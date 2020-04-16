@@ -1,0 +1,80 @@
+%import businfotable as businfo
+<html>
+<head> <title> {{title}} </title>
+</head>
+<body>
+
+<br />
+RealTime: All active busses by internal ids<br>
+Data current to: {{time_string}} UTC<br>
+<br />
+Click blockid or tripid to view the schedule for this bus<br>
+<br /> <a href="?rt=reload">Refresh Realtime</a><hr>
+
+<a href="/"> Back to Top</a><br>
+Note: a fleet number of 'Unknown' means that a fleet number could not be found for this fleetid. <br>
+In this case, nextride's API should be scraped to get the translation
+<table>
+<tr>
+  <th>Fleet Number</th>
+  <th>Bus Description</th>
+  <th>Bus ID (internal)</th>
+  <th>On scheduled Route?</th>
+  <th>Trip ID</th>
+  <th>Block ID</th>
+  <th>Headsign</th>
+  <th>Current Stop</th>
+  <th>Coordinates <th>
+</tr>
+
+ %for bus in rtbuslist:
+    <%
+    busid = bus.fleetid
+     if(bus.scheduled):
+         tripid = bus.tripid
+         trip = tripdict[tripid]
+         blockid = trip.blockid
+         headsign = trip.headsign
+     end
+     if(bus.onroute):
+         stopcode = stopdict[bus.stopid].stopcode
+     else:
+         stopcode = ''
+     end
+    %>
+    <tr>
+      %if(bus.unknown_fleetnum_flag):
+         <td>Unknown</td>
+         <td>N/A</td>
+      %else:
+         <td><a href="/bus/{{bus.fleetnum}}">{{bus.fleetnum}}</a></td>
+           %busrange = businfo.get_bus_range(bus.fleetnum)
+          <td>{{busrange.year}} {{busrange.model}}</td>
+      %end
+    <td><a href="/busid/{{busid}}">{{busid}}</a></td>
+    <td>{{str(bus.scheduled)}}</td>
+    %if(bus.scheduled):
+       <td><a href="/trips/{{tripid}}">{{tripid}}</a></td>
+       <td><a href="/blocks/{{blockid}}">{{blockid}}</a></td>
+       <td>{{headsign}}</td>
+       %if bus.onroute:
+            <td><a href="/stops/{{stopcode}}">{{stopcode}}</a></td>
+       %else:
+            <td>Bus not on route</td>
+       %end
+    %else:
+       <td>N/A</td>
+       <td>N/A</td>
+       <td>N/A</td>
+       <td>N/A</td>
+    %end
+    <td>{{str(bus.lat)}} {{str(bus.lon)}}</td>
+    </tr>
+ %end
+ </table>
+ %if len(rtbuslist) == 0:
+    <i>Apparently there are no busses to report... note that Victoria has no nightbus service, so this should happen overnight</i>
+ %end
+
+</body>
+</html>

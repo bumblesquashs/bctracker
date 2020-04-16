@@ -1,0 +1,4 @@
+data/archived-gtfs-static/
+data/realtime_downloads/
+data/nextride/archived-route-json/
+__pycache__/
