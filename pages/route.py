@@ -65,3 +65,23 @@ def routepage_html(this_route):
    for day_str in day_triplistdict:
        gen_html += tableForDay(day_str, day_triplistdict[day_str])
    return gen_html
+
+def routepage2_html(this_route):
+    try:
+        trip_list = ds.route_triplistdict[this_route]
+    except:
+        return no("Couldn't find data for route " + this_route)
+    #first, make a big dict of DayStr -> list of trip
+    day_triplistdict = {}
+    for trip in trip_list:
+        if(ds.days_of_week_dict[trip.serviceid]) == 'INVALID':
+            continue
+        if(trip.use_alt_day_string):
+            keystr = trip.alt_day_string
+        else:
+            keystr = ds.days_of_week_dict_longname[trip.serviceid]
+        if(keystr in day_triplistdict.keys()):
+            day_triplistdict[keystr].append(trip)
+        else:
+            day_triplistdict[keystr] = [trip]
+        return template('pages/route.templ', day_triplistdict=day_triplistdict)

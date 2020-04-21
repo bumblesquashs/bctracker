@@ -116,7 +116,6 @@ def genrtbuslist_html():
          #now - sort that list however we please
      rtbuslist.sort(key = lambda x: (int(x.scheduled)*-1, int(x.fleetnum)))
      return template('pages/realtime.templ',
-                           title='All active busses...',
                            time_string=format(rt.get_data_refreshed_time_str()),
                            rtbuslist=rtbuslist,
                            tripdict=ds.tripdict,
@@ -216,7 +215,7 @@ def scrape_fleet():
     print('Scraping fleet again')
     scrape.scrape()
     return('Done. <br> <a href="/admin"> Back </a>')
-   
+
 @app.route('/blocks/<blockid>')
 def blockview(blockid):
   try:

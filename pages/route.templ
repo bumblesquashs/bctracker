@@ -1,0 +1,29 @@
+<html>
+<head> <title> Choose a Trip </title>
+</head>
+<body>
+<a href="/"> Back to Top</a><br>
+
+% for day_str in day_triplistdict:
+%     trip_list = day_triplistdict[day_str]
+<br />
+<h3>{{day_str}}</h3>
+% ib_trips = [trip for trip in trip_list if trip.directionid == '0']
+% ob_trips = [trip for trip in trip_list if trip.directionid == '1']
+
+% if(len(ob_trips) != 0):
+    <h4> Outbound Trips ({{len(ob_trips)}}):</h4>
+%   include('pages/tempaltes/triplist.templ', triplist=ob_trips)
+% end
+
+% if(len(ib_trips) != 0):
+    <br />
+    <h4> Inbound Trips ({{format(len(ib_trips)}}):</h4>
+%   include('pages/tempaltes/triplist.templ', triplist=ib_trips)
+% end
+
+%end
+
+
+</body>
+</html>
