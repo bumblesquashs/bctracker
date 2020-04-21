@@ -2,10 +2,11 @@ import datastructure as ds
 
 
 def no(msg):
-  return "Not quite: " + msg + "</body></html>"
+    return "Not quite: " + msg + "</body></html>"
+
 
 def formatTripList(triplist):
-     table_html = """<table>
+    table_html = """<table>
      <tr>
       <th>BlockID</th>
       <th>TripID</th>
@@ -14,19 +15,22 @@ def formatTripList(triplist):
       <th>Departing From...</th>
       <th>Day of week</th>
      </tr>"""
-     triplist.sort(key=ds.trip_to_numseconds)
-     for trip in triplist:
-         entry = "<tr>\n"
-         entry += "<td>" + trip.blockid + "</td>\n"
-         entry += '<td><a href="/trips/' + trip.tripid + '">' + trip.tripid + "</a></td>\n"
-         entry += "<td>" + trip.headsign + "</td>\n"
-         entry += "<td>" + trip.starttime + "</td>\n"
-         entry += '<td><a href="/stops/' + ds.stopdict[trip.stoplist[0].stopid].stopcode + '">' + trip.startstopname + "</a></td>\n"
-         entry += "<td>" + ds.days_of_week_dict[trip.serviceid] + "</td>\n"
-         entry += "</tr>\n"
-         table_html += entry
-     table_html += '</table>\n'
-     return table_html
+    triplist.sort(key=ds.trip_to_numseconds)
+    for trip in triplist:
+        entry = "<tr>\n"
+        entry += "<td>" + trip.blockid + "</td>\n"
+        entry += '<td><a href="/trips/' + trip.tripid + '">' + trip.tripid + "</a></td>\n"
+        entry += "<td>" + trip.headsign + "</td>\n"
+        entry += "<td>" + trip.starttime + "</td>\n"
+        entry += '<td><a href="/stops/' + \
+            ds.stopdict[trip.stoplist[0].stopid].stopcode + \
+            '">' + trip.startstopname + "</a></td>\n"
+        entry += "<td>" + ds.days_of_week_dict[trip.serviceid] + "</td>\n"
+        entry += "</tr>\n"
+        table_html += entry
+    table_html += '</table>\n'
+    return table_html
+
 
 def tableForDay(day_str, trip_list):
     rstr = "<br />"
@@ -42,36 +46,38 @@ def tableForDay(day_str, trip_list):
         rstr += formatTripList(ib_trips)
     return rstr
 
+
 def routepage_html(this_route):
-   try:
-       trip_list = ds.route_triplistdict[this_route]
-   except:
-       return no("Couldn't find data for route " + this_route)
-   #first, make a big dict of DayStr -> list of trip
-   day_triplistdict = {}
-   for trip in trip_list:
-       if(ds.days_of_week_dict[trip.serviceid]) == 'INVALID':
-           continue
-       if(trip.use_alt_day_string):
-           keystr = trip.alt_day_string
-       else:
-           keystr = ds.days_of_week_dict_longname[trip.serviceid]
-       if(keystr in day_triplistdict.keys()):
-           day_triplistdict[keystr].append(trip)
-       else:
-           day_triplistdict[keystr] = [trip]
-   #now - for each key/value in that dict
-   gen_html = ''
-   for day_str in day_triplistdict:
-       gen_html += tableForDay(day_str, day_triplistdict[day_str])
-   return gen_html
+    try:
+        trip_list = ds.route_triplistdict[this_route]
+    except:
+        return no("Couldn't find data for route " + this_route)
+    # first, make a big dict of DayStr -> list of trip
+    day_triplistdict = {}
+    for trip in trip_list:
+        if(ds.days_of_week_dict[trip.serviceid]) == 'INVALID':
+            continue
+        if(trip.use_alt_day_string):
+            keystr = trip.alt_day_string
+        else:
+            keystr = ds.days_of_week_dict_longname[trip.serviceid]
+        if(keystr in day_triplistdict.keys()):
+            day_triplistdict[keystr].append(trip)
+        else:
+            day_triplistdict[keystr] = [trip]
+    # now - for each key/value in that dict
+    gen_html = ''
+    for day_str in day_triplistdict:
+        gen_html += tableForDay(day_str, day_triplistdict[day_str])
+    return gen_html
+
 
 def routepage2_html(this_route):
     try:
         trip_list = ds.route_triplistdict[this_route]
     except:
         return no("Couldn't find data for route " + this_route)
-    #first, make a big dict of DayStr -> list of trip
+    # first, make a big dict of DayStr -> list of trip
     day_triplistdict = {}
     for trip in trip_list:
         if(ds.days_of_week_dict[trip.serviceid]) == 'INVALID':

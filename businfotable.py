@@ -7,18 +7,22 @@ TYPE_35FOOT = 5
 TYPE_SUBURBAN = 6
 TYPE_ARTIC = 7
 
+
 class BusRange:
-    def __init__(self,low_num, high_num, year,model,type):
+    def __init__(self, low_num, high_num, year, model, type):
         self.low_num = low_num
         self.high_num = high_num
         self.year = year
         self.model = model
         self.type = type
         self.size = (high_num - low_num) + 1
+
     def get_yearnum(self):
         if '-' in self.year:
             return int(self.year.split('-')[0])
-        else: return int(self.year)
+        else:
+            return int(self.year)
+
     def is_in_range(self, fleetnum):
         if(type(fleetnum) == str):
             fleetnum = int(fleetnum)
@@ -27,11 +31,14 @@ class BusRange:
         else:
             return False
 
+
 def get_bus_range(fleet_num):
     for range in all_ranges:
         if(range.is_in_range(fleet_num)):
             return range
     return BusRange(0, 0, '0', 'Unknown Bus Type', TYPE_UNKNOWN)
+
+
 all_ranges = [
     BusRange(1, 18, '2000', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(101, 116, '2001', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
@@ -65,8 +72,10 @@ all_ranges = [
     BusRange(2663, 2687, '2018', 'Chevrolet/Arboc 4500/SOM28D', TYPE_SHUTTLE),
 
     BusRange(3001, 3005, '2013', 'Grande West Vicinity (27.5 foot)', TYPE_30FOOT),
-    BusRange(3016, 3023, '2015', 'International/ElDorado 3200/Aero Elite', TYPE_SHUTTLE),
-    BusRange(3024, 3028, '2018', 'International/ElDorado 3200/Aero Elite', TYPE_SHUTTLE),
+    BusRange(3016, 3023, '2015',
+             'International/ElDorado 3200/Aero Elite', TYPE_SHUTTLE),
+    BusRange(3024, 3028, '2018',
+             'International/ElDorado 3200/Aero Elite', TYPE_SHUTTLE),
 
     BusRange(4007, 4061, '2017', 'Grande West Vicinity (30 foot)', TYPE_30FOOT),
     BusRange(4062, 4070, '2017', 'Grande West Vicinity (30 foot)', TYPE_30FOOT),
@@ -94,7 +103,8 @@ all_ranges = [
     BusRange(9434, 9446, '2012-2013', 'Nova Bus LFS', TYPE_CONVENTIONAL),
     BusRange(9447, 9486, '2015', 'Nova Bus LFS', TYPE_CONVENTIONAL),
     BusRange(9501, 9526, '2008', 'Alexander Dennis Enviro500', TYPE_DECKER),
-    BusRange(9527, 9527, '2008', 'Alexander Dennis Enviro500H (Hybrid)', TYPE_DECKER),
+    BusRange(9527, 9527, '2008',
+             'Alexander Dennis Enviro500H (Hybrid)', TYPE_DECKER),
     BusRange(9528, 9528, '2007', 'Alexander Dennis Enviro500', TYPE_DECKER),
     BusRange(9529, 9531, '2008', 'Alexander Dennis Enviro500', TYPE_DECKER),
     BusRange(9529, 9531, '2008', 'Alexander Dennis Enviro500', TYPE_DECKER),
