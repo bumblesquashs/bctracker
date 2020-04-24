@@ -6,7 +6,6 @@ import scrape_fleetnums as scrape
 import sys
 import subprocess
 
-from pages.route import routepage_html
 from pages.stop import stoppage_html
 
 PLACEHOLDER = '100000'
@@ -255,19 +254,31 @@ def tripview(tripid):
         return no("Couldn't find trip with tripid " + tripid)
     return template('pages/trip.templ', tripid=tripid, trip=trip)
 
-
 @app.route('/routes/<routenum>')
 def routepage(routenum):
-    routepage_str = header('Choose a Trip') + homelink
-    routepage_str += "\n All trips for Route " + \
-        routenum + " by the time of their first stop\n<hr>"
     try:
-        routepage_str += routepage_html(reverse_rdict[routenum])
+        this_route = reverse_rdict[routenum]
     except KeyError:
         return no("Couldn't find route: " + str(routenum))
-    routepage_str += footer
-    return routepage_str
 
+    try:
+        trip_list = ds.route_triplistdict[this_route]
+    except:
+        return ("<html><body>Not quite: Couldn't find data for route " + this_route + "</body></html>")
+    # first, make a big dict of DayStr -> list of trip
+    day_triplistdict = {}
+    for trip in trip_list:
+        if(ds.days_of_week_dict[trip.serviceid]) == 'INVALID':
+            continue
+        if(trip.use_alt_day_string):
+            keystr = trip.alt_day_string
+        else:
+            keystr = ds.days_of_week_dict_longname[trip.serviceid]
+        if(keystr in day_triplistdict.keys()):
+            day_triplistdict[keystr].append(trip)
+        else:
+            day_triplistdict[keystr] = [trip]
+    return template('pages/route.templ', day_triplistdict=day_triplistdict, routenum=routenum)
 
 @app.route('/stops/<stopcode>')
 def stoppage(stopcode):
