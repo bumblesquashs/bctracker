@@ -7,9 +7,10 @@
 
 <body>
   <a href="/"> Back to Top</a><br>
-  Viewing trip id {{tripid}}:
+    Viewing trip id {{tripid}}: 
   <br />
-  {{trip.headsign}} ({{ds.days_of_week_dict[trip.serviceid]}}) <br>
+  <h3> {{trip.headsign}} ({{ds.days_of_week_dict[trip.serviceid]}}) </h3>
+  <br />
   <a href="/routes/{{trip.routenum}}"> View Route </a> <br>
   <a href="/blocks/{{trip.blockid}}"> View Block </a> <br>
   <hr>
@@ -25,7 +26,6 @@
     % stopcode = ds.stopdict[stop.stopid].stopcode
     <tr>
       <td> <a href="/stops/{{stopcode}}">{{ stopcode }}</a> </td>
-      <td> {{ ds.directionid_dict[trip.directionid] }} </td>
       <td> {{ stop.departtime }} </td>
       <td> {{ ds.stopdict[stop.stopid].stopname }} </td>
     </tr>

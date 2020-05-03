@@ -4,5 +4,4 @@ data/realtime_downloads/*
 data/google_transit.zip
 data/google_transit/
 data/nextride/archived-route-json/
-logs/*
 __pycache__/

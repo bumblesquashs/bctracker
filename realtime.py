@@ -58,7 +58,7 @@ def setup_fleetnums():
 
 
 def get_data_refreshed_time_str():
-    return datetime.utcfromtimestamp(last_rt_download_time).strftime('%Y-%m-%d %H:%M:%S')
+    return time.asctime(time.localtime(last_rt_download_time)) 
 
 
 class RTVehiclePosition:

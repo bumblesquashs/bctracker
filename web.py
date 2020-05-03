@@ -278,7 +278,7 @@ def routepage(routenum):
             day_triplistdict[keystr].append(trip)
         else:
             day_triplistdict[keystr] = [trip]
-    return template('pages/route.templ', day_triplistdict=day_triplistdict, routenum=routenum)
+    return template('pages/route.templ', day_triplistdict=day_triplistdict, routenum=routenum, routename=rdict[this_route][1])
 
 @app.route('/stops/<stopcode>')
 def stoppage(stopcode):

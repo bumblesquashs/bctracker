@@ -5,6 +5,9 @@
   
   <body>
     <a href="/"> Back to Top</a><br>
+    <br />
+    <h3> Viewing: {{routenum}} {{routename}} </h3>
+    <br />
     All trips for Route {{routenum}} by the time of their first stop<hr>
 
     <%
@@ -17,13 +20,13 @@
       <h3>{{day_str}}</h3>
 
     %  if(len(ob_trips) != 0):
-         <h4> Outbound Trips ({{len(ob_trips)}}):</h4>
+         <h5> Outbound Trips ({{len(ob_trips)}}):</h5>
     %    include('pages/templates/triplist.templ', triplist=ob_trips)
     %  end
 
     % if(len(ib_trips) != 0):
        <br />
-       <h4> Inbound Trips ({{len(ib_trips)}}):</h4>
+       <h5> Inbound Trips ({{len(ib_trips)}}):</h5>
     %    include('pages/templates/triplist.templ', triplist=ib_trips)
     % end
 

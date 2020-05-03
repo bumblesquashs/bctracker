@@ -10,7 +10,7 @@ routespath = pathprefix + 'routes.txt'
 stoptimespath = pathprefix + 'stop_times.txt'
 stoppath = pathprefix + 'stops.txt'
 calendarpath = pathprefix + 'calendar.txt'
-
+calendar_dates_path = pathprefix + 'calendar_dates.txt'
 # directionid dict
 directionid_dict = {'0': 'Outbound', '1': 'Inbound'}
 
@@ -106,9 +106,9 @@ route_triplistdict = {}  # dict of route id -> list of trips for that route
 routedict = {}  # dict of routeid -> route info tuple
 stopcode2stopnum = {}  # dict of stop code -> stopnum
 stopdict = {}  # dict of stopid -> stop obj
-days_of_week_dict = {}  # service_id -> day of week
-days_of_week_dict_longname = {}  # service_id -> day of week long
-
+days_of_week_dict = {}  # service_id -> string for day of week
+days_of_week_dict_longname = {}  # service_id -> long string for day of week
+service_order_dict = {} # service_id -> display order (monday first, sunday last, etc) for sorting later
 
 def get_today_str():
     return str(date.today()).replace('-', '')
@@ -119,12 +119,29 @@ today = get_today_str()
 # this function is actually the worst - its AWFUL
 this_sheet_enddate = ''
 
-
 def populate_calendar():
     global days_of_week_dict
     global this_sheet_enddate
+    global days_of_week_dict_longname
+
     days_of_week_dict = {}
-    # handle changing columns here too because why not
+    service_order_dict = {}
+    days_of_week_dict_longname = {}
+   
+    special_serviceid_dict = {}
+    special_serviceid_dict_short = {}
+    with open(calendar_dates_path, 'r') as caldate_f:
+        colnames = caldate_f.readline().rstrip().split(',')
+        for line in caldate_f:
+            items = line.rstrip().split(',')
+            date = items[colnames.index('date')]
+            date = date[0:3] + '-' + date[4:5] + '-' + date[6:]
+            exception_type = items[colnames.index('exception_type')]
+            service_id = items[colnames.index('service_id')]
+            if(exception_type == '1'):
+                special_serviceid_dict[service_id] = 'Special: ' + date + ' only'
+                special_serviceid_dict_short[service_id] = date
+   
     with open(calendarpath, 'r') as cal_f:
         colnames = cal_f.readline().rstrip().split(',')
         for line in cal_f:
@@ -148,43 +165,59 @@ def populate_calendar():
             if(issunday == '1' and issaturday == '1'):
                 days_of_week_dict[service_id] = 'Weekends'
                 days_of_week_dict_longname[service_id] = 'Weekends'
+                service_order_dict[service_id] = 7
                 continue
             if(ismonday == '1' and istuesday == '1' and iswednesday == '1' and isthursday == '1' and isfriday == '1'):
                 days_of_week_dict[service_id] = 'Weekdays'
                 days_of_week_dict_longname[service_id] = 'Weekdays'
+                service_order_dict[service_id] = 1
                 continue
             if(ismonday == '1'):
                 days_of_week_dict[service_id] = 'Mon'
                 days_of_week_dict_longname[service_id] = 'Mondays'
+                service_order_dict[service_id] = 2
                 continue
             if(istuesday == '1'):
                 days_of_week_dict[service_id] = 'Tues'
                 days_of_week_dict_longname[service_id] = 'Tuesdays'
+                service_order_dict[service_id] = 3
                 continue
             if(iswednesday == '1'):
                 days_of_week_dict[service_id] = 'Wed'
                 days_of_week_dict_longname[service_id] = 'Wednesdays'
+                service_order_dict[service_id] = 4
                 continue
             if(isthursday == '1'):
                 days_of_week_dict[service_id] = 'Thurs'
                 days_of_week_dict_longname[service_id] = 'Thursdays'
+                service_order_dict[service_id] = 5
                 continue
             if(isfriday == '1'):
                 days_of_week_dict[service_id] = 'Frid'
                 days_of_week_dict_longname[service_id] = 'Fridays'
+                service_order_dict[service_id] = 6
                 continue
             if(issaturday == '1'):
                 days_of_week_dict[service_id] = 'Sat'
                 days_of_week_dict_longname[service_id] = 'Saturdays'
+                service_order_dict[service_id] = 8
                 continue
             if(issunday == '1'):
                 days_of_week_dict[service_id] = 'Sun'
                 days_of_week_dict_longname[service_id] = 'Sundays'
+                service_order_dict[service_id] = 9
                 continue
-            days_of_week_dict[service_id] = 'Special (id: ' + service_id + ')'
-            days_of_week_dict_longname[service_id] = 'Special (id: ' + \
-                service_id + ')'
-
+            try:
+                days_of_week_dict[service_id] = special_serviceid_dict_short[service_id]
+                days_of_week_dict_longname[service_id] = special_serviceid_dict[service_id]
+            except KeyError:
+               days_of_week_dict[service_id] = 'Special (id: ' + service_id + ')'
+               days_of_week_dict_longname[service_id] = 'Special (id: ' + \
+                  service_id + ')'
+            try:
+               service_order_dict[service_id] = 9001 + int(service_id)
+            except ValueError:
+               service_order_dict[service_id] = 69
 
 # this loads in all the data and sets up the global dicts
 def start():
