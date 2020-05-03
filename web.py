@@ -7,6 +7,10 @@ import sys
 import subprocess
 import cherrypy as cp
 
+import requestlogger
+import logging
+import logging.handlers
+
 from pages.stop import stoppage_html
 
 PLACEHOLDER = '100000'
@@ -61,8 +65,9 @@ for route_tuple in rdict.values():
 
 # build the route table for the index
 index_str = header('Victoria GTFS Test!')
-index_str += "<b>Welcome to the silly little Victoria GTFS app!</b><br>"
-index_str += '<i>Coming soon!</i> Realtime lookup: choose a bus!<br>'
+index_str += "<b>Welcome to Bumblesquash's little Victoria GTFS app!</b><br>"
+index_str += 'This is very much a WIP. If you are curious about this, have questions, or something seems broken, contact bumblesquash somehow.<br>'
+index_str += '<i>Coming soon!</i> Block history lookup: choose a bus!<br>'
 index_str += lookup_jscript
 index_str += '<br />'
 index_str += '<a href="blocks"> List of blocks </a><br>'
@@ -134,12 +139,6 @@ def genrtbuslist_html():
 # Web framework code
 # ========================================
 app = Bottle()
-
-
-@app.route('/test/<name>')
-def testpage(name):
-    return template('<b>Test page: Hello {{name}}</b>!', name=name)
-
 
 @app.route('/')
 @app.route('/routes')
@@ -293,11 +292,22 @@ def stoppage(stopcode):
     rstr += footer
     return rstr
 
+def make_access_log(app, filepath, when='d', interval=7, **kwargs):
+    if filepath is not None:
+        handlers = [logging.handlers.TimedRotatingFileHandler(
+        filepath, when, interval, **kwargs)]
+    else:
+        handlers = [logging.StreamHandler()]
+    return requestlogger.WSGILogger(app, handlers, requestlogger.ApacheFormatter())
+
 
 #run(app, host='192.168.1.93', port=8080)
 
 #use cherrypy server instead
 
 cp.config.update('server.conf')
-cp.tree.graft(app, '/')
+cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
+cp.log('Whaaat? here we go')
 cp.server.start()
+
+

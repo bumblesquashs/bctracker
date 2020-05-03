@@ -4,6 +4,7 @@ DATA_DIR="$(pwd)/data"
 cd $DATA_DIR
 pwd
 DATE_STR=$(date +%F-%T)
+mkdir -p archived-gtfs-static
 
 mv google_transit.zip archived-gtfs-static/google_transit-$DATE_STR.zip
 
