@@ -5,6 +5,7 @@ import businfotable as businfo
 import scrape_fleetnums as scrape
 import sys
 import subprocess
+import cherrypy as cp
 
 from pages.stop import stoppage_html
 
@@ -293,4 +294,10 @@ def stoppage(stopcode):
     return rstr
 
 
-run(app, host='192.168.1.93', port=8080)
+#run(app, host='192.168.1.93', port=8080)
+
+#use cherrypy server instead
+
+cp.config.update('server.conf')
+cp.tree.graft(app, '/')
+cp.server.start()

@@ -64,44 +64,44 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 63,100080,Douglas at Beacon - Beacon Hill Park,,48.411968,-123.368022,,,0,,2
 64,100037,Douglas at Avalon,,48.414875,-123.366307,,,0,,2
 65,100012,"Douglas at Blanshard, Royal BC Museum",,48.419228,-123.365886,,,0,,2
-66,100757,Newport at Windsor,,48.423843,-123.306701,,,0,,2
-67,100734,Newport at Beresford,,48.425428,-123.308872,,,0,,2
-68,100701,Oak Bay at York,,48.426475,-123.311408,,,0,,2
-69,100632,Oak Bay at Hampshire,,48.426567,-123.315729,,,0,,2
-70,100574,Oak Bay at Elgin,,48.426588,-123.319619,,,0,,2
-71,100512,Oak Bay at Amphion,,48.426516,-123.323311,,,0,,2
-72,100458,Oak Bay at Davie,,48.426528,-123.326546,,,0,,2
-73,100406,Oak Bay at Richmond,,48.426534,-123.330657,,,0,,2
-74,100382,Oak Bay at Belcher,,48.426546,-123.3328,,,0,,2
-75,100317,Oak Bay at Fort - Oak Bay Junction,,48.426592,-123.336286,,,0,,2
-76,100248,Pandora at Johnson,,48.4268,-123.34216,,,0,,2
-77,100209,Pandora at Fernwood,,48.426924,-123.345877,,,0,,2
-78,100169,Pandora at Chambers,,48.427141,-123.350068,,,0,,2
-79,100150,Pandora at Cook,,48.427255,-123.353846,,,0,,2
-80,100129,Pandora at Quadra,,48.427532,-123.358167,,,0,,2
-81,100084,Pandora at Blanshard,,48.427906,-123.362465,,,0,,2
-82,100034,Douglas at Fort,,48.424963,-123.365354,,,0,,2
-83,100019,Douglas at Courtney,,48.422735,-123.365966,,,0,,2
-84,100954,Douglas at Superior,,48.418236,-123.365859,,,0,,2
-85,100046,Douglas at Avalon,,48.41358,-123.367281,,,0,,2
-86,100078,Douglas at Beacon - Beacon Hill Park,,48.411257,-123.368587,,,0,,2
-87,100065,Niagara at Government,,48.412243,-123.372112,,,0,,2
-88,100054,Niagara at Clarence,,48.412992,-123.373751,,,0,,2
-89,100049,Niagara at Menzies,,48.413688,-123.375228,,,0,,2
-90,100031,Menzies at Simcoe,,48.415557,-123.37371,,,0,,2
-91,100013,Menzies at Michigan,,48.417173,-123.372823,,,0,,2
-92,100008,Superior at Menzies,,48.418267,-123.372816,,,0,,2
-93,100905,Superior at Oswego,,48.419766,-123.376596,,,0,,2
-94,100946,Superior at Montreal,,48.421153,-123.379469,,,0,,2
-95,100086,Erie at Dallas - Fisherman's Wharf,,48.421585,-123.383306,,,0,,2
-96,100802,Musgrave at Thompson,,48.438125,-123.308107,,,0,,2
-97,100815,Estevan at Dunlevy,,48.437181,-123.3069,,,0,,2
-98,100838,Estevan at Lincoln,,48.436371,-123.304494,,,0,,2
-99,100801,Beach at Dalhousie,,48.433585,-123.305868,,,0,,2
-100,100783,Beach at Bowker,,48.432173,-123.306858,,,0,,2
-101,100748,Bowker at Lulie,,48.433076,-123.310133,,,0,,2
-102,100708,St Ann at Cranmore,,48.431054,-123.312192,,,0,,2
-103,100674,Monterey at Woodlawn,,48.428489,-123.314129,,,0,,2
+66,100802,Musgrave at Thompson,,48.438125,-123.308107,,,0,,2
+67,100815,Estevan at Dunlevy,,48.437181,-123.3069,,,0,,2
+68,100838,Estevan at Lincoln,,48.436371,-123.304494,,,0,,2
+69,100801,Beach at Dalhousie,,48.433585,-123.305868,,,0,,2
+70,100783,Beach at Bowker,,48.432173,-123.306858,,,0,,2
+71,100748,Bowker at Lulie,,48.433076,-123.310133,,,0,,2
+72,100708,St Ann at Cranmore,,48.431054,-123.312192,,,0,,2
+73,100674,Monterey at Woodlawn,,48.428489,-123.314129,,,0,,2
+74,100632,Oak Bay at Hampshire,,48.426567,-123.315729,,,0,,2
+75,100574,Oak Bay at Elgin,,48.426588,-123.319619,,,0,,2
+76,100512,Oak Bay at Amphion,,48.426516,-123.323311,,,0,,2
+77,100458,Oak Bay at Davie,,48.426528,-123.326546,,,0,,2
+78,100406,Oak Bay at Richmond,,48.426534,-123.330657,,,0,,2
+79,100382,Oak Bay at Belcher,,48.426546,-123.3328,,,0,,2
+80,100317,Oak Bay at Fort - Oak Bay Junction,,48.426592,-123.336286,,,0,,2
+81,100248,Pandora at Johnson,,48.4268,-123.34216,,,0,,2
+82,100209,Pandora at Fernwood,,48.426924,-123.345877,,,0,,2
+83,100169,Pandora at Chambers,,48.427141,-123.350068,,,0,,2
+84,100150,Pandora at Cook,,48.427255,-123.353846,,,0,,2
+85,100129,Pandora at Quadra,,48.427532,-123.358167,,,0,,2
+86,100084,Pandora at Blanshard,,48.427906,-123.362465,,,0,,2
+87,100034,Douglas at Fort,,48.424963,-123.365354,,,0,,2
+88,100019,Douglas at Courtney,,48.422735,-123.365966,,,0,,2
+89,100954,Douglas at Superior,,48.418236,-123.365859,,,0,,2
+90,100046,Douglas at Avalon,,48.41358,-123.367281,,,0,,2
+91,100078,Douglas at Beacon - Beacon Hill Park,,48.411257,-123.368587,,,0,,2
+92,100065,Niagara at Government,,48.412243,-123.372112,,,0,,2
+93,100054,Niagara at Clarence,,48.412992,-123.373751,,,0,,2
+94,100049,Niagara at Menzies,,48.413688,-123.375228,,,0,,2
+95,100031,Menzies at Simcoe,,48.415557,-123.37371,,,0,,2
+96,100013,Menzies at Michigan,,48.417173,-123.372823,,,0,,2
+97,100008,Superior at Menzies,,48.418267,-123.372816,,,0,,2
+98,100905,Superior at Oswego,,48.419766,-123.376596,,,0,,2
+99,100946,Superior at Montreal,,48.421153,-123.379469,,,0,,2
+100,100086,Erie at Dallas - Fisherman's Wharf,,48.421585,-123.383306,,,0,,2
+101,100757,Newport at Windsor,,48.423843,-123.306701,,,0,,2
+102,100734,Newport at Beresford,,48.425428,-123.308872,,,0,,2
+103,100701,Oak Bay at York,,48.426475,-123.311408,,,0,,2
 104,100079,Johnson at Blanshard,,48.426729,-123.361265,,,0,,2
 105,100093,Johnson at Quadra,,48.426465,-123.358619,,,0,,2
 106,100125,Johnson at Vancouver,,48.426176,-123.355914,,,0,,2
@@ -121,19 +121,19 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 120,100588,Oak Bay at Yale,,48.42645,-123.318562,,,0,,2
 121,100622,Oak Bay at Wilmot,,48.426453,-123.317032,,,0,,2
 122,100657,Oak Bay at Monterey,,48.426413,-123.314595,,,0,,2
-123,100686,Oak Bay at Oliver,,48.426365,-123.312319,,,0,,2
-124,100714,Newport at St David,,48.42595,-123.309965,,,0,,2
-125,100742,Newport at Transit,,48.424619,-123.308048,,,0,,2
-126,100669,Monterey at Woodlawn,,48.428505,-123.313928,,,0,,2
-127,100720,St Ann at Cranmore,,48.431523,-123.311683,,,0,,2
-128,100745,St Ann at Bowker,,48.432986,-123.31073,,,0,,2
-129,100510,Bowker at Monteith,,48.432417,-123.308415,,,0,,2
-130,100787,Beach at Bowker,,48.432391,-123.306497,,,0,,2
-131,100814,Beach at Dalhousie,,48.434383,-123.304998,,,0,,2
-132,100847,Estevan at Beach,,48.436332,-123.304027,,,0,,2
-133,100821,Estevan at Dunlevy,,48.437336,-123.306965,,,0,,2
-134,100807,Thompson at Musgrave,,48.438137,-123.308475,,,0,,2
-135,100808,Mayhew at Dufferin,,48.439841,-123.309355,,,0,,2
+123,100669,Monterey at Woodlawn,,48.428505,-123.313928,,,0,,2
+124,100720,St Ann at Cranmore,,48.431523,-123.311683,,,0,,2
+125,100745,St Ann at Bowker,,48.432986,-123.31073,,,0,,2
+126,100510,Bowker at Monteith,,48.432417,-123.308415,,,0,,2
+127,100787,Beach at Bowker,,48.432391,-123.306497,,,0,,2
+128,100814,Beach at Dalhousie,,48.434383,-123.304998,,,0,,2
+129,100847,Estevan at Beach,,48.436332,-123.304027,,,0,,2
+130,100821,Estevan at Dunlevy,,48.437336,-123.306965,,,0,,2
+131,100807,Thompson at Musgrave,,48.438137,-123.308475,,,0,,2
+132,100808,Mayhew at Dufferin,,48.439841,-123.309355,,,0,,2
+133,100686,Oak Bay at Oliver,,48.426365,-123.312319,,,0,,2
+134,100714,Newport at St David,,48.42595,-123.309965,,,0,,2
+135,100742,Newport at Transit,,48.424619,-123.308048,,,0,,2
 136,103741,Royal Jubilee Hospital,,48.433631,-123.327865,,,0,,2
 137,100515,Fort at Lee,,48.431565,-123.325101,,,0,,2
 138,100559,Foul Bay at Cadboro Bay / Fort,,48.431763,-123.32255,,,0,,2
@@ -234,34 +234,34 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 233,100042,Douglas at View,,48.425546,-123.365231,,,0,,2
 234,100017,Burdett / Humboldt at Douglas,,48.42205,-123.365463,,,0,,2
 235,100025,Fairfield at Blanshard - Bay A,,48.421886,-123.364085,,,0,,2
-236,100076,Douglas at Pandora - City Hall,,48.427714,-123.364464,,,0,,2
-237,100394,Douglas at Herald / Fisgard,,48.429958,-123.364397,,,0,,2
-238,100146,Douglas at Discovery,,48.432177,-123.364488,,,0,,2
-239,100178,Douglas at Field (Bay St.),,48.434688,-123.36477,,,0,,2
-240,100198,Douglas at Kings,,48.437073,-123.366107,,,0,,2
-241,102012,Hillside at Douglas,,48.438496,-123.365523,,,0,,2
-242,100237,Hillside at Blanshard,,48.438968,-123.362406,,,0,,2
-243,100266,Hillside at Quadra,,48.439481,-123.358182,,,0,,2
-244,100280,Hillside at Graham,,48.439777,-123.356029,,,0,,2
-245,100301,Hillside at Blackwood,,48.440102,-123.353483,,,0,,2
-246,100322,Hillside at Cook,,48.440415,-123.351205,,,0,,2
-247,100337,Hillside at Higgins,,48.440841,-123.348779,,,0,,2
-248,100385,Hillside at Cedar Hill,,48.441036,-123.345454,,,0,,2
-249,100442,Hillside at Gosworth,,48.442269,-123.341669,,,0,,2
-250,100514,Hillside at Doncaster,,48.443841,-123.337704,,,0,,2
-251,100566,Hillside at Shakespeare - Hillside Ctr.,,48.444817,-123.335207,,,0,,2
-252,100618,Hillside at Shelbourne,,48.445836,-123.332646,,,0,,2
-253,100653,Lansdowne at Richmond,,48.446074,-123.32785,,,0,,2
-254,100763,Camosun College main entrance,,48.448,-123.320356,,,0,,2
-255,100827,Foul Bay at University Woods,,48.449544,-123.318019,,,0,,2
-256,100864,Henderson at Dundrum,,48.451296,-123.316008,,,0,,2
-257,100913,Henderson at Kendal,,48.453544,-123.314867,,,0,,2
-258,100937,Henderson at Avondale,,48.455456,-123.314264,,,0,,2
-259,100951,Henderson at Frederick Norris,,48.457909,-123.315693,,,0,,2
-260,100071,University Dr at Ring Rd,,48.459773,-123.314519,,,0,,2
-261,101036,Ring Rd. at Parking Lot '1',,48.461773,-123.308363,,,0,,2
-262,102420,UVic Exchange,,48.465923,-123.308732,,,0,,2
-263,100223,Gorge at Government / Douglas,,48.438748,-123.368215,,,0,,2
+236,100223,Gorge at Government / Douglas,,48.438748,-123.368215,,,0,,2
+237,100076,Douglas at Pandora - City Hall,,48.427714,-123.364464,,,0,,2
+238,100394,Douglas at Herald / Fisgard,,48.429958,-123.364397,,,0,,2
+239,100146,Douglas at Discovery,,48.432177,-123.364488,,,0,,2
+240,100178,Douglas at Field (Bay St.),,48.434688,-123.36477,,,0,,2
+241,100198,Douglas at Kings,,48.437073,-123.366107,,,0,,2
+242,102012,Hillside at Douglas,,48.438496,-123.365523,,,0,,2
+243,100237,Hillside at Blanshard,,48.438968,-123.362406,,,0,,2
+244,100266,Hillside at Quadra,,48.439481,-123.358182,,,0,,2
+245,100280,Hillside at Graham,,48.439777,-123.356029,,,0,,2
+246,100301,Hillside at Blackwood,,48.440102,-123.353483,,,0,,2
+247,100322,Hillside at Cook,,48.440415,-123.351205,,,0,,2
+248,100337,Hillside at Higgins,,48.440841,-123.348779,,,0,,2
+249,100385,Hillside at Cedar Hill,,48.441036,-123.345454,,,0,,2
+250,100442,Hillside at Gosworth,,48.442269,-123.341669,,,0,,2
+251,100514,Hillside at Doncaster,,48.443841,-123.337704,,,0,,2
+252,100566,Hillside at Shakespeare - Hillside Ctr.,,48.444817,-123.335207,,,0,,2
+253,100618,Hillside at Shelbourne,,48.445836,-123.332646,,,0,,2
+254,100653,Lansdowne at Richmond,,48.446074,-123.32785,,,0,,2
+255,100763,Camosun College main entrance,,48.448,-123.320356,,,0,,2
+256,100827,Foul Bay at University Woods,,48.449544,-123.318019,,,0,,2
+257,100864,Henderson at Dundrum,,48.451296,-123.316008,,,0,,2
+258,100913,Henderson at Kendal,,48.453544,-123.314867,,,0,,2
+259,100937,Henderson at Avondale,,48.455456,-123.314264,,,0,,2
+260,100951,Henderson at Frederick Norris,,48.457909,-123.315693,,,0,,2
+261,100071,University Dr at Ring Rd,,48.459773,-123.314519,,,0,,2
+262,101036,Ring Rd. at Parking Lot '1',,48.461773,-123.308363,,,0,,2
+263,102420,UVic Exchange,,48.465923,-123.308732,,,0,,2
 264,101430,Royal Oak Exch - Commonwealth Place,,48.498481,-123.388669,,,0,,2
 265,101352,West Saanich at Elk Lake Dr.,,48.495795,-123.389639,,,0,,2
 266,101318,West Saanich at Royal Oak Shopping Ctr,,48.492801,-123.387518,,,0,,2
@@ -291,55 +291,55 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 290,100145,Quadra at Caledonia,,48.430537,-123.358762,,,0,,2
 291,100135,Quadra at North Park,,48.429616,-123.358904,,,0,,2
 292,100101,Quadra at Pandora,,48.427277,-123.359052,,,0,,2
-293,101414,Royal Oak Exch / Commonwealth Place,,48.499014,-123.388922,,,0,,2
-294,101381,Royal Oak at Falaise Dr - Broadmead Vlg,,48.498045,-123.380602,,,0,,2
-295,101369,Chatterton at Royal Oak Dr.,,48.497136,-123.380046,,,0,,2
-296,101351,"Chatterton, 4540 block",,48.496563,-123.383551,,,0,,2
-297,101333,Chatterton at Royal Oak Av.,,48.494632,-123.384631,,,0,,2
-298,101306,Chatterton at Dalewood,,48.493054,-123.38399,,,0,,2
-299,101234,"Chatterton, 4420 block",,48.488209,-123.383192,,,0,,2
-300,101370,Royal Oak Dr. at Chatterton,,48.497495,-123.377643,,,0,,2
-301,101362,Royal Oak Dr. at Royal Oak Av.,,48.497505,-123.372952,,,0,,2
-302,101382,Royal Oak at Tanglewood,,48.498463,-123.369546,,,0,,2
-303,101404,Emily Carr at Carolwood,,48.499211,-123.366838,,,0,,2
-304,101356,Emily Carr at Rithetwood,,48.496998,-123.366478,,,0,,2
-305,101323,Emily Carr at Lohbrunner Rd W,,48.494041,-123.368346,,,0,,2
-306,101297,Emily Carr at Thistlewood,,48.49241,-123.372274,,,0,,2
-307,101242,Emily Carr at Parkwood,,48.489626,-123.372958,,,0,,2
-308,101225,Emily Carr at Crownwood,,48.488339,-123.377766,,,0,,2
-309,101197,Emily Carr at Maltwood,,48.487019,-123.38126,,,0,,2
-310,100069,Quadra at View,,48.424425,-123.35951,,,0,,2
-311,100085,Quadra at Johnson,,48.42615,-123.359077,,,0,,2
-312,100118,Quadra at Mason,,48.427888,-123.358906,,,0,,2
-313,100133,Quadra at Balmoral,,48.429235,-123.358728,,,0,,2
-314,100147,Quadra at Caledonia,,48.430589,-123.358542,,,0,,2
-315,100171,Quadra at Princess - Crystal Pool,,48.4332,-123.358187,,,0,,2
-316,100208,Quadra at Bay,,48.435577,-123.357996,,,0,,2
-317,100234,Quadra at Kings,,48.437908,-123.358627,,,0,,2
-318,100271,Quadra at Hillside,,48.44006,-123.359255,,,0,,2
-319,100315,Quadra at Topaz,,48.442869,-123.360068,,,0,,2
-320,100344,Quadra at Spruce,,48.444255,-123.360461,,,0,,2
-321,100401,Quadra at Finlayson,,48.446829,-123.361186,,,0,,2
-322,100455,Quadra at Tolmie,,48.449319,-123.361707,,,0,,2
-323,100540,Quadra at Holmes,,48.452321,-123.360601,,,0,,2
-324,100599,Quadra at Cook / Cloverdale,,48.454338,-123.359879,,,0,,2
-325,100655,Quadra at Tattersall Dr,,48.45827,-123.359877,,,0,,2
-326,100746,Quadra at Rock,,48.460466,-123.360477,,,0,,2
-327,100782,Quadra at Lodge,,48.463094,-123.359508,,,0,,2
-328,100853,Quadra at Reynolds,,48.466817,-123.361911,,,0,,2
-329,100895,Quadra at Greenridge,,48.468744,-123.363427,,,0,,2
-330,100923,Quadra at McKenzie,,48.470453,-123.365055,,,0,,2
-331,100977,Quadra at Saanich,,48.473399,-123.370266,,,0,,2
-332,101004,Quadra at Ambassador,,48.476504,-123.373612,,,0,,2
-333,101034,Quadra at Rogers,,48.478428,-123.375977,,,0,,2
-334,101089,Quadra at Beckwith,,48.481381,-123.378133,,,0,,2
-335,101146,Quadra at Caen,,48.484493,-123.380562,,,0,,2
-336,101166,Quadra at Chatterton,,48.48576,-123.382128,,,0,,2
-337,101257,"West Saanich, 4360 block",,48.48988,-123.385796,,,0,,2
-338,101316,West Saanich at Royal Oak Shopping Ctr,,48.492843,-123.387293,,,0,,2
-339,101345,West Saanich at Elk Lake Dr.,,48.49569,-123.389282,,,0,,2
-340,101399,West Saanich at Pipeline,,48.497761,-123.39222,,,0,,2
-341,101412,Royal Oak at West Saanich,,48.4985,-123.393149,,,0,,2
+293,100271,Quadra at Hillside,,48.44006,-123.359255,,,0,,2
+294,100315,Quadra at Topaz,,48.442869,-123.360068,,,0,,2
+295,100344,Quadra at Spruce,,48.444255,-123.360461,,,0,,2
+296,100401,Quadra at Finlayson,,48.446829,-123.361186,,,0,,2
+297,100455,Quadra at Tolmie,,48.449319,-123.361707,,,0,,2
+298,100540,Quadra at Holmes,,48.452321,-123.360601,,,0,,2
+299,100599,Quadra at Cook / Cloverdale,,48.454338,-123.359879,,,0,,2
+300,100655,Quadra at Tattersall Dr,,48.45827,-123.359877,,,0,,2
+301,100746,Quadra at Rock,,48.460466,-123.360477,,,0,,2
+302,100782,Quadra at Lodge,,48.463094,-123.359508,,,0,,2
+303,100853,Quadra at Reynolds,,48.466817,-123.361911,,,0,,2
+304,100895,Quadra at Greenridge,,48.468744,-123.363427,,,0,,2
+305,100923,Quadra at McKenzie,,48.470453,-123.365055,,,0,,2
+306,100977,Quadra at Saanich,,48.473399,-123.370266,,,0,,2
+307,101004,Quadra at Ambassador,,48.476504,-123.373612,,,0,,2
+308,101034,Quadra at Rogers,,48.478428,-123.375977,,,0,,2
+309,101089,Quadra at Beckwith,,48.481381,-123.378133,,,0,,2
+310,101146,Quadra at Caen,,48.484493,-123.380562,,,0,,2
+311,101166,Quadra at Chatterton,,48.48576,-123.382128,,,0,,2
+312,101257,"West Saanich, 4360 block",,48.48988,-123.385796,,,0,,2
+313,101316,West Saanich at Royal Oak Shopping Ctr,,48.492843,-123.387293,,,0,,2
+314,101345,West Saanich at Elk Lake Dr.,,48.49569,-123.389282,,,0,,2
+315,101399,West Saanich at Pipeline,,48.497761,-123.39222,,,0,,2
+316,101412,Royal Oak at West Saanich,,48.4985,-123.393149,,,0,,2
+317,100069,Quadra at View,,48.424425,-123.35951,,,0,,2
+318,100085,Quadra at Johnson,,48.42615,-123.359077,,,0,,2
+319,100118,Quadra at Mason,,48.427888,-123.358906,,,0,,2
+320,100133,Quadra at Balmoral,,48.429235,-123.358728,,,0,,2
+321,100147,Quadra at Caledonia,,48.430589,-123.358542,,,0,,2
+322,100171,Quadra at Princess - Crystal Pool,,48.4332,-123.358187,,,0,,2
+323,100208,Quadra at Bay,,48.435577,-123.357996,,,0,,2
+324,100234,Quadra at Kings,,48.437908,-123.358627,,,0,,2
+325,101414,Royal Oak Exch / Commonwealth Place,,48.499014,-123.388922,,,0,,2
+326,101381,Royal Oak at Falaise Dr - Broadmead Vlg,,48.498045,-123.380602,,,0,,2
+327,101369,Chatterton at Royal Oak Dr.,,48.497136,-123.380046,,,0,,2
+328,101351,"Chatterton, 4540 block",,48.496563,-123.383551,,,0,,2
+329,101333,Chatterton at Royal Oak Av.,,48.494632,-123.384631,,,0,,2
+330,101306,Chatterton at Dalewood,,48.493054,-123.38399,,,0,,2
+331,101234,"Chatterton, 4420 block",,48.488209,-123.383192,,,0,,2
+332,101370,Royal Oak Dr. at Chatterton,,48.497495,-123.377643,,,0,,2
+333,101362,Royal Oak Dr. at Royal Oak Av.,,48.497505,-123.372952,,,0,,2
+334,101382,Royal Oak at Tanglewood,,48.498463,-123.369546,,,0,,2
+335,101404,Emily Carr at Carolwood,,48.499211,-123.366838,,,0,,2
+336,101356,Emily Carr at Rithetwood,,48.496998,-123.366478,,,0,,2
+337,101323,Emily Carr at Lohbrunner Rd W,,48.494041,-123.368346,,,0,,2
+338,101297,Emily Carr at Thistlewood,,48.49241,-123.372274,,,0,,2
+339,101242,Emily Carr at Parkwood,,48.489626,-123.372958,,,0,,2
+340,101225,Emily Carr at Crownwood,,48.488339,-123.377766,,,0,,2
+341,101197,Emily Carr at Maltwood,,48.487019,-123.38126,,,0,,2
 342,101188,Emily Carr at Maltwood,,48.486906,-123.381093,,,0,,2
 343,101221,Emily Carr at Crownwood,,48.488348,-123.376468,,,0,,2
 344,101243,Emily Carr at Parkwood,,48.489566,-123.37277,,,0,,2
@@ -364,118 +364,118 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 363,100602,Foul Bay at Haultain,,48.435462,-123.322366,,,0,,2
 364,100383,Fairfield at Robertson,,48.415109,-123.332041,,,0,,2
 365,100340,Fairfield at Lillian,,48.413137,-123.334293,,,0,,2
-366,100236,Fairfield at Memorial,,48.412313,-123.343412,,,0,,2
-367,100205,Fairfield at Kipling,,48.414005,-123.345655,,,0,,2
-368,100164,Fairfield at Moss,,48.415539,-123.349084,,,0,,2
-369,100137,Fairfield at Linden,,48.417108,-123.352486,,,0,,2
-370,100124,Fairfield at Trutch,,48.417596,-123.353766,,,0,,2
-371,100091,Fairfield at Cook,,48.418159,-123.356234,,,0,,2
-372,100073,Fairfield at Vancouver,,48.418377,-123.358013,,,0,,2
-373,100035,Fairfield at Quadra,,48.420212,-123.360755,,,0,,2
-374,100051,Douglas at Yates / Johnson,,48.426708,-123.364671,,,0,,2
-375,100024,Fairfield at Blanshard - Bay B,,48.421242,-123.363528,,,0,,2
-376,100039,Fairfield at Quadra,,48.420187,-123.361008,,,0,,2
-377,100056,Fairfield at Vancouver,,48.418365,-123.358659,,,0,,2
-378,100092,Fairfield at Cook,,48.418006,-123.355761,,,0,,2
-379,100345,Fairfield at Lillian,,48.413071,-123.334116,,,0,,2
-380,100390,Fairfield at Richmond,,48.415287,-123.330948,,,0,,2
-381,100575,Foul Bay at Cadboro Bay / Fort,,48.432804,-123.322303,,,0,,2
-382,100605,Foul Bay at Haultain,,48.435649,-123.322168,,,0,,2
-383,100626,Foul Bay at Kings,,48.437565,-123.322077,,,0,,2
-384,100665,Foul Bay at Townley,,48.440525,-123.321932,,,0,,2
-385,100689,Foul Bay at Neil,,48.442222,-123.321826,,,0,,2
-386,100717,Foul Bay at Cochrane,,48.444582,-123.321762,,,0,,2
-387,102426,UVic Exchange,,48.466094,-123.309073,,,0,,2
+366,100091,Fairfield at Cook,,48.418159,-123.356234,,,0,,2
+367,100073,Fairfield at Vancouver,,48.418377,-123.358013,,,0,,2
+368,100035,Fairfield at Quadra,,48.420212,-123.360755,,,0,,2
+369,100051,Douglas at Yates / Johnson,,48.426708,-123.364671,,,0,,2
+370,100024,Fairfield at Blanshard - Bay B,,48.421242,-123.363528,,,0,,2
+371,100039,Fairfield at Quadra,,48.420187,-123.361008,,,0,,2
+372,100056,Fairfield at Vancouver,,48.418365,-123.358659,,,0,,2
+373,100092,Fairfield at Cook,,48.418006,-123.355761,,,0,,2
+374,100345,Fairfield at Lillian,,48.413071,-123.334116,,,0,,2
+375,100390,Fairfield at Richmond,,48.415287,-123.330948,,,0,,2
+376,100575,Foul Bay at Cadboro Bay / Fort,,48.432804,-123.322303,,,0,,2
+377,100605,Foul Bay at Haultain,,48.435649,-123.322168,,,0,,2
+378,100626,Foul Bay at Kings,,48.437565,-123.322077,,,0,,2
+379,100665,Foul Bay at Townley,,48.440525,-123.321932,,,0,,2
+380,100689,Foul Bay at Neil,,48.442222,-123.321826,,,0,,2
+381,100717,Foul Bay at Cochrane,,48.444582,-123.321762,,,0,,2
+382,102426,UVic Exchange,,48.466094,-123.309073,,,0,,2
+383,100236,Fairfield at Memorial,,48.412313,-123.343412,,,0,,2
+384,100205,Fairfield at Kipling,,48.414005,-123.345655,,,0,,2
+385,100164,Fairfield at Moss,,48.415539,-123.349084,,,0,,2
+386,100137,Fairfield at Linden,,48.417108,-123.352486,,,0,,2
+387,100124,Fairfield at Trutch,,48.417596,-123.353766,,,0,,2
 388,100123,Fairfield at Trutch,,48.417471,-123.353763,,,0,,2
 389,100141,Fairfield at Linden,,48.416737,-123.35186,,,0,,2
 390,100162,Fairfield at Moss,,48.415555,-123.349387,,,0,,2
 391,100210,Fairfield at Kipling,,48.413679,-123.345531,,,0,,2
 392,100241,Fairfield at Memorial,,48.412146,-123.34342,,,0,,2
-393,100800,Oak Bay Marina,,48.423681,-123.302932,,,0,,2
-394,100320,Fort at Oak Bay - Oak Bay Junction,,48.427034,-123.335786,,,0,,2
-395,100384,Fort at Leighton,,48.428554,-123.332397,,,0,,2
-396,100434,Richmond at Fort,,48.430114,-123.329892,,,0,,2
-397,100479,Richmond at Bay - Royal Jubilee Hospital,,48.434065,-123.329013,,,0,,2
-398,100518,Richmond at Haultain,,48.436233,-123.32856,,,0,,2
-399,100544,Richmond at Kings,,48.43773,-123.328245,,,0,,2
-400,100565,Richmond at Newton,,48.43913,-123.327973,,,0,,2
-401,100606,Richmond at Allenby,,48.441525,-123.327466,,,0,,2
-402,100652,Richmond at Cochrane,,48.444251,-123.326856,,,0,,2
-403,100615,Shelbourne at Hillside - Hillside Ctr.,,48.44619,-123.333155,,,0,,2
-404,100637,North Dairy at Browning,,48.448248,-123.334705,,,0,,2
-405,100610,North Dairy at Keats,,48.448274,-123.337278,,,0,,2
-406,100584,North Dairy at Wetherby,,48.448315,-123.34009,,,0,,2
-407,100548,Finlayson at Cedar Hill,,48.448439,-123.344507,,,0,,2
-408,100490,Finlayson at Cook,,48.447887,-123.349002,,,0,,2
-409,100422,Finlayson at Somerset,,48.446927,-123.356481,,,0,,2
-410,100392,Finlayson at Glasgow,,48.446216,-123.362174,,,0,,2
-411,100359,Finlayson at Blanshard - Mayfair Mall,,48.445528,-123.367705,,,0,,2
-412,100339,Finlayson at Douglas - Mayfair Mall,,48.444885,-123.37165,,,0,,2
-413,100319,Jutland at Sumas,,48.443664,-123.374875,,,0,,2
-414,100297,Gorge at Jutland,,48.442383,-123.377626,,,0,,2
-415,100325,Gorge at Washington,,48.443152,-123.38171,,,0,,2
-416,100369,Gorge at Balfour,,48.443599,-123.386828,,,0,,2
-417,100398,Gorge at Harriet,,48.443885,-123.389652,,,0,,2
-418,100462,Gorge at Wascana,,48.44577,-123.39347,,,0,,2
-419,100503,Gorge at Millgrove,,48.446831,-123.395445,,,0,,2
-420,100525,Gorge at Orillia,,48.447334,-123.397172,,,0,,2
-421,100569,Gorge at Tillicum,,48.447803,-123.399439,,,0,,2
-422,100601,Tillicum at Obed,,48.450283,-123.39748,,,0,,2
-423,100628,Tillicum at Maddock / Arena,,48.452226,-123.395274,,,0,,2
-424,100670,Burnside at Tillicum - Tillicum Mall,,48.455164,-123.393527,,,0,,2
-425,100716,Burnside Rd at Hwy 1 ramp,,48.456898,-123.394602,,,0,,2
-426,100797,Interurban at Dumeresq,,48.462358,-123.395358,,,0,,2
-427,100860,Interurban at Columbine,,48.464165,-123.397041,,,0,,2
-428,100938,Interurban at Marigold,,48.467079,-123.401654,,,0,,2
-429,100987,Interurban at Hyacinth,,48.469664,-123.403703,,,0,,2
-430,101022,Interurban at Chesterfield,,48.472483,-123.405917,,,0,,2
-431,101061,Interurban at Meadowview,,48.47462,-123.407589,,,0,,2
-432,101136,"Interurban, 4140 block",,48.47725,-123.409714,,,0,,2
-433,101158,Interurban at Wilkinson,,48.479704,-123.411603,,,0,,2
-434,101263,Interurban at Charlton,,48.484054,-123.414402,,,0,,2
-435,101302,Interurban at Alan - P.I.S.E.,,48.486895,-123.415478,,,0,,2
-436,101347,Interurban at Hector,,48.489319,-123.418138,,,0,,2
-437,101365,Camosun - Interurban Campus Loop,,48.490536,-123.418738,,,0,,2
-438,100671,Tillicum Mall / G.R. Pearkes Rec Ctr,,48.454294,-123.396397,,,0,,2
-439,101341,Interurban at Hector - P.I.S.E.,,48.489105,-123.418064,,,0,,2
-440,101293,Interurban at Courtland,,48.486069,-123.415724,,,0,,2
-441,101264,Interurban at Charlton,,48.483994,-123.414587,,,0,,2
-442,101155,Interurban at Dunsterville,,48.479249,-123.411444,,,0,,2
-443,101133,Interurban at Wilkinson,,48.477688,-123.410248,,,0,,2
-444,101056,Interurban at Meadowview,,48.474199,-123.407476,,,0,,2
-445,101008,Interurban at Grange,,48.471636,-123.405457,,,0,,2
-446,100984,Interurban at Hyacinth,,48.469453,-123.403768,,,0,,2
-447,100924,Interurban at Marigold,,48.466402,-123.40127,,,0,,2
-448,100855,Interurban at Columbine,,48.464029,-123.397118,,,0,,2
-449,100743,Burnside at Interurban,,48.458213,-123.394954,,,0,,2
-450,100662,Burnside at Tillicum - Tillicum Mall,,48.454615,-123.39358,,,0,,2
-451,100648,Tillicum at Burnside - Tillicum Mall,,48.453344,-123.394378,,,0,,2
-452,100619,Tillicum at Arena / Maddock,,48.451548,-123.396354,,,0,,2
-453,100598,Tillicum at Obed,,48.449732,-123.39839,,,0,,2
-454,100562,Gorge at Tillicum,,48.447662,-123.399213,,,0,,2
-455,100061,Gorge at Millgrove,,48.446604,-123.395005,,,0,,2
-456,100459,Gorge at Wascana,,48.445253,-123.392991,,,0,,2
-457,100395,Gorge at Harriet,,48.443771,-123.38972,,,0,,2
-458,100363,Gorge at Balfour,,48.443424,-123.386503,,,0,,2
-459,100326,Gorge at Washington,,48.443032,-123.382057,,,0,,2
-460,100300,Jutland at Cecelia,,48.442626,-123.375664,,,0,,2
-461,100328,Finlayson at Burnside,,48.444238,-123.373374,,,0,,2
-462,100343,Finlayson at Douglas - Mayfair Mall,,48.445065,-123.369842,,,0,,2
-463,100378,Finlayson at Glasgow,,48.446022,-123.362782,,,0,,2
-464,100424,Finlayson at Blackwood,,48.446927,-123.355565,,,0,,2
-465,100487,Finlayson at Cook,,48.447808,-123.348601,,,0,,2
-466,100541,Finlayson at Cedar Hill,,48.448301,-123.344821,,,0,,2
-467,100611,North Dairy at Keats,,48.448144,-123.336796,,,0,,2
-468,100678,Richmond at Watson,,48.445543,-123.326768,,,0,,2
-469,100646,Richmond at Forrester,,48.444061,-123.327092,,,0,,2
-470,100596,Richmond at Allenby,,48.441059,-123.327741,,,0,,2
-471,100568,Richmond at Carnarvon,,48.439239,-123.328142,,,0,,2
-472,100530,Richmond at Kings,,48.437549,-123.328484,,,0,,2
-473,100506,Richmond at Adanac,,48.435535,-123.328906,,,0,,2
-474,100468,Richmond at Bay - Royal Jubilee Hospital,,48.433397,-123.329354,,,0,,2
-475,100441,Richmond at Coronation,,48.431365,-123.329793,,,0,,2
-476,100407,Richmond at Leighton,,48.428139,-123.330332,,,0,,2
-477,100769,Windsor at Newport,,48.423755,-123.306063,,,0,,2
+393,101365,Camosun - Interurban Campus Loop,,48.490536,-123.418738,,,0,,2
+394,101341,Interurban at Hector - P.I.S.E.,,48.489105,-123.418064,,,0,,2
+395,101293,Interurban at Courtland,,48.486069,-123.415724,,,0,,2
+396,101264,Interurban at Charlton,,48.483994,-123.414587,,,0,,2
+397,101155,Interurban at Dunsterville,,48.479249,-123.411444,,,0,,2
+398,101133,Interurban at Wilkinson,,48.477688,-123.410248,,,0,,2
+399,101056,Interurban at Meadowview,,48.474199,-123.407476,,,0,,2
+400,101008,Interurban at Grange,,48.471636,-123.405457,,,0,,2
+401,100984,Interurban at Hyacinth,,48.469453,-123.403768,,,0,,2
+402,100924,Interurban at Marigold,,48.466402,-123.40127,,,0,,2
+403,100855,Interurban at Columbine,,48.464029,-123.397118,,,0,,2
+404,100743,Burnside at Interurban,,48.458213,-123.394954,,,0,,2
+405,100662,Burnside at Tillicum - Tillicum Mall,,48.454615,-123.39358,,,0,,2
+406,100648,Tillicum at Burnside - Tillicum Mall,,48.453344,-123.394378,,,0,,2
+407,100619,Tillicum at Arena / Maddock,,48.451548,-123.396354,,,0,,2
+408,100598,Tillicum at Obed,,48.449732,-123.39839,,,0,,2
+409,100562,Gorge at Tillicum,,48.447662,-123.399213,,,0,,2
+410,100061,Gorge at Millgrove,,48.446604,-123.395005,,,0,,2
+411,100459,Gorge at Wascana,,48.445253,-123.392991,,,0,,2
+412,100395,Gorge at Harriet,,48.443771,-123.38972,,,0,,2
+413,100363,Gorge at Balfour,,48.443424,-123.386503,,,0,,2
+414,100326,Gorge at Washington,,48.443032,-123.382057,,,0,,2
+415,100300,Jutland at Cecelia,,48.442626,-123.375664,,,0,,2
+416,100328,Finlayson at Burnside,,48.444238,-123.373374,,,0,,2
+417,100343,Finlayson at Douglas - Mayfair Mall,,48.445065,-123.369842,,,0,,2
+418,100378,Finlayson at Glasgow,,48.446022,-123.362782,,,0,,2
+419,100424,Finlayson at Blackwood,,48.446927,-123.355565,,,0,,2
+420,100487,Finlayson at Cook,,48.447808,-123.348601,,,0,,2
+421,100541,Finlayson at Cedar Hill,,48.448301,-123.344821,,,0,,2
+422,100611,North Dairy at Keats,,48.448144,-123.336796,,,0,,2
+423,100678,Richmond at Watson,,48.445543,-123.326768,,,0,,2
+424,100646,Richmond at Forrester,,48.444061,-123.327092,,,0,,2
+425,100596,Richmond at Allenby,,48.441059,-123.327741,,,0,,2
+426,100568,Richmond at Carnarvon,,48.439239,-123.328142,,,0,,2
+427,100530,Richmond at Kings,,48.437549,-123.328484,,,0,,2
+428,100506,Richmond at Adanac,,48.435535,-123.328906,,,0,,2
+429,100468,Richmond at Bay - Royal Jubilee Hospital,,48.433397,-123.329354,,,0,,2
+430,100441,Richmond at Coronation,,48.431365,-123.329793,,,0,,2
+431,100407,Richmond at Leighton,,48.428139,-123.330332,,,0,,2
+432,100769,Windsor at Newport,,48.423755,-123.306063,,,0,,2
+433,100800,Oak Bay Marina,,48.423681,-123.302932,,,0,,2
+434,100671,Tillicum Mall / G.R. Pearkes Rec Ctr,,48.454294,-123.396397,,,0,,2
+435,100320,Fort at Oak Bay - Oak Bay Junction,,48.427034,-123.335786,,,0,,2
+436,100384,Fort at Leighton,,48.428554,-123.332397,,,0,,2
+437,100434,Richmond at Fort,,48.430114,-123.329892,,,0,,2
+438,100479,Richmond at Bay - Royal Jubilee Hospital,,48.434065,-123.329013,,,0,,2
+439,100518,Richmond at Haultain,,48.436233,-123.32856,,,0,,2
+440,100544,Richmond at Kings,,48.43773,-123.328245,,,0,,2
+441,100565,Richmond at Newton,,48.43913,-123.327973,,,0,,2
+442,100606,Richmond at Allenby,,48.441525,-123.327466,,,0,,2
+443,100652,Richmond at Cochrane,,48.444251,-123.326856,,,0,,2
+444,100615,Shelbourne at Hillside - Hillside Ctr.,,48.44619,-123.333155,,,0,,2
+445,100637,North Dairy at Browning,,48.448248,-123.334705,,,0,,2
+446,100610,North Dairy at Keats,,48.448274,-123.337278,,,0,,2
+447,100584,North Dairy at Wetherby,,48.448315,-123.34009,,,0,,2
+448,100548,Finlayson at Cedar Hill,,48.448439,-123.344507,,,0,,2
+449,100490,Finlayson at Cook,,48.447887,-123.349002,,,0,,2
+450,100422,Finlayson at Somerset,,48.446927,-123.356481,,,0,,2
+451,100392,Finlayson at Glasgow,,48.446216,-123.362174,,,0,,2
+452,100359,Finlayson at Blanshard - Mayfair Mall,,48.445528,-123.367705,,,0,,2
+453,100339,Finlayson at Douglas - Mayfair Mall,,48.444885,-123.37165,,,0,,2
+454,100319,Jutland at Sumas,,48.443664,-123.374875,,,0,,2
+455,100297,Gorge at Jutland,,48.442383,-123.377626,,,0,,2
+456,100325,Gorge at Washington,,48.443152,-123.38171,,,0,,2
+457,100369,Gorge at Balfour,,48.443599,-123.386828,,,0,,2
+458,100398,Gorge at Harriet,,48.443885,-123.389652,,,0,,2
+459,100462,Gorge at Wascana,,48.44577,-123.39347,,,0,,2
+460,100503,Gorge at Millgrove,,48.446831,-123.395445,,,0,,2
+461,100525,Gorge at Orillia,,48.447334,-123.397172,,,0,,2
+462,100569,Gorge at Tillicum,,48.447803,-123.399439,,,0,,2
+463,100601,Tillicum at Obed,,48.450283,-123.39748,,,0,,2
+464,100628,Tillicum at Maddock / Arena,,48.452226,-123.395274,,,0,,2
+465,100670,Burnside at Tillicum - Tillicum Mall,,48.455164,-123.393527,,,0,,2
+466,100716,Burnside Rd at Hwy 1 ramp,,48.456898,-123.394602,,,0,,2
+467,100797,Interurban at Dumeresq,,48.462358,-123.395358,,,0,,2
+468,100860,Interurban at Columbine,,48.464165,-123.397041,,,0,,2
+469,100938,Interurban at Marigold,,48.467079,-123.401654,,,0,,2
+470,100987,Interurban at Hyacinth,,48.469664,-123.403703,,,0,,2
+471,101022,Interurban at Chesterfield,,48.472483,-123.405917,,,0,,2
+472,101061,Interurban at Meadowview,,48.47462,-123.407589,,,0,,2
+473,101136,"Interurban, 4140 block",,48.47725,-123.409714,,,0,,2
+474,101158,Interurban at Wilkinson,,48.479704,-123.411603,,,0,,2
+475,101263,Interurban at Charlton,,48.484054,-123.414402,,,0,,2
+476,101302,Interurban at Alan - P.I.S.E.,,48.486895,-123.415478,,,0,,2
+477,101347,Interurban at Hector,,48.489319,-123.418138,,,0,,2
 478,101424,Royal Oak Exch - Commonwealth Place,,48.499239,-123.388719,,,0,,2
 479,101429,Royal Oak at Smokey Smith,,48.499164,-123.392156,,,0,,2
 480,101392,Markham at West Saanich,,48.500191,-123.40325,,,0,,2
@@ -493,140 +493,140 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 492,101391,Markham at V.I. Tech Park,,48.49419,-123.411763,,,0,,2
 493,101403,"Markham, 4540 block",,48.497013,-123.404929,,,0,,2
 494,101394,Markham at West Saanich,,48.500047,-123.403117,,,0,,2
-495,103724,Bay at Wilson - Westside Village,,48.432438,-123.382703,,,0,,2
-496,100170,Bay at Turner,,48.434842,-123.375412,,,0,,2
-497,100180,Bay at Rock Bay,,48.435822,-123.369355,,,0,,2
-498,103726,Bay at Douglas / Westbourne,,48.435571,-123.364008,,,0,,2
-499,103727,Bay at Dowler,,48.435418,-123.361443,,,0,,2
-500,103730,Bay at Fifth,,48.435172,-123.356775,,,0,,2
-501,103734,Bay at Cedar Hill,,48.434592,-123.347344,,,0,,2
-502,103735,Bay at Roseberry,,48.434393,-123.343872,,,0,,2
-503,103738,Bay at Victor,,48.434098,-123.337872,,,0,,2
-504,103740,Bay at Howard,,48.433924,-123.334653,,,0,,2
-505,100007,Superior at Menzies,,48.41802,-123.37175,,,0,,2
-506,100287,Legislature Terminal,,48.418582,-123.368829,,,0,,2
-507,100026,Government at Broughton,,48.424064,-123.367966,,,0,,2
-508,100050,Government at Johnson,,48.427226,-123.367245,,,0,,2
-509,100077,Pandora at Government / Store,,48.428596,-123.368124,,,0,,2
-510,100941,Esquimalt at Harbour,,48.428241,-123.375062,,,0,,2
-511,100097,Esquimalt at Tyee,,48.428822,-123.377965,,,0,,2
-512,100134,Esquimalt at Sitkum,,48.430127,-123.38048,,,0,,2
-513,103739,Bay at Shakespeare,,48.434091,-123.335426,,,0,,2
-514,103736,Bay at Roseberry,,48.434507,-123.344041,,,0,,2
-515,103733,Bay at Cedar Hill,,48.434765,-123.348086,,,0,,2
-516,103729,Bay at Quadra,,48.435333,-123.35749,,,0,,2
-517,103728,Bay at Dowler,,48.435566,-123.36145,,,0,,2
-518,100185,Bay at Douglas,,48.435804,-123.365997,,,0,,2
-519,100183,Bay at Rock Bay,,48.435924,-123.368484,,,0,,2
-520,100175,Bay at Turner,,48.43507,-123.374896,,,0,,2
-521,100152,Bay at Wilson,,48.432622,-123.382781,,,0,,2
+495,103739,Bay at Shakespeare,,48.434091,-123.335426,,,0,,2
+496,103736,Bay at Roseberry,,48.434507,-123.344041,,,0,,2
+497,103733,Bay at Cedar Hill,,48.434765,-123.348086,,,0,,2
+498,103729,Bay at Quadra,,48.435333,-123.35749,,,0,,2
+499,103728,Bay at Dowler,,48.435566,-123.36145,,,0,,2
+500,100185,Bay at Douglas,,48.435804,-123.365997,,,0,,2
+501,100183,Bay at Rock Bay,,48.435924,-123.368484,,,0,,2
+502,100175,Bay at Turner,,48.43507,-123.374896,,,0,,2
+503,100152,Bay at Wilson,,48.432622,-123.382781,,,0,,2
+504,100007,Superior at Menzies,,48.41802,-123.37175,,,0,,2
+505,100287,Legislature Terminal,,48.418582,-123.368829,,,0,,2
+506,100026,Government at Broughton,,48.424064,-123.367966,,,0,,2
+507,100050,Government at Johnson,,48.427226,-123.367245,,,0,,2
+508,100077,Pandora at Government / Store,,48.428596,-123.368124,,,0,,2
+509,100941,Esquimalt at Harbour,,48.428241,-123.375062,,,0,,2
+510,100097,Esquimalt at Tyee,,48.428822,-123.377965,,,0,,2
+511,100134,Esquimalt at Sitkum,,48.430127,-123.38048,,,0,,2
+512,103724,Bay at Wilson - Westside Village,,48.432438,-123.382703,,,0,,2
+513,100170,Bay at Turner,,48.434842,-123.375412,,,0,,2
+514,100180,Bay at Rock Bay,,48.435822,-123.369355,,,0,,2
+515,103726,Bay at Douglas / Westbourne,,48.435571,-123.364008,,,0,,2
+516,103727,Bay at Dowler,,48.435418,-123.361443,,,0,,2
+517,103730,Bay at Fifth,,48.435172,-123.356775,,,0,,2
+518,103734,Bay at Cedar Hill,,48.434592,-123.347344,,,0,,2
+519,103735,Bay at Roseberry,,48.434393,-123.343872,,,0,,2
+520,103738,Bay at Victor,,48.434098,-123.337872,,,0,,2
+521,103740,Bay at Howard,,48.433924,-123.334653,,,0,,2
 522,100161,Esquimalt at Catherine,,48.430321,-123.383108,,,0,,2
 523,100099,Esquimalt at Tyee,,48.428651,-123.378013,,,0,,2
 524,100930,Esquimalt at Harbour,,48.428108,-123.375097,,,0,,2
 525,100047,Wharf at Yates,,48.427092,-123.3705,,,0,,2
 526,101995,Government at Wharf,,48.422296,-123.368651,,,0,,2
-527,100604,Obed at Tillicum,,48.450261,-123.39832,,,0,,2
-528,100668,Obed at Bodega,,48.451955,-123.401623,,,0,,2
-529,100704,"Obed, 500 block",,48.452837,-123.403373,,,0,,2
-530,100735,Obed at Dysart,,48.45399,-123.405606,,,0,,2
-531,100772,Cowper at Austin,,48.454565,-123.408856,,,0,,2
-532,100803,Cowper at Colquitz,,48.455638,-123.411306,,,0,,2
-533,104110,Admirals at Cowper,,48.456296,-123.413818,,,0,,2
-534,100857,Admirals at Murray,,48.45471,-123.418582,,,0,,2
-535,100846,Gorge at Rockwell,,48.45301,-123.419418,,,0,,2
-536,100804,Gorge at Inlet,,48.452231,-123.41762,,,0,,2
-537,100770,Gorge at Wyndeatt,,48.450907,-123.414419,,,0,,2
-538,100738,Gorge at Austin,,48.450535,-123.411892,,,0,,2
-539,100695,Gorge at Dysart,,48.450165,-123.409123,,,0,,2
-540,100658,Gorge at Inez,,48.44914,-123.406187,,,0,,2
-541,100640,Gorge at Gorge View,,48.448312,-123.403122,,,0,,2
-542,100126,Fort at Cook,,48.423277,-123.353475,,,0,,2
-543,100153,Fort at Linden,,48.422939,-123.350254,,,0,,2
-544,100187,Fort at Fernwood - Castle / Art Gallery,,48.423306,-123.34603,,,0,,2
-545,100212,Fort at Elford,,48.424939,-123.341307,,,0,,2
-546,100286,Fort at Belmont,,48.425916,-123.33829,,,0,,2
-547,100427,Fort at Richmond,,48.429697,-123.329685,,,0,,2
-548,100573,Cadboro Bay at Bee - Oak Bay Rec Ctr,,48.432246,-123.321656,,,0,,2
-549,100616,Cadboro Bay at Cranmore,,48.432771,-123.318374,,,0,,2
-550,100673,Cadboro Bay at Eastdowne,,48.433461,-123.315914,,,0,,2
-551,100737,Cadboro Bay at Woodhouse,,48.435876,-123.312894,,,0,,2
-552,100747,Cadboro Bay at Kinross,,48.437269,-123.3128,,,0,,2
-553,100756,Cadboro Bay at Estevan,,48.438515,-123.312654,,,0,,2
-554,100777,Cadboro Bay at Harlow,,48.440014,-123.312492,,,0,,2
-555,100792,Cadboro Bay at Neil,,48.442161,-123.312228,,,0,,2
-556,100850,Uplands at Dewdney,,48.444298,-123.309473,,,0,,2
-557,100912,Uplands at Cotswold,,48.446656,-123.306772,,,0,,2
-558,100936,Cotswold at Weald,,48.446899,-123.304392,,,0,,2
-559,100968,Midland Circle,,48.447687,-123.301392,,,0,,2
-560,100997,Midland at Beach,,48.451963,-123.301332,,,0,,2
-561,101024,Beach at Midland,,48.454624,-123.30066,,,0,,2
-562,101053,Cadboro Bay at Vista Bay,,48.457381,-123.300212,,,0,,2
-563,101100,Cadboro Bay at Killarney,,48.46013,-123.298556,,,0,,2
-564,101126,Cadboro Bay at Sinclair,,48.461371,-123.296889,,,0,,2
-565,101151,Cadboro Bay at Maynard,,48.461854,-123.29489,,,0,,2
-566,101167,Cadboro Bay at Cherrilee,,48.461272,-123.292408,,,0,,2
-567,101186,Cadboro Bay at Dawe,,48.459817,-123.288913,,,0,,2
-568,101239,Telegraph Bay at Green Vale,,48.460216,-123.285585,,,0,,2
-569,101240,Arbutus at Lauder,,48.462399,-123.287982,,,0,,2
-570,101231,Arbutus at Sherwood,,48.463725,-123.290373,,,0,,2
-571,101214,Arbutus at Hobbs,,48.465988,-123.294517,,,0,,2
-572,101211,Arbutus at Rowley,,48.466861,-123.296039,,,0,,2
-573,101205,Arbutus at Haro,,48.468108,-123.298266,,,0,,2
-574,101202,Arbutus at Qu. Alexandra Childrens Hosp.,,48.469682,-123.301083,,,0,,2
-575,101154,Finnerty at Edgelow,,48.469059,-123.305302,,,0,,2
-576,100507,UVic Exchange,,48.4664,-123.308661,,,0,,2
-577,101157,Finnerty at Edgelow,,48.469355,-123.304694,,,0,,2
-578,101193,Arbutus at Qu. Alexandra Childrens Hosp.,,48.469579,-123.301256,,,0,,2
-579,101201,Arbutus at Haro,,48.467908,-123.298187,,,0,,2
-580,101206,Arbutus at Rowley,,48.466777,-123.296176,,,0,,2
-581,101208,Arbutus at Hobbs,,48.465393,-123.293749,,,0,,2
-582,101226,Arbutus at Sherwood,,48.463621,-123.290504,,,0,,2
-583,101235,Arbutus at Lauder,,48.462255,-123.288001,,,0,,2
-584,101230,Telegraph Bay at Seaview,,48.460094,-123.286039,,,0,,2
-585,101195,Cadboro Bay at Dawe,,48.459824,-123.288568,,,0,,2
-586,101169,Cadboro Bay at Cherrilee,,48.461583,-123.292747,,,0,,2
-587,101152,Cadboro Bay at Maynard,,48.461954,-123.295119,,,0,,2
-588,101117,Cadboro Bay at Sinclair,,48.460872,-123.29791,,,0,,2
-589,101079,Cadboro Bay at Bermuda,,48.459262,-123.299682,,,0,,2
-590,101058,Cadboro Bay at Vista Bay,,48.457408,-123.300412,,,0,,2
-591,101021,Beach at Midland,,48.454469,-123.30087,,,0,,2
-592,101005,Beach at Ripon,,48.451751,-123.299627,,,0,,2
-593,101018,Beach at Ripon,,48.450806,-123.297877,,,0,,2
-594,101023,Beach at Humber,,48.448884,-123.294747,,,0,,2
-595,101013,Beach at Lansdowne,,48.446485,-123.294366,,,0,,2
-596,100986,Lansdowne at Norfolk,,48.444507,-123.296982,,,0,,2
-597,100947,Lansdowne at Ripon,,48.444416,-123.301173,,,0,,2
-598,100914,Nottingham at Devon,,48.4446,-123.305328,,,0,,2
-599,100870,Nottingham at Dorset,,48.44356,-123.307404,,,0,,2
-600,100824,Nottingham at Burdick,,48.442114,-123.310314,,,0,,2
-601,100794,Nottingham at Thompson,,48.44133,-123.311897,,,0,,2
-602,100773,Cadboro Bay at Harlow,,48.440048,-123.312691,,,0,,2
-603,100758,Cadboro Bay at Pacific,,48.438811,-123.312822,,,0,,2
-604,100739,Cadboro Bay at Woodhouse,,48.43662,-123.313045,,,0,,2
-605,100718,Cadboro Bay at Dalhousie,,48.434535,-123.313169,,,0,,2
-606,100664,Cadboro Bay at Eastdowne,,48.433573,-123.317098,,,0,,2
-607,100639,Cadboro Bay at Epworth,,48.43255,-123.320119,,,0,,2
-608,100402,Fort at Ashgrove,,48.429114,-123.331387,,,0,,2
-609,100351,Fort at Morrison,,48.428099,-123.334046,,,0,,2
-610,100294,Fort at Pandora - Oak Bay Junction,,48.42627,-123.337803,,,0,,2
-611,100224,Fort at Stanley,,48.424605,-123.342765,,,0,,2
-612,100191,Yates at Fernwood,,48.424607,-123.346277,,,0,,2
-613,100165,Yates at Ormond,,48.424682,-123.348894,,,0,,2
-614,100617,Gorge at Gorge View,,48.448518,-123.403227,,,0,,2
-615,100663,Gorge at Inez,,48.449239,-123.406399,,,0,,2
-616,100699,Gorge at Heath,,48.450178,-123.408739,,,0,,2
-617,100740,Gorge at Austin,,48.450559,-123.412252,,,0,,2
-618,100779,Gorge at Colquitz,,48.451462,-123.415215,,,0,,2
-619,100812,Gorge at Rockwell,,48.452456,-123.417814,,,0,,2
-620,100849,Admirals at Gorge,,48.453789,-123.419895,,,0,,2
-621,100852,Admirals at Murray,,48.455034,-123.41764,,,0,,2
-622,100837,Admirals at Cowper,,48.456224,-123.413619,,,0,,2
-623,100809,Cowper at Colquitz,,48.45561,-123.411929,,,0,,2
-624,100774,Cowper at Austin,,48.454412,-123.408885,,,0,,2
-625,100744,Cowper at Dysart,,48.453581,-123.406707,,,0,,2
-626,100700,"Obed, 500 block",,48.452835,-123.403696,,,0,,2
-627,100649,Obed at Bodega,,48.451295,-123.400621,,,0,,2
-628,100608,Obed at Tillicum,,48.450053,-123.398233,,,0,,2
+527,100617,Gorge at Gorge View,,48.448518,-123.403227,,,0,,2
+528,100663,Gorge at Inez,,48.449239,-123.406399,,,0,,2
+529,100699,Gorge at Heath,,48.450178,-123.408739,,,0,,2
+530,100740,Gorge at Austin,,48.450559,-123.412252,,,0,,2
+531,100779,Gorge at Colquitz,,48.451462,-123.415215,,,0,,2
+532,100812,Gorge at Rockwell,,48.452456,-123.417814,,,0,,2
+533,100849,Admirals at Gorge,,48.453789,-123.419895,,,0,,2
+534,100852,Admirals at Murray,,48.455034,-123.41764,,,0,,2
+535,100837,Admirals at Cowper,,48.456224,-123.413619,,,0,,2
+536,100809,Cowper at Colquitz,,48.45561,-123.411929,,,0,,2
+537,100774,Cowper at Austin,,48.454412,-123.408885,,,0,,2
+538,100744,Cowper at Dysart,,48.453581,-123.406707,,,0,,2
+539,100700,"Obed, 500 block",,48.452835,-123.403696,,,0,,2
+540,100649,Obed at Bodega,,48.451295,-123.400621,,,0,,2
+541,100608,Obed at Tillicum,,48.450053,-123.398233,,,0,,2
+542,100507,UVic Exchange,,48.4664,-123.308661,,,0,,2
+543,101157,Finnerty at Edgelow,,48.469355,-123.304694,,,0,,2
+544,101193,Arbutus at Qu. Alexandra Childrens Hosp.,,48.469579,-123.301256,,,0,,2
+545,101201,Arbutus at Haro,,48.467908,-123.298187,,,0,,2
+546,101206,Arbutus at Rowley,,48.466777,-123.296176,,,0,,2
+547,101208,Arbutus at Hobbs,,48.465393,-123.293749,,,0,,2
+548,101226,Arbutus at Sherwood,,48.463621,-123.290504,,,0,,2
+549,101235,Arbutus at Lauder,,48.462255,-123.288001,,,0,,2
+550,101230,Telegraph Bay at Seaview,,48.460094,-123.286039,,,0,,2
+551,101195,Cadboro Bay at Dawe,,48.459824,-123.288568,,,0,,2
+552,101169,Cadboro Bay at Cherrilee,,48.461583,-123.292747,,,0,,2
+553,101152,Cadboro Bay at Maynard,,48.461954,-123.295119,,,0,,2
+554,101117,Cadboro Bay at Sinclair,,48.460872,-123.29791,,,0,,2
+555,101079,Cadboro Bay at Bermuda,,48.459262,-123.299682,,,0,,2
+556,101058,Cadboro Bay at Vista Bay,,48.457408,-123.300412,,,0,,2
+557,101021,Beach at Midland,,48.454469,-123.30087,,,0,,2
+558,101005,Beach at Ripon,,48.451751,-123.299627,,,0,,2
+559,101018,Beach at Ripon,,48.450806,-123.297877,,,0,,2
+560,101023,Beach at Humber,,48.448884,-123.294747,,,0,,2
+561,101013,Beach at Lansdowne,,48.446485,-123.294366,,,0,,2
+562,100986,Lansdowne at Norfolk,,48.444507,-123.296982,,,0,,2
+563,100947,Lansdowne at Ripon,,48.444416,-123.301173,,,0,,2
+564,100914,Nottingham at Devon,,48.4446,-123.305328,,,0,,2
+565,100870,Nottingham at Dorset,,48.44356,-123.307404,,,0,,2
+566,100824,Nottingham at Burdick,,48.442114,-123.310314,,,0,,2
+567,100794,Nottingham at Thompson,,48.44133,-123.311897,,,0,,2
+568,100773,Cadboro Bay at Harlow,,48.440048,-123.312691,,,0,,2
+569,100758,Cadboro Bay at Pacific,,48.438811,-123.312822,,,0,,2
+570,100739,Cadboro Bay at Woodhouse,,48.43662,-123.313045,,,0,,2
+571,100718,Cadboro Bay at Dalhousie,,48.434535,-123.313169,,,0,,2
+572,100664,Cadboro Bay at Eastdowne,,48.433573,-123.317098,,,0,,2
+573,100639,Cadboro Bay at Epworth,,48.43255,-123.320119,,,0,,2
+574,100402,Fort at Ashgrove,,48.429114,-123.331387,,,0,,2
+575,100351,Fort at Morrison,,48.428099,-123.334046,,,0,,2
+576,100294,Fort at Pandora - Oak Bay Junction,,48.42627,-123.337803,,,0,,2
+577,100224,Fort at Stanley,,48.424605,-123.342765,,,0,,2
+578,100191,Yates at Fernwood,,48.424607,-123.346277,,,0,,2
+579,100165,Yates at Ormond,,48.424682,-123.348894,,,0,,2
+580,100604,Obed at Tillicum,,48.450261,-123.39832,,,0,,2
+581,100668,Obed at Bodega,,48.451955,-123.401623,,,0,,2
+582,100704,"Obed, 500 block",,48.452837,-123.403373,,,0,,2
+583,100735,Obed at Dysart,,48.45399,-123.405606,,,0,,2
+584,100772,Cowper at Austin,,48.454565,-123.408856,,,0,,2
+585,100803,Cowper at Colquitz,,48.455638,-123.411306,,,0,,2
+586,104110,Admirals at Cowper,,48.456296,-123.413818,,,0,,2
+587,100857,Admirals at Murray,,48.45471,-123.418582,,,0,,2
+588,100846,Gorge at Rockwell,,48.45301,-123.419418,,,0,,2
+589,100804,Gorge at Inlet,,48.452231,-123.41762,,,0,,2
+590,100770,Gorge at Wyndeatt,,48.450907,-123.414419,,,0,,2
+591,100738,Gorge at Austin,,48.450535,-123.411892,,,0,,2
+592,100695,Gorge at Dysart,,48.450165,-123.409123,,,0,,2
+593,100658,Gorge at Inez,,48.44914,-123.406187,,,0,,2
+594,100640,Gorge at Gorge View,,48.448312,-123.403122,,,0,,2
+595,100126,Fort at Cook,,48.423277,-123.353475,,,0,,2
+596,100153,Fort at Linden,,48.422939,-123.350254,,,0,,2
+597,100187,Fort at Fernwood - Castle / Art Gallery,,48.423306,-123.34603,,,0,,2
+598,100212,Fort at Elford,,48.424939,-123.341307,,,0,,2
+599,100286,Fort at Belmont,,48.425916,-123.33829,,,0,,2
+600,100427,Fort at Richmond,,48.429697,-123.329685,,,0,,2
+601,100573,Cadboro Bay at Bee - Oak Bay Rec Ctr,,48.432246,-123.321656,,,0,,2
+602,100616,Cadboro Bay at Cranmore,,48.432771,-123.318374,,,0,,2
+603,100673,Cadboro Bay at Eastdowne,,48.433461,-123.315914,,,0,,2
+604,100737,Cadboro Bay at Woodhouse,,48.435876,-123.312894,,,0,,2
+605,100747,Cadboro Bay at Kinross,,48.437269,-123.3128,,,0,,2
+606,100756,Cadboro Bay at Estevan,,48.438515,-123.312654,,,0,,2
+607,100777,Cadboro Bay at Harlow,,48.440014,-123.312492,,,0,,2
+608,100792,Cadboro Bay at Neil,,48.442161,-123.312228,,,0,,2
+609,100850,Uplands at Dewdney,,48.444298,-123.309473,,,0,,2
+610,100912,Uplands at Cotswold,,48.446656,-123.306772,,,0,,2
+611,100936,Cotswold at Weald,,48.446899,-123.304392,,,0,,2
+612,100968,Midland Circle,,48.447687,-123.301392,,,0,,2
+613,100997,Midland at Beach,,48.451963,-123.301332,,,0,,2
+614,101024,Beach at Midland,,48.454624,-123.30066,,,0,,2
+615,101053,Cadboro Bay at Vista Bay,,48.457381,-123.300212,,,0,,2
+616,101100,Cadboro Bay at Killarney,,48.46013,-123.298556,,,0,,2
+617,101126,Cadboro Bay at Sinclair,,48.461371,-123.296889,,,0,,2
+618,101151,Cadboro Bay at Maynard,,48.461854,-123.29489,,,0,,2
+619,101167,Cadboro Bay at Cherrilee,,48.461272,-123.292408,,,0,,2
+620,101186,Cadboro Bay at Dawe,,48.459817,-123.288913,,,0,,2
+621,101239,Telegraph Bay at Green Vale,,48.460216,-123.285585,,,0,,2
+622,101240,Arbutus at Lauder,,48.462399,-123.287982,,,0,,2
+623,101231,Arbutus at Sherwood,,48.463725,-123.290373,,,0,,2
+624,101214,Arbutus at Hobbs,,48.465988,-123.294517,,,0,,2
+625,101211,Arbutus at Rowley,,48.466861,-123.296039,,,0,,2
+626,101205,Arbutus at Haro,,48.468108,-123.298266,,,0,,2
+627,101202,Arbutus at Qu. Alexandra Childrens Hosp.,,48.469682,-123.301083,,,0,,2
+628,101154,Finnerty at Edgelow,,48.469059,-123.305302,,,0,,2
 629,100965,Garnet at Cedar Hill,,48.467821,-123.334973,,,0,,2
 630,101006,Cedar Hill at Hopesmore,,48.471258,-123.334774,,,0,,2
 631,101060,Cedar Hill at Feltham,,48.47537,-123.335505,,,0,,2
@@ -698,53 +698,53 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 697,100186,Tyee at Bay,,48.434134,-123.381355,,,0,,2
 698,100149,Tyee at Wilson,,48.431033,-123.378723,,,0,,2
 699,100028,Fort at Langley,,48.424954,-123.36892,,,0,,2
-700,100712,Richmond at Argyle - Camosun College,,48.447413,-123.32614,,,0,,2
-701,100751,Richmond at Ernest,,48.449802,-123.325367,,,0,,2
-702,100778,Richmond at Woodley,,48.452263,-123.326249,,,0,,2
-703,100793,Richmond at Mayfair,,48.453905,-123.327,,,0,,2
-704,100822,Richmond at Cedar,,48.456281,-123.328204,,,0,,2
-705,100844,Richmond at Kingsberry,,48.458123,-123.329158,,,0,,2
-706,100869,Richmond at Poplar,,48.459716,-123.329899,,,0,,2
-707,100901,Cedar Hill Cross Rd. at Palo Alto,,48.460372,-123.327908,,,0,,2
-708,100944,Cedar Hill Cross Rd. at Gordon Head,,48.460494,-123.321698,,,0,,2
-709,100956,Cedar Hill Cross Rd. at University Dr,,48.459452,-123.317946,,,0,,2
-710,102416,UVic Exchange,,48.466153,-123.30926,,,0,,2
-711,100960,Cedar Hill Cross Rd. at University Dr,,48.459501,-123.31763,,,0,,2
-712,100942,Cedar Hill Cross Rd. at Mayfair,,48.460639,-123.322084,,,0,,2
-713,100911,Cedar Hill Cross Rd. at Iona,,48.460544,-123.326974,,,0,,2
-714,100861,Richmond at Poplar,,48.459512,-123.329997,,,0,,2
-715,100833,Richmond at Donnelly,,48.45736,-123.328983,,,0,,2
-716,100820,Richmond at Cedar,,48.45607,-123.328303,,,0,,2
-717,100784,Richmond at Knight,,48.453152,-123.326772,,,0,,2
-718,100775,Richmond at Woodley,,48.452104,-123.326397,,,0,,2
-719,100750,Richmond at Ernest,,48.450008,-123.325636,,,0,,2
-720,100719,Richmond at Argyle - Camosun College,,48.44722,-123.326395,,,0,,2
-721,100048,Yates at Broad / Douglas,,48.426441,-123.36571,,,0,,2
-722,101970,Tyee at Wilson,,48.430564,-123.378106,,,0,,2
-723,100182,Tyee at Bay,,48.434358,-123.381374,,,0,,2
-724,100219,Skinner at Catherine,,48.43566,-123.385353,,,0,,2
-725,100281,Craigflower at Belton,,48.437425,-123.388834,,,0,,2
-726,100318,Craigflower at Coventry,,48.439057,-123.391631,,,0,,2
-727,100388,Craigflower at Carrie,,48.440269,-123.395438,,,0,,2
-728,100417,Craigflower at Arcadia,,48.440752,-123.398587,,,0,,2
-729,100457,Craigflower at Lampson,,48.441569,-123.401288,,,0,,2
-730,100491,Craigflower at Tillicum,,48.442282,-123.40317,,,0,,2
-731,100586,"Craigflower, 1115 block",,48.444184,-123.407221,,,0,,2
-732,100634,Craigflower at Forshaw,,48.445426,-123.409749,,,0,,2
-733,100683,Craigflower at Garthland,,48.446599,-123.412205,,,0,,2
-734,100799,Craigflower at Rankin,,48.448385,-123.417401,,,0,,2
-735,100754,Craigflower at Aral,,48.449642,-123.420432,,,0,,2
-736,100859,Craigflower at Admirals,,48.450766,-123.424088,,,0,,2
-737,100896,Island Hwy at Shoreline,,48.451748,-123.425625,,,0,,2
-738,100939,Island Hwy at Glentana - Shoreline Sch,,48.452708,-123.428922,,,0,,2
-739,101001,Island Hwy at Plowright,,48.453724,-123.437177,,,0,,2
-740,101051,Helmcken at Island Hwy,,48.456419,-123.440493,,,0,,2
-741,101026,Helmcken at Midwood,,48.458515,-123.435062,,,0,,2
-742,101025,Helmcken at Parkcrest,,48.459937,-123.433073,,,0,,2
-743,101046,Helmcken at Hwy 1 s/b ramp,,48.463329,-123.431169,,,0,,2
-744,101064,Helmcken at Hwy 1 n/b ramp,,48.464583,-123.430446,,,0,,2
-745,101081,Watkiss Wy at Helmcken - Eagle Creek Vlg,,48.467329,-123.429448,,,0,,2
-746,101143,Hospital Way at Watkiss Way,,48.466922,-123.436315,,,0,,2
+700,102416,UVic Exchange,,48.466153,-123.30926,,,0,,2
+701,100960,Cedar Hill Cross Rd. at University Dr,,48.459501,-123.31763,,,0,,2
+702,100942,Cedar Hill Cross Rd. at Mayfair,,48.460639,-123.322084,,,0,,2
+703,100911,Cedar Hill Cross Rd. at Iona,,48.460544,-123.326974,,,0,,2
+704,100861,Richmond at Poplar,,48.459512,-123.329997,,,0,,2
+705,100833,Richmond at Donnelly,,48.45736,-123.328983,,,0,,2
+706,100820,Richmond at Cedar,,48.45607,-123.328303,,,0,,2
+707,100784,Richmond at Knight,,48.453152,-123.326772,,,0,,2
+708,100775,Richmond at Woodley,,48.452104,-123.326397,,,0,,2
+709,100750,Richmond at Ernest,,48.450008,-123.325636,,,0,,2
+710,100719,Richmond at Argyle - Camosun College,,48.44722,-123.326395,,,0,,2
+711,100048,Yates at Broad / Douglas,,48.426441,-123.36571,,,0,,2
+712,101970,Tyee at Wilson,,48.430564,-123.378106,,,0,,2
+713,100182,Tyee at Bay,,48.434358,-123.381374,,,0,,2
+714,100219,Skinner at Catherine,,48.43566,-123.385353,,,0,,2
+715,100281,Craigflower at Belton,,48.437425,-123.388834,,,0,,2
+716,100318,Craigflower at Coventry,,48.439057,-123.391631,,,0,,2
+717,100388,Craigflower at Carrie,,48.440269,-123.395438,,,0,,2
+718,100417,Craigflower at Arcadia,,48.440752,-123.398587,,,0,,2
+719,100457,Craigflower at Lampson,,48.441569,-123.401288,,,0,,2
+720,100491,Craigflower at Tillicum,,48.442282,-123.40317,,,0,,2
+721,100586,"Craigflower, 1115 block",,48.444184,-123.407221,,,0,,2
+722,100634,Craigflower at Forshaw,,48.445426,-123.409749,,,0,,2
+723,100683,Craigflower at Garthland,,48.446599,-123.412205,,,0,,2
+724,100799,Craigflower at Rankin,,48.448385,-123.417401,,,0,,2
+725,100754,Craigflower at Aral,,48.449642,-123.420432,,,0,,2
+726,100859,Craigflower at Admirals,,48.450766,-123.424088,,,0,,2
+727,100896,Island Hwy at Shoreline,,48.451748,-123.425625,,,0,,2
+728,100939,Island Hwy at Glentana - Shoreline Sch,,48.452708,-123.428922,,,0,,2
+729,101001,Island Hwy at Plowright,,48.453724,-123.437177,,,0,,2
+730,101051,Helmcken at Island Hwy,,48.456419,-123.440493,,,0,,2
+731,101026,Helmcken at Midwood,,48.458515,-123.435062,,,0,,2
+732,101025,Helmcken at Parkcrest,,48.459937,-123.433073,,,0,,2
+733,101046,Helmcken at Hwy 1 s/b ramp,,48.463329,-123.431169,,,0,,2
+734,101064,Helmcken at Hwy 1 n/b ramp,,48.464583,-123.430446,,,0,,2
+735,101081,Watkiss Wy at Helmcken - Eagle Creek Vlg,,48.467329,-123.429448,,,0,,2
+736,101143,Hospital Way at Watkiss Way,,48.466922,-123.436315,,,0,,2
+737,100712,Richmond at Argyle - Camosun College,,48.447413,-123.32614,,,0,,2
+738,100751,Richmond at Ernest,,48.449802,-123.325367,,,0,,2
+739,100778,Richmond at Woodley,,48.452263,-123.326249,,,0,,2
+740,100793,Richmond at Mayfair,,48.453905,-123.327,,,0,,2
+741,100822,Richmond at Cedar,,48.456281,-123.328204,,,0,,2
+742,100844,Richmond at Kingsberry,,48.458123,-123.329158,,,0,,2
+743,100869,Richmond at Poplar,,48.459716,-123.329899,,,0,,2
+744,100901,Cedar Hill Cross Rd. at Palo Alto,,48.460372,-123.327908,,,0,,2
+745,100944,Cedar Hill Cross Rd. at Gordon Head,,48.460494,-123.321698,,,0,,2
+746,100956,Cedar Hill Cross Rd. at University Dr,,48.459452,-123.317946,,,0,,2
 747,100148,Esquimalt at Catherine,,48.430471,-123.385252,,,0,,2
 748,100204,Esquimalt at Maitland,,48.430846,-123.390257,,,0,,2
 749,100242,Esquimalt at Dominion,,48.431758,-123.394068,,,0,,2
@@ -758,19 +758,19 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 757,100597,Esquimalt at Foster,,48.429668,-123.422038,,,0,,2
 758,100651,Canteen at Esquimalt,,48.428904,-123.424622,,,0,,2
 759,100698,HMC Dockyard Terminal,,48.427641,-123.428154,,,0,,2
-760,100693,Esquimalt at Lyall,,48.428419,-123.428112,,,0,,2
-761,100635,Esquimalt at Grafton,,48.429364,-123.42345,,,0,,2
-762,100594,Esquimalt at Sturdee,,48.429669,-123.420828,,,0,,2
-763,100526,Esquimalt at Admirals,,48.429837,-123.4166,,,0,,2
-764,100471,Esquimalt at Park,,48.430077,-123.413961,,,0,,2
-765,100421,Esquimalt at Fernhill,,48.429926,-123.41019,,,0,,2
-766,100365,Esquimalt at Lampson,,48.429453,-123.406403,,,0,,2
-767,100327,Esquimalt at MacAulay,,48.429062,-123.40406,,,0,,2
-768,100299,Esquimalt at Head,,48.43063,-123.400316,,,0,,2
-769,100283,"Esquimalt, 850 block",,48.431532,-123.397942,,,0,,2
-770,100231,Esquimalt at Barnard,,48.431309,-123.393234,,,0,,2
-771,100197,Esquimalt at Maitland,,48.430623,-123.389812,,,0,,2
-772,102417,UVic Exchange,,48.466322,-123.309034,,,0,,2
+760,102417,UVic Exchange,,48.466322,-123.309034,,,0,,2
+761,100693,Esquimalt at Lyall,,48.428419,-123.428112,,,0,,2
+762,100635,Esquimalt at Grafton,,48.429364,-123.42345,,,0,,2
+763,100594,Esquimalt at Sturdee,,48.429669,-123.420828,,,0,,2
+764,100526,Esquimalt at Admirals,,48.429837,-123.4166,,,0,,2
+765,100471,Esquimalt at Park,,48.430077,-123.413961,,,0,,2
+766,100421,Esquimalt at Fernhill,,48.429926,-123.41019,,,0,,2
+767,100365,Esquimalt at Lampson,,48.429453,-123.406403,,,0,,2
+768,100327,Esquimalt at MacAulay,,48.429062,-123.40406,,,0,,2
+769,100299,Esquimalt at Head,,48.43063,-123.400316,,,0,,2
+770,100283,"Esquimalt, 850 block",,48.431532,-123.397942,,,0,,2
+771,100231,Esquimalt at Barnard,,48.431309,-123.393234,,,0,,2
+772,100197,Esquimalt at Maitland,,48.430623,-123.389812,,,0,,2
 773,100918,McKenzie at Quadra,,48.469931,-123.366016,,,0,,2
 774,100900,McKenzie at Nelthorpe,,48.468918,-123.374247,,,0,,2
 775,100890,McKenzie at Douglas / Hwy 17 n/b ramp,,48.468447,-123.378438,,,0,,2
@@ -819,202 +819,202 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 818,101192,Hastings at Delmar,,48.479317,-123.418151,,,0,,2
 819,101176,Hastings at Santa Anita,,48.479056,-123.415184,,,0,,2
 820,101144,Hastings at Wilkinson,,48.478298,-123.411561,,,0,,2
-821,100623,Burnside at Albina,,48.45315,-123.392016,,,0,,2
-822,100572,Burnside at Millgrove,,48.451767,-123.389353,,,0,,2
-823,100527,Burnside at Wascana,,48.450485,-123.386863,,,0,,2
-824,100486,Burnside at Harriet,,48.449198,-123.384275,,,0,,2
-825,100446,Burnside at Eldon,,48.44814,-123.382196,,,0,,2
-826,100399,Burnside at Alpha,,48.446673,-123.379185,,,0,,2
-827,100362,Burnside at Napier,,48.445452,-123.376629,,,0,,2
-828,100323,Burnside at Jutland,,48.443872,-123.373351,,,0,,2
-829,100290,Burnside at Dunedin / Douglas,,48.442044,-123.369566,,,0,,2
-830,100195,Douglas at Hillside / Gorge,,48.43868,-123.36729,,,0,,2
-831,101386,VI Technology Park Main Entrance,,48.493867,-123.409914,,,0,,2
-832,101435,Interurban at Conway,,48.493577,-123.419456,,,0,,2
-833,101461,Interurban at Delmar,,48.495212,-123.419377,,,0,,2
-834,101490,Interurban at Viaduct Ave W,,48.498405,-123.419397,,,0,,2
-835,101434,Interurban at Conway,,48.493486,-123.419654,,,0,,2
-836,100962,Helmcken at Camden,,48.468039,-123.42489,,,0,,2
-837,101097,Wilkinson at Glen Tara,,48.475521,-123.412371,,,0,,2
-838,101073,Wilkinson at Helen,,48.473806,-123.412843,,,0,,2
-839,101976,"Wilkinson, 3930 block",,48.470592,-123.412593,,,0,,2
-840,101017,Wilkinson at South Valley Drive,,48.46778,-123.414128,,,0,,2
-841,100990,Wilkinson at Burnside Rd W,,48.465612,-123.415904,,,0,,2
-842,101978,Burnside at Heritage,,48.463445,-123.412655,,,0,,2
-843,100920,Burnside at Grange,,48.463071,-123.409759,,,0,,2
-844,100902,Burnside at Marigold,,48.463337,-123.404524,,,0,,2
-845,100843,Burnside at McKenzie,,48.461636,-123.401755,,,0,,2
-846,100810,Burnside at Rolston,,48.460628,-123.400281,,,0,,2
-847,100194,Fernwood at Yates,,48.424082,-123.34548,,,0,,2
-848,100203,Fernwood at Johnson,,48.425766,-123.345364,,,0,,2
-849,100214,Fernwood at Pandora,,48.42722,-123.345264,,,0,,2
-850,100227,Fernwood at Grant,,48.42887,-123.345186,,,0,,2
-851,100245,Fernwood at Gladstone,,48.430668,-123.34505,,,0,,2
-852,100253,Fernwood at Pembroke,,48.431537,-123.345046,,,0,,2
-853,100289,Fernwood at Bay,,48.434343,-123.344892,,,0,,2
-854,100306,Fernwood at Haultain,,48.436042,-123.34487,,,0,,2
-855,100331,Haultain at Avebury,,48.436137,-123.342006,,,0,,2
-856,100368,Haultain at Belmont,,48.436097,-123.339436,,,0,,2
-857,100400,Haultain at Victor,,48.436055,-123.336946,,,0,,2
-858,100428,Haultain at Scott,,48.436058,-123.334615,,,0,,2
-859,100485,Shelbourne at Kings,,48.438524,-123.333474,,,0,,2
-860,100549,Shelbourne at Pearl,,48.442239,-123.333342,,,0,,2
-861,100577,Shelbourne at Myrtle,,48.443984,-123.33328,,,0,,2
-862,100612,Hillside Centre,,48.447349,-123.335636,,,0,,2
-863,101147,Watkiss Way at Stoneridge,,48.466205,-123.438158,,,0,,2
-864,101163,Watkiss Way at Talcott,,48.464762,-123.442944,,,0,,2
-865,101204,Watkiss Way at Burnside Rd W,,48.465076,-123.446313,,,0,,2
-866,101228,Watkiss Way at Creed,,48.463696,-123.449691,,,0,,2
-867,101253,Watkiss Way at Marler,,48.462071,-123.453723,,,0,,2
-868,101284,Highland Loop,,48.462067,-123.456523,,,0,,2
-869,101252,Watkiss Way at Marler,,48.461936,-123.453801,,,0,,2
-870,101227,Watkiss Way at Creed,,48.463496,-123.449787,,,0,,2
-871,101190,Watkiss Way at Burnside Rd W,,48.464519,-123.445485,,,0,,2
-872,101156,Watkiss Way at Talcott,,48.464832,-123.441678,,,0,,2
-873,101141,Watkiss Way at Stoneridge,,48.46609,-123.438082,,,0,,2
-874,100636,Shelbourne at N. Dairy - Hillside Ctr.,,48.446769,-123.333453,,,0,,2
-875,100590,Shelbourne at Hillside,,48.445099,-123.333437,,,0,,2
-876,100531,Shelbourne at Pearl,,48.441712,-123.333532,,,0,,2
-877,100461,Shelbourne at Kings,,48.437566,-123.333739,,,0,,2
-878,100431,Haultain at Scott,,48.436181,-123.334855,,,0,,2
-879,100409,Haultain at Shakespeare,,48.436165,-123.336536,,,0,,2
-880,100391,Haultain at Forbes,,48.436193,-123.338375,,,0,,2
-881,100352,Haultain at Asquith,,48.436217,-123.340784,,,0,,2
-882,100316,Haultain at Roseberry,,48.436286,-123.344047,,,0,,2
-883,100302,Fernwood at Haultain,,48.435939,-123.345035,,,0,,2
-884,100285,Fernwood at Bay,,48.434259,-123.34511,,,0,,2
-885,100264,Fernwood at Centre,,48.432213,-123.345186,,,0,,2
-886,100240,Fernwood at Gladstone,,48.430269,-123.34526,,,0,,2
-887,100216,Fernwood at Grant,,48.428379,-123.345414,,,0,,2
-888,100207,Fernwood at Rudlin,,48.425855,-123.345537,,,0,,2
-889,101033,Burnside at Eaton,,48.466797,-123.422731,,,0,,2
-890,100993,Burnside at Mildred,,48.465488,-123.417182,,,0,,2
-891,100992,Wilkinson at Burnside Rd W,,48.466362,-123.415121,,,0,,2
-892,101015,Wilkinson at Tulip,,48.468834,-123.413994,,,0,,2
-893,101030,"Wilkinson, 3930 block",,48.470731,-123.412236,,,0,,2
-894,101071,Wilkinson at Helen,,48.474156,-123.412655,,,0,,2
-895,101104,Wilkinson at Glen Tara,,48.475858,-123.41185,,,0,,2
-896,101142,Hastings at Wilkinson,,48.47845,-123.411705,,,0,,2
-897,101171,Hastings at Santa Anita,,48.479202,-123.415392,,,0,,2
-898,101189,Hastings at Delmar,,48.479416,-123.417843,,,0,,2
-899,101216,Holland at Hastings,,48.479108,-123.421242,,,0,,2
-900,101175,"Holland, 4050 block",,48.477179,-123.421596,,,0,,2
-901,101148,Holland at Blue Ridge,,48.474854,-123.422024,,,0,,2
-902,101118,"Holland, 3940 block",,48.472934,-123.422393,,,0,,2
-903,101094,Holland at Helmcken,,48.471149,-123.422736,,,0,,2
-904,101068,Helmcken at Burnside Rd W,,48.468247,-123.424714,,,0,,2
-905,100948,Cedar Hill at Garnet - Cedar Hill School,,48.466661,-123.335928,,,0,,2
-906,100863,Cedar Hill Rd. at Cedar Hill Cross Rd.,,48.462202,-123.337406,,,0,,2
-907,100813,Cedar Hill at Church,,48.460221,-123.338313,,,0,,2
-908,100753,Cedar Hill at Rowan,,48.457175,-123.339205,,,0,,2
-909,100707,Cedar Hill at Derby,,48.454687,-123.339835,,,0,,2
-910,100677,Cedar Hill at Oakcrest,,48.453151,-123.340253,,,0,,2
-911,100631,Cedar Hill at McRae,,48.450885,-123.341236,,,0,,2
-912,100557,Cedar Hill at North Dairy,,48.44889,-123.343739,,,0,,2
-913,100499,Cedar Hill at Gosworth,,48.446588,-123.345202,,,0,,2
-914,100440,Cedar Hill at Hibberson,,48.444768,-123.346924,,,0,,2
-915,100413,Kiwanis Way at Cedar Hill,,48.443644,-123.34802,,,0,,2
-916,100354,Cook at Higgins,,48.441967,-123.35009,,,0,,2
-917,100309,Cook at Hillside,,48.440077,-123.351953,,,0,,2
-918,100250,Cook at Haultain,,48.436154,-123.352291,,,0,,2
-919,100226,Cook at Empress,,48.434603,-123.352446,,,0,,2
-920,100196,Cook at Princess,,48.432408,-123.352726,,,0,,2
-921,100172,Cook at Caledonia,,48.430231,-123.353009,,,0,,2
-922,100115,Cook at Pandora,,48.427363,-123.35336,,,0,,2
-923,100151,"Wilson, 100 block",,48.431478,-123.3793,,,0,,2
-924,100176,Wilson at Alston,,48.432937,-123.382825,,,0,,2
-925,100189,Wilson at Mary,,48.43295,-123.3858,,,0,,2
-926,100229,Wilson at Dalton,,48.43267,-123.391221,,,0,,2
-927,100272,Old Esquimalt at Viewfield,,48.433023,-123.394966,,,0,,2
-928,100308,Old Esquimalt at Aldebury,,48.433023,-123.39915,,,0,,2
-929,100372,Lampson at Old Esquimalt,,48.433395,-123.403682,,,0,,2
-930,100418,Lampson at Ellery,,48.437581,-123.402247,,,0,,2
-931,100466,Colville at MacLeod,,48.438808,-123.405438,,,0,,2
-932,100537,Colville at Hutchinson,,48.438358,-123.410832,,,0,,2
-933,100579,Colville at Veterans,,48.437946,-123.414704,,,0,,2
-934,100638,Colville at Admirals,,48.437551,-123.418696,,,0,,2
-935,100692,Admirals at Coles,,48.438219,-123.422241,,,0,,2
-936,100728,Parklands at McAdam,,48.440548,-123.423556,,,0,,2
-937,100703,Parklands at Cunningham,,48.441535,-123.420354,,,0,,2
-938,100706,Kingsmill at Alexander,,48.44266,-123.419714,,,0,,2
-939,100723,Kingsmill at Parklands,,48.441739,-123.422105,,,0,,2
-940,100776,Admirals at Caroline,,48.440334,-123.425733,,,0,,2
-941,101778,Admirals at Maple Bank,,48.441846,-123.427763,,,0,,2
-942,100819,Admirals at Seenupin,,48.4444,-123.42789,,,0,,2
-943,100830,Admirals at Cemetery,,48.447106,-123.426311,,,0,,2
-944,100881,Admirals Walk Shopping Centre,,48.447514,-123.427883,,,0,,2
-945,100823,Admirals at Thomas,,48.443663,-123.42855,,,0,,2
-946,101771,Admirals at Maple Bank,,48.441733,-123.427902,,,0,,2
-947,100762,Admirals at Luscombe,,48.440425,-123.426186,,,0,,2
-948,100733,Admirals at Parklands,,48.439332,-123.4247,,,0,,2
-949,100691,Admirals at Coles,,48.438094,-123.42228,,,0,,2
-950,100613,Colville at Flag,,48.437593,-123.416847,,,0,,2
-951,100567,Colville at Intervale,,48.437952,-123.413498,,,0,,2
-952,100524,Colville at Hutchinson,,48.438288,-123.410327,,,0,,2
-953,100464,Colville at MacLeod,,48.438698,-123.405402,,,0,,2
-954,100419,Lampson at Colville,,48.438546,-123.40212,,,0,,2
-955,100408,Lampson at Wurtele,,48.436648,-123.402885,,,0,,2
-956,100379,Lampson at Old Esquimalt,,48.433878,-123.403708,,,0,,2
-957,100342,Old Esquimalt at Head,,48.432944,-123.402438,,,0,,2
-958,100305,Old Esquimalt at Aldebury,,48.432908,-123.399245,,,0,,2
-959,100263,Old Esquimalt at Viewfield,,48.432885,-123.394495,,,0,,2
-960,100225,Wilson at Dalton,,48.432532,-123.391218,,,0,,2
-961,100188,Wilson at Mary,,48.43282,-123.385557,,,0,,2
-962,100173,Wilson at Bay,,48.432806,-123.38275,,,0,,2
-963,100053,Johnson at Wharf,,48.427745,-123.369699,,,0,,2
-964,100055,Johnson at Broad,,48.427253,-123.365627,,,0,,2
-965,100144,Cook at Johnson,,48.426226,-123.353313,,,0,,2
-966,100160,Cook at Balmoral,,48.428727,-123.353007,,,0,,2
-967,100179,Cook at Caledonia,,48.430703,-123.352733,,,0,,2
-968,100206,Cook at Princess,,48.433023,-123.352454,,,0,,2
-969,100235,Cook at Bay,,48.435225,-123.35218,,,0,,2
-970,100260,Cook at Haultain,,48.436719,-123.352018,,,0,,2
-971,100329,Cook at Hillside,,48.440672,-123.351384,,,0,,2
-972,100356,Cook at Higgins,,48.441948,-123.349858,,,0,,2
-973,100420,Cedar Hill at Hipwood,,48.443889,-123.347531,,,0,,2
-974,100449,Cedar Hill at Hibberson,,48.444974,-123.346528,,,0,,2
-975,100497,Cedar Hill at Gosworth,,48.446587,-123.344986,,,0,,2
-976,100563,Cedar Hill at North Dairy,,48.448683,-123.343644,,,0,,2
-977,100627,Cedar Hill at McRae,,48.450967,-123.340898,,,0,,2
-978,100676,Cedar Hill at Oakcrest,,48.452975,-123.34013,,,0,,2
-979,100711,Cedar Hill at Derby,,48.455043,-123.339532,,,0,,2
-980,100768,Cedar Hill at Rowan,,48.457606,-123.338888,,,0,,2
-981,100816,Cedar Hill at Church,,48.460169,-123.338132,,,0,,2
-982,100862,Cedar Hill Rd. at Cedar Hill Cross Rd.,,48.46205,-123.337322,,,0,,2
-983,100922,Cedar Hill at Mortimer,,48.465204,-123.336105,,,0,,2
-984,100624,Admirals at Colville,,48.436948,-123.418263,,,0,,2
-985,100580,Admirals at Naden,,48.4338,-123.417852,,,0,,2
-986,100543,Admirals at Esquimalt,,48.430263,-123.417047,,,0,,2
-987,100528,Admirals at Lyall,,48.428432,-123.417128,,,0,,2
-988,100469,Fraser at Lyall,,48.427682,-123.413937,,,0,,2
-989,100478,Fraser at Wychbury,,48.426154,-123.414829,,,0,,2
-990,100472,Munro at Fraser,,48.424046,-123.415547,,,0,,2
-991,100447,Munro at Plaskett,,48.422345,-123.413839,,,0,,2
-992,100404,Munro at Kinver,,48.421727,-123.410967,,,0,,2
-993,100371,Lampson at Munro,,48.422015,-123.409083,,,0,,2
-994,100367,Lampson at Bewdley,,48.423771,-123.408539,,,0,,2
-995,100364,Lampson at Wychbury,,48.425763,-123.407956,,,0,,2
-996,100353,Lyall at Lampson,,48.427103,-123.406982,,,0,,2
-997,100314,Lyall at MacAulay,,48.426706,-123.403968,,,0,,2
-998,100270,Gore at Lyall,,48.426486,-123.400215,,,0,,2
-999,100267,Head at Paradise,,48.428054,-123.399068,,,0,,2
-1000,100275,Dunsmuir at Head,,48.429315,-123.398744,,,0,,2
-1001,100252,Dunsmuir at Garrett,,48.4303,-123.396188,,,0,,2
-1002,100251,Dunsmuir at Esquimalt,,48.431666,-123.394774,,,0,,2
-1003,100443,Cook at Summit,,48.445612,-123.349174,,,0,,2
-1004,100488,Cook at Finlayson,,48.448103,-123.349812,,,0,,2
-1005,100553,Maplewood at Tolmie,,48.450564,-123.350499,,,0,,2
-1006,100603,Maplewood at Oakmount,,48.452978,-123.350458,,,0,,2
-1007,100661,Maplewood at Derby,,48.455647,-123.350825,,,0,,2
-1008,100688,Maplewood at Pike,,48.457066,-123.350858,,,0,,2
-1009,100736,Blenkinsop at Tattersall,,48.459222,-123.350821,,,0,,2
-1010,100790,Blenkinsop at Judge,,48.462272,-123.350078,,,0,,2
-1011,100848,Blenkinsop at Union,,48.465218,-123.350012,,,0,,2
-1012,100916,Blenkinsop at Moorgreen,,48.467938,-123.349877,,,0,,2
-1013,100961,Blenkinsop at Lonsdale,,48.471404,-123.350928,,,0,,2
-1014,100966,McKenzie at Blenkinsop,,48.471973,-123.351822,,,0,,2
-1015,100955,McKenzie at Century,,48.471532,-123.354838,,,0,,2
-1016,100921,Borden at McKenzie,,48.469368,-123.360972,,,0,,2
+821,101435,Interurban at Conway,,48.493577,-123.419456,,,0,,2
+822,101461,Interurban at Delmar,,48.495212,-123.419377,,,0,,2
+823,101490,Interurban at Viaduct Ave W,,48.498405,-123.419397,,,0,,2
+824,101434,Interurban at Conway,,48.493486,-123.419654,,,0,,2
+825,100623,Burnside at Albina,,48.45315,-123.392016,,,0,,2
+826,100572,Burnside at Millgrove,,48.451767,-123.389353,,,0,,2
+827,100527,Burnside at Wascana,,48.450485,-123.386863,,,0,,2
+828,100486,Burnside at Harriet,,48.449198,-123.384275,,,0,,2
+829,100446,Burnside at Eldon,,48.44814,-123.382196,,,0,,2
+830,100399,Burnside at Alpha,,48.446673,-123.379185,,,0,,2
+831,100362,Burnside at Napier,,48.445452,-123.376629,,,0,,2
+832,100323,Burnside at Jutland,,48.443872,-123.373351,,,0,,2
+833,100290,Burnside at Dunedin / Douglas,,48.442044,-123.369566,,,0,,2
+834,100195,Douglas at Hillside / Gorge,,48.43868,-123.36729,,,0,,2
+835,101386,VI Technology Park Main Entrance,,48.493867,-123.409914,,,0,,2
+836,101147,Watkiss Way at Stoneridge,,48.466205,-123.438158,,,0,,2
+837,101163,Watkiss Way at Talcott,,48.464762,-123.442944,,,0,,2
+838,101204,Watkiss Way at Burnside Rd W,,48.465076,-123.446313,,,0,,2
+839,101228,Watkiss Way at Creed,,48.463696,-123.449691,,,0,,2
+840,101253,Watkiss Way at Marler,,48.462071,-123.453723,,,0,,2
+841,101284,Highland Loop,,48.462067,-123.456523,,,0,,2
+842,101252,Watkiss Way at Marler,,48.461936,-123.453801,,,0,,2
+843,101227,Watkiss Way at Creed,,48.463496,-123.449787,,,0,,2
+844,101190,Watkiss Way at Burnside Rd W,,48.464519,-123.445485,,,0,,2
+845,101156,Watkiss Way at Talcott,,48.464832,-123.441678,,,0,,2
+846,101141,Watkiss Way at Stoneridge,,48.46609,-123.438082,,,0,,2
+847,100962,Helmcken at Camden,,48.468039,-123.42489,,,0,,2
+848,101033,Burnside at Eaton,,48.466797,-123.422731,,,0,,2
+849,100993,Burnside at Mildred,,48.465488,-123.417182,,,0,,2
+850,101978,Burnside at Heritage,,48.463445,-123.412655,,,0,,2
+851,100920,Burnside at Grange,,48.463071,-123.409759,,,0,,2
+852,100902,Burnside at Marigold,,48.463337,-123.404524,,,0,,2
+853,100843,Burnside at McKenzie,,48.461636,-123.401755,,,0,,2
+854,100810,Burnside at Rolston,,48.460628,-123.400281,,,0,,2
+855,100194,Fernwood at Yates,,48.424082,-123.34548,,,0,,2
+856,100203,Fernwood at Johnson,,48.425766,-123.345364,,,0,,2
+857,100214,Fernwood at Pandora,,48.42722,-123.345264,,,0,,2
+858,100227,Fernwood at Grant,,48.42887,-123.345186,,,0,,2
+859,100245,Fernwood at Gladstone,,48.430668,-123.34505,,,0,,2
+860,100253,Fernwood at Pembroke,,48.431537,-123.345046,,,0,,2
+861,100289,Fernwood at Bay,,48.434343,-123.344892,,,0,,2
+862,100306,Fernwood at Haultain,,48.436042,-123.34487,,,0,,2
+863,100331,Haultain at Avebury,,48.436137,-123.342006,,,0,,2
+864,100368,Haultain at Belmont,,48.436097,-123.339436,,,0,,2
+865,100400,Haultain at Victor,,48.436055,-123.336946,,,0,,2
+866,100428,Haultain at Scott,,48.436058,-123.334615,,,0,,2
+867,100485,Shelbourne at Kings,,48.438524,-123.333474,,,0,,2
+868,100549,Shelbourne at Pearl,,48.442239,-123.333342,,,0,,2
+869,100577,Shelbourne at Myrtle,,48.443984,-123.33328,,,0,,2
+870,100612,Hillside Centre,,48.447349,-123.335636,,,0,,2
+871,100636,Shelbourne at N. Dairy - Hillside Ctr.,,48.446769,-123.333453,,,0,,2
+872,100590,Shelbourne at Hillside,,48.445099,-123.333437,,,0,,2
+873,100531,Shelbourne at Pearl,,48.441712,-123.333532,,,0,,2
+874,100461,Shelbourne at Kings,,48.437566,-123.333739,,,0,,2
+875,100431,Haultain at Scott,,48.436181,-123.334855,,,0,,2
+876,100409,Haultain at Shakespeare,,48.436165,-123.336536,,,0,,2
+877,100391,Haultain at Forbes,,48.436193,-123.338375,,,0,,2
+878,100352,Haultain at Asquith,,48.436217,-123.340784,,,0,,2
+879,100316,Haultain at Roseberry,,48.436286,-123.344047,,,0,,2
+880,100302,Fernwood at Haultain,,48.435939,-123.345035,,,0,,2
+881,100285,Fernwood at Bay,,48.434259,-123.34511,,,0,,2
+882,100264,Fernwood at Centre,,48.432213,-123.345186,,,0,,2
+883,100240,Fernwood at Gladstone,,48.430269,-123.34526,,,0,,2
+884,100216,Fernwood at Grant,,48.428379,-123.345414,,,0,,2
+885,100207,Fernwood at Rudlin,,48.425855,-123.345537,,,0,,2
+886,100992,Wilkinson at Burnside Rd W,,48.466362,-123.415121,,,0,,2
+887,101015,Wilkinson at Tulip,,48.468834,-123.413994,,,0,,2
+888,101030,"Wilkinson, 3930 block",,48.470731,-123.412236,,,0,,2
+889,101071,Wilkinson at Helen,,48.474156,-123.412655,,,0,,2
+890,101104,Wilkinson at Glen Tara,,48.475858,-123.41185,,,0,,2
+891,101142,Hastings at Wilkinson,,48.47845,-123.411705,,,0,,2
+892,101171,Hastings at Santa Anita,,48.479202,-123.415392,,,0,,2
+893,101189,Hastings at Delmar,,48.479416,-123.417843,,,0,,2
+894,101216,Holland at Hastings,,48.479108,-123.421242,,,0,,2
+895,101175,"Holland, 4050 block",,48.477179,-123.421596,,,0,,2
+896,101148,Holland at Blue Ridge,,48.474854,-123.422024,,,0,,2
+897,101118,"Holland, 3940 block",,48.472934,-123.422393,,,0,,2
+898,101094,Holland at Helmcken,,48.471149,-123.422736,,,0,,2
+899,101068,Helmcken at Burnside Rd W,,48.468247,-123.424714,,,0,,2
+900,101097,Wilkinson at Glen Tara,,48.475521,-123.412371,,,0,,2
+901,101073,Wilkinson at Helen,,48.473806,-123.412843,,,0,,2
+902,101976,"Wilkinson, 3930 block",,48.470592,-123.412593,,,0,,2
+903,101017,Wilkinson at South Valley Drive,,48.46778,-123.414128,,,0,,2
+904,100990,Wilkinson at Burnside Rd W,,48.465612,-123.415904,,,0,,2
+905,100881,Admirals Walk Shopping Centre,,48.447514,-123.427883,,,0,,2
+906,100823,Admirals at Thomas,,48.443663,-123.42855,,,0,,2
+907,101771,Admirals at Maple Bank,,48.441733,-123.427902,,,0,,2
+908,100762,Admirals at Luscombe,,48.440425,-123.426186,,,0,,2
+909,100733,Admirals at Parklands,,48.439332,-123.4247,,,0,,2
+910,100691,Admirals at Coles,,48.438094,-123.42228,,,0,,2
+911,100613,Colville at Flag,,48.437593,-123.416847,,,0,,2
+912,100567,Colville at Intervale,,48.437952,-123.413498,,,0,,2
+913,100524,Colville at Hutchinson,,48.438288,-123.410327,,,0,,2
+914,100464,Colville at MacLeod,,48.438698,-123.405402,,,0,,2
+915,100419,Lampson at Colville,,48.438546,-123.40212,,,0,,2
+916,100408,Lampson at Wurtele,,48.436648,-123.402885,,,0,,2
+917,100379,Lampson at Old Esquimalt,,48.433878,-123.403708,,,0,,2
+918,100342,Old Esquimalt at Head,,48.432944,-123.402438,,,0,,2
+919,100305,Old Esquimalt at Aldebury,,48.432908,-123.399245,,,0,,2
+920,100263,Old Esquimalt at Viewfield,,48.432885,-123.394495,,,0,,2
+921,100225,Wilson at Dalton,,48.432532,-123.391218,,,0,,2
+922,100188,Wilson at Mary,,48.43282,-123.385557,,,0,,2
+923,100173,Wilson at Bay,,48.432806,-123.38275,,,0,,2
+924,100053,Johnson at Wharf,,48.427745,-123.369699,,,0,,2
+925,100055,Johnson at Broad,,48.427253,-123.365627,,,0,,2
+926,100144,Cook at Johnson,,48.426226,-123.353313,,,0,,2
+927,100160,Cook at Balmoral,,48.428727,-123.353007,,,0,,2
+928,100179,Cook at Caledonia,,48.430703,-123.352733,,,0,,2
+929,100206,Cook at Princess,,48.433023,-123.352454,,,0,,2
+930,100235,Cook at Bay,,48.435225,-123.35218,,,0,,2
+931,100260,Cook at Haultain,,48.436719,-123.352018,,,0,,2
+932,100329,Cook at Hillside,,48.440672,-123.351384,,,0,,2
+933,100356,Cook at Higgins,,48.441948,-123.349858,,,0,,2
+934,100420,Cedar Hill at Hipwood,,48.443889,-123.347531,,,0,,2
+935,100449,Cedar Hill at Hibberson,,48.444974,-123.346528,,,0,,2
+936,100497,Cedar Hill at Gosworth,,48.446587,-123.344986,,,0,,2
+937,100563,Cedar Hill at North Dairy,,48.448683,-123.343644,,,0,,2
+938,100627,Cedar Hill at McRae,,48.450967,-123.340898,,,0,,2
+939,100676,Cedar Hill at Oakcrest,,48.452975,-123.34013,,,0,,2
+940,100711,Cedar Hill at Derby,,48.455043,-123.339532,,,0,,2
+941,100768,Cedar Hill at Rowan,,48.457606,-123.338888,,,0,,2
+942,100816,Cedar Hill at Church,,48.460169,-123.338132,,,0,,2
+943,100862,Cedar Hill Rd. at Cedar Hill Cross Rd.,,48.46205,-123.337322,,,0,,2
+944,100922,Cedar Hill at Mortimer,,48.465204,-123.336105,,,0,,2
+945,100948,Cedar Hill at Garnet - Cedar Hill School,,48.466661,-123.335928,,,0,,2
+946,100863,Cedar Hill Rd. at Cedar Hill Cross Rd.,,48.462202,-123.337406,,,0,,2
+947,100813,Cedar Hill at Church,,48.460221,-123.338313,,,0,,2
+948,100753,Cedar Hill at Rowan,,48.457175,-123.339205,,,0,,2
+949,100707,Cedar Hill at Derby,,48.454687,-123.339835,,,0,,2
+950,100677,Cedar Hill at Oakcrest,,48.453151,-123.340253,,,0,,2
+951,100631,Cedar Hill at McRae,,48.450885,-123.341236,,,0,,2
+952,100557,Cedar Hill at North Dairy,,48.44889,-123.343739,,,0,,2
+953,100499,Cedar Hill at Gosworth,,48.446588,-123.345202,,,0,,2
+954,100440,Cedar Hill at Hibberson,,48.444768,-123.346924,,,0,,2
+955,100413,Kiwanis Way at Cedar Hill,,48.443644,-123.34802,,,0,,2
+956,100354,Cook at Higgins,,48.441967,-123.35009,,,0,,2
+957,100309,Cook at Hillside,,48.440077,-123.351953,,,0,,2
+958,100250,Cook at Haultain,,48.436154,-123.352291,,,0,,2
+959,100226,Cook at Empress,,48.434603,-123.352446,,,0,,2
+960,100196,Cook at Princess,,48.432408,-123.352726,,,0,,2
+961,100172,Cook at Caledonia,,48.430231,-123.353009,,,0,,2
+962,100115,Cook at Pandora,,48.427363,-123.35336,,,0,,2
+963,100151,"Wilson, 100 block",,48.431478,-123.3793,,,0,,2
+964,100176,Wilson at Alston,,48.432937,-123.382825,,,0,,2
+965,100189,Wilson at Mary,,48.43295,-123.3858,,,0,,2
+966,100229,Wilson at Dalton,,48.43267,-123.391221,,,0,,2
+967,100272,Old Esquimalt at Viewfield,,48.433023,-123.394966,,,0,,2
+968,100308,Old Esquimalt at Aldebury,,48.433023,-123.39915,,,0,,2
+969,100372,Lampson at Old Esquimalt,,48.433395,-123.403682,,,0,,2
+970,100418,Lampson at Ellery,,48.437581,-123.402247,,,0,,2
+971,100466,Colville at MacLeod,,48.438808,-123.405438,,,0,,2
+972,100537,Colville at Hutchinson,,48.438358,-123.410832,,,0,,2
+973,100579,Colville at Veterans,,48.437946,-123.414704,,,0,,2
+974,100638,Colville at Admirals,,48.437551,-123.418696,,,0,,2
+975,100692,Admirals at Coles,,48.438219,-123.422241,,,0,,2
+976,100776,Admirals at Caroline,,48.440334,-123.425733,,,0,,2
+977,101778,Admirals at Maple Bank,,48.441846,-123.427763,,,0,,2
+978,100819,Admirals at Seenupin,,48.4444,-123.42789,,,0,,2
+979,100830,Admirals at Cemetery,,48.447106,-123.426311,,,0,,2
+980,100728,Parklands at McAdam,,48.440548,-123.423556,,,0,,2
+981,100703,Parklands at Cunningham,,48.441535,-123.420354,,,0,,2
+982,100706,Kingsmill at Alexander,,48.44266,-123.419714,,,0,,2
+983,100723,Kingsmill at Parklands,,48.441739,-123.422105,,,0,,2
+984,100443,Cook at Summit,,48.445612,-123.349174,,,0,,2
+985,100488,Cook at Finlayson,,48.448103,-123.349812,,,0,,2
+986,100553,Maplewood at Tolmie,,48.450564,-123.350499,,,0,,2
+987,100603,Maplewood at Oakmount,,48.452978,-123.350458,,,0,,2
+988,100661,Maplewood at Derby,,48.455647,-123.350825,,,0,,2
+989,100688,Maplewood at Pike,,48.457066,-123.350858,,,0,,2
+990,100736,Blenkinsop at Tattersall,,48.459222,-123.350821,,,0,,2
+991,100790,Blenkinsop at Judge,,48.462272,-123.350078,,,0,,2
+992,100848,Blenkinsop at Union,,48.465218,-123.350012,,,0,,2
+993,100916,Blenkinsop at Moorgreen,,48.467938,-123.349877,,,0,,2
+994,100961,Blenkinsop at Lonsdale,,48.471404,-123.350928,,,0,,2
+995,100966,McKenzie at Blenkinsop,,48.471973,-123.351822,,,0,,2
+996,100955,McKenzie at Century,,48.471532,-123.354838,,,0,,2
+997,100921,Borden at McKenzie,,48.469368,-123.360972,,,0,,2
+998,100624,Admirals at Colville,,48.436948,-123.418263,,,0,,2
+999,100580,Admirals at Naden,,48.4338,-123.417852,,,0,,2
+1000,100543,Admirals at Esquimalt,,48.430263,-123.417047,,,0,,2
+1001,100528,Admirals at Lyall,,48.428432,-123.417128,,,0,,2
+1002,100469,Fraser at Lyall,,48.427682,-123.413937,,,0,,2
+1003,100478,Fraser at Wychbury,,48.426154,-123.414829,,,0,,2
+1004,100472,Munro at Fraser,,48.424046,-123.415547,,,0,,2
+1005,100447,Munro at Plaskett,,48.422345,-123.413839,,,0,,2
+1006,100404,Munro at Kinver,,48.421727,-123.410967,,,0,,2
+1007,100371,Lampson at Munro,,48.422015,-123.409083,,,0,,2
+1008,100367,Lampson at Bewdley,,48.423771,-123.408539,,,0,,2
+1009,100364,Lampson at Wychbury,,48.425763,-123.407956,,,0,,2
+1010,100353,Lyall at Lampson,,48.427103,-123.406982,,,0,,2
+1011,100314,Lyall at MacAulay,,48.426706,-123.403968,,,0,,2
+1012,100270,Gore at Lyall,,48.426486,-123.400215,,,0,,2
+1013,100267,Head at Paradise,,48.428054,-123.399068,,,0,,2
+1014,100275,Dunsmuir at Head,,48.429315,-123.398744,,,0,,2
+1015,100252,Dunsmuir at Garrett,,48.4303,-123.396188,,,0,,2
+1016,100251,Dunsmuir at Esquimalt,,48.431666,-123.394774,,,0,,2
 1017,100854,Borden at Reynolds,,48.466933,-123.360255,,,0,,2
 1018,100929,Cedar Hill Cross Rd. at Astra,,48.470237,-123.356653,,,0,,2
 1019,100909,Cedar Hill Cross Rd. at Margot,,48.468313,-123.352807,,,0,,2
@@ -1104,71 +1104,71 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1103,100781,Shelbourne at Cedar,,48.455848,-123.333145,,,0,,2
 1104,100727,Shelbourne at Knight,,48.45293,-123.333207,,,0,,2
 1105,100685,Shelbourne at McRae,,48.450079,-123.333264,,,0,,2
-1106,100433,Shelbourne at Haultain,,48.435484,-123.333809,,,0,,2
-1107,100403,Shelbourne at Denman,,48.432747,-123.333502,,,0,,2
-1108,100330,Begbie at Shakespeare,,48.429449,-123.335998,,,0,,2
-1109,100258,Begbie at Elford,,48.427599,-123.341239,,,0,,2
-1110,104111,Fairfield at Blanshard,,48.421748,-123.364135,,,0,,2
-1111,100994,Shelbourne at McKenzie,,48.469324,-123.332629,,,0,,2
-1112,101039,Shelbourne at Blair,,48.473198,-123.332487,,,0,,2
-1113,101077,Shelbourne at Feltham,,48.475647,-123.332634,,,0,,2
-1114,101108,Feltham at Lambrick,,48.475965,-123.328023,,,0,,2
-1115,101123,Feltham at Cabot,,48.475977,-123.325251,,,0,,2
-1116,101149,Tyndall at Feltham,,48.476772,-123.32296,,,0,,2
-1117,101220,Tyndall at San Pedro,,48.479017,-123.322947,,,0,,2
-1118,101274,Tyndall at San Juan,,48.483067,-123.321537,,,0,,2
-1119,101305,Tyndall at Hillcrest,,48.485233,-123.320231,,,0,,2
-1120,101355,Tyndall at El Sareno,,48.488058,-123.318464,,,0,,2
-1121,101396,Tyndall at Leabrook,,48.490417,-123.317113,,,0,,2
-1122,101410,Ferndale at Seawood,,48.491123,-123.315432,,,0,,2
-1123,101421,Ferndale at Pomona,,48.490087,-123.311596,,,0,,2
-1124,101428,Ferndale at Vantreight,,48.48922,-123.308406,,,0,,2
-1125,101423,Ferndale at Pauls,,48.488324,-123.307213,,,0,,2
-1126,101379,Ferndale at Saltair,,48.486327,-123.307885,,,0,,2
-1127,101358,Ferndale at Evergreen,,48.485026,-123.30732,,,0,,2
-1128,101344,Ferndale at Houlihan,,48.483676,-123.305811,,,0,,2
-1129,101331,Gordon Head at Sage,,48.481396,-123.305335,,,0,,2
-1130,100014,Gordon Head at San Juan,,48.479341,-123.307627,,,0,,2
-1131,101246,Gordon Head at Greenlands,,48.477229,-123.31008,,,0,,2
-1132,101203,Gordon Head at Graduation,,48.475613,-123.312003,,,0,,2
-1133,101153,Gordon Head at Fairburn,,48.473732,-123.314103,,,0,,2
-1134,101113,Laval at Gordon Head,,48.47231,-123.31707,,,0,,2
-1135,101106,Laval at Loyola,,48.473264,-123.321115,,,0,,2
-1136,101083,Laval at Larchwood,,48.473307,-123.324928,,,0,,2
-1137,101066,Blair at Carnegie,,48.472952,-123.327082,,,0,,2
-1138,101045,Blair at Magdelin,,48.47295,-123.330395,,,0,,2
-1139,100265,Begbie at Elford,,48.427551,-123.34091,,,0,,2
-1140,100321,Begbie at Vining,,48.429092,-123.336614,,,0,,2
-1141,100411,Shelbourne at Denman,,48.432813,-123.333287,,,0,,2
-1142,100450,Shelbourne at Haultain,,48.436487,-123.333565,,,0,,2
-1143,100656,Shelbourne at North Dairy,,48.448429,-123.333115,,,0,,2
-1144,100697,Shelbourne at McRae,,48.450884,-123.333058,,,0,,2
-1145,100731,Shelbourne at Knight,,48.453092,-123.333017,,,0,,2
-1146,100761,Shelbourne at Derby,,48.454754,-123.332973,,,0,,2
-1147,100798,Shelbourne at Rowan,,48.457216,-123.332933,,,0,,2
-1148,100829,Shelbourne at Pear,,48.45882,-123.332887,,,0,,2
-1149,100888,Shelbourne at Cedar Hill Cross Rd.,,48.461839,-123.332824,,,0,,2
-1150,100933,Shelbourne at Mortimer,,48.464874,-123.332693,,,0,,2
-1151,100970,Shelbourne at Garnet,,48.467199,-123.332649,,,0,,2
-1152,101041,Blair at Birchwood,,48.472852,-123.330884,,,0,,2
-1153,101065,Blair at Carnegie,,48.472824,-123.326329,,,0,,2
-1154,101078,Laval at Larchwood,,48.473188,-123.324763,,,0,,2
-1155,101099,Laval at Loyola,,48.473145,-123.320922,,,0,,2
-1156,101110,"Laval, 1870 block - Mt. Doug School",,48.472183,-123.317423,,,0,,2
-1157,101129,Gordon Head at Laval,,48.472541,-123.315247,,,0,,2
-1158,101174,Gordon Head at Ventura,,48.474518,-123.312973,,,0,,2
-1159,101224,Gordon Head at Lifton,,48.476181,-123.311062,,,0,,2
-1160,101256,Gordon Head at Greenlands,,48.477249,-123.309817,,,0,,2
-1161,101294,Gordon Head at San Juan,,48.479256,-123.307471,,,0,,2
-1162,101332,Gordon Head at Sage,,48.481407,-123.305079,,,0,,2
-1163,101349,Ferndale at Houlihan,,48.483447,-123.305503,,,0,,2
-1164,101359,Ferndale at Grandview,,48.485257,-123.307691,,,0,,2
-1165,101390,Ferndale at Saltair,,48.486698,-123.307575,,,0,,2
-1166,101422,Ferndale at Pauls,,48.488412,-123.306993,,,0,,2
-1167,101431,Ferndale at Vantreight,,48.489367,-123.308447,,,0,,2
-1168,101426,Ferndale at Pomona,,48.490289,-123.31181,,,0,,2
-1169,101420,Ferndale at Seawood,,48.491142,-123.315004,,,0,,2
-1170,101405,Tyndall at Barrie,,48.491,-123.316973,,,0,,2
+1106,100265,Begbie at Elford,,48.427551,-123.34091,,,0,,2
+1107,100321,Begbie at Vining,,48.429092,-123.336614,,,0,,2
+1108,100411,Shelbourne at Denman,,48.432813,-123.333287,,,0,,2
+1109,100450,Shelbourne at Haultain,,48.436487,-123.333565,,,0,,2
+1110,100656,Shelbourne at North Dairy,,48.448429,-123.333115,,,0,,2
+1111,100697,Shelbourne at McRae,,48.450884,-123.333058,,,0,,2
+1112,100731,Shelbourne at Knight,,48.453092,-123.333017,,,0,,2
+1113,100761,Shelbourne at Derby,,48.454754,-123.332973,,,0,,2
+1114,100798,Shelbourne at Rowan,,48.457216,-123.332933,,,0,,2
+1115,100829,Shelbourne at Pear,,48.45882,-123.332887,,,0,,2
+1116,100888,Shelbourne at Cedar Hill Cross Rd.,,48.461839,-123.332824,,,0,,2
+1117,100933,Shelbourne at Mortimer,,48.464874,-123.332693,,,0,,2
+1118,100970,Shelbourne at Garnet,,48.467199,-123.332649,,,0,,2
+1119,100994,Shelbourne at McKenzie,,48.469324,-123.332629,,,0,,2
+1120,101041,Blair at Birchwood,,48.472852,-123.330884,,,0,,2
+1121,101065,Blair at Carnegie,,48.472824,-123.326329,,,0,,2
+1122,101078,Laval at Larchwood,,48.473188,-123.324763,,,0,,2
+1123,101099,Laval at Loyola,,48.473145,-123.320922,,,0,,2
+1124,101110,"Laval, 1870 block - Mt. Doug School",,48.472183,-123.317423,,,0,,2
+1125,101129,Gordon Head at Laval,,48.472541,-123.315247,,,0,,2
+1126,101174,Gordon Head at Ventura,,48.474518,-123.312973,,,0,,2
+1127,101224,Gordon Head at Lifton,,48.476181,-123.311062,,,0,,2
+1128,101256,Gordon Head at Greenlands,,48.477249,-123.309817,,,0,,2
+1129,101294,Gordon Head at San Juan,,48.479256,-123.307471,,,0,,2
+1130,101332,Gordon Head at Sage,,48.481407,-123.305079,,,0,,2
+1131,101349,Ferndale at Houlihan,,48.483447,-123.305503,,,0,,2
+1132,101359,Ferndale at Grandview,,48.485257,-123.307691,,,0,,2
+1133,101390,Ferndale at Saltair,,48.486698,-123.307575,,,0,,2
+1134,101422,Ferndale at Pauls,,48.488412,-123.306993,,,0,,2
+1135,101431,Ferndale at Vantreight,,48.489367,-123.308447,,,0,,2
+1136,101426,Ferndale at Pomona,,48.490289,-123.31181,,,0,,2
+1137,101420,Ferndale at Seawood,,48.491142,-123.315004,,,0,,2
+1138,101405,Tyndall at Barrie,,48.491,-123.316973,,,0,,2
+1139,101039,Shelbourne at Blair,,48.473198,-123.332487,,,0,,2
+1140,101077,Shelbourne at Feltham,,48.475647,-123.332634,,,0,,2
+1141,101108,Feltham at Lambrick,,48.475965,-123.328023,,,0,,2
+1142,101123,Feltham at Cabot,,48.475977,-123.325251,,,0,,2
+1143,101149,Tyndall at Feltham,,48.476772,-123.32296,,,0,,2
+1144,101220,Tyndall at San Pedro,,48.479017,-123.322947,,,0,,2
+1145,101274,Tyndall at San Juan,,48.483067,-123.321537,,,0,,2
+1146,101305,Tyndall at Hillcrest,,48.485233,-123.320231,,,0,,2
+1147,101355,Tyndall at El Sareno,,48.488058,-123.318464,,,0,,2
+1148,101396,Tyndall at Leabrook,,48.490417,-123.317113,,,0,,2
+1149,101410,Ferndale at Seawood,,48.491123,-123.315432,,,0,,2
+1150,101421,Ferndale at Pomona,,48.490087,-123.311596,,,0,,2
+1151,101428,Ferndale at Vantreight,,48.48922,-123.308406,,,0,,2
+1152,101423,Ferndale at Pauls,,48.488324,-123.307213,,,0,,2
+1153,101379,Ferndale at Saltair,,48.486327,-123.307885,,,0,,2
+1154,101358,Ferndale at Evergreen,,48.485026,-123.30732,,,0,,2
+1155,101344,Ferndale at Houlihan,,48.483676,-123.305811,,,0,,2
+1156,101331,Gordon Head at Sage,,48.481396,-123.305335,,,0,,2
+1157,100014,Gordon Head at San Juan,,48.479341,-123.307627,,,0,,2
+1158,101246,Gordon Head at Greenlands,,48.477229,-123.31008,,,0,,2
+1159,101203,Gordon Head at Graduation,,48.475613,-123.312003,,,0,,2
+1160,101153,Gordon Head at Fairburn,,48.473732,-123.314103,,,0,,2
+1161,101113,Laval at Gordon Head,,48.47231,-123.31707,,,0,,2
+1162,101106,Laval at Loyola,,48.473264,-123.321115,,,0,,2
+1163,101083,Laval at Larchwood,,48.473307,-123.324928,,,0,,2
+1164,101066,Blair at Carnegie,,48.472952,-123.327082,,,0,,2
+1165,101045,Blair at Magdelin,,48.47295,-123.330395,,,0,,2
+1166,104111,Fairfield at Blanshard,,48.421748,-123.364135,,,0,,2
+1167,100433,Shelbourne at Haultain,,48.435484,-123.333809,,,0,,2
+1168,100403,Shelbourne at Denman,,48.432747,-123.333502,,,0,,2
+1169,100330,Begbie at Shakespeare,,48.429449,-123.335998,,,0,,2
+1170,100258,Begbie at Elford,,48.427599,-123.341239,,,0,,2
 1171,101368,Ash at Torquay,,48.49071,-123.321765,,,0,,2
 1172,101367,Ash at Bissenden,,48.491444,-123.324675,,,0,,2
 1173,101354,Majestic at Ash,,48.492113,-123.32887,,,0,,2
@@ -1313,33 +1313,33 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1312,101387,Cordova Bay at Ash,,48.495895,-123.335863,,,0,,2
 1313,101476,Cordova Bay at Westbank,,48.502526,-123.343999,,,0,,2
 1314,101485,Cordova Bay at Lavinia,,48.503439,-123.349576,,,0,,2
-1315,100818,Westhills Exchange,,48.446289,-123.533314,,,0,,2
-1316,101593,Langford Pkwy at Langford Lake Rd.,,48.443744,-123.52695,,,0,,2
-1317,101549,Langford Pkwy at City Centre Park,,48.443369,-123.51966,,,0,,2
-1318,101750,Langford Pkwy at Hull's Corner,,48.442845,-123.514621,,,0,,2
-1319,101625,Jacklin at Station,,48.445425,-123.508604,,,0,,2
-1320,101620,Jacklin at Orono,,48.447996,-123.507118,,,0,,2
-1321,101618,Goldstream at Jacobson,,48.450222,-123.504887,,,0,,2
-1322,101574,Goldstream at Peatt,,48.44944,-123.50159,,,0,,2
-1323,101539,Goldstream at Bryn Maur,,48.448097,-123.497409,,,0,,2
-1324,101520,Veterans Memorial Pkwy at Station,,48.445974,-123.496517,,,0,,2
-1325,101553,Veterans Memorial Pkwy at Langford Pkwy,,48.440952,-123.503029,,,0,,2
-1326,101509,Kelly at Pickford,,48.436791,-123.498586,,,0,,2
-1327,101486,Kelly at Metchosin,,48.435826,-123.494763,,,0,,2
-1328,101460,Kelly at Sooke Rd.,,48.43517,-123.492203,,,0,,2
-1329,101437,Sooke Rd. at Ledsham,,48.43536,-123.489858,,,0,,2
-1330,101419,Sooke Rd. at Acacia,,48.437041,-123.486598,,,0,,2
-1331,101310,Sooke Rd. at Aldeane - Royal Roads U.,,48.439995,-123.476686,,,0,,2
-1332,101255,Sooke Rd. at Goldstream,,48.441545,-123.470038,,,0,,2
-1333,101241,Colwood Exchange - Westshore Rec Ctr,,48.445877,-123.466523,,,0,,2
-1334,101251,Island Hwy at Wilfert - Elements Casino,,48.45257,-123.462784,,,0,,2
-1335,101262,Island Hwy at Six Mile Rd.,,48.45876,-123.457571,,,0,,2
-1336,101085,Helmcken at Knockan,,48.472619,-123.418482,,,0,,2
-1337,101483,Cordova Bay at Lavinia,,48.503295,-123.349531,,,0,,2
-1338,101475,"Cordova Bay, 4560 block",,48.501705,-123.343322,,,0,,2
-1339,101383,Cordova Bay at Ash,,48.495838,-123.336051,,,0,,2
-1340,101292,Shelbourne at Robinwood,,48.488977,-123.338073,,,0,,2
-1341,101250,Shelbourne at Elnido,,48.486354,-123.337629,,,0,,2
+1315,101483,Cordova Bay at Lavinia,,48.503295,-123.349531,,,0,,2
+1316,101475,"Cordova Bay, 4560 block",,48.501705,-123.343322,,,0,,2
+1317,101383,Cordova Bay at Ash,,48.495838,-123.336051,,,0,,2
+1318,101292,Shelbourne at Robinwood,,48.488977,-123.338073,,,0,,2
+1319,101250,Shelbourne at Elnido,,48.486354,-123.337629,,,0,,2
+1320,100818,Westhills Exchange,,48.446289,-123.533314,,,0,,2
+1321,101593,Langford Pkwy at Langford Lake Rd.,,48.443744,-123.52695,,,0,,2
+1322,101549,Langford Pkwy at City Centre Park,,48.443369,-123.51966,,,0,,2
+1323,101750,Langford Pkwy at Hull's Corner,,48.442845,-123.514621,,,0,,2
+1324,101625,Jacklin at Station,,48.445425,-123.508604,,,0,,2
+1325,101620,Jacklin at Orono,,48.447996,-123.507118,,,0,,2
+1326,101618,Goldstream at Jacobson,,48.450222,-123.504887,,,0,,2
+1327,101574,Goldstream at Peatt,,48.44944,-123.50159,,,0,,2
+1328,101539,Goldstream at Bryn Maur,,48.448097,-123.497409,,,0,,2
+1329,101520,Veterans Memorial Pkwy at Station,,48.445974,-123.496517,,,0,,2
+1330,101553,Veterans Memorial Pkwy at Langford Pkwy,,48.440952,-123.503029,,,0,,2
+1331,101509,Kelly at Pickford,,48.436791,-123.498586,,,0,,2
+1332,101486,Kelly at Metchosin,,48.435826,-123.494763,,,0,,2
+1333,101460,Kelly at Sooke Rd.,,48.43517,-123.492203,,,0,,2
+1334,101437,Sooke Rd. at Ledsham,,48.43536,-123.489858,,,0,,2
+1335,101419,Sooke Rd. at Acacia,,48.437041,-123.486598,,,0,,2
+1336,101310,Sooke Rd. at Aldeane - Royal Roads U.,,48.439995,-123.476686,,,0,,2
+1337,101255,Sooke Rd. at Goldstream,,48.441545,-123.470038,,,0,,2
+1338,101241,Colwood Exchange - Westshore Rec Ctr,,48.445877,-123.466523,,,0,,2
+1339,101251,Island Hwy at Wilfert - Elements Casino,,48.45257,-123.462784,,,0,,2
+1340,101262,Island Hwy at Six Mile Rd.,,48.45876,-123.457571,,,0,,2
+1341,101085,Helmcken at Knockan,,48.472619,-123.418482,,,0,,2
 1342,101095,Helmcken at Lidgate,,48.47428,-123.415552,,,0,,2
 1343,101088,Helmcken at Knockan,,48.472083,-123.418966,,,0,,2
 1344,101254,Island Hwy at Six Mile Rd.,,48.458665,-123.458124,,,0,,2
@@ -1523,53 +1523,53 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1522,101630,Jacklin at Rex - Westshore Town Ctr,,48.441616,-123.510788,,,0,,2
 1523,102443,Langford Pkwy at Jacklin,,48.442786,-123.509628,,,0,,2
 1524,102442,Phipps at Langford Pkwy,,48.442823,-123.504323,,,0,,2
-1525,101573,Langford Exchange,,48.445327,-123.505752,,,0,,2
-1526,102211,Legislature Terminal,,48.418647,-123.368962,,,0,,2
-1527,101542,Langford Exchange,,48.445535,-123.504678,,,0,,2
-1528,101628,Jenkins at Reunion,,48.438796,-123.509681,,,0,,2
-1529,100840,McKenzie at Burnside Rd W,,48.461537,-123.402648,,,0,,2
-1530,100882,McKenzie at Carey,,48.466467,-123.390576,,,0,,2
-1531,100876,McKenzie at Glanford,,48.466924,-123.386829,,,0,,2
-1532,100877,"McKenzie, 660 block",,48.467513,-123.382264,,,0,,2
-1533,100883,McKenzie at Douglas / Hwy 17 n/b ramp,,48.468067,-123.379397,,,0,,2
-1534,100893,McKenzie at Nelthorpe,,48.468846,-123.373559,,,0,,2
-1535,100878,UVic Exchange,,48.465731,-123.30844,,,0,,2
-1536,100884,McKenzie at Willowbrook,,48.467474,-123.384611,,,0,,2
-1537,100887,McKenzie at Glanford,,48.466898,-123.389204,,,0,,2
-1538,100899,McKenzie at Carey,,48.46651,-123.393512,,,0,,2
-1539,100845,McKenzie at Burnside Rd W,,48.461556,-123.402914,,,0,,2
-1540,102347,Latoria at R. Hesjedal - Royal Bay Sch,,48.407305,-123.491611,,,0,,2
-1541,101511,Latoria at Wishart,,48.406474,-123.500983,,,0,,2
-1542,101508,Wishart at Bunker,,48.409405,-123.499867,,,0,,2
-1543,101496,"Wishart, 3480 block",,48.411779,-123.498567,,,0,,2
-1544,101470,Wishart at Rockwood,,48.416105,-123.495597,,,0,,2
-1545,101531,Veterans Memorial Pkwy at Cairndale,,48.421913,-123.503811,,,0,,2
-1546,101530,Veterans Memorial Pkwy at Sooke Rd.,,48.430479,-123.502836,,,0,,2
-1547,101567,Kelly at Veterans Memorial Pkwy,,48.438305,-123.505383,,,0,,2
-1548,101846,Phipps at Kelly - Westshore Town Ctr,,48.44056,-123.505629,,,0,,2
-1549,101232,Colwood Exchange - Westshore Rec Ctr,,48.444953,-123.466198,,,0,,2
-1550,104108,Royal Roads University,,48.437476,-123.475542,,,0,,2
-1551,101340,Lagoon at Christopher,,48.420192,-123.484078,,,0,,2
-1552,101296,Milburn at Hatley,,48.419426,-123.480675,,,0,,2
-1553,101276,Milburn at Hockering,,48.418197,-123.479094,,,0,,2
-1554,102216,Milburn at Aloha,,48.416974,-123.476511,,,0,,2
-1555,101229,Lagoon at Ocean,,48.416964,-123.472531,,,0,,2
-1556,101249,Lagoon at Lanai,,48.418507,-123.475346,,,0,,2
-1557,101273,Lagoon at Goldfinch,,48.419091,-123.476608,,,0,,2
-1558,101303,Lagoon at Heatherbell,,48.420793,-123.480233,,,0,,2
-1559,101337,Lagoon at Christopher,,48.420318,-123.484153,,,0,,2
-1560,101521,Veterans Memorial Pkwy at Hoffman,,48.450247,-123.49507,,,0,,2
-1561,101535,Veterans Memorial Pkwy at Marlisa,,48.452513,-123.495201,,,0,,2
-1562,101671,Millstream at Hoylake,,48.465892,-123.501068,,,0,,2
-1563,101702,Millstream at All Fun Rec/Western Spdwy,,48.470768,-123.503977,,,0,,2
-1564,101722,Bear Mountain Pkwy at Longspur,,48.470353,-123.508532,,,0,,2
-1565,101741,Bear Mountain Pkwy at Echo Valley,,48.469114,-123.512163,,,0,,2
-1566,101763,Bear Mountain Pkwy at Stone Gate,,48.472621,-123.512848,,,0,,2
-1567,101790,Bear Mountain Pkwy at Players Dr,,48.474451,-123.517746,,,0,,2
-1568,101807,Bear Mountain Pkwy at Nicklaus Dr,,48.4753,-123.523397,,,0,,2
-1569,101834,Bear Mountain Pkwy at Country Club Way,,48.475927,-123.530712,,,0,,2
-1570,100154,Metchosin at Kenning,,48.413938,-123.483576,,,0,,2
-1571,102132,Latoria at Dunlin,,48.408379,-123.487997,,,0,,2
+1525,102211,Legislature Terminal,,48.418647,-123.368962,,,0,,2
+1526,101542,Langford Exchange,,48.445535,-123.504678,,,0,,2
+1527,101573,Langford Exchange,,48.445327,-123.505752,,,0,,2
+1528,100878,UVic Exchange,,48.465731,-123.30844,,,0,,2
+1529,100884,McKenzie at Willowbrook,,48.467474,-123.384611,,,0,,2
+1530,100887,McKenzie at Glanford,,48.466898,-123.389204,,,0,,2
+1531,100899,McKenzie at Carey,,48.46651,-123.393512,,,0,,2
+1532,100845,McKenzie at Burnside Rd W,,48.461556,-123.402914,,,0,,2
+1533,101628,Jenkins at Reunion,,48.438796,-123.509681,,,0,,2
+1534,100840,McKenzie at Burnside Rd W,,48.461537,-123.402648,,,0,,2
+1535,100882,McKenzie at Carey,,48.466467,-123.390576,,,0,,2
+1536,100876,McKenzie at Glanford,,48.466924,-123.386829,,,0,,2
+1537,100877,"McKenzie, 660 block",,48.467513,-123.382264,,,0,,2
+1538,100883,McKenzie at Douglas / Hwy 17 n/b ramp,,48.468067,-123.379397,,,0,,2
+1539,100893,McKenzie at Nelthorpe,,48.468846,-123.373559,,,0,,2
+1540,101232,Colwood Exchange - Westshore Rec Ctr,,48.444953,-123.466198,,,0,,2
+1541,104108,Royal Roads University,,48.437476,-123.475542,,,0,,2
+1542,101340,Lagoon at Christopher,,48.420192,-123.484078,,,0,,2
+1543,101296,Milburn at Hatley,,48.419426,-123.480675,,,0,,2
+1544,101276,Milburn at Hockering,,48.418197,-123.479094,,,0,,2
+1545,102216,Milburn at Aloha,,48.416974,-123.476511,,,0,,2
+1546,101229,Lagoon at Ocean,,48.416964,-123.472531,,,0,,2
+1547,101249,Lagoon at Lanai,,48.418507,-123.475346,,,0,,2
+1548,101273,Lagoon at Goldfinch,,48.419091,-123.476608,,,0,,2
+1549,101303,Lagoon at Heatherbell,,48.420793,-123.480233,,,0,,2
+1550,101337,Lagoon at Christopher,,48.420318,-123.484153,,,0,,2
+1551,100154,Metchosin at Kenning,,48.413938,-123.483576,,,0,,2
+1552,102132,Latoria at Dunlin,,48.408379,-123.487997,,,0,,2
+1553,102347,Latoria at R. Hesjedal - Royal Bay Sch,,48.407305,-123.491611,,,0,,2
+1554,101511,Latoria at Wishart,,48.406474,-123.500983,,,0,,2
+1555,101508,Wishart at Bunker,,48.409405,-123.499867,,,0,,2
+1556,101496,"Wishart, 3480 block",,48.411779,-123.498567,,,0,,2
+1557,101470,Wishart at Rockwood,,48.416105,-123.495597,,,0,,2
+1558,101531,Veterans Memorial Pkwy at Cairndale,,48.421913,-123.503811,,,0,,2
+1559,101530,Veterans Memorial Pkwy at Sooke Rd.,,48.430479,-123.502836,,,0,,2
+1560,101567,Kelly at Veterans Memorial Pkwy,,48.438305,-123.505383,,,0,,2
+1561,101846,Phipps at Kelly - Westshore Town Ctr,,48.44056,-123.505629,,,0,,2
+1562,101521,Veterans Memorial Pkwy at Hoffman,,48.450247,-123.49507,,,0,,2
+1563,101535,Veterans Memorial Pkwy at Marlisa,,48.452513,-123.495201,,,0,,2
+1564,101671,Millstream at Hoylake,,48.465892,-123.501068,,,0,,2
+1565,101702,Millstream at All Fun Rec/Western Spdwy,,48.470768,-123.503977,,,0,,2
+1566,101722,Bear Mountain Pkwy at Longspur,,48.470353,-123.508532,,,0,,2
+1567,101741,Bear Mountain Pkwy at Echo Valley,,48.469114,-123.512163,,,0,,2
+1568,101763,Bear Mountain Pkwy at Stone Gate,,48.472621,-123.512848,,,0,,2
+1569,101790,Bear Mountain Pkwy at Players Dr,,48.474451,-123.517746,,,0,,2
+1570,101807,Bear Mountain Pkwy at Nicklaus Dr,,48.4753,-123.523397,,,0,,2
+1571,101834,Bear Mountain Pkwy at Country Club Way,,48.475927,-123.530712,,,0,,2
 1572,101804,Bear Mountain Pkwy at Nicklaus Dr,,48.475082,-123.522157,,,0,,2
 1573,101789,Bear Mountain Pkwy at Players Dr,,48.474316,-123.517945,,,0,,2
 1574,101738,Bear Mountain Pkwy at Echo Valley,,48.468988,-123.512249,,,0,,2
@@ -1591,35 +1591,35 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1590,101681,Dunford at Carlow,,48.445897,-123.514506,,,0,,2
 1591,101687,Carlow at Costin,,48.447577,-123.514221,,,0,,2
 1592,104081,Carlow at Goldstream,,48.449223,-123.513112,,,0,,2
-1593,101649,Goldstream at Leigh,,48.449716,-123.518852,,,0,,2
-1594,101558,"Goldstream, 1170 Block",,48.449882,-123.524442,,,0,,2
-1595,101547,"Goldstream, 1200 Block",,48.450495,-123.526466,,,0,,2
-1596,101809,Goldstream Ave at Ed Nixon Trailhead,,48.455134,-123.534114,,,0,,2
-1597,101787,Goldstream at Lakeshore,,48.453295,-123.530538,,,0,,2
-1598,101781,Goldstream at Wenger,,48.452021,-123.528727,,,0,,2
-1599,101730,"Goldstream, 1170 Block",,48.449592,-123.52417,,,0,,2
-1600,101747,Goldstream at Hartsdale,,48.449183,-123.520956,,,0,,2
-1601,101712,Goldstream at Leigh,,48.449574,-123.517469,,,0,,2
-1602,101679,Goldstream at Carlow,,48.449885,-123.512438,,,0,,2
-1603,101668,Goldstream at Spencer,,48.450245,-123.510811,,,0,,2
-1604,101639,Goldstream at Matson,,48.450888,-123.507543,,,0,,2
-1605,101564,Peatt at Goldstream,,48.450108,-123.50009,,,0,,2
-1606,101560,Peatt at Brock,,48.452729,-123.498499,,,0,,2
-1607,101561,Peatt at Arncote,,48.45451,-123.497515,,,0,,2
-1608,101543,Strandlund at Duncan,,48.456629,-123.493473,,,0,,2
-1609,101518,Selwyn at Wentwich,,48.457052,-123.489883,,,0,,2
-1610,101494,Selwyn at Mill Hill,,48.456031,-123.487096,,,0,,2
-1611,101484,Selwyn at Wynwood,,48.453117,-123.486519,,,0,,2
-1612,101462,Selwyn at Selwyn Oaks,,48.450406,-123.486023,,,0,,2
-1613,101442,Atkins at Leggett,,48.450011,-123.484354,,,0,,2
-1614,101377,Atkins at Crystalview,,48.449967,-123.478279,,,0,,2
-1615,101348,"Atkins, 360 block",,48.447555,-123.477454,,,0,,2
-1616,101304,Atkins at Country,,48.449925,-123.47025,,,0,,2
-1617,101307,Atkins at Myra,,48.452388,-123.468733,,,0,,2
-1618,101322,Atkins at Anya,,48.456442,-123.467201,,,0,,2
-1619,101311,Atkins at Six Mile,,48.458183,-123.464499,,,0,,2
-1620,101289,Six Mile at Damon,,48.45739,-123.462073,,,0,,2
-1621,101465,Colwood Exch / Westshore Rec Ctr,,48.445137,-123.466537,,,0,,2
+1593,101679,Goldstream at Carlow,,48.449885,-123.512438,,,0,,2
+1594,101668,Goldstream at Spencer,,48.450245,-123.510811,,,0,,2
+1595,101639,Goldstream at Matson,,48.450888,-123.507543,,,0,,2
+1596,101564,Peatt at Goldstream,,48.450108,-123.50009,,,0,,2
+1597,101560,Peatt at Brock,,48.452729,-123.498499,,,0,,2
+1598,101561,Peatt at Arncote,,48.45451,-123.497515,,,0,,2
+1599,101543,Strandlund at Duncan,,48.456629,-123.493473,,,0,,2
+1600,101518,Selwyn at Wentwich,,48.457052,-123.489883,,,0,,2
+1601,101494,Selwyn at Mill Hill,,48.456031,-123.487096,,,0,,2
+1602,101484,Selwyn at Wynwood,,48.453117,-123.486519,,,0,,2
+1603,101462,Selwyn at Selwyn Oaks,,48.450406,-123.486023,,,0,,2
+1604,101442,Atkins at Leggett,,48.450011,-123.484354,,,0,,2
+1605,101377,Atkins at Crystalview,,48.449967,-123.478279,,,0,,2
+1606,101348,"Atkins, 360 block",,48.447555,-123.477454,,,0,,2
+1607,101304,Atkins at Country,,48.449925,-123.47025,,,0,,2
+1608,101307,Atkins at Myra,,48.452388,-123.468733,,,0,,2
+1609,101322,Atkins at Anya,,48.456442,-123.467201,,,0,,2
+1610,101311,Atkins at Six Mile,,48.458183,-123.464499,,,0,,2
+1611,101289,Six Mile at Damon,,48.45739,-123.462073,,,0,,2
+1612,101465,Colwood Exch / Westshore Rec Ctr,,48.445137,-123.466537,,,0,,2
+1613,101649,Goldstream at Leigh,,48.449716,-123.518852,,,0,,2
+1614,101558,"Goldstream, 1170 Block",,48.449882,-123.524442,,,0,,2
+1615,101547,"Goldstream, 1200 Block",,48.450495,-123.526466,,,0,,2
+1616,101809,Goldstream Ave at Ed Nixon Trailhead,,48.455134,-123.534114,,,0,,2
+1617,101787,Goldstream at Lakeshore,,48.453295,-123.530538,,,0,,2
+1618,101781,Goldstream at Wenger,,48.452021,-123.528727,,,0,,2
+1619,101730,"Goldstream, 1170 Block",,48.449592,-123.52417,,,0,,2
+1620,101747,Goldstream at Hartsdale,,48.449183,-123.520956,,,0,,2
+1621,101712,Goldstream at Leigh,,48.449574,-123.517469,,,0,,2
 1622,101291,Six Mile at Damon,,48.457584,-123.462469,,,0,,2
 1623,101315,Atkins at Six Mile,,48.458234,-123.464815,,,0,,2
 1624,101320,Atkins at Anya,,48.456461,-123.467399,,,0,,2
@@ -1796,114 +1796,114 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1795,104102,"Walfred, 900 block",,48.427564,-123.514029,,,0,,2
 1796,104103,Jacklin at Walfred,,48.429928,-123.517672,,,0,,2
 1797,104104,"Jacklin, 3227 block",,48.432939,-123.515738,,,0,,2
-1798,100016,Sooke at Townsend - Sooke Town Ctr.,,48.378338,-123.722015,,,0,,2
-1799,102272,Sooke Rd at Church,,48.379199,-123.717495,,,0,,2
-1800,102258,Sooke Rd at Dover,,48.380423,-123.713775,,,0,,2
-1801,102246,Sooke Rd at Drennan,,48.381846,-123.709941,,,0,,2
-1802,102235,Sooke Rd at Belvista,,48.383903,-123.705545,,,0,,2
-1803,102212,Sooke Rd at Lazzar,,48.387729,-123.697598,,,0,,2
-1804,102184,Sooke Rd at Kaltasin,,48.387237,-123.688492,,,0,,2
-1805,102170,"Sooke Rd, 5920 block",,48.389313,-123.681984,,,0,,2
-1806,102157,Sooke Rd at Woodlands,,48.390516,-123.677126,,,0,,2
-1807,102150,Sooke Rd at Saseenos,,48.39085,-123.671958,,,0,,2
-1808,102127,Sooke Rd at Harbourview,,48.391069,-123.66696,,,0,,2
-1809,102109,Sooke Rd at Laidlaw,,48.393001,-123.66088,,,0,,2
-1810,102106,Sooke Rd at Ludlow,,48.394043,-123.658014,,,0,,2
-1811,102103,"Sooke Rd, 5440 block",,48.394675,-123.655607,,,0,,2
-1812,102092,"Sooke Rd, 5300 block",,48.390562,-123.651318,,,0,,2
-1813,102083,"Sooke Rd, 5260 block",,48.387645,-123.647808,,,0,,2
-1814,100018,"Sooke Rd, 5220 block",,48.389034,-123.642852,,,0,,2
-1815,102069,Sooke Rd at Glinz Lake Rd,,48.393436,-123.636436,,,0,,2
-1816,102041,"Sooke Rd, 5140 block",,48.394417,-123.631342,,,0,,2
-1817,102027,Sooke Rd at Gillespie - 17 Mile,,48.394703,-123.626768,,,0,,2
-1818,102005,Sooke Rd at Connie,,48.397352,-123.61924,,,0,,2
-1819,101980,"Sooke Rd, 4960 block",,48.397942,-123.614379,,,0,,2
-1820,101965,"Sooke Rd, 4880 block",,48.39651,-123.609307,,,0,,2
-1821,101956,Sooke Rd at Impala,,48.393841,-123.605631,,,0,,2
-1822,101937,Sooke Rd at Kangaroo,,48.392942,-123.597979,,,0,,2
-1823,101903,"Sooke Rd, 4130 block",,48.399259,-123.589446,,,0,,2
-1824,101916,"Sooke Rd, 4000 block",,48.409573,-123.585279,,,0,,2
-1825,101815,Sooke Rd. at Awsworth,,48.42582,-123.563117,,,0,,2
-1826,101860,Sooke Rd at Westshore Pkwy,,48.425108,-123.548787,,,0,,2
-1827,101801,Sooke Rd. at Glenshire,,48.429233,-123.539809,,,0,,2
-1828,101723,Sooke Rd. at Happy Valley,,48.432939,-123.523911,,,0,,2
-1829,101806,Sooke Rd. at Glenshire,,48.429204,-123.542741,,,0,,2
-1830,101827,Sooke Rd at Westshore Pkwy,,48.425215,-123.549555,,,0,,2
-1831,101822,Sooke Rd. at Awsworth,,48.426036,-123.563724,,,0,,2
-1832,101881,Sooke Rd at Humpback,,48.426224,-123.569148,,,0,,2
-1833,101501,"Sooke Rd., 3770 block",,48.41133,-123.585888,,,0,,2
-1834,101902,"Sooke Rd, 4020 block",,48.407489,-123.584208,,,0,,2
-1835,101905,"Sooke Rd, 4140 block",,48.399109,-123.590311,,,0,,2
-1836,101938,Sooke Rd at Kangaroo,,48.393487,-123.596912,,,0,,2
-1837,101957,Sooke Rd at Impala,,48.394322,-123.605993,,,0,,2
-1838,101967,"Sooke Rd, 4880 block",,48.396867,-123.609468,,,0,,2
-1839,101987,"Sooke Rd, 4960 block",,48.39808,-123.614855,,,0,,2
-1840,102029,Sooke Rd at Connie,,48.3973,-123.61996,,,0,,2
-1841,101923,Sooke Rd at Gillespie - 17 Mile,,48.394066,-123.627397,,,0,,2
-1842,102053,"Sooke Rd, 5150 block",,48.39509,-123.6331,,,0,,2
-1843,102073,Sooke Rd at Glinz Lake Rd,,48.393423,-123.636651,,,0,,2
-1844,100496,"Sooke Rd, 5190 block",,48.390956,-123.64113,,,0,,2
-1845,102081,"Sooke Rd, 5220 block",,48.388611,-123.643742,,,0,,2
-1846,102085,"Sooke Rd, 5260 block",,48.388321,-123.648457,,,0,,2
-1847,102093,"Sooke Rd, 5300 block",,48.390811,-123.65116,,,0,,2
-1848,102097,"Sooke Rd, 5440 block",,48.394836,-123.655139,,,0,,2
-1849,102102,Sooke Rd at Ludlow,,48.394195,-123.657973,,,0,,2
-1850,102105,Sooke Rd at Laidlaw,,48.393023,-123.661199,,,0,,2
-1851,102131,Sooke at Harbourview,,48.391203,-123.666975,,,0,,2
-1852,102147,Sooke Rd at Saseenos,,48.391078,-123.670603,,,0,,2
-1853,102154,Sooke Rd at Woodlands,,48.390747,-123.676787,,,0,,2
-1854,102168,"Sooke Rd, 5940 block",,48.38906,-123.682764,,,0,,2
-1855,102183,Sooke Rd at Kaltasin,,48.387366,-123.688727,,,0,,2
-1856,102214,Sooke Rd at Lazzar,,48.387895,-123.698741,,,0,,2
-1857,102236,Sooke Rd at Phillips,,48.383858,-123.705958,,,0,,2
-1858,102247,Sooke Rd at Terrott,,48.381865,-123.710206,,,0,,2
-1859,102255,Sooke Rd at Charters,,48.380766,-123.712957,,,0,,2
-1860,102270,Sooke Rd at Church,,48.379224,-123.717774,,,0,,2
-1861,102285,Sooke Rd at Townsend - Sooke Town Ctr.,,48.378466,-123.722469,,,0,,2
-1862,102292,Otter Point at Ayre,,48.378517,-123.724532,,,0,,2
-1863,102294,Otter Point at Grant,,48.379653,-123.725201,,,0,,2
-1864,102315,Otter Point at Beaton,,48.383019,-123.732821,,,0,,2
-1865,102317,Quartz at Otter Point,,48.384253,-123.733726,,,0,,2
-1866,102325,Pyrite at Rhodonite,,48.383232,-123.735893,,,0,,2
-1867,102329,Pyrite at Talc,,48.381076,-123.735583,,,0,,2
-1868,102326,Pyrite at Banner,,48.37841,-123.734624,,,0,,2
-1869,102331,Grant at French,,48.377024,-123.735221,,,0,,2
-1870,102339,Grant at Guardian,,48.376431,-123.737227,,,0,,2
-1871,102350,Grant at Maple,,48.375386,-123.740957,,,0,,2
-1872,102358,Grant at Winfield,,48.374348,-123.744553,,,0,,2
-1873,102364,"Grant, 7120 block",,48.373538,-123.747208,,,0,,2
-1874,102372,Grant at West Coast,,48.372668,-123.750265,,,0,,2
-1875,102371,West Coast at Ella,,48.371949,-123.749668,,,0,,2
-1876,102367,West Coast at Croce,,48.370104,-123.747292,,,0,,2
-1877,102362,"West Coast, 7120 block",,48.367572,-123.743228,,,0,,2
-1878,102344,West Coast at Whiffin Spit,,48.366071,-123.734929,,,0,,2
-1879,102332,"West Coast, 6950 block",,48.367481,-123.731036,,,0,,2
-1880,102308,West Coast at Maple,,48.370573,-123.72819,,,0,,2
-1881,102299,West Coast at Atherly,,48.375349,-123.724963,,,0,,2
-1882,101505,Sooke Rd. at Lynnlark,,48.43168,-123.498902,,,0,,2
-1883,101548,Sooke Rd. at Fulton,,48.42992,-123.505577,,,0,,2
-1884,101580,Sooke Rd. at Cecil Blogg,,48.432308,-123.510001,,,0,,2
-1885,102290,Sooke Rd at Shields,,48.376773,-123.724468,,,0,,2
-1886,102311,West Coast at Maple,,48.370637,-123.72837,,,0,,2
-1887,102333,"West Coast, 6960 block",,48.367028,-123.733029,,,0,,2
-1888,102342,West Coast at Whiffin Spit,,48.365941,-123.736748,,,0,,2
-1889,102360,"West Coast, 7120 block",,48.368212,-123.743942,,,0,,2
-1890,102365,West Coast at Croce,,48.370246,-123.747225,,,0,,2
-1891,102369,Grant at West Coast,,48.372628,-123.749901,,,0,,2
-1892,102361,"Grant, 7120 block",,48.373336,-123.747431,,,0,,2
-1893,102356,Grant at Winfield,,48.374442,-123.743721,,,0,,2
-1894,102345,Grant at Maple,,48.375493,-123.740076,,,0,,2
-1895,102337,Grant at French,,48.376475,-123.736578,,,0,,2
-1896,102323,Pyrite at Banner,,48.37849,-123.734363,,,0,,2
-1897,102327,Pyrite at Beaton,,48.381545,-123.735663,,,0,,2
-1898,102324,Pyrite at Rhodonite,,48.38344,-123.735536,,,0,,2
-1899,102319,Quartz at Gatewood,,48.383982,-123.734239,,,0,,2
-1900,102316,Otter Point at Rhodonite,,48.383229,-123.733252,,,0,,2
-1901,102293,Otter Point at Eustace,,48.378147,-123.724536,,,0,,2
-1902,101648,Sooke Rd. at Jacklin,,48.433706,-123.514466,,,0,,2
-1903,101585,Sooke Rd. at Cecil Blogg,,48.431807,-123.509345,,,0,,2
-1904,101552,Sooke Rd. at Fulton,,48.429701,-123.505448,,,0,,2
-1905,101497,Sooke Rd. at Carran,,48.431984,-123.497946,,,0,,2
+1798,102290,Sooke Rd at Shields,,48.376773,-123.724468,,,0,,2
+1799,102311,West Coast at Maple,,48.370637,-123.72837,,,0,,2
+1800,102333,"West Coast, 6960 block",,48.367028,-123.733029,,,0,,2
+1801,102342,West Coast at Whiffin Spit,,48.365941,-123.736748,,,0,,2
+1802,102360,"West Coast, 7120 block",,48.368212,-123.743942,,,0,,2
+1803,102365,West Coast at Croce,,48.370246,-123.747225,,,0,,2
+1804,102369,Grant at West Coast,,48.372628,-123.749901,,,0,,2
+1805,102361,"Grant, 7120 block",,48.373336,-123.747431,,,0,,2
+1806,102356,Grant at Winfield,,48.374442,-123.743721,,,0,,2
+1807,102345,Grant at Maple,,48.375493,-123.740076,,,0,,2
+1808,102337,Grant at French,,48.376475,-123.736578,,,0,,2
+1809,102323,Pyrite at Banner,,48.37849,-123.734363,,,0,,2
+1810,102327,Pyrite at Beaton,,48.381545,-123.735663,,,0,,2
+1811,102324,Pyrite at Rhodonite,,48.38344,-123.735536,,,0,,2
+1812,102319,Quartz at Gatewood,,48.383982,-123.734239,,,0,,2
+1813,102316,Otter Point at Rhodonite,,48.383229,-123.733252,,,0,,2
+1814,102293,Otter Point at Eustace,,48.378147,-123.724536,,,0,,2
+1815,100016,Sooke at Townsend - Sooke Town Ctr.,,48.378338,-123.722015,,,0,,2
+1816,102272,Sooke Rd at Church,,48.379199,-123.717495,,,0,,2
+1817,102258,Sooke Rd at Dover,,48.380423,-123.713775,,,0,,2
+1818,102246,Sooke Rd at Drennan,,48.381846,-123.709941,,,0,,2
+1819,102235,Sooke Rd at Belvista,,48.383903,-123.705545,,,0,,2
+1820,102212,Sooke Rd at Lazzar,,48.387729,-123.697598,,,0,,2
+1821,102184,Sooke Rd at Kaltasin,,48.387237,-123.688492,,,0,,2
+1822,102170,"Sooke Rd, 5920 block",,48.389313,-123.681984,,,0,,2
+1823,102157,Sooke Rd at Woodlands,,48.390516,-123.677126,,,0,,2
+1824,102150,Sooke Rd at Saseenos,,48.39085,-123.671958,,,0,,2
+1825,102127,Sooke Rd at Harbourview,,48.391069,-123.66696,,,0,,2
+1826,102109,Sooke Rd at Laidlaw,,48.393001,-123.66088,,,0,,2
+1827,102106,Sooke Rd at Ludlow,,48.394043,-123.658014,,,0,,2
+1828,102103,"Sooke Rd, 5440 block",,48.394675,-123.655607,,,0,,2
+1829,102092,"Sooke Rd, 5300 block",,48.390562,-123.651318,,,0,,2
+1830,102083,"Sooke Rd, 5260 block",,48.387645,-123.647808,,,0,,2
+1831,100018,"Sooke Rd, 5220 block",,48.389034,-123.642852,,,0,,2
+1832,102069,Sooke Rd at Glinz Lake Rd,,48.393436,-123.636436,,,0,,2
+1833,102041,"Sooke Rd, 5140 block",,48.394417,-123.631342,,,0,,2
+1834,102027,Sooke Rd at Gillespie - 17 Mile,,48.394703,-123.626768,,,0,,2
+1835,102005,Sooke Rd at Connie,,48.397352,-123.61924,,,0,,2
+1836,101980,"Sooke Rd, 4960 block",,48.397942,-123.614379,,,0,,2
+1837,101965,"Sooke Rd, 4880 block",,48.39651,-123.609307,,,0,,2
+1838,101956,Sooke Rd at Impala,,48.393841,-123.605631,,,0,,2
+1839,101937,Sooke Rd at Kangaroo,,48.392942,-123.597979,,,0,,2
+1840,101903,"Sooke Rd, 4130 block",,48.399259,-123.589446,,,0,,2
+1841,101916,"Sooke Rd, 4000 block",,48.409573,-123.585279,,,0,,2
+1842,101815,Sooke Rd. at Awsworth,,48.42582,-123.563117,,,0,,2
+1843,101860,Sooke Rd at Westshore Pkwy,,48.425108,-123.548787,,,0,,2
+1844,101801,Sooke Rd. at Glenshire,,48.429233,-123.539809,,,0,,2
+1845,101648,Sooke Rd. at Jacklin,,48.433706,-123.514466,,,0,,2
+1846,101585,Sooke Rd. at Cecil Blogg,,48.431807,-123.509345,,,0,,2
+1847,101552,Sooke Rd. at Fulton,,48.429701,-123.505448,,,0,,2
+1848,101497,Sooke Rd. at Carran,,48.431984,-123.497946,,,0,,2
+1849,101505,Sooke Rd. at Lynnlark,,48.43168,-123.498902,,,0,,2
+1850,101548,Sooke Rd. at Fulton,,48.42992,-123.505577,,,0,,2
+1851,101580,Sooke Rd. at Cecil Blogg,,48.432308,-123.510001,,,0,,2
+1852,101723,Sooke Rd. at Happy Valley,,48.432939,-123.523911,,,0,,2
+1853,101806,Sooke Rd. at Glenshire,,48.429204,-123.542741,,,0,,2
+1854,101827,Sooke Rd at Westshore Pkwy,,48.425215,-123.549555,,,0,,2
+1855,101822,Sooke Rd. at Awsworth,,48.426036,-123.563724,,,0,,2
+1856,101881,Sooke Rd at Humpback,,48.426224,-123.569148,,,0,,2
+1857,101501,"Sooke Rd., 3770 block",,48.41133,-123.585888,,,0,,2
+1858,101902,"Sooke Rd, 4020 block",,48.407489,-123.584208,,,0,,2
+1859,101905,"Sooke Rd, 4140 block",,48.399109,-123.590311,,,0,,2
+1860,101938,Sooke Rd at Kangaroo,,48.393487,-123.596912,,,0,,2
+1861,101957,Sooke Rd at Impala,,48.394322,-123.605993,,,0,,2
+1862,101967,"Sooke Rd, 4880 block",,48.396867,-123.609468,,,0,,2
+1863,101987,"Sooke Rd, 4960 block",,48.39808,-123.614855,,,0,,2
+1864,102029,Sooke Rd at Connie,,48.3973,-123.61996,,,0,,2
+1865,101923,Sooke Rd at Gillespie - 17 Mile,,48.394066,-123.627397,,,0,,2
+1866,102053,"Sooke Rd, 5150 block",,48.39509,-123.6331,,,0,,2
+1867,102073,Sooke Rd at Glinz Lake Rd,,48.393423,-123.636651,,,0,,2
+1868,100496,"Sooke Rd, 5190 block",,48.390956,-123.64113,,,0,,2
+1869,102081,"Sooke Rd, 5220 block",,48.388611,-123.643742,,,0,,2
+1870,102085,"Sooke Rd, 5260 block",,48.388321,-123.648457,,,0,,2
+1871,102093,"Sooke Rd, 5300 block",,48.390811,-123.65116,,,0,,2
+1872,102097,"Sooke Rd, 5440 block",,48.394836,-123.655139,,,0,,2
+1873,102102,Sooke Rd at Ludlow,,48.394195,-123.657973,,,0,,2
+1874,102105,Sooke Rd at Laidlaw,,48.393023,-123.661199,,,0,,2
+1875,102131,Sooke at Harbourview,,48.391203,-123.666975,,,0,,2
+1876,102147,Sooke Rd at Saseenos,,48.391078,-123.670603,,,0,,2
+1877,102154,Sooke Rd at Woodlands,,48.390747,-123.676787,,,0,,2
+1878,102168,"Sooke Rd, 5940 block",,48.38906,-123.682764,,,0,,2
+1879,102183,Sooke Rd at Kaltasin,,48.387366,-123.688727,,,0,,2
+1880,102214,Sooke Rd at Lazzar,,48.387895,-123.698741,,,0,,2
+1881,102236,Sooke Rd at Phillips,,48.383858,-123.705958,,,0,,2
+1882,102247,Sooke Rd at Terrott,,48.381865,-123.710206,,,0,,2
+1883,102255,Sooke Rd at Charters,,48.380766,-123.712957,,,0,,2
+1884,102270,Sooke Rd at Church,,48.379224,-123.717774,,,0,,2
+1885,102285,Sooke Rd at Townsend - Sooke Town Ctr.,,48.378466,-123.722469,,,0,,2
+1886,102292,Otter Point at Ayre,,48.378517,-123.724532,,,0,,2
+1887,102294,Otter Point at Grant,,48.379653,-123.725201,,,0,,2
+1888,102315,Otter Point at Beaton,,48.383019,-123.732821,,,0,,2
+1889,102317,Quartz at Otter Point,,48.384253,-123.733726,,,0,,2
+1890,102325,Pyrite at Rhodonite,,48.383232,-123.735893,,,0,,2
+1891,102329,Pyrite at Talc,,48.381076,-123.735583,,,0,,2
+1892,102326,Pyrite at Banner,,48.37841,-123.734624,,,0,,2
+1893,102331,Grant at French,,48.377024,-123.735221,,,0,,2
+1894,102339,Grant at Guardian,,48.376431,-123.737227,,,0,,2
+1895,102350,Grant at Maple,,48.375386,-123.740957,,,0,,2
+1896,102358,Grant at Winfield,,48.374348,-123.744553,,,0,,2
+1897,102364,"Grant, 7120 block",,48.373538,-123.747208,,,0,,2
+1898,102372,Grant at West Coast,,48.372668,-123.750265,,,0,,2
+1899,102371,West Coast at Ella,,48.371949,-123.749668,,,0,,2
+1900,102367,West Coast at Croce,,48.370104,-123.747292,,,0,,2
+1901,102362,"West Coast, 7120 block",,48.367572,-123.743228,,,0,,2
+1902,102344,West Coast at Whiffin Spit,,48.366071,-123.734929,,,0,,2
+1903,102332,"West Coast, 6950 block",,48.367481,-123.731036,,,0,,2
+1904,102308,West Coast at Maple,,48.370573,-123.72819,,,0,,2
+1905,102299,West Coast at Atherly,,48.375349,-123.724963,,,0,,2
 1906,102271,Church at Sooke Rd,,48.379479,-123.718461,,,0,,2
 1907,102275,Church at Country,,48.381928,-123.719958,,,0,,2
 1908,102278,Church Rd at Church St,,48.384589,-123.722334,,,0,,2
@@ -1963,15 +1963,15 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1962,102145,E Sooke Rd 5900 block,,48.359909,-123.660873,,,0,,2
 1963,102167,E Sooke Rd at Raglan,,48.364451,-123.67433,,,0,,2
 1964,100108,East Sooke at Llanilar,,48.366422,-123.684065,,,0,,2
-1965,101185,Westshore Pkwy at Commander Crt,,48.442094,-123.535551,,,0,,2
-1966,101178,Westshore Pkwy at Bombardier,,48.444108,-123.536688,,,0,,2
-1967,102445,Langford Pkwy at Phipps,,48.44201,-123.503961,,,0,,2
-1968,101516,Veterans Memorial Pkwy at Goldstream,,48.446092,-123.496041,,,0,,2
-1969,101559,Veterans Memorial Pkwy at Peatt,,48.455532,-123.496436,,,0,,2
-1970,101177,Langford Pkwy at Veterans Memorial Pkwy,,48.442233,-123.50389,,,0,,2
-1971,101127,Langford Pkwy at Attree,,48.443176,-123.507946,,,0,,2
-1972,101184,Westshore Pkwy at Bombardier,,48.443698,-123.536351,,,0,,2
-1973,101334,Westshore Pkwy at Commander Crt,,48.441561,-123.536189,,,0,,2
+1965,101177,Langford Pkwy at Veterans Memorial Pkwy,,48.442233,-123.50389,,,0,,2
+1966,101127,Langford Pkwy at Attree,,48.443176,-123.507946,,,0,,2
+1967,101184,Westshore Pkwy at Bombardier,,48.443698,-123.536351,,,0,,2
+1968,101334,Westshore Pkwy at Commander Crt,,48.441561,-123.536189,,,0,,2
+1969,101185,Westshore Pkwy at Commander Crt,,48.442094,-123.535551,,,0,,2
+1970,101178,Westshore Pkwy at Bombardier,,48.444108,-123.536688,,,0,,2
+1971,102445,Langford Pkwy at Phipps,,48.44201,-123.503961,,,0,,2
+1972,101516,Veterans Memorial Pkwy at Goldstream,,48.446092,-123.496041,,,0,,2
+1973,101559,Veterans Memorial Pkwy at Peatt,,48.455532,-123.496436,,,0,,2
 1974,102404,Swartz Bay Ferry Terminal,,48.688255,-123.41188,,,0,,2
 1975,102385,Hwy 17 s/b ramp at Lands End Rd,,48.683695,-123.413432,,,0,,2
 1976,102243,Fifth at Beacon - Sidney Town Ctr,,48.648599,-123.400417,,,0,,2
@@ -1987,170 +1987,170 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 1986,102048,McTavish Exch - airport connections,,48.629052,-123.411623,,,0,,2
 1987,102249,Fifth at Beacon - Sidney Town Ctr,,48.649312,-123.40023,,,0,,2
 1988,102387,Lands End at Hwy 17 s/b ramp,,48.684105,-123.412477,,,0,,2
-1989,102204,Canora at Summergate,,48.636279,-123.417316,,,0,,2
-1990,102220,Canora at Norseman,,48.640476,-123.41727,,,0,,2
-1991,101997,Canora at de Havilland,,48.642802,-123.416669,,,0,,2
-1992,102379,Ocean at Canora,,48.644374,-123.416435,,,0,,2
-1993,102231,Ocean at Epco,,48.64443,-123.410575,,,0,,2
-1994,102248,Beacon at Hwy 17,,48.648822,-123.408746,,,0,,2
-1995,102259,Fifth at Henry,,48.652783,-123.400187,,,0,,2
-1996,102274,Resthaven at Mills,,48.655171,-123.402832,,,0,,2
-1997,102287,Resthaven at Amherst,,48.657554,-123.402859,,,0,,2
-1998,102295,Resthaven at Amelia,,48.659024,-123.402875,,,0,,2
-1999,102303,Resthaven at Ardwell,,48.662235,-123.403815,,,0,,2
-2000,102310,Ardwell at Simister,,48.662655,-123.406614,,,0,,2
-2001,102314,Bowerbank at Ardwell,,48.662911,-123.410101,,,0,,2
-2002,102321,Bowerbank at Colinwood,,48.664963,-123.410042,,,0,,2
-2003,102335,"Resthaven, 10460 block",,48.666215,-123.412946,,,0,,2
-2004,102336,Resthaven at McDonald Park Rd,,48.666227,-123.416515,,,0,,2
-2005,102353,McDonald Park Rd at Blue Heron,,48.669557,-123.417638,,,0,,2
-2006,102359,McDonald Park Rd at Bayfield,,48.671483,-123.421684,,,0,,2
-2007,102368,McDonald Park Rd at Marina,,48.674299,-123.424055,,,0,,2
-2008,102373,Hwy 17 n/b ramp at McDonald Park Rd,,48.676013,-123.426047,,,0,,2
-2009,102366,McDonald Park Rd at McMicken,,48.674096,-123.42421,,,0,,2
-2010,102357,McDonald Park Rd at Bayfield,,48.671219,-123.421362,,,0,,2
-2011,102354,"McDonald Park Rd, 10580 block",,48.669292,-123.417772,,,0,,2
-2012,102338,McDonald Park Rd at Resthaven,,48.666489,-123.41697,,,0,,2
-2013,102334,Resthaven at Shoal Harbour Pier,,48.666103,-123.412205,,,0,,2
-2014,102322,Bowerbank at Colinwood,,48.664918,-123.410248,,,0,,2
-2015,102312,Ardwell at Devlin,,48.662526,-123.409467,,,0,,2
-2016,102309,Ardwell at Simister,,48.662528,-123.407347,,,0,,2
-2017,102307,Ardwell at Resthaven,,48.662531,-123.404552,,,0,,2
-2018,102291,Resthaven at Amelia,,48.658479,-123.403045,,,0,,2
-2019,102280,Resthaven at Malaview,,48.656734,-123.403055,,,0,,2
-2020,102269,Resthaven at Henry,,48.653832,-123.402514,,,0,,2
-2021,102253,James White Blvd at Fifth,,48.650168,-123.400599,,,0,,2
-2022,102251,Beacon at Stirling,,48.649034,-123.408677,,,0,,2
-2023,102233,Ocean at Epco,,48.644561,-123.410578,,,0,,2
-2024,102376,Ocean at Canora,,48.644506,-123.416611,,,0,,2
-2025,101993,Canora at Dehavilland,,48.64275,-123.416695,,,0,,2
-2026,102218,Canora at Northbrook,,48.639996,-123.417673,,,0,,2
-2027,102208,Canora at Summergate,,48.636833,-123.41775,,,0,,2
-2028,100642,Vernon at Saanich,,48.456902,-123.372067,,,0,,2
-2029,101416,Royal Oak Exchange,,48.499152,-123.387383,,,0,,2
-2030,101317,Island View at Hwy 17,,48.572451,-123.400268,,,0,,2
-2031,101944,East Saanich at Cooperidge,,48.573936,-123.40409,,,0,,2
-2032,101954,East Saanich at Dogwood,,48.577008,-123.40666,,,0,,2
-2033,101955,East Saanich at Stelly's Cross Rd,,48.579594,-123.408771,,,0,,2
-2034,102015,"East Saanich, 7370 block",,48.582671,-123.411851,,,0,,2
-2035,102011,East Saanich at Veyaness,,48.585497,-123.416567,,,0,,2
-2036,102025,East Saanich at Hovey,,48.587901,-123.419077,,,0,,2
-2037,102054,Saanichton Exchange,,48.593586,-123.416868,,,0,,2
-2038,102071,East Saanich at Patterson,,48.596596,-123.416773,,,0,,2
-2039,102080,East Saanich at Polo Park,,48.600192,-123.41671,,,0,,2
-2040,102086,East Saanich at Newman,,48.602609,-123.417121,,,0,,2
-2041,102096,East Saanich at Haldon,,48.606795,-123.419088,,,0,,2
-2042,102113,East Saanich at Barrett,,48.613669,-123.415921,,,0,,2
-2043,102136,East Saanich at Lowe,,48.618346,-123.416453,,,0,,2
-2044,102144,"East Saanich, 8800 block",,48.620746,-123.417386,,,0,,2
-2045,102160,East Saanich at Forest Park Dr,,48.625659,-123.419229,,,0,,2
-2046,102177,East Saanich at McTavish,,48.629618,-123.420254,,,0,,2
-2047,102018,McTavish Exch - airport connections,,48.630165,-123.413086,,,0,,2
-2048,102188,Lochside at Bakerview,,48.632776,-123.408984,,,0,,2
-2049,102207,Lochside at Frost,,48.638126,-123.403241,,,0,,2
-2050,102217,Fifth at Weiler,,48.64133,-123.400263,,,0,,2
-2051,102227,Fifth at Ocean - Washington State Ferry,,48.644002,-123.400104,,,0,,2
-2052,102239,Fifth at Bevan,,48.647387,-123.400226,,,0,,2
-2053,102240,Fifth at Bevan,,48.647294,-123.400401,,,0,,2
-2054,102228,Fifth at Ocean - Washington State Ferry,,48.643691,-123.400468,,,0,,2
-2055,102221,Fifth at Weiler,,48.641658,-123.40046,,,0,,2
-2056,102205,Lochside at Frost,,48.637804,-123.403793,,,0,,2
-2057,102200,Lochside at Captains Walk,,48.636359,-123.405167,,,0,,2
-2058,102190,Lochside at Bakerview,,48.632818,-123.409121,,,0,,2
-2059,102038,McTavish Exchange,,48.63033,-123.412974,,,0,,2
-2060,102176,East Saanich at McTavish,,48.629512,-123.420458,,,0,,2
-2061,102158,East Saanich at Bazan Bay,,48.624778,-123.418814,,,0,,2
-2062,102143,"East Saanich, 8800 block",,48.620941,-123.417657,,,0,,2
-2063,102135,East Saanich at Dean Park Rd,,48.61796,-123.416655,,,0,,2
-2064,102112,East Saanich at Barrett,,48.613484,-123.416151,,,0,,2
-2065,102094,East Saanich at Haldon,,48.606596,-123.419117,,,0,,2
-2066,102087,East Saanich at Newman,,48.602501,-123.417304,,,0,,2
-2067,102079,East Saanich at Polo Park,,48.599495,-123.416922,,,0,,2
-2068,102072,East Saanich at Wallace,,48.596759,-123.416973,,,0,,2
-2069,102057,Saanichton Exchange Bay B,,48.593679,-123.417057,,,0,,2
-2070,102030,East Saanich at Prosser,,48.588293,-123.41938,,,0,,2
-2071,102021,East Saanich at Veyaness,,48.585678,-123.417486,,,0,,2
-2072,101996,"East Saanich, 7360 block",,48.582454,-123.411825,,,0,,2
-2073,101968,East Saanich at Stelly's Cross Rd,,48.579922,-123.409207,,,0,,2
-2074,101972,East Saanich at Dogwood,,48.57695,-123.406838,,,0,,2
-2075,101942,East Saanich at Cooperidge,,48.573275,-123.403766,,,0,,2
-2076,101861,Island View at Hwy 17,,48.57232,-123.398849,,,0,,2
-2077,101448,Royal Oak Exchange,,48.498866,-123.386955,,,0,,2
-2078,100650,Blanshard at Ravine - Uptown,,48.457012,-123.376022,,,0,,2
-2079,102374,Hwy 17 s/b ramp at Wain Rd,,48.676786,-123.427501,,,0,,2
-2080,102024,Wallace at Hovey,,48.586527,-123.422791,,,0,,2
-2081,101990,Wallace at White,,48.584441,-123.4238,,,0,,2
-2082,101986,Wallace at Stelly's Cross Rd,,48.579873,-123.425996,,,0,,2
-2083,101969,"Wallace, 7200 block - Stelly's Sec Sch",,48.576094,-123.433334,,,0,,2
-2084,101985,West Saanich at Wallace,,48.576243,-123.446543,,,0,,2
-2085,101998,Verdier at West Saanich,,48.577965,-123.450417,,,0,,2
-2086,102003,Verdier at Holly Park,,48.577936,-123.455635,,,0,,2
-2087,102014,Verdier at Hagan,,48.577953,-123.458286,,,0,,2
-2088,102022,Verdier at Keally,,48.577957,-123.46307,,,0,,2
-2089,102016,Brentwood Dr at Verdier,,48.576656,-123.464756,,,0,,2
-2090,101991,Brentwood Dr at Sluggett,,48.573677,-123.462191,,,0,,2
-2091,101983,Brentwood Dr at Marchant,,48.572532,-123.461052,,,0,,2
-2092,101977,Marchant at Hagan,,48.57237,-123.457712,,,0,,2
-2093,101966,Wallace at Marin Park,,48.571795,-123.45271,,,0,,2
-2094,101962,Wallace at Springside,,48.569821,-123.455547,,,0,,2
-2095,101963,Wallace at McKenna,,48.568865,-123.459424,,,0,,2
-2096,101952,Wallace 6760 block,,48.565865,-123.461295,,,0,,2
-2097,101945,Wallace at Woodward,,48.564338,-123.460256,,,0,,2
-2098,101940,Wallace at Benvenuto,,48.563336,-123.45917,,,0,,2
-2099,101935,Benvenuto at Trudeau,,48.562857,-123.456144,,,0,,2
-2100,101933,Benvenuto at Garden Gate,,48.563787,-123.453527,,,0,,2
-2101,101939,Benvenuto at Knott,,48.566159,-123.447089,,,0,,2
-2102,101929,Keating Cross Rd at West Saanich,,48.565123,-123.437382,,,0,,2
-2103,101924,Keating Cross Rd at Bryn,,48.565713,-123.42649,,,0,,2
-2104,101920,Keating Cross Rd at Kirkpatrick,,48.565061,-123.419304,,,0,,2
-2105,101917,Keating Cross Rd at Rajpur,,48.56507,-123.41313,,,0,,2
-2106,101911,Keating Cross Rd at Veyaness,,48.565065,-123.410068,,,0,,2
-2107,101908,Keating Cross Rd at Mirah,,48.565071,-123.406231,,,0,,2
-2108,101906,Central Saanich Rd at Keating Cross Rd,,48.564535,-123.403656,,,0,,2
-2109,101901,Central Saanich Rd at Styan,,48.560434,-123.403667,,,0,,2
-2110,101895,Central Saanich Rd at Tanner,,48.55711,-123.403635,,,0,,2
-2111,101888,Tanner at Rodolph,,48.554253,-123.400433,,,0,,2
-2112,101889,Tanner at Conconi,,48.554225,-123.398228,,,0,,2
-2113,101885,Tanner at Marie Meadows,,48.554219,-123.395008,,,0,,2
-2114,102007,Butchart Gardens,,48.563081,-123.466557,,,0,,2
-2115,102017,Benvenuto at Tod Inlet,,48.562489,-123.464226,,,0,,2
-2116,101883,Tanner at Marie Meadows,,48.554355,-123.395026,,,0,,2
-2117,101886,Tanner at Conconi,,48.554344,-123.398271,,,0,,2
-2118,101890,Tanner at Rodolph,,48.554402,-123.40117,,,0,,2
-2119,101894,Central Saanich Rd at Tanner,,48.557134,-123.403432,,,0,,2
-2120,101897,Central Saanich Rd at Styan,,48.559804,-123.403459,,,0,,2
-2121,101904,Central Saanich Rd at Handy,,48.562316,-123.403459,,,0,,2
-2122,101907,Central Saanich Rd at Keating Cross Rd,,48.564839,-123.403454,,,0,,2
-2123,101909,Keating Cross Rd at Mirah,,48.565212,-123.407263,,,0,,2
-2124,101915,Keating Cross Rd at Veyaness,,48.565216,-123.410263,,,0,,2
-2125,101919,Keating Cross Rd at Rajpur,,48.565205,-123.414381,,,0,,2
-2126,101921,Keating Cross Rd at Oldfield,,48.565216,-123.418377,,,0,,2
-2127,101925,Keating Cross Rd at Bryn,,48.56558,-123.427515,,,0,,2
-2128,101930,Keating Cross Rd at West Saanich,,48.565273,-123.437712,,,0,,2
-2129,101943,Benvenuto at Knott,,48.566311,-123.447453,,,0,,2
-2130,101936,Benvenuto at Garden Gate,,48.563843,-123.453728,,,0,,2
-2131,101934,Benvenuto at Trudeau,,48.562992,-123.456136,,,0,,2
-2132,101950,Butchart Gardens,,48.563102,-123.466572,,,0,,2
-2133,101941,Wallace at Benvenuto,,48.563304,-123.458824,,,0,,2
-2134,101946,Wallace at Woodward,,48.564416,-123.460087,,,0,,2
-2135,101953,Wallace 6770 block,,48.566319,-123.461365,,,0,,2
-2136,101960,Wallace at McKenna,,48.568765,-123.459378,,,0,,2
-2137,101958,Wallace at Springside,,48.569585,-123.455646,,,0,,2
-2138,101964,Wallace at Llanfair,,48.570698,-123.454023,,,0,,2
-2139,101971,Wallace at Marchant,,48.572723,-123.451064,,,0,,2
-2140,101975,Wallace at Sluggett,,48.573904,-123.449065,,,0,,2
-2141,101999,West Saanich at Verdier,,48.578514,-123.449919,,,0,,2
-2142,102010,Stelly's Cross at West Saanich,,48.579677,-123.450765,,,0,,2
-2143,102002,Stelly's Cross Rd at Early,,48.579639,-123.445677,,,0,,2
-2144,101677,Stelly's Cross Rd at Gowdy,,48.57964,-123.443524,,,0,,2
-2145,101992,Stelly's Cross Rd at Saanich Fairgrounds,,48.579658,-123.436883,,,0,,2
-2146,101988,Stelly's Cross Rd at Stelly's Sec School,,48.579664,-123.431969,,,0,,2
-2147,101984,Wallace at Stelly's Cross Rd,,48.580118,-123.425682,,,0,,2
-2148,102009,Wallace at White,,48.584478,-123.423569,,,0,,2
-2149,102023,Wallace at Hovey,,48.586614,-123.422538,,,0,,2
-2150,102026,Wallace at Prosser,,48.588528,-123.421743,,,0,,2
-2151,102052,Wallace at Cultra,,48.592713,-123.421369,,,0,,2
-2152,102065,Wallace at Mt Newton Cross Rd,,48.594442,-123.419646,,,0,,2
+1989,102366,McDonald Park Rd at McMicken,,48.674096,-123.42421,,,0,,2
+1990,102357,McDonald Park Rd at Bayfield,,48.671219,-123.421362,,,0,,2
+1991,102354,"McDonald Park Rd, 10580 block",,48.669292,-123.417772,,,0,,2
+1992,102338,McDonald Park Rd at Resthaven,,48.666489,-123.41697,,,0,,2
+1993,102334,Resthaven at Shoal Harbour Pier,,48.666103,-123.412205,,,0,,2
+1994,102322,Bowerbank at Colinwood,,48.664918,-123.410248,,,0,,2
+1995,102312,Ardwell at Devlin,,48.662526,-123.409467,,,0,,2
+1996,102309,Ardwell at Simister,,48.662528,-123.407347,,,0,,2
+1997,102307,Ardwell at Resthaven,,48.662531,-123.404552,,,0,,2
+1998,102291,Resthaven at Amelia,,48.658479,-123.403045,,,0,,2
+1999,102280,Resthaven at Malaview,,48.656734,-123.403055,,,0,,2
+2000,102269,Resthaven at Henry,,48.653832,-123.402514,,,0,,2
+2001,102253,James White Blvd at Fifth,,48.650168,-123.400599,,,0,,2
+2002,102251,Beacon at Stirling,,48.649034,-123.408677,,,0,,2
+2003,102233,Ocean at Epco,,48.644561,-123.410578,,,0,,2
+2004,102376,Ocean at Canora,,48.644506,-123.416611,,,0,,2
+2005,101993,Canora at Dehavilland,,48.64275,-123.416695,,,0,,2
+2006,102218,Canora at Northbrook,,48.639996,-123.417673,,,0,,2
+2007,102208,Canora at Summergate,,48.636833,-123.41775,,,0,,2
+2008,102204,Canora at Summergate,,48.636279,-123.417316,,,0,,2
+2009,102220,Canora at Norseman,,48.640476,-123.41727,,,0,,2
+2010,101997,Canora at de Havilland,,48.642802,-123.416669,,,0,,2
+2011,102379,Ocean at Canora,,48.644374,-123.416435,,,0,,2
+2012,102231,Ocean at Epco,,48.64443,-123.410575,,,0,,2
+2013,102248,Beacon at Hwy 17,,48.648822,-123.408746,,,0,,2
+2014,102259,Fifth at Henry,,48.652783,-123.400187,,,0,,2
+2015,102274,Resthaven at Mills,,48.655171,-123.402832,,,0,,2
+2016,102287,Resthaven at Amherst,,48.657554,-123.402859,,,0,,2
+2017,102295,Resthaven at Amelia,,48.659024,-123.402875,,,0,,2
+2018,102303,Resthaven at Ardwell,,48.662235,-123.403815,,,0,,2
+2019,102310,Ardwell at Simister,,48.662655,-123.406614,,,0,,2
+2020,102314,Bowerbank at Ardwell,,48.662911,-123.410101,,,0,,2
+2021,102321,Bowerbank at Colinwood,,48.664963,-123.410042,,,0,,2
+2022,102335,"Resthaven, 10460 block",,48.666215,-123.412946,,,0,,2
+2023,102336,Resthaven at McDonald Park Rd,,48.666227,-123.416515,,,0,,2
+2024,102353,McDonald Park Rd at Blue Heron,,48.669557,-123.417638,,,0,,2
+2025,102359,McDonald Park Rd at Bayfield,,48.671483,-123.421684,,,0,,2
+2026,102368,McDonald Park Rd at Marina,,48.674299,-123.424055,,,0,,2
+2027,102373,Hwy 17 n/b ramp at McDonald Park Rd,,48.676013,-123.426047,,,0,,2
+2028,102374,Hwy 17 s/b ramp at Wain Rd,,48.676786,-123.427501,,,0,,2
+2029,102240,Fifth at Bevan,,48.647294,-123.400401,,,0,,2
+2030,102228,Fifth at Ocean - Washington State Ferry,,48.643691,-123.400468,,,0,,2
+2031,102221,Fifth at Weiler,,48.641658,-123.40046,,,0,,2
+2032,102205,Lochside at Frost,,48.637804,-123.403793,,,0,,2
+2033,102200,Lochside at Captains Walk,,48.636359,-123.405167,,,0,,2
+2034,102190,Lochside at Bakerview,,48.632818,-123.409121,,,0,,2
+2035,102038,McTavish Exchange,,48.63033,-123.412974,,,0,,2
+2036,102176,East Saanich at McTavish,,48.629512,-123.420458,,,0,,2
+2037,102158,East Saanich at Bazan Bay,,48.624778,-123.418814,,,0,,2
+2038,102143,"East Saanich, 8800 block",,48.620941,-123.417657,,,0,,2
+2039,102135,East Saanich at Dean Park Rd,,48.61796,-123.416655,,,0,,2
+2040,102112,East Saanich at Barrett,,48.613484,-123.416151,,,0,,2
+2041,102094,East Saanich at Haldon,,48.606596,-123.419117,,,0,,2
+2042,102087,East Saanich at Newman,,48.602501,-123.417304,,,0,,2
+2043,102079,East Saanich at Polo Park,,48.599495,-123.416922,,,0,,2
+2044,102072,East Saanich at Wallace,,48.596759,-123.416973,,,0,,2
+2045,102057,Saanichton Exchange Bay B,,48.593679,-123.417057,,,0,,2
+2046,102030,East Saanich at Prosser,,48.588293,-123.41938,,,0,,2
+2047,102021,East Saanich at Veyaness,,48.585678,-123.417486,,,0,,2
+2048,101996,"East Saanich, 7360 block",,48.582454,-123.411825,,,0,,2
+2049,101968,East Saanich at Stelly's Cross Rd,,48.579922,-123.409207,,,0,,2
+2050,101972,East Saanich at Dogwood,,48.57695,-123.406838,,,0,,2
+2051,101942,East Saanich at Cooperidge,,48.573275,-123.403766,,,0,,2
+2052,101861,Island View at Hwy 17,,48.57232,-123.398849,,,0,,2
+2053,101448,Royal Oak Exchange,,48.498866,-123.386955,,,0,,2
+2054,100650,Blanshard at Ravine - Uptown,,48.457012,-123.376022,,,0,,2
+2055,100642,Vernon at Saanich,,48.456902,-123.372067,,,0,,2
+2056,101416,Royal Oak Exchange,,48.499152,-123.387383,,,0,,2
+2057,101317,Island View at Hwy 17,,48.572451,-123.400268,,,0,,2
+2058,101944,East Saanich at Cooperidge,,48.573936,-123.40409,,,0,,2
+2059,101954,East Saanich at Dogwood,,48.577008,-123.40666,,,0,,2
+2060,101955,East Saanich at Stelly's Cross Rd,,48.579594,-123.408771,,,0,,2
+2061,102015,"East Saanich, 7370 block",,48.582671,-123.411851,,,0,,2
+2062,102011,East Saanich at Veyaness,,48.585497,-123.416567,,,0,,2
+2063,102025,East Saanich at Hovey,,48.587901,-123.419077,,,0,,2
+2064,102054,Saanichton Exchange,,48.593586,-123.416868,,,0,,2
+2065,102071,East Saanich at Patterson,,48.596596,-123.416773,,,0,,2
+2066,102080,East Saanich at Polo Park,,48.600192,-123.41671,,,0,,2
+2067,102086,East Saanich at Newman,,48.602609,-123.417121,,,0,,2
+2068,102096,East Saanich at Haldon,,48.606795,-123.419088,,,0,,2
+2069,102113,East Saanich at Barrett,,48.613669,-123.415921,,,0,,2
+2070,102136,East Saanich at Lowe,,48.618346,-123.416453,,,0,,2
+2071,102144,"East Saanich, 8800 block",,48.620746,-123.417386,,,0,,2
+2072,102160,East Saanich at Forest Park Dr,,48.625659,-123.419229,,,0,,2
+2073,102177,East Saanich at McTavish,,48.629618,-123.420254,,,0,,2
+2074,102018,McTavish Exch - airport connections,,48.630165,-123.413086,,,0,,2
+2075,102188,Lochside at Bakerview,,48.632776,-123.408984,,,0,,2
+2076,102207,Lochside at Frost,,48.638126,-123.403241,,,0,,2
+2077,102217,Fifth at Weiler,,48.64133,-123.400263,,,0,,2
+2078,102227,Fifth at Ocean - Washington State Ferry,,48.644002,-123.400104,,,0,,2
+2079,102239,Fifth at Bevan,,48.647387,-123.400226,,,0,,2
+2080,101883,Tanner at Marie Meadows,,48.554355,-123.395026,,,0,,2
+2081,101886,Tanner at Conconi,,48.554344,-123.398271,,,0,,2
+2082,101890,Tanner at Rodolph,,48.554402,-123.40117,,,0,,2
+2083,101894,Central Saanich Rd at Tanner,,48.557134,-123.403432,,,0,,2
+2084,101897,Central Saanich Rd at Styan,,48.559804,-123.403459,,,0,,2
+2085,101904,Central Saanich Rd at Handy,,48.562316,-123.403459,,,0,,2
+2086,101907,Central Saanich Rd at Keating Cross Rd,,48.564839,-123.403454,,,0,,2
+2087,101909,Keating Cross Rd at Mirah,,48.565212,-123.407263,,,0,,2
+2088,101915,Keating Cross Rd at Veyaness,,48.565216,-123.410263,,,0,,2
+2089,101919,Keating Cross Rd at Rajpur,,48.565205,-123.414381,,,0,,2
+2090,101921,Keating Cross Rd at Oldfield,,48.565216,-123.418377,,,0,,2
+2091,101925,Keating Cross Rd at Bryn,,48.56558,-123.427515,,,0,,2
+2092,101930,Keating Cross Rd at West Saanich,,48.565273,-123.437712,,,0,,2
+2093,101943,Benvenuto at Knott,,48.566311,-123.447453,,,0,,2
+2094,101936,Benvenuto at Garden Gate,,48.563843,-123.453728,,,0,,2
+2095,101934,Benvenuto at Trudeau,,48.562992,-123.456136,,,0,,2
+2096,101941,Wallace at Benvenuto,,48.563304,-123.458824,,,0,,2
+2097,101946,Wallace at Woodward,,48.564416,-123.460087,,,0,,2
+2098,101953,Wallace 6770 block,,48.566319,-123.461365,,,0,,2
+2099,101960,Wallace at McKenna,,48.568765,-123.459378,,,0,,2
+2100,101958,Wallace at Springside,,48.569585,-123.455646,,,0,,2
+2101,101964,Wallace at Llanfair,,48.570698,-123.454023,,,0,,2
+2102,101971,Wallace at Marchant,,48.572723,-123.451064,,,0,,2
+2103,101975,Wallace at Sluggett,,48.573904,-123.449065,,,0,,2
+2104,101985,West Saanich at Wallace,,48.576243,-123.446543,,,0,,2
+2105,101998,Verdier at West Saanich,,48.577965,-123.450417,,,0,,2
+2106,102003,Verdier at Holly Park,,48.577936,-123.455635,,,0,,2
+2107,102014,Verdier at Hagan,,48.577953,-123.458286,,,0,,2
+2108,102022,Verdier at Keally,,48.577957,-123.46307,,,0,,2
+2109,102016,Brentwood Dr at Verdier,,48.576656,-123.464756,,,0,,2
+2110,101991,Brentwood Dr at Sluggett,,48.573677,-123.462191,,,0,,2
+2111,101983,Brentwood Dr at Marchant,,48.572532,-123.461052,,,0,,2
+2112,101977,Marchant at Hagan,,48.57237,-123.457712,,,0,,2
+2113,101999,West Saanich at Verdier,,48.578514,-123.449919,,,0,,2
+2114,102010,Stelly's Cross at West Saanich,,48.579677,-123.450765,,,0,,2
+2115,102002,Stelly's Cross Rd at Early,,48.579639,-123.445677,,,0,,2
+2116,101677,Stelly's Cross Rd at Gowdy,,48.57964,-123.443524,,,0,,2
+2117,101992,Stelly's Cross Rd at Saanich Fairgrounds,,48.579658,-123.436883,,,0,,2
+2118,101988,Stelly's Cross Rd at Stelly's Sec School,,48.579664,-123.431969,,,0,,2
+2119,101984,Wallace at Stelly's Cross Rd,,48.580118,-123.425682,,,0,,2
+2120,102009,Wallace at White,,48.584478,-123.423569,,,0,,2
+2121,102023,Wallace at Hovey,,48.586614,-123.422538,,,0,,2
+2122,102026,Wallace at Prosser,,48.588528,-123.421743,,,0,,2
+2123,102052,Wallace at Cultra,,48.592713,-123.421369,,,0,,2
+2124,102065,Wallace at Mt Newton Cross Rd,,48.594442,-123.419646,,,0,,2
+2125,101950,Butchart Gardens,,48.563102,-123.466572,,,0,,2
+2126,102017,Benvenuto at Tod Inlet,,48.562489,-123.464226,,,0,,2
+2127,102024,Wallace at Hovey,,48.586527,-123.422791,,,0,,2
+2128,101990,Wallace at White,,48.584441,-123.4238,,,0,,2
+2129,101986,Wallace at Stelly's Cross Rd,,48.579873,-123.425996,,,0,,2
+2130,101969,"Wallace, 7200 block - Stelly's Sec Sch",,48.576094,-123.433334,,,0,,2
+2131,101966,Wallace at Marin Park,,48.571795,-123.45271,,,0,,2
+2132,101962,Wallace at Springside,,48.569821,-123.455547,,,0,,2
+2133,101963,Wallace at McKenna,,48.568865,-123.459424,,,0,,2
+2134,101952,Wallace 6760 block,,48.565865,-123.461295,,,0,,2
+2135,101945,Wallace at Woodward,,48.564338,-123.460256,,,0,,2
+2136,101940,Wallace at Benvenuto,,48.563336,-123.45917,,,0,,2
+2137,102007,Butchart Gardens,,48.563081,-123.466557,,,0,,2
+2138,101935,Benvenuto at Trudeau,,48.562857,-123.456144,,,0,,2
+2139,101933,Benvenuto at Garden Gate,,48.563787,-123.453527,,,0,,2
+2140,101939,Benvenuto at Knott,,48.566159,-123.447089,,,0,,2
+2141,101929,Keating Cross Rd at West Saanich,,48.565123,-123.437382,,,0,,2
+2142,101924,Keating Cross Rd at Bryn,,48.565713,-123.42649,,,0,,2
+2143,101920,Keating Cross Rd at Kirkpatrick,,48.565061,-123.419304,,,0,,2
+2144,101917,Keating Cross Rd at Rajpur,,48.56507,-123.41313,,,0,,2
+2145,101911,Keating Cross Rd at Veyaness,,48.565065,-123.410068,,,0,,2
+2146,101908,Keating Cross Rd at Mirah,,48.565071,-123.406231,,,0,,2
+2147,101906,Central Saanich Rd at Keating Cross Rd,,48.564535,-123.403656,,,0,,2
+2148,101901,Central Saanich Rd at Styan,,48.560434,-123.403667,,,0,,2
+2149,101895,Central Saanich Rd at Tanner,,48.55711,-123.403635,,,0,,2
+2150,101888,Tanner at Rodolph,,48.554253,-123.400433,,,0,,2
+2151,101889,Tanner at Conconi,,48.554225,-123.398228,,,0,,2
+2152,101885,Tanner at Marie Meadows,,48.554219,-123.395008,,,0,,2
 2153,100157,Swartz Bay Ferry Terminal,,48.687991,-123.41227,,,0,,2
 2154,102305,Bowerbank at Vallis,,48.662056,-123.41028,,,0,,2
 2155,102301,Bowerbank at Calvin,,48.659836,-123.410265,,,0,,2
@@ -2212,76 +2212,76 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,locatio
 2211,101007,Stautw at Church,,48.58915,-123.385231,,,0,,2
 2212,100952,Jimmy at Stautw,,48.588375,-123.378693,,,0,,2
 2213,101029,Mt Newton Cross Rd. at Church,,48.591121,-123.384579,,,0,,2
-2214,101928,West Saanich at Keating Cross Rd,,48.564576,-123.43813,,,0,,2
-2215,101912,West Saanich at Old West Saanich,,48.560931,-123.436667,,,0,,2
-2216,101900,"West Saanich, 6340 block",,48.554589,-123.438651,,,0,,2
-2217,101893,West Saanich at Durrance,,48.550609,-123.439901,,,0,,2
-2218,101892,West Saanich at Glen Nevis,,48.547518,-123.44142,,,0,,2
-2219,101873,"West Saanich, 5750 block",,48.541383,-123.436804,,,0,,2
-2220,101856,West Saanich at Wallace,,48.535154,-123.437506,,,0,,2
-2221,101840,West Saanich at Matterhorn,,48.532291,-123.438554,,,0,,2
-2222,101808,West Saanich at Hartland,,48.527395,-123.436497,,,0,,2
-2223,101783,West Saanich at Prospect Lake,,48.523721,-123.43061,,,0,,2
-2224,101711,West Saanich at Observatory,,48.516936,-123.421433,,,0,,2
-2225,101627,West Saanich at Goward,,48.510912,-123.414667,,,0,,2
-2226,101575,West Saanich at Beaver,,48.508461,-123.410053,,,0,,2
-2227,101536,Beaver Lake Rd at West Saanich,,48.505135,-123.408026,,,0,,2
-2228,101503,Beaver at Quayle - The Gardens at HCP,,48.501615,-123.413839,,,0,,2
-2229,101528,Quayle at Elk,,48.502751,-123.418535,,,0,,2
-2230,102257,Galaran at Skylark,,48.650908,-123.412328,,,0,,2
-2231,102266,Galaran at Henry,,48.653555,-123.412314,,,0,,2
-2232,102279,Mills at McDonald Park Rd,,48.655407,-123.416561,,,0,,2
-2233,102281,"Mills Rd, 1920 block",,48.655415,-123.420116,,,0,,2
-2234,102284,Mills at Avenger Way,,48.655429,-123.423247,,,0,,2
-2235,102289,Mills at Littlewood,,48.655424,-123.430109,,,0,,2
-2236,102298,Mills at West Saanich,,48.655459,-123.444401,,,0,,2
-2237,102273,West Saanich at Willingdon,,48.64974,-123.447511,,,0,,2
-2238,102261,"West Saanich, 9730 block",,48.646491,-123.455853,,,0,,2
-2239,102254,West Saanich at Ardmore,,48.643914,-123.458107,,,0,,2
-2240,102234,West Saanich at Bradley Dyne,,48.638745,-123.458102,,,0,,2
-2241,102201,West Saanich at McTavish,,48.630154,-123.458203,,,0,,2
-2242,102191,West Saanich at North Ridge,,48.627076,-123.458115,,,0,,2
-2243,102169,West Saanich at Theh Le Lum,,48.621594,-123.464575,,,0,,2
-2244,102164,"West Saanich, 8740 block",,48.619902,-123.466153,,,0,,2
-2245,102148,West Saanich at Lawrence,,48.610869,-123.473828,,,0,,2
-2246,102118,West Saanich at McPhail,,48.604467,-123.471842,,,0,,2
-2247,102098,West Saanich at Mt Newton Cross Rd,,48.599042,-123.465892,,,0,,2
-2248,102035,West Saanich at Shaker Church Rd,,48.583817,-123.457704,,,0,,2
-2249,101493,Interurban at Viaduct Ave W,,48.499109,-123.419171,,,0,,2
-2250,101526,Quayle at Elk,,48.502642,-123.418587,,,0,,2
-2251,101500,Quayle at Beaver - The Gardens at HCP,,48.501418,-123.413943,,,0,,2
-2252,101524,Beaver Lake Rd at West Saanich,,48.505014,-123.407927,,,0,,2
-2253,101590,West Saanich at Old West Saanich,,48.509171,-123.411316,,,0,,2
-2254,101633,West Saanich at Interurban,,48.511679,-123.414575,,,0,,2
-2255,101725,West Saanich at Observatory,,48.517775,-123.421817,,,0,,2
-2256,101786,West Saanich at Prospect Lake,,48.523874,-123.430636,,,0,,2
-2257,101810,West Saanich at Hartland,,48.527586,-123.436484,,,0,,2
-2258,101844,West Saanich at Matterhorn,,48.533865,-123.437665,,,0,,2
-2259,101857,West Saanich at Wallace,,48.535538,-123.437182,,,0,,2
-2260,101878,"West Saanich, 5780 block",,48.543193,-123.436708,,,0,,2
-2261,101891,West Saanich at Glen Nevis,,48.54772,-123.441083,,,0,,2
-2262,101896,West Saanich at Durrance,,48.551218,-123.440076,,,0,,2
-2263,101899,"West Saanich, 6090 block",,48.554236,-123.438658,,,0,,2
-2264,101914,West Saanich at Old West Saanich,,48.560897,-123.436471,,,0,,2
-2265,101931,West Saanich at Keating Cross Rd,,48.56585,-123.439058,,,0,,2
-2266,101948,West Saanich at Carriage Ln,,48.56928,-123.441331,,,0,,2
-2267,101961,West Saanich at Marchant,,48.572902,-123.4426,,,0,,2
-2268,101973,West Saanich at Columbia,,48.574728,-123.444359,,,0,,2
-2269,102037,West Saanich at Shaker Church Rd,,48.584279,-123.458072,,,0,,2
-2270,102099,West Saanich at Mt Newton Cross Rd,,48.599552,-123.466028,,,0,,2
-2271,102121,West Saanich at McPhail,,48.605256,-123.472387,,,0,,2
-2272,102140,West Saanich at Lawrence,,48.609714,-123.474136,,,0,,2
-2273,102165,West Saanich at Theh Le Lum,,48.620579,-123.465272,,,0,,2
-2274,102194,West Saanich at North Ridge,,48.627681,-123.457902,,,0,,2
-2275,102206,West Saanich at McTavish,,48.631694,-123.458089,,,0,,2
-2276,102229,"West Saanich, 9380 block",,48.637149,-123.457974,,,0,,2
-2277,102256,West Saanich at Ardmore,,48.643624,-123.457919,,,0,,2
-2278,102260,"West Saanich, 9740 block",,48.646399,-123.455695,,,0,,2
-2279,102268,West Saanich at Willingdon,,48.649547,-123.447554,,,0,,2
-2280,101779,Mills at West Saanich,,48.655311,-123.444894,,,0,,2
-2281,101813,Mills at Littlewood,,48.655323,-123.432043,,,0,,2
-2282,101814,Mills at Avenger Way,,48.655275,-123.424981,,,0,,2
-2283,102267,McDonald Park Rd at Henry,,48.653135,-123.416925,,,0,,2
+2214,101493,Interurban at Viaduct Ave W,,48.499109,-123.419171,,,0,,2
+2215,101526,Quayle at Elk,,48.502642,-123.418587,,,0,,2
+2216,101500,Quayle at Beaver - The Gardens at HCP,,48.501418,-123.413943,,,0,,2
+2217,101524,Beaver Lake Rd at West Saanich,,48.505014,-123.407927,,,0,,2
+2218,101590,West Saanich at Old West Saanich,,48.509171,-123.411316,,,0,,2
+2219,101633,West Saanich at Interurban,,48.511679,-123.414575,,,0,,2
+2220,101725,West Saanich at Observatory,,48.517775,-123.421817,,,0,,2
+2221,101786,West Saanich at Prospect Lake,,48.523874,-123.430636,,,0,,2
+2222,101810,West Saanich at Hartland,,48.527586,-123.436484,,,0,,2
+2223,101844,West Saanich at Matterhorn,,48.533865,-123.437665,,,0,,2
+2224,101857,West Saanich at Wallace,,48.535538,-123.437182,,,0,,2
+2225,101878,"West Saanich, 5780 block",,48.543193,-123.436708,,,0,,2
+2226,101891,West Saanich at Glen Nevis,,48.54772,-123.441083,,,0,,2
+2227,101896,West Saanich at Durrance,,48.551218,-123.440076,,,0,,2
+2228,101899,"West Saanich, 6090 block",,48.554236,-123.438658,,,0,,2
+2229,101914,West Saanich at Old West Saanich,,48.560897,-123.436471,,,0,,2
+2230,101931,West Saanich at Keating Cross Rd,,48.56585,-123.439058,,,0,,2
+2231,101948,West Saanich at Carriage Ln,,48.56928,-123.441331,,,0,,2
+2232,101961,West Saanich at Marchant,,48.572902,-123.4426,,,0,,2
+2233,101973,West Saanich at Columbia,,48.574728,-123.444359,,,0,,2
+2234,102037,West Saanich at Shaker Church Rd,,48.584279,-123.458072,,,0,,2
+2235,102099,West Saanich at Mt Newton Cross Rd,,48.599552,-123.466028,,,0,,2
+2236,102121,West Saanich at McPhail,,48.605256,-123.472387,,,0,,2
+2237,102140,West Saanich at Lawrence,,48.609714,-123.474136,,,0,,2
+2238,102165,West Saanich at Theh Le Lum,,48.620579,-123.465272,,,0,,2
+2239,102194,West Saanich at North Ridge,,48.627681,-123.457902,,,0,,2
+2240,102206,West Saanich at McTavish,,48.631694,-123.458089,,,0,,2
+2241,102229,"West Saanich, 9380 block",,48.637149,-123.457974,,,0,,2
+2242,102256,West Saanich at Ardmore,,48.643624,-123.457919,,,0,,2
+2243,102260,"West Saanich, 9740 block",,48.646399,-123.455695,,,0,,2
+2244,102268,West Saanich at Willingdon,,48.649547,-123.447554,,,0,,2
+2245,101779,Mills at West Saanich,,48.655311,-123.444894,,,0,,2
+2246,101813,Mills at Littlewood,,48.655323,-123.432043,,,0,,2
+2247,101814,Mills at Avenger Way,,48.655275,-123.424981,,,0,,2
+2248,102267,McDonald Park Rd at Henry,,48.653135,-123.416925,,,0,,2
+2249,102257,Galaran at Skylark,,48.650908,-123.412328,,,0,,2
+2250,102266,Galaran at Henry,,48.653555,-123.412314,,,0,,2
+2251,102279,Mills at McDonald Park Rd,,48.655407,-123.416561,,,0,,2
+2252,102281,"Mills Rd, 1920 block",,48.655415,-123.420116,,,0,,2
+2253,102284,Mills at Avenger Way,,48.655429,-123.423247,,,0,,2
+2254,102289,Mills at Littlewood,,48.655424,-123.430109,,,0,,2
+2255,102298,Mills at West Saanich,,48.655459,-123.444401,,,0,,2
+2256,102273,West Saanich at Willingdon,,48.64974,-123.447511,,,0,,2
+2257,102261,"West Saanich, 9730 block",,48.646491,-123.455853,,,0,,2
+2258,102254,West Saanich at Ardmore,,48.643914,-123.458107,,,0,,2
+2259,102234,West Saanich at Bradley Dyne,,48.638745,-123.458102,,,0,,2
+2260,102201,West Saanich at McTavish,,48.630154,-123.458203,,,0,,2
+2261,102191,West Saanich at North Ridge,,48.627076,-123.458115,,,0,,2
+2262,102169,West Saanich at Theh Le Lum,,48.621594,-123.464575,,,0,,2
+2263,102164,"West Saanich, 8740 block",,48.619902,-123.466153,,,0,,2
+2264,102148,West Saanich at Lawrence,,48.610869,-123.473828,,,0,,2
+2265,102118,West Saanich at McPhail,,48.604467,-123.471842,,,0,,2
+2266,102098,West Saanich at Mt Newton Cross Rd,,48.599042,-123.465892,,,0,,2
+2267,102035,West Saanich at Shaker Church Rd,,48.583817,-123.457704,,,0,,2
+2268,101928,West Saanich at Keating Cross Rd,,48.564576,-123.43813,,,0,,2
+2269,101912,West Saanich at Old West Saanich,,48.560931,-123.436667,,,0,,2
+2270,101900,"West Saanich, 6340 block",,48.554589,-123.438651,,,0,,2
+2271,101893,West Saanich at Durrance,,48.550609,-123.439901,,,0,,2
+2272,101892,West Saanich at Glen Nevis,,48.547518,-123.44142,,,0,,2
+2273,101873,"West Saanich, 5750 block",,48.541383,-123.436804,,,0,,2
+2274,101856,West Saanich at Wallace,,48.535154,-123.437506,,,0,,2
+2275,101840,West Saanich at Matterhorn,,48.532291,-123.438554,,,0,,2
+2276,101808,West Saanich at Hartland,,48.527395,-123.436497,,,0,,2
+2277,101783,West Saanich at Prospect Lake,,48.523721,-123.43061,,,0,,2
+2278,101711,West Saanich at Observatory,,48.516936,-123.421433,,,0,,2
+2279,101627,West Saanich at Goward,,48.510912,-123.414667,,,0,,2
+2280,101575,West Saanich at Beaver,,48.508461,-123.410053,,,0,,2
+2281,101536,Beaver Lake Rd at West Saanich,,48.505135,-123.408026,,,0,,2
+2282,101503,Beaver at Quayle - The Gardens at HCP,,48.501615,-123.413839,,,0,,2
+2283,101528,Quayle at Elk,,48.502751,-123.418535,,,0,,2
 2284,102306,West Saanich at Tapping,,48.65882,-123.447018,,,0,,2
 2285,102341,"West Saanich, 10340 block",,48.663132,-123.451331,,,0,,2
 2286,102348,West Saanich at Totem Ln,,48.664779,-123.454026,,,0,,2
