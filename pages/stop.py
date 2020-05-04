@@ -9,14 +9,17 @@ class TripTime:
 
 
 def formatTripList(triptimelist):
-    table_html = """<table>
+    table_html = """<table class="pure-table pure-table-horizontal pure-table-striped">
+    <thead>
      <tr>
       <th>BlockID</th>
       <th>TripID</th>
       <th>Headsign</th>
       <th>Depart Time</th>
       <th>Day of week</th>
-     </tr>"""
+     </tr>
+     </thead>
+     <tbody>"""
     # triplist.sort(key=ds.trip_to_numseconds)
     try:
         last_hour = int(triptimelist[0].stoptime.split(':')[0])  # get hour
@@ -37,13 +40,13 @@ def formatTripList(triptimelist):
         entry += "<td>" + ds.days_of_week_dict[trip.serviceid] + "</td>\n"
         entry += "</tr>\n"
         table_html += entry
-    table_html += '</table>\n'
+    table_html += '</tbody></table>\n'
     return table_html
 
 
 def tableForDay(day_str, triptimelist):
     rstr = "<br />"
-    rstr += "<h3>{0} ({1} Trips)</h3>".format(day_str, len(triptimelist))
+    rstr += "<h3>{0} ({1} Trips):</h3>".format(day_str, len(triptimelist))
     if(len(triptimelist) == 0):
         rstr += "SKIP DATE? <br>"
     rstr += formatTripList(triptimelist)
@@ -69,8 +72,12 @@ def stoppage_html(this_stop):
         else:
             day_triptimesdict[keystr] = [triptime]
     # now - for each key/value in that dict
-    gen_html = "<h2> View Stop {0} </h2> \n <h3> {1} </h3> \n Stop Schedule:\n<hr>".format(
+    gen_html = "<h2> Viewing Stop {0} </h2> \n <h3> {1} </h3> \n Stop Schedule:\n<hr>".format(
         this_stop.stopcode, this_stop.stopname)
+    day_order = []
     for day_str in day_triptimesdict:
+        day_order.append(day_str)
+    day_order.sort(key = lambda x: ds.service_order_dict.setdefault(day_triptimesdict[x][0].trip.serviceid, 10000)) #sort by first trip's service id, any unfound keys last
+    for day_str in day_order:
         gen_html += tableForDay(day_str, day_triptimesdict[day_str])
     return gen_html

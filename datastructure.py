@@ -123,11 +123,12 @@ def populate_calendar():
     global days_of_week_dict
     global this_sheet_enddate
     global days_of_week_dict_longname
+    global service_order_dict
 
     days_of_week_dict = {}
     service_order_dict = {}
     days_of_week_dict_longname = {}
-   
+
     special_serviceid_dict = {}
     special_serviceid_dict_short = {}
     with open(calendar_dates_path, 'r') as caldate_f:
@@ -135,13 +136,13 @@ def populate_calendar():
         for line in caldate_f:
             items = line.rstrip().split(',')
             date = items[colnames.index('date')]
-            date = date[0:3] + '-' + date[4:5] + '-' + date[6:]
+            date = date[0:4] + '-' + date[4:6] + '-' + date[6:]
             exception_type = items[colnames.index('exception_type')]
             service_id = items[colnames.index('service_id')]
             if(exception_type == '1'):
                 special_serviceid_dict[service_id] = 'Special: ' + date + ' only'
                 special_serviceid_dict_short[service_id] = date
-   
+
     with open(calendarpath, 'r') as cal_f:
         colnames = cal_f.readline().rstrip().split(',')
         for line in cal_f:

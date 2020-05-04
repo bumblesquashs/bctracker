@@ -1,16 +1,19 @@
 %import datastructure as ds
 %triplist.sort(key=ds.trip_to_numseconds)
 
-<table>
+<table class="pure-table pure-table-horizontal pure-table-striped">
+  <thead>
   <tr>
   <th>BlockID</th>
   <th>TripID</th>
   <th>Headsign</th>
   <th>Departure Time</th>
   <th>Departing From...</th>
-  <th>Day of week</th>
+  <th>On</th>
   </tr>
+  </thead>
 
+  <tbody>
   %for trip in triplist:
     <tr>
     <td>{{trip.blockid}}</td>
@@ -21,5 +24,5 @@
     <td>{{ds.days_of_week_dict[trip.serviceid]}}</td>
     </tr>
   %end
-
+  </tbody>
 </table>

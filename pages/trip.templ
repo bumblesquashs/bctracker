@@ -1,13 +1,6 @@
 %import datastructure as ds
-<html>
 
-<head>
-  <title> View Trip... </title>
-</head>
-
-<body>
-  <a href="/"> Back to Top</a><br>
-    Viewing trip id {{tripid}}: 
+    Viewing trip id {{tripid}}:
   <br />
   <h3> {{trip.headsign}} ({{ds.days_of_week_dict[trip.serviceid]}}) </h3>
   <br />
@@ -15,12 +8,15 @@
   <a href="/blocks/{{trip.blockid}}"> View Block </a> <br>
   <hr>
   Number of stops: {{len(trip.stoplist)}} <br>
-  <table>
+  <table class="pure-table pure-table-horizontal pure-table-striped">
+    <thead>
     <tr>
       <th>Stop Code</th>
       <th>Departure Time</th>
       <th>Stop Name</th>
     </tr>
+  </thead>
+  <tbody>
     % stoplist = trip.stoplist
     % for stop in stoplist:
     % stopcode = ds.stopdict[stop.stopid].stopcode
@@ -30,8 +26,6 @@
       <td> {{ ds.stopdict[stop.stopid].stopname }} </td>
     </tr>
     % end
+  </tbody>
 
   </table>
-</body>
-
-</html>

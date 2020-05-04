@@ -1,13 +1,5 @@
 %import businfotable as businfo
-<html>
 
-<head>
-  <title> All active busses... </title>
-</head>
-
-<body>
-
-  <br />
   RealTime: All active busses by internal ids<br>
   Data current to: {{time_string}} Pacific Time<br>
   <br />
@@ -18,20 +10,21 @@
   <a href="/"> Back to Top</a><br>
   Note: a fleet number of 'Unknown' means that a fleet number could not be found for this fleetid. <br>
   In this case, nextride's API should be scraped to get the translation
-  <table>
-    <tr>
-      <th>Fleet Number</th>
-      <th>Bus Description</th>
-      <th>Bus ID (internal)</th>
-      <th>On scheduled Route?</th>
-      <th>Trip ID</th>
-      <th>Block ID</th>
-      <th>Headsign</th>
-      <th>Current Stop</th>
-      <th>Coordinates
-      <th>
-    </tr>
-
+  <table class="pure-table pure-table-horizontal pure-table-striped">
+    <thead>
+      <tr>
+        <th>Fleet Number</th>
+        <th>Bus Description</th>
+        <th>Bus ID (internal)</th>
+        <th>On scheduled Route?</th>
+        <th>Trip ID</th>
+        <th>Block ID</th>
+        <th>Headsign</th>
+        <th>Current Stop</th>
+        <th>Coordinates </th>
+      </tr>
+    </thead>
+    <tbody>
     %for bus in rtbuslist:
     <%
     busid = bus.fleetid
@@ -76,11 +69,8 @@
       <td>{{str(bus.lat)}} {{str(bus.lon)}}</td>
     </tr>
     %end
+  </tbody>
   </table>
   %if len(rtbuslist) == 0:
   <i>Apparently there are no busses to report... note that Victoria has no nightbus service, so this should happen overnight</i>
   %end
-
-</body>
-
-</html>

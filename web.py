@@ -1,4 +1,4 @@
-from bottle import route, run, request, template, Bottle
+from bottle import route, run, request, template, Bottle, static_file
 import datastructure as ds
 import realtime as rt
 import businfotable as businfo
@@ -20,25 +20,18 @@ rt.load_realtime()
 
 homelink = '<a href="/"> Back to Top</a><br>'
 
+def no(msg):
+    return "Not quite: " + msg + "<br>" + homelink
+
+# All this is Static!
+def header(title_str):
+    return template('sections/header.templ', title=title_str)
+
 footer = """
+</div>
 </body>
 </html>
 """
-
-
-def no(msg):
-    return "Not quite: " + msg + "<br>" + homelink
-# All this is Static!
-
-
-def header(title):
-    return """
-<html>
-<head> <title> {0} </title>
-</head>
-<body>
-""".format(title)
-
 
 lookup_jscript = '''
 <script type="text/javascript">
@@ -54,7 +47,6 @@ function busLookup() {
 </form>
 '''
 
-
 # rdict is routeid -> (routenum, routename, routeid)
 rdict = ds.routedict
 
@@ -64,29 +56,22 @@ for route_tuple in rdict.values():
     reverse_rdict[route_tuple[0]] = route_tuple[2]
 
 # build the route table for the index
-index_str = header('Victoria GTFS Test!')
-index_str += "<b>Welcome to Bumblesquash's little Victoria GTFS app!</b><br>"
-index_str += 'This is very much a WIP. If you are curious about this, have questions, or something seems broken, contact bumblesquash somehow.<br>'
+index_str = "<b>Welcome to Bumblesquash's little Victoria GTFS app!</b><br>"
+index_str += 'This is very much a WIP. See <a href="/about"> about </a> for more info.<br>'
 index_str += '<i>Coming soon!</i> Block history lookup: choose a bus!<br>'
 index_str += lookup_jscript
 index_str += '<br />'
-index_str += '<a href="blocks"> List of blocks </a><br>'
-index_str += '<br />'
-index_str += '<a href="all-busses"> Realtime: List of active busses </a><br>'
-index_str += '<br />'
 index_str += '<a href="?rt=reload">Refresh Realtime</a>'
-index_str += '<br />'
 index_str += '<br />'
 for routeid in rdict:
     index_str += '<a href="routes/' + \
         rdict[routeid][0] + '">' + rdict[routeid][0] + \
         ' ' + rdict[routeid][1] + '</a><br>'
-index_str += footer
 
 
 # build the block table for the blocks page - static
 
-btable_html = """<table>
+btable_html = """<table class="pure-table pure-table-horizontal pure-table-striped">
 <tr>
   <th>BlockID</th>
   <th>Routes</th>
@@ -129,11 +114,11 @@ def genrtbuslist_html():
         rtbuslist.append(bus)
         # now - sort that list however we please
     rtbuslist.sort(key=lambda x: (int(x.scheduled) * -1, int(x.fleetnum)))
-    return template('pages/realtime.templ',
+    return header('All active busses...') + template('pages/realtime.templ',
                     time_string=format(rt.get_data_refreshed_time_str()),
                     rtbuslist=rtbuslist,
                     tripdict=ds.tripdict,
-                    stopdict=ds.stopdict)
+                    stopdict=ds.stopdict) + footer
 
 
 # Web framework code
@@ -148,8 +133,11 @@ def index():
         print('Oi! gotta reload')
         rt.download_lastest_files()
         rt.load_realtime()
-    return index_str
+    return header('Victoria GTFS Test!') + index_str + footer
 
+@app.route('/style.css')
+def style():
+    return static_file('style.css', root='.')
 
 @app.route('/bus/')
 def buspage_root():
@@ -174,7 +162,6 @@ def all_busses_templ():
 @app.route('/bus/<fleetnum>')
 def buspage(fleetnum):
     rstr = header('Bus Lookup')
-    rstr += homelink
     rstr += 'Page for bus with fleetnum ' + fleetnum
     rstr += footer
     return rstr
@@ -183,7 +170,6 @@ def buspage(fleetnum):
 @app.route('/busid/<busid>')
 def buspage(busid):
     rstr = header('Bus Lookup')
-    rstr += homelink
     rstr += 'Page for bus with internal id ' + busid
     rstr += footer
     return rstr
@@ -192,7 +178,7 @@ def buspage(busid):
 @app.route('/blocks')
 @app.route('/blocks/')
 def allblocks():
-    rstr = header('List of Blocks') + homelink
+    rstr = header('List of Blocks')
     rstr += "\n All of Victoria's blocks: \n<hr>"
     rstr += btable_html
     rstr += footer
@@ -243,7 +229,7 @@ def blockview(blockid):
         triplist = ds.blockdict[blockid].triplist
     except KeyError:
         return no("Couldn't find block with blockid " + blockid)
-    return template('pages/block.templ', blockid=blockid, triplist=triplist)
+    return header('Table of Trips') + template('pages/block.templ', blockid=blockid, triplist=triplist) + footer
 
 
 @app.route('/trips/<tripid>')
@@ -252,7 +238,7 @@ def tripview(tripid):
         trip = ds.tripdict[tripid]
     except KeyError:
         return no("Couldn't find trip with tripid " + tripid)
-    return template('pages/trip.templ', tripid=tripid, trip=trip)
+    return header('View trip...') + template('pages/trip.templ', tripid=tripid, trip=trip)
 
 @app.route('/routes/<routenum>')
 def routepage(routenum):
@@ -267,6 +253,7 @@ def routepage(routenum):
         return ("<html><body>Not quite: Couldn't find data for route " + this_route + "</body></html>")
     # first, make a big dict of DayStr -> list of trip
     day_triplistdict = {}
+    day_order = []
     for trip in trip_list:
         if(ds.days_of_week_dict[trip.serviceid]) == 'INVALID':
             continue
@@ -278,7 +265,10 @@ def routepage(routenum):
             day_triplistdict[keystr].append(trip)
         else:
             day_triplistdict[keystr] = [trip]
-    return template('pages/route.templ', day_triplistdict=day_triplistdict, routenum=routenum, routename=rdict[this_route][1])
+    for key in day_triplistdict:
+        day_order.append(key)
+    day_order.sort(key = lambda x: ds.service_order_dict.setdefault(day_triplistdict[x][0].serviceid, 10000)) #sort by first trip's service id, any unfound keys last
+    return header('Viewing route' + routenum) + template('pages/route.templ', day_triplistdict=day_triplistdict, day_order=day_order, routenum=routenum, routename=rdict[this_route][1]) + footer
 
 @app.route('/stops/<stopcode>')
 def stoppage(stopcode):
@@ -287,11 +277,19 @@ def stoppage(stopcode):
         stop = ds.stopdict[ds.stopcode2stopnum[stopcode]]
     except KeyError:
         return no("Couldn't find data for stop " + stopcode)
-    rstr = header('Stop Schedule') + homelink
+    rstr = header('Stop Schedule')
     rstr += stoppage_html(stop)
     rstr += footer
     return rstr
 
+@app.route('/about')
+@app.route('/about/')
+def about_page():
+    return header('About this abomination...') + template('pages/about.templ') + footer
+
+#================================= set up server and launch
+
+#use cherrypy server - setup logging
 def make_access_log(app, filepath, when='d', interval=7, **kwargs):
     if filepath is not None:
         handlers = [logging.handlers.TimedRotatingFileHandler(
@@ -300,14 +298,7 @@ def make_access_log(app, filepath, when='d', interval=7, **kwargs):
         handlers = [logging.StreamHandler()]
     return requestlogger.WSGILogger(app, handlers, requestlogger.ApacheFormatter())
 
-
-#run(app, host='192.168.1.93', port=8080)
-
-#use cherrypy server instead
-
 cp.config.update('server.conf')
 cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
 cp.log('Whaaat? here we go')
 cp.server.start()
-
-
