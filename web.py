@@ -101,7 +101,7 @@ def index():
         print('Oi! gotta reload')
         rt.download_lastest_files()
         rt.load_realtime()
-    return header('Victoria GTFS Test!') + template('pages/home.templ', rdict=rdict) + footer
+    return header('Victoria GTFS Tracker') + template('pages/home.templ', rdict=rdict) + footer
 
 @app.route('/routes')
 @app.route('/routes/')
