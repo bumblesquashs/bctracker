@@ -132,7 +132,7 @@ def all_busses_templ():
 @app.route('/bus/<fleetnum>')
 def buspage(fleetnum):
     rstr = header('Bus Lookup')
-    rstr += 'Page for bus with fleetnum ' + fleetnum
+    rstr += '<br> \n Page for bus with fleetnum {0}... coming soon!'.format(fleetnum)
     rstr += footer
     return rstr
 
@@ -147,7 +147,7 @@ def buspage(busid):
 @app.route('/blocks/')
 def allblocks():
     rstr = header('List of Blocks')
-    rstr += "\n <b> All of Victoria's blocks: </b> <br /> \n"
+    rstr += "<br> \n <b> All of Victoria's blocks: </b> <br /> \n"
     rstr += btable_html
     rstr += footer
     return rstr
