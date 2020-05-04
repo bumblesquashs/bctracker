@@ -1,0 +1,29 @@
+<h2>Welcome to Bumblesquash's Victoria GTFS app!</h2>
+
+This is very much a WIP. See <a href="/about">about</a> for more info.<br>
+<br />
+<i>Coming soon!</i> Block history lookup: choose a bus! <br>
+
+<br />
+
+<form onsubmit="busLookup();" action="javascript:void(0);">
+  <label for="busid_f">Bus ID:</label><br>
+  <input type="text" id="busid_f" name="busid" method="post">
+  <input type="submit" value="Lookup">
+</form>
+
+<script type="text/javascript">
+function busLookup() {
+      var busid = document.getElementById('busid_f').value;
+      window.location = "/bus/" + busid;
+  }
+</script>
+
+<br />
+<b> All Routes: </b>
+<br />
+<ul>
+% for routeid in rdict:
+    <li> <a href="routes/{{rdict[routeid][0]}}">{{rdict[routeid][0]}} {{rdict[routeid][1]}}</a><br> </li>
+% end
+</ul>

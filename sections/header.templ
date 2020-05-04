@@ -2,42 +2,35 @@
 <head> <title> {{title}} </title>
 <link rel="stylesheet" href="/style.css">
 <style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #49a348;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-family: Helvetica, sans-serif;
-}
-
-li a:hover {
+  .navlist {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #49a348;
+  }
+  .navitem {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: Helvetica, sans-serif;
+  }
+  .navitem:hover {
   background-color: #255325;
 }
 </style>
 </head>
 <body>
 
-<ul>
-  <li><a class="active" href="/">BCTracker</a></li>
-  <li><a href="/all-busses">Realtime</a></li>
-  <li><a href="/routes">All Routes</a></li>
-  <li><a href="/blocks">All Blocks</a></li>
-  <li><a href="/about">About</a></li>
+<ul class="navlist">
+  <li><a class="navitem" href="/">BCTracker</a></li>
+  <li><a class="navitem" href="/all-busses">Realtime</a></li>
+  <li><a class="navitem" href="/routes">All Routes</a></li>
+  <li><a class="navitem" href="/blocks">All Blocks</a></li>
+  <li><a class="navitem" href="/about">About</a></li>
 </ul> <br>
-
-<br />
 
 <div>

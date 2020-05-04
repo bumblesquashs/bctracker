@@ -1,12 +1,10 @@
 import datastructure as ds
 
-
 class TripTime:
     def __init__(self, tripid, stoptime):
         self.stoptime = stoptime
         self.tripid = tripid
         self.trip = ds.tripdict[tripid]
-
 
 def formatTripList(triptimelist):
     table_html = """<table class="pure-table pure-table-horizontal pure-table-striped">

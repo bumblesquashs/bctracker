@@ -1,15 +1,11 @@
 %import businfotable as businfo
-
-  RealTime: All active busses by internal ids<br>
+<br />
+  RealTime: All currently active busses by fleet number<br>
   Data current to: {{time_string}} Pacific Time<br>
   <br />
-  Click blockid or tripid to view the schedule for this bus<br>
-  <br /> <a href="?rt=reload">Refresh Realtime</a>
-  <hr>
-
-  <a href="/"> Back to Top</a><br>
-  Note: a fleet number of 'Unknown' means that a fleet number could not be found for this fleetid. <br>
-  In this case, nextride's API should be scraped to get the translation
+  Click blockid or tripid to view the schedule for the bus, and click Refresh Realtime to get fresh data.<br>
+  <br /> <a href="?rt=reload">Refresh Realtime</a> <br>
+  <br />
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>
       <tr>

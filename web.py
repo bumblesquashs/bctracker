@@ -18,59 +18,32 @@ ds.start()
 rt.download_lastest_files()
 rt.load_realtime()
 
-homelink = '<a href="/"> Back to Top</a><br>'
+# rdict is routeid -> (routenum, routename, routeid)
+rdict = ds.routedict
+reverse_rdict = {}  # route num -> routeid
+# build a reverse route table (routenum->routeid)
+for route_tuple in rdict.values():
+    reverse_rdict[route_tuple[0]] = route_tuple[2]
 
+# ==============================================================
+# Web helper code!
+# ==============================================================
+
+#minature rror page
 def no(msg):
-    return "Not quite: " + msg + "<br>" + homelink
+    return "Not quite: " + msg + "<br>" + '<a href="/"> Back to Top</a><br>'
 
-# All this is Static!
+# header bar for all pages
 def header(title_str):
     return template('sections/header.templ', title=title_str)
-
+#footer for all pages
 footer = """
 </div>
 </body>
 </html>
 """
 
-lookup_jscript = '''
-<script type="text/javascript">
-function busLookup() {
-      var busid = document.getElementById('busid_f').value;
-      window.location = "/bus/" + busid;
-  }
-</script>
-<form onsubmit="busLookup();" action="javascript:void(0);>
-  <label for="busid_f">Bus ID:</label><br>
-  <input type="text" id="busid_f" name="busid" method="post">
-  <input type="submit" value="Lookup">
-</form>
-'''
-
-# rdict is routeid -> (routenum, routename, routeid)
-rdict = ds.routedict
-
-reverse_rdict = {}  # route num -> routeid
-# build a reverse route table (routenum->routeid)
-for route_tuple in rdict.values():
-    reverse_rdict[route_tuple[0]] = route_tuple[2]
-
-# build the route table for the index
-index_str = "<b>Welcome to Bumblesquash's little Victoria GTFS app!</b><br>"
-index_str += 'This is very much a WIP. See <a href="/about"> about </a> for more info.<br>'
-index_str += '<i>Coming soon!</i> Block history lookup: choose a bus!<br>'
-index_str += lookup_jscript
-index_str += '<br />'
-index_str += '<a href="?rt=reload">Refresh Realtime</a>'
-index_str += '<br />'
-for routeid in rdict:
-    index_str += '<a href="routes/' + \
-        rdict[routeid][0] + '">' + rdict[routeid][0] + \
-        ' ' + rdict[routeid][1] + '</a><br>'
-
-
-# build the block table for the blocks page - static
-
+# build the block table for the blocks page - TODO: need to move this to its own page lol
 btable_html = """<table class="pure-table pure-table-horizontal pure-table-striped">
 <tr>
   <th>BlockID</th>
@@ -96,10 +69,7 @@ for block in blocklist:
     btable_html += entry
 btable_html += '</table>\n'
 
-# Dynamic functions
-# =========================
-
-
+# do some preprocessing when we call the realtime page
 def genrtbuslist_html():
     rtbuslist = []
     for busid in rt.rtvehicle_dict:
@@ -120,20 +90,23 @@ def genrtbuslist_html():
                     tripdict=ds.tripdict,
                     stopdict=ds.stopdict) + footer
 
-
-# Web framework code
+# ========================================
+# Web framework: assign routes
 # ========================================
 app = Bottle()
 
 @app.route('/')
-@app.route('/routes')
-@app.route('/routes/')
 def index():
     if 'rt' in request.query:  # for the refresh data thing
         print('Oi! gotta reload')
         rt.download_lastest_files()
         rt.load_realtime()
-    return header('Victoria GTFS Test!') + index_str + footer
+    return header('Victoria GTFS Test!') + template('pages/home.templ', rdict=rdict) + footer
+
+@app.route('/routes')
+@app.route('/routes/')
+def index():
+    return header('All Routes...') + template('pages/routes.templ', rdict=rdict) + footer
 
 @app.route('/style.css')
 def style():
@@ -143,11 +116,9 @@ def style():
 def buspage_root():
     return no('Gotta choose a bus!')
 
-
 @app.route('/busid/')
 def busidpage_root():
     return no('Gotta choose a busid!')
-
 
 @app.route('/all-busses/')
 @app.route('/all-busses')
@@ -158,14 +129,12 @@ def all_busses_templ():
         rt.load_realtime()
     return genrtbuslist_html()
 
-
 @app.route('/bus/<fleetnum>')
 def buspage(fleetnum):
     rstr = header('Bus Lookup')
     rstr += 'Page for bus with fleetnum ' + fleetnum
     rstr += footer
     return rstr
-
 
 @app.route('/busid/<busid>')
 def buspage(busid):
@@ -174,16 +143,14 @@ def buspage(busid):
     rstr += footer
     return rstr
 
-
 @app.route('/blocks')
 @app.route('/blocks/')
 def allblocks():
     rstr = header('List of Blocks')
-    rstr += "\n All of Victoria's blocks: \n<hr>"
+    rstr += "\n <b> All of Victoria's blocks: </b> <br /> \n"
     rstr += btable_html
     rstr += footer
     return rstr
-
 
 @app.route('/admin')
 @app.route('/admin/')
@@ -197,15 +164,12 @@ def admin():
     <a href="/admin/scrape-fleet/">Scrape Unknown Fleet Numbers via NextRide API </a><br>
     </body></html>
 '''
-
-
 @app.route('/admin/download-gtfs/')
 @app.route('/admin/download-gtfs')
 def download_gtfs_sp():
     print('Activating subprocess for gtfs download shell script')
     subprocess.run(['./download_new_gtfs.sh'])
     return('Done. <br> <a href="/admin"> Back </a>')
-
 
 @app.route('/admin/download-routes')
 @app.route('/admin/download-routes/')
@@ -214,14 +178,12 @@ def download_routes_sp():
     subprocess.run(['./download_new_routes.sh'])
     return('Done. <br> <a href="/admin"> Back </a>')
 
-
 @app.route('/admin/scrape-fleet')
 @app.route('/admin/scrape-fleet/')
 def scrape_fleet():
     print('Scraping fleet again')
     scrape.scrape()
     return('Done. <br> <a href="/admin"> Back </a>')
-
 
 @app.route('/blocks/<blockid>')
 def blockview(blockid):
@@ -230,7 +192,6 @@ def blockview(blockid):
     except KeyError:
         return no("Couldn't find block with blockid " + blockid)
     return header('Table of Trips') + template('pages/block.templ', blockid=blockid, triplist=triplist) + footer
-
 
 @app.route('/trips/<tripid>')
 def tripview(tripid):
@@ -270,6 +231,7 @@ def routepage(routenum):
     day_order.sort(key = lambda x: ds.service_order_dict.setdefault(day_triplistdict[x][0].serviceid, 10000)) #sort by first trip's service id, any unfound keys last
     return header('Viewing route' + routenum) + template('pages/route.templ', day_triplistdict=day_triplistdict, day_order=day_order, routenum=routenum, routename=rdict[this_route][1]) + footer
 
+#this page doesnt use a template - TODO: should probably change that
 @app.route('/stops/<stopcode>')
 def stoppage(stopcode):
     try:
@@ -287,7 +249,9 @@ def stoppage(stopcode):
 def about_page():
     return header('About this abomination...') + template('pages/about.templ') + footer
 
-#================================= set up server and launch
+# =================================
+# set up server and launch
+# =================================
 
 #use cherrypy server - setup logging
 def make_access_log(app, filepath, when='d', interval=7, **kwargs):

@@ -1,29 +1,29 @@
+<br />
+<h3><u> Viewing Route: {{routenum}} {{routename}} </u></h3>
+<br />
+All trips for Route {{routenum}} by the time of their first stop<hr>
 
-    <h3><u> Viewing Route: {{routenum}} {{routename}} </u></h3>
-    <br />
-    All trips for Route {{routenum}} by the time of their first stop<hr>
+<%
 
-    <%
+ for day_str in day_order:
+   trip_list = day_triplistdict[day_str]
+   ib_trips = [trip for trip in trip_list if trip.directionid == '0']
+   ob_trips = [trip for trip in trip_list if trip.directionid == '1']
+%>
+  <br />
+  <h3>{{day_str}}</h3>
 
-     for day_str in day_order:
-       trip_list = day_triplistdict[day_str]
-       ib_trips = [trip for trip in trip_list if trip.directionid == '0']
-       ob_trips = [trip for trip in trip_list if trip.directionid == '1']
-    %>
-      <br />
-      <h3>{{day_str}}</h3>
+%  if(len(ob_trips) != 0):
+     <b> Outbound Trips ({{len(ob_trips)}}):</b><br>
+     <br />
+%    include('sections/triplist.templ', triplist=ob_trips)
+%  end
 
-    %  if(len(ob_trips) != 0):
-         <b> Outbound Trips ({{len(ob_trips)}}):</b><br>
-         <br />
-    %    include('sections/triplist.templ', triplist=ob_trips)
-    %  end
+% if(len(ib_trips) != 0):
+   <br />
+   <b> Inbound Trips ({{len(ib_trips)}}):</b><br>
+   <br />
+%    include('sections/triplist.templ', triplist=ib_trips)
+% end
 
-    % if(len(ib_trips) != 0):
-       <br />
-       <b> Inbound Trips ({{len(ib_trips)}}):</b><br>
-       <br />
-    %    include('sections/triplist.templ', triplist=ib_trips)
-    % end
-
-    %end
+%end
