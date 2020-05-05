@@ -42,33 +42,6 @@ footer = """
 </body>
 </html>
 """
-
-# build the block table for the blocks page - TODO: need to move this to its own page lol
-btable_html = """<table class="pure-table pure-table-horizontal pure-table-striped">
-<tr>
-  <th>BlockID</th>
-  <th>Routes</th>
-  <th>Start Time</th>
-  <th>Day of week</th>
-</tr>"""
-blocklist = ds.blockdict.values()
-for block in blocklist:
-
-    entry = "<tr>\n"
-    entry += '<td><a href="blocks/' + block.blockid + \
-        '">' + block.blockid + "</a></td>\n"
-    entry += '<td>'
-    b_routes = block.get_block_routes()
-    for route in b_routes:
-        entry += route + ', '
-    entry = entry[:-2]  # drop the last comma and space
-    entry += "</td>"
-    entry += "<td>" + block.triplist[0].starttime + "</td>\n"
-    entry += "<td>" + ds.days_of_week_dict[block.serviceid] + "</td>\n"
-    entry += "</tr>\n"
-    btable_html += entry
-btable_html += '</table>\n'
-
 # do some preprocessing when we call the realtime page
 def genrtbuslist_html():
     rtbuslist = []
@@ -146,24 +119,13 @@ def buspage(busid):
 @app.route('/blocks')
 @app.route('/blocks/')
 def allblocks():
-    rstr = header('List of Blocks')
-    rstr += "<br> \n <b> All of Victoria's blocks: </b> <br /> \n"
-    rstr += btable_html
-    rstr += footer
-    return rstr
+    return header('List of all Blocks') + template('pages/blocks.templ') + footer
 
 @app.route('/admin')
 @app.route('/admin/')
 def admin():
-    return '''
-    <html><head><title>Admin tools</title></head><body>
-    Click the following to load new data... <br>
-    Note: you probably have to restart the app for any of this to take effect <br>
-    <a href="/admin/download-gtfs/">Download Latest GTFS-Static Files (Once every 2 weeks?)</a><br>
-    <a href="/admin/download-routes/">Download Latest NextRide Routes.json file (Once every 2 weeks?) </a><br>
-    <a href="/admin/scrape-fleet/">Scrape Unknown Fleet Numbers via NextRide API </a><br>
-    </body></html>
-'''
+    return static_file('admin.html', root='./pages')
+
 @app.route('/admin/download-gtfs/')
 @app.route('/admin/download-gtfs')
 def download_gtfs_sp():
