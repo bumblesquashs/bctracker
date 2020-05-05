@@ -1,4 +1,3 @@
-
 import wget
 import time
 from datetime import datetime
@@ -8,28 +7,36 @@ from os import path
 import datastructure as ds
 import json
 
-
 # from protoc
 import protobuf.data.gtfs_realtime_pb2 as rt
 
-# use unix time
-
+class RTVehiclePosition:
+    def __init__(self, fleetid, tripid, blockid, scheduled, onroute, stopid, lat, lon):
+        self.fleetid = fleetid
+        self.tripid = tripid
+        self.scheduled = scheduled
+        self.onroute = onroute
+        self.stopid = stopid
+        self.blockid = blockid
+        self.lat = lat
+        self.lon = lon
+        self.fleetnum = 'Unknown'
+        self.unknown_fleetnum_flag = True
 
 def make_realtime_filename():
     return 'gtfsrt_vehiclepos' + str(int(time.time())) + '.bin'
-
 
 default_positions_file = 'data/realtime_downloads/default_gtfrealtime_VehiclePositions.bin'
 vehicle_positions_path = default_positions_file
 override_rt_flag = False  # for debug
 
 # global
+rtvehicle_dict = {}
 id2fleetnum_dict = {}
 
 victoria_gtfs_rt_url = 'http://victoria.mapstrat.com/current/gtfrealtime_VehiclePositions.bin'
 last_rt_download_time = time.time()
 # dynamically download the latest realtime files, save them somewhere with a logical path, update path variables here
-
 
 def download_lastest_files():
     global vehicle_positions_path
@@ -50,40 +57,48 @@ def download_lastest_files():
     if override_rt_flag:  # for debug
         vehicle_positions_path = default_positions_file
 
-
 def setup_fleetnums():
     global id2fleetnum_dict
+    print('Realtime: Imported latest fleet numbers!')
     with open('data/nextride/id2fleetnum.json', 'r') as f:
         id2fleetnum_dict = json.load(f)
 
-
 def get_data_refreshed_time_str():
-    return time.asctime(time.localtime(last_rt_download_time)) 
+    return time.asctime(time.localtime(last_rt_download_time))
 
-
-class RTVehiclePosition:
-    def __init__(self, fleetid, tripid, scheduled, onroute, stopid, lat, lon):
-        self.fleetid = fleetid
-        self.tripid = tripid
-        self.scheduled = scheduled
-        self.onroute = onroute
-        self.stopid = stopid
-        self.lat = lat
-        self.lon = lon
-        self.fleetnum = 'Unknown'
-        self.unknown_fleetnum_flag = True
-
-
-rtvehicle_dict = {}
+def update_last_seen():
+    global rtvehicle_dict
+    with open('data/vehicle_history/last_seen.json', 'r') as f:
+        last_seen = json.load(f)
+    last_seen_times = last_seen['last_times']
+    last_seen_blocks = last_seen['last_blocks']
+    for fleetid in rtvehicle_dict.keys():
+        rt_entry = rtvehicle_dict[fleetid]
+        fleetnum = ''
+        try:
+            fleetnum = id2fleetnum_dict[fleetid]
+        except AttributeError:
+            continue
+        last_seen_times[fleetnum] = {
+        'day': str(date.today()),
+        }
+        if(rt_entry.scheduled and rt_entry.blockid != 'NONE'):
+            last_seen_blocks[fleetnum] = {
+            'blockid': rt_entry.blockid,
+            'day': str(date.today()),
+            'routes': ds.blockdict[rt_entry.blockid].get_block_routes()
+            }
+    last_seen['last_times'] = last_seen_times
+    last_seen['last_blocks'] = last_seen_blocks
+    with open('data/vehicle_history/last_seen.json', 'w') as f:
+        last_seen = json.dump(last_seen, f)
 
 # just for interest
-
 busidlist = []
 count_scheduled = 0
 count_unsched = 0
 
 pos_data = None
-
 
 def load_realtime():
     print('Loading the realtime data now...')
@@ -122,13 +137,17 @@ def load_realtime():
             tripid = trip.trip_id
             if(trip.schedule_relationship == 0 and tripid != ''):
                 scheduled = True
+                blockid = ds.tripdict[tripid].blockid
                 count_scheduled += 1
+
             else:
                 scheduled = False
                 count_unsched += 1
+                blockid = 'NONE'
         except AttributeError:
             stopid = 'None: Not signed in'
             tripid = 'NONE'
+            blockid = 'NONE'
             scheduled = False
             count_unsched += 1
             onroute = False
@@ -141,7 +160,7 @@ def load_realtime():
             lat = 0
             lon = 0
         rtvehicle_dict[fleetid] = RTVehiclePosition(
-            fleetid, tripid, scheduled, onroute, stopid, lat, lon)
+            fleetid, tripid, blockid, scheduled, onroute, stopid, lat, lon)
         busidlist.append(fleetid)
     print('Populated the realtime structure...')
     print('Scheduled: {0} Unscheduled: {1} Total: {2}; Offroute: {3}'.format(

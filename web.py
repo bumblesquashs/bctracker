@@ -1,22 +1,43 @@
 from bottle import route, run, request, template, Bottle, static_file
-import datastructure as ds
-import realtime as rt
-import businfotable as businfo
-import scrape_fleetnums as scrape
 import sys
+import signal
 import subprocess
 import cherrypy as cp
-
 import requestlogger
 import logging
 import logging.handlers
 
+import datastructure as ds
+import realtime as rt
+import businfotable as businfo
+import scrape_fleetnums as scrape
+import munch
 from pages.stop import stoppage_html
+
+def controlc_handler(sig, frame):
+    munch.stop_cron()
+    print('Gooodbye Everybody!')
+    sys.exit(0)
+
+def crontask_handler(sig, frame):
+    print('MUNCH: Got signalled!')
+    try:
+        munch.munch()
+    except:
+        print('MUNCH: (in sighandler) Hit exception...')
+    return
+
+
+signal.signal(signal.SIGINT, controlc_handler)
+signal.signal(signal.SIGUSR1, crontask_handler)
+
 
 PLACEHOLDER = '100000'
 ds.start()
 rt.download_lastest_files()
 rt.load_realtime()
+rt.update_last_seen()
+munch.start_cron()
 
 # rdict is routeid -> (routenum, routename, routeid)
 rdict = ds.routedict
@@ -74,6 +95,9 @@ def index():
         print('Oi! gotta reload')
         rt.download_lastest_files()
         rt.load_realtime()
+    if 'munch' in request.query:  # for the refresh data thing
+        print('Oi! gotta munch')
+        munch.munch()
     return header('Victoria GTFS Tracker') + template('pages/home.templ', rdict=rdict) + footer
 
 @app.route('/routes')
@@ -100,6 +124,7 @@ def all_busses_templ():
         print('Oi! gotta reload')
         rt.download_lastest_files()
         rt.load_realtime()
+        rt.update_last_seen()
     return genrtbuslist_html()
 
 @app.route('/bus/<fleetnum>')

@@ -15,30 +15,23 @@ calendar_dates_path = pathprefix + 'calendar_dates.txt'
 directionid_dict = {'0': 'Outbound', '1': 'Inbound'}
 
 # helper that sorts list of tuples based on the time in their 5th slot
-
-
 def hms_to_sec(hms):
     (h, m, s) = hms.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
 
-
 def trip_to_numseconds(trip):
     return hms_to_sec(trip.starttime)
-
 
 def trip_is_before_midday(trip):
     return (trip_to_numseconds(trip) < 43200)
 
 # the first 3 of these are basically just structs
-
-
 class Stop:
     def __init__(self, stopid, stopcode, stopname):
         self.stopid = stopid
         self.stopcode = stopcode
         self.stopname = stopname
         self.triptimes = []  # list of (tripid, triptime) tuple
-
 
 class StopTime:
     def __init__(self, tripid, stopid, stopname, departtime, stopseq):
@@ -47,7 +40,6 @@ class StopTime:
         self.departtime = departtime
         self.stopseq = stopseq
         self.stopname = stopname
-
 
 class Trip:
     def __init__(self, tripid, routeid, serviceid, routenum, blockid, headsign, starttime, startstopname, directionid):
@@ -65,7 +57,6 @@ class Trip:
         # When identical weekday/weekend trip and blocks are consolidated, use this
         self.alt_day_string = ''
         self.stoplist = []  # list of stoptimetuple
-
 
 class Block:
     def __init__(self, blockid):
@@ -112,7 +103,6 @@ service_order_dict = {} # service_id -> display order (monday first, sunday last
 
 def get_today_str():
     return str(date.today()).replace('-', '')
-
 
 today = get_today_str()
 
