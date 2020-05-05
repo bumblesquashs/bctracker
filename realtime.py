@@ -77,7 +77,7 @@ def update_last_seen():
         fleetnum = ''
         try:
             fleetnum = id2fleetnum_dict[fleetid]
-        except AttributeError:
+        except (KeyError, AttributeError):
             continue
         last_seen_times[fleetnum] = {
         'day': str(date.today()),

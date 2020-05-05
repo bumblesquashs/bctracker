@@ -25,4 +25,5 @@ def munch():
     rt.download_lastest_files()
     scrape.scrape()
     rt.setup_fleetnums()
+    rt.load_realtime()
     rt.update_last_seen()

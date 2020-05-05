@@ -7,6 +7,10 @@ pip install wsgi-request-logger
 pip install protobuf
 pip install google
 pip install python-crontab
+cp data/realtime_downloads
+if [ ! -f data/realtime_downloads/last_seen.json ]
+ then cp data/realtime_downloads/last_seen.json.seed data/realtime_downloads/last_seen.json
+fi
 mkdir -p data/realtime_downloads
 mkdir -p logs
 mkdir -p data/nextride
