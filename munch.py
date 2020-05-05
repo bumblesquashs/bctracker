@@ -8,13 +8,14 @@ cron_interval_mins = 10
 
 def start_cron():
     with CronTab(user=True) as cron:
+        cron.remove_all(comment=CRON_ID_STR)
         job = cron.new(command='kill -s USR1 {0}'.format(os.getpid()), comment=CRON_ID_STR)
         job.minute.every(cron_interval_mins)
     print('MUNCHER: cron job to munch realtime was just setup')
 
 def stop_cron():
     with CronTab(user=True) as cron:
-        cron.remove_all(comment='foo')
+        cron.remove_all(comment=CRON_ID_STR)
     print('MUNCHER:  cron job to munch realtime was just removed')
 
 #code to run under cron:
