@@ -15,12 +15,12 @@ import munch
 from pages.stop import stoppage_html
 
 def controlc_handler(sig, frame):
+    print('\n')
     munch.stop_cron()
-    print('Gooodbye Everybody!')
+    print('EXITING: Gooodbye Everybody!')
     sys.exit(0)
 
 def crontask_handler(sig, frame):
-    print('MUNCH: Got signalled!')
     try:
         munch.munch()
     except:
@@ -104,6 +104,12 @@ def index():
 @app.route('/routes/')
 def index():
     return header('All Routes...') + template('pages/routes.templ', rdict=rdict) + footer
+
+@app.route('/history')
+@app.route('/history/')
+def index():
+    return header('Bus history') + template('pages/history.templ') + footer
+
 
 @app.route('/style.css')
 def style():

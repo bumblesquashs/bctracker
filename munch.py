@@ -4,7 +4,7 @@ import os
 import realtime as rt
 import scrape_fleetnums as scrape
 CRON_ID_STR = 'vgtfs-muncher'
-cron_interval_mins = 1
+cron_interval_mins = 10
 
 def start_cron():
     with CronTab(user=True) as cron:

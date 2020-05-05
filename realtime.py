@@ -93,6 +93,10 @@ def update_last_seen():
     with open('data/vehicle_history/last_seen.json', 'w') as f:
         last_seen = json.dump(last_seen, f)
 
+def get_last_seen():
+    with open('data/vehicle_history/last_seen.json', 'r') as f:
+        last_seen = json.load(f)
+    return last_seen
 # just for interest
 busidlist = []
 count_scheduled = 0
