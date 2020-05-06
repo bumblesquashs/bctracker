@@ -26,11 +26,7 @@ class BusRange:
     def is_in_range(self, fleetnum):
         if(type(fleetnum) == str):
             fleetnum = int(fleetnum)
-        if fleetnum >= self.low_num and fleetnum <= self.high_num:
-            return True
-        else:
-            return False
-
+        return (fleetnum >= self.low_num and fleetnum <= self.high_num)
 
 def get_bus_range(fleet_num):
     for range in all_ranges:

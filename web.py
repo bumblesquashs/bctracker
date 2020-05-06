@@ -135,17 +135,18 @@ def all_busses_templ():
 
 @app.route('/bus/<fleetnum>')
 def buspage(fleetnum):
-    rstr = header('Bus Lookup')
-    rstr += '<br> \n Page for bus with fleetnum {0}... coming soon!'.format(fleetnum)
-    rstr += footer
-    return rstr
+    if(businfo.get_bus_range(fleetnum).type == businfo.TYPE_UNKNOWN):
+        return no('Unknown Fleetnumber {0}! Is this a (recent) BC Transit bus?'.format(fleetnum))
+    return header('Bus Lookup') + template('pages/bus.templ', fleetnum=fleetnum) + footer
 
 @app.route('/busid/<busid>')
 def buspage(busid):
-    rstr = header('Bus Lookup')
-    rstr += 'Page for bus with internal id ' + busid
-    rstr += footer
-    return rstr
+    if(busid not in rt.id2fleetnum_dict):
+        return no('Internal id {0} not found! Is this a fleet number instead of an internal id?'.format(busid))
+    fleetnum = rt.id2fleetnum_dict[busid]
+    if(businfo.get_bus_range(fleetnum).type == businfo.TYPE_UNKNOWN):
+        return no('Unknown Fleetnumber {0}! Is this a BC Transit bus?'.format(fleetnum))
+    return header('Bus Lookup') + template('pages/bus.templ', fleetnum=fleetnum) + footer
 
 @app.route('/blocks')
 @app.route('/blocks/')

@@ -97,6 +97,25 @@ def get_last_seen():
     with open('data/vehicle_history/last_seen.json', 'r') as f:
         last_seen = json.load(f)
     return last_seen
+
+def get_last_seen_bus(fleetnum):
+    with open('data/vehicle_history/last_seen.json', 'r') as f:
+        last_seen = json.load(f)
+        last_seen_times = last_seen['last_times']
+        try:
+            return last_seen_times[fleetnum]
+        except KeyError:
+            return False
+
+def get_last_block_bus(fleetnum):
+    with open('data/vehicle_history/last_seen.json', 'r') as f:
+        last_seen = json.load(f)
+    last_seen_blocks = last_seen['last_blocks']
+    try:
+        return last_seen_blocks[fleetnum]
+    except KeyError:
+        return False
+
 # just for interest
 busidlist = []
 count_scheduled = 0

@@ -16,7 +16,7 @@
   <tbody>
   %for trip in triplist:
     <tr>
-    <td>{{trip.blockid}}</td>
+    <td><a href="/blocks/{{trip.blockid}}">{{trip.blockid}}</a></td>
     <td><a href="/trips/{{trip.tripid}}">{{trip.tripid}}</a></td>
     <td>{{trip.headsign}}</td>
     <td>{{trip.starttime}}</td>

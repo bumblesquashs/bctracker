@@ -1,12 +1,15 @@
 % import realtime as rt
+% import businfotable as businfo
 
 <br>
 <h3> History for each vehicle </h3>
 <h4> Last Block Assigned: </h4>
+<p> Note: for entries made under a previous gtfs, the blockid will no longer be correct </p>
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
       <th> Fleet Number </th>
+      <th> Bus Model </th>
       <th> Date Last Assigned</th>
       <th> Routes Assigned </th>
       <th> BlockId </th>
@@ -27,10 +30,11 @@
         continue
      end
      obj = last_blocks[fleetnum]
-
+     busrange = businfo.get_bus_range(fleetnum)
  %>
      <tr>
        <td> {{fleetnum}} </td>
+       <td> {{busrange.year}} {{busrange.model}}</td>
        <td> {{obj['day']}} </td>
        <td> {{', '.join(sorted(obj['routes']))}} </td>
        <td> {{obj['blockid']}} </td>
@@ -45,17 +49,20 @@
   <thead>
     <tr>
        <th> Fleet Number </th>
+       <th> Bus Model </th>
        <th> Date Last Active</th>
     </tr>
    </thead>
    <tbody>
 %   for fleetnum in last_times_keys:
-%       if(fleetnum == '0'):
-%          continue
-%       end
+%      if(fleetnum == '0'):
+%         continue
+%      end
 %      date = last_times[fleetnum]['day']
+%      busrange = businfo.get_bus_range(fleetnum)
         <tr>
           <td> {{fleetnum}} </td>
+          <td> {{busrange.year}} {{busrange.model}}</td>
           <td> {{date}} </td>
         </tr>
 %      end

@@ -2,20 +2,19 @@
 
 This is very much a WIP. See <a href="/about">about</a> for more info.<br>
 <br />
-<i>Coming soon!</i> Block history lookup: choose a bus! <br>
-
+<i>Coming soon!</i> Better block history! <br>
 <br />
-
+<p> <b> See last block for vehicle: </b> </p>
 <form onsubmit="busLookup();" action="javascript:void(0);">
-  <label for="busid_f">Bus ID:</label><br>
+  <label for="busid_f">Fleet Number:</label><br>
   <input type="text" id="busid_f" name="busid" method="post">
   <input type="submit" value="Lookup">
 </form>
 
 <script type="text/javascript">
 function busLookup() {
-      var busid = document.getElementById('busid_f').value;
-      window.location = "/bus/" + busid;
+      var fleetnum = document.getElementById('busid_f').value;
+      window.location = "/bus/" + fleetnum;
   }
 </script>
 

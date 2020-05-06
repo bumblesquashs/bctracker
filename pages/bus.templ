@@ -1,0 +1,41 @@
+% import businfotable as businfo
+% import realtime as rt
+% busrange = businfo.get_bus_range(fleetnum)
+
+<h3> Viewing bus: {{fleetnum}} </h3>
+% busrange = businfo.get_bus_range(fleetnum)
+<i> {{busrange.year}} {{busrange.model}} </i>
+<br />
+<hr>
+% track_history = rt.get_last_seen_bus(fleetnum)
+% if(track_history != False):
+      <h4> Last Tracked: {{track_history['day']}}</h4>
+      <p> (The last time the vehicle was detected by the tracker even if it wasn't assigned to a route) </p>
+% else:
+      <p>No History for this vehicle found.</p>
+      <p><i> Note: this site began tracking data on May 5th 2020, so vehicles
+        retired before then will not show up.</i></p>
+% end
+% block_history = rt.get_last_block_bus(fleetnum)
+% if(block_history != False):
+      <h3> Last Block Assigned for unit {{fleetnum}} </h3>
+      <p> Note: for entries made under a previous gtfs, the blockid will no longer be correct </p>
+      <table class="pure-table pure-table-horizontal pure-table-striped">
+        <thead>
+          <tr>
+            <th> Date</th>
+            <th> Routes Assigned </th>
+            <th> BlockId </th>
+          </tr>
+         </thead>
+         <tbody>
+         <tr>
+           <td> {{block_history['day']}} </td>
+           <td> {{', '.join(sorted(block_history['routes']))}} </td>
+           <td> <a href="/blocks/{{block_history['blockid']}}">{{block_history['blockid']}}</a> </td>
+         </tr>
+        </tbody>
+      </table>
+% else:
+      <p><i> No block history for this vehicle found...</i></p>
+% end
