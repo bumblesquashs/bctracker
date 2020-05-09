@@ -6,4 +6,6 @@ data/google_transit/
 data/vehicle_history/last_seen.json
 data/nextride/archived-route-json/
 data/nextride/id2fleetnum.json
+data/nextride/last_api_result.json
+
 __pycache__/

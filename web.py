@@ -79,7 +79,7 @@ def genrtbuslist_html():
         # now - sort that list however we please
     rtbuslist.sort(key=lambda x: (int(x.scheduled) * -1, int(x.fleetnum)))
     return header('All active busses...') + template('pages/realtime.templ',
-                    time_string=format(rt.get_data_refreshed_time_str()),
+                    time_string=rt.get_data_refreshed_time_str(),
                     rtbuslist=rtbuslist,
                     tripdict=ds.tripdict,
                     stopdict=ds.stopdict) + footer
@@ -135,7 +135,7 @@ def all_busses_templ():
 
 @app.route('/bus/<fleetnum>')
 def buspage(fleetnum):
-    if(businfo.get_bus_range(fleetnum).type == businfo.TYPE_UNKNOWN):
+    if(not businfo.is_known_bus(fleetnum)):
         return no('Unknown Fleetnumber {0}! Is this a (recent) BC Transit bus?'.format(fleetnum))
     return header('Bus Lookup') + template('pages/bus.templ', fleetnum=fleetnum) + footer
 

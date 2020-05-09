@@ -34,6 +34,12 @@ def get_bus_range(fleet_num):
             return range
     return BusRange(0, 0, '0', 'Unknown Bus Type', TYPE_UNKNOWN)
 
+def is_known_bus(fleet_num):
+   for range in all_ranges:
+        if(range.is_in_range(fleet_num)):
+            return True
+   return False
+
 
 all_ranges = [
     BusRange(1, 18, '2000', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),

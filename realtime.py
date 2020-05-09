@@ -6,6 +6,15 @@ import os.path
 from os import path
 import datastructure as ds
 import json
+import businfotable as businfo
+
+#realtime bus status
+STATUS_UNKNOWNFLEETNUM = 0 #this is not a BC transit bus we know about
+STATUS_INACTIVE = 1 #this bus is not active right now
+STATUS_TRACKING = 2 #this bus is tracking but is not assigned to any block
+STATUS_LOGGEDIN = 3 #this bus is assigned to a block but is not "onroute"
+STATUS_ONROUTE = 4 #this bus is fully on route (all systems go)
+STATUS_UNKNOWN_TRANSLATION = 5 #we recognize this fleet number but we don't have a translation for it (same as 0 really)
 
 # from protoc
 import protobuf.data.gtfs_realtime_pb2 as rt
@@ -33,6 +42,7 @@ override_rt_flag = False  # for debug
 # global
 rtvehicle_dict = {}
 id2fleetnum_dict = {}
+fleetnum2id_dict = {}
 
 victoria_gtfs_rt_url = 'http://victoria.mapstrat.com/current/gtfrealtime_VehiclePositions.bin'
 last_rt_download_time = time.time()
@@ -59,9 +69,13 @@ def download_lastest_files():
 
 def setup_fleetnums():
     global id2fleetnum_dict
+    global fleetnum2id_dict
+    fleetnum2id_dict = {}
     print('Realtime: Imported latest fleet numbers!')
     with open('data/nextride/id2fleetnum.json', 'r') as f:
         id2fleetnum_dict = json.load(f)
+    for pair in id2fleetnum_dict.items(): #flip the dict
+        fleetnum2id_dict[pair[1]] = pair[0]
 
 def get_data_refreshed_time_str():
     return time.asctime(time.localtime(last_rt_download_time))
@@ -115,6 +129,30 @@ def get_last_block_bus(fleetnum):
         return last_seen_blocks[fleetnum]
     except KeyError:
         return False
+
+def get_gmaps_url(lat, lon):
+    return 'https://www.google.com/maps/search/?api=1&query={0},{1}'.format(lat, lon)
+
+#returns status, and rt object if any
+def get_current_status(fleetnum):
+    if(not businfo.is_known_bus(fleetnum)):
+        return STATUS_UNKNOWNFLEETNUM, False
+    try:
+        fleetid = fleetnum2id_dict[fleetnum]
+    except KeyError:
+        return STATUS_UNKNOWN_TRANSLATION, False
+    try:
+        vehicle_rt = rtvehicle_dict[fleetid]
+        if(vehicle_rt.scheduled and vehicle_rt.onroute):
+            return STATUS_ONROUTE, vehicle_rt
+        if(vehicle_rt.scheduled):
+            return STATUS_LOGGEDIN, vehicle_rt
+        if(vehicle_rt.onroute and not vehicle_rt.scheduled): #should be impossible?
+            print('REALTIME: Whaaat? apparently a vehicle is onroute but not scheduled')
+            return STATUS_TRACKING, vehicle_rt
+        print('REALTIME: Whaaat?')
+    except KeyError:
+        return STATUS_INACTIVE, False
 
 # just for interest
 busidlist = []

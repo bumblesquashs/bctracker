@@ -1,4 +1,6 @@
 %import businfotable as businfo
+%import realtime as rt
+
 <br />
   RealTime: All currently active busses by fleet number<br>
   Data current to: {{time_string}} Pacific Time<br>
@@ -62,7 +64,7 @@
       <td>N/A</td>
       <td>N/A</td>
       %end
-      <td>{{str(bus.lat)}} {{str(bus.lon)}}</td>
+      <td><a href="{{rt.get_gmaps_url(bus.lat, bus.lon)}}"> {{bus.lat}} {{bus.lon}} </a></td>
     </tr>
     %end
   </tbody>

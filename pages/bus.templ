@@ -1,10 +1,38 @@
 % import businfotable as businfo
 % import realtime as rt
+% import datastructure as ds
 % busrange = businfo.get_bus_range(fleetnum)
 
 <h3> Viewing bus: {{fleetnum}} </h3>
 % busrange = businfo.get_bus_range(fleetnum)
-<i> {{busrange.year}} {{busrange.model}} </i>
+<i> {{busrange.year}} {{busrange.model}} </i><br>
+<hr>
+% bus_status, rt_struct = rt.get_current_status(fleetnum)
+% if (bus_status == rt.STATUS_INACTIVE or bus_status == rt.STATUS_UNKNOWN_TRANSLATION):
+     <p> Unit {{fleetnum}} is not active right now. </p>
+% elif (bus_status == rt.STATUS_TRACKING):
+     <p> <b> {{fleetnum}} is active, but not assigned to any route. </b> </p>
+     <p> Current Coordinates: <a href="{{rt.get_gmaps_url(rt_struct.lat, rt_struct.lon)}}"> {{rt_struct.lat}} {{rt_struct.lon}} </a></p>
+% elif (bus_status == rt.STATUS_LOGGEDIN):
+% trip = ds.tripdict[rt_struct.tripid]
+    <p> Current assignment: </p>
+    <h2> {{trip.headsign}} </h2>
+    <p> (off scheduled route) </p>
+    <p> <a href="/trips/{{rt_struct.tripid}}"> View Trip </a> </p>
+    <p> <a href="/blocks/{{rt_struct.blockid}}"> View Block </a> </p>
+    <p> <a href="/routes/{{trip.routenum}}"> View Route </a> </p>
+    <p> Current Coordinates: <a href="{{rt.get_gmaps_url(rt_struct.lat, rt_struct.lon)}}"> {{rt_struct.lat}} {{rt_struct.lon}} </a></p>
+% elif (bus_status == rt.STATUS_ONROUTE):
+% trip = ds.tripdict[rt_struct.tripid]
+% stop = ds.stopdict[rt_struct.stopid]
+<p> Current assignment: </p>
+<h2> {{trip.headsign}} </h2>
+<p> Current Stop: <a href="/stops/{{stop.stopcode}}">{{stop.stopname}} (#{{stop.stopcode}})</a> </p>
+<p> <a href="/trips/{{rt_struct.tripid}}"> View Trip </a> </p>
+<p> <a href="/blocks/{{rt_struct.blockid}}"> View Block </a> </p>
+<p> <a href="/routes/{{trip.routenum}}"> View Route </a> </p>
+<p> Current Coordinates: <a href="{{rt.get_gmaps_url(rt_struct.lat, rt_struct.lon)}}"> {{rt_struct.lat}} {{rt_struct.lon}} </a></p>
+% end
 <br />
 <hr>
 % track_history = rt.get_last_seen_bus(fleetnum)
@@ -38,4 +66,9 @@
       </table>
 % else:
       <p><i> No block history for this vehicle found...</i></p>
+%     if (bus_status == rt.STATUS_UNKNOWN_TRANSLATION):
+            <p><i> Note: No lookup for this fleetnumber is known, has this bus been in service lately? </i></p>
+%      end
 % end
+<br />
+<p> Data current to: {{rt.get_data_refreshed_time_str()}} Pacific Time</p>
