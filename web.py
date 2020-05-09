@@ -1,18 +1,22 @@
-from bottle import route, run, request, template, Bottle, static_file
-import sys
-import signal
-import subprocess
-import cherrypy as cp
-import requestlogger
-import logging
-import logging.handlers
+#!/usr/bin/env python
 
-import datastructure as ds
+import os
+import sys
+import munch
+import signal
+import logging
+import inspect
+import subprocess
+import requestlogger
 import realtime as rt
+import cherrypy as cp
+import logging.handlers
+import datastructure as ds
 import businfotable as businfo
 import scrape_fleetnums as scrape
-import munch
 from pages.stop import stoppage_html
+from bottle import route, run, request, template, Bottle, static_file
+
 
 def controlc_handler(sig, frame):
     print('\n')
@@ -27,15 +31,24 @@ def crontask_handler(sig, frame):
         print('MUNCH: (in sighandler) Hit exception...')
     return
 
+def restart_server():
+    print('\n')
+    munch.stop_cron()
+    print('RESTARTING: Loading New static GTFS!')
+    os.execv(inspect.getfile(lambda: None), sys.argv)
 
 signal.signal(signal.SIGINT, controlc_handler)
 signal.signal(signal.SIGUSR1, crontask_handler)
 
-
 PLACEHOLDER = '100000'
 ds.start()
 rt.download_lastest_files()
-rt.load_realtime()
+valid = rt.load_realtime()
+if(not valid):
+    print('ERROR: Not valid on startup... now thats a zinger.')
+    print('ERROR: Try running the download new gtfs script and try again')
+    print('ERROR: Shutting down.')
+    sys.exit(1)
 rt.update_last_seen()
 munch.start_cron()
 
@@ -153,31 +166,24 @@ def buspage(busid):
 def allblocks():
     return header('List of all Blocks') + template('pages/blocks.templ') + footer
 
-@app.route('/admin')
-@app.route('/admin/')
-def admin():
-    return static_file('admin.html', root='./pages')
-
-@app.route('/admin/download-gtfs/')
 @app.route('/admin/download-gtfs')
 def download_gtfs_sp():
     print('Activating subprocess for gtfs download shell script')
     subprocess.run(['./download_new_gtfs.sh'])
     return('Done. <br> <a href="/admin"> Back </a>')
 
+@app.route('/admin/restart-server')
+def restart():
+    print('Attempting to restart the server')
+    restart_server()
+    return('Lol you should never see this')
+
 @app.route('/admin/download-routes')
-@app.route('/admin/download-routes/')
 def download_routes_sp():
     print('Activating subprocess for NrApi Routes json shell script')
     subprocess.run(['./download_new_routes.sh'])
     return('Done. <br> <a href="/admin"> Back </a>')
 
-@app.route('/admin/scrape-fleet')
-@app.route('/admin/scrape-fleet/')
-def scrape_fleet():
-    print('Scraping fleet again')
-    scrape.scrape()
-    return('Done. <br> <a href="/admin"> Back </a>')
 
 @app.route('/blocks/<blockid>')
 def blockview(blockid):
@@ -201,7 +207,6 @@ def routepage(routenum):
         this_route = reverse_rdict[routenum]
     except KeyError:
         return no("Couldn't find route: " + str(routenum))
-
     try:
         trip_list = ds.route_triplistdict[this_route]
     except:

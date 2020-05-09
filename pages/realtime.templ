@@ -2,8 +2,13 @@
 %import realtime as rt
 
 <br />
+% if rt.gtfs_valid_vlag:
   RealTime: All currently active busses by fleet number<br>
   Data current to: {{time_string}} Pacific Time<br>
+% else:
+RealTime: <i> GTFS Apparently out of date... need to fix that </i><br>
+Data current to: {{time_string}} Pacific Time<br>
+% end
   <br />
   Click blockid or tripid to view the schedule for the bus, and click Refresh Realtime to get fresh data.<br>
   <br /> <a href="?rt=reload">Refresh Realtime</a> <br>

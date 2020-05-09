@@ -33,7 +33,7 @@
      busrange = businfo.get_bus_range(fleetnum)
  %>
      <tr>
-       <td> {{fleetnum}} </td>
+       <td> <a href="/bus/{{fleetnum}}"> {{fleetnum}} </a> </td>
        <td> {{busrange.year}} {{busrange.model}}</td>
        <td> {{obj['day']}} </td>
        <td> {{', '.join(sorted(obj['routes']))}} </td>

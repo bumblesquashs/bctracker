@@ -38,6 +38,7 @@ def make_realtime_filename():
 default_positions_file = 'data/realtime_downloads/default_gtfrealtime_VehiclePositions.bin'
 vehicle_positions_path = default_positions_file
 override_rt_flag = False  # for debug
+gtfs_valid_vlag = True # set when a validation failure happens
 
 # global
 rtvehicle_dict = {}
@@ -82,30 +83,31 @@ def get_data_refreshed_time_str():
 
 def update_last_seen():
     global rtvehicle_dict
-    with open('data/vehicle_history/last_seen.json', 'r') as f:
-        last_seen = json.load(f)
-    last_seen_times = last_seen['last_times']
-    last_seen_blocks = last_seen['last_blocks']
-    for fleetid in rtvehicle_dict.keys():
-        rt_entry = rtvehicle_dict[fleetid]
-        fleetnum = ''
-        try:
-            fleetnum = id2fleetnum_dict[fleetid]
-        except (KeyError, AttributeError):
-            continue
-        last_seen_times[fleetnum] = {
-        'day': str(date.today()),
-        }
-        if(rt_entry.scheduled and rt_entry.blockid != 'NONE'):
-            last_seen_blocks[fleetnum] = {
-            'blockid': rt_entry.blockid,
+    if(gtfs_valid_vlag):
+        with open('data/vehicle_history/last_seen.json', 'r') as f:
+            last_seen = json.load(f)
+        last_seen_times = last_seen['last_times']
+        last_seen_blocks = last_seen['last_blocks']
+        for fleetid in rtvehicle_dict.keys():
+            rt_entry = rtvehicle_dict[fleetid]
+            fleetnum = ''
+            try:
+                fleetnum = id2fleetnum_dict[fleetid]
+            except (KeyError, AttributeError):
+                continue
+            last_seen_times[fleetnum] = {
             'day': str(date.today()),
-            'routes': ds.blockdict[rt_entry.blockid].get_block_routes()
             }
-    last_seen['last_times'] = last_seen_times
-    last_seen['last_blocks'] = last_seen_blocks
-    with open('data/vehicle_history/last_seen.json', 'w') as f:
-        last_seen = json.dump(last_seen, f)
+            if(rt_entry.scheduled and rt_entry.blockid != 'NONE'):
+                last_seen_blocks[fleetnum] = {
+                'blockid': rt_entry.blockid,
+                'day': str(date.today()),
+                'routes': ds.blockdict[rt_entry.blockid].get_block_routes()
+                }
+        last_seen['last_times'] = last_seen_times
+        last_seen['last_blocks'] = last_seen_blocks
+        with open('data/vehicle_history/last_seen.json', 'w') as f:
+            last_seen = json.dump(last_seen, f)
 
 def get_last_seen():
     with open('data/vehicle_history/last_seen.json', 'r') as f:
@@ -154,6 +156,66 @@ def get_current_status(fleetnum):
     except KeyError:
         return STATUS_INACTIVE, False
 
+'''
+The Detect Outdated GTFS Algorithm...
+
+When a new gtfs is uploaded, this apparently breaks the site because generally
+the blockids are scrambled around. The site has the old gtfs while the realtime
+data comes with blockids for the new gtfs, leading to the site reporting busses
+being on the wrong blocks - especially bad for the new history features.
+
+There is a script to download a new static gtfs, and archive the old one. Loading
+a new gtfs static data dump in, however, presently requires restarting the server -
+hopefully that can change in a later version. I have recently included code to do
+the restart for now. However, when to run this download and restart?
+
+What this algorithm is doing is checking to see if any of realtime bus
+entries include a blockid that points to a block in the static gtfs
+that makes no sense: for example, the bus is apparently on a tuesday block
+but its currently saturday or the block listed does not contain the route
+the bus is apparently on.
+
+It is possible by chance that a given block happens to also be on the right day.
+For that reason, a number of blocks are to be tried. For at least 7 service ids
+and normally more, its a 1/7 chance that we miss an error on days alone
+for each comparison, and 10 comparisons means there is a 99.9999996% chance of
+missing the error for any given realtime update, and 10 checks should still be fast.
+
+When there are fewer logged in busses than 10, we just check all of them.
+'''
+
+#number of comparisons to do here on loading a new gtfs realtime
+CONFIDENCE_COUNT = 10
+def check_for_broken_gtfs():
+    tries = 0
+    if len(rtvehicle_dict) == 0:
+        return False
+    for vehicle in rtvehicle_dict.values():
+        if(tries >= 10):
+            return False #we've hit the limit, all is apparently good
+        if(not vehicle.scheduled): #we dont care about unscheduled vehicles they tell us nothing
+            continue #doesnt count as a try
+        try:
+            serviceid1 = ds.blockdict[vehicle.blockid].serviceid
+            serviceid2 = ds.tripdict[vehicle.tripid].serviceid
+            if(serviceid1 != serviceid2):
+                print('CHECKGTFS: service ids of block and trip dont match: {0} vs {1}'.format(serviceid1, serviceid2))
+                return True
+            dayofweek = ds.days_of_week_dict[serviceid1]
+            try: #inner try because we can get special day strings which we'll ignore
+                dnum = ds.dow_number_dict[dayofweek]
+                if(dnum != datetime.today().weekday()):
+                    print('CHECKGTFS: realtime id {0} not running on today: {1} vs {2}'.format(vehicle.fleetid, dnum, datetime.today().weekday()))
+                    return True
+            except KeyError:
+                continue #doesnt count as a try
+        except KeyError:
+            print('CHECKGTFS: realtime block has invalid blockid')
+            return True
+        #if we got down here, things look ok for this one - increment and try again
+        tries +=1
+    return False #we got out of the loop, so I guess that means its fine
+
 # just for interest
 busidlist = []
 count_scheduled = 0
@@ -198,9 +260,11 @@ def load_realtime():
             tripid = trip.trip_id
             if(trip.schedule_relationship == 0 and tripid != ''):
                 scheduled = True
-                blockid = ds.tripdict[tripid].blockid
+                try:
+                    blockid = ds.tripdict[tripid].blockid
+                except KeyError:
+                    blockid = '0' #uh oh - something is wrong....
                 count_scheduled += 1
-
             else:
                 scheduled = False
                 count_unsched += 1
@@ -226,6 +290,14 @@ def load_realtime():
     print('Populated the realtime structure...')
     print('Scheduled: {0} Unscheduled: {1} Total: {2}; Offroute: {3}'.format(
         count_scheduled, count_unsched, len(busidlist), count_offroute))
+    ret = check_for_broken_gtfs()
+    if(ret):
+        print('CHECKGTFS: GTFS is apparently busted right now')
+        gtfs_valid_vlag = False
+    else:
+        print('CHECKGTFS: static GTFS seems fine')
+        gtfs_valid_vlag = True
     setup_fleetnums()
     print('Fleet number translation list (from nextride) setup: {0} fleet numbers known'.format(
         len(id2fleetnum_dict)))
+    return (not ret)

@@ -4,7 +4,6 @@ pathprefix = './data/google_transit/'
 
 midday_secs = 43200  # number of secs at midday
 
-
 tripspath = pathprefix + 'trips.txt'
 routespath = pathprefix + 'routes.txt'
 stoptimespath = pathprefix + 'stop_times.txt'
@@ -97,18 +96,21 @@ route_triplistdict = {}  # dict of route id -> list of trips for that route
 routedict = {}  # dict of routeid -> route info tuple
 stopcode2stopnum = {}  # dict of stop code -> stopnum
 stopdict = {}  # dict of stopid -> stop obj
+
+# small dicts just to deal with date shenigans
 days_of_week_dict = {}  # service_id -> string for day of week
 days_of_week_dict_longname = {}  # service_id -> long string for day of week
 service_order_dict = {} # service_id -> display order (monday first, sunday last, etc) for sorting later
+dow_number_dict = {'Mon': 0, 'Tues': 1, 'Wed': 2, 'Thurs': 3, 'Frid': 4, 'Sat': 5, 'Sun': 6}
 
 def get_today_str():
     return str(date.today()).replace('-', '')
 
 today = get_today_str()
 
-# this function is actually the worst - its AWFUL
 this_sheet_enddate = ''
 
+# this function is actually the worst - its AWFUL
 def populate_calendar():
     global days_of_week_dict
     global this_sheet_enddate
