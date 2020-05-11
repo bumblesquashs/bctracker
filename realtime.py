@@ -83,7 +83,7 @@ def get_data_refreshed_time_str():
 
 def update_last_seen():
     global rtvehicle_dict
-    if(not gtfs_valid_vlag):
+    if(gtfs_valid_vlag):
         with open('data/vehicle_history/last_seen.json', 'r') as f:
             last_seen = json.load(f)
         last_seen_times = last_seen['last_times']
