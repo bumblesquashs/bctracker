@@ -38,7 +38,7 @@ def make_realtime_filename():
 default_positions_file = 'data/realtime_downloads/default_gtfrealtime_VehiclePositions.bin'
 vehicle_positions_path = default_positions_file
 override_rt_flag = False  # for debug
-gtfs_valid_vlag = True # set when a validation failure happens
+gtfs_valid_flag = True # set when a validation failure happens
 
 # global
 rtvehicle_dict = {}
@@ -83,7 +83,7 @@ def get_data_refreshed_time_str():
 
 def update_last_seen():
     global rtvehicle_dict
-    if(gtfs_valid_vlag):
+    if(gtfs_valid_flag):
         with open('data/vehicle_history/last_seen.json', 'r') as f:
             last_seen = json.load(f)
         last_seen_times = last_seen['last_times']
@@ -293,10 +293,10 @@ def load_realtime():
     ret = check_for_broken_gtfs()
     if(ret):
         print('CHECKGTFS: GTFS is apparently busted right now')
-        gtfs_valid_vlag = False
+        gtfs_valid_flag = False
     else:
         print('CHECKGTFS: static GTFS seems fine')
-        gtfs_valid_vlag = True
+        gtfs_valid_flag = True
     setup_fleetnums()
     print('Fleet number translation list (from nextride) setup: {0} fleet numbers known'.format(
         len(id2fleetnum_dict)))
