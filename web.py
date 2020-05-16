@@ -17,6 +17,9 @@ import scrape_fleetnums as scrape
 from pages.stop import stoppage_html
 from bottle import route, run, request, template, Bottle, static_file
 
+AUTO_RELOAD = True
+RELOAD_ENABLED = True
+
 
 def controlc_handler(sig, frame):
     print('\n')
@@ -24,18 +27,36 @@ def controlc_handler(sig, frame):
     print('EXITING: Gooodbye Everybody!')
     sys.exit(0)
 
-def crontask_handler(sig, frame):
-    try:
-        munch.munch()
-    except:
-        print('MUNCH: (in sighandler) Hit exception...')
-    return
-
 def restart_server():
     print('\n')
     munch.stop_cron()
     print('RESTARTING: Loading New static GTFS!')
     os.execv(inspect.getfile(lambda: None), sys.argv)
+
+def download_and_restart():
+    print('INVALID GTFS: Automatically restarting... (or reload requested?)')
+    try:
+        subprocess.call(['./download_new_gtfs.sh'], timeout = 45)
+    except subprocess.TimeoutExpired:
+        try:
+            subprocess.call(['./download_new_gtfs.sh'], timeout = 60)
+        except subprocess.TimeoutExpired:
+            print('WTF: timeout expired twice, guess no connection?')
+            controlc_handler()
+    subprocess.call(['./download_new_routes.sh'], timeout = 15)
+    restart_server()
+    print('this should never be seen haha!')
+
+
+
+def crontask_handler(sig, frame):
+    try:
+        valid = munch.munch()
+        if((not valid) and AUTO_RELOAD):
+            download_and_restart()
+    except:
+        print('MUNCH: (in sighandler) Hit exception...')
+    return
 
 signal.signal(signal.SIGINT, controlc_handler)
 signal.signal(signal.SIGUSR1, crontask_handler)
@@ -104,13 +125,11 @@ app = Bottle()
 
 @app.route('/')
 def index():
-    if 'rt' in request.query:  # for the refresh data thing
-        print('Oi! gotta reload')
-        rt.download_lastest_files()
-        rt.load_realtime()
     if 'munch' in request.query:  # for the refresh data thing
         print('Oi! gotta munch')
-        munch.munch()
+        valid = munch.munch()
+        if((not valid) and AUTO_RELOAD):
+            download_and_restart()
     return header('Victoria GTFS Tracker') + template('pages/home.templ', rdict=rdict) + footer
 
 @app.route('/routes')
@@ -142,7 +161,9 @@ def all_busses_templ():
     if 'rt' in request.query:
         print('Oi! gotta reload')
         rt.download_lastest_files()
-        rt.load_realtime()
+        valid = rt.load_realtime()
+        if((not valid) and AUTO_RELOAD):
+            download_and_restart()
         rt.update_last_seen()
     return genrtbuslist_html()
 
@@ -166,23 +187,12 @@ def buspage(busid):
 def allblocks():
     return header('List of all Blocks') + template('pages/blocks.templ') + footer
 
-@app.route('/admin/download-gtfs')
-def download_gtfs_sp():
-    print('Activating subprocess for gtfs download shell script')
-    subprocess.run(['./download_new_gtfs.sh'])
-    return('Done. <br> <a href="/admin"> Back </a>')
-
-@app.route('/admin/restart-server')
+@app.route('/admin/reload-server')
 def restart():
-    print('Attempting to restart the server')
-    restart_server()
+    print('Attempting to reload the server')
+    if(RELOAD_ENABLED):
+        download_and_restart()
     return('Lol you should never see this')
-
-@app.route('/admin/download-routes')
-def download_routes_sp():
-    print('Activating subprocess for NrApi Routes json shell script')
-    subprocess.run(['./download_new_routes.sh'])
-    return('Done. <br> <a href="/admin"> Back </a>')
 
 
 @app.route('/blocks/<blockid>')

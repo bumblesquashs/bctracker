@@ -62,9 +62,9 @@ def download_lastest_files():
             vehicle_positions_path = fpath  # update path to new download
     except:
         print('victoria GTFS download failed!')
-        # now, test the date to see if we are out of date
-        if(int(ds.get_today_str()) > int(ds.this_sheet_enddate)):
-            print('THIS SHEET IS OUT OF DATE! Please reload the server lol')
+    # now, test the date to see if we are out of date
+    if(int(ds.get_today_str()) > int(ds.this_sheet_enddate)):
+        print('THIS SHEET IS OUT OF DATE! Please reload the server lol')
     if override_rt_flag:  # for debug
         vehicle_positions_path = default_positions_file
 

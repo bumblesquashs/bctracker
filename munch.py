@@ -28,3 +28,4 @@ def munch():
     valid = rt.load_realtime()
     if(valid):
         rt.update_last_seen()
+    return valid
