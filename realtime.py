@@ -232,6 +232,7 @@ def load_realtime():
     global count_unsched
     global busidlist
     global pos_data
+    global data_valid
     count_offroute = 0
     count_scheduled = 0
     count_unsched = 0
