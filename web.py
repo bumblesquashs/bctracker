@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-
-import os
-import sys
 import munch
-import signal
+import start
 import logging
-import inspect
-import subprocess
 import requestlogger
 import realtime as rt
 import cherrypy as cp
@@ -17,68 +11,22 @@ import scrape_fleetnums as scrape
 from pages.stop import stoppage_html
 from bottle import route, run, request, template, Bottle, static_file
 
-AUTO_RELOAD = True
-RELOAD_ENABLED = True
-
-
-def controlc_handler(sig, frame):
-    print('\n')
-    munch.stop_cron()
-    print('EXITING: Gooodbye Everybody!')
-    sys.exit(0)
-
-def restart_server():
-    print('\n')
-    munch.stop_cron()
-    print('RESTARTING: Loading New static GTFS!')
-    os.execv(inspect.getfile(lambda: None), sys.argv)
-
-def download_and_restart():
-    print('INVALID GTFS: Automatically restarting... (or reload requested?)')
-    try:
-        subprocess.call(['./download_new_gtfs.sh'], timeout = 45)
-    except subprocess.TimeoutExpired:
-        try:
-            subprocess.call(['./download_new_gtfs.sh'], timeout = 60)
-        except subprocess.TimeoutExpired:
-            print('WTF: timeout expired twice, guess no connection?')
-            controlc_handler()
-    subprocess.call(['./download_new_routes.sh'], timeout = 15)
-    restart_server()
-    print('this should never be seen haha!')
-
-
-
-def crontask_handler(sig, frame):
-    try:
-        valid = munch.munch()
-        if((not valid) and AUTO_RELOAD):
-            download_and_restart()
-    except:
-        print('MUNCH: (in sighandler) Hit exception...')
-    return
-
-signal.signal(signal.SIGINT, controlc_handler)
-signal.signal(signal.SIGUSR1, crontask_handler)
-
 PLACEHOLDER = '100000'
-ds.start()
-rt.download_lastest_files()
-valid = rt.load_realtime()
-if(not valid):
-    print('ERROR: Not valid on startup... now thats a zinger.')
-    print('ERROR: Try running the download new gtfs script and try again')
-    print('ERROR: Shutting down.')
-    sys.exit(1)
-rt.update_last_seen()
-munch.start_cron()
+rdict = {}     # rdict is routeid -> (routenum, routename, routeid)
+reverse_rdict = {} # route num -> routeid
 
-# rdict is routeid -> (routenum, routename, routeid)
-rdict = ds.routedict
-reverse_rdict = {}  # route num -> routeid
-# build a reverse route table (routenum->routeid)
-for route_tuple in rdict.values():
-    reverse_rdict[route_tuple[0]] = route_tuple[2]
+def start():
+    global rdict
+    global reverse_rdict
+    print('WEB: initializing the web server!')
+    rdict = ds.routedict
+    # build a reverse route table (routenum->routeid)
+    for route_tuple in rdict.values():
+        reverse_rdict[route_tuple[0]] = route_tuple[2]
+    cp.config.update('server.conf')
+    cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
+    cp.log('Whaaat? here we go')
+    cp.server.start()
 
 # ==============================================================
 # Web helper code!
@@ -128,7 +76,7 @@ def index():
     if 'munch' in request.query:  # for the refresh data thing
         print('Oi! gotta munch')
         valid = munch.munch()
-        if((not valid) and AUTO_RELOAD):
+        if((not valid) and LOAD):
             download_and_restart()
     return header('Victoria GTFS Tracker') + template('pages/home.templ', rdict=rdict) + footer
 
@@ -159,10 +107,9 @@ def busidpage_root():
 @app.route('/all-busses')
 def all_busses_templ():
     if 'rt' in request.query:
-        print('Oi! gotta reload')
         rt.download_lastest_files()
         valid = rt.load_realtime()
-        if((not valid) and AUTO_RELOAD):
+        if((not valid) and LOAD):
             download_and_restart()
         rt.update_last_seen()
     return genrtbuslist_html()
@@ -190,8 +137,8 @@ def allblocks():
 @app.route('/admin/reload-server')
 def restart():
     print('Attempting to reload the server')
-    if(RELOAD_ENABLED):
-        download_and_restart()
+    if(start.RELOAD_ENABLED):
+        start.download_and_restart()
     return('Lol you should never see this')
 
 
@@ -238,7 +185,7 @@ def routepage(routenum):
     for key in day_triplistdict:
         day_order.append(key)
     day_order.sort(key = lambda x: ds.service_order_dict.setdefault(day_triplistdict[x][0].serviceid, 10000)) #sort by first trip's service id, any unfound keys last
-    return header('Viewing route' + routenum) + template('pages/route.templ', day_triplistdict=day_triplistdict, day_order=day_order, routenum=routenum, routename=rdict[this_route][1]) + footer
+    return header('Viewing route ' + routenum) + template('pages/route.templ', day_triplistdict=day_triplistdict, day_order=day_order, routenum=routenum, routename=rdict[this_route][1]) + footer
 
 #this page doesnt use a template - TODO: should probably change that
 @app.route('/stops/<stopcode>')
@@ -258,10 +205,6 @@ def stoppage(stopcode):
 def about_page():
     return header('About this abomination...') + template('pages/about.templ') + footer
 
-# =================================
-# set up server and launch
-# =================================
-
 #use cherrypy server - setup logging
 def make_access_log(app, filepath, when='d', interval=7, **kwargs):
     if filepath is not None:
@@ -270,8 +213,3 @@ def make_access_log(app, filepath, when='d', interval=7, **kwargs):
     else:
         handlers = [logging.StreamHandler()]
     return requestlogger.WSGILogger(app, handlers, requestlogger.ApacheFormatter())
-
-cp.config.update('server.conf')
-cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
-cp.log('Whaaat? here we go')
-cp.server.start()

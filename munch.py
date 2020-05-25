@@ -3,8 +3,10 @@ from crontab import CronTab
 import os
 import realtime as rt
 import scrape_fleetnums as scrape
+import start
 CRON_ID_STR = 'vgtfs-muncher'
-cron_interval_mins = 10
+cron_interval_mins = 5
+munch_count = 1
 
 def start_cron():
     with CronTab(user=True) as cron:
@@ -21,11 +23,16 @@ def stop_cron():
 #code to run under cron:
 #this should get triggered every cron_interval_mins mins
 def munch():
+    global munch_count
     print('MUNCHER: Munching!')
+    munch_count += 1
     rt.download_lastest_files()
     scrape.scrape()
     rt.setup_fleetnums()
     valid = rt.load_realtime()
     if(valid):
         rt.update_last_seen()
+    if((not rt.data_valid) and (munch_count % 2 == 0)):
+        print('INVALID DATA: downloading new gtfs and trying again!')
+        start.download_and_restart
     return valid

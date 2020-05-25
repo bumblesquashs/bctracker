@@ -16,6 +16,9 @@ STATUS_LOGGEDIN = 3 #this bus is assigned to a block but is not "onroute"
 STATUS_ONROUTE = 4 #this bus is fully on route (all systems go)
 STATUS_UNKNOWN_TRANSLATION = 5 #we recognize this fleet number but we don't have a translation for it (same as 0 really)
 
+#flag to log data or not
+data_valid = False
+
 # from protoc
 import protobuf.data.gtfs_realtime_pb2 as rt
 
@@ -38,7 +41,6 @@ def make_realtime_filename():
 default_positions_file = 'data/realtime_downloads/default_gtfrealtime_VehiclePositions.bin'
 vehicle_positions_path = default_positions_file
 override_rt_flag = False  # for debug
-gtfs_valid_flag = True # set when a validation failure happens
 
 # global
 rtvehicle_dict = {}
@@ -83,7 +85,7 @@ def get_data_refreshed_time_str():
 
 def update_last_seen():
     global rtvehicle_dict
-    if(gtfs_valid_flag):
+    if(data_valid):
         with open('data/vehicle_history/last_seen.json', 'r') as f:
             last_seen = json.load(f)
         last_seen_times = last_seen['last_times']
@@ -293,10 +295,10 @@ def load_realtime():
     ret = check_for_broken_gtfs()
     if(ret):
         print('CHECKGTFS: GTFS is apparently busted right now')
-        gtfs_valid_flag = False
+        data_valid = False
     else:
         print('CHECKGTFS: static GTFS seems fine')
-        gtfs_valid_flag = True
+        data_valid = True
     setup_fleetnums()
     print('Fleet number translation list (from nextride) setup: {0} fleet numbers known'.format(
         len(id2fleetnum_dict)))
