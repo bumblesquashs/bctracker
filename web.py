@@ -15,7 +15,7 @@ PLACEHOLDER = '100000'
 rdict = {}     # rdict is routeid -> (routenum, routename, routeid)
 reverse_rdict = {} # route num -> routeid
 
-def start():
+def startup():
     global rdict
     global reverse_rdict
     print('WEB: initializing the web server!')
@@ -76,8 +76,8 @@ def index():
     if 'munch' in request.query:  # for the refresh data thing
         print('Oi! gotta munch')
         valid = munch.munch()
-        if((not valid) and LOAD):
-            download_and_restart()
+        if((not valid) and start.RELOAD_ENABLED):
+            start.download_and_restart()
     return header('Victoria GTFS Tracker') + template('pages/home.templ', rdict=rdict) + footer
 
 @app.route('/routes')
@@ -109,8 +109,8 @@ def all_busses_templ():
     if 'rt' in request.query:
         rt.download_lastest_files()
         valid = rt.load_realtime()
-        if((not valid) and LOAD):
-            download_and_restart()
+        if((not valid) and start.RELOAD_ENABLED):
+            start.download_and_restart()
         rt.update_last_seen()
     return genrtbuslist_html()
 

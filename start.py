@@ -66,4 +66,4 @@ if __name__ == "__main__":
         rt.data_valid = False
     rt.update_last_seen()
     munch.start_cron()
-    web.start()
+    web.startup()
