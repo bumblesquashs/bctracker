@@ -19,6 +19,8 @@ def hms_to_sec(hms):
     return int(h) * 3600 + int(m) * 60 + int(s)
 
 def trip_to_numseconds(trip):
+    if(trip.starttime == 'N/A'):
+        return 1000000000
     return hms_to_sec(trip.starttime)
 
 def trip_is_before_midday(trip):
@@ -298,9 +300,13 @@ def start():
             directionid = items[colnames.index('direction_id')]
             blockid = items[colnames.index('block_id')]
             routenum = routedict[routeid][0]  # find route number this way
-            depart_time = firststoptimes_dict[tripid].departtime
-            first_stop_name = firststoptimes_dict[tripid].stopname
-
+            depart_time = 'N/A'
+            first_stop_name = 'N/A'
+            try:
+                depart_time = firststoptimes_dict[tripid].departtime
+                first_stop_name = firststoptimes_dict[tripid].stopname
+            except KeyError:
+                print('Stop times key error for tripid {0}!'.format(tripid))
             trip_obj = Trip(routeid=routeid, tripid=tripid, blockid=blockid, routenum=routenum, headsign=headsign,
                             starttime=depart_time, startstopname=first_stop_name, serviceid=serviceid, directionid=directionid)
             tripdict[tripid] = trip_obj
