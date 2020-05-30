@@ -13,8 +13,10 @@ import realtime as rt
 import datastructure as ds
 from pages.stop import stoppage_html
 
+#some config
 AUTO_RELOAD = True
 RELOAD_ENABLED = True
+COMBINE_WEEKDAYS = False
 
 def controlc_handler(sig, frame):
     print('\n')

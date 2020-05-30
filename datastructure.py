@@ -1,4 +1,5 @@
 from datetime import date
+import start as start_mod
 
 pathprefix = './data/google_transit/'
 
@@ -12,6 +13,19 @@ calendarpath = pathprefix + 'calendar.txt'
 calendar_dates_path = pathprefix + 'calendar_dates.txt'
 # directionid dict
 directionid_dict = {'0': 'Outbound', '1': 'Inbound'}
+
+#calendar constants:
+CONST_WEEKDAY = 1
+CONST_WEEKDAY_EXCEPT_FRI = 2
+CONST_WEEKEND = 3
+CONST_MON = 4
+CONST_TUES = 5
+CONST_WED = 6
+CONST_THURS = 7
+CONST_FRI = 8
+CONST_SAT = 9
+CONST_SUN = 10
+CONST_SPECIAL = 11
 
 # helper that sorts list of tuples based on the time in their 5th slot
 def hms_to_sec(hms):
@@ -58,6 +72,17 @@ class Trip:
         # When identical weekday/weekend trip and blocks are consolidated, use this
         self.alt_day_string = ''
         self.stoplist = []  # list of stoptimetuple
+
+#Check if two trips are equivalent (ignoring day, id, blockid)
+def compare_trips(trip1, trip2):
+    if(trip1.routeid != trip2.routeid
+       or trip1.headsign != trip2.headsign
+       or trip1.routenum != trip2.routenum
+       or trip1.starttime != trip2.starttime
+       or trip1.directionid != trip2.directionid
+       or trip1.startstopname != trip2.startstopname):
+       return False
+    else: return True
 
 class Block:
     def __init__(self, blockid):
@@ -160,47 +185,52 @@ def populate_calendar():
             if(issunday == '1' and issaturday == '1'):
                 days_of_week_dict[service_id] = 'Weekends'
                 days_of_week_dict_longname[service_id] = 'Weekends'
-                service_order_dict[service_id] = 7
+                service_order_dict[service_id] = CONST_WEEKEND
                 continue
             if(ismonday == '1' and istuesday == '1' and iswednesday == '1' and isthursday == '1' and isfriday == '1'):
                 days_of_week_dict[service_id] = 'Weekdays'
                 days_of_week_dict_longname[service_id] = 'Weekdays'
-                service_order_dict[service_id] = 1
+                service_order_dict[service_id] = CONST_WEEKDAY
+                continue
+            if(ismonday == '1' and istuesday == '1' and iswednesday == '1' and isthursday == '1' and isfriday == '0'):
+                days_of_week_dict[service_id] = 'Mon-Thurs'
+                days_of_week_dict_longname[service_id] = 'Weekdays except Friday'
+                service_order_dict[service_id] = CONST_WEEKDAY_EXCEPT_FRI
                 continue
             if(ismonday == '1'):
                 days_of_week_dict[service_id] = 'Mon'
                 days_of_week_dict_longname[service_id] = 'Mondays'
-                service_order_dict[service_id] = 2
+                service_order_dict[service_id] = CONST_MON
                 continue
             if(istuesday == '1'):
                 days_of_week_dict[service_id] = 'Tues'
                 days_of_week_dict_longname[service_id] = 'Tuesdays'
-                service_order_dict[service_id] = 3
+                service_order_dict[service_id] = CONST_TUES
                 continue
             if(iswednesday == '1'):
                 days_of_week_dict[service_id] = 'Wed'
                 days_of_week_dict_longname[service_id] = 'Wednesdays'
-                service_order_dict[service_id] = 4
+                service_order_dict[service_id] = CONST_WED
                 continue
             if(isthursday == '1'):
                 days_of_week_dict[service_id] = 'Thurs'
                 days_of_week_dict_longname[service_id] = 'Thursdays'
-                service_order_dict[service_id] = 5
+                service_order_dict[service_id] = CONST_THURS
                 continue
             if(isfriday == '1'):
                 days_of_week_dict[service_id] = 'Frid'
                 days_of_week_dict_longname[service_id] = 'Fridays'
-                service_order_dict[service_id] = 6
+                service_order_dict[service_id] = CONST_FRI
                 continue
             if(issaturday == '1'):
                 days_of_week_dict[service_id] = 'Sat'
                 days_of_week_dict_longname[service_id] = 'Saturdays'
-                service_order_dict[service_id] = 8
+                service_order_dict[service_id] = CONST_SAT
                 continue
             if(issunday == '1'):
                 days_of_week_dict[service_id] = 'Sun'
                 days_of_week_dict_longname[service_id] = 'Sundays'
-                service_order_dict[service_id] = 9
+                service_order_dict[service_id] = CONST_SUN
                 continue
             try:
                 days_of_week_dict[service_id] = special_serviceid_dict_short[service_id]
@@ -212,7 +242,7 @@ def populate_calendar():
             try:
                service_order_dict[service_id] = 9001 + int(service_id)
             except ValueError:
-               service_order_dict[service_id] = 69
+               service_order_dict[service_id] = CONST_SPECIAL
 
 # this loads in all the data and sets up the global dicts
 def start():
@@ -320,6 +350,15 @@ def start():
         total_trip_count, trip_pop_count))
     print('Number of blocks read: ' + str(len(blocklistdict.keys())))
 
+    # prune the trip and block dicts - consolidate identical weekday blocks
+    if(start_mod.COMBINE_WEEKDAYS):
+        for tripid in tripdict:
+            trip = tripdict[tripid]
+            for other_tripid in tripdict:
+                other_trip = tripdict[other_tripid]
+                if(compare_trips(trip, other_trip)):
+                    print('Found equivalent trips! Tripids: {0} {1}'.format(tripid, other_tripid))
+
     # now, make a block object for each block
     blocklist = []
     for key in blocklistdict:
@@ -369,7 +408,6 @@ def start():
         stop.triptimes.sort(key=lambda x: hms_to_sec(x[1]))
 
     print('Beginning trip list, block list day-consolidation...')
-    # prune the trip and block dicts - consolidate identical weekday blocks
 
     # done with setup
     print('Backend setup done!')
