@@ -1,10 +1,11 @@
 % import realtime as rt
 % import businfotable as businfo
+% import history as hist
 
 <br>
 <h3> History for each vehicle </h3>
 <h4> Last Block Assigned: </h4>
-<p> Note: for entries made under a previous gtfs, the blockid will no longer be correct </p>
+<p> Note: for entries made under a previous gtfs version, the blockid will no longer be correct </p>
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
@@ -17,7 +18,7 @@
    </thead>
    <tbody>
 <%
-  last_seen = rt.get_last_seen()
+  last_seen = hist.get_last_seen()
   last_blocks = last_seen['last_blocks']
   last_block_keys = list(last_blocks.keys())
   last_block_keys.sort(key = lambda x: int(x))

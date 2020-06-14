@@ -4,6 +4,8 @@ import os
 import realtime as rt
 import scrape_fleetnums as scrape
 import start
+import history as hist
+
 CRON_ID_STR = 'vgtfs-muncher'
 cron_interval_mins = 5
 munch_count = 1
@@ -31,7 +33,7 @@ def munch():
     rt.setup_fleetnums()
     valid = rt.load_realtime()
     if(valid):
-        rt.update_last_seen()
+        hist.update_last_seen()
     if((not rt.data_valid) and (munch_count % 2 == 0)):
         print('INVALID DATA: downloading new gtfs and trying again!')
         start.download_and_restart

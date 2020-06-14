@@ -4,6 +4,7 @@ data/realtime_downloads/*
 data/google_transit.zip
 data/google_transit/
 data/vehicle_history/last_seen.json
+data/vehicle_history/vehicle/*
 data/nextride/archived-route-json/
 data/nextride/id2fleetnum.json
 data/nextride/last_api_result.json

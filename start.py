@@ -10,6 +10,7 @@ import inspect
 import subprocess
 import requestlogger
 import realtime as rt
+import history as hist
 import datastructure as ds
 from pages.stop import stoppage_html
 
@@ -51,8 +52,9 @@ def crontask_handler(sig, frame):
         valid = munch.munch()
         if((not valid) and AUTO_RELOAD):
             download_and_restart()
-    except:
+    except Exception as e:
         print('MUNCH: (in sighandler) Hit exception...')
+        print('MUNCH: Error was: ' + str(e))
     return
 
 if __name__ == "__main__":
@@ -66,6 +68,6 @@ if __name__ == "__main__":
         print('ERROR: Try running the download new gtfs script and try again')
         print('ERROR: Going without logging...')
         rt.data_valid = False
-    rt.update_last_seen()
+    hist.update_last_seen()
     munch.start_cron()
     web.startup()

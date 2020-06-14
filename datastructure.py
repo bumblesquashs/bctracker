@@ -100,6 +100,10 @@ class Block:
             if trip.routenum not in unique_routes:
                 unique_routes.append(trip.routenum)
         return unique_routes
+    def get_block_start_time(self):
+        if(len(self.triplist) == 0):
+            return ''
+        return self.triplist[0].starttime
 
     def pretty_print(self):
         if(trip_is_before_midday(self.triplist[0])):

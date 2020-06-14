@@ -4,6 +4,7 @@ import logging
 import requestlogger
 import realtime as rt
 import cherrypy as cp
+import history as hist
 import logging.handlers
 import datastructure as ds
 import businfotable as businfo
@@ -111,7 +112,7 @@ def all_busses_templ():
         valid = rt.load_realtime()
         if((not valid) and start.RELOAD_ENABLED):
             start.download_and_restart()
-        rt.update_last_seen()
+        hist.update_last_seen()
     return genrtbuslist_html()
 
 @app.route('/bus/<fleetnum>')
@@ -203,7 +204,7 @@ def stoppage(stopcode):
 @app.route('/about')
 @app.route('/about/')
 def about_page():
-    return header('About this abomination...') + template('pages/about.templ') + footer
+    return header('About this site...') + template('pages/about.templ') + footer
 
 #use cherrypy server - setup logging
 def make_access_log(app, filepath, when='d', interval=7, **kwargs):

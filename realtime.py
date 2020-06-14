@@ -83,56 +83,6 @@ def setup_fleetnums():
 def get_data_refreshed_time_str():
     return time.asctime(time.localtime(last_rt_download_time))
 
-def update_last_seen():
-    global rtvehicle_dict
-    if(data_valid):
-        with open('data/vehicle_history/last_seen.json', 'r') as f:
-            last_seen = json.load(f)
-        last_seen_times = last_seen['last_times']
-        last_seen_blocks = last_seen['last_blocks']
-        for fleetid in rtvehicle_dict.keys():
-            rt_entry = rtvehicle_dict[fleetid]
-            fleetnum = ''
-            try:
-                fleetnum = id2fleetnum_dict[fleetid]
-            except (KeyError, AttributeError):
-                continue
-            last_seen_times[fleetnum] = {
-            'day': str(date.today()),
-            }
-            if(rt_entry.scheduled and rt_entry.blockid != 'NONE'):
-                last_seen_blocks[fleetnum] = {
-                'blockid': rt_entry.blockid,
-                'day': str(date.today()),
-                'routes': ds.blockdict[rt_entry.blockid].get_block_routes()
-                }
-        last_seen['last_times'] = last_seen_times
-        last_seen['last_blocks'] = last_seen_blocks
-        with open('data/vehicle_history/last_seen.json', 'w') as f:
-            last_seen = json.dump(last_seen, f)
-
-def get_last_seen():
-    with open('data/vehicle_history/last_seen.json', 'r') as f:
-        last_seen = json.load(f)
-    return last_seen
-
-def get_last_seen_bus(fleetnum):
-    with open('data/vehicle_history/last_seen.json', 'r') as f:
-        last_seen = json.load(f)
-        last_seen_times = last_seen['last_times']
-        try:
-            return last_seen_times[fleetnum]
-        except KeyError:
-            return False
-
-def get_last_block_bus(fleetnum):
-    with open('data/vehicle_history/last_seen.json', 'r') as f:
-        last_seen = json.load(f)
-    last_seen_blocks = last_seen['last_blocks']
-    try:
-        return last_seen_blocks[fleetnum]
-    except KeyError:
-        return False
 
 def get_gmaps_url(lat, lon):
     return 'https://www.google.com/maps/search/?api=1&query={0},{1}'.format(lat, lon)

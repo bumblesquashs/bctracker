@@ -1,6 +1,9 @@
 % import businfotable as businfo
 % import realtime as rt
 % import datastructure as ds
+% import history as hist
+% HISTORY_LIMIT = 20
+
 % busrange = businfo.get_bus_range(fleetnum)
 
 <h3> Viewing bus: {{fleetnum}} </h3>
@@ -25,18 +28,18 @@
     <p> <a href="/routes/{{trip.routenum}}"> View Route </a> </p>
     <p> Current Coordinates: <a href="{{rt.get_gmaps_url(rt_struct.lat, rt_struct.lon)}}"> {{rt_struct.lat}} {{rt_struct.lon}} </a></p>
 % elif (bus_status == rt.STATUS_ONROUTE):
-% trip = ds.tripdict[rt_struct.tripid]
-% stop = ds.stopdict[rt_struct.stopid]
-<p> Current assignment: </p>
-<h2> {{trip.headsign}} </h2>
-<p> Current Stop: <a href="/stops/{{stop.stopcode}}">{{stop.stopname}} (#{{stop.stopcode}})</a> </p>
-<p> <a href="/trips/{{rt_struct.tripid}}"> View Trip </a> </p>
-<p> <a href="/blocks/{{rt_struct.blockid}}"> View Block </a> </p>
-<p> <a href="/routes/{{trip.routenum}}"> View Route </a> </p>
-<p> Current Coordinates: <a href="{{rt.get_gmaps_url(rt_struct.lat, rt_struct.lon)}}"> {{rt_struct.lat}} {{rt_struct.lon}} </a></p>
+%    trip = ds.tripdict[rt_struct.tripid]
+%    stop = ds.stopdict[rt_struct.stopid]
+     <p> Current assignment: </p>
+     <h2> {{trip.headsign}} </h2>
+     <p> Current Stop: <a href="/stops/{{stop.stopcode}}">{{stop.stopname}} (#{{stop.stopcode}})</a> </p>
+     <p> <a href="/trips/{{rt_struct.tripid}}"> View Trip </a> </p>
+     <p> <a href="/blocks/{{rt_struct.blockid}}"> View Block </a> </p>
+     <p> <a href="/routes/{{trip.routenum}}"> View Route </a> </p>
+     <p> Current Coordinates: <a href="{{rt.get_gmaps_url(rt_struct.lat, rt_struct.lon)}}"> {{rt_struct.lat}} {{rt_struct.lon}} </a></p>
 % end
 <hr>
-% track_history = rt.get_last_seen_bus(fleetnum)
+% track_history = hist.get_last_seen_bus(fleetnum)
 % if(track_history != False):
       <h4> Last Tracked: {{track_history['day']}}</h4>
       <p> (The last time the vehicle was detected by the tracker even if it wasn't assigned to a route) </p>
@@ -45,9 +48,10 @@
       <p><i> Note: this site began tracking data on May 5th 2020, so vehicles
         retired before then will not show up.</i></p>
 % end
-% block_history = rt.get_last_block_bus(fleetnum)
+% block_history = hist.get_block_history(fleetnum)
+% last_block = hist.get_last_block_bus(fleetnum)
 % if(block_history != False):
-      <h3> Last Block Assigned for unit {{fleetnum}} </h3>
+      <h3> Block history for unit {{fleetnum}} </h3>
       <p> Note: for entries made under a previous gtfs, the blockid will no longer be correct </p>
       <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
@@ -58,13 +62,44 @@
           </tr>
          </thead>
          <tbody>
+%        history_count = 0
+%        for block in block_history:
+%        if(block['blockid'] == '0'):
+%            continue # id 0 is a placeholder
+%        end
          <tr>
-           <td> {{block_history['day']}} </td>
-           <td> {{', '.join(sorted(block_history['routes']))}} </td>
-           <td> <a href="/blocks/{{block_history['blockid']}}">{{block_history['blockid']}}</a> </td>
+           <td> {{block['day']}} </td>
+           <td> {{', '.join(sorted(block['routes']))}} </td>
+           <td> <a href="/blocks/{{block['blockid']}}">{{block['blockid']}}</a> </td>
          </tr>
+%        if(history_count > HISTORY_LIMIT):
+%           break
+%        end
+%        history_count += 1
+%        end
         </tbody>
       </table>
+
+% elif (last_block != False): # this part is for busses that retired under the old system and only have a last block from the combined json
+
+<h3> Last Block Assigned for unit {{fleetnum}} </h3>
+     <p> Note: for entries made under a previous gtfs, the blockid will no longer be correct </p>
+     <table class="pure-table pure-table-horizontal pure-table-striped">
+       <thead>
+         <tr>
+           <th> Date</th>
+           <th> Routes Assigned </th>
+           <th> BlockId </th>
+         </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td> {{last_block['day']}} </td>
+          <td> {{', '.join(sorted(last_block['routes']))}} </td>
+          <td> <a href="/blocks/{{last_block['blockid']}}">{{last_block['blockid']}}</a> </td>
+        </tr>
+       </tbody>
+     </table>
 % else:
       <p><i> No block history for this vehicle found...</i></p>
 %     if (bus_status == rt.STATUS_UNKNOWN_TRANSLATION):
