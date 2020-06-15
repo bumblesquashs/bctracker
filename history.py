@@ -51,6 +51,7 @@ def update_last_seen():
 
 def update_history():
     if(rt.data_valid):
+        print('HISTORY: Updating history!')
         for fleetid in rt.rtvehicle_dict.keys():
             rt_entry = rt.rtvehicle_dict[fleetid]
             if(not rt_entry.scheduled):
