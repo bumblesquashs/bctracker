@@ -8,7 +8,8 @@ VEHICLE_JSON_SEED = '''{"block_history": [{
 		"blockid": "0",
 		"day": "1969-01-01",
 		"routes": ["1", "2", "3", "4"],
-        "start_time": "9:00"
+        "start_time": "9:00",
+        "length": "6"
 	}]}'''
 
 #this is today from 4am - 11:59 and then yesterday from midnight - 3:59 am
@@ -77,6 +78,7 @@ def update_history():
                 block = ds.blockdict[rt_entry.blockid]
                 routes_str = block.get_block_routes()
                 start_time_str = block.get_block_start_time()
+                length_str = block.get_block_length()
             except KeyError:
                 routes_str = '(Unknown)'
                 start_time_str = ''
@@ -84,7 +86,8 @@ def update_history():
                 'blockid': rt_entry.blockid,
                 'day': str(get_service_day()),
                 'routes': routes_str,
-                'start_time': start_time_str
+                'start_time': start_time_str,
+                'length': length_str,
             })
             history_data['block_history'] = last_blocks
             with open(fpath, 'w') as f:
@@ -126,3 +129,13 @@ def get_block_history(fleetnum):
         print('File not found for fleetnum ' + fleetnum)
         return False
     return last_blocks
+
+def get_time_string(start_time_str, length_str):
+    start_hour = int(start_time_str.split(':')[0])
+    if(start_hour > 12):
+        if(int(length_str) < 5):
+            return 'PM Tripper'
+        return 'Evening'
+    if(int(length_str) > 4):
+        return 'All Day'
+    return 'AM Tripper'

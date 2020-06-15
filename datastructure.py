@@ -104,6 +104,13 @@ class Block:
         if(len(self.triplist) == 0):
             return ''
         return self.triplist[0].starttime
+    def get_block_length(self):
+        if(len(self.triplist) == 0):
+            return ''
+        start_hour = int(self.get_block_start_time().split(':')[0])
+        end_hour = int(self.triplist[-1].stoplist[-1].departtime
+        .split(':')[0])
+        return str(end_hour - start_hour)
 
     def pretty_print(self):
         if(trip_is_before_midday(self.triplist[0])):

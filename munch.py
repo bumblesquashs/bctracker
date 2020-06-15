@@ -36,5 +36,5 @@ def munch():
         hist.update_last_seen()
     if((not rt.data_valid) and (munch_count % 2 == 0)):
         print('INVALID DATA: downloading new gtfs and trying again!')
-        start.download_and_restart
+        start.download_and_restart()
     return valid

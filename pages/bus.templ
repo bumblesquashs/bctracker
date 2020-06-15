@@ -59,6 +59,7 @@
             <th> Date</th>
             <th> Routes Assigned </th>
             <th> BlockId </th>
+            <th> Time </th>
           </tr>
          </thead>
          <tbody>
@@ -71,6 +72,7 @@
            <td> {{block['day']}} </td>
            <td> {{', '.join(sorted(block['routes']))}} </td>
            <td> <a href="/blocks/{{block['blockid']}}">{{block['blockid']}}</a> </td>
+           <td> {{hist.get_time_string(block['start_time'], block['length'])}} </td>
          </tr>
 %        if(history_count > HISTORY_LIMIT):
 %           break
