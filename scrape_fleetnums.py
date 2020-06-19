@@ -5,8 +5,6 @@ import urllib.request
 added_list = []
 
 # maintains the id2fleetnum json file
-
-
 def updateTable(api_json_data):
     global added_list
     # read in existing table if any
@@ -55,12 +53,12 @@ def scrape():
         pattern_numbers.append(obj['patternID'])
 
     url_base = 'https://nextride.victoria.bctransit.com/api/VehicleStatuses?patternIds='
-    dumbo = ''
+    dumbo = '' # dumbo the giant query string
     for pattern_num in pattern_numbers:
         dumbo += str(pattern_num) + ','
     dumbo = dumbo[:-1]  # drop trailing comma
     the_god_query = url_base + dumbo
-    print('The god query has been obtained and saved. Good luck. Here we go.')
+    print('The query has been obtained and saved from nextride. Here we go.')
     with open('data/nextride/godquery.txt', 'w') as f:
         f.write(the_god_query)
 

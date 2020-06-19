@@ -4,6 +4,8 @@ from datetime import date, datetime, timedelta
 import realtime as rt
 import datastructure as ds
 
+# seed json data for each bus - this is marked with blockid str '0' and we check
+# that in the rendering - it won't ever get shown
 VEHICLE_JSON_SEED = '''{"block_history": [{
 		"blockid": "0",
 		"day": "1969-01-01",
@@ -12,7 +14,8 @@ VEHICLE_JSON_SEED = '''{"block_history": [{
         "length": "6"
 	}]}'''
 
-#this is today from 4am - 11:59 and then yesterday from midnight - 3:59 am
+# this is today from 4am - 11:59 and then yesterday from midnight - 3:59 am
+# handle busses that are out past midnight so they dont get recorded as being from the next day
 def get_service_day():
     hour = datetime.now().hour
     today = date.today()
@@ -21,6 +24,7 @@ def get_service_day():
     else:
         return today
 
+# based on the loaded realtime data, update all the history files
 def update_last_seen():
     if(rt.data_valid):
         with open('data/vehicle_history/last_seen.json', 'r') as f:
@@ -49,6 +53,7 @@ def update_last_seen():
             json.dump(last_seen, f)
         update_history()
 
+# update the block history files for each bus (called from the above)
 def update_history():
     if(rt.data_valid):
         print('HISTORY: Updating history!')
@@ -94,11 +99,19 @@ def update_history():
             with open(fpath, 'w') as f:
                 json.dump(history_data, f)
 
+# ------------------------------------------------------------------------------
+# The old system: one json file with the last seen times and blocks for all known busses
+# we keep this around since some busses retired before the new system saw them
+# ------------------------------------------------------------------------------
+
+# read out what's in the general last seen history file (contains last seen for all busses)
 def get_last_seen():
     with open('data/vehicle_history/last_seen.json', 'r') as f:
         last_seen = json.load(f)
     return last_seen
 
+# from the general file, pick out the last seen time for a particular fleet num
+# returns false for nonexistant bus in the history
 def get_last_seen_bus(fleetnum):
     with open('data/vehicle_history/last_seen.json', 'r') as f:
         last_seen = json.load(f)
@@ -107,8 +120,8 @@ def get_last_seen_bus(fleetnum):
             return last_seen_times[fleetnum]
         except KeyError:
             return False
-
-#returns false for nonexistant last block history
+# from the general file, get the last seen block for a particular fleet num
+# returns false for nonexistant bus last block history
 def get_last_block_bus(fleetnum):
     with open('data/vehicle_history/last_seen.json', 'r') as f:
         last_seen = json.load(f)
@@ -118,7 +131,12 @@ def get_last_block_bus(fleetnum):
     except KeyError:
         return False
 
-#returns false for nonexistant block history
+# ------------------------------------------------------------------------------
+# The new system: keep a history of blocks for each bus, one json file per bus
+# ------------------------------------------------------------------------------
+
+# get the whole block history for a bus (based on its specific file)
+# returns false for nonexistant block history
 def get_block_history(fleetnum):
     if(' ' in fleetnum or '/' in fleetnum):
         return False
@@ -131,6 +149,7 @@ def get_block_history(fleetnum):
         return False
     return last_blocks
 
+# get the time string given block start time and length
 def get_time_string(start_time_str, length_str):
     start_hour = int(start_time_str.split(':')[0])
     if(start_hour > 12):

@@ -42,7 +42,7 @@ default_positions_file = 'data/realtime_downloads/default_gtfrealtime_VehiclePos
 vehicle_positions_path = default_positions_file
 override_rt_flag = False  # for debug
 
-# global
+# global dicts exported that other modules make use of
 rtvehicle_dict = {}
 id2fleetnum_dict = {}
 fleetnum2id_dict = {}
@@ -51,6 +51,7 @@ victoria_gtfs_rt_url = 'http://victoria.mapstrat.com/current/gtfrealtime_Vehicle
 last_rt_download_time = time.time()
 # dynamically download the latest realtime files, save them somewhere with a logical path, update path variables here
 
+# download the latest realtime updates from bc transit api
 def download_lastest_files():
     global vehicle_positions_path
     global last_rt_download_time
@@ -70,6 +71,9 @@ def download_lastest_files():
     if override_rt_flag:  # for debug
         vehicle_positions_path = default_positions_file
 
+# update the fleet number lookup dictionaries based on the latest entries
+# in the id2fleetnum json file that the scraping module maintains
+# allows the rest of the site to map fleetnumbers to internal realtime ids and vice versa
 def setup_fleetnums():
     global id2fleetnum_dict
     global fleetnum2id_dict
@@ -83,11 +87,10 @@ def setup_fleetnums():
 def get_data_refreshed_time_str():
     return time.asctime(time.localtime(last_rt_download_time))
 
-
 def get_gmaps_url(lat, lon):
     return 'https://www.google.com/maps/search/?api=1&query={0},{1}'.format(lat, lon)
 
-#returns status, and rt object if any
+# returns status, and rt object if any
 def get_current_status(fleetnum):
     if(not businfo.is_known_bus(fleetnum)):
         return STATUS_UNKNOWNFLEETNUM, False
@@ -185,6 +188,8 @@ count_unsched = 0
 
 pos_data = None
 
+# main function for realtime - parses the latest realtime files that have been
+# downloaded and saved into the realtime datastructures for the rest of the site to use
 def load_realtime():
     print('Loading the realtime data now...')
     global rtvehicle_dict

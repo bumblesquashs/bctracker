@@ -10,6 +10,7 @@ CRON_ID_STR = 'vgtfs-muncher'
 cron_interval_mins = 5
 munch_count = 1
 
+# add the realtime munching cron job - its a simple command to send us a signal
 def start_cron():
     with CronTab(user=True) as cron:
         cron.remove_all(comment=CRON_ID_STR)
@@ -17,13 +18,17 @@ def start_cron():
         job.minute.every(cron_interval_mins)
     print('MUNCHER: cron job to munch realtime was just setup')
 
+# very important: remove the realtime munching cron job
+# This gets run every time the app is stopped gracefully (and by control-c) to
+# avoid leaving useless cron jobs in the cron table
 def stop_cron():
     with CronTab(user=True) as cron:
         cron.remove_all(comment=CRON_ID_STR)
     print('MUNCHER:  cron job to munch realtime was just removed')
 
-#code to run under cron:
-#this should get triggered every cron_interval_mins mins
+# code to run under cron: cron uses kill to send us a SIGUSR1 signal which we handle
+# called from the assigned signal handler in start.py
+# this should get triggered every cron_interval_mins mins
 def munch():
     global munch_count
     print('MUNCHER: Munching!')

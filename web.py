@@ -11,29 +11,34 @@ import businfotable as businfo
 import scrape_fleetnums as scrape
 from pages.stop import stoppage_html
 from bottle import route, run, request, template, Bottle, static_file
+# miniature error page
+def no(msg):
+    return "Not quite: " + msg + "<br>" + '<a href="/"> Back to Top</a><br>'
 
 PLACEHOLDER = '100000'
 rdict = {}     # rdict is routeid -> (routenum, routename, routeid)
 reverse_rdict = {} # route num -> routeid
 
+# Web framework code to start the server
 def startup():
     global rdict
     global reverse_rdict
     print('WEB: initializing the web server!')
     rdict = ds.routedict
-    # build a reverse route table (routenum->routeid)
+    # build a reverse route table for handling web requests (routenum->routeid)
     for route_tuple in rdict.values():
         reverse_rdict[route_tuple[0]] = route_tuple[2]
+    # Calls to run the bottle code on the cherrypy server
     cp.config.update('server.conf')
     cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
     cp.log('Whaaat? here we go')
-    cp.server.start()
+    cp.server.start() #That's it for our startup code
 
 # ==============================================================
 # Web helper code!
 # ==============================================================
 
-#minature rror page
+# miniature error page
 def no(msg):
     return "Not quite: " + msg + "<br>" + '<a href="/"> Back to Top</a><br>'
 
@@ -46,6 +51,7 @@ footer = """
 </body>
 </html>
 """
+
 # do some preprocessing when we call the realtime page
 def genrtbuslist_html():
     rtbuslist = []
@@ -67,9 +73,9 @@ def genrtbuslist_html():
                     tripdict=ds.tripdict,
                     stopdict=ds.stopdict) + footer
 
-# ========================================
-# Web framework: assign routes
-# ========================================
+# =============================================================
+# Web framework: assign routes - its all Server side rendering
+# =============================================================
 app = Bottle()
 
 @app.route('/')

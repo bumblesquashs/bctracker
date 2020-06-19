@@ -27,18 +27,21 @@ CONST_SAT = 9
 CONST_SUN = 10
 CONST_SPECIAL = 11
 
-# helper that sorts list of tuples based on the time in their 5th slot
+# string like 15:42:52 -> number of seconds since midnight
 def hms_to_sec(hms):
     (h, m, s) = hms.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
 
+# get the start time of the trip in seconds for sorting
+# put a big number past the end of the day for (invalid) trips with no start time
 def trip_to_numseconds(trip):
     if(trip.starttime == 'N/A'):
         return 1000000000
     return hms_to_sec(trip.starttime)
 
+# check if a trip object starts before midday
 def trip_is_before_midday(trip):
-    return (trip_to_numseconds(trip) < 43200)
+    return (trip_to_numseconds(trip) < midday_secs)
 
 # the first 3 of these are basically just structs
 class Stop:
@@ -67,13 +70,14 @@ class Trip:
         self.starttime = starttime
         self.startstopname = startstopname
         self.directionid = directionid
-        # When identical weekday/weekend trip and blocks are consolidated, use this
+        # NOTE: Consolidation isn't used right now. It probably won't be with the new gtfs formats
+        # True When identical weekday/weekend trip and blocks are consolidated
         self.use_alt_day_string = False
         # When identical weekday/weekend trip and blocks are consolidated, use this
         self.alt_day_string = ''
         self.stoplist = []  # list of stoptimetuple
 
-#Check if two trips are equivalent (ignoring day, id, blockid)
+# Check if two trips are equivalent (ignoring day, id, blockid)
 def compare_trips(trip1, trip2):
     if(trip1.routeid != trip2.routeid
        or trip1.headsign != trip2.headsign
@@ -94,16 +98,21 @@ class Block:
         # When identical weekday/weekend trip and blocks are consolidated, use this
         self.alt_day_string = ''
 
+    # Returns the set of route number strings that are in this block (no duplicates)
     def get_block_routes(self):
         unique_routes = []
         for trip in self.triplist:
             if trip.routenum not in unique_routes:
                 unique_routes.append(trip.routenum)
         return unique_routes
+
+    # Returns the start time string of this block
     def get_block_start_time(self):
         if(len(self.triplist) == 0):
             return ''
         return self.triplist[0].starttime
+
+    # Returns the length of this block in hours - this is stored in the bus history
     def get_block_length(self):
         if(len(self.triplist) == 0):
             return ''
@@ -112,6 +121,7 @@ class Block:
         .split(':')[0])
         return str(end_hour - start_hour)
 
+    # Currently unused but nice for debug - prints out all the trips of the block
     def pretty_print(self):
         if(trip_is_before_midday(self.triplist[0])):
             print(days_of_week_dict[self.serviceid] +
@@ -135,12 +145,16 @@ routedict = {}  # dict of routeid -> route info tuple
 stopcode2stopnum = {}  # dict of stop code -> stopnum
 stopdict = {}  # dict of stopid -> stop obj
 
-# small dicts just to deal with date shenigans
+# small dicts just to deal with date shenanigans
+# the days of week stuff can handle more weird date cases than it needs, but is still missing some support
 days_of_week_dict = {}  # service_id -> string for day of week
 days_of_week_dict_longname = {}  # service_id -> long string for day of week
 service_order_dict = {} # service_id -> display order (monday first, sunday last, etc) for sorting later
 dow_number_dict = {'Mon': 0, 'Tues': 1, 'Wed': 2, 'Thurs': 3, 'Frid': 4, 'Sat': 5, 'Sun': 6}
 
+# ------------------------------------------ #
+#  Some setup code that gets run on import   #
+# ------------------------------------------ #
 def get_today_str():
     return str(date.today()).replace('-', '')
 
@@ -148,7 +162,9 @@ today = get_today_str()
 
 this_sheet_enddate = ''
 
-# this function is actually the worst - its AWFUL
+# all of these loading functions try to follow the GTFS spec
+# this function is actually the worst - its AWFUL.
+# I could try to clean it up, but this is a messy task no matter how I can think to do it
 def populate_calendar():
     global days_of_week_dict
     global this_sheet_enddate
@@ -186,6 +202,7 @@ def populate_calendar():
                 days_of_week_dict_longname[service_id] = 'INVALID'
                 continue
             this_sheet_enddate = end_date
+            # so gross
             ismonday = items[colnames.index('monday')]
             istuesday = items[colnames.index('tuesday')]
             iswednesday = items[colnames.index('wednesday')]
@@ -193,6 +210,7 @@ def populate_calendar():
             isfriday = items[colnames.index('friday')]
             issaturday = items[colnames.index('saturday')]
             issunday = items[colnames.index('sunday')]
+            # oh my god why
             if(issunday == '1' and issaturday == '1'):
                 days_of_week_dict[service_id] = 'Weekends'
                 days_of_week_dict_longname[service_id] = 'Weekends'
@@ -218,6 +236,7 @@ def populate_calendar():
                 days_of_week_dict_longname[service_id] = 'Tuesdays'
                 service_order_dict[service_id] = CONST_TUES
                 continue
+            # don't do this to me... so much repetition
             if(iswednesday == '1'):
                 days_of_week_dict[service_id] = 'Wed'
                 days_of_week_dict_longname[service_id] = 'Wednesdays'
@@ -238,6 +257,7 @@ def populate_calendar():
                 days_of_week_dict_longname[service_id] = 'Saturdays'
                 service_order_dict[service_id] = CONST_SAT
                 continue
+            # please stop
             if(issunday == '1'):
                 days_of_week_dict[service_id] = 'Sun'
                 days_of_week_dict_longname[service_id] = 'Sundays'
@@ -251,13 +271,16 @@ def populate_calendar():
                days_of_week_dict_longname[service_id] = 'Special (id: ' + \
                   service_id + ')'
             try:
+               # service order dict is to sort the different service_ids when rendering
+               # so for any serviceid that didn't match the above, ensure they all go at the end
                service_order_dict[service_id] = 9001 + int(service_id)
             except ValueError:
+               # just in case
                service_order_dict[service_id] = CONST_SPECIAL
 
 # this loads in all the data and sets up the global dicts
 def start():
-    # this just used internally
+    # these are just used internally to this function
     blocklistdict = {}  # dict of block id->list of trips in the block
     firststoptimes_dict = {}  # dict of trip id -> StopTime object
     # list of stop times just used internally
@@ -362,6 +385,9 @@ def start():
     print('Number of blocks read: ' + str(len(blocklistdict.keys())))
 
     # prune the trip and block dicts - consolidate identical weekday blocks
+    # this pruning loop does actually detect the identical trips but is not enabled:
+    # victoria decided to combine mon - thurs schedules anyway so this is less of a need.
+    # Besides, the logic for actually consolidating the blocks is probably very gross
     if(start_mod.COMBINE_WEEKDAYS):
         for tripid in tripdict:
             trip = tripdict[tripid]
@@ -396,17 +422,17 @@ def start():
         else:
             route_triplistdict[trip.routeid] = [trip]
 
-    print('Beginning trip->stop population...')
-    for st in stoptime_list:
+    print('Beginning trip->stop list population...')
+    for st in stoptime_list: # this is a big list
         try:
             tripdict[st.tripid].stoplist.append(st)
         except KeyError:  # for handling those stoptimes for trips not in this sheet
-            pass
+            pass          # (double sheet gtfs files will have trips from two sheets)
     for trip in tripdict.values():
         # sort the stoplist by stopseq didnt work so use departtime?
         trip.stoplist.sort(key=lambda x: hms_to_sec(x.departtime))
 
-    print('Beginning stop->trip population...')
+    print('Beginning stop->trip list population...')
     for st in stoptime_list:
         # maintain these two lists in parallel (I know, I know...)
         stop = stopdict[st.stopid]
