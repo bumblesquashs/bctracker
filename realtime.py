@@ -159,12 +159,12 @@ def check_for_broken_gtfs():
             dayofweek = ds.days_of_week_dict[serviceid1]
             this_hour = datetime.now().hour
             try: #inner try because we can get special day strings which we'll ignore
+                dnum = ds.dow_number_dict[dayofweek]
                 if(this_hour < 5):
-                    if((dnum + 1 )!= datetime.today().weekday()):
+                    if(( dnum + 1 ) != datetime.today().weekday()):
                         print('CHECKGTFS: realtime id {0} not running on service day (its past 12): {1} vs {2}'.format(vehicle.fleetid, dnum, datetime.today().weekday()))
                         return True
                 else:
-                    dnum = ds.dow_number_dict[dayofweek]
                     if(dnum != datetime.today().weekday()):
                         print('CHECKGTFS: realtime id {0} not running on today: {1} vs {2}'.format(vehicle.fleetid, dnum, datetime.today().weekday()))
                         return True
