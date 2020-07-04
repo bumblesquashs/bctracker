@@ -38,7 +38,11 @@ Data current to: {{time_string}} Pacific Time<br>
          headsign = trip.headsign
      end
      if(bus.onroute):
-         stopcode = stopdict[bus.stopid].stopcode
+         try:
+             stopcode = stopdict[bus.stopid].stopcode
+         except KeyError:
+             rt.handle_key_error()
+         end
      else:
          stopcode = ''
      end

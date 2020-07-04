@@ -5,6 +5,7 @@ from datetime import date
 import os.path
 from os import path
 import datastructure as ds
+import start
 import json
 import businfotable as businfo
 
@@ -180,6 +181,11 @@ def check_for_broken_gtfs():
         #if we got down here, things look ok for this one - increment and try again
         tries +=1
     return False #we got out of the loop, so I guess that means its fine
+
+def handle_key_error():
+    print('Hit a key error (But the heuristic says the static gtfs is fine?)')
+    if(start.RELOAD_ENABLED):    
+        start.download_and_restart()
 
 # just for interest
 busidlist = []
