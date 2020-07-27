@@ -45,7 +45,6 @@ all_ranges = [
     BusRange(1, 18, '2000', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(101, 116, '2001', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(221, 237, '2002', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
-    BusRange(221, 237, '2001', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
 
     BusRange(1020, 1044, '2013', 'New Flyer XN40', TYPE_CONVENTIONAL),
     BusRange(1045, 1069, '2015', 'New Flyer XN40', TYPE_CONVENTIONAL),
@@ -82,6 +81,7 @@ all_ranges = [
     BusRange(4007, 4061, '2017', 'Grande West Vicinity (30 foot)', TYPE_30FOOT),
     BusRange(4062, 4070, '2017', 'Grande West Vicinity (30 foot)', TYPE_30FOOT),
     BusRange(4071, 4073, '2018', 'Grande West Vicinity (30 foot)', TYPE_30FOOT),
+    BusRange(4200, 4231, '2020', 'Grande West Vicinity CNG (30 foot)', TYPE_30FOOT),
     BusRange(4400, 4432, '2017', 'Grande West Vicinity (35 foot)', TYPE_35FOOT),
     BusRange(4433, 4474, '2018', 'Grande West Vicinity (35 foot)', TYPE_35FOOT),
 
@@ -108,7 +108,6 @@ all_ranges = [
     BusRange(9527, 9527, '2008',
              'Alexander Dennis Enviro500H (Hybrid)', TYPE_DECKER),
     BusRange(9528, 9528, '2007', 'Alexander Dennis Enviro500', TYPE_DECKER),
-    BusRange(9529, 9531, '2008', 'Alexander Dennis Enviro500', TYPE_DECKER),
     BusRange(9529, 9531, '2008', 'Alexander Dennis Enviro500', TYPE_DECKER),
     BusRange(9701, 9749, '1996-1997', 'New Flyer D40LF', TYPE_CONVENTIONAL),
     BusRange(9750, 9760, '1995-1996', 'New Flyer D40LF', TYPE_CONVENTIONAL),
