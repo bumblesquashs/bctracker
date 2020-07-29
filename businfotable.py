@@ -52,6 +52,8 @@ all_ranges = [
     BusRange(1115, 1139, '2017', 'New Flyer XN40', TYPE_CONVENTIONAL),
     BusRange(1140, 1147, '2018', 'New Flyer XN40', TYPE_CONVENTIONAL),
     BusRange(1148, 1185, '2019', 'New Flyer XN40', TYPE_CONVENTIONAL),
+    BusRange(1186, 1202, '2020', 'New Flyer XN40', TYPE_CONVENTIONAL),
+
 
     BusRange(2173, 2240, '2009', 'Ford/CBB E-450/Polar V', TYPE_SHUTTLE),
     BusRange(2311, 2315, '2010', 'Chevrolet/Arboc 4500/SOM28D', TYPE_SHUTTLE),
