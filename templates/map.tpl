@@ -16,4 +16,6 @@
     marker.className = 'marker';
 
     new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
+
+    map.setStyle('mapbox://styles/mapbox/light-v10')
 </script>

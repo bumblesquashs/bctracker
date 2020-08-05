@@ -1,10 +1,10 @@
-%import datastructure as ds
-%triplist.sort(key=ds.trip_to_numseconds)
+% import datastructure as ds
+% triplist.sort(key=ds.trip_to_numseconds)
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Departure Time</th>
+      <th>Start Time</th>
       <th>Headsign</th>
       <th>Departing From</th>
       <th>Block</th>

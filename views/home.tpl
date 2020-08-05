@@ -1,3 +1,5 @@
+% include('templates/header', title='BCTracker - Victoria')
+
 <h1>BCTracker - Victoria</h1>
 <h2>Welcome to the BCTracker site for the Victoria Regional Transit System!</h2>
 
@@ -43,8 +45,20 @@
 </form>
 
 <h2>All Routes:</h2>
-<ul>
-% for routeid in rdict:
-    <li> <a href="routes/{{rdict[routeid][0]}}">{{rdict[routeid][0]}} {{rdict[routeid][1]}}</a><br> </li>
-% end
-</ul>
+
+<table class="pure-table pure-table-horizontal pure-table-striped">
+    <thead>
+        <tr>
+            <th>Route</th>
+        </tr>
+    </thead>
+    <tbody>
+        % for routeid in rdict:
+            <tr>
+                <td><a href="routes/{{rdict[routeid][0]}}">{{rdict[routeid][0]}} {{rdict[routeid][1]}}</a></td>
+            </tr>
+        % end
+    </tbody>
+</table>
+
+% include('templates/footer')

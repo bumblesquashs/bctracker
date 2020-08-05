@@ -53,6 +53,8 @@ a {
     padding: 10px;
     color: white;
     cursor: default;
+    font-weight: bold;
+    font-family: Helvetica, sans-serif;
 }
 
 .button:hover {

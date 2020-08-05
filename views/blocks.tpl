@@ -1,15 +1,17 @@
 % import datastructure as ds
 
+% include('templates/header', title='All Blocks')
+
 <h1>All Blocks</h1>
 <hr />
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>ID</th>
+      <th>Block</th>
       <th>Routes</th>
       <th>Start Time</th>
-      <th>On</th>
+      <th>Service Days</th>
     </tr>
   </thead>
   <tbody>
@@ -31,3 +33,5 @@
     % end
   </tbody>
 </table>
+
+% include('templates/footer')

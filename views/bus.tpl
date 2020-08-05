@@ -10,61 +10,65 @@
 % block_history = hist.get_block_history(fleetnum)
 % last_block = hist.get_last_block_bus(fleetnum)
 
+% include('templates/header', title='Bus {0}'.format(fleetnum), include_maps=True)
+
 <h1>Bus {{fleetnum}}</h1>
 <h2>{{busrange.year}} {{busrange.model}}</h2>
 <hr />
 
 % if (bus_status == rt.STATUS_INACTIVE or bus_status == rt.STATUS_UNKNOWN_TRANSLATION or rt_struct == False):
-  <h2>{{fleetnum}} is not active right now.</h2>
+  <h2>{{fleetnum}} is not active right now</h2>
 % elif (bus_status == rt.STATUS_TRACKING):
-  % include('templates/map.templ', lat=rt_struct.lat, lon=rt_struct.lon)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
 
-  <h2>{{fleetnum}} is active, but not assigned to any route.</h2>
+  <h2>{{fleetnum}} is active, but not assigned to any route</h2>
 % elif (bus_status == rt.STATUS_LOGGEDIN):
   % trip = ds.tripdict[rt_struct.tripid]
 
-  % include('templates/map.templ', lat=rt_struct.lat, lon=rt_struct.lon)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
 
   <h2>{{trip.headsign}}</h2>
-  <p>(off scheduled route)</p>
-  <p><a href="/trips/{{rt_struct.tripid}}">View Trip</a></p>
-  <p><a href="/blocks/{{rt_struct.blockid}}">View Block</a></p>
-  <p><a href="/routes/{{trip.routenum}}">View Route</a></p>
+
+  <p>Off scheduled route</p>
+  <p>
+    <a href="/trips/{{rt_struct.tripid}}">View Trip</a><br />
+    <a href="/blocks/{{rt_struct.blockid}}">View Block</a><br />
+    <a href="/routes/{{trip.routenum}}">View Route</a>
+  </p>
 % elif (bus_status == rt.STATUS_ONROUTE):
   % trip = ds.tripdict[rt_struct.tripid]
   % stop = ds.stopdict[rt_struct.stopid]
-  
-  % include('templates/map.templ', lat=rt_struct.lat, lon=rt_struct.lon)
-  
-  <h2>{{trip.headsign}}</h2>
-  <p>Current Stop: <a href="/stops/{{stop.stopcode}}">{{stop.stopname}}</a></p>
-  <p><a href="/trips/{{rt_struct.tripid}}">View Trip</a></p>
-  <p><a href="/blocks/{{rt_struct.blockid}}">View Block</a></p>
-  <p><a href="/routes/{{trip.routenum}}">View Route</a></p>
-% end
 
-<hr>
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
+
+  <h2>{{trip.headsign}}</h2>
+
+  <p>Current Stop: <a href="/stops/{{stop.stopcode}}">{{stop.stopname}}</a></p>
+  <p>
+    <a href="/trips/{{rt_struct.tripid}}">View Trip</a><br />
+    <a href="/blocks/{{rt_struct.blockid}}">View Block</a><br />
+    <a href="/routes/{{trip.routenum}}">View Route</a>
+  </p>
+% end
 
 <h2>Service History</h2>
 
 % if (track_history != False):
-  <p>Last Tracked: {{track_history['day']}}</p>
-  <p>(The last time the vehicle was detected by the tracker even if it wasn't assigned to a route)</p>
+  <h3>Last logged in: {{track_history['day']}}</h3>
 % else:
-  <p>No History for this vehicle found.</p>
-  <p><i>Note: this site began tracking data on May 5th 2020, so vehicles retired before then will not show up.</i></p>
+  <h3>No history for this vehicle found</h3>
+  <p>This site began tracking data on May 5th 2020, so vehicles retired before then will not show any history</p>
 % end
 
 % if (block_history != False):
-  <h3>Block history for unit {{fleetnum}}</h3>
-  <p>Note: for entries made under a previous gtfs, the blockid will no longer be correct</p>
+  <p>For entries made under a older GTFS version, the block will no longer be valid</p>
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>
       <tr>
         <th>Date</th>
-        <th>Routes Assigned</th>
-        <th>BlockId</th>
-        <th>Time</th>
+        <th>Assigned Routes</th>
+        <th>Assigned Block</th>
+        <th>Time of Day</th>
       </tr>
     </thead>
     <tbody>
@@ -88,14 +92,13 @@
     </tbody>
   </table>
 % elif (last_block != False): # this part is for busses that retired under the old system and only have a last block from the combined json
-  <h3>Last Block Assigned for unit {{fleetnum}}</h3>
-  <p>Note: for entries made under a previous gtfs, the blockid will no longer be correct</p>
+  <p>For entries made under a older GTFS version, the block will no longer be valid</p>
     <table class="pure-table pure-table-horizontal pure-table-striped">
       <thead>
         <tr>
           <th>Date</th>
-          <th>Routes Assigned</th>
-          <th>BlockId</th>
+          <th>Assigned Routes</th>
+          <th>Assigned Block</th>
         </tr>
       </thead>
       <tbody>
@@ -112,5 +115,6 @@
     <p><i>Note: No lookup for this fleetnumber is known, has this bus been in service lately?</i></p>
   % end
 % end
-<br />
 <p>Data current to: {{rt.get_data_refreshed_time_str()}} Pacific Time</p>
+
+% include('templates/footer')

@@ -12,7 +12,6 @@ import requestlogger
 import realtime as rt
 import history as hist
 import datastructure as ds
-from pages.stop import stoppage_html
 
 #some config
 AUTO_RELOAD = True # Will we auto reload when we detect that our gtfs is out of date?

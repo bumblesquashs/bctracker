@@ -1,4 +1,6 @@
-%import datastructure as ds
+% import datastructure as ds
+
+% include('templates/header', title='Trip {0}'.format(tripid))
 
 <h1>{{trip.headsign}}</h1>
 <h2>Trip {{tripid}} ({{ds.days_of_week_dict[trip.serviceid]}})</h2>
@@ -13,7 +15,7 @@
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Departure Time</th>
+      <th>Time</th>
       <th>Stop Code</th>
       <th>Stop Name</th>
     </tr>
@@ -30,3 +32,5 @@
     % end
   </tbody>
 </table>
+
+% include('templates/footer')

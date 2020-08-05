@@ -1,3 +1,5 @@
+% include('templates/header', title='About')
+
 <h1>About</h1>
 <hr />
 
@@ -26,3 +28,5 @@ If you are otherwise curious about this, have questions, or something seems brok
 
 <br />
 <i> - Bumblesquash, 2020 </i>
+
+% include('templates/footer')

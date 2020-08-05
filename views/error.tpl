@@ -1,3 +1,5 @@
+% include('templates/header', title='Error: {0}'.format(error))
+
 <style>
     #error-block {
         text-align: center;
@@ -12,9 +14,11 @@
 </style>
 
 <div id="error-block">
-    <p id="error-title">{{ error_title }}</p>
+    <p id="error-title">Error: {{ error }}</p>
 
-    % if defined('error_message'):
-        <p id="error-message">{{ error_message }}</p>
+    % if defined('message'):
+        <p id="error-message">{{ message }}</p>
     % end
 </div>
+
+% include('templates/footer')

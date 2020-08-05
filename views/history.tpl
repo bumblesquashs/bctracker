@@ -2,19 +2,21 @@
 % import businfotable as businfo
 % import history as hist
 
+% include('templates/header', title='Vehicle History')
+
 <h1>Vehicle History</h1>
 <hr />
 
-<h3>Last Block Assigned</h3>
+<h2>Last Block Assigned</h2>
 <p>For entries made under a older GTFS version, the block will no longer be valid</p>
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Bus Number</th>
-      <th>Bus Description</th>
+      <th>Fleet Number</th>
+      <th>Year and Model</th>
       <th>Date Last Assigned</th>
-      <th>Routes Assigned</th>
-      <th>Block</th>
+      <th>Assigned Routes</th>
+      <th>Assigned Block</th>
     </tr>
   </thead>
   <tbody>
@@ -43,13 +45,13 @@
   </tbody>
 </table>
 
-<h3>Last Time Tracked</h3>
+<h2>Last Time Tracked</h2>
 <p>The last time the vehicle was detected by the tracker even if it wasn't assigned to a route</p>
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Bus Number</th>
-      <th>Bus Description</th>
+      <th>Fleet Number</th>
+      <th>Year and Model</th>
       <th>Date Last Active</th>
     </tr>
   </thead>
@@ -61,10 +63,12 @@
       % date = last_times[fleetnum]['day']
       % busrange = businfo.get_bus_range(fleetnum)
       <tr>
-        <td>{{fleetnum}}</td>
+        <td><a href="/bus/number/{{fleetnum}}">{{fleetnum}}</a></td>
         <td>{{busrange.year}} {{busrange.model}}</td>
         <td>{{date}}</td>
       </tr>
     % end
   </tbody>
 </table>
+
+% include('templates/footer')

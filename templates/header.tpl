@@ -11,7 +11,7 @@
     <link rel="stylesheet" media="screen and (max-width: 767px)" href="/style/main-mobile.css" />
     <link rel="stylesheet" href="/style/tables.css" />
     
-    % if (include_maps):
+    % if defined("include_maps") and include_maps:
       <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
       <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
     % end

@@ -1,3 +1,5 @@
+% include('templates/header', title='Route {0}'.format(routenum))
+
 <h1>{{routenum}} {{routename}}</h1>
 All trips for Route {{routenum}} by the time of their first stop
 <hr />
@@ -37,13 +39,15 @@ All trips for Route {{routenum}} by the time of their first stop
     % if(len(ob_trips) != 0):
       <h3 id="{{day_str}}_ob">Outbound Trips ({{len(ob_trips)}})</h3>
       
-      % include('templates/triplist.templ', triplist=ob_trips)
+      % include('templates/triplist', triplist=ob_trips)
     % end
   
     % if(len(ib_trips) != 0):
       <h3 id="{{day_str}}_ib">Inbound Trips ({{len(ib_trips)}})</h3>
       
-      % include('templates/triplist.templ', triplist=ib_trips)
+      % include('templates/triplist', triplist=ib_trips)
     % end
   %end
 </div>
+
+% include('templates/footer')

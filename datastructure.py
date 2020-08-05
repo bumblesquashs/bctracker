@@ -43,7 +43,7 @@ def trip_to_numseconds(trip):
 def trip_is_before_midday(trip):
     return (trip_to_numseconds(trip) < midday_secs)
 
-# the first 3 of these are basically just structs
+# the first 4 of these are basically just structs
 class Stop:
     def __init__(self, stopid, stopcode, stopname, stoplat, stoplon):
         self.stopid = stopid
@@ -51,7 +51,7 @@ class Stop:
         self.stopname = stopname
         self.stoplat = stoplat
         self.stoplon = stoplon
-        self.triptimes = []  # list of (tripid, triptime) tuple
+        self.entries = []  # list of (tripid, triptime) tuple
 
 class StopTime:
     def __init__(self, tripid, stopid, stopname, departtime, stopseq):
@@ -60,6 +60,12 @@ class StopTime:
         self.departtime = departtime
         self.stopseq = stopseq
         self.stopname = stopname
+
+class StopEntry:
+    def __init__(self, tripid, stoptime):
+        self.stoptime = stoptime
+        self.tripid = tripid
+        self.trip = tripdict[tripid]
 
 class Trip:
     def __init__(self, tripid, routeid, serviceid, routenum, blockid, headsign, starttime, startstopname, directionid):
@@ -152,7 +158,7 @@ stopdict = {}  # dict of stopid -> stop obj
 days_of_week_dict = {}  # service_id -> string for day of week
 days_of_week_dict_longname = {}  # service_id -> long string for day of week
 service_order_dict = {} # service_id -> display order (monday first, sunday last, etc) for sorting later
-dow_number_dict = {'Mon': 0, 'Tues': 1, 'Wed': 2, 'Thurs': 3, 'Frid': 4, 'Sat': 5, 'Sun': 6}
+dow_number_dict = {'Mon': 0, 'Tue': 1, 'Wed': 2, 'Thu': 3, 'Fri': 4, 'Sat': 5, 'Sun': 6}
 
 # ------------------------------------------ #
 #  Some setup code that gets run on import   #
@@ -224,7 +230,7 @@ def populate_calendar():
                 service_order_dict[service_id] = CONST_WEEKDAY
                 continue
             if(ismonday == '1' and istuesday == '1' and iswednesday == '1' and isthursday == '1' and isfriday == '0'):
-                days_of_week_dict[service_id] = 'Mon-Thurs'
+                days_of_week_dict[service_id] = 'Mon-Thu'
                 days_of_week_dict_longname[service_id] = 'Weekdays except Friday'
                 service_order_dict[service_id] = CONST_WEEKDAY_EXCEPT_FRI
                 continue
@@ -234,7 +240,7 @@ def populate_calendar():
                 service_order_dict[service_id] = CONST_MON
                 continue
             if(istuesday == '1'):
-                days_of_week_dict[service_id] = 'Tues'
+                days_of_week_dict[service_id] = 'Tue'
                 days_of_week_dict_longname[service_id] = 'Tuesdays'
                 service_order_dict[service_id] = CONST_TUES
                 continue
@@ -245,12 +251,12 @@ def populate_calendar():
                 service_order_dict[service_id] = CONST_WED
                 continue
             if(isthursday == '1'):
-                days_of_week_dict[service_id] = 'Thurs'
+                days_of_week_dict[service_id] = 'Thu'
                 days_of_week_dict_longname[service_id] = 'Thursdays'
                 service_order_dict[service_id] = CONST_THURS
                 continue
             if(isfriday == '1'):
-                days_of_week_dict[service_id] = 'Frid'
+                days_of_week_dict[service_id] = 'Fri'
                 days_of_week_dict_longname[service_id] = 'Fridays'
                 service_order_dict[service_id] = CONST_FRI
                 continue
@@ -443,10 +449,10 @@ def start():
         # check for trips that arent from this sheet - dont want to put those in
         if(st.tripid not in tripdict):
             continue
-        stop.triptimes.append((st.tripid, st.departtime))
+        stop.entries.append((st.tripid, st.departtime))
     for stop in stopdict.values():
         # sort trip tuple list by time
-        stop.triptimes.sort(key=lambda x: hms_to_sec(x[1]))
+        stop.entries.sort(key=lambda x: hms_to_sec(x[1]))
 
     print('Beginning trip list, block list day-consolidation...')
 

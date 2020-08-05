@@ -1,7 +1,9 @@
-%import datastructure as ds
+% import datastructure as ds
+
+% include('templates/header', title='Block {0}'.format(blockid))
 
 <h1>Block {{blockid}}</h1>
-<h2>Block Service: {{ds.days_of_week_dict[triplist[0].serviceid]}}</h2>
+<h2>Service Days: {{ds.days_of_week_dict[triplist[0].serviceid]}}</h2>
 <hr />
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
@@ -26,3 +28,5 @@
     % end
   </tbody>
 </table>
+
+% include('templates/footer')
