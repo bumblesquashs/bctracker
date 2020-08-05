@@ -45,10 +45,12 @@ def trip_is_before_midday(trip):
 
 # the first 3 of these are basically just structs
 class Stop:
-    def __init__(self, stopid, stopcode, stopname):
+    def __init__(self, stopid, stopcode, stopname, stoplat, stoplon):
         self.stopid = stopid
         self.stopcode = stopcode
         self.stopname = stopname
+        self.stoplat = stoplat
+        self.stoplon = stoplon
         self.triptimes = []  # list of (tripid, triptime) tuple
 
 class StopTime:
@@ -304,7 +306,9 @@ def start():
             stopid = items[colnames.index('stop_id')]
             stopcode = items[colnames.index('stop_code')]
             stopname = items[colnames.index('stop_name')]
-            stopdict[stopid] = Stop(stopid, stopcode, stopname)
+            stoplat = items[colnames.index('stop_lat')]
+            stoplon = items[colnames.index('stop_lon')]
+            stopdict[stopid] = Stop(stopid, stopcode, stopname, stoplat, stoplon)
 
     # fill in the backwards dict here
     for stop in stopdict.values():

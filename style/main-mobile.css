@@ -1,0 +1,59 @@
+
+body {
+    font-size: 14pt;
+}
+
+form input[type="text"] {
+    font-size: 18pt;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+form label {
+    font-size: 16pt;
+}
+
+.navbar-title {
+    font-size: 18pt;
+}
+
+.desktop-only {
+    display: none;
+}
+
+.button {
+    font-size: 16pt;
+    overflow: hidden;
+    display: block;
+}
+
+.mobile-navbar-item {
+    display: block;
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: Helvetica, sans-serif;
+    font-size: 16pt;
+}
+
+.mobile-navbar-toggle {
+    float: right;
+    display: block;
+    padding: 5px;
+    margin: 4px 0px;
+}
+
+.mobile-navbar-toggle-line {
+    background-color: white;
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    margin: 6px;
+}
+
+#mobile-navbar {
+    margin: 0px;
+    padding: 10px 20px 20px 20px;
+    overflow: hidden;
+    background-color: #255325;
+}

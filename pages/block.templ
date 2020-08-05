@@ -1,30 +1,28 @@
 %import datastructure as ds
-<br />
-  <h3> Viewing block id {{blockid}}: </h3><br>
-  Block Service: <b> {{ds.days_of_week_dict[triplist[0].serviceid]}} </b> <br>
-  <br />
 
- <table class="pure-table pure-table-horizontal pure-table-striped">
-   <thead>
+<h1>Block {{blockid}}</h1>
+<h2>Block Service: {{ds.days_of_week_dict[triplist[0].serviceid]}}</h2>
+<hr />
+
+<table class="pure-table pure-table-horizontal pure-table-striped">
+  <thead>
     <tr>
-      <th>TripID</th>
+      <th>Start Time</th>
       <th>Direction</th>
       <th>Headsign</th>
-      <th>Start Time</th>
-      <th>Day of week</th>
+      <th>Trip</th>
     </tr>
   </thead>
 
-    <tbody>
-      % triplist.sort(key=ds.trip_to_numseconds)
-      % for trip in triplist:
-      <tr>
-        <td> <a href="/trips/{{trip.tripid}}">{{ trip.tripid }}</a> </td>
-        <td> {{ ds.directionid_dict[trip.directionid] }} </td>
-        <td> {{ trip.headsign }} </td>
-        <td> {{ trip.starttime }} </td>
-        <td> {{ ds.days_of_week_dict[trip.serviceid] }} </td>
-      </tr>
-      % end
-    </tbody>
-  </table>
+  <tbody>
+    % triplist.sort(key=ds.trip_to_numseconds)
+    % for trip in triplist:
+    <tr>
+      <td>{{ trip.starttime }}</td>
+      <td>{{ ds.directionid_dict[trip.directionid] }}</td>
+      <td>{{ trip.headsign }}</td>
+      <td><a href="/trips/{{trip.tripid}}">{{ trip.tripid }}</a></td>
+    </tr>
+    % end
+  </tbody>
+</table>

@@ -1,0 +1,19 @@
+
+body {
+    font-size: 14pt;
+}
+
+form input[type="text"] {
+    font-size: 14pt;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.button {
+    font-size: 12pt;
+    vertical-align: middle;
+}

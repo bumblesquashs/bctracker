@@ -2,70 +2,69 @@
 % import businfotable as businfo
 % import history as hist
 
-<br>
-<h3> History for each vehicle </h3>
-<h4> Last Block Assigned: </h4>
-<p> Note: for entries made under a previous gtfs version, the blockid will no longer be correct </p>
+<h1>Vehicle History</h1>
+<hr />
+
+<h3>Last Block Assigned</h3>
+<p>For entries made under a older GTFS version, the block will no longer be valid</p>
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th> Fleet Number </th>
-      <th> Bus Model </th>
-      <th> Date Last Assigned</th>
-      <th> Routes Assigned </th>
-      <th> BlockId </th>
+      <th>Bus Number</th>
+      <th>Bus Description</th>
+      <th>Date Last Assigned</th>
+      <th>Routes Assigned</th>
+      <th>Block</th>
     </tr>
-   </thead>
-   <tbody>
-<%
-  last_seen = hist.get_last_seen()
-  last_blocks = last_seen['last_blocks']
-  last_block_keys = list(last_blocks.keys())
-  last_block_keys.sort(key = lambda x: int(x))
+  </thead>
+  <tbody>
+    % last_seen = hist.get_last_seen()
+    % last_blocks = last_seen['last_blocks']
+    % last_block_keys = list(last_blocks.keys())
+    % last_block_keys.sort(key = lambda x: int(x))
 
-  last_times = last_seen['last_times']
-  last_times_keys = list(last_times.keys())
-  last_times_keys.sort(key = lambda x: int(x))
-  for fleetnum in last_block_keys:
-     if(fleetnum == '0'):
-        continue
-     end
-     obj = last_blocks[fleetnum]
-     busrange = businfo.get_bus_range(fleetnum)
- %>
-     <tr>
-       <td> <a href="/bus/{{fleetnum}}"> {{fleetnum}} </a> </td>
-       <td> {{busrange.year}} {{busrange.model}}</td>
-       <td> {{obj['day']}} </td>
-       <td> {{', '.join(sorted(obj['routes']))}} </td>
-       <td> {{obj['blockid']}} </td>
-     </tr>
-  % end
+    % last_times = last_seen['last_times']
+    % last_times_keys = list(last_times.keys())
+    % last_times_keys.sort(key = lambda x: int(x))
+    % for fleetnum in last_block_keys:
+      % if (fleetnum == '0'):
+        % continue
+      % end
+      % obj = last_blocks[fleetnum]
+      % busrange = businfo.get_bus_range(fleetnum)
+      <tr>
+        <td><a href="/bus/number/{{fleetnum}}">{{fleetnum}}</a></td>
+        <td>{{busrange.year}} {{busrange.model}}</td>
+        <td>{{obj['day']}}</td>
+        <td>{{', '.join(sorted(obj['routes']))}}</td>
+        <td><a href="/blocks/{{obj['blockid']}}">{{obj['blockid']}}</a></td>
+      </tr>
+    % end
   </tbody>
 </table>
 
-<h4> Last Time Tracked: </h4>
-<p> (The last time the vehicle was detected by the tracker even if it wasn't assigned to a route) </p>
+<h3>Last Time Tracked</h3>
+<p>The last time the vehicle was detected by the tracker even if it wasn't assigned to a route</p>
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-       <th> Fleet Number </th>
-       <th> Bus Model </th>
-       <th> Date Last Active</th>
+      <th>Bus Number</th>
+      <th>Bus Description</th>
+      <th>Date Last Active</th>
     </tr>
-   </thead>
-   <tbody>
-%   for fleetnum in last_times_keys:
-%      if(fleetnum == '0'):
-%         continue
-%      end
-%      date = last_times[fleetnum]['day']
-%      busrange = businfo.get_bus_range(fleetnum)
-        <tr>
-          <td> {{fleetnum}} </td>
-          <td> {{busrange.year}} {{busrange.model}}</td>
-          <td> {{date}} </td>
-        </tr>
-%      end
-   </tbody>
- </table>
+  </thead>
+  <tbody>
+    % for fleetnum in last_times_keys:
+      % if (fleetnum == '0'):
+        % continue
+      % end
+      % date = last_times[fleetnum]['day']
+      % busrange = businfo.get_bus_range(fleetnum)
+      <tr>
+        <td>{{fleetnum}}</td>
+        <td>{{busrange.year}} {{busrange.model}}</td>
+        <td>{{date}}</td>
+      </tr>
+    % end
+  </tbody>
+</table>

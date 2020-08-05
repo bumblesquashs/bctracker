@@ -1,0 +1,20 @@
+<style>
+    #error-block {
+        text-align: center;
+        margin-top: 50px;
+    }
+    #error-title {
+        font-size: 48pt;
+    }
+    #error-message {
+        font-size: 24pt;
+    }
+</style>
+
+<div id="error-block">
+    <p id="error-title">{{ error_title }}</p>
+
+    % if defined('error_message'):
+        <p id="error-message">{{ error_message }}</p>
+    % end
+</div>

@@ -10,3 +10,4 @@ data/nextride/id2fleetnum.json
 data/nextride/last_api_result.json
 
 __pycache__/
+.vscode

@@ -43,14 +43,12 @@ def no(msg):
     return "Not quite: " + msg + "<br>" + '<a href="/"> Back to Top</a><br>'
 
 # header bar for all pages
-def header(title_str):
-    return template('sections/header.templ', title=title_str)
+def header(title_str, include_maps=False):
+    return template('templates/header.templ', title=title_str, include_maps=include_maps)
+
 #footer for all pages
-footer = """
-</div>
-</body>
-</html>
-"""
+def footer():
+    return template('templates/footer.templ')
 
 # do some preprocessing when we call the realtime page
 def genrtbuslist_html():
@@ -67,16 +65,35 @@ def genrtbuslist_html():
         rtbuslist.append(bus)
         # now - sort that list however we please
     rtbuslist.sort(key=lambda x: (int(x.scheduled) * -1, int(x.fleetnum)))
-    return header('All active busses...') + template('pages/realtime.templ',
+    return header('Realtime') + template('pages/realtime.templ',
                     time_string=rt.get_data_refreshed_time_str(),
                     rtbuslist=rtbuslist,
                     tripdict=ds.tripdict,
-                    stopdict=ds.stopdict) + footer
+                    stopdict=ds.stopdict) + footer()
+
+def errorPage(error_title, error_message):
+    return header('Error') + template('pages/error.templ', error_title=error_title, error_message=error_message) + footer()
 
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
 # =============================================================
 app = Bottle()
+
+@app.route('/style/main.css')
+def style_main():
+    return static_file('style/main.css', root='.')
+
+@app.route('/style/main-desktop.css')
+def style_main():
+    return static_file('style/main-desktop.css', root='.')
+
+@app.route('/style/main-mobile.css')
+def style_main():
+    return static_file('style/main-mobile.css', root='.')
+
+@app.route('/style/tables.css')
+def style_tables():
+    return static_file('style/tables.css', root='.')
 
 @app.route('/')
 def index():
@@ -85,85 +102,12 @@ def index():
         valid = munch.munch()
         if((not valid) and start.RELOAD_ENABLED):
             start.download_and_restart()
-    return header('Victoria GTFS Tracker') + template('pages/home.templ', rdict=rdict) + footer
+    return header('BCTracker - Victoria') + template('pages/home.templ', rdict=rdict) + footer()
 
 @app.route('/routes')
 @app.route('/routes/')
-def index():
-    return header('All Routes...') + template('pages/routes.templ', rdict=rdict) + footer
-
-@app.route('/history')
-@app.route('/history/')
-def index():
-    return header('Bus history') + template('pages/history.templ') + footer
-
-
-@app.route('/style.css')
-def style():
-    return static_file('style.css', root='.')
-
-@app.route('/bus/')
-def buspage_root():
-    return no('Gotta choose a bus!')
-
-@app.route('/busid/')
-def busidpage_root():
-    return no('Gotta choose a busid!')
-
-@app.route('/all-busses/')
-@app.route('/all-busses')
-def all_busses_templ():
-    if 'rt' in request.query:
-        rt.download_lastest_files()
-        valid = rt.load_realtime()
-        if((not valid) and start.RELOAD_ENABLED):
-            start.download_and_restart()
-        hist.update_last_seen()
-    return genrtbuslist_html()
-
-@app.route('/bus/<fleetnum>')
-def buspage(fleetnum):
-    if(not businfo.is_known_bus(fleetnum)):
-        return no('Unknown Fleetnumber {0}! Is this a (recent) BC Transit bus?'.format(fleetnum))
-    return header('Bus Lookup') + template('pages/bus.templ', fleetnum=fleetnum) + footer
-
-@app.route('/busid/<busid>')
-def buspage(busid):
-    if(busid not in rt.id2fleetnum_dict):
-        return no('Internal id {0} not found! Is this a fleet number instead of an internal id?'.format(busid))
-    fleetnum = rt.id2fleetnum_dict[busid]
-    if(businfo.get_bus_range(fleetnum).type == businfo.TYPE_UNKNOWN):
-        return no('Unknown Fleetnumber {0}! Is this a BC Transit bus?'.format(fleetnum))
-    return header('Bus Lookup') + template('pages/bus.templ', fleetnum=fleetnum) + footer
-
-@app.route('/blocks')
-@app.route('/blocks/')
-def allblocks():
-    return header('List of all Blocks') + template('pages/blocks.templ') + footer
-
-@app.route('/admin/reload-server')
-def restart():
-    print('Attempting to reload the server')
-    if(start.RELOAD_ENABLED):
-        start.download_and_restart()
-    return('Lol you should never see this')
-
-
-@app.route('/blocks/<blockid>')
-def blockview(blockid):
-    try:
-        triplist = ds.blockdict[blockid].triplist
-    except KeyError:
-        return no("Couldn't find block with blockid " + blockid)
-    return header('Table of Trips') + template('pages/block.templ', blockid=blockid, triplist=triplist) + footer
-
-@app.route('/trips/<tripid>')
-def tripview(tripid):
-    try:
-        trip = ds.tripdict[tripid]
-    except KeyError:
-        return no("Couldn't find trip with tripid " + tripid)
-    return header('View trip...') + template('pages/trip.templ', tripid=tripid, trip=trip)
+def routes():
+    return header('All Routes') + template('pages/routes.templ', rdict=rdict) + footer()
 
 @app.route('/routes/<routenum>')
 def routepage(routenum):
@@ -192,7 +136,65 @@ def routepage(routenum):
     for key in day_triplistdict:
         day_order.append(key)
     day_order.sort(key = lambda x: ds.service_order_dict.setdefault(day_triplistdict[x][0].serviceid, 10000)) #sort by first trip's service id, any unfound keys last
-    return header('Viewing route ' + routenum) + template('pages/route.templ', day_triplistdict=day_triplistdict, day_order=day_order, routenum=routenum, routename=rdict[this_route][1]) + footer
+    return header('Route ' + routenum) + template('pages/route.templ', day_triplistdict=day_triplistdict, day_order=day_order, routenum=routenum, routename=rdict[this_route][1]) + footer()
+
+@app.route('/history')
+@app.route('/history/')
+def history():
+    return header('Vehicle History') + template('pages/history.templ') + footer()
+
+@app.route('/realtime')
+@app.route('/realtime/')
+def realtime():
+    if 'rt' in request.query:
+        rt.download_lastest_files()
+        valid = rt.load_realtime()
+        if((not valid) and start.RELOAD_ENABLED):
+            start.download_and_restart()
+        hist.update_last_seen()
+    return genrtbuslist_html()
+
+@app.route('/bus/')
+@app.route('/bus/id/')
+@app.route('/bus/number/')
+def bus():
+    return no('Gotta choose a bus!')
+
+@app.route('/bus/id/<busid>')
+def busid_number(busid):
+    if(busid not in rt.id2fleetnum_dict):
+        return errorPage('Bus Not Found', 'Internal ID {0} not found - is this a fleet number instead of an internal ID?'.format(busid))
+    fleetnum = rt.id2fleetnum_dict[busid]
+    if(businfo.get_bus_range(fleetnum).type == businfo.TYPE_UNKNOWN):
+        return no('Unknown Fleetnumber {0}! Is this a BC Transit bus?'.format(fleetnum))
+    return header('Bus ' + fleetnum, True) + template('pages/bus.templ', fleetnum=fleetnum) + footer()
+
+@app.route('/bus/number/<fleetnum>')
+def bus_number(fleetnum):
+    if(not businfo.is_known_bus(fleetnum)):
+        return no('Unknown Fleetnumber {0}! Is this a (recent) BC Transit bus?'.format(fleetnum))
+    return header('Bus ' + fleetnum, True) + template('pages/bus.templ', fleetnum=fleetnum) + footer()
+
+@app.route('/blocks')
+@app.route('/blocks/')
+def blocks():
+    return header('All Blocks') + template('pages/blocks.templ') + footer()
+
+@app.route('/blocks/<blockid>')
+def blocks_number(blockid):
+    try:
+        triplist = ds.blockdict[blockid].triplist
+    except KeyError:
+        return no("Couldn't find block with blockid " + blockid)
+    return header('Block ' + blockid) + template('pages/block.templ', blockid=blockid, triplist=triplist) + footer()
+
+@app.route('/trips/<tripid>')
+def tripview(tripid):
+    try:
+        trip = ds.tripdict[tripid]
+    except KeyError:
+        return no("Couldn't find trip with tripid " + tripid)
+    return header('Trip ' + tripid) + template('pages/trip.templ', tripid=tripid, trip=trip) + footer()
 
 #this page doesnt use a template - TODO: should probably change that
 @app.route('/stops/<stopcode>')
@@ -202,15 +204,22 @@ def stoppage(stopcode):
         stop = ds.stopdict[ds.stopcode2stopnum[stopcode]]
     except KeyError:
         return no("Couldn't find data for stop " + stopcode)
-    rstr = header('Stop Schedule')
+    rstr = header('Stop ' + stopcode, True)
     rstr += stoppage_html(stop)
-    rstr += footer
+    rstr += footer()
     return rstr
 
 @app.route('/about')
 @app.route('/about/')
 def about_page():
-    return header('About this site...') + template('pages/about.templ') + footer
+    return header('About') + template('pages/about.templ') + footer()
+
+@app.route('/admin/reload-server')
+def restart():
+    print('Attempting to reload the server')
+    if(start.RELOAD_ENABLED):
+        start.download_and_restart()
+    return('Lol you should never see this')
 
 #use cherrypy server - setup logging
 def make_access_log(app, filepath, when='d', interval=7, **kwargs):

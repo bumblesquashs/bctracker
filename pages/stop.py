@@ -1,4 +1,5 @@
 import datastructure as ds
+from bottle import template
 
 class TripTime:
     def __init__(self, tripid, stoptime):
@@ -70,8 +71,9 @@ def stoppage_html(this_stop):
         else:
             day_triptimesdict[keystr] = [triptime]
     # now - for each key/value in that dict
-    gen_html = "<h2> Viewing Stop {0} </h2> \n <h3> {1} </h3> \n Stop Schedule:\n<hr>".format(
+    gen_html = "<h1>{1}</h1> \n <h2>Bus Stop {0} - Schedule</h2> \n <hr>".format(
         this_stop.stopcode, this_stop.stopname)
+    gen_html += template('templates/map.templ', lon=this_stop.stoplon, lat=this_stop.stoplat)
     day_order = []
     for day_str in day_triptimesdict:
         day_order.append(day_str)

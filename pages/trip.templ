@@ -1,31 +1,32 @@
 %import datastructure as ds
-<br />
 
-    Viewing trip id {{tripid}}:
-  <br />
-  <h3> {{trip.headsign}} ({{ds.days_of_week_dict[trip.serviceid]}}) </h3>
-  <a href="/routes/{{trip.routenum}}"> View Route </a> <br>
-  <a href="/blocks/{{trip.blockid}}"> View Block </a> <br>
-  <hr>
-  Number of stops: {{len(trip.stoplist)}} <br>
-  <table class="pure-table pure-table-horizontal pure-table-striped">
-    <thead>
+<h1>{{trip.headsign}}</h1>
+<h2>Trip {{tripid}} ({{ds.days_of_week_dict[trip.serviceid]}})</h2>
+
+<a href="/routes/{{trip.routenum}}">View Route</a>
+<br />
+<a href="/blocks/{{trip.blockid}}">View Block</a>
+<hr />
+
+<p>Number of stops: {{len(trip.stoplist)}}</p>
+
+<table class="pure-table pure-table-horizontal pure-table-striped">
+  <thead>
     <tr>
-      <th>Stop Code</th>
       <th>Departure Time</th>
+      <th>Stop Code</th>
       <th>Stop Name</th>
     </tr>
   </thead>
   <tbody>
     % stoplist = trip.stoplist
     % for stop in stoplist:
-    % stopcode = ds.stopdict[stop.stopid].stopcode
-    <tr>
-      <td> <a href="/stops/{{stopcode}}">{{ stopcode }}</a> </td>
-      <td> {{ stop.departtime }} </td>
-      <td> {{ ds.stopdict[stop.stopid].stopname }} </td>
-    </tr>
+      % stopcode = ds.stopdict[stop.stopid].stopcode
+      <tr>
+        <td>{{ stop.departtime }}</td>
+        <td><a href="/stops/{{stopcode}}">{{ stopcode }}</a></td>
+        <td>{{ ds.stopdict[stop.stopid].stopname }}</td>
+      </tr>
     % end
   </tbody>
-
-  </table>
+</table>
