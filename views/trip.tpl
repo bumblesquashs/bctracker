@@ -1,4 +1,5 @@
 % import datastructure as ds
+% from formatting import format_time
 
 % include('templates/header', title='Trip {0}'.format(tripid))
 
@@ -25,7 +26,7 @@
     % for stop in stoplist:
       % stopcode = ds.stopdict[stop.stopid].stopcode
       <tr>
-        <td>{{ stop.departtime }}</td>
+        <td>{{ format_time(stop.departtime) }}</td>
         <td><a href="/stops/{{stopcode}}">{{ stopcode }}</a></td>
         <td>{{ ds.stopdict[stop.stopid].stopname }}</td>
       </tr>

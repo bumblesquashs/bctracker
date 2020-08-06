@@ -1,4 +1,5 @@
 % import datastructure as ds
+% from formatting import format_time
 
 % include('templates/header', title='All Blocks')
 
@@ -25,10 +26,10 @@
       % end
       % routes_entry = routes_entry[:-2] # drop the last comma and space
       <tr>
-        <td><a href="blocks/{{block.blockid}}">{{block.blockid}}</a></td>
-        <td>{{routes_entry}}</td>
-        <td>{{block.triplist[0].starttime}}</td>
-        <td>{{ds.days_of_week_dict[block.serviceid]}}</td>
+        <td><a href="blocks/{{block.blockid}}">{{ block.blockid }}</a></td>
+        <td>{{ routes_entry }}</td>
+        <td>{{ format_time(block.triplist[0].starttime) }}</td>
+        <td>{{ ds.days_of_week_dict[block.serviceid] }}</td>
       </tr>
     % end
   </tbody>

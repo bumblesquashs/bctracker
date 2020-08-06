@@ -1,6 +1,9 @@
-% if len(stop_entries) > 0:
-  <h2>{{ day }} ({{ len(stop_entries) }} Trips)</h2>
+% from formatting import format_time
 
+% if len(stop_entries) > 0:
+  <h2>{{ day }}</h2>
+  <p class="subtitle">{{ len(stop_entries) }} Trips</p>
+  
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>
       <tr>
@@ -23,7 +26,7 @@
           % last_hour = this_hour
         % end
         <tr>
-          <td>{{ stop_entry.stoptime }}</td>
+          <td>{{ format_time(stop_entry.stoptime) }}</td>
           <td>{{ stop_entry.trip.headsign }}</td>
           <td><a href="/blocks/{{ stop_entry.trip.blockid }}">{{ stop_entry.trip.blockid }}</a></td>
           <td><a href="/blocks/{{ stop_entry.tripid }}">{{ stop_entry.tripid }}</a></td>

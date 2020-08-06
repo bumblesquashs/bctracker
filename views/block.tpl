@@ -1,4 +1,5 @@
 % import datastructure as ds
+% from formatting import format_time
 
 % include('templates/header', title='Block {0}'.format(blockid))
 
@@ -20,7 +21,7 @@
     % triplist.sort(key=ds.trip_to_numseconds)
     % for trip in triplist:
     <tr>
-      <td>{{ trip.starttime }}</td>
+      <td>{{ format_time(trip.starttime) }}</td>
       <td>{{ ds.directionid_dict[trip.directionid] }}</td>
       <td>{{ trip.headsign }}</td>
       <td><a href="/trips/{{trip.tripid}}">{{ trip.tripid }}</a></td>

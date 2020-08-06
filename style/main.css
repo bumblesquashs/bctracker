@@ -11,6 +11,10 @@ h1 + h2 {
     margin-top: -20px;
 }
 
+h2 + .subtitle {
+    margin-top: -20px;
+}
+
 h2 {
     margin-top: 0px;
 }
@@ -55,6 +59,8 @@ a {
     cursor: default;
     font-weight: bold;
     font-family: Helvetica, sans-serif;
+    text-align: center;
+    text-decoration: none !important;
 }
 
 .button:hover {
@@ -71,7 +77,7 @@ a {
     color: white;
     text-align: center;
     padding: 14px 16px;
-    text-decoration: none;
+    text-decoration: none !important;
     font-family: Helvetica, sans-serif;
     font-size: 14pt;
 }

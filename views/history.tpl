@@ -1,6 +1,7 @@
 % import realtime as rt
 % import businfotable as businfo
 % import history as hist
+% from formatting import format_date
 
 % include('templates/header', title='Vehicle History')
 
@@ -35,11 +36,11 @@
       % obj = last_blocks[fleetnum]
       % busrange = businfo.get_bus_range(fleetnum)
       <tr>
-        <td><a href="/bus/number/{{fleetnum}}">{{fleetnum}}</a></td>
-        <td>{{busrange.year}} {{busrange.model}}</td>
-        <td>{{obj['day']}}</td>
-        <td>{{', '.join(sorted(obj['routes']))}}</td>
-        <td><a href="/blocks/{{obj['blockid']}}">{{obj['blockid']}}</a></td>
+        <td><a href="/bus/number/{{fleetnum}}">{{ fleetnum }}</a></td>
+        <td>{{ busrange.year }} {{ busrange.model }}</td>
+        <td>{{ format_date(obj['day']) }}</td>
+        <td>{{ ', '.join(sorted(obj['routes'])) }}</td>
+        <td><a href="/blocks/{{obj['blockid']}}">{{ obj['blockid'] }}</a></td>
       </tr>
     % end
   </tbody>
@@ -63,9 +64,9 @@
       % date = last_times[fleetnum]['day']
       % busrange = businfo.get_bus_range(fleetnum)
       <tr>
-        <td><a href="/bus/number/{{fleetnum}}">{{fleetnum}}</a></td>
-        <td>{{busrange.year}} {{busrange.model}}</td>
-        <td>{{date}}</td>
+        <td><a href="/bus/number/{{fleetnum}}">{{ fleetnum }}</a></td>
+        <td>{{ busrange.year }} {{ busrange.model }}</td>
+        <td>{{ format_date(date) }}</td>
       </tr>
     % end
   </tbody>

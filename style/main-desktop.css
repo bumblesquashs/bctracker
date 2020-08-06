@@ -9,6 +9,10 @@ form input[type="text"] {
     vertical-align: middle;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 .mobile-only {
     display: none;
 }

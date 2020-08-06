@@ -37,13 +37,15 @@ All trips for Route {{routenum}} by the time of their first stop
     <h2 id="{{day_str}}">{{day_str}}</h2>
   
     % if(len(ob_trips) != 0):
-      <h3 id="{{day_str}}_ob">Outbound Trips ({{len(ob_trips)}})</h3>
+      <h3 id="{{day_str}}_ob">Outbound</h3>
+      <p class="subtitle">{{len(ob_trips)}} Trips</p>
       
       % include('templates/triplist', triplist=ob_trips)
     % end
   
     % if(len(ib_trips) != 0):
-      <h3 id="{{day_str}}_ib">Inbound Trips ({{len(ib_trips)}})</h3>
+      <h3 id="{{day_str}}_ib">Inbound</h3>
+      <p class="subtitle">{{len(ib_trips)}} Trips</p>
       
       % include('templates/triplist', triplist=ib_trips)
     % end

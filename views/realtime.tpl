@@ -5,15 +5,14 @@
 
 <h1>Realtime</h1>
 <h2>All currently active buses</h2>
-% if rt.data_valid:
-  <p>Data current to: {{time_string}} Pacific Time</p>
-% else:
-  <p>GTFS Apparently out of date... need to fix that</p>
-  <p>Data current to: {{time_string}} Pacific Time</p>
-% end
 <hr />
 
 <p><a class="button" href="?rt=reload">Refresh Realtime</a></p>
+<p>Last updated {{time_string}}</p>
+
+% if not rt.data_valid:
+  <p>GTFS Apparently out of date... need to fix that</p>
+% end
 
 % if len(rtbuslist) == 0:
   <p>There doesn't appear to be any buses out right now. Victoria has no nightbus service, so this should be the case overnight. If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.</p>

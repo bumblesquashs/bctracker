@@ -2,6 +2,7 @@
 % import realtime as rt
 % import datastructure as ds
 % import history as hist
+% from formatting import format_date
 % HISTORY_LIMIT = 20
 
 % busrange = businfo.get_bus_range(fleetnum)
@@ -50,11 +51,13 @@
     <a href="/routes/{{trip.routenum}}">View Route</a>
   </p>
 % end
+  
+<p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 
 <h2>Service History</h2>
 
 % if (track_history != False):
-  <h3>Last logged in: {{track_history['day']}}</h3>
+  <h3>Last logged in: {{ format_date(track_history['day']) }}</h3>
 % else:
   <h3>No history for this vehicle found</h3>
   <p>This site began tracking data on May 5th 2020, so vehicles retired before then will not show any history</p>
@@ -79,10 +82,10 @@
           % continue # id 0 is a placeholder
         % end
         <tr>
-          <td>{{block['day']}}</td>
-          <td>{{', '.join(sorted(block['routes']))}}</td>
-          <td><a href="/blocks/{{block['blockid']}}">{{block['blockid']}}</a></td>
-          <td>{{hist.get_time_string(block['start_time'], block['length'])}}</td>
+          <td>{{ format_date(block['day']) }}</td>
+          <td>{{ ', '.join(sorted(block['routes'])) }}</td>
+          <td><a href="/blocks/{{block['blockid']}}">{{ block['blockid'] }}</a></td>
+          <td>{{ hist.get_time_string(block['start_time'], block['length']) }}</td>
         </tr>
         % if(history_count > HISTORY_LIMIT):
           % break
@@ -103,9 +106,9 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{last_block['day']}}</td>
-          <td>{{', '.join(sorted(last_block['routes']))}}</td>
-          <td><a href="/blocks/{{last_block['blockid']}}">{{last_block['blockid']}}</a></td>
+          <td>{{ format_date(last_block['day']) }}</td>
+          <td>{{ ', '.join(sorted(last_block['routes'])) }}</td>
+          <td><a href="/blocks/{{last_block['blockid']}}">{{ last_block['blockid'] }}</a></td>
         </tr>
       </tbody>
     </table>
@@ -115,6 +118,5 @@
     <p><i>Note: No lookup for this fleetnumber is known, has this bus been in service lately?</i></p>
   % end
 % end
-<p>Data current to: {{rt.get_data_refreshed_time_str()}} Pacific Time</p>
 
 % include('templates/footer')
