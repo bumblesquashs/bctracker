@@ -11,10 +11,9 @@
   <thead>
     <tr>
       <th class="desktop-only">Start Time</th>
-      <th class="desktop-only">Direction</th>
-      <th class="desktop-only">Headsign</th>
       <th class="mobile-only">Start</th>
-      <th class="mobile-only">Headsign and Direction</th>
+      <th class=>Headsign</th>
+      <th class="desktop-only">Direction</th>
       <th>Trip</th>
     </tr>
   </thead>
@@ -24,7 +23,6 @@
     % for trip in triplist:
     <tr>
       <td>{{ format_time(trip.starttime) }}</td>
-      <td class="desktop-only">{{ ds.directionid_dict[trip.directionid] }}</td>
       <td>
         {{ trip.headsign }}
         <span class="mobile-only smaller-font">
@@ -32,6 +30,7 @@
           {{ ds.directionid_dict[trip.directionid] }}
         </span>
       </td>
+      <td class="desktop-only">{{ ds.directionid_dict[trip.directionid] }}</td>
       <td><a href="/trips/{{trip.tripid}}">{{ trip.tripid }}</a></td>
     </tr>
     % end

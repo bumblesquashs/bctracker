@@ -2,12 +2,9 @@
 
 <h1>BCTracker - Victoria</h1>
 <h2>Welcome to the BCTracker site for the Victoria Regional Transit System!</h2>
-
-<p>This is still a WIP. See <a href="/about">about</a> for more info.</p>
-
 <hr />
 
-<h2>Quick Search:</h2>
+<h2>Quick Search</h2>
 
 <script type="text/javascript">
   function busSearch() {
@@ -44,7 +41,7 @@
   <input type="submit" value="Search" class="button">
 </form>
 
-<h2>All Routes:</h2>
+<h2>All Routes</h2>
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>

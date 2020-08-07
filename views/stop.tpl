@@ -1,6 +1,6 @@
 % import datastructure as ds
 
-% include('templates/header', title='Bus Stop {0}'.format(stop.stopcode), include_maps=True)
+% include('templates/header', title=stop.stopname, include_maps=True)
 
 <h1>{{ stop.stopname }}</h1>
 <h2>Bus Stop {{ stop.stopcode }}</h2>

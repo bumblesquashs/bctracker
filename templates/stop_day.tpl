@@ -2,7 +2,7 @@
 
 % if len(stop_entries) > 0:
   <h2>{{ day }}</h2>
-  <p class="subtitle">{{ len(stop_entries) }} Trips</p>
+  <p>{{ len(stop_entries) }} Trips</p>
   
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>

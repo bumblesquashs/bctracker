@@ -19,22 +19,25 @@
 
 % if (bus_status == rt.STATUS_INACTIVE or bus_status == rt.STATUS_UNKNOWN_TRANSLATION or rt_struct == False):
   <h2>{{fleetnum}} is not active right now</h2>
+  <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 % elif (bus_status == rt.STATUS_TRACKING):
   % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
 
   <h2>{{fleetnum}} is active, but not assigned to any route</h2>
+  <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 % elif (bus_status == rt.STATUS_LOGGEDIN):
   % trip = ds.tripdict[rt_struct.tripid]
 
   % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
 
   <h2>{{trip.headsign}}</h2>
+  <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 
   <p>Off scheduled route</p>
   <p>
-    <a href="/trips/{{rt_struct.tripid}}">View Trip</a><br />
+    <a href="/routes/{{trip.routenum}}">View Route</a><br />
     <a href="/blocks/{{rt_struct.blockid}}">View Block</a><br />
-    <a href="/routes/{{trip.routenum}}">View Route</a>
+    <a href="/trips/{{rt_struct.tripid}}">View Trip</a>
   </p>
 % elif (bus_status == rt.STATUS_ONROUTE):
   % trip = ds.tripdict[rt_struct.tripid]
@@ -43,23 +46,22 @@
   % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
 
   <h2>{{trip.headsign}}</h2>
+  <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 
   <p>Current Stop: <a href="/stops/{{stop.stopcode}}">{{stop.stopname}}</a></p>
   <p>
-    <a href="/trips/{{rt_struct.tripid}}">View Trip</a><br />
+    <a href="/routes/{{trip.routenum}}">View Route</a><br />
     <a href="/blocks/{{rt_struct.blockid}}">View Block</a><br />
-    <a href="/routes/{{trip.routenum}}">View Route</a>
+    <a href="/trips/{{rt_struct.tripid}}">View Trip</a>
   </p>
 % end
-  
-<p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 
 <h2>Service History</h2>
 
 % if (track_history != False):
-  <h3>Last logged in: {{ format_date(track_history['day']) }}</h3>
+  <p>Last logged in: {{ format_date(track_history['day']) }}</p>
 % else:
-  <h3>No history for this vehicle found</h3>
+  <p>No history for this vehicle found</p>
   <p>This site began tracking data on May 5th 2020, so vehicles retired before then will not show any history</p>
 % end
 
@@ -69,10 +71,9 @@
     <thead>
       <tr>
         <th>Date</th>
+        <th>Assigned Block</th>
         <th class="desktop-only">Assigned Routes</th>
-        <th class="desktop-only">Assigned Block</th>
         <th class="desktop-only">Time of Day</th>
-        <th class="mobile-only">Block and Routes</th>
         <th class="mobile-only">Time</th>
       </tr>
     </thead>
@@ -86,9 +87,8 @@
         <tr>
           <td>
             <span class="desktop-only">{{ format_date(block['day']) }}</span>
-            <span class="mobile-only">{{ format_date_mobile(block['day']) }}</span>
+            <span class="mobile-only no-wrap">{{ format_date_mobile(block['day']) }}</span>
           </td>
-          <td class="desktop-only">{{ ', '.join(sorted(block['routes'])) }}</td>
           <td>
             <a href="/blocks/{{block['blockid']}}">{{ block['blockid'] }}</a>
             <span class="mobile-only smaller-font">
@@ -96,6 +96,7 @@
               {{ ', '.join(sorted(block['routes'])) }}
             </span>
           </td>
+          <td class="desktop-only">{{ ', '.join(sorted(block['routes'])) }}</td>
           <td class="no-wrap">{{ hist.get_time_string(block['start_time'], block['length']) }}</td>
         </tr>
         % if(history_count > HISTORY_LIMIT):
@@ -111,15 +112,24 @@
       <thead>
         <tr>
           <th>Date</th>
-          <th>Assigned Routes</th>
           <th>Assigned Block</th>
+          <th class="desktop-only">Assigned Routes</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>{{ format_date(last_block['day']) }}</td>
-          <td>{{ ', '.join(sorted(last_block['routes'])) }}</td>
-          <td><a href="/blocks/{{last_block['blockid']}}">{{ last_block['blockid'] }}</a></td>
+          <td>
+            <span class="desktop-only">{{ format_date(last_block['day']) }}</span>
+            <span class="mobile-only no-wrap">{{ format_date_mobile(last_block['day']) }}</span>
+          </td>
+          <td>
+            <a href="/blocks/{{last_block['blockid']}}">{{ last_block['blockid'] }}</a>
+            <span class="mobile-only smaller-font">
+              <br />
+              {{ ', '.join(sorted(last_block['routes'])) }}
+            </span>
+          </td>
+          <td class="desktop-only">{{ ', '.join(sorted(last_block['routes'])) }}</td>
         </tr>
       </tbody>
     </table>

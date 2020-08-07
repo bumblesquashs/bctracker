@@ -1,15 +1,17 @@
 % import datastructure as ds
 % from formatting import format_time
 
-% include('templates/header', title='Trip {0}'.format(tripid))
+% include('templates/header', title=trip.headsign)
 
 <h1>{{trip.headsign}}</h1>
 <h2>Trip {{tripid}} ({{ds.days_of_week_dict[trip.serviceid]}})</h2>
-
-<a href="/routes/{{trip.routenum}}">View Route</a>
-<br />
-<a href="/blocks/{{trip.blockid}}">View Block</a>
 <hr />
+
+<p>
+  <a href="/routes/{{trip.routenum}}">View Route</a>
+  <br />
+  <a href="/blocks/{{trip.blockid}}">View Block</a>
+</p>
 
 <p>Number of stops: {{len(trip.stoplist)}}</p>
 
