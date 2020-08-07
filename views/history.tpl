@@ -1,7 +1,7 @@
 % import realtime as rt
 % import businfotable as businfo
 % import history as hist
-% from formatting import format_date
+% from formatting import format_date, format_date_mobile
 
 % include('templates/header', title='Vehicle History')
 
@@ -13,11 +13,15 @@
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Fleet Number</th>
-      <th>Year and Model</th>
-      <th>Date Last Assigned</th>
-      <th>Assigned Routes</th>
-      <th>Assigned Block</th>
+      <th class="desktop-only">Fleet Number</th>
+      <th class="desktop-only">Year and Model</th>
+      <th class="desktop-only">Date Last Assigned</th>
+      <th class="desktop-only">Assigned Routes</th>
+      <th class="desktop-only">Assigned Block</th>
+      
+      <th class="mobile-only">Bus and Model</th>
+      <th class="mobile-only">Date</th>
+      <th class="mobile-only">Block</th>
     </tr>
   </thead>
   <tbody>
@@ -36,10 +40,19 @@
       % obj = last_blocks[fleetnum]
       % busrange = businfo.get_bus_range(fleetnum)
       <tr>
-        <td><a href="/bus/number/{{fleetnum}}">{{ fleetnum }}</a></td>
-        <td>{{ busrange.year }} {{ busrange.model }}</td>
-        <td>{{ format_date(obj['day']) }}</td>
-        <td>{{ ', '.join(sorted(obj['routes'])) }}</td>
+        <td>
+          <a href="/bus/{{fleetnum}}">{{ fleetnum }}</a>
+          <span class="mobile-only smaller-font">
+            <br />
+            {{ busrange.year }} {{ busrange.model }}
+          </span>
+        </td>
+        <td class="desktop-only">{{ busrange.year }} {{ busrange.model }}</td>
+        <td>
+          <span class="desktop-only">{{ format_date(obj['day']) }}</span>
+          <span class="mobile-only no-wrap">{{ format_date_mobile(obj['day']) }}</span>
+        </td>
+        <td class="desktop-only">{{ ', '.join(sorted(obj['routes'])) }}</td>
         <td><a href="/blocks/{{obj['blockid']}}">{{ obj['blockid'] }}</a></td>
       </tr>
     % end
@@ -51,9 +64,12 @@
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Fleet Number</th>
-      <th>Year and Model</th>
-      <th>Date Last Active</th>
+      <th class="desktop-only">Fleet Number</th>
+      <th class="desktop-only">Year and Model</th>
+      <th class="desktop-only">Date Last Assigned</th>
+      
+      <th class="mobile-only">Bus and Model</th>
+      <th class="mobile-only">Date</th>
     </tr>
   </thead>
   <tbody>
@@ -64,9 +80,18 @@
       % date = last_times[fleetnum]['day']
       % busrange = businfo.get_bus_range(fleetnum)
       <tr>
-        <td><a href="/bus/number/{{fleetnum}}">{{ fleetnum }}</a></td>
-        <td>{{ busrange.year }} {{ busrange.model }}</td>
-        <td>{{ format_date(date) }}</td>
+        <td>
+          <a href="/bus/{{fleetnum}}">{{ fleetnum }}</a>
+          <span class="mobile-only smaller-font">
+            <br />
+            {{ busrange.year }} {{ busrange.model }}
+          </span>
+        </td>
+        <td class="desktop-only">{{ busrange.year }} {{ busrange.model }}</td>
+        <td>
+          <span class="desktop-only">{{ format_date(date) }}</span>
+          <span class="mobile-only no-wrap">{{ format_date_mobile(date) }}</span>
+        </td>
       </tr>
     % end
   </tbody>

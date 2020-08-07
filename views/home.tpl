@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
   function busSearch() {
-    window.location = "/bus/number/" + document.getElementById('bus_id_search').value;
+    window.location = "/bus/" + document.getElementById('bus_id_search').value;
   }
 
   function routeSearch() {

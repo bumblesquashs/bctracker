@@ -2,7 +2,7 @@
 % import realtime as rt
 % import datastructure as ds
 % import history as hist
-% from formatting import format_date
+% from formatting import format_date, format_date_mobile
 % HISTORY_LIMIT = 20
 
 % busrange = businfo.get_bus_range(fleetnum)
@@ -69,9 +69,11 @@
     <thead>
       <tr>
         <th>Date</th>
-        <th>Assigned Routes</th>
-        <th>Assigned Block</th>
-        <th>Time of Day</th>
+        <th class="desktop-only">Assigned Routes</th>
+        <th class="desktop-only">Assigned Block</th>
+        <th class="desktop-only">Time of Day</th>
+        <th class="mobile-only">Block and Routes</th>
+        <th class="mobile-only">Time</th>
       </tr>
     </thead>
     <tbody>
@@ -82,10 +84,19 @@
           % continue # id 0 is a placeholder
         % end
         <tr>
-          <td>{{ format_date(block['day']) }}</td>
-          <td>{{ ', '.join(sorted(block['routes'])) }}</td>
-          <td><a href="/blocks/{{block['blockid']}}">{{ block['blockid'] }}</a></td>
-          <td>{{ hist.get_time_string(block['start_time'], block['length']) }}</td>
+          <td>
+            <span class="desktop-only">{{ format_date(block['day']) }}</span>
+            <span class="mobile-only">{{ format_date_mobile(block['day']) }}</span>
+          </td>
+          <td class="desktop-only">{{ ', '.join(sorted(block['routes'])) }}</td>
+          <td>
+            <a href="/blocks/{{block['blockid']}}">{{ block['blockid'] }}</a>
+            <span class="mobile-only smaller-font">
+              <br />
+              {{ ', '.join(sorted(block['routes'])) }}
+            </span>
+          </td>
+          <td class="no-wrap">{{ hist.get_time_string(block['start_time'], block['length']) }}</td>
         </tr>
         % if(history_count > HISTORY_LIMIT):
           % break

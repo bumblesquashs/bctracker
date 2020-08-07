@@ -1,16 +1,26 @@
 
 body {
-    font-size: 14pt;
+    font-size: 13pt;
 }
 
 form input[type="text"] {
-    font-size: 18pt;
+    font-size: 16pt;
     margin-bottom: 10px;
     width: 100%;
 }
 
 form label {
-    font-size: 16pt;
+    font-size: 13pt;
+}
+
+a {
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    display: table;
+    font-size: 13pt;
 }
 
 .navbar-title {
@@ -22,7 +32,7 @@ form label {
 }
 
 .button {
-    font-size: 16pt;
+    font-size: 14pt;
     overflow: hidden;
     display: block;
 }
@@ -33,6 +43,7 @@ form label {
     padding: 14px 16px;
     font-family: Helvetica, sans-serif;
     font-size: 16pt;
+    font-weight: normal;
 }
 
 .mobile-navbar-toggle {
@@ -48,6 +59,10 @@ form label {
     height: 4px;
     border-radius: 2px;
     margin: 6px;
+}
+
+.smaller-font {
+    font-size: 11pt;
 }
 
 #mobile-navbar {

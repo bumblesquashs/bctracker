@@ -80,6 +80,7 @@ a {
     text-decoration: none !important;
     font-family: Helvetica, sans-serif;
     font-size: 14pt;
+    font-weight: normal;
 }
 
 .navbar-item:hover {
@@ -111,6 +112,10 @@ a {
 
 .body {
     float: left;
+}
+
+.no-wrap {
+    white-space: nowrap;
 }
 
 .marker {

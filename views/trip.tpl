@@ -17,8 +17,9 @@
   <thead>
     <tr>
       <th>Time</th>
-      <th>Stop Code</th>
-      <th>Stop Name</th>
+      <th class="desktop-only">Stop Code</th>
+      <th class="desktop-only">Stop Name</th>
+      <th class="mobile-only">Stop</th>
     </tr>
   </thead>
   <tbody>
@@ -27,8 +28,14 @@
       % stopcode = ds.stopdict[stop.stopid].stopcode
       <tr>
         <td>{{ format_time(stop.departtime) }}</td>
-        <td><a href="/stops/{{stopcode}}">{{ stopcode }}</a></td>
-        <td>{{ ds.stopdict[stop.stopid].stopname }}</td>
+        <td>
+          <a href="/stops/{{stopcode}}">{{ stopcode }}</a>
+          <span class="mobile-only smaller-font">
+            <br />
+            {{ ds.stopdict[stop.stopid].stopname }}
+          </span>
+        </td>
+        <td class="desktop-only">{{ ds.stopdict[stop.stopid].stopname }}</td>
       </tr>
     % end
   </tbody>

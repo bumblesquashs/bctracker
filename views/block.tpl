@@ -10,9 +10,11 @@
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>
     <tr>
-      <th>Start Time</th>
-      <th>Direction</th>
-      <th>Headsign</th>
+      <th class="desktop-only">Start Time</th>
+      <th class="desktop-only">Direction</th>
+      <th class="desktop-only">Headsign</th>
+      <th class="mobile-only">Start</th>
+      <th class="mobile-only">Headsign and Direction</th>
       <th>Trip</th>
     </tr>
   </thead>
@@ -22,8 +24,14 @@
     % for trip in triplist:
     <tr>
       <td>{{ format_time(trip.starttime) }}</td>
-      <td>{{ ds.directionid_dict[trip.directionid] }}</td>
-      <td>{{ trip.headsign }}</td>
+      <td class="desktop-only">{{ ds.directionid_dict[trip.directionid] }}</td>
+      <td>
+        {{ trip.headsign }}
+        <span class="mobile-only smaller-font">
+          <br />
+          {{ ds.directionid_dict[trip.directionid] }}
+        </span>
+      </td>
       <td><a href="/trips/{{trip.tripid}}">{{ trip.tripid }}</a></td>
     </tr>
     % end

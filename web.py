@@ -118,22 +118,12 @@ def realtime():
         hist.update_last_seen()
     return genrtbuslist_html()
 
+@app.route('/bus')
 @app.route('/bus/')
-@app.route('/bus/id/')
-@app.route('/bus/number/')
 def bus():
     return template('error', error='No Bus Specified')
 
-@app.route('/bus/id/<busid:int>')
-def bus_id(busid):
-    if(str(busid) not in rt.id2fleetnum_dict):
-        return template('error', error='Bus Not Found', message='Internal ID {0} not found - is this a fleet number instead of an internal ID?'.format(busid))
-    fleetnum = rt.id2fleetnum_dict[str(busid)]
-    if(businfo.get_bus_range(fleetnum).type == businfo.TYPE_UNKNOWN):
-        return template('error', error='Unknown Bus {0}'.format(fleetnum), message='Is this a new bus?')
-    return template('bus', fleetnum=fleetnum)
-
-@app.route('/bus/number/<fleetnum:int>')
+@app.route('/bus/<fleetnum:int>')
 def bus_number(fleetnum):
     if(not businfo.is_known_bus(str(fleetnum))):
         return template('error', error='Unknown Bus {0}'.format(fleetnum), message='Is this a new bus?')
