@@ -74,7 +74,7 @@
             % if bus.onroute:
               <td class="desktop-only"><a href="/stops/{{stopcode}}">{{ ds.stopdict[bus.stopid].stopname }}</a></td>
             % else:
-              <td class="desktop-only">Not on route</td>
+              <td class="desktop-only">Unavailable</td>
             % end
           % else:
             <td>Not in service</td>

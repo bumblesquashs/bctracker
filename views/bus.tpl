@@ -28,12 +28,12 @@
 % elif (bus_status == rt.STATUS_LOGGEDIN):
   % trip = ds.tripdict[rt_struct.tripid]
 
-  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, shape_id=trip.shape_id)
 
   <h2>{{trip.headsign}}</h2>
   <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 
-  <p>Off scheduled route</p>
+  <p>Current stop unavailable</p>
   <p>
     <a href="/routes/{{trip.routenum}}">View Route</a><br />
     <a href="/blocks/{{rt_struct.blockid}}">View Block</a><br />
@@ -43,7 +43,7 @@
   % trip = ds.tripdict[rt_struct.tripid]
   % stop = ds.stopdict[rt_struct.stopid]
 
-  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, shape_id=trip.shape_id)
 
   <h2>{{trip.headsign}}</h2>
   <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
