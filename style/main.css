@@ -62,6 +62,14 @@ a {
     text-decoration: none !important;
 }
 
+.button-disabled {
+    background-color: #8a8a8a;
+}
+
+.button-disabled:hover {
+    background-color: #8a8a8a !important;
+}
+
 .button:hover {
     background-color: #255325;
 }
@@ -122,6 +130,27 @@ a {
     width: 10px;
     height: 10px;
     border-radius: 5px;
+}
+
+.vertical-line {
+    display: inline-block;
+    vertical-align: middle;
+    height: 25px;
+    width: 2px;
+    background-color: #cbcbcb;
+    margin: 0px 10px;
+}
+
+.horizontal-line {
+    height: 2px;
+    width: calc(100% - 40px);
+    background-color: #cbcbcb;
+    margin: 20px;
+}
+
+.flexbox-space-between {
+    display: flex;
+    justify-content: space-between;
 }
 
 #navbar {

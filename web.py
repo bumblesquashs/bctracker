@@ -34,23 +34,6 @@ def startup():
 # Web helper code!
 # ==============================================================
 
-# do some preprocessing when we call the realtime page
-def genrtbuslist_html():
-    rtbuslist = []
-    for busid in rt.rtvehicle_dict:
-        bus = rt.rtvehicle_dict[busid]
-        try:
-            # if we know the real time translation, add it here
-            fleet_num = rt.id2fleetnum_dict[busid]
-            bus.fleetnum = fleet_num
-            bus.unknown_fleetnum_flag = False
-        except KeyError:
-            bus.fleetnum = PLACEHOLDER
-        rtbuslist.append(bus)
-        # now - sort that list however we please
-    rtbuslist.sort(key=lambda x: (int(x.scheduled) * -1, int(x.fleetnum)))
-    return template('realtime', time_string=rt.get_data_refreshed_time_str(), rtbuslist=rtbuslist, tripdict=ds.tripdict, stopdict=ds.stopdict)
-
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
 # =============================================================
@@ -116,7 +99,22 @@ def realtime():
         if((not valid) and start.RELOAD_ENABLED):
             start.download_and_restart()
         hist.update_last_seen()
-    return genrtbuslist_html()
+    group = request.query.get('group', 'all')
+
+    rtbuslist = []
+    for busid in rt.rtvehicle_dict:
+        bus = rt.rtvehicle_dict[busid]
+        try:
+            # if we know the real time translation, add it here
+            fleet_num = rt.id2fleetnum_dict[busid]
+            bus.fleetnum = fleet_num
+            bus.unknown_fleetnum_flag = False
+        except KeyError:
+            bus.fleetnum = PLACEHOLDER
+        rtbuslist.append(bus)
+        # now - sort that list however we please
+    rtbuslist.sort(key=lambda x: (int(x.scheduled) * -1, int(x.fleetnum)))
+    return template('realtime', time_string=rt.get_data_refreshed_time_str(), rtbuslist=rtbuslist, tripdict=ds.tripdict, stopdict=ds.stopdict, group=group, rdict=rdict)
 
 @app.route('/bus')
 @app.route('/bus/')

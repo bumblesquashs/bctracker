@@ -16,10 +16,10 @@
       <th class="desktop-only">Fleet Number</th>
       <th class="desktop-only">Year and Model</th>
       <th class="desktop-only">Date Last Assigned</th>
-      <th class="desktop-only">Assigned Routes</th>
       <th class="desktop-only">Assigned Block</th>
+      <th class="desktop-only">Assigned Routes</th>
       
-      <th class="mobile-only">Bus and Model</th>
+      <th class="mobile-only">Bus</th>
       <th class="mobile-only">Date</th>
       <th class="mobile-only">Block</th>
     </tr>
@@ -52,8 +52,8 @@
           <span class="desktop-only">{{ format_date(obj['day']) }}</span>
           <span class="mobile-only no-wrap">{{ format_date_mobile(obj['day']) }}</span>
         </td>
-        <td class="desktop-only">{{ ', '.join(sorted(obj['routes'])) }}</td>
         <td><a href="/blocks/{{obj['blockid']}}">{{ obj['blockid'] }}</a></td>
+        <td class="desktop-only">{{ ', '.join(sorted(obj['routes'])) }}</td>
       </tr>
     % end
   </tbody>
@@ -68,7 +68,7 @@
       <th class="desktop-only">Year and Model</th>
       <th class="desktop-only">Date Last Assigned</th>
       
-      <th class="mobile-only">Bus and Model</th>
+      <th class="mobile-only">Bus</th>
       <th class="mobile-only">Date</th>
     </tr>
   </thead>

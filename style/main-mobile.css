@@ -69,6 +69,10 @@ table {
     font-size: 11pt;
 }
 
+.fixed-table {
+    table-layout: fixed;
+}
+
 #mobile-navbar {
     margin: 0px;
     padding: 10px 20px 20px 20px;
