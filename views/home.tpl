@@ -45,7 +45,7 @@
 <div class="home-update">
   <div class="home-update-header">
     <h3>New Website Look</h3>
-    August 22, 2020
+    August 21, 2020
   </div>
   <div class="home-update-content">
     <p>

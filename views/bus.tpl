@@ -66,7 +66,7 @@
 % end
 
 % if (block_history != False):
-  <p>For entries made under a older GTFS version, the block will no longer be valid</p>
+  <p>For entries made under a older GTFS version, the block may no longer be valid</p>
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>
       <tr>
@@ -107,7 +107,7 @@
     </tbody>
   </table>
 % elif (last_block != False): # this part is for busses that retired under the old system and only have a last block from the combined json
-  <p>For entries made under a older GTFS version, the block will no longer be valid</p>
+  <p>For entries made under a older GTFS version, the block may no longer be valid</p>
     <table class="pure-table pure-table-horizontal pure-table-striped">
       <thead>
         <tr>

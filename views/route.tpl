@@ -3,10 +3,9 @@
 <h1>{{routenum}} {{routename}}</h1>
 <hr />
 
-<h2>Service Days</h2>
 <p>
   % for day_str in day_order:
-    <a href="#{{day_str}}">{{ day_str }}</a><br />
+    <a href="#{{day_str}}" class='button spaced-button'>{{ day_str }}</a>
   % end
 </p>
 
