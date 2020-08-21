@@ -14,13 +14,28 @@
       interactive: false
     });
 
-    var marker = document.createElement('div');
-    marker.className = 'marker';
-
-    new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-
     map.setStyle('mapbox://styles/mapbox/light-v10')
 </script>
+
+% if defined('marker_type'):
+    % if marker_type == 'bus':
+      <script>
+        var marker = document.createElement('div');
+        marker.className = 'marker';
+        marker.innerHTML = '<img src="/img/busicon.png" />'
+    
+        new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
+      </script>
+    % elif marker_type == 'stop':
+      <script>
+        var marker = document.createElement('div');
+        marker.className = 'marker';
+        marker.innerHTML = '<img src="/img/stopicon.png" />'
+    
+        new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
+      </script>
+    % end
+% end
 
 % if defined('shape_id'):
   % points = filter(lambda p: p.shape_id == shape_id, ds.all_points)
@@ -50,7 +65,7 @@
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#AAAAAA',
+          'line-color': '#4040FF',
           'line-width': 4
         }
       });

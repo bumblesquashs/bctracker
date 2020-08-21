@@ -6,7 +6,14 @@
 <h2>Bus Stop {{ stop.stopcode }}</h2>
 <hr />
 
-% include('templates/map', lon=stop.stoplon, lat=stop.stoplat)
+% include('templates/map', lon=stop.stoplon, lat=stop.stoplat, marker_type='stop')
+
+<h2>Service Days</h2>
+<p>
+  % for day_str in day_order:
+    <a href="#{{day_str}}">{{day_str}}</a><br />
+  % end
+</p>
 
 % for day_str in day_order:
   % include('templates/stop_day', day=day_str, stop_entries=day_entries[day_str])

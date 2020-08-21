@@ -1,7 +1,7 @@
 % from formatting import format_time
 
 % if len(stop_entries) > 0:
-  <h2>{{ day }}</h2>
+  <h2 id="{{day}}">{{ day }}</h2>
   <p>{{ len(stop_entries) }} Trips</p>
   
   <table class="pure-table pure-table-horizontal pure-table-striped">

@@ -97,7 +97,7 @@
       sorted_models = sorted(models)
       for model in sorted_models:
         buses = list(filter(lambda b: businfo.get_bus_range(b.fleetnum).model == model, rtbuslist))
-        include('templates/realtime_list', group_name=model, buses=buses)
+        include('templates/realtime_list', group_name=model, buses=buses, show_model=False)
       end
     end
   %>

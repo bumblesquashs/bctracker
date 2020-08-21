@@ -16,7 +16,18 @@
   </thead>
 
   <tbody>
+    % last_hour = -1
     %for trip in triplist:
+      % this_hour = int(trip.starttime.split(':')[0])
+      % if last_hour == -1:
+        % last_hour = this_hour
+      % elif this_hour > last_hour:
+        <tr>
+          <td class="desktop-only" colspan="5"><hr /></td>
+          <td class="mobile-only" colspan="3"><hr /></td>
+        </tr>
+        % last_hour = this_hour
+      % end
       <tr>
         <td>{{ format_time(trip.starttime) }}</td>
         <td>{{ trip.headsign }}</td>

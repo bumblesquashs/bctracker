@@ -30,10 +30,6 @@ def startup():
     cp.log('Whaaat? here we go')
     cp.server.start() #That's it for our startup code
 
-# ==============================================================
-# Web helper code!
-# ==============================================================
-
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
 # =============================================================
@@ -43,6 +39,10 @@ app = Bottle()
 def style(filename):
     return static_file(filename, root='./style')
 
+@app.route('/img/<filename:path>')
+def style(filename):
+    return static_file(filename, root='./img')
+
 @app.route('/')
 def index():
     if 'munch' in request.query:  # for the refresh data thing
@@ -50,7 +50,7 @@ def index():
         valid = munch.munch()
         if((not valid) and start.RELOAD_ENABLED):
             start.download_and_restart()
-    return template('home', rdict=rdict)
+    return template('home')
 
 @app.route('/routes')
 @app.route('/routes/')
@@ -113,7 +113,7 @@ def realtime():
             bus.fleetnum = PLACEHOLDER
         rtbuslist.append(bus)
         # now - sort that list however we please
-    rtbuslist.sort(key=lambda x: (int(x.scheduled) * -1, int(x.fleetnum)))
+    rtbuslist.sort(key=lambda x: int(x.fleetnum))
     return template('realtime', time_string=rt.get_data_refreshed_time_str(), rtbuslist=rtbuslist, tripdict=ds.tripdict, stopdict=ds.stopdict, group=group, rdict=rdict)
 
 @app.route('/bus')
@@ -137,7 +137,7 @@ def block_id(blockid):
     try:
         triplist = ds.blockdict[str(blockid)].triplist
     except KeyError:
-        return template('error', error='Block {0} Not Found'.format(blockid))
+        return template('error', error='Block {0} Not Found'.format(blockid), message='This block may be from an older version of GTFS which is no longer valid')
     return template('block', blockid=blockid, triplist=triplist)
 
 @app.route('/trips/<tripid:int>')
@@ -145,7 +145,7 @@ def trip_id(tripid):
     try:
         trip = ds.tripdict[str(tripid)]
     except KeyError:
-        return template('error', error='Trip {0} Not Found'.format(tripid))
+        return template('error', error='Trip {0} Not Found'.format(tripid), message='This trip may be from an older version of GTFS which is no longer valid')
     return template('trip', tripid=tripid, trip=trip)
 
 @app.route('/stops/<stopcode:int>')

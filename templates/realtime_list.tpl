@@ -6,8 +6,13 @@
   <thead>
     <tr>
       <th class="desktop-only">Fleet Number</th>
-      <th class="desktop-only">Year and Model</th>
-      <th class="mobile-only">Bus</th>
+      % if get('show_model', True):
+        <th class="desktop-only">Year and Model</th>
+        <th class="mobile-only">Bus</th>
+      % else:
+        <th class="desktop-only">Year</th>
+        <th class="mobile-only" style="width: 20%;">Bus</th>
+      % end
       <th>Headsign</th>
       <th class="desktop-only">Current Block</th>
       <th class="desktop-only">Current Trip</th>
@@ -45,10 +50,18 @@
             <a href="/bus/{{bus.fleetnum}}">{{ bus.fleetnum }}</a>
             <span class="mobile-only smaller-font">
               <br />
-              {{ busrange.year }} {{ busrange.model }}
+              {{ busrange.year }}
+              % if get('show_model', True):
+                {{ busrange.model }}
+              % end
             </span>
           </td>
-          <td class="desktop-only">{{ busrange.year }} {{ busrange.model }}</td>
+          <td class="desktop-only">
+            {{ busrange.year }}
+            % if get('show_model', True):
+              {{ busrange.model }}
+            % end
+          </td>
         % end
 
         % if (bus.scheduled):
@@ -58,10 +71,10 @@
           % if bus.onroute:
             <td class="desktop-only"><a href="/stops/{{stopcode}}">{{ ds.stopdict[bus.stopid].stopname }}</a></td>
           % else:
-            <td class="desktop-only">Unavailable</td>
+            <td class="desktop-only lighter-text">Unavailable</td>
           % end
         % else:
-          <td>Not in service</td>
+          <td class="lighter-text">Not in service</td>
           <td class="desktop-only"></td>
           <td class="desktop-only"></td>
           <td class="desktop-only"></td>

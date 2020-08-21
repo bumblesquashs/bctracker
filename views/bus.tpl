@@ -21,14 +21,14 @@
   <h2>{{fleetnum}} is not active right now</h2>
   <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 % elif (bus_status == rt.STATUS_TRACKING):
-  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, marker_type='bus')
 
   <h2>{{fleetnum}} is active, but not assigned to any route</h2>
   <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
 % elif (bus_status == rt.STATUS_LOGGEDIN):
   % trip = ds.tripdict[rt_struct.tripid]
 
-  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, shape_id=trip.shape_id)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, shape_id=trip.shape_id, marker_type='bus')
 
   <h2>{{trip.headsign}}</h2>
   <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
@@ -43,7 +43,7 @@
   % trip = ds.tripdict[rt_struct.tripid]
   % stop = ds.stopdict[rt_struct.stopid]
 
-  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, shape_id=trip.shape_id)
+  % include('templates/map', lat=rt_struct.lat, lon=rt_struct.lon, shape_id=trip.shape_id, marker_type='bus')
 
   <h2>{{trip.headsign}}</h2>
   <p>Last updated {{rt.get_data_refreshed_time_str()}}</p>
@@ -59,7 +59,7 @@
 <h2>Service History</h2>
 
 % if (track_history != False):
-  <p>Last logged in: {{ format_date(track_history['day']) }}</p>
+  <p>Last seen {{ format_date(track_history['day']) }}</p>
 % else:
   <p>No history for this vehicle found</p>
   <p>This site began tracking data on May 5th 2020, so vehicles retired before then will not show any history</p>
