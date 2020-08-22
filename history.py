@@ -138,8 +138,6 @@ def get_last_block_bus(fleetnum):
 # get the whole block history for a bus (based on its specific file)
 # returns false for nonexistant block history
 def get_block_history(fleetnum):
-    if(' ' in fleetnum or '/' in fleetnum):
-        return False
     try:
         with open('data/vehicle_history/vehicle/{0}.json'.format(fleetnum), 'r') as f:
             history_data = json.load(f)

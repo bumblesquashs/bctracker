@@ -86,7 +86,7 @@ def setup_fleetnums():
         fleetnum2id_dict[pair[1]] = pair[0]
 
 def get_data_refreshed_time_str():
-    return time.asctime(time.localtime(last_rt_download_time))
+    return time.strftime("%B %-d, %Y at %H:%M", time.localtime(last_rt_download_time))
 
 def get_gmaps_url(lat, lon):
     return 'https://www.google.com/maps/search/?api=1&query={0},{1}'.format(lat, lon)

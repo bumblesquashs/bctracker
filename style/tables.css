@@ -10,6 +10,7 @@ https://github.com/pure-css/pure/blob/master/LICENSE.md
     border-spacing: 0;
     empty-cells: show;
     border: 1px solid #cbcbcb;
+    margin-bottom: 20px;
 }
 
 .pure-table caption {

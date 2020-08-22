@@ -6,6 +6,7 @@ pathprefix = './data/google_transit/'
 midday_secs = 43200  # number of secs at midday
 
 tripspath = pathprefix + 'trips.txt'
+shapespath = pathprefix + 'shapes.txt'
 routespath = pathprefix + 'routes.txt'
 stoptimespath = pathprefix + 'stop_times.txt'
 stoppath = pathprefix + 'stops.txt'
@@ -43,13 +44,15 @@ def trip_to_numseconds(trip):
 def trip_is_before_midday(trip):
     return (trip_to_numseconds(trip) < midday_secs)
 
-# the first 3 of these are basically just structs
+# the first 4 of these are basically just structs
 class Stop:
-    def __init__(self, stopid, stopcode, stopname):
+    def __init__(self, stopid, stopcode, stopname, stoplat, stoplon):
         self.stopid = stopid
         self.stopcode = stopcode
         self.stopname = stopname
-        self.triptimes = []  # list of (tripid, triptime) tuple
+        self.stoplat = stoplat
+        self.stoplon = stoplon
+        self.entries = []  # list of (tripid, triptime) tuple
 
 class StopTime:
     def __init__(self, tripid, stopid, stopname, departtime, stopseq):
@@ -59,8 +62,14 @@ class StopTime:
         self.stopseq = stopseq
         self.stopname = stopname
 
+class StopEntry:
+    def __init__(self, tripid, stoptime):
+        self.stoptime = stoptime
+        self.tripid = tripid
+        self.trip = tripdict[tripid]
+
 class Trip:
-    def __init__(self, tripid, routeid, serviceid, routenum, blockid, headsign, starttime, startstopname, directionid):
+    def __init__(self, tripid, routeid, serviceid, routenum, blockid, headsign, starttime, startstopname, directionid, shape_id):
         self.tripid = tripid
         self.routeid = routeid
         self.serviceid = serviceid
@@ -70,12 +79,20 @@ class Trip:
         self.starttime = starttime
         self.startstopname = startstopname
         self.directionid = directionid
+        self.shape_id = shape_id
         # NOTE: Consolidation isn't used right now. It probably won't be with the new gtfs formats
         # True When identical weekday/weekend trip and blocks are consolidated
         self.use_alt_day_string = False
         # When identical weekday/weekend trip and blocks are consolidated, use this
         self.alt_day_string = ''
         self.stoplist = []  # list of stoptimetuple
+
+class ShapePoint:
+    def __init__(self, shape_id, lat, lon, sequence):
+        self.shape_id = shape_id
+        self.lat = lat
+        self.lon = lon
+        self.sequence = sequence
 
 # Check if two trips are equivalent (ignoring day, id, blockid)
 def compare_trips(trip1, trip2):
@@ -145,12 +162,14 @@ routedict = {}  # dict of routeid -> route info tuple
 stopcode2stopnum = {}  # dict of stop code -> stopnum
 stopdict = {}  # dict of stopid -> stop obj
 
+all_points = [] # All points used for plotting routes on maps
+
 # small dicts just to deal with date shenanigans
 # the days of week stuff can handle more weird date cases than it needs, but is still missing some support
 days_of_week_dict = {}  # service_id -> string for day of week
 days_of_week_dict_longname = {}  # service_id -> long string for day of week
 service_order_dict = {} # service_id -> display order (monday first, sunday last, etc) for sorting later
-dow_number_dict = {'Mon': 0, 'Tues': 1, 'Wed': 2, 'Thurs': 3, 'Frid': 4, 'Sat': 5, 'Sun': 6}
+dow_number_dict = {'Mon': 0, 'Tue': 1, 'Wed': 2, 'Thu': 3, 'Fri': 4, 'Sat': 5, 'Sun': 6}
 
 # ------------------------------------------ #
 #  Some setup code that gets run on import   #
@@ -222,7 +241,7 @@ def populate_calendar():
                 service_order_dict[service_id] = CONST_WEEKDAY
                 continue
             if(ismonday == '1' and istuesday == '1' and iswednesday == '1' and isthursday == '1' and isfriday == '0'):
-                days_of_week_dict[service_id] = 'Mon-Thurs'
+                days_of_week_dict[service_id] = 'Mon-Thu'
                 days_of_week_dict_longname[service_id] = 'Weekdays except Friday'
                 service_order_dict[service_id] = CONST_WEEKDAY_EXCEPT_FRI
                 continue
@@ -232,7 +251,7 @@ def populate_calendar():
                 service_order_dict[service_id] = CONST_MON
                 continue
             if(istuesday == '1'):
-                days_of_week_dict[service_id] = 'Tues'
+                days_of_week_dict[service_id] = 'Tue'
                 days_of_week_dict_longname[service_id] = 'Tuesdays'
                 service_order_dict[service_id] = CONST_TUES
                 continue
@@ -243,12 +262,12 @@ def populate_calendar():
                 service_order_dict[service_id] = CONST_WED
                 continue
             if(isthursday == '1'):
-                days_of_week_dict[service_id] = 'Thurs'
+                days_of_week_dict[service_id] = 'Thu'
                 days_of_week_dict_longname[service_id] = 'Thursdays'
                 service_order_dict[service_id] = CONST_THURS
                 continue
             if(isfriday == '1'):
-                days_of_week_dict[service_id] = 'Frid'
+                days_of_week_dict[service_id] = 'Fri'
                 days_of_week_dict_longname[service_id] = 'Fridays'
                 service_order_dict[service_id] = CONST_FRI
                 continue
@@ -304,7 +323,9 @@ def start():
             stopid = items[colnames.index('stop_id')]
             stopcode = items[colnames.index('stop_code')]
             stopname = items[colnames.index('stop_name')]
-            stopdict[stopid] = Stop(stopid, stopcode, stopname)
+            stoplat = items[colnames.index('stop_lat')]
+            stoplon = items[colnames.index('stop_lon')]
+            stopdict[stopid] = Stop(stopid, stopcode, stopname, stoplat, stoplon)
 
     # fill in the backwards dict here
     for stop in stopdict.values():
@@ -345,6 +366,17 @@ def start():
                 firststoptimes_dict[tripid] = st
             # add this as a stop time object to the stop time list
             stoptime_list.append(st)
+    
+    with open(shapespath, 'r') as points:
+        colnames = points.readline().rstrip().split(',')
+        for line in points:
+            items = line.rstrip().split(',')
+            shape_id = items[colnames.index('shape_id')]
+            lat = items[colnames.index('shape_pt_lat')]
+            lon = items[colnames.index('shape_pt_lon')]
+            sequence = items[colnames.index('shape_pt_sequence')]
+            point = ShapePoint(shape_id, lat, lon, sequence)
+            all_points.append(point)
 
     # make a dict of trips, and then a dict of blocks
     with open(tripspath, 'r') as trips:
@@ -371,8 +403,9 @@ def start():
                 first_stop_name = firststoptimes_dict[tripid].stopname
             except KeyError:
                 print('Stop times key error for tripid {0}!'.format(tripid))
+            shape_id = items[colnames.index('shape_id')]
             trip_obj = Trip(routeid=routeid, tripid=tripid, blockid=blockid, routenum=routenum, headsign=headsign,
-                            starttime=depart_time, startstopname=first_stop_name, serviceid=serviceid, directionid=directionid)
+                            starttime=depart_time, startstopname=first_stop_name, serviceid=serviceid, directionid=directionid, shape_id=shape_id)
             tripdict[tripid] = trip_obj
 
             # add this to a block dict to form the block structure
@@ -439,10 +472,10 @@ def start():
         # check for trips that arent from this sheet - dont want to put those in
         if(st.tripid not in tripdict):
             continue
-        stop.triptimes.append((st.tripid, st.departtime))
+        stop.entries.append((st.tripid, st.departtime))
     for stop in stopdict.values():
         # sort trip tuple list by time
-        stop.triptimes.sort(key=lambda x: hms_to_sec(x[1]))
+        stop.entries.sort(key=lambda x: hms_to_sec(x[1]))
 
     print('Beginning trip list, block list day-consolidation...')
 

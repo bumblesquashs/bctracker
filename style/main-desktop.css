@@ -1,0 +1,33 @@
+
+body {
+    font-size: 14pt;
+}
+
+form input[type="text"] {
+    font-size: 14pt;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.button {
+    font-size: 12pt;
+    vertical-align: middle;
+}
+
+.side-menu {
+    float: left;
+    margin-right: 100px;
+    margin-bottom: 20px;
+}
+
+.body {
+    float: left;
+}
