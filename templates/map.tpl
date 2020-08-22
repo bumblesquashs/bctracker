@@ -1,11 +1,12 @@
 % import datastructure as ds
+% import web
 
 <div id="map"></div>
 <script>
     const lat = parseFloat("{{lat}}");
     const lon = parseFloat("{{lon}}");
 
-    mapboxgl.accessToken = ''; // Replace with proper token in production and when testing - DO NOT COMMIT!
+    mapboxgl.accessToken = '{{web.mapbox_api_key}}';
     var map = new mapboxgl.Map({
       container: 'map',
       center: [lon, lat],
@@ -23,7 +24,7 @@
         var marker = document.createElement('div');
         marker.className = 'marker';
         marker.innerHTML = '<img src="/img/busicon.png" />'
-    
+
         new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
       </script>
     % elif marker_type == 'stop':
@@ -31,7 +32,7 @@
         var marker = document.createElement('div');
         marker.className = 'marker';
         marker.innerHTML = '<img src="/img/stopicon.png" />'
-    
+
         new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
       </script>
     % end

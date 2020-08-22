@@ -14,11 +14,13 @@ from bottle import route, run, request, template, Bottle, static_file
 PLACEHOLDER = '100000'
 rdict = {}     # rdict is routeid -> (routenum, routename, routeid)
 reverse_rdict = {} # route num -> routeid
+mapbox_api_key = ''
 
 # Web framework code to start the server
 def startup():
     global rdict
     global reverse_rdict
+    global mapbox_api_key
     print('WEB: initializing the web server!')
     rdict = ds.routedict
     # build a reverse route table for handling web requests (routenum->routeid)
@@ -27,6 +29,7 @@ def startup():
     # Calls to run the bottle code on the cherrypy server
     cp.config.update('server.conf')
     cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
+    mapbox_api_key = cp.config['mapbox_api_key']
     cp.log('Whaaat? here we go')
     cp.server.start() #That's it for our startup code
 
