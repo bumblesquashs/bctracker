@@ -111,6 +111,7 @@ all_ranges = [
              'Alexander Dennis Enviro500H (Hybrid)', TYPE_DECKER),
     BusRange(9528, 9528, '2007', 'Alexander Dennis Enviro500', TYPE_DECKER),
     BusRange(9529, 9531, '2008', 'Alexander Dennis Enviro500', TYPE_DECKER),
+    BusRange(9532, 9542, '2020', 'Alexander Dennis Enviro500 MMC', TYPE_DECKER),
     BusRange(9701, 9749, '1996-1997', 'New Flyer D40LF', TYPE_CONVENTIONAL),
     BusRange(9750, 9760, '1995-1996', 'New Flyer D40LF', TYPE_CONVENTIONAL),
     BusRange(9815, 9828, '1998', 'New Flyer D40LF', TYPE_CONVENTIONAL),
