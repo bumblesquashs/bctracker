@@ -40,8 +40,8 @@ def is_known_bus(fleet_num):
             return True
    return False
 
-
-all_ranges = [
+# Normal ranges
+all_normal_ranges = [
     BusRange(1, 18, '2000', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(101, 116, '2001', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(221, 237, '2002', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
@@ -118,4 +118,84 @@ all_ranges = [
     BusRange(9831, 9856, '1998', 'New Flyer D40LF', TYPE_CONVENTIONAL),
     BusRange(9861, 9878, '1998', 'New Flyer D40LF', TYPE_CONVENTIONAL),
     BusRange(9881, 9891, '1998', 'New Flyer D40LF', TYPE_CONVENTIONAL),
+]
+
+# For april fools
+all_ranges = [
+    BusRange(1, 18, '2000', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
+    BusRange(101, 116, '2001', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
+    BusRange(221, 237, '2002', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
+
+    BusRange(1020, 1044, '2013', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+    BusRange(1045, 1069, '2015', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+    BusRange(1070, 1114, '2016', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+    BusRange(1115, 1139, '2017', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+    BusRange(1140, 1147, '2018', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+    BusRange(1148, 1185, '2019', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+    BusRange(1186, 1202, '2020', 'MCI TC40LFR-102N', TYPE_CONVENTIONAL),
+
+
+    BusRange(2173, 2240, '2009', 'Ford/CBB E-450/Polar V', TYPE_SHUTTLE),
+    BusRange(2311, 2315, '2010', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2316, 2339, '2012', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2340, 2341, '2012', 'Mercedes-Benz Sprinter MiniBus', TYPE_SHUTTLE),
+    BusRange(2342, 2344, '2012', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2345, 2346, '2012', 'Mercedes-Benz Sprinter MiniBus', TYPE_SHUTTLE),
+    BusRange(2347, 2367, '2012', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2368, 2368, '2012', 'Mercedes-Benz Sprinter MiniBus', TYPE_SHUTTLE),
+    BusRange(2369, 2377, '2012', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2378, 2449, '2013', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2450, 2450, '2011', 'Mercedes-Benz Sprinter MiniBus', TYPE_SHUTTLE),
+    BusRange(2451, 2557, '2014', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2558, 2618, '2015', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2619, 2624, '2015', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2625, 2636, '2016', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2637, 2640, '2016', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2641, 2662, '2017', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+    BusRange(2663, 2687, '2018', 'Chevrolet/Ekans 4500/SOM28D', TYPE_SHUTTLE),
+
+    BusRange(3001, 3005, '2013', 'Grande West Vicinity (27.5 foot)', TYPE_30FOOT),
+    BusRange(3016, 3023, '2015',
+             'International/ElDorado 3200/Aero Elite', TYPE_SHUTTLE),
+    BusRange(3024, 3028, '2018',
+             'International/ElDorado 3200/Aero Elite', TYPE_SHUTTLE),
+
+    BusRange(4007, 4061, '2017', 'Starbucks Grande West (30 fl oz)', TYPE_30FOOT),
+    BusRange(4062, 4070, '2017', 'Starbucks Grande West (30 fl oz)', TYPE_30FOOT),
+    BusRange(4071, 4073, '2018', 'Starbucks Grande West (30 fl oz)', TYPE_30FOOT),
+    BusRange(4200, 4231, '2020', 'Starbucks Grande West w/ extra shot CNG (30 fl oz)', TYPE_30FOOT),
+    BusRange(4400, 4432, '2017', 'Starbucks Grande West (35 fl oz)', TYPE_35FOOT),
+    BusRange(4433, 4474, '2018', 'Starbucks Grande West (35 fl oz)', TYPE_35FOOT),
+
+    BusRange(6000, 6029, '2017', 'Gillig Québécois', TYPE_CONVENTIONAL),
+
+    BusRange(8095, 8117, '1996', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
+
+    BusRange(9001, 9010, '2000', 'Dennis T-comm', TYPE_DECKER),
+    BusRange(9021, 9039, '2002', 'TransBus BusTransport', TYPE_DECKER),
+    BusRange(9041, 9049, '2004', 'Alexander Hamilton Orion VIII', TYPE_DECKER),
+    BusRange(9051, 9078, '2000', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
+    BusRange(9081, 9085, '2001', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
+    BusRange(9101, 9106, '2005', 'Flyer DE901A', TYPE_CONVENTIONAL),
+    BusRange(9201, 9210, '2006', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9211, 9231, '2006', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9232, 9267, '2007', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9268, 9289, '2008', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9290, 9300, '2008', 'Gillig Québécois', TYPE_SUBURBAN),
+    BusRange(9301, 9318, '2008', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9319, 9433, '2009', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9434, 9446, '2012-2013', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9447, 9486, '2015', 'Gillig Québécois', TYPE_CONVENTIONAL),
+    BusRange(9501, 9526, '2008', 'Alexander Hamilton Orion VIII', TYPE_DECKER),
+    BusRange(9527, 9527, '2008',
+             'Alexander Hamilton Orion VIII HEV', TYPE_DECKER),
+    BusRange(9528, 9528, '2007', 'Alexander Hamilton Orion VIII', TYPE_DECKER),
+    BusRange(9529, 9531, '2008', 'Alexander Hamilton Orion VIII', TYPE_DECKER),
+    BusRange(9532, 9542, '2020', 'Alexander Hamilton Orion VIII NG', TYPE_DECKER),
+    BusRange(9701, 9749, '1996-1997', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
+    BusRange(9750, 9760, '1995-1996', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
+    BusRange(9815, 9828, '1998', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
+    BusRange(9831, 9856, '1998', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
+    BusRange(9861, 9878, '1998', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
+    BusRange(9881, 9891, '1998', 'Den Oudsten Bussen The User Friendly Bus (TUF)', TYPE_CONVENTIONAL),
 ]

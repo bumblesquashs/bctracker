@@ -44,6 +44,19 @@
 <h2>Latest Updates</h2>
 <div class="home-update">
   <div class="home-update-header">
+    <h3>New Deckers Out!</h3>
+    April 1, 2021
+  </div>
+  <div class="home-update-content">
+    <p>
+      BCTracker has been updated to support the latest deckers, which have just entered service.
+      Inaccuracies in bus model names and manufacturer names have also been addressed.
+    </p>
+    Thanks for your feedback, everyone!
+  </div>
+</div>
+<div class="home-update">
+  <div class="home-update-header">
     <h3>New Website Look</h3>
     August 21, 2020
   </div>
