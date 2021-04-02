@@ -41,7 +41,7 @@ def is_known_bus(fleet_num):
    return False
 
 # Normal ranges
-all_normal_ranges = [
+all_ranges = [
     BusRange(1, 18, '2000', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(101, 116, '2001', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
     BusRange(221, 237, '2002', 'Dennis Dart SLF (35 foot)', TYPE_35FOOT),
@@ -121,7 +121,7 @@ all_normal_ranges = [
 ]
 
 # For april fools
-all_ranges = [
+april_fools_ranges = [
     BusRange(1, 18, '2000', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
     BusRange(101, 116, '2001', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),
     BusRange(221, 237, '2002', 'Cuisinart Toaster (35 foot)', TYPE_35FOOT),

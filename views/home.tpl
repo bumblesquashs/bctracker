@@ -50,9 +50,8 @@
   <div class="home-update-content">
     <p>
       BCTracker has been updated to support the latest deckers, which have just entered service.
-      Inaccuracies in bus model names and manufacturer names have also been addressed.
     </p>
-    Thanks for your feedback, everyone!
+    Stay safe everyone!
   </div>
 </div>
 <div class="home-update">
