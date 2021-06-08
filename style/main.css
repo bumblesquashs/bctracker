@@ -98,6 +98,10 @@ a {
     font-weight: bold;
 }
 
+.navbar-right {
+    float: right !important;
+}
+
 .home-update {
     background-color: #f2f2f2;
     margin-top: 20px;
