@@ -1,4 +1,5 @@
-import bus_range
+
+import models.bus_range as bus_range
 
 class Bus:
     def __init__(self, bus_id, number):
@@ -10,7 +11,7 @@ class Bus:
     def __str__(self):
         if self.number < 0:
             return "Unknown"
-        return str(number)
+        return str(self.number)
     
     def __hash__(self):
         return hash(self.id)

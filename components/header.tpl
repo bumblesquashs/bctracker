@@ -1,6 +1,8 @@
 <html>
   <head> 
     <title>BCTracker | {{ title }}</title>
+
+    % supports_realtime = defined('system') and system.supports_realtime
     
     <!-- prevent this website from being searchable -->
     <meta name="robots" content="noindex" />
@@ -36,12 +38,18 @@
       <a class="navbar-item navbar-title" href="/">BCTracker</a>
 
       <div class="desktop-only">
-        <a class="navbar-item" href="/realtime">Realtime</a>
+        % if supports_realtime:
+          <a class="navbar-item" href="/realtime">Realtime</a>
+        % end
         <a class="navbar-item" href="/routes">All Routes</a>
         <a class="navbar-item" href="/blocks">All Blocks</a>
-        <a class="navbar-item" href="/history">Vehicle History</a>
+        % if supports_realtime:
+          <a class="navbar-item" href="/history">Vehicle History</a>
+        % end
         <a class="navbar-item" href="/about">About</a>
-        <a class="navbar-item navbar-right" href="/">{{ system }}</a>
+        % if defined('system'):
+          <a class="navbar-item navbar-right" href="/">{{ system }}</a>
+        % end
       </div>
 
       <div class="mobile-navbar-toggle mobile-only" onclick="toggleMobileNavbar()">
@@ -52,12 +60,18 @@
     </div>
     
     <div id="mobile-navbar" class="mobile-only display-none">
-      <a class="mobile-navbar-item" href="/realtime">Realtime</a>
+      % if supports_realtime:
+        <a class="mobile-navbar-item" href="/realtime">Realtime</a>
+      % end
       <a class="mobile-navbar-item" href="/routes">All Routes</a>
       <a class="mobile-navbar-item" href="/blocks">All Blocks</a>
-      <a class="mobile-navbar-item" href="/history">Vehicle History</a>
+      % if supports_realtime:
+        <a class="mobile-navbar-item" href="/history">Vehicle History</a>
+      % end
       <a class="mobile-navbar-item" href="/about">About</a>
-      <a class="mobile-navbar-item" href="/">{{ system }}</a>
+      % if defined('system'):
+        <a class="mobile-navbar-item" href="/">{{ system }}</a>
+      % end
     </div>
     
     <div id="content">

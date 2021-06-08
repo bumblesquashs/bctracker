@@ -10,9 +10,10 @@ from models.stop_times import StopTime
 from models.trip import Trip
 
 class System:
-    def __init__(self, system_id, name):
+    def __init__(self, system_id, name, supports_realtime):
         self.system_id = system_id
         self.name = name
+        self.supports_realtime = supports_realtime
     
     def __str__(self):
         return self.name
@@ -232,3 +233,16 @@ class System:
                 for column in column_names:
                     values[column] = line_values[column_names.index(column)]
                 operation(values)
+
+systems = {
+    'victoria': System('victoria', 'Victoria', True),
+    'nanaimo': System('nanaimo', 'Nanaimo', True)
+}
+
+def get_system(system_id):
+    if system_id in systems:
+        return systems[system_id]
+    return None
+
+def all_systems():
+    return systems.values()

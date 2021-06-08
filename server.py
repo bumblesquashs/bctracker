@@ -1,35 +1,21 @@
 
-import logging
-import requestlogger
+from logging import StreamHandler
+from logging.handlers import TimedRotatingFileHandler
+from requestlogger import WSGILogger, ApacheFormatter
+from bottle import template, Bottle, static_file
 import cherrypy as cp
-import logging.handlers
 
-from models.system import System
+from models.system import get_system, all_systems
 import gtfs
 
-from bottle import template, Bottle, static_file
-
-PLACEHOLDER = '100000'
 DEFAULT_SYSTEM_ID = 'victoria'
 
-systems = {
-    'victoria': System('victoria', 'Victoria'),
-    'nanaimo': System('nanaimo', 'Nanaimo')
-}
 mapbox_api_key = ''
-
-def get_system(system_id):
-    if system_id in systems:
-        return systems[system_id]
-    return None
-
-def all_systems():
-    return systems.values()
 
 def start():
     global mapbox_api_key
 
-    for system in systems.values():
+    for system in all_systems():
         # gtfs.update(system.system_id)
         system.reload()
 
@@ -38,6 +24,16 @@ def start():
 
     cp.tree.graft(make_access_log(app, 'logs/access_log.log'), '/')
     cp.server.start()
+
+def make_access_log(app, filepath, when='d', interval=7, **kwargs):
+    if filepath is None:
+        handlers = [StreamHandler()]
+    else:
+        handlers = [TimedRotatingFileHandler(filepath, when, interval, **kwargs)]
+    return WSGILogger(app, handlers, ApacheFormatter())
+
+def stop():
+    cp.server.stop()
 
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
@@ -85,7 +81,7 @@ def system_routes_number(system_id, number):
         return template('templates/invalid_system', systems=all_systems(), system_id=system_id)
     route = system.get_route(number=number)
     if route is None:
-        return template('templates/error', systems=all_systems(), system=system)
+        return template('templates/error', systems=all_systems(), system=system, error=f'Route {number} not found')
     return template('templates/route', systems=all_systems(), system=system, route=route)
 
 
@@ -184,22 +180,3 @@ def system_stops_number(system_id, number):
 @app.route('/about')
 def about():
     return template('about')
-
-@app.route('/admin/reload-server')
-def restart():
-    print('Attempting to reload the server')
-    if(start.RELOAD_ENABLED):
-        start.download_and_restart()
-    return('Lol you should never see this')
-
-#use cherrypy server - setup logging
-def make_access_log(app, filepath, when='d', interval=7, **kwargs):
-    if filepath is not None:
-        handlers = [logging.handlers.TimedRotatingFileHandler(
-        filepath, when, interval, **kwargs)]
-    else:
-        handlers = [logging.StreamHandler()]
-    return requestlogger.WSGILogger(app, handlers, requestlogger.ApacheFormatter())
-
-if __name__ == '__main__':
-    start()
