@@ -27,3 +27,6 @@ def update(system):
             zip.extractall(data_path)
     except Exception as err:
         print(err)
+
+def downloaded(system):
+    return path.exists(f'data/gtfs/{system.system_id}')

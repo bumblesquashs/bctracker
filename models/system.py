@@ -10,6 +10,7 @@ from models.stop_times import StopTime
 from models.trip import Trip
 
 import gtfs
+import realtime
 
 class System:
     def __init__(self, system_id, remote_id, name, supports_realtime):
@@ -27,15 +28,36 @@ class System:
     def __lt__(self, other):
         return self.name < other.name
     
-    def reload(self):
-        # gtfs.update(self)
+    def update_gtfs(self, update=False):
+        print(f'Updating GTFS data for {self.name}...')
+        gtfs.update(self)
+        print('Done!')
+        self.load_gtfs()
 
+    def load_gtfs(self):
+        print(f'Loading GTFS data for {self.name}...')
         self.load_stops()
         self.load_routes()
         self.load_services()
         self.load_shapes()
         self.load_trips()
         self.load_stop_times()
+        print('Done!')
+
+    def update_realtime(self):
+        print(f'Updating realtime data for {self.name}...')
+        realtime.update(self)
+        print('Done!')
+        self.load_realtime()
+    
+    def load_realtime(self):
+        print(f'Loading realtime data for {self.name}...')
+        self.load_buses()
+        print('Done!')
+    
+    def validate_gtfs(self):
+        # TODO: Implement validation
+        return True
     
     # Methods for blocks
     def add_block(self, block_id, service_id):

@@ -5,6 +5,7 @@ from bottle import Bottle, static_file, template, request
 import cherrypy as cp
 
 from models.system import get_system, all_systems
+import gtfs
 
 DEFAULT_SYSTEM_ID = 'victoria'
 
@@ -14,7 +15,13 @@ def start():
     global mapbox_api_key
 
     for system in all_systems():
-        system.reload()
+        if gtfs.downloaded(system):
+            system.load_gtfs()
+        else:
+            system.update_gtfs()
+        system.update_realtime()
+        if not system.validate_gtfs():
+            system.update_gtfs()
 
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
@@ -104,6 +111,10 @@ def system_history(system_id):
     if system is None:
         return systems_invalid_template(system_id)
     return systems_template('history', system=system)
+
+@app.route('/realtime')
+def realtime():
+    return system_realtime(DEFAULT_SYSTEM_ID)
 
 @app.route('/<system_id>/realtime')
 def system_realtime(system_id):

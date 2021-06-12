@@ -22,4 +22,6 @@ def stop():
 
 def handle(sig, frame):
     for system in all_systems():
-        system.reload()
+        system.update_realtime()
+        if not system.validate_gtfs():
+            system.update_gtfs()
