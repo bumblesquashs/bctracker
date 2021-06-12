@@ -3,6 +3,8 @@ import os
 import signal
 from crontab import CronTab
 
+from models.system import all_systems
+
 CRON_ID = 'gtfs-muncher'
 CRON_INTERVAL = 5
 
@@ -19,4 +21,5 @@ def stop():
         cron.remove_all(comment=CRON_ID)
 
 def handle(sig, frame):
-    return
+    for system in all_systems():
+        system.reload()

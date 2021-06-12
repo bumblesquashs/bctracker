@@ -28,7 +28,7 @@
           <td>{{ stop_time.time }}</td>
           <td>{{ stop_time.trip.headsign }}</td>
           <td class="desktop-only"><a href="/blocks/{{ stop_time.trip.block.block_id }}">{{ stop_time.trip.block.block_id }}</a></td>
-          <td><a href="/trips/{{ stop_entry.trip.trip_id }}">{{ stop_entry.trip.trip_id }}</a></td>
+          <td><a href="/trips/{{ stop_time.trip.trip_id }}">{{ stop_time.trip.trip_id }}</a></td>
         </tr>
       % end
     </tbody>

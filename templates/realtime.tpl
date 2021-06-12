@@ -1,8 +1,5 @@
-% import businfotable as businfo
-% import realtime as rt
-% import datastructure as ds
 
-% include('components/header', title='Realtime')
+% rebase('base', title='Realtime')
 
 <h1>Realtime</h1>
 % if group == 'all':
@@ -67,7 +64,7 @@
     % end
   </span>
 </p>
-<p>Last updated {{time_string}}</p>
+<p>Last updated ???</p>
 
 % if not rt.data_valid:
   <p>GTFS apparently out of date... need to fix that</p>
@@ -102,5 +99,3 @@
     end
   %>
 % end
-
-% include('components/footer')

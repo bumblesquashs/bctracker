@@ -1,6 +1,6 @@
 % from models.trip import Direction
 
-% include('components/header', title=str(route))
+% rebase('base', title=str(route))
 
 <h1>{{ route }}</h1>
 <hr />
@@ -30,5 +30,3 @@
     % include('components/route_trips', trips=inbound_trips)
   % end
 % end
-
-% include('components/footer')

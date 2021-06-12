@@ -1,4 +1,4 @@
-% include('components/header', title='About')
+% rebase('base', title='About')
 
 <h1>About</h1>
 <hr />
@@ -19,5 +19,3 @@
 
 <br />
 <i> - James & Perrin, 2020 </i>
-
-% include('components/footer')

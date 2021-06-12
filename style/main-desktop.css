@@ -31,3 +31,42 @@ a:hover {
 .body {
     float: left;
 }
+
+.dropdown {
+    position: relative;
+    cursor: default;
+    user-select: none;
+    overflow: visible !important;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content .dropdown-title {
+    padding: 12px;
+    font-size: 12pt;
+    color: grey;
+}
+
+.dropdown-content a {
+    padding: 12px;
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #e0e0e0
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}

@@ -1,4 +1,4 @@
-% include('components/header', title=str(system))
+% rebase('base', title=str(system))
 
 <h1>BCTracker - {{ system }}</h1>
 <h2>Welcome to the BCTracker site for the {{ system }} Transit System!</h2>
@@ -77,5 +77,3 @@
     Enjoy!
   </div>
 </div>
-
-% include('components/footer')

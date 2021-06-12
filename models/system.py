@@ -9,9 +9,12 @@ from models.stop import Stop
 from models.stop_times import StopTime
 from models.trip import Trip
 
+import gtfs
+
 class System:
-    def __init__(self, system_id, name, supports_realtime):
+    def __init__(self, system_id, remote_id, name, supports_realtime):
         self.system_id = system_id
+        self.remote_id = remote_id
         self.name = name
         self.supports_realtime = supports_realtime
     
@@ -21,7 +24,12 @@ class System:
     def __eq__(self, other):
         return self.system_id == other.system_id
     
+    def __lt__(self, other):
+        return self.name < other.name
+    
     def reload(self):
+        # gtfs.update(self)
+
         self.load_stops()
         self.load_routes()
         self.load_services()
@@ -63,8 +71,8 @@ class System:
         self.read_csv('routes', self.add_route)
     
     def add_route(self, values):
-        route_id = int(values['route_id'])
-        number = int(values['route_short_name'])
+        route_id = values['route_id']
+        number = values['route_short_name']
         name = values['route_long_name']
 
         route = Route(self, route_id, number, name)
@@ -89,7 +97,7 @@ class System:
         self.read_csv('calendar_dates', self.add_special_service)
 
     def add_service(self, values):
-        service_id = int(values['service_id'])
+        service_id = values['service_id']
         mon = values['monday'] == '1'
         tue = values['tuesday'] == '1'
         wed = values['wednesday'] == '1'
@@ -101,8 +109,8 @@ class System:
         self.services[service_id] = Service(self, service_id, mon, tue, wed, thu, fri, sat, sun)
 
     def add_special_service(self, values):
-        service_id = int(values['service_id'])
-        exception_type = int(values['exception_type'])
+        service_id = values['service_id']
+        exception_type = values['exception_type']
 
         service = self.get_service(service_id)
         if service is None or exception_type != 1:
@@ -123,7 +131,7 @@ class System:
         self.read_csv('shapes', self.add_shape)
 
     def add_shape(self, values):
-        shape_id = int(values['shape_id'])
+        shape_id = values['shape_id']
         lat = float(values['shape_pt_lat'])
         lon = float(values['shape_pt_lon'])
         sequence = int(values['shape_pt_sequence'])
@@ -145,11 +153,11 @@ class System:
         self.read_csv('stop_times', self.add_stop_time)
 
     def add_stop_time(self, values):
-        stop_id = int(values['stop_id'])
+        stop_id = values['stop_id']
         if stop_id not in self.stops:
             print(f'Invalid stop id: {stop_id}')
             return
-        trip_id = int(values['trip_id'])
+        trip_id = values['trip_id']
         if trip_id not in self.trips:
             print(f'Invalid trip id: {trip_id}')
             return
@@ -168,9 +176,9 @@ class System:
         self.read_csv('stops', self.add_stop)
 
     def add_stop(self, values):
-        stop_id = int(values['stop_id'])
+        stop_id = values['stop_id']
         try:
-            number = int(values['stop_code'])
+            number = values['stop_code']
         except:
             return
         name = values['stop_name']
@@ -196,20 +204,20 @@ class System:
         self.read_csv('trips', self.add_trip)
 
     def add_trip(self, values):
-        trip_id = int(values['trip_id'])
-        route_id = int(values['route_id'])
+        trip_id = values['trip_id']
+        route_id = values['route_id']
         if route_id not in self.routes:
             print(f'Invalid route id: {route_id}')
             return
-        service_id = int(values['service_id'])
+        service_id = values['service_id']
         if service_id not in self.services:
             print(f'Invalid service id: {service_id}')
             return
-        block_id = int(values['block_id'])
+        block_id = values['block_id']
         if block_id not in self.blocks:
             self.add_block(block_id, service_id)
         direction_id = int(values['direction_id'])
-        shape_id = int(values['shape_id'])
+        shape_id = values['shape_id']
         headsign = values['trip_headsign']
 
         trip = Trip(self, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
@@ -235,8 +243,9 @@ class System:
                 operation(values)
 
 systems = {
-    'victoria': System('victoria', 'Victoria', True),
-    'nanaimo': System('nanaimo', 'Nanaimo', True)
+    'victoria': System('victoria', 'victoria', 'Victoria', True),
+    'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
+    'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False)
 }
 
 def get_system(system_id):

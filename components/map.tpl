@@ -1,12 +1,11 @@
-% import datastructure as ds
-% import web
+% import server
 
 <div id="map"></div>
 <script>
     const lat = parseFloat("{{lat}}");
     const lon = parseFloat("{{lon}}");
 
-    mapboxgl.accessToken = '{{web.mapbox_api_key}}';
+    mapboxgl.accessToken = '{{server.mapbox_api_key}}';
     var map = new mapboxgl.Map({
       container: 'map',
       center: [lon, lat],

@@ -1,4 +1,4 @@
-% include('components/header', title=f'Block {block.block_id}')
+% rebase('base', title=f'Block {block.block_id}')
 
 <h1>Block {{ block.block_id }}</h1>
 <h2>{{ block.service }}</h2>
@@ -32,5 +32,3 @@
     % end
   </tbody>
 </table>
-
-% include('components/footer')

@@ -3,7 +3,7 @@
 % import history as hist
 % from formatting import format_date, format_date_mobile
 
-% include('components/header', title='Vehicle History')
+% rebase('base', title='Vehicle History')
 
 <h1>Vehicle History</h1>
 <hr />
@@ -96,5 +96,3 @@
     % end
   </tbody>
 </table>
-
-% include('components/footer')

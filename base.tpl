@@ -2,6 +2,8 @@
   <head> 
     <title>BCTracker | {{ title }}</title>
 
+    <link rel="icon" type="image/png" href="/img/busicon.png"/>
+
     % supports_realtime = defined('system') and system.supports_realtime
     
     <!-- prevent this website from being searchable -->
@@ -48,7 +50,17 @@
         % end
         <a class="navbar-item" href="/about">About</a>
         % if defined('system'):
-          <a class="navbar-item navbar-right" href="/">{{ system }}</a>
+          <div class="navbar-item navbar-right dropdown">
+            {{ system }}
+            <div class="dropdown-content">
+              <div class="dropdown-title">Change System</div>
+              % for available_system in sorted(systems):
+                % if system != available_system:
+                  <a href="http://{{ available_system.system_id }}.bctracker.ca">{{ available_system }}</a>
+                % end
+              % end
+            </div>
+          </div>
         % end
       </div>
 
@@ -57,6 +69,7 @@
         <div class="mobile-navbar-toggle-line"></div>
         <div class="mobile-navbar-toggle-line"></div>
       </div>
+      <br style="clear: both" />
     </div>
     
     <div id="mobile-navbar" class="mobile-only display-none">
@@ -75,3 +88,7 @@
     </div>
     
     <div id="content">
+      {{ !base }}
+    </div>
+  </body>
+</html>

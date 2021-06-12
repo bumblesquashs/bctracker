@@ -11,7 +11,7 @@
 % block_history = hist.get_block_history(fleetnum)
 % last_block = hist.get_last_block_bus(fleetnum)
 
-% include('components/header', title='Bus {0}'.format(fleetnum), include_maps=True)
+% rebase('base', title='Bus {0}'.format(fleetnum), include_maps=True)
 
 <h1>Bus {{fleetnum}}</h1>
 <h2>{{busrange.year}} {{busrange.model}}</h2>
@@ -139,5 +139,3 @@
     <p><i>Note: No lookup for this fleetnumber is known, has this bus been in service lately?</i></p>
   % end
 % end
-
-% include('components/footer')

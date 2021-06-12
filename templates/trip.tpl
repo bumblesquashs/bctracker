@@ -1,4 +1,4 @@
-% include('components/header', title=str(trip))
+% rebase('base', title=str(trip))
 
 <h1>{{ trip }}</h1>
 <h2>Trip {{ trip.trip_id }} ({{ trip.service }})</h2>
@@ -37,5 +37,3 @@
     % end
   </tbody>
 </table>
-
-% include('components/footer')
