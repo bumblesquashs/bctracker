@@ -267,7 +267,8 @@ class System:
 systems = {
     'victoria': System('victoria', 'victoria', 'Victoria', True),
     'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
-    'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False)
+    'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False),
+    'kamloops': System('kamloops', 'kamloops', 'Kamloops', True)
 }
 
 def get_system(system_id):

@@ -18,7 +18,7 @@ class Stop:
     
     @property
     def services(self):
-        return set(map(lambda s: s.trip.service, self.stop_times))
+        return { s.trip.service for s in self.stop_times }
     
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)

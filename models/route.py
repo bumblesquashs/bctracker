@@ -25,7 +25,7 @@ class Route:
     
     @property
     def services(self):
-        return set(map(lambda t: t.service, self.trips))
+        return { t.service for t in self.trips }
     
     def add_trip(self, trip):
         self.trips.append(trip)

@@ -5,6 +5,7 @@ class Bus:
     def __init__(self, bus_id, number):
         self.bus_id = bus_id
         self.number = number
+        self.current_system = None
 
         self.bus_range = bus_range.get(number)
 

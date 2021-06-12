@@ -1,5 +1,5 @@
 <html>
-  <head> 
+  <head>
     <title>BCTracker | {{ title }}</title>
 
     <link rel="icon" type="image/png" href="/img/busicon.png"/>
