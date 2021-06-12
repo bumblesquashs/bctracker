@@ -1,4 +1,4 @@
-% rebase('base', title=str(system))
+% rebase('base', title='BCTracker')
 
 <h1>BCTracker - {{ system }}</h1>
 <h2>Welcome to the BCTracker site for the {{ system }} Transit System!</h2>
