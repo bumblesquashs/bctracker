@@ -1,6 +1,12 @@
 <html>
-  <head>
-    <title>BCTracker | {{ title }}</title>
+  <head> 
+    <title>
+      % if defined('system'):
+        {{ system }} | {{ title }}
+      % else:
+        BCTracker | {{ title }}
+      % end
+    </title>
 
     <link rel="icon" type="image/png" href="/img/busicon.png"/>
 

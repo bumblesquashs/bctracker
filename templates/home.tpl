@@ -1,4 +1,4 @@
-% rebase('base', title=str(system))
+% rebase('base', title='BCTracker')
 
 <h1>BCTracker - {{ system }}</h1>
 <h2>Welcome to the BCTracker site for the {{ system }} Transit System!</h2>
@@ -20,12 +20,14 @@
   }
 </script>
 
-<form onsubmit="busSearch()" action="javascript:void(0)">
-  <label for="bus_id_search">Fleet Number:</label>
-  <br />
-  <input type="text" id="bus_id_search" name="bus_id" method="post">
-  <input type="submit" value="Search" class="button">
-</form>
+% if defined('system') and system.supports_realtime:
+  <form onsubmit="busSearch()" action="javascript:void(0)">
+    <label for="bus_id_search">Fleet Number:</label>
+    <br />
+    <input type="text" id="bus_id_search" name="bus_id" method="post">
+    <input type="submit" value="Search" class="button">
+  </form>
+% end
 
 <form onsubmit="routeSearch()" action="javascript:void(0)">
   <label for="route_id_search">Route Number:</label>

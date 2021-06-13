@@ -1,5 +1,8 @@
 from datetime import datetime
 
+def format_csv(date_string):
+    return datetime.strptime(date_string, "%Y%m%d")
+
 def format_date(date_string):
     date_object = datetime.strptime(date_string, "%Y-%m-%d")
     return date_object.strftime("%B %-d, %Y")

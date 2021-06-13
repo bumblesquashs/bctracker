@@ -1,7 +1,7 @@
-% rebase('base', title=f'Error: {error}')
+% rebase('base', title='Error')
 
 <h1>Error: {{ error }}</h1>
-% if defined('message'):
+% if defined('message') and message is not None:
   <h2>{{ message }}</h2>
 % end
 <hr />
