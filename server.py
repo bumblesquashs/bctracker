@@ -82,6 +82,19 @@ def system_index(system_id):
         return systems_invalid_template(system_id)
     return systems_template('home', system=system)
 
+@app.route('/systems')
+@app.route('/systems/')
+def systems():
+    return system_systems(DEFAULT_SYSTEM_ID)
+
+@app.route('/<system_id>/systems')
+@app.route('/<system_id>/systems/')
+def system_systems(system_id):
+    system = get_system(system_id)
+    if system is None:
+        return systems_invalid_template(system_id)
+    return systems_template('systems', system=system)
+
 @app.route('/routes')
 @app.route('/routes/')
 def routes():

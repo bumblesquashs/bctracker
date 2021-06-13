@@ -90,6 +90,7 @@
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
         % end
         <a class="mobile-navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
+        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'systems') }}">Change System</a>
       </div>
     % end
     
