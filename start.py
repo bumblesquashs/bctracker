@@ -8,6 +8,7 @@ import cron
 import server
 
 def exit(sig, frame):
+    print('\n')
     cron.stop()
     server.stop()
     sys.exit(0)

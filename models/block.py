@@ -22,11 +22,11 @@ class Block:
 
     @property
     def routes(self):
-        return set(map(lambda trip: trip.route, self.trips))
+        return { trip.route for trip in self.trips }
 
     @property
     def routes_string(self):
-        return ', '.join(map(lambda route: str(route.number), sorted(self.routes)))
+        return ', '.join([route.number for route in sorted(self.routes)])
     
     @property
     def start_time(self):

@@ -21,7 +21,13 @@ def stop():
         cron.remove_all(comment=CRON_ID)
 
 def handle(sig, frame):
-    for system in all_systems():
-        system.update_realtime()
-        if not system.validate_gtfs():
-            system.update_gtfs()
+    try:
+        for system in all_systems():
+            system.update_realtime()
+            if not system.validate_gtfs():
+                system.update_gtfs()
+    except Exception as e:
+        # We should not let any python exceptions propogate out of a signal handler
+        print('Error: Hit exception in cron signal handler')
+        print('Error message: ' + str(e))
+    return
