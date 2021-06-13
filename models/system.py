@@ -16,7 +16,7 @@ import realtime
 
 class System:
     def __init__(self, system_id, remote_id, name, supports_realtime):
-        self.system_id = system_id
+        self.id = system_id
         self.remote_id = remote_id
         self.name = name
         self.supports_realtime = supports_realtime
@@ -25,12 +25,12 @@ class System:
         return self.name
     
     def __eq__(self, other):
-        return self.system_id == other.system_id
+        return self.id == other.id
     
     def __lt__(self, other):
         return self.name < other.name
     
-    def update_gtfs(self, update=False):
+    def update_gtfs(self):
         print(f'Updating GTFS data for {self.name}...')
         gtfs.update(self)
         print('Done!')
@@ -265,7 +265,7 @@ class System:
         return None
 
     def read_csv(self, name, operation):
-        with open(f'./data/gtfs/{self.system_id}/{name}.txt', 'r') as file:
+        with open(f'./data/gtfs/{self.id}/{name}.txt', 'r') as file:
             column_names = file.readline().rstrip().split(',')
             for line in file:
                 line_values = line.rstrip().split(',')

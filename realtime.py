@@ -7,7 +7,7 @@ def update(system):
     if not system.supports_realtime:
         return
     
-    system_id = system.system_id
+    system_id = system.id
     remote_id = system.remote_id
 
     downloads_path = f'downloads/realtime/{system_id}.bin'

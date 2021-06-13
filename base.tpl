@@ -42,7 +42,7 @@
     </script>
     <div id="navbar">
       % if defined('system'):
-        <a class="navbar-item navbar-title" href="{{ get_url(system.system_id, '') }}">BCTracker</a>
+        <a class="navbar-item navbar-title" href="{{ get_url(system.id, '') }}">BCTracker</a>
       % else:
         <a class="navbar-item navbar-title" href="{{ get_url('victoria', '') }}">BCTracker</a>
       % end
@@ -50,21 +50,21 @@
       % if defined('system'):
         <div class="desktop-only">
           % if system.supports_realtime:
-            <a class="navbar-item" href="{{ get_url(system.system_id, 'realtime') }}">Realtime</a>
+            <a class="navbar-item" href="{{ get_url(system.id, 'realtime') }}">Realtime</a>
           % end
-          <a class="navbar-item" href="{{ get_url(system.system_id, 'routes') }}">All Routes</a>
-          <a class="navbar-item" href="{{ get_url(system.system_id, 'blocks') }}">All Blocks</a>
+          <a class="navbar-item" href="{{ get_url(system.id, 'routes') }}">All Routes</a>
+          <a class="navbar-item" href="{{ get_url(system.id, 'blocks') }}">All Blocks</a>
           % if system.supports_realtime:
-            <a class="navbar-item" href="{{ get_url(system.system_id, 'history') }}">Vehicle History</a>
+            <a class="navbar-item" href="{{ get_url(system.id, 'history') }}">Vehicle History</a>
           % end
-          <a class="navbar-item" href="{{ get_url(system.system_id, 'about') }}">About</a>
+          <a class="navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
           <div class="navbar-item navbar-right dropdown">
             {{ system }}
             <div class="dropdown-content">
               <div class="dropdown-title">Change System</div>
               % for available_system in sorted(systems):
                 % if system != available_system:
-                  <a href="{{ get_url(available_system.system_id, '') }}">{{ available_system }}</a>
+                  <a href="{{ get_url(available_system.id, '') }}">{{ available_system }}</a>
                 % end
               % end
             </div>
@@ -83,14 +83,14 @@
     % if defined('system'):
       <div id="mobile-navbar" class="mobile-only display-none">
         % if system.supports_realtime:
-          <a class="mobile-navbar-item" href="{{ get_url(system.system_id, 'realtime') }}">Realtime</a>
+          <a class="mobile-navbar-item" href="{{ get_url(system.id, 'realtime') }}">Realtime</a>
         % end
-        <a class="mobile-navbar-item" href="{{ get_url(system.system_id, 'routes') }}">All Routes</a>
-        <a class="mobile-navbar-item" href="{{ get_url(system.system_id, 'blocks') }}">All Blocks</a>
+        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'routes') }}">All Routes</a>
+        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'blocks') }}">All Blocks</a>
         % if system.supports_realtime:
-          <a class="mobile-navbar-item" href="{{ get_url(system.system_id, 'history') }}">Vehicle History</a>
+          <a class="mobile-navbar-item" href="{{ get_url(system.id, 'history') }}">Vehicle History</a>
         % end
-        <a class="mobile-navbar-item" href="{{ get_url(system.system_id, 'about') }}">About</a>
+        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
       </div>
     % end
     

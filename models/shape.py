@@ -2,7 +2,7 @@
 class Shape:
     def __init__(self, system, shape_id):
         self.system = system
-        self.shape_id = shape_id
+        self.id = shape_id
         self.points = []
 
     def add_point(self, lat, lon, sequence):

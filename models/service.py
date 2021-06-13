@@ -20,7 +20,7 @@ class ServiceType(IntEnum):
 class Service:
     def __init__(self, system, service_id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun):
         self.system = system
-        self.service_id = service_id
+        self.id = service_id
         self.start_date = start_date
         self.end_date = end_date
 
@@ -82,10 +82,10 @@ class Service:
             return 'Unknown'
     
     def __hash__(self):
-        return hash(self.service_id)
+        return hash(self.id)
     
     def __eq__(self, other):
-        return self.service_id == other.service_id
+        return self.id == other.id
     
     def __lt__(self, other):
         return self.service_type < other.service_type

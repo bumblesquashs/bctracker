@@ -2,7 +2,7 @@
 class Stop:
     def __init__(self, system, stop_id, number, name, lat, lon):
         self.system = system
-        self.stop_id = stop_id
+        self.id = stop_id
         self.number = number
         self.name = name
         self.lat = lat
@@ -14,7 +14,7 @@ class Stop:
         return self.name
     
     def __eq__(self, other):
-        return self.stop_id == other.stop_id
+        return self.id == other.id
     
     @property
     def services(self):

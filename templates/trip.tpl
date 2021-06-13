@@ -1,13 +1,13 @@
 % rebase('base', title=str(trip))
 
 <h1>{{ trip }}</h1>
-<h2>Trip {{ trip.trip_id }} ({{ trip.service }})</h2>
+<h2>Trip {{ trip.id }} ({{ trip.service }})</h2>
 <hr />
 
 <p>
-  <a href="{{ get_url(trip.system.system_id, f'/routes/{trip.route.number}') }}">View Route</a>
+  <a href="{{ get_url(trip.system.id, f'/routes/{trip.route.number}') }}">View Route</a>
   <br />
-  <a href="{{ get_url(trip.block.system.system_id, f'/blocks/{trip.block.block_id}') }}">View Block</a>
+  <a href="{{ get_url(trip.block.system.id, f'/blocks/{trip.block.id}') }}">View Block</a>
 </p>
 
 <p>Number of stops: {{ len(trip.stop_times) }}</p>
@@ -26,7 +26,7 @@
       <tr>
         <td>{{ stop_time.time }}</td>
         <td>
-          <a href="{{ get_url(stop_time.system.system_id, f'/stops/{stop_time.stop.number}') }}">
+          <a href="{{ get_url(stop_time.system.id, f'/stops/{stop_time.stop.number}') }}">
             {{ stop_time.stop.number }}
           </a>
           <span class="mobile-only smaller-font">

@@ -2,17 +2,17 @@
 class Block:
     def __init__(self, system, block_id, service_id):
         self.system = system
-        self.block_id = block_id
+        self.id = block_id
         self.service_id = service_id
 
         self.trips = []
     
     def __eq__(self, other):
-        return self.block_id == other.block_id
+        return self.id == other.id
     
     def __lt__(self, other):
         if self.service == other.service:
-            return self.block_id < other.block_id
+            return self.id < other.id
         else:
             return self.service < other.service
 

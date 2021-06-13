@@ -1,6 +1,6 @@
-% rebase('base', title=f'Block {block.block_id}')
+% rebase('base', title=f'Block {block.id}')
 
-<h1>Block {{ block.block_id }}</h1>
+<h1>Block {{ block.id }}</h1>
 <h2>{{ block.service }}</h2>
 <hr />
 
@@ -28,8 +28,8 @@
         </td>
         <td class="desktop-only">{{ trip.direction.value }}</td>
         <td>
-          <a href="{{ get_url(trip.system.system_id, f'/trips/{trip.trip_id}') }}">
-            {{ trip.trip_id }}
+          <a href="{{ get_url(trip.system.id, f'/trips/{trip.id}') }}">
+            {{ trip.id }}
           </a>
         </td>
       </tr>

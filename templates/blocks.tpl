@@ -20,8 +20,8 @@
     % for block in sorted(system.all_blocks()):
       <tr>
         <td>
-          <a href="{{ get_url(block.system.system_id, f'/blocks/{block.block_id}') }}">
-            {{ block.block_id }}
+          <a href="{{ get_url(block.system.id, f'/blocks/{block.id}') }}">
+            {{ block.id }}
           </a>
           <span class="mobile-only smaller-font">
             <br />

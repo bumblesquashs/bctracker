@@ -9,7 +9,7 @@ class Direction(Enum):
 class Trip:
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
         self.system = system
-        self.trip_id = trip_id
+        self.id = trip_id
         self.route_id = route_id
         self.block_id = block_id
         self.service_id = service_id
@@ -29,7 +29,7 @@ class Trip:
         return self.headsign
     
     def __eq__(self, other):
-        return self.trip_id == other.trip_id
+        return self.id == other.id
     
     def __lt__(self, other):
         return self.stop_times[0] < other.stop_times[0]

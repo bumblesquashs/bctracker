@@ -6,7 +6,7 @@ from shutil import rmtree
 import wget
 
 def update(system):
-    system_id = system.system_id
+    system_id = system.id
     remote_id = system.remote_id
 
     downloads_path = f'downloads/gtfs/{system_id}.zip'
@@ -29,4 +29,4 @@ def update(system):
         print(err)
 
 def downloaded(system):
-    return path.exists(f'data/gtfs/{system.system_id}')
+    return path.exists(f'data/gtfs/{system.id}')
