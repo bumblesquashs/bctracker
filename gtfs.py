@@ -1,5 +1,5 @@
 from os import path, rename
-from datetime import date
+from datetime import datetime
 from zipfile import ZipFile
 from shutil import rmtree
 
@@ -14,7 +14,7 @@ def update(system):
 
     try:
         if path.exists(downloads_path):
-            formatted_date = date.today().strftime('%Y-%m-%d')
+            formatted_date = datetime.now().strftime('%Y-%m-%d')
             archives_path = f'archives/gtfs/{system_id}-{formatted_date}.zip'
             rename(downloads_path, archives_path)
         if system.supports_realtime:

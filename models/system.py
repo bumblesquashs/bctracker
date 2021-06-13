@@ -9,6 +9,8 @@ from models.stop import Stop
 from models.stop_times import StopTime
 from models.trip import Trip
 
+from formatting import format_csv
+
 import gtfs
 import realtime
 
@@ -45,6 +47,8 @@ class System:
         print('Done!')
 
     def update_realtime(self):
+        if not self.supports_realtime:
+            return
         print(f'Updating realtime data for {self.name}...')
         realtime.update(self)
         print('Done!')
@@ -56,7 +60,11 @@ class System:
         print('Done!')
     
     def validate_gtfs(self):
-        # TODO: Implement validation
+        for service in self.all_services():
+            if service.end_date.date() < datetime.now().date():
+                return False
+        if self.supports_realtime:
+            pass # TODO: Implement realtime validation
         return True
     
     # Methods for blocks
@@ -120,6 +128,8 @@ class System:
 
     def add_service(self, values):
         service_id = values['service_id']
+        start_date = format_csv(values['start_date'])
+        end_date = format_csv(values['end_date'])
         mon = values['monday'] == '1'
         tue = values['tuesday'] == '1'
         wed = values['wednesday'] == '1'
@@ -128,7 +138,7 @@ class System:
         sat = values['saturday'] == '1'
         sun = values['sunday'] == '1'
 
-        self.services[service_id] = Service(self, service_id, mon, tue, wed, thu, fri, sat, sun)
+        self.services[service_id] = Service(self, service_id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun)
 
     def add_special_service(self, values):
         service_id = values['service_id']
@@ -137,15 +147,15 @@ class System:
         service = self.get_service(service_id)
         if service is None or exception_type != 1:
             return
-        date_string = values['date']
-        date = datetime.strptime(date_string, '%Y%m%d')
-
-        service.special_service = date.strftime('%B %-d, %Y')
+        service.special_service = format_csv(values['date'])
 
     def get_service(self, service_id):
         if service_id in self.services:
             return self.services[service_id]
         return None
+    
+    def all_services(self):
+        return self.services.values()
     
     # Methods for shapes
     def load_shapes(self):

@@ -1,6 +1,8 @@
 
 from enum import IntEnum
 
+from formatting import format_date
+
 class ServiceType(IntEnum):
     WEEKDAY = 0
     MON = 1
@@ -16,9 +18,11 @@ class ServiceType(IntEnum):
     UNKNOWN = 11
 
 class Service:
-    def __init__(self, system, service_id, mon, tue, wed, thu, fri, sat, sun):
+    def __init__(self, system, service_id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun):
         self.system = system
         self.service_id = service_id
+        self.start_date = start_date
+        self.end_date = end_date
 
         self.special_service = 'Special Service'
 
@@ -69,7 +73,11 @@ class Service:
         elif self.service_type == ServiceType.SUN:
             return 'Sundays'
         elif self.service_type == ServiceType.SPECIAL:
-            return f'Special: {self.special_service} Only'
+            if isinstance(self.special_service, str):
+                special_service = self.special_service
+            else:
+                special_service = format_date(self.special_service)
+            return f'Special: {special_service} Only'
         else:
             return 'Unknown'
     
