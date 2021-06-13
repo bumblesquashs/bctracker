@@ -25,7 +25,7 @@ class Route:
 
     @property
     def services(self):
-        return { t.service for t in self.trips if t.service.is_currently_active() }
+        return { t.service for t in self.trips if t.service.is_current }
     
     def add_trip(self, trip):
         self.trips.append(trip)

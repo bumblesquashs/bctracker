@@ -143,7 +143,7 @@ class System:
 
     def add_special_service(self, values):
         service_id = values['service_id']
-        exception_type = values['exception_type']
+        exception_type = int(values['exception_type'])
 
         service = self.get_service(service_id)
         if service is None or exception_type != 1:
