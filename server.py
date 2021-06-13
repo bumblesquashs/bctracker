@@ -37,8 +37,8 @@ def start():
 def stop():
     cp.server.stop()
 
-def get_url(system_id, path):
-    return system_domain.format(system_id, path.lstrip('/'))
+def get_url(system_id, path=''):
+    return system_domain.format(system_id, path.lstrip('/')).rstrip('/')
 
 def systems_template(name, **kwargs):
     return template(f'templates/{name}', systems=all_systems(), get_url=get_url, **kwargs)

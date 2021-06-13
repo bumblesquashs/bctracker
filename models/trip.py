@@ -26,7 +26,9 @@ class Trip:
             self.direction = Direction.UNKNOWN
     
     def __str__(self):
-        return self.headsign
+        if self.headsign.startswith(str(self.route.number)):
+            return self.headsign
+        return f'{self.route.number} {self.headsign}'
     
     def __eq__(self, other):
         return self.id == other.id

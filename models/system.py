@@ -6,7 +6,7 @@ from models.route import Route
 from models.service import Service
 from models.shape import Shape
 from models.stop import Stop
-from models.stop_times import StopTime
+from models.stop_time import StopTime
 from models.trip import Trip
 
 from formatting import format_csv

@@ -1,6 +1,6 @@
-% rebase('base', title='All Blocks')
+% rebase('base', title='Blocks')
 
-<h1>All Blocks</h1>
+<h1>Blocks</h1>
 <hr />
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
@@ -20,7 +20,7 @@
     % for block in sorted(system.all_blocks()):
       <tr>
         <td>
-          <a href="{{ get_url(block.system.id, f'/blocks/{block.id}') }}">
+          <a href="{{ get_url(block.system.id, f'blocks/{block.id}') }}">
             {{ block.id }}
           </a>
           <span class="mobile-only smaller-font">

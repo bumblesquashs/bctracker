@@ -1,26 +1,26 @@
 % rebase('base', title='BCTracker')
 
 <h1>BCTracker - {{ system }}</h1>
-<h2>Welcome to the BCTracker site for the {{ system }} Transit System!</h2>
+<h2>Welcome to the BCTracker site for the {{ system }} Regional Transit System!</h2>
 <hr />
 
 <h2>Quick Search</h2>
 
 <script type="text/javascript">
   function busSearch() {
-    window.location = "/bus/" + document.getElementById('bus_id_search').value;
+    window.location = "{{ get_url(system.id) }}/bus/" + document.getElementById('bus_id_search').value;
   }
 
   function routeSearch() {
-    window.location = "/routes/" + document.getElementById('route_id_search').value;
+    window.location = "{{ get_url(system.id) }}/routes/" + document.getElementById('route_id_search').value;
   }
 
   function stopSearch() {
-    window.location = "/stops/" + document.getElementById('stop_id_search').value;
+    window.location = "{{ get_url(system.id) }}/stops/" + document.getElementById('stop_id_search').value;
   }
 </script>
 
-% if defined('system') and system.supports_realtime:
+% if system.supports_realtime:
   <form onsubmit="busSearch()" action="javascript:void(0)">
     <label for="bus_id_search">Fleet Number:</label>
     <br />
@@ -67,7 +67,7 @@
       We've been working hard to get this updated design ready, and there's a lot of new things for you to enjoy - including full mobile support, improved realtime navigation, maps, and much more.
     </p>
     <p>
-      We've also moved the website to a new address at <a href="http://bctracker.ca">bctracker.ca</a>.
+      We've also moved the website to a new address at <a href="http://victoria.bctracker.ca">victoria.bctracker.ca</a>.
       The old URL will continue to be usable for a while, but if you've bookmarked any pages you'll want to make sure they're updated.
     </p>
     <p>

@@ -20,7 +20,7 @@
       <tr>
         <td>{{ trip.start_time }}</td>
         <td>
-          {{ trip.headsign }}
+          {{ trip }}
           <span class="mobile-only smaller-font">
             <br />
             {{ trip.direction.value }}
@@ -28,7 +28,7 @@
         </td>
         <td class="desktop-only">{{ trip.direction.value }}</td>
         <td>
-          <a href="{{ get_url(trip.system.id, f'/trips/{trip.id}') }}">
+          <a href="{{ get_url(trip.system.id, f'trips/{trip.id}') }}">
             {{ trip.id }}
           </a>
         </td>

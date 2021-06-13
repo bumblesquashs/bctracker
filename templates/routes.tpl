@@ -1,6 +1,6 @@
-% rebase('base', title='All Routes')
+% rebase('base', title='Routes')
 
-<h1>All Routes</h1>
+<h1>Routes</h1>
 <hr />
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
@@ -13,7 +13,7 @@
     % for route in system.all_routes():
       <tr>
         <td>
-          <a href="{{ get_url(route.system.id, f'/routes/{route.number}') }}">
+          <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">
             {{ route }}
           </a>
         </td>

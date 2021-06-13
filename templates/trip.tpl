@@ -5,9 +5,9 @@
 <hr />
 
 <p>
-  <a href="{{ get_url(trip.system.id, f'/routes/{trip.route.number}') }}">View Route</a>
+  <a href="{{ get_url(trip.system.id, f'routes/{trip.route.number}') }}">View Route</a>
   <br />
-  <a href="{{ get_url(trip.block.system.id, f'/blocks/{trip.block.id}') }}">View Block</a>
+  <a href="{{ get_url(trip.block.system.id, f'blocks/{trip.block.id}') }}">View Block</a>
 </p>
 
 <p>Number of stops: {{ len(trip.stop_times) }}</p>
@@ -26,7 +26,7 @@
       <tr>
         <td>{{ stop_time.time }}</td>
         <td>
-          <a href="{{ get_url(stop_time.system.id, f'/stops/{stop_time.stop.number}') }}">
+          <a href="{{ get_url(stop_time.system.id, f'stops/{stop_time.stop.number}') }}">
             {{ stop_time.stop.number }}
           </a>
           <span class="mobile-only smaller-font">

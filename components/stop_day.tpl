@@ -26,14 +26,14 @@
         % end
         <tr>
           <td>{{ stop_time.time }}</td>
-          <td>{{ stop_time.trip.headsign }}</td>
+          <td>{{ stop_time.trip }}</td>
           <td class="desktop-only">
-            <a href="{{ get_url(stop_time.trip.block.system.id, f'/blocks/{stop_time.trip.block.id}') }}">
+            <a href="{{ get_url(stop_time.trip.block.system.id, f'blocks/{stop_time.trip.block.id}') }}">
               {{ stop_time.trip.block.id }}
             </a>
           </td>
           <td>
-            <a href="{{ get_url(stop_time.trip.system.id, f'/trips/{stop_time.trip.id}') }}">
+            <a href="{{ get_url(stop_time.trip.system.id, f'trips/{stop_time.trip.id}') }}">
               {{ stop_time.trip.id }}
             </a>
           </td>

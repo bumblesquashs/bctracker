@@ -3,9 +3,9 @@
 % import history as hist
 % from formatting import format_date, format_date_mobile
 
-% rebase('base', title='Vehicle History')
+% rebase('base', title='History')
 
-<h1>Vehicle History</h1>
+<h1>History</h1>
 <hr />
 
 <h2>Last Block Assigned</h2>
