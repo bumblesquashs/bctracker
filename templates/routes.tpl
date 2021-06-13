@@ -12,7 +12,11 @@
   <tbody>
     % for route in system.all_routes():
       <tr>
-        <td><a href="/routes/{{route.number}}">{{ route }}</a></td>
+        <td>
+          <a href="{{ get_url(route.system.system_id, f'/routes/{route.number}') }}">
+            {{ route }}
+          </a>
+        </td>
       </tr>
     % end
   </tbody>

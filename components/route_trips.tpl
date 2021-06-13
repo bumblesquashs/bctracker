@@ -26,9 +26,21 @@
       <tr>
         <td>{{ trip.start_time }}</td>
         <td>{{ trip.headsign }}</td>
-        <td class="desktop-only"><a href="/stops/{{trip.stop_times[0].stop.number}}">{{ str(trip.stop_times[0].stop) }}</a></td>
-        <td class="desktop-only"><a href="/blocks/{{trip.block_id}}">{{ trip.block_id }}</a></td>
-        <td><a href="/trips/{{trip.trip_id}}">{{ trip.trip_id }}</a></td>
+        <td class="desktop-only">
+          <a href="{{ get_url(trip.stop_times[0].stop.system.system_id, f'/stops/{trip.stop_times[0].stop.number}') }}">
+            {{ str(trip.stop_times[0].stop) }}
+          </a>
+        </td>
+        <td class="desktop-only">
+          <a href="{{ get_url(trip.block.system.system_id, f'/blocks/{trip.block.block_id}') }}">
+            {{ trip.block_id }}
+          </a>
+        </td>
+        <td>
+          <a href="{{ get_url(trip.system.system_id, f'/trips/{trip.trip_id}') }}">
+            {{ trip.trip_id }}
+          </a>
+        </td>
       </tr>
     %end
   </tbody>
