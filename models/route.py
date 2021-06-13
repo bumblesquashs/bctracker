@@ -22,10 +22,10 @@ class Route:
     
     def __gt__(self, other):
         return self.number > other.number
-    
+
     @property
     def services(self):
-        return { t.service for t in self.trips }
+        return { t.service for t in self.trips if t.service.is_currently_active() }
     
     def add_trip(self, trip):
         self.trips.append(trip)

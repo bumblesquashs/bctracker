@@ -22,11 +22,11 @@ class Block:
 
     @property
     def routes(self):
-        return { trip.route for trip in self.trips }
+        return [trip.route for trip in self.trips]
 
     @property
     def routes_string(self):
-        return ', '.join([route.number for route in sorted(self.routes)])
+        return ', '.join({ route.number for route in self.routes })
     
     @property
     def start_time(self):

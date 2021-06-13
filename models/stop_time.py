@@ -7,17 +7,17 @@ class StopTime:
         self.stop_id = stop_id
         self.trip_id = trip_id
         self.time = formatting.format_time(time)
-        self.seqence = sequence
+        self.sequence = sequence
     
     def __eq__(self, other):
         if self.stop_id == other.stop_id and self.trip_id == other.trip_id:
-            return self.seqence == other.sequence
+            return self.sequence == other.sequence
         else:
             return self.time == other.time
 
     def __lt__(self, other):
         if self.stop_id == other.stop_id and self.trip_id == other.trip_id:
-            return self.seqence < other.sequence
+            return self.sequence < other.sequence
         else:
             (sh, sm) = self.time.split(':')
             (oh, om) = other.time.split(':')

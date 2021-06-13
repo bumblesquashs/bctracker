@@ -16,7 +16,7 @@
   </thead>
 
   <tbody>
-    % for trip in sorted(block.trips):
+    % for trip in block.trips:
       <tr>
         <td>{{ trip.start_time }}</td>
         <td>

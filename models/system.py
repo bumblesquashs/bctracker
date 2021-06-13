@@ -44,6 +44,7 @@ class System:
         self.load_shapes()
         self.load_trips()
         self.load_stop_times()
+        self.sort_data()
         print('Done!')
 
     def update_realtime(self):
@@ -263,6 +264,17 @@ class System:
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
+
+    def sort_data(self):
+        print('Sorting data...')
+        for stop in self.stops.values():
+            stop.stop_times = sorted(stop.stop_times)
+        for trip in self.trips.values():
+            trip.stop_times = sorted(trip.stop_times)
+        for route in self.routes.values():
+            route.trips = sorted(route.trips)
+        for block in self.blocks.values():
+            block.trips = sorted(block.trips)
 
     def read_csv(self, name, operation):
         with open(f'./data/gtfs/{self.id}/{name}.txt', 'r') as file:

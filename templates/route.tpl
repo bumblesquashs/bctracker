@@ -6,12 +6,12 @@
 <hr />
 
 <p>
-  % for service in sorted(route.services):
+  % for service in route.services:
     <a href="#{{service}}" class='button spaced-button'>{{ service }}</a>
   % end
 </p>
 
-% for service in sorted(route.services):
+% for service in route.services:
   % trips = [trip for trip in route.trips if trip.service == service]
 
   <h2 id="{{service}}">{{ service }}</h2>

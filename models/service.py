@@ -1,4 +1,4 @@
-
+from datetime import date
 from enum import IntEnum
 
 from formatting import format_date
@@ -89,3 +89,6 @@ class Service:
     
     def __lt__(self, other):
         return self.service_type < other.service_type
+    
+    def is_currently_active(self):
+        return self.start_date.date() <= date.today() <= self.end_date.date()
