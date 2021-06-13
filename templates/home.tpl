@@ -67,7 +67,7 @@
       We've been working hard to get this updated design ready, and there's a lot of new things for you to enjoy - including full mobile support, improved realtime navigation, maps, and much more.
     </p>
     <p>
-      We've also moved the website to a new address at <a href="http://victoria.bctracker.ca">victoria.bctracker.ca</a>.
+      We've also moved the website to a new address at <a href="http://victoria.bctracker.ca">bctracker.ca</a>.
       The old URL will continue to be usable for a while, but if you've bookmarked any pages you'll want to make sure they're updated.
     </p>
     <p>

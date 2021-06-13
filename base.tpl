@@ -58,16 +58,18 @@
             <a class="navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
           % end
           <a class="navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
-          <div class="navbar-item navbar-right dropdown">
-            Change System
-            <div class="dropdown-content">
-              % for available_system in sorted(systems):
-                % if system != available_system:
-                  <a href="{{ get_url(available_system.id) }}">{{ available_system }}</a>
+          % if len(systems) > 1:
+            <div class="navbar-item navbar-right dropdown">
+              Change System
+              <div class="dropdown-content">
+                % for available_system in sorted(systems):
+                  % if system != available_system:
+                    <a href="{{ get_url(available_system.id) }}">{{ available_system }}</a>
+                  % end
                 % end
-              % end
+              </div>
             </div>
-          </div>
+          % end
         </div>
 
         <div class="mobile-navbar-toggle mobile-only" onclick="toggleMobileNavbar()">
@@ -90,7 +92,9 @@
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
         % end
         <a class="mobile-navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
-        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'systems') }}">Change System</a>
+        % if len(systems) > 1:
+          <a class="mobile-navbar-item" href="{{ get_url(system.id, 'systems') }}">Change System</a>
+        % end
       </div>
     % end
     

@@ -1,5 +1,6 @@
 
 from enum import IntEnum
+from datetime import datetime
 
 from formatting import format_date
 
@@ -74,10 +75,9 @@ class Service:
             return 'Sundays'
         elif self.service_type == ServiceType.SPECIAL:
             if isinstance(self.special_service, str):
-                special_service = self.special_service
+                return self.special_service
             else:
-                special_service = format_date(self.special_service)
-            return f'Special: {special_service} Only'
+                return format_date(self.special_service)
         else:
             return 'Unknown'
     
@@ -89,3 +89,7 @@ class Service:
     
     def __lt__(self, other):
         return self.service_type < other.service_type
+    
+    @property
+    def is_current(self):
+        return self.start_date.date() <= datetime.now().date() <= self.end_date.date()
