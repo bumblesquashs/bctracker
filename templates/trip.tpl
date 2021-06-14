@@ -1,8 +1,10 @@
-% rebase('base', title=str(trip))
+% rebase('base', title=str(trip), include_maps=True)
 
 <h1>{{ trip }}</h1>
 <h2>Trip {{ trip.id }} ({{ trip.service }})</h2>
 <hr />
+
+% include('components/trip_map', trip=trip)
 
 <p>
   <a href="{{ get_url(trip.system.id, f'routes/{trip.route.number}') }}">View Route</a>
@@ -10,7 +12,7 @@
   <a href="{{ get_url(trip.block.system.id, f'blocks/{trip.block.id}') }}">View Block</a>
 </p>
 
-<p>Number of stops: {{ len(trip.stop_times) }}</p>
+<p>{{ len(trip.stop_times) }} Stops</p>
 
 <table class="pure-table pure-table-horizontal pure-table-striped">
   <thead>

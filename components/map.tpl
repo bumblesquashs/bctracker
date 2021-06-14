@@ -2,39 +2,39 @@
 
 <div id="map"></div>
 <script>
-    const lat = parseFloat("{{lat}}");
-    const lon = parseFloat("{{lon}}");
+  const lat = parseFloat("{{lat}}");
+  const lon = parseFloat("{{lon}}");
 
-    mapboxgl.accessToken = '{{server.mapbox_api_key}}';
-    var map = new mapboxgl.Map({
-      container: 'map',
-      center: [lon, lat],
-      zoom: 14,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      interactive: false
-    });
+  mapboxgl.accessToken = '{{server.mapbox_api_key}}';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    center: [lon, lat],
+    zoom: 14,
+    style: 'mapbox://styles/mapbox/streets-v11',
+    interactive: false
+  });
 
-    map.setStyle('mapbox://styles/mapbox/light-v10')
+  map.setStyle('mapbox://styles/mapbox/light-v10')
 </script>
 
 % if defined('marker_type'):
-    % if marker_type == 'bus':
-      <script>
-        var marker = document.createElement('div');
-        marker.className = 'marker';
-        marker.innerHTML = '<img src="/img/busicon.png" />'
+  % if marker_type == 'bus':
+    <script>
+      var marker = document.createElement('div');
+      marker.className = 'marker';
+      marker.innerHTML = '<img src="/img/busicon.png" />'
 
-        new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-      </script>
-    % elif marker_type == 'stop':
-      <script>
-        var marker = document.createElement('div');
-        marker.className = 'marker';
-        marker.innerHTML = '<img src="/img/stopicon.png" />'
+      new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
+    </script>
+  % elif marker_type == 'stop':
+    <script>
+      var marker = document.createElement('div');
+      marker.className = 'marker';
+      marker.innerHTML = '<img src="/img/stopicon.png" />'
 
-        new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-      </script>
-    % end
+      new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
+    </script>
+  % end
 % end
 
 % if defined('trip'):
