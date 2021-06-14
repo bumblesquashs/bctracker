@@ -266,7 +266,7 @@ class System:
             reader = csv.reader(file)
             columns = next(reader)
             for row in reader:
-                rows.append(dict((k, v) for k, v in zip(columns, row)))
+                rows.append(dict(zip(columns, row)))
         return rows
 
 systems = {

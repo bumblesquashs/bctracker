@@ -176,6 +176,7 @@ a {
 .list-content {
     margin: 20;
     display: inline-block;
+    vertical-align: top;
 }
 
 #navbar {
