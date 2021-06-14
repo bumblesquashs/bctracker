@@ -26,9 +26,7 @@
       <tr>
         <td>{{ stop_time.time }}</td>
         <td>
-          <a href="{{ get_url(stop_time.system.id, f'stops/{stop_time.stop.number}') }}">
-            {{ stop_time.stop.number }}
-          </a>
+          <a href="{{ get_url(stop_time.system.id, f'stops/{stop_time.stop.number}') }}">{{ stop_time.stop.number }}</a>
           <span class="mobile-only smaller-font">
             <br />
             {{ stop_time.stop }}

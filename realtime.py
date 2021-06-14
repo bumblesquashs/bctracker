@@ -18,5 +18,6 @@ def update(system):
             archives_path = f'archives/realtime/{system_id}-{formatted_date}.bin'
             rename(downloads_path, archives_path)
         wget.download(f'http://{remote_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', downloads_path)
-    except Exception as err:
-        print(err)
+    except Exception as e:
+        print(f'Error: Failed to update realtime for {system}')
+        print(f'Error message: {e}')

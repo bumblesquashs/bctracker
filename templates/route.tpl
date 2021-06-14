@@ -20,13 +20,13 @@
   % if len(outbound_trips) > 0:
     <p>Outbound - {{ len(outbound_trips) }} trips</p>
 
-    % include('components/route_trips', trips=outbound_trips)
+    % include('components/service_trips', trips=outbound_trips)
   % end
 
   % inbound_trips = [trip for trip in trips if trip.direction == Direction.INBOUND]
   % if len(inbound_trips) > 0:
     <p>Inbound - {{ len(inbound_trips) }} trips</p>
 
-    % include('components/route_trips', trips=inbound_trips)
+    % include('components/service_trips', trips=inbound_trips)
   % end
 % end

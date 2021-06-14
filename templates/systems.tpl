@@ -14,11 +14,7 @@
     % for available_system in sorted(systems):
       % if system != available_system:
         <tr>
-          <td>
-            <a href="{{ get_url(available_system.id) }}">
-              {{ available_system }}
-            </a>
-          </td>
+          <td><a href="{{ get_url(available_system.id) }}">{{ available_system }}</a></td>
         </tr>
       % end
     % end

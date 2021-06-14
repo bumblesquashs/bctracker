@@ -27,11 +27,7 @@
           </span>
         </td>
         <td class="desktop-only">{{ trip.direction.value }}</td>
-        <td>
-          <a href="{{ get_url(trip.system.id, f'trips/{trip.id}') }}">
-            {{ trip.id }}
-          </a>
-        </td>
+        <td><a href="{{ get_url(trip.system.id, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
       </tr>
     % end
   </tbody>

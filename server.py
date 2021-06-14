@@ -38,7 +38,7 @@ def stop():
     cp.server.stop()
 
 def get_url(system_id, path=''):
-    return system_domain.format(system_id, path.lstrip('/')).rstrip('/')
+    return system_domain.format(system_id, path).rstrip('/')
 
 def systems_template(name, **kwargs):
     return template(f'templates/{name}', systems=all_systems(), get_url=get_url, **kwargs)
@@ -108,13 +108,13 @@ def system_routes(system_id):
         return systems_invalid_template(system_id)
     return systems_template('routes', system=system)
 
-@app.route('/routes/<number>')
-@app.route('/routes/<number>/')
+@app.route('/routes/<number:int>')
+@app.route('/routes/<number:int>/')
 def routes_number(number):
     return system_routes_number(DEFAULT_SYSTEM_ID, number)
 
-@app.route('/<system_id>/routes/<number>')
-@app.route('/<system_id>/routes/<number>/')
+@app.route('/<system_id>/routes/<number:int>')
+@app.route('/<system_id>/routes/<number:int>/')
 def system_routes_number(system_id, number):
     system = get_system(system_id)
     if system is None:
@@ -151,13 +151,13 @@ def system_realtime(system_id):
     group = request.query.get('group', 'all')
     return systems_template('realtime', system=system, group=group)
 
-@app.route('/bus/<number>')
-@app.route('/bus/<number>/')
+@app.route('/bus/<number:int>')
+@app.route('/bus/<number:int>/')
 def bus_number(number):
     return system_bus_number(DEFAULT_SYSTEM_ID, number)
 
-@app.route('/<system_id>/bus/<number>')
-@app.route('/<system_id>/bus/<number>/')
+@app.route('/<system_id>/bus/<number:int>')
+@app.route('/<system_id>/bus/<number:int>/')
 def system_bus_number(system_id, number):
     system = get_system(system_id)
     if system is None:
@@ -212,13 +212,13 @@ def system_trips_id(system_id, trip_id):
         return systems_error_template(system, f'Trip {trip_id} Not Found', 'This trip may be from an older version of GTFS which is no longer valid')
     return systems_template('trip', system=system, trip=trip)
 
-@app.route('/stops/<number>')
-@app.route('/stops/<number>/')
+@app.route('/stops/<number:int>')
+@app.route('/stops/<number:int>/')
 def stops_number(number):
     return system_stops_number(DEFAULT_SYSTEM_ID, number)
 
-@app.route('/<system_id>/stops/<number>')
-@app.route('/<system_id>/stops/<number>/')
+@app.route('/<system_id>/stops/<number:int>')
+@app.route('/<system_id>/stops/<number:int>/')
 def system_stops_number(system_id, number):
     system = get_system(system_id)
     if system is None:

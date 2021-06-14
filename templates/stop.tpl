@@ -14,5 +14,5 @@
 
 % for service in stop.services:
   % stop_times = [stop_time for stop_time in stop.stop_times if stop_time.trip.service == service]
-  % include('components/stop_day', service=service, stop_times=stop_times)
+  % include('components/service_stop_times', service=service, stop_times=stop_times)
 % end

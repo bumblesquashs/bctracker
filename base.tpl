@@ -23,41 +23,36 @@
       <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
       <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
     % end
-  </head>
-  
-  <body>
+
     <script>
       var showMobileNavbar = false;
-
       function toggleMobileNavbar() {
         const element = document.getElementById("mobile-navbar")
+        showMobileNavbar = !showMobileNavbar
         if (showMobileNavbar) {
-          showMobileNavbar = false;
-          element.className = "mobile-only display-none"
-        } else {
-          showMobileNavbar = true;
           element.className = "mobile-only"
+        } else {
+          element.className = "mobile-only display-none"
         }
       }
     </script>
+  </head>
+  
+  <body>
     <div id="navbar">
       % if defined('system'):
         <a class="navbar-item navbar-title" href="{{ get_url(system.id) }}">BCTracker - {{ system }}</a>
-      % else:
-        <a class="navbar-item navbar-title" href="{{ get_url('victoria') }}">BCTracker</a>
-      % end
 
-      % if defined('system'):
         <div class="desktop-only">
           % if system.supports_realtime:
             <a class="navbar-item" href="{{ get_url(system.id, 'realtime') }}">Realtime</a>
-          % end
-          <a class="navbar-item" href="{{ get_url(system.id, 'routes') }}">Routes</a>
-          <a class="navbar-item" href="{{ get_url(system.id, 'blocks') }}">Blocks</a>
-          % if system.supports_realtime:
             <a class="navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
           % end
+
+          <a class="navbar-item" href="{{ get_url(system.id, 'routes') }}">Routes</a>
+          <a class="navbar-item" href="{{ get_url(system.id, 'blocks') }}">Blocks</a>
           <a class="navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
+
           % if len(systems) > 1:
             <div class="navbar-item navbar-right dropdown">
               Change System
@@ -77,7 +72,10 @@
           <div class="mobile-navbar-toggle-line"></div>
           <div class="mobile-navbar-toggle-line"></div>
         </div>
+      % else:
+        <a class="navbar-item navbar-title" href="{{ get_url('victoria') }}">BCTracker</a>
       % end
+
       <br style="clear: both" />
     </div>
     
@@ -85,13 +83,13 @@
       <div id="mobile-navbar" class="mobile-only display-none">
         % if system.supports_realtime:
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'realtime') }}">Realtime</a>
-        % end
-        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'routes') }}">Routes</a>
-        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'blocks') }}">Blocks</a>
-        % if system.supports_realtime:
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
         % end
+
+        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'routes') }}">Routes</a>
+        <a class="mobile-navbar-item" href="{{ get_url(system.id, 'blocks') }}">Blocks</a>
         <a class="mobile-navbar-item" href="{{ get_url(system.id, 'about') }}">About</a>
+        
         % if len(systems) > 1:
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'systems') }}">Change System</a>
         % end

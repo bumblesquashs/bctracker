@@ -25,8 +25,9 @@ def update(system):
             rmtree(data_path)
         with ZipFile(downloads_path) as zip:
             zip.extractall(data_path)
-    except Exception as err:
-        print(err)
+    except Exception as e:
+        print(f'Error: Failed to update GTFS for {system}')
+        print(f'Error message: {e}')
 
 def downloaded(system):
     return path.exists(f'data/gtfs/{system.id}')

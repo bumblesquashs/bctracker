@@ -1,5 +1,6 @@
 
 from datetime import datetime
+import csv
 
 from models.block import Block
 from models.route import Route
@@ -33,7 +34,7 @@ class System:
     def update_gtfs(self):
         print(f'Updating GTFS data for {self.name}...')
         gtfs.update(self)
-        print('Done!')
+        print('\nDone!')
         self.load_gtfs()
 
     def load_gtfs(self):
@@ -52,7 +53,7 @@ class System:
             return
         print(f'Updating realtime data for {self.name}...')
         realtime.update(self)
-        print('Done!')
+        print('\nDone!')
         self.load_realtime()
     
     def load_realtime(self):
@@ -78,7 +79,7 @@ class System:
         return None
 
     def all_blocks(self):
-        return self.blocks.values()
+        return sorted(self.blocks.values())
 
     # Methods for buses
     def load_buses(self):
@@ -93,7 +94,7 @@ class System:
         return None
 
     def all_buses(self):
-        return self.buses.values()
+        return sorted(self.buses.values())
     
     # Methods for routes
     def load_routes(self):
@@ -103,7 +104,7 @@ class System:
     
     def add_route(self, values):
         route_id = values['route_id']
-        number = values['route_short_name']
+        number = int(values['route_short_name'])
         name = values['route_long_name']
 
         route = Route(self, route_id, number, name)
@@ -119,7 +120,7 @@ class System:
         return None
 
     def all_routes(self):
-        return self.routes.values()
+        return sorted(self.routes.values())
     
     # Methods for services
     def load_services(self):
@@ -156,7 +157,7 @@ class System:
         return None
     
     def all_services(self):
-        return self.services.values()
+        return sorted(self.services.values())
     
     # Methods for shapes
     def load_shapes(self):
@@ -211,7 +212,7 @@ class System:
     def add_stop(self, values):
         stop_id = values['stop_id']
         try:
-            number = values['stop_code']
+            number = int(values['stop_code'])
         except:
             return
         name = values['stop_name']
@@ -278,13 +279,10 @@ class System:
 
     def read_csv(self, name, operation):
         with open(f'./data/gtfs/{self.id}/{name}.txt', 'r') as file:
-            column_names = file.readline().rstrip().split(',')
-            for line in file:
-                line_values = line.rstrip().split(',')
-                values = {}
-                for column in column_names:
-                    values[column] = line_values[column_names.index(column)]
-                operation(values)
+            reader = csv.reader(file)
+            columns = next(reader)
+            for row in reader:
+                operation(dict((k, v) for k, v in zip(columns, row)))
 
 systems = {
     'victoria': System('victoria', 'victoria', 'Victoria', True),
