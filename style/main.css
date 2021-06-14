@@ -169,13 +169,13 @@ a {
     color: #666666;
 }
 
-.floating-container {
+.list-container {
     margin: -20;
 }
 
-.floating-content {
+.list-content {
     margin: 20;
-    float: left;
+    display: inline-block;
 }
 
 #navbar {

@@ -11,9 +11,9 @@
   % end
 </p>
 
-<div class="floating-container">
+<div class="list-container">
   % for service in route.services:
-    <div class="floating-content">
+    <div class="list-content">
       % trips = [trip for trip in route.trips if trip.service == service]
   
       <h2 id="{{service}}">{{ service }}</h2>

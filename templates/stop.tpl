@@ -12,12 +12,12 @@
   % end
 </p>
 
-<div class="floating-container">
+<div class="list-container">
   % for service in stop.services:
     % stop_times = [stop_time for stop_time in stop.stop_times if stop_time.trip.service == service]
 
     % if len(stop_times) > 0:
-      <div class="floating-content">
+      <div class="list-content">
         <h2 id="{{service}}">{{ service }}</h2>
         <p>{{ len(stop_times) }} Trips</p>
         

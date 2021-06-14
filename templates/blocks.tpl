@@ -12,9 +12,9 @@
   % end
 </p>
 
-<div class="floating-container">
+<div class="list-container">
   % for service in services:
-    <div class="floating-content">
+    <div class="list-content">
       <h2 id="{{service}}">{{ service }}</h2>
       <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
