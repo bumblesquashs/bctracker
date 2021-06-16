@@ -1,4 +1,6 @@
 from enum import Enum
+import fleetnumber_translation
+import models.bus_range
 
 class RealtimeStatus(Enum):
     INACTIVE = "Inactive" # this bus is not tracking right 
@@ -16,7 +18,7 @@ class RealtimeVehiclePosition:
         self.realtime_status = realtime_status
         self.lat = lat
         self.lon = lon
-        # print('loaded realtime vehicle: ' + fleet_id + ' ' + trip_id + ' ' + str(block_id) + ' ' + system.name)
+        print('loaded realtime vehicle: ' + fleet_id + ' ' + trip_id + ' ' + str(block_id) + ' ' + system.name)
         
     def __eq__(self, other):
         return self.fleet_id == other.fleet_id
@@ -28,6 +30,18 @@ class RealtimeVehiclePosition:
     @property
     def has_location_data(self):
         return self.lat is not None and self.lon is not None
+        
+    @property
+    def fleet_number(self):
+        translation_table = fleetnumber_translation.get_table()
+        try:
+           return translation_table[self.fleet_id]
+        except KeyError:
+           return None
+           
+    @property
+    def bus(self):
+        return bus_range.get(self.fleet_number)
         
         
         

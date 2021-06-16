@@ -2,11 +2,10 @@
 import models.bus_range as bus_range
 
 class Bus:
-    def __init__(self, bus_id, number):
-        self.id = bus_id
-        self.number = number
+    def __init__(self, fleet_id, fleet_number):
+        self.fleet_id = fleet_id
+        self.fleet_number = fleet_number
         self.current_system = None
-
         self.bus_range = bus_range.get(number)
 
     def __str__(self):

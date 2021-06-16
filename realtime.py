@@ -4,21 +4,32 @@ from os import rename, path
 from datetime import datetime
 from models.realtime_position import RealtimeStatus, RealtimeVehiclePosition
 import protobuf.data.gtfs_realtime_pb2 as protobuf_reader
-
+import fleetnumber_translation
 
 class Realtime:
     def __init__(self):
-        self.realtime_positions = {}
+        self.realtime_positions_dict = {}
         self.last_updated_time = time.time()
 
     def add_realtime_position(self, realtime_position):
-        self.realtime_positions[realtime_position.fleet_id] = realtime_position
+        print('adding : ' + realtime_position.fleet_id)
+        self.realtime_positions_dict[realtime_position.fleet_id] = realtime_position
+        # print(len(self.realtime_positions_dict.values()))
 
-    def get_onroute_realtime_positions(self):
-        return [pos for pos in self.realtime_positions.values() if pos.realtime_status != RealtimeStatus.UNASSIGNED]
+    def reset_realtime_positions(self):
+        self.realtime_positions_dict = {}
         
-    def get_all_realtime_positions(self):
-        return self.realtime_positions.values()
+    @property
+    def onroute_realtime_positions(self):
+        return [pos for pos in self.realtime_positions_dict.values() if pos.realtime_status != RealtimeStatus.UNASSIGNED]
+        
+    @property
+    def realtime_positions(self):
+        return self.realtime_positions_dict.values()
+        
+    @property
+    def is_valid(self):
+        return True
 
 # Singleton
 global_realtime = Realtime()
@@ -39,10 +50,9 @@ def update(system):
         archives_path = f'archives/realtime/{system_id}-{formatted_date}.bin'
         rename(downloads_path, archives_path)
     wget.download(f'http://{remote_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', downloads_path)
-    get_realtime().realtime_positions = {}
     load_realtime_updates(downloads_path, system)
+    fleetnumber_translation.update_table()
         
-
 def load_realtime_updates(realtime_file_path, system):
     class ParsedPosition:
         def __init__(self, vehicle):
@@ -111,5 +121,3 @@ def load_realtime_updates(realtime_file_path, system):
                 lon = parsed_vehicle.lon,
             )
             global_realtime.add_realtime_position(realtime_position)
-            
-

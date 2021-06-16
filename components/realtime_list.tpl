@@ -1,3 +1,5 @@
+% from models.realtime_position import RealtimeStatus
+
 % if defined('group_name'):
   <h2>{{ group_name }}</h2>
 % end
@@ -5,7 +7,8 @@
 <table class="pure-table pure-table-horizontal pure-table-striped fixed-table">
   <thead>
     <tr>
-      <th class="desktop-only">Fleet Number</th>
+        <th class="desktop-only">System</th>
+        <th class="desktop-only">Fleet Number</th>
       % if get('show_model', True):
         <th class="desktop-only">Year and Model</th>
         <th class="mobile-only">Bus</th>
@@ -22,54 +25,61 @@
   <tbody>
     % for bus in buses:
       <%
-        busid = bus.fleetid
-        if (bus.scheduled):
-          tripid = bus.tripid
-          trip = tripdict[tripid]
-          blockid = trip.blockid
+        fleet_number = bus.fleet_number
+        system = bus.system
+        status = bus.realtime_status
+        if status != RealtimeStatus.UNASSIGNED:
+          trip_id = bus.trip_id
+          block_id = bus.block_id
+          status = bus.realtime_status
+          trip = system.get_trip(trip_id)
           headsign = trip.headsign
         end
         
-        if(bus.onroute):
+        if status == RealtimeStatus.ONROUTE:
           try:
-            stopcode = stopdict[bus.stopid].stopcode
+            stop_code = system.get_stop(bus.stop_id).number
+            stop_name = system.get_stop(bus.stop_id).name
           except KeyError:
-            rt.handle_key_error()
+            stop_code = ''
+            stop_name = ''
           end
         else:
-          stopcode = ''
+          stop_code = ''
+          stop_name = ''
         end
       %>
       <tr>
-        % if (bus.unknown_fleetnum_flag):
+          <td>{{ system.name }}</td>
+        % if fleet_number is None:
           <td>Unknown Bus</td>
           <td class="desktop-only"></td>
         % else:
-          % busrange = businfo.get_bus_range(bus.fleetnum)
+          % bus_range = bus.bus.bus_range
           <td>
-            <a href="/bus/{{bus.fleetnum}}">{{ bus.fleetnum }}</a>
+            <a href="/bus/{{fleet_number}}">{{ fleet_number }}</a>
             <span class="mobile-only smaller-font">
               <br />
-              {{ busrange.year }}
+              {{ bus_range.year }}
               % if get('show_model', True):
-                {{ busrange.model }}
+                {{ bus_range.model }}
               % end
             </span>
           </td>
           <td class="desktop-only">
-            {{ busrange.year }}
+            {{ bus_range.year }}
             % if get('show_model', True):
-              {{ busrange.model }}
+              {{ bus_range.model }}
             % end
           </td>
         % end
 
-        % if (bus.scheduled):
+        % if status != RealtimeStatus.UNASSIGNED:
           <td>{{headsign}}</td>
-          <td class="desktop-only"><a href="/blocks/{{blockid}}">{{ blockid }}</a></td>
-          <td class="desktop-only"><a href="/trips/{{tripid}}">{{ tripid }}</a></td>
-          % if bus.onroute:
-            <td class="desktop-only"><a href="/stops/{{stopcode}}">{{ ds.stopdict[bus.stopid].stopname }}</a></td>
+          <td class="desktop-only"><a href="/blocks/{{block_id}}">{{ block_id }}</a></td>
+          <td class="desktop-only"><a href="/trips/{{trip_id}}">{{ trip_id }}</a></td>
+          % if status == RealtimeStatus.ONROUTE:
+            <td class="desktop-only"><a href="/stops/{{stop_code}}">{{ stop_name }}</a></td>
           % else:
             <td class="desktop-only lighter-text">Unavailable</td>
           % end

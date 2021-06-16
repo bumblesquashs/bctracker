@@ -1,6 +1,11 @@
 
 % rebase('base', title='Realtime')
 
+% import realtime as rt
+% from models.realtime_position import RealtimeStatus
+% realtime = rt.get_realtime()
+% buses = realtime.realtime_positions
+
 <h1>Realtime</h1>
 % if group == 'all':
   <h2>All active buses</h2>
@@ -66,35 +71,36 @@
 </p>
 <p>Last updated ???</p>
 
-% if not rt.data_valid:
+
+% if not realtime.is_valid:
   <p>GTFS apparently out of date... need to fix that</p>
 % end
 
-% if len(rtbuslist) == 0:
-  <p>There doesn't appear to be any buses out right now. Victoria has no nightbus service, so this should be the case overnight. If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.</p>
+% if len(buses) == 0:
+  <p>There doesn't appear to be any buses out right now. BC Transit has no nightbus service, so this should be the case overnight. If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.</p>
 % else:
   <%
     if group == 'all':
-      include('components/realtime_list', buses=rtbuslist)
+      include('components/realtime_list', buses=buses)
     elif group == 'route':
-      buses_on_route = list(filter(lambda b: b.scheduled, rtbuslist))
-      routes = set(map(lambda b: rdict[tripdict[b.tripid].routeid], buses_on_route))
-      sorted_routes = sorted(routes, key=lambda r: int(r[0]))
+      buses_on_route = [b for b in buses if b.realtime_status == RealtimeStatus.ONROUTE]
+      routes = [b.system.get_route(b.route_id) for b in buses_on_route]
+      sorted_routes = sorted(routes, key=lambda r: int(route.number))
       for route in sorted_routes:
-        buses = list(filter(lambda b: tripdict[b.tripid].routeid == route[2], buses_on_route))
-        include('components/realtime_list', group_name='{0} {1}'.format(route[0], route[1]), buses=buses)
+        selected_buses = [b for b in buses_on_route if b.system.get_trip(b.trip_id) == route.trip_id]
+        include('components/realtime_list', group_name='{0} {1}'.format(route.number, route.name), buses=selected_buses)
       end
 
-      buses_off_route = list(filter(lambda b: not b.scheduled, rtbuslist))
+      buses_off_route = [b for b in buses if b.realtime_status != RealtimeStatus.ONROUTE]
       if len(buses_off_route) > 0:
         include('components/realtime_list', group_name='Not in service', buses=buses_off_route)
       end
     elif group == 'model':
-      models = set(map(lambda b: businfo.get_bus_range(b.fleetnum).model, rtbuslist))
+      models = [b.bus.bus_range.model for b in buses]
       sorted_models = sorted(models)
       for model in sorted_models:
-        buses = list(filter(lambda b: businfo.get_bus_range(b.fleetnum).model == model, rtbuslist))
-        include('components/realtime_list', group_name=model, buses=buses, show_model=False)
+        selected_buses = [b for b in buses if b.bus.bus_range.model == model]
+        include('components/realtime_list', group_name=model, buses=selected_buses, show_model=False)
       end
     end
   %>

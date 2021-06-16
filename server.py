@@ -140,11 +140,11 @@ def system_history(system_id):
 @app.route('/realtime')
 @app.route('/realtime/')
 def realtime():
-    return system_realtime(DEFAULT_SYSTEM_ID)
+    return global_realtime(DEFAULT_SYSTEM_ID)
 
 @app.route('/<system_id>/realtime')
 @app.route('/<system_id>/realtime/')
-def system_realtime(system_id):
+def global_realtime(system_id):
     system = get_system(system_id)
     if system is None:
         return systems_invalid_template(system_id)

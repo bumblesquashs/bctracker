@@ -23,6 +23,7 @@ def stop():
 
 def handle(sig, frame):
     try:
+        get_realtime().reset_realtime_positions()
         for system in all_systems():
             system.update_realtime()
             if not system.validate_gtfs():
