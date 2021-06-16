@@ -4,22 +4,64 @@
 <h2>Bus Stop {{ stop.number }}</h2>
 <hr />
 
-% include('components/map', lon=stop.lon, lat=stop.lat, marker_type='stop')
-
-<p>
-  % for service in stop.services:
-    <a href="#{{service}}" class="button spaced-button">{{ service }}</a>
-  % end
-</p>
+<div class="side-menu">
+  % include('components/map', lon=stop.lon, lat=stop.lat, marker_type='stop')
+  
+  <div class="info-box">
+    <div class="info-box-header">
+      <h3>Bus Stop Details</h3>
+    </div>
+    <div class="info-box-content">
+      <div class="info-box-row">
+        <span class="info-box-name">Route{{ '' if len(stop.routes) == 1 else 's' }}</span>
+        <div class="info-box-value">
+          % for route in stop.routes:
+            <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
+            <br />
+          % end
+        </div>
+        <br style="clear: both;" />
+      </div>
+      <div class="info-box-row">
+        <span class="info-box-name">First trip</span>
+        <div class="info-box-value">
+          % for service in stop.services:
+            % stop_times = [s for s in stop.stop_times if s.trip.service == service]
+            <span>{{ service }} - {{ stop_times[0].time }}</span>
+            <br />
+          % end
+        </div>
+        <br style="clear: both;" />
+      </div>
+      <div class="info-box-row">
+        <span class="info-box-name">Last trip</span>
+        <div class="info-box-value">
+          % for service in stop.services:
+            % stop_times = [s for s in stop.stop_times if s.trip.service == service]
+            <span>{{ service }} - {{ stop_times[-1].time }}</span>
+            <br />
+          % end
+        </div>
+        <br style="clear: both;" />
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="list-container">
+  <div class="list-navigation">
+    % for service in stop.services:
+      <a href="#{{service}}" class="button">{{ service }}</a>
+    % end
+  </div>
+  <br />
+
   % for service in stop.services:
     % stop_times = [stop_time for stop_time in stop.stop_times if stop_time.trip.service == service]
 
     % if len(stop_times) > 0:
       <div class="list-content">
         <h2 id="{{service}}">{{ service }}</h2>
-        <p>{{ len(stop_times) }} Trips</p>
         
         <table class="pure-table pure-table-horizontal pure-table-striped">
           <thead>

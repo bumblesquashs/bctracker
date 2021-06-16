@@ -30,9 +30,11 @@ class Block:
     
     @property
     def start_time(self):
-        if len(self.trips) > 0:
-            return sorted(self.trips)[0].start_time
-        return ''
+        return self.trips[0].start_time
+    
+    @property
+    def end_time(self):
+        return self.trips[-1].end_time
     
     def add_trip(self, trip):
         self.trips.append(trip)

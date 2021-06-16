@@ -21,6 +21,7 @@ class System:
         self.remote_id = remote_id
         self.name = name
         self.supports_realtime = supports_realtime
+        self.feed_version = ''
     
     def __str__(self):
         return self.name
@@ -32,13 +33,14 @@ class System:
         return self.name < other.name
     
     def update_gtfs(self):
-        print(f'Updating GTFS data for {self.name}...')
+        print(f'Updating GTFS data for {self}...')
         gtfs.update(self)
         print('\nDone!')
         self.load_gtfs()
 
     def load_gtfs(self):
-        print(f'Loading GTFS data for {self.name}...')
+        print(f'Loading GTFS data for {self}...')
+        self.load_feed_info()
         self.load_stops()
         self.load_routes()
         self.load_services()
@@ -51,13 +53,13 @@ class System:
     def update_realtime(self):
         if not self.supports_realtime:
             return
-        print(f'Updating realtime data for {self.name}...')
+        print(f'Updating realtime data for {self}...')
         realtime.update(self)
         print('\nDone!')
         self.load_realtime()
     
     def load_realtime(self):
-        print(f'Loading realtime data for {self.name}...')
+        print(f'Loading realtime data for {self}...')
         self.load_buses()
         print('Done!')
     
@@ -68,6 +70,10 @@ class System:
         if self.supports_realtime:
             pass # TODO: Implement realtime validation
         return True
+    
+    def load_feed_info(self):
+        values = self.read_csv('feed_info')[0]
+        self.feed_version = values['feed_version']
     
     # Methods for blocks
     def get_block(self, block_id):

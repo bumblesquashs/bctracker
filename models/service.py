@@ -1,6 +1,5 @@
 from datetime import date
 from enum import IntEnum
-from datetime import datetime
 
 from formatting import format_date
 

@@ -53,6 +53,10 @@ class Trip:
         return self.stop_times[0].time
     
     @property
+    def end_time(self):
+        return self.stop_times[-1].time
+    
+    @property
     def points(self):
         return sorted(self.system.get_shape(self.shape_id).points)
 

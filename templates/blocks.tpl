@@ -6,13 +6,14 @@
 % blocks = system.all_blocks()
 % services = sorted({ b.service for b in blocks if b.service.is_current })
 
-<p>
-  % for service in services:
-    <a href="#{{service}}" class='button spaced-button'>{{ service }}</a>
-  % end
-</p>
-
 <div class="list-container">
+  <div class="list-navigation">
+    % for service in services:
+      <a href="#{{service}}" class='button'>{{ service }}</a>
+    % end
+  </div>
+  <br />
+
   % for service in services:
     <div class="list-content">
       <h2 id="{{service}}">{{ service }}</h2>
