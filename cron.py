@@ -1,9 +1,10 @@
-
 import os
+import time
 import signal
 from crontab import CronTab
 
 from models.system import all_systems
+from realtime import get_realtime
 
 CRON_ID = 'gtfs-muncher'
 CRON_INTERVAL = 5
@@ -26,6 +27,7 @@ def handle(sig, frame):
             system.update_realtime()
             if not system.validate_gtfs():
                 system.update_gtfs()
+        get_realtime().last_updated_time = time.time()
     except Exception as e:
         # We should not let any python exceptions propogate out of a signal handler
         print('Error: Hit exception in cron signal handler')
