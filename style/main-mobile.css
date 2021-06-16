@@ -54,7 +54,7 @@ table {
     float: right;
     display: block;
     padding: 5px;
-    margin: 4px 0px;
+    margin: 5px 10px 5px 0px;
 }
 
 .mobile-navbar-toggle-line {
@@ -74,6 +74,8 @@ table {
 }
 
 #mobile-navbar {
+    position: relative;
+    z-index: 10;
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;

@@ -48,6 +48,7 @@
 
       <div class="desktop-only">
         % if system is None:
+          <a class="navbar-item" href="{{ get_url(None, 'map') }}">Map</a>
           <a class="navbar-item" href="{{ get_url(None, 'realtime') }}">Realtime</a>
           <a class="navbar-item" href="{{ get_url(None, 'history') }}">History</a>
           <a class="navbar-item" href="{{ get_url(None, 'routes') }}">Routes</a>
@@ -66,9 +67,11 @@
           % end
         % else:
           % if system.supports_realtime:
+            <a class="navbar-item" href="{{ get_url(system.id, 'map') }}">Map</a>
             <a class="navbar-item" href="{{ get_url(system.id, 'realtime') }}">Realtime</a>
             <a class="navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
           % else:
+            <span class="navbar-item navbar-item-disabled">Map</span>
             <span class="navbar-item navbar-item-disabled">Realtime</span>
             <span class="navbar-item navbar-item-disabled">History</span>
           % end
@@ -104,6 +107,7 @@
     
     <div id="mobile-navbar" class="mobile-only display-none">
       % if system is None:
+        <a class="mobile-navbar-item" href="{{ get_url(None, 'map') }}">Map</a>
         <a class="mobile-navbar-item" href="{{ get_url(None, 'realtime') }}">Realtime</a>
         <a class="mobile-navbar-item" href="{{ get_url(None, 'history') }}">History</a>
         <a class="mobile-navbar-item" href="{{ get_url(None, 'routes') }}">Routes</a>
@@ -116,6 +120,7 @@
         % end
       % else:
         % if system.supports_realtime:
+          <a class="mobile-navbar-item" href="{{ get_url(system.id, 'map') }}">Map</a>
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'realtime') }}">Realtime</a>
           <a class="mobile-navbar-item" href="{{ get_url(system.id, 'history') }}">History</a>
         % end

@@ -128,6 +128,16 @@ def history():
 def system_history(system_id):
     return systems_template('history', system=get_system(system_id), path='history')
 
+@app.route('/map')
+@app.route('/map/')
+def map():
+    return system_map(None)
+
+@app.route('/<system_id>/map')
+@app.route('/<system_id>/map/')
+def system_map(system_id):
+    return systems_template('map', system=get_system(system_id), path='map')
+
 @app.route('/realtime')
 @app.route('/realtime/')
 def realtime():

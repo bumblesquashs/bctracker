@@ -238,13 +238,22 @@ a {
     vertical-align: top;
 }
 
+.system-map-header {
+    position: relative;
+    z-index: 5;
+}
+
 #navbar {
+    position: relative;
+    z-index: 20;
     margin: 0px;
     padding: 0px;
     background-color: #49a348;
 }
 
 #sub-navbar {
+    position: relative;
+    z-index: 10;
     margin: 0px;
     padding: 5px 20px;
     background-color: #cbcbcb;
@@ -262,4 +271,13 @@ a {
     height: 300px;
     margin-bottom: 20px;
     border: 1px solid #cbcbcb;
+}
+
+#system-map {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
 }
