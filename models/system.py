@@ -283,7 +283,7 @@ systems = {
 }
 
 def get_system(system_id):
-    if system_id in systems:
+    if system_id is not None and system_id in systems:
         return systems[system_id]
     return None
 

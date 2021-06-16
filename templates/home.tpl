@@ -1,57 +1,76 @@
-% rebase('base', title='BCTracker')
+% rebase('base', title='Home' if system is None else 'BCTracker')
 
-<h1>BCTracker - {{ system }}</h1>
-<h2>Welcome to the BCTracker site for the {{ system }} Regional Transit System!</h2>
+<h1>Welcome to BCTracker!</h1>
 <hr />
 
 <div class="side-menu">
   <h2>Quick Search</h2>
 
-  <script type="text/javascript">
-    function busSearch() {
-      let value = document.getElementById('bus_id_search').value;
-      if (value.length > 0) {
-        window.location = "{{ get_url(system.id) }}/bus/" + value;
+  % if system is None:
+    <script type="text/javascript">
+      function busSearch() {
+        let value = document.getElementById('bus_id_search').value;
+        if (value.length > 0) {
+          window.location = "{{ get_url(None) }}/bus/" + value;
+        }
       }
-    }
-  
-    function routeSearch() {
-      let value = document.getElementById('route_id_search').value;
-      if (value.length > 0) {
-        window.location = "{{ get_url(system.id) }}/routes/" + value;
+    </script>
+  % else:
+    <script type="text/javascript">
+      function busSearch() {
+        let value = document.getElementById('bus_id_search').value;
+        if (value.length > 0) {
+          window.location = "{{ get_url(system.id) }}/bus/" + value;
+        }
       }
-    }
-  
-    function stopSearch() {
-      let value = document.getElementById('stop_id_search').value;
-      if (value.length > 0) {
-        window.location = "{{ get_url(system.id) }}/stops/" + value;
+    
+      function routeSearch() {
+        let value = document.getElementById('route_id_search').value;
+        if (value.length > 0) {
+          window.location = "{{ get_url(system.id) }}/routes/" + value;
+        }
       }
-    }
-  </script>
-  
-  % if system.supports_realtime:
+    
+      function stopSearch() {
+        let value = document.getElementById('stop_id_search').value;
+        if (value.length > 0) {
+          window.location = "{{ get_url(system.id) }}/stops/" + value;
+        }
+      }
+    </script>
+  % end
+
+  % if system is None:
     <form onsubmit="busSearch()" action="javascript:void(0)">
       <label for="bus_id_search">Fleet Number:</label>
       <br />
       <input type="text" id="bus_id_search" name="bus_id" method="post">
       <input type="submit" value="Search" class="button">
     </form>
+  % else:
+    % if system.supports_realtime:
+      <form onsubmit="busSearch()" action="javascript:void(0)">
+        <label for="bus_id_search">Fleet Number:</label>
+        <br />
+        <input type="text" id="bus_id_search" name="bus_id" method="post">
+        <input type="submit" value="Search" class="button">
+      </form>
+    % end
+    
+    <form onsubmit="routeSearch()" action="javascript:void(0)">
+      <label for="route_id_search">Route Number:</label>
+      <br />
+      <input type="text" id="route_id_search" name="route_id" method="post">
+      <input type="submit" value="Search" class="button">
+    </form>
+    
+    <form onsubmit="stopSearch()" action="javascript:void(0)">
+      <label for="stop_id_search">Stop Number:</label>
+      <br />
+      <input type="text" id="stop_id_search" name="stop_id" method="post">
+      <input type="submit" value="Search" class="button">
+    </form>
   % end
-  
-  <form onsubmit="routeSearch()" action="javascript:void(0)">
-    <label for="route_id_search">Route Number:</label>
-    <br />
-    <input type="text" id="route_id_search" name="route_id" method="post">
-    <input type="submit" value="Search" class="button">
-  </form>
-  
-  <form onsubmit="stopSearch()" action="javascript:void(0)">
-    <label for="stop_id_search">Stop Number:</label>
-    <br />
-    <input type="text" id="stop_id_search" name="stop_id" method="post">
-    <input type="submit" value="Search" class="button">
-  </form>
 </div>
 
 <div style="overflow: hidden;">
@@ -80,7 +99,7 @@
         We've been working hard to get this updated design ready, and there's a lot of new things for you to enjoy - including full mobile support, improved realtime navigation, maps, and much more.
       </p>
       <p>
-        We've also moved the website to a new address at <a href="http://victoria.bctracker.ca">bctracker.ca</a>.
+        We've also moved the website to a new address at <a href="http://bctracker.ca">bctracker.ca</a>.
         The old URL will continue to be usable for a while, but if you've bookmarked any pages you'll want to make sure they're updated.
       </p>
       <p>

@@ -44,7 +44,7 @@ table {
 .mobile-navbar-item {
     display: block;
     color: white;
-    padding: 14px 16px;
+    padding: 15px 20px;
     font-family: Helvetica, sans-serif;
     font-size: 16pt;
     font-weight: normal;
@@ -75,7 +75,7 @@ table {
 
 #mobile-navbar {
     margin: 0px;
-    padding: 10px 20px 20px 20px;
+    padding: 5px 0px;
     overflow: hidden;
     background-color: #255325;
 }

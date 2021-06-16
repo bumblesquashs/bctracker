@@ -16,8 +16,10 @@
         <div class="info-box-value">
           % for service in route.services:
             % trips = [t for t in route.trips if t.service == service and t.direction == Direction.OUTBOUND]
-            <span>{{ service }} - {{ trips[0].start_time }}</span>
-            <br />
+            % if len(trips):
+              <span>{{ service }} - {{ trips[0].start_time }}</span>
+              <br />
+            % end
           % end
         </div>
         <br style="clear: both;" />
@@ -27,8 +29,10 @@
         <div class="info-box-value">
           % for service in route.services:
             % trips = [t for t in route.trips if t.service == service and t.direction == Direction.INBOUND]
-            <span>{{ service }} - {{ trips[0].start_time }}</span>
-            <br />
+            % if len(trips) > 0:
+              <span>{{ service }} - {{ trips[0].start_time }}</span>
+              <br />
+            % end
           % end
         </div>
         <br style="clear: both;" />
@@ -38,8 +42,10 @@
         <div class="info-box-value">
           % for service in route.services:
             % trips = [t for t in route.trips if t.service == service and t.direction == Direction.OUTBOUND]
-            <span>{{ service }} - {{ trips[-1].end_time }}</span>
-            <br />
+            % if len(trips) > 0:
+              <span>{{ service }} - {{ trips[-1].end_time }}</span>
+              <br />
+            % end
           % end
         </div>
         <br style="clear: both;" />
@@ -49,8 +55,10 @@
         <div class="info-box-value">
           % for service in route.services:
             % trips = [t for t in route.trips if t.service == service and t.direction == Direction.INBOUND]
-            <span>{{ service }} - {{ trips[-1].end_time }}</span>
-            <br />
+            % if len(trips) > 0:
+              <span>{{ service }} - {{ trips[-1].end_time }}</span>
+              <br />
+            % end
           % end
         </div>
         <br style="clear: both;" />
