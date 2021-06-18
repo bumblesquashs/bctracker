@@ -140,22 +140,11 @@ def system_map(system_id):
 @app.route('/realtime')
 @app.route('/realtime/')
 def realtime():
-<<<<<<< HEAD
-    return global_realtime(DEFAULT_SYSTEM_ID)
-
-@app.route('/<system_id>/realtime')
-@app.route('/<system_id>/realtime/')
-def global_realtime(system_id):
-    system = get_system(system_id)
-    if system is None:
-        return systems_invalid_template(system_id)
-=======
     return system_realtime(None)
 
 @app.route('/<system_id>/realtime')
 @app.route('/<system_id>/realtime/')
 def system_realtime(system_id):
->>>>>>> de09ab709b9458ab68a6a2959c945a6ae7b2d0ef
     group = request.query.get('group', 'all')
     return systems_template('realtime', system=get_system(system_id), group=group, path='realtime')
 
