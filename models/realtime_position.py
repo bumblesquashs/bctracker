@@ -10,10 +10,11 @@ class RealtimeStatus(Enum):
     ONROUTE = "Onroute" # this bus is fully on route (all systems go)
 
 class RealtimeVehiclePosition:
-    def __init__(self, system, fleet_id, trip_id, block_id, stop_id, realtime_status, lat, lon):
+    def __init__(self, system, fleet_id, trip_id, route_id, block_id, stop_id, realtime_status, lat, lon):
         self.fleet_id = fleet_id
         self.system = system
         self.trip_id = trip_id
+        self.route_id = route_id
         self.block_id = block_id
         self.stop_id = stop_id
         self.realtime_status = realtime_status
@@ -41,5 +42,7 @@ class RealtimeVehiclePosition:
            
     @property
     def bus(self):
+        if self.fleet_number == None:
+            return None
         return bus_range.get(int(self.fleet_number))
         

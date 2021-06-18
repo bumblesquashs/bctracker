@@ -48,6 +48,7 @@ class Realtime:
             parsed_vehicle.is_scheduled = False
             parsed_vehicle.block_id = None
             parsed_vehicle.stop_id = None
+            parsed_vehicle.route_id = None
             
             if gtfs_vehicle.stop_id != '':
                 parsed_vehicle.stop_id = gtfs_vehicle.stop_id
@@ -58,6 +59,7 @@ class Realtime:
                 if trip is not None:
                     parsed_vehicle.is_scheduled = True
                     parsed_vehicle.block_id = trip.block_id
+                    parsed_vehicle.route_id = trip.route_id
                 
         except AttributeError:
             parsed_vehicle.status = RealtimeStatus.UNASSIGNED
@@ -83,6 +85,7 @@ class Realtime:
             fleet_id = parsed_vehicle.fleet_id,
             system = system,
             trip_id = parsed_vehicle.trip_id,
+            route_id = parsed_vehicle.route_id,
             block_id = parsed_vehicle.block_id,
             stop_id = parsed_vehicle.stop_id,
             realtime_status = parsed_vehicle.status,

@@ -54,7 +54,7 @@ class System:
         if not self.supports_realtime:
             return
         print(f'Updating realtime data for {self}...')
-        # realtime.update(self)
+        realtime.update(self)
         print('\nDone!')
         self.load_realtime()
     
