@@ -17,6 +17,7 @@ mkdir -p archives/realtime
 mkdir -p data/gtfs
 mkdir -p data/history
 mkdir -p data/realtime
+mkdir -p data/nextride
 
 mkdir -p downloads/gtfs
 mkdir -p downloads/realtime

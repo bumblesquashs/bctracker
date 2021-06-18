@@ -4,7 +4,7 @@ import signal
 from crontab import CronTab
 
 from models.system import all_systems
-from realtime import get_realtime
+from models.realtime import get_realtime
 
 CRON_ID = 'gtfs-muncher'
 CRON_INTERVAL = 5

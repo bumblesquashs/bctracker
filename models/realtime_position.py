@@ -1,6 +1,6 @@
 from enum import Enum
 import fleetnumber_translation
-import models.bus_range
+import models.bus_range as bus_range
 
 class RealtimeStatus(Enum):
     INACTIVE = "Inactive" # this bus is not tracking right 
@@ -41,7 +41,7 @@ class RealtimeVehiclePosition:
            
     @property
     def bus(self):
-        return bus_range.get(self.fleet_number)
+        return bus_range.get(int(self.fleet_number))
         
         
         

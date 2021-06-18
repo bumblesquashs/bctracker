@@ -55,7 +55,7 @@
           <td>Unknown Bus</td>
           <td class="desktop-only"></td>
         % else:
-          % bus_range = bus.bus.bus_range
+          % bus_range = bus.bus
           <td>
             <a href="/bus/{{fleet_number}}">{{ fleet_number }}</a>
             <span class="mobile-only smaller-font">

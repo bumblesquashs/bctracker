@@ -1,10 +1,10 @@
 
 % rebase('base', title='Realtime')
 
-% import realtime as rt
+% import models.realtime as rt
 % from models.realtime_position import RealtimeStatus
 % realtime = rt.get_realtime()
-% buses = realtime.realtime_positions
+% buses = realtime.get_realtime_positions(system)
 
 <h1>Realtime</h1>
 % if group == 'all':
@@ -96,10 +96,10 @@
         include('components/realtime_list', group_name='Not in service', buses=buses_off_route)
       end
     elif group == 'model':
-      models = [b.bus.bus_range.model for b in buses]
+      models = [b.bus.model for b in buses]
       sorted_models = sorted(models)
       for model in sorted_models:
-        selected_buses = [b for b in buses if b.bus.bus_range.model == model]
+        selected_buses = [b for b in buses if b.bus.model == model]
         include('components/realtime_list', group_name=model, buses=selected_buses, show_model=False)
       end
     end

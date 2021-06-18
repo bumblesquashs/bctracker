@@ -2,6 +2,9 @@ from os import path, rename
 from datetime import datetime
 from zipfile import ZipFile
 from shutil import rmtree
+import nextride_client
+
+
 
 import wget
 
@@ -19,6 +22,7 @@ def update(system):
             rename(downloads_path, archives_path)
         if system.supports_realtime:
             wget.download(f'http://{remote_id}.mapstrat.com/current/google_transit.zip', downloads_path)
+            nextride_client.download_static(system)
         else:
             wget.download(f'http://bctransit.com/data/gtfs/{remote_id}.zip', downloads_path)
         if path.exists(data_path):
@@ -30,4 +34,4 @@ def update(system):
         print(f'Error message: {e}')
 
 def downloaded(system):
-    return path.exists(f'data/gtfs/{system.id}')
+    return path.exists(f'data/gtfs/{system.id}') and path.exists(f'data/nextride/{system.id}')
