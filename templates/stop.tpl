@@ -4,57 +4,34 @@
 <h2>Bus Stop {{ stop.number }}</h2>
 <hr />
 
-<div class="side-menu">
+<div class="sidebar">
   % include('components/map', lon=stop.lon, lat=stop.lat, marker_type='stop')
   
   <div class="info-box">
-    <div class="info-box-header">
-      <h3>Bus Stop Details</h3>
+    <div class="info-box-section">
+      % include('components/service_indicator', services=stop.services)
     </div>
-    <div class="info-box-content">
-      <div class="info-box-row">
-        <span class="info-box-name">Route{{ '' if len(stop.routes) == 1 else 's' }}</span>
-        <div class="info-box-value">
-          % for route in stop.routes:
-            <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
-            <br />
-          % end
-        </div>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">First trip</span>
-        <div class="info-box-value">
-          % for service in stop.services:
-            % stop_times = [s for s in stop.stop_times if s.trip.service == service]
-            <span>{{ service }} - {{ stop_times[0].time }}</span>
-            <br />
-          % end
-        </div>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Last trip</span>
-        <div class="info-box-value">
-          % for service in stop.services:
-            % stop_times = [s for s in stop.stop_times if s.trip.service == service]
-            <span>{{ service }} - {{ stop_times[-1].time }}</span>
-            <br />
-          % end
-        </div>
-        <br style="clear: both;" />
+    <div class="info-box-section">
+      <div class="info-box-name">Route{{ '' if len(stop.routes) == 1 else 's' }}</div>
+      <div class="info-box-value">
+        % for route in stop.routes:
+          <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
+          <br />
+        % end
       </div>
     </div>
   </div>
 </div>
 
-<div class="list-container">
-  <div class="list-navigation">
-    % for service in stop.services:
-      <a href="#{{service}}" class="button">{{ service }}</a>
-    % end
-  </div>
-  <br />
+<div class="body list-container">
+  % if len(stop.services) > 0:
+    <div class="list-navigation">
+      % for service in stop.services:
+        <a href="#{{service}}" class="button">{{ service }}</a>
+      % end
+    </div>
+    <br />
+  % end
 
   % for service in stop.services:
     % stop_times = [stop_time for stop_time in stop.stop_times if stop_time.trip.service == service]
@@ -73,22 +50,11 @@
             </tr>
           </thead>
           <tbody>
-            % last_hour = -1
             % for stop_time in stop_times:
-              % this_hour = int(stop_time.time.split(':')[0])
-              % if last_hour == -1:
-                % last_hour = this_hour
-              % elif this_hour > last_hour:
-                <tr>
-                  <td class="desktop-only" colspan="4"><hr /></td>
-                  <td class="mobile-only" colspan="3"><hr /></td>
-                </tr>
-                % last_hour = this_hour
-              % end
+              % block = stop_time.trip.block
               <tr>
                 <td>{{ stop_time.time }}</td>
                 <td>{{ stop_time.trip }}</td>
-                % block = stop_time.trip.block
                 <td class="desktop-only"><a href="{{ get_url(block.system.id, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                 <td><a href="{{ get_url(stop_time.trip.system.id, f'trips/{stop_time.trip.id}') }}">{{ stop_time.trip.id }}</a></td>
               </tr>

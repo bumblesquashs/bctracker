@@ -24,7 +24,16 @@ class Service:
         self.start_date = start_date
         self.end_date = end_date
 
-        self.special_service = 'Special Service'
+        self.mon = mon
+        self.tue = tue
+        self.wed = wed
+        self.thu = thu
+        self.fri = fri
+        self.sat = sat
+        self.sun = sun
+
+        self.special_dates = []
+        self.excluded_dates = []
 
         if sat and sun:
             self.service_type = ServiceType.WEEKEND
@@ -73,10 +82,7 @@ class Service:
         elif self.service_type == ServiceType.SUN:
             return 'Sundays'
         elif self.service_type == ServiceType.SPECIAL:
-            if isinstance(self.special_service, str):
-                return self.special_service
-            else:
-                return format_date(self.special_service)
+            return self.special_dates_string
         else:
             return 'Unknown'
     
@@ -90,5 +96,19 @@ class Service:
         return self.service_type < other.service_type
     
     @property
+    def special_dates_string(self):
+        return ','.join(self.special_dates)
+    
+    @property
+    def excluded_dates_string(self):
+        return ','.join(self.excluded_dates)
+    
+    @property
     def is_current(self):
         return self.start_date.date() <= date.today() <= self.end_date.date()
+    
+    def add_special_date(self, date):
+        self.special_dates.append(format_date(date))
+    
+    def add_excluded_date(self, date):
+        self.excluded_dates.append(format_date(date))

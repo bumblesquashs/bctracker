@@ -3,47 +3,36 @@
 <h1>Block {{ block.id }}</h1>
 <hr />
 
-<div class="side-menu">
+<div class="sidebar">
   <div class="info-box">
-    <div class="info-box-header">
-      <h3>Block Details</h3>
+    <div class="info-box-section">
+      % include('components/service_indicator', service=block.service)
     </div>
-    <div class="info-box-content">
-      <div class="info-box-row">
-        <span class="info-box-name">Service day(s)</span>
-        <span class="info-box-value">{{ block.service }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Start time</span>
-        <span class="info-box-value">{{ block.start_time }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">End time</span>
-        <span class="info-box-value">{{ block.end_time }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Number of trips</span>
-        <span class="info-box-value">{{ len(block.trips) }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Route{{ '' if len(block.routes) == 1 else 's' }}</span>
-        <div class="info-box-value">
-          % for route in block.routes:
-            <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
-            <br />
-          % end
-        </div>
-        <br style="clear: both;" />
+    <div class="info-box-section">
+      <div class="info-box-name">Start time</div>
+      <div class="info-box-value">{{ block.start_time }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">End time</div>
+      <div class="info-box-value">{{ block.end_time }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Number of trips</div>
+      <div class="info-box-value">{{ len(block.trips) }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Route{{ '' if len(block.routes) == 1 else 's' }}</div>
+      <div class="info-box-value">
+        % for route in block.routes:
+          <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
+          <br />
+        % end
       </div>
     </div>
   </div>
 </div>
 
-<div>
+<div class="body">
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>
       <tr>

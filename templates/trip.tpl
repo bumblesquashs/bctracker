@@ -4,49 +4,41 @@
 <h2>Trip {{ trip.id }}</h2>
 <hr />
 
-<div class="side-menu">
+<div class="sidebar">
   % include('components/trip_map', trip=trip)
   
   <div class="info-box">
-    <div class="info-box-header">
-      <h3>Trip Details</h3>
+    <div class="info-box-section">
+      % include('components/service_indicator', service=trip.service)
     </div>
-    <div class="info-box-content">
-      <div class="info-box-row">
-        <span class="info-box-name">Service day(s)</span>
-        <span class="info-box-value">{{ trip.service }}</span>
-        <br style="clear: both;" />
+    <div class="info-box-section">
+      <div class="info-box-name">Start time</div>
+      <div class="info-box-value">{{ trip.start_time }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">End time</div>
+      <div class="info-box-value">{{ trip.end_time }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Number of stops</div>
+      <div class="info-box-value">{{ len(trip.stop_times) }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Route</div>
+      <div class="info-box-value">
+        <a href="{{ get_url(trip.system.id, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
       </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Start time</span>
-        <span class="info-box-value">{{ trip.start_time }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">End time</span>
-        <span class="info-box-value">{{ trip.end_time }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Number of stops</span>
-        <span class="info-box-value">{{ len(trip.stop_times) }}</span>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Route</span>
-        <a class="info-box-value" href="{{ get_url(trip.system.id, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
-        <br style="clear: both;" />
-      </div>
-      <div class="info-box-row">
-        <span class="info-box-name">Block</span>
-        <a class="info-box-value" href="{{ get_url(trip.block.system.id, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
-        <br style="clear: both;" />
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Block</div>
+      <div class="info-box-value">
+        <a href="{{ get_url(trip.block.system.id, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
       </div>
     </div>
   </div>
 </div>
 
-<div>
+<div class="body">
   <table class="pure-table pure-table-horizontal pure-table-striped">
     <thead>
       <tr>

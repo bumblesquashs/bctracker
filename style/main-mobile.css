@@ -73,6 +73,14 @@ table {
     table-layout: fixed;
 }
 
+.list-navigation .button {
+    margin-bottom: 10px;
+}
+
+.list-navigation .button:last-child {
+    margin-bottom: 0px;
+}
+
 #mobile-navbar {
     position: relative;
     z-index: 10;

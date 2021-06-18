@@ -22,7 +22,7 @@ a:hover {
     vertical-align: middle;
 }
 
-.side-menu {
+.sidebar {
     float: left;
     margin-right: 40px;
     margin-bottom: 20px;
@@ -30,7 +30,8 @@ a:hover {
 }
 
 .body {
-    float: left;
+    float: none;
+    overflow: hidden;
 }
 
 .dropdown {
@@ -65,9 +66,28 @@ a:hover {
 }
 
 .dropdown-content a:hover {
-    background-color: #e0e0e0
+    background-color: #e6e6e6
 }
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.list-container {
+    margin: -20px;
+}
+
+.list-container .list-navigation {
+    display: inline-block;
+    margin: 20px 20px 0px 20px;
+}
+
+.list-container .list-navigation .button {
+    margin-right: 5px;
+}
+
+.list-container .list-content {
+    margin: 20px;
+    display: inline-block;
+    vertical-align: top;
 }

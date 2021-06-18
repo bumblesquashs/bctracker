@@ -3,7 +3,7 @@
 <h1>Welcome to BCTracker!</h1>
 <hr />
 
-<div class="side-menu">
+<div class="sidebar">
   <h2>Quick Search</h2>
 
   % if system is None:
@@ -73,7 +73,7 @@
   % end
 </div>
 
-<div style="overflow: hidden;">
+<div class="body">
   <h2>Latest Updates</h2>
 
   <div class="home-update">

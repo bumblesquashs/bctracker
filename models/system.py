@@ -54,7 +54,7 @@ class System:
         if not self.supports_realtime:
             return
         print(f'Updating realtime data for {self}...')
-        realtime.update(self)
+        # realtime.update(self)
         print('\nDone!')
         self.load_realtime()
     
@@ -144,9 +144,14 @@ class System:
             exception_type = int(values['exception_type'])
 
             service = self.get_service(service_id)
-            if service is None or exception_type != 1:
+            if service is None:
                 continue
-            service.special_service = format_csv(values['date'])
+            
+            date = format_csv(values['date'])
+            if exception_type == 1:
+                service.add_special_date(date)
+            if exception_type == 2:
+                service.add_excluded_date(date)
 
     def get_service(self, service_id):
         if service_id in self.services:
