@@ -81,27 +81,27 @@
 % else:
   <%
     if group == 'all':
-      include('components/realtime_list', buses=buses)
+        include('components/realtime_list', buses=buses)
     elif group == 'route':
-      buses_on_route = [b for b in buses if b.realtime_status == RealtimeStatus.ONROUTE]
-      routes = [b.system.get_route(b.route_id) for b in buses_on_route]
-      sorted_routes = sorted(routes, key=lambda r: int(route.number))
-      for route in sorted_routes:
-        selected_buses = [b for b in buses_on_route if b.system.get_trip(b.trip_id) == route.trip_id]
-        include('components/realtime_list', group_name='{0} {1}'.format(route.number, route.name), buses=selected_buses)
-      end
-
-      buses_off_route = [b for b in buses if b.realtime_status != RealtimeStatus.ONROUTE]
-      if len(buses_off_route) > 0:
-        include('components/realtime_list', group_name='Not in service', buses=buses_off_route)
-      end
+        buses_on_route = [b for b in buses if b.realtime_status == RealtimeStatus.ONROUTE]
+        routes = [b.system.get_route(b.route_id) for b in buses_on_route]
+        sorted_routes = sorted(routes, key=lambda r: int(route.number))
+        for route in sorted_routes:
+            selected_buses = [b for b in buses_on_route if b.system.get_trip(b.trip_id) == route.trip_id]
+            include('components/realtime_list', group_name='{0} {1}'.format(route.number, route.name), buses=selected_buses)
+        end
+        
+        buses_off_route = [b for b in buses if b.realtime_status != RealtimeStatus.ONROUTE]
+        if len(buses_off_route) > 0:
+            include('components/realtime_list', group_name='Not in service', buses=buses_off_route)
+        end
     elif group == 'model':
-      models = {b.bus.model for b in buses}
-      sorted_models = sorted(models)
-      for model in sorted_models:
-        selected_buses = [b for b in buses if b.bus.model == model]
-        include('components/realtime_list', group_name=model, buses=selected_buses, show_model=False)
-      end
+        models = {b.bus.model for b in buses}
+        sorted_models = sorted(models)
+        for model in sorted_models:
+            selected_buses = [b for b in buses if b.bus.model == model]
+            include('components/realtime_list', group_name=model, buses=selected_buses, show_model=False)
+        end
     end
   %>
 % end

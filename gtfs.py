@@ -2,9 +2,10 @@ from os import path, rename
 from datetime import datetime
 from zipfile import ZipFile
 from shutil import rmtree
-import nextride_client
 
 import wget
+
+import nextride_client
 
 def update(system):
     system_id = system.id

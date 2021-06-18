@@ -19,7 +19,6 @@ class RealtimeVehiclePosition:
         self.realtime_status = realtime_status
         self.lat = lat
         self.lon = lon
-        print('loaded realtime vehicle: ' + fleet_id + ' ' + trip_id + ' ' + str(block_id) + ' ' + system.name)
         
     def __eq__(self, other):
         return self.fleet_id == other.fleet_id
@@ -43,6 +42,4 @@ class RealtimeVehiclePosition:
     @property
     def bus(self):
         return bus_range.get(int(self.fleet_number))
-        
-        
         

@@ -1,6 +1,7 @@
 import os
-import wget
 import json
+
+import wget
 import urllib.request
     
 def download_static(system):

@@ -29,24 +29,24 @@
         system = bus.system
         status = bus.realtime_status
         if status != RealtimeStatus.UNASSIGNED:
-          trip_id = bus.trip_id
-          block_id = bus.block_id
-          status = bus.realtime_status
-          trip = system.get_trip(trip_id)
-          headsign = trip.headsign
+            trip_id = bus.trip_id
+            block_id = bus.block_id
+            status = bus.realtime_status
+            trip = system.get_trip(trip_id)
+            headsign = trip.headsign
         end
         
         if status == RealtimeStatus.ONROUTE:
           try:
-            stop_code = system.get_stop(bus.stop_id).number
-            stop_name = system.get_stop(bus.stop_id).name
+              stop_code = system.get_stop(bus.stop_id).number
+              stop_name = system.get_stop(bus.stop_id).name
           except KeyError:
-            stop_code = ''
-            stop_name = ''
+              stop_code = ''
+              stop_name = ''
           end
         else:
-          stop_code = ''
-          stop_name = ''
+            stop_code = ''
+            stop_name = ''
         end
       %>
       <tr>
@@ -62,14 +62,14 @@
               <br />
               {{ bus_range.year }}
               % if get('show_model', True):
-                {{ bus_range.model }}
+                  {{ bus_range.model }}
               % end
             </span>
           </td>
           <td class="desktop-only">
             {{ bus_range.year }}
             % if get('show_model', True):
-              {{ bus_range.model }}
+                {{ bus_range.model }}
             % end
           </td>
         % end

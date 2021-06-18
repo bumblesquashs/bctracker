@@ -132,4 +132,3 @@ def load_realtime_updates(realtime_file_path, system):
             continue
         global_realtime.parse_realtime_position(gtfs_vehicle, system)
 
-    

@@ -28,5 +28,3 @@ def update_table(system):
     for fleet_id in bus_mapping.keys():
         fleetnumber_translation_table[fleet_id] = bus_mapping[fleet_id]
     save_table()
-        
-    
