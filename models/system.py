@@ -1,6 +1,6 @@
 
-from datetime import datetime
 import csv
+from datetime import datetime
 
 from models.block import Block
 from models.route import Route
@@ -13,7 +13,7 @@ from models.trip import Trip
 from formatting import format_csv
 
 import gtfs
-import realtime
+import models.realtime as realtime
 
 class System:
     def __init__(self, system_id, remote_id, name, supports_realtime):

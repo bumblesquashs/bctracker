@@ -4,8 +4,6 @@ from zipfile import ZipFile
 from shutil import rmtree
 import nextride_client
 
-
-
 import wget
 
 def update(system):

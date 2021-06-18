@@ -1,3 +1,4 @@
+
 from enum import Enum
 import fleetnumber_translation
 import models.bus_range as bus_range

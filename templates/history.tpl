@@ -1,4 +1,4 @@
-% import realtime as rt
+% import models.realtime as rt
 % import businfotable as businfo
 % import history as hist
 % from formatting import format_date, format_date_mobile

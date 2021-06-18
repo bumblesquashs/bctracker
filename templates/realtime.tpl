@@ -69,7 +69,7 @@
     % end
   </span>
 </p>
-<p>Last updated ???</p>
+<p>Last updated {{ realtime.pretty_last_updated_time }}</p>
 
 
 % if not realtime.is_valid:
@@ -96,7 +96,7 @@
         include('components/realtime_list', group_name='Not in service', buses=buses_off_route)
       end
     elif group == 'model':
-      models = [b.bus.model for b in buses]
+      models = {b.bus.model for b in buses}
       sorted_models = sorted(models)
       for model in sorted_models:
         selected_buses = [b for b in buses if b.bus.model == model]
