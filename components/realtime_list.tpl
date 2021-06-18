@@ -57,7 +57,7 @@
         % else:
           % bus_range = bus.bus
           <td>
-            <a href="/bus/{{fleet_number}}">{{ fleet_number }}</a>
+            <a href="{{ get_url(system.id, f'bus/{fleet_number}') }}">{{ fleet_number }}</a>
             <span class="mobile-only smaller-font">
               <br />
               {{ bus_range.year }}
@@ -76,10 +76,11 @@
 
         % if status != RealtimeStatus.UNASSIGNED:
           <td>{{headsign}}</td>
-          <td class="desktop-only"><a href="/blocks/{{block_id}}">{{ block_id }}</a></td>
-          <td class="desktop-only"><a href="/trips/{{trip_id}}">{{ trip_id }}</a></td>
+          
+          <td class="desktop-only"><a href="{{ get_url(system.id, f'blocks/{block_id}') }}">{{ block_id }}</a></td>
+          <td class="desktop-only"><a href="{{ get_url(system.id, f'trips/{trip_id}') }}">{{ trip_id }}</a></td>
           % if status == RealtimeStatus.ONROUTE:
-            <td class="desktop-only"><a href="/stops/{{stop_code}}">{{ stop_name }}</a></td>
+            <td class="desktop-only"><a href="{{ get_url(system.id, f'stops/{system.get_stop(bus.stop_id).number}') }}">{{ stop_name }}</a></td>
           % else:
             <td class="desktop-only lighter-text">Unavailable</td>
           % end
