@@ -50,14 +50,22 @@
             </tr>
           </thead>
           <tbody>
+            % last_hour = -1
             % for stop_time in stop_times:
               % block = stop_time.trip.block
-              <tr>
+              % this_hour = int(stop_time.time.split(':')[0])
+              % if last_hour == -1:
+                % last_hour = this_hour
+              % end
+              <tr class="{{'hourly' if this_hour > last_hour else ''}}">
                 <td>{{ stop_time.time }}</td>
                 <td>{{ stop_time.trip }}</td>
                 <td class="desktop-only"><a href="{{ get_url(block.system.id, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                 <td><a href="{{ get_url(stop_time.trip.system.id, f'trips/{stop_time.trip.id}') }}">{{ stop_time.trip.id }}</a></td>
               </tr>
+              % if this_hour > last_hour:
+                % last_hour = this_hour
+              % end
             % end
           </tbody>
         </table>

@@ -49,6 +49,10 @@ a {
     text-decoration: none;
 }
 
+tr.hourly {
+    border-top: 4px solid #989898
+}
+
 .button {
     background-color: #49a348;
     border-width: 0px;
