@@ -44,7 +44,7 @@ table {
 .mobile-navbar-item {
     display: block;
     color: white;
-    padding: 14px 16px;
+    padding: 15px 20px;
     font-family: Helvetica, sans-serif;
     font-size: 16pt;
     font-weight: normal;
@@ -54,7 +54,7 @@ table {
     float: right;
     display: block;
     padding: 5px;
-    margin: 4px 0px;
+    margin: 5px 10px 5px 0px;
 }
 
 .mobile-navbar-toggle-line {
@@ -73,13 +73,19 @@ table {
     table-layout: fixed;
 }
 
-.button.spaced-button {
+.list-navigation .button {
     margin-bottom: 10px;
 }
 
+.list-navigation .button:last-child {
+    margin-bottom: 0px;
+}
+
 #mobile-navbar {
+    position: relative;
+    z-index: 10;
     margin: 0px;
-    padding: 10px 20px 20px 20px;
+    padding: 5px 0px;
     overflow: hidden;
     background-color: #255325;
 }

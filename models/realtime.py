@@ -117,7 +117,6 @@ def update(system):
     wget.download(f'http://{remote_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', downloads_path)
     load_realtime_updates(downloads_path, system)
     fleetnumber_translation.update_table(system)
-    global_realtime.last_updated_time = time.time()
 
 # Read the realtime file using protocol buffer compiled code
 def load_realtime_updates(realtime_file_path, system):

@@ -25,9 +25,13 @@ def handle(sig, frame):
     try:
         get_realtime().reset_realtime_positions()
         for system in all_systems():
-            system.update_realtime()
-            if not system.validate_gtfs():
-                system.update_gtfs()
+            try:
+                system.update_realtime()
+                if not system.validate_gtfs():
+                    system.update_gtfs()
+            except Exception as e:
+                print(f'Error: Hit exception loading realtime for system: {system.name}')
+                print(f'Error message: {e}')
         get_realtime().last_updated_time = time.time()
     except Exception as e:
         # We should not let any python exceptions propogate out of a signal handler

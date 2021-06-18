@@ -21,6 +21,7 @@ class System:
         self.remote_id = remote_id
         self.name = name
         self.supports_realtime = supports_realtime
+        self.feed_version = ''
     
     def __str__(self):
         return self.name
@@ -32,13 +33,14 @@ class System:
         return self.name < other.name
     
     def update_gtfs(self):
-        print(f'Updating GTFS data for {self.name}...')
+        print(f'Updating GTFS data for {self}...')
         gtfs.update(self)
         print('\nDone!')
         self.load_gtfs()
 
     def load_gtfs(self):
-        print(f'Loading GTFS data for {self.name}...')
+        print(f'Loading GTFS data for {self}...')
+        self.load_feed_info()
         self.load_stops()
         self.load_routes()
         self.load_services()
@@ -51,13 +53,13 @@ class System:
     def update_realtime(self):
         if not self.supports_realtime:
             return
-        print(f'Updating realtime data for {self.name}...')
-        realtime.update(self)
+        print(f'Updating realtime data for {self}...')
+        # realtime.update(self)
         print('\nDone!')
         self.load_realtime()
     
     def load_realtime(self):
-        print(f'Loading realtime data for {self.name}...')
+        print(f'Loading realtime data for {self}...')
         self.load_buses()
         print('Done!')
     
@@ -68,6 +70,10 @@ class System:
         if self.supports_realtime:
             pass # TODO: Implement realtime validation
         return True
+    
+    def load_feed_info(self):
+        values = self.read_csv('feed_info')[0]
+        self.feed_version = values['feed_version']
     
     # Methods for blocks
     def get_block(self, block_id):
@@ -138,9 +144,14 @@ class System:
             exception_type = int(values['exception_type'])
 
             service = self.get_service(service_id)
-            if service is None or exception_type != 1:
+            if service is None:
                 continue
-            service.special_service = format_csv(values['date'])
+            
+            date = format_csv(values['date'])
+            if exception_type == 1:
+                service.add_special_date(date)
+            if exception_type == 2:
+                service.add_excluded_date(date)
 
     def get_service(self, service_id):
         if service_id in self.services:
@@ -277,7 +288,7 @@ systems = {
 }
 
 def get_system(system_id):
-    if system_id in systems:
+    if system_id is not None and system_id in systems:
         return systems[system_id]
     return None
 
