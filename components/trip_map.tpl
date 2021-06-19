@@ -1,46 +1,15 @@
 % import server
-
-% coords = list(map(lambda p: [float(p.lon), float(p.lat)], trip.points))
+% import json
 
 <div id="map"></div>
 <script>
-  const coords = {{ coords }}
-
-  minLon = coords[0][0]
-  maxLon = coords[0][0]
-
-  minLat = coords[0][1]
-  maxLat = coords[0][1]
-
-  console.log(minLon, maxLon, minLat, maxLat)
-
-  for (const coord of coords) {
-    console.log(coord)
-    let lon = coord[0]
-    let lat = coord[1]
-    console.log(lon, lat)
-    if (lon < minLon) {
-      minLon = lon
-    }
-    if (lon > maxLon) {
-      maxLon = lon
-    }
-
-    if (lat < minLat) {
-      minLat = lat
-    }
-    if (lat > maxLat) {
-      maxLat = lat
-    }
-  }
-
-  console.log(minLon, maxLon, minLat, maxLat)
+  const points = JSON.parse('{{! json.dumps([p.json_info for p in trip.points]) }}')
 
   mapboxgl.accessToken = '{{server.mapbox_api_key}}';
   var map = new mapboxgl.Map({
     container: 'map',
-    center: [(minLon + maxLon) / 2, (minLat + maxLat) / 2],
-    zoom: 14,
+    center: [0, 0],
+    zoom: 1,
     style: 'mapbox://styles/mapbox/streets-v11',
     interactive: false
   });
@@ -55,7 +24,7 @@
         'properties': {},
         'geometry': {
           'type': 'LineString',
-          'coordinates': coords
+          'coordinates': points.map(function (point) { return [point.lon, point.lat] })
         }
       }
     });
@@ -72,6 +41,14 @@
         'line-width': 4
       }
     });
+
+    const lons = points.map(function (point) { return point.lon })
+    const lats = points.map(function (point) { return point.lat })
+
+    const minLon = Math.min.apply(Math, lons)
+    const maxLon = Math.max.apply(Math, lons)
+    const minLat = Math.min.apply(Math, lats)
+    const maxLat = Math.max.apply(Math, lats)
     map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
       duration: 0,
       padding: 20

@@ -140,7 +140,13 @@ def map():
 @app.route('/<system_id>/map')
 @app.route('/<system_id>/map/')
 def system_map(system_id):
-    return systems_template('map', system=get_system(system_id), path='map')
+    system = get_system(system_id)
+    active_buses = rt.active_buses()
+    if system is None:
+        buses = active_buses
+    else:
+        buses = [b for b in active_buses if b.position.system == system]
+    return systems_template('map', system=system, buses=buses, path='map')
 
 @app.route('/realtime')
 @app.route('/realtime/')

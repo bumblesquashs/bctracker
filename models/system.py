@@ -58,9 +58,6 @@ class System:
         print('\nDone!')
     
     def validate_gtfs(self):
-        for service in self.all_services():
-            if service.end_date.date() < datetime.now().date():
-                return False
         if self.supports_realtime:
             pass # TODO: Implement realtime validation
         return True
@@ -260,13 +257,14 @@ class System:
         return rows
 
 systems = {
-    'victoria': System('victoria', 'victoria', 'Victoria', True),
-    'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
     'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False),
+    'comox': System('comox', 'comox', 'Comox Valley', True),
     'kamloops': System('kamloops', 'kamloops', 'Kamloops', True),
-    'squamish': System('squamish', 'squamish', 'Squamish', True),
-    'whistler': System('whistler', 'whistler', 'Whistler', True),
     'kelowna': System('kelowna', 'kelowna', 'Kelowna', True),
+    'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
+    'squamish': System('squamish', 'squamish', 'Squamish', True),
+    'victoria': System('victoria', 'victoria', 'Victoria', True),
+    'whistler': System('whistler', 'whistler', 'Whistler', True),
 }
 
 def get_system(system_id):

@@ -188,11 +188,10 @@ tr.hourly {
     top: 4px;
 }
 
-.stop-marker {
-    background-color: #49a348;
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
+.marker div {
+    font-size: 8pt;
+    margin-top: 5px;
+    text-align: center;
 }
 
 .vertical-line {

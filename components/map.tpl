@@ -1,4 +1,5 @@
 % import server
+% import json
 
 <div id="map"></div>
 <script>
@@ -38,9 +39,8 @@
 % end
 
 % if defined('trip'):
-  % coords = list(map(lambda p: [float(p.lon), float(p.lat)], trip.points))
   <script>
-    const coords = {{ coords }}
+    const points = JSON.parse('{{! json.dumps([p.json_info for p in trip.points]) }}')
 
     map.on('load', function() {
       map.addSource('route', {
@@ -50,7 +50,7 @@
           'properties': {},
           'geometry': {
             'type': 'LineString',
-            'coordinates': coords
+            'coordinates': points.map(function (point) { return [point.lon, point.lat] })
           }
         }
       });

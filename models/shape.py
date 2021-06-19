@@ -19,3 +19,10 @@ class ShapePoint:
     
     def __lt__(self, other):
         return self.sequence < other.sequence
+    
+    @property
+    def json_info(self):
+        return {
+            'lon': self.lon,
+            'lat': self.lat
+        }
