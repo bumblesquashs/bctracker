@@ -8,7 +8,7 @@
 		% if system is None:
 			% for available_system in sorted(systems):
 				<tr>
-					<td><a href="{{ get_url(available_system.id, get('path', '')) }}">{{ available_system }}</a></td>
+					<td><a href="{{ get_url(available_system, get('path', '')) }}">{{ available_system }}</a></td>
 				</tr>
 			% end
 		% else:
@@ -16,7 +16,7 @@
 			% for available_system in sorted(systems):
 				% if system != available_system:
 					<tr>
-						<td><a href="{{ get_url(available_system.id, get('path', '')) }}">{{ available_system }}</a></td>
+						<td><a href="{{ get_url(available_system, get('path', '')) }}">{{ available_system }}</a></td>
 					</tr>
 				% end
 			% end

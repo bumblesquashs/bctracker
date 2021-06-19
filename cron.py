@@ -4,7 +4,7 @@ import signal
 from crontab import CronTab
 
 from models.system import all_systems
-from models.realtime import get_realtime
+import realtime
 
 CRON_ID = 'gtfs-muncher'
 CRON_INTERVAL = 5
@@ -23,7 +23,7 @@ def stop():
 
 def handle(sig, frame):
     try:
-        get_realtime().reset_realtime_positions()
+        realtime.reset_positions()
         for system in all_systems():
             try:
                 system.update_realtime()
@@ -32,9 +32,7 @@ def handle(sig, frame):
             except Exception as e:
                 print(f'Error: Hit exception loading realtime for system: {system.name}')
                 print(f'Error message: {e}')
-        get_realtime().last_updated_time = time.time()
     except Exception as e:
         # We should not let any python exceptions propogate out of a signal handler
         print('Error: Hit exception in cron signal handler')
         print(f'Error message: {e}')
-    return

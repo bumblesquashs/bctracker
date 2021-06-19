@@ -15,7 +15,7 @@
       <div class="info-box-name">Route{{ '' if len(stop.routes) == 1 else 's' }}</div>
       <div class="info-box-value">
         % for route in stop.routes:
-          <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
+          <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
           <br />
         % end
       </div>
@@ -60,8 +60,8 @@
               <tr class="{{'hourly' if this_hour > last_hour else ''}}">
                 <td>{{ stop_time.time }}</td>
                 <td>{{ stop_time.trip }}</td>
-                <td class="desktop-only"><a href="{{ get_url(block.system.id, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                <td><a href="{{ get_url(stop_time.trip.system.id, f'trips/{stop_time.trip.id}') }}">{{ stop_time.trip.id }}</a></td>
+                <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                <td><a href="{{ get_url(stop_time.trip.system, f'trips/{stop_time.trip.id}') }}">{{ stop_time.trip.id }}</a></td>
               </tr>
               % if this_hour > last_hour:
                 % last_hour = this_hour

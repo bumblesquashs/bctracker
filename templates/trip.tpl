@@ -26,13 +26,13 @@
     <div class="info-box-section">
       <div class="info-box-name">Route</div>
       <div class="info-box-value">
-        <a href="{{ get_url(trip.system.id, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
+        <a href="{{ get_url(trip.route.system, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
       </div>
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Block</div>
       <div class="info-box-value">
-        <a href="{{ get_url(trip.block.system.id, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+        <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@
         <tr>
           <td>{{ stop_time.time }}</td>
           <td>
-            <a href="{{ get_url(stop_time.system.id, f'stops/{stop_time.stop.number}') }}">{{ stop_time.stop.number }}</a>
+            <a href="{{ get_url(stop_time.system, f'stops/{stop_time.stop.number}') }}">{{ stop_time.stop.number }}</a>
             <span class="mobile-only smaller-font">
               <br />
               {{ stop_time.stop }}

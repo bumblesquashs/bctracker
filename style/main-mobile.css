@@ -31,6 +31,10 @@ table {
     font-size: 18pt;
 }
 
+.sub-navbar-system {
+    font-size: 14pt;
+}
+
 .desktop-only {
     display: none;
 }

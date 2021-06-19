@@ -24,7 +24,7 @@
       <div class="info-box-name">Route{{ '' if len(block.routes) == 1 else 's' }}</div>
       <div class="info-box-value">
         % for route in block.routes:
-          <a href="{{ get_url(route.system.id, f'routes/{route.number}') }}">{{ route }}</a>
+          <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
           <br />
         % end
       </div>
@@ -56,7 +56,7 @@
             </span>
           </td>
           <td class="desktop-only">{{ trip.direction.value }}</td>
-          <td><a href="{{ get_url(trip.system.id, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+          <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
         </tr>
       % end
     </tbody>

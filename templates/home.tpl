@@ -6,43 +6,32 @@
 <div class="sidebar">
   <h2>Quick Search</h2>
 
-  % if system is None:
-    <script type="text/javascript">
-      function busSearch() {
-        let value = document.getElementById('bus_id_search').value;
-        if (value.length > 0) {
-          window.location = "{{ get_url(None) }}/bus/" + value;
-        }
+  <script type="text/javascript">
+    function busSearch() {
+      let value = document.getElementById('bus_id_search').value;
+      if (value.length > 0) {
+        window.location = "{{ get_url(system) }}/bus/" + value;
       }
-    </script>
-  % else:
-    <script type="text/javascript">
-      function busSearch() {
-        let value = document.getElementById('bus_id_search').value;
-        if (value.length > 0) {
-          window.location = "{{ get_url(system.id) }}/bus/" + value;
-        }
+    }
+  
+    function routeSearch() {
+      let value = document.getElementById('route_id_search').value;
+      if (value.length > 0) {
+        window.location = "{{ get_url(system) }}/routes/" + value;
       }
-    
-      function routeSearch() {
-        let value = document.getElementById('route_id_search').value;
-        if (value.length > 0) {
-          window.location = "{{ get_url(system.id) }}/routes/" + value;
-        }
+    }
+  
+    function stopSearch() {
+      let value = document.getElementById('stop_id_search').value;
+      if (value.length > 0) {
+        window.location = "{{ get_url(system) }}/stops/" + value;
       }
-    
-      function stopSearch() {
-        let value = document.getElementById('stop_id_search').value;
-        if (value.length > 0) {
-          window.location = "{{ get_url(system.id) }}/stops/" + value;
-        }
-      }
-    </script>
-  % end
+    }
+  </script>
 
   % if system is None:
     <form onsubmit="busSearch()" action="javascript:void(0)">
-      <label for="bus_id_search">Fleet Number:</label>
+      <label for="bus_id_search">Bus Number:</label>
       <br />
       <input type="text" id="bus_id_search" name="bus_id" method="post">
       <input type="submit" value="Search" class="button">
@@ -50,7 +39,7 @@
   % else:
     % if system.supports_realtime:
       <form onsubmit="busSearch()" action="javascript:void(0)">
-        <label for="bus_id_search">Fleet Number:</label>
+        <label for="bus_id_search">Bus Number:</label>
         <br />
         <input type="text" id="bus_id_search" name="bus_id" method="post">
         <input type="submit" value="Search" class="button">

@@ -13,7 +13,7 @@ from models.trip import Trip
 from formatting import format_csv
 
 import gtfs
-import models.realtime as realtime
+import realtime
 
 class System:
     def __init__(self, system_id, remote_id, name, supports_realtime):
@@ -56,12 +56,6 @@ class System:
         print(f'Updating realtime data for {self}...')
         realtime.update(self)
         print('\nDone!')
-        self.load_realtime()
-    
-    def load_realtime(self):
-        print(f'Loading realtime data for {self}...')
-        self.load_buses()
-        print('Done!')
     
     def validate_gtfs(self):
         for service in self.all_services():
@@ -83,21 +77,6 @@ class System:
 
     def all_blocks(self):
         return sorted(self.blocks.values())
-
-    # Methods for buses
-    def load_buses(self):
-        self.buses = {}
-        self.buses_by_number = {}
-
-    def get_bus(self, bus_id=None, number=None):
-        if bus_id is not None and bus_id in self.buses:
-            return self.buses[bus_id]
-        if number is not None and number in self.buses_by_number:
-            return self.buses_by_number[number]
-        return None
-
-    def all_buses(self):
-        return sorted(self.buses.values())
     
     # Methods for routes
     def load_routes(self):
@@ -285,9 +264,9 @@ systems = {
     'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
     'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False),
     'kamloops': System('kamloops', 'kamloops', 'Kamloops', True),
-    # 'squamish': System('squamish', 'squamish', 'Squamish', True),
-    # 'whistler': System('whistler', 'whistler', 'Whistler', True),
-    # 'kelowna': System('kelowna', 'kelowna', 'Kelowna', True),
+    'squamish': System('squamish', 'squamish', 'Squamish', True),
+    'whistler': System('whistler', 'whistler', 'Whistler', True),
+    'kelowna': System('kelowna', 'kelowna', 'Kelowna', True),
 }
 
 def get_system(system_id):

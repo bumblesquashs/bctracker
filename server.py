@@ -5,6 +5,7 @@ import cherrypy as cp
 
 from models.system import get_system, all_systems
 import gtfs
+import realtime as rt
 
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
@@ -12,6 +13,8 @@ system_domain = '{0}.bctracker.ca/{1}'
 
 def start():
     global mapbox_api_key, no_system_domain, system_domain
+
+    rt.load_translations()
 
     for system in all_systems():
         if gtfs.downloaded(system):
@@ -36,13 +39,15 @@ def start():
 def stop():
     cp.server.stop()
 
-def get_url(system_id, path=''):
-    if system_id is None:
+def get_url(system, path=''):
+    if system is None:
         return no_system_domain.format(path).rstrip('/')
-    return system_domain.format(system_id, path).rstrip('/')
+    if isinstance(system, str):
+        return system_domain.format(system, path).rstrip('/')
+    return system_domain.format(system.id, path).rstrip('/')
 
 def systems_template(name, **kwargs):
-    return template(f'templates/{name}', systems=all_systems(), get_url=get_url, **kwargs)
+    return template(f'templates/{name}', systems=all_systems(), get_url=get_url, last_updated=rt.last_updated_string(), **kwargs)
 
 def systems_invalid_template(system_id):
     return systems_template('invalid_system', system_id=system_id)
@@ -146,7 +151,13 @@ def realtime():
 @app.route('/<system_id>/realtime/')
 def system_realtime(system_id):
     group = request.query.get('group', 'all')
-    return systems_template('realtime', system=get_system(system_id), group=group, path='realtime')
+    system = get_system(system_id)
+    active_buses = rt.active_buses()
+    if system is None:
+        buses = active_buses
+    else:
+        buses = [b for b in active_buses if b.position.system == system]
+    return systems_template('realtime', system=system, group=group, buses=buses, path=f'realtime?group={group}')
 
 @app.route('/bus/<number:int>')
 @app.route('/bus/<number:int>/')
@@ -157,9 +168,7 @@ def bus_number(number):
 @app.route('/<system_id>/bus/<number:int>/')
 def system_bus_number(system_id, number):
     system = get_system(system_id)
-    if system is None:
-        return systems_invalid_template(system_id)
-    bus = system.get_bus(number=number)
+    bus = rt.get_bus(number=number)
     if bus is None:
         return systems_error_template(system, f'Bus {number} not found')
     return systems_template('bus', system=system, bus=bus)

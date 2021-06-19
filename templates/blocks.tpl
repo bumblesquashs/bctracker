@@ -35,7 +35,7 @@
             % service_blocks = [block for block in blocks if block.service == service]
             % for block in service_blocks:
               <tr>
-                <td><a href="{{ get_url(block.system.id, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                 <td>{{ block.routes_string }}</td>
                 <td>{{ block.start_time }}</td>
               </tr>

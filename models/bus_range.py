@@ -38,6 +38,12 @@ def get(number):
             return bus_range
     return unknown_range
 
+def is_valid(number):
+    for bus_range in bus_ranges:
+        if bus_range.contains(number):
+            return True
+    return False
+
 unknown_range = BusRange(0, 0, '', 'Unknown', BusRangeDescription.UNKNOWN)
 
 bus_ranges = [
