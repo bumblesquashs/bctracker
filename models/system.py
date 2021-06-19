@@ -284,7 +284,10 @@ systems = {
     'victoria': System('victoria', 'victoria', 'Victoria', True),
     'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
     'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False),
-    'kamloops': System('kamloops', 'kamloops', 'Kamloops', True)
+    'kamloops': System('kamloops', 'kamloops', 'Kamloops', True),
+    # 'squamish': System('squamish', 'squamish', 'Squamish', True),
+    # 'whistler': System('whistler', 'whistler', 'Whistler', True),
+    # 'kelowna': System('kelowna', 'kelowna', 'Kelowna', True),
 }
 
 def get_system(system_id):

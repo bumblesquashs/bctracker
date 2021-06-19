@@ -21,7 +21,11 @@
     % if group == 'all':
       <span class="button button-disabled">All Buses</span>
     % else:
-      <a class="button" href="/realtime">All Buses</a>
+    %    if system is None:
+      <a class="button" href="{{ get_url(None, 'realtime') }}">All Buses</a>
+    %    else:
+      <a class="button" href="{{ get_url(system.id, 'realtime') }}">All Buses</a>
+    %    end
     % end
 
     % if group == 'route':
@@ -43,7 +47,11 @@
     % if group == 'all':
       <span class="button button-disabled">All Buses</span>
     % else:
-      <a class="button" href="/realtime">All Buses</a>
+    %    if system is None:
+         <a class="button" href="{{ get_url(None, 'realtime') }}">All Buses</a>
+    %    else:
+         <a class="button" href="{{ get_url(system.id, 'realtime') }}">All Buses</a>
+    %    end
     % end
 
     % if group == 'route':

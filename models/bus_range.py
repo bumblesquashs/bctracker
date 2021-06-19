@@ -72,7 +72,7 @@ bus_ranges = [
     BusRange(2688, 2722, '2020', 'Chevrolet/Girardin 4500/Micro Bird G5', BusRangeDescription.SHUTTLE),
     BusRange(2723, 2756, '2020', 'Chevrolet/Arboc 4500/SOF26G', BusRangeDescription.SHUTTLE),
     BusRange(2757, 2773, '2021', 'Chevrolet/Girardin 4500/Micro Bird G5', BusRangeDescription.SHUTTLE),
-    BusRange(3001, 3005, '2013', 'Grande West Vicinity (27.5 foot)', BusRangeDescription.CONVENTIONAL_30),
+    BusRange(3001, 3015, '2013', 'Grande West Vicinity (27.5 foot)', BusRangeDescription.CONVENTIONAL_30),
     BusRange(3016, 3023, '2015', 'International/ElDorado 3200/Aero Elite', BusRangeDescription.SHUTTLE),
     BusRange(3024, 3028, '2018', 'International/ElDorado 3200/Aero Elite', BusRangeDescription.SHUTTLE),
     BusRange(4007, 4061, '2017', 'Grande West Vicinity (30 foot)', BusRangeDescription.CONVENTIONAL_30),
