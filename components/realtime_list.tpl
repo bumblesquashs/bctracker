@@ -2,16 +2,16 @@
 <table class="pure-table pure-table-horizontal pure-table-striped fixed-table">
   <thead>
     <tr>
-      % if system is None:
-        <th class="desktop-only">System</th>
-      % end
-        <th class="desktop-only">Number</th>
+      <th class="desktop-only">Number</th>
       % if get('show_model', True):
         <th class="desktop-only">Year and Model</th>
         <th class="mobile-only">Bus</th>
       % else:
         <th class="desktop-only">Year</th>
         <th class="mobile-only" style="width: 20%;">Bus</th>
+      % end
+      % if system is None:
+        <th class="desktop-only">System</th>
       % end
       <th>Headsign</th>
       <th class="desktop-only">Current Block</th>
@@ -23,9 +23,6 @@
     % for bus in sorted(buses):
       % position = bus.position
       <tr>
-        % if system is None:
-          <td class="desktop-only">{{ position.system }}</td>
-        % end
         % if bus.number is None:
           <td>Unknown Bus</td>
           <td class="desktop-only"></td>
@@ -48,7 +45,9 @@
             % end
           </td>
         % end
-
+        % if system is None:
+          <td class="desktop-only">{{ position.system }}</td>
+        % end
         % if position.trip is None:
           <td class="lighter-text">Not in service</td>
           <td class="desktop-only"></td>

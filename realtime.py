@@ -65,7 +65,8 @@ def update_positions(system):
             position.lon = vehicle.position.longitude
         except AttributeError: pass
         try:
-            positions[vehicle.vehicle.id] = position
+            bus_id = f'{system.id}_{vehicle.vehicle.id}'
+            positions[bus_id] = position
         except AttributeError: pass
 
 def update_translations(system):
@@ -76,7 +77,8 @@ def update_translations(system):
         bus_info = json.loads(file.read())
     for i in bus_info:
         try:
-            bus_id = str(i['vehicleId'])
+            vehicle_id = i['vehicleId']
+            bus_id = f'{system.id}_{vehicle_id}'
             number = int(i['name'])
             
             buses_by_id[bus_id] = number
