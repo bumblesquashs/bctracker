@@ -97,11 +97,11 @@ class Service:
     
     @property
     def special_dates_string(self):
-        return ','.join(self.special_dates)
+        return ', '.join(self.special_dates)
     
     @property
     def excluded_dates_string(self):
-        return ','.join(self.excluded_dates)
+        return ', '.join(self.excluded_dates)
     
     @property
     def is_current(self):

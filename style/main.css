@@ -192,6 +192,8 @@ tr.hourly {
     font-size: 8pt;
     margin-top: 5px;
     text-align: center;
+    font-weight: bold;
+    position: relative;
 }
 
 .vertical-line {

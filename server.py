@@ -156,6 +156,17 @@ def realtime():
 @app.route('/<system_id>/realtime')
 @app.route('/<system_id>/realtime/')
 def system_realtime(system_id):
+    reload = request.query.get('reload', 'false')
+    if reload == 'true':
+        rt.reset_positions()
+        for system in all_systems():
+            try:
+                system.update_realtime()
+                if not system.validate_gtfs():
+                    system.update_gtfs()
+            except Exception as e:
+                print(f'Error: Failed to update realtime for {system}')
+                print(f'Error message: {e}')
     group = request.query.get('group', 'all')
     system = get_system(system_id)
     active_buses = rt.active_buses()

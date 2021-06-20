@@ -15,8 +15,11 @@
   % if len(buses) == 0:
     <div class="list-content">
       % if system is not None and not system.supports_realtime:
-        {{ system }} does not currently support realtime.
-        Please choose a different system.
+        <p>
+          {{ system }} does not currently support realtime. Please choose a different system.
+        </p>
+
+        % include('components/systems', realtime_only=True)
       % else:
         There doesn't appear to be any buses out right now.
         BC Transit has no nightbus service, so this should be the case overnight.

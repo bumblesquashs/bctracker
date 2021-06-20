@@ -49,12 +49,20 @@ class Trip:
         return self.system.get_service(self.service_id)
     
     @property
+    def first_stop(self):
+        return self.stop_times[0]
+
+    @property
+    def last_stop(self):
+        return self.stop_times[-1]
+    
+    @property
     def start_time(self):
-        return self.stop_times[0].time
+        return self.first_stop.time
     
     @property
     def end_time(self):
-        return self.stop_times[-1].time
+        return self.last_stop.time
     
     @property
     def points(self):

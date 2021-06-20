@@ -59,7 +59,16 @@
               % end
               <tr class="{{'hourly' if this_hour > last_hour else ''}}">
                 <td>{{ stop_time.time }}</td>
-                <td>{{ stop_time.trip }}</td>
+                <td>
+                  {{ stop_time.trip }}
+                  % if stop_time == stop_time.trip.first_stop:
+                    <br />
+                    <span class="smaller-font">Loading only</span>
+                  % elif stop_time == stop_time.trip.last_stop:
+                    <br />
+                    <span class="smaller-font">Unloading only</span>
+                  % end
+                </td>
                 <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                 <td><a href="{{ get_url(stop_time.trip.system, f'trips/{stop_time.trip.id}') }}">{{ stop_time.trip.id }}</a></td>
               </tr>

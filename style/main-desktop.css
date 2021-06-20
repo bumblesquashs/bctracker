@@ -32,6 +32,10 @@ a:hover {
     margin-left: 10px;
 }
 
+.smaller-font {
+    font-size: 11pt;
+}
+
 .sidebar {
     float: left;
     margin-right: 40px;
@@ -89,15 +93,22 @@ a:hover {
 
 .list-container .list-navigation {
     display: inline-block;
-    margin: 20px 20px 0px 20px;
+    margin: 20px 20px -5px 20px;
+    font-size: 0pt;
 }
 
 .list-container .list-navigation .button {
+    display: inline-block;
     margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 .list-container .list-content {
     margin: 20px;
     display: inline-block;
     vertical-align: top;
+}
+
+.list-container .list-content table:last-child {
+    margin-bottom: 0px;
 }

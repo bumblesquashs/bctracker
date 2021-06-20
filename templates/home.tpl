@@ -60,6 +60,11 @@
       <input type="submit" value="Search" class="button">
     </form>
   % end
+
+  % if system is None:
+    <p>Choose a system to search for routes and stops</p>
+    % include('components/systems')
+  % end
 </div>
 
 <div class="body">

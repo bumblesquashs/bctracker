@@ -4,8 +4,10 @@
 <hr />
 
 % if system is None:
-  <h2>Choose a System</h2>
-
+  <p>
+    Routes can only be viewed for individual systems.
+    Please choose a system.
+  </p>
   % include('components/systems')
 % else:
   <table class="pure-table pure-table-horizontal pure-table-striped">

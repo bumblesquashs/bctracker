@@ -4,8 +4,10 @@
 <hr />
 
 % if system is None:
-  <h2>Choose a System</h2>
-  
+  <p>
+    Blocks can only be viewed for individual systems.
+    Please choose a system.
+  </p>
   % include('components/systems')
 % else:
   % blocks = system.all_blocks()
