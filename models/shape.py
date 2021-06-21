@@ -21,7 +21,7 @@ class ShapePoint:
         return self.sequence < other.sequence
     
     @property
-    def json_info(self):
+    def json_data(self):
         return {
             'lon': self.lon,
             'lat': self.lat

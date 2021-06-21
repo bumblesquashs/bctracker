@@ -23,7 +23,7 @@
     <script>
       var marker = document.createElement('div');
       marker.className = 'marker';
-      marker.innerHTML = '<img src="/img/busicon.png" />'
+      marker.innerHTML = '<img src="/img/bus.png" />'
 
       new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
     </script>
@@ -31,7 +31,7 @@
     <script>
       var marker = document.createElement('div');
       marker.className = 'marker';
-      marker.innerHTML = '<img src="/img/stopicon.png" />'
+      marker.innerHTML = '<img src="/img/stop.png" />'
 
       new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
     </script>
@@ -40,7 +40,7 @@
 
 % if defined('trip'):
   <script>
-    const points = JSON.parse('{{! json.dumps([p.json_info for p in trip.points]) }}')
+    const points = JSON.parse('{{! json.dumps([p.json_data for p in trip.points]) }}')
 
     map.on('load', function() {
       map.addSource('route', {

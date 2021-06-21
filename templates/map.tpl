@@ -19,7 +19,7 @@
   });
   map.setStyle("mapbox://styles/mapbox/light-v10");
 
-  const buses = JSON.parse('{{! json.dumps([b.json_info for b in buses if b.position.has_location]) }}');
+  const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
 
   var lons = []
   var lats = []
@@ -27,7 +27,7 @@
   for (var bus of buses) {
     var marker = document.createElement("div");
     marker.className = "marker";
-    marker.innerHTML = "<img src=\"/img/busicon.png\" /><div><span>" + bus.number + "</span></div>";
+    marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
 
     lons.push(bus.lon)
     lats.push(bus.lat)

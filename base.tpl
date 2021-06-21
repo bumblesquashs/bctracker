@@ -8,7 +8,7 @@
       % end
     </title>
 
-    <link rel="icon" type="image/png" href="/img/busicon.png"/>
+    <link rel="icon" type="image/png" href="/img/bus.png"/>
     
     <!-- prevent this website from being searchable -->
     <meta name="robots" content="noindex" />

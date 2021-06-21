@@ -3,7 +3,7 @@
 
 <div id="map"></div>
 <script>
-  const points = JSON.parse('{{! json.dumps([p.json_info for p in trip.points]) }}')
+  const points = JSON.parse('{{! json.dumps([p.json_data for p in trip.points]) }}')
 
   mapboxgl.accessToken = '{{server.mapbox_api_key}}';
   var map = new mapboxgl.Map({

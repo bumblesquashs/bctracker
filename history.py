@@ -23,7 +23,7 @@ def update_last_seen(buses):
 
 def save_last_seen():
     last_seen_data = {
-        'last_seen': [h.__dict__() for h in last_seen.values()]
+        'last_seen': [h.json_data for h in last_seen.values()]
     }
     with open(LAST_SEEN_PATH, 'w') as file:
         json.dump(last_seen_data, file)

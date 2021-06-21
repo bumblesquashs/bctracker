@@ -21,9 +21,18 @@
 
         % include('components/systems', realtime_only=True)
       % else:
-        There doesn't appear to be any buses out right now.
-        BC Transit has no nightbus service, so this should be the case overnight.
-        If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
+        % if system is None:
+          There are no buses out right now.
+          BC Transit does not have late night service, so this should be the case overnight.
+          If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
+          Please check back later!
+        % else:
+          <p>
+            There are no buses out in {{ system }} right now. Please choose a different system.
+          </p>
+
+          % include('components/systems', realtime_only=True)
+        % end
       % end
     </div>
   % else:

@@ -17,17 +17,6 @@ class BusHistory:
     def __lt__(self, other):
         return self.bus < other.bus
     
-    def __dict__(self):
-        return {
-            'date': self.date.strftime('%Y-%m-%d'),
-            'bus_id': self.bus_id,
-            'number': self.number,
-            'system_id': self.system_id,
-            'feed_version': self.feed_version,
-            'block_id': self.block_id,
-            'routes': self.routes
-        }
-    
     @property
     def system(self):
         return get_system(self.system_id)
@@ -43,3 +32,15 @@ class BusHistory:
     @property
     def bus(self):
         return get_bus(number=self.number)
+    
+    @property
+    def json_data(self):
+        return {
+            'date': self.date.strftime('%Y-%m-%d'),
+            'bus_id': self.bus_id,
+            'number': self.number,
+            'system_id': self.system_id,
+            'feed_version': self.feed_version,
+            'block_id': self.block_id,
+            'routes': self.routes
+        }

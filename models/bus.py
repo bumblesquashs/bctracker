@@ -38,7 +38,7 @@ class Bus:
         return realtime.get_position(self.id)
     
     @property
-    def json_info(self):
+    def json_data(self):
         return {
             'id': self.id,
             'number': str(self),
