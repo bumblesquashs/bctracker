@@ -43,6 +43,10 @@ a:hover {
     width: 25%;
 }
 
+.sidebar table {
+    width: 100%;
+}
+
 .body {
     float: none;
     overflow: hidden;
@@ -107,6 +111,10 @@ a:hover {
     margin: 20px;
     display: inline-block;
     vertical-align: top;
+}
+
+.list-container .list-content.no-inline {
+    display: block !important;
 }
 
 .list-container .list-content table:last-child {
