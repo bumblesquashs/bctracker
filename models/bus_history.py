@@ -1,0 +1,45 @@
+from models.system import get_system
+from realtime import get_bus
+
+class BusHistory:
+    def __init__(self, date, bus_id, number, system_id, feed_version, block_id, routes):
+        self.date = date
+        self.bus_id = bus_id
+        self.number = number
+        self.system_id = system_id
+        self.feed_version = feed_version
+        self.block_id = block_id
+        self.routes = routes
+    
+    def __eq__(self, other):
+        return self.bus == other.bus
+    
+    def __lt__(self, other):
+        return self.bus < other.bus
+    
+    def __dict__(self):
+        return {
+            'date': self.date.strftime('%Y-%m-%d'),
+            'bus_id': self.bus_id,
+            'number': self.number,
+            'system_id': self.system_id,
+            'feed_version': self.feed_version,
+            'block_id': self.block_id,
+            'routes': self.routes
+        }
+    
+    @property
+    def system(self):
+        return get_system(self.system_id)
+    
+    @property
+    def is_current(self):
+        return self.feed_version == self.system.feed_version
+    
+    @property
+    def block(self):
+        return self.system.get_block(self.block_id)
+    
+    @property
+    def bus(self):
+        return get_bus(number=self.number)

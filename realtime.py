@@ -25,7 +25,7 @@ def update(system):
     global last_updated
     if not system.supports_realtime:
         return
-
+    print(f'Updating realtime data for {system}...')
     data_path = f'data/realtime/{system.id}.bin'
     
     try:
@@ -33,14 +33,16 @@ def update(system):
             formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
             archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
             rename(data_path, archives_path)
-        wget.download(f'http://{system.remote_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', data_path)
+        wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', data_path)
 
         update_positions(system)
         update_translations(system)
 
+        print('\nDone!')
+
         last_updated = datetime.now()
     except Exception as e:
-        print(f'Error: Failed to update realtime for {system}')
+        print(f'\nError: Failed to update realtime for {system}')
         print(f'Error message: {e}')
 
 def update_positions(system):
@@ -70,10 +72,10 @@ def update_positions(system):
         except AttributeError: pass
 
 def update_translations(system):
-    with request.urlopen(f'https://nextride.{system.remote_id}.bctransit.com/api/Route') as file:
+    with request.urlopen(f'https://nextride.{system.bctransit_id}.bctransit.com/api/Route') as file:
         system_info = json.loads(file.read())
     pattern_ids = ','.join([str(i['patternID']) for i in system_info])
-    with request.urlopen(f'https://nextride.{system.remote_id}.bctransit.com/api/VehicleStatuses?patternIds={pattern_ids}') as file:
+    with request.urlopen(f'https://nextride.{system.bctransit_id}.bctransit.com/api/VehicleStatuses?patternIds={pattern_ids}') as file:
         bus_info = json.loads(file.read())
     for i in bus_info:
         try:

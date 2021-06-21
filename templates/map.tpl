@@ -27,7 +27,7 @@
   for (var bus of buses) {
     var marker = document.createElement("div");
     marker.className = "marker";
-    marker.innerHTML = "<img src=\"/img/busicon.png\" /><div>" + bus.number + "</div>";
+    marker.innerHTML = "<img src=\"/img/busicon.png\" /><div><span>" + bus.number + "</span></div>";
 
     lons.push(bus.lon)
     lats.push(bus.lat)

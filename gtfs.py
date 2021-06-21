@@ -9,21 +9,25 @@ def update(system):
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
 
+    print(f'Updating GTFS data for {system}...')
+
     try:
         if path.exists(data_zip_path):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
             archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
             rename(data_zip_path, archives_path)
         if system.supports_realtime:
-            wget.download(f'http://{system.remote_id}.mapstrat.com/current/google_transit.zip', data_zip_path)
+            wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/google_transit.zip', data_zip_path)
         else:
-            wget.download(f'http://bctransit.com/data/gtfs/{system.remote_id}.zip', data_zip_path)
+            wget.download(f'http://bctransit.com/data/gtfs/{system.bctransit_id}.zip', data_zip_path)
         if path.exists(data_path):
             rmtree(data_path)
         with ZipFile(data_zip_path) as zip:
             zip.extractall(data_path)
+        print('\nDone!')
+        system.load_gtfs()
     except Exception as e:
-        print(f'Error: Failed to update GTFS for {system}')
+        print(f'\nError: Failed to update GTFS for {system}')
         print(f'Error message: {e}')
 
 def downloaded(system):

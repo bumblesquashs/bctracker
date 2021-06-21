@@ -1,6 +1,5 @@
 
 import csv
-from datetime import datetime
 
 from models.block import Block
 from models.route import Route
@@ -12,13 +11,11 @@ from models.trip import Trip
 
 from formatting import format_csv
 
-import gtfs
-import realtime
-
 class System:
-    def __init__(self, system_id, remote_id, name, supports_realtime):
+    def __init__(self, system_id, name, supports_realtime, mapstrat_id=None, bctransit_id=None, ):
         self.id = system_id
-        self.remote_id = remote_id
+        self.mapstrat_id = mapstrat_id or system_id
+        self.bctransit_id = bctransit_id or system_id
         self.name = name
         self.supports_realtime = supports_realtime
         self.feed_version = ''
@@ -31,12 +28,6 @@ class System:
     
     def __lt__(self, other):
         return self.name < other.name
-    
-    def update_gtfs(self):
-        print(f'Updating GTFS data for {self}...')
-        gtfs.update(self)
-        print('\nDone!')
-        self.load_gtfs()
 
     def load_gtfs(self):
         print(f'Loading GTFS data for {self}...')
@@ -49,13 +40,6 @@ class System:
         self.load_stop_times()
         self.sort_data()
         print('Done!')
-
-    def update_realtime(self):
-        if not self.supports_realtime:
-            return
-        print(f'Updating realtime data for {self}...')
-        realtime.update(self)
-        print('\nDone!')
     
     def validate_gtfs(self):
         if self.supports_realtime:
@@ -237,7 +221,6 @@ class System:
         return None
 
     def sort_data(self):
-        print('Sorting data...')
         for stop in self.stops.values():
             stop.stop_times = sorted(stop.stop_times)
         for trip in self.trips.values():
@@ -257,14 +240,14 @@ class System:
         return rows
 
 systems = {
-    'cfv': System('cfv', 'central-fraser-valley', 'Central Fraser Valley', False),
-    'comox': System('comox', 'comox', 'Comox Valley', True),
-    'kamloops': System('kamloops', 'kamloops', 'Kamloops', True),
-    'kelowna': System('kelowna', 'kelowna', 'Kelowna', True),
-    'nanaimo': System('nanaimo', 'nanaimo', 'Nanaimo', True),
-    'squamish': System('squamish', 'squamish', 'Squamish', True),
-    'victoria': System('victoria', 'victoria', 'Victoria', True),
-    'whistler': System('whistler', 'whistler', 'Whistler', True),
+    'cfv': System('cfv', 'Central Fraser Valley', False, bctransit_id='central-fraser-valley'),
+    'comox': System('comox', 'Comox Valley', True, bctransit_id='comox-valley'),
+    'kamloops': System('kamloops', 'Kamloops', True),
+    'kelowna': System('kelowna', 'Kelowna', True),
+    'nanaimo': System('nanaimo', 'Nanaimo', True),
+    'squamish': System('squamish', 'Squamish', True),
+    'victoria': System('victoria', 'Victoria', True),
+    'whistler': System('whistler', 'Whistler', True),
 }
 
 def get_system(system_id):

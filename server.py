@@ -5,7 +5,8 @@ import cherrypy as cp
 
 from models.system import get_system, all_systems
 import gtfs
-import realtime as rt
+import realtime
+import history
 
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
@@ -14,16 +15,18 @@ system_domain = '{0}.bctracker.ca/{1}'
 def start():
     global mapbox_api_key, no_system_domain, system_domain
 
-    rt.load_translations()
+    realtime.load_translations()
+    history.load_last_seen()
 
     for system in all_systems():
         if gtfs.downloaded(system):
             system.load_gtfs()
         else:
-            system.update_gtfs()
-        system.update_realtime()
+            gtfs.update(system)
+        realtime.update(system)
         if not system.validate_gtfs():
-            system.update_gtfs()
+            gtfs.update(system)
+    history.update_last_seen(realtime.active_buses())
 
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
@@ -47,7 +50,7 @@ def get_url(system, path=''):
     return system_domain.format(system.id, path).rstrip('/')
 
 def systems_template(name, **kwargs):
-    return template(f'templates/{name}', systems=all_systems(), get_url=get_url, last_updated=rt.last_updated_string(), **kwargs)
+    return template(f'templates/{name}', systems=all_systems(), get_url=get_url, last_updated=realtime.last_updated_string(), **kwargs)
 
 def systems_invalid_template(system_id):
     return systems_template('invalid_system', system_id=system_id)
@@ -124,13 +127,18 @@ def system_routes_number(system_id, number):
 
 @app.route('/history')
 @app.route('/history/')
-def history():
+def route_history():
     return system_history(None)
 
 @app.route('/<system_id>/history')
 @app.route('/<system_id>/history/')
 def system_history(system_id):
-    return systems_template('history', system=get_system(system_id), path='history')
+    system = get_system(system_id)
+    if system is None:
+        last_seen = history.all_last_seen()
+    else:
+        last_seen = [h for h in history.all_last_seen() if h.system == system]
+    return systems_template('history', system=system, last_seen=last_seen, path='history')
 
 @app.route('/map')
 @app.route('/map/')
@@ -141,16 +149,15 @@ def map():
 @app.route('/<system_id>/map/')
 def system_map(system_id):
     system = get_system(system_id)
-    active_buses = rt.active_buses()
     if system is None:
-        buses = active_buses
+        buses = realtime.active_buses()
     else:
-        buses = [b for b in active_buses if b.position.system == system]
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
     return systems_template('map', system=system, buses=buses, path='map')
 
 @app.route('/realtime')
 @app.route('/realtime/')
-def realtime():
+def route_realtime():
     return system_realtime(None)
 
 @app.route('/<system_id>/realtime')
@@ -158,22 +165,22 @@ def realtime():
 def system_realtime(system_id):
     reload = request.query.get('reload', 'false')
     if reload == 'true':
-        rt.reset_positions()
+        realtime.reset_positions()
         for system in all_systems():
             try:
-                system.update_realtime()
+                realtime.update(system)
                 if not system.validate_gtfs():
-                    system.update_gtfs()
+                    gtfs.update(system)
             except Exception as e:
                 print(f'Error: Failed to update realtime for {system}')
                 print(f'Error message: {e}')
+        history.update_last_seen(realtime.active_buses())
     group = request.query.get('group', 'all')
     system = get_system(system_id)
-    active_buses = rt.active_buses()
     if system is None:
-        buses = active_buses
+        buses = realtime.active_buses()
     else:
-        buses = [b for b in active_buses if b.position.system == system]
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
     return systems_template('realtime', system=system, group=group, buses=buses, path=f'realtime?group={group}')
 
 @app.route('/bus/<number:int>')
@@ -185,7 +192,7 @@ def bus_number(number):
 @app.route('/<system_id>/bus/<number:int>/')
 def system_bus_number(system_id, number):
     system = get_system(system_id)
-    bus = rt.get_bus(number=number)
+    bus = realtime.get_bus(number=number)
     if bus is None:
         return systems_error_template(system, f'Bus {number} not found')
     return systems_template('bus', system=system, bus=bus)

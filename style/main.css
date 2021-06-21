@@ -160,13 +160,13 @@ tr.hourly {
 
 .info-box .info-box-section .info-box-name {
     float: left;
+    margin-right: 20px;
 }
 
 .info-box .info-box-section .info-box-value {
     float: none;
     overflow: hidden;
     text-align: right;
-    margin-left: 20px;
 }
 
 .no-wrap {
@@ -193,7 +193,13 @@ tr.hourly {
     margin-top: 5px;
     text-align: center;
     font-weight: bold;
-    position: relative;
+}
+
+.marker div span {
+    margin-left: -100%;
+    margin-right: -100%;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .vertical-line {
@@ -227,17 +233,17 @@ tr.hourly {
 }
 
 .service-indicator {
-    display: table;
+    margin: -5px;
     text-align: center;
-    empty-cells: show;
-    table-layout: fixed;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-.service-indicator thead tr th {
+.service-indicator .service-indicator-section {
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
     font-weight: bold;
-    padding: 0px 10px;
+    margin: 5px;
+    width: 40px;
 }
 
 .service-details {

@@ -1,10 +1,11 @@
 import os
-import time
 import signal
 from crontab import CronTab
 
 from models.system import all_systems
+import gtfs
 import realtime
+import history
 
 CRON_ID = 'gtfs-muncher'
 CRON_INTERVAL = 5
@@ -25,9 +26,10 @@ def handle(sig, frame):
     realtime.reset_positions()
     for system in all_systems():
         try:
-            system.update_realtime()
+            realtime.update(system)
             if not system.validate_gtfs():
-                system.update_gtfs()
+                gtfs.update(system)
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
+    history.update_last_seen(realtime.active_buses())
