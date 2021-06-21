@@ -23,9 +23,11 @@ def start():
             system.load_gtfs()
         else:
             gtfs.update(system)
+            realtime.update_routes(system)
         realtime.update(system)
         if not system.validate_gtfs():
             gtfs.update(system)
+            realtime.update_routes(system)
     history.update_last_seen(realtime.active_buses())
 
     cp.config.update('server.conf')
@@ -171,6 +173,7 @@ def system_realtime(system_id):
                 realtime.update(system)
                 if not system.validate_gtfs():
                     gtfs.update(system)
+                    realtime.update_routes(system)
             except Exception as e:
                 print(f'Error: Failed to update realtime for {system}')
                 print(f'Error message: {e}')

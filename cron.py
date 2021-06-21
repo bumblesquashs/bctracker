@@ -29,6 +29,7 @@ def handle(sig, frame):
             realtime.update(system)
             if not system.validate_gtfs():
                 gtfs.update(system)
+                realtime.update_routes(system)
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
