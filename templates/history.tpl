@@ -41,7 +41,7 @@
             </td>
             <td class="desktop-only">{{ bus.range }}</td>
             <td class="desktop-only">{{ format_date(history.date) }}</td>
-            <td class="mobile-only">{{ format_date_mobile(history.date) }}</td>
+            <td class="mobile-only no-wrap">{{ format_date_mobile(history.date) }}</td>
             % if system is None:
               <td class="desktop-only">{{ history.system }}</td>
             % end
@@ -53,7 +53,7 @@
                 <span>{{ history.block_id }}</span>
               % end
             </td>
-            <td class="desktop-only">{{ ', '.join([str(r) for r in history.routes]) }}</td>
+            <td class="desktop-only">{{ history.routes_string }}</td>
           </tr>
         % end
       </tbody>

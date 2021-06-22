@@ -95,7 +95,7 @@
       <thead>
         <tr>
           <th>Date</th>
-          <th class="desktop-only">System</th>
+          <th>System</th>
           <th class="desktop-only">Assigned Block</th>
           <th class="desktop-only">Assigned Routes</th>
           <th class="desktop-only">Start Time</th>
@@ -107,8 +107,8 @@
         % for block_history in history[:20]:
           <tr>
             <td class="desktop-only">{{ format_date(block_history.date) }}</td>
-            <td class="mobile-only">{{ format_date_mobile(block_history.date) }}</td>
-            <td class="desktop-only">{{ block_history.system }}</td>
+            <td class="mobile-only no-wrap">{{ format_date_mobile(block_history.date) }}</td>
+            <td>{{ block_history.system }}</td>
             <td>
               % if block_history.is_current:
                 % block = block_history.block
@@ -116,8 +116,12 @@
               % else:
                 <span>{{ block_history.block_id }}</span>
               % end
+              <span class="mobile-only smaller-font">
+                <br />
+                {{ block_history.routes_string }}
+              </span>
             </td>
-            <td class="desktop-only">{{ ', '.join([str(r) for r in block_history.routes]) }}</td>
+            <td class="desktop-only">{{ block_history.routes_string }}</td>
             <td class="desktop-only">{{ block_history.start_time }}</td>
             <td class="desktop-only">{{ block_history.end_time }}</td>
           </tr>
