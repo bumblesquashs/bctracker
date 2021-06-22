@@ -28,7 +28,7 @@ def start():
         if not system.validate_gtfs():
             gtfs.update(system)
             realtime.update_routes(system)
-    history.update_last_seen(realtime.active_buses())
+    history.update(realtime.active_buses())
 
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
@@ -177,7 +177,7 @@ def system_realtime(system_id):
             except Exception as e:
                 print(f'Error: Failed to update realtime for {system}')
                 print(f'Error message: {e}')
-        history.update_last_seen(realtime.active_buses())
+        history.update(realtime.active_buses())
     group = request.query.get('group', 'all')
     system = get_system(system_id)
     if system is None:
@@ -198,7 +198,7 @@ def system_bus_number(system_id, number):
     bus = realtime.get_bus(number=number)
     if bus is None:
         return systems_error_template(system, f'Bus {number} not found')
-    return systems_template('bus', system=system, bus=bus)
+    return systems_template('bus', system=system, bus=bus, history=sorted(history.load_bus_history(number)))
 
 @app.route('/blocks')
 @app.route('/blocks/')

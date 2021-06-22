@@ -146,6 +146,14 @@ tr.hourly {
     border: 1px solid #989898;
 }
 
+.info-box .info-box-title {
+    margin-bottom: 20px;
+}
+
+.info-box .info-box-title:last-child {
+    margin-bottom: 0px;
+}
+
 .info-box .info-box-section {
     border-bottom: 1px solid #cbcbcb;
     padding-bottom: 10px;
