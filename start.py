@@ -16,5 +16,5 @@ def exit(sig, frame):
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, exit)
     
-    cron.start()
     server.start()
+    cron.start()

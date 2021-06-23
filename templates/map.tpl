@@ -3,15 +3,30 @@
 
 % rebase('base', title='Map', include_maps=True)
 
-% if system is not None and not system.supports_realtime:
-  <h1>Map</h1>
-  <hr />
+% if len(buses) == 0:
+  % if system is not None and not system.supports_realtime:
+    <h1>Map</h1>
+    <hr />
 
-  <p>
-    {{ system }} does not currently support realtime. Please choose a different system.
-  </p>
+    <p>
+      {{ system }} does not currently support realtime. Please choose a different system.
+    </p>
 
-  % include('components/systems', realtime_only=True)
+    % include('components/systems', realtime_only=True)
+  % else:
+    % if system is None:
+      There are no buses out right now.
+      BC Transit does not have late night service, so this should be the case overnight.
+      If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
+      Please check back later!
+    % else:
+      <p>
+        There are no buses out in {{ system }} right now. Please choose a different system.
+      </p>
+
+      % include('components/systems', realtime_only=True)
+    % end
+  % end
 % else:
   <div class="system-map-header">
     <h1>Map</h1>

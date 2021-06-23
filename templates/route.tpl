@@ -25,7 +25,8 @@
     % service_outbound_trips = [t for t in outbound_trips if t.service == service]
     % service_inbound_trips = [t for t in inbound_trips if t.service == service]
     <div class="list-content">
-      <h2 id="{{service}}">{{ service }}</h2>
+      <h2 class="list-content-title" id="{{service}}">{{ service }}</h2>
+      <div class="list-content-subtitle">{{ service.date_string }}</div>
       <div class="list-container">
         % if len(inbound_trips) > 0:
           <div class="list-content">

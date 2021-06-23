@@ -20,12 +20,12 @@ def start():
 
     for system in all_systems():
         if gtfs.downloaded(system):
-            system.load_gtfs()
+            gtfs.load(system)
         else:
             gtfs.update(system)
             realtime.update_routes(system)
         realtime.update(system)
-        if not system.validate_gtfs():
+        if not gtfs.validate(system):
             gtfs.update(system)
             realtime.update_routes(system)
     history.update(realtime.active_buses())
@@ -171,7 +171,7 @@ def system_realtime(system_id):
         for system in all_systems():
             try:
                 realtime.update(system)
-                if not system.validate_gtfs():
+                if not gtfs.validate(system):
                     gtfs.update(system)
                     realtime.update_routes(system)
             except Exception as e:

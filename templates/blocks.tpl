@@ -23,7 +23,8 @@
 
     % for service in services:
       <div class="list-content">
-        <h2 id="{{service}}">{{ service }}</h2>
+        <h2 class="list-content-title" id="{{service}}">{{ service }}</h2>
+        <div class="list-content-subtitle">{{ service.date_string }}</div>
         <table class="pure-table pure-table-horizontal pure-table-striped">
           <thead>
             <tr>

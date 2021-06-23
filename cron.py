@@ -27,7 +27,7 @@ def handle(sig, frame):
     for system in all_systems():
         try:
             realtime.update(system)
-            if not system.validate_gtfs():
+            if not gtfs.validate(system):
                 gtfs.update(system)
                 realtime.update_routes(system)
         except Exception as e:

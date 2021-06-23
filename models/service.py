@@ -102,6 +102,14 @@ class Service:
     @property
     def excluded_dates_string(self):
         return ', '.join(self.excluded_dates)
+
+    @property
+    def date_string(self):
+        if self.service_type == ServiceType.SPECIAL:
+            return 'Special Service'
+        start = format_date(self.start_date)
+        end = format_date(self.end_date)
+        return f'{start} to {end}'
     
     @property
     def is_current(self):

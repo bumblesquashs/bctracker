@@ -177,6 +177,10 @@ tr.hourly {
     text-align: right;
 }
 
+.list-content .list-content-subtitle {
+    margin-bottom: 5px;
+}
+
 .no-wrap {
     white-space: nowrap;
 }
