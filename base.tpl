@@ -55,9 +55,21 @@
             <div class="navbar-item navbar-right dropdown">
               Change System
               <div class="dropdown-content">
-                % for available_system in sorted(systems):
-                  <a href="{{ get_url(available_system, get('path', '')) }}">{{ available_system }}</a>
-                % end
+                % sorted_systems = sorted(systems)
+                <table class="dropdown-table">
+                  <tbody>
+                    % for i in range(0, len(sorted_systems), 2):
+                      <tr>
+                        % left_system = sorted_systems[i]
+                        <td><a href="{{ get_url(left_system, get('path', '')) }}">{{ left_system }}</a></td>
+                        % if i < len(sorted_systems) - 1:
+                          % right_system = sorted_systems[i + 1]
+                          <td><a href="{{ get_url(right_system, get('path', '')) }}">{{ right_system }}</a></td>
+                        % end
+                      </tr>
+                    % end
+                  </tbody>
+                </table>
               </div>
             </div>
           % end
@@ -81,11 +93,21 @@
               Change System
               <div class="dropdown-content">
                 <a href="{{ get_url(None, get('path', '')) }}">All Systems</a>
-                % for available_system in sorted(systems):
-                  % if system != available_system:
-                    <a href="{{ get_url(available_system, get('path', '')) }}">{{ available_system }}</a>
-                  % end
-                % end
+                % sorted_systems = sorted([s for s in systems if s != system])
+                <table class="dropdown-table">
+                  <tbody>
+                    % for i in range(0, len(sorted_systems), 2):
+                      <tr>
+                        % left_system = sorted_systems[i]
+                        <td><a href="{{ get_url(left_system, get('path', '')) }}">{{ left_system }}</a></td>
+                        % if i < len(sorted_systems) - 1:
+                          % right_system = sorted_systems[i + 1]
+                          <td><a href="{{ get_url(right_system, get('path', '')) }}">{{ right_system }}</a></td>
+                        % end
+                      </tr>
+                    % end
+                  </tbody>
+                </table>
               </div>
             </div>
           % end

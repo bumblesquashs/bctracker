@@ -73,10 +73,12 @@ class System:
 
 systems = {
     'cfv': System('cfv', 'Central Fraser Valley', False, bctransit_id='central-fraser-valley'),
+    'chilliwack': System('chilliwack', 'Chilliwack', False),
     'comox': System('comox', 'Comox Valley', True, bctransit_id='comox-valley'),
     'kamloops': System('kamloops', 'Kamloops', True),
     'kelowna': System('kelowna', 'Kelowna', True),
     'nanaimo': System('nanaimo', 'Nanaimo', True),
+    'prince-george': System('prince-george', 'Prince George', False),
     'squamish': System('squamish', 'Squamish', True),
     'victoria': System('victoria', 'Victoria', True),
     'whistler': System('whistler', 'Whistler', True),

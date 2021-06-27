@@ -192,6 +192,16 @@ tr.hourly {
     border-radius: 16px;
 }
 
+.marker:hover {
+    background-color: #255325;
+    cursor: pointer;
+}
+
+.marker a {
+    text-decoration: none !important;
+    color: black;
+}
+
 .marker img {
     position: relative;
     width: 24px;

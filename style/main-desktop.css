@@ -64,10 +64,18 @@ a:hover {
     position: absolute;
     top: 52px;
     right: 0px;
-    left: 0px;
+    min-width: 200%;
     background-color: white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 20;
+}
+
+.dropdown-content .dropdown-table {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
 }
 
 .dropdown-content .dropdown-title {
@@ -81,6 +89,25 @@ a:hover {
     color: black;
     text-decoration: none;
     display: block;
+}
+
+.dropdown-content .dropdown-table tr {
+    height: 100%;
+}
+
+.dropdown-content .dropdown-table tr td {
+    height: 100%;
+    padding: 0px;
+}
+
+.dropdown-content .dropdown-table tr td a {
+    padding: 12px;
+    font-size: 14pt;
+    color: black;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    height: 100%;
 }
 
 .dropdown-content a:hover {
