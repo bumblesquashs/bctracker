@@ -7,6 +7,7 @@ class System:
         self.name = name
         self.supports_realtime = supports_realtime
         self.feed_version = ''
+        self.realtime_validation_error_count = 0
     
     def __str__(self):
         return self.name
@@ -17,7 +18,6 @@ class System:
     def __lt__(self, other):
         return self.name < other.name
     
-    # Methods for blocks
     def get_block(self, block_id):
         if block_id in self.blocks:
             return self.blocks[block_id]

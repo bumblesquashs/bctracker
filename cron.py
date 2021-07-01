@@ -47,8 +47,12 @@ def handle_realtime(sig, frame):
         try:
             realtime.update(system)
             if not realtime.validate(system):
-                gtfs.update(system)
-                realtime.update_routes(system)
+                system.realtime_validation_error_count += 1
+                if system.realtime_validation_error_count <= 10 and system.realtime_validation_error_count % 2 == 0:
+                    gtfs.update(system)
+                    realtime.update_routes(system)
+            else:
+                system.realtime_validation_error_count = 0
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')

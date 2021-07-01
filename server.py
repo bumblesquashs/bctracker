@@ -25,9 +25,11 @@ def start():
             gtfs.update(system)
             realtime.update_routes(system)
         realtime.update(system)
-        if not gtfs.validate(system) or not realtime.validate(system):
+        if not gtfs.validate(system):
             gtfs.update(system)
             realtime.update_routes(system)
+        elif not realtime.validate(system):
+            system.realtime_validation_error_count += 1
     history.update(realtime.active_buses())
 
     cp.config.update('server.conf')
