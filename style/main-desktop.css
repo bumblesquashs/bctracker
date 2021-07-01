@@ -91,6 +91,14 @@ a:hover {
     display: block;
 }
 
+.dropdown-content a.disabled-link {
+    color: grey;
+}
+
+.dropdown-content a.disabled-link:hover {
+    background-color: white;
+}
+
 .dropdown-content .dropdown-table tr {
     height: 100%;
 }
@@ -101,11 +109,7 @@ a:hover {
 }
 
 .dropdown-content .dropdown-table tr td a {
-    padding: 12px;
     font-size: 14pt;
-    color: black;
-    text-decoration: none;
-    display: block;
     text-align: center;
     height: 100%;
 }

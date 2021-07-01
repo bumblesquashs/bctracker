@@ -50,29 +50,6 @@
           <a class="navbar-item" href="{{ get_url(None, 'routes') }}">Routes</a>
           <a class="navbar-item" href="{{ get_url(None, 'blocks') }}">Blocks</a>
           <a class="navbar-item" href="{{ get_url(None, 'about') }}">About</a>
-
-          % if len(systems) > 1:
-            <div class="navbar-item navbar-right dropdown">
-              Change System
-              <div class="dropdown-content">
-                % sorted_systems = sorted(systems)
-                <table class="dropdown-table">
-                  <tbody>
-                    % for i in range(0, len(sorted_systems), 2):
-                      <tr>
-                        % left_system = sorted_systems[i]
-                        <td><a href="{{ get_url(left_system, get('path', '')) }}">{{ left_system }}</a></td>
-                        % if i < len(sorted_systems) - 1:
-                          % right_system = sorted_systems[i + 1]
-                          <td><a href="{{ get_url(right_system, get('path', '')) }}">{{ right_system }}</a></td>
-                        % end
-                      </tr>
-                    % end
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          % end
         % else:
           % if system.supports_realtime:
             <a class="navbar-item" href="{{ get_url(system, 'map') }}">Map</a>
@@ -87,30 +64,46 @@
           <a class="navbar-item" href="{{ get_url(system, 'routes') }}">Routes</a>
           <a class="navbar-item" href="{{ get_url(system, 'blocks') }}">Blocks</a>
           <a class="navbar-item" href="{{ get_url(system, 'about') }}">About</a>
+        % end
 
-          % if len(systems) > 1:
-            <div class="navbar-item navbar-right dropdown">
-              Change System
-              <div class="dropdown-content">
+        % if len(systems) > 1:
+          <div class="navbar-item navbar-right dropdown">
+            Change System
+            <div class="dropdown-content">
+              % if system is None:
+                <a class="disabled-link">All Systems</a>
+              % else:
                 <a href="{{ get_url(None, get('path', '')) }}">All Systems</a>
-                % sorted_systems = sorted([s for s in systems if s != system])
-                <table class="dropdown-table">
-                  <tbody>
-                    % for i in range(0, len(sorted_systems), 2):
-                      <tr>
-                        % left_system = sorted_systems[i]
-                        <td><a href="{{ get_url(left_system, get('path', '')) }}">{{ left_system }}</a></td>
-                        % if i < len(sorted_systems) - 1:
-                          % right_system = sorted_systems[i + 1]
-                          <td><a href="{{ get_url(right_system, get('path', '')) }}">{{ right_system }}</a></td>
+              % end
+              % sorted_systems = sorted(systems)
+              <table class="dropdown-table">
+                <tbody>
+                  % for i in range(0, len(sorted_systems), 2):
+                    <tr>
+                      % left_system = sorted_systems[i]
+                      <td>
+                        % if system is not None and system == left_system:
+                          <a class="disabled-link">{{ left_system }}</a>
+                        % else:
+                          <a href="{{ get_url(left_system, get('path', '')) }}">{{ left_system }}</a>
                         % end
-                      </tr>
-                    % end
-                  </tbody>
-                </table>
-              </div>
+                      </td>
+                      % if i < len(sorted_systems) - 1:
+                        % right_system = sorted_systems[i + 1]
+                        <td>
+                          % if system is not None and system == right_system:
+                            <a class="disabled-link">{{ right_system }}</a>
+                          % else:
+                            <a href="{{ get_url(right_system, get('path', '')) }}">{{ right_system }}</a>
+                          % end
+                        </td>
+                      % end
+                    </tr>
+                  % end
+                </tbody>
+              </table>
             </div>
-          % end
+          </div>
         % end
       </div>
 
