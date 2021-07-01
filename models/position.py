@@ -1,6 +1,4 @@
 
-from enum import Enum
-
 class Position:
     def __init__(self, system, active):
         self.system = system

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, timedelta
 from enum import IntEnum
 
 from formatting import format_date
@@ -113,7 +113,34 @@ class Service:
     
     @property
     def is_current(self):
-        return self.start_date.date() <= date.today() <= self.end_date.date()
+        return self.start_date.date() <= datetime.now().date() <= self.end_date.date()
+    
+    @property
+    def is_today(self):
+        hour = datetime.now().hour
+        today = datetime.today()
+        date = today if hour >= 5 else today - timedelta(days=1)
+        date_string = format_date(date)
+        if date_string in self.special_dates:
+            return True
+        if date_string in self.excluded_dates:
+            return False
+        weekday = date.date().weekday()
+        if weekday == 0:
+            return self.mon
+        if weekday == 1:
+            return self.tue
+        if weekday == 2:
+            return self.wed
+        if weekday == 3:
+            return self.thu
+        if weekday == 4:
+            return self.fri
+        if weekday == 5:
+            return self.sat
+        if weekday == 6:
+            return self.sun
+        return False
     
     def add_special_date(self, date):
         self.special_dates.append(format_date(date))

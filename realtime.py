@@ -22,6 +22,8 @@ buses_by_number = {}
 last_updated = datetime.now()
 
 def update_routes(system):
+    if not system.supports_realtime:
+        return
     data_path = f'data/realtime/{system.id}_routes.json'
 
     try:
@@ -146,3 +148,18 @@ def last_updated_string():
     if last_updated.date() == datetime.now().date():
         return last_updated.strftime("at %H:%M")
     return last_updated.strftime("%B %-d, %Y at %H:%M")
+
+def validate(system):
+    if not system.supports_realtime:
+        return True
+    count = 0
+    for position in [p for p in positions.values() if p.system == system]:
+        if count == 10:
+            return True
+        if position.trip_id is None:
+            continue
+        trip = position.trip
+        if trip is None or not trip.service.is_today:
+            return False
+        count += 1
+    return True

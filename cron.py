@@ -1,5 +1,6 @@
 import os
 import signal
+from datetime import datetime
 from crontab import CronTab
 
 from models.system import all_systems
@@ -7,27 +8,45 @@ import gtfs
 import realtime
 import history
 
-CRON_ID = 'gtfs-muncher'
-CRON_INTERVAL = 5
+GTFS_CRON_ID = 'gtfs-muncher'
+REALTIME_CRON_ID = 'realtime-muncher'
 
 def start():
-    signal.signal(signal.SIGUSR1, handle)
+    signal.signal(signal.SIGUSR1, handle_gtfs)
+    signal.signal(signal.SIGUSR2, handle_realtime)
     pid = os.getpid()
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=CRON_ID)
-        job = cron.new(command=f'kill -s USR1 {pid}', comment=CRON_ID)
-        job.minute.every(CRON_INTERVAL)
+        cron.remove_all(comment=GTFS_CRON_ID)
+        cron.remove_all(comment=REALTIME_CRON_ID)
+
+        gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=GTFS_CRON_ID)
+        gtfs_job.setall('0 7 */1 * *')
+
+        realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=REALTIME_CRON_ID)
+        realtime_job.minute.every(5)
 
 def stop():
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=CRON_ID)
+        cron.remove_all(comment=GTFS_CRON_ID)
+        cron.remove_all(comment=REALTIME_CRON_ID)
 
-def handle(sig, frame):
+def handle_gtfs(sig, frame):
+    weekday = datetime.today().weekday()
+    for system in all_systems():
+        try:
+            if weekday == 0 or not gtfs.validate(system):
+                gtfs.update(system)
+                realtime.update_routes(system)
+        except Exception as e:
+            print(f'Error: Failed to update gtfs for {system}')
+            print(f'Error message: {e}')
+
+def handle_realtime(sig, frame):
     realtime.reset_positions()
     for system in all_systems():
         try:
             realtime.update(system)
-            if not gtfs.validate(system):
+            if not realtime.validate(system):
                 gtfs.update(system)
                 realtime.update_routes(system)
         except Exception as e:

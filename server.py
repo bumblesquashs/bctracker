@@ -25,7 +25,7 @@ def start():
             gtfs.update(system)
             realtime.update_routes(system)
         realtime.update(system)
-        if not gtfs.validate(system):
+        if not gtfs.validate(system) or not realtime.validate(system):
             gtfs.update(system)
             realtime.update_routes(system)
     history.update(realtime.active_buses())

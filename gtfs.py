@@ -1,5 +1,5 @@
 from os import path, rename
-from datetime import datetime
+from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
 
@@ -188,8 +188,11 @@ def read_csv(system, name):
         for row in reader:
             rows.append(dict(zip(columns, row)))
     return rows
-    
+
 def validate(system):
-    if system.supports_realtime:
-        pass # TODO: Implement realtime validation
-    return True
+    end_date = None
+    for service in system.all_services():
+        date = service.end_date.date()
+        if end_date is None or date > end_date:
+            end_date = date
+    return datetime.now().date() < end_date - timedelta(days=7)
