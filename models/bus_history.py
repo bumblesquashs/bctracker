@@ -23,7 +23,7 @@ class BusHistory:
     
     @property
     def is_current(self):
-        return self.feed_version == self.system.feed_version
+        return self.feed_version == self.system.feed_version or self.block is not None
     
     @property
     def block(self):

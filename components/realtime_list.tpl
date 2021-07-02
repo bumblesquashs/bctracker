@@ -20,9 +20,12 @@
     </tr>
   </thead>
   <tbody>
+    % last_bus = None
     % for bus in sorted(buses):
       % position = bus.position
-      <tr>
+      % same_model = last_bus is None or bus.range == last_bus.range
+      % last_bus = bus
+      <tr class="{{'' if same_model else 'divider'}}">
         % if bus.number is None:
           <td>Unknown Bus</td>
           <td class="desktop-only"></td>

@@ -57,7 +57,7 @@
               % if last_hour == -1:
                 % last_hour = this_hour
               % end
-              <tr class="{{'hourly' if this_hour > last_hour else ''}}">
+              <tr class="{{'divider' if this_hour > last_hour else ''}}">
                 <td>{{ stop_time.time }}</td>
                 <td>
                   {{ stop_time.trip }}

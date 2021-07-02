@@ -29,9 +29,12 @@
         </tr>
       </thead>
       <tbody>
+        % last_bus = None
         % for history in last_seen:
           % bus = history.bus
-          <tr>
+          % same_model = last_bus is None or bus.range == last_bus.range
+          % last_bus = bus
+          <tr class="{{'' if same_model else 'divider'}}">
             <td>
               <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
               <span class="mobile-only smaller-font">
