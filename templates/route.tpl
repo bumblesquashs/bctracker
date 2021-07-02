@@ -1,6 +1,6 @@
 % from models.trip import Direction
 
-% rebase('base', title=str(route))
+% rebase('base', title=str(route), include_maps=True)
 
 <h1>{{ route }}</h1>
 <hr />
@@ -10,6 +10,25 @@
 
 % has_outbound_trips = len(outbound_trips) > 0
 % has_inbound_trips = len(inbound_trips) > 0
+
+<div class="sidebar">
+  % include('components/route_map', route=route)
+
+  <div class="info-box">
+    <div class="info-box-section">
+      % include('components/service_indicator', services=route.services)
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Headsign{{ '' if len(route.headsigns) == 1 else 's' }}</div>
+      <div class="info-box-value">
+        % for headsign in route.headsigns:
+          <span>{{ headsign }}</span>
+          <br />
+        % end
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="body list-container">
   % if len(route.services) > 1:

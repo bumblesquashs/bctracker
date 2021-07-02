@@ -27,5 +27,9 @@ class Route:
     def services(self):
         return sorted({ t.service for t in self.trips if t.service.is_current })
     
+    @property
+    def headsigns(self):
+        return sorted({ str(t) for t in self.trips if t.service.is_current })
+    
     def add_trip(self, trip):
         self.trips.append(trip)
