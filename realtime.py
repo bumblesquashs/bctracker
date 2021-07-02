@@ -21,21 +21,6 @@ buses_by_number = {}
 
 last_updated = datetime.now()
 
-def update_routes(system):
-    if not system.supports_realtime:
-        return
-    data_path = f'data/realtime/{system.id}_routes.json'
-
-    try:
-        if path.exists(data_path):
-            formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
-            archives_path = f'archives/realtime/{system.id}_route_{formatted_date}.json'
-            rename(data_path, archives_path)
-        wget.download(f'https://nextride.{system.bctransit_id}.bctransit.com/api/Route', data_path)
-    except Exception as e:
-        print(f'\nError: Failed to update realtime routes for {system}')
-        print(f'Error message: {e}')
-
 def update(system):
     global last_updated
     if not system.supports_realtime:
@@ -87,11 +72,8 @@ def update_positions(system):
         except AttributeError: pass
 
 def update_translations(system):
-    data_path = f'data/realtime/{system.id}_routes.json'
-    if not path.exists(data_path):
-        update_routes(system)
-    with open(data_path) as file:
-        system_info = json.load(file)
+    with request.urlopen(f'https://nextride.{system.bctransit_id}.bctransit.com/api/Route') as file:
+        system_info = json.loads(file.read())
     pattern_ids = ','.join([str(i['patternID']) for i in system_info])
     with request.urlopen(f'https://nextride.{system.bctransit_id}.bctransit.com/api/VehicleStatuses?patternIds={pattern_ids}') as file:
         bus_info = json.load(file)

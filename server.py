@@ -23,11 +23,9 @@ def start():
             gtfs.load(system)
         else:
             gtfs.update(system)
-            realtime.update_routes(system)
         realtime.update(system)
         if not gtfs.validate(system):
             gtfs.update(system)
-            realtime.update_routes(system)
         elif not realtime.validate(system):
             system.realtime_validation_error_count += 1
     history.update(realtime.active_buses())
@@ -175,7 +173,6 @@ def system_realtime(system_id):
                 realtime.update(system)
                 if not gtfs.validate(system):
                     gtfs.update(system)
-                    realtime.update_routes(system)
             except Exception as e:
                 print(f'Error: Failed to update realtime for {system}')
                 print(f'Error message: {e}')

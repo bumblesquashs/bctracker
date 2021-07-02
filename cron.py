@@ -36,7 +36,6 @@ def handle_gtfs(sig, frame):
         try:
             if weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
-                realtime.update_routes(system)
         except Exception as e:
             print(f'Error: Failed to update gtfs for {system}')
             print(f'Error message: {e}')
@@ -50,7 +49,6 @@ def handle_realtime(sig, frame):
                 system.realtime_validation_error_count += 1
                 if system.realtime_validation_error_count <= 10 and system.realtime_validation_error_count % 2 == 0:
                     gtfs.update(system)
-                    realtime.update_routes(system)
             else:
                 system.realtime_validation_error_count = 0
         except Exception as e:
