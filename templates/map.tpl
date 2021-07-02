@@ -52,7 +52,11 @@
     for (var bus of buses) {
       var marker = document.createElement("div");
       marker.className = "marker";
-      marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+      if (bus.number === "Unknown Bus") {
+        marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
+      } else {
+        marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+      }
   
       lons.push(bus.lon)
       lats.push(bus.lat)
