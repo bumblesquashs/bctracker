@@ -4,7 +4,7 @@
     <tr>
       <th class="desktop-only">Number</th>
       % if get('show_model', True):
-        <th class="desktop-only">Year and Model</th>
+        <th class="desktop-only">Model</th>
         <th class="mobile-only">Bus</th>
       % else:
         <th class="desktop-only">Year</th>
@@ -23,28 +23,32 @@
     % last_bus = None
     % for bus in sorted(buses):
       % position = bus.position
-      % same_model = last_bus is None or bus.range == last_bus.range
+      % same_model = last_bus is None or bus.order == last_bus.order
       % last_bus = bus
       <tr class="{{'' if same_model else 'divider'}}">
         % if bus.number is None:
           <td>Unknown Bus</td>
           <td class="desktop-only"></td>
         % else:
-          % range = bus.range
+          % order = bus.order
           <td>
             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus.number }}</a>
-            <span class="mobile-only smaller-font">
-              <br />
-              {{ range.year }}
-              % if get('show_model', True):
-                  {{ range.model }}
-              % end
-            </span>
+            % if order is not None:
+              <span class="mobile-only smaller-font">
+                <br />
+                {{ order.year }}
+                % if get('show_model', True):
+                    {{ order.model }}
+                % end
+              </span>
+            % end
           </td>
           <td class="desktop-only">
-            {{ range.year }}
-            % if get('show_model', True):
-                {{ range.model }}
+            % if order is not None:
+              {{ order.year }}
+              % if get('show_model', True):
+                  {{ order.model }}
+              % end
             % end
           </td>
         % end

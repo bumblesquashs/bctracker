@@ -1,5 +1,5 @@
 % from formatting import format_date, format_date_mobile
-% from models.bus_range import BusRangeDescription
+% from models.bus_model import BusModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
 
@@ -60,17 +60,31 @@
   % end
   
   <div class="info-box">
+    % order = bus.order
+    % model = bus.model
+    <div class="info-box-section">
+      <div class="info-box-name">Manufacturer</div>
+      <div class="info-box-value">{{ model.manufacturer }}</div>
+    </div>
     <div class="info-box-section">
       <div class="info-box-name">Model</div>
-      <div class="info-box-value">{{ bus.range.model }}</div>
+      <div class="info-box-value">{{ model.name }}</div>
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Year</div>
-      <div class="info-box-value">{{ bus.range.year }}</div>
+      <div class="info-box-value">{{ order.year }}</div>
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Vehicle Type</div>
-      <div class="info-box-value">{{ bus.range.description.value }}</div>
+      <div class="info-box-value">{{ model.type.value }}</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Length</div>
+      <div class="info-box-value">{{ str(model.length).rstrip('0').rstrip('.') }} feet</div>
+    </div>
+    <div class="info-box-section">
+      <div class="info-box-name">Fuel Type</div>
+      <div class="info-box-value">{{ model.fuel }}</div>
     </div>
   </div>
 </div>
@@ -84,7 +98,7 @@
         <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
         <li>It may not have been in service since BCTracker started recording bus history</li>
         <li>It may not have functional NextRide equipment installed</li>
-        % if bus.range.description == BusRangeDescription.SHUTTLE:
+        % if model.type == BusModelType.shuttle:
           <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
         % end
       </ol>

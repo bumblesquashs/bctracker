@@ -8,8 +8,8 @@ import urllib.request as request
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
-import models.bus_range as bus_range
 from models.bus import Bus
+from models.bus_order import is_valid_bus
 from models.position import Position
 
 TRANSLATIONS_PATH = "data/realtime/translations.json"
@@ -110,7 +110,7 @@ def load_translations():
 def get_bus(bus_id=None, number=None):
     if bus_id is not None:
         return Bus(bus_id, buses_by_id.get(bus_id))
-    if number is not None and bus_range.is_valid(number):
+    if number is not None and is_valid_bus(number):
         return Bus(buses_by_number.get(number), number)
     return None
 

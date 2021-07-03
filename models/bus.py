@@ -1,5 +1,5 @@
 
-import models.bus_range as bus_range
+from models.bus_order import get_order
 import realtime
 
 class Bus:
@@ -28,10 +28,15 @@ class Bus:
         return self_number < other_number
     
     @property
-    def range(self):
-        if self.number is None:
-            return bus_range.unknown_range
-        return bus_range.get(self.number)
+    def order(self):
+        return get_order(self.number)
+    
+    @property
+    def model(self):
+        order = self.order
+        if order is None:
+            return None
+        return order.model
     
     @property
     def position(self):

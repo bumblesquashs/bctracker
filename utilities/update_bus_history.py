@@ -20,7 +20,7 @@ for file_name in listdir('vehicle_history'):
             'block_id': value['blockid'],
             'routes': [int(r) for r in value['routes']],
             'start_time': value['start_time'],
-            'end_time': 'Unknown'
+            'end_time': ''
         })
 
     with open(new_path, 'w') as file:

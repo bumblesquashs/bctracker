@@ -100,18 +100,18 @@
         % end
       % end
     % elif group == 'model':
-      % known_buses = [b for b in buses if b.range is not None]
-      % models = sorted({b.range.model for b in known_buses})
+      % known_buses = [b for b in buses if b.order is not None]
+      % models = sorted({b.order.model for b in known_buses})
       
       % for model in models:
-        % model_buses = [b for b in known_buses if b.range.model == model]
+        % model_buses = [b for b in known_buses if b.order.model == model]
         <div class="list-content no-inline">
           <h2 class="list-content-title">{{ model }}</h2>
           % include('components/realtime_list', buses=model_buses, show_model=False)
         </div>
       % end
 
-      % unknown_buses = [b for b in buses if b.range is None]
+      % unknown_buses = [b for b in buses if b.order is None]
       % if len(unknown_buses) > 0:
         <div class="list-content no-inline">
           <h2 class="list-content-title">Unknown Bus</h2>

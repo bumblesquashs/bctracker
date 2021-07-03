@@ -1,0 +1,11 @@
+system_id,name,supports_realtime,mapstrat_id,bctransit_id
+cfv,Central Fraser Valley,0,central-fraser-valley,central-fraser-valley
+chilliwack,Chilliwack,0,chilliwack,chilliwack
+comox,Comox Valley,1,comox,comox-valley
+kamloops,Kamloops,1,kamloops,kamloops
+kelowna,Kelowna,1,kelowna,kelowna
+nanaimo,Nanaimo,1,nanaimo,nanaimo
+prince-george,Prince George,0,prince-george,prince-george
+squamish,Squamish,1,squamish,squamish
+victoria,Victoria,1,victoria,victoria
+whistler,Whistler,1,whistler,whistler

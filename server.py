@@ -3,7 +3,10 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request
 import cherrypy as cp
 
-from models.system import get_system, all_systems
+from models.bus_model import load_models
+from models.bus_order import load_orders
+from models.system import load_systems, get_system, all_systems
+
 import gtfs
 import realtime
 import history
@@ -14,6 +17,10 @@ system_domain = '{0}.bctracker.ca/{1}'
 
 def start():
     global mapbox_api_key, no_system_domain, system_domain
+
+    load_models()
+    load_orders()
+    load_systems()
 
     realtime.load_translations()
     history.load_last_seen()
