@@ -52,7 +52,11 @@
     for (var bus of buses) {
       var marker = document.createElement("div");
       marker.className = "marker";
-      marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+      if (bus.number === "Unknown Bus") {
+        marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
+      } else {
+        marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+      }
   
       lons.push(bus.lon)
       lats.push(bus.lat)
@@ -60,13 +64,20 @@
       new mapboxgl.Marker(marker).setLngLat([bus.lon, bus.lat]).addTo(map);
     }
   
-    const minLon = Math.min.apply(Math, lons)
-    const maxLon = Math.max.apply(Math, lons)
-    const minLat = Math.min.apply(Math, lats)
-    const maxLat = Math.max.apply(Math, lats)
-    map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
-      duration: 0,
-      padding: {top: 200, bottom: 100, left: 100, right: 100}
-    })
+    if (lons.length === 1 && lats.length === 1) {
+      map.jumpTo({
+        center: [lons[0], lats[0]],
+        zoom: 14
+      })
+    } else {
+      const minLon = Math.min.apply(Math, lons)
+      const maxLon = Math.max.apply(Math, lons)
+      const minLat = Math.min.apply(Math, lats)
+      const maxLat = Math.max.apply(Math, lats)
+      map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
+        duration: 0,
+        padding: {top: 200, bottom: 100, left: 100, right: 100}
+      })
+    }
   </script>
 % end

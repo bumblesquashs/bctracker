@@ -1,15 +1,20 @@
+import csv
 
 class System:
-    def __init__(self, system_id, name, supports_realtime, mapstrat_id=None, bctransit_id=None, ):
+    def __init__(self, system_id, name, supports_realtime, mapstrat_id, bctransit_id):
         self.id = system_id
-        self.mapstrat_id = mapstrat_id or system_id
-        self.bctransit_id = bctransit_id or system_id
+        self.mapstrat_id = mapstrat_id
+        self.bctransit_id = bctransit_id
         self.name = name
         self.supports_realtime = supports_realtime
         self.feed_version = ''
+        self.realtime_validation_error_count = 0
     
     def __str__(self):
         return self.name
+    
+    def __hash__(self):
+        return hash(self.id)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -17,7 +22,6 @@ class System:
     def __lt__(self, other):
         return self.name < other.name
     
-    # Methods for blocks
     def get_block(self, block_id):
         if block_id in self.blocks:
             return self.blocks[block_id]
@@ -71,18 +75,23 @@ class System:
         for block in self.blocks.values():
             block.trips = sorted(block.trips)
 
-systems = {
-    'cfv': System('cfv', 'Central Fraser Valley', False, bctransit_id='central-fraser-valley'),
-    'chilliwack': System('chilliwack', 'Chilliwack', False),
-    'comox': System('comox', 'Comox Valley', True, bctransit_id='comox-valley'),
-    'kamloops': System('kamloops', 'Kamloops', True),
-    'kelowna': System('kelowna', 'Kelowna', True),
-    'nanaimo': System('nanaimo', 'Nanaimo', True),
-    'prince-george': System('prince-george', 'Prince George', False),
-    'squamish': System('squamish', 'Squamish', True),
-    'victoria': System('victoria', 'Victoria', True),
-    'whistler': System('whistler', 'Whistler', True),
-}
+systems = {}
+
+def load_systems():
+    rows = []
+    with open(f'./static_data/systems.csv', 'r') as file:
+        reader = csv.reader(file)
+        columns = next(reader)
+        for row in reader:
+            rows.append(dict(zip(columns, row)))
+    for row in rows:
+        system_id = row['system_id']
+        name = row['name']
+        supports_realtime = int(row['supports_realtime']) == 1
+        mapstrat_id = row['mapstrat_id']
+        bctransit_id = row['bctransit_id']
+
+        systems[system_id] = System(system_id, name, supports_realtime, mapstrat_id, bctransit_id)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:

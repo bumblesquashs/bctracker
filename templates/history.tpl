@@ -16,8 +16,8 @@
     <table class="pure-table pure-table-horizontal pure-table-striped">
       <thead>
         <tr>
-          <th class="desktop-only">Bus Number</th>
-          <th class="desktop-only">Year and Model</th>
+          <th class="desktop-only">Number</th>
+          <th class="desktop-only">Model</th>
           <th class="mobile-only">Bus</th>
           <th>Last Seen</th>
           % if system is None:
@@ -29,17 +29,27 @@
         </tr>
       </thead>
       <tbody>
+        % last_bus = None
         % for history in last_seen:
           % bus = history.bus
-          <tr>
+          % same_model = last_bus is None or bus.order == last_bus.order
+          % last_bus = bus
+          % order = bus.order
+          <tr class="{{'' if same_model else 'divider'}}">
             <td>
               <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-              <span class="mobile-only smaller-font">
-                <br />
-                {{ bus.range }}
-              </span>
+              % if order is not None:
+                <span class="mobile-only smaller-font">
+                  <br />
+                  {{ order }}
+                </span>
+              % end
             </td>
-            <td class="desktop-only">{{ bus.range }}</td>
+            <td class="desktop-only">
+              % if order is not None:
+                {{ order }}
+              % end
+            </td>
             <td class="desktop-only">{{ format_date(history.date) }}</td>
             <td class="mobile-only no-wrap">{{ format_date_mobile(history.date) }}</td>
             % if system is None:

@@ -17,7 +17,8 @@
       </tr>
     </thead>
     <tbody>
-      % for route in system.all_routes():
+      % routes = [r for r in system.all_routes() if r.is_current]
+      % for route in routes:
         <tr>
           <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
         </tr>

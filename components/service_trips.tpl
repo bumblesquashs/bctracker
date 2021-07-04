@@ -17,7 +17,7 @@
       % if last_hour == -1:
         % last_hour = this_hour
       % end
-      <tr class="{{'hourly' if this_hour > last_hour else ''}}">
+      <tr class="{{'divider' if this_hour > last_hour else ''}}">
         <td>{{ trip.start_time }}</td>
         <td>{{ trip }}</td>
         <td class="desktop-only"><a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a></td>

@@ -3,7 +3,10 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request
 import cherrypy as cp
 
-from models.system import get_system, all_systems
+from models.bus_model import load_models
+from models.bus_order import load_orders
+from models.system import load_systems, get_system, all_systems
+
 import gtfs
 import realtime
 import history
@@ -15,6 +18,10 @@ system_domain = '{0}.bctracker.ca/{1}'
 def start():
     global mapbox_api_key, no_system_domain, system_domain
 
+    load_models()
+    load_orders()
+    load_systems()
+
     realtime.load_translations()
     history.load_last_seen()
 
@@ -23,11 +30,11 @@ def start():
             gtfs.load(system)
         else:
             gtfs.update(system)
-            realtime.update_routes(system)
         realtime.update(system)
-        if not gtfs.validate(system) or not realtime.validate(system):
+        if not gtfs.validate(system):
             gtfs.update(system)
-            realtime.update_routes(system)
+        elif not realtime.validate(system):
+            system.realtime_validation_error_count += 1
     history.update(realtime.active_buses())
 
     cp.config.update('server.conf')
@@ -173,7 +180,6 @@ def system_realtime(system_id):
                 realtime.update(system)
                 if not gtfs.validate(system):
                     gtfs.update(system)
-                    realtime.update_routes(system)
             except Exception as e:
                 print(f'Error: Failed to update realtime for {system}')
                 print(f'Error message: {e}')
