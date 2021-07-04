@@ -5,11 +5,11 @@
 <hr />
 
 <div class="sidebar">
-  % include('components/map', lon=stop.lon, lat=stop.lat, marker_type='stop')
+  % include('components/stop_map', stop=stop)
   
   <div class="info-box">
     <div class="info-box-section">
-      % include('components/service_indicator', services=stop.services)
+      % include('components/services_indicator', services=stop.services)
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Route{{ '' if len(stop.routes) == 1 else 's' }}</div>

@@ -16,7 +16,7 @@
 
   <div class="info-box">
     <div class="info-box-section">
-      % include('components/service_indicator', services=route.services)
+      % include('components/services_indicator', services=route.services)
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Headsign{{ '' if len(route.headsigns) == 1 else 's' }}</div>

@@ -192,7 +192,7 @@ tr.divider {
     border-radius: 16px;
 }
 
-.marker:hover {
+.marker.linking:hover {
     background-color: #255325;
     cursor: pointer;
 }
@@ -255,7 +255,7 @@ tr.divider {
 }
 
 .service-indicator {
-    margin: -5px;
+    margin: -5px -2px;
     text-align: center;
 }
 
@@ -264,7 +264,7 @@ tr.divider {
     display: inline-block;
     vertical-align: top;
     font-weight: bold;
-    margin: 5px;
+    margin: 5px 2px;
     width: 40px;
 }
 

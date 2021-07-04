@@ -13,15 +13,15 @@
       <h3 class="info-box-title">Not in service</h3>
     </div>
   % elif position.trip is None:
-    % include('components/map', lat=position.lat, lon=position.lon, marker_type='bus')
+    % include('components/bus_map', bus=bus)
 
     <div class="info-box">
       <h3 class="info-box-title">Not in service</h3>
     </div>
   % else:
-    % trip = position.trip
-    % include('components/map', lat=position.lat, lon=position.lon, marker_type='bus', trip=trip)
+    % include('components/bus_map', bus=bus)
 
+    % trip = position.trip
     <div class="info-box">
       <h3 class="info-box-title">{{ trip }}</h3>
 

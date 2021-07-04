@@ -36,52 +36,52 @@ class Service:
         self.excluded_dates = []
 
         if sat and sun:
-            self.service_type = ServiceType.WEEKEND
+            self.type = ServiceType.WEEKEND
         elif mon and tue and wed and thu and fri:
-            self.service_type = ServiceType.WEEKDAY
+            self.type = ServiceType.WEEKDAY
         elif mon and tue and wed and thu and (not fri):
-            self.service_type = ServiceType.WEEKDAY_EXCEPT_FRIDAY
+            self.type = ServiceType.WEEKDAY_EXCEPT_FRIDAY
         elif mon:
-            self.service_type = ServiceType.MON
+            self.type = ServiceType.MON
         elif tue:
-            self.service_type = ServiceType.TUE
+            self.type = ServiceType.TUE
         elif wed:
-            self.service_type = ServiceType.WED
+            self.type = ServiceType.WED
         elif thu:
-            self.service_type = ServiceType.THU
+            self.type = ServiceType.THU
         elif fri:
-            self.service_type = ServiceType.FRI
+            self.type = ServiceType.FRI
         elif sat:
-            self.service_type = ServiceType.SAT
+            self.type = ServiceType.SAT
         elif sun:
-            self.service_type = ServiceType.SUN
+            self.type = ServiceType.SUN
         elif not (mon or tue or wed or thu or fri or sat or sun):
-            self.service_type = ServiceType.SPECIAL
+            self.type = ServiceType.SPECIAL
         else:
-            self.service_type = ServiceType.UNKNOWN
+            self.type = ServiceType.UNKNOWN
     
     def __str__(self):
-        if self.service_type == ServiceType.WEEKDAY:
+        if self.type == ServiceType.WEEKDAY:
             return 'Weekdays'
-        elif self.service_type == ServiceType.MON:
+        elif self.type == ServiceType.MON:
             return 'Mondays'
-        elif self.service_type == ServiceType.TUE:
+        elif self.type == ServiceType.TUE:
             return 'Tuesdays'
-        elif self.service_type == ServiceType.WED:
+        elif self.type == ServiceType.WED:
             return 'Wednesdays'
-        elif self.service_type == ServiceType.THU:
+        elif self.type == ServiceType.THU:
             return 'Thursdays'
-        elif self.service_type == ServiceType.WEEKDAY_EXCEPT_FRIDAY:
+        elif self.type == ServiceType.WEEKDAY_EXCEPT_FRIDAY:
             return 'Weekdays except Friday'
-        elif self.service_type == ServiceType.FRI:
+        elif self.type == ServiceType.FRI:
             return 'Fridays'
-        elif self.service_type == ServiceType.WEEKEND:
+        elif self.type == ServiceType.WEEKEND:
             return 'Weekends'
-        elif self.service_type == ServiceType.SAT:
+        elif self.type == ServiceType.SAT:
             return 'Saturdays'
-        elif self.service_type == ServiceType.SUN:
+        elif self.type == ServiceType.SUN:
             return 'Sundays'
-        elif self.service_type == ServiceType.SPECIAL:
+        elif self.type == ServiceType.SPECIAL:
             return self.special_dates_string
         else:
             return 'Unknown'
@@ -93,7 +93,7 @@ class Service:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.service_type < other.service_type
+        return self.type < other.type
     
     @property
     def special_dates_string(self):
@@ -105,7 +105,7 @@ class Service:
 
     @property
     def date_string(self):
-        if self.service_type == ServiceType.SPECIAL:
+        if self.type == ServiceType.SPECIAL:
             return 'Special Service'
         start = format_date(self.start_date)
         end = format_date(self.end_date)
