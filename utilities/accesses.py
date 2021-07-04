@@ -1,8 +1,9 @@
 import datetime
 import matplotlib.pyplot as plt
 
-#log_paths = ('../logs/access_log.log', '../logs/access_log.log.2020-05-16')
-log_paths = ['/home/james/Documents/access_log.log']
+log_paths = ('../logs/access_log.log', '../logs/access_log.log.2020-05-16')
+#log_paths = ['/home/james/Documents/access_log.log']
+
 access_counts = [0] * 366
 raw_dates = []
 

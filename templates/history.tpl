@@ -1,14 +1,14 @@
 % from formatting import format_date, format_date_mobile
 
-% rebase('base', title='History')
+% rebase('base', title='Vehicle History')
 
-<h1>History</h1>
+<h1>Vehicle History</h1>
 <hr />
 
 <div class="body">
   % if system is not None and not system.supports_realtime:
     <p>
-      {{ system }} does not currently support realtime. Please choose a different system.
+      {{ system }} does not currently support realtime. You can browse the schedule data for {{ system }} using the links above.
     </p>
 
     % include('components/systems', realtime_only=True)

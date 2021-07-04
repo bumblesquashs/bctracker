@@ -6,6 +6,8 @@
 <p>
   BCTracker is a browser for the <a href="https://developers.google.com/transit/gtfs">GTFS</a> static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
   The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses.
+  
+  Realtime data is provided for the 7 systems that currently support it, along with 3 other systems where only schedule data is available. 
 <p>
 
 <p>
