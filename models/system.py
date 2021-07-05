@@ -1,10 +1,11 @@
 import csv
 
 class System:
-    def __init__(self, system_id, name, visible, realtime_enabled, bctransit_id, mapstrat_id):
+    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id):
         self.id = system_id
         self.name = name
         self.visible = visible
+        self.gtfs_enabled = gtfs_enabled
         self.realtime_enabled = realtime_enabled
         self.bctransit_id = bctransit_id
         self.mapstrat_id = mapstrat_id
@@ -99,11 +100,12 @@ def load_systems():
         system_id = row['system_id']
         name = row['name']
         visible = row['visible'] == '1'
+        gtfs_enabled = row['gtfs_enabled'] == '1'
         realtime_enabled = row['realtime_enabled'] == '1'
         bctransit_id = row['bctransit_id']
         mapstrat_id = row['mapstrat_id']
 
-        systems[system_id] = System(system_id, name, visible, realtime_enabled, bctransit_id, mapstrat_id)
+        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:

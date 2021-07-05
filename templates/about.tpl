@@ -3,11 +3,13 @@
 <h1>About</h1>
 <hr />
 
+% realtime_count = len([s for s in systems if s.realtime_enabled])
+% non_realtime_count = len([s for s in systems if not s.realtime_enabled])
 <p>
   BCTracker is a browser for the <a href="https://developers.google.com/transit/gtfs">GTFS</a> static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
   The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses.
   
-  Realtime data is provided for the 7 systems that currently support it, along with 3 other systems where only schedule data is available. 
+  Realtime data is provided for the {{ realtime_count }} systems that currently support it, along with {{ non_realtime_count }} other systems where only schedule data is available. 
 <p>
 
 <p>

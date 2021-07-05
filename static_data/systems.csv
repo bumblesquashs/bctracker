@@ -1,12 +1,22 @@
 system_id,name,visible,gtfs_enabled,realtime_enabled,bctransit_id,mapstrat_id
-cfv,Central Fraser Valley,1,0,central-fraser-valley,central-fraser-valley
-chilliwack,Chilliwack,1,0,chilliwack,chilliwack
-comox,Comox Valley,1,1,comox-valley,comox
-fvx,Fraser Valley Express,0,0,fraser-valley-express,fvx
-kamloops,Kamloops,1,1,kamloops,kamloops
-kelowna,Kelowna,1,1,kelowna,kelowna
-nanaimo,Nanaimo,1,1,nanaimo,nanaimo
-prince-george,Prince George,1,0,prince-george,prince-george
-squamish,Squamish,1,1,squamish,squamish
-victoria,Victoria,1,1,victoria,victoria
-whistler,Whistler,1,1,whistler,whistler
+campbell-river,Campbell River,0,0,0,campbell-river,campbell-river
+cfv,Central Fraser Valley,1,1,0,central-fraser-valley,central-fraser-valley
+chilliwack,Chilliwack,1,1,0,chilliwack,chilliwack
+comox,Comox Valley,1,1,1,comox-valley,comox
+cowichan,Cowichan Valley,0,0,0,cowichan-valley,cowichan
+cranbrook,Cranbrook,0,0,0,cranbrook,cranbrook
+dawson,Dawson Creek,0,0,0,dawson-creek,dawson
+fort-st-john,Fort St. John,0,0,0,fort-st-john,fort-st-john
+fvx,Fraser Valley Express,0,1,0,fraser-valley-express,fvx
+kamloops,Kamloops,1,1,1,kamloops,kamloops
+kelowna,Kelowna,1,1,1,kelowna,kelowna
+nanaimo,Nanaimo,1,1,1,nanaimo,nanaimo
+powell-river,Powell River,0,0,0,powell-river,powell-river
+prince-george,Prince George,1,1,0,prince-george,prince-george
+sos,South Okanagan - Similkameen,0,0,0,south-okanagan-similkameen,south-okanagan-similkameen
+squamish,Squamish,1,1,1,squamish,squamish
+sunshine-coast,Sunshine Coast,0,0,0,sunshine-coast,sunshine-coast
+vernon,Vernon,0,0,0,vernon,vernon
+victoria,Victoria,1,1,1,victoria,victoria
+west-kootenay,West Kootenay,0,0,0,west-kootenay,west-kootenay
+whistler,Whistler,1,1,1,whistler,whistler

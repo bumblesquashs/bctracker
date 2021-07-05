@@ -17,6 +17,8 @@ from models.trip import Trip
 from formatting import format_csv
 
 def update(system):
+    if not system.gtfs_enabled:
+        return
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
 
@@ -42,9 +44,13 @@ def update(system):
         print(f'Error message: {e}')
 
 def downloaded(system):
+    if not system.gtfs_enabled:
+        return True
     return path.exists(f'data/gtfs/{system.id}')
 
 def load(system):
+    if not system.gtfs_enabled:
+        return
     print(f'Loading GTFS data for {system}...')
     load_feed_info(system)
     load_stops(system)
@@ -190,6 +196,8 @@ def read_csv(system, name):
     return rows
 
 def validate(system):
+    if not system.gtfs_enabled:
+        return True
     end_date = None
     for service in system.all_services():
         date = service.end_date.date()
