@@ -16,6 +16,17 @@ from models.trip import Trip
 
 from formatting import format_csv
 
+FVX_URL = 'https://www.bctransit.com/data/gtfs/internet/FVX2009-GTFS-20200818-20210906_v20200818.zip'
+
+def download_gtfs(system, data_zip_path):
+    if system.id == 'fvx':
+        wget.download(FVX_URL, data_zip_path)
+        return
+    if system.supports_realtime:
+        wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/google_transit.zip', data_zip_path)
+    else:
+        wget.download(f'http://bctransit.com/data/gtfs/{system.bctransit_id}.zip', data_zip_path)
+    
 def update(system):
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
@@ -27,10 +38,7 @@ def update(system):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
             archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
             rename(data_zip_path, archives_path)
-        if system.supports_realtime:
-            wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/google_transit.zip', data_zip_path)
-        else:
-            wget.download(f'http://bctransit.com/data/gtfs/{system.bctransit_id}.zip', data_zip_path)
+        download_gtfs(system, data_zip_path)
         if path.exists(data_path):
             rmtree(data_path)
         with ZipFile(data_zip_path) as zip:

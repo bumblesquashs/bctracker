@@ -2,10 +2,11 @@ from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request
 import cherrypy as cp
+import sys
 
 from models.bus_model import load_models
 from models.bus_order import load_orders
-from models.system import load_systems, get_system, all_systems
+from models.system import load_systems, get_system, all_systems, enabled_systems
 
 import gtfs
 import realtime
@@ -17,6 +18,11 @@ system_domain = '{0}.bctracker.ca/{1}'
 
 def start():
     global mapbox_api_key, no_system_domain, system_domain
+    
+    force_gtfs_redownload = False
+    if len(sys.argv) > 1 and sys.argv[1] == '-r':
+        print('Forcing GTFS redownload')
+        force_gtfs_redownload = True
 
     load_models()
     load_orders()
@@ -26,10 +32,10 @@ def start():
     history.load_last_seen()
 
     for system in all_systems():
-        if gtfs.downloaded(system):
-            gtfs.load(system)
-        else:
+        if not gtfs.downloaded(system) or force_gtfs_redownload:
             gtfs.update(system)
+        else:
+            gtfs.load(system)
         realtime.update(system)
         if not gtfs.validate(system):
             gtfs.update(system)
@@ -59,7 +65,7 @@ def get_url(system, path=''):
     return system_domain.format(system.id, path).rstrip('/')
 
 def systems_template(name, **kwargs):
-    return template(f'templates/{name}', systems=all_systems(), get_url=get_url, last_updated=realtime.last_updated_string(), **kwargs)
+    return template(f'templates/{name}', systems=enabled_systems(), get_url=get_url, last_updated=realtime.last_updated_string(), **kwargs)
 
 def systems_invalid_template(system_id):
     return systems_template('invalid_system', system_id=system_id)

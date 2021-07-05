@@ -1,8 +1,9 @@
 import csv
 
 class System:
-    def __init__(self, system_id, name, supports_realtime, mapstrat_id, bctransit_id):
+    def __init__(self, system_id, is_hidden, name, supports_realtime, mapstrat_id, bctransit_id):
         self.id = system_id
+        self.is_hidden = is_hidden
         self.mapstrat_id = mapstrat_id
         self.bctransit_id = bctransit_id
         self.name = name
@@ -86,12 +87,12 @@ def load_systems():
             rows.append(dict(zip(columns, row)))
     for row in rows:
         system_id = row['system_id']
+        is_hidden = int(row['is_hidden']) == 1
         name = row['name']
         supports_realtime = int(row['supports_realtime']) == 1
         mapstrat_id = row['mapstrat_id']
         bctransit_id = row['bctransit_id']
-
-        systems[system_id] = System(system_id, name, supports_realtime, mapstrat_id, bctransit_id)
+        systems[system_id] = System(system_id, is_hidden, name, supports_realtime, mapstrat_id, bctransit_id)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:
@@ -100,3 +101,6 @@ def get_system(system_id):
 
 def all_systems():
     return systems.values()
+
+def enabled_systems():
+    return [system for system in systems.values() if not system.is_hidden]
