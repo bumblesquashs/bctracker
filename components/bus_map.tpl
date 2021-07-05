@@ -1,10 +1,12 @@
 % import server
 % import json
 
+% position = bus.position
+
 <div id="map"></div>
 <script>
-  const lat = parseFloat("{{lat}}");
-  const lon = parseFloat("{{lon}}");
+  const lat = parseFloat("{{position.lat}}");
+  const lon = parseFloat("{{position.lon}}");
 
   mapboxgl.accessToken = '{{server.mapbox_api_key}}';
   var map = new mapboxgl.Map({
@@ -16,29 +18,16 @@
   });
 
   map.setStyle('mapbox://styles/mapbox/light-v10')
+
+  var marker = document.createElement('div');
+  marker.className = 'marker';
+  marker.innerHTML = '<img src="/img/bus.png" />'
+
+  new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
 </script>
 
-% if defined('marker_type'):
-  % if marker_type == 'bus':
-    <script>
-      var marker = document.createElement('div');
-      marker.className = 'marker';
-      marker.innerHTML = '<img src="/img/bus.png" />'
-
-      new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-    </script>
-  % elif marker_type == 'stop':
-    <script>
-      var marker = document.createElement('div');
-      marker.className = 'marker';
-      marker.innerHTML = '<img src="/img/stop.png" />'
-
-      new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-    </script>
-  % end
-% end
-
-% if defined('trip'):
+% trip = position.trip
+% if trip is not None:
   <script>
     const points = JSON.parse('{{! json.dumps([p.json_data for p in trip.points]) }}')
 
