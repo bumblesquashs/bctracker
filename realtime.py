@@ -23,7 +23,7 @@ last_updated = datetime.now()
 
 def update(system):
     global last_updated
-    if not system.supports_realtime:
+    if not system.realtime_enabled:
         return
     print(f'Updating realtime data for {system}...')
     data_path = f'data/realtime/{system.id}.bin'
@@ -132,7 +132,7 @@ def last_updated_string():
     return last_updated.strftime("%B %-d, %Y at %H:%M")
 
 def validate(system):
-    if not system.supports_realtime:
+    if not system.realtime_enabled:
         return True
     count = 0
     for position in [p for p in positions.values() if p.system == system]:

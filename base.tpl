@@ -51,7 +51,7 @@
           <a class="navbar-item" href="{{ get_url(None, 'blocks') }}">Blocks</a>
           <a class="navbar-item" href="{{ get_url(None, 'about') }}">About</a>
         % else:
-          % if system.supports_realtime:
+          % if system.realtime_enabled:
             <a class="navbar-item" href="{{ get_url(system, 'map') }}">Map</a>
             <a class="navbar-item" href="{{ get_url(system, 'realtime') }}">Realtime</a>
             <a class="navbar-item" href="{{ get_url(system, 'history') }}">History</a>
@@ -130,7 +130,7 @@
           <a class="mobile-navbar-item" href="{{ get_url(None, f'systems?path={path}') }}">Change System</a>
         % end
       % else:
-        % if system.supports_realtime:
+        % if system.realtime_enabled:
           <a class="mobile-navbar-item" href="{{ get_url(system, 'map') }}">Map</a>
           <a class="mobile-navbar-item" href="{{ get_url(system, 'realtime') }}">Realtime</a>
           <a class="mobile-navbar-item" href="{{ get_url(system, 'history') }}">History</a>
@@ -157,7 +157,7 @@
           {{ system }} Regional Transit System
         % end
       </div>
-      % if system is None or system.supports_realtime:
+      % if system is None or system.realtime_enabled:
         <div class="sub-navbar-date">
           Updated {{ last_updated }}
         </div>

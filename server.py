@@ -6,7 +6,7 @@ import sys
 
 from models.bus_model import load_models
 from models.bus_order import load_orders
-from models.system import load_systems, get_system, all_systems, enabled_systems
+from models.system import load_systems, get_system, all_systems
 
 import gtfs
 import realtime
@@ -65,7 +65,8 @@ def get_url(system, path=''):
     return system_domain.format(system.id, path).rstrip('/')
 
 def systems_template(name, **kwargs):
-    return template(f'templates/{name}', systems=enabled_systems(), get_url=get_url, last_updated=realtime.last_updated_string(), **kwargs)
+    systems = [s for s in all_systems() if s.visible]
+    return template(f'templates/{name}', systems=systems, get_url=get_url, last_updated=realtime.last_updated_string(), **kwargs)
 
 def systems_invalid_template(system_id):
     return systems_template('invalid_system', system_id=system_id)

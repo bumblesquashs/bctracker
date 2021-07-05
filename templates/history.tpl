@@ -6,7 +6,7 @@
 <hr />
 
 <div class="body">
-  % if system is not None and not system.supports_realtime:
+  % if system is not None and not system.realtime_enabled:
     <p>
       {{ system }} does not currently support realtime. You can browse the schedule data for {{ system }} using the links above.
     </p>

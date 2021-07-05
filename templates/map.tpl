@@ -4,7 +4,7 @@
 % rebase('base', title='Map', include_maps=True)
 
 % if len(buses) == 0:
-  % if system is not None and not system.supports_realtime:
+  % if system is not None and not system.realtime_enabled:
     <h1>Map</h1>
     <hr />
 

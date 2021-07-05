@@ -14,7 +14,7 @@
 <div class="body list-container">
   % if len(buses) == 0:
     <div class="list-content">
-      % if system is not None and not system.supports_realtime:
+      % if system is not None and not system.realtime_enabled:
         <p>
           {{ system }} does not currently support realtime. Please choose a different system.
         </p>

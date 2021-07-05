@@ -1,15 +1,25 @@
 import csv
 
 class System:
-    def __init__(self, system_id, is_hidden, name, supports_realtime, mapstrat_id, bctransit_id):
+    def __init__(self, system_id, name, visible, realtime_enabled, bctransit_id, mapstrat_id):
         self.id = system_id
-        self.is_hidden = is_hidden
-        self.mapstrat_id = mapstrat_id
-        self.bctransit_id = bctransit_id
         self.name = name
-        self.supports_realtime = supports_realtime
+        self.visible = visible
+        self.realtime_enabled = realtime_enabled
+        self.bctransit_id = bctransit_id
+        self.mapstrat_id = mapstrat_id
+
         self.feed_version = ''
         self.realtime_validation_error_count = 0
+
+        self.blocks = {}
+        self.routes = {}
+        self.routes_by_number = {}
+        self.services = {}
+        self.shapes = {}
+        self.stops = {}
+        self.stops_by_number = {}
+        self.trips = {}
     
     def __str__(self):
         return self.name
@@ -87,12 +97,13 @@ def load_systems():
             rows.append(dict(zip(columns, row)))
     for row in rows:
         system_id = row['system_id']
-        is_hidden = int(row['is_hidden']) == 1
         name = row['name']
-        supports_realtime = int(row['supports_realtime']) == 1
-        mapstrat_id = row['mapstrat_id']
+        visible = row['visible'] == '1'
+        realtime_enabled = row['realtime_enabled'] == '1'
         bctransit_id = row['bctransit_id']
-        systems[system_id] = System(system_id, is_hidden, name, supports_realtime, mapstrat_id, bctransit_id)
+        mapstrat_id = row['mapstrat_id']
+
+        systems[system_id] = System(system_id, name, visible, realtime_enabled, bctransit_id, mapstrat_id)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:
@@ -101,6 +112,3 @@ def get_system(system_id):
 
 def all_systems():
     return systems.values()
-
-def enabled_systems():
-    return [system for system in systems.values() if not system.is_hidden]

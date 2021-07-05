@@ -43,7 +43,7 @@
       <input type="submit" value="Search" class="button">
     </form>
   % else:
-    % if system.supports_realtime:
+    % if system.realtime_enabled:
       <form onsubmit="busSearch()" action="javascript:void(0)">
         <label for="bus_id_search">Bus Number:</label>
         <br />

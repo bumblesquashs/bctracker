@@ -1,12 +1,12 @@
-system_id,is_hidden,name,supports_realtime,mapstrat_id,bctransit_id
-cfv,0,Central Fraser Valley,0,central-fraser-valley,central-fraser-valley
-chilliwack,0,Chilliwack,0,chilliwack,chilliwack
-comox,0,Comox Valley,1,comox,comox-valley
-kamloops,0,Kamloops,1,kamloops,kamloops
-kelowna,0,Kelowna,1,kelowna,kelowna
-nanaimo,0,Nanaimo,1,nanaimo,nanaimo
-prince-george,0,Prince George,0,prince-george,prince-george
-squamish,0,Squamish,1,squamish,squamish
-victoria,0,Victoria,1,victoria,victoria
-whistler,0,Whistler,1,whistler,whistler
-fvx,1,Fraser Valley Express,0,fvx,fvx
+system_id,name,visible,gtfs_enabled,realtime_enabled,bctransit_id,mapstrat_id
+cfv,Central Fraser Valley,1,0,central-fraser-valley,central-fraser-valley
+chilliwack,Chilliwack,1,0,chilliwack,chilliwack
+comox,Comox Valley,1,1,comox-valley,comox
+fvx,Fraser Valley Express,0,0,fraser-valley-express,fvx
+kamloops,Kamloops,1,1,kamloops,kamloops
+kelowna,Kelowna,1,1,kelowna,kelowna
+nanaimo,Nanaimo,1,1,nanaimo,nanaimo
+prince-george,Prince George,1,0,prince-george,prince-george
+squamish,Squamish,1,1,squamish,squamish
+victoria,Victoria,1,1,victoria,victoria
+whistler,Whistler,1,1,whistler,whistler
