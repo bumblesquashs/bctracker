@@ -30,7 +30,7 @@ class BlockHistory:
     
     @property
     def is_current(self):
-        return self.feed_version == self.system.feed_version or self.block is not None
+        return self.feed_version == self.system.feed_version or (self.block is not None and self.block.service.is_current)
     
     @property
     def block(self):

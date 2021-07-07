@@ -34,11 +34,17 @@ class Block:
     
     @property
     def start_time(self):
-        return self.current_trips[0].start_time
+        trips = self.current_trips
+        if len(trips) == 0:
+            return 'Unavailable'
+        return trips[0].start_time
     
     @property
     def end_time(self):
-        return self.current_trips[-1].end_time
+        trips = self.current_trips
+        if len(trips) == 0:
+            return 'Unavailable'
+        return trips[-1].end_time
     
     def add_trip(self, trip):
         self.trips.append(trip)
