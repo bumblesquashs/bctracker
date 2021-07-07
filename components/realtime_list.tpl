@@ -23,7 +23,13 @@
     % last_bus = None
     % for bus in sorted(buses):
       % position = bus.position
-      % same_model = last_bus is None or bus.order == last_bus.order
+      % if last_bus is None or (bus.order is None and last_bus.order is None):
+        % same_model = True
+      % elif bus.order is None or last_bus.order is None:
+        % same_model = False
+      % else:
+        % same_model = bus.order == last_bus.order
+      % end
       % last_bus = bus
       <tr class="{{'' if same_model else 'divider'}}">
         % if bus.number is None:
