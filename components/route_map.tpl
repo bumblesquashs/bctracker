@@ -1,19 +1,16 @@
-% import server
 % import json
 
 <div id="map"></div>
 <script>
-  mapboxgl.accessToken = '{{server.mapbox_api_key}}';
+  mapboxgl.accessToken = '{{mapbox_api_key}}';
 
   var map = new mapboxgl.Map({
     container: 'map',
     center: [0, 0],
     zoom: 1,
-    style: 'mapbox://styles/mapbox/streets-v11',
+    style: 'mapbox://styles/mapbox/light-v10',
     interactive: false
   });
-
-  map.setStyle('mapbox://styles/mapbox/light-v10')
 
   var lons = []
   var lats = []

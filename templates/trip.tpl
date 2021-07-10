@@ -59,7 +59,16 @@
               {{ stop_time.stop }}
             </span>
           </td>
-          <td class="desktop-only">{{ stop_time.stop }}</td>
+          <td class="desktop-only">
+            {{ stop_time.stop }}
+            % if stop_time == trip.first_stop:
+              <br />
+              <span class="smaller-font">Loading only</span>
+            % elif stop_time == trip.last_stop:
+              <br />
+              <span class="smaller-font">Unloading only</span>
+            % end
+          </td>
         </tr>
       % end
     </tbody>

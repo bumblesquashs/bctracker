@@ -37,6 +37,7 @@
     <thead>
       <tr>
         <th class="desktop-only">Start Time</th>
+        <th class="desktop-only">End Time</th>
         <th class="mobile-only">Start</th>
         <th class=>Headsign</th>
         <th class="desktop-only">Direction</th>
@@ -48,6 +49,7 @@
       % for trip in block.current_trips:
         <tr>
           <td>{{ trip.start_time }}</td>
+          <td class="desktop-only">{{ trip.end_time }}</td>
           <td>
             {{ trip }}
             <span class="mobile-only smaller-font">

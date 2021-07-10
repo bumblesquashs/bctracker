@@ -1,4 +1,3 @@
-% import server
 % import json
 
 % position = bus.position
@@ -8,16 +7,14 @@
   const lat = parseFloat("{{position.lat}}");
   const lon = parseFloat("{{position.lon}}");
 
-  mapboxgl.accessToken = '{{server.mapbox_api_key}}';
+  mapboxgl.accessToken = '{{mapbox_api_key}}';
   var map = new mapboxgl.Map({
     container: 'map',
     center: [lon, lat],
     zoom: 14,
-    style: 'mapbox://styles/mapbox/streets-v11',
+    style: 'mapbox://styles/mapbox/light-v10',
     interactive: false
   });
-
-  map.setStyle('mapbox://styles/mapbox/light-v10')
 
   var marker = document.createElement('div');
   marker.className = 'marker';

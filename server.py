@@ -66,6 +66,7 @@ def get_url(system, path=''):
 
 def systems_template(name, system_id, **kwargs):
     return template(f'templates/{name}',
+        mapbox_api_key=mapbox_api_key,
         systems=[s for s in all_systems() if s.visible],
         system_id=system_id,
         system=get_system(system_id),
