@@ -21,12 +21,15 @@ class Block:
         return self.system.get_service(self.service_id)
     
     @property
-    def current_trips(self):
-        return [t for t in self.trips if t.service.is_current]
+    def available_trips(self):
+        if self.service.is_current:
+            return [t for t in self.trips if t.service.is_current]
+        else:
+            return self.trips
 
     @property
     def routes(self):
-        return sorted({t.route for t in self.current_trips})
+        return sorted({t.route for t in self.available_trips})
 
     @property
     def routes_string(self):
@@ -34,17 +37,11 @@ class Block:
     
     @property
     def start_time(self):
-        trips = self.current_trips
-        if len(trips) == 0:
-            return 'Unavailable'
-        return trips[0].start_time
+        return self.available_trips[0].start_time
     
     @property
     def end_time(self):
-        trips = self.current_trips
-        if len(trips) == 0:
-            return 'Unavailable'
-        return trips[-1].end_time
+        return self.available_trips[-1].end_time
     
     def add_trip(self, trip):
         self.trips.append(trip)

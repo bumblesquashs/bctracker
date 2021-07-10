@@ -22,21 +22,27 @@ class Route:
     
     def __gt__(self, other):
         return self.number > other.number
-
-    @property
-    def services(self):
-        return sorted({ t.service for t in self.trips if t.service.is_current })
     
     @property
     def is_current(self):
-        for service in self.services:
-            if service.is_current:
+        for trip in self.trips:
+            if trip.service.is_current:
                 return True
         return False
+
+    @property
+    def services(self):
+        if self.is_current:
+            return sorted({ t.service for t in self.trips if t.service.is_current })
+        else:
+            return sorted({ t.service for t in self.trips })
     
     @property
     def headsigns(self):
-        return sorted({ str(t) for t in self.trips if t.service.is_current })
+        if self.is_current:
+            return sorted({ str(t) for t in self.trips if t.service.is_current })
+        else:
+            return sorted({ str(t) for t in self.trips })
     
     def add_trip(self, trip):
         self.trips.append(trip)

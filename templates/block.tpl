@@ -18,7 +18,7 @@
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Number of trips</div>
-      <div class="info-box-value">{{ len(block.current_trips) }}</div>
+      <div class="info-box-value">{{ len(block.available_trips) }}</div>
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Route{{ '' if len(block.routes) == 1 else 's' }}</div>
@@ -46,7 +46,7 @@
     </thead>
   
     <tbody>
-      % for trip in block.current_trips:
+      % for trip in block.available_trips:
         <tr>
           <td>{{ trip.start_time }}</td>
           <td class="desktop-only">{{ trip.end_time }}</td>
