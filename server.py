@@ -64,15 +64,18 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
-def systems_template(name, **kwargs):
-    systems = [s for s in all_systems() if s.visible]
-    return template(f'templates/{name}', systems=systems, get_url=get_url, last_updated=realtime.last_updated_string(), **kwargs)
+def systems_template(name, system_id, **kwargs):
+    return template(f'templates/{name}',
+        systems=[s for s in all_systems() if s.visible],
+        system_id=system_id,
+        system=get_system(system_id),
+        get_url=get_url,
+        last_updated=realtime.last_updated_string(),
+        **kwargs
+    )
 
-def systems_invalid_template(system_id):
-    return systems_template('invalid_system', system_id=system_id)
-
-def systems_error_template(system, error, message=None):
-    return systems_template('error', system=system, error=error, message=message)
+def systems_error_template(name, system_id, **kwargs):
+    return systems_template(f'errors/{name}_error', system_id, **kwargs)
 
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
@@ -102,7 +105,7 @@ def index():
 @app.route('/<system_id>')
 @app.route('/<system_id>/')
 def system_index(system_id):
-    return systems_template('home', system=get_system(system_id))
+    return systems_template('home', system_id)
 
 @app.route('/systems')
 @app.route('/systems/')
@@ -113,7 +116,7 @@ def systems():
 @app.route('/<system_id>/systems/')
 def system_systems(system_id):
     path = request.query.get('path', '')
-    return systems_template('systems', system=get_system(system_id), path=path)
+    return systems_template('systems', system_id, path=path)
 
 @app.route('/routes')
 @app.route('/routes/')
@@ -123,7 +126,7 @@ def routes():
 @app.route('/<system_id>/routes')
 @app.route('/<system_id>/routes/')
 def system_routes(system_id):
-    return systems_template('routes', system=get_system(system_id), path='routes')
+    return systems_template('routes', system_id, path='routes')
 
 @app.route('/routes/<number:int>')
 @app.route('/routes/<number:int>/')
@@ -135,11 +138,11 @@ def routes_number(number):
 def system_routes_number(system_id, number):
     system = get_system(system_id)
     if system is None:
-        return systems_invalid_template(system_id)
+        return systems_error_template('system', system_id, path=f'routes/{number}')
     route = system.get_route(number=number)
     if route is None:
-        return systems_error_template(system, f'Route {number} not found')
-    return systems_template('route', system=system, route=route)
+        return systems_error_template('route', system_id, number=number)
+    return systems_template('route', system_id, route=route)
 
 @app.route('/history')
 @app.route('/history/')
@@ -154,7 +157,7 @@ def system_history(system_id):
         last_seen = history.all_last_seen()
     else:
         last_seen = [h for h in history.all_last_seen() if h.system == system]
-    return systems_template('history', system=system, last_seen=last_seen, path='history')
+    return systems_template('history', system_id, last_seen=last_seen, path='history')
 
 @app.route('/map')
 @app.route('/map/')
@@ -169,7 +172,7 @@ def system_map(system_id):
         buses = realtime.active_buses()
     else:
         buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('map', system=system, buses=buses, path='map')
+    return systems_template('map', system_id, buses=buses, path='map')
 
 @app.route('/realtime')
 @app.route('/realtime/')
@@ -197,7 +200,7 @@ def system_realtime(system_id):
         buses = realtime.active_buses()
     else:
         buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('realtime', system=system, group=group, buses=buses, path=f'realtime?group={group}')
+    return systems_template('realtime', system_id, group=group, buses=buses, path=f'realtime?group={group}')
 
 @app.route('/bus/<number:int>')
 @app.route('/bus/<number:int>/')
@@ -207,11 +210,10 @@ def bus_number(number):
 @app.route('/<system_id>/bus/<number:int>')
 @app.route('/<system_id>/bus/<number:int>/')
 def system_bus_number(system_id, number):
-    system = get_system(system_id)
     bus = realtime.get_bus(number=number)
     if bus is None:
-        return systems_error_template(system, f'Bus {number} not found')
-    return systems_template('bus', system=system, bus=bus, history=sorted(history.load_bus_history(number)))
+        return systems_error_template('bus', system_id, number=number)
+    return systems_template('bus', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -221,7 +223,7 @@ def blocks():
 @app.route('/<system_id>/blocks')
 @app.route('/<system_id>/blocks/')
 def system_blocks(system_id):
-    return systems_template('blocks', system=get_system(system_id), path='blocks')
+    return systems_template('blocks', system_id, path='blocks')
 
 @app.route('/blocks/<block_id>')
 @app.route('/blocks/<block_id>/')
@@ -233,11 +235,11 @@ def blocks_id(block_id):
 def system_blocks_id(system_id, block_id):
     system = get_system(system_id)
     if system is None:
-        return systems_invalid_template(system_id)
+        return systems_error_template('system', system_id, path=f'blocks/{block_id}')
     block = system.get_block(block_id)
     if block is None:
-        return systems_error_template(system, f'Block {block_id} Not Found', 'This block may be from an older version of GTFS which is no longer valid')
-    return systems_template('block', system=system, block=block)
+        return systems_error_template('block', system_id, block_id=block_id)
+    return systems_template('block', system_id, block=block)
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -249,11 +251,11 @@ def trips_id(trip_id):
 def system_trips_id(system_id, trip_id):
     system = get_system(system_id)
     if system is None:
-        return systems_invalid_template(system_id)
+        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
     trip = system.get_trip(trip_id)
     if trip is None:
-        return systems_error_template(system, f'Trip {trip_id} Not Found', 'This trip may be from an older version of GTFS which is no longer valid')
-    return systems_template('trip', system=system, trip=trip)
+        return systems_error_template('trip', system_id, trip_id=trip_id)
+    return systems_template('trip', system_id, trip=trip)
 
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
@@ -265,11 +267,11 @@ def stops_number(number):
 def system_stops_number(system_id, number):
     system = get_system(system_id)
     if system is None:
-        return systems_invalid_template(system_id)
+        return systems_error_template('system', system_id, path=f'stops/{number}')
     stop = system.get_stop(number=number)
     if stop is None:
-        return systems_error_template(system, f'Stop {number} Not Found')
-    return systems_template('stop', system=system, stop=stop)
+        return systems_error_template('stop', system_id, number=number)
+    return systems_template('stop', system_id, stop=stop)
 
 @app.route('/about')
 @app.route('/about/')
@@ -279,4 +281,4 @@ def about():
 @app.route('/<system_id>/about')
 @app.route('/<system_id>/about/')
 def system_about(system_id):
-    return systems_template('about', system=get_system(system_id), path='about')
+    return systems_template('about', system_id, path='about')

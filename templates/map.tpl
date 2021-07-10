@@ -9,7 +9,8 @@
     <hr />
 
     <p>
-      {{ system }} does not currently support realtime. Please choose a different system.
+      {{ system }} does not currently support realtime.
+      You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
     </p>
 
     % include('components/systems', realtime_only=True)
