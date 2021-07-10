@@ -1,7 +1,12 @@
 % from models.service import ServiceType
 
 <div class="service-indicator">
-  % if service.type != ServiceType.SPECIAL:
+  <div class="service-indicator-header">{{ service.date_string }}</div>
+  % if service.type == ServiceType.SPECIAL:
+    % if len(service.special_dates) > 0:
+      <div class="service-details">{{ service.special_dates_string }}</div>
+    % end
+  % else:
     <div class="service-indicator-section">
       <div class="service-indicator-day">Mon</div>
       % if service.mon:
@@ -44,8 +49,8 @@
         <img class="service-indicator-check" src="/img/check.png" />
       % end
     </div>
-  % end
-  % if defined('service') and len(service.special_dates) > 0:
-    <div class="service-details">{{ service.special_dates_string }}</div>
+    % if len(service.special_dates) > 0:
+      <div class="service-details">Special Service: {{ service.special_dates_string }}</div>
+    % end
   % end
 </div>

@@ -259,6 +259,11 @@ tr.divider {
     text-align: center;
 }
 
+.service-indicator .service-indicator-header {
+    margin: 5px 0px;
+    text-align: center;
+}
+
 .service-indicator .service-indicator-section {
     text-align: center;
     display: inline-block;
@@ -268,7 +273,7 @@ tr.divider {
     width: 40px;
 }
 
-.service-details {
+.service-indicator .service-details {
     font-size: 12pt;
     color: #464646;
     text-align: center;
