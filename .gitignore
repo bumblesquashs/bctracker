@@ -1,7 +1,6 @@
 archives/
 data/
 logs/
-protobuf/
 
 server.conf
 
