@@ -25,9 +25,7 @@ def key_in_new_data(key):
 for key, value in old_data['last_blocks'].items():
     if key == '0' and value['blockid'] == '12345':
         continue
-    print('bus: ' + key)
     if not key_in_new_data(key):
-        print('adding: ' + key)
         new_data.append({
             'date': value['day'],
             'bus_id': '',

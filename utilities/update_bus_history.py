@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os import listdir, path
 import json
 

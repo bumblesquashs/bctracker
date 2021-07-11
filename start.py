@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# set up for linux
 
 import sys
 import signal
