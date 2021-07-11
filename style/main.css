@@ -76,6 +76,7 @@ tr.divider {
 
 .button:hover {
     background-color: #255325;
+    cursor: pointer;
 }
 
 .display-none {
@@ -123,20 +124,24 @@ tr.divider {
     color: #222222;
 }
 
-.home-update {
+.news-post {
     background-color: #e6e6e6;
     margin-top: 20px;
     border: 1px solid #989898;
 }
 
-.home-update .home-update-header {
+.news-post .news-post-header {
     background-color: #cbcbcb;
     border-bottom: 1px solid #989898;
     padding: 10px;
 }
 
-.home-update .home-update-content {
+.news-post .news-post-content {
     padding: 10px;
+}
+
+.news-post-older {
+    margin-top: 20px;
 }
 
 .info-box {

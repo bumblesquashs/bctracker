@@ -283,3 +283,13 @@ def about():
 @app.route('/<system_id>/about/')
 def system_about(system_id):
     return systems_template('about', system_id, path='about')
+
+@app.route('/news')
+@app.route('/news/')
+def news():
+    return system_news(None)
+
+@app.route('/<system_id>/news')
+@app.route('/<system_id>/news/')
+def system_news(system_id):
+    return systems_template('news', system_id, path='news')
