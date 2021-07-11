@@ -41,9 +41,9 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
-    realtime.reset_positions()
     for system in all_systems():
         try:
+            realtime.reset_positions(system)
             realtime.update(system)
             if not realtime.validate(system):
                 system.realtime_validation_error_count += 1

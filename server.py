@@ -1,6 +1,7 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, redirect, request
+from datetime import datetime
 import cherrypy as cp
 import sys
 
@@ -187,16 +188,18 @@ def route_realtime():
 def system_realtime(system_id):
     reload = request.query.get('reload', 'false')
     if reload == 'true':
-        realtime.reset_positions()
-        for system in all_systems():
-            try:
-                realtime.update(system)
-                if not gtfs.validate(system):
-                    gtfs.update(system)
-            except Exception as e:
-                print(f'Error: Failed to update realtime for {system}')
-                print(f'Error message: {e}')
-        history.update(realtime.active_buses())
+        delta = datetime.now() - realtime.last_updated
+        if delta.seconds > 60:
+            for system in all_systems():
+                try:
+                    realtime.reset_positions(system)
+                    realtime.update(system)
+                    if not gtfs.validate(system):
+                        gtfs.update(system)
+                except Exception as e:
+                    print(f'Error: Failed to update realtime for {system}')
+                    print(f'Error message: {e}')
+            history.update(realtime.active_buses())
     group = request.query.get('group', 'all')
     system = get_system(system_id)
     if system is None:

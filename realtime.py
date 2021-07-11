@@ -113,9 +113,9 @@ def get_bus(bus_id=None, number=None):
         return Bus(buses_by_number.get(number), number)
     return None
 
-def reset_positions():
+def reset_positions(system):
     global positions
-    positions = {}
+    positions = {k:v for (k, v) in positions.items() if v.system != system}
 
 def get_position(bus_id):
     if bus_id is not None and bus_id in positions:
