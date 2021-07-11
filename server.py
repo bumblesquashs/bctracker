@@ -1,6 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, request
+from bottle import Bottle, static_file, template, redirect, request
 import cherrypy as cp
 import sys
 
@@ -137,6 +137,8 @@ def routes_number(number):
 @app.route('/<system_id>/routes/<number:int>')
 @app.route('/<system_id>/routes/<number:int>/')
 def system_routes_number(system_id, number):
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == 66:
+        redirect(get_url('fvx', 'routes/66'))
     system = get_system(system_id)
     if system is None:
         return systems_error_template('system', system_id, path=f'routes/{number}')
