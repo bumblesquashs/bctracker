@@ -1,13 +1,7 @@
-data/archived-gtfs-static/
-data/realtime_downloads/*
-!data/realtime_downloads/default_gtfrealtime_VehiclePositions.bin
-data/google_transit.zip
-data/google_transit/
-data/vehicle_history/last_seen.json
-data/vehicle_history/vehicle/*
-data/nextride/archived-route-json/
-data/nextride/id2fleetnum.json
-data/nextride/last_api_result.json
+archives/
+data/
+logs/
+
 server.conf
 
 __pycache__/

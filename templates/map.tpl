@@ -1,75 +1,85 @@
-% import datastructure as ds
-% import web
+% import json
 
-<div id="map"></div>
-<script>
-    const lat = parseFloat("{{lat}}");
-    const lon = parseFloat("{{lon}}");
+% rebase('base', title='Map', include_maps=True)
 
-    mapboxgl.accessToken = '{{web.mapbox_api_key}}';
-    var map = new mapboxgl.Map({
-      container: 'map',
-      center: [lon, lat],
-      zoom: 14,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      interactive: false
-    });
+% if len(buses) == 0:
+  <h1>Map</h1>
+  <hr />
 
-    map.setStyle('mapbox://styles/mapbox/light-v10')
-</script>
+  % if system is not None and not system.realtime_enabled:
+    <p>
+      {{ system }} does not currently support realtime.
+      You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
+    </p>
 
-% if defined('marker_type'):
-    % if marker_type == 'bus':
-      <script>
-        var marker = document.createElement('div');
-        marker.className = 'marker';
-        marker.innerHTML = '<img src="/img/busicon.png" />'
+    % include('components/systems', realtime_only=True)
+  % else:
+    % if system is None:
+      <p>
+        There are no buses out right now.
+        BC Transit does not have late night service, so this should be the case overnight.
+        If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
+        Please check back later!
+      </p>
+    % else:
+      <p>
+        There are no buses out in {{ system }} right now. Please choose a different system.
+      </p>
 
-        new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-      </script>
-    % elif marker_type == 'stop':
-      <script>
-        var marker = document.createElement('div');
-        marker.className = 'marker';
-        marker.innerHTML = '<img src="/img/stopicon.png" />'
-
-        new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
-      </script>
+      % include('components/systems', realtime_only=True)
     % end
-% end
+  % end
+% else:
+  <div class="system-map-header">
+    <h1>Map</h1>
+  </div>
 
-% if defined('shape_id'):
-  % points = filter(lambda p: p.shape_id == shape_id, ds.all_points)
-  % sorted_points = sorted(points, key=lambda p: int(p.sequence))
-  % coords = list(map(lambda p: [float(p.lon), float(p.lat)], sorted_points))
+  <div id="system-map"></div>
+  
   <script>
-    const coords = {{ coords }}
-
-    map.on('load', function() {
-      map.addSource('route', {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': coords
-          }
-        }
-      });
-      map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#4040FF',
-          'line-width': 4
-        }
-      });
+    mapboxgl.accessToken = "{{mapbox_api_key}}";
+    var map = new mapboxgl.Map({
+      container: "system-map",
+      center: [0, 0],
+      zoom: 1,
+      style: "mapbox://styles/mapbox/light-v10"
     });
+  
+    const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+  
+    var lons = []
+    var lats = []
+    
+    for (var bus of buses) {
+      var marker = document.createElement("div");
+      if (bus.number === "Unknown Bus") {
+        marker.className = "marker";
+        marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
+      } else {
+        marker.className = "marker linking";
+        marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+      }
+  
+      lons.push(bus.lon)
+      lats.push(bus.lat)
+  
+      new mapboxgl.Marker(marker).setLngLat([bus.lon, bus.lat]).addTo(map);
+    }
+  
+    if (lons.length === 1 && lats.length === 1) {
+      map.jumpTo({
+        center: [lons[0], lats[0]],
+        zoom: 14
+      })
+    } else {
+      const minLon = Math.min.apply(Math, lons)
+      const maxLon = Math.max.apply(Math, lons)
+      const minLat = Math.min.apply(Math, lats)
+      const maxLat = Math.max.apply(Math, lats)
+      map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
+        duration: 0,
+        padding: {top: 200, bottom: 100, left: 100, right: 100}
+      })
+    }
   </script>
 % end
