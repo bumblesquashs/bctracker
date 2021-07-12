@@ -124,7 +124,7 @@
             <td class="mobile-only no-wrap">{{ format_date_mobile(block_history.date) }}</td>
             <td>{{ block_history.system }}</td>
             <td>
-              % if block_history.is_current:
+              % if block_history.is_available:
                 % block = block_history.block
                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
               % else:

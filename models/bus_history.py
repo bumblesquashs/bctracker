@@ -22,8 +22,8 @@ class BusHistory:
         return get_system(self.system_id)
     
     @property
-    def is_current(self):
-        return self.feed_version == self.system.feed_version or (self.block is not None and self.block.is_current)
+    def is_available(self):
+        return self.block is not None
     
     @property
     def block(self):
