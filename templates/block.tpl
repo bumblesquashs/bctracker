@@ -6,7 +6,12 @@
 <div class="sidebar">
   <div class="info-box">
     <div class="info-box-section">
-      % include('components/service_indicator', service=block.service)
+      % services = block.services
+      % if len(services) == 1:
+        % include('components/service_indicator', service=services[0])
+      % else:
+        % include('components/services_indicator', services=services)
+      % end
     </div>
     <div class="info-box-section">
       <div class="info-box-name">Start time</div>

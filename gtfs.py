@@ -174,7 +174,7 @@ def load_trips(system):
             continue
         block_id = values['block_id']
         if block_id not in system.blocks:
-            system.blocks[block_id] = Block(system, block_id, service_id)
+            system.blocks[block_id] = Block(system, block_id)
         direction_id = int(values['direction_id'])
         shape_id = values['shape_id']
         headsign = values['trip_headsign']

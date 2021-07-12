@@ -11,7 +11,7 @@
   % include('components/systems')
 % else:
   % blocks = system.all_blocks()
-  % services = sorted({ b.service for b in blocks if b.service.is_current })
+  % services = sorted({ s for b in blocks for s in b.services if s.is_current })
 
   <div class="list-container">
     <div class="list-navigation">
@@ -36,7 +36,7 @@
             </tr>
           </thead>
           <tbody>
-            % service_blocks = [block for block in blocks if block.service == service]
+            % service_blocks = [block for block in blocks if service in block.services]
             % for block in service_blocks:
               <tr>
                 <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
