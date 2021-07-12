@@ -1,9 +1,8 @@
 
 class Block:
-    def __init__(self, system, block_id, service_id):
+    def __init__(self, system, block_id):
         self.system = system
         self.id = block_id
-        self.service_id = service_id
 
         self.trips = []
     
@@ -11,18 +10,25 @@ class Block:
         return self.id == other.id
     
     def __lt__(self, other):
-        if self.service == other.service:
-            return self.id < other.id
-        else:
-            return self.service < other.service
+        return self.id < other.id
+    
+    @property
+    def is_current(self):
+        for trip in self.trips:
+            if trip.service.is_current:
+                return True
+        return False
 
     @property
-    def service(self):
-        return self.system.get_service(self.service_id)
+    def services(self):
+        if self.is_current:
+            return sorted({ t.service for t in self.trips if t.service.is_current })
+        else:
+            return sorted({ t.service for t in self.trips })
     
     @property
     def available_trips(self):
-        if self.service.is_current:
+        if self.is_current:
             return [t for t in self.trips if t.service.is_current]
         else:
             return self.trips

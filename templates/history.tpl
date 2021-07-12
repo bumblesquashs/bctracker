@@ -57,7 +57,7 @@
               <td class="desktop-only">{{ history.system }}</td>
             % end
             <td>
-              % if history.is_current:
+              % if history.is_available:
                 % block = history.block
                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
               % else:
