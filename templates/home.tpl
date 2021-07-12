@@ -87,13 +87,13 @@
         That's right, BCTracker now supports multiple transit systems across British Columbia.
       </p>
       <p>
-        We're starting with 10 systems from around the province, and we plan to add more in the future.
+        We're starting with 10 cities and regions from around the province, and we plan to add more in the future.
         These initial systems include all seven currently enabled with realtime information, as well as three that only provide schedule data.
         You can easily swap between these systems at any time using the dropdown at the top right corner of your screen.
       </p>
       <p>
         In addition to all the new transit systems, we've also made a bunch of improvements to the general website design.
-        System-wide realtime maps, route maps and information panels, improved desktop layouts, and many more useful features are now available.
+        System-wide realtime maps, route maps and information panels, improved desktop layouts, and many more useful features are now available!
       </p>
       <p>
         There's always more to do, and your feedback helps us figure out what comes next.
