@@ -44,9 +44,17 @@ class Bus:
     
     @property
     def json_data(self):
-        return {
+        data = {
             'id': self.id,
             'number': str(self),
             'lon': self.position.lon,
             'lat': self.position.lat
         }
+        trip = self.position.trip
+        if trip is None:
+            data['headsign'] = "Not In Service"
+        else:
+            data['points'] = [p.json_data for p in trip.points]
+            data['headsign'] = str(trip).replace("'", "")
+            data['colour'] = trip.route.colour
+        return data

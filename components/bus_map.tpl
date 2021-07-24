@@ -49,7 +49,7 @@
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#4040FF',
+          'line-color': '#{{trip.route.colour}}',
           'line-width': 4
         }
       });

@@ -32,6 +32,12 @@
 % else:
   <div class="system-map-header">
     <h1>Map</h1>
+    <div class="checkbox-button" onclick="toggleTripLines()">
+      <div class="checkbox">
+        <img class="checkbox-image" id="checkbox-image" src="/img/check.png" />
+      </div>
+      <span class="checkbox-label">Show Routes</span>
+    </div>
   </div>
 
   <div id="system-map"></div>
@@ -57,7 +63,12 @@
         marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
       } else {
         marker.className = "marker linking";
-        marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+        marker.innerHTML = "\
+          <a href=\"/bus/" + bus.number +"\">\
+            <img src=\"/img/bus.png\" />\
+            <div class='marker-bus'><span>" + bus.number + "</span></div>\
+            <div class='marker-headsign'><span>" + bus.headsign + "</span></div>\
+          </a>";
       }
   
       lons.push(bus.lon)
@@ -80,6 +91,57 @@
         duration: 0,
         padding: {top: 200, bottom: 100, left: 100, right: 100}
       })
+    }
+
+    map.on("load", function() {
+      for (var bus of buses) {
+        if (bus.points === null || bus.points === undefined) {
+          continue
+        }
+        map.addSource(bus.number + '_route', {
+          'type': 'geojson',
+          'data': {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+              'type': 'LineString',
+              'coordinates': bus.points.map(function (point) { return [point.lon, point.lat] })
+            }
+          }
+        });
+        map.addLayer({
+          'id': bus.number + '_route',
+          'type': 'line',
+          'source': bus.number + '_route',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#' + bus.colour,
+            'line-width': 4
+          }
+        });
+      }
+    })
+
+    let tripLinesVisible = true
+
+    function toggleTripLines() {
+      tripLinesVisible = !tripLinesVisible;
+      let checkboxImage = document.getElementById("checkbox-image");
+      if (tripLinesVisible) {
+        checkboxImage.className = "checkbox-image";
+      } else {
+        checkboxImage.className = "checkbox-image hidden";
+      }
+
+      for (var bus of buses) {
+        if (bus.points === null || bus.points === undefined) {
+          continue
+        }
+        map.setLayoutProperty(bus.number + "_route", "visibility", tripLinesVisible ? "visible" : "none");
+      }
     }
   </script>
 % end
