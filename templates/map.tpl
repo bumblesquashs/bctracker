@@ -52,6 +52,7 @@
     });
   
     const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+    var shape_ids = []
   
     var lons = []
     var lats = []
@@ -95,7 +96,12 @@
         if (bus.points === null || bus.points === undefined) {
           continue
         }
-        map.addSource(bus.number + '_route', {
+        if (shape_ids.includes(bus.shape_id)) {
+          continue
+        } else {
+          shape_ids.push(bus.shape_id)
+        }
+        map.addSource(bus.shape_id, {
           'type': 'geojson',
           'data': {
             'type': 'Feature',
@@ -107,9 +113,9 @@
           }
         });
         map.addLayer({
-          'id': bus.number + '_route',
+          'id': bus.shape_id,
           'type': 'line',
-          'source': bus.number + '_route',
+          'source': bus.shape_id,
           'layout': {
             'line-join': 'round',
             'line-cap': 'round'
@@ -137,7 +143,7 @@
         if (bus.points === null || bus.points === undefined) {
           continue
         }
-        map.setLayoutProperty(bus.number + "_route", "visibility", tripLinesVisible ? "visible" : "none");
+        map.setLayoutProperty(bus.shape_id, "visibility", tripLinesVisible ? "visible" : "none");
       }
     }
   </script>
