@@ -197,8 +197,19 @@ tr.divider {
     border-radius: 16px;
 }
 
-.marker.linking:hover {
-    background-color: #255325;
+.marker .marker-link {
+    background-color: black;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: 16px;
+}
+
+.marker:hover .marker-link {
+    opacity: 0.3;
     cursor: pointer;
 }
 

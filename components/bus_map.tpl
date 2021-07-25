@@ -19,6 +19,7 @@
   var marker = document.createElement('div');
   marker.className = 'marker';
   marker.innerHTML = '<img src="/img/bus.png" />'
+  marker.style.backgroundColor = "#{{bus.colour}}";
 
   new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
 </script>

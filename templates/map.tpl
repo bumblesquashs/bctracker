@@ -58,18 +58,15 @@
     
     for (var bus of buses) {
       var marker = document.createElement("div");
-      if (bus.number === "Unknown Bus") {
-        marker.className = "marker";
-        marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
-      } else {
-        marker.className = "marker linking";
-        marker.innerHTML = "\
-          <a href=\"/bus/" + bus.number +"\">\
-            <img src=\"/img/bus.png\" />\
-            <div class='marker-bus'><span>" + bus.number + "</span></div>\
-            <div class='marker-headsign'><span>" + bus.headsign + "</span></div>\
-          </a>";
-      }
+      marker.className = "marker";
+      marker.innerHTML = "\
+        <div class='marker-link'></div>\
+        <a href=\"/bus/" + bus.number +"\">\
+          <img src=\"/img/bus.png\" />\
+          <div class='marker-bus'><span>" + bus.number + "</span></div>\
+          <div class='marker-headsign'><span>" + bus.headsign + "</span></div>\
+        </a>";
+      marker.style.backgroundColor = "#" + bus.colour;
   
       lons.push(bus.lon)
       lats.push(bus.lat)

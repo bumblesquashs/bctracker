@@ -43,18 +43,25 @@ class Bus:
         return realtime.get_position(self.id)
     
     @property
+    def colour(self):
+        trip = self.position.trip
+        if trip is None:
+            return '989898'
+        return trip.route.colour
+    
+    @property
     def json_data(self):
         data = {
             'id': self.id,
             'number': str(self),
             'lon': self.position.lon,
-            'lat': self.position.lat
+            'lat': self.position.lat,
+            'colour': self.colour
         }
         trip = self.position.trip
         if trip is None:
-            data['headsign'] = "Not In Service"
+            data['headsign'] = 'Not In Service'
         else:
             data['points'] = [p.json_data for p in trip.points]
-            data['headsign'] = str(trip).replace("'", "")
-            data['colour'] = trip.route.colour
+            data['headsign'] = str(trip).replace("'", '')
         return data
