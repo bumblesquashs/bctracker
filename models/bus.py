@@ -62,7 +62,7 @@ class Bus:
         if trip is None:
             data['headsign'] = 'Not In Service'
         else:
+            data['headsign'] = str(trip).replace("'", '&apos;')
             data['points'] = [p.json_data for p in trip.points]
             data['shape_id'] = trip.shape_id
-            data['headsign'] = str(trip).replace("'", '')
         return data
