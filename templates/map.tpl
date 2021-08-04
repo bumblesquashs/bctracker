@@ -34,9 +34,9 @@
     <h1>Map</h1>
     <div class="checkbox-button" onclick="toggleTripLines()">
       <div class="checkbox">
-        <img class="checkbox-image" id="checkbox-image" src="/img/check.png" />
+        <img class="checkbox-image hidden" id="checkbox-image" src="/img/check.png" />
       </div>
-      <span class="checkbox-label">Show Routes</span>
+      <span class="checkbox-label">Show Route Lines</span>
     </div>
   </div>
 
@@ -126,7 +126,8 @@
           'minzoom': 8,
           'layout': {
             'line-join': 'round',
-            'line-cap': 'round'
+            'line-cap': 'round',
+            'visibility': 'none'
           },
           'paint': {
             'line-color': '#' + bus.colour,
@@ -136,7 +137,7 @@
       }
     })
 
-    let tripLinesVisible = true
+    let tripLinesVisible = false
 
     function toggleTripLines() {
       tripLinesVisible = !tripLinesVisible;
