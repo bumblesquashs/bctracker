@@ -1,10 +1,11 @@
 
 class Route:
-    def __init__(self, system, route_id, number, name):
+    def __init__(self, system, route_id, number, name, colour):
         self.system = system
         self.id = route_id
         self.number = number
         self.name = name
+        self.colour = colour
 
         self.trips = []
     

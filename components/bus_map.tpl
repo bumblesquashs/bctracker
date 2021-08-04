@@ -19,6 +19,7 @@
   var marker = document.createElement('div');
   marker.className = 'marker';
   marker.innerHTML = '<img src="/img/bus.png" />'
+  marker.style.backgroundColor = "#{{bus.colour}}";
 
   new mapboxgl.Marker(marker).setLngLat([lon, lat]).addTo(map);
 </script>
@@ -49,7 +50,7 @@
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#4040FF',
+          'line-color': '#{{trip.route.colour}}',
           'line-width': 4
         }
       });

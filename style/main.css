@@ -197,8 +197,19 @@ tr.divider {
     border-radius: 16px;
 }
 
-.marker.linking:hover {
-    background-color: #255325;
+.marker .marker-link {
+    background-color: black;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: 16px;
+}
+
+.marker:hover .marker-link {
+    opacity: 0.3;
     cursor: pointer;
 }
 
@@ -215,18 +226,39 @@ tr.divider {
     top: 4px;
 }
 
-.marker div {
+.marker .marker-bus {
     font-size: 8pt;
     margin-top: 5px;
     text-align: center;
     font-weight: bold;
 }
 
-.marker div span {
+.marker .marker-bus span {
     margin-left: -100%;
     margin-right: -100%;
     text-align: center;
     white-space: nowrap;
+}
+
+.marker .marker-headsign {
+    margin-left: -100%;
+    margin-right: -100%;
+    display: none;
+    font-size: 8pt;
+    margin-top: -5px;
+    text-align: center;
+    overflow: visible;
+}
+
+.marker .marker-headsign span {
+    text-align: center;
+    white-space: nowrap;
+    margin-left: -100%;
+    margin-right: -100%;
+}
+
+.marker:hover .marker-headsign {
+    display: block;
 }
 
 .vertical-line {
@@ -257,6 +289,7 @@ tr.divider {
 .system-map-header {
     position: relative;
     z-index: 5;
+    display: inline-block;
 }
 
 .service-indicator {
@@ -282,6 +315,29 @@ tr.divider {
     font-size: 12pt;
     color: #464646;
     text-align: center;
+}
+
+.checkbox-button {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.checkbox {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.checkbox-label {
+    vertical-align: middle;
+    user-select: none;
+}
+
+.hidden {
+    opacity: 0;
 }
 
 #navbar {

@@ -32,6 +32,12 @@
 % else:
   <div class="system-map-header">
     <h1>Map</h1>
+    <div class="checkbox-button" onclick="toggleTripLines()">
+      <div class="checkbox">
+        <img class="checkbox-image hidden" id="checkbox-image" src="/img/check.png" />
+      </div>
+      <span class="checkbox-label">Show Route Lines</span>
+    </div>
   </div>
 
   <div id="system-map"></div>
@@ -46,19 +52,29 @@
     });
   
     const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+    var shape_ids = []
   
     var lons = []
     var lats = []
     
     for (var bus of buses) {
       var marker = document.createElement("div");
+      marker.className = "marker";
       if (bus.number === "Unknown Bus") {
-        marker.className = "marker";
-        marker.innerHTML = "<img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div>";
+        marker.innerHTML = "\
+          <img src=\"/img/bus.png\" />\
+          <div class='marker-bus'><span>" + bus.number + "</span></div>\
+          <div class='marker-headsign'><span>" + bus.headsign + "</span></div>";
       } else {
-        marker.className = "marker linking";
-        marker.innerHTML = "<a href=\"/bus/" + bus.number +"\"><img src=\"/img/bus.png\" /><div><span>" + bus.number + "</span></div></a>";
+        marker.innerHTML = "\
+          <div class='marker-link'></div>\
+          <a href=\"/bus/" + bus.number +"\">\
+            <img src=\"/img/bus.png\" />\
+            <div class='marker-bus'><span>" + bus.number + "</span></div>\
+            <div class='marker-headsign'><span>" + bus.headsign + "</span></div>\
+          </a>";
       }
+      marker.style.backgroundColor = "#" + bus.colour;
   
       lons.push(bus.lon)
       lats.push(bus.lat)
@@ -80,6 +96,64 @@
         duration: 0,
         padding: {top: 200, bottom: 100, left: 100, right: 100}
       })
+    }
+
+    map.on("load", function() {
+      for (var bus of buses) {
+        if (bus.points === null || bus.points === undefined) {
+          continue
+        }
+        if (shape_ids.includes(bus.shape_id)) {
+          continue
+        } else {
+          shape_ids.push(bus.shape_id)
+        }
+        map.addSource(bus.shape_id, {
+          'type': 'geojson',
+          'data': {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+              'type': 'LineString',
+              'coordinates': bus.points.map(function (point) { return [point.lon, point.lat] })
+            }
+          }
+        });
+        map.addLayer({
+          'id': bus.shape_id,
+          'type': 'line',
+          'source': bus.shape_id,
+          'minzoom': 8,
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round',
+            'visibility': 'none'
+          },
+          'paint': {
+            'line-color': '#' + bus.colour,
+            'line-width': 4
+          }
+        });
+      }
+    })
+
+    let tripLinesVisible = false
+
+    function toggleTripLines() {
+      tripLinesVisible = !tripLinesVisible;
+      let checkboxImage = document.getElementById("checkbox-image");
+      if (tripLinesVisible) {
+        checkboxImage.className = "checkbox-image";
+      } else {
+        checkboxImage.className = "checkbox-image hidden";
+      }
+
+      for (var bus of buses) {
+        if (bus.points === null || bus.points === undefined) {
+          continue
+        }
+        map.setLayoutProperty(bus.shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+      }
     }
   </script>
 % end

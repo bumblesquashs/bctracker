@@ -43,7 +43,7 @@
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#4040FF',
+          'line-color': '#{{route.colour}}',
           'line-width': 4
         }
       });
