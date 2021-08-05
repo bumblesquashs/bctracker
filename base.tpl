@@ -15,9 +15,10 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 
     <link rel="stylesheet" href="/style/main.css" />
-    <link rel="stylesheet" media="screen and (min-width: 803px)" href="/style/main-desktop.css" />
-    <link rel="stylesheet" media="screen and (max-width: 802px)" href="/style/main-mobile.css" />
+    <link rel="stylesheet" media="screen and (min-width: 803px)" href="/style/desktop.css" />
+    <link rel="stylesheet" media="screen and (max-width: 802px)" href="/style/mobile.css" />
     <link rel="stylesheet" href="/style/tables.css" />
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/darkmode.css" />
     
     % if defined("include_maps") and include_maps:
       <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
@@ -35,6 +36,8 @@
           element.className = "mobile-only display-none"
         }
       }
+
+      const prefersDarkScheme = window.matchMedia("screen and (prefers-color-scheme: dark)").matches;
     </script>
   </head>
   

@@ -10,7 +10,7 @@
     container: 'map',
     center: [lon, lat],
     zoom: 14,
-    style: 'mapbox://styles/mapbox/light-v10',
+    style: prefersDarkScheme ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/light-v10',
     interactive: false
   });
 

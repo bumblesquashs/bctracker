@@ -8,7 +8,7 @@
     container: 'map',
     center: [0, 0],
     zoom: 1,
-    style: 'mapbox://styles/mapbox/light-v10',
+    style: prefersDarkScheme ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/light-v10',
     interactive: false
   });
 

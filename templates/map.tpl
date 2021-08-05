@@ -48,7 +48,7 @@
       container: "system-map",
       center: [0, 0],
       zoom: 1,
-      style: "mapbox://styles/mapbox/light-v10"
+      style: prefersDarkScheme ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/light-v10'
     });
   
     const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
