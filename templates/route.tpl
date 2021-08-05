@@ -1,15 +1,10 @@
-% from models.trip import Direction
 
 % rebase('base', title=str(route), include_maps=True)
 
 <h1>{{ route }}</h1>
 <hr />
 
-% outbound_trips = [t for t in route.trips if t.direction == Direction.OUTBOUND]
-% inbound_trips = [t for t in route.trips if t.direction == Direction.INBOUND]
-
-% has_outbound_trips = len(outbound_trips) > 0
-% has_inbound_trips = len(inbound_trips) > 0
+% direction_ids = {t.direction_id for t in route.trips}
 
 <div class="sidebar">
   % include('components/route_map', route=route)
@@ -41,28 +36,22 @@
   % end
 
   % for service in route.services:
-    % service_outbound_trips = [t for t in outbound_trips if t.service == service]
-    % service_inbound_trips = [t for t in inbound_trips if t.service == service]
+    % service_trips = [t for t in route.trips if t.service == service]
     <div class="list-content">
       <h2 class="list-content-title" id="{{service}}">{{ service }}</h2>
       <div class="list-content-subtitle">{{ service.date_string }}</div>
       <div class="list-container">
-        % if len(inbound_trips) > 0:
-          <div class="list-content">
-            % if len(service_outbound_trips) > 0:
-              <h3>Inbound</h3>
-            % end
-            % include('components/service_trips', trips=service_inbound_trips)
-          </div>
-        % end
-
-        % if len(service_outbound_trips) > 0:
-          <div class="list-content">
-            % if len(service_inbound_trips) > 0:
-              <h3>Outbound</h3>
-            % end
-            % include('components/service_trips', trips=service_outbound_trips)
-          </div>
+        % for direction_id in direction_ids:
+          % direction_trips = [t for t in service_trips if t.direction_id == direction_id]
+          % if len(direction_trips) > 0:
+            <div class="list-content">
+              % if len(direction_ids) > 1:
+                % directions = sorted({t.direction for t in direction_trips})
+                <h3>{{ '/'.join(directions) }}</h3>
+              % end
+              % include('components/service_trips', trips=direction_trips)
+            </div>
+          % end
         % end
       </div>
     </div>

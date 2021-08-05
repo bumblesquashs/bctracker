@@ -155,8 +155,8 @@ def load_stops(system):
         except:
             continue
         name = values['stop_name']
-        lat = values['stop_lat']
-        lon = values['stop_lon']
+        lat = float(values['stop_lat'])
+        lon = float(values['stop_lon'])
 
         stop = Stop(system, stop_id, number, name, lat, lon)
 
