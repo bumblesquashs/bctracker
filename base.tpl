@@ -158,7 +158,7 @@
         % end
       </div>
       % if system is None or system.realtime_enabled:
-        <div class="sub-navbar-date">
+        <div class="sub-navbar-date" id="sub-navbar-date">
           Updated {{ last_updated }}
         </div>
       % end

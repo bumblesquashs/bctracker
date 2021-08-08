@@ -298,3 +298,19 @@ def news():
 @app.route('/<system_id>/news/')
 def system_news(system_id):
     return systems_template('news', system_id, path='news')
+
+@app.route('/api/map.json')
+def api_map():
+    return system_api_map(None)
+
+@app.route('/<system_id>/api/map.json')
+def system_api_map(system_id):
+    system = get_system(system_id)
+    if system is None:
+        buses = realtime.active_buses()
+    else:
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
+    return {
+        'buses': [b.json_data for b in buses if b.position.has_location],
+        'last_updated': realtime.last_updated_string()
+    }

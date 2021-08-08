@@ -38,6 +38,7 @@
       </div>
       <span class="checkbox-label">Show Route Lines</span>
     </div>
+    <button class="button" onclick="updateData()">Refresh</button>
   </div>
 
   <div id="system-map"></div>
@@ -51,62 +52,69 @@
       style: "mapbox://styles/mapbox/light-v10"
     });
   
-    const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
-    var shape_ids = []
-  
-    var lons = []
-    var lats = []
+    var buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+    var shape_ids = [];
+    var markers = [];
     
-    for (var bus of buses) {
-      var marker = document.createElement("div");
-      marker.className = "marker";
-      if (bus.number === "Unknown Bus") {
-        marker.innerHTML = "\
-          <img src=\"/img/bus.png\" />\
-          <div class='marker-bus'><span>" + bus.number + "</span></div>\
-          <div class='marker-headsign'><span>" + bus.headsign + "</span></div>";
-      } else {
-        marker.innerHTML = "\
-          <div class='marker-link'></div>\
-          <a href=\"/bus/" + bus.number +"\">\
+    map.on("load", function() {
+      updateMap(true)
+    })
+
+    function updateMap(resetPosition) {
+      var lons = []
+      var lats = []
+      
+      for (var bus of buses) {
+        const element = document.createElement("div");
+        element.className = "marker";
+        if (bus.number === "Unknown Bus") {
+          element.innerHTML = "\
             <img src=\"/img/bus.png\" />\
             <div class='marker-bus'><span>" + bus.number + "</span></div>\
-            <div class='marker-headsign'><span>" + bus.headsign + "</span></div>\
-          </a>";
+            <div class='marker-headsign'><span>" + bus.headsign + "</span></div>";
+        } else {
+          element.innerHTML = "\
+            <div class='marker-link'></div>\
+            <a href=\"/bus/" + bus.number +"\">\
+              <img src=\"/img/bus.png\" />\
+              <div class='marker-bus'><span>" + bus.number + "</span></div>\
+              <div class='marker-headsign'><span>" + bus.headsign + "</span></div>\
+            </a>";
+        }
+        element.style.backgroundColor = "#" + bus.colour;
+    
+        lons.push(bus.lon)
+        lats.push(bus.lat)
+    
+        markers.push(new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map));
       }
-      marker.style.backgroundColor = "#" + bus.colour;
-  
-      lons.push(bus.lon)
-      lats.push(bus.lat)
-  
-      new mapboxgl.Marker(marker).setLngLat([bus.lon, bus.lat]).addTo(map);
-    }
-  
-    if (lons.length === 1 && lats.length === 1) {
-      map.jumpTo({
-        center: [lons[0], lats[0]],
-        zoom: 14
-      })
-    } else {
-      const minLon = Math.min.apply(Math, lons)
-      const maxLon = Math.max.apply(Math, lons)
-      const minLat = Math.min.apply(Math, lats)
-      const maxLat = Math.max.apply(Math, lats)
-      map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
-        duration: 0,
-        padding: {top: 200, bottom: 100, left: 100, right: 100}
-      })
-    }
+    
+      if (resetPosition) {
+        if (lons.length === 1 && lats.length === 1) {
+          map.jumpTo({
+            center: [lons[0], lats[0]],
+            zoom: 14
+          })
+        } else {
+          const minLon = Math.min.apply(Math, lons)
+          const maxLon = Math.max.apply(Math, lons)
+          const minLat = Math.min.apply(Math, lats)
+          const maxLat = Math.max.apply(Math, lats)
+          map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
+            duration: 0,
+            padding: {top: 200, bottom: 100, left: 100, right: 100}
+          })
+        }
+      }
 
-    map.on("load", function() {
       for (var bus of buses) {
         if (bus.points === null || bus.points === undefined) {
-          continue
+          continue;
         }
         if (shape_ids.includes(bus.shape_id)) {
-          continue
+          continue;
         } else {
-          shape_ids.push(bus.shape_id)
+          shape_ids.push(bus.shape_id);
         }
         map.addSource(bus.shape_id, {
           'type': 'geojson',
@@ -127,7 +135,7 @@
           'layout': {
             'line-join': 'round',
             'line-cap': 'round',
-            'visibility': 'none'
+            'visibility': tripLinesVisible ? 'visible' : 'none'
           },
           'paint': {
             'line-color': '#' + bus.colour,
@@ -135,9 +143,21 @@
           }
         });
       }
-    })
+    }
 
-    let tripLinesVisible = false
+    function resetMap() {
+      for (var shape_id of shape_ids) {
+        map.removeLayer(shape_id)
+        map.removeSource(shape_id)
+      }
+      for (var marker of markers) {
+        marker.remove()
+      }
+      shape_ids = []
+      markers = []
+    }
+
+    let tripLinesVisible = false;
 
     function toggleTripLines() {
       tripLinesVisible = !tripLinesVisible;
@@ -150,10 +170,29 @@
 
       for (var bus of buses) {
         if (bus.points === null || bus.points === undefined) {
-          continue
+          continue;
         }
         map.setLayoutProperty(bus.shape_id, "visibility", tripLinesVisible ? "visible" : "none");
       }
+    }
+
+    function updateData() {
+      var request = new XMLHttpRequest();
+      request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
+      request.responseType = "json";
+      request.onload = function() {
+        if (request.status === 200) {
+          const lastUpdated = request.response.last_updated;
+          const element = document.getElementById("sub-navbar-date");
+          if (element !== null && element !== undefined && element.innerHTML.trim() !== "Updated " + lastUpdated) {
+            element.innerHTML = "Updated " + lastUpdated;
+            resetMap();
+            buses = request.response.buses;
+            updateMap(false);
+          }
+        }
+      };
+      request.send();
     }
   </script>
 % end
