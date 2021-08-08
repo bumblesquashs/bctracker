@@ -9,6 +9,7 @@ from models.bus_model import load_models
 from models.bus_order import load_orders
 from models.system import load_systems, get_system, all_systems
 
+import database
 import gtfs
 import realtime
 import history
@@ -19,6 +20,8 @@ system_domain = '{0}.bctracker.ca/{1}'
 
 def start():
     global mapbox_api_key, no_system_domain, system_domain
+
+    database.connect()
     
     force_gtfs_redownload = False
     if len(sys.argv) > 1 and sys.argv[1] == '-r':
@@ -56,6 +59,7 @@ def start():
     cp.server.start()
 
 def stop():
+    database.disconnect()
     cp.server.stop()
 
 def get_url(system, path=''):
