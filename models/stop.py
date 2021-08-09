@@ -7,7 +7,7 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
-
+        
         self.stop_times = []
     
     def __str__(self):

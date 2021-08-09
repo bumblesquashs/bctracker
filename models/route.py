@@ -30,7 +30,7 @@ class Route:
             if trip.service.is_current:
                 return True
         return False
-
+    
     @property
     def services(self):
         if self.is_current:

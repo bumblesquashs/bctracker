@@ -3,7 +3,7 @@ class Block:
     def __init__(self, system, block_id):
         self.system = system
         self.id = block_id
-
+        
         self.trips = []
     
     def __eq__(self, other):
@@ -18,7 +18,7 @@ class Block:
             if trip.service.is_current:
                 return True
         return False
-
+    
     @property
     def services(self):
         if self.is_current:
@@ -32,11 +32,11 @@ class Block:
             return [t for t in self.trips if t.service.is_current]
         else:
             return self.trips
-
+    
     @property
     def routes(self):
         return sorted({t.route for t in self.available_trips})
-
+    
     @property
     def routes_string(self):
         return ', '.join([str(r.number) for r in self.routes])
