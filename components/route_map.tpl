@@ -2,8 +2,6 @@
 
 <div id="map"></div>
 <script>
-    mapboxgl.accessToken = '{{mapbox_api_key}}';
-    
     const map = new mapboxgl.Map({
         container: 'map',
         center: [0, 0],

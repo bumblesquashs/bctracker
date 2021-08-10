@@ -40,28 +40,19 @@
             <a class="header-button title" href="{{ get_url(system) }}">BCTracker</a>
             
             <div class="desktop-only">
-                % if system is None:
-                    <a class="header-button" href="{{ get_url(None, 'map') }}">Map</a>
-                    <a class="header-button" href="{{ get_url(None, 'realtime') }}">Realtime</a>
-                    <a class="header-button" href="{{ get_url(None, 'history') }}">History</a>
-                    <a class="header-button" href="{{ get_url(None, 'routes') }}">Routes</a>
-                    <a class="header-button" href="{{ get_url(None, 'blocks') }}">Blocks</a>
-                    <a class="header-button" href="{{ get_url(None, 'about') }}">About</a>
+                % if system is None or system.realtime_enabled:
+                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
+                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
                 % else:
-                    % if system.realtime_enabled:
-                        <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
-                        <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                        <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
-                    % else:
-                        <span class="header-button disabled">Map</span>
-                        <span class="header-button disabled">Realtime</span>
-                        <span class="header-button disabled">History</span>
-                    % end
-                    
-                    <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                    <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
-                    <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
+                    <span class="header-button disabled">Map</span>
+                    <span class="header-button disabled">Realtime</span>
+                    <span class="header-button disabled">History</span>
                 % end
+                
+                <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
                 
                 % if len(systems) > 1:
                     <div class="header-button dropdown" id="system-dropdown">
@@ -114,33 +105,18 @@
         </div>
         
         <div id="mobile-header" class="mobile-only display-none">
-            % if system is None:
-                <a class="header-button" href="{{ get_url(None, 'map') }}">Map</a>
-                <a class="header-button" href="{{ get_url(None, 'realtime') }}">Realtime</a>
-                <a class="header-button" href="{{ get_url(None, 'history') }}">History</a>
-                <a class="header-button" href="{{ get_url(None, 'routes') }}">Routes</a>
-                <a class="header-button" href="{{ get_url(None, 'blocks') }}">Blocks</a>
-                <a class="header-button" href="{{ get_url(None, 'about') }}">About</a>
-                
-                % if len(systems) > 1:
-                    % path = get('path', '')
-                    <a class="header-button" href="{{ get_url(None, f'systems?path={path}') }}">Change System</a>
-                % end
-            % else:
-                % if system.realtime_enabled:
-                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
-                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
-                % end
-                
-                <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
-                <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
-                
-                % if len(systems) > 1:
-                    % path = get('path', '')
-                    <a class="header-button" href="{{ get_url(system, f'systems?path={path}') }}">Change System</a>
-                % end
+            % if system is None or system.realtime_enabled:
+                <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
+                <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
+            % end
+            <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+            <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
+            
+            % if len(systems) > 1:
+                % path = get('path', '')
+                <a class="header-button" href="{{ get_url(system, f'systems?path={path}') }}">Change System</a>
             % end
         </div>
         

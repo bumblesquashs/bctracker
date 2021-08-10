@@ -5,7 +5,6 @@
     const lat = parseFloat("{{stop.lat}}");
     const lon = parseFloat("{{stop.lon}}");
     
-    mapboxgl.accessToken = '{{mapbox_api_key}}';
     const map = new mapboxgl.Map({
         container: 'map',
         center: [lon, lat],

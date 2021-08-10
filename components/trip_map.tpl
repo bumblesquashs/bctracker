@@ -4,7 +4,6 @@
 <script>
     const points = JSON.parse('{{! json.dumps([p.json_data for p in trip.points]) }}')
     
-    mapboxgl.accessToken = '{{mapbox_api_key}}';
     const map = new mapboxgl.Map({
         container: 'map',
         center: [0, 0],
