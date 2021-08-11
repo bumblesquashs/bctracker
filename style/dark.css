@@ -74,12 +74,12 @@ tr.divider {
     background-color: #565656
 }
 
-.dropdown .content a.disabled-link {
+.dropdown .content a.disabled {
     color: #ABABAB;
 }
 
-.dropdown .content a.disabled-link:hover {
-    background-color: #2F2F2F;
+.dropdown .content a.disabled:hover {
+    background-color: #2F2F2F !important;
 }
 
 .dropdown .content .title {
