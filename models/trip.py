@@ -15,9 +15,9 @@ class Trip:
         self.service_id = service_id
         self.shape_id = shape_id
         self.headsign = headsign
-
+        
         self.stop_times = []
-
+        
         if direction_id == 0:
             self.direction = Direction.OUTBOUND
         elif direction_id == 1:
@@ -51,7 +51,7 @@ class Trip:
     @property
     def first_stop(self):
         return self.stop_times[0]
-
+    
     @property
     def last_stop(self):
         return self.stop_times[-1]
@@ -67,6 +67,6 @@ class Trip:
     @property
     def points(self):
         return sorted(self.system.get_shape(self.shape_id).points)
-
+    
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)

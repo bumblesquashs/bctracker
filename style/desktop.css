@@ -1,4 +1,8 @@
 
+a:hover {
+    text-decoration: underline;
+}
+
 body {
     font-size: 14pt;
 }
@@ -9,12 +13,34 @@ form input[type="text"] {
     vertical-align: middle;
 }
 
-a:hover {
-    text-decoration: underline;
+#header #system-dropdown {
+    float: right;
 }
 
-.mobile-only {
-    display: none;
+#subheader #system {
+    display: inline-block;
+}
+
+#subheader #last-updated {
+    display: inline-block;
+    font-size: 12pt;
+    margin-left: 10px;
+}
+
+#sidebar {
+    float: left;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    width: 25%;
+}
+
+#sidebar table {
+    width: 100%;
+}
+
+#sidebar + * {
+    float: none;
+    overflow: hidden;
 }
 
 .button {
@@ -22,34 +48,34 @@ a:hover {
     vertical-align: middle;
 }
 
-.sub-navbar-system {
+.container {
+    margin: -20px;
+}
+
+.container .navigation {
     display: inline-block;
+    margin: 20px 20px -5px 20px;
+    font-size: 0pt;
 }
 
-.sub-navbar-date {
+.container .navigation .button {
     display: inline-block;
-    font-size: 12pt;
-    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
-.smaller-font {
-    font-size: 11pt;
+.container .section {
+    margin: 20px;
+    display: inline-block;
+    vertical-align: top;
 }
 
-.sidebar {
-    float: left;
-    margin-right: 40px;
-    margin-bottom: 20px;
-    width: 25%;
+.container .section.no-inline {
+    display: block !important;
 }
 
-.sidebar table {
-    width: 100%;
-}
-
-.body {
-    float: none;
-    overflow: hidden;
+.container .section table:last-child {
+    margin-bottom: 0px;
 }
 
 .dropdown {
@@ -59,7 +85,7 @@ a:hover {
     overflow: visible !important;
 }
 
-.dropdown-content {
+.dropdown .content {
     display: none;
     position: absolute;
     top: 52px;
@@ -70,7 +96,30 @@ a:hover {
     z-index: 20;
 }
 
-.dropdown-content .dropdown-table {
+.dropdown:hover .content {
+    display: block;
+}
+
+.dropdown .content a {
+    padding: 12px;
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown .content a:hover {
+    background-color: #e6e6e6
+}
+
+.dropdown .content a.disabled {
+    color: grey;
+}
+
+.dropdown .content a.disabled:hover {
+    background-color: white;
+}
+
+.dropdown .content table {
     padding: 0px;
     margin: 0px;
     width: 100%;
@@ -78,76 +127,31 @@ a:hover {
     border-collapse: collapse;
 }
 
-.dropdown-content .dropdown-title {
-    padding: 12px;
-    font-size: 12pt;
-    color: grey;
-}
-
-.dropdown-content a {
-    padding: 12px;
-    color: black;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a.disabled-link {
-    color: grey;
-}
-
-.dropdown-content a.disabled-link:hover {
-    background-color: white;
-}
-
-.dropdown-content .dropdown-table tr {
+.dropdown .content table tr {
     height: 100%;
 }
 
-.dropdown-content .dropdown-table tr td {
+.dropdown .content table tr td {
     height: 100%;
     padding: 0px;
 }
 
-.dropdown-content .dropdown-table tr td a {
+.dropdown .content table tr td a {
     font-size: 14pt;
     text-align: center;
     height: 100%;
 }
 
-.dropdown-content a:hover {
-    background-color: #e6e6e6
+.dropdown .content .title {
+    padding: 12px;
+    font-size: 12pt;
+    color: grey;
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+.mobile-only {
+    display: none;
 }
 
-.list-container {
-    margin: -20px;
-}
-
-.list-container .list-navigation {
-    display: inline-block;
-    margin: 20px 20px -5px 20px;
-    font-size: 0pt;
-}
-
-.list-container .list-navigation .button {
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-.list-container .list-content {
-    margin: 20px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.list-container .list-content.no-inline {
-    display: block !important;
-}
-
-.list-container .list-content table:last-child {
-    margin-bottom: 0px;
+.smaller-font {
+    font-size: 11pt;
 }

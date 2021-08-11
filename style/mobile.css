@@ -1,6 +1,14 @@
 
+a {
+    font-weight: bold;
+}
+
 body {
     font-size: 13pt;
+}
+
+button {
+    width: 100%;
 }
 
 form input[type="text"] {
@@ -13,39 +21,41 @@ form label {
     font-size: 13pt;
 }
 
-button {
-    width: 100%;
-}
-
-a {
-    font-weight: bold;
-}
-
 table {
     width: 100%;
     display: table;
     font-size: 13pt;
 }
 
-.navbar-title {
+#header .title {
     font-size: 18pt;
 }
 
-.sub-navbar-system {
-    font-size: 14pt;
-}
-
-.desktop-only {
-    display: none;
-}
-
-.button {
-    font-size: 14pt;
-    overflow: hidden;
+#header .mobile-toggle {
+    float: right;
     display: block;
+    padding: 5px;
+    margin: 5px 10px 5px 0px;
 }
 
-.mobile-navbar-item {
+#header .mobile-toggle .line {
+    background-color: white;
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    margin: 6px;
+}
+
+#mobile-header {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 5px 0px;
+    overflow: hidden;
+    background-color: #255325;
+}
+
+#mobile-header .header-button {
     display: block;
     color: white;
     padding: 15px 20px;
@@ -54,42 +64,32 @@ table {
     font-weight: normal;
 }
 
-.mobile-navbar-toggle {
-    float: right;
+#subheader-system {
+    font-size: 14pt;
+}
+
+.button {
+    font-size: 14pt;
+    overflow: hidden;
     display: block;
-    padding: 5px;
-    margin: 5px 10px 5px 0px;
 }
 
-.mobile-navbar-toggle-line {
-    background-color: white;
-    width: 32px;
-    height: 4px;
-    border-radius: 2px;
-    margin: 6px;
+.container .navigation .button {
+    margin-bottom: 10px;
 }
 
-.smaller-font {
-    font-size: 11pt;
+.container .navigation .button:last-child {
+    margin-bottom: 0px;
+}
+
+.desktop-only {
+    display: none;
 }
 
 .fixed-table {
     table-layout: fixed;
 }
 
-.list-navigation .button {
-    margin-bottom: 10px;
-}
-
-.list-navigation .button:last-child {
-    margin-bottom: 0px;
-}
-
-#mobile-navbar {
-    position: relative;
-    z-index: 10;
-    margin: 0px;
-    padding: 5px 0px;
-    overflow: hidden;
-    background-color: #255325;
+.smaller-font {
+    font-size: 11pt;
 }
