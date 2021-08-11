@@ -231,12 +231,12 @@ tr.divider {
     margin-bottom: 0px;
 }
 
-.info-box .section .name {
+.info-box .section > .name {
     float: left;
     margin-right: 20px;
 }
 
-.info-box .section .value {
+.info-box .section > .value {
     float: none;
     overflow: hidden;
     text-align: right;

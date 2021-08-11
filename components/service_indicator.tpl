@@ -10,43 +10,50 @@
         <div class="date">
             <div class="name">Mon</div>
             % if service.mon:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         <div class="date">
             <div class="name">Tue</div>
             % if service.tue:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         <div class="date">
             <div class="day">Wed</div>
             % if service.wed:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         <div class="date">
             <div class="name">Thu</div>
             % if service.thu:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         <div class="date">
             <div class="name">Fri</div>
             % if service.fri:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         <div class="date">
             <div class="name">Sat</div>
             % if service.sat:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         <div class="date">
             <div class="name">Sun</div>
             % if service.sun:
-                <img class="check" src="/img/check.png" />
+                <img class="light-only check" src="/img/check.png" />
+                <img class="dark-only check" src="/img/check-white.png" />
             % end
         </div>
         % if len(service.special_dates) > 0:

@@ -18,7 +18,8 @@
         <link rel="stylesheet" media="screen and (min-width: 803px)" href="/style/desktop.css" />
         <link rel="stylesheet" media="screen and (max-width: 802px)" href="/style/mobile.css" />
         <link rel="stylesheet" href="/style/tables.css" />
-        <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/darkmode.css" />
+        <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css" />
+        <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css" />
         
         % if defined("include_maps") and include_maps:
             <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>

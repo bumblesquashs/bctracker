@@ -40,27 +40,6 @@
             <span class="checkbox-label">Show Route Lines</span>
         </div>
     </div>
-<<<<<<< HEAD
-  </div>
-
-  <div id="system-map"></div>
-  
-  <script>
-    mapboxgl.accessToken = "{{mapbox_api_key}}";
-    var map = new mapboxgl.Map({
-      container: "system-map",
-      center: [0, 0],
-      zoom: 1,
-      style: prefersDarkScheme ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/light-v10'
-    });
-  
-    const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
-    var shape_ids = []
-  
-    var lons = []
-    var lats = []
-=======
->>>>>>> 96b7881dff9d5989fcc035becee59e3f4f3c4ebf
     
     <div id="system-map"></div>
     
@@ -69,7 +48,7 @@
             container: "system-map",
             center: [0, 0],
             zoom: 1,
-            style: "mapbox://styles/mapbox/light-v10"
+            style: prefersDarkScheme ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/light-v10'
         });
         
         const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');

@@ -1,0 +1,171 @@
+
+a {
+    color: #04E0FF;
+}
+
+body {
+    background-color: #2F2F2F;
+    color: white;
+}
+
+form input[type="text"] {
+    border: 2px solid #565656;
+    background-color: #2F2F2F;
+    color: white;
+}
+
+tr.divider {
+    border-top: 4px solid #565656;
+}
+
+#header {
+    background-color: #0A6415;
+}
+
+#header .header-button:hover {
+    background-color: #00760F;
+}
+
+#header .header-button.disabled:hover {
+    background-color: #0A6415 !important;
+}
+
+#mobile-header {
+    background-color: #00760F;
+}
+
+#subheader {
+    background-color: #565656;
+}
+
+#subheader #last-updated {
+    color: #EEEEEE;
+}
+
+#map {
+    border: 1px solid #565656;
+}
+
+.button {
+    background-color: #0A6415;
+}
+
+.button:hover {
+    background-color: #00760F;
+}
+
+.button.disabled {
+    background-color: #565656;
+}
+
+.button.disabled:hover {
+    background-color: #565656 !important;
+}
+
+.dropdown .content {
+    background-color: #2F2F2F;
+}
+
+.dropdown .content a {
+    color: white;
+}
+
+.dropdown .content a:hover {
+    background-color: #565656
+}
+
+.dropdown .content a.disabled-link {
+    color: #ABABAB;
+}
+
+.dropdown .content a.disabled-link:hover {
+    background-color: #2F2F2F;
+}
+
+.dropdown .content .title {
+    color: #ABABAB;
+}
+
+.horizontal-line {
+    background-color: #565656;
+}
+
+.info-box {
+    background-color: #393939;
+    border: 1px solid #565656;
+}
+
+.info-box .section {
+    border-bottom: 1px solid #565656;
+}
+
+.info-box .section:last-child {
+    border-bottom: 0px solid #565656;
+}
+
+.light-only {
+    display: none;
+}
+
+.lighter-text {
+    color: #ABABAB;
+}
+
+.marker {
+    background-color: #0A6415;
+}
+
+.marker a {
+    color: white;
+}
+
+.news-post {
+    background-color: #393939;
+    border: 1px solid #565656;
+}
+
+.news-post .header {
+    background-color: #565656;
+    border-bottom: 1px solid #565656;
+}
+
+.pure-table {
+    border: 1px solid #565656;
+}
+
+.pure-table td,
+.pure-table th {
+    border-left: 1px solid #565656;
+    border-width: 0 0 0 1px;
+}
+
+.pure-table thead {
+    background-color: #565656;
+    color: white;
+}
+
+.pure-table-odd td {
+    background-color: #393939;
+}
+
+.pure-table-striped tr:nth-child(2n-1) td {
+    background-color: #393939;
+}
+
+.pure-table-bordered td {
+    border-bottom: 1px solid #565656;
+}
+
+.pure-table-horizontal td,
+.pure-table-horizontal th {
+    border-width: 0 0 1px 0;
+    border-bottom: 1px solid #565656;
+}
+
+.service-indicator .details {
+    color: #ABABAB;
+}
+
+.vertical-line {
+    background-color: #565656;
+}
