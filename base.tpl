@@ -55,13 +55,14 @@
                 <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
                 
                 % if len(systems) > 1:
+                    % path = get('path', '')
                     <div class="header-button dropdown" id="system-dropdown">
                         Change System
                         <div class="content">
                             % if system is None:
                                 <a class="disabled">All Systems</a>
                             % else:
-                                <a href="{{ get_url(None, get('path', '')) }}">All Systems</a>
+                                <a href="{{ get_url(None, path) }}">All Systems</a>
                             % end
                             % sorted_systems = sorted(systems)
                             <table>
@@ -73,7 +74,7 @@
                                                 % if system is not None and system == left_system:
                                                     <a class="disabled">{{ left_system }}</a>
                                                 % else:
-                                                    <a href="{{ get_url(left_system, get('path', '')) }}">{{ left_system }}</a>
+                                                    <a href="{{ get_url(left_system, path) }}">{{ left_system }}</a>
                                                 % end
                                             </td>
                                             % if i < len(sorted_systems) - 1:
@@ -82,7 +83,7 @@
                                                     % if system is not None and system == right_system:
                                                         <a class="disabled">{{ right_system }}</a>
                                                     % else:
-                                                        <a href="{{ get_url(right_system, get('path', '')) }}">{{ right_system }}</a>
+                                                        <a href="{{ get_url(right_system, path) }}">{{ right_system }}</a>
                                                     % end
                                                 </td>
                                             % end
