@@ -4,7 +4,7 @@ class Shape:
         self.system = system
         self.id = shape_id
         self.points = []
-
+    
     def add_point(self, lat, lon, sequence):
         self.points.append(ShapePoint(lat, lon, sequence))
 

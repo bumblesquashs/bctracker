@@ -24,14 +24,14 @@ def start():
     if len(sys.argv) > 1 and sys.argv[1] == '-r':
         print('Forcing GTFS redownload')
         force_gtfs_redownload = True
-
+    
     load_models()
     load_orders()
     load_systems()
-
+    
     realtime.load_translations()
     history.load_last_seen()
-
+    
     for system in all_systems():
         if not gtfs.downloaded(system) or force_gtfs_redownload:
             gtfs.update(system)
@@ -43,15 +43,15 @@ def start():
         elif not realtime.validate(system):
             system.realtime_validation_error_count += 1
     history.update(realtime.active_buses())
-
+    
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
-
+    
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
-
+    
     cp.tree.graft(log, '/')
     cp.server.start()
 
@@ -186,20 +186,6 @@ def route_realtime():
 @app.route('/<system_id>/realtime')
 @app.route('/<system_id>/realtime/')
 def system_realtime(system_id):
-    reload = request.query.get('reload', 'false')
-    if reload == 'true':
-        delta = datetime.now() - realtime.last_updated
-        if delta.seconds > 60:
-            for system in all_systems():
-                try:
-                    realtime.reset_positions(system)
-                    realtime.update(system)
-                    if not gtfs.validate(system):
-                        gtfs.update(system)
-                except Exception as e:
-                    print(f'Error: Failed to update realtime for {system}')
-                    print(f'Error message: {e}')
-            history.update(realtime.active_buses())
     group = request.query.get('group', 'all')
     system = get_system(system_id)
     if system is None:
