@@ -253,6 +253,18 @@ tr.divider {
     border-radius: 16px;
 }
 
+.marker.small {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.marker.small img {
+    width: 12px;
+    height: 12px;
+    left: 2px;
+    top: 2px;
+}
+
 .marker .link {
     background-color: black;
     opacity: 0;

@@ -84,13 +84,13 @@
                         </a>";
                 }
                 element.style.backgroundColor = "#" + bus.colour;
-        
+                
                 lons.push(bus.lon);
                 lats.push(bus.lat);
         
                 markers.push(new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map));
             }
-    
+            
             if (resetPosition) {
                 if (lons.length === 1 && lats.length === 1) {
                     map.jumpTo({
