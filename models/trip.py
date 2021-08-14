@@ -70,3 +70,6 @@ class Trip:
     
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)
+    
+    def get_stop_time(self, stop):
+        return next((s for s in self.stop_times if s.stop == stop), None)

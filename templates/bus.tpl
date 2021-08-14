@@ -53,6 +53,11 @@
                     <div class="name">Current Stop</div>
                     <div class="value">
                         <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                        % adherence = position.schedule_adherence_string
+                        % if adherence is not None:
+                            <br />
+                            <span class="smaller-font">{{ adherence }}</span>
+                        % end
                     </div>
                 </div>
             % end

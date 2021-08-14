@@ -56,15 +56,6 @@
             % else:
                 <a class="button" href="?group=model">By Model</a>
             % end
-            <span class="vertical-line desktop-only"></span>
-            <div class="horizontal-line mobile-only"></div>
-            % if group == 'all':
-                <a class="button" href="?group=all&reload=true">Refresh Realtime</a>
-            % elif group == 'route':
-                <a class="button" href="?group=route&reload=true">Refresh Realtime</a>
-            % elif group == 'model':
-                <a class="button" href="?group=model&reload=true">Refresh Realtime</a>
-            % end
         </div>
         <br />
         
