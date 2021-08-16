@@ -164,6 +164,7 @@ tr.divider {
 .checkbox {
     cursor: pointer;
     vertical-align: middle;
+    margin-bottom: 5px;
 }
 
 .checkbox .box {

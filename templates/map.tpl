@@ -39,8 +39,12 @@
             </div>
             <span class="checkbox-label">Show Route Lines</span>
         </div>
-        
-        <button class="button" onclick="updateBusData()">Refresh</button>
+        <div class="checkbox" onclick="toggleAutomaticRefresh()">
+            <div class="box">
+                <img class="hidden" id="refresh-image" src="/img/check.png" />
+            </div>
+            <span class="checkbox-label">Automatically Refresh</span>
+        </div>
     </div>
     
     <div id="system-map"></div>
@@ -57,6 +61,7 @@
         let current_shape_ids = []
         let markers = [];
         let tripLinesVisible = false;
+        let automaticRefresh = false;
         
         const shape_ids = [];
         
@@ -147,6 +152,16 @@
             }
         }
         
+        function toggleAutomaticRefresh() {
+            automaticRefresh = !automaticRefresh;
+            const checkboxImage = document.getElementById("refresh-image");
+            checkboxImage.classList.toggle("hidden");
+            
+            if (automaticRefresh) {
+                updateBusData()
+            }
+        }
+        
         function updateBusData() {
             const request = new XMLHttpRequest();
             request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
@@ -214,5 +229,22 @@
                 request.send();
             }
         }
+        
+        const date = new Date();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+        const timeSinceLastUpdate = ((minutes % 2) * 60) + seconds;
+        const timeToNextUpdate = (2 * 60) - timeSinceLastUpdate;
+        
+        setTimeout(function() {
+            if (automaticRefresh) {
+                updateBusData();
+            }
+            setInterval(function() {
+                if (automaticRefresh) {
+                    updateBusData();
+                }
+            }, 1000 * 60 * 2);
+        }, 1000 * (timeToNextUpdate + 15));
     </script>
 % end
