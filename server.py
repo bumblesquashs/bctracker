@@ -300,3 +300,15 @@ def system_api_map(system_id):
         'buses': [b.json_data for b in buses if b.position.has_location],
         'last_updated': realtime.last_updated_string()
     }
+
+@app.route('/<system_id>/api/shape/<shape_id>.json')
+def system_api_shape_id(system_id, shape_id):
+    system = get_system(system_id)
+    if system is None:
+        return {}
+    shape = system.get_shape(shape_id)
+    if shape is None:
+        return {}
+    return {
+        'points': [p.json_data for p in shape.points]
+    }

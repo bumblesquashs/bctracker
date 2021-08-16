@@ -40,7 +40,7 @@
             <span class="checkbox-label">Show Route Lines</span>
         </div>
         
-        <button class="button" onclick="updateData()">Refresh</button>
+        <button class="button" onclick="updateBusData()">Refresh</button>
     </div>
     
     <div id="system-map"></div>
@@ -54,19 +54,33 @@
         });
         
         let buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
-        let shape_ids = [];
+        let current_shape_ids = []
         let markers = [];
         let tripLinesVisible = false;
+        
+        const shape_ids = [];
         
         map.on("load", function() {
             updateMap(true);
         })
-
+        
         function updateMap(resetPosition) {
+            current_shape_ids = []
+            for (const marker of markers) {
+                marker.remove();
+            }
+            markers = [];
+            
             const lons = [];
             const lats = [];
-      
+            
             for (const bus of buses) {
+                if (bus.shape_id !== null && bus.shape_id !== undefined) {
+                    if (!(current_shape_ids.includes(bus.shape_id))) {
+                        current_shape_ids.push(bus.shape_id)
+                    }
+                }
+                
                 const element = document.createElement("div");
                 element.className = "marker";
                 if (bus.number === "Unknown Bus") {
@@ -109,54 +123,13 @@
                 }
             }
             
-            for (const bus of buses) {
-                if (bus.points === null || bus.points === undefined) {
-                    continue;
-                }
-                if (shape_ids.includes(bus.shape_id)) {
-                    continue;
-                } else {
-                    shape_ids.push(bus.shape_id);
-                }
-                map.addSource(bus.shape_id, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': bus.points.map(function (point) { return [point.lon, point.lat] })
-                        }
-                    }
-                });
-                map.addLayer({
-                    'id': bus.shape_id,
-                    'type': 'line',
-                    'source': bus.shape_id,
-                    'minzoom': 8,
-                    'layout': {
-                        'line-join': 'round',
-                        'line-cap': 'round',
-                        'visibility':  tripLinesVisible ? 'visible' : 'none'
-                    },
-                    'paint': {
-                        'line-color': '#' + bus.colour,
-                        'line-width': 4
-                    }
-                });
-            }
-        }
-        
-        function resetMap() {
             for (const shape_id of shape_ids) {
-                map.removeLayer(shape_id);
-                map.removeSource(shape_id);
+                if (current_shape_ids.includes(shape_id)) {
+                    map.setLayoutProperty(shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+                } else {
+                    map.setLayoutProperty(shape_id, "visibility", "none");
+                }
             }
-            for (const marker of markers) {
-                marker.remove();
-            }
-            shape_ids = [];
-            markers = [];
         }
         
         function toggleTripLines() {
@@ -164,16 +137,18 @@
             const checkboxImage = document.getElementById("checkbox-image");
             checkboxImage.classList.toggle("hidden");
             
-            for (const bus of buses) {
-                if (bus.points === null || bus.points === undefined) {
-                    continue;
+            for (const shape_id of current_shape_ids) {
+                if (shape_ids.includes(shape_id)) {
+                    map.setLayoutProperty(shape_id, "visibility", tripLinesVisible ? "visible" : "none");
                 }
-                map.setLayoutProperty(bus.shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+            }
+            if (tripLinesVisible) {
+                updateRouteData()
             }
         }
         
-        function updateData() {
-            let request = new XMLHttpRequest();
+        function updateBusData() {
+            const request = new XMLHttpRequest();
             request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
             request.responseType = "json";
             request.onload = function() {
@@ -182,13 +157,62 @@
                     const element = document.getElementById("last-updated");
                     if (element !== null && element !== undefined && element.innerHTML.trim() !== "Updated " + lastUpdated) {
                         element.innerHTML = "Updated " + lastUpdated;
-                        resetMap();
                         buses = request.response.buses;
                         updateMap(false);
+                        if (tripLinesVisible) {
+                            updateRouteData()
+                        }
                     }
                 }
             };
             request.send();
+        }
+        
+        function updateRouteData() {
+            for (const bus of buses) {
+                if (bus.shape_id === null || bus.shape_id === undefined) {
+                    continue;
+                }
+                if (shape_ids.includes(bus.shape_id)) {
+                    continue;
+                } else {
+                    shape_ids.push(bus.shape_id);
+                }
+                const request = new XMLHttpRequest();
+                request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
+                request.responseType = "json";
+                request.onload = function() {
+                    if (request.status === 200) {
+                        map.addSource(bus.shape_id, {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'Feature',
+                                'properties': {},
+                                'geometry': {
+                                    'type': 'LineString',
+                                    'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                                }
+                            }
+                        });
+                        map.addLayer({
+                            'id': bus.shape_id,
+                            'type': 'line',
+                            'source': bus.shape_id,
+                            'minzoom': 8,
+                            'layout': {
+                                'line-join': 'round',
+                                'line-cap': 'round',
+                                'visibility':  tripLinesVisible ? 'visible' : 'none'
+                            },
+                            'paint': {
+                                'line-color': '#' + bus.colour,
+                                'line-width': 4
+                            }
+                        });
+                    }
+                };
+                request.send();
+            }
         }
     </script>
 % end
