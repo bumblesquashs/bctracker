@@ -71,6 +71,15 @@
         <p>Choose a system to search for routes and stops</p>
         % include('components/systems')
     % end
+    
+    <div class="theme-control">
+        <h2>Theme</h2>
+        <div>
+            <a class="button" href="?theme=automatic">Automatic</a>
+            <a class="button" href="?theme=light">Light</a>
+            <a class="button" href="?theme=dark">Dark</a>
+        </div>
+    </div>
 </div>
 
 <div>

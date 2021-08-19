@@ -366,6 +366,15 @@ tr.divider {
     text-align: center;
 }
 
+.theme-control {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.theme-control .button {
+    display: inline-block;
+}
+
 .vertical-line {
     display: inline-block;
     vertical-align: middle;
