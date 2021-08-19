@@ -32,6 +32,10 @@ a {
     background-color: #E20000;
 }
 
+.button:hover {
+    background-color: #840000;
+}
+
 .dark-only {
     display: none;
 }
