@@ -9,10 +9,10 @@ class System:
         self.realtime_enabled = realtime_enabled
         self.bctransit_id = bctransit_id
         self.mapstrat_id = mapstrat_id
-
+        
         self.feed_version = ''
         self.realtime_validation_error_count = 0
-
+        
         self.blocks = {}
         self.routes = {}
         self.routes_by_number = {}
@@ -38,20 +38,20 @@ class System:
         if block_id in self.blocks:
             return self.blocks[block_id]
         return None
-
+    
     def all_blocks(self):
         return sorted(self.blocks.values())
-
+    
     def get_route(self, route_id = None, number = None):
         if route_id is not None and route_id in self.routes:
             return self.routes[route_id]
         if number is not None and number in self.routes_by_number:
             return self.routes_by_number[number]
         return None
-
+    
     def all_routes(self):
         return sorted(self.routes.values())
-
+    
     def get_service(self, service_id):
         if service_id in self.services:
             return self.services[service_id]
@@ -64,19 +64,19 @@ class System:
         if shape_id in self.shapes:
             return self.shapes[shape_id]
         return None
-
+    
     def get_stop(self, stop_id=None, number=None):
         if stop_id is not None and stop_id in self.stops:
             return self.stops[stop_id]
         if number is not None and number in self.stops_by_number:
             return self.stops_by_number[number]
         return None
-
+    
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
-
+    
     def sort_data(self):
         for stop in self.stops.values():
             stop.stop_times = sorted(stop.stop_times)
@@ -104,7 +104,7 @@ def load_systems():
         realtime_enabled = row['realtime_enabled'] == '1'
         bctransit_id = row['bctransit_id']
         mapstrat_id = row['mapstrat_id']
-
+        
         systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id)
 
 def get_system(system_id):

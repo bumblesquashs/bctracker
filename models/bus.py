@@ -6,7 +6,7 @@ class Bus:
     def __init__(self, bus_id, number):
         self.id = bus_id
         self.number = number
-
+    
     def __str__(self):
         if self.number is None:
             return 'Unknown Bus'

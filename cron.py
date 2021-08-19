@@ -19,10 +19,10 @@ def start():
     with CronTab(user=True) as cron:
         cron.remove_all(comment=GTFS_CRON_ID)
         cron.remove_all(comment=REALTIME_CRON_ID)
-
+        
         gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=GTFS_CRON_ID)
         gtfs_job.setall('0 7 */1 * *')
-
+        
         realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=REALTIME_CRON_ID)
         realtime_job.minute.every(5)
 
