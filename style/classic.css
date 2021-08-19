@@ -1,0 +1,46 @@
+
+a {
+    color: #023496;
+}
+
+#header {
+    background-color: #E20000;
+}
+
+#header .header-button:hover {
+    background-color: #840000;
+}
+
+#header .header-button.disabled:hover {
+    background-color: #E20000 !important;
+}
+
+#mobile-header {
+    background-color: #840000;
+}
+
+#subheader {
+    background-color: #023496;
+    color: white;
+}
+
+#subheader #last-updated {
+    color: #EEEEEE;
+}
+
+.button {
+    background-color: #E20000;
+}
+
+.dark-only {
+    display: none;
+}
+
+.marker {
+    background-color: #E20000;
+}
+
+.pure-table thead {
+    background-color: #023496;
+    color: white;
+}

@@ -31,6 +31,12 @@
             <script>
                 const prefersDarkScheme = true
             </script>
+        % elif theme == "classic":
+            <link rel="stylesheet" href="/style/classic.css" />
+            
+            <script>
+                const prefersDarkScheme = false
+            </script>
         % else:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css" />

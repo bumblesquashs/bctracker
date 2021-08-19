@@ -78,6 +78,7 @@
             <a class="button" href="?theme=automatic">Automatic</a>
             <a class="button" href="?theme=light">Light</a>
             <a class="button" href="?theme=dark">Dark</a>
+            <!-- Oh, hello there! Green and white is nice, but I wonder what the site would look like in "classic" colours. If only there was a way to set the theme to "classic"... -->
         </div>
     </div>
 </div>
