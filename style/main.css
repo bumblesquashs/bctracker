@@ -62,7 +62,7 @@ tr.divider {
 }
 
 #header .title {
-    font-weight: bold;
+    font-weight: bold !important;
 }
 
 #header .header-button {
