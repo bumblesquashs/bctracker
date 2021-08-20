@@ -16,9 +16,10 @@ import history
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
 system_domain = '{0}.bctracker.ca/{1}'
+cookie_domain = None
 
 def start():
-    global mapbox_api_key, no_system_domain, system_domain
+    global mapbox_api_key, no_system_domain, system_domain, cookie_domain
     
     force_gtfs_redownload = False
     if len(sys.argv) > 1 and sys.argv[1] == '-r':
@@ -48,6 +49,7 @@ def start():
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
+    cookie_domain = cp.config.get('cookie_domain')
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
@@ -110,7 +112,11 @@ def index():
 def system_index(system_id):
     theme = request.query.get('theme')
     if theme is not None:
-        response.set_cookie('theme', theme, max_age=60*60*24*365*10)
+        max_age = 60*60*24*365*10
+        if cookie_domain is None:
+            response.set_cookie('theme', theme, max_age=max_age)
+        else:
+            response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
     return systems_template('home', system_id, theme)
 
 @app.route('/systems')
