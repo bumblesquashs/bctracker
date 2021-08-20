@@ -9,7 +9,7 @@ class Trip:
         self.service_id = service_id
         self.shape_id = shape_id
         self.headsign = headsign
-
+        
         self.stop_times = []
         self._direction = None
     
@@ -39,7 +39,7 @@ class Trip:
     @property
     def first_stop(self):
         return self.stop_times[0]
-
+    
     @property
     def last_stop(self):
         return self.stop_times[-1]
@@ -72,6 +72,6 @@ class Trip:
             else:
                 self._direction = ''
         return self._direction
-
+    
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)

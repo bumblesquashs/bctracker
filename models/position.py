@@ -23,4 +23,3 @@ class Position:
         if self.stop_id is None or self.system is None:
             return None
         return self.system.get_stop(stop_id=self.stop_id)
-        

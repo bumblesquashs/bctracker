@@ -21,9 +21,9 @@ def update(system):
         return
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
-
+    
     print(f'Updating GTFS data for {system}...')
-
+    
     try:
         if path.exists(data_zip_path):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
@@ -126,7 +126,7 @@ def load_shapes(system):
             system.shapes[shape_id] = shape
         
         shape.add_point(lat, lon, sequence)
-    
+
 def load_stop_times(system):
     for values in read_csv(system, 'stop_times'):
         stop_id = values['stop_id']

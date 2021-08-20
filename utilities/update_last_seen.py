@@ -12,7 +12,7 @@ NEW_PATH = 'data/history/last_seen.json'
 
 with open(OLD_PATH, 'r') as file:
     old_data = json.load(file)
-    
+
 with open(NEW_PATH, 'r') as file:
     new_data = json.load(file)['last_seen']
 
@@ -21,7 +21,7 @@ def key_in_new_data(key):
         if entry["number"] == int(key):
             return True
     return False
-    
+
 for key, value in old_data['last_blocks'].items():
     if key == '0' and value['blockid'] == '12345':
         continue

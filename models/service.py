@@ -23,7 +23,7 @@ class Service:
         self.id = service_id
         self.start_date = start_date
         self.end_date = end_date
-
+        
         self.mon = mon
         self.tue = tue
         self.wed = wed
@@ -31,10 +31,10 @@ class Service:
         self.fri = fri
         self.sat = sat
         self.sun = sun
-
+        
         self.special_dates = []
         self.excluded_dates = []
-
+        
         if sat and sun:
             self.type = ServiceType.WEEKEND
         elif mon and tue and wed and thu and fri:
@@ -102,7 +102,7 @@ class Service:
     @property
     def excluded_dates_string(self):
         return ', '.join(self.excluded_dates)
-
+    
     @property
     def date_string(self):
         if self.type == ServiceType.SPECIAL:
