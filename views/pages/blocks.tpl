@@ -32,7 +32,7 @@
                             <th>Routes</th>
                             <th class="desktop-only">Start Time</th>
                             <th class="desktop-only">End Time</th>
-                            <th class="mobile-only">Time</th>
+                            <th class="non-desktop">Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +43,7 @@
                                 <td>{{ block.routes_string }}</td>
                                 <td class="desktop-only">{{ block.start_time }}</td>
                                 <td class="desktop-only">{{ block.end_time }}</td>
-                                <td class="mobile-only">{{ block.start_time }} - {{ block.end_time }}</td>
+                                <td class="non-desktop">{{ block.start_time }} - {{ block.end_time }}</td>
                             </tr>
                         % end
                     </tbody>
