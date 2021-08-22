@@ -68,7 +68,7 @@ def get_url(system, path=''):
     return system_domain.format(system.id, path).rstrip('/')
 
 def systems_template(name, system_id, theme=None, **kwargs):
-    return template(f'templates/{name}',
+    return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
         systems=[s for s in all_systems() if s.visible],
         system_id=system_id,
