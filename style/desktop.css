@@ -152,6 +152,14 @@ form input[type="text"] {
     display: none;
 }
 
+.non-desktop {
+    display: none;
+}
+
 .smaller-font {
     font-size: 11pt;
+}
+
+.tablet-only {
+    display: none;
 }

@@ -90,6 +90,14 @@ table {
     table-layout: fixed;
 }
 
+.non-mobile {
+    display: none;
+}
+
 .smaller-font {
     font-size: 11pt;
+}
+
+.tablet-only {
+    display: none;
 }
