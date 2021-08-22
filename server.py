@@ -1,6 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, redirect, request
+from bottle import Bottle, static_file, template, redirect, request, response
 from datetime import datetime
 import cherrypy as cp
 import sys
@@ -16,9 +16,10 @@ import history
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
 system_domain = '{0}.bctracker.ca/{1}'
+cookie_domain = None
 
 def start():
-    global mapbox_api_key, no_system_domain, system_domain
+    global mapbox_api_key, no_system_domain, system_domain, cookie_domain
     
     force_gtfs_redownload = False
     if len(sys.argv) > 1 and sys.argv[1] == '-r':
@@ -48,6 +49,7 @@ def start():
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
+    cookie_domain = cp.config.get('cookie_domain')
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
@@ -65,7 +67,7 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
-def systems_template(name, system_id, **kwargs):
+def systems_template(name, system_id, theme=None, **kwargs):
     return template(f'templates/{name}',
         mapbox_api_key=mapbox_api_key,
         systems=[s for s in all_systems() if s.visible],
@@ -73,6 +75,7 @@ def systems_template(name, system_id, **kwargs):
         system=get_system(system_id),
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
+        theme=theme or request.get_cookie('theme'),
         **kwargs
     )
 
@@ -107,7 +110,14 @@ def index():
 @app.route('/<system_id>')
 @app.route('/<system_id>/')
 def system_index(system_id):
-    return systems_template('home', system_id)
+    theme = request.query.get('theme')
+    if theme is not None:
+        max_age = 60*60*24*365*10
+        if cookie_domain is None:
+            response.set_cookie('theme', theme, max_age=max_age)
+        else:
+            response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
+    return systems_template('home', system_id, theme)
 
 @app.route('/systems')
 @app.route('/systems/')
