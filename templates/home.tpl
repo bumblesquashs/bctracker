@@ -71,6 +71,16 @@
         <p>Choose a system to search for routes and stops</p>
         % include('components/systems')
     % end
+    
+    <div class="theme-control">
+        <h2>Theme</h2>
+        <div>
+            <a class="button" href="?theme=automatic">Automatic</a>
+            <a class="button" href="?theme=light">Light</a>
+            <a class="button" href="?theme=dark">Dark</a>
+            <!-- Oh, hello there! Green and white is nice, but I wonder what the site would look like in "classic" colours. If only there was a way to set the theme to "classic"... -->
+        </div>
+    </div>
 </div>
 
 <div>
