@@ -43,8 +43,8 @@
         <thead>
             <tr>
                 <th>Time</th>
-                <th class="desktop-only">Stop Number</th>
-                <th class="desktop-only">Stop Name</th>
+                <th class="non-mobile">Stop Number</th>
+                <th class="non-mobile">Stop Name</th>
                 <th class="mobile-only">Stop</th>
             </tr>
         </thead>
@@ -59,7 +59,7 @@
                             {{ stop_time.stop }}
                         </span>
                     </td>
-                    <td class="desktop-only">
+                    <td class="non-mobile">
                         {{ stop_time.stop }}
                         % if stop_time == trip.first_stop:
                             <br />

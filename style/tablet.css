@@ -1,4 +1,97 @@
 
+a {
+    font-weight: bold;
+}
+
+body {
+    font-size: 13pt;
+}
+
+button {
+    width: 100%;
+}
+
+form input[type="text"] {
+    font-size: 16pt;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+form input[type="submit"] {
+    width: 100%;
+}
+
+form label {
+    font-size: 13pt;
+}
+
+table {
+    width: 100%;
+    display: table;
+    font-size: 13pt;
+}
+
+#header .header-button {
+    font-size: 16pt;
+}
+
+#header .menu-toggle {
+    float: right;
+    display: block;
+    padding: 5px;
+    margin: 5px 10px 5px 0px;
+}
+
+#header .menu-toggle .line {
+    background-color: white;
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    margin: 6px;
+}
+
+#menu {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 5px 0px;
+    overflow: hidden;
+    background-color: #255325;
+}
+
+#menu .header-button {
+    display: block;
+    color: white;
+    padding: 15px 20px;
+    font-family: Helvetica, sans-serif;
+    font-size: 16pt;
+    font-weight: normal;
+}
+
+#subheader #system {
+    display: inline-block;
+}
+
+#subheader #last-updated {
+    display: inline-block;
+    font-size: 12pt;
+    margin-left: 10px;
+}
+
+.button {
+    font-size: 14pt;
+    overflow: hidden;
+    display: block;
+}
+
+.container .navigation .button {
+    margin-bottom: 10px;
+}
+
+.container .navigation .button:last-child {
+    margin-bottom: 0px;
+}
+
 .desktop-only {
     display: none;
 }
@@ -9,4 +102,8 @@
 
 .non-tablet {
     display: none;
+}
+
+.smaller-font {
+    font-size: 11pt;
 }

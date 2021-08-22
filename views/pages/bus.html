@@ -114,14 +114,15 @@
                     <th class="desktop-only">Assigned Routes</th>
                     <th class="desktop-only">Start Time</th>
                     <th class="desktop-only">End Time</th>
-                    <th class="mobile-only">Block</th>
+                    <th class="non-desktop">Block</th>
+                    <th class="tablet-only">Time</th>
                 </tr>
             </thead>
             <tbody>
                 % for block_history in history[:20]:
                     <tr>
                         <td class="desktop-only">{{ format_date(block_history.date) }}</td>
-                        <td class="mobile-only no-wrap">{{ format_date_mobile(block_history.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(block_history.date) }}</td>
                         <td>{{ block_history.system }}</td>
                         <td>
                             % if block_history.is_available:
@@ -130,7 +131,7 @@
                             % else:
                                 <span>{{ block_history.block_id }}</span>
                             % end
-                            <span class="mobile-only smaller-font">
+                            <span class="non-desktop smaller-font">
                                 <br />
                                 {{ block_history.routes_string }}
                             </span>
@@ -138,6 +139,7 @@
                         <td class="desktop-only">{{ block_history.routes_string }}</td>
                         <td class="desktop-only">{{ block_history.start_time }}</td>
                         <td class="desktop-only">{{ block_history.end_time }}</td>
+                        <td class="tablet-only">{{ block_history.start_time }} - {{ block_history.end_time }}</td>
                     </tr>
                 % end
             </tbody>

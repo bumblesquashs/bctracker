@@ -19,14 +19,14 @@
                 <tr>
                     <th class="desktop-only">Number</th>
                     <th class="desktop-only">Model</th>
-                    <th class="mobile-only">Bus</th>
+                    <th class="non-desktop">Bus</th>
                     <th>Last Seen</th>
                     % if system is None:
-                        <th class="desktop-only">System</th>
+                        <th class="non-mobile">System</th>
                     % end
                     <th class="desktop-only">Assigned Block</th>
                     <th class="desktop-only">Assigned Routes</th>
-                    <th class="mobile-only">Block</th>
+                    <th class="non-desktop">Block</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,9 +40,9 @@
                         <td>
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                             % if order is not None:
-                                <span class="mobile-only smaller-font">
-                                <br />
-                                {{ order }}
+                                <span class="non-desktop smaller-font">
+                                    <br />
+                                    {{ order }}
                                 </span>
                             % end
                         </td>
@@ -52,9 +52,9 @@
                             % end
                         </td>
                         <td class="desktop-only">{{ format_date(history.date) }}</td>
-                        <td class="mobile-only no-wrap">{{ format_date_mobile(history.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(history.date) }}</td>
                         % if system is None:
-                            <td class="desktop-only">{{ history.system }}</td>
+                            <td class="non-mobile">{{ history.system }}</td>
                         % end
                         <td>
                             % if history.is_available:

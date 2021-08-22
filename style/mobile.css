@@ -17,6 +17,10 @@ form input[type="text"] {
     width: 100%;
 }
 
+form input[type="submit"] {
+    width: 100%;
+}
+
 form label {
     font-size: 13pt;
 }
@@ -31,14 +35,14 @@ table {
     font-size: 18pt;
 }
 
-#header .mobile-toggle {
+#header .menu-toggle {
     float: right;
     display: block;
     padding: 5px;
     margin: 5px 10px 5px 0px;
 }
 
-#header .mobile-toggle .line {
+#header .menu-toggle .line {
     background-color: white;
     width: 32px;
     height: 4px;
@@ -46,7 +50,7 @@ table {
     margin: 6px;
 }
 
-#mobile-header {
+#menu {
     position: relative;
     z-index: 10;
     margin: 0px;
@@ -55,7 +59,7 @@ table {
     background-color: #255325;
 }
 
-#mobile-header .header-button {
+#menu .header-button {
     display: block;
     color: white;
     padding: 15px 20px;
