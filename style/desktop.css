@@ -7,10 +7,19 @@ body {
     font-size: 14pt;
 }
 
+form {
+    margin-bottom: 10px;
+}
+
 form input[type="text"] {
     font-size: 14pt;
     margin-right: 10px;
     vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+form input[type="submit"] {
+    margin-bottom: 10px;
 }
 
 #header #system-dropdown {
@@ -152,6 +161,14 @@ form input[type="text"] {
     display: none;
 }
 
+.non-desktop {
+    display: none;
+}
+
 .smaller-font {
     font-size: 11pt;
+}
+
+.tablet-only {
+    display: none;
 }

@@ -31,8 +31,8 @@ table {
     font-size: 13pt;
 }
 
-#header .title {
-    font-size: 18pt;
+#header .header-button {
+    font-size: 16pt;
 }
 
 #header .menu-toggle {
@@ -68,8 +68,14 @@ table {
     font-weight: normal;
 }
 
-#subheader-system {
-    font-size: 14pt;
+#subheader #system {
+    display: inline-block;
+}
+
+#subheader #last-updated {
+    display: inline-block;
+    font-size: 12pt;
+    margin-left: 10px;
 }
 
 .button {
@@ -90,18 +96,14 @@ table {
     display: none;
 }
 
-.fixed-table {
-    table-layout: fixed;
+.mobile-only {
+    display: none;
 }
 
-.non-mobile {
+.non-tablet {
     display: none;
 }
 
 .smaller-font {
     font-size: 11pt;
-}
-
-.tablet-only {
-    display: none;
 }

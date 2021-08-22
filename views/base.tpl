@@ -15,9 +15,11 @@
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         
         <link rel="stylesheet" href="/style/main.css" />
-        <link rel="stylesheet" media="screen and (min-width: 803px)" href="/style/desktop.css" />
-        <link rel="stylesheet" media="screen and (max-width: 802px)" href="/style/mobile.css" />
         <link rel="stylesheet" href="/style/tables.css" />
+        
+        <link rel="stylesheet" media="screen and (min-width: 1001px)" href="/style/desktop.css" />
+        <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/tablet.css" />
+        <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/mobile.css" />
         
         % if theme == "light":
             <link rel="stylesheet" href="/style/light.css" />
@@ -56,8 +58,8 @@
         % end
         
         <script>
-            function toggleMobileHeader() {
-                document.getElementById("mobile-header").classList.toggle("display-none")
+            function toggleMenu() {
+                document.getElementById("menu").classList.toggle("display-none")
             }
         </script>
     </head>
@@ -123,7 +125,17 @@
                 % end
             </div>
             
-            <div class="mobile-toggle mobile-only" onclick="toggleMobileHeader()">
+            <div class="tablet-only">
+                % if system is None or system.realtime_enabled:
+                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
+                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                % else:
+                    <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                    <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                % end
+            </div>
+            
+            <div class="menu-toggle non-desktop" onclick="toggleMenu()">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
@@ -132,14 +144,25 @@
             <br style="clear: both" />
         </div>
         
-        <div id="mobile-header" class="mobile-only display-none">
-            % if system is None or system.realtime_enabled:
-                <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
-                <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
-            % end
-            <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-            <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+        <div id="menu" class="non-desktop display-none">
+            <div class="tablet-only">
+                % if system is None or system.realtime_enabled:
+                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
+                    <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                    <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                % end
+            </div>
+            
+            <div class="mobile-only">
+                % if system is None or system.realtime_enabled:
+                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
+                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
+                % end
+                <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            </div>
+            
             <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
             
             % if len(systems) > 1:
