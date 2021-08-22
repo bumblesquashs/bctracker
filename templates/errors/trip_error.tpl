@@ -7,7 +7,7 @@
 <p>
     There are a few reasons why that might be the case:
     <ol>
-        <li>It may be from an older service sheet that is no longer used</li>
+        <li>It may be from an older sheet that is no longer active</li>
         <li>It may be the wrong ID - are you sure trip {{ trip_id }} is the one you want?</li>
         % alt_systems = [s for s in systems if s.get_trip(trip_id) is not None]
         % if len(alt_systems) > 0:
