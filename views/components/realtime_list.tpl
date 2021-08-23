@@ -13,10 +13,11 @@
             % if system is None:
                 <th class="non-mobile">System</th>
             % end
-            <th>Headsign</th>
+            <th class="desktop-only">Headsign</th>
             <th class="desktop-only">Current Block</th>
             <th class="desktop-only">Current Trip</th>
             <th class="desktop-only">Current Stop</th>
+            <th class="non-desktop">Details</th>
         </tr>
     </thead>
     <tbody>
@@ -69,14 +70,41 @@
                 % else:
                     % trip = position.trip
                     % block = position.trip.block
-                    <td>{{ trip }}</td>
+                    % stop = position.stop
+                    <td>
+                        {{ trip }}
+                        % if stop is not None:
+                            <span class="non-desktop smaller-font">
+                                <br />
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                % adherence = position.schedule_adherence
+                                % if adherence is not None:
+                                    <span class="lighter-text">
+                                        % if adherence > 0:
+                                            +{{ adherence }}
+                                        % elif adherence < 0:
+                                            {{ adherence }}
+                                        % else:
+                                            +0
+                                        % end
+                                    </span>
+                                % end
+                            </span>
+                        % end
+                    </td>
                     <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                     <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                    % if position.stop is None:
+                    % if stop is None:
                         <td class="desktop-only lighter-text">Unavailable</td>
                     % else:
-                        % stop = position.stop
-                        <td class="desktop-only"><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a></td>
+                        <td class="desktop-only">
+                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                            % adherence = position.schedule_adherence_string
+                            % if adherence is not None:
+                                <br />
+                                <span class="smaller-font">{{ adherence }}</span>
+                            % end
+                        </td>
                     % end
                 % end
             </tr>

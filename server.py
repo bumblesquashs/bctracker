@@ -1,7 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, redirect, request, response
-from datetime import datetime
 import cherrypy as cp
 import sys
 
