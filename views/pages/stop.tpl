@@ -4,19 +4,22 @@
 <h2>Bus Stop {{ stop.number }}</h2>
 <hr />
 
+% services = stop.get_services(None)
+% rotues = stop.get_routes(None)
+
 <div id="sidebar">
     % include('components/stop_map', stop=stop)
     
     <div class="info-box">
         <div class="section">
-            % include('components/services_indicator', services=stop.services)
+            % include('components/services_indicator', services=services)
         </div>
         <div class="section">
-            <div class="name">Route{{ '' if len(stop.routes) == 1 else 's' }}</div>
+            <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
             <div class="value">
-                % for route in stop.routes:
-                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
-                <br />
+                % for route in routes:
+                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
+                    <br />
                 % end
             </div>
         </div>
@@ -24,16 +27,16 @@
 </div>
 
 <div class="container">
-    % if len(stop.services) > 0:
+    % if len(services) > 1:
         <div class="navigation">
-            % for service in stop.services:
+            % for service in services:
                 <a href="#{{service}}" class="button">{{ service }}</a>
             % end
         </div>
         <br />
     % end
     
-    % for service in stop.services:
+    % for service in services:
         % stop_times = [stop_time for stop_time in stop.stop_times if stop_time.trip.service == service]
         
         % if len(stop_times) > 0:

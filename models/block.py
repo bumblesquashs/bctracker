@@ -13,41 +13,36 @@ class Block:
         return self.id < other.id
     
     @property
-    def is_current(self):
-        for trip in self.trips:
-            if trip.service.is_current:
-                return True
-        return False
-    
-    @property
-    def services(self):
-        if self.is_current:
-            return sorted({ t.service for t in self.trips if t.service.is_current })
-        else:
-            return sorted({ t.service for t in self.trips })
-    
-    @property
-    def available_trips(self):
-        if self.is_current:
-            return [t for t in self.trips if t.service.is_current]
-        else:
-            return self.trips
-    
-    @property
-    def routes(self):
-        return sorted({t.route for t in self.available_trips})
-    
-    @property
-    def routes_string(self):
-        return ', '.join([str(r.number) for r in self.routes])
-    
-    @property
-    def start_time(self):
-        return self.available_trips[0].start_time
-    
-    @property
-    def end_time(self):
-        return self.available_trips[-1].end_time
+    def sheets(self):
+        return {t.service.sheet for t in self.trips}
     
     def add_trip(self, trip):
         self.trips.append(trip)
+    
+    def get_trips(self, sheet):
+        if sheet is None:
+            return self.trips
+        return [t for t in self.trips if t.service.sheet == sheet]
+    
+    def get_services(self, sheet):
+        return sorted({t.service for t in self.get_trips(sheet)})
+    
+    def get_routes(self, sheet):
+        return sorted({t.route for t in self.get_trips(sheet)})
+    
+    def get_routes_string(self, sheet):
+        return ', '.join([str(r.number) for r in self.get_routes(sheet)])
+    
+    def get_start_time(self, sheet):
+        trips = self.get_trips(sheet)
+        if not trips:
+            return 'N/A'
+        else:
+            return trips[0].start_time
+    
+    def get_end_time(self, sheet):
+        trips = self.get_trips(sheet)
+        if not trips:
+            return 'N/A'
+        else:
+            return trips[-1].end_time

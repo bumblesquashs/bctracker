@@ -10,16 +10,18 @@
     </p>
     % include('components/systems')
 % else:
-    % blocks = system.all_blocks()
-    % services = sorted({ s for b in blocks for s in b.services if s.is_current })
+    % blocks = system.get_blocks(None)
+    % services = sorted({ s for b in blocks for s in b.get_services(None) })
     
     <div class="container">
-        <div class="navigation">
-            % for service in services:
-                <a href="#{{service}}" class='button'>{{ service }}</a>
-            % end
-        </div>
-        <br />
+        % if len(services) > 1:
+            <div class="navigation">
+                % for service in services:
+                    <a href="#{{service}}" class='button'>{{ service }}</a>
+                % end
+            </div>
+            <br />
+        % end
         
         % for service in services:
             <div class="section">
@@ -36,14 +38,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % service_blocks = [block for block in blocks if service in block.services]
+                        % service_blocks = [block for block in blocks if service in block.get_services(None)]
                         % for block in service_blocks:
                             <tr>
                                 <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                <td>{{ block.routes_string }}</td>
-                                <td class="desktop-only">{{ block.start_time }}</td>
-                                <td class="desktop-only">{{ block.end_time }}</td>
-                                <td class="non-desktop">{{ block.start_time }} - {{ block.end_time }}</td>
+                                <td>{{ block.get_routes_string(None) }}</td>
+                                <td class="desktop-only">{{ block.get_start_time(None) }}</td>
+                                <td class="desktop-only">{{ block.get_end_time(None) }}</td>
+                                <td class="non-desktop">{{ block.get_start_time(None) }} - {{ block.get_end_time(None) }}</td>
                             </tr>
                         % end
                     </tbody>

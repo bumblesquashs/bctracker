@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from models.block_history import BlockHistory
 from models.bus_history import BusHistory
+from models.service import Sheet
 
 LAST_SEEN_PATH = 'data/history/last_seen.json'
 
@@ -23,7 +24,7 @@ def update_last_seen(buses):
         system_id = position.system.id
         feed_version = position.system.feed_version
         block_id = trip.block.id
-        routes = [r.number for r in trip.block.routes]
+        routes = [r.number for r in trip.block.get_routes(Sheet.CURRENT)]
         
         last_seen[bus.number] = BusHistory(date, bus.id, bus.number, system_id, feed_version, block_id, routes)
     save_last_seen()
@@ -72,9 +73,9 @@ def update_bus_history(bus):
     system_id = position.system.id
     feed_version = position.system.feed_version
     block_id = block.id
-    routes = [r.number for r in block.routes]
-    start_time = block.start_time
-    end_time = block.end_time
+    routes = [r.number for r in block.get_routes(Sheet.CURRENT)]
+    start_time = block.get_start_time(Sheet.CURRENT)
+    end_time = block.get_end_time(Sheet.CURRENT)
     
     history.append(BlockHistory(date, system_id, feed_version, block_id, routes, start_time, end_time))
     

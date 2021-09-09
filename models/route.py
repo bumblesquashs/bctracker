@@ -25,25 +25,19 @@ class Route:
         return self.number > other.number
     
     @property
-    def is_current(self):
-        for trip in self.trips:
-            if trip.service.is_current:
-                return True
-        return False
-    
-    @property
-    def services(self):
-        if self.is_current:
-            return sorted({ t.service for t in self.trips if t.service.is_current })
-        else:
-            return sorted({ t.service for t in self.trips })
-    
-    @property
-    def headsigns(self):
-        if self.is_current:
-            return sorted({ str(t) for t in self.trips if t.service.is_current })
-        else:
-            return sorted({ str(t) for t in self.trips })
+    def sheets(self):
+        return {t.service.sheet for t in self.trips}
     
     def add_trip(self, trip):
         self.trips.append(trip)
+    
+    def get_trips(self, sheet):
+        if sheet is None:
+            return self.trips
+        return [t for t in self.trips if t.service.sheet == sheet]
+    
+    def get_services(self, sheet):
+        return sorted({t.service for t in self.get_trips(sheet)})
+    
+    def get_headsigns(self, sheet):
+        return sorted({str(t) for t in self.get_trips(sheet)})

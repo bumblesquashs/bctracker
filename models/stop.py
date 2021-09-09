@@ -16,13 +16,16 @@ class Stop:
     def __eq__(self, other):
         return self.id == other.id
     
-    @property
-    def services(self):
-        return sorted({ s.trip.service for s in self.stop_times if s.trip.service.is_current })
-    
-    @property
-    def routes(self):
-        return sorted({ s.trip.route for s in self.stop_times })
-    
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)
+    
+    def get_stop_times(self, sheet):
+        if sheet is None:
+            return self.stop_times
+        return [s for s in self.stop_times if s.trip.service.sheet == sheet]
+    
+    def get_services(self, sheet):
+        return sorted({s.trip.service for s in self.get_stop_times(sheet)})
+    
+    def get_soutes(self, sheet):
+        return sorted({s.trip.route for s in self.get_stop_times(sheet)})

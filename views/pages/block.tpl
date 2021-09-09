@@ -3,10 +3,13 @@
 <h1>Block {{ block.id }}</h1>
 <hr />
 
+% services = block.get_services(None)
+% routes = block.get_routes(None)
+% trips = block.get_trips(None)
+
 <div id="sidebar">
     <div class="info-box">
         <div class="section">
-            % services = block.services
             % if len(services) == 1:
                 % include('components/service_indicator', service=services[0])
             % else:
@@ -15,20 +18,20 @@
         </div>
         <div class="section">
             <div class="name">Start time</div>
-            <div class="value">{{ block.start_time }}</div>
+            <div class="value">{{ block.get_start_time(None) }}</div>
         </div>
         <div class="section">
             <div class="name">End time</div>
-            <div class="value">{{ block.end_time }}</div>
+            <div class="value">{{ block.get_end_time(None) }}</div>
         </div>
         <div class="section">
             <div class="name">Number of trips</div>
-            <div class="value">{{ len(block.available_trips) }}</div>
+            <div class="value">{{ len(trips) }}</div>
         </div>
         <div class="section">
-            <div class="name">Route{{ '' if len(block.routes) == 1 else 's' }}</div>
+            <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
             <div class="value">
-                % for route in block.routes:
+                % for route in routes:
                     <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
                     <br />
                 % end
@@ -50,7 +53,7 @@
             </tr>
         </thead>
         <tbody>
-            % for trip in block.available_trips:
+            % for trip in trips:
                 <tr>
                     <td>{{ trip.start_time }}</td>
                     <td class="desktop-only">{{ trip.end_time }}</td>

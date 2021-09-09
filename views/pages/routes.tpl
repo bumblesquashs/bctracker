@@ -1,5 +1,6 @@
-% rebase('base', title='Routes')
 % from models.system import get_system
+
+% rebase('base', title='Routes')
 
 <h1>Routes</h1>
 <hr />
@@ -11,6 +12,7 @@
     </p>
     % include('components/systems')
 % else:
+    % routes = system.get_routes(None)
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>
@@ -18,7 +20,6 @@
             </tr>
         </thead>
         <tbody>
-            % routes = [r for r in system.all_routes() if r.is_current]
             % for route in routes:
                 <tr>
                     <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
@@ -42,8 +43,8 @@
             </tbody>
         </table>
     % end
-
-    % if system.id == 'fvx' :
+    
+    % if system.id == 'fvx':
         % cfv = get_system('cfv')
         % chilliwack = get_system('chilliwack')
         <table class="pure-table pure-table-horizontal pure-table-striped">

@@ -6,7 +6,8 @@ import sys
 
 from models.bus_model import load_models
 from models.bus_order import load_orders
-from models.system import load_systems, get_system, all_systems
+from models.service import Sheet
+from models.system import load_systems, get_system, get_systems
 
 import gtfs
 import realtime
@@ -32,7 +33,7 @@ def start():
     realtime.load_translations()
     history.load_last_seen()
     
-    for system in all_systems():
+    for system in get_systems():
         if not gtfs.downloaded(system) or force_gtfs_redownload:
             gtfs.update(system)
         else:
@@ -69,7 +70,7 @@ def get_url(system, path=''):
 def systems_template(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
-        systems=[s for s in all_systems() if s.visible],
+        systems=[s for s in get_systems() if s.visible],
         system_id=system_id,
         system=get_system(system_id),
         get_url=get_url,

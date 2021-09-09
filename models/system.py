@@ -39,26 +39,32 @@ class System:
             return self.blocks[block_id]
         return None
     
-    def all_blocks(self):
-        return sorted(self.blocks.values())
+    def get_blocks(self, sheet):
+        if sheet is None:
+            return sorted(self.blocks.values())
+        return sorted([b for b in self.blocks.values() if sheet in b.sheets])
     
-    def get_route(self, route_id = None, number = None):
+    def get_route(self, route_id=None, number=None):
         if route_id is not None and route_id in self.routes:
             return self.routes[route_id]
         if number is not None and number in self.routes_by_number:
             return self.routes_by_number[number]
         return None
     
-    def all_routes(self):
-        return sorted(self.routes.values())
+    def get_routes(self, sheet):
+        if sheet is None:
+            return sorted(self.routes.values())
+        return sorted([r for r in self.routes.values() if sheet in r.sheets])
     
     def get_service(self, service_id):
         if service_id in self.services:
             return self.services[service_id]
         return None
     
-    def all_services(self):
-        return sorted(self.services.values())
+    def get_services(self, sheet):
+        if sheet is None:
+            return sorted(self.services.values())
+        return sorted([s for s in self.services.values() if s.sheet == sheet])
     
     def get_shape(self, shape_id):
         if shape_id in self.shapes:
@@ -112,5 +118,5 @@ def get_system(system_id):
         return systems[system_id]
     return None
 
-def all_systems():
+def get_systems():
     return systems.values()

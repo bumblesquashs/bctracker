@@ -5,8 +5,12 @@
 <h1>{{ route }}</h1>
 <hr />
 
-% outbound_trips = [t for t in route.trips if t.direction == Direction.OUTBOUND]
-% inbound_trips = [t for t in route.trips if t.direction == Direction.INBOUND]
+% services = route.get_services(None)
+% trips = route.get_trips(None)
+% headsigns = route.get_headsigns(None)
+
+% outbound_trips = [t for t in trips if t.direction == Direction.OUTBOUND]
+% inbound_trips = [t for t in trips if t.direction == Direction.INBOUND]
 
 % has_outbound_trips = len(outbound_trips) > 0
 % has_inbound_trips = len(inbound_trips) > 0
@@ -16,12 +20,12 @@
     
     <div class="info-box">
         <div class="section">
-            % include('components/services_indicator', services=route.services)
+            % include('components/services_indicator', services=services)
         </div>
         <div class="section">
-            <div class="name">Headsign{{ '' if len(route.headsigns) == 1 else 's' }}</div>
+            <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
             <div class="value">
-                % for headsign in route.headsigns:
+                % for headsign in headsigns:
                     <span>{{ headsign }}</span>
                     <br />
                 % end
@@ -31,16 +35,16 @@
 </div>
 
 <div class="container">
-    % if len(route.services) > 1:
+    % if len(services) > 1:
         <div class="navigation">
-            % for service in route.services:
+            % for service in services:
                 <a href="#{{service}}" class='button'>{{ service }}</a>
             % end
         </div>
         <br />
     % end
     
-    % for service in route.services:
+    % for service in services:
         % service_outbound_trips = [t for t in outbound_trips if t.service == service]
         % service_inbound_trips = [t for t in inbound_trips if t.service == service]
         <div class="section">
