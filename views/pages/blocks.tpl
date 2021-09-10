@@ -14,12 +14,14 @@
     % services = sorted({ s for b in blocks for s in b.services if s.is_current })
     
     <div class="container">
-        <div class="navigation">
-            % for service in services:
-                <a href="#{{service}}" class='button'>{{ service }}</a>
-            % end
-        </div>
-        <br />
+        % if len(services) > 1:
+            <div class="navigation">
+                % for service in services:
+                    <a href="#{{service}}" class='button'>{{ service }}</a>
+                % end
+            </div>
+            <br />
+        % end
         
         % for service in services:
             <div class="section">
