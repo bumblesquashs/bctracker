@@ -4,18 +4,19 @@ from enum import IntEnum
 from formatting import format_date
 
 class ServiceType(IntEnum):
-    WEEKDAY = 0
-    MON = 1
-    TUE = 2
-    WED = 3
-    THU = 4
-    WEEKDAY_EXCEPT_FRIDAY = 5
-    FRI = 6
-    WEEKEND = 7
-    SAT = 8
-    SUN = 9
-    SPECIAL = 10
-    UNKNOWN = 11
+    ALL = 0
+    WEEKDAY = 1
+    WEEKDAY_EXCEPT_FRIDAY = 2
+    MON = 3
+    TUE = 4
+    WED = 5
+    THU = 6
+    FRI = 7
+    WEEKEND = 8
+    SAT = 9
+    SUN = 10
+    SPECIAL = 11
+    UNKNOWN = 12
 
 class Service:
     def __init__(self, system, service_id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun):
@@ -35,8 +36,8 @@ class Service:
         self.special_dates = []
         self.excluded_dates = []
         
-        if sat and sun:
-            self.type = ServiceType.WEEKEND
+        if mon and tue and wed and thu and fri and sat and sun:
+            self.type = ServiceType.ALL
         elif mon and tue and wed and thu and fri:
             self.type = ServiceType.WEEKDAY
         elif mon and tue and wed and thu and (not fri):
@@ -51,6 +52,8 @@ class Service:
             self.type = ServiceType.THU
         elif fri:
             self.type = ServiceType.FRI
+        elif sat and sun:
+            self.type = ServiceType.WEEKEND
         elif sat:
             self.type = ServiceType.SAT
         elif sun:
@@ -61,30 +64,31 @@ class Service:
             self.type = ServiceType.UNKNOWN
     
     def __str__(self):
+        if self.type == ServiceType.ALL:
+            return 'Every Day'
         if self.type == ServiceType.WEEKDAY:
             return 'Weekdays'
-        elif self.type == ServiceType.MON:
-            return 'Mondays'
-        elif self.type == ServiceType.TUE:
-            return 'Tuesdays'
-        elif self.type == ServiceType.WED:
-            return 'Wednesdays'
-        elif self.type == ServiceType.THU:
-            return 'Thursdays'
-        elif self.type == ServiceType.WEEKDAY_EXCEPT_FRIDAY:
+        if self.type == ServiceType.WEEKDAY_EXCEPT_FRIDAY:
             return 'Weekdays except Friday'
-        elif self.type == ServiceType.FRI:
+        if self.type == ServiceType.MON:
+            return 'Mondays'
+        if self.type == ServiceType.TUE:
+            return 'Tuesdays'
+        if self.type == ServiceType.WED:
+            return 'Wednesdays'
+        if self.type == ServiceType.THU:
+            return 'Thursdays'
+        if self.type == ServiceType.FRI:
             return 'Fridays'
-        elif self.type == ServiceType.WEEKEND:
+        if self.type == ServiceType.WEEKEND:
             return 'Weekends'
-        elif self.type == ServiceType.SAT:
+        if self.type == ServiceType.SAT:
             return 'Saturdays'
-        elif self.type == ServiceType.SUN:
+        if self.type == ServiceType.SUN:
             return 'Sundays'
-        elif self.type == ServiceType.SPECIAL:
+        if self.type == ServiceType.SPECIAL:
             return self.special_dates_string
-        else:
-            return 'Unknown'
+        return 'Unknown'
     
     def __hash__(self):
         return hash(self.id)
@@ -93,6 +97,10 @@ class Service:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.type == ServiceType.SPECIAL and other.type == ServiceType.SPECIAL:
+            self_special = datetime.strptime(self.special_dates[0], "%B %d, %Y")
+            other_special = datetime.strptime(other.special_dates[0], "%B %d, %Y")
+            return self_special < other_special
         return self.type < other.type
     
     @property
