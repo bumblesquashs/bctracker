@@ -76,19 +76,8 @@
                         % if stop is not None:
                             <span class="non-desktop smaller-font">
                                 <br />
+                                % include('components/adherence_indicator', adherence=position.schedule_adherence)
                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                % adherence = position.schedule_adherence
-                                % if adherence is not None:
-                                    <span class="lighter-text">
-                                        % if adherence > 0:
-                                            +{{ adherence }}
-                                        % elif adherence < 0:
-                                            {{ adherence }}
-                                        % else:
-                                            +0
-                                        % end
-                                    </span>
-                                % end
                             </span>
                         % end
                     </td>
@@ -98,12 +87,8 @@
                         <td class="desktop-only lighter-text">Unavailable</td>
                     % else:
                         <td class="desktop-only">
+                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            % adherence = position.schedule_adherence_string
-                            % if adherence is not None:
-                                <br />
-                                <span class="smaller-font">{{ adherence }}</span>
-                            % end
                         </td>
                     % end
                 % end
