@@ -329,6 +329,14 @@ tr.divider {
     padding: 10px;
 }
 
+.news-post .content p + ul {
+    margin-top: -15px;
+}
+
+.news-post .content p:last-child {
+    margin-bottom: 0px;
+}
+
 .news-post-older {
     margin-top: 20px;
 }

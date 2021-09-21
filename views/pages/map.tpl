@@ -33,7 +33,7 @@
         % end
     % end
 % else:
-    <div id="page-header system-map-header">
+    <div id="system-map-header" class="page-header">
         <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
