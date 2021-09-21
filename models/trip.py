@@ -78,3 +78,9 @@ class Trip:
     
     def get_stop_time(self, stop):
         return next((s for s in self.stop_times if s.stop == stop), None)
+
+    def get_previous_stop(self, stop_time):
+        for other_st in self.stop_times:
+            if other_st.sequence == (stop_time.sequence - 1):
+                return other_st.stop
+        return None
