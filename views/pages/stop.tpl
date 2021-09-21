@@ -21,6 +21,29 @@
             </div>
         </div>
     </div>
+    
+    % nearby_stops = sorted(stop.nearby_stops)
+    % if len(nearby_stops) > 0:
+        <h2>Nearby Stops</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th>Routes</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for nearby_stop in nearby_stops:
+                    <tr>
+                        <td><a href="{{ get_url(stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
+                        <td>{{ nearby_stop }}</td>
+                        <td>{{ ', '.join([str(r.number) for r in nearby_stop.routes]) }}</td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 </div>
 
 <div class="container">
