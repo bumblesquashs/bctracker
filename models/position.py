@@ -74,7 +74,7 @@ class Position:
         return 'On schedule'
         
     def calculate_schedule_adherence(self):
-        MINIMUM_MINUTES = 1
+        MINIMUM_MINUTES = 5
         trip = self.trip
         stop = self.stop
 
@@ -95,7 +95,7 @@ class Position:
                 time_difference = next_stop_time_mins - prev_stop_time_mins
 
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
-                if time_difference > MINIMUM_MINUTES:
+                if time_difference >= MINIMUM_MINUTES:
                     interp_time = linear_interpolate(previous_stop, stop, self.lat, self.lon, time_difference)
                     # print(f'interpolated: next stop name: {stop.name} total time diff: {time_difference} interpolated time: {interp_time}')
                     expected_scheduled_mins = prev_stop_time_mins + interp_time
