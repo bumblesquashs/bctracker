@@ -24,6 +24,10 @@
             <div class="value">{{ len(trip.stop_times) }}</div>
         </div>
         <div class="section">
+            <div class="name">Direction</div>
+            <div class="value">{{ trip.direction }}</div>
+        </div>
+        <div class="section">
             <div class="name">Route</div>
             <div class="value">
                 <a href="{{ get_url(trip.route.system, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
