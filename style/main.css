@@ -62,7 +62,7 @@ tr.divider {
 }
 
 #header .title {
-    font-weight: bold;
+    font-weight: bold !important;
 }
 
 #header .header-button {
@@ -133,6 +133,40 @@ tr.divider {
     position: relative;
     z-index: 5;
     display: inline-block;
+}
+
+.adherence-indicator {
+    padding: 2px 4px;
+    margin-right: 5px;
+    border-radius: 4px;
+    min-width: 14px;
+    text-align: center;
+    user-select: none;
+    font-weight: bold;
+    font-family: Helvetica, sans-serif;
+    font-size: 9pt;
+    color: white;
+    float: left;
+}
+
+.adherence-indicator.ahead {
+    background-color: #FF9A3A
+}
+
+.adherence-indicator.behind {
+    background-color: #FF9A3A;
+}
+
+.adherence-indicator.on-time {
+    background-color: #3C5ABE;
+}
+
+.adherence-indicator.very-ahead {
+    background-color: #FD393E;
+}
+
+.adherence-indicator.very-behind {
+    background-color: #FD393E;
 }
 
 .button {
@@ -377,6 +411,15 @@ tr.divider {
     font-size: 12pt;
     color: #464646;
     text-align: center;
+}
+
+.theme-control {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.theme-control .button {
+    display: inline-block;
 }
 
 .vertical-line {

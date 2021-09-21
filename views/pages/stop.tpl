@@ -24,7 +24,7 @@
 </div>
 
 <div class="container">
-    % if len(stop.services) > 0:
+    % if len(stop.services) > 1:
         <div class="navigation">
             % for service in stop.services:
                 <a href="#{{service}}" class="button">{{ service }}</a>

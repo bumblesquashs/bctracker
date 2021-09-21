@@ -7,10 +7,18 @@
 <p>
     There are a few reasons why that might be the case:
     <ol>
-        <li>It may be from an older service sheet that is no longer used</li>
+        <li>It may be from an older sheet that is no longer active</li>
         <li>It may be the wrong ID - are you sure block {{ block_id }} is the one you want?</li>
-        % if system is not None:
-            <li>It may be from a different system - you're currently looking at {{ system }}</li>
+        % alt_systems = [s for s in systems if s.get_block(block_id) is not None]
+        % if len(alt_systems) > 0:
+            <li>
+                It may be from a different system - the following systems have a block with that ID
+                <ul>
+                    % for alt_system in alt_systems:
+                        <li>{{ alt_system }}: <a href="{{ get_url(alt_system, f'blocks/{block_id}') }}">Block {{ block_id }}</a></li>
+                    % end
+                </ul>
+            </li>
         % end
     </ol>
 </p>

@@ -41,9 +41,9 @@
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>
-                <th class="desktop-only">Start Time</th>
-                <th class="desktop-only">End Time</th>
+                <th class="non-mobile">Start Time</th>
                 <th class="mobile-only">Start</th>
+                <th class="desktop-only">End Time</th>
                 <th class=>Headsign</th>
                 <th class="desktop-only">Direction</th>
                 <th>Trip</th>

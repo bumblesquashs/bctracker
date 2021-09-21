@@ -47,7 +47,7 @@
             <h2 class="title" id="{{service}}">{{ service }}</h2>
             <div class="subtitle">{{ service.date_string }}</div>
             <div class="container">
-                % if len(inbound_trips) > 0:
+                % if len(service_inbound_trips) > 0:
                     <div class="section">
                         % if len(service_outbound_trips) > 0:
                             <h3>Inbound</h3>

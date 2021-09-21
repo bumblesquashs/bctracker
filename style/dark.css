@@ -30,7 +30,7 @@ tr.divider {
     background-color: #0A6415 !important;
 }
 
-#mobile-header {
+#menu {
     background-color: #00760F;
 }
 
@@ -44,6 +44,26 @@ tr.divider {
 
 #map {
     border: 1px solid #565656;
+}
+
+.adherence-indicator.ahead {
+    background-color: #FF6A00
+}
+
+.adherence-indicator.behind {
+    background-color: #FF6A00;
+}
+
+.adherence-indicator.on-time {
+    background-color: #0093A8;
+}
+
+.adherence-indicator.very-ahead {
+    background-color: #FF0007;
+}
+
+.adherence-indicator.very-behind {
+    background-color: #FF0007;
 }
 
 .button {
