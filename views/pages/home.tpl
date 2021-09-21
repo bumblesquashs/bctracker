@@ -1,12 +1,12 @@
 % rebase('base', title='Home' if system is None else 'BCTracker')
 
-<h1>
+<div class="page-header">
     % if system is None:
-        Welcome to BCTracker!
+        <h1 class="title">Welcome to BCTracker!</h1>
     % else:
-        Welcome to BCTracker {{ system }}!
+        <h1 class="title">Welcome to BCTracker {{ system }}!</h1>
     % end
-</h1>
+</div>
 <hr />
 
 <div id="sidebar">

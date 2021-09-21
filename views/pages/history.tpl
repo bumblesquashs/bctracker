@@ -2,7 +2,9 @@
 
 % rebase('base', title='Vehicle History')
 
-<h1>Vehicle History</h1>
+<div class="page-header">
+    <h1 class="title">Vehicle History</h1>
+</div>
 <hr />
 
 <div class="body">

@@ -1,6 +1,8 @@
 % rebase('base', title='News Archive')
 
-<h1>News Archive</h1>
+<div class="page-header">
+    <h1 class="title">News Archive</h1>
+</div>
 <hr />
 
 <div class="body">

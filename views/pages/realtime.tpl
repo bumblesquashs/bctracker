@@ -1,14 +1,16 @@
 
 % rebase('base', title='Realtime')
 
-<h1>Realtime</h1>
-% if group == 'all':
-    <h2>All active buses</h2>
-% elif group == 'route':
-    <h2>Routes with active buses</h2>
-% elif group == 'model':
-    <h2>Models with active buses</h2>
-% end
+<div class="page-header">
+    <h1 class="title">Realtime</h1>
+    % if group == 'all':
+        <h2 class="subtitle">All active buses</h2>
+    % elif group == 'route':
+        <h2 class="subtitle">Routes with active buses</h2>
+    % elif group == 'model':
+        <h2 class="subtitle">Models with active buses</h2>
+    % end
+</div>
 <hr />
 
 <div class="container">

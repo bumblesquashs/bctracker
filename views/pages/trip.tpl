@@ -1,10 +1,13 @@
-% rebase('base', title=str(trip), include_maps=True)
+% rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
-<h1>{{ trip }}</h1>
-<h2>Trip {{ trip.id }}</h2>
+<div class="page-header">
+    <h1 class="title">Trip {{ trip.id }}</h1>
+    <h2 class="subtitle">{{ trip }}</h2>
+</div>
 <hr />
 
 <div id="sidebar">
+    <h2>Overview</h2>
     % include('components/trip_map', trip=trip)
     
     <div class="info-box">
@@ -39,6 +42,7 @@
 </div>
 
 <div>
+    <h2>Stop Schedule</h2>
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>

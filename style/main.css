@@ -27,10 +27,6 @@ h1 {
     margin-bottom: 5px;
 }
 
-h1 + h2 {
-    font-weight: normal;
-}
-
 h2 {
     margin-top: 0px;
     margin-bottom: 5px;
@@ -339,6 +335,10 @@ tr.divider {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.page-header .subtitle {
+    font-weight: normal;
 }
 
 .service-indicator {
