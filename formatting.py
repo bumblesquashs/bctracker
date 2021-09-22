@@ -27,3 +27,6 @@ def format_time(time_string):
     if int(s) == 0:
         return h + ':' + m
     return time_string
+
+def get_minutes(hours, minutes):
+    return ((hours * 60) + minutes) % 1440 # For times past midnight
