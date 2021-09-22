@@ -51,8 +51,8 @@ class Block:
 
     @property
     def duration(self):
-    		import formatting as fmt
-    		return fmt.duration_between_timestrs(self.start_time, self.end_time)
+    	  import formatting as fmt
+    	  return fmt.duration_between_timestrs(self.start_time, self.end_time)
     
     def add_trip(self, trip):
         self.trips.append(trip)
