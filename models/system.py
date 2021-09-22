@@ -72,6 +72,9 @@ class System:
             return self.stops_by_number[number]
         return None
     
+    def all_stops(self):
+        return self.stops.values()
+    
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]

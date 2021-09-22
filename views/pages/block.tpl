@@ -1,9 +1,12 @@
 % rebase('base', title=f'Block {block.id}')
 
-<h1>Block {{ block.id }}</h1>
+<div class="page-header">
+    <h1 class="title">Block {{ block.id }}</h1>
+</div>
 <hr />
 
 <div id="sidebar">
+    <h2>Overview</h2>
     <div class="info-box">
         <div class="section">
             % services = block.services
@@ -38,6 +41,7 @@
 </div>
 
 <div>
+    <h2>Trip Schedule</h2>
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>
@@ -58,10 +62,10 @@
                         {{ trip }}
                         <span class="mobile-only smaller-font">
                             <br />
-                            {{ trip.direction.value }}
+                            {{ trip.direction }}
                         </span>
                     </td>
-                    <td class="desktop-only">{{ trip.direction.value }}</td>
+                    <td class="desktop-only">{{ trip.direction }}</td>
                     <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
                 </tr>
             % end

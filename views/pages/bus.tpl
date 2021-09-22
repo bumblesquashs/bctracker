@@ -3,10 +3,15 @@
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
 
-<h1>Bus {{ bus }}</h1>
+<div class="page-header">
+    <h1 class="title">Bus {{ bus }}</h1>
+    % order = bus.order
+    <h2 class="subtitle">{{ order.year }} {{ order.model }}</h2>
+</div>
 <hr />
 
 <div id="sidebar">
+    <h2>Realtime Information</h2>
     % position = bus.position
     % if not position.active:
         <div class="info-box">
@@ -64,21 +69,10 @@
         </div>
     % end
     
+    <h2>Details</h2>
     <div class="info-box">
         % order = bus.order
         % model = bus.model
-        <div class="section">
-            <div class="name">Manufacturer</div>
-            <div class="value">{{ model.manufacturer }}</div>
-        </div>
-        <div class="section">
-            <div class="name">Model</div>
-            <div class="value">{{ model.name }}</div>
-        </div>
-        <div class="section">
-            <div class="name">Year</div>
-            <div class="value">{{ order.year }}</div>
-        </div>
         <div class="section">
             <div class="name">Vehicle Type</div>
             <div class="value">{{ model.type.value }}</div>
@@ -95,6 +89,7 @@
 </div>
 
 <div>
+    <h2>History</h2>
     % if len(history) == 0:
         <p>This bus doesn't have any recorded history.</p>
         <p>

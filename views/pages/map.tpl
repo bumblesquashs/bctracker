@@ -3,7 +3,9 @@
 % rebase('base', title='Map', include_maps=True)
 
 % if len(buses) == 0:
-    <h1>Map</h1>
+    <div class="page-header">
+        <h1 class="title">Map</h1>
+    </div>
     <hr />
 
     % if system is not None and not system.realtime_enabled:
@@ -31,8 +33,8 @@
         % end
     % end
 % else:
-    <div id="system-map-header">
-        <h1>Map</h1>
+    <div id="system-map-header" class="page-header">
+        <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
                 <img class="hidden" id="checkbox-image" src="/img/check.png" />
