@@ -69,6 +69,7 @@ def update_positions(system):
             bus_id = f'{system.id}_{vehicle.vehicle.id}'
             positions[bus_id] = position
         except AttributeError: pass
+        position.calculate_schedule_adherence()
 
 def update_translations(system):
     with request.urlopen(f'https://nextride.{system.bctransit_id}.bctransit.com/api/Route') as file:
