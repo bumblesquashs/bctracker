@@ -1,9 +1,12 @@
 % rebase('base', title=f'Block {block.id}')
 
-<h1>Block {{ block.id }}</h1>
+<div class="page-header">
+    <h1 class="title">Block {{ block.id }}</h1>
+</div>
 <hr />
 
 <div id="sidebar">
+    <h2>Overview</h2>
     <div class="info-box">
         <div class="section">
             % services = block.services
@@ -38,6 +41,7 @@
 </div>
 
 <div>
+    <h2>Trip Schedule</h2>
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>

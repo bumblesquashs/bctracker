@@ -22,21 +22,7 @@ hr {
     margin-bottom: 20px;
 }
 
-h1 {
-    margin-top: 0px;
-    margin-bottom: 5px;
-}
-
-h1 + h2 {
-    font-weight: normal;
-}
-
-h2 {
-    margin-top: 0px;
-    margin-bottom: 5px;
-}
-
-h3 {
+h1, h2, h3, h4 {
     margin-top: 0px;
     margin-bottom: 5px;
 }
@@ -367,12 +353,24 @@ tr.divider {
     padding: 10px;
 }
 
+.news-post .content p + ul {
+    margin-top: -15px;
+}
+
+.news-post .content p:last-child {
+    margin-bottom: 0px;
+}
+
 .news-post-older {
     margin-top: 20px;
 }
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.page-header .subtitle {
+    font-weight: normal;
 }
 
 .service-indicator {

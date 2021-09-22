@@ -1,6 +1,8 @@
 % rebase('base', title='Blocks')
 
-<h1>Blocks</h1>
+<div class="page-header">
+    <h1 class="title">Blocks</h1>
+</div>
 <hr />
 
 % if system is None:
