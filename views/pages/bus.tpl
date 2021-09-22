@@ -68,6 +68,24 @@
             % end
         </div>
     % end
+    
+    <h2>Details</h2>
+    <div class="info-box">
+        % order = bus.order
+        % model = bus.model
+        <div class="section">
+            <div class="name">Vehicle Type</div>
+            <div class="value">{{ model.type.value }}</div>
+        </div>
+        <div class="section">
+            <div class="name">Length</div>
+            <div class="value">{{ str(model.length).rstrip('0').rstrip('.') }} feet</div>
+        </div>
+        <div class="section">
+            <div class="name">Fuel Type</div>
+            <div class="value">{{ model.fuel }}</div>
+        </div>
+    </div>
 </div>
 
 <div>

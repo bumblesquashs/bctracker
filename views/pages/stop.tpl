@@ -66,7 +66,7 @@
             
             % if len(stop_times) > 0:
                 <div class="section">
-                    <h2 class="title" id="{{service}}">{{ service }}</h2>
+                    <h3 class="title" id="{{service}}">{{ service }}</h3>
                     <div class="subtitle">{{ service.date_string }}</div>
                     <table class="pure-table pure-table-horizontal pure-table-striped">
                         <thead>

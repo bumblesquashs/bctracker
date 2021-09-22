@@ -51,7 +51,7 @@
                         <div class="section">
                             % if len(direction_ids) > 1:
                                 % directions = sorted({t.direction for t in direction_trips})
-                                <h3>{{ '/'.join(directions) }}</h3>
+                                <h4>{{ '/'.join(directions) }}</h4>
                             % end
                             % include('components/service_trips', trips=direction_trips)
                         </div>
