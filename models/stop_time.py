@@ -30,3 +30,7 @@ class StopTime:
     @property
     def trip(self):
         return self.system.get_trip(self.trip_id)
+    
+    def get_time_minutes(self):
+        (hour, minute) = self.time.split(':')
+        return formatting.get_minutes(int(hour), int(minute))
