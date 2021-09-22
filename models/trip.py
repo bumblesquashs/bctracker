@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import formatting
 
 class Trip:
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -75,3 +78,20 @@ class Trip:
     
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)
+    
+    def get_stop_time(self, stop):
+        stop_times = [s for s in self.stop_times if s.stop == stop]
+        if len(stop_times) == 0:
+            return None
+        if len(stop_times) == 1:
+            return stop_times[0]
+        now = datetime.now()
+        current_mins = formatting.get_minutes(now.hour, now.minute)
+        stop_times.sort(key=lambda s: abs(current_mins - s.get_time_minutes()))
+        return stop_times[0]
+    
+    def get_previous_stop(self, stop_time):
+        for other_st in self.stop_times:
+            if other_st.sequence == (stop_time.sequence - 1):
+                return other_st.stop
+        return None
