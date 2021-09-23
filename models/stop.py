@@ -35,6 +35,10 @@ class Stop:
         return sorted({ s.trip.route for s in self.stop_times })
     
     @property
+    def routes_string(self):
+        return ', '.join([str(r.number) for r in self.routes])
+    
+    @property
     def nearby_stops(self):
         stops = self.system.all_stops()
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})

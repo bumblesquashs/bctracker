@@ -258,6 +258,16 @@ def system_trips_id(system_id, trip_id):
         return systems_error_template('trip', system_id, trip_id=trip_id)
     return systems_template('trip', system_id, trip=trip)
 
+@app.route('/stops')
+@app.route('/stops/')
+def stops():
+    return system_stops(None)
+
+@app.route('/<system_id>/stops')
+@app.route('/<system_id>/stops/')
+def system_stops(system_id):
+    return systems_template('stops', system_id, search=request.query.get('search'), path="stops")
+
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
 def stops_number(number):
