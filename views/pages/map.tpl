@@ -88,20 +88,42 @@
                     }
                 }
                 
+                let adherenceElement = document.createElement("span")
+                if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
+                    adherence = bus.schedule_adherence
+                    adherenceElement.classList.add("adherence-indicator")
+                    if (adherence <= -8) {
+                        adherenceElement.classList.add("very-behind")
+                    } else if (adherence <= -5) {
+                        adherenceElement.classList.add("behind")
+                    } else if (adherence >= 5) {
+                        adherenceElement.classList.add("very-ahead")
+                    } else if (adherence >= 3) {
+                        adherenceElement.classList.add("ahead")
+                    } else {
+                        adherenceElement.classList.add("on-time")
+                    }
+                    if (adherence > 0) {
+                        adherenceElement.innerHTML = "+" + adherence
+                    } else {
+                        adherenceElement.innerHTML = "" + adherence
+                    }
+                }
+                
                 const element = document.createElement("div");
                 element.className = "marker";
                 if (bus.number === "Unknown Bus") {
                     element.innerHTML = "\
                         <img src=\"/img/bus.png\" />\
                         <div class='title'><span>" + bus.number + "</span></div>\
-                        <div class='subtitle'><span>" + bus.headsign + "</span></div>";
+                        <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>";
                 } else {
                     element.innerHTML = "\
                         <div class='link'></div>\
                         <a href=\"/bus/" + bus.number +"\">\
                             <img src=\"/img/bus.png\" />\
                             <div class='title'><span>" + bus.number + "</span></div>\
-                            <div class='subtitle'><span>" + bus.headsign + "</span></div>\
+                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
                         </a>";
                 }
                 element.style.backgroundColor = "#" + bus.colour;

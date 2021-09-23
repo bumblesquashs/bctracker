@@ -65,4 +65,7 @@ class Bus:
             data['headsign'] = str(trip).replace("'", '&apos;')
             data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id
+        schedule_adherence = self.position.schedule_adherence
+        if schedule_adherence is not None:
+            data['schedule_adherence'] = schedule_adherence
         return data

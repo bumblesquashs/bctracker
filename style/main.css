@@ -339,11 +339,18 @@ tr.divider {
     overflow: visible;
 }
 
-.marker .subtitle span {
+.marker .subtitle > span {
     text-align: center;
     white-space: nowrap;
     margin-left: -100%;
     margin-right: -100%;
+}
+
+.marker .subtitle .adherence-indicator {
+    float: none;
+    font-size: 8pt;
+    padding: 1px 3px;
+    border-radius: 3px;
 }
 
 .marker:hover .subtitle {
