@@ -57,8 +57,7 @@ class Trip:
 
     @property
     def duration(self):
-        import formatting as fmt
-        return fmt.duration_between_timestrs(self.start_time, self.end_time)
+        return formatting.duration_between_timestrs(self.start_time, self.end_time)
     
     @property
     def points(self):
