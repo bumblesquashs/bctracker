@@ -47,6 +47,43 @@
             </div>
         </div>
     </div>
+    
+    % position = trip.system.get_position(trip.id)
+    % if position is not None:
+        <h2>Realtime Information</h2>
+        <div class="info-box">
+            <div class="section">
+                % bus = position.bus
+                <div class="name">Bus</div>
+                <div class="value">
+                    % if bus.number is None:
+                        {{ bus }}
+                    % else:
+                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        % order = bus.order
+                        % if order is not None:
+                            <br />
+                            <span class="non-desktop smaller-font">{{ order }}</span>
+                        % end
+                    % end
+                </div>
+            </div>
+            % stop = position.stop
+            % if stop is not None:
+                <div class="section">
+                    <div class="name">Current Stop</div>
+                    <div class="value">
+                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                        % adherence = position.schedule_adherence_string
+                        % if adherence is not None:
+                            <br />
+                            <span class="smaller-font">{{ adherence }}</span>
+                        % end
+                    </div>
+                </div>
+            % end
+        </div>
+    % end
 </div>
 
 <div>

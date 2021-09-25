@@ -52,8 +52,8 @@
                     <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                 </div>
             </div>
-            % if position.stop is not None:
-                % stop = position.stop
+            % stop = position.stop
+            % if stop is not None:
                 <div class="section">
                     <div class="name">Current Stop</div>
                     <div class="value">
