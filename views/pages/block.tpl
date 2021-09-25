@@ -44,7 +44,7 @@
     </div>
     
     % for trip in block.available_trips:
-        % position = trip.system.get_position(trip.id)
+        % position = trip.position
         % if position is not None:
             <h2>Realtime Information</h2>
             <div class="info-box">

@@ -80,6 +80,10 @@ class Trip:
                 self._direction = ''
         return self._direction
     
+    @property
+    def position(self):
+        return self.system.get_position(self.id)
+    
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)
     
