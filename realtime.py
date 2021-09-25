@@ -69,8 +69,6 @@ def update_positions(system):
             position.lon = vehicle.position.longitude
         except AttributeError: pass
         positions[bus_id] = position
-        if position.trip_id is not None:
-            system.positions[position.trip_id] = position
         position.calculate_schedule_adherence()
 
 def update_translations(system):
@@ -125,6 +123,9 @@ def get_position(bus_id):
     if bus_id is not None and bus_id in positions:
         return positions[bus_id]
     return Position(None, False)
+
+def get_positions():
+    return positions.values()
 
 def active_buses():
     return [get_bus(bus_id=id) for id in positions.keys()]

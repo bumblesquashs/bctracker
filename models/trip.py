@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import formatting
+import realtime
 
 class Trip:
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -81,8 +82,9 @@ class Trip:
         return self._direction
     
     @property
-    def position(self):
-        return self.system.get_position(self.id)
+    def positions(self):
+        positions = realtime.get_positions()
+        return [p for p in positions if p.system == self.system and p.trip_id == self.id]
     
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)

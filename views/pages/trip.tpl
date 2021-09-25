@@ -50,8 +50,8 @@
 </div>
 
 <div>
-    % position = trip.position
-    % if position is not None:
+    % positions = trip.positions
+    % if len(positions) > 0:
         <h2>Realtime Information</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">
             <thead>
@@ -62,39 +62,41 @@
                 </tr>
             </thead>
             <tbody>
-                % bus = position.bus
-                % trip = position.trip
-                % stop = position.stop
-                <tr>
-                    % if bus.number is None:
-                        <td>{{ bus }}</td>
-                        <td class="non-mobile"></td>
-                    % else:
-                        % order = bus.order
-                        <td>
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % if order is not None:
-                                <span class="mobile-only smaller-font">
-                                    <br />
+                % for position in positions:
+                    % bus = position.bus
+                    % trip = position.trip
+                    % stop = position.stop
+                    <tr>
+                        % if bus.number is None:
+                            <td>{{ bus }}</td>
+                            <td class="non-mobile"></td>
+                        % else:
+                            % order = bus.order
+                            <td>
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                % if order is not None:
+                                    <span class="mobile-only smaller-font">
+                                        <br />
+                                        {{ order }}
+                                    </span>
+                                % end
+                            </td>
+                            <td class="non-mobile">
+                                % if order is not None:
                                     {{ order }}
-                                </span>
-                            % end
-                        </td>
-                        <td class="non-mobile">
-                            % if order is not None:
-                                {{ order }}
-                            % end
-                        </td>
-                    % end
-                    % if stop is None:
-                        <td class="lighter-text">Unavailable</td>
-                    % else:
-                        <td>
-                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
-                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                        </td>
-                    % end
-                </tr>
+                                % end
+                            </td>
+                        % end
+                        % if stop is None:
+                            <td class="lighter-text">Unavailable</td>
+                        % else:
+                            <td>
+                                % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                            </td>
+                        % end
+                    </tr>
+                % end
             </tbody>
         </table>
     % end

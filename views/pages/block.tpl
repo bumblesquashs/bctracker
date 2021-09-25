@@ -47,7 +47,7 @@
 </div>
 
 <div>
-    % positions = [t.position for t in block.available_trips if t.position is not None]
+    % positions = block.positions
     % if len(positions) > 0:
         <h2>Realtime Information</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">

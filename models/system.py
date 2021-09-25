@@ -14,7 +14,6 @@ class System:
         self.realtime_validation_error_count = 0
         
         self.blocks = {}
-        self.positions = {}
         self.routes = {}
         self.routes_by_number = {}
         self.services = {}
@@ -42,11 +41,6 @@ class System:
     
     def all_blocks(self):
         return sorted(self.blocks.values())
-    
-    def get_position(self, trip_id):
-        if trip_id in self.positions:
-            return self.positions[trip_id]
-        return None
     
     def get_route(self, route_id = None, number = None):
         if route_id is not None and route_id in self.routes:

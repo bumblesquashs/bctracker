@@ -67,10 +67,9 @@
     })
 </script>
 
-% for trip in block.available_trips:
-    % position = trip.position
-    % if position is not None:
-        <script>
+% for position in block.positions:
+    <script>
+        map.on('load', function() {
             const bus = JSON.parse('{{! json.dumps(position.bus.json_data) }}');
             
             const element = document.createElement("div");
@@ -90,6 +89,6 @@
             element.style.backgroundColor = "#" + bus.colour;
         
             new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
-        </script>
-    % end
+        })
+    </script>
 % end
