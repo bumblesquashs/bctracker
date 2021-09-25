@@ -1,4 +1,4 @@
-% rebase('base', title=f'Block {block.id}')
+% rebase('base', title=f'Block {block.id}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -7,6 +7,8 @@
 
 <div id="sidebar">
     <h2>Overview</h2>
+    % include('components/block_map', block=block)
+    
     <div class="info-box">
         <div class="section">
             % services = block.services
@@ -42,65 +44,64 @@
             </div>
         </div>
     </div>
-    
-    % for trip in block.available_trips:
-        % position = trip.position
-        % if position is not None:
-            <h2>Realtime Information</h2>
-            <div class="info-box">
-                <div class="section">
-                    % bus = position.bus
-                    <div class="name">Bus</div>
-                    <div class="value">
-                        % if bus.number is None:
-                            {{ bus }}
-                        % else:
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % order = bus.order
-                            % if order is not None:
-                                <br />
-                                <span class="non-desktop smaller-font">{{ order }}</span>
-                            % end
-                        % end
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="name">Headsign</div>
-                    <div class="value">{{ trip }}</div>
-                </div>
-                <div class="section">
-                    <div class="name">Current Route</div>
-                    <div class="value">
-                        <a href="{{ get_url(trip.route.system, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="name">Current Trip</div>
-                    <div class="value">
-                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                    </div>
-                </div>
-                % stop = position.stop
-                % if stop is not None:
-                    <div class="section">
-                        <div class="name">Current Stop</div>
-                        <div class="value">
-                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            % adherence = position.schedule_adherence_string
-                            % if adherence is not None:
-                                <br />
-                                <span class="smaller-font">{{ adherence }}</span>
-                            % end
-                        </div>
-                    </div>
-                % end
-            </div>
-            % break
-        % end
-    % end
 </div>
 
 <div>
+    % positions = [t.position for t in block.available_trips if t.position is not None]
+    % if len(positions) > 0:
+        <h2>Realtime Information</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Bus</th>
+                    <th class="desktop-only">Model</th>
+                    <th>Headsign</th>
+                    <th>Trip</th>
+                    <th class="non-mobile">Current Stop</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for position in positions:
+                    % bus = position.bus
+                    % trip = position.trip
+                    % stop = position.stop
+                    <tr>
+                        % if bus.number is None:
+                            <td>{{ bus }}</td>
+                            <td class="desktop-only"></td>
+                        % else:
+                            % order = bus.order
+                            <td>
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                % if order is not None:
+                                    <span class="non-desktop smaller-font">
+                                        <br />
+                                        {{ order }}
+                                    </span>
+                                % end
+                            </td>
+                            <td class="desktop-only">
+                                % if order is not None:
+                                    {{ order }}
+                                % end
+                            </td>
+                        % end
+                        <td>{{ trip }}</td>
+                        <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                        % if stop is None:
+                            <td class="non-mobile lighter-text">Unavailable</td>
+                        % else:
+                            <td class="non-mobile">
+                                % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                            </td>
+                        % end
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
+    
     <h2>Trip Schedule</h2>
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
