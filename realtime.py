@@ -82,9 +82,14 @@ def update_translations(system):
             vehicle_id = i['vehicleId']
             bus_id = f'{system.id}_{vehicle_id}'
             number = int(i['name'])
-            
-            buses_by_id[bus_id] = number
-            buses_by_number[number] = bus_id
+            if system.id == 'victoria':
+                # Sep 27 2021 special case - victoria is now using fleet numbers as its bus ids - account for this
+                special_bus_id = f'victoria_{number}'
+                buses_by_id[special_bus_id] = number
+                buses_by_number[number] = special_bus_id
+            else:
+                buses_by_id[bus_id] = number
+                buses_by_number[number] = bus_id
         except KeyError:
             print('Error: fleet number (name) or fleet id (vehicleId) missing from bus nextride query bus entry')
     save_translations()
