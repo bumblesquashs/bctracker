@@ -71,17 +71,15 @@ def load_routes(system):
     system.routes_by_number = {}
     for values in read_csv(system, 'routes'):
         route_id = values['route_id']
-        number_raw = values['route_short_name']
-        # Sep 27 2021 - remove the X from whistler route 20X
-        number = int(''.join([d for d in number_raw if d.isdigit()]))
+        number = values['route_short_name']
         name = values['route_long_name']
         if 'route_color' in values:
             colour = values['route_color']
         else:
             colour = '4040FF'
-
+        
         route = Route(system, route_id, number, name, colour)
-
+        
         system.routes[route_id] = route
         system.routes_by_number[number] = route
 
