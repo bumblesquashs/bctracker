@@ -1,7 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, redirect, request
-from datetime import datetime
+from bottle import Bottle, static_file, template, redirect, request, response
 import cherrypy as cp
 import sys
 
@@ -17,24 +16,25 @@ import history
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
 system_domain = '{0}.bctracker.ca/{1}'
+cookie_domain = None
 
 def start():
-    global mapbox_api_key, no_system_domain, system_domain
-
+    global mapbox_api_key, no_system_domain, system_domain, cookie_domain
+    
     database.connect()
     
     force_gtfs_redownload = False
     if len(sys.argv) > 1 and sys.argv[1] == '-r':
         print('Forcing GTFS redownload')
         force_gtfs_redownload = True
-
+    
     load_models()
     load_orders()
     load_systems()
-
+    
     realtime.load_translations()
     history.load_last_seen()
-
+    
     for system in all_systems():
         if not gtfs.downloaded(system) or force_gtfs_redownload:
             gtfs.update(system)
@@ -46,15 +46,16 @@ def start():
         elif not realtime.validate(system):
             system.realtime_validation_error_count += 1
     history.update(realtime.active_buses())
-
+    
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
-
+    cookie_domain = cp.config.get('cookie_domain')
+    
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
-
+    
     cp.tree.graft(log, '/')
     cp.server.start()
 
@@ -69,14 +70,15 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
-def systems_template(name, system_id, **kwargs):
-    return template(f'templates/{name}',
+def systems_template(name, system_id, theme=None, **kwargs):
+    return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
         systems=[s for s in all_systems() if s.visible],
         system_id=system_id,
         system=get_system(system_id),
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
+        theme=theme or request.get_cookie('theme'),
         **kwargs
     )
 
@@ -111,7 +113,14 @@ def index():
 @app.route('/<system_id>')
 @app.route('/<system_id>/')
 def system_index(system_id):
-    return systems_template('home', system_id)
+    theme = request.query.get('theme')
+    if theme is not None:
+        max_age = 60*60*24*365*10
+        if cookie_domain is None:
+            response.set_cookie('theme', theme, max_age=max_age)
+        else:
+            response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
+    return systems_template('home', system_id, theme)
 
 @app.route('/systems')
 @app.route('/systems/')
@@ -134,15 +143,15 @@ def routes():
 def system_routes(system_id):
     return systems_template('routes', system_id, path='routes')
 
-@app.route('/routes/<number:int>')
-@app.route('/routes/<number:int>/')
+@app.route('/routes/<number>')
+@app.route('/routes/<number>/')
 def routes_number(number):
     return system_routes_number(None, number)
 
-@app.route('/<system_id>/routes/<number:int>')
-@app.route('/<system_id>/routes/<number:int>/')
+@app.route('/<system_id>/routes/<number>')
+@app.route('/<system_id>/routes/<number>/')
 def system_routes_number(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == 66:
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
         redirect(get_url('fvx', 'routes/66'))
     system = get_system(system_id)
     if system is None:
@@ -190,20 +199,6 @@ def route_realtime():
 @app.route('/<system_id>/realtime')
 @app.route('/<system_id>/realtime/')
 def system_realtime(system_id):
-    reload = request.query.get('reload', 'false')
-    if reload == 'true':
-        delta = datetime.now() - realtime.last_updated
-        if delta.seconds > 60:
-            for system in all_systems():
-                try:
-                    realtime.reset_positions(system)
-                    realtime.update(system)
-                    if not gtfs.validate(system):
-                        gtfs.update(system)
-                except Exception as e:
-                    print(f'Error: Failed to update realtime for {system}')
-                    print(f'Error message: {e}')
-            history.update(realtime.active_buses())
     group = request.query.get('group', 'all')
     system = get_system(system_id)
     if system is None:

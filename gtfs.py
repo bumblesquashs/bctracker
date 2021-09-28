@@ -21,9 +21,9 @@ def update(system):
         return
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
-
+    
     print(f'Updating GTFS data for {system}...')
-
+    
     try:
         if path.exists(data_zip_path):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
@@ -71,15 +71,15 @@ def load_routes(system):
     system.routes_by_number = {}
     for values in read_csv(system, 'routes'):
         route_id = values['route_id']
-        number = int(values['route_short_name'])
+        number = values['route_short_name']
         name = values['route_long_name']
         if 'route_color' in values:
             colour = values['route_color']
         else:
             colour = '4040FF'
-
+        
         route = Route(system, route_id, number, name, colour)
-
+        
         system.routes[route_id] = route
         system.routes_by_number[number] = route
 
@@ -126,7 +126,7 @@ def load_shapes(system):
             system.shapes[shape_id] = shape
         
         shape.add_point(lat, lon, sequence)
-    
+
 def load_stop_times(system):
     for values in read_csv(system, 'stop_times'):
         stop_id = values['stop_id']
@@ -155,8 +155,8 @@ def load_stops(system):
         except:
             continue
         name = values['stop_name']
-        lat = values['stop_lat']
-        lon = values['stop_lon']
+        lat = float(values['stop_lat'])
+        lon = float(values['stop_lon'])
 
         stop = Stop(system, stop_id, number, name, lat, lon)
 

@@ -6,7 +6,9 @@ class Route:
         self.number = number
         self.name = name
         self.colour = colour
-
+        
+        self.number_value = int(''.join([d for d in number if d.isdigit()]))
+        
         self.trips = []
     
     def __str__(self):
@@ -19,10 +21,10 @@ class Route:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.number < other.number
+        return self.number_value < other.number_value
     
     def __gt__(self, other):
-        return self.number > other.number
+        return self.number_value > other.number_value
     
     @property
     def is_current(self):
@@ -30,7 +32,7 @@ class Route:
             if trip.service.is_current:
                 return True
         return False
-
+    
     @property
     def services(self):
         if self.is_current:

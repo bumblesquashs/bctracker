@@ -77,7 +77,7 @@ def update_bus_history(bus):
     end_time = block.end_time
     
     history.append(BlockHistory(date, system_id, feed_version, block_id, routes, start_time, end_time))
-
+    
     data_path = f'data/history/{bus.number}.json'
     history_data = {
         'history': [h.json_data for h in history]
@@ -101,6 +101,6 @@ def load_bus_history(number):
         routes = data['routes']
         start_time = data['start_time']
         end_time = data['end_time']
-
+        
         history.append(BlockHistory(date, system_id, feed_version, block_id, routes, start_time, end_time))
     return history

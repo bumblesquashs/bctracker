@@ -28,7 +28,7 @@ class BusHistory:
     @property
     def block(self):
         return self.system.get_block(self.block_id)
-
+    
     @property
     def routes_string(self):
         return ', '.join([ str(r) for r in self.routes ])

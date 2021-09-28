@@ -11,7 +11,7 @@ class StopTime:
     
     def __eq__(self, other):
         return self.stop_id == other.stop_id and self.trip_id == other.trip_id and self.sequence == other.sequence and self.time == other.time
-
+    
     def __lt__(self, other):
         if self.stop_id == other.stop_id and self.trip_id == other.trip_id:
             return self.sequence < other.sequence
@@ -30,3 +30,7 @@ class StopTime:
     @property
     def trip(self):
         return self.system.get_trip(self.trip_id)
+    
+    def get_time_minutes(self):
+        (hour, minute) = self.time.split(':')
+        return formatting.get_minutes(int(hour), int(minute))

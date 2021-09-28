@@ -33,12 +33,12 @@ def update(system):
             archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
             rename(data_path, archives_path)
         wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', data_path)
-
+        
         update_positions(system)
         update_translations(system)
-
+        
         print('\nDone!')
-
+        
         last_updated = datetime.now()
     except Exception as e:
         print(f'\nError: Failed to update realtime for {system}')
@@ -69,6 +69,7 @@ def update_positions(system):
             bus_id = f'{system.id}_{vehicle.vehicle.id}'
             positions[bus_id] = position
         except AttributeError: pass
+        position.calculate_schedule_adherence()
 
 def update_translations(system):
     with request.urlopen(f'https://nextride.{system.bctransit_id}.bctransit.com/api/Route') as file:
@@ -79,9 +80,11 @@ def update_translations(system):
     for i in bus_info:
         try:
             vehicle_id = i['vehicleId']
-            bus_id = f'{system.id}_{vehicle_id}'
             number = int(i['name'])
-            
+            if system.vehicle_id_enabled:
+                bus_id = f'{system.id}_{vehicle_id}'
+            else:
+                bus_id = f'{system.id}_{number}' # Sep 27 2021 - Victoria is now using bus numbers as IDs in realtime data
             buses_by_id[bus_id] = number
             buses_by_number[number] = bus_id
         except KeyError:

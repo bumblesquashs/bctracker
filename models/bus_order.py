@@ -9,9 +9,9 @@ class BusOrder:
         self.high = high
         self.year = year
         self.model_id = model_id
-
+        
         self.size = (high - low) + 1
-
+    
     def __str__(self):
         model = self.model
         if model is None:

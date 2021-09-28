@@ -1,18 +1,19 @@
 import csv
 
 class System:
-    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id):
+    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, vehicle_id_enabled, bctransit_id, mapstrat_id):
         self.id = system_id
         self.name = name
         self.visible = visible
         self.gtfs_enabled = gtfs_enabled
         self.realtime_enabled = realtime_enabled
+        self.vehicle_id_enabled = vehicle_id_enabled
         self.bctransit_id = bctransit_id
         self.mapstrat_id = mapstrat_id
-
+        
         self.feed_version = ''
         self.realtime_validation_error_count = 0
-
+        
         self.blocks = {}
         self.routes = {}
         self.routes_by_number = {}
@@ -38,20 +39,20 @@ class System:
         if block_id in self.blocks:
             return self.blocks[block_id]
         return None
-
+    
     def all_blocks(self):
         return sorted(self.blocks.values())
-
+    
     def get_route(self, route_id = None, number = None):
         if route_id is not None and route_id in self.routes:
             return self.routes[route_id]
         if number is not None and number in self.routes_by_number:
             return self.routes_by_number[number]
         return None
-
+    
     def all_routes(self):
         return sorted(self.routes.values())
-
+    
     def get_service(self, service_id):
         if service_id in self.services:
             return self.services[service_id]
@@ -64,19 +65,22 @@ class System:
         if shape_id in self.shapes:
             return self.shapes[shape_id]
         return None
-
+    
     def get_stop(self, stop_id=None, number=None):
         if stop_id is not None and stop_id in self.stops:
             return self.stops[stop_id]
         if number is not None and number in self.stops_by_number:
             return self.stops_by_number[number]
         return None
-
+    
+    def all_stops(self):
+        return self.stops.values()
+    
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
-
+    
     def sort_data(self):
         for stop in self.stops.values():
             stop.stop_times = sorted(stop.stop_times)
@@ -102,10 +106,11 @@ def load_systems():
         visible = row['visible'] == '1'
         gtfs_enabled = row['gtfs_enabled'] == '1'
         realtime_enabled = row['realtime_enabled'] == '1'
+        vehicle_id_enabled = row['vehicle_id_enabled'] == '1'
         bctransit_id = row['bctransit_id']
         mapstrat_id = row['mapstrat_id']
-
-        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id)
+        
+        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, vehicle_id_enabled, bctransit_id, mapstrat_id)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:

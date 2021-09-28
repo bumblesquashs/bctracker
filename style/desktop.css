@@ -1,0 +1,174 @@
+
+a:hover {
+    text-decoration: underline;
+}
+
+body {
+    font-size: 14pt;
+}
+
+form {
+    margin-bottom: 10px;
+}
+
+form input[type="text"] {
+    font-size: 14pt;
+    margin-right: 10px;
+    vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+form input[type="submit"] {
+    margin-bottom: 10px;
+}
+
+#header #system-dropdown {
+    float: right;
+}
+
+#subheader #system {
+    display: inline-block;
+}
+
+#subheader #last-updated {
+    display: inline-block;
+    font-size: 12pt;
+    margin-left: 10px;
+}
+
+#sidebar {
+    float: left;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    width: 25%;
+}
+
+#sidebar table {
+    width: 100%;
+}
+
+#sidebar + * {
+    float: none;
+    overflow: hidden;
+}
+
+.button {
+    font-size: 12pt;
+    vertical-align: middle;
+}
+
+.container {
+    margin: -20px;
+}
+
+.container .navigation {
+    display: inline-block;
+    margin: 20px 20px -5px 20px;
+    font-size: 0pt;
+}
+
+.container .navigation .button {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.container .section {
+    margin: 20px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.container .section.no-inline {
+    display: block !important;
+}
+
+.container .section table:last-child {
+    margin-bottom: 0px;
+}
+
+.dropdown {
+    position: relative;
+    cursor: default;
+    user-select: none;
+    overflow: visible !important;
+}
+
+.dropdown .content {
+    display: none;
+    position: absolute;
+    top: 52px;
+    right: 0px;
+    min-width: 200%;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 20;
+}
+
+.dropdown:hover .content {
+    display: block;
+}
+
+.dropdown .content a {
+    padding: 12px;
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown .content a:hover {
+    background-color: #e6e6e6
+}
+
+.dropdown .content a.disabled {
+    color: grey;
+}
+
+.dropdown .content a.disabled:hover {
+    background-color: white;
+}
+
+.dropdown .content table {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.dropdown .content table tr {
+    height: 100%;
+}
+
+.dropdown .content table tr td {
+    height: 100%;
+    padding: 0px;
+}
+
+.dropdown .content table tr td a {
+    font-size: 14pt;
+    text-align: center;
+    height: 100%;
+}
+
+.dropdown .content .title {
+    padding: 12px;
+    font-size: 12pt;
+    color: grey;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.non-desktop {
+    display: none;
+}
+
+.smaller-font {
+    font-size: 11pt;
+}
+
+.tablet-only {
+    display: none;
+}
