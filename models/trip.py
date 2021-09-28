@@ -57,7 +57,7 @@ class Trip:
 
     @property
     def duration(self):
-        return formatting.duration_between_timestrs(self.start_time, self.end_time)
+        return self.start_time.get_difference(self.end_time)
     
     @property
     def points(self):
@@ -90,8 +90,8 @@ class Trip:
         if len(stop_times) == 1:
             return stop_times[0]
         now = datetime.now()
-        current_mins = formatting.get_minutes(now.hour, now.minute)
-        stop_times.sort(key=lambda s: abs(current_mins - s.get_time_minutes()))
+        current_mins = (now.hour * 60) + now.minute
+        stop_times.sort(key=lambda s: abs(current_mins - s.time.get_minutes()))
         return stop_times[0]
     
     def get_previous_stop(self, stop_time):

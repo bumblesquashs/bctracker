@@ -57,11 +57,11 @@ class Position:
         stop_time = trip.get_stop_time(stop)
         previous_stop = trip.get_previous_stop(stop_time)
         try:
-            expected_scheduled_mins = stop_time.get_time_minutes()
+            expected_scheduled_mins = stop_time.time.get_minutes()
             
             if previous_stop is not None:
                 prev_stop_time = trip.get_stop_time(previous_stop)
-                prev_stop_time_mins = prev_stop_time.get_time_minutes()
+                prev_stop_time_mins = prev_stop_time.time.get_minutes()
                 time_difference = expected_scheduled_mins - prev_stop_time_mins
                 
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
@@ -69,7 +69,7 @@ class Position:
                     expected_scheduled_mins = prev_stop_time_mins + self.linear_interpolate(previous_stop, stop, time_difference)
             
             now = datetime.now()
-            current_mins = formatting.get_minutes(now.hour, now.minute)
+            current_mins = (now.hour * 60) + now.minute
             self.schedule_adherence = expected_scheduled_mins - current_mins
         except AttributeError:
             pass

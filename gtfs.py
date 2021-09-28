@@ -139,9 +139,9 @@ def load_stop_times(system):
             continue
         time = values['departure_time']
         sequence = int(values['stop_sequence'])
-
+        
         stop_time = StopTime(system, stop_id, trip_id, time, sequence)
-
+        
         stop_time.stop.add_stop_time(stop_time)
         stop_time.trip.add_stop_time(stop_time)
 
