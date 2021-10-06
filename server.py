@@ -1,6 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, redirect, request, response
+from bottle import Bottle, static_file, template, redirect, request, response, debug
 import cherrypy as cp
 import sys
 
@@ -12,6 +12,8 @@ import gtfs
 import realtime
 import history
 
+app = Bottle()
+
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
 system_domain = '{0}.bctracker.ca/{1}'
@@ -21,9 +23,14 @@ def start():
     global mapbox_api_key, no_system_domain, system_domain, cookie_domain
     
     force_gtfs_redownload = False
-    if len(sys.argv) > 1 and sys.argv[1] == '-r':
-        print('Forcing GTFS redownload')
-        force_gtfs_redownload = True
+    if len(sys.argv):
+        arg_str = ''.join(sys.argv[1:])
+        if 'r' in arg_str:
+            print('Forcing GTFS redownload')
+            force_gtfs_redownload = True
+        if 'd' in arg_str:
+            print('Starting bottle in DEBUG mode')
+            debug(True)
     
     load_models()
     load_orders()
@@ -84,7 +91,6 @@ def systems_error_template(name, system_id, **kwargs):
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
 # =============================================================
-app = Bottle()
 
 @app.route('/style/<name:path>')
 def style(name):
