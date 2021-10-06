@@ -222,6 +222,19 @@ def system_bus_number(system_id, number):
         return systems_error_template('bus', system_id, number=number)
     return systems_template('bus', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
 
+@app.route('/bus/<number:int>/history')
+@app.route('/bus/<number:int>/history/')
+def bus_number_history(number):
+    return system_bus_number_history(None, number)
+
+@app.route('/<system_id>/bus/<number:int>/history')
+@app.route('/<system_id>/bus/<number:int>/history/')
+def system_bus_number_history(system_id, number):
+    bus = realtime.get_bus(number=number)
+    if bus is None:
+        return systems_error_template('bus', system_id, number=number)
+    return systems_template('bus_history', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
+
 @app.route('/blocks')
 @app.route('/blocks/')
 def blocks():
