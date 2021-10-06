@@ -23,6 +23,10 @@
             <div class="value">{{ trip.end_time }}</div>
         </div>
         <div class="section">
+            <div class="name">Duration</div>
+            <div class="value">{{ trip.duration }}</div>
+        </div>
+        <div class="section">
             <div class="name">Number of stops</div>
             <div class="value">{{ len(trip.stop_times) }}</div>
         </div>

@@ -54,6 +54,10 @@ class Trip:
     @property
     def end_time(self):
         return self.last_stop.time
+
+    @property
+    def duration(self):
+        return formatting.duration_between_timestrs(self.start_time, self.end_time)
     
     @property
     def points(self):

@@ -139,15 +139,15 @@ def routes():
 def system_routes(system_id):
     return systems_template('routes', system_id, path='routes')
 
-@app.route('/routes/<number:int>')
-@app.route('/routes/<number:int>/')
+@app.route('/routes/<number>')
+@app.route('/routes/<number>/')
 def routes_number(number):
     return system_routes_number(None, number)
 
-@app.route('/<system_id>/routes/<number:int>')
-@app.route('/<system_id>/routes/<number:int>/')
+@app.route('/<system_id>/routes/<number>')
+@app.route('/<system_id>/routes/<number>/')
 def system_routes_number(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == 66:
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
         redirect(get_url('fvx', 'routes/66'))
     system = get_system(system_id)
     if system is None:

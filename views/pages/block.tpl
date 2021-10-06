@@ -25,6 +25,10 @@
             <div class="value">{{ block.end_time }}</div>
         </div>
         <div class="section">
+            <div class="name">Duration</div>
+            <div class="value">{{ block.duration }}</div>
+        </div>
+        <div class="section">
             <div class="name">Number of trips</div>
             <div class="value">{{ len(block.available_trips) }}</div>
         </div>
@@ -48,6 +52,7 @@
                 <th class="non-mobile">Start Time</th>
                 <th class="mobile-only">Start</th>
                 <th class="desktop-only">End Time</th>
+                <th class="desktop-only">Duration</th>
                 <th class=>Headsign</th>
                 <th class="desktop-only">Direction</th>
                 <th>Trip</th>
@@ -58,6 +63,7 @@
                 <tr>
                     <td>{{ trip.start_time }}</td>
                     <td class="desktop-only">{{ trip.end_time }}</td>
+                    <td class="desktop-only">{{ trip.duration }}</td>
                     <td>
                         {{ trip }}
                         <span class="mobile-only smaller-font">

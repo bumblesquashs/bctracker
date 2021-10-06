@@ -30,3 +30,14 @@ def format_time(time_string):
 
 def get_minutes(hours, minutes):
     return ((hours * 60) + minutes) % 1440 # For times past midnight
+
+'''
+Returns the time as a string in HH:mm from two times, also
+strings in HH:mm format.
+'''
+def duration_between_timestrs(start_time, end_time):
+    end_min = int(end_time[0:2]) * 60 + int(end_time[3:5])
+    start_min = int(start_time[0:2]) * 60 + int(start_time[3:5])
+    diff = abs(end_min - start_min)
+    return "{0:02d}:{1:02d}".format(diff // 60, diff % 60)
+

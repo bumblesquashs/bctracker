@@ -36,6 +36,7 @@
                             <th>Routes</th>
                             <th class="desktop-only">Start Time</th>
                             <th class="desktop-only">End Time</th>
+                            <th class="desktop-only">Duration</th>
                             <th class="non-desktop">Time</th>
                         </tr>
                     </thead>
@@ -47,6 +48,7 @@
                                 <td>{{ block.routes_string }}</td>
                                 <td class="desktop-only">{{ block.start_time }}</td>
                                 <td class="desktop-only">{{ block.end_time }}</td>
+                                <td class="desktop-only">{{ block.duration }}</td>
                                 <td class="non-desktop">{{ block.start_time }} - {{ block.end_time }}</td>
                             </tr>
                         % end
