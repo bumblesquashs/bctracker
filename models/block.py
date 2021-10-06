@@ -51,10 +51,10 @@ class Block:
     @property
     def end_time(self):
         return self.available_trips[-1].end_time
-
+    
     @property
     def duration(self):
-    	return formatting.duration_between_timestrs(self.start_time, self.end_time)
+        return formatting.duration_between_timestrs(self.start_time, self.end_time)
     
     @property
     def positions(self):
