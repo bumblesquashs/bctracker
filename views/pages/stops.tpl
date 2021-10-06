@@ -10,7 +10,7 @@
 
 % if system is None:
     <p>
-        Blocks can only be viewed for individual systems.
+        Stops can only be viewed for individual systems.
         Please choose a system.
     </p>
     % include('components/systems')
