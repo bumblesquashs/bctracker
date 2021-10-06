@@ -1,4 +1,6 @@
 
+import formatting
+
 class Block:
     def __init__(self, system, block_id):
         self.system = system
@@ -48,6 +50,10 @@ class Block:
     @property
     def end_time(self):
         return self.available_trips[-1].end_time
+
+    @property
+    def duration(self):
+    	  return formatting.duration_between_timestrs(self.start_time, self.end_time)
     
     def add_trip(self, trip):
         self.trips.append(trip)
