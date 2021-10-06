@@ -32,7 +32,15 @@ class Stop:
     
     @property
     def routes(self):
-        return sorted({ s.trip.route for s in self.stop_times })
+        routes = sorted({ s.trip.route for s in self.stop_times })
+        current_routes = [r for r in routes if r.is_current]
+        if len(current_routes) == 0:
+            return routes
+        return current_routes
+    
+    @property
+    def routes_string(self):
+        return ', '.join([str(r.number) for r in self.routes])
     
     @property
     def nearby_stops(self):
