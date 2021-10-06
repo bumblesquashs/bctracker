@@ -123,7 +123,7 @@ tr.divider {
 
 #top-button {
     position: fixed;
-    left: 40px;
+    right: 40px;
     bottom: 20px;
     display: none;
 }
