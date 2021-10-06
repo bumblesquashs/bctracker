@@ -21,6 +21,24 @@
         % stops = [s for s in stops if search.lower() in s.name.lower()]
     % end
     
+    <script>
+        function stopSearch() {
+            let value = document.getElementById('stop_id_search').value;
+            if (value.length > 0) {
+                window.location = "{{ get_url(system) }}/stops?search=" + value;
+            } else {
+                window.location = "{{ get_url(system) }}/stops";
+            }
+        }
+    </script>
+    
+    <form onsubmit="stopSearch()" action="javascript:void(0)">
+        <label for="stop_id_search">Stop Name:</label>
+        <br />
+        <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}">
+        <input type="submit" value="Search" class="button">
+    </form>
+    
     % if len(stops) == 0:
         <p>No stops found</p>
     % else:
@@ -28,9 +46,9 @@
             <thead>
                 <tr>
                     <th class="desktop-only">Stop Number</th>
-                    <th class="mobile-only">Number</th>
+                    <th class="non-desktop">Number</th>
                     <th class="desktop-only">Stop Name</th>
-                    <th class="mobile-only">Name</th>
+                    <th class="non-desktop">Name</th>
                     <th>Routes</th>
                 </tr>
             </thead>
@@ -46,3 +64,5 @@
         </table>
     % end
 % end
+
+% include('components/top_button')

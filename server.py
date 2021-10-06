@@ -272,7 +272,11 @@ def stops():
 @app.route('/<system_id>/stops')
 @app.route('/<system_id>/stops/')
 def system_stops(system_id):
-    return systems_template('stops', system_id, search=request.query.get('search'), path="stops")
+    path = 'stops'
+    search = request.query.get('search')
+    if search is not None:
+        path += f'?search={search}'
+    return systems_template('stops', system_id, search=search, path=path)
 
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
