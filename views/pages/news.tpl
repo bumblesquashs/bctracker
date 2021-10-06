@@ -46,3 +46,5 @@
         </div>
     </div>
 </div>
+
+% include('components/top_button')
