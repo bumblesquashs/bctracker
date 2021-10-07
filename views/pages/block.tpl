@@ -42,6 +42,27 @@
             </div>
         </div>
     </div>
+    
+    % related_blocks = block.related_blocks
+    % if len(related_blocks) > 0:
+        <h2>Related Blocks</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Block</th>
+                    <th>Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for related_block in related_blocks:
+                    <tr>
+                        <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
+                        <td>{{ ', '.join([str(s) for s in related_block.services]) }}</td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 </div>
 
 <div>
