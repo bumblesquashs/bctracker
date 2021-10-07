@@ -8,6 +8,7 @@
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }} History</h1>
+    <a href="{{ get_url(system, f'bus/{bus.number}') }}">Return to bus details</a>
 </div>
 <hr />
 
@@ -55,18 +56,6 @@
                             % end
                         </span>
                     % end
-                </div>
-            </div>
-            <div class="section">
-                <div class="name">Days in Service</div>
-                <div class="value">
-                    % days_in_service = len({h.date.date() for h in history})
-                    {{ days_in_service }}
-                    <br />
-                    <span class="smaller-font">
-                        % total_days = math.floor((days_in_service / (last_tracked - first_tracked).days) * 100)
-                        {{ total_days }}% in service rate
-                    </span>
                 </div>
             </div>
             <div class="section">
