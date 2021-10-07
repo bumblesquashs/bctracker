@@ -41,7 +41,7 @@
                     <tr>
                         <td><a href="{{ get_url(stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
                         <td>{{ nearby_stop }}</td>
-                        <td>{{ ', '.join([str(r.number) for r in nearby_stop.routes]) }}</td>
+                        <td>{{ nearby_stop.routes_string }}</td>
                     </tr>
                 % end
             </tbody>

@@ -52,10 +52,6 @@ form input[type="submit"] {
     overflow: hidden;
 }
 
-#sidebar ~ #top-button {
-    right: 20px;
-}
-
 .button {
     font-size: 12pt;
     vertical-align: middle;
