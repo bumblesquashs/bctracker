@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from models.block_history import BlockHistory
 from models.bus_history import BusHistory
-from models.stop_time import Time
+from models.time import Time
 
 LAST_SEEN_PATH = 'data/history/last_seen.json'
 

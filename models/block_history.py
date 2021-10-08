@@ -42,6 +42,6 @@ class BlockHistory:
             'feed_version': self.feed_version,
             'block_id': self.block_id,
             'routes': self.routes,
-            'start_time': str(self.start_time),
-            'end_time': str(self.end_time)
+            'start_time': self.start_time.full_string,
+            'end_time': self.end_time.full_string
         }
