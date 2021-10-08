@@ -6,6 +6,7 @@ class Time:
             self.unknown = True
             self.hour = -1
             self.minute = 0
+            self.second = 0
         else:
             self.unknown = False
             time_parts = time_string.split(':')
@@ -25,8 +26,6 @@ class Time:
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
     def __eq__(self, other):
-        if self.unknown or other.unknown:
-            return False
         return self.hour == other.hour and self.minute == other.minute and self.second == other.second
     
     def __lt__(self, other):
