@@ -73,3 +73,5 @@
         </table>
     % end
 </div>
+
+% include('components/top_button')

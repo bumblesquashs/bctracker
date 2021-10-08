@@ -48,16 +48,20 @@
                 <div class="container">
                     % for direction_id in direction_ids:
                         % direction_trips = [t for t in service_trips if t.direction_id == direction_id]
-                        <div class="section">
-                            % if len(direction_ids) > 1:
-                                % directions = sorted({t.direction for t in direction_trips})
-                                <h4>{{ '/'.join(directions) }}</h4>
-                            % end
-                            % include('components/service_trips', trips=direction_trips)
-                        </div>
+                        % if len(direction_trips) > 0:
+                            <div class="section">
+                                % if len(direction_ids) > 1:
+                                    % directions = sorted({t.direction for t in direction_trips})
+                                    <h4>{{ '/'.join(directions) }}</h4>
+                                % end
+                                % include('components/service_trips', trips=direction_trips)
+                            </div>
+                        % end
                     % end
                 </div>
             </div>
         % end
     </div>
 </div>
+
+% include('components/top_button')

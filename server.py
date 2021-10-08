@@ -1,6 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, redirect, request, response
+from bottle import Bottle, static_file, template, redirect, request, response, debug
 import cherrypy as cp
 import sys
 
@@ -12,6 +12,8 @@ import gtfs
 import realtime
 import history
 
+app = Bottle()
+
 mapbox_api_key = ''
 no_system_domain = 'bctracker.ca/{0}'
 system_domain = '{0}.bctracker.ca/{1}'
@@ -21,9 +23,14 @@ def start():
     global mapbox_api_key, no_system_domain, system_domain, cookie_domain
     
     force_gtfs_redownload = False
-    if len(sys.argv) > 1 and sys.argv[1] == '-r':
-        print('Forcing GTFS redownload')
-        force_gtfs_redownload = True
+    if len(sys.argv):
+        arg_str = ''.join(sys.argv[1:])
+        if 'r' in arg_str:
+            print('Forcing GTFS redownload')
+            force_gtfs_redownload = True
+        if 'd' in arg_str:
+            print('Starting bottle in DEBUG mode')
+            debug(True)
     
     load_models()
     load_orders()
@@ -84,7 +91,6 @@ def systems_error_template(name, system_id, **kwargs):
 # =============================================================
 # Web framework: assign routes - its all Server side rendering
 # =============================================================
-app = Bottle()
 
 @app.route('/style/<name:path>')
 def style(name):
@@ -139,15 +145,15 @@ def routes():
 def system_routes(system_id):
     return systems_template('routes', system_id, path='routes')
 
-@app.route('/routes/<number:int>')
-@app.route('/routes/<number:int>/')
+@app.route('/routes/<number>')
+@app.route('/routes/<number>/')
 def routes_number(number):
     return system_routes_number(None, number)
 
-@app.route('/<system_id>/routes/<number:int>')
-@app.route('/<system_id>/routes/<number:int>/')
+@app.route('/<system_id>/routes/<number>')
+@app.route('/<system_id>/routes/<number>/')
 def system_routes_number(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == 66:
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
         redirect(get_url('fvx', 'routes/66'))
     system = get_system(system_id)
     if system is None:
@@ -257,6 +263,20 @@ def system_trips_id(system_id, trip_id):
     if trip is None:
         return systems_error_template('trip', system_id, trip_id=trip_id)
     return systems_template('trip', system_id, trip=trip)
+
+@app.route('/stops')
+@app.route('/stops/')
+def stops():
+    return system_stops(None)
+
+@app.route('/<system_id>/stops')
+@app.route('/<system_id>/stops/')
+def system_stops(system_id):
+    path = 'stops'
+    search = request.query.get('search')
+    if search is not None:
+        path += f'?search={search}'
+    return systems_template('stops', system_id, search=search, path=path)
 
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
