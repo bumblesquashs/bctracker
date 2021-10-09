@@ -47,6 +47,30 @@
             </div>
         </div>
     </div>
+    
+    % related_trips = trip.related_trips
+    % if len(related_trips) > 0:
+        <h2>Related Trips</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Trip</th>
+                    <th>Block</th>
+                    <th>Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for related_trip in related_trips:
+                    % block = related_trip.block
+                    <tr>
+                        <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
+                        <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                        <td>{{ related_trip.service }}</td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 </div>
 
 <div>

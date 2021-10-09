@@ -78,6 +78,10 @@ table {
     margin-left: 10px;
 }
 
+#top-button {
+    right: 40px;
+}
+
 .button {
     font-size: 14pt;
     overflow: hidden;
