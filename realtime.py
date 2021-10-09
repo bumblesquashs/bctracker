@@ -65,6 +65,7 @@ def update_positions(system):
             position.lat = vehicle.position.latitude
             position.lon = vehicle.position.longitude
         except AttributeError: pass
+        # print(f'system: {system.id} {vehicle.vehicle.id}')
         try:
             bus_id = f'{system.id}_{vehicle.vehicle.id}'
             positions[bus_id] = position
@@ -80,9 +81,11 @@ def update_translations(system):
     for i in bus_info:
         try:
             vehicle_id = i['vehicleId']
-            bus_id = f'{system.id}_{vehicle_id}'
             number = int(i['name'])
-            
+            if system.vehicle_id_enabled:
+                bus_id = f'{system.id}_{vehicle_id}'
+            else:
+                bus_id = f'{system.id}_{number}' # Sep 27 2021 - Victoria is now using bus numbers as IDs in realtime data
             buses_by_id[bus_id] = number
             buses_by_number[number] = bus_id
         except KeyError:

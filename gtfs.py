@@ -71,7 +71,7 @@ def load_routes(system):
     system.routes_by_number = {}
     for values in read_csv(system, 'routes'):
         route_id = values['route_id']
-        number = int(values['route_short_name'])
+        number = values['route_short_name']
         name = values['route_long_name']
         if 'route_color' in values:
             colour = values['route_color']
@@ -155,8 +155,8 @@ def load_stops(system):
         except:
             continue
         name = values['stop_name']
-        lat = values['stop_lat']
-        lon = values['stop_lon']
+        lat = float(values['stop_lat'])
+        lon = float(values['stop_lon'])
         
         stop = Stop(system, stop_id, number, name, lat, lon)
         

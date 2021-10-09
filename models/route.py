@@ -7,6 +7,8 @@ class Route:
         self.name = name
         self.colour = colour
         
+        self.number_value = int(''.join([d for d in number if d.isdigit()]))
+        
         self.trips = []
     
     def __str__(self):
@@ -19,10 +21,10 @@ class Route:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.number < other.number
+        return self.number_value < other.number_value
     
     def __gt__(self, other):
-        return self.number > other.number
+        return self.number_value > other.number_value
     
     @property
     def sheets(self):

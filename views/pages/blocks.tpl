@@ -1,6 +1,8 @@
 % rebase('base', title='Blocks')
 
-<h1>Blocks</h1>
+<div class="page-header">
+    <h1 class="title">Blocks</h1>
+</div>
 <hr />
 
 % if system is None:
@@ -34,6 +36,7 @@
                             <th>Routes</th>
                             <th class="desktop-only">Start Time</th>
                             <th class="desktop-only">End Time</th>
+                            <th class="desktop-only">Duration</th>
                             <th class="non-desktop">Time</th>
                         </tr>
                     </thead>
@@ -45,6 +48,7 @@
                                 <td>{{ block.get_routes_string(None) }}</td>
                                 <td class="desktop-only">{{ block.get_start_time(None) }}</td>
                                 <td class="desktop-only">{{ block.get_end_time(None) }}</td>
+                                <td class="desktop-only">{{ block.get_duration(None) }}</td>
                                 <td class="non-desktop">{{ block.get_start_time(None) }} - {{ block.get_end_time(None) }}</td>
                             </tr>
                         % end
@@ -54,3 +58,5 @@
         % end
     </div>
 % end
+
+% include('components/top_button')

@@ -36,13 +36,23 @@ class Block:
     def get_start_time(self, sheet):
         trips = self.get_trips(sheet)
         if not trips:
-            return 'N/A'
+            return None
         else:
             return trips[0].start_time
     
     def get_end_time(self, sheet):
         trips = self.get_trips(sheet)
         if not trips:
-            return 'N/A'
+            return None
         else:
             return trips[-1].end_time
+    
+    def get_duration(self, sheet):
+        start_time = self.get_start_time(sheet)
+        end_time = self.get_end_time(sheet)
+        if start_time is None or end_time is None:
+            return 0
+        return start_time.get_difference(end_time)
+    
+    def get_related_blocks(self, sheet=None):
+        return []

@@ -1,4 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+import math
+
+MINIMUM_MINUTES = 4
 
 class Position:
     def __init__(self, system, active):
@@ -48,14 +51,46 @@ class Position:
         
         if trip is None or stop is None:
             return
+        
         stop_time = trip.get_stop_time(stop)
-        if stop_time is None:
-            return
-        now = datetime.now()
-        (stop_hour, stop_minute) = stop_time.time.split(':')
-        total = (now.hour * 60) + now.minute
-        stop_total = (int(stop_hour) * 60) + int(stop_minute)
-        if stop_total >= (1440):
-            # Stop is scheduled after midnight - remove 24 hours
-            stop_total = stop_total - 1440
-        self.schedule_adherence = stop_total - total
+        previous_stop = trip.get_previous_stop(stop_time)
+        try:
+            expected_scheduled_mins = stop_time.time.get_minutes()
+            
+            if previous_stop is not None:
+                prev_stop_time = trip.get_stop_time(previous_stop)
+                prev_stop_time_mins = prev_stop_time.time.get_minutes()
+                time_difference = expected_scheduled_mins - prev_stop_time_mins
+                
+                # in the case where we know a previous stop, and its a long gap, do linear interpolation
+                if time_difference >= MINIMUM_MINUTES:
+                    expected_scheduled_mins = prev_stop_time_mins + self.linear_interpolate(previous_stop, stop, time_difference)
+            
+            now = datetime.now()
+            current_mins = (now.hour * 60) + now.minute
+            self.schedule_adherence = expected_scheduled_mins - current_mins
+        except AttributeError:
+            pass
+    
+    '''
+    Estimate how far the position is between two stops in minutes...
+    aka calculate the fraction of distance a point has travelled between two other points.
+    
+    Another approach might be projecting the vector from previous_stop to lat-lon onto the vector from
+    previous_stop to next_stop - this probably involves the dot product somewhere.
+    Instead we simply take the ratio of the (scalar) distances to each one, which should be an ok estimate
+    This is simpler and avoids weird results when the position is really in an odd spot
+    '''
+    def linear_interpolate(self, previous_stop, next_stop, time_difference):
+        previous_stop_dx = self.lon - previous_stop.lon
+        previous_stop_dy = self.lat - previous_stop.lat
+        next_stop_dx = self.lon - next_stop.lon
+        next_stop_dy = self.lat - next_stop.lat
+        
+        distance_to_previous_stop = math.sqrt(previous_stop_dx ** 2 + previous_stop_dy ** 2)
+        distance_to_next_stop = math.sqrt(next_stop_dx ** 2 + next_stop_dy ** 2)
+        
+        scalar_sum_of_displacements = distance_to_previous_stop + distance_to_next_stop
+        fraction_travelled = distance_to_previous_stop / scalar_sum_of_displacements
+        
+        return int(fraction_travelled * time_difference)

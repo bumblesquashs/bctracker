@@ -1,6 +1,8 @@
 % rebase('base', title='About')
 
-<h1>About</h1>
+<div class="page-header">
+    <h1 class="title">About</h1>
+</div>
 <hr />
 
 % realtime_count = len([s for s in systems if s.realtime_enabled])

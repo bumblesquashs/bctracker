@@ -84,7 +84,7 @@ class Service:
     
     def __str__(self):
         if self.type == ServiceType.ALL:
-            return 'Everyday'
+            return 'Every Day'
         if self.type == ServiceType.WEEKDAY:
             return 'Weekdays'
         if self.type == ServiceType.WEEKDAY_EXCEPT_FRIDAY:

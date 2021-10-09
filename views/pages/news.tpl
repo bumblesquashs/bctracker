@@ -1,9 +1,26 @@
 % rebase('base', title='News Archive')
 
-<h1>News Archive</h1>
+<div class="page-header">
+    <h1 class="title">News Archive</h1>
+    <a href="{{ get_url(system) }}">Return home</a>
+</div>
 <hr />
 
 <div class="body">
+    <div class="news-post">
+        <div class="header">
+            <h3>New Deckers Out!</h3>
+            April 1, 2021
+        </div>
+        <div class="content">
+            <p>
+                BCTracker has been updated to support the latest deckers, which have just entered service.
+            </p>
+            <p>
+                Stay safe everyone!
+            </p>
+        </div>
+    </div>
     <div class="news-post">
         <div class="header">
             <h3>New Website Look</h3>
@@ -24,7 +41,11 @@
                 We're always looking for ways to improve the website even more, and your feedback is always welcome.
                 Send us an email anytime at <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>
             </p>
-            Enjoy!
+            <p>
+                Enjoy!
+            </p>
         </div>
     </div>
 </div>
+
+% include('components/top_button')

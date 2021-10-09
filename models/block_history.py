@@ -1,5 +1,4 @@
 from models.system import get_system
-from formatting import format_time
 
 class BlockHistory:
     def __init__(self, date, system_id, feed_version, block_id, routes, start_time, end_time):
@@ -8,20 +7,15 @@ class BlockHistory:
         self.feed_version = feed_version
         self.block_id = block_id
         self.routes = routes
-        self.start_time = format_time(start_time)
-        self.end_time = format_time(end_time)
+        self.start_time = start_time
+        self.end_time = end_time
     
     def __eq__(self, other):
         return self.block_id == other.block_id
     
     def __lt__(self, other):
         if self.date == other.date:
-            (sh, sm) = self.start_time.split(':')
-            (oh, om) = other.start_time.split(':')
-            if sh == oh:
-                return int(sm) > int(om)
-            else:
-                return int(sh) > int(oh)
+            return self.start_time > other.start_time
         return self.date > other.date
     
     @property
@@ -48,6 +42,6 @@ class BlockHistory:
             'feed_version': self.feed_version,
             'block_id': self.block_id,
             'routes': self.routes,
-            'start_time': self.start_time,
-            'end_time': self.end_time
+            'start_time': self.start_time.full_string,
+            'end_time': self.end_time.full_string
         }

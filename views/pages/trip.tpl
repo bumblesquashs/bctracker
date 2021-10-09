@@ -1,10 +1,13 @@
-% rebase('base', title=str(trip), include_maps=True)
+% rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
-<h1>{{ trip }}</h1>
-<h2>Trip {{ trip.id }}</h2>
+<div class="page-header">
+    <h1 class="title">Trip {{ trip.id }}</h1>
+    <h2 class="subtitle">{{ trip }}</h2>
+</div>
 <hr />
 
 <div id="sidebar">
+    <h2>Overview</h2>
     % include('components/trip_map', trip=trip)
     
     <div class="info-box">
@@ -20,8 +23,16 @@
             <div class="value">{{ trip.end_time }}</div>
         </div>
         <div class="section">
+            <div class="name">Duration</div>
+            <div class="value">{{ trip.duration }}</div>
+        </div>
+        <div class="section">
             <div class="name">Number of stops</div>
             <div class="value">{{ len(trip.stop_times) }}</div>
+        </div>
+        <div class="section">
+            <div class="name">Direction</div>
+            <div class="value">{{ trip.direction }}</div>
         </div>
         <div class="section">
             <div class="name">Route</div>
@@ -36,9 +47,34 @@
             </div>
         </div>
     </div>
+    
+    % related_trips = trip.related_trips
+    % if len(related_trips) > 0:
+        <h2>Related Trips</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Trip</th>
+                    <th>Block</th>
+                    <th>Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for related_trip in related_trips:
+                    % block = related_trip.block
+                    <tr>
+                        <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
+                        <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                        <td>{{ related_trip.service }}</td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 </div>
 
 <div>
+    <h2>Stop Schedule</h2>
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>

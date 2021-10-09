@@ -2,7 +2,9 @@
 
 % rebase('base', title='Routes')
 
-<h1>Routes</h1>
+<div class="page-header">
+    <h1 class="title">Routes</h1>
+</div>
 <hr />
 
 % if system is None:

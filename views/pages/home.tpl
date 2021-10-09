@@ -1,12 +1,12 @@
 % rebase('base', title='Home' if system is None else 'BCTracker')
 
-<h1>
+<div class="page-header">
     % if system is None:
-        Welcome to BCTracker!
+        <h1 class="title">Welcome to BCTracker!</h1>
     % else:
-        Welcome to BCTracker {{ system }}!
+        <h1 class="title">Welcome to BCTracker {{ system }}!</h1>
     % end
-</h1>
+</div>
 <hr />
 
 <div id="sidebar">
@@ -30,7 +30,11 @@
         function stopSearch() {
             let value = document.getElementById('stop_id_search').value;
             if (value.length > 0) {
-                window.location = "{{ get_url(system) }}/stops/" + value;
+                if (isNaN(value)) {
+                    window.location = "{{ get_url(system) }}/stops?search=" + value;
+                } else {
+                    window.location = "{{ get_url(system) }}/stops/" + value;
+                }
             }
         }
     </script>
@@ -60,7 +64,7 @@
         </form>
         
         <form onsubmit="stopSearch()" action="javascript:void(0)">
-            <label for="stop_id_search">Stop Number:</label>
+            <label for="stop_id_search">Stop Number or Name:</label>
             <br />
             <input type="text" id="stop_id_search" name="stop_id" method="post">
             <input type="submit" value="Search" class="button">
@@ -88,6 +92,32 @@
     
     <div class="news-post">
         <div class="header">
+            <h3>Fall Update</h3>
+            September 21, 2021
+        </div>
+        <div class="content">
+            <p>
+                Over the last couple months you may have noticed some exciting new features appearing around the website.
+                We're trying to keep updates more frequent, rather than releasing massive changes once or twice per year.
+            </p>
+            <p>
+                Since the big multi-system update earlier this summer, we've introduced:
+            </p>
+            <ul>
+                <li>Schedule Adherence: How many minutes ahead or behind schedule a bus is (approximately)</li>
+                <li>Nearby Stops: Easy transfers that are within 100m of the stop you're looking at</li>
+                <li>Dark Theme: Can be set automatically based on your device's current preferences, or set manually</li>
+                <li>Tablet Layouts: Specially designed for screens bigger than a phone but smaller than a computer</li>
+                <li>Lots more minor improvements and fixes behind the scenes</li>
+            </ul>
+            <p>
+                We appreciate your feedback, and we're looking forward to turning more of your suggestions into new features and improvements.
+                Stay tuned for more this fall!
+            </p>
+        </div>
+    </div>
+    <div class="news-post">
+        <div class="header">
             <h3>More Transit Systems</h3>
             July 12, 2021
         </div>
@@ -109,19 +139,9 @@
                 There's always more to do, and your feedback helps us figure out what comes next.
                 You can send an email to <a href="mailto:james@bctracker.ca">james@bctracker.ca</a> to let us know what you like and what can be made better.
             </p>
-            Have a great summer!
-        </div>
-    </div>
-    <div class="news-post">
-        <div class="header">
-            <h3>New Deckers Out!</h3>
-            April 1, 2021
-        </div>
-        <div class="content">
             <p>
-                BCTracker has been updated to support the latest deckers, which have just entered service.
+                Have a great summer!
             </p>
-            Stay safe everyone!
         </div>
     </div>
     <div class="news-post-older">

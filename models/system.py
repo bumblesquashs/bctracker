@@ -1,12 +1,13 @@
 import csv
 
 class System:
-    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id):
+    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, vehicle_id_enabled, bctransit_id, mapstrat_id):
         self.id = system_id
         self.name = name
         self.visible = visible
         self.gtfs_enabled = gtfs_enabled
         self.realtime_enabled = realtime_enabled
+        self.vehicle_id_enabled = vehicle_id_enabled
         self.bctransit_id = bctransit_id
         self.mapstrat_id = mapstrat_id
         
@@ -78,10 +79,16 @@ class System:
             return self.stops_by_number[number]
         return None
     
+    def all_stops(self):
+        return self.stops.values()
+    
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
+    
+    def all_trips(self):
+        return self.trips.values()
     
     def sort_data(self):
         for stop in self.stops.values():
@@ -108,10 +115,11 @@ def load_systems():
         visible = row['visible'] == '1'
         gtfs_enabled = row['gtfs_enabled'] == '1'
         realtime_enabled = row['realtime_enabled'] == '1'
+        vehicle_id_enabled = row['vehicle_id_enabled'] == '1'
         bctransit_id = row['bctransit_id']
         mapstrat_id = row['mapstrat_id']
         
-        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, bctransit_id, mapstrat_id)
+        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, vehicle_id_enabled, bctransit_id, mapstrat_id)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:

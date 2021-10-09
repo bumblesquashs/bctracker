@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from models.block_history import BlockHistory
 from models.bus_history import BusHistory
 from models.service import Sheet
+from models.time import Time
 
 LAST_SEEN_PATH = 'data/history/last_seen.json'
 
@@ -100,8 +101,8 @@ def load_bus_history(number):
         feed_version = data['feed_version']
         block_id = data['block_id']
         routes = data['routes']
-        start_time = data['start_time']
-        end_time = data['end_time']
+        start_time = Time(data['start_time'])
+        end_time = Time(data['end_time'])
         
         history.append(BlockHistory(date, system_id, feed_version, block_id, routes, start_time, end_time))
     return history
