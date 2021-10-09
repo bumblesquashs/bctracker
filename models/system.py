@@ -79,7 +79,7 @@ class System:
             return self.stops_by_number[number]
         return None
     
-    def all_stops(self):
+    def get_stops(self):
         return self.stops.values()
     
     def get_trip(self, trip_id):
@@ -87,18 +87,18 @@ class System:
             return self.trips[trip_id]
         return None
     
-    def all_trips(self):
+    def get_trips(self):
         return self.trips.values()
     
     def sort_data(self):
         for stop in self.stops.values():
-            stop.stop_times = sorted(stop.stop_times)
+            stop.departures.sort()
         for trip in self.trips.values():
-            trip.stop_times = sorted(trip.stop_times)
+            trip.departures.sort()
         for route in self.routes.values():
-            route.trips = sorted(route.trips)
+            route.trips.sort()
         for block in self.blocks.values():
-            block.trips = sorted(block.trips)
+            block.trips.sort()
 
 systems = {}
 

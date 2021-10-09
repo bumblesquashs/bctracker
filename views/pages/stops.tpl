@@ -15,7 +15,7 @@
     </p>
     % include('components/systems')
 % else:
-    % stops = system.all_stops()
+    % stops = system.get_stops()
     
     % if search is not None:
         % stops = [s for s in stops if search.lower() in s.name.lower()]

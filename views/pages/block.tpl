@@ -85,8 +85,8 @@
         <tbody>
             % for trip in trips:
                 <tr>
-                    <td>{{ trip.start_time }}</td>
-                    <td class="desktop-only">{{ trip.end_time }}</td>
+                    <td>{{ trip.first_departure.time }}</td>
+                    <td class="desktop-only">{{ trip.last_departure.time }}</td>
                     <td class="desktop-only">{{ trip.duration }}</td>
                     <td>
                         {{ trip }}

@@ -174,9 +174,9 @@ def route_history():
 def system_history(system_id):
     system = get_system(system_id)
     if system is None:
-        last_seen = history.all_last_seen()
+        last_seen = history.get_last_seen()
     else:
-        last_seen = [h for h in history.all_last_seen() if h.system == system]
+        last_seen = [h for h in history.get_last_seen() if h.system == system]
     return systems_template('history', system_id, last_seen=last_seen, path='history')
 
 @app.route('/map')

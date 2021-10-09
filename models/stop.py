@@ -10,7 +10,7 @@ class Stop:
         self.lat = lat
         self.lon = lon
         
-        self.stop_times = []
+        self.departures = []
     
     def __hash__(self):
         return hash(self.id)
@@ -26,23 +26,23 @@ class Stop:
             return self.number < other.number
         return self.name < other.name
     
-    def add_stop_time(self, stop_time):
-        self.stop_times.append(stop_time)
+    def add_departure(self, departure):
+        self.departures.append(departure)
     
-    def get_stop_times(self, sheet):
+    def get_departures(self, sheet):
         if sheet is None:
-            return self.stop_times
-        return [s for s in self.stop_times if s.trip.service.sheet == sheet]
+            return self.departures
+        return [d for d in self.departures if d.trip.service.sheet == sheet]
     
     def get_services(self, sheet):
-        return sorted({s.trip.service for s in self.get_stop_times(sheet)})
+        return sorted({d.trip.service for d in self.get_departures(sheet)})
     
     def get_routes(self, sheet):
-        return sorted({s.trip.route for s in self.get_stop_times(sheet)})
+        return sorted({d.trip.route for d in self.get_departures(sheet)})
     
     def get_routes_string(self, sheet):
         return ', '.join([str(r.number) for r in self.get_routes(sheet)])
     
     def get_nearby_stops(self):
-        stops = self.system.all_stops()
+        stops = self.system.get_stops()
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})

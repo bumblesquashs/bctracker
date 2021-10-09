@@ -7,11 +7,11 @@ import wget
 import csv
 
 from models.block import Block
+from models.departure import Departure
 from models.route import Route
 from models.service import Service, Sheet
 from models.shape import Shape
 from models.stop import Stop
-from models.stop_time import StopTime
 from models.trip import Trip
 
 from formatting import format_csv
@@ -58,7 +58,7 @@ def load(system):
     load_services(system)
     load_shapes(system)
     load_trips(system)
-    load_stop_times(system)
+    load_departures(system)
     system.sort_data()
     print('Done!')
 
@@ -127,7 +127,7 @@ def load_shapes(system):
         
         shape.add_point(lat, lon, sequence)
 
-def load_stop_times(system):
+def load_departures(system):
     for values in read_csv(system, 'stop_times'):
         stop_id = values['stop_id']
         if stop_id not in system.stops:
@@ -140,10 +140,10 @@ def load_stop_times(system):
         time = values['departure_time']
         sequence = int(values['stop_sequence'])
         
-        stop_time = StopTime(system, stop_id, trip_id, time, sequence)
+        departure = Departure(system, stop_id, trip_id, time, sequence)
         
-        stop_time.stop.add_stop_time(stop_time)
-        stop_time.trip.add_stop_time(stop_time)
+        departure.stop.add_departure(departure)
+        departure.trip.add_departure(departure)
 
 def load_stops(system):
     system.stops = {}

@@ -55,7 +55,7 @@ def load_last_seen():
 
         last_seen[number] = BusHistory(date, bus_id, number, system_id, feed_version, block_id, routes)
 
-def all_last_seen():
+def get_last_seen():
     return sorted(last_seen.values())
 
 def update_bus_history(bus):

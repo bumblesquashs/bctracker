@@ -65,9 +65,9 @@
         % end
         
         % for service in services:
-            % stop_times = [stop_time for stop_time in stop.stop_times if stop_time.trip.service == service]
+            % departures = [d for d in stop.departures if d.trip.service == service]
             
-            % if len(stop_times) > 0:
+            % if len(departures) > 0:
                 <div class="section">
                     <h3 class="title" id="{{service}}">{{ service }}</h3>
                     <div class="subtitle">{{ service.date_string }}</div>
@@ -82,26 +82,27 @@
                         </thead>
                         <tbody>
                             % last_hour = -1
-                            % for stop_time in stop_times:
-                                % block = stop_time.trip.block
-                                % this_hour = stop_time.time.hour
+                            % for departure in departures:
+                                % trip = departure.trip
+                                % block = trip.block
+                                % this_hour = departure.time.hour
                                 % if last_hour == -1:
                                     % last_hour = this_hour
                                 % end
                                 <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                                    <td>{{ stop_time.time }}</td>
+                                    <td>{{ departure.time }}</td>
                                     <td>
-                                        {{ stop_time.trip }}
-                                        % if stop_time == stop_time.trip.first_stop:
+                                        {{ trip }}
+                                        % if departure == trip.first_departure:
                                             <br />
                                             <span class="smaller-font">Loading only</span>
-                                        % elif stop_time == stop_time.trip.last_stop:
+                                        % elif departure == trip.last_departure:
                                             <br />
                                             <span class="smaller-font">Unloading only</span>
                                         % end
                                     </td>
                                     <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                    <td><a href="{{ get_url(stop_time.trip.system, f'trips/{stop_time.trip.id}') }}">{{ stop_time.trip.id }}</a></td>
+                                    <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
                                 </tr>
                                 % if this_hour > last_hour:
                                     % last_hour = this_hour
