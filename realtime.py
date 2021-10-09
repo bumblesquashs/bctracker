@@ -65,6 +65,7 @@ def update_positions(system):
             position.lat = vehicle.position.latitude
             position.lon = vehicle.position.longitude
         except AttributeError: pass
+        # print(f'system: {system.id} {vehicle.vehicle.id}')
         try:
             bus_id = f'{system.id}_{vehicle.vehicle.id}'
             positions[bus_id] = position
