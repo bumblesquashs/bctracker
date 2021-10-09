@@ -30,7 +30,11 @@
         function stopSearch() {
             let value = document.getElementById('stop_id_search').value;
             if (value.length > 0) {
-                window.location = "{{ get_url(system) }}/stops/" + value;
+                if (isNaN(value)) {
+                    window.location = "{{ get_url(system) }}/stops?search=" + value;
+                } else {
+                    window.location = "{{ get_url(system) }}/stops/" + value;
+                }
             }
         }
     </script>
@@ -60,7 +64,7 @@
         </form>
         
         <form onsubmit="stopSearch()" action="javascript:void(0)">
-            <label for="stop_id_search">Stop Number:</label>
+            <label for="stop_id_search">Stop Number or Name:</label>
             <br />
             <input type="text" id="stop_id_search" name="stop_id" method="post">
             <input type="submit" value="Search" class="button">
