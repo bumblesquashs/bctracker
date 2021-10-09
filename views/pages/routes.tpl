@@ -14,7 +14,7 @@
     </p>
     % include('components/systems')
 % else:
-    % routes = system.get_routes(None)
+    % routes = system.get_routes(sheet)
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
             <tr>

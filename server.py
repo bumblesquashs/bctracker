@@ -74,6 +74,17 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
+def get_sheet(default_sheet):
+    sheet = request.query.get('sheet')
+    if sheet is None:
+        return default_sheet
+    if sheet.lower() == 'all':
+        return None
+    try:
+        return Sheet[sheet.upper()]
+    except:
+        return default_sheet
+
 def systems_template(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
@@ -144,7 +155,7 @@ def routes():
 @app.route('/<system_id>/routes')
 @app.route('/<system_id>/routes/')
 def system_routes(system_id):
-    return systems_template('routes', system_id, path='routes')
+    return systems_template('routes', system_id, sheet=get_sheet(Sheet.CURRENT), path='routes')
 
 @app.route('/routes/<number>')
 @app.route('/routes/<number>/')
@@ -162,7 +173,7 @@ def system_routes_number(system_id, number):
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    return systems_template('route', system_id, route=route)
+    return systems_template('route', system_id, route=route, sheet=get_sheet(route.main_sheet))
 
 @app.route('/history')
 @app.route('/history/')
@@ -244,7 +255,7 @@ def blocks():
 @app.route('/<system_id>/blocks')
 @app.route('/<system_id>/blocks/')
 def system_blocks(system_id):
-    return systems_template('blocks', system_id, path='blocks')
+    return systems_template('blocks', system_id, sheet=get_sheet(Sheet.CURRENT), path='blocks')
 
 @app.route('/blocks/<block_id>')
 @app.route('/blocks/<block_id>/')
@@ -260,7 +271,7 @@ def system_blocks_id(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    return systems_template('block', system_id, block=block)
+    return systems_template('block', system_id, block=block, sheet=get_sheet(block.main_sheet))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -290,7 +301,7 @@ def system_stops(system_id):
     search = request.query.get('search')
     if search is not None:
         path += f'?search={search}'
-    return systems_template('stops', system_id, search=search, path=path)
+    return systems_template('stops', system_id, search=search, sheet=get_sheet(Sheet.CURRENT), path=path)
 
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
@@ -306,7 +317,7 @@ def system_stops_number(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    return systems_template('stop', system_id, stop=stop)
+    return systems_template('stop', system_id, stop=stop, sheet=get_sheet(stop.main_sheet))
 
 @app.route('/about')
 @app.route('/about/')

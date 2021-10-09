@@ -6,8 +6,9 @@
 </div>
 <hr />
 
-% services = stop.get_services(None)
-% routes = stop.get_routes(None)
+% services = stop.get_services(sheet)
+% routes = stop.get_routes(sheet)
+% departures = stop.get_departures(sheet)
 
 <div id="sidebar">
     <h2>Overview</h2>
@@ -28,7 +29,7 @@
         </div>
     </div>
     
-    % nearby_stops = sorted(stop.get_nearby_stops())
+    % nearby_stops = sorted(stop.get_nearby_stops(sheet))
     % if len(nearby_stops) > 0:
         <h2>Nearby Stops</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">
@@ -42,9 +43,9 @@
             <tbody>
                 % for nearby_stop in nearby_stops:
                     <tr>
-                        <td><a href="{{ get_url(stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
+                        <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
                         <td>{{ nearby_stop }}</td>
-                        <td>{{ nearby_stop.get_routes_string(None) }}</td>
+                        <td>{{ nearby_stop.get_routes_string(sheet) }}</td>
                     </tr>
                 % end
             </tbody>
@@ -65,9 +66,9 @@
         % end
         
         % for service in services:
-            % departures = [d for d in stop.departures if d.trip.service == service]
+            % service_departures = [d for d in departures if d.trip.service == service]
             
-            % if len(departures) > 0:
+            % if len(service_departures) > 0:
                 <div class="section">
                     <h3 class="title" id="{{service}}">{{ service }}</h3>
                     <div class="subtitle">{{ service.date_string }}</div>
@@ -82,7 +83,7 @@
                         </thead>
                         <tbody>
                             % last_hour = -1
-                            % for departure in departures:
+                            % for departure in service_departures:
                                 % trip = departure.trip
                                 % block = trip.block
                                 % this_hour = departure.time.hour

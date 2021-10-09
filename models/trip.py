@@ -13,6 +13,7 @@ class Trip:
         
         self.departures = []
         self._direction = None
+        self._related_trips = None
     
     def __str__(self):
         if self.headsign.startswith(str(self.route.number)):
@@ -23,7 +24,7 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.departures[0] < other.departures[0]
+        return self.first_departure < other.first_departure
     
     @property
     def route(self):
@@ -72,7 +73,10 @@ class Trip:
     
     @property
     def related_trips(self):
-        return []
+        if self._related_trips is None:
+            self._related_trips = [t for t in self.system.get_trips(self.service.sheet) if self.is_related(t)]
+            self._related_trips.sort(key=lambda t: t.service)
+        return self._related_trips
     
     def add_departure(self, departure):
         self.departures.append(departure)
@@ -93,3 +97,18 @@ class Trip:
             if other_departure.sequence == (departure.sequence - 1):
                 return other_departure
         return None
+    
+    def is_related(self, other):
+        if self.id == other.id:
+            return False
+        if self.service.sheet != other.service.sheet:
+            return False
+        if self.route_id != other.route_id:
+            return False
+        if self.first_departure.time != other.first_departure.time:
+            return False
+        if self.last_departure.time != other.last_departure.time:
+            return False
+        if self.direction_id != other.direction_id:
+            return False
+        return True

@@ -5,9 +5,9 @@
 </div>
 <hr />
 
-% services = block.get_services(None)
-% routes = block.get_routes(None)
-% trips = block.get_trips(None)
+% services = block.get_services(sheet)
+% routes = block.get_routes(sheet)
+% trips = block.get_trips(sheet)
 
 <div id="sidebar">
     <h2>Overview</h2>
@@ -21,15 +21,15 @@
         </div>
         <div class="section">
             <div class="name">Start time</div>
-            <div class="value">{{ block.get_start_time(None) }}</div>
+            <div class="value">{{ block.get_start_time(sheet) }}</div>
         </div>
         <div class="section">
             <div class="name">End time</div>
-            <div class="value">{{ block.get_end_time(None) }}</div>
+            <div class="value">{{ block.get_end_time(sheet) }}</div>
         </div>
         <div class="section">
             <div class="name">Duration</div>
-            <div class="value">{{ block.get_duration(None) }}</div>
+            <div class="value">{{ block.get_duration(sheet) }}</div>
         </div>
         <div class="section">
             <div class="name">Number of trips</div>
@@ -46,7 +46,7 @@
         </div>
     </div>
     
-    % related_blocks = block.get_related_blocks(None)
+    % related_blocks = block.get_related_blocks(sheet)
     % if len(related_blocks) > 0:
         <h2>Related Blocks</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">
@@ -60,7 +60,7 @@
                 % for related_block in related_blocks:
                     <tr>
                         <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
-                        <td>{{ ', '.join([str(s) for s in related_block.services]) }}</td>
+                        <td>{{ ', '.join([str(s) for s in related_block.get_services(sheet)]) }}</td>
                     </tr>
                 % end
             </tbody>

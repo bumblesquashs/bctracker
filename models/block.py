@@ -1,4 +1,6 @@
 
+from models.service import Sheet
+
 class Block:
     def __init__(self, system, block_id):
         self.system = system
@@ -15,6 +17,17 @@ class Block:
     @property
     def sheets(self):
         return {t.service.sheet for t in self.trips}
+    
+    @property
+    def main_sheet(self):
+        sheets = self.sheets
+        if Sheet.CURRENT in sheets:
+            return Sheet.CURRENT
+        if Sheet.NEXT in sheets:
+            return Sheet.NEXT
+        if Sheet.PREVIOUS in sheets:
+            return Sheet.PREVIOUS
+        return Sheet.UNKNOWN
     
     def add_trip(self, trip):
         self.trips.append(trip)
@@ -54,5 +67,5 @@ class Block:
             return 0
         return start_time.get_difference(end_time)
     
-    def get_related_blocks(self, sheet=None):
+    def get_related_blocks(self, sheet):
         return []

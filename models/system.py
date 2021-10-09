@@ -79,16 +79,20 @@ class System:
             return self.stops_by_number[number]
         return None
     
-    def get_stops(self):
-        return self.stops.values()
+    def get_stops(self, sheet):
+        if sheet is None:
+            return self.stops.values()
+        return [s for s in self.stops.values() if sheet in s.sheets]
     
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
     
-    def get_trips(self):
-        return self.trips.values()
+    def get_trips(self, sheet):
+        if sheet is None:
+            return self.trips.values()
+        return [t for t in self.trips.values() if t.service.sheet == sheet]
     
     def sort_data(self):
         for stop in self.stops.values():

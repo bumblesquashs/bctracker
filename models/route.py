@@ -1,4 +1,6 @@
 
+from models.service import Sheet
+
 class Route:
     def __init__(self, system, route_id, number, name, colour):
         self.system = system
@@ -29,6 +31,17 @@ class Route:
     @property
     def sheets(self):
         return {t.service.sheet for t in self.trips}
+    
+    @property
+    def main_sheet(self):
+        sheets = self.sheets
+        if Sheet.CURRENT in sheets:
+            return Sheet.CURRENT
+        if Sheet.NEXT in sheets:
+            return Sheet.NEXT
+        if Sheet.PREVIOUS in sheets:
+            return Sheet.PREVIOUS
+        return Sheet.UNKNOWN
     
     def add_trip(self, trip):
         self.trips.append(trip)
