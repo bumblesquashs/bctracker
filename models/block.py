@@ -1,6 +1,4 @@
 
-import formatting
-
 class Block:
     def __init__(self, system, block_id):
         self.system = system

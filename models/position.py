@@ -1,8 +1,6 @@
 from datetime import datetime
 import math
 
-import formatting
-
 MINIMUM_MINUTES = 4
 
 class Position:
