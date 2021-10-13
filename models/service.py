@@ -69,8 +69,8 @@ class Service:
         else:
             self.type = ServiceType.UNKNOWN
         
-        start = self.start_date.date()
-        end = self.end_date.date()
+        start = start_date.date()
+        end = end_date.date()
         today = datetime.now().date()
         
         if start <= today <= end:

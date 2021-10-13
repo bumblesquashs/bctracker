@@ -78,8 +78,6 @@ def get_sheet(default_sheet):
     sheet = request.query.get('sheet')
     if sheet is None:
         return default_sheet
-    if sheet.lower() == 'all':
-        return None
     try:
         return Sheet[sheet.upper()]
     except:
@@ -173,7 +171,7 @@ def system_routes_number(system_id, number):
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    return systems_template('route', system_id, route=route, sheet=get_sheet(route.main_sheet))
+    return systems_template('route', system_id, route=route, sheet=get_sheet(route.default_sheet))
 
 @app.route('/history')
 @app.route('/history/')
@@ -271,7 +269,7 @@ def system_blocks_id(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    return systems_template('block', system_id, block=block, sheet=get_sheet(block.main_sheet))
+    return systems_template('block', system_id, block=block, sheet=get_sheet(block.default_sheet))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -317,7 +315,7 @@ def system_stops_number(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    return systems_template('stop', system_id, stop=stop, sheet=get_sheet(stop.main_sheet))
+    return systems_template('stop', system_id, stop=stop, sheet=get_sheet(stop.default_sheet))
 
 @app.route('/about')
 @app.route('/about/')

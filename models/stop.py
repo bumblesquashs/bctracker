@@ -33,7 +33,7 @@ class Stop:
         return {d.trip.service.sheet for d in self.departures}
     
     @property
-    def main_sheet(self):
+    def default_sheet(self):
         sheets = self.sheets
         if Sheet.CURRENT in sheets:
             return Sheet.CURRENT
