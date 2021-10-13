@@ -1,6 +1,6 @@
 from models.time import Time
 
-class StopTime:
+class Departure:
     def __init__(self, system, stop_id, trip_id, time_string, sequence):
         self.system = system
         self.stop_id = stop_id

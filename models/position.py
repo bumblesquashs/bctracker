@@ -54,19 +54,18 @@ class Position:
         if trip is None or stop is None:
             return
         
-        stop_time = trip.get_stop_time(stop)
-        previous_stop = trip.get_previous_stop(stop_time)
+        departure = trip.get_departure(stop)
+        previous_departure = trip.get_previous_departure(departure)
         try:
-            expected_scheduled_mins = stop_time.time.get_minutes()
+            expected_scheduled_mins = departure.time.get_minutes()
             
-            if previous_stop is not None:
-                prev_stop_time = trip.get_stop_time(previous_stop)
-                prev_stop_time_mins = prev_stop_time.time.get_minutes()
-                time_difference = expected_scheduled_mins - prev_stop_time_mins
+            if previous_departure is not None:
+                previous_departure_mins = previous_departure.time.get_minutes()
+                time_difference = expected_scheduled_mins - previous_departure_mins
                 
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
                 if time_difference >= MINIMUM_MINUTES:
-                    expected_scheduled_mins = prev_stop_time_mins + self.linear_interpolate(previous_stop, stop, time_difference)
+                    expected_scheduled_mins = previous_departure_mins + self.linear_interpolate(previous_departure.stop, stop, time_difference)
             
             now = datetime.now()
             current_mins = (now.hour * 60) + now.minute
