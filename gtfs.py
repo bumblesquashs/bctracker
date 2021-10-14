@@ -62,6 +62,24 @@ def load(system):
     system.sort_data()
     print('Done!')
 
+def load_departures(system):
+    for values in read_csv(system, 'stop_times'):
+        stop_id = values['stop_id']
+        if stop_id not in system.stops:
+            print(f'Invalid stop id: {stop_id}')
+            continue
+        trip_id = values['trip_id']
+        if trip_id not in system.trips:
+            print(f'Invalid trip id: {trip_id}')
+            continue
+        time = values['departure_time']
+        sequence = int(values['stop_sequence'])
+        
+        departure = Departure(system, stop_id, trip_id, time, sequence)
+        
+        departure.stop.add_departure(departure)
+        departure.trip.add_departure(departure)
+
 def load_feed_info(system):
     values = read_csv(system, 'feed_info')[0]
     system.feed_version = values['feed_version']
@@ -126,24 +144,6 @@ def load_shapes(system):
             system.shapes[shape_id] = shape
         
         shape.add_point(lat, lon, sequence)
-
-def load_departures(system):
-    for values in read_csv(system, 'stop_times'):
-        stop_id = values['stop_id']
-        if stop_id not in system.stops:
-            print(f'Invalid stop id: {stop_id}')
-            continue
-        trip_id = values['trip_id']
-        if trip_id not in system.trips:
-            print(f'Invalid trip id: {trip_id}')
-            continue
-        time = values['departure_time']
-        sequence = int(values['stop_sequence'])
-        
-        departure = Departure(system, stop_id, trip_id, time, sequence)
-        
-        departure.stop.add_departure(departure)
-        departure.trip.add_departure(departure)
 
 def load_stops(system):
     system.stops = {}
