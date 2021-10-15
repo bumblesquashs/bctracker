@@ -31,7 +31,7 @@
 <div>
     % positions = route.positions
     % if len(positions) > 0:
-        <h2>Realtime Information</h2>
+        <h2>Active Buses</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">
             <thead>
                 <tr>
