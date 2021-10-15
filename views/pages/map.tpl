@@ -41,6 +41,12 @@
             </div>
             <span class="checkbox-label">Show Route Lines</span>
         </div>
+        <div class="checkbox" onclick="toggleAutomaticRefresh()">
+            <div class="box">
+                <img class="hidden" id="refresh-image" src="/img/check.png" />
+            </div>
+            <span class="checkbox-label">Automatically Refresh</span>
+        </div>
     </div>
     
     <div id="system-map"></div>
@@ -50,59 +56,160 @@
             container: "system-map",
             center: [0, 0],
             zoom: 1,
-            style: prefersDarkScheme ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/light-v10'
+            style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
         });
         
-        const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+        let buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+        let current_shape_ids = []
+        let markers = [];
+        let tripLinesVisible = false;
+        let automaticRefresh = false;
+        
         const shape_ids = [];
         
-        const lons = [];
-        const lats = [];
+        map.on("load", function() {
+            updateMap(true);
+        })
         
-        for (let bus of buses) {
-            const element = document.createElement("div");
-            element.className = "marker";
-            if (bus.number === "Unknown Bus") {
-                element.innerHTML = "\
-                    <img src=\"/img/bus.png\" />\
-                    <div class='title'><span>" + bus.number + "</span></div>\
-                    <div class='subtitle'><span>" + bus.headsign + "</span></div>";
-            } else {
-                element.innerHTML = "\
-                    <div class='link'></div>\
-                    <a href=\"/bus/" + bus.number +"\">\
+        function updateMap(resetPosition) {
+            current_shape_ids = []
+            for (const marker of markers) {
+                marker.remove();
+            }
+            markers = [];
+            
+            const lons = [];
+            const lats = [];
+            
+            for (const bus of buses) {
+                if (bus.shape_id !== null && bus.shape_id !== undefined) {
+                    if (!(current_shape_ids.includes(bus.shape_id))) {
+                        current_shape_ids.push(bus.shape_id)
+                    }
+                }
+                
+                let adherenceElement = document.createElement("span")
+                if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
+                    adherence = bus.schedule_adherence
+                    adherenceElement.classList.add("adherence-indicator")
+                    if (adherence <= -8) {
+                        adherenceElement.classList.add("very-behind")
+                    } else if (adherence <= -5) {
+                        adherenceElement.classList.add("behind")
+                    } else if (adherence >= 5) {
+                        adherenceElement.classList.add("very-ahead")
+                    } else if (adherence >= 3) {
+                        adherenceElement.classList.add("ahead")
+                    } else {
+                        adherenceElement.classList.add("on-time")
+                    }
+                    if (adherence > 0) {
+                        adherenceElement.innerHTML = "+" + adherence
+                    } else {
+                        adherenceElement.innerHTML = "" + adherence
+                    }
+                }
+                
+                const element = document.createElement("div");
+                element.className = "marker";
+                if (bus.number === "Unknown Bus") {
+                    element.innerHTML = "\
                         <img src=\"/img/bus.png\" />\
                         <div class='title'><span>" + bus.number + "</span></div>\
-                        <div class='subtitle'><span>" + bus.headsign + "</span></div>\
-                    </a>";
+                        <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>";
+                } else {
+                    element.innerHTML = "\
+                        <div class='link'></div>\
+                        <a href=\"/bus/" + bus.number +"\">\
+                            <img src=\"/img/bus.png\" />\
+                            <div class='title'><span>" + bus.number + "</span></div>\
+                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
+                        </a>";
+                }
+                element.style.backgroundColor = "#" + bus.colour;
+                
+                lons.push(bus.lon);
+                lats.push(bus.lat);
+        
+                markers.push(new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map));
             }
-            element.style.backgroundColor = "#" + bus.colour;
-        
-            lons.push(bus.lon);
-            lats.push(bus.lat);
-        
-            new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
+            
+            if (resetPosition) {
+                if (lons.length === 1 && lats.length === 1) {
+                    map.jumpTo({
+                        center: [lons[0], lats[0]],
+                        zoom: 14
+                    });
+                } else {
+                    const minLon = Math.min.apply(Math, lons);
+                    const maxLon = Math.max.apply(Math, lons);
+                    const minLat = Math.min.apply(Math, lats);
+                    const maxLat = Math.max.apply(Math, lats);
+                    map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
+                        duration: 0,
+                        padding: {top: 200, bottom: 100, left: 100, right: 100}
+                    });
+                }
+            }
+            
+            for (const shape_id of shape_ids) {
+                if (current_shape_ids.includes(shape_id)) {
+                    map.setLayoutProperty(shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+                } else {
+                    map.setLayoutProperty(shape_id, "visibility", "none");
+                }
+            }
         }
         
-        if (lons.length === 1 && lats.length === 1) {
-            map.jumpTo({
-                center: [lons[0], lats[0]],
-                zoom: 14
-            });
-        } else {
-            const minLon = Math.min.apply(Math, lons);
-            const maxLon = Math.max.apply(Math, lons);
-            const minLat = Math.min.apply(Math, lats);
-            const maxLat = Math.max.apply(Math, lats);
-            map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
-                duration: 0,
-                padding: {top: 200, bottom: 100, left: 100, right: 100}
-            });
+        function toggleTripLines() {
+            tripLinesVisible = !tripLinesVisible;
+            const checkboxImage = document.getElementById("checkbox-image");
+            checkboxImage.classList.toggle("hidden");
+            
+            for (const shape_id of current_shape_ids) {
+                if (shape_ids.includes(shape_id)) {
+                    map.setLayoutProperty(shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+                }
+            }
+            if (tripLinesVisible) {
+                updateRouteData()
+            }
         }
         
-        map.on("load", function() {
-            for (var bus of buses) {
-                if (bus.points === null || bus.points === undefined) {
+        function toggleAutomaticRefresh() {
+            automaticRefresh = !automaticRefresh;
+            const checkboxImage = document.getElementById("refresh-image");
+            checkboxImage.classList.toggle("hidden");
+            
+            if (automaticRefresh) {
+                updateBusData()
+            }
+        }
+        
+        function updateBusData() {
+            const request = new XMLHttpRequest();
+            request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
+            request.responseType = "json";
+            request.onload = function() {
+                if (request.status === 200) {
+                    const lastUpdated = request.response.last_updated;
+                    const element = document.getElementById("last-updated");
+                    if (element !== null && element !== undefined && element.innerHTML.trim() !== "Updated " + lastUpdated) {
+                        element.innerHTML = "Updated " + lastUpdated;
+                        buses = request.response.buses;
+                        updateMap(false);
+                        if (tripLinesVisible) {
+                            updateRouteData()
+                        }
+                    }
+                }
+            };
+            request.send();
+        }
+        
+        function updateRouteData() {
+            for (const bus of buses) {
+                if (bus.shape_id === null || bus.shape_id === undefined) {
                     continue;
                 }
                 if (shape_ids.includes(bus.shape_id)) {
@@ -110,52 +217,58 @@
                 } else {
                     shape_ids.push(bus.shape_id);
                 }
-                map.addSource(bus.shape_id, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': bus.points.map(function (point) { return [point.lon, point.lat] })
-                        }
+                const request = new XMLHttpRequest();
+                request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
+                request.responseType = "json";
+                request.onload = function() {
+                    if (request.status === 200) {
+                        map.addSource(bus.shape_id, {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'Feature',
+                                'properties': {},
+                                'geometry': {
+                                    'type': 'LineString',
+                                    'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                                }
+                            }
+                        });
+                        map.addLayer({
+                            'id': bus.shape_id,
+                            'type': 'line',
+                            'source': bus.shape_id,
+                            'minzoom': 8,
+                            'layout': {
+                                'line-join': 'round',
+                                'line-cap': 'round',
+                                'visibility':  tripLinesVisible ? 'visible' : 'none'
+                            },
+                            'paint': {
+                                'line-color': '#' + bus.colour,
+                                'line-width': 4
+                            }
+                        });
                     }
-                });
-                map.addLayer({
-                    'id': bus.shape_id,
-                    'type': 'line',
-                    'source': bus.shape_id,
-                    'minzoom': 8,
-                    'layout': {
-                        'line-join': 'round',
-                        'line-cap': 'round',
-                        'visibility': 'none'
-                    },
-                    'paint': {
-                        'line-color': '#' + bus.colour,
-                        'line-width': 4
-                    }
-                });
-            }
-        })
-        
-        let tripLinesVisible = false;
-        
-        function toggleTripLines() {
-            tripLinesVisible = !tripLinesVisible;
-            let checkboxImage = document.getElementById("checkbox-image");
-            if (tripLinesVisible) {
-                checkboxImage.className = "checkbox-image";
-            } else {
-                checkboxImage.className = "checkbox-image hidden";
-            }
-            
-            for (var bus of buses) {
-                if (bus.points === null || bus.points === undefined) {
-                    continue;
-                }
-                map.setLayoutProperty(bus.shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+                };
+                request.send();
             }
         }
+        
+        const date = new Date();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+        const timeSinceLastUpdate = ((minutes % 2) * 60) + seconds;
+        const timeToNextUpdate = (2 * 60) - timeSinceLastUpdate;
+        
+        setTimeout(function() {
+            if (automaticRefresh) {
+                updateBusData();
+            }
+            setInterval(function() {
+                if (automaticRefresh) {
+                    updateBusData();
+                }
+            }, 1000 * 60 * 2);
+        }, 1000 * (timeToNextUpdate + 15));
     </script>
 % end
