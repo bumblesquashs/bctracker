@@ -63,6 +63,9 @@ class Bus:
             data['headsign'] = 'Not In Service'
         else:
             data['headsign'] = str(trip).replace("'", '&apos;')
-            data['points'] = [p.json_data for p in trip.points]
+            data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id
+        schedule_adherence = self.position.schedule_adherence
+        if schedule_adherence is not None:
+            data['schedule_adherence'] = schedule_adherence
         return data

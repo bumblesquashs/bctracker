@@ -191,6 +191,7 @@ tr.divider {
 .checkbox {
     cursor: pointer;
     vertical-align: middle;
+    margin-bottom: 5px;
 }
 
 .checkbox .box {
@@ -280,6 +281,18 @@ tr.divider {
     border-radius: 16px;
 }
 
+.marker.small {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.marker.small img {
+    width: 12px;
+    height: 12px;
+    left: 2px;
+    top: 2px;
+}
+
 .marker .link {
     background-color: black;
     opacity: 0;
@@ -333,11 +346,18 @@ tr.divider {
     overflow: visible;
 }
 
-.marker .subtitle span {
+.marker .subtitle > span {
     text-align: center;
     white-space: nowrap;
     margin-left: -100%;
     margin-right: -100%;
+}
+
+.marker .subtitle .adherence-indicator {
+    float: none;
+    font-size: 8pt;
+    padding: 1px 3px;
+    border-radius: 3px;
 }
 
 .marker:hover .subtitle {
