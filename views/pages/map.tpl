@@ -51,6 +51,8 @@
     
     <div id="system-map"></div>
     
+    <style id="marker-style"></style>
+    
     <script>
         const map = new mapboxgl.Map({
             container: "system-map",
@@ -60,19 +62,20 @@
         });
         
         let buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
-        let current_shape_ids = []
+        let currentShapeIDs = []
         let markers = [];
         let tripLinesVisible = false;
         let automaticRefresh = false;
+        let hoverBus = null
         
-        const shape_ids = [];
+        const shapeIDs = [];
         
         map.on("load", function() {
             updateMap(true);
         })
         
         function updateMap(resetPosition) {
-            current_shape_ids = []
+            currentShapeIDs = []
             for (const marker of markers) {
                 marker.remove();
             }
@@ -83,8 +86,8 @@
             
             for (const bus of buses) {
                 if (bus.shape_id !== null && bus.shape_id !== undefined) {
-                    if (!(current_shape_ids.includes(bus.shape_id))) {
-                        current_shape_ids.push(bus.shape_id)
+                    if (!(currentShapeIDs.includes(bus.shape_id))) {
+                        currentShapeIDs.push(bus.shape_id)
                     }
                 }
                 
@@ -118,6 +121,7 @@
                         <div class='title'><span>" + bus.number + "</span></div>\
                         <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>";
                 } else {
+                    element.id = "bus-marker-" + bus.number
                     element.innerHTML = "\
                         <div class='link'></div>\
                         <a href=\"/bus/" + bus.number +"\">\
@@ -128,9 +132,16 @@
                 }
                 element.style.backgroundColor = "#" + bus.colour;
                 
+                element.onmouseenter = function() {
+                    setHoverBus(bus);
+                }
+                element.onmouseleave = function() {
+                    setHoverBus(null);
+                }
+                
                 lons.push(bus.lon);
                 lats.push(bus.lat);
-        
+                
                 markers.push(new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map));
             }
             
@@ -152,11 +163,11 @@
                 }
             }
             
-            for (const shape_id of shape_ids) {
-                if (current_shape_ids.includes(shape_id)) {
-                    map.setLayoutProperty(shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+            for (const shapeID of shapeIDs) {
+                if (currentShapeIDs.includes(shapeID)) {
+                    map.setLayoutProperty(shapeID, "visibility", tripLinesVisible ? "visible" : "none");
                 } else {
-                    map.setLayoutProperty(shape_id, "visibility", "none");
+                    map.setLayoutProperty(shapeID, "visibility", "none");
                 }
             }
         }
@@ -166,9 +177,9 @@
             const checkboxImage = document.getElementById("checkbox-image");
             checkboxImage.classList.toggle("hidden");
             
-            for (const shape_id of current_shape_ids) {
-                if (shape_ids.includes(shape_id)) {
-                    map.setLayoutProperty(shape_id, "visibility", tripLinesVisible ? "visible" : "none");
+            for (const shapeID of currentShapeIDs) {
+                if (shapeIDs.includes(shapeID)) {
+                    map.setLayoutProperty(shapeID, "visibility", tripLinesVisible ? "visible" : "none");
                 }
             }
             if (tripLinesVisible) {
@@ -212,16 +223,15 @@
                 if (bus.shape_id === null || bus.shape_id === undefined) {
                     continue;
                 }
-                if (shape_ids.includes(bus.shape_id)) {
+                if (shapeIDs.includes(bus.shape_id)) {
                     continue;
-                } else {
-                    shape_ids.push(bus.shape_id);
                 }
                 const request = new XMLHttpRequest();
                 request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
+                        shapeIDs.push(bus.shape_id);
                         map.addSource(bus.shape_id, {
                             'type': 'geojson',
                             'data': {
@@ -252,6 +262,73 @@
                 };
                 request.send();
             }
+        }
+        
+        function setHoverBus(bus) {
+            if (tripLinesVisible) {
+                return
+            }
+            if (hoverBus !== null) {
+                if (shapeIDs.includes(hoverBus.shape_id)) {
+                    map.setLayoutProperty(hoverBus.shape_id, "visibility", "none");
+                }
+            }
+            const styleElement = document.getElementById("marker-style");
+            if (bus === null) {
+                styleElement.innerText = "";
+            } else {
+                styleElement.innerText = "\
+                    .marker {\
+                        opacity: 0%;\
+                    }\
+                    .marker:hover {\
+                        opacity: 100%;\
+                    }\
+                ";
+                if (bus.shape_id === null || bus.shape_id === undefined) {
+                    return;
+                }
+                if (shapeIDs.includes(bus.shape_id)) {
+                    map.setLayoutProperty(bus.shape_id, "visibility", "visible");
+                } else {
+                    const request = new XMLHttpRequest();
+                    request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
+                    request.responseType = "json";
+                    request.onload = function() {
+                        if (request.status === 200) {
+                            shapeIDs.push(bus.shape_id);
+                            map.addSource(bus.shape_id, {
+                                'type': 'geojson',
+                                'data': {
+                                    'type': 'Feature',
+                                    'properties': {},
+                                    'geometry': {
+                                        'type': 'LineString',
+                                        'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                                    }
+                                }
+                            });
+                            map.addLayer({
+                                'id': bus.shape_id,
+                                'type': 'line',
+                                'source': bus.shape_id,
+                                'minzoom': 8,
+                                'layout': {
+                                    'line-join': 'round',
+                                    'line-cap': 'round',
+                                    'visibility': (hoverBus === bus) ? 'visible' : 'none'
+                                },
+                                'paint': {
+                                    'line-color': '#' + bus.colour,
+                                    'line-width': 4
+                                }
+                            });
+                        }
+                    };
+                    request.send();
+                }
+            }
+            hoverBus = bus;
         }
         
         const date = new Date();
