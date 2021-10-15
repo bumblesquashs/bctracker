@@ -12,6 +12,9 @@ import gtfs
 import realtime
 import history
 
+# Increase the version to force CSS reload
+VERSION = 0
+
 app = Bottle()
 
 mapbox_api_key = ''
@@ -82,6 +85,7 @@ def systems_template(name, system_id, theme=None, **kwargs):
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
         theme=theme or request.get_cookie('theme'),
+        version=VERSION,
         **kwargs
     )
 
