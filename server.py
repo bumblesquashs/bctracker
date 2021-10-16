@@ -86,6 +86,8 @@ def systems_template(name, system_id, theme=None, **kwargs):
         last_updated=realtime.last_updated_string(),
         theme=theme or request.get_cookie('theme'),
         version=VERSION,
+        no_system_domain=no_system_domain,
+        system_domain=system_domain,
         **kwargs
     )
 
