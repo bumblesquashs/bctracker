@@ -61,6 +61,21 @@
             function toggleMenu() {
                 document.getElementById("menu").classList.toggle("display-none")
             }
+            
+            String.prototype.format = function() {
+                a = this;
+                for (k in arguments) {
+                    a = a.replace("{" + k + "}", arguments[k])
+                }
+                return a
+            }
+            
+            function getUrl(systemID, path) {
+                if (systemID === null || systemID === undefined) {
+                    return "{{ no_system_domain }}".format(path)
+                }
+                return "{{ system_domain }}".format(systemID, path)
+            }
         </script>
     </head>
     

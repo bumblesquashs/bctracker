@@ -83,8 +83,9 @@
             
             for (const bus of buses) {
                 if (bus.shape_id !== null && bus.shape_id !== undefined) {
-                    if (!(current_shape_ids.includes(bus.shape_id))) {
-                        current_shape_ids.push(bus.shape_id)
+                    const shape_id = bus.system_id + "_" + bus.shape_id
+                    if (!(current_shape_ids.includes(shape_id))) {
+                        current_shape_ids.push(shape_id)
                     }
                 }
                 
@@ -212,17 +213,18 @@
                 if (bus.shape_id === null || bus.shape_id === undefined) {
                     continue;
                 }
-                if (shape_ids.includes(bus.shape_id)) {
+                const shape_id = bus.system_id + "_" + bus.shape_id
+                if (shape_ids.includes(shape_id)) {
                     continue;
                 } else {
-                    shape_ids.push(bus.shape_id);
+                    shape_ids.push(shape_id);
                 }
                 const request = new XMLHttpRequest();
-                request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
+                request.open("GET", getUrl(bus.system_id, "api/shape/" + bus.shape_id + ".json"), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
-                        map.addSource(bus.shape_id, {
+                        map.addSource(shape_id, {
                             'type': 'geojson',
                             'data': {
                                 'type': 'Feature',
@@ -234,9 +236,9 @@
                             }
                         });
                         map.addLayer({
-                            'id': bus.shape_id,
+                            'id': shape_id,
                             'type': 'line',
-                            'source': bus.shape_id,
+                            'source': shape_id,
                             'minzoom': 8,
                             'layout': {
                                 'line-join': 'round',
