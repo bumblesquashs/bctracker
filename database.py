@@ -11,26 +11,30 @@ def disconnect():
     connection.close()
     connection = None
 
+def commit():
+    connection.commit()
+
 def execute(sql, args=None):
     if type(args) is list:
         args = tuple(args)
     if args is None:
-        result = connection.cursor().execute(sql)
+        return connection.cursor().execute(sql)
     else:
-        result = connection.cursor().execute(sql, args)
-    connection.commit()
-    return result
+        return connection.cursor().execute(sql, args)
 
-def select(table, columns='*', filters=None, limit=None, args=None):
+def select(table, columns='*', filters=None, order_by=None, limit=None):
     if type(columns) is not list:
         columns = [columns]
     columns_string = ', '.join(columns)
     sql = f'SELECT {columns_string} FROM {table}'
+    args = None
     if filters is not None:
-        if type(filters) is not list:
-            filters = [filters]
-        filters_string = ' AND '.join(filters)
+        keys = filters.keys()
+        args = [filters[k] for k in keys]
+        filters_string = ' AND '.join([f'{k} = ?' for k in keys])
         sql += f' WHERE {filters_string}'
+    if order_by is not None:
+        sql += f' ORDER BY {order_by}'
     if limit is not None:
         sql += f' LIMIT {int(limit)}'
     result = execute(sql, args)

@@ -204,7 +204,7 @@ def system_bus_number(system_id, number):
     bus = realtime.get_bus(number=number)
     if bus is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
+    return systems_template('bus', system_id, bus=bus, history=sorted(history.load_bus_history(number, limit=20)))
 
 @app.route('/bus/<number:int>/history')
 @app.route('/bus/<number:int>/history/')
