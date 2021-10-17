@@ -124,7 +124,7 @@ def reset_positions(system):
 def get_position(bus_id):
     if bus_id is not None and bus_id in positions:
         return positions[bus_id]
-    return Position(None, False)
+    return Position(None, False, bus_id)
 
 def get_positions():
     return positions.values()
