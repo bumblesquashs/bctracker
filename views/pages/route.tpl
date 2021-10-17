@@ -34,6 +34,66 @@
     </div>
     
     <div>
+        % positions = route.positions
+        % if len(positions) > 0:
+            <h2>Active Buses</h2>
+            <table class="pure-table pure-table-horizontal pure-table-striped">
+                <thead>
+                    <tr>
+                        <th>Bus</th>
+                        <th class="desktop-only">Model</th>
+                        <th>Headsign</th>
+                        <th class="desktop-only">Block</th>
+                        <th>Trip</th>
+                        <th class="non-mobile">Current Stop</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    % for position in positions:
+                        % bus = position.bus
+                        % trip = position.trip
+                        % stop = position.stop
+                        <tr>
+                            % if bus.number is None:
+                                <td>{{ bus }}</td>
+                                <td class="desktop-only"></td>
+                            % else:
+                                % order = bus.order
+                                <td>
+                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                    % if order is not None:
+                                        <span class="non-desktop smaller-font">
+                                            <br />
+                                            {{ order }}
+                                        </span>
+                                    % end
+                                </td>
+                                <td class="desktop-only">
+                                    % if order is not None:
+                                        {{ order }}
+                                    % end
+                                </td>
+                            % end
+                            <td>{{ trip }}</td>
+                            <td class="desktop-only">
+                                % block = trip.block
+                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            </td>
+                            <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                            % if stop is None:
+                                <td class="non-mobile lighter-text">Unavailable</td>
+                            % else:
+                                <td class="non-mobile">
+                                    % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                </td>
+                            % end
+                        </tr>
+                    % end
+                </tbody>
+            </table>
+        % end
+        
         <h2>Trip Schedule</h2>
         <div class="container">
             % if len(services) > 1:

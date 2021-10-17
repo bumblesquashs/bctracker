@@ -1,3 +1,4 @@
+import realtime
 
 from models.service import Sheet
 
@@ -42,6 +43,11 @@ class Route:
         if Sheet.PREVIOUS in sheets:
             return Sheet.PREVIOUS
         return Sheet.UNKNOWN
+    
+    @property
+    def positions(self):
+        positions = realtime.get_positions()
+        return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.route_id == self.id]
     
     def add_trip(self, trip):
         self.trips.append(trip)

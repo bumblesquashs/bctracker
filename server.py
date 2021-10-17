@@ -13,6 +13,9 @@ import gtfs
 import realtime
 import history
 
+# Increase the version to force CSS reload
+VERSION = 0
+
 app = Bottle()
 
 mapbox_api_key = ''
@@ -92,6 +95,9 @@ def systems_template(name, system_id, theme=None, **kwargs):
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
         theme=theme or request.get_cookie('theme'),
+        version=VERSION,
+        no_system_domain=no_system_domain,
+        system_domain=system_domain,
         **kwargs
     )
 
@@ -99,7 +105,7 @@ def systems_error_template(name, system_id, **kwargs):
     return systems_template(f'errors/{name}_error', system_id, **kwargs)
 
 # =============================================================
-# Web framework: assign routes - its all Server side rendering
+# CSS (Static Files)
 # =============================================================
 
 @app.route('/style/<name:path>')
@@ -110,6 +116,10 @@ def style(name):
 def system_style(system_id, name):
     return static_file(name, root='./style')
 
+# =============================================================
+# Images (Static Files)
+# =============================================================
+
 @app.route('/img/<name:path>')
 def img(name):
     return system_img(None, name)
@@ -117,6 +127,10 @@ def img(name):
 @app.route('/<system_id>/img/<name:path>')
 def system_img(system_id, name):
     return static_file(name, root='./img')
+
+# =============================================================
+# HTML (Templates)
+# =============================================================
 
 @app.route('/')
 def index():
@@ -134,59 +148,15 @@ def system_index(system_id):
             response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
     return systems_template('home', system_id, theme)
 
-@app.route('/systems')
-@app.route('/systems/')
-def systems():
-    return system_systems(None)
+@app.route('/news')
+@app.route('/news/')
+def news():
+    return system_news(None)
 
-@app.route('/<system_id>/systems')
-@app.route('/<system_id>/systems/')
-def system_systems(system_id):
-    path = request.query.get('path', '')
-    return systems_template('systems', system_id, path=path)
-
-@app.route('/routes')
-@app.route('/routes/')
-def routes():
-    return system_routes(None)
-
-@app.route('/<system_id>/routes')
-@app.route('/<system_id>/routes/')
-def system_routes(system_id):
-    return systems_template('routes', system_id, sheet=get_sheet(Sheet.CURRENT), path='routes')
-
-@app.route('/routes/<number>')
-@app.route('/routes/<number>/')
-def routes_number(number):
-    return system_routes_number(None, number)
-
-@app.route('/<system_id>/routes/<number>')
-@app.route('/<system_id>/routes/<number>/')
-def system_routes_number(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66'))
-    system = get_system(system_id)
-    if system is None:
-        return systems_error_template('system', system_id, path=f'routes/{number}')
-    route = system.get_route(number=number)
-    if route is None:
-        return systems_error_template('route', system_id, number=number)
-    return systems_template('route', system_id, route=route, sheet=get_sheet(route.default_sheet))
-
-@app.route('/history')
-@app.route('/history/')
-def route_history():
-    return system_history(None)
-
-@app.route('/<system_id>/history')
-@app.route('/<system_id>/history/')
-def system_history(system_id):
-    system = get_system(system_id)
-    if system is None:
-        last_seen = history.get_last_seen()
-    else:
-        last_seen = [h for h in history.get_last_seen() if h.system == system]
-    return systems_template('history', system_id, last_seen=last_seen, path='history')
+@app.route('/<system_id>/news')
+@app.route('/<system_id>/news/')
+def system_news(system_id):
+    return systems_template('news', system_id, path='news')
 
 @app.route('/map')
 @app.route('/map/')
@@ -244,6 +214,49 @@ def system_bus_number_history(system_id, number):
     if bus is None:
         return systems_error_template('bus', system_id, number=number)
     return systems_template('bus_history', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
+
+@app.route('/history')
+@app.route('/history/')
+def route_history():
+    return system_history(None)
+
+@app.route('/<system_id>/history')
+@app.route('/<system_id>/history/')
+def system_history(system_id):
+    system = get_system(system_id)
+    if system is None:
+        last_seen = history.get_last_seen()
+    else:
+        last_seen = [h for h in history.get_last_seen() if h.system == system]
+    return systems_template('history', system_id, last_seen=last_seen, path='history')
+
+@app.route('/routes')
+@app.route('/routes/')
+def routes():
+    return system_routes(None)
+
+@app.route('/<system_id>/routes')
+@app.route('/<system_id>/routes/')
+def system_routes(system_id):
+    return systems_template('routes', system_id, sheet=get_sheet(Sheet.CURRENT), path='routes')
+
+@app.route('/routes/<number>')
+@app.route('/routes/<number>/')
+def routes_number(number):
+    return system_routes_number(None, number)
+
+@app.route('/<system_id>/routes/<number>')
+@app.route('/<system_id>/routes/<number>/')
+def system_routes_number(system_id, number):
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
+        redirect(get_url('fvx', 'routes/66'))
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'routes/{number}')
+    route = system.get_route(number=number)
+    if route is None:
+        return systems_error_template('route', system_id, number=number)
+    return systems_template('route', system_id, route=route, sheet=get_sheet(route.default_sheet))
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -327,12 +340,45 @@ def about():
 def system_about(system_id):
     return systems_template('about', system_id, path='about')
 
-@app.route('/news')
-@app.route('/news/')
-def news():
-    return system_news(None)
+@app.route('/systems')
+@app.route('/systems/')
+def systems():
+    return system_systems(None)
 
-@app.route('/<system_id>/news')
-@app.route('/<system_id>/news/')
-def system_news(system_id):
-    return systems_template('news', system_id, path='news')
+@app.route('/<system_id>/systems')
+@app.route('/<system_id>/systems/')
+def system_systems(system_id):
+    path = request.query.get('path', '')
+    return systems_template('systems', system_id, path=path)
+
+# =============================================================
+# JSON (API endpoints)
+# =============================================================
+
+@app.route('/api/map.json')
+def api_map():
+    return system_api_map(None)
+
+@app.route('/<system_id>/api/map.json')
+def system_api_map(system_id):
+    system = get_system(system_id)
+    if system is None:
+        buses = realtime.active_buses()
+    else:
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
+    return {
+        'buses': [b.json_data for b in buses if b.position.has_location],
+        'last_updated': realtime.last_updated_string()
+    }
+
+@app.route('/<system_id>/api/shape/<shape_id>.json')
+def system_api_shape_id(system_id, shape_id):
+    system = get_system(system_id)
+    if system is None:
+        return {}
+    shape = system.get_shape(shape_id)
+    if shape is None:
+        return {}
+    return {
+        'points': [p.json_data for p in shape.points]
+    }

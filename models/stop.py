@@ -14,11 +14,11 @@ class Stop:
         
         self.departures = []
     
-    def __hash__(self):
-        return hash(self.id)
-    
     def __str__(self):
         return self.name
+    
+    def __hash__(self):
+        return hash(self.id)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -42,6 +42,15 @@ class Stop:
         if Sheet.PREVIOUS in sheets:
             return Sheet.PREVIOUS
         return Sheet.UNKNOWN
+    
+    @property
+    def json_data(self):
+        return {
+            'number': self.number,
+            'name': self.name.replace("'", '&apos;'),
+            'lat': self.lat,
+            'lon': self.lon
+        }
     
     def add_departure(self, departure):
         self.departures.append(departure)
