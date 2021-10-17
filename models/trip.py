@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import formatting
+import realtime
 
 class Trip:
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -15,6 +16,7 @@ class Trip:
         
         self.stop_times = []
         self._direction = None
+        self._related_trips = None
     
     def __str__(self):
         if self.headsign.startswith(str(self.route.number)):
@@ -54,7 +56,7 @@ class Trip:
     @property
     def end_time(self):
         return self.last_stop.time
-
+    
     @property
     def duration(self):
         return formatting.duration_between_timestrs(self.start_time, self.end_time)
@@ -79,6 +81,19 @@ class Trip:
             else:
                 self._direction = ''
         return self._direction
+    
+    @property
+    def positions(self):
+        positions = realtime.get_positions()
+        return [p for p in positions if p.system == self.system and p.trip_id == self.id]
+    
+    @property
+    def related_trips(self):
+        if self._related_trips is None:
+            trips = self.system.all_trips()
+            self._related_trips = [t for t in trips if t.id != self.id and t.service.is_current == self.service.is_current and t.route_id == self.route_id and t.start_time == self.start_time and t.end_time == self.end_time and t.direction_id == self.direction_id]
+            self._related_trips.sort(key=lambda t: t.service)
+        return self._related_trips
     
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)

@@ -1,5 +1,6 @@
 
 import formatting
+import realtime
 
 class Block:
     def __init__(self, system, block_id):
@@ -7,6 +8,7 @@ class Block:
         self.id = block_id
         
         self.trips = []
+        self._related_blocks = None
     
     def __eq__(self, other):
         return self.id == other.id
@@ -50,10 +52,23 @@ class Block:
     @property
     def end_time(self):
         return self.available_trips[-1].end_time
-
+    
     @property
     def duration(self):
-    	  return formatting.duration_between_timestrs(self.start_time, self.end_time)
+        return formatting.duration_between_timestrs(self.start_time, self.end_time)
+    
+    @property
+    def positions(self):
+        positions = realtime.get_positions()
+        return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.block_id == self.id]
+    
+    @property
+    def related_blocks(self):
+        if self._related_blocks is None:
+            blocks = self.system.all_blocks()
+            self._related_blocks = [b for b in blocks if b.id != self.id and b.is_current == self.is_current and b.routes == self.routes and b.start_time == self.start_time and b.end_time == self.end_time]
+            self._related_blocks.sort(key=lambda b: b.services[0])
+        return self._related_blocks
     
     def add_trip(self, trip):
         self.trips.append(trip)

@@ -52,7 +52,10 @@ def update_positions(system):
         data.ParseFromString(file.read())
     for entity in data.entity:
         vehicle = entity.vehicle
-        position = Position(system, True)
+        try:
+            bus_id = f'{system.id}_{vehicle.vehicle.id}'
+        except AttributeError: continue
+        position = Position(system, True, bus_id)
         try:
             if vehicle.trip.schedule_relationship == 0 and vehicle.trip.trip_id != '':
                 position.trip_id = vehicle.trip.trip_id
@@ -65,10 +68,7 @@ def update_positions(system):
             position.lat = vehicle.position.latitude
             position.lon = vehicle.position.longitude
         except AttributeError: pass
-        try:
-            bus_id = f'{system.id}_{vehicle.vehicle.id}'
-            positions[bus_id] = position
-        except AttributeError: pass
+        positions[bus_id] = position
         position.calculate_schedule_adherence()
 
 def update_translations(system):
@@ -119,11 +119,15 @@ def get_bus(bus_id=None, number=None):
 def reset_positions(system):
     global positions
     positions = {k:v for (k, v) in positions.items() if v.system != system}
+    system.positions = {}
 
 def get_position(bus_id):
     if bus_id is not None and bus_id in positions:
         return positions[bus_id]
     return Position(None, False)
+
+def get_positions():
+    return positions.values()
 
 def active_buses():
     return [get_bus(bus_id=id) for id in positions.keys()]

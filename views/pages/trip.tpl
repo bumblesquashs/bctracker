@@ -47,9 +47,84 @@
             </div>
         </div>
     </div>
+    
+    % related_trips = trip.related_trips
+    % if len(related_trips) > 0:
+        <h2>Related Trips</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Trip</th>
+                    <th>Block</th>
+                    <th>Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for related_trip in related_trips:
+                    % block = related_trip.block
+                    <tr>
+                        <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
+                        <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                        <td>{{ related_trip.service }}</td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 </div>
 
 <div>
+    % positions = trip.positions
+    % if len(positions) > 0:
+        <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Bus</th>
+                    <th class="non-mobile">Model</th>
+                    <th>Current Stop</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for position in positions:
+                    % bus = position.bus
+                    % trip = position.trip
+                    % stop = position.stop
+                    <tr>
+                        % if bus.number is None:
+                            <td>{{ bus }}</td>
+                            <td class="non-mobile"></td>
+                        % else:
+                            % order = bus.order
+                            <td>
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                % if order is not None:
+                                    <span class="mobile-only smaller-font">
+                                        <br />
+                                        {{ order }}
+                                    </span>
+                                % end
+                            </td>
+                            <td class="non-mobile">
+                                % if order is not None:
+                                    {{ order }}
+                                % end
+                            </td>
+                        % end
+                        % if stop is None:
+                            <td class="lighter-text">Unavailable</td>
+                        % else:
+                            <td>
+                                % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                            </td>
+                        % end
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
+    
     <h2>Stop Schedule</h2>
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>

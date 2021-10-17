@@ -81,6 +81,9 @@ class System:
             return self.trips[trip_id]
         return None
     
+    def all_trips(self):
+        return self.trips.values()
+    
     def sort_data(self):
         for stop in self.stops.values():
             stop.stop_times = sorted(stop.stop_times)
