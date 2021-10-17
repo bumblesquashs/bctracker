@@ -1,12 +1,15 @@
 from datetime import datetime
 import math
 
+import realtime
+
 MINIMUM_MINUTES = 4
 
 class Position:
-    def __init__(self, system, active):
+    def __init__(self, system, active, bus_id):
         self.system = system
         self.active = active
+        self.bus_id = bus_id
         self.trip_id = None
         self.stop_id = None
         self.lat = None
@@ -28,6 +31,10 @@ class Position:
         if self.stop_id is None or self.system is None:
             return None
         return self.system.get_stop(stop_id=self.stop_id)
+    
+    @property
+    def bus(self):
+        return realtime.get_bus(bus_id=self.bus_id)
     
     @property
     def schedule_adherence_string(self):

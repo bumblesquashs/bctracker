@@ -12,11 +12,11 @@ class Stop:
         
         self.departures = []
     
-    def __hash__(self):
-        return hash(self.id)
-    
     def __str__(self):
         return self.name
+    
+    def __hash__(self):
+        return hash(self.id)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -46,6 +46,15 @@ class Stop:
     def nearby_stops(self):
         stops = self.system.all_stops()
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
+    
+    @property
+    def json_data(self):
+        return {
+            'number': self.number,
+            'name': self.name.replace("'", '&apos;'),
+            'lat': self.lat,
+            'lon': self.lon
+        }
     
     def add_departure(self, departure):
         self.departures.append(departure)

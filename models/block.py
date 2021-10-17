@@ -1,4 +1,6 @@
 
+import realtime
+
 class Block:
     def __init__(self, system, block_id):
         self.system = system
@@ -53,6 +55,11 @@ class Block:
     @property
     def duration(self):
         return self.start_time.get_difference(self.end_time)
+    
+    @property
+    def positions(self):
+        positions = realtime.get_positions()
+        return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.block_id == self.id]
     
     @property
     def related_blocks(self):
