@@ -14,7 +14,7 @@
     const lats = [];
 </script>
 
-% shape_ids = {(t.shape_id, t.route.colour) for t in block.available_trips}
+% shape_ids = {(t.shape_id, t.route.colour) for t in block.get_trips(sheet)}
 % for (shape_id, colour) in shape_ids:
     % points = sorted(block.system.get_shape(shape_id).points)
     <script>

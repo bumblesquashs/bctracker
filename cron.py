@@ -3,7 +3,7 @@ import signal
 from datetime import datetime
 from crontab import CronTab
 
-from models.system import all_systems
+from models.system import get_systems
 import gtfs
 import realtime
 import history
@@ -33,7 +33,7 @@ def stop():
 
 def handle_gtfs(sig, frame):
     weekday = datetime.today().weekday()
-    for system in all_systems():
+    for system in get_systems():
         try:
             if weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
@@ -42,7 +42,7 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
-    for system in all_systems():
+    for system in get_systems():
         try:
             realtime.reset_positions(system)
             realtime.update(system)

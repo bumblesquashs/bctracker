@@ -1,5 +1,7 @@
 import realtime
 
+from models.service import Sheet
+
 class Route:
     def __init__(self, system, route_id, number, name, colour):
         self.system = system
@@ -28,25 +30,19 @@ class Route:
         return self.number_value > other.number_value
     
     @property
-    def is_current(self):
-        for trip in self.trips:
-            if trip.service.is_current:
-                return True
-        return False
+    def sheets(self):
+        return {t.service.sheet for t in self.trips}
     
     @property
-    def services(self):
-        if self.is_current:
-            return sorted({ t.service for t in self.trips if t.service.is_current })
-        else:
-            return sorted({ t.service for t in self.trips })
-    
-    @property
-    def headsigns(self):
-        if self.is_current:
-            return sorted({ str(t) for t in self.trips if t.service.is_current })
-        else:
-            return sorted({ str(t) for t in self.trips })
+    def default_sheet(self):
+        sheets = self.sheets
+        if Sheet.CURRENT in sheets:
+            return Sheet.CURRENT
+        if Sheet.NEXT in sheets:
+            return Sheet.NEXT
+        if Sheet.PREVIOUS in sheets:
+            return Sheet.PREVIOUS
+        return Sheet.UNKNOWN
     
     @property
     def positions(self):
@@ -55,3 +51,14 @@ class Route:
     
     def add_trip(self, trip):
         self.trips.append(trip)
+    
+    def get_trips(self, sheet):
+        if sheet is None:
+            return self.trips
+        return [t for t in self.trips if t.service.sheet == sheet]
+    
+    def get_services(self, sheet):
+        return sorted({t.service for t in self.get_trips(sheet)})
+    
+    def get_headsigns(self, sheet):
+        return sorted({str(t) for t in self.get_trips(sheet)})

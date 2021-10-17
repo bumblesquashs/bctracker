@@ -12,13 +12,13 @@
     <tbody>
         % last_hour = -1
         % for trip in trips:
-            % first_stop = trip.stop_times[0].stop
-            % this_hour = int(trip.start_time.split(':')[0])
+            % first_stop = trip.first_departure.stop
+            % this_hour = trip.first_departure.time.hour
             % if last_hour == -1:
                 % last_hour = this_hour
             % end
             <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                <td>{{ trip.start_time }}</td>
+                <td>{{ trip.first_departure.time }}</td>
                 <td>{{ trip }}</td>
                 <td class="desktop-only"><a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a></td>
                 <td class="desktop-only"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
