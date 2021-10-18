@@ -4,6 +4,7 @@ from bottle import Bottle, static_file, template, redirect, request, response, d
 import cherrypy as cp
 import sys
 
+from models.bus import Bus
 from models.bus_model import load_models
 from models.bus_order import load_orders
 from models.service import Sheet
@@ -42,9 +43,6 @@ def start():
     load_models()
     load_orders()
     load_systems()
-    
-    realtime.load_translations()
-    history.load_last_seen()
     
     for system in get_systems():
         if not gtfs.downloaded(system) or force_gtfs_redownload:
@@ -201,10 +199,10 @@ def bus_number(number):
 @app.route('/<system_id>/bus/<number:int>')
 @app.route('/<system_id>/bus/<number:int>/')
 def system_bus_number(system_id, number):
-    bus = realtime.get_bus(number=number)
-    if bus is None:
+    bus = Bus(number)
+    if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus', system_id, bus=bus, history=sorted(history.load_bus_history(number, limit=20)))
+    return systems_template('bus', system_id, bus=bus)
 
 @app.route('/bus/<number:int>/history')
 @app.route('/bus/<number:int>/history/')
@@ -214,10 +212,10 @@ def bus_number_history(number):
 @app.route('/<system_id>/bus/<number:int>/history')
 @app.route('/<system_id>/bus/<number:int>/history/')
 def system_bus_number_history(system_id, number):
-    bus = realtime.get_bus(number=number)
-    if bus is None:
+    bus = Bus(number)
+    if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus_history', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
+    return systems_template('bus_history', system_id, bus=bus)
 
 @app.route('/history')
 @app.route('/history/')

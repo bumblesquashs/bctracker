@@ -12,6 +12,7 @@
 </div>
 <hr />
 
+% history = bus.history
 % if len(history) > 0:
     % last_tracked = history[0].date
     % days_since_last_tracked = (datetime.now() - last_tracked).days
@@ -82,7 +83,8 @@
                 <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                 <li>It may not have been in service since BCTracker started recording bus history</li>
                 <li>It may not have functional NextRide equipment installed</li>
-                % if model.type == BusModelType.shuttle:
+                % model = bus.model
+                % if model is not None and model.type == BusModelType.shuttle:
                     <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                 % end
             </ol>
@@ -103,27 +105,27 @@
                 </tr>
             </thead>
             <tbody>
-                % for block_history in history:
+                % for bus_history in history:
                     <tr>
-                        <td class="desktop-only">{{ format_date(block_history.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(block_history.date) }}</td>
-                        <td>{{ block_history.system }}</td>
+                        <td class="desktop-only">{{ format_date(bus_history.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(bus_history.date) }}</td>
+                        <td>{{ bus_history.system }}</td>
                         <td>
-                            % if block_history.is_available:
-                                % block = block_history.block
+                            % if bus_history.is_available:
+                                % block = bus_history.block
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                             % else:
-                                <span>{{ block_history.block_id }}</span>
+                                <span>{{ bus_history.block_id }}</span>
                             % end
                             <span class="non-desktop smaller-font">
                                 <br />
-                                {{ block_history.routes_string }}
+                                {{ bus_history.routes }}
                             </span>
                         </td>
-                        <td class="desktop-only">{{ block_history.routes_string }}</td>
-                        <td class="desktop-only">{{ block_history.start_time }}</td>
-                        <td class="desktop-only">{{ block_history.end_time }}</td>
-                        <td class="tablet-only">{{ block_history.start_time }} - {{ block_history.end_time }}</td>
+                        <td class="desktop-only">{{ bus_history.routes }}</td>
+                        <td class="desktop-only">{{ bus_history.start_time }}</td>
+                        <td class="desktop-only">{{ bus_history.end_time }}</td>
+                        <td class="tablet-only">{{ bus_history.start_time }} - {{ bus_history.end_time }}</td>
                     </tr>
                 % end
             </tbody>

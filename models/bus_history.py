@@ -1,21 +1,16 @@
+
 from models.system import get_system
-from realtime import get_bus
 
 class BusHistory:
-    def __init__(self, date, bus_id, number, system_id, feed_version, block_id, routes):
+    def __init__(self, bus, date, system_id, feed_version, block_id, routes, start_time, end_time):
+        self.bus = bus
         self.date = date
-        self.bus_id = bus_id
-        self.number = number
         self.system_id = system_id
         self.feed_version = feed_version
         self.block_id = block_id
         self.routes = routes
-    
-    def __eq__(self, other):
-        return self.bus == other.bus
-    
-    def __lt__(self, other):
-        return self.bus < other.bus
+        self.start_time = start_time
+        self.end_time = end_time
     
     @property
     def system(self):
@@ -30,21 +25,14 @@ class BusHistory:
         return self.system.get_block(self.block_id)
     
     @property
-    def routes_string(self):
-        return ', '.join([ str(r) for r in self.routes ])
-    
-    @property
-    def bus(self):
-        return get_bus(number=self.number)
-    
-    @property
     def json_data(self):
         return {
+            'bus_number': self.bus.number,
             'date': self.date.strftime('%Y-%m-%d'),
-            'bus_id': self.bus_id,
-            'number': self.number,
             'system_id': self.system_id,
             'feed_version': self.feed_version,
             'block_id': self.block_id,
-            'routes': self.routes
+            'routes': self.routes,
+            'start_time': self.start_time.full_string,
+            'end_time': self.end_time.full_string
         }

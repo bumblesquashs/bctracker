@@ -25,8 +25,8 @@ class BusOrder:
     def model(self):
         return get_model(self.model_id)
     
-    def contains(self, number):
-        return self.low <= number <= self.high
+    def contains(self, bus_number):
+        return self.low <= bus_number <= self.high
 
 orders = []
 
@@ -45,16 +45,8 @@ def load_orders():
 
         orders.append(BusOrder(low, high, year, model_id))
 
-def get_order(number):
-    if number is None:
-        return None
+def get_order(bus):
     for order in orders:
-        if order.contains(number):
+        if order.contains(bus.number):
             return order
     return None
-
-def is_valid_bus(number):
-    for order in orders:
-        if order.contains(number):
-            return True
-    return False

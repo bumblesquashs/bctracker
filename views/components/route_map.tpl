@@ -74,20 +74,13 @@
             
             const element = document.createElement("div");
             element.className = "marker";
-            if (bus.number === "Unknown Bus") {
-                element.innerHTML = "\
+            element.innerHTML = "\
+                <div class='link'></div>\
+                <a href=\"/bus/" + bus.number +"\">\
                     <img src=\"/img/bus.png\" />\
                     <div class='title'><span>" + bus.number + "</span></div>\
-                    <div class='subtitle'><span>" + bus.headsign + "</span></div>";
-            } else {
-                element.innerHTML = "\
-                    <div class='link'></div>\
-                    <a href=\"/bus/" + bus.number +"\">\
-                        <img src=\"/img/bus.png\" />\
-                        <div class='title'><span>" + bus.number + "</span></div>\
-                        <div class='subtitle'><span>" + bus.headsign + "</span></div>\
-                    </a>";
-            }
+                    <div class='subtitle'><span>" + bus.headsign + "</span></div>\
+                </a>";
             element.style.backgroundColor = "#" + bus.colour;
         
             new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);

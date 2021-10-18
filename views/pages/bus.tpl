@@ -90,6 +90,7 @@
 
 <div>
     <h2>Recent History</h2>
+    % history = bus.recent_history
     % if len(history) == 0:
         <p>This bus doesn't have any recorded history.</p>
         <p>
@@ -119,27 +120,27 @@
                 </tr>
             </thead>
             <tbody>
-                % for block_history in history[:20]:
+                % for bus_history in history:
                     <tr>
-                        <td class="desktop-only">{{ format_date(block_history.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(block_history.date) }}</td>
-                        <td>{{ block_history.system }}</td>
+                        <td class="desktop-only">{{ format_date(bus_history.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(bus_history.date) }}</td>
+                        <td>{{ bus_history.system }}</td>
                         <td>
-                            % if block_history.is_available:
-                                % block = block_history.block
+                            % if bus_history.is_available:
+                                % block = bus_history.block
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                             % else:
-                                <span>{{ block_history.block_id }}</span>
+                                <span>{{ bus_history.block_id }}</span>
                             % end
                             <span class="non-desktop smaller-font">
                                 <br />
-                                {{ block_history.routes_string }}
+                                {{ bus_history.routes }}
                             </span>
                         </td>
-                        <td class="desktop-only">{{ block_history.routes_string }}</td>
-                        <td class="desktop-only">{{ block_history.start_time }}</td>
-                        <td class="desktop-only">{{ block_history.end_time }}</td>
-                        <td class="tablet-only">{{ block_history.start_time }} - {{ block_history.end_time }}</td>
+                        <td class="desktop-only">{{ bus_history.routes }}</td>
+                        <td class="desktop-only">{{ bus_history.start_time }}</td>
+                        <td class="desktop-only">{{ bus_history.end_time }}</td>
+                        <td class="tablet-only">{{ bus_history.start_time }} - {{ bus_history.end_time }}</td>
                     </tr>
                 % end
             </tbody>
