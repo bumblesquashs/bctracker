@@ -22,13 +22,17 @@ def execute(sql, args=None):
     else:
         return connection.cursor().execute(sql, args)
 
-def select(table, columns='*', filters=None, order_by=None, limit=None):
+def select(table, columns='*', filters=None, order_by=None, limit=None, args=None):
     if type(columns) is not list:
         columns = [columns]
     columns_string = ', '.join(columns)
     sql = f'SELECT {columns_string} FROM {table}'
-    args = None
-    if filters is not None:
+    if type(filters) is str:
+        sql += f' WHERE {filters}'
+    elif type(filters) is list:
+        filters_string = ' AND '.join(filters)
+        sql += f' WHERE {filters_string}'
+    elif type(filters) is dict:
         keys = filters.keys()
         args = [filters[k] for k in keys]
         filters_string = ' AND '.join([f'{k} = ?' for k in keys])

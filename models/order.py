@@ -1,9 +1,9 @@
 
 import csv
 
-from models.bus_model import get_model
+from models.model import get_model
 
-class BusOrder:
+class Order:
     def __init__(self, low, high, year, model_id):
         self.low = low
         self.high = high
@@ -25,8 +25,8 @@ class BusOrder:
     def model(self):
         return get_model(self.model_id)
     
-    def contains(self, bus_number):
-        return self.low <= bus_number <= self.high
+    def contains(self, bus):
+        return self.low <= bus.number <= self.high
 
 orders = []
 
@@ -43,10 +43,10 @@ def load_orders():
         year = int(row['year'])
         model_id = row['model_id']
 
-        orders.append(BusOrder(low, high, year, model_id))
+        orders.append(Order(low, high, year, model_id))
 
 def get_order(bus):
     for order in orders:
-        if order.contains(bus.number):
+        if order.contains(bus):
             return order
     return None

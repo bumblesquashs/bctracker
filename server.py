@@ -5,8 +5,8 @@ import cherrypy as cp
 import sys
 
 from models.bus import Bus
-from models.bus_model import load_models
-from models.bus_order import load_orders
+from models.model import load_models
+from models.order import load_orders
 from models.service import Sheet
 from models.system import load_systems, get_system, get_systems
 
@@ -54,7 +54,7 @@ def start():
             gtfs.update(system)
         elif not realtime.validate(system):
             system.realtime_validation_error_count += 1
-    history.update(realtime.active_buses())
+    history.update(realtime.get_positions())
     
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
@@ -202,7 +202,7 @@ def system_bus_number(system_id, number):
     bus = Bus(number)
     if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus', system_id, bus=bus)
+    return systems_template('bus', system_id, bus=bus, records=history.get_bus_records(bus, 20))
 
 @app.route('/bus/<number:int>/history')
 @app.route('/bus/<number:int>/history/')
@@ -215,7 +215,7 @@ def system_bus_number_history(system_id, number):
     bus = Bus(number)
     if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus_history', system_id, bus=bus)
+    return systems_template('bus_history', system_id, bus=bus, records=history.get_bus_records(bus))
 
 @app.route('/history')
 @app.route('/history/')
@@ -226,11 +226,7 @@ def route_history():
 @app.route('/<system_id>/history/')
 def system_history(system_id):
     system = get_system(system_id)
-    if system is None:
-        last_seen = history.get_last_seen()
-    else:
-        last_seen = [h for h in history.get_last_seen() if h.system == system]
-    return systems_template('history', system_id, last_seen=last_seen, path='history')
+    return systems_template('history', system_id, records=history.get_last_seen(system), path='history')
 
 @app.route('/routes')
 @app.route('/routes/')

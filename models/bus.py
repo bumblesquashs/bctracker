@@ -1,12 +1,10 @@
 
-from models.bus_order import get_order
+from models.order import get_order
 import realtime
-import history
 
 class Bus:
     def __init__(self, bus_number):
         self.number = bus_number
-        self.order = get_order(self)
     
     def __str__(self):
         return str(self.number)
@@ -21,6 +19,10 @@ class Bus:
         return self.number < other.number
     
     @property
+    def order(self):
+        return get_order(self)
+    
+    @property
     def model(self):
         order = self.order
         if order is None:
@@ -29,15 +31,7 @@ class Bus:
     
     @property
     def position(self):
-        return realtime.get_position(self.number)
-    
-    @property
-    def recent_history(self):
-        return history.load_history(self, 20)
-    
-    @property
-    def history(self):
-        return history.load_history(self)
+        return realtime.get_position(self)
     
     @property
     def colour(self):

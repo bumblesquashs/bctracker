@@ -1,15 +1,13 @@
 from datetime import datetime
 import math
 
-from models.bus import Bus
-
 MINIMUM_MINUTES = 4
 
 class Position:
-    def __init__(self, system, active, bus_number):
+    def __init__(self, system, active, bus):
         self.system = system
         self.active = active
-        self.bus = Bus(bus_number)
+        self.bus = bus
         self.trip_id = None
         self.stop_id = None
         self.lat = None

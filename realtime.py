@@ -5,6 +5,7 @@ import wget
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
+from models.bus import Bus
 from models.position import Position
 
 positions = {}
@@ -45,7 +46,7 @@ def update_positions(system):
         try:
             bus_number = int(vehicle.vehicle.id)
         except AttributeError: continue
-        position = Position(system, True, bus_number)
+        position = Position(system, True, Bus(bus_number))
         try:
             if vehicle.trip.schedule_relationship == 0 and vehicle.trip.trip_id != '':
                 position.trip_id = vehicle.trip.trip_id
@@ -66,10 +67,10 @@ def reset_positions(system):
     positions = {k:v for (k, v) in positions.items() if v.system != system}
     system.positions = {}
 
-def get_position(bus_number):
-    if bus_number in positions:
-        return positions[bus_number]
-    return Position(None, False, bus_number)
+def get_position(bus):
+    if bus.number in positions:
+        return positions[bus.number]
+    return Position(None, False, bus)
 
 def get_positions():
     return positions.values()

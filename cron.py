@@ -55,4 +55,4 @@ def handle_realtime(sig, frame):
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
-    history.update(realtime.active_buses())
+    history.update(realtime.get_positions())
