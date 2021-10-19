@@ -14,4 +14,7 @@ database.execute('''
     )
 ''')
 
+database.execute('CREATE INDEX records_bus_number ON records (bus_number)')
+
+database.commit()
 database.disconnect()
