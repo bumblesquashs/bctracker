@@ -2,6 +2,11 @@ from os import listdir
 from os.path import join
 import json
 
+import sys
+import os
+
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 import database
 
 database.connect()
