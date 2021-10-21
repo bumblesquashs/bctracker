@@ -54,6 +54,128 @@
 </div>
 
 <div>
+    % upcoming_departures = stop.get_upcoming_departures(sheet)
+    <h2>Upcoming Departures</h2>
+    % if len(upcoming_departures) > 0:
+        <table class="pure-table pure-table-horizontal pure-table-striped">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    % if system.realtime_enabled:
+                        <th>Bus</th>
+                        <th class="desktop-only">Model</th>
+                    % end
+                    <th class="desktop-only">Headsign</th>
+                    <th class="desktop-only">Block</th>
+                    <th>Trip</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for departure in upcoming_departures:
+                    % trip = departure.trip
+                    % block = trip.block
+                    % if system.realtime_enabled:
+                        % positions = block.positions
+                        % if len(positions) == 0:
+                            <tr>
+                                <td>{{ departure.time }}</td>
+                                <td class="lighter-text">Unavailable</td>
+                                <td class="desktop-only"></td>
+                                <td class="desktop-only">
+                                    {{ trip }}
+                                    % if departure == trip.first_departure:
+                                        <br />
+                                        <span class="smaller-font">Loading only</span>
+                                    % elif departure == trip.last_departure:
+                                        <br />
+                                        <span class="smaller-font">Unloading only</span>
+                                    % end
+                                </td>
+                                <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                <td>
+                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                    <span class="non-desktop smaller-font">
+                                        <br />
+                                        {{ trip }}
+                                    </span>
+                                </td>
+                            </tr>
+                        % else:
+                            % for position in positions:
+                                % bus = position.bus
+                                % order = bus.order
+                                <tr>
+                                    <td>{{ departure.time }}</td>
+                                    <td>
+                                        % if position.schedule_adherence is not None:
+                                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                        % end
+                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                        % if order is not None:
+                                            <span class="non-desktop smaller-font">
+                                                <br />
+                                                {{ order }}
+                                            </span>
+                                        % end
+                                    </td>
+                                    <td class="desktop-only">
+                                        % if order is not None:
+                                            {{ order }}
+                                        % end
+                                    </td>
+                                    <td class="desktop-only">
+                                        {{ trip }}
+                                        % if departure == trip.first_departure:
+                                            <br />
+                                            <span class="smaller-font">Loading only</span>
+                                        % elif departure == trip.last_departure:
+                                            <br />
+                                            <span class="smaller-font">Unloading only</span>
+                                        % end
+                                    </td>
+                                    <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                    <td>
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                        <span class="non-desktop smaller-font">
+                                            <br />
+                                            {{ trip }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            % end
+                        % end
+                    % else:
+                        <tr>
+                            <td>{{ departure.time }}</td>
+                            <td class="desktop-only">
+                                {{ trip }}
+                                % if departure == trip.first_departure:
+                                    <br />
+                                    <span class="smaller-font">Loading only</span>
+                                % elif departure == trip.last_departure:
+                                    <br />
+                                    <span class="smaller-font">Unloading only</span>
+                                % end
+                            </td>
+                            <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                            <td>
+                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                <span class="non-desktop smaller-font">
+                                    <br />
+                                    {{ trip }}
+                                </span>
+                            </td>
+                        </tr>
+                    % end
+                % end
+            </tbody>
+        </table>
+    % else:
+        <p>
+            There are no departures in the next 30 minutes.
+        </p>
+    % end
+    
     <h2>Trip Schedule</h2>
     <div class="container">
         % if len(services) > 1:
