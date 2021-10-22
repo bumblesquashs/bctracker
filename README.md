@@ -37,6 +37,7 @@ log.error_file: 'logs/serv_log.log'
 mapbox_api_key: '<API KEY HERE>'
 system_domain: 'http://localhost:8080/{0}/{1}'
 no_system_domain: 'http://localhost:8080/{0}'
+system_domain_path: 'http://localhost:8080/{0}/{1}'
 
 ```
 
@@ -51,6 +52,7 @@ To enable this, in server.conf, you need these lines instead, along with the pro
 ```
 system_domain: 'http://{0}.example.com/{1}'
 no_system_domain: 'http://example.com/{0}'
+system_domain_path: 'http://example.com/{0}/{1}'
 ```
 
 Once you've done that, run setup.sh to install packages and create directories, and then run start.py to load up the server.

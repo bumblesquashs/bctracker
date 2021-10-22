@@ -74,7 +74,7 @@
                 if (systemID === null || systemID === undefined) {
                     return "{{ no_system_domain }}".format(path)
                 }
-                return "{{ no_system_domain }}/{1}".format(systemID, path)
+                return "{{ system_domain_path }}".format(systemID, path)
             }
         </script>
     </head>
