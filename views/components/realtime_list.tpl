@@ -32,8 +32,8 @@
                 % same_model = bus.order == last_bus.order
             % end
             % last_bus = bus
+            % order = bus.order
             <tr class="{{'' if same_model else 'divider'}}">
-                % order = bus.order
                 <td>
                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus.number }}</a>
                     % if order is not None:

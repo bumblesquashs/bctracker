@@ -90,27 +90,22 @@
                     % bus = position.bus
                     % trip = position.trip
                     % stop = position.stop
+                    % order = bus.order
                     <tr>
-                        % if bus.number is None:
-                            <td>{{ bus }}</td>
-                            <td class="non-mobile"></td>
-                        % else:
-                            % order = bus.order
-                            <td>
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                % if order is not None:
-                                    <span class="mobile-only smaller-font">
-                                        <br />
-                                        {{ order }}
-                                    </span>
-                                % end
-                            </td>
-                            <td class="non-mobile">
-                                % if order is not None:
+                        <td>
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            % if order is not None:
+                                <span class="mobile-only smaller-font">
+                                    <br />
                                     {{ order }}
-                                % end
-                            </td>
-                        % end
+                                </span>
+                            % end
+                        </td>
+                        <td class="non-mobile">
+                            % if order is not None:
+                                {{ order }}
+                            % end
+                        </td>
                         % if stop is None:
                             <td class="lighter-text">Unavailable</td>
                         % else:
