@@ -18,8 +18,8 @@ VERSION = 0
 app = Bottle()
 
 mapbox_api_key = ''
-no_system_domain = 'bctracker.ca/{0}'
-system_domain = '{0}.bctracker.ca/{1}'
+no_system_domain = 'https://bctracker.ca/{0}'
+system_domain = 'https://{0}.bctracker.ca/{1}'
 cookie_domain = None
 
 def start():
