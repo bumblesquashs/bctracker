@@ -52,7 +52,9 @@ To enable this, in server.conf, you need these lines instead, along with the pro
 ```
 system_domain: 'http://{0}.example.com/{1}'
 no_system_domain: 'http://example.com/{0}'
-system_domain_path: 'http://example.com/{0}/{1}'
+system_domain_path: 'http://example.com/{0}/{1}
+cookie_domain: 'example.com'
+
 ```
 
 Once you've done that, run setup.sh to install packages and create directories, and then run start.py to load up the server.
