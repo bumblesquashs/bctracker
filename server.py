@@ -18,12 +18,13 @@ VERSION = 0
 app = Bottle()
 
 mapbox_api_key = ''
-no_system_domain = 'bctracker.ca/{0}'
-system_domain = '{0}.bctracker.ca/{1}'
+no_system_domain = 'https://bctracker.ca/{0}'
+system_domain = 'https://{0}.bctracker.ca/{1}'
+system_domain_path = 'https://bctracker.ca/{0}/{1}'
 cookie_domain = None
 
 def start():
-    global mapbox_api_key, no_system_domain, system_domain, cookie_domain
+    global mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
     
     force_gtfs_redownload = False
     if len(sys.argv):
@@ -58,6 +59,7 @@ def start():
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
+    system_domain_path = cp.config['system_domain_path']
     cookie_domain = cp.config.get('cookie_domain')
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
@@ -88,6 +90,7 @@ def systems_template(name, system_id, theme=None, **kwargs):
         version=VERSION,
         no_system_domain=no_system_domain,
         system_domain=system_domain,
+        system_domain_path=system_domain_path,
         **kwargs
     )
 
