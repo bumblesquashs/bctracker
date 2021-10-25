@@ -1,6 +1,5 @@
 model_id,manufacturer,name,length,fuel,type
 alexander_dennis_enviro500,Alexander Dennis,Enviro500,42,Diesel,decker
-alexander_dennis_enviro500_mmc,Alexander Dennis,Enviro500 MMC,42,Diesel,decker
 alexander_dennis_enviro500h,Alexander Dennis,Enviro500H,42,Hybrid,decker
 chevrolet_arboc_4500_sof_27,Chevrolet/ARBOC,4500/SOF 27,27,Gasoline,shuttle
 chevrolet_arboc_4500_som23d,Chevrolet/ARBOC,4500/SOM23D,23,Diesel,shuttle
