@@ -7,6 +7,7 @@ from models.system import get_systems
 import gtfs
 import realtime
 import history
+import database
 
 PID = os.getpid()
 
@@ -56,3 +57,8 @@ def handle_realtime(sig, frame):
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
     history.update(realtime.get_positions())
+    
+    # Backup database at the end of each day
+    now = datetime.now()
+    if now.hour == 0 and now.minute == 0:
+        database.backup()

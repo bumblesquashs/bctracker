@@ -71,3 +71,8 @@ def update(table, values, filters=None, args=None):
         filters_string = ' AND '.join(filters)
         sql += f' WHERE {filters_string}'
     return execute(sql, values + args)
+
+def backup():
+    backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
+    connection.backup(backup)
+    backup.close()
