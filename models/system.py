@@ -86,13 +86,13 @@ class System:
     
     def sort_data(self):
         for stop in self.stops.values():
-            stop.stop_times = sorted(stop.stop_times)
+            stop.departures.sort()
         for trip in self.trips.values():
-            trip.stop_times = sorted(trip.stop_times)
+            trip.departures.sort()
         for route in self.routes.values():
-            route.trips = sorted(route.trips)
+            route.trips.sort()
         for block in self.blocks.values():
-            block.trips = sorted(block.trips)
+            block.trips.sort()
 
 systems = {}
 

@@ -49,7 +49,7 @@
         });
     </script>
     
-    % stops = {s.stop for s in trip.stop_times}
+    % stops = {d.stop for d in trip.departures}
     <script>
         const stops = JSON.parse('{{! json.dumps([s.json_data for s in stops]) }}');
         

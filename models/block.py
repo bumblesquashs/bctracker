@@ -1,5 +1,4 @@
 
-import formatting
 import realtime
 
 class Block:
@@ -55,7 +54,7 @@ class Block:
     
     @property
     def duration(self):
-        return formatting.duration_between_timestrs(self.start_time, self.end_time)
+        return self.start_time.get_difference(self.end_time)
     
     @property
     def positions(self):

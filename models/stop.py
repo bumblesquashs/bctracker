@@ -10,7 +10,7 @@ class Stop:
         self.lat = lat
         self.lon = lon
         
-        self.stop_times = []
+        self.departures = []
     
     def __str__(self):
         return self.name
@@ -28,11 +28,11 @@ class Stop:
     
     @property
     def services(self):
-        return sorted({ s.trip.service for s in self.stop_times if s.trip.service.is_current })
+        return sorted({d.trip.service for d in self.departures if d.trip.service.is_current})
     
     @property
     def routes(self):
-        routes = sorted({ s.trip.route for s in self.stop_times })
+        routes = sorted({d.trip.route for d in self.departures})
         current_routes = [r for r in routes if r.is_current]
         if len(current_routes) == 0:
             return routes
@@ -56,5 +56,5 @@ class Stop:
             'lon': self.lon
         }
     
-    def add_stop_time(self, stop_time):
-        self.stop_times.append(stop_time)
+    def add_departure(self, departure):
+        self.departures.append(departure)

@@ -28,7 +28,7 @@
         </div>
         <div class="section">
             <div class="name">Number of stops</div>
-            <div class="value">{{ len(trip.stop_times) }}</div>
+            <div class="value">{{ len(trip.departures) }}</div>
         </div>
         <div class="section">
             <div class="name">Direction</div>
@@ -136,22 +136,23 @@
             </tr>
         </thead>
         <tbody>
-            % for stop_time in trip.stop_times:
+            % for departure in trip.departures:
+                % stop = departure.stop
                 <tr>
-                    <td>{{ stop_time.time }}</td>
+                    <td>{{ departure.time }}</td>
                     <td>
-                        <a href="{{ get_url(stop_time.system, f'stops/{stop_time.stop.number}') }}">{{ stop_time.stop.number }}</a>
+                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                         <span class="mobile-only smaller-font">
                             <br />
-                            {{ stop_time.stop }}
+                            {{ stop }}
                         </span>
                     </td>
                     <td class="non-mobile">
-                        {{ stop_time.stop }}
-                        % if stop_time == trip.first_stop:
+                        {{ stop }}
+                        % if departure == trip.first_departure:
                             <br />
                             <span class="smaller-font">Loading only</span>
-                        % elif stop_time == trip.last_stop:
+                        % elif departure == trip.last_departure:
                             <br />
                             <span class="smaller-font">Unloading only</span>
                         % end
