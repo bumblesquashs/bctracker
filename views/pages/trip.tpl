@@ -16,11 +16,11 @@
         </div>
         <div class="section">
             <div class="name">Start time</div>
-            <div class="value">{{ trip.first_departure.time }}</div>
+            <div class="value">{{ trip.start_time }}</div>
         </div>
         <div class="section">
             <div class="name">End time</div>
-            <div class="value">{{ trip.last_departure.time }}</div>
+            <div class="value">{{ trip.end_time }}</div>
         </div>
         <div class="section">
             <div class="name">Duration</div>

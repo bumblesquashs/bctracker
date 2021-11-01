@@ -57,14 +57,14 @@ class Block:
         if not trips:
             return None
         else:
-            return trips[0].first_departure.time
+            return trips[0].start_time
     
     def get_end_time(self, sheet):
         trips = self.get_trips(sheet)
         if not trips:
             return None
         else:
-            return trips[-1].last_departure.time
+            return trips[-1].end_time
     
     def get_duration(self, sheet):
         start_time = self.get_start_time(sheet)
