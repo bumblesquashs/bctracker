@@ -89,27 +89,22 @@
                     % bus = position.bus
                     % trip = position.trip
                     % stop = position.stop
+                    % order = bus.order
                     <tr>
-                        % if bus.number is None:
-                            <td>{{ bus }}</td>
-                            <td class="desktop-only"></td>
-                        % else:
-                            % order = bus.order
-                            <td>
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                % if order is not None:
-                                    <span class="non-desktop smaller-font">
-                                        <br />
-                                        {{ order }}
-                                    </span>
-                                % end
-                            </td>
-                            <td class="desktop-only">
-                                % if order is not None:
+                        <td>
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            % if order is not None:
+                                <span class="non-desktop smaller-font">
+                                    <br />
                                     {{ order }}
-                                % end
-                            </td>
-                        % end
+                                </span>
+                            % end
+                        </td>
+                        <td class="desktop-only">
+                            % if order is not None:
+                                {{ order }}
+                            % end
+                        </td>
                         <td>{{ trip }}</td>
                         <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
                         % if stop is None:
@@ -142,8 +137,8 @@
         <tbody>
             % for trip in trips:
                 <tr>
-                    <td>{{ trip.first_departure.time }}</td>
-                    <td class="desktop-only">{{ trip.last_departure.time }}</td>
+                    <td>{{ trip.start_time }}</td>
+                    <td class="desktop-only">{{ trip.end_time }}</td>
                     <td class="desktop-only">{{ trip.duration }}</td>
                     <td>
                         {{ trip }}

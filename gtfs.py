@@ -72,10 +72,10 @@ def load_departures(system):
         if trip_id not in system.trips:
             print(f'Invalid trip id: {trip_id}')
             continue
-        time = values['departure_time']
+        time_string = values['departure_time']
         sequence = int(values['stop_sequence'])
         
-        departure = Departure(system, stop_id, trip_id, time, sequence)
+        departure = Departure(system, stop_id, trip_id, time_string, sequence)
         
         departure.stop.add_departure(departure)
         departure.trip.add_departure(departure)

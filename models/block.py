@@ -57,14 +57,14 @@ class Block:
         if not trips:
             return None
         else:
-            return trips[0].first_departure.time
+            return trips[0].start_time
     
     def get_end_time(self, sheet):
         trips = self.get_trips(sheet)
         if not trips:
             return None
         else:
-            return trips[-1].last_departure.time
+            return trips[-1].end_time
     
     def get_duration(self, sheet):
         start_time = self.get_start_time(sheet)
@@ -74,4 +74,19 @@ class Block:
         return start_time.get_difference(end_time)
     
     def get_related_blocks(self, sheet):
-        return []
+        related_blocks = [b for b in self.system.get_blocks(sheet) if self.is_related(b, sheet)]
+        related_blocks.sort(key=lambda b: b.get_services(sheet)[0])
+        return related_blocks
+    
+    def is_related(self, other, sheet):
+        if self.id == other.id:
+            return False
+        if sheet not in other.sheets:
+            return False
+        if self.get_routes(sheet) != other.get_routes(sheet):
+            return False
+        if self.get_start_time(sheet) != other.get_start_time(sheet):
+            return False
+        if self.get_end_time(sheet) != other.get_end_time(sheet):
+            return False
+        return True

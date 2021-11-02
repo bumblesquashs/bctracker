@@ -49,8 +49,16 @@ class Trip:
         return self.departures[-1]
     
     @property
+    def start_time(self):
+        return self.first_departure.time
+    
+    @property
+    def end_time(self):
+        return self.last_departure.time
+    
+    @property
     def duration(self):
-        return self.first_departure.time.get_difference(self.last_departure.time)
+        return self.start_time.get_difference(self.end_time)
     
     @property
     def points(self):
@@ -100,9 +108,9 @@ class Trip:
         return departures[0]
     
     def get_previous_departure(self, departure):
-        for other_departure in self.departures:
-            if other_departure.sequence == (departure.sequence - 1):
-                return other_departure
+        for previous_departure in self.departures:
+            if previous_departure.sequence == (departure.sequence - 1):
+                return previous_departure
         return None
     
     def is_related(self, other):
@@ -112,9 +120,9 @@ class Trip:
             return False
         if self.route_id != other.route_id:
             return False
-        if self.first_departure.time != other.first_departure.time:
+        if self.start_time != other.start_time:
             return False
-        if self.last_departure.time != other.last_departure.time:
+        if self.end_time != other.end_time:
             return False
         if self.direction_id != other.direction_id:
             return False
