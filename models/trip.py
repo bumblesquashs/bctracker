@@ -26,7 +26,7 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.departures[0] < other.departures[0]
+        return self.first_departure < other.first_departure
     
     @property
     def route(self):
@@ -89,8 +89,7 @@ class Trip:
     @property
     def related_trips(self):
         if self._related_trips is None:
-            trips = self.system.all_trips()
-            self._related_trips = [t for t in trips if t.id != self.id and t.service.is_current == self.service.is_current and t.route_id == self.route_id and t.start_time == self.start_time and t.end_time == self.end_time and t.direction_id == self.direction_id]
+            self._related_trips = [t for t in self.system.get_trips(self.service.sheet) if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
@@ -113,3 +112,18 @@ class Trip:
             if previous_departure.sequence == (departure.sequence - 1):
                 return previous_departure
         return None
+    
+    def is_related(self, other):
+        if self.id == other.id:
+            return False
+        if self.service.sheet != other.service.sheet:
+            return False
+        if self.route_id != other.route_id:
+            return False
+        if self.start_time != other.start_time:
+            return False
+        if self.end_time != other.end_time:
+            return False
+        if self.direction_id != other.direction_id:
+            return False
+        return True

@@ -2,7 +2,7 @@
 % import math
 
 % from formatting import format_date, format_date_mobile
-% from models.bus_model import BusModelType
+% from models.model import BusModelType
 
 % rebase('base', title=f'Bus {bus} History')
 
@@ -12,11 +12,11 @@
 </div>
 <hr />
 
-% if len(history) > 0:
-    % last_tracked = history[0].date
+% if len(records) > 0:
+    % last_tracked = records[0].date
     % days_since_last_tracked = (datetime.now() - last_tracked).days
     
-    % first_tracked = history[-1].date
+    % first_tracked = records[-1].date
     % days_since_first_tracked = (datetime.now() - first_tracked).days
     
     <div id="sidebar">
@@ -59,11 +59,11 @@
                 </div>
             </div>
             <div class="section">
-                % history_systems = sorted({h.system for h in history})
-                <div class="name">System{{ '' if len(history_systems) == 1 else 's' }}</div>
+                % record_systems = sorted({r.system for r in records})
+                <div class="name">System{{ '' if len(record_systems) == 1 else 's' }}</div>
                 <div class="value">
-                    % for history_system in history_systems:
-                        <a href="{{ get_url(history_system) }}">{{ history_system }}</a>
+                    % for record_system in record_systems:
+                        <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
                         <br />
                     % end
                 </div>
@@ -74,7 +74,7 @@
 
 <div>
     <h2>History</h2>
-    % if len(history) == 0:
+    % if len(records) == 0:
         <p>This bus doesn't have any recorded history.</p>
         <p>
             There are a few reasons why that might be the case:
@@ -82,7 +82,8 @@
                 <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                 <li>It may not have been in service since BCTracker started recording bus history</li>
                 <li>It may not have functional NextRide equipment installed</li>
-                % if model.type == BusModelType.shuttle:
+                % model = bus.model
+                % if model is not None and model.type == BusModelType.shuttle:
                     <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                 % end
             </ol>
@@ -103,27 +104,27 @@
                 </tr>
             </thead>
             <tbody>
-                % for block_history in history:
+                % for record in records:
                     <tr>
-                        <td class="desktop-only">{{ format_date(block_history.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(block_history.date) }}</td>
-                        <td>{{ block_history.system }}</td>
+                        <td class="desktop-only">{{ format_date(record.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                        <td>{{ record.system }}</td>
                         <td>
-                            % if block_history.is_available:
-                                % block = block_history.block
+                            % if record.is_available:
+                                % block = record.block
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                             % else:
-                                <span>{{ block_history.block_id }}</span>
+                                <span>{{ record.block_id }}</span>
                             % end
                             <span class="non-desktop smaller-font">
                                 <br />
-                                {{ block_history.routes_string }}
+                                {{ record.routes }}
                             </span>
                         </td>
-                        <td class="desktop-only">{{ block_history.routes_string }}</td>
-                        <td class="desktop-only">{{ block_history.start_time }}</td>
-                        <td class="desktop-only">{{ block_history.end_time }}</td>
-                        <td class="tablet-only">{{ block_history.start_time }} - {{ block_history.end_time }}</td>
+                        <td class="desktop-only">{{ record.routes }}</td>
+                        <td class="desktop-only">{{ record.start_time }}</td>
+                        <td class="desktop-only">{{ record.end_time }}</td>
+                        <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
                     </tr>
                 % end
             </tbody>

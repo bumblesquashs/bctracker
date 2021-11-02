@@ -6,26 +6,30 @@
 </div>
 <hr />
 
+% services = stop.get_services(sheet)
+% routes = stop.get_routes(sheet)
+% departures = stop.get_departures(sheet)
+
 <div id="sidebar">
     <h2>Overview</h2>
     % include('components/stop_map', stop=stop)
     
     <div class="info-box">
         <div class="section">
-            % include('components/services_indicator', services=stop.services)
+            % include('components/services_indicator', services=services)
         </div>
         <div class="section">
-            <div class="name">Route{{ '' if len(stop.routes) == 1 else 's' }}</div>
+            <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
             <div class="value">
-                % for route in stop.routes:
-                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
-                <br />
+                % for route in routes:
+                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
+                    <br />
                 % end
             </div>
         </div>
     </div>
     
-    % nearby_stops = sorted(stop.nearby_stops)
+    % nearby_stops = sorted(stop.get_nearby_stops(sheet))
     % if len(nearby_stops) > 0:
         <h2>Nearby Stops</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">
@@ -39,9 +43,9 @@
             <tbody>
                 % for nearby_stop in nearby_stops:
                     <tr>
-                        <td><a href="{{ get_url(stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
+                        <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
                         <td>{{ nearby_stop }}</td>
-                        <td>{{ nearby_stop.routes_string }}</td>
+                        <td>{{ nearby_stop.get_routes_string(sheet) }}</td>
                     </tr>
                 % end
             </tbody>
@@ -52,19 +56,19 @@
 <div>
     <h2>Trip Schedule</h2>
     <div class="container">
-        % if len(stop.services) > 1:
+        % if len(services) > 1:
             <div class="navigation">
-                % for service in stop.services:
+                % for service in services:
                     <a href="#{{service}}" class="button">{{ service }}</a>
                 % end
             </div>
             <br />
         % end
         
-        % for service in stop.services:
-            % departures = [d for d in stop.departures if d.trip.service == service]
+        % for service in services:
+            % service_departures = [d for d in departures if d.trip.service == service]
             
-            % if len(departures) > 0:
+            % if len(service_departures) > 0:
                 <div class="section">
                     <h3 class="title" id="{{service}}">{{ service }}</h3>
                     <div class="subtitle">{{ service.date_string }}</div>
@@ -79,7 +83,7 @@
                         </thead>
                         <tbody>
                             % last_hour = -1
-                            % for departure in departures:
+                            % for departure in service_departures:
                                 % trip = departure.trip
                                 % block = trip.block
                                 % this_hour = departure.time.hour

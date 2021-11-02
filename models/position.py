@@ -1,15 +1,13 @@
 from datetime import datetime
 import math
 
-import realtime
-
 MINIMUM_MINUTES = 4
 
 class Position:
-    def __init__(self, system, active, bus_id):
+    def __init__(self, system, active, bus):
         self.system = system
         self.active = active
-        self.bus_id = bus_id
+        self.bus = bus
         self.trip_id = None
         self.stop_id = None
         self.lat = None
@@ -31,10 +29,6 @@ class Position:
         if self.stop_id is None or self.system is None:
             return None
         return self.system.get_stop(stop_id=self.stop_id)
-    
-    @property
-    def bus(self):
-        return realtime.get_bus(bus_id=self.bus_id)
     
     @property
     def schedule_adherence_string(self):
@@ -60,6 +54,8 @@ class Position:
             return
         
         departure = trip.get_departure(stop)
+        if departure is None:
+            return
         previous_departure = trip.get_previous_departure(departure)
         try:
             expected_scheduled_mins = departure.time.get_minutes()

@@ -33,11 +33,11 @@
             </thead>
             <tbody>
                 % last_bus = None
-                % for history in last_seen:
-                    % bus = history.bus
-                    % same_model = last_bus is None or bus.order == last_bus.order
-                    % last_bus = bus
+                % for record in records:
+                    % bus = record.bus
                     % order = bus.order
+                    % same_model = last_bus is None or order == last_bus.order
+                    % last_bus = bus
                     <tr class="{{'' if same_model else 'divider'}}">
                         <td>
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
@@ -53,20 +53,20 @@
                                 {{ order }}
                             % end
                         </td>
-                        <td class="desktop-only">{{ format_date(history.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(history.date) }}</td>
+                        <td class="desktop-only">{{ format_date(record.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
                         % if system is None:
-                            <td class="non-mobile">{{ history.system }}</td>
+                            <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            % if history.is_available:
-                                % block = history.block
+                            % if record.is_available:
+                                % block = record.block
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                             % else:
-                                <span>{{ history.block_id }}</span>
+                                <span>{{ record.block_id }}</span>
                             % end
                         </td>
-                        <td class="desktop-only">{{ history.routes_string }}</td>
+                        <td class="desktop-only">{{ record.routes }}</td>
                     </tr>
                 % end
             </tbody>

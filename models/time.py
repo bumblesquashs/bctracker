@@ -2,7 +2,7 @@
 class Time:
     
     def __init__(self, time_string):
-        if time_string == '':
+        if time_string is None or time_string == '':
             self.unknown = True
             self.hour = -1
             self.minute = 0

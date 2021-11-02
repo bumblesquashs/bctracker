@@ -14,7 +14,7 @@
     const lats = [];
 </script>
 
-% shape_ids = {(t.shape_id, t.route.colour) for t in block.available_trips}
+% shape_ids = {(t.shape_id, t.route.colour) for t in block.get_trips(sheet)}
 % for (shape_id, colour) in shape_ids:
     % points = sorted(block.system.get_shape(shape_id).points)
     <script>
@@ -74,18 +74,12 @@
             
             const element = document.createElement("div");
             element.className = "marker";
-            if (bus.number === "Unknown Bus") {
-                element.innerHTML = "\
+            element.innerHTML = "\
+                <div class='link'></div>\
+                <a href=\"/bus/" + bus.number +"\">\
                     <img src=\"/img/bus.png\" />\
-                    <div class='title'><span>" + bus.number + "</span></div>";
-            } else {
-                element.innerHTML = "\
-                    <div class='link'></div>\
-                    <a href=\"/bus/" + bus.number +"\">\
-                        <img src=\"/img/bus.png\" />\
-                        <div class='title'><span>" + bus.number + "</span></div>\
-                    </a>";
-            }
+                    <div class='title'><span>" + bus.number + "</span></div>\
+                </a>";
             element.style.backgroundColor = "#" + bus.colour;
         
             new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
