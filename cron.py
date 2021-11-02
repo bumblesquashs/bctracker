@@ -3,10 +3,11 @@ import signal
 from datetime import datetime
 from crontab import CronTab
 
-from models.system import all_systems
+from models.system import get_systems
 import gtfs
 import realtime
 import history
+import database
 
 PID = os.getpid()
 
@@ -33,7 +34,7 @@ def stop():
 
 def handle_gtfs(sig, frame):
     weekday = datetime.today().weekday()
-    for system in all_systems():
+    for system in get_systems():
         try:
             if weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
@@ -42,7 +43,7 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
-    for system in all_systems():
+    for system in get_systems():
         try:
             realtime.reset_positions(system)
             realtime.update(system)
@@ -55,4 +56,9 @@ def handle_realtime(sig, frame):
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
-    history.update(realtime.active_buses())
+    history.update(realtime.get_positions())
+    
+    # Backup database at the end of each day
+    now = datetime.now()
+    if now.hour == 0 and now.minute == 0:
+        database.backup()

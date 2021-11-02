@@ -4,23 +4,32 @@ from bottle import Bottle, static_file, template, redirect, request, response, d
 import cherrypy as cp
 import sys
 
-from models.bus_model import load_models
-from models.bus_order import load_orders
-from models.system import load_systems, get_system, all_systems
+from models.bus import Bus
+from models.model import load_models
+from models.order import load_orders
+from models.service import Sheet
+from models.system import load_systems, get_system, get_systems
 
+import database
 import gtfs
 import realtime
 import history
 
+# Increase the version to force CSS reload
+VERSION = 0
+
 app = Bottle()
 
 mapbox_api_key = ''
-no_system_domain = 'bctracker.ca/{0}'
-system_domain = '{0}.bctracker.ca/{1}'
+no_system_domain = 'https://bctracker.ca/{0}'
+system_domain = 'https://{0}.bctracker.ca/{1}'
+system_domain_path = 'https://bctracker.ca/{0}/{1}'
 cookie_domain = None
 
 def start():
-    global mapbox_api_key, no_system_domain, system_domain, cookie_domain
+    global mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
+    
+    database.connect()
     
     force_gtfs_redownload = False
     if len(sys.argv):
@@ -36,10 +45,7 @@ def start():
     load_orders()
     load_systems()
     
-    realtime.load_translations()
-    history.load_last_seen()
-    
-    for system in all_systems():
+    for system in get_systems():
         if not gtfs.downloaded(system) or force_gtfs_redownload:
             gtfs.update(system)
         else:
@@ -49,12 +55,13 @@ def start():
             gtfs.update(system)
         elif not realtime.validate(system):
             system.realtime_validation_error_count += 1
-    history.update(realtime.active_buses())
+    history.update(realtime.get_positions())
     
     cp.config.update('server.conf')
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
+    system_domain_path = cp.config['system_domain_path']
     cookie_domain = cp.config.get('cookie_domain')
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
@@ -64,6 +71,7 @@ def start():
     cp.server.start()
 
 def stop():
+    database.disconnect()
     cp.server.stop()
 
 def get_url(system, path=''):
@@ -73,15 +81,28 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
+def get_sheet_from_query(default_sheet):
+    sheet = request.query.get('sheet')
+    if sheet is None:
+        return default_sheet
+    try:
+        return Sheet[sheet.upper()]
+    except:
+        return default_sheet
+
 def systems_template(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
-        systems=[s for s in all_systems() if s.visible],
+        systems=[s for s in get_systems() if s.visible],
         system_id=system_id,
         system=get_system(system_id),
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
         theme=theme or request.get_cookie('theme'),
+        version=VERSION,
+        no_system_domain=no_system_domain,
+        system_domain=system_domain,
+        system_domain_path=system_domain_path,
         **kwargs
     )
 
@@ -181,10 +202,10 @@ def bus_number(number):
 @app.route('/<system_id>/bus/<number:int>')
 @app.route('/<system_id>/bus/<number:int>/')
 def system_bus_number(system_id, number):
-    bus = realtime.get_bus(number=number)
-    if bus is None:
+    bus = Bus(number)
+    if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
+    return systems_template('bus', system_id, bus=bus, records=history.get_bus_records(bus, 20))
 
 @app.route('/bus/<number:int>/history')
 @app.route('/bus/<number:int>/history/')
@@ -194,10 +215,10 @@ def bus_number_history(number):
 @app.route('/<system_id>/bus/<number:int>/history')
 @app.route('/<system_id>/bus/<number:int>/history/')
 def system_bus_number_history(system_id, number):
-    bus = realtime.get_bus(number=number)
-    if bus is None:
+    bus = Bus(number)
+    if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus_history', system_id, bus=bus, history=sorted(history.load_bus_history(number)))
+    return systems_template('bus_history', system_id, bus=bus, records=history.get_bus_records(bus))
 
 @app.route('/history')
 @app.route('/history/')
@@ -208,11 +229,7 @@ def route_history():
 @app.route('/<system_id>/history/')
 def system_history(system_id):
     system = get_system(system_id)
-    if system is None:
-        last_seen = history.all_last_seen()
-    else:
-        last_seen = [h for h in history.all_last_seen() if h.system == system]
-    return systems_template('history', system_id, last_seen=last_seen, path='history')
+    return systems_template('history', system_id, records=history.get_last_seen(system), path='history')
 
 @app.route('/routes')
 @app.route('/routes/')
@@ -222,7 +239,7 @@ def routes():
 @app.route('/<system_id>/routes')
 @app.route('/<system_id>/routes/')
 def system_routes(system_id):
-    return systems_template('routes', system_id, path='routes')
+    return systems_template('routes', system_id, sheet=get_sheet_from_query(default_sheet=Sheet.CURRENT), path='routes')
 
 @app.route('/routes/<number>')
 @app.route('/routes/<number>/')
@@ -240,7 +257,7 @@ def system_routes_number(system_id, number):
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    return systems_template('route', system_id, route=route)
+    return systems_template('route', system_id, route=route, sheet=get_sheet_from_query(default_sheet=route.default_sheet))
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -250,7 +267,7 @@ def blocks():
 @app.route('/<system_id>/blocks')
 @app.route('/<system_id>/blocks/')
 def system_blocks(system_id):
-    return systems_template('blocks', system_id, path='blocks')
+    return systems_template('blocks', system_id, sheet=get_sheet_from_query(default_sheet=Sheet.CURRENT), path='blocks')
 
 @app.route('/blocks/<block_id>')
 @app.route('/blocks/<block_id>/')
@@ -266,7 +283,7 @@ def system_blocks_id(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    return systems_template('block', system_id, block=block)
+    return systems_template('block', system_id, block=block, sheet=get_sheet_from_query(default_sheet=block.default_sheet))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -296,7 +313,7 @@ def system_stops(system_id):
     search = request.query.get('search')
     if search is not None:
         path += f'?search={search}'
-    return systems_template('stops', system_id, search=search, path=path)
+    return systems_template('stops', system_id, search=search, sheet=get_sheet_from_query(default_sheet=Sheet.CURRENT), path=path)
 
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
@@ -312,7 +329,7 @@ def system_stops_number(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    return systems_template('stop', system_id, stop=stop)
+    return systems_template('stop', system_id, stop=stop, sheet=get_sheet_from_query(default_sheet=stop.default_sheet))
 
 @app.route('/about')
 @app.route('/about/')

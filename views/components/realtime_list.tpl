@@ -32,33 +32,28 @@
                 % same_model = bus.order == last_bus.order
             % end
             % last_bus = bus
+            % order = bus.order
             <tr class="{{'' if same_model else 'divider'}}">
-                % if bus.number is None:
-                    <td>Unknown Bus</td>
-                    <td class="desktop-only"></td>
-                % else:
-                    % order = bus.order
-                    <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus.number }}</a>
-                        % if order is not None:
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ order.year }}
-                                % if get('show_model', True):
-                                    {{ order.model }}
-                                % end
-                            </span>
-                        % end
-                    </td>
-                    <td class="desktop-only">
-                        % if order is not None:
+                <td>
+                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus.number }}</a>
+                    % if order is not None:
+                        <span class="non-desktop smaller-font">
+                            <br />
                             {{ order.year }}
                             % if get('show_model', True):
                                 {{ order.model }}
                             % end
+                        </span>
+                    % end
+                </td>
+                <td class="desktop-only">
+                    % if order is not None:
+                        {{ order.year }}
+                        % if get('show_model', True):
+                            {{ order.model }}
                         % end
-                    </td>
-                % end
+                    % end
+                </td>
                 % if system is None:
                     <td class="non-mobile">{{ position.system }}</td>
                 % end

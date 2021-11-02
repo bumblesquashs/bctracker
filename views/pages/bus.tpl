@@ -1,5 +1,5 @@
 % from formatting import format_date, format_date_mobile
-% from models.bus_model import BusModelType
+% from models.model import BusModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
 
@@ -52,8 +52,8 @@
                     <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                 </div>
             </div>
-            % if position.stop is not None:
-                % stop = position.stop
+            % stop = position.stop
+            % if stop is not None:
                 <div class="section">
                     <div class="name">Current Stop</div>
                     <div class="value">
@@ -90,7 +90,7 @@
 
 <div>
     <h2>Recent History</h2>
-    % if len(history) == 0:
+    % if len(records) == 0:
         <p>This bus doesn't have any recorded history.</p>
         <p>
             There are a few reasons why that might be the case:
@@ -119,27 +119,27 @@
                 </tr>
             </thead>
             <tbody>
-                % for block_history in history[:20]:
+                % for record in records:
                     <tr>
-                        <td class="desktop-only">{{ format_date(block_history.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(block_history.date) }}</td>
-                        <td>{{ block_history.system }}</td>
+                        <td class="desktop-only">{{ format_date(record.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                        <td>{{ record.system }}</td>
                         <td>
-                            % if block_history.is_available:
-                                % block = block_history.block
+                            % if record.is_available:
+                                % block = record.block
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                             % else:
-                                <span>{{ block_history.block_id }}</span>
+                                <span>{{ record.block_id }}</span>
                             % end
                             <span class="non-desktop smaller-font">
                                 <br />
-                                {{ block_history.routes_string }}
+                                {{ record.routes }}
                             </span>
                         </td>
-                        <td class="desktop-only">{{ block_history.routes_string }}</td>
-                        <td class="desktop-only">{{ block_history.start_time }}</td>
-                        <td class="desktop-only">{{ block_history.end_time }}</td>
-                        <td class="tablet-only">{{ block_history.start_time }} - {{ block_history.end_time }}</td>
+                        <td class="desktop-only">{{ record.routes }}</td>
+                        <td class="desktop-only">{{ record.start_time }}</td>
+                        <td class="desktop-only">{{ record.end_time }}</td>
+                        <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
                     </tr>
                 % end
             </tbody>

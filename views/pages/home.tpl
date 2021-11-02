@@ -14,21 +14,21 @@
     
     <script type="text/javascript">
         function busSearch() {
-            let value = document.getElementById('bus_id_search').value;
+            let value = document.getElementById('bus_search').value;
             if (value.length > 0) {
                 window.location = "{{ get_url(system) }}/bus/" + value;
             }
         }
         
         function routeSearch() {
-            let value = document.getElementById('route_id_search').value;
+            let value = document.getElementById('route_search').value;
             if (value.length > 0) {
                 window.location = "{{ get_url(system) }}/routes/" + value;
             }
         }
         
         function stopSearch() {
-            let value = document.getElementById('stop_id_search').value;
+            let value = document.getElementById('stop_search').value;
             if (value.length > 0) {
                 if (isNaN(value)) {
                     window.location = "{{ get_url(system) }}/stops?search=" + value;
@@ -41,32 +41,32 @@
     
     % if system is None:
         <form onsubmit="busSearch()" action="javascript:void(0)">
-            <label for="bus_id_search">Bus Number:</label>
+            <label for="bus_search">Bus Number:</label>
             <br />
-            <input type="text" id="bus_id_search" name="bus_id" method="post">
+            <input type="text" id="bus_search" name="bus_search" method="post">
             <input type="submit" value="Search" class="button">
         </form>
     % else:
         % if system.realtime_enabled:
             <form onsubmit="busSearch()" action="javascript:void(0)">
-                <label for="bus_id_search">Bus Number:</label>
+                <label for="bus_search">Bus Number:</label>
                 <br />
-                <input type="text" id="bus_id_search" name="bus_id" method="post">
+                <input type="text" id="bus_search" name="bus_search" method="post">
                 <input type="submit" value="Search" class="button">
             </form>
         % end
         
         <form onsubmit="routeSearch()" action="javascript:void(0)">
-            <label for="route_id_search">Route Number:</label>
+            <label for="route_search">Route Number:</label>
             <br />
-            <input type="text" id="route_id_search" name="route_id" method="post">
+            <input type="text" id="route_search" name="route_search" method="post">
             <input type="submit" value="Search" class="button">
         </form>
         
         <form onsubmit="stopSearch()" action="javascript:void(0)">
-            <label for="stop_id_search">Stop Number or Name:</label>
+            <label for="stop_search">Stop Number or Name:</label>
             <br />
-            <input type="text" id="stop_id_search" name="stop_id" method="post">
+            <input type="text" id="stop_search" name="stop_search" method="post">
             <input type="submit" value="Search" class="button">
         </form>
     % end

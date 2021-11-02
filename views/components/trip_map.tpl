@@ -51,3 +51,23 @@
         })
     });
 </script>
+
+% for position in trip.positions:
+    <script>
+        map.on('load', function() {
+            const bus = JSON.parse('{{! json.dumps(position.bus.json_data) }}');
+            
+            const element = document.createElement("div");
+            element.className = "marker";
+            element.innerHTML = "\
+                <div class='link'></div>\
+                <a href=\"/bus/" + bus.number +"\">\
+                    <img src=\"/img/bus.png\" />\
+                    <div class='title'><span>" + bus.number + "</span></div>\
+                </a>";
+            element.style.backgroundColor = "#" + bus.colour;
+        
+            new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
+        })
+    </script>
+% end

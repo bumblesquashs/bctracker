@@ -96,10 +96,10 @@
             % end
         % elif group == 'model':
             % known_buses = [b for b in buses if b.order is not None]
-            % models = sorted({b.order.model for b in known_buses})
+            % models = sorted({b.model for b in known_buses})
             
             % for model in models:
-                % model_buses = [b for b in known_buses if b.order.model == model]
+                % model_buses = [b for b in known_buses if b.model == model]
                 <div class="section no-inline">
                     <h2 class="title">{{ model }}</h2>
                     % include('components/realtime_list', buses=model_buses, show_model=False)
@@ -109,7 +109,7 @@
             % unknown_buses = [b for b in buses if b.order is None]
             % if len(unknown_buses) > 0:
                 <div class="section no-inline">
-                    <h2 class="title">Unknown Bus</h2>
+                    <h2 class="title">Unknown Model</h2>
                     % include('components/realtime_list', buses=unknown_buses, show_model=False)
                 </div>
             % end

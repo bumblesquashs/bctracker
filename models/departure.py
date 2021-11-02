@@ -1,12 +1,11 @@
+from models.time import Time
 
-import formatting
-
-class StopTime:
-    def __init__(self, system, stop_id, trip_id, time, sequence):
+class Departure:
+    def __init__(self, system, stop_id, trip_id, time_string, sequence):
         self.system = system
         self.stop_id = stop_id
         self.trip_id = trip_id
-        self.time = formatting.format_time(time)
+        self.time = Time(time_string)
         self.sequence = sequence
     
     def __eq__(self, other):
@@ -16,12 +15,7 @@ class StopTime:
         if self.stop_id == other.stop_id and self.trip_id == other.trip_id:
             return self.sequence < other.sequence
         else:
-            (sh, sm) = self.time.split(':')
-            (oh, om) = other.time.split(':')
-            if sh == oh:
-                return int(sm) < int(om)
-            else:
-                return int(sh) < int(oh)
+            return self.time < other.time
     
     @property
     def stop(self):
@@ -30,7 +24,3 @@ class StopTime:
     @property
     def trip(self):
         return self.system.get_trip(self.trip_id)
-    
-    def get_time_minutes(self):
-        (hour, minute) = self.time.split(':')
-        return formatting.get_minutes(int(hour), int(minute))

@@ -7,11 +7,11 @@ import wget
 import csv
 
 from models.block import Block
+from models.departure import Departure
 from models.route import Route
-from models.service import Service
+from models.service import Service, Sheet
 from models.shape import Shape
 from models.stop import Stop
-from models.stop_time import StopTime
 from models.trip import Trip
 
 from formatting import format_csv
@@ -58,9 +58,27 @@ def load(system):
     load_services(system)
     load_shapes(system)
     load_trips(system)
-    load_stop_times(system)
+    load_departures(system)
     system.sort_data()
     print('Done!')
+
+def load_departures(system):
+    for values in read_csv(system, 'stop_times'):
+        stop_id = values['stop_id']
+        if stop_id not in system.stops:
+            print(f'Invalid stop id: {stop_id}')
+            continue
+        trip_id = values['trip_id']
+        if trip_id not in system.trips:
+            print(f'Invalid trip id: {trip_id}')
+            continue
+        time_string = values['departure_time']
+        sequence = int(values['stop_sequence'])
+        
+        departure = Departure(system, stop_id, trip_id, time_string, sequence)
+        
+        departure.stop.add_departure(departure)
+        departure.trip.add_departure(departure)
 
 def load_feed_info(system):
     values = read_csv(system, 'feed_info')[0]
@@ -96,12 +114,12 @@ def load_services(system):
         fri = values['friday'] == '1'
         sat = values['saturday'] == '1'
         sun = values['sunday'] == '1'
-
+        
         system.services[service_id] = Service(system, service_id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun)
     for values in read_csv(system, 'calendar_dates'):
         service_id = values['service_id']
         exception_type = int(values['exception_type'])
-
+        
         service = system.get_service(service_id)
         if service is None:
             continue
@@ -119,31 +137,13 @@ def load_shapes(system):
         lat = float(values['shape_pt_lat'])
         lon = float(values['shape_pt_lon'])
         sequence = int(values['shape_pt_sequence'])
-
+        
         shape = system.get_shape(shape_id)
         if shape is None:
             shape = Shape(system, shape_id)
             system.shapes[shape_id] = shape
         
         shape.add_point(lat, lon, sequence)
-
-def load_stop_times(system):
-    for values in read_csv(system, 'stop_times'):
-        stop_id = values['stop_id']
-        if stop_id not in system.stops:
-            print(f'Invalid stop id: {stop_id}')
-            continue
-        trip_id = values['trip_id']
-        if trip_id not in system.trips:
-            print(f'Invalid trip id: {trip_id}')
-            continue
-        time = values['departure_time']
-        sequence = int(values['stop_sequence'])
-
-        stop_time = StopTime(system, stop_id, trip_id, time, sequence)
-
-        stop_time.stop.add_stop_time(stop_time)
-        stop_time.trip.add_stop_time(stop_time)
 
 def load_stops(system):
     system.stops = {}
@@ -157,9 +157,9 @@ def load_stops(system):
         name = values['stop_name']
         lat = float(values['stop_lat'])
         lon = float(values['stop_lon'])
-
+        
         stop = Stop(system, stop_id, number, name, lat, lon)
-
+        
         system.stops[stop_id] = stop
         system.stops_by_number[number] = stop
 
@@ -182,11 +182,11 @@ def load_trips(system):
         direction_id = int(values['direction_id'])
         shape_id = values['shape_id']
         headsign = values['trip_headsign']
-
+        
         trip = Trip(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
-
+        
         system.trips[trip_id] = trip
-
+        
         trip.block.add_trip(trip)
         trip.route.add_trip(trip)
 
@@ -203,7 +203,7 @@ def validate(system):
     if not system.gtfs_enabled:
         return True
     end_date = None
-    for service in system.all_services():
+    for service in system.get_services(Sheet.CURRENT):
         date = service.end_date.date()
         if end_date is None or date > end_date:
             end_date = date

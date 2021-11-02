@@ -1,7 +1,13 @@
 from datetime import datetime, timedelta
-from enum import IntEnum
+from enum import Enum, IntEnum
 
 from formatting import format_date
+
+class Sheet(Enum):
+    PREVIOUS = 'previous'
+    CURRENT = 'current'
+    NEXT = 'next'
+    UNKNOWN = 'unknown'
 
 class ServiceType(IntEnum):
     ALL = 0
@@ -62,6 +68,19 @@ class Service:
             self.type = ServiceType.SPECIAL
         else:
             self.type = ServiceType.UNKNOWN
+        
+        start = start_date.date()
+        end = end_date.date()
+        today = datetime.now().date()
+        
+        if start <= today <= end:
+            self.sheet = Sheet.CURRENT
+        elif end < today:
+            self.sheet = Sheet.PREVIOUS
+        elif today < start:
+            self.sheet = Sheet.NEXT
+        else:
+            self.sheet = Sheet.UNKNOWN
     
     def __str__(self):
         if self.type == ServiceType.ALL:
@@ -118,10 +137,6 @@ class Service:
         start = format_date(self.start_date)
         end = format_date(self.end_date)
         return f'{start} to {end}'
-    
-    @property
-    def is_current(self):
-        return self.start_date.date() <= datetime.now().date() <= self.end_date.date()
     
     @property
     def is_today(self):

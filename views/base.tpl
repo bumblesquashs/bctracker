@@ -14,34 +14,34 @@
         <meta name="robots" content="noindex" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         
-        <link rel="stylesheet" href="/style/main.css" />
-        <link rel="stylesheet" href="/style/tables.css" />
+        <link rel="stylesheet" href="/style/main.css?version={{ version }}" />
+        <link rel="stylesheet" href="/style/tables.css?version={{ version }}" />
         
-        <link rel="stylesheet" media="screen and (min-width: 1001px)" href="/style/desktop.css" />
-        <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/tablet.css" />
-        <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/mobile.css" />
+        <link rel="stylesheet" media="screen and (min-width: 1001px)" href="/style/desktop.css?version={{ version }}" />
+        <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/tablet.css?version={{ version }}" />
+        <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/mobile.css?version={{ version }}" />
         
         % if theme == "light":
-            <link rel="stylesheet" href="/style/light.css" />
+            <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = false
             </script>
         % elif theme == "dark":
-            <link rel="stylesheet" href="/style/dark.css" />
+            <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = true
             </script>
         % elif theme == "classic":
-            <link rel="stylesheet" href="/style/classic.css" />
+            <link rel="stylesheet" href="/style/classic.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = false
             </script>
         % else:
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css" />
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css" />
+            <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css?version={{ version }}" />
+            <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = window.matchMedia("screen and (prefers-color-scheme: dark)").matches;
@@ -60,6 +60,21 @@
         <script>
             function toggleMenu() {
                 document.getElementById("menu").classList.toggle("display-none")
+            }
+            
+            String.prototype.format = function() {
+                a = this;
+                for (k in arguments) {
+                    a = a.replace("{" + k + "}", arguments[k])
+                }
+                return a
+            }
+            
+            function getUrl(systemID, path) {
+                if (systemID === null || systemID === undefined) {
+                    return "{{ no_system_domain }}".format(path)
+                }
+                return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
             }
         </script>
     </head>

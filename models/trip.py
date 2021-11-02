@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import formatting
+import realtime
 
 class Trip:
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -13,7 +13,7 @@ class Trip:
         self.shape_id = shape_id
         self.headsign = headsign
         
-        self.stop_times = []
+        self.departures = []
         self._direction = None
         self._related_trips = None
     
@@ -26,7 +26,7 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.stop_times[0] < other.stop_times[0]
+        return self.first_departure < other.first_departure
     
     @property
     def route(self):
@@ -41,24 +41,24 @@ class Trip:
         return self.system.get_service(self.service_id)
     
     @property
-    def first_stop(self):
-        return self.stop_times[0]
+    def first_departure(self):
+        return self.departures[0]
     
     @property
-    def last_stop(self):
-        return self.stop_times[-1]
+    def last_departure(self):
+        return self.departures[-1]
     
     @property
     def start_time(self):
-        return self.first_stop.time
+        return self.first_departure.time
     
     @property
     def end_time(self):
-        return self.last_stop.time
+        return self.last_departure.time
     
     @property
     def duration(self):
-        return formatting.duration_between_timestrs(self.start_time, self.end_time)
+        return self.start_time.get_difference(self.end_time)
     
     @property
     def points(self):
@@ -67,8 +67,8 @@ class Trip:
     @property
     def direction(self):
         if self._direction is None:
-            first_stop = self.first_stop.stop
-            last_stop = self.last_stop.stop
+            first_stop = self.first_departure.stop
+            last_stop = self.last_departure.stop
             lat_diff = first_stop.lat - last_stop.lat
             lon_diff = first_stop.lon - last_stop.lon
             if lat_diff == 0 and lon_diff == 0:
@@ -82,29 +82,48 @@ class Trip:
         return self._direction
     
     @property
+    def positions(self):
+        positions = realtime.get_positions()
+        return [p for p in positions if p.system == self.system and p.trip_id == self.id]
+    
+    @property
     def related_trips(self):
         if self._related_trips is None:
-            trips = self.system.all_trips()
-            self._related_trips = [t for t in trips if t.id != self.id and t.service.is_current == self.service.is_current and t.route_id == self.route_id and t.start_time == self.start_time and t.end_time == self.end_time and t.direction_id == self.direction_id]
+            self._related_trips = [t for t in self.system.get_trips(self.service.sheet) if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
-    def add_stop_time(self, stop_time):
-        self.stop_times.append(stop_time)
+    def add_departure(self, departure):
+        self.departures.append(departure)
     
-    def get_stop_time(self, stop):
-        stop_times = [s for s in self.stop_times if s.stop == stop]
-        if len(stop_times) == 0:
+    def get_departure(self, stop):
+        departures = [d for d in self.departures if d.stop == stop]
+        if len(departures) == 0:
             return None
-        if len(stop_times) == 1:
-            return stop_times[0]
+        if len(departures) == 1:
+            return departures[0]
         now = datetime.now()
-        current_mins = formatting.get_minutes(now.hour, now.minute)
-        stop_times.sort(key=lambda s: abs(current_mins - s.get_time_minutes()))
-        return stop_times[0]
+        current_mins = (now.hour * 60) + now.minute
+        departures.sort(key=lambda d: abs(current_mins - d.time.get_minutes()))
+        return departures[0]
     
-    def get_previous_stop(self, stop_time):
-        for other_st in self.stop_times:
-            if other_st.sequence == (stop_time.sequence - 1):
-                return other_st.stop
+    def get_previous_departure(self, departure):
+        for previous_departure in self.departures:
+            if previous_departure.sequence == (departure.sequence - 1):
+                return previous_departure
         return None
+    
+    def is_related(self, other):
+        if self.id == other.id:
+            return False
+        if self.service.sheet != other.service.sheet:
+            return False
+        if self.route_id != other.route_id:
+            return False
+        if self.start_time != other.start_time:
+            return False
+        if self.end_time != other.end_time:
+            return False
+        if self.direction_id != other.direction_id:
+            return False
+        return True

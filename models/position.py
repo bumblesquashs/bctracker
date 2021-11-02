@@ -1,14 +1,13 @@
 from datetime import datetime
 import math
 
-import formatting
-
 MINIMUM_MINUTES = 4
 
 class Position:
-    def __init__(self, system, active):
+    def __init__(self, system, active, bus):
         self.system = system
         self.active = active
+        self.bus = bus
         self.trip_id = None
         self.stop_id = None
         self.lat = None
@@ -54,22 +53,23 @@ class Position:
         if trip is None or stop is None:
             return
         
-        stop_time = trip.get_stop_time(stop)
-        previous_stop = trip.get_previous_stop(stop_time)
+        departure = trip.get_departure(stop)
+        if departure is None:
+            return
+        previous_departure = trip.get_previous_departure(departure)
         try:
-            expected_scheduled_mins = stop_time.get_time_minutes()
+            expected_scheduled_mins = departure.time.get_minutes()
             
-            if previous_stop is not None:
-                prev_stop_time = trip.get_stop_time(previous_stop)
-                prev_stop_time_mins = prev_stop_time.get_time_minutes()
-                time_difference = expected_scheduled_mins - prev_stop_time_mins
+            if previous_departure is not None:
+                previous_departure_mins = previous_departure.time.get_minutes()
+                time_difference = expected_scheduled_mins - previous_departure_mins
                 
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
                 if time_difference >= MINIMUM_MINUTES:
-                    expected_scheduled_mins = prev_stop_time_mins + self.linear_interpolate(previous_stop, stop, time_difference)
+                    expected_scheduled_mins = previous_departure_mins + self.linear_interpolate(previous_departure.stop, stop, time_difference)
             
             now = datetime.now()
-            current_mins = formatting.get_minutes(now.hour, now.minute)
+            current_mins = (now.hour * 60) + now.minute
             self.schedule_adherence = expected_scheduled_mins - current_mins
         except AttributeError:
             pass

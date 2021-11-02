@@ -86,8 +86,9 @@
             
             for (const bus of buses) {
                 if (bus.shape_id !== null && bus.shape_id !== undefined) {
-                    if (!(currentShapeIDs.includes(bus.shape_id))) {
-                        currentShapeIDs.push(bus.shape_id)
+                    const shapeID = bus.system_id + "_" + bus.shape_id
+                    if (!(currentShapeIDs.includes(shapeID))) {
+                        currentShapeIDs.push(shapeID)
                     }
                 }
                 
@@ -114,22 +115,15 @@
                 }
                 
                 const element = document.createElement("div");
+                element.id = "bus-marker-" + bus.number
                 element.className = "marker";
-                if (bus.number === "Unknown Bus") {
-                    element.innerHTML = "\
+                element.innerHTML = "\
+                    <div class='link'></div>\
+                    <a href=\"/bus/" + bus.number +"\">\
                         <img src=\"/img/bus.png\" />\
                         <div class='title'><span>" + bus.number + "</span></div>\
-                        <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>";
-                } else {
-                    element.id = "bus-marker-" + bus.number
-                    element.innerHTML = "\
-                        <div class='link'></div>\
-                        <a href=\"/bus/" + bus.number +"\">\
-                            <img src=\"/img/bus.png\" />\
-                            <div class='title'><span>" + bus.number + "</span></div>\
-                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
-                        </a>";
-                }
+                        <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
+                    </a>";
                 element.style.backgroundColor = "#" + bus.colour;
                 
                 element.onmouseenter = function() {
@@ -223,16 +217,17 @@
                 if (bus.shape_id === null || bus.shape_id === undefined) {
                     continue;
                 }
-                if (shapeIDs.includes(bus.shape_id)) {
+                const shapeID = bus.system_id + "_" + bus.shape_id
+                if (shapeIDs.includes(shapeID)) {
                     continue;
                 }
                 const request = new XMLHttpRequest();
-                request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
+                request.open("GET", getUrl(bus.system_id, "api/shape/" + bus.shape_id + ".json"), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
-                        shapeIDs.push(bus.shape_id);
-                        map.addSource(bus.shape_id, {
+                        shapeIDs.push(shapeID);
+                        map.addSource(shapeID, {
                             'type': 'geojson',
                             'data': {
                                 'type': 'Feature',
@@ -244,9 +239,9 @@
                             }
                         });
                         map.addLayer({
-                            'id': bus.shape_id,
+                            'id': shapeID,
                             'type': 'line',
-                            'source': bus.shape_id,
+                            'source': shapeID,
                             'minzoom': 8,
                             'layout': {
                                 'line-join': 'round',

@@ -40,26 +40,32 @@ class System:
             return self.blocks[block_id]
         return None
     
-    def all_blocks(self):
-        return sorted(self.blocks.values())
+    def get_blocks(self, sheet):
+        if sheet is None:
+            return sorted(self.blocks.values())
+        return sorted([b for b in self.blocks.values() if sheet in b.sheets])
     
-    def get_route(self, route_id = None, number = None):
+    def get_route(self, route_id=None, number=None):
         if route_id is not None and route_id in self.routes:
             return self.routes[route_id]
         if number is not None and number in self.routes_by_number:
             return self.routes_by_number[number]
         return None
     
-    def all_routes(self):
-        return sorted(self.routes.values())
+    def get_routes(self, sheet):
+        if sheet is None:
+            return sorted(self.routes.values())
+        return sorted([r for r in self.routes.values() if sheet in r.sheets])
     
     def get_service(self, service_id):
         if service_id in self.services:
             return self.services[service_id]
         return None
     
-    def all_services(self):
-        return sorted(self.services.values())
+    def get_services(self, sheet):
+        if sheet is None:
+            return sorted(self.services.values())
+        return sorted([s for s in self.services.values() if s.sheet == sheet])
     
     def get_shape(self, shape_id):
         if shape_id in self.shapes:
@@ -73,26 +79,30 @@ class System:
             return self.stops_by_number[number]
         return None
     
-    def all_stops(self):
-        return self.stops.values()
+    def get_stops(self, sheet):
+        if sheet is None:
+            return self.stops.values()
+        return [s for s in self.stops.values() if sheet in s.sheets]
     
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
     
-    def all_trips(self):
-        return self.trips.values()
+    def get_trips(self, sheet):
+        if sheet is None:
+            return self.trips.values()
+        return [t for t in self.trips.values() if t.service.sheet == sheet]
     
     def sort_data(self):
         for stop in self.stops.values():
-            stop.stop_times = sorted(stop.stop_times)
+            stop.departures.sort()
         for trip in self.trips.values():
-            trip.stop_times = sorted(trip.stop_times)
+            trip.departures.sort()
         for route in self.routes.values():
-            route.trips = sorted(route.trips)
+            route.trips.sort()
         for block in self.blocks.values():
-            block.trips = sorted(block.trips)
+            block.trips.sort()
 
 systems = {}
 
@@ -120,5 +130,5 @@ def get_system(system_id):
         return systems[system_id]
     return None
 
-def all_systems():
+def get_systems():
     return systems.values()
