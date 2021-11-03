@@ -274,7 +274,7 @@
             } else {
                 styleElement.innerText = "\
                     .marker {\
-                        opacity: 0%;\
+                        opacity: 40%;\
                     }\
                     .marker:hover {\
                         opacity: 100%;\
