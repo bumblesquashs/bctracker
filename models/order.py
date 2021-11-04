@@ -46,6 +46,8 @@ def load_orders():
         orders.append(Order(low, high, year, model_id))
 
 def get_order(bus):
+    if bus.is_unknown:
+        return None
     for order in orders:
         if order.contains(bus):
             return order

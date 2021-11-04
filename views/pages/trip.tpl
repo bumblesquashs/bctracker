@@ -93,7 +93,11 @@
                     % order = bus.order
                     <tr>
                         <td>
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            % if bus.is_unknown:
+                                {{ bus }}
+                            % else:
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            % end
                             % if order is not None:
                                 <span class="mobile-only smaller-font">
                                     <br />
