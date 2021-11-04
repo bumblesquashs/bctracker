@@ -7,6 +7,8 @@ class Bus:
         self.number = bus_number
     
     def __str__(self):
+        if self.is_unknown:
+            return 'Unknown Bus'
         return str(self.number)
     
     def __hash__(self):
@@ -17,6 +19,10 @@ class Bus:
     
     def __lt__(self, other):
         return self.number < other.number
+    
+    @property
+    def is_unknown(self):
+        return self.number < 0
     
     @property
     def order(self):

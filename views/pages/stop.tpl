@@ -112,7 +112,11 @@
                                             % if position.schedule_adherence is not None:
                                                 % include('components/adherence_indicator', adherence=position.schedule_adherence)
                                             % end
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            % if bus.is_unknown:
+                                                {{ bus }}
+                                            % else:
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            % end
                                             % if order is not None:
                                                 <span class="non-desktop smaller-font">
                                                     <br />

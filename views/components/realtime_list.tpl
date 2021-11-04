@@ -35,7 +35,11 @@
             % order = bus.order
             <tr class="{{'' if same_model else 'divider'}}">
                 <td>
-                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus.number }}</a>
+                    % if bus.is_unknown:
+                        {{ bus }}
+                    % else:
+                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                    % end
                     % if order is not None:
                         <span class="non-desktop smaller-font">
                             <br />
