@@ -33,7 +33,7 @@
         % end
     % end
 % else:
-    <div id="system-map-header" class="page-header">
+    <div class="page-header map-page">
         <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
@@ -49,11 +49,11 @@
         </div>
     </div>
     
-    <div id="system-map"></div>
+    <div id="full-map"></div>
     
     <script>
         const map = new mapboxgl.Map({
-            container: "system-map",
+            container: "full-map",
             center: [0, 0],
             zoom: 1,
             style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"

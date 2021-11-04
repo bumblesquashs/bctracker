@@ -39,6 +39,15 @@ tr.divider {
     border-top: 4px solid #989898
 }
 
+#full-map {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
 #header {
     position: relative;
     z-index: 20;
@@ -104,21 +113,6 @@ tr.divider {
 
 #subheader #last-updated {
     color: #222222;
-}
-
-#system-map {
-    position: absolute;
-    z-index: 0;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-}
-
-#system-map-header {
-    position: relative;
-    z-index: 5;
-    display: inline-block;
 }
 
 #top-button {
@@ -294,6 +288,10 @@ tr.divider {
     top: 2px;
 }
 
+.marker.small .title {
+    display: none;
+}
+
 .marker .link {
     background-color: black;
     opacity: 0;
@@ -365,6 +363,10 @@ tr.divider {
     display: block;
 }
 
+.marker.small:hover .title {
+    display: block;
+}
+
 .news-post {
     background-color: #e6e6e6;
     margin-top: 20px;
@@ -395,6 +397,12 @@ tr.divider {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.page-header.map-page {
+    position: relative;
+    z-index: 5;
+    display: inline-block;
 }
 
 .page-header .subtitle {

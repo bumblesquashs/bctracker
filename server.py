@@ -205,7 +205,7 @@ def system_bus_number(system_id, number):
     bus = Bus(number)
     if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus', system_id, bus=bus, records=history.get_bus_records(bus, 20))
+    return systems_template('bus/overview', system_id, bus=bus, records=history.get_bus_records(bus, 20))
 
 @app.route('/bus/<number:int>/history')
 @app.route('/bus/<number:int>/history/')
@@ -218,7 +218,20 @@ def system_bus_number_history(system_id, number):
     bus = Bus(number)
     if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus_history', system_id, bus=bus, records=history.get_bus_records(bus))
+    return systems_template('bus/history', system_id, bus=bus, records=history.get_bus_records(bus))
+
+@app.route('/bus/<number:int>/map')
+@app.route('/bus/<number:int>/map/')
+def bus_number_map(number):
+    return system_bus_number_map(None, number)
+
+@app.route('/<system_id>/bus/<number:int>/map')
+@app.route('/<system_id>/bus/<number:int>/map/')
+def system_bus_number_map(system_id, number):
+    bus = Bus(number)
+    if bus.order is None:
+        return systems_error_template('bus', system_id, number=number)
+    return systems_template('bus/map', system_id, bus=bus)
 
 @app.route('/history')
 @app.route('/history/')
@@ -257,7 +270,25 @@ def system_routes_number(system_id, number):
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    return systems_template('route', system_id, route=route, sheet=get_sheet_from_query(default_sheet=route.default_sheet))
+    return systems_template('route/overview', system_id, route=route, sheet=get_sheet_from_query(default_sheet=route.default_sheet))
+
+@app.route('/routes/<number>/map')
+@app.route('/routes/<number>/map/')
+def routes_number_map(number):
+    return system_routes_number_map(None, number)
+
+@app.route('/<system_id>/routes/<number>/map')
+@app.route('/<system_id>/routes/<number>/map/')
+def system_routes_number_map(system_id, number):
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
+        redirect(get_url('fvx', 'routes/66/map'))
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'routes/{number}')
+    route = system.get_route(number=number)
+    if route is None:
+        return systems_error_template('route', system_id, number=number)
+    return systems_template('route/map', system_id, route=route, sheet=get_sheet_from_query(default_sheet=route.default_sheet))
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -283,7 +314,23 @@ def system_blocks_id(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    return systems_template('block', system_id, block=block, sheet=get_sheet_from_query(default_sheet=block.default_sheet))
+    return systems_template('block/overview', system_id, block=block, sheet=get_sheet_from_query(default_sheet=block.default_sheet))
+
+@app.route('/blocks/<block_id>/map')
+@app.route('/blocks/<block_id>/map/')
+def blocks_id_map(block_id):
+    return system_blocks_id_map(None, block_id)
+
+@app.route('/<system_id>/blocks/<block_id>/map')
+@app.route('/<system_id>/blocks/<block_id>/map/')
+def system_blocks_id_map(system_id, block_id):
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'blocks/{block_id}')
+    block = system.get_block(block_id)
+    if block is None:
+        return systems_error_template('block', system_id, block_id=block_id)
+    return systems_template('block/map', system_id, block=block, sheet=get_sheet_from_query(default_sheet=block.default_sheet))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -299,7 +346,23 @@ def system_trips_id(system_id, trip_id):
     trip = system.get_trip(trip_id)
     if trip is None:
         return systems_error_template('trip', system_id, trip_id=trip_id)
-    return systems_template('trip', system_id, trip=trip)
+    return systems_template('trip/overview', system_id, trip=trip)
+
+@app.route('/trips/<trip_id>/map')
+@app.route('/trips/<trip_id>/map/')
+def trips_id_map(trip_id):
+    return system_trips_id_map(None, trip_id)
+
+@app.route('/<system_id>/trips/<trip_id>/map')
+@app.route('/<system_id>/trips/<trip_id>/map')
+def system_trips_id_map(system_id, trip_id):
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
+    trip = system.get_trip(trip_id)
+    if trip is None:
+        return systems_error_template('trip', system_id, trip_id=trip_id)
+    return systems_template('trip/map', system_id, trip=trip)
 
 @app.route('/stops')
 @app.route('/stops/')
@@ -329,7 +392,23 @@ def system_stops_number(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    return systems_template('stop', system_id, stop=stop, sheet=get_sheet_from_query(default_sheet=stop.default_sheet))
+    return systems_template('stop/overview', system_id, stop=stop, sheet=get_sheet_from_query(default_sheet=stop.default_sheet))
+
+@app.route('/stops/<number:int>/map')
+@app.route('/stops/<number:int>/map/')
+def stops_number_map(number):
+    return system_stops_number_map(None, number)
+
+@app.route('/<system_id>/stops/<number:int>/map')
+@app.route('/<system_id>/stops/<number:int>/map/')
+def system_stops_number_map(system_id, number):
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'stops/{number}')
+    stop = system.get_stop(number=number)
+    if stop is None:
+        return systems_error_template('stop', system_id, number=number)
+    return systems_template('stop/map', system_id, stop=stop, sheet=get_sheet_from_query(default_sheet=stop.default_sheet))
 
 @app.route('/about')
 @app.route('/about/')

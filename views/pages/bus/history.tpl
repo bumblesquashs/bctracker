@@ -4,11 +4,11 @@
 % from formatting import format_date, format_date_mobile
 % from models.model import BusModelType
 
-% rebase('base', title=f'Bus {bus} History')
+% rebase('base', title=f'Bus {bus} - History')
 
 <div class="page-header">
-    <h1 class="title">Bus {{ bus }} History</h1>
-    <a href="{{ get_url(system, f'bus/{bus.number}') }}">Return to bus details</a>
+    <h1 class="title">Bus {{ bus }} - History</h1>
+    <a href="{{ get_url(system, f'bus/{bus.number}') }}">Return to bus overview</a>
 </div>
 <hr />
 
