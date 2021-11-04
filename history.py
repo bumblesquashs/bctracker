@@ -36,24 +36,21 @@ def update(positions):
     database.commit()
 
 def get_last_seen(system):
-    filters = ['''
-        rowid = (
-            SELECT rowid
-            FROM records r2
-            WHERE r2.bus_number = r1.bus_number
-            ORDER BY date DESC, start_time DESC
-            LIMIT 1
-        )
-    ''']
-    args = None
+    filters = {
+        'rn': 1
+    }
     if system is not None:
-        filters.append('system_id = ?')
-        args = [system.id]
-    records_data = database.select('records r1',
+        filters['system_id'] = system.id
+    records_data = database.select('''
+        (
+            SELECT bus_number, date, system_id, block_id, routes, start_time, end_time,
+                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, start_time DESC) AS rn
+            FROM records
+        )
+        ''',
         columns=['bus_number', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time'],
         filters=filters,
-        order_by='bus_number',
-        args=args)
+        order_by='bus_number')
     records = []
     for data in records_data:
         bus = Bus(data['bus_number'])
