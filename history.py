@@ -13,6 +13,8 @@ def update(positions):
         if not position.active or position.trip is None:
             continue
         bus = position.bus
+        if bus.is_unknown:
+            continue
         block = position.trip.block
         hour = datetime.now().hour
         today = datetime.today()
