@@ -24,5 +24,10 @@ database.execute('''
     )
 ''')
 
+database.execute('''
+    DELETE FROM records
+    WHERE bus_number < 0
+''')
+
 database.commit()
 database.disconnect()
