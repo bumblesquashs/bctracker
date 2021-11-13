@@ -13,6 +13,7 @@ class Route:
         self.number_value = int(''.join([d for d in number if d.isdigit()]))
         
         self.trips = []
+        self._sheets = None
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -31,7 +32,9 @@ class Route:
     
     @property
     def sheets(self):
-        return {t.service.sheet for t in self.trips}
+        if self._sheets is None:
+            self._sheets = {t.service.sheet for t in self.trips}
+        return self._sheets
     
     @property
     def default_sheet(self):
@@ -51,6 +54,7 @@ class Route:
     
     def add_trip(self, trip):
         self.trips.append(trip)
+        self._sheets = None
     
     def get_trips(self, sheet):
         if sheet is None:

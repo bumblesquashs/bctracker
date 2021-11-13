@@ -8,6 +8,7 @@ class Block:
         self.id = block_id
         
         self.trips = []
+        self._sheets = None
     
     def __eq__(self, other):
         return self.id == other.id
@@ -17,7 +18,9 @@ class Block:
     
     @property
     def sheets(self):
-        return {t.service.sheet for t in self.trips}
+        if self._sheets is None:
+            self._sheets = {t.service.sheet for t in self.trips}
+        return self._sheets
     
     @property
     def default_sheet(self):
@@ -37,6 +40,7 @@ class Block:
     
     def add_trip(self, trip):
         self.trips.append(trip)
+        self._sheets = None
     
     def get_trips(self, sheet):
         if sheet is None:
