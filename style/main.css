@@ -18,6 +18,11 @@ form input[type="text"] {
     padding: 5px;
 }
 
+form input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #255325;
+}
+
 hr {
     margin-bottom: 20px;
 }

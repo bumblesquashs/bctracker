@@ -2,8 +2,8 @@
 from datetime import datetime
 from math import sqrt
 
+from models.search_result import SearchResult
 from models.service import Sheet
-import realtime
 
 class Stop:
     def __init__(self, system, stop_id, number, name, lat, lon):
@@ -84,3 +84,18 @@ class Stop:
         now = datetime.now()
         current_mins = (now.hour * 60) + now.minute
         return [d for d in departures if d.trip.service.is_today and current_mins <= d.time.get_minutes() <= current_mins + 30]
+    
+    def get_search_result(self, query):
+        query = query.lower()
+        number = str(self.number).lower()
+        name = self.name.lower()
+        match = 0
+        if query in number:
+            match += (len(query) / len(number)) * 100
+            if number.startswith(query):
+                match += len(query)
+        elif query in name:
+            match += (len(query) / len(name)) * 100
+            if name.startswith(query):
+                match += len(query)
+        return SearchResult('stop', str(self.number), self.name, f'stops/{self.number}', match)

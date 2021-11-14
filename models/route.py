@@ -1,5 +1,6 @@
 import realtime
 
+from models.search_result import SearchResult
 from models.service import Sheet
 
 class Route:
@@ -66,3 +67,18 @@ class Route:
     
     def get_headsigns(self, sheet):
         return sorted({str(t) for t in self.get_trips(sheet)})
+    
+    def get_search_result(self, query):
+        query = query.lower()
+        number = self.number.lower()
+        name = self.name.lower()
+        match = 0
+        if query in number:
+            match += (len(query) / len(number)) * 100
+            if number.startswith(query):
+                match += len(query)
+        elif query in name:
+            match += (len(query) / len(name)) * 100
+            if name.startswith(query):
+                match += len(query)
+        return SearchResult('route', self.number, self.name, f'routes/{self.number}', match)

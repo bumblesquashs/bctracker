@@ -6,7 +6,7 @@ import sys
 
 from models.bus import Bus
 from models.model import load_models
-from models.order import load_orders
+from models.order import load_orders, search_buses
 from models.service import Sheet
 from models.system import load_systems, get_system, get_systems
 
@@ -382,4 +382,25 @@ def system_api_shape_id(system_id, shape_id):
         return {}
     return {
         'points': [p.json_data for p in shape.points]
+    }
+
+@app.route('/api/search', method='POST')
+def api_search():
+    return system_api_search(None)
+
+@app.route('/<system_id>/api/search', method='POST')
+def system_api_search(system_id):
+    query = request.forms.get('query', '')
+    system = get_system(system_id)
+    results = []
+    if query != '':
+        if query.isnumeric() and (system is None or system.realtime_enabled):
+            results += search_buses(query, history.recorded_buses(system))
+        if system is not None:
+            results += system.search_routes(query)
+            results += system.search_stops(query)
+    results.sort()
+    return {
+        'results': [r.get_json_data(system, get_url) for r in results[0:6]],
+        'count': len(results)
     }

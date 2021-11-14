@@ -76,6 +76,82 @@
                 }
                 return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
             }
+            
+            function searchDesktopFocus() {
+                const query = document.getElementById("search-desktop-input").value;
+                const element = document.getElementById("search-desktop-results");
+                if (query === undefined || query === null || query === "") {
+                    element.classList.add("display-none");
+                } else {
+                    element.classList.remove("display-none");
+                }
+            }
+            
+            function searchDesktopBlur() {
+                setTimeout(function() {
+                    const element = document.getElementById("search-desktop-results");
+                    element.classList.add("display-none");
+                }, 200);
+            }
+            
+            function searchDesktop() {
+                const query = document.getElementById("search-desktop-input").value;
+                const element = document.getElementById("search-desktop-results");
+                
+                if (query === undefined || query === null || query === "") {
+                    element.classList.add("display-none");
+                    element.innerHTML = "";
+                } else {
+                    element.classList.remove("display-none");
+                    if (element.innerHTML === "") {
+                        element.innerHTML = "<div class='message'>Loading...</div>";
+                    }
+                    const request = new XMLHttpRequest();
+                    request.open("POST", "{{get_url(system, 'api/search')}}", true);
+                    request.responseType = "json";
+                    request.onload = function() {
+                        const count = request.response.count;
+                        if (count === 0) {
+                            element.innerHTML = "<div class='message'>No Results</div>";
+                        } else {
+                            let html = "";
+                            const results = request.response.results;
+                            for (const result of results) {
+                                let name = result.name;
+                                switch (result.type) {
+                                    case "bus":
+                                        name = "Bus " + result.name;
+                                        break;
+                                    case "route":
+                                        name = "Route " + result.name;
+                                        break;
+                                    case "stop":
+                                        name = "Stop " + result.name;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                html += "\
+                                    <a href='" + result.url + "'>" +
+                                        name +
+                                        "<br />\
+                                        <span class='smaller-font lighter-text'>" + result.description + "</span>\
+                                    </a>";
+                            }
+                            if (count > results.length) {
+                                html += "<div class='message'>" + (count - results.length) + " additional results</div>"
+                            }
+                            element.innerHTML = html;
+                        }
+                    };
+                    request.onerror = function() {
+                        element.innerHTML = "<div class='message'>Error loading search results</div>";
+                    };
+                    const data = new FormData()
+                    data.set("query", query)
+                    request.send(data);
+                }
+            }
         </script>
     </head>
     
@@ -100,7 +176,7 @@
                 
                 % if len(systems) > 1:
                     % path = get('path', '')
-                    <div class="header-button dropdown" id="system-dropdown">
+                    <div class="header-button dropdown right" id="system-dropdown">
                         Change System
                         <div class="content">
                             % if system is None:
@@ -138,6 +214,13 @@
                         </div>
                     </div>
                 % end
+                
+                <div id="search-desktop" class="header-text right">
+                    <img src="/img/search.png" />
+                    <input type="text" id="search-desktop-input" placeholder="Search" oninput="searchDesktop()" onfocus="searchDesktopFocus()" onblur="searchDesktopBlur()">
+                    
+                    <div id="search-desktop-results" class="display-none"></div>
+                </div>
             </div>
             
             <div class="tablet-only">

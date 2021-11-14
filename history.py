@@ -85,3 +85,15 @@ def get_bus_records(bus, limit=None):
         
         records.append(Record(bus, date, system_id, block_id, routes, start_time, end_time))
     return records
+
+def recorded_buses(system):
+    filters = None
+    if system is not None:
+        filters = {
+            'system_id': system.id
+        }
+    records_data = database.select('records', columns=['DISTINCT bus_number'], filters=filters)
+    buses = []
+    for data in records_data:
+        buses.append(Bus(data['DISTINCT bus_number']))
+    return buses

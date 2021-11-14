@@ -2,6 +2,7 @@
 import csv
 
 from models.model import get_model
+from models.search_result import SearchResult
 
 class Order:
     def __init__(self, low, high, year, model_id):
@@ -24,6 +25,10 @@ class Order:
     @property
     def model(self):
         return get_model(self.model_id)
+    
+    @property
+    def range(self):
+        return range(self.low, self.high + 1)
     
     def contains(self, bus):
         return self.low <= bus.number <= self.high
@@ -52,3 +57,20 @@ def get_order(bus):
         if order.contains(bus):
             return order
     return None
+
+def search_buses(query, recorded_buses):
+    recorded_bus_numbers = [b.number for b in recorded_buses]
+    results = []
+    for order in orders:
+        order_string = str(order)
+        for bus_number in order.range:
+            bus_number_string = f'{bus_number:04d}'
+            match = 0
+            if query in bus_number_string:
+                match += (len(query) / len(bus_number_string)) * 100
+                if bus_number_string.startswith(query):
+                    match += len(query)
+            if bus_number not in recorded_bus_numbers:
+                match /= 10
+            results.append(SearchResult('bus', str(bus_number), order_string, f'bus/{bus_number}', match))
+    return [r for r in results if r.match > 0]
