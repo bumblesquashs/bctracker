@@ -112,7 +112,11 @@
                                             % if position.schedule_adherence is not None:
                                                 % include('components/adherence_indicator', adherence=position.schedule_adherence)
                                             % end
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            % if bus.is_unknown:
+                                                {{ bus }}
+                                            % else:
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            % end
                                             % if order is not None:
                                                 <span class="non-desktop smaller-font">
                                                     <br />
@@ -159,7 +163,7 @@
                                         <span class="smaller-font">Unloading only</span>
                                     % end
                                 </td>
-                                <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                                <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                 <td>
                                     <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                                     <span class="non-desktop smaller-font">

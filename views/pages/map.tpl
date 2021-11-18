@@ -113,13 +113,22 @@
                 
                 const element = document.createElement("div");
                 element.className = "marker";
-                element.innerHTML = "\
-                    <div class='link'></div>\
-                    <a href=\"/bus/" + bus.number +"\">\
-                        <img src=\"/img/bus.png\" />\
-                        <div class='title'><span>" + bus.number + "</span></div>\
-                        <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
-                    </a>";
+                if (bus.number < 0) {
+                    element.innerHTML = "\
+                        <span>\
+                            <img src=\"/img/bus.png\" />\
+                            <div class='title'><span>Unknown Bus</span></div>\
+                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
+                        </span>";
+                } else {
+                    element.innerHTML = "\
+                        <div class='link'></div>\
+                        <a href=\"/bus/" + bus.number +"\">\
+                            <img src=\"/img/bus.png\" />\
+                            <div class='title'><span>" + bus.number + "</span></div>\
+                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
+                        </a>";
+                }
                 element.style.backgroundColor = "#" + bus.colour;
                 
                 lons.push(bus.lon);

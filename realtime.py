@@ -41,11 +41,12 @@ def update_positions(system):
     data = protobuf.FeedMessage()
     with open(data_path, 'rb') as file:
         data.ParseFromString(file.read())
-    for entity in data.entity:
+    for index, entity in enumerate(data.entity):
         vehicle = entity.vehicle
         try:
             bus_number = int(vehicle.vehicle.id)
-        except AttributeError: continue
+        except:
+            bus_number = -(index + 1)
         position = Position(system, True, Bus(bus_number))
         try:
             if vehicle.trip.schedule_relationship == 0 and vehicle.trip.trip_id != '':
