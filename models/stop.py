@@ -15,6 +15,7 @@ class Stop:
         self.lon = lon
         
         self.departures = []
+        self._sheets = None
     
     def __str__(self):
         return self.name
@@ -32,7 +33,9 @@ class Stop:
     
     @property
     def sheets(self):
-        return {d.trip.service.sheet for d in self.departures}
+        if self._sheets is None:
+            self._sheets = {d.trip.service.sheet for d in self.departures}
+        return self._sheets
     
     @property
     def default_sheet(self):
@@ -56,6 +59,7 @@ class Stop:
     
     def add_departure(self, departure):
         self.departures.append(departure)
+        self._sheets = None
     
     def get_departures(self, sheet):
         if sheet is None:

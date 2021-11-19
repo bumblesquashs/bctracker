@@ -203,8 +203,10 @@ def validate(system):
     if not system.gtfs_enabled:
         return True
     end_date = None
-    for service in system.get_services(Sheet.CURRENT):
+    for service in system.get_services(None):
         date = service.end_date.date()
         if end_date is None or date > end_date:
             end_date = date
+    if end_date is None:
+        return False
     return datetime.now().date() < end_date - timedelta(days=7)
