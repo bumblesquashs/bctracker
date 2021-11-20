@@ -9,10 +9,11 @@
     % services = block.get_services(sheet)
     % routes = block.get_routes(sheet)
     % trips = block.get_trips(sheet)
-
+    % positions = sorted(block.positions)
+    
     <div id="sidebar">
         <h2>Overview</h2>
-        % include('components/block_map', block=block)
+        % include('components/map', trips=trips, buses=[p.bus for p in positions])
         
         <div class="info-box">
             <div class="section">
@@ -72,7 +73,6 @@
     </div>
 
     <div>
-        % positions = block.positions
         % if len(positions) > 0:
             <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>
             <table class="pure-table pure-table-horizontal pure-table-striped">

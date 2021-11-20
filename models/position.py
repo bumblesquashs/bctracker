@@ -14,6 +14,12 @@ class Position:
         self.lon = None
         self.schedule_adherence = None
     
+    def __eq__(self, other):
+        return self.bus == other.bus
+    
+    def __lt__(self, other):
+        return self.bus < other.bus
+    
     @property
     def has_location(self):
         return self.lat is not None and self.lon is not None

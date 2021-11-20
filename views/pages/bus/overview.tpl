@@ -18,15 +18,16 @@
             <h3 class="title">Not in service</h3>
         </div>
     % elif position.trip is None:
-        % include('components/bus_map', bus=bus)
+        % include('components/map', bus=bus)
         
         <div class="info-box">
             <h3 class="title">Not in service</h3>
         </div>
     % else:
-        % include('components/bus_map', bus=bus)
-        
         % trip = position.trip
+        
+        % include('components/map', bus=bus, trip=trip, stops={d.stop for d in trip.departures}, bound_trips=False, bound_stops=False)
+        
         <div class="info-box">
             <h3 class="title">{{ trip }}</h3>
             

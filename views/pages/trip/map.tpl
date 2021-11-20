@@ -68,13 +68,16 @@
         const element = document.createElement('div');
         element.className = 'marker small';
         element.innerHTML = "\
-            <div class='link'></div>\
-            <a href=\"{{get_url(trip.system)}}/stops/" + stop.number +"\">\
-                <img src=\"/img/stop.png\" />\
-                <div class='title'><span>" + stop.number + "</span></div>\
-                <div class='subtitle'><span>" + stop.name + "</span></div>\
+            <a href='{{get_url(trip.system)}}/stops/" + stop.number +"'>\
+                <div class='icon' style='background-color: #{{trip.route.colour}}'>\
+                    <div class='link'></div>\
+                    <img src='/img/stop.png' />\
+                </div>\
+                <div class='details'>\
+                    <div class='title hover-only'>" + stop.number + "</div>\
+                    <div class='subtitle hover-only'>" + stop.name + "</div>\
+                </div>\
             </a>";
-        element.style.backgroundColor = "#{{trip.route.colour}}";
         
         new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
     }
@@ -87,14 +90,29 @@
             
             const element = document.createElement("div");
             element.className = "marker";
-            element.innerHTML = "\
-                <div class='link'></div>\
-                <a href=\"/bus/" + bus.number +"\">\
-                    <img src=\"/img/bus.png\" />\
-                    <div class='title'><span>" + bus.number + "</span></div>\
-                </a>";
-            element.style.backgroundColor = "#" + bus.colour;
-        
+            if (bus.number < 0) {
+                element.innerHTML = "\
+                    <div class='icon' style='background-color: #" + bus.colour + ";'>\
+                        <img src='/img/bus.png' />\
+                    </div>\
+                    <div class='details'>\
+                        <div class='title'>Unknown Bus</div>\
+                        <div class='subtitle hover-only'>" + bus.headsign + "</div>\
+                    </div>";
+            } else {
+                element.innerHTML = "\
+                    <a href='/bus/" + bus.number +"'>\
+                        <div class='icon' style='background-color: #" + bus.colour + ";'>\
+                            <div class='link'></div>\
+                            <img src='/img/bus.png' />\
+                        </div>\
+                        <div class='details'>\
+                            <div class='title'>" + bus.number + "</div>\
+                            <div class='subtitle hover-only'>" + bus.headsign + "</div>\
+                        </div>\
+                    </a>";
+            }
+            
             new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
         })
     </script>

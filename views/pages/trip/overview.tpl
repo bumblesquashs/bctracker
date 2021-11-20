@@ -1,5 +1,7 @@
 % rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
+% positions = sorted(trip.positions)
+
 <div class="page-header">
     <h1 class="title">Trip {{ trip.id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
@@ -8,7 +10,9 @@
 
 <div id="sidebar">
     <h2>Overview</h2>
-    % include('components/trip_map', trip=trip)
+    % include('components/map', trip=trip, buses=[p.bus for p in positions])
+    
+    <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="button map-button">Show Full Map</a>
     
     <div class="info-box">
         <div class="section">
@@ -74,7 +78,6 @@
 </div>
 
 <div>
-    % positions = trip.positions
     % if len(positions) > 0:
         <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>
         <table class="pure-table pure-table-horizontal pure-table-striped">

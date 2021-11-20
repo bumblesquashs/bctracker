@@ -49,13 +49,11 @@
         </div>
     </div>
     
-    <div id="full-map"></div>
-    
-    <style id="marker-style"></style>
+    <div id="map" class="full-screen"></div>
     
     <script>
         const map = new mapboxgl.Map({
-            container: "full-map",
+            container: "map",
             center: [0, 0],
             zoom: 1,
             style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
@@ -119,21 +117,24 @@
                 element.className = "marker";
                 if (bus.number < 0) {
                     element.innerHTML = "\
-                        <span>\
-                            <img src=\"/img/bus.png\" />\
-                            <div class='title'><span>Unknown Bus</span></div>\
-                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
-                        </span>";
+                        <div class='icon' style='background-color: #" + bus.colour + ";'>\
+                            <img src='/img/bus.png' />\
+                        </div>\
+                        <div class='details'>\
+                            <div class='title'>Unknown Bus</div>\
+                            <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>\
+                        </div>";
                 } else {
                     element.innerHTML = "\
-                        <div class='link'></div>\
-                        <a href=\"/bus/" + bus.number +"\">\
-                            <img src=\"/img/bus.png\" />\
-                            <div class='title'><span>" + bus.number + "</span></div>\
-                            <div class='subtitle'><span>" + adherenceElement.outerHTML + bus.headsign + "</span></div>\
-                        </a>";
+                        <a href='/bus/" + bus.number +"' class='icon' style='background-color: #" + bus.colour + ";'>\
+                            <div class='link'></div>\
+                            <img src='/img/bus.png' />\
+                        </a>\
+                        <div class='details'>\
+                            <div class='title'>" + bus.number + "</div>\
+                            <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>\
+                        </div>";
                 }
-                element.style.backgroundColor = "#" + bus.colour;
                 
                 element.onmouseenter = function() {
                     setHoverBus(bus);
@@ -277,18 +278,7 @@
                     map.setLayoutProperty(hoverBus.shape_id, "visibility", "none");
                 }
             }
-            const styleElement = document.getElementById("marker-style");
-            if (bus === null) {
-                styleElement.innerText = "";
-            } else {
-                styleElement.innerText = "\
-                    .marker {\
-                        opacity: 40%;\
-                    }\
-                    .marker:hover {\
-                        opacity: 100%;\
-                    }\
-                ";
+            if (bus !== null) {
                 if (bus.shape_id === null || bus.shape_id === undefined) {
                     return;
                 }

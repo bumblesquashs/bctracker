@@ -93,6 +93,14 @@ class Trip:
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
+    @property
+    def json_data(self):
+        return {
+            'shape_id': self.shape_id,
+            'colour': self.route.colour,
+            'points': [p.json_data for p in self.points]
+        }
+    
     def add_departure(self, departure):
         self.departures.append(departure)
     

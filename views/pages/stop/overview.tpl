@@ -13,7 +13,7 @@
 
     <div id="sidebar">
         <h2>Overview</h2>
-        % include('components/stop_map', stop=stop)
+        % include('components/map', stop=stop)
         
         <div class="info-box">
             <div class="section">
