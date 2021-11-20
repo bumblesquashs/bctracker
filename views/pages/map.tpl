@@ -116,31 +116,48 @@
                 element.id = "bus-marker-" + bus.number
                 element.className = "marker";
                 if (bus.number < 0) {
-                    element.innerHTML = "\
-                        <div class='icon' style='background-color: #" + bus.colour + ";'>\
-                            <img src='/img/bus.png' />\
-                        </div>\
-                        <div class='details'>\
-                            <div class='title'>Unknown Bus</div>\
-                            <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>\
-                        </div>";
-                } else {
-                    element.innerHTML = "\
-                        <a href='/bus/" + bus.number +"' class='icon' style='background-color: #" + bus.colour + ";'>\
-                            <div class='link'></div>\
-                            <img src='/img/bus.png' />\
-                        </a>\
-                        <div class='details'>\
-                            <div class='title'>" + bus.number + "</div>\
-                            <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>\
-                        </div>";
-                }
+                    const icon = document.createElement("div");
+                    icon.className = "icon";
+                    icon.style.backgroundColor = "#" + bus.colour;
+                    icon.innerHTML = "<img src='/img/bus.png' />";
                 
-                element.onmouseenter = function() {
-                    setHoverBus(bus);
-                }
-                element.onmouseleave = function() {
-                    setHoverBus(null);
+                    icon.onmouseenter = function() {
+                        setHoverBus(bus);
+                    }
+                    icon.onmouseleave = function() {
+                        setHoverBus(null);
+                    }
+                    
+                    const details = document.createElement("div");
+                    details.className = "details";
+                    details.innerHTML = "\
+                        <div class='title'>Unknown Bus</div>\
+                        <div class='subtitle hover-only'>" + bus.headsign + "</div>"
+                    
+                    element.appendChild(icon);
+                    element.appendChild(details);
+                } else {
+                    const icon = document.createElement("a");
+                    icon.className = "icon";
+                    icon.href = "/bus/" + bus.number;
+                    icon.style.backgroundColor = "#" + bus.colour;
+                    icon.innerHTML = "<div class='link'></div><img src='/img/bus.png' />";
+                
+                    icon.onmouseenter = function() {
+                        setHoverBus(bus);
+                    }
+                    icon.onmouseleave = function() {
+                        setHoverBus(null);
+                    }
+                    
+                    const details = document.createElement("div");
+                    details.className = "details";
+                    details.innerHTML = "\
+                        <div class='title'>" + bus.number + "</div>\
+                        <div class='subtitle hover-only'>" + bus.headsign + "</div>";
+                    
+                    element.appendChild(icon);
+                    element.appendChild(details);
                 }
                 
                 lons.push(bus.lon);

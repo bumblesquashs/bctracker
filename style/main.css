@@ -315,8 +315,8 @@ tr.divider {
 .marker .details {
     display: block;
     position: absolute;
-    left: -50px;
-    right: -50px;
+    left: 0px;
+    right: 0px;
 }
 
 .marker .details .title {
@@ -324,6 +324,8 @@ tr.divider {
     text-align: center;
     font-weight: bold;
     line-height: 10pt;
+    margin-left: -50px;
+    margin-right: -50px;
 }
 
 .marker .details .subtitle {
@@ -331,6 +333,8 @@ tr.divider {
     text-align: center;
     overflow: visible;
     line-height: 10pt;
+    margin-left: -50px;
+    margin-right: -50px;
 }
 
 .marker .details .subtitle .adherence-indicator {
