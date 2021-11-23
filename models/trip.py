@@ -41,6 +41,10 @@ class Trip:
         return self.system.get_service(self.service_id)
     
     @property
+    def stops(self):
+        return {d.stop for d in self.departures}
+    
+    @property
     def first_departure(self):
         return self.departures[0]
     

@@ -18,7 +18,7 @@
         <h2>Overview</h2>
         % include('components/map', trips=trips, buses=[p.bus for p in positions])
         
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="button map-button">Show Full Map</a>
+        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <div class="section">

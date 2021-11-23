@@ -18,20 +18,22 @@
     const lons = [];
 </script>
 
-% trips = get('trips', [trip] if defined('trip') else [])
-% if len(trips) > 0:
+% trips = get('trips', [trip] if defined('trip') and trip is not None else [])
+% shape_ids = set()
+% shape_trips = []
+% for trip in trips:
+    % if trip.shape_id not in shape_ids:
+        % shape_ids.add(trip.shape_id)
+        % shape_trips.append(trip)
+    % end
+% end
+% if len(shape_trips) > 0:
     <script>
-        const trips = JSON.parse('{{! json.dumps([t.json_data for t in trips]) }}');
-        const shapeIDs = [];
+        const trips = JSON.parse('{{! json.dumps([t.json_data for t in shape_trips]) }}');
         
         map.on("load", function() {
             for (const trip of trips) {
                 const shapeID = String(trip.shape_id);
-                if (shapeIDs.includes(shapeID)) {
-                    continue;
-                } else {
-                    shapeIDs.push(shapeID);
-                }
                 map.addSource(shapeID, {
                     "type": "geojson",
                     "data": {
@@ -68,24 +70,36 @@
     </script>
 % end
 
-% stops = get('stops', [stop] if defined('stop') else [])
-% if len(stops) > 0:
+% departures = get('departures', [departure] if defined('departure') and departure is not None else [])
+% departures.reverse()
+% stop_ids = set()
+% stop_departures = []
+% for departure in departures:
+    % if departure.stop_id not in stop_ids:
+        % stop_ids.add(departure.stop.id)
+        % stop_departures.append(departure)
+    % end
+% end
+% if len(stop_departures) > 0:
     <script>
-        const stops = JSON.parse('{{! json.dumps([s.json_data for s in stops]) }}');
+        const departures = JSON.parse('{{! json.dumps([d.json_data for d in stop_departures]) }}');
         
-        for (const stop of stops) {
+        for (const departure of departures) {
+            const stop = departure.stop;
+            
             const element = document.createElement("div");
-            element.className = "marker small";
+            element.className = "{{ 'marker' if len(departures) == 1 else 'marker small' }}";
             
             const icon = document.createElement("a");
             icon.className = "icon";
             icon.href = "{{ get_url(system) }}/stops/" + stop.number;
+            icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
             
             const details = document.createElement("div");
             details.className = "details";
             details.innerHTML = "\
-                <div class='title hover-only'>" + stop.number + "</div>\
+                <div class='{{ 'title' if len(departures) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
                 <div class='subtitle hover-only'>" + stop.name + "</div>";
             
             element.appendChild(icon);
@@ -101,7 +115,40 @@
     </script>
 % end
 
-% buses = get('buses', [bus] if defined('bus') else [])
+% stops = get('stops', [stop] if defined('stop') and stop is not None else [])
+% if len(stops) > 0:
+    <script>
+        const stops = JSON.parse('{{! json.dumps([s.json_data for s in stops]) }}');
+        
+        for (const stop of stops) {
+            const element = document.createElement("div");
+            element.className = "{{ 'marker' if len(stops) == 1 else 'marker small' }}";
+            
+            const icon = document.createElement("a");
+            icon.className = "icon";
+            icon.href = "{{ get_url(system) }}/stops/" + stop.number;
+            icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
+            
+            const details = document.createElement("div");
+            details.className = "details";
+            details.innerHTML = "\
+                <div class='{{ 'title' if len(stops) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
+                <div class='subtitle hover-only'>" + stop.name + "</div>";
+            
+            element.appendChild(icon);
+            element.appendChild(details);
+            
+            new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
+            
+            if ("{{ get('bound_stops', True) }}" === "True") {
+                lats.push(stop.lat);
+                lons.push(stop.lon);
+            }
+        }
+    </script>
+% end
+
+% buses = get('buses', [bus] if defined('bus') and bus is not None else [])
 % if len(buses) > 0:
     <script>
         const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses]) }}');

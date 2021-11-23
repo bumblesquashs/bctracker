@@ -98,6 +98,12 @@ table {
     table-layout: fixed;
 }
 
+.map-button {
+    display: inline-block;
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
 .non-mobile {
     display: none;
 }

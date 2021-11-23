@@ -48,7 +48,8 @@ form input[type="submit"] {
 }
 
 #sidebar .map-button {
-    display: block;
+    display: inline-block;
+    margin-top: -15px;
     margin-bottom: 20px;
 }
 

@@ -1,4 +1,3 @@
-% import json
 
 % rebase('base', title=f'{route} - Map', include_maps=True)
 
@@ -8,7 +7,7 @@
 </div>
 
 % trips = route.get_trips(sheet)
-% stops = {d.stop for t in trips for d in t.departures}
+% departures = [d for t in trips for d in t.departures]
 % buses = [p.bus for p in route.positions]
 
-% include('components/map', is_preview=False, trips=trips, stops=stops, buses=buses)
+% include('components/map', is_preview=False, trips=trips, departures=departures, buses=buses)

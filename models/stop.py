@@ -3,7 +3,6 @@ from datetime import datetime
 from math import sqrt
 
 from models.service import Sheet
-import realtime
 
 class Stop:
     def __init__(self, system, stop_id, number, name, lat, lon):
@@ -63,7 +62,7 @@ class Stop:
     
     def get_departures(self, sheet):
         if sheet is None:
-            sheet = self.departures
+            return self.departures
         return [d for d in self.departures if d.trip.service.sheet == sheet]
     
     def get_services(self, sheet):

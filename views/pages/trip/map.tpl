@@ -1,4 +1,3 @@
-% import json
 
 % rebase('base', title=f'Trip {trip.id} - Map', include_maps=True)
 
@@ -8,7 +7,7 @@
     <a href="{{ get_url(system, f'trips/{trip.id}') }}">Return to trip overview</a>
 </div>
 
-% stops = {d.stop for d in trip.departures}
+% departures = trip.departures
 % buses = [p.bus for p in trip.positions]
 
-% include('components/map', is_preview=False, trip=trip, stops=stops, buses=buses)
+% include('components/map', is_preview=False, trip=trip, departures=departures, buses=buses)
