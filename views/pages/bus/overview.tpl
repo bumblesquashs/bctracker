@@ -17,7 +17,7 @@
             <h3 class="title">Not in service</h3>
         </div>
     % elif position.trip is None:
-        % include('components/map', bus=bus)
+        % include('components/map', map_bus=bus)
         
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="map-button">See full map</a>
         
@@ -27,7 +27,7 @@
     % else:
         % trip = position.trip
         
-        % include('components/map', bus=bus, trip=trip, departures=trip.departures, bound_trips=False, bound_stops=False)
+        % include('components/map', map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
         
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="map-button">See full map</a>
         

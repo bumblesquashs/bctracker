@@ -50,6 +50,7 @@ class Stop:
     @property
     def json_data(self):
         return {
+            'system_id': self.system.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,

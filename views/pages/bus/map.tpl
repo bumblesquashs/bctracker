@@ -19,9 +19,9 @@
     </div>
     
     % if position.trip is None:
-        % include('components/map', is_preview=False, bus=bus)
+        % include('components/map', is_preview=False, map_bus=bus)
     % else:
         % trip = position.trip
-        % include('components/map', is_preview=False, bus=bus, trip=trip, departures=trip.departures)
+        % include('components/map', is_preview=False, map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
     % end
 % end

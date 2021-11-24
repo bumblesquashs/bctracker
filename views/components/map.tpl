@@ -18,10 +18,10 @@
     const lons = [];
 </script>
 
-% trips = get('trips', [trip] if defined('trip') and trip is not None else [])
+% map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
 % shape_ids = set()
 % shape_trips = []
-% for trip in trips:
+% for trip in map_trips:
     % if trip.shape_id not in shape_ids:
         % shape_ids.add(trip.shape_id)
         % shape_trips.append(trip)
@@ -59,7 +59,7 @@
                     }
                 });
                 
-                if ("{{ get('bound_trips', True) }}" === "True") {
+                if ("{{ get('zoom_trips', True) }}" === "True") {
                     for (const point of trip.points) {
                         lats.push(point.lat);
                         lons.push(point.lon);
@@ -70,11 +70,11 @@
     </script>
 % end
 
-% departures = get('departures', [departure] if defined('departure') and departure is not None else [])
-% departures.reverse()
+% map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure is not None else [])
+% map_departures.reverse()
 % stop_ids = set()
 % stop_departures = []
-% for departure in departures:
+% for departure in map_departures:
     % if departure.stop_id not in stop_ids:
         % stop_ids.add(departure.stop.id)
         % stop_departures.append(departure)
@@ -88,18 +88,18 @@
             const stop = departure.stop;
             
             const element = document.createElement("div");
-            element.className = "{{ 'marker' if len(departures) == 1 else 'marker small' }}";
+            element.className = "{{ 'marker' if len(map_departures) == 1 else 'marker small' }}";
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = "{{ get_url(system) }}/stops/" + stop.number;
+            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
             
             const details = document.createElement("div");
             details.className = "details";
             details.innerHTML = "\
-                <div class='{{ 'title' if len(departures) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
+                <div class='{{ 'title' if len(map_departures) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
                 <div class='subtitle hover-only'>" + stop.name + "</div>";
             
             element.appendChild(icon);
@@ -107,7 +107,7 @@
             
             new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
             
-            if ("{{ get('bound_stops', True) }}" === "True") {
+            if ("{{ get('zoom_departures', True) }}" === "True") {
                 lats.push(stop.lat);
                 lons.push(stop.lon);
             }
@@ -115,24 +115,24 @@
     </script>
 % end
 
-% stops = get('stops', [stop] if defined('stop') and stop is not None else [])
-% if len(stops) > 0:
+% map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
+% if len(map_stops) > 0:
     <script>
-        const stops = JSON.parse('{{! json.dumps([s.json_data for s in stops]) }}');
+        const stops = JSON.parse('{{! json.dumps([s.json_data for s in map_stops]) }}');
         
         for (const stop of stops) {
             const element = document.createElement("div");
-            element.className = "{{ 'marker' if len(stops) == 1 else 'marker small' }}";
+            element.className = "{{ 'marker' if len(map_stops) == 1 else 'marker small' }}";
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = "{{ get_url(system) }}/stops/" + stop.number;
+            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
             
             const details = document.createElement("div");
             details.className = "details";
             details.innerHTML = "\
-                <div class='{{ 'title' if len(stops) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
+                <div class='{{ 'title' if len(map_stops) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
                 <div class='subtitle hover-only'>" + stop.name + "</div>";
             
             element.appendChild(icon);
@@ -140,7 +140,7 @@
             
             new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
             
-            if ("{{ get('bound_stops', True) }}" === "True") {
+            if ("{{ get('zoom_stops', True) }}" === "True") {
                 lats.push(stop.lat);
                 lons.push(stop.lon);
             }
@@ -148,10 +148,10 @@
     </script>
 % end
 
-% buses = get('buses', [bus] if defined('bus') and bus is not None else [])
-% if len(buses) > 0:
+% map_buses = get('map_buses', [map_bus] if defined('map_bus') and map_bus is not None else [])
+% if len(map_buses) > 0:
     <script>
-        const buses = JSON.parse('{{! json.dumps([b.json_data for b in buses]) }}');
+        const buses = JSON.parse('{{! json.dumps([b.json_data for b in map_buses]) }}');
         
         for (const bus of buses) {
             const element = document.createElement("div");
@@ -189,7 +189,7 @@
             
             new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
             
-            if ("{{ get('bound_buses', True) }}" === "True") {
+            if ("{{ get('zoom_buses', True) }}" === "True") {
                 lats.push(bus.lat);
                 lons.push(bus.lon);
             }

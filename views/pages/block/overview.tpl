@@ -13,7 +13,7 @@
     
     <div id="sidebar">
         <h2>Overview</h2>
-        % include('components/map', trips=trips, buses=[p.bus for p in positions])
+        % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
         
         <a href="{{ get_url(system, f'blocks/{block.id}/map') }}" class="map-button">See full map</a>
         
