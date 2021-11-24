@@ -42,7 +42,7 @@ tr.divider {
     color: #EEEEEE;
 }
 
-#map {
+#map.preview {
     border: 1px solid #565656;
 }
 
@@ -131,12 +131,9 @@ tr.divider {
     color: #ABABAB;
 }
 
-.marker {
+.marker .icon {
     background-color: #0A6415;
-}
-
-.marker a {
-    color: white;
+    border: 2px solid #393939;
 }
 
 .news-post {
