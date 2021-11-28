@@ -30,6 +30,10 @@ tr.divider {
     background-color: #0A6415 !important;
 }
 
+#map.preview {
+    border: 1px solid #565656;
+}
+
 #menu {
     background-color: #00760F;
 }
@@ -42,8 +46,8 @@ tr.divider {
     color: #EEEEEE;
 }
 
-#map.preview {
-    border: 1px solid #565656;
+#survey-banner {
+    background-color: #8A4D00;
 }
 
 .adherence-indicator.ahead {

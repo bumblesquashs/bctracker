@@ -78,6 +78,11 @@ table {
     margin-left: 10px;
 }
 
+#survey-banner .content {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
 #top-button {
     right: 40px;
 }
