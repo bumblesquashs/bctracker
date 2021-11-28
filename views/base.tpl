@@ -218,10 +218,11 @@
         % if show_survey_banner:
             <div id="survey-banner">
                 <span class="close-button" onclick="hideSurvey()"><img width="24px" height="24px" src="/img/close.png"/></span>
-                <span class="title">Take the BCTracker Survey!</span>
-                <br>
-                <span class="description">For more information, check out the latest update on the <a href="{{ get_url(system) }}">home page</a></span>
-                <br />
+                <div class="content">
+                    <span class="title">Take the BCTracker Survey!</span>
+                    <br />
+                    <span class="description">For more information, check out the latest update on the <a href="{{ get_url(system) }}">home page</a></span>
+                </div>
                 <button class="button survey-button" onclick="openSurvey()">Start Now</button>
             </div>
         % end

@@ -56,6 +56,16 @@ form input[type="submit"] {
     text-decoration: underline;
 }
 
+#survey-banner .content {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+#survey-banner .survey-button {
+    vertical-align: middle;
+}
+
 .button {
     font-size: 12pt;
     vertical-align: middle;

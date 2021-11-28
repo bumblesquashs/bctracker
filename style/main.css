@@ -110,7 +110,7 @@ tr.divider {
     position: relative;
     z-index: 10;
     margin: 0px;
-    padding: 20px 20px;
+    padding: 10px 20px;
     background-color: #FFB960;
     cursor: default;
     vertical-align: middle;
@@ -135,11 +135,6 @@ tr.divider {
 #survey-banner .title {
     font-weight: bold;
     font-size: 16pt;
-}
-
-#survey-banner .description {
-    display: inline-block;
-    margin-bottom: 10px;
 }
 
 #system-map {
