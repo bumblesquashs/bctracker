@@ -52,6 +52,10 @@ form input[type="submit"] {
     overflow: hidden;
 }
 
+#survey-banner a {
+    text-decoration: underline;
+}
+
 .button {
     font-size: 12pt;
     vertical-align: middle;

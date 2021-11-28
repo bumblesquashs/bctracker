@@ -106,6 +106,42 @@ tr.divider {
     color: #222222;
 }
 
+#survey-banner {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 20px 20px;
+    background-color: #FFB960;
+    cursor: default;
+    vertical-align: middle;
+    color: white;
+    text-align: center;
+}
+
+#survey-banner a {
+    color: white;
+}
+
+#survey-banner .close-button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+#survey-banner .close-button:hover {
+    cursor: pointer;
+}
+
+#survey-banner .title {
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+#survey-banner .description {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
 #system-map {
     position: absolute;
     z-index: 0;
@@ -187,6 +223,14 @@ tr.divider {
 .button.disabled:hover {
     cursor: default;
     background-color: #8a8a8a !important;
+}
+
+.button.survey-button {
+    background-color: #FF8E00;
+}
+
+.button.survey-button:hover {
+    background-color: #AD6100;
 }
 
 .checkbox {
