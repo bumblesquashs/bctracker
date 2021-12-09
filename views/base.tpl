@@ -59,7 +59,8 @@
         
         <script>
             function toggleMenu() {
-                document.getElementById("menu").classList.toggle("display-none")
+                document.getElementById("menu").classList.toggle("display-none");
+                document.getElementById("search-non-desktop").classList.add("display-none");
             }
             
             String.prototype.format = function() {
@@ -97,7 +98,25 @@
             function searchDesktop() {
                 const query = document.getElementById("search-desktop-input").value;
                 const element = document.getElementById("search-desktop-results");
-                
+                search(query, element);
+            }
+            
+            function toggleSearchNonDesktop() {
+                const element = document.getElementById("search-non-desktop");
+                element.classList.toggle("display-none");
+                if (!element.classList.contains("display-none")) {
+                    document.getElementById("search-non-desktop-input").focus();
+                }
+                document.getElementById("menu").classList.add("display-none");
+            }
+            
+            function searchNonDesktop() {
+                const query = document.getElementById("search-non-desktop-input").value;
+                const element = document.getElementById("search-non-desktop-results");
+                search(query, element);
+            }
+            
+            function search(query, element) {
                 if (query === undefined || query === null || query === "") {
                     element.classList.add("display-none");
                     element.innerHTML = "";
@@ -114,39 +133,8 @@
                         if (count === 0) {
                             element.innerHTML = "<div class='message'>No Results</div>";
                         } else {
-                            let html = "";
                             const results = request.response.results;
-                            for (const result of results) {
-                                let name = result.name;
-                                switch (result.type) {
-                                    case "bus":
-                                        name = "Bus " + result.name;
-                                        break;
-                                    case "route":
-                                        name = "Route " + result.name;
-                                        break;
-                                    case "stop":
-                                        name = "Stop " + result.name;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                html += "\
-                                    <a href='" + result.url + "'>" +
-                                        name +
-                                        "<br />\
-                                        <span class='smaller-font lighter-text'>" + result.description + "</span>\
-                                    </a>";
-                            }
-                            if (count > results.length) {
-                                const additional = count - results.length;
-                                if (additional === 1) {
-                                    html += "<div class='message'>1 additional result</div>";
-                                } else {
-                                    html += "<div class='message'>" + additional + " additional results</div>";
-                                }
-                            }
-                            element.innerHTML = html;
+                            element.innerHTML = getSearchHTML(results, count);
                         }
                     };
                     request.onerror = function() {
@@ -156,6 +144,41 @@
                     data.set("query", query)
                     request.send(data);
                 }
+            }
+            
+            function getSearchHTML(results, count) {
+                let html = "";
+                for (const result of results) {
+                    let name = result.name;
+                    switch (result.type) {
+                        case "bus":
+                            name = "Bus " + result.name;
+                            break;
+                        case "route":
+                            name = "Route " + result.name;
+                            break;
+                        case "stop":
+                            name = "Stop " + result.name;
+                            break;
+                        default:
+                            break;
+                    }
+                    html += "\
+                        <a href='" + result.url + "'>" +
+                            name +
+                            "<br />\
+                            <span class='smaller-font lighter-text'>" + result.description + "</span>\
+                        </a>";
+                }
+                if (count > results.length) {
+                    const additional = count - results.length;
+                    if (additional === 1) {
+                        html += "<div class='message'>1 additional result</div>";
+                    } else {
+                        html += "<div class='message'>" + additional + " additional results</div>";
+                    }
+                }
+                return html;
             }
         </script>
     </head>
@@ -244,6 +267,10 @@
                 <div class="line"></div>
             </div>
             
+            <div class="search-non-desktop-toggle non-desktop" onclick="toggleSearchNonDesktop()">
+                <img src="/img/search.png" />
+            </div>
+            
             <br style="clear: both" />
         </div>
         
@@ -272,6 +299,12 @@
                 % path = get('path', '')
                 <a class="header-button" href="{{ get_url(system, f'systems?path={path}') }}">Change System</a>
             % end
+        </div>
+        
+        <div id="search-non-desktop" class="non-desktop display-none">
+            <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">
+            
+            <div id="search-non-desktop-results" class="display-none"></div>
         </div>
         
         <div id="subheader">

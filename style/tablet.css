@@ -50,6 +50,12 @@ table {
     margin: 6px;
 }
 
+#header .search-non-desktop-toggle {
+    float: right;
+    display: block;
+    padding: 10px;
+}
+
 #menu {
     position: relative;
     z-index: 10;
@@ -66,6 +72,51 @@ table {
     font-family: Helvetica, sans-serif;
     font-size: 16pt;
     font-weight: normal;
+}
+
+#search-non-desktop {
+    padding: 20px;
+    background-color: #255325;
+    font-family: Helvetica, sans-serif;
+}
+
+#search-non-desktop input[type="text"] {
+    border: 2px solid white;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 5px;
+    -webkit-appearance: none;
+    background-color: white;
+    color: black;
+    width: 100%;
+}
+
+#search-non-desktop input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #49a348;
+}
+
+#search-non-desktop #search-non-desktop-results {
+    margin-top: 10px;
+}
+
+#search-non-desktop #search-non-desktop-results .message {
+    padding: 10px 0px;
+    color: #cbcbcb;
+    text-align: center;
+    font-size: 16pt;
+}
+
+#search-non-desktop #search-non-desktop-results a {
+    padding: 10px 0px;
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 16pt;
+}
+
+#search-non-desktop #search-non-desktop-results a .lighter-text {
+    color: #cbcbcb;
 }
 
 #subheader #system {
