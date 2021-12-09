@@ -70,7 +70,8 @@ def load_departures(system):
             continue
         trip_id = values['trip_id']
         if trip_id not in system.trips:
-            print(f'Invalid trip id: {trip_id}')
+            if system.non_current_sheets_enabled:
+                print(f'Invalid trip id: {trip_id}')
             continue
         time_string = values['departure_time']
         sequence = int(values['stop_sequence'])
@@ -177,13 +178,17 @@ def load_trips(system):
             print(f'Invalid service id: {service_id}')
             continue
         block_id = values['block_id']
-        if block_id not in system.blocks:
-            system.blocks[block_id] = Block(system, block_id)
         direction_id = int(values['direction_id'])
         shape_id = values['shape_id']
         headsign = values['trip_headsign']
         
         trip = Trip(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+        
+        if not system.non_current_sheets_enabled and trip.service.sheet != Sheet.CURRENT:
+            continue
+        
+        if block_id not in system.blocks:
+            system.blocks[block_id] = Block(system, block_id)
         
         system.trips[trip_id] = trip
         

@@ -76,6 +76,10 @@ tr.divider {
     color: #EEEEEE;
 }
 
+#survey-banner {
+    background-color: #8A4D00;
+}
+
 #map {
     border: 1px solid #565656;
 }

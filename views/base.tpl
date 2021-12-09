@@ -180,6 +180,20 @@
                 }
                 return html;
             }
+            
+            function openSurvey() {
+                window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
+                hideSurvey();
+            }
+            
+            function hideSurvey() {
+                document.getElementById("survey-banner").classList.add("display-none");
+                const now = new Date();
+                const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
+                now.setTime(expireTime);
+                
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if cookie_domain is None else cookie_domain }};path=/";
+            }
         </script>
     </head>
     
@@ -321,6 +335,18 @@
                 <div id="last-updated">Updated {{ last_updated }}</div>
             % end
         </div>
+        
+        % if show_survey_banner:
+            <div id="survey-banner">
+                <span class="close-button" onclick="hideSurvey()"><img width="24px" height="24px" src="/img/close.png"/></span>
+                <div class="content">
+                    <span class="title">Take the BCTracker Survey!</span>
+                    <br />
+                    <span class="description">For more information, check out the latest update on the <a href="{{ get_url(system) }}">home page</a></span>
+                </div>
+                <button class="button survey-button" onclick="openSurvey()">Start Now</button>
+            </div>
+        % end
         
         <div id="content">{{ !base }}</div>
     </body>
