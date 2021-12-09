@@ -139,7 +139,12 @@
                                     </a>";
                             }
                             if (count > results.length) {
-                                html += "<div class='message'>" + (count - results.length) + " additional results</div>"
+                                const additional = count - results.length;
+                                if (additional === 1) {
+                                    html += "<div class='message'>1 additional result</div>";
+                                } else {
+                                    html += "<div class='message'>" + additional + " additional results</div>";
+                                }
                             }
                             element.innerHTML = html;
                         }

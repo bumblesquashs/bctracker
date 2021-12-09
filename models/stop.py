@@ -98,4 +98,8 @@ class Stop:
             match += (len(query) / len(name)) * 100
             if name.startswith(query):
                 match += len(query)
+            if match > 20:
+                match -= 20
+            else:
+                match = 1
         return SearchResult('stop', str(self.number), self.name, f'stops/{self.number}', match)
