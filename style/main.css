@@ -81,6 +81,10 @@ tr.divider {
     background-color: #49a348 !important;
 }
 
+#header .right {
+    float: right !important;
+}
+
 #content {
     padding: 20px;
     overflow: auto;

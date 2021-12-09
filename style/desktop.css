@@ -70,10 +70,6 @@ form input[type="submit"] {
     color: #666666;
 }
 
-#header .right {
-    float: right;
-}
-
 #search-desktop {
     position: relative;
     overflow: visible !important;

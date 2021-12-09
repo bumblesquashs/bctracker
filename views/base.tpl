@@ -261,13 +261,13 @@
                 % end
             </div>
             
-            <div class="menu-toggle non-desktop" onclick="toggleMenu()">
+            <div class="menu-toggle non-desktop right" onclick="toggleMenu()">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
             
-            <div class="search-non-desktop-toggle non-desktop" onclick="toggleSearchNonDesktop()">
+            <div class="search-non-desktop-toggle non-desktop right" onclick="toggleSearchNonDesktop()">
                 <img src="/img/search.png" />
             </div>
             
