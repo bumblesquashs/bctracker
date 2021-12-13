@@ -1,9 +1,8 @@
 
-from datetime import datetime
 from math import sqrt
 
 from models.service import Sheet
-import realtime
+from models.time import get_current_minutes
 
 class Stop:
     def __init__(self, system, stop_id, number, name, lat, lon):
@@ -81,6 +80,5 @@ class Stop:
     
     def get_upcoming_departures(self, sheet):
         departures = self.get_departures(sheet)
-        now = datetime.now()
-        current_mins = (now.hour * 60) + now.minute
+        current_mins = get_current_minutes()
         return [d for d in departures if d.trip.service.is_today and current_mins <= d.time.get_minutes() <= current_mins + 30]
