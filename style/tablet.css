@@ -68,6 +68,12 @@ table {
     font-weight: normal;
 }
 
+#refresh-button {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+}
+
 #subheader #system {
     display: inline-block;
 }

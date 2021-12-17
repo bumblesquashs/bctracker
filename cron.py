@@ -25,7 +25,7 @@ def start():
         gtfs_job.setall('0 7 */1 * *')
         
         realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=REALTIME_CRON_ID)
-        realtime_job.minute.every(2)
+        realtime_job.minute.every(1)
 
 def stop():
     with CronTab(user=True) as cron:

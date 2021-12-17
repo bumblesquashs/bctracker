@@ -258,12 +258,6 @@
             }
         }
         
-        const date = new Date();
-        const minutes = date.getMinutes();
-        const seconds = date.getSeconds();
-        const timeSinceLastUpdate = ((minutes % 2) * 60) + seconds;
-        const timeToNextUpdate = (2 * 60) - timeSinceLastUpdate;
-        
         setTimeout(function() {
             if (automaticRefresh) {
                 updateBusData();
@@ -272,7 +266,7 @@
                 if (automaticRefresh) {
                     updateBusData();
                 }
-            }, 1000 * 60 * 2);
+            }, 1000 * 60);
         }, 1000 * (timeToNextUpdate + 15));
     </script>
 % end

@@ -26,6 +26,24 @@ form input[type="submit"] {
     float: right;
 }
 
+#refresh-button {
+    margin-left: 10px;
+    display: inline-block;
+    margin-top: -6px;
+    margin-bottom: -6px;
+}
+
+#refresh-button:hover {
+    cursor: pointer;
+    background-color: #989898;
+    border-radius: 12px;
+}
+
+#refresh-button img {
+    width: 24px;
+    height: 24px;
+}
+
 #subheader #system {
     display: inline-block;
 }
@@ -50,6 +68,10 @@ form input[type="submit"] {
 #sidebar + * {
     float: none;
     overflow: hidden;
+}
+
+#subheader * {
+    vertical-align: middle;
 }
 
 #survey-banner a {
