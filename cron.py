@@ -1,4 +1,5 @@
 import os
+import sys
 import signal
 from datetime import datetime
 from crontab import CronTab
@@ -7,12 +8,14 @@ from models.system import get_systems
 import gtfs
 import realtime
 import history
-import database
 
 PID = os.getpid()
+CWD = os.path.dirname(__file__)
+EXC = sys.executable
 
 GTFS_CRON_ID = f'gtfs-muncher-{PID}'
 REALTIME_CRON_ID = f'realtime-muncher-{PID}'
+BACKUP_CRON_ID = f'backup-muncher-{PID}'
 
 def start():
     signal.signal(signal.SIGUSR1, handle_gtfs)
@@ -20,17 +23,22 @@ def start():
     with CronTab(user=True) as cron:
         cron.remove_all(comment=GTFS_CRON_ID)
         cron.remove_all(comment=REALTIME_CRON_ID)
+        cron.remove_all(comment=BACKUP_CRON_ID)
         
         gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=GTFS_CRON_ID)
         gtfs_job.setall('0 7 */1 * *')
         
         realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=REALTIME_CRON_ID)
         realtime_job.minute.every(1)
+        
+        backup_job = cron.new(command=f'{EXC} {CWD}/backup.py', comment=BACKUP_CRON_ID)
+        backup_job.month.every(1)
 
 def stop():
     with CronTab(user=True) as cron:
         cron.remove_all(comment=GTFS_CRON_ID)
         cron.remove_all(comment=REALTIME_CRON_ID)
+        cron.remove_all(comment=BACKUP_CRON_ID)
 
 def handle_gtfs(sig, frame):
     weekday = datetime.today().weekday()
@@ -57,8 +65,3 @@ def handle_realtime(sig, frame):
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
     history.update(realtime.get_positions())
-    
-    # Backup database at the end of each day
-    now = datetime.now()
-    if now.hour == 0 and now.minute == 0:
-        database.backup()
