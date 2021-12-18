@@ -55,6 +55,6 @@ class Time:
 def get_current_minutes():
     now = datetime.now()
     hour = now.hour
-    if hour < 5:
+    if hour < 4:
         hour += 24
     return (hour * 60) + now.minute
