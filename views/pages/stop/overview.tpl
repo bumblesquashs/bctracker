@@ -179,10 +179,9 @@
                 </tbody>
             </table>
         % else:
-            <p>
-                There are no departures in the next 30 minutes.
-            </p>
+            <p>There are no departures in the next 30 minutes.</p>
         % end
+        <p><a href="{{ get_url(system, f'stops/{stop.number}/departures') }}">All departures today</a></p>
         
         <h2>Trip Schedule</h2>
         <div class="container">

@@ -84,3 +84,7 @@ class Stop:
         now = datetime.now()
         current_mins = (now.hour * 60) + now.minute
         return [d for d in departures if d.trip.service.is_today and current_mins <= d.time.get_minutes() <= current_mins + 30]
+    
+    def get_departures_today(self, sheet):
+        departures = self.get_departures(sheet)
+        return [d for d in departures if d.trip.service.is_today]
