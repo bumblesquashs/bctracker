@@ -73,7 +73,7 @@
             </table>
         % end
     </div>
-
+    
     <div>
         % if len(positions) > 0:
             <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>

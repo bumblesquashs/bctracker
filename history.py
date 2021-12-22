@@ -18,7 +18,7 @@ def update(positions):
         block = position.trip.block
         hour = datetime.now().hour
         today = datetime.today()
-        date = today if hour >= 5 else today - timedelta(days=1)
+        date = today if hour >= 4 else today - timedelta(days=1)
         now = datetime.now().strftime('%H:%M')
         
         records = get_bus_records(bus, limit=1)
@@ -55,7 +55,7 @@ def get_last_seen(system):
         filters['system_id'] = system.id
     records_data = database.select('''
         (
-            SELECT rowid, bus_number, date, system_id, block_id, routes, start_time, end_time,
+            SELECT rowid, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen,
                 ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, start_time DESC) AS rn
             FROM records
         )
