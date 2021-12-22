@@ -72,7 +72,7 @@ def get_bus_records(bus, limit=None):
         filters={
             'bus_number': bus.number
         },
-        order_by='date DESC, start_time DESC',
+        order_by='date DESC, rowid DESC',
         limit=limit)
     records = []
     for data in records_data:
