@@ -15,7 +15,9 @@ database.execute('''
         block_id TEXT NOT NULL,
         routes TEXT NOT NULL,
         start_time TEXT,
-        end_time TEXT
+        end_time TEXT,
+        first_seen TEXT,
+        last_seen TEXT
     )
 ''')
 

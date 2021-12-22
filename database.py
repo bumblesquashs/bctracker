@@ -65,10 +65,15 @@ def update(table, values, filters=None, args=None):
     values = list(values.values())
     columns_string = ', '.join([c + ' = ?' for c in columns])
     sql = f'UPDATE {table} SET {columns_string}'
-    if filters is not None:
-        if type(filters) is not list:
-            filters = [filters]
+    if type(filters) is str:
+        sql += f' WHERE {filters}'
+    elif type(filters) is list:
         filters_string = ' AND '.join(filters)
+        sql += f' WHERE {filters_string}'
+    elif type(filters) is dict:
+        keys = filters.keys()
+        args = [filters[k] for k in keys]
+        filters_string = ' AND '.join([f'{k} = ?' for k in keys])
         sql += f' WHERE {filters_string}'
     return execute(sql, values + args)
 

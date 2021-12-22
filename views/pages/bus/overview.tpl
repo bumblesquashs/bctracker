@@ -119,6 +119,8 @@
                     <th class="desktop-only">End Time</th>
                     <th class="non-desktop">Block</th>
                     <th class="tablet-only">Time</th>
+                    <th class="desktop-only">First Seen</th>
+                    <th class="desktop-only">Last Seen</th>
                 </tr>
             </thead>
             <tbody>
@@ -143,6 +145,8 @@
                         <td class="desktop-only">{{ record.start_time }}</td>
                         <td class="desktop-only">{{ record.end_time }}</td>
                         <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
+                        <td class="desktop-only">{{ record.first_seen }}</td>
+                        <td class="desktop-only">{{ record.last_seen }}</td>
                     </tr>
                 % end
             </tbody>
