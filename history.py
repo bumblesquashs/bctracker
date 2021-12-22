@@ -85,7 +85,7 @@ def get_bus_records(bus, limit=None):
         filters={
             'bus_number': bus.number
         },
-        order_by='date DESC, start_time DESC',
+        order_by='date DESC, rowid DESC',
         limit=limit)
     records = []
     for data in records_data:
@@ -108,7 +108,7 @@ def get_block_records(block, limit=None):
         filters={
             'block_id': block.id
         },
-        order_by='date DESC, start_time DESC',
+        order_by='date DESC, rowid DESC',
         limit=limit)
     records = []
     for data in records_data:

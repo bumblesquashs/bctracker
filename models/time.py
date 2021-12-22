@@ -1,4 +1,6 @@
 
+from datetime import datetime
+
 class Time:
     
     def __init__(self, time_string):
@@ -41,15 +43,12 @@ class Time:
             return ''
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
-    def get_minutes(self, reset_day=True):
-        hour = self.hour
-        if reset_day and hour >= 24:
-            hour -= 24
-        return (hour * 60) + self.minute
+    def get_minutes(self):
+        return (self.hour * 60) + self.minute
     
     def get_difference(self, other):
-        self_minutes = self.get_minutes(reset_day=False)
-        other_minutes = other.get_minutes(reset_day=False)
+        self_minutes = self.get_minutes()
+        other_minutes = other.get_minutes()
         difference = abs(self_minutes - other_minutes)
         
         hour = difference // 60
@@ -63,3 +62,10 @@ class Time:
         if len(parts) == 0:
             return '0h 0m'
         return ' '.join(parts)
+
+def get_current_minutes():
+    now = datetime.now()
+    hour = now.hour
+    if hour < 4:
+        hour += 24
+    return (hour * 60) + now.minute
