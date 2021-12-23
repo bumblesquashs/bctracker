@@ -69,9 +69,25 @@ table {
 }
 
 #refresh-button {
-    position: absolute;
-    right: 20px;
-    top: 12px;
+    margin-left: 10px;
+    display: inline-block;
+    margin-top: -8px;
+    margin-bottom: -8px;
+}
+
+#refresh-button:hover {
+    cursor: pointer;
+    background-color: #989898;
+    border-radius: 12px;
+}
+
+#refresh-button img {
+    width: 24px;
+    height: 24px;
+}
+
+#subheader * {
+    vertical-align: middle;
 }
 
 #subheader #system {

@@ -29,8 +29,8 @@ form input[type="submit"] {
 #refresh-button {
     margin-left: 10px;
     display: inline-block;
-    margin-top: -6px;
-    margin-bottom: -6px;
+    margin-top: -8px;
+    margin-bottom: -8px;
 }
 
 #refresh-button:hover {
