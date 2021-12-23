@@ -111,12 +111,6 @@ table {
     display: none;
 }
 
-.map-button {
-    display: inline-block;
-    margin-top: -15px;
-    margin-bottom: 20px;
-}
-
 .mobile-only {
     display: none;
 }
@@ -127,4 +121,15 @@ table {
 
 .smaller-font {
     font-size: 11pt;
+}
+
+.tab-button-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: -1px;
+}
+
+.tab-button {
+    flex: 1;
 }

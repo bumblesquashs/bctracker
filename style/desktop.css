@@ -207,8 +207,22 @@ form input[type="submit"] {
     display: none;
 }
 
+.page-header.map-page {
+    display: inline-block;
+}
+
 .smaller-font {
     font-size: 11pt;
+}
+
+.tab-button-bar {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: -1px;
+}
+
+.tab-button {
+    min-width: 100px;
 }
 
 .tablet-only {

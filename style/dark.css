@@ -187,6 +187,20 @@ tr.divider {
     color: #ABABAB;
 }
 
+.tab-button {
+    background-color: #2F2F2F;
+    border: 1px solid #565656;
+    color: white;
+}
+
+.tab-button:hover {
+    background-color: #393939;
+}
+
+.tab-button.current {
+    background-color: #565656;
+}
+
 .vertical-line {
     background-color: #565656;
 }

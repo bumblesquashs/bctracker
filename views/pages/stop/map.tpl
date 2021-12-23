@@ -1,10 +1,14 @@
 
-% rebase('base', title=f'Stop {stop.number} - Map', include_maps=True)
+% rebase('base', title=f'Stop {stop.number}', include_maps=True)
 
 <div class="page-header map-page">
-    <h1 class="title">Stop {{ stop.number }} - Map</h1>
+    <h1 class="title">Stop {{ stop.number }}</h1>
     <h2 class="subtitle">{{ stop }}</h2>
-    <a href="{{ get_url(system, f'stops/{stop.number}') }}">Return to stop overview</a>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Map</span>
+        <a href="{{ get_url(system, f'stops/{stop.number}/departures') }}" class="tab-button">Departures</a>
+    </div>
 </div>
 
 % trips = [d.trip for d in stop.get_departures(sheet)]
