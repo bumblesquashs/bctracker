@@ -450,6 +450,14 @@ tr.divider {
     font-weight: normal;
 }
 
+.route-number {
+    display: inline-block;
+    color: white;
+    padding: 1px 6px;
+    font-weight: bold;
+    border: 1px solid white;
+}
+
 .service-indicator {
     margin: -5px -2px;
     text-align: center;
