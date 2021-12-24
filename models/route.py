@@ -57,7 +57,7 @@ class Route:
         return {
             'id': self.id,
             'number': self.number,
-            'name': self.name,
+            'name': self.name.replace("'", '&apos;'),
             'colour': self.colour
         }
     
