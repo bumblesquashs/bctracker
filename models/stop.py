@@ -50,11 +50,14 @@ class Stop:
     
     @property
     def json_data(self):
+        routes = self.get_routes(self.default_sheet)
         return {
+            'system_id': self.system.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
-            'lon': self.lon
+            'lon': self.lon,
+            'routes': [r.json_data for r in routes]
         }
     
     def add_departure(self, departure):
@@ -63,7 +66,7 @@ class Stop:
     
     def get_departures(self, sheet):
         if sheet is None:
-            sheet = self.departures
+            return self.departures
         return [d for d in self.departures if d.trip.service.sheet == sheet]
     
     def get_services(self, sheet):
