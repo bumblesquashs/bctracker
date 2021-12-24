@@ -389,6 +389,22 @@ def system_trips_id_map(system_id, trip_id):
         return systems_error_template('trip', system_id, trip_id=trip_id)
     return systems_template('trip/map', system_id, trip=trip)
 
+@app.route('/trips/<trip_id>/history')
+@app.route('/trips/<trip_id>/history/')
+def trips_id_history(trip_id):
+    return system_trips_id_map(None, trip_id)
+
+@app.route('/<system_id>/trips/<trip_id>/history')
+@app.route('/<system_id>/trips/<trip_id>/history/')
+def system_trips_id_history(system_id, trip_id):
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
+    trip = system.get_trip(trip_id)
+    if trip is None:
+        return systems_error_template('trip', system_id, trip_id=trip_id)
+    return systems_template('trip/history', system_id, trip=trip, records=history.get_trip_records(trip))
+
 @app.route('/stops')
 @app.route('/stops/')
 def stops():

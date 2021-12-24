@@ -8,6 +8,9 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
+        % if system.realtime_enabled:
+            <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
+        % end
     </div>
 </div>
 <hr />

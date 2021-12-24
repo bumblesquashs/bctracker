@@ -8,7 +8,7 @@ import database
 database.connect()
 
 database.execute('''
-    CREATE TABLE IF NOT EXISTS records (
+    CREATE TABLE IF NOT EXISTS new_records (
         record_id INTEGER PRIMARY KEY ASC,
         bus_number INTEGER NOT NULL,
         date TEXT NOT NULL,
@@ -23,16 +23,14 @@ database.execute('''
 ''')
 
 database.execute('''
-    CREATE TABLE IF NOT EXISTS trip_records (
-        trip_record_id INTEGER PRIMARY KEY ASC,
-        record_id INTEGER NOT NULL,
-        trip_id TEXT NOT NULL,
-        FOREIGN KEY (record_id) REFERENCES records (record_id)
-    )
+    INSERT INTO new_records (bus_number, date, system_id, block_id, routes, start_time, end_time)
+    SELECT bus_number, date, system_id, block_id, routes, start_time, end_time
+    FROM records
 ''')
 
-database.execute('CREATE INDEX IF NOT EXISTS records_bus_number ON records (bus_number)')
-database.execute('CREATE INDEX IF NOT EXISTS trip_records_record_id ON trip_records (record_id)')
+database.execute('DROP TABLE records')
+
+database.execute('ALTER TABLE new_records RENAME TO records')
 
 database.commit()
 database.disconnect()
