@@ -303,7 +303,7 @@
                     map.setLayoutProperty(bus.shape_id, "visibility", "visible");
                 } else {
                     const request = new XMLHttpRequest();
-                    request.open("GET", "/" + bus.system_id + "/api/shape/" + bus.shape_id + ".json", true);
+                    request.open("GET", getUrl(bus.system_id, "api/shape/" + bus.shape_id + ".json"), true);
                     request.responseType = "json";
                     request.onload = function() {
                         if (request.status === 200) {

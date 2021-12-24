@@ -96,11 +96,17 @@
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
             
+            let routesHTML = "";
+            for (const route of stop.routes) {
+                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+            }
+            
             const details = document.createElement("div");
             details.className = "details";
             details.innerHTML = "\
                 <div class='{{ 'title' if len(map_departures) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
-                <div class='subtitle hover-only'>" + stop.name + "</div>";
+                <div class='subtitle hover-only'>" + stop.name + "</div>\
+                <div class='subtitle hover-only'>" + routesHTML + "</div>";
             
             element.appendChild(icon);
             element.appendChild(details);
@@ -129,11 +135,17 @@
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
             
+            let routesHTML = "";
+            for (const route of stop.routes) {
+                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+            }
+            
             const details = document.createElement("div");
             details.className = "details";
             details.innerHTML = "\
                 <div class='{{ 'title' if len(map_stops) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
-                <div class='subtitle hover-only'>" + stop.name + "</div>";
+                <div class='subtitle hover-only'>" + stop.name + "</div>\
+                <div class='subtitle hover-only'>" + routesHTML + "</div>";
             
             element.appendChild(icon);
             element.appendChild(details);

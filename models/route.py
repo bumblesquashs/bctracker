@@ -52,6 +52,15 @@ class Route:
         positions = realtime.get_positions()
         return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.route_id == self.id]
     
+    @property
+    def json_data(self):
+        return {
+            'id': self.id,
+            'number': self.number,
+            'name': self.name.replace("'", '&apos;'),
+            'colour': self.colour
+        }
+    
     def add_trip(self, trip):
         self.trips.append(trip)
         self._sheets = None
