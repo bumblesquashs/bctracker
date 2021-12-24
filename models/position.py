@@ -1,5 +1,7 @@
-from datetime import datetime
+
 import math
+
+from models.time import get_current_minutes
 
 MINIMUM_MINUTES = 4
 
@@ -74,8 +76,7 @@ class Position:
                 if time_difference >= MINIMUM_MINUTES:
                     expected_scheduled_mins = previous_departure_mins + self.linear_interpolate(previous_departure.stop, stop, time_difference)
             
-            now = datetime.now()
-            current_mins = (now.hour * 60) + now.minute
+            current_mins = get_current_minutes()
             self.schedule_adherence = expected_scheduled_mins - current_mins
         except AttributeError:
             pass
