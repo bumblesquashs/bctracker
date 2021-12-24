@@ -10,10 +10,12 @@
     % services = stop.get_services(sheet)
     % routes = stop.get_routes(sheet)
     % departures = stop.get_departures(sheet)
-
+    
     <div id="sidebar">
         <h2>Overview</h2>
-        % include('components/stop_map', stop=stop)
+        % include('components/map', map_stop=stop)
+        
+        <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <div class="section">

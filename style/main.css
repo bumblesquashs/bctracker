@@ -81,7 +81,16 @@ tr.divider {
     overflow: auto;
 }
 
-#map {
+#map.full-screen {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#map.preview {
     width: 100%;
     height: 300px;
     margin-bottom: 20px;
@@ -135,21 +144,6 @@ tr.divider {
 #survey-banner .title {
     font-weight: bold;
     font-size: 16pt;
-}
-
-#system-map {
-    position: absolute;
-    z-index: 0;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-}
-
-#system-map-header {
-    position: relative;
-    z-index: 5;
-    display: inline-block;
 }
 
 #top-button {
@@ -315,25 +309,34 @@ tr.divider {
 }
 
 .marker {
-    background-color: #49a348;
+    position: relative;
+}
+
+.marker:hover {
+    z-index: 100;
+}
+
+.marker .icon {
+    display: block;
     width: 32px;
     height: 32px;
-    border-radius: 16px;
+    border-radius: 18px;
+    border: 2px solid white;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #49a348;
 }
 
-.marker.small {
-    width: 16px !important;
-    height: 16px !important;
+.marker .icon img {
+    width: 24px;
+    height: 24px;
+    left: 4px;
+    top: 4px;
+    position: relative;
 }
 
-.marker.small img {
-    width: 12px;
-    height: 12px;
-    left: 2px;
-    top: 2px;
-}
-
-.marker .link {
+.marker .icon .link {
     background-color: black;
     opacity: 0;
     position: absolute;
@@ -341,67 +344,68 @@ tr.divider {
     bottom: 0px;
     left: 0px;
     right: 0px;
-    border-radius: 16px;
+    border-radius: 18px;
 }
 
-.marker:hover .link {
-    opacity: 0.3;
-    cursor: pointer;
+.marker .icon ~ * .hover-only {
+    display: none;
 }
 
-.marker a {
-    text-decoration: none !important;
-    color: black;
+.marker .details {
+    display: block;
+    position: absolute;
+    left: 0px;
+    right: 0px;
 }
 
-.marker img {
-    position: relative;
-    width: 24px;
-    height: 24px;
-    left: 4px;
-    top: 4px;
-}
-
-.marker .title {
+.marker .details .title {
     font-size: 8pt;
-    margin-top: 5px;
     text-align: center;
     font-weight: bold;
+    line-height: 10pt;
+    margin-left: -50px;
+    margin-right: -50px;
 }
 
-.marker .title span {
-    margin-left: -100%;
-    margin-right: -100%;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.marker .subtitle {
-    margin-left: -100%;
-    margin-right: -100%;
-    display: none;
+.marker .details .subtitle {
     font-size: 8pt;
-    margin-top: -5px;
     text-align: center;
     overflow: visible;
+    line-height: 10pt;
+    margin-left: -50px;
+    margin-right: -50px;
 }
 
-.marker .subtitle > span {
-    text-align: center;
-    white-space: nowrap;
-    margin-left: -100%;
-    margin-right: -100%;
-}
-
-.marker .subtitle .adherence-indicator {
+.marker .details .subtitle .adherence-indicator {
     float: none;
     font-size: 8pt;
     padding: 1px 3px;
     border-radius: 3px;
 }
 
-.marker:hover .subtitle {
+.marker .icon:hover .link {
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.marker .icon:hover ~ * .hover-only {
     display: block;
+}
+
+.marker.small .icon {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.marker.small .icon img {
+    width: 12px;
+    height: 12px;
+    left: 2px;
+    top: 2px;
+}
+
+.marker.small .details {
+    top: 20px;
 }
 
 .news-post {
@@ -436,8 +440,22 @@ tr.divider {
     white-space: nowrap;
 }
 
+.page-header.map-page {
+    position: relative;
+    z-index: 5;
+    display: inline-block;
+}
+
 .page-header .subtitle {
     font-weight: normal;
+}
+
+.route-number {
+    display: inline-block;
+    color: white;
+    padding: 1px 6px;
+    font-weight: bold;
+    border: 1px solid white;
 }
 
 .service-indicator {

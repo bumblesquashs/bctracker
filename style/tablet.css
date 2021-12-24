@@ -105,6 +105,12 @@ table {
     display: none;
 }
 
+.map-button {
+    display: inline-block;
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
 .mobile-only {
     display: none;
 }

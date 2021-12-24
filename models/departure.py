@@ -24,3 +24,11 @@ class Departure:
     @property
     def trip(self):
         return self.system.get_trip(self.trip_id)
+    
+    @property
+    def json_data(self):
+        return {
+            'stop': self.stop.json_data,
+            'time': str(self.time),
+            'colour': self.trip.route.colour
+        }

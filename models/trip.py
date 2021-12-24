@@ -41,6 +41,10 @@ class Trip:
         return self.system.get_service(self.service_id)
     
     @property
+    def stops(self):
+        return {d.stop for d in self.departures}
+    
+    @property
     def first_departure(self):
         return self.departures[0]
     
@@ -92,6 +96,14 @@ class Trip:
             self._related_trips = [t for t in self.system.get_trips(self.service.sheet) if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
+    
+    @property
+    def json_data(self):
+        return {
+            'shape_id': self.shape_id,
+            'colour': self.route.colour,
+            'points': [p.json_data for p in self.points]
+        }
     
     def add_departure(self, departure):
         self.departures.append(departure)

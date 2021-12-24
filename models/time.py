@@ -50,7 +50,18 @@ class Time:
         self_minutes = self.get_minutes()
         other_minutes = other.get_minutes()
         difference = abs(self_minutes - other_minutes)
-        return '{0:02d}:{1:02d}'.format(difference // 60, difference % 60)
+        
+        hour = difference // 60
+        minute = difference % 60
+        
+        parts = []
+        if hour > 0:
+            parts.append(f'{hour}h')
+        if minute > 0:
+            parts.append(f'{minute}m')
+        if len(parts) == 0:
+            return '0h 0m'
+        return ' '.join(parts)
 
 def get_current_minutes():
     now = datetime.now()

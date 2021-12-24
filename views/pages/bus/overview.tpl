@@ -5,8 +5,7 @@
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
-    % order = bus.order
-    <h2 class="subtitle">{{ order.year }} {{ order.model }}</h2>
+    <h2 class="subtitle">{{ bus.order }}</h2>
 </div>
 <hr />
 
@@ -18,15 +17,20 @@
             <h3 class="title">Not in service</h3>
         </div>
     % elif position.trip is None:
-        % include('components/bus_map', bus=bus)
+        % include('components/map', map_bus=bus)
+        
+        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <h3 class="title">Not in service</h3>
         </div>
     % else:
-        % include('components/bus_map', bus=bus)
-        
         % trip = position.trip
+        
+        % include('components/map', map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
+        
+        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="map-button">See full map</a>
+        
         <div class="info-box">
             <h3 class="title">{{ trip }}</h3>
             
@@ -71,7 +75,6 @@
     
     <h2>Details</h2>
     <div class="info-box">
-        % order = bus.order
         % model = bus.model
         <div class="section">
             <div class="name">Vehicle Type</div>

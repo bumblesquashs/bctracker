@@ -10,12 +10,15 @@
     % services = route.get_services(sheet)
     % trips = route.get_trips(sheet)
     % headsigns = route.get_headsigns(sheet)
-
+    % positions = sorted(route.positions)
+    
     % direction_ids = {t.direction_id for t in trips}
-
+    
     <div id="sidebar">
         <h2>Overview</h2>
-        % include('components/route_map', route=route)
+        % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
+        
+        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <div class="section">
@@ -34,7 +37,6 @@
     </div>
     
     <div>
-        % positions = route.positions
         % if len(positions) > 0:
             <h2>Active Buses</h2>
             <table class="pure-table pure-table-horizontal pure-table-striped">
