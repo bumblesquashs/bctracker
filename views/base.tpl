@@ -134,7 +134,7 @@
                             element.innerHTML = "<div class='message'>No Results</div>";
                         } else {
                             const results = request.response.results;
-                            element.innerHTML = getSearchHTML(results, count);
+                            element.innerHTML = getSearchHTML(results);
                         }
                     };
                     request.onerror = function() {
@@ -146,7 +146,7 @@
                 }
             }
             
-            function getSearchHTML(results, count) {
+            function getSearchHTML(results) {
                 let html = "";
                 for (const result of results) {
                     let name = result.name;
@@ -169,14 +169,6 @@
                             "<br />\
                             <span class='smaller-font lighter-text'>" + result.description + "</span>\
                         </a>";
-                }
-                if (count > results.length) {
-                    const additional = count - results.length;
-                    if (additional === 1) {
-                        html += "<div class='message'>1 additional result</div>";
-                    } else {
-                        html += "<div class='message'>" + additional + " additional results</div>";
-                    }
                 }
                 return html;
             }

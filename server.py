@@ -482,6 +482,6 @@ def system_api_search(system_id):
             results += system.search_stops(query)
     results.sort()
     return {
-        'results': [r.get_json_data(system, get_url) for r in results[0:6]],
+        'results': [r.get_json_data(system, get_url) for r in results[0:10]],
         'count': len(results)
     }
