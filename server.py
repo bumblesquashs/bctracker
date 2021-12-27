@@ -454,23 +454,6 @@ def system_stops_number_map(system_id, number):
     sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
     return systems_template('stop/map', system_id, stop=stop, sheet=sheet)
 
-@app.route('/stops/<number:int>/departures')
-@app.route('/stops/<number:int>/departures/')
-def stops_number_departures(number):
-    return system_stops_number_departures(None, number)
-
-@app.route('/<system_id>/stops/<number:int>/departures')
-@app.route('/<system_id>/stops/<number:int>/departures/')
-def system_stops_number_departures(system_id, number):
-    system = get_system(system_id)
-    if system is None:
-        return systems_error_template('system', system_id, path=f'stops/{number}')
-    stop = system.get_stop(number=number)
-    if stop is None:
-        return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/departures', system_id, stop=stop, sheet=sheet)
-
 @app.route('/about')
 @app.route('/about/')
 def about():

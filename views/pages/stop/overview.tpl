@@ -6,7 +6,6 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, f'stops/{stop.number}/departures') }}" class="tab-button">Departures</a>
     </div>
 </div>
 <hr />

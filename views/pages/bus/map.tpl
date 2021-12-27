@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Bus {{ bus }}', include_maps=True)
+% rebase('base', title=f'Bus {bus}', include_maps=True)
 
 % position = bus.position
 % if not position.active:
