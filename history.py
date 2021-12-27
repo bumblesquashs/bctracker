@@ -5,6 +5,7 @@ from models.bus import Bus
 from models.record import Record
 from models.service import Sheet
 from models.time import Time
+from models.transfer import Transfer
 
 import database
 
@@ -25,6 +26,13 @@ def update(positions):
         records = get_bus_records(bus, limit=1)
         if len(records) > 0:
             last_record = records[0]
+            if last_record.system_id != position.system.id:
+                database.insert('transfers', {
+                    'bus_number': bus.number,
+                    'date': date.strftime('%Y-%m-%d'),
+                    'old_system_id': last_record.system_id,
+                    'new_system_id': position.system.id
+                })
             if last_record.date.date() == date.date() and last_record.block_id == block.id:
                 database.update('records',
                     values={
@@ -67,13 +75,45 @@ def get_last_seen(system):
     records_data = database.select('''
         (
             SELECT record_id, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen,
-                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, start_time DESC) AS rn
+                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, record_id DESC) AS rn
             FROM records
         )
         ''',
         columns=['record_id', 'bus_number', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen'],
         filters=filters,
         order_by='bus_number')
+    records = []
+    for data in records_data:
+        record_id = data['record_id']
+        bus = Bus(data['bus_number'])
+        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        system_id = data['system_id']
+        block_id = data['block_id']
+        routes = data['routes']
+        start_time = Time(data['start_time'])
+        end_time = Time(data['end_time'])
+        first_seen = Time(data['first_seen'])
+        last_seen = Time(data['last_seen'])
+        
+        records.append(Record(record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen))
+    return records
+
+def get_first_seen(system):
+    filters = {
+        'rn': 1
+    }
+    if system is not None:
+        filters['system_id'] = system.id
+    records_data = database.select('''
+        (
+            SELECT record_id, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen,
+                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY record_id ASC) AS rn
+            FROM records
+        )
+        ''',
+        columns=['record_id', 'bus_number', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen'],
+        filters=filters,
+        order_by='date DESC, record_id DESC')
     records = []
     for data in records_data:
         record_id = data['record_id']
@@ -175,3 +215,23 @@ def get_trip_records(trip, limit=None):
         
         records.append(Record(record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen))
     return records
+
+def get_transfers(system, limit=None):
+    filters = {}
+    if system is not None:
+        filters['new_system_id'] = system.id
+    transfers_data = database.select('transfers', 
+        columns=['transfer_id', 'bus_number', 'date', 'old_system_id', 'new_system_id'],
+        filters=filters,
+        order_by='date DESC, transfer_id DESC',
+        limit=limit)
+    transfers = []
+    for data in transfers_data:
+        record_id = data['record_id']
+        bus = Bus(data['bus_number'])
+        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        old_system_id = data['old_system_id']
+        new_system_id = data['new_system_id']
+        
+        transfers.append(Transfer(record_id, bus, date, old_system_id, new_system_id))
+    return transfers

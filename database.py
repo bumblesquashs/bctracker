@@ -56,14 +56,16 @@ def select(table, columns='*', joins=None, filters=None, order_by=None, limit=No
     if type(filters) is str:
         sql += f' WHERE {filters}'
     elif type(filters) is list:
-        filters_string = ' AND '.join(filters)
-        sql += f' WHERE {filters_string}'
+        if len(filters) > 0:
+            filters_string = ' AND '.join(filters)
+            sql += f' WHERE {filters_string}'
     elif type(filters) is dict:
         filters = {k: v for (k, v) in filters.items() if v is not None}
         keys = filters.keys()
-        args += [filters[k] for k in keys]
-        filters_string = ' AND '.join([f'{k} = ?' for k in keys])
-        sql += f' WHERE {filters_string}'
+        if len(keys) > 0:
+            args += [filters[k] for k in keys]
+            filters_string = ' AND '.join([f'{k} = ?' for k in keys])
+            sql += f' WHERE {filters_string}'
     
     if order_by is not None:
         sql += f' ORDER BY {order_by}'

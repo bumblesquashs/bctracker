@@ -32,8 +32,19 @@ database.execute('''
     )
 ''')
 
+database.execute('''
+    CREATE TABLE IF NOT EXISTS transfers (
+        transfer_id INTEGER PRIMARY KEY ASC,
+        bus_number INTEGER NOT NULL,
+        date TEXT NOT NULL,
+        old_system_id TEXT NOT NULL,
+        new_system_id TEXT NOT NULL
+    )
+''')
+
 database.execute('CREATE INDEX IF NOT EXISTS records_bus_number ON records (bus_number)')
 database.execute('CREATE INDEX IF NOT EXISTS trip_records_record_id ON trip_records (record_id)')
+database.execute('CREATE INDEX IF NOT EXISTS transfers_bus_number ON transfers (bus_number)')
 
 database.commit()
 database.disconnect()

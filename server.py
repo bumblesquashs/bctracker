@@ -237,14 +237,36 @@ def system_bus_number_map(system_id, number):
 
 @app.route('/history')
 @app.route('/history/')
-def route_history():
-    return system_history(None)
+def history_last_seen():
+    return system_history_last_seen(None)
 
 @app.route('/<system_id>/history')
 @app.route('/<system_id>/history/')
-def system_history(system_id):
+def system_history_last_seen(system_id):
     system = get_system(system_id)
-    return systems_template('history', system_id, records=history.get_last_seen(system), path='history')
+    return systems_template('history/last_seen', system_id, records=history.get_last_seen(system), path='history')
+
+@app.route('/history/first-seen')
+@app.route('/history/first-seen')
+def history_first_seen():
+    return system_history_first_seen(None)
+
+@app.route('/<system_id>/history/first-seen')
+@app.route('/<system_id>/history/first-seen/')
+def system_history_first_seen(system_id):
+    system = get_system(system_id)
+    return systems_template('history/first_seen', system_id, records=history.get_first_seen(system), path='history/first-seen')
+
+@app.route('/history/transfers')
+@app.route('/history/transfers/')
+def history_transfers():
+    return system_history_transfers(None)
+
+@app.route('/<system_id>/history/transfers')
+@app.route('/<system_id>/history/transfers/')
+def system_history_transfers(system_id):
+    system = get_system(system_id)
+    return systems_template('history/transfers', system_id, transfers=history.get_transfers(system), path='history/transfers')
 
 @app.route('/routes')
 @app.route('/routes/')
