@@ -217,21 +217,24 @@ def get_trip_records(trip, limit=None):
     return records
 
 def get_transfers(system, limit=None):
-    filters = {}
+    filters = None
+    args = []
     if system is not None:
-        filters['new_system_id'] = system.id
+        filters = 'old_system_id = ? OR new_system_id = ?'
+        args = [system.id, system.id]
     transfers_data = database.select('transfers', 
         columns=['transfer_id', 'bus_number', 'date', 'old_system_id', 'new_system_id'],
         filters=filters,
         order_by='date DESC, transfer_id DESC',
-        limit=limit)
+        limit=limit,
+        args=args)
     transfers = []
     for data in transfers_data:
-        record_id = data['record_id']
+        transfer_id = data['transfer_id']
         bus = Bus(data['bus_number'])
         date = datetime.strptime(data['date'], '%Y-%m-%d')
         old_system_id = data['old_system_id']
         new_system_id = data['new_system_id']
         
-        transfers.append(Transfer(record_id, bus, date, old_system_id, new_system_id))
+        transfers.append(Transfer(transfer_id, bus, date, old_system_id, new_system_id))
     return transfers

@@ -19,6 +19,12 @@
     </p>
     
     % include('components/systems', realtime_only=True)
+% elif len(transfers) == 0:
+    % if system is None:
+        <p>There are no recorded transfers.</p>
+    % else:
+        <p>{{ system }} does not have any recorded transfers.</p>
+    % end
 % else:
     <table class="pure-table pure-table-horizontal pure-table-striped">
         <thead>
@@ -27,9 +33,9 @@
                 <th class="desktop-only">Number</th>
                 <th class="desktop-only">Model</th>
                 <th class="non-desktop">Bus</th>
-                <th class="non-mobile">From System</th>
-                <th class="non-mobile">To System</th>
-                <th class="mobile-only">Systems</th>
+                <th class="non-mobile">From</th>
+                <th class="non-mobile">To</th>
+                <th class="mobile-only">From / To</th>
             </tr>
         </thead>
         <tbody>
@@ -39,7 +45,7 @@
                 % order = bus.order
                 % same_date = last_date is None or transfer.date == last_date
                 % last_date = transfer.date
-                <tr class="{{'' if same_model else 'divider'}}">
+                <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ format_date(transfer.date) }}</td>
                     <td class="non-desktop no-wrap">{{ format_date_mobile(transfer.date) }}</td>
                     <td>
