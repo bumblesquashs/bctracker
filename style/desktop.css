@@ -65,12 +65,6 @@ form input[type="submit"] {
     width: 100%;
 }
 
-#sidebar .map-button {
-    display: inline-block;
-    margin-top: -15px;
-    margin-bottom: 20px;
-}
-
 #sidebar + * {
     float: none;
     overflow: hidden;
