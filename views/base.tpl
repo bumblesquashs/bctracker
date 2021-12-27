@@ -121,6 +121,7 @@
                 if (query === undefined || query === null || query === "") {
                     resultsElement.classList.add("display-none");
                     resultsElement.innerHTML = "";
+                    inputElement.onkeyup = function() {};
                 } else {
                     resultsElement.classList.remove("display-none");
                     if (resultsElement.innerHTML === "") {
@@ -133,6 +134,7 @@
                         const count = request.response.count;
                         if (count === 0) {
                             resultsElement.innerHTML = "<div class='message'>No Results</div>";
+                            inputElement.onkeyup = function() {};
                         } else {
                             const results = request.response.results;
                             resultsElement.innerHTML = getSearchHTML(results, count);
@@ -150,6 +152,7 @@
                     };
                     request.onerror = function() {
                         resultsElement.innerHTML = "<div class='message'>Error loading search results</div>";
+                        inputElement.onkeyup = function() {};
                     };
                     const data = new FormData()
                     data.set("query", query)
