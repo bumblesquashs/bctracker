@@ -103,6 +103,10 @@ table {
     font-size: 16pt;
 }
 
+#search-non-desktop #search-non-desktop-results .message.smaller-font {
+    font-size: 14pt;
+}
+
 #search-non-desktop #search-non-desktop-results a {
     padding: 10px 0px;
     color: white;

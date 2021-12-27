@@ -96,9 +96,9 @@
             }
             
             function searchDesktop() {
-                const query = document.getElementById("search-desktop-input").value;
-                const element = document.getElementById("search-desktop-results");
-                search(query, element);
+                const inputElement = document.getElementById("search-desktop-input");
+                const resultsElement = document.getElementById("search-desktop-results");
+                search(inputElement, resultsElement);
             }
             
             function toggleSearchNonDesktop() {
@@ -111,19 +111,20 @@
             }
             
             function searchNonDesktop() {
-                const query = document.getElementById("search-non-desktop-input").value;
-                const element = document.getElementById("search-non-desktop-results");
-                search(query, element);
+                const inputElement = document.getElementById("search-non-desktop-input");
+                const resultsElement = document.getElementById("search-non-desktop-results");
+                search(inputElement, resultsElement);
             }
             
-            function search(query, element) {
+            function search(inputElement, resultsElement) {
+                const query = inputElement.value;
                 if (query === undefined || query === null || query === "") {
-                    element.classList.add("display-none");
-                    element.innerHTML = "";
+                    resultsElement.classList.add("display-none");
+                    resultsElement.innerHTML = "";
                 } else {
-                    element.classList.remove("display-none");
-                    if (element.innerHTML === "") {
-                        element.innerHTML = "<div class='message'>Loading...</div>";
+                    resultsElement.classList.remove("display-none");
+                    if (resultsElement.innerHTML === "") {
+                        resultsElement.innerHTML = "<div class='message'>Loading...</div>";
                     }
                     const request = new XMLHttpRequest();
                     request.open("POST", "{{get_url(system, 'api/search')}}", true);
@@ -131,14 +132,24 @@
                     request.onload = function() {
                         const count = request.response.count;
                         if (count === 0) {
-                            element.innerHTML = "<div class='message'>No Results</div>";
+                            resultsElement.innerHTML = "<div class='message'>No Results</div>";
                         } else {
                             const results = request.response.results;
-                            element.innerHTML = getSearchHTML(results);
+                            resultsElement.innerHTML = getSearchHTML(results, count);
+                            if (count === 1) {
+                                inputElement.onkeyup = function(event) {
+                                    if (event.keyCode === 13) {
+                                        event.preventDefault();
+                                        window.location = results[0].url;
+                                    }
+                                };
+                            } else {
+                                inputElement.onkeyup = function() {};
+                            }
                         }
                     };
                     request.onerror = function() {
-                        element.innerHTML = "<div class='message'>Error loading search results</div>";
+                        resultsElement.innerHTML = "<div class='message'>Error loading search results</div>";
                     };
                     const data = new FormData()
                     data.set("query", query)
@@ -146,8 +157,13 @@
                 }
             }
             
-            function getSearchHTML(results) {
+            function getSearchHTML(results, count) {
                 let html = "";
+                if (count === 1) {
+                    html += "<div class='message smaller-font'>Showing 1 of 1 result</div>";
+                } else {
+                    html += "<div class='message smaller-font'>Showing " + results.length + " of " + count + " results</div>";
+                }
                 for (const result of results) {
                     let name = result.name;
                     switch (result.type) {
