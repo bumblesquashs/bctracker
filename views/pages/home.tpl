@@ -90,6 +90,43 @@
 <div>
     <h2>Latest Updates</h2>
     
+    <div class="news-post">
+        <div class="header">
+            <h3>Winter Update</h3>
+            TBD
+        </div>
+        <div class="content">
+            <p>
+                Hey everyone, it's once again time for a quick update!
+            </p>
+            <p>
+                First of all, a huge thank you to everyone who has participated in our survey so far!
+                
+            </p>
+            <p>
+                Now, onto the juicy updates you've been waiting for.
+                We've gotten a lot done over the last few months, some of which you have have already noticed, while other things have only just recently been added.
+                Here's an overview of the newest features:
+            </p>
+            <ul>
+                <li>Realtime Frequency: Now updates every minute for even more accurate bus positions</li>
+                <li>Global Search: An easy way to find buses, routes, and stops from anywhere on the website</li>
+                <li>Upcoming Departures: Trips leaving a stop in the next 30 minutes, including realtime bus information when available</li>
+                <li>Transfers and First Seen: Historic updates for when buses are transferred between systems, and when they were recorded for the first time</li>
+                <li>Block/Trip History: All recorded realtime history for blocks and trips</li>
+                <li>Map Improvements: Full-screen, interactive maps for buses, routes, stops, blocks, and trips</li>
+                <li>Some pretty big improvements behind the scenes that made a lot of these updates possible</li>
+            </ul>
+            <p>
+                
+            </p>
+            <p>
+                One other note: based on the survey results, we're very happy to see how much BC Tracker has started to spread by word of mouth rather than directly from places that we have linked it before.
+                
+            </p>
+        </div>
+    </div>
+    
     <div class="news-post" id="survey">
         <div class="header">
             <h3>BCTracker Survey</h3>
@@ -107,32 +144,6 @@
             </p>
             <p>
                 <button class="button survey-button" onclick="openSurvey()">Take the survey!</button>
-            </p>
-        </div>
-    </div>
-    <div class="news-post">
-        <div class="header">
-            <h3>Fall Update</h3>
-            September 21, 2021
-        </div>
-        <div class="content">
-            <p>
-                Over the last couple months you may have noticed some exciting new features appearing around the website.
-                We're trying to keep updates more frequent, rather than releasing massive changes once or twice per year.
-            </p>
-            <p>
-                Since the big multi-system update earlier this summer, we've introduced:
-            </p>
-            <ul>
-                <li>Schedule Adherence: How many minutes ahead or behind schedule a bus is (approximately)</li>
-                <li>Nearby Stops: Easy transfers that are within 100m of the stop you're looking at</li>
-                <li>Dark Theme: Can be set automatically based on your device's current preferences, or set manually</li>
-                <li>Tablet Layouts: Specially designed for screens bigger than a phone but smaller than a computer</li>
-                <li>Lots more minor improvements and fixes behind the scenes</li>
-            </ul>
-            <p>
-                We appreciate your feedback, and we're looking forward to turning more of your suggestions into new features and improvements.
-                Stay tuned for more this fall!
             </p>
         </div>
     </div>
