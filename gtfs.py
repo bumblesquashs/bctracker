@@ -2,6 +2,7 @@ from os import path, rename
 from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
+from random import randint, seed, shuffle
 
 import wget
 import csv
@@ -95,7 +96,11 @@ def load_routes(system):
         if 'route_color' in values:
             colour = values['route_color']
         else:
-            colour = '4040FF'
+            # Generate a random colour based on system ID and route number
+            seed(system.id + number)
+            values = [randint(0, 100), randint(0, 255), randint(100, 255)]
+            shuffle(values)
+            colour = f'{values[0]:02x}{values[1]:02x}{values[2]:02x}'
         
         route = Route(system, route_id, number, name, colour)
         
