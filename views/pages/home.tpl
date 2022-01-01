@@ -93,7 +93,7 @@
     <div class="news-post">
         <div class="header">
             <h3>Winter Update</h3>
-            TBD
+            Date TBD
         </div>
         <div class="content">
             <p>
@@ -101,12 +101,13 @@
             </p>
             <p>
                 First of all, a huge thank you to everyone who has participated in our survey so far!
-                
+                Your feedback has been very helpful in planning upcoming additions to the site, and we're glad to know how helpful BCTracker has been for you.
+                If you haven't had a chance to respond yet, you can still get to it from the link in the previous post.
             </p>
             <p>
-                Now, onto the juicy updates you've been waiting for.
-                We've gotten a lot done over the last few months, some of which you have have already noticed, while other things have only just recently been added.
-                Here's an overview of the newest features:
+                We've gotten a lot done over the last few months, some of which you may have already noticed, while other things have only just recently been added.
+                Many of the newest features are among the most highly-requested in the survey responses, so we hope you enjoy them!
+                Here's an overview of what's new:
             </p>
             <ul>
                 <li>Realtime Frequency: Now updates every minute for even more accurate bus positions</li>
@@ -118,11 +119,11 @@
                 <li>Some pretty big improvements behind the scenes that made a lot of these updates possible</li>
             </ul>
             <p>
-                
+                Finally, we've updated our <a href="/about">About</a> page with some FAQs, based on some of the survey results we got back.
+                We hope the answers are enlightening!
             </p>
             <p>
-                One other note: based on the survey results, we're very happy to see how much BC Tracker has started to spread by word of mouth rather than directly from places that we have linked it before.
-                
+                As always, stay safe and have a Happy New Year!
             </p>
         </div>
     </div>
