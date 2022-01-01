@@ -215,6 +215,13 @@
                                     handleResultsDown()
                                 }
                             };
+                            inputElement.onkeydown = function(event) {
+                                // Prevent up/down presses from moving cursor
+                                if (event.keyCode === 38 || event.keyCode === 40) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                }
+                            };
                         }
                     };
                     request.onerror = function() {
