@@ -58,6 +58,10 @@
         % end
         
         <script>
+            var searchFocused = false;
+            var selectedResultIndex = 0;
+            var searchResults = [];
+            
             function toggleMenu() {
                 document.getElementById("menu").classList.toggle("display-none");
                 document.getElementById("search-non-desktop").classList.add("display-none");
@@ -86,6 +90,7 @@
                 } else {
                     element.classList.remove("display-none");
                 }
+                searchFocused = true;
             }
             
             function searchDesktopBlur() {
@@ -93,6 +98,17 @@
                     const element = document.getElementById("search-desktop-results");
                     element.classList.add("display-none");
                 }, 200);
+                clearSearchHighlighting();
+                searchFocused = false;
+            }
+            
+            function clearSearchHighlighting() {
+              if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
+                var selectedElement = searchResults[selectedResultIndex].element;
+                selectedElement.classList.remove("keyboard-selected");
+              }
+              var selectedResultIndex = 0;
+              var searchResults = [];
             }
             
             function searchDesktop() {
@@ -116,6 +132,42 @@
                 search(inputElement, resultsElement);
             }
             
+            function handleResultsDown() {
+              if (searchResults.length < 2){
+                return; // Nothing to change for 0 or 1 results
+              }
+              if (selectedResultIndex === searchResults.length - 1){
+                return; // Can't go down from the last result
+              }
+              
+              // Select the next entry in the dropdown
+              var oldSelectedElement = searchResults[selectedResultIndex].element;
+              oldSelectedElement.classList.remove("keyboard-selected");
+              var newSelectedElement = searchResults[selectedResultIndex + 1].element;
+              newSelectedElement.classList.add("keyboard-selected");
+              selectedResultIndex++;
+            }
+            
+            function handleResultsUp() {
+              if (searchResults.length < 2){
+                return; // Nothing to change for 0 or 1 results
+              }
+              if (selectedResultIndex === 0){
+                return; // Can't go up from the first result
+              }
+              
+              // Select the next entry in the dropdown
+              var oldSelectedElement = searchResults[selectedResultIndex].element;
+              oldSelectedElement.classList.remove("keyboard-selected");
+              var newSelectedElement = searchResults[selectedResultIndex - 1].element;
+              newSelectedElement.classList.add("keyboard-selected");
+              selectedResultIndex--;
+            }
+            
+            function handleResultsEnter() {
+                window.location = searchResults[selectedResultIndex].url;
+            }
+
             function search(inputElement, resultsElement) {
                 const query = inputElement.value;
                 if (query === undefined || query === null || query === "") {
@@ -138,16 +190,31 @@
                         } else {
                             const results = request.response.results;
                             resultsElement.innerHTML = getSearchHTML(results, count);
-                            if (count === 1) {
-                                inputElement.onkeyup = function(event) {
-                                    if (event.keyCode === 13) {
-                                        event.preventDefault();
-                                        window.location = results[0].url;
-                                    }
-                                };
-                            } else {
-                                inputElement.onkeyup = function() {};
-                            }
+                            
+                            // Save the global array of results, including their URL and the HTML element reference for them
+                            searchResults = results.map(function(result, index) {
+                              return { 
+                                url: result.url, 
+                                element: document.getElementById("search-result-entry-" + index)
+                              }
+                            });
+                            document.getElementById("search-result-entry-0").classList.add("keyboard-selected");
+                            inputElement.onkeyup = function(event) {
+                                if (event.keyCode === 13) { // ENTER
+                                    event.preventDefault();
+                                    handleResultsEnter()
+                                    return;
+                                }
+                                if (event.keyCode === 38) { // ARROW KEY UP
+                                    event.preventDefault();
+                                    handleResultsUp()
+                                    return;
+                                }
+                                if (event.keyCode === 40) { // ARROW KEY DOWN
+                                    event.preventDefault();
+                                    handleResultsDown()
+                                }
+                            };
                         }
                     };
                     request.onerror = function() {
@@ -167,6 +234,7 @@
                 } else {
                     html += "<div class='message smaller-font'>Showing " + results.length + " of " + count + " results</div>";
                 }
+                var index = 0
                 for (const result of results) {
                     let name = result.name;
                     switch (result.type) {
@@ -183,11 +251,12 @@
                             break;
                     }
                     html += "\
-                        <a href='" + result.url + "'>" +
+                        <a id='search-result-entry-" + index + "' href='" + result.url + "'>" +
                             name +
                             "<br />\
                             <span class='smaller-font lighter-text'>" + result.description + "</span>\
                         </a>";
+                    index++;
                 }
                 return html;
             }

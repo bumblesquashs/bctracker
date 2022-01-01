@@ -86,6 +86,10 @@ form input[type="submit"] {
     text-align: left;
 }
 
+#search-desktop #search-desktop-results .keyboard-selected {
+    background-color: #bbbbbb;
+}
+
 #search-desktop #search-desktop-results .message {
     padding: 12px;
     color: #666666;
