@@ -30,12 +30,50 @@ tr.divider {
     background-color: #0A6415 !important;
 }
 
+#header .header-text input[type="text"]:focus {
+    border: 2px solid #00760F;
+}
+
 #map.preview {
     border: 1px solid #565656;
 }
 
 #menu {
     background-color: #00760F;
+}
+
+#search-desktop #search-desktop-results {
+    background-color: #2F2F2F;
+}
+
+#search-desktop #search-desktop-results .keyboard-selected {
+    background-color: #565656;
+}
+
+#search-desktop #search-desktop-results .message {
+    padding: 12px;
+    color: #cbcbcb;
+    text-align: center;
+}
+
+#search-desktop #search-desktop-results a {
+    padding: 5px 12px;
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+#search-desktop #search-desktop-results a:hover {
+    background-color: #565656
+}
+
+#search-non-desktop {
+    background-color: #00760F;
+}
+
+#search-non-desktop input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #0A6415;
 }
 
 #subheader {

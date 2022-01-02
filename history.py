@@ -238,3 +238,15 @@ def get_transfers(system, limit=None):
         
         transfers.append(Transfer(transfer_id, bus, date, old_system_id, new_system_id))
     return transfers
+
+def recorded_buses(system):
+    filters = None
+    if system is not None:
+        filters = {
+            'system_id': system.id
+        }
+    records_data = database.select('records', columns=['DISTINCT bus_number'], filters=filters)
+    buses = []
+    for data in records_data:
+        buses.append(Bus(data['DISTINCT bus_number']))
+    return buses
