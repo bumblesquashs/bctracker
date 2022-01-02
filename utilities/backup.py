@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 from zipfile import ZipFile
 from glob import glob
