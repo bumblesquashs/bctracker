@@ -93,8 +93,8 @@
             
             function clearSearchHighlighting() {
               if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-                var selectedElement = searchResults[selectedResultIndex].element;
-                selectedElement.classList.remove("keyboard-selected");
+                  var selectedElement = searchResults[selectedResultIndex].element;
+                  selectedElement.classList.remove("keyboard-selected");
               }
               selectedResultIndex = 0;
               searchResults = [];
@@ -105,7 +105,6 @@
                     const element = document.getElementById("search-desktop-results");
                     element.classList.add("display-none");
                 }, 200);
-                clearSearchHighlighting();
             }
             
             function searchDesktop() {
@@ -130,33 +129,33 @@
             }
             
             function setSelectedEntry(newIndex) {
-              var oldSelectedElement = searchResults[selectedResultIndex].element;
-              oldSelectedElement.classList.remove("keyboard-selected");
-              var newSelectedElement = searchResults[newIndex].element;
-              newSelectedElement.classList.add("keyboard-selected");
-              selectedResultIndex = newIndex;
+                var oldSelectedElement = searchResults[selectedResultIndex].element;
+                oldSelectedElement.classList.remove("keyboard-selected");
+                var newSelectedElement = searchResults[newIndex].element;
+                newSelectedElement.classList.add("keyboard-selected");
+                selectedResultIndex = newIndex;
             }
             
             function handleResultsDown() {
-              if (searchResults.length < 2){
-                return; // Nothing to change for 0 or 1 results
-              }
-              if (selectedResultIndex === searchResults.length - 1){
-                return; // Can't go down from the last result
-              }
+                if (searchResults.length < 2){
+                    return; // Nothing to change for 0 or 1 results
+                }
+                if (selectedResultIndex === searchResults.length - 1){
+                    return; // Can't go down from the last result
+                }
               
-            setSelectedEntry(selectedResultIndex + 1);
+                setSelectedEntry(selectedResultIndex + 1);
             }
 
             function handleResultsUp() {
-              if (searchResults.length < 2){
-                return; // Nothing to change for 0 or 1 results
-              }
-              if (selectedResultIndex === 0){
-                return; // Can't go up from the first result
-              }
+                if (searchResults.length < 2){
+                    return; // Nothing to change for 0 or 1 results
+                }
+                if (selectedResultIndex === 0){
+                    return; // Can't go up from the first result
+                }
               
-            setSelectedEntry(selectedResultIndex - 1);
+                setSelectedEntry(selectedResultIndex - 1);
             }
             
             function handleResultsEnter() {
