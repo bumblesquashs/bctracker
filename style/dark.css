@@ -46,6 +46,10 @@ tr.divider {
     background-color: #2F2F2F;
 }
 
+#search-desktop #search-desktop-results .keyboard-selected {
+    background-color: #565656;
+}
+
 #search-desktop #search-desktop-results .message {
     padding: 12px;
     color: #cbcbcb;

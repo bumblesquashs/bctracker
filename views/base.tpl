@@ -93,6 +93,15 @@
                 searchFocused = true;
             }
             
+            function clearSearchHighlighting() {
+              if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
+                var selectedElement = searchResults[selectedResultIndex].element;
+                selectedElement.classList.remove("keyboard-selected");
+              }
+              selectedResultIndex = 0;
+              searchResults = [];
+            }
+            
             function searchDesktopBlur() {
                 setTimeout(function() {
                     const element = document.getElementById("search-desktop-results");
@@ -100,15 +109,6 @@
                 }, 200);
                 clearSearchHighlighting();
                 searchFocused = false;
-            }
-            
-            function clearSearchHighlighting() {
-              if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-                var selectedElement = searchResults[selectedResultIndex].element;
-                selectedElement.classList.remove("keyboard-selected");
-              }
-              var selectedResultIndex = 0;
-              var searchResults = [];
             }
             
             function searchDesktop() {
@@ -132,6 +132,14 @@
                 search(inputElement, resultsElement);
             }
             
+            function setSelectedEntry(newIndex) {
+              var oldSelectedElement = searchResults[selectedResultIndex].element;
+              oldSelectedElement.classList.remove("keyboard-selected");
+              var newSelectedElement = searchResults[newIndex].element;
+              newSelectedElement.classList.add("keyboard-selected");
+              selectedResultIndex = newIndex;
+            }
+            
             function handleResultsDown() {
               if (searchResults.length < 2){
                 return; // Nothing to change for 0 or 1 results
@@ -140,14 +148,9 @@
                 return; // Can't go down from the last result
               }
               
-              // Select the next entry in the dropdown
-              var oldSelectedElement = searchResults[selectedResultIndex].element;
-              oldSelectedElement.classList.remove("keyboard-selected");
-              var newSelectedElement = searchResults[selectedResultIndex + 1].element;
-              newSelectedElement.classList.add("keyboard-selected");
-              selectedResultIndex++;
+            setSelectedEntry(selectedResultIndex + 1);
             }
-            
+
             function handleResultsUp() {
               if (searchResults.length < 2){
                 return; // Nothing to change for 0 or 1 results
@@ -156,12 +159,7 @@
                 return; // Can't go up from the first result
               }
               
-              // Select the next entry in the dropdown
-              var oldSelectedElement = searchResults[selectedResultIndex].element;
-              oldSelectedElement.classList.remove("keyboard-selected");
-              var newSelectedElement = searchResults[selectedResultIndex - 1].element;
-              newSelectedElement.classList.add("keyboard-selected");
-              selectedResultIndex--;
+            setSelectedEntry(selectedResultIndex - 1);
             }
             
             function handleResultsEnter() {
@@ -191,6 +189,9 @@
                             const results = request.response.results;
                             resultsElement.innerHTML = getSearchHTML(results, count);
                             
+                            // Reset navigation
+                            clearSearchHighlighting();
+                            
                             // Save the global array of results, including their URL and the HTML element reference for them
                             searchResults = results.map(function(result, index) {
                               return { 
@@ -198,21 +199,22 @@
                                 element: document.getElementById("search-result-entry-" + index)
                               }
                             });
-                            document.getElementById("search-result-entry-0").classList.add("keyboard-selected");
+                            
+                            setSelectedEntry(0);
                             inputElement.onkeyup = function(event) {
                                 if (event.keyCode === 13) { // ENTER
                                     event.preventDefault();
-                                    handleResultsEnter()
+                                    handleResultsEnter();
                                     return;
                                 }
                                 if (event.keyCode === 38) { // ARROW KEY UP
                                     event.preventDefault();
-                                    handleResultsUp()
+                                    handleResultsUp();
                                     return;
                                 }
                                 if (event.keyCode === 40) { // ARROW KEY DOWN
                                     event.preventDefault();
-                                    handleResultsDown()
+                                    handleResultsDown();
                                 }
                             };
                             inputElement.onkeydown = function(event) {
