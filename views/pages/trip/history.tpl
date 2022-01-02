@@ -84,7 +84,7 @@
                 There are a few reasons why that might be the case:
                 <ol>
                     <li>It may be a new trip introduced in the last service change</li>
-                    <li>It may have been cancelled due to driver or vehicle shortages</li>
+                    <li>It may not be operating due to driver or vehicle shortages</li>
                     <li>It may have only been done by buses without functional NextRide equipment installed</li>
                 </ol>
                 Please check again later!

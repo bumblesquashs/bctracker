@@ -26,6 +26,7 @@ form input[type="text"]:focus {
 hr {
     margin-top: 0px;
     margin-bottom: 20px;
+    border-top: 2px solid #989898;
 }
 
 h1, h2, h3, h4 {
@@ -497,7 +498,7 @@ tr.divider {
     border: 1px solid #989898;
     padding: 10px;
     margin: 0px;
-    color: black;
+    color: blue;
     cursor: default;
     font-size: 13pt;
     font-weight: bold;
@@ -518,6 +519,7 @@ tr.divider {
 
 .tab-button.current {
     background-color: #CBCBCB;
+    color: black;
 }
 
 .tab-button.current:hover {

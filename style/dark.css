@@ -228,7 +228,7 @@ tr.divider {
 .tab-button {
     background-color: #2F2F2F;
     border: 1px solid #565656;
-    color: white;
+    color: #04E0FF;
 }
 
 .tab-button:hover {
@@ -237,6 +237,7 @@ tr.divider {
 
 .tab-button.current {
     background-color: #565656;
+    color: white;
 }
 
 .vertical-line {

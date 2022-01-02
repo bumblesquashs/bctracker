@@ -16,7 +16,11 @@
         function busSearch() {
             let value = document.getElementById('bus_search').value;
             if (value.length > 0) {
-                window.location = "{{ get_url(system) }}/bus/" + value;
+                if (isNaN(value)) {
+                    alert("Please enter a valid bus number")
+                } else {
+                    window.location = "{{ get_url(system) }}/bus/" + value;
+                }
             }
         }
         

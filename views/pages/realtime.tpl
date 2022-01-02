@@ -3,10 +3,13 @@
 
 <div class="page-header">
     <h1 class="title">Realtime</h1>
+    <h2 class="subtitle">Currently active vehicles</h2>
     % if group == 'all':
         <div class="tab-button-bar">
             <span class="tab-button current">All Buses</span>
-            <a href="?group=route" class="tab-button">By Route</a>
+            % if system is not None:
+                <a href="?group=route" class="tab-button">By Route</a>
+            % end
             <a href="?group=model" class="tab-button">By Model</a>
         </div>
     % elif group == 'route':
@@ -18,7 +21,9 @@
     % elif group == 'model':
         <div class="tab-button-bar">
             <a href="?group=all" class="tab-button">All Buses</a>
-            <a href="?group=route" class="tab-button">By Route</a>
+            % if system is not None:
+                <a href="?group=route" class="tab-button">By Route</a>
+            % end
             <span class="tab-button current">By Model</span>
         </div>
     % end
