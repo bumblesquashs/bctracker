@@ -9,7 +9,7 @@
 % non_realtime_count = len([s for s in systems if not s.realtime_enabled])
 % realtime_system_names = ', '.join([s.name for s in systems if s.realtime_enabled])
 
-<h2>FAQs</h2>
+<h2>Frequently Asked Questions</h2>
 
 <h3>What is BCTracker?</h3>
 <p>
@@ -55,4 +55,4 @@
 </p>
 
 <br />
-<i> - James & Perrin, 2021 </i>
+<i> - James & Perrin, 2022 </i>
