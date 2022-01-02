@@ -4,11 +4,16 @@
 % from formatting import format_date, format_date_mobile
 % from models.model import BusModelType
 
-% rebase('base', title=f'Bus {bus} - History')
+% rebase('base', title=f'Bus {bus}')
 
 <div class="page-header">
-    <h1 class="title">Bus {{ bus }} - History</h1>
-    <a href="{{ get_url(system, f'bus/{bus.number}') }}">Return to bus overview</a>
+    <h1 class="title">Bus {{ bus }}</h1>
+    <h2 class="subtitle">{{ bus.order }}</h2>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
+        <span class="tab-button current">History</span>
+    </div>
 </div>
 <hr />
 
@@ -101,6 +106,8 @@
                     <th class="desktop-only">End Time</th>
                     <th class="non-desktop">Block</th>
                     <th class="tablet-only">Time</th>
+                    <th class="desktop-only">First Seen</th>
+                    <th class="desktop-only">Last Seen</th>
                 </tr>
             </thead>
             <tbody>
@@ -125,6 +132,8 @@
                         <td class="desktop-only">{{ record.start_time }}</td>
                         <td class="desktop-only">{{ record.end_time }}</td>
                         <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
+                        <td class="desktop-only">{{ record.first_seen }}</td>
+                        <td class="desktop-only">{{ record.last_seen }}</td>
                     </tr>
                 % end
             </tbody>

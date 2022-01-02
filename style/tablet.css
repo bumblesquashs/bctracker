@@ -70,6 +70,24 @@ table {
     font-weight: normal;
 }
 
+#refresh-button {
+    margin-left: 10px;
+    display: inline-block;
+    margin-top: -8px;
+    margin-bottom: -8px;
+}
+
+#refresh-button:hover {
+    cursor: pointer;
+    background-color: #989898;
+    border-radius: 12px;
+}
+
+#refresh-button img {
+    width: 24px;
+    height: 24px;
+}
+
 #search-non-desktop {
     padding: 20px;
     background-color: #255325;
@@ -115,6 +133,10 @@ table {
     color: #cbcbcb;
 }
 
+#subheader * {
+    vertical-align: middle;
+}
+
 #subheader #system {
     display: inline-block;
 }
@@ -152,12 +174,6 @@ table {
     display: none;
 }
 
-.map-button {
-    display: inline-block;
-    margin-top: -15px;
-    margin-bottom: 20px;
-}
-
 .mobile-only {
     display: none;
 }
@@ -168,4 +184,15 @@ table {
 
 .smaller-font {
     font-size: 11pt;
+}
+
+.tab-button-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: -1px;
+}
+
+.tab-button {
+    flex: 1;
 }

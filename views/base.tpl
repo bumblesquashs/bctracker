@@ -268,6 +268,21 @@
                 window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
             }
         </script>
+        
+        % if system is None or system.realtime_enabled:
+            <script>
+                const date = new Date();
+                const timeToNextUpdate = 60 - date.getSeconds();
+                
+                setTimeout(function() {
+                    document.getElementById("refresh-button").classList.remove("display-none");
+                }, 1000 * (timeToNextUpdate + 15));
+                
+                function refresh() {
+                    location.reload();
+                }
+            </script>
+        % end
     </head>
     
     <body>
@@ -406,6 +421,11 @@
             </div>
             % if system is None or system.realtime_enabled:
                 <div id="last-updated">Updated {{ last_updated }}</div>
+                
+                <div id="refresh-button" class="display-none" onclick="refresh()">
+                    <img class="light-only" src="/img/refresh.png" />
+                    <img class="dark-only" src="/img/refresh-white.png" />
+                </div>
             % end
         </div>
         

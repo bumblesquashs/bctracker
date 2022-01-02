@@ -236,14 +236,36 @@ def system_bus_number_map(system_id, number):
 
 @app.route('/history')
 @app.route('/history/')
-def route_history():
-    return system_history(None)
+def history_last_seen():
+    return system_history_last_seen(None)
 
 @app.route('/<system_id>/history')
 @app.route('/<system_id>/history/')
-def system_history(system_id):
+def system_history_last_seen(system_id):
     system = get_system(system_id)
-    return systems_template('history', system_id, records=history.get_last_seen(system), path='history')
+    return systems_template('history/last_seen', system_id, records=history.get_last_seen(system), path='history')
+
+@app.route('/history/first-seen')
+@app.route('/history/first-seen')
+def history_first_seen():
+    return system_history_first_seen(None)
+
+@app.route('/<system_id>/history/first-seen')
+@app.route('/<system_id>/history/first-seen/')
+def system_history_first_seen(system_id):
+    system = get_system(system_id)
+    return systems_template('history/first_seen', system_id, records=history.get_first_seen(system), path='history/first-seen')
+
+@app.route('/history/transfers')
+@app.route('/history/transfers/')
+def history_transfers():
+    return system_history_transfers(None)
+
+@app.route('/<system_id>/history/transfers')
+@app.route('/<system_id>/history/transfers/')
+def system_history_transfers(system_id):
+    system = get_system(system_id)
+    return systems_template('history/transfers', system_id, transfers=history.get_transfers(system), path='history/transfers')
 
 @app.route('/routes')
 @app.route('/routes/')
@@ -253,7 +275,8 @@ def routes():
 @app.route('/<system_id>/routes')
 @app.route('/<system_id>/routes/')
 def system_routes(system_id):
-    return systems_template('routes', system_id, sheet=get_sheet_from_query(default_sheet=Sheet.CURRENT), path='routes')
+    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
+    return systems_template('routes', system_id, sheet=sheet, path='routes')
 
 @app.route('/routes/<number>')
 @app.route('/routes/<number>/')
@@ -271,7 +294,8 @@ def system_routes_number(system_id, number):
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    return systems_template('route/overview', system_id, route=route, sheet=get_sheet_from_query(default_sheet=route.default_sheet))
+    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
+    return systems_template('route/overview', system_id, route=route, sheet=sheet)
 
 @app.route('/routes/<number>/map')
 @app.route('/routes/<number>/map/')
@@ -289,7 +313,8 @@ def system_routes_number_map(system_id, number):
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    return systems_template('route/map', system_id, route=route, sheet=get_sheet_from_query(default_sheet=route.default_sheet))
+    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
+    return systems_template('route/map', system_id, route=route, sheet=sheet)
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -299,7 +324,8 @@ def blocks():
 @app.route('/<system_id>/blocks')
 @app.route('/<system_id>/blocks/')
 def system_blocks(system_id):
-    return systems_template('blocks', system_id, sheet=get_sheet_from_query(default_sheet=Sheet.CURRENT), path='blocks')
+    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
+    return systems_template('blocks', system_id, sheet=sheet, path='blocks')
 
 @app.route('/blocks/<block_id>')
 @app.route('/blocks/<block_id>/')
@@ -315,7 +341,8 @@ def system_blocks_id(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    return systems_template('block/overview', system_id, block=block, sheet=get_sheet_from_query(default_sheet=block.default_sheet))
+    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
+    return systems_template('block/overview', system_id, block=block, sheet=sheet)
 
 @app.route('/blocks/<block_id>/map')
 @app.route('/blocks/<block_id>/map/')
@@ -331,7 +358,25 @@ def system_blocks_id_map(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    return systems_template('block/map', system_id, block=block, sheet=get_sheet_from_query(default_sheet=block.default_sheet))
+    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
+    return systems_template('block/map', system_id, block=block, sheet=sheet)
+
+@app.route('/blocks/<block_id>/history')
+@app.route('/blocks/<block_id>/history/')
+def blocks_id_history(block_id):
+    return system_blocks_id_map(None, block_id)
+
+@app.route('/<system_id>/blocks/<block_id>/history')
+@app.route('/<system_id>/blocks/<block_id>/history/')
+def system_blocks_id_history(system_id, block_id):
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'blocks/{block_id}')
+    block = system.get_block(block_id)
+    if block is None:
+        return systems_error_template('block', system_id, block_id=block_id)
+    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
+    return systems_template('block/history', system_id, block=block, sheet=sheet, records=history.get_block_records(block))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -365,6 +410,22 @@ def system_trips_id_map(system_id, trip_id):
         return systems_error_template('trip', system_id, trip_id=trip_id)
     return systems_template('trip/map', system_id, trip=trip)
 
+@app.route('/trips/<trip_id>/history')
+@app.route('/trips/<trip_id>/history/')
+def trips_id_history(trip_id):
+    return system_trips_id_map(None, trip_id)
+
+@app.route('/<system_id>/trips/<trip_id>/history')
+@app.route('/<system_id>/trips/<trip_id>/history/')
+def system_trips_id_history(system_id, trip_id):
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
+    trip = system.get_trip(trip_id)
+    if trip is None:
+        return systems_error_template('trip', system_id, trip_id=trip_id)
+    return systems_template('trip/history', system_id, trip=trip, records=history.get_trip_records(trip))
+
 @app.route('/stops')
 @app.route('/stops/')
 def stops():
@@ -377,7 +438,8 @@ def system_stops(system_id):
     search = request.query.get('search')
     if search is not None:
         path += f'?search={search}'
-    return systems_template('stops', system_id, search=search, sheet=get_sheet_from_query(default_sheet=Sheet.CURRENT), path=path)
+    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
+    return systems_template('stops', system_id, search=search, sheet=sheet, path=path)
 
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
@@ -393,7 +455,8 @@ def system_stops_number(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    return systems_template('stop/overview', system_id, stop=stop, sheet=get_sheet_from_query(default_sheet=stop.default_sheet))
+    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
+    return systems_template('stop/overview', system_id, stop=stop, sheet=sheet)
 
 @app.route('/stops/<number:int>/map')
 @app.route('/stops/<number:int>/map/')
@@ -409,7 +472,8 @@ def system_stops_number_map(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    return systems_template('stop/map', system_id, stop=stop, sheet=get_sheet_from_query(default_sheet=stop.default_sheet))
+    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
+    return systems_template('stop/map', system_id, stop=stop, sheet=sheet)
 
 @app.route('/about')
 @app.route('/about/')

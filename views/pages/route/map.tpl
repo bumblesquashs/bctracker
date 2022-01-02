@@ -1,9 +1,12 @@
 
-% rebase('base', title=f'{route} - Map', include_maps=True)
+% rebase('base', title=str(route), include_maps=True)
 
 <div class="page-header map-page">
-    <h1 class="title">{{ route }} - Map</h1>
-    <a href="{{ get_url(system, f'routes/{route.number}') }}">Return to route overview</a>
+    <h1 class="title">{{ route }}</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Map</span>
+    </div>
 </div>
 
 % trips = route.get_trips(sheet)

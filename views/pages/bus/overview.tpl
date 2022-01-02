@@ -6,6 +6,11 @@
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
     <h2 class="subtitle">{{ bus.order }}</h2>
+    <div class="tab-button-bar">
+        <span class="tab-button current">Overview</span>
+        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
+    </div>
 </div>
 <hr />
 
@@ -19,8 +24,6 @@
     % elif position.trip is None:
         % include('components/map', map_bus=bus)
         
-        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="map-button">See full map</a>
-        
         <div class="info-box">
             <h3 class="title">Not in service</h3>
         </div>
@@ -28,8 +31,6 @@
         % trip = position.trip
         
         % include('components/map', map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
-        
-        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <h3 class="title">{{ trip }}</h3>
@@ -119,6 +120,8 @@
                     <th class="desktop-only">End Time</th>
                     <th class="non-desktop">Block</th>
                     <th class="tablet-only">Time</th>
+                    <th class="desktop-only">First Seen</th>
+                    <th class="desktop-only">Last Seen</th>
                 </tr>
             </thead>
             <tbody>
@@ -143,13 +146,11 @@
                         <td class="desktop-only">{{ record.start_time }}</td>
                         <td class="desktop-only">{{ record.end_time }}</td>
                         <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
+                        <td class="desktop-only">{{ record.first_seen }}</td>
+                        <td class="desktop-only">{{ record.last_seen }}</td>
                     </tr>
                 % end
             </tbody>
         </table>
-        
-        <div class="history-older">
-            <a href="{{ get_url(system, f'bus/{bus.number}/history') }}">See all history</a>
-        </div>
     % end
 </div>

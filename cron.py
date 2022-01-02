@@ -1,4 +1,5 @@
 import os
+import sys
 import signal
 from datetime import datetime
 from crontab import CronTab
@@ -10,27 +11,28 @@ import history
 import database
 
 PID = os.getpid()
-
-GTFS_CRON_ID = f'gtfs-muncher-{PID}'
-REALTIME_CRON_ID = f'realtime-muncher-{PID}'
+CWD = os.path.dirname(__file__)
+EXC = sys.executable
+CRON_ID = f'bctracker-muncher-{PID}'
 
 def start():
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=GTFS_CRON_ID)
-        cron.remove_all(comment=REALTIME_CRON_ID)
+        cron.remove_all(comment=CRON_ID)
         
-        gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=GTFS_CRON_ID)
+        gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=CRON_ID)
         gtfs_job.setall('0 7 */1 * *')
         
-        realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=REALTIME_CRON_ID)
-        realtime_job.minute.every(2)
+        realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=CRON_ID)
+        realtime_job.minute.every(1)
+        
+        backup_job = cron.new(command=f'{EXC} {CWD}/backup.py', comment=CRON_ID)
+        backup_job.month.every(1)
 
 def stop():
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=GTFS_CRON_ID)
-        cron.remove_all(comment=REALTIME_CRON_ID)
+        cron.remove_all(comment=CRON_ID)
 
 def handle_gtfs(sig, frame):
     weekday = datetime.today().weekday()

@@ -19,8 +19,14 @@ class Order:
             return str(self.year)
         return f'{self.year} {model}'
     
+    def __hash__(self):
+        return hash(str(self))
+    
     def __eq__(self, other):
         return self.low == other.low and self.high == other.high
+    
+    def __lt__(self, other):
+        return str(self) < str(other)
     
     @property
     def model(self):

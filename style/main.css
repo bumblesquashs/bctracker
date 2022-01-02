@@ -24,6 +24,7 @@ form input[type="text"]:focus {
 }
 
 hr {
+    margin-top: 0px;
     margin-bottom: 20px;
 }
 
@@ -452,7 +453,6 @@ tr.divider {
 .page-header.map-page {
     position: relative;
     z-index: 5;
-    display: inline-block;
 }
 
 .page-header .subtitle {
@@ -490,6 +490,38 @@ tr.divider {
     font-size: 12pt;
     color: #464646;
     text-align: center;
+}
+
+.tab-button {
+    background-color: white;
+    border: 1px solid #989898;
+    padding: 10px;
+    margin: 0px;
+    color: black;
+    cursor: default;
+    font-size: 13pt;
+    font-weight: bold;
+    vertical-align: middle;
+    font-family: Helvetica, sans-serif;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.tab-button ~ .tab-button {
+    border-left-width: 0px;
+}
+
+.tab-button:hover {
+    background-color: #E6E6E6;
+    cursor: pointer;
+}
+
+.tab-button.current {
+    background-color: #CBCBCB;
+}
+
+.tab-button.current:hover {
+    cursor: default !important;
 }
 
 .theme-control {

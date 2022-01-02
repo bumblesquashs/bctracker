@@ -4,11 +4,23 @@
 <div class="page-header">
     <h1 class="title">Realtime</h1>
     % if group == 'all':
-        <h2 class="subtitle">All active buses</h2>
+        <div class="tab-button-bar">
+            <span class="tab-button current">All Buses</span>
+            <a href="?group=route" class="tab-button">By Route</a>
+            <a href="?group=model" class="tab-button">By Model</a>
+        </div>
     % elif group == 'route':
-        <h2 class="subtitle">Routes with active buses</h2>
+        <div class="tab-button-bar">
+            <a href="?group=all" class="tab-button">All Buses</a>
+            <span class="tab-button current">By Route</span>
+            <a href="?group=model" class="tab-button">By Model</a>
+        </div>
     % elif group == 'model':
-        <h2 class="subtitle">Models with active buses</h2>
+        <div class="tab-button-bar">
+            <a href="?group=all" class="tab-button">All Buses</a>
+            <a href="?group=route" class="tab-button">By Route</a>
+            <span class="tab-button current">By Model</span>
+        </div>
     % end
 </div>
 <hr />
@@ -40,26 +52,7 @@
             % end
         </div>
     % else:
-        <div class="navigation">
-            % if group == 'all':
-                <span class="button disabled">All Buses</span>
-            % else:
-                <a class="button" href="?group=all">All Buses</a>
-            % end
-            
-            % if group == 'route':
-                <span class="button disabled">By Route</span>
-            % else:
-                <a class="button" href="?group=route">By Route</a>
-            % end
-            
-            % if group == 'model':
-                <span class="button disabled">By Model</span>
-            % else:
-                <a class="button" href="?group=model">By Model</a>
-            % end
-        </div>
-        <br />
+        <div class="navigation"></div>
         
         % if group == 'all':
             <div class="section no-inline">

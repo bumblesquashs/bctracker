@@ -3,6 +3,10 @@
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>
     <h2 class="subtitle">{{ stop }}</h2>
+    <div class="tab-button-bar">
+        <span class="tab-button current">Overview</span>
+        <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
+    </div>
 </div>
 <hr />
 
@@ -14,8 +18,6 @@
     <div id="sidebar">
         <h2>Overview</h2>
         % include('components/map', map_stop=stop)
-        
-        <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <div class="section">
@@ -179,9 +181,7 @@
                 </tbody>
             </table>
         % else:
-            <p>
-                There are no departures in the next 30 minutes.
-            </p>
+            <p>There are no departures in the next 30 minutes.</p>
         % end
         
         <h2>Trip Schedule</h2>

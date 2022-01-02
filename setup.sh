@@ -19,3 +19,5 @@ mkdir -p data/history
 mkdir -p data/realtime
 
 mkdir -p logs
+
+mkdir -p backups
