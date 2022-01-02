@@ -92,12 +92,12 @@
             }
             
             function clearSearchHighlighting() {
-              if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-                  var selectedElement = searchResults[selectedResultIndex].element;
-                  selectedElement.classList.remove("keyboard-selected");
-              }
-              selectedResultIndex = 0;
-              searchResults = [];
+                if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
+                    var selectedElement = searchResults[selectedResultIndex].element;
+                    selectedElement.classList.remove("keyboard-selected");
+                }
+                selectedResultIndex = 0;
+                searchResults = [];
             }
             
             function searchDesktopBlur() {
