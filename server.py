@@ -103,7 +103,6 @@ def systems_template(name, system_id, theme=None, **kwargs):
         no_system_domain=no_system_domain,
         system_domain=system_domain,
         system_domain_path=system_domain_path,
-        show_survey_banner=request.get_cookie('survey_banner', 'show') == 'show',
         cookie_domain=cookie_domain,
         **kwargs
     )
