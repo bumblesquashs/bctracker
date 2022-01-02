@@ -15,8 +15,21 @@ a {
     background-color: #E20000 !important;
 }
 
+#header .header-text input[type="text"]:focus {
+    border: 2px solid #840000;
+}
+
 #menu {
     background-color: #840000;
+}
+
+#search-non-desktop {
+    background-color: #840000;
+}
+
+#search-non-desktop input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #E20000;
 }
 
 #subheader {
