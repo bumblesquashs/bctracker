@@ -1,6 +1,7 @@
 
 from math import sqrt
 
+from models.search_result import SearchResult
 from models.service import Sheet
 from models.time import get_current_minutes
 
@@ -86,6 +87,21 @@ class Stop:
         current_mins = get_current_minutes()
         return [d for d in departures if d.trip.service.is_today and current_mins <= d.time.get_minutes() <= current_mins + 30]
     
-    def get_departures_today(self, sheet):
-        departures = self.get_departures(sheet)
-        return [d for d in departures if d.trip.service.is_today]
+    def get_search_result(self, query):
+        query = query.lower()
+        number = str(self.number).lower()
+        name = self.name.lower()
+        match = 0
+        if query in number:
+            match += (len(query) / len(number)) * 100
+            if number.startswith(query):
+                match += len(query)
+        elif query in name:
+            match += (len(query) / len(name)) * 100
+            if name.startswith(query):
+                match += len(query)
+            if match > 20:
+                match -= 20
+            else:
+                match = 1
+        return SearchResult('stop', str(self.number), self.name, f'stops/{self.number}', match)
