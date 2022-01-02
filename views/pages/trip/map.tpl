@@ -1,10 +1,16 @@
 
-% rebase('base', title=f'Trip {trip.id} - Map', include_maps=True)
+% rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
 <div class="page-header map-page">
-    <h1 class="title">Trip {{ trip.id }} - Map</h1>
+    <h1 class="title">Trip {{ trip.id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
-    <a href="{{ get_url(system, f'trips/{trip.id}') }}">Return to trip overview</a>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Map</span>
+        % if system.realtime_enabled:
+            <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
+        % end
+    </div>
 </div>
 
 % departures = trip.departures

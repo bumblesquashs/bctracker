@@ -70,6 +70,12 @@ table {
     font-weight: normal;
 }
 
+#refresh-button {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+}
+
 #search-non-desktop {
     padding: 20px;
     background-color: #255325;
@@ -154,18 +160,23 @@ table {
     table-layout: fixed;
 }
 
-.map-button {
-    display: inline-block;
-    margin-top: -15px;
-    margin-bottom: 20px;
-}
-
 .non-mobile {
     display: none;
 }
 
 .smaller-font {
     font-size: 11pt;
+}
+
+.tab-button-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: -1px;
+}
+
+.tab-button {
+    flex: 1;
 }
 
 .tablet-only {

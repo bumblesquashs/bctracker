@@ -1,9 +1,15 @@
 
-% rebase('base', title=f'Block {block.id} - Map', include_maps=True)
+% rebase('base', title=f'Block {block.id}', include_maps=True)
 
 <div class="page-header map-page">
-    <h1 class="title">Block {{ block.id }} - Map</h1>
-    <a href="{{ get_url(system, f'blocks/{block.id}') }}">Return to block overview</a>
+    <h1 class="title">Block {{ block.id }}</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'blocks/{block.id}') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Map</span>
+        % if system.realtime_enabled:
+            <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
+        % end
+    </div>
 </div>
 
 % trips = block.get_trips(sheet)

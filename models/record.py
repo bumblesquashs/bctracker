@@ -2,7 +2,8 @@
 from models.system import get_system
 
 class Record:
-    def __init__(self, bus, date, system_id, block_id, routes, start_time, end_time):
+    def __init__(self, record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen):
+        self.id = record_id
         self.bus = bus
         self.date = date
         self.system_id = system_id
@@ -10,6 +11,8 @@ class Record:
         self.routes = routes
         self.start_time = start_time
         self.end_time = end_time
+        self.first_seen = first_seen
+        self.last_seen = last_seen
     
     @property
     def system(self):

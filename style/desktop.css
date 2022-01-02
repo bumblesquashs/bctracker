@@ -107,6 +107,24 @@ form input[type="submit"] {
     background-color: #e6e6e6
 }
 
+#refresh-button {
+    margin-left: 10px;
+    display: inline-block;
+    margin-top: -8px;
+    margin-bottom: -8px;
+}
+
+#refresh-button:hover {
+    cursor: pointer;
+    background-color: #989898;
+    border-radius: 12px;
+}
+
+#refresh-button img {
+    width: 24px;
+    height: 24px;
+}
+
 #subheader #system {
     display: inline-block;
 }
@@ -128,15 +146,13 @@ form input[type="submit"] {
     width: 100%;
 }
 
-#sidebar .map-button {
-    display: inline-block;
-    margin-top: -15px;
-    margin-bottom: 20px;
-}
-
 #sidebar + * {
     float: none;
     overflow: hidden;
+}
+
+#subheader * {
+    vertical-align: middle;
 }
 
 #survey-banner a {
@@ -266,8 +282,22 @@ form input[type="submit"] {
     display: none;
 }
 
+.page-header.map-page {
+    display: inline-block;
+}
+
 .smaller-font {
     font-size: 11pt;
+}
+
+.tab-button-bar {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: -1px;
+}
+
+.tab-button {
+    min-width: 100px;
 }
 
 .tablet-only {

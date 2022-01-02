@@ -5,14 +5,19 @@
 <div class="page-header">
     <h1 class="title">Trip {{ trip.id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
+    <div class="tab-button-bar">
+        <span class="tab-button current">Overview</span>
+        <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
+        % if system.realtime_enabled:
+            <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
+        % end
+    </div>
 </div>
 <hr />
 
 <div id="sidebar">
     <h2>Overview</h2>
     % include('components/map', map_trip=trip, map_buses=[p.bus for p in positions])
-    
-    <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="map-button">See full map</a>
     
     <div class="info-box">
         <div class="section">

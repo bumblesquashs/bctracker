@@ -3,6 +3,10 @@
 
 <div class="page-header">
     <h1 class="title">{{ route }}</h1>
+    <div class="tab-button-bar">
+        <span class="tab-button current">Overview</span>
+        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
+    </div>
 </div>
 <hr />
 
@@ -17,8 +21,6 @@
     <div id="sidebar">
         <h2>Overview</h2>
         % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
-        
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="map-button">See full map</a>
         
         <div class="info-box">
             <div class="section">
