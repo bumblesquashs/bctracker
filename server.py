@@ -16,7 +16,7 @@ import realtime
 import history
 
 # Increase the version to force CSS reload
-VERSION = 2
+VERSION = 3
 
 app = Bottle()
 
