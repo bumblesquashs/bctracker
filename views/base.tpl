@@ -91,13 +91,12 @@
                 }
             }
             
-            function clearSearchHighlighting() {
+            function clearSearchHighlighting() { 
                 if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
                     var selectedElement = searchResults[selectedResultIndex].element;
-                    selectedElement.classList.remove("keyboard-selected");
+                    selectedElement.classList.remove("keyboard-selected"); 
                 }
-                selectedResultIndex = 0;
-                searchResults = [];
+                selectedResultIndex = 0; searchResults = [];
             }
             
             function searchDesktopBlur() {
@@ -239,8 +238,8 @@
                 } else {
                     html += "<div class='message smaller-font'>Showing " + results.length + " of " + count + " results</div>";
                 }
-                var index = 0
-                for (const result of results) {
+                for (i = 0; i < results.length; i++) {
+                    let result = results[i]
                     let name = result.name;
                     switch (result.type) {
                         case "bus":
@@ -256,12 +255,11 @@
                             break;
                     }
                     html += "\
-                        <a id='search-result-entry-" + index + "' href='" + result.url + "'>" +
+                        <a id='search-result-entry-" + i + "' href='" + result.url + "'>" +
                             name +
                             "<br />\
                             <span class='smaller-font lighter-text'>" + result.description + "</span>\
                         </a>";
-                    index++;
                 }
                 return html;
             }
