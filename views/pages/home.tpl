@@ -93,11 +93,11 @@
     <div class="news-post">
         <div class="header">
             <h3>Winter Update</h3>
-            Date TBD
+            January 2, 2022
         </div>
         <div class="content">
             <p>
-                Hey everyone, it's once again time for a quick update!
+                Hey everyone, it's once again time for a quick(ish) update!
             </p>
             <p>
                 First of all, a huge thank you to everyone who has participated in our survey so far!
