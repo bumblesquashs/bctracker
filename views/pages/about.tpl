@@ -10,6 +10,7 @@
 % realtime_system_names = ', '.join([s.name for s in systems if s.realtime_enabled])
 
 <h2>Frequently Asked Questions</h2>
+<br />
 
 <h3>What is BCTracker?</h3>
 <p>
