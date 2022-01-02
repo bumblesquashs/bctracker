@@ -58,7 +58,6 @@
         % end
         
         <script>
-            var searchFocused = false;
             var selectedResultIndex = 0;
             var searchResults = [];
             
@@ -90,7 +89,6 @@
                 } else {
                     element.classList.remove("display-none");
                 }
-                searchFocused = true;
             }
             
             function clearSearchHighlighting() {
@@ -108,7 +106,6 @@
                     element.classList.add("display-none");
                 }, 200);
                 clearSearchHighlighting();
-                searchFocused = false;
             }
             
             function searchDesktop() {
