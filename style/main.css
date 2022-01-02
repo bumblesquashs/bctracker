@@ -18,6 +18,11 @@ form input[type="text"] {
     padding: 5px;
 }
 
+form input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #255325;
+}
+
 hr {
     margin-bottom: 20px;
 }
@@ -74,6 +79,10 @@ tr.divider {
 
 #header .header-button.disabled:hover {
     background-color: #49a348 !important;
+}
+
+#header .right {
+    float: right !important;
 }
 
 #content {

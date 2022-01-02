@@ -1,5 +1,7 @@
 import csv
 
+from models.service import Sheet
+
 class System:
     def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, non_current_sheets_enabled, bctransit_id, mapstrat_id):
         self.id = system_id
@@ -93,6 +95,16 @@ class System:
         if sheet is None:
             return self.trips.values()
         return [t for t in self.trips.values() if t.service.sheet == sheet]
+    
+    def search_routes(self, query):
+        routes = self.get_routes(Sheet.CURRENT)
+        results = [r.get_search_result(query) for r in routes]
+        return [r for r in results if r.match > 0]
+    
+    def search_stops(self, query):
+        stops = self.get_stops(Sheet.CURRENT)
+        results = [s.get_search_result(query) for s in stops]
+        return [r for r in results if r.match > 0]
     
     def sort_data(self):
         for stop in self.stops.values():
