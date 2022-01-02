@@ -309,12 +309,31 @@ def system_routes_number_map(system_id, number):
         redirect(get_url('fvx', 'routes/66/map'))
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'routes/{number}')
+        return systems_error_template('system', system_id, path=f'routes/{number}/map')
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
     sheet = get_sheet_from_query(default_sheet=route.default_sheet)
     return systems_template('route/map', system_id, route=route, sheet=sheet)
+
+@app.route('/routes/<number>/schedule')
+@app.route('/routes/<number>/schedule/')
+def routes_number_schedule(number):
+    return system_routes_number_schedule(None, number)
+
+@app.route('/<system_id>/routes/<number>/schedule')
+@app.route('/<system_id>/routes/<number>/schedule/')
+def system_routes_number_schedule(system_id, number):
+    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
+        redirect(get_url('fvx', 'routes/66/schedule'))
+    system = get_system(system_id)
+    if system is None:
+        return systems_error_template('system', system_id, path=f'routes/{number}/schedule')
+    route = system.get_route(number=number)
+    if route is None:
+        return systems_error_template('route', system_id, number=number)
+    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
+    return systems_template('route/schedule', system_id, route=route, sheet=sheet)
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -404,7 +423,7 @@ def trips_id_map(trip_id):
 def system_trips_id_map(system_id, trip_id):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
+        return systems_error_template('system', system_id, path=f'trips/{trip_id}/map')
     trip = system.get_trip(trip_id)
     if trip is None:
         return systems_error_template('trip', system_id, trip_id=trip_id)
@@ -420,7 +439,7 @@ def trips_id_history(trip_id):
 def system_trips_id_history(system_id, trip_id):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
+        return systems_error_template('system', system_id, path=f'trips/{trip_id}/history')
     trip = system.get_trip(trip_id)
     if trip is None:
         return systems_error_template('trip', system_id, trip_id=trip_id)
@@ -468,7 +487,7 @@ def stops_number_map(number):
 def system_stops_number_map(system_id, number):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'stops/{number}')
+        return systems_error_template('system', system_id, path=f'stops/{number}/map')
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)

@@ -1,3 +1,5 @@
+% from datetime import datetime
+% from formatting import format_date
 
 % rebase('base', title=str(route), include_maps=True)
 
@@ -6,6 +8,7 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 <hr />
@@ -15,8 +18,6 @@
     % trips = route.get_trips(sheet)
     % headsigns = route.get_headsigns(sheet)
     % positions = sorted(route.positions)
-    
-    % direction_ids = {t.direction_id for t in trips}
     
     <div id="sidebar">
         <h2>Overview</h2>
@@ -97,39 +98,32 @@
             </table>
         % end
         
-        <h2>Trip Schedule</h2>
-        <div class="container">
-            % if len(services) > 1:
-                <div class="navigation">
-                    % for service in services:
-                        <a href="#{{service}}" class='button'>{{ service }}</a>
-                    % end
-                </div>
-                <br />
-            % end
-            
-            % for service in services:
-                % service_trips = [t for t in trips if t.service == service]
-                <div class="section">
-                    <h3 class="title" id="{{service}}">{{ service }}</h3>
-                    <div class="subtitle">{{ service.date_string }}</div>
-                    <div class="container">
-                        % for direction_id in direction_ids:
-                            % direction_trips = [t for t in service_trips if t.direction_id == direction_id]
-                            % if len(direction_trips) > 0:
-                                <div class="section">
-                                    % if len(direction_ids) > 1:
-                                        % directions = sorted({t.direction for t in direction_trips})
-                                        <h4>{{ '/'.join(directions) }}</h4>
-                                    % end
-                                    % include('components/service_trips', trips=direction_trips)
-                                </div>
+        <h2>Today's Schedule</h2>
+        
+        % today_trips = [t for t in trips if t.service.is_today]
+        % direction_ids = {t.direction_id for t in today_trips}
+        
+        % if len(today_trips) == 0:
+            <p>
+                There are no trips for this route today.
+                You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.
+            </p>
+        % else:
+            <div class="container">
+                % for direction_id in direction_ids:
+                    % direction_trips = [t for t in today_trips if t.direction_id == direction_id]
+                    % if len(direction_trips) > 0:
+                        <div class="section">
+                            % if len(direction_ids) > 1:
+                                % directions = sorted({t.direction for t in direction_trips})
+                                <h3>{{ '/'.join(directions) }}</h3>
                             % end
-                        % end
-                    </div>
-                </div>
-            % end
-        </div>
+                            % include('components/service_trips', trips=direction_trips)
+                        </div>
+                    % end
+                % end
+            </div>
+        % end
     </div>
     
     % include('components/top_button')
