@@ -20,7 +20,7 @@ form input[type="text"] {
 
 form input[type="text"]:focus {
     outline: none;
-    border: 2px solid #255325;
+    border: 2px solid #0C610C;
 }
 
 hr {
@@ -43,7 +43,7 @@ table hr {
 }
 
 tr.divider {
-    border-top: 4px solid #989898
+    border-top: 4px solid #989898;
 }
 
 #header {
@@ -51,7 +51,7 @@ tr.divider {
     z-index: 20;
     margin: 0px;
     padding: 0px;
-    background-color: #49a348;
+    background-color: #278427;
 }
 
 #header .title {
@@ -71,7 +71,7 @@ tr.divider {
 }
 
 #header .header-button:hover {
-    background-color: #255325;
+    background-color: #0C610C;
 }
 
 #header .header-button.disabled {
@@ -80,7 +80,7 @@ tr.divider {
 }
 
 #header .header-button.disabled:hover {
-    background-color: #49a348 !important;
+    background-color: #48A348 !important;
 }
 
 #header .right {
@@ -108,22 +108,39 @@ tr.divider {
     border: 1px solid #989898;
 }
 
+#refresh-button {
+    margin-left: 10px;
+    display: inline-block;
+}
+
+#refresh-button:hover {
+    cursor: pointer;
+    background-color: #0C610C;
+    border-radius: 16px;
+}
+
+#refresh-button img {
+    width: 32px;
+    height: 32px;
+}
+
 #subheader {
     position: relative;
     z-index: 10;
     margin: 0px;
     padding: 10px 20px;
-    background-color: #cbcbcb;
+    background-color: #48A348;
+    color: white;
     cursor: default;
     vertical-align: middle;
 }
 
-#subheader #system {
-    font-weight: bold;
+#subheader .content {
+    display: inline-block;
 }
 
-#subheader #last-updated {
-    color: #222222;
+#subheader #system {
+    font-weight: bold;
 }
 
 #survey-banner {
@@ -199,7 +216,7 @@ tr.divider {
 }
 
 .button {
-    background-color: #49a348;
+    background-color: #48A348;
     border-width: 0px;
     border-radius: 5px;
     padding: 10px;
@@ -212,7 +229,7 @@ tr.divider {
 }
 
 .button:hover {
-    background-color: #255325;
+    background-color: #0C610C;
     cursor: pointer;
 }
 
@@ -278,7 +295,7 @@ tr.divider {
 }
 
 .info-box {
-    background-color: #e6e6e6;
+    background-color: #E6E6E6;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #989898;
@@ -293,13 +310,13 @@ tr.divider {
 }
 
 .info-box .section {
-    border-bottom: 1px solid #cbcbcb;
+    border-bottom: 1px solid #CBCBCB;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
 .info-box .section:last-child {
-    border-bottom: 0px solid #cbcbcb;
+    border-bottom: 0px solid #CBCBCB;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
@@ -336,7 +353,7 @@ tr.divider {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    background-color: #49a348;
+    background-color: #48A348;
 }
 
 .marker .icon img {
@@ -420,13 +437,13 @@ tr.divider {
 }
 
 .news-post {
-    background-color: #e6e6e6;
+    background-color: #E6E6E6;
     margin-top: 20px;
     border: 1px solid #989898;
 }
 
 .news-post .header {
-    background-color: #cbcbcb;
+    background-color: #CBCBCB;
     border-bottom: 1px solid #989898;
     padding: 10px;
 }
@@ -454,6 +471,10 @@ tr.divider {
 .page-header.map-page {
     position: relative;
     z-index: 5;
+}
+
+.page-header.map-page .tab-button {
+    border-bottom-width: 2px;
 }
 
 .page-header .subtitle {
@@ -496,6 +517,7 @@ tr.divider {
 .tab-button {
     background-color: white;
     border: 1px solid #989898;
+    border-bottom-width: 0px;
     padding: 10px;
     margin: 0px;
     color: blue;

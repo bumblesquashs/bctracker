@@ -31,7 +31,7 @@ https://github.com/pure-css/pure/blob/master/LICENSE.md
 }
 
 .pure-table thead {
-    background-color: #cbcbcb;
+    background-color: #CBCBCB;
     color: #000;
     text-align: left;
     vertical-align: bottom;
@@ -46,12 +46,12 @@ striping:
     background-color: transparent;
 }
 .pure-table-odd td {
-    background-color: #e6e6e6;
+    background-color: #E6E6E6;
 }
 
 /* nth-child selector for modern browsers */
 .pure-table-striped tr:nth-child(2n-1) td {
-    background-color: #e6e6e6;
+    background-color: #E6E6E6;
 }
 
 /* BORDERED TABLES */

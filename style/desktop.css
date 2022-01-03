@@ -54,7 +54,7 @@ form input[type="submit"] {
 
 #header .header-text input[type="text"]:focus {
     outline: none;
-    border: 2px solid #255325;
+    border: 2px solid #0C610C;
 }
 
 #header .header-text input[type="text"]::placeholder {
@@ -87,7 +87,7 @@ form input[type="submit"] {
 }
 
 #search-desktop #search-desktop-results .keyboard-selected {
-    background-color: #cbcbcb;
+    background-color: #CBCBCB;
 }
 
 #search-desktop #search-desktop-results .message {
@@ -104,35 +104,11 @@ form input[type="submit"] {
 }
 
 #search-desktop #search-desktop-results a:hover {
-    background-color: #e6e6e6
-}
-
-#refresh-button {
-    margin-left: 10px;
-    display: inline-block;
-    margin-top: -8px;
-    margin-bottom: -8px;
-}
-
-#refresh-button:hover {
-    cursor: pointer;
-    background-color: #989898;
-    border-radius: 12px;
-}
-
-#refresh-button img {
-    width: 24px;
-    height: 24px;
-}
-
-#subheader #system {
-    display: inline-block;
+    background-color: #E6E6E6;
 }
 
 #subheader #last-updated {
-    display: inline-block;
     font-size: 12pt;
-    margin-left: 10px;
 }
 
 #sidebar {
@@ -234,7 +210,7 @@ form input[type="submit"] {
 }
 
 .dropdown .content a:hover {
-    background-color: #e6e6e6
+    background-color: #E6E6E6;
 }
 
 .dropdown .content a.disabled {
@@ -293,7 +269,6 @@ form input[type="submit"] {
 .tab-button-bar {
     display: flex;
     flex-direction: row;
-    margin-bottom: -1px;
 }
 
 .tab-button {

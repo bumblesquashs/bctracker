@@ -58,7 +58,7 @@ table {
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;
-    background-color: #255325;
+    background-color: #0C610C;
 }
 
 #menu .header-button {
@@ -70,15 +70,9 @@ table {
     font-weight: normal;
 }
 
-#refresh-button {
-    position: absolute;
-    right: 20px;
-    top: 12px;
-}
-
 #search-non-desktop {
     padding: 20px;
-    background-color: #255325;
+    background-color: #0C610C;
     font-family: Helvetica, sans-serif;
 }
 
@@ -95,7 +89,7 @@ table {
 
 #search-non-desktop input[type="text"]:focus {
     outline: none;
-    border: 2px solid #49a348;
+    border: 2px solid #48A348;
 }
 
 #search-non-desktop #search-non-desktop-results {
@@ -104,7 +98,7 @@ table {
 
 #search-non-desktop #search-non-desktop-results .message {
     padding: 10px 0px;
-    color: #cbcbcb;
+    color: #CBCBCB;
     text-align: center;
     font-size: 16pt;
 }
@@ -122,7 +116,7 @@ table {
 }
 
 #search-non-desktop #search-non-desktop-results a .lighter-text {
-    color: #cbcbcb;
+    color: #CBCBCB;
 }
 
 #subheader-system {

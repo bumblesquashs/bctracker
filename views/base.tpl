@@ -410,21 +410,23 @@
         </div>
         
         <div id="subheader">
-            <div id="system">
-                % if system is None:
-                    All Transit Systems
-                % elif system.id == 'fvx':
-                    Fraser Valley Express
-                % else:
-                    {{ system }} Regional Transit System
+            <div class="content">
+                <div id="system">
+                    % if system is None:
+                        All Transit Systems
+                    % elif system.id == 'fvx':
+                        Fraser Valley Express
+                    % else:
+                        {{ system }} Regional Transit System
+                    % end
+                </div>
+                % if system is None or system.realtime_enabled:
+                    <div id="last-updated">Updated {{ last_updated }}</div>
                 % end
             </div>
             % if system is None or system.realtime_enabled:
-                <div id="last-updated">Updated {{ last_updated }}</div>
-                
                 <div id="refresh-button" class="display-none" onclick="refresh()">
-                    <img class="light-only" src="/img/refresh.png" />
-                    <img class="dark-only" src="/img/refresh-white.png" />
+                    <img src="/img/refresh-white.png" />
                 </div>
             % end
         </div>
