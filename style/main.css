@@ -468,6 +468,11 @@ tr.divider {
     border: 1px solid white;
 }
 
+.scheduled-indicator {
+    color: #FD393E;
+    font-weight: bold;
+}
+
 .service-indicator {
     margin: -5px -2px;
     text-align: center;

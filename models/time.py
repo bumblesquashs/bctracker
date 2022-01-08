@@ -43,6 +43,18 @@ class Time:
             return ''
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
+    @property
+    def is_earlier(self):
+        return self.get_minutes() < get_current_minutes()
+    
+    @property
+    def is_now(self):
+        return self.get_minutes() == get_current_minutes()
+    
+    @property
+    def is_later(self):
+        return self.get_minutes() > get_current_minutes()
+    
     def get_minutes(self):
         return (self.hour * 60) + self.minute
     
