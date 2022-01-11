@@ -46,7 +46,7 @@
                                         <th class="mobile-only">Start</th>
                                         <th>Headsign</th>
                                         <th class="desktop-only">Departing From</th>
-                                        <th class="desktop-only">Block</th>
+                                        <th class="non-mobile">Block</th>
                                         <th>Trip</th>
                                     </tr>
                                 </thead>
@@ -62,7 +62,7 @@
                                             <td>{{ trip.start_time }}</td>
                                             <td>{{ trip }}</td>
                                             <td class="desktop-only"><a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a></td>
-                                            <td class="desktop-only"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
+                                            <td class="non-mobile"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
                                             <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
                                         </tr>
                                         % if this_hour > last_hour:

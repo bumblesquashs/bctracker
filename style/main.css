@@ -46,6 +46,10 @@ tr.divider {
     border-top: 4px solid #989898
 }
 
+td * {
+    vertical-align: middle;
+}
+
 #header {
     position: relative;
     z-index: 20;
@@ -469,8 +473,7 @@ tr.divider {
 }
 
 .scheduled-indicator {
-    color: #FD393E;
-    font-weight: bold;
+    vertical-align: middle;
 }
 
 .service-indicator {

@@ -66,20 +66,25 @@
         
         % if len(today_departures) == 0:
             There are no departures from this stop today.
-            You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.
+            You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.
         % else:
             % today_buses = today(stop.system, list({d.trip.block_id for d in today_departures}))
             % recorded_buses = today_buses['recorded']
             % scheduled_buses = today_buses['scheduled']
             
             % if system is None or system.realtime_enabled:
-                <span>Buses with a <span class="scheduled-indicator">*</span> are scheduled but may be swapped off or cancelled</span>
+                <p>
+                    <span>Buses with a</span>
+                    <img class="scheduled-indicator light-only" src="/img/schedule.png" />
+                    <img class="scheduled-indicator dark-only" src="/img/schedule-white.png" />
+                    <span>are scheduled but may be swapped off</span>
+                </p>
             % end
             <table class="pure-table pure-table-horizontal pure-table-striped">
                 <thead>
                     <tr>
                         <th>Time</th>
-                        <th>Headsign</th>
+                        <th class="non-mobile">Headsign</th>
                         <th class="desktop-only">Block</th>
                         <th>Trip</th>
                         % if system is None or system.realtime_enabled:
@@ -99,7 +104,7 @@
                         % end
                         <tr class="{{'divider' if this_hour > last_hour else ''}}">
                             <td>{{ departure.time }}</td>
-                            <td>
+                            <td class="non-mobile">
                                 {{ trip }}
                                 % if departure == trip.first_departure:
                                     <br />
@@ -110,7 +115,13 @@
                                 % end
                             </td>
                             <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                            <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                            <td>
+                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                <span class="mobile-only smaller-font">
+                                    <br />
+                                    {{ trip }}
+                                </span>
+                            </td>
                             % if system is None or system.realtime_enabled:
                                 % if trip.id in recorded_buses:
                                     % bus = recorded_buses[trip.id]
@@ -141,10 +152,12 @@
                                     % bus = scheduled_buses[trip.block_id]
                                     % order = bus.order
                                     <td>
+                                        <img class="scheduled-indicator light-only" src="/img/schedule.png" />
+                                        <img class="scheduled-indicator dark-only" src="/img/schedule-white.png" />
                                         % if bus.is_unknown:
-                                            {{ bus }} <span class="scheduled-indicator">*</span>
+                                            {{ bus }}
                                         % else:
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a> <span class="scheduled-indicator">*</span>
+                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                         % end
                                         % if order is not None:
                                             <span class="non-desktop smaller-font">

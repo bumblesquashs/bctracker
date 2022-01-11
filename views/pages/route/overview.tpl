@@ -122,8 +122,14 @@
                                 % directions = sorted({t.direction for t in direction_trips})
                                 <h3>{{ '/'.join(directions) }}</h3>
                             % end
+                            
                             % if system is None or system.realtime_enabled:
-                                <span>Buses with a <span class="scheduled-indicator">*</span> are scheduled but may be swapped off or cancelled</span>
+                                <p>
+                                    <span>Buses with a</span>
+                                    <img class="scheduled-indicator light-only" src="/img/schedule.png" />
+                                    <img class="scheduled-indicator dark-only" src="/img/schedule-white.png" />
+                                    <span>are scheduled but may be swapped off</span>
+                                </p>
                             % end
                             <table class="pure-table pure-table-horizontal pure-table-striped">
                                 <thead>
@@ -190,10 +196,12 @@
                                                     % bus = scheduled_buses[trip.block_id]
                                                     % order = bus.order
                                                     <td>
+                                                        <img class="scheduled-indicator light-only" src="/img/schedule.png" />
+                                                        <img class="scheduled-indicator dark-only" src="/img/schedule-white.png" />
                                                         % if bus.is_unknown:
-                                                            {{ bus }} <span class="scheduled-indicator">*</span>
+                                                            {{ bus }}
                                                         % else:
-                                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a> <span class="scheduled-indicator">*</span>
+                                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                                         % end
                                                         % if order is not None:
                                                             <span class="non-desktop smaller-font">
