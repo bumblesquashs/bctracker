@@ -423,6 +423,10 @@ td * {
     top: 20px;
 }
 
+.middle-align {
+    vertical-align: middle;
+}
+
 .news-post {
     background-color: #e6e6e6;
     margin-top: 20px;
@@ -470,10 +474,6 @@ td * {
     padding: 1px 6px;
     font-weight: bold;
     border: 1px solid white;
-}
-
-.scheduled-indicator {
-    vertical-align: middle;
 }
 
 .service-indicator {

@@ -55,10 +55,7 @@
                                     <td>{{ departure.time }}</td>
                                     <td>
                                         {{ trip }}
-                                        % if departure == trip.first_departure:
-                                            <br />
-                                            <span class="smaller-font">Loading only</span>
-                                        % elif departure == trip.last_departure:
+                                        % if departure == trip.last_departure:
                                             <br />
                                             <span class="smaller-font">Unloading only</span>
                                         % end
