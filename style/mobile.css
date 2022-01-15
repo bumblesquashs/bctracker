@@ -71,9 +71,11 @@ table {
 }
 
 #search-non-desktop {
+    position: relative;
     padding: 20px;
     background-color: #0C610C;
     font-family: Helvetica, sans-serif;
+    z-index: 10;
 }
 
 #search-non-desktop input[type="text"] {
