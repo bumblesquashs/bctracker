@@ -29,6 +29,10 @@
         </div>
     % else:
         % trip = position.trip
+        % stop = position.stop
+        % block = trip.block
+        % route = trip.route
+        % sheet = trip.service.sheet
         
         % include('components/map', map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
         
@@ -42,22 +46,25 @@
             <div class="section">
                 <div class="name">Route</div>
                 <div class="value">
-                    <a href="{{ get_url(trip.route.system, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
+                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
                 </div>
             </div>
             <div class="section">
                 <div class="name">Block</div>
                 <div class="value">
-                    <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                    <br />
+                    <span class="smaller-font">{{ block.get_start_time(sheet) }} - {{ block.get_end_time(sheet) }} ({{ block.get_duration(sheet) }})</span>
                 </div>
             </div>
             <div class="section">
                 <div class="name">Trip</div>
                 <div class="value">
                     <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                    <br />
+                    <span class="smaller-font">{{ trip.start_time }} - {{ trip.end_time }} ({{ trip.duration }})</span>
                 </div>
             </div>
-            % stop = position.stop
             % if stop is not None:
                 <div class="section">
                     <div class="name">Current Stop</div>
