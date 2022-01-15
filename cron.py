@@ -22,13 +22,13 @@ def start():
         cron.remove_all(comment=CRON_ID)
         
         gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=CRON_ID)
-        gtfs_job.setall('0 7 */1 * *')
+        gtfs_job.setall('0 7 * * 1')
         
         realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=CRON_ID)
         realtime_job.minute.every(1)
         
         backup_job = cron.new(command=f'{EXC} {CWD}/backup.py', comment=CRON_ID)
-        backup_job.month.every(1)
+        backup_job.setall('0 0 1 * *')
 
 def stop():
     with CronTab(user=True) as cron:
