@@ -2,17 +2,16 @@
  * 
  * Primary Background: #2F2F2F
  * Secondary Background: #393939
- * Site Header: #046204
+ * Primary Header: #046204
+ * Secondary Header: #188018
  * Menu: #004000
- * Table Header: #188018
  * Borders: #565656
  * Selection: #565656
  * 
  * Primary Text: #FFFFFF
  * Secondary Text: #ABABAB
  * Links: #04E0FF
- * Buttons: #188018
- * Hover/Focus: #004000
+ * Buttons: #010195
  * 
  * Other colors may also be used for specific purposes
  */
@@ -187,12 +186,12 @@ tr.divider {
 }
 
 .button {
-    background-color: #188018;
+    background-color: #010195;
     color: white;
 }
 
 .button:hover {
-    background-color: #004000;
+    background-color: #010153;
 }
 
 .button.disabled {
