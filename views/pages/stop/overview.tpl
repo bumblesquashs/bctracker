@@ -37,7 +37,7 @@
         % nearby_stops = sorted(stop.get_nearby_stops(sheet))
         % if len(nearby_stops) > 0:
             <h2>Nearby Stops</h2>
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Number</th>
@@ -63,7 +63,7 @@
         <h2>Upcoming Departures</h2>
         % if len(upcoming_departures) > 0:
             Scheduled departures in the next 30 minutes.
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Time</th>
@@ -202,7 +202,7 @@
                     <div class="section">
                         <h3 class="title" id="{{service}}">{{ service }}</h3>
                         <div class="subtitle">{{ service.date_string }}</div>
-                        <table class="pure-table pure-table-horizontal pure-table-striped">
+                        <table class="striped">
                             <thead>
                                 <tr>
                                     <th>Time</th>

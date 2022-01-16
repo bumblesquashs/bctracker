@@ -1,50 +1,68 @@
 /* COLOR REFERENCE
  * 
- * Primary Background: #FFFFFF
- * Secondary Background: #E6E6E6
- * Primary Header: #278427
- * Secondary Header: #48A348
- * Menu: #0C610C
- * Borders: #989898
+ * Primary Background: #FFFBEF
+ * Secondary Background: #D8D8D8
+ * Primary Header: #61C315
+ * Secondary Header: #249B9B
+ * Menu: #347800
+ * Borders: #666666
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
- * Links: #0000FF
- * Buttons: #0000FF
+ * Links: #026E6E
+ * Buttons: #61C315
  * 
  * Other colors may also be used for specific purposes
- */
+*/
 
 a {
-    color: #0000FF;
+    color: #026E6E;
 }
 
 body {
-    background-color: #FFFFFF;
+    background-color: #FFFBEF;
     color: #000000;
 }
 
 form input[type="text"] {
-    border-color: #989898;
+    border-color: #666666;
     background-color: #FFFFFF;
     color: #000000;
 }
 
 form input[type="text"]:focus {
-    border-color: #0C610C;
+    border-color: #347800;
 }
 
 hr {
-    border-top-color: #989898;
+    border-top-color: #666666;
 }
 
-tr.divider {
-    border-top-color: #989898;
+table.striped {
+    border-color: #666666;
+}
+
+table.striped td {
+    border-color: #666666;
+}
+
+table.striped th {
+    background-color: #249B9B;
+    color: #FFFFFF;
+    border-color: #666666;
+}
+
+table.striped tr {
+    background-color: #FFFFFF;
+}
+
+table.striped tr:nth-child(2n-1) td {
+    background-color: #D8D8D8;
 }
 
 #header {
-    background-color: #278427;
+    background-color: #61C315;
 }
 
 #header .header-button {
@@ -52,11 +70,11 @@ tr.divider {
 }
 
 #header .header-button:hover {
-    background-color: #0C610C;
+    background-color: #347800;
 }
 
 #header .header-button.disabled:hover {
-    background-color: #278427 !important;
+    background-color: #61C315 !important;
 }
 
 #header .header-text {
@@ -70,7 +88,7 @@ tr.divider {
 }
 
 #header .header-text input[type="text"]:focus {
-    border-color: #0C610C;
+    border-color: #347800;
 }
 
 #header .header-text input[type="text"]::placeholder {
@@ -80,7 +98,7 @@ tr.divider {
 #header .header-text input[type="text"]:-ms-input-placeholder {
     color: #666666;
 }
-
+  
 #header .header-text input[type="text"]::-ms-input-placeholder {
     color: #666666;
 }
@@ -90,11 +108,11 @@ tr.divider {
 }
 
 #map.preview {
-    border-color: #989898;
+    border-color: #666666;
 }
 
 #menu {
-    background-color: #0C610C;
+    background-color: #347800;
 }
 
 #menu .menu-button {
@@ -102,7 +120,7 @@ tr.divider {
 }
 
 #refresh-button:hover {
-    background-color: #0C610C;
+    background-color: #026E6E;
 }
 
 #search-desktop #search-desktop-results {
@@ -114,7 +132,7 @@ tr.divider {
 }
 
 #search-desktop #search-desktop-results a:hover {
-    background-color: #E6E6E6;
+    background-color: #D8D8D8;
 }
 
 #search-desktop #search-desktop-results .keyboard-selected {
@@ -126,7 +144,7 @@ tr.divider {
 }
 
 #search-non-desktop {
-    background-color: #0C610C;
+    background-color: #347800;
 }
 
 #search-non-desktop input[type="text"] {
@@ -134,7 +152,7 @@ tr.divider {
 }
 
 #search-non-desktop input[type="text"]:focus {
-    border-color: #48A348;
+    border-color: #61C315;
 }
 
 #search-non-desktop #search-non-desktop-results a {
@@ -150,7 +168,7 @@ tr.divider {
 }
 
 #subheader {
-    background-color: #48A348;
+    background-color: #249B9B;
     color: #FFFFFF;
 }
 
@@ -188,12 +206,12 @@ tr.divider {
 }
 
 .button {
-    background-color: #0000FF;
+    background-color: #61C315;
     color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #010195;
+    background-color: #347800;
 }
 
 .button.disabled {
@@ -230,7 +248,7 @@ tr.divider {
 }
 
 .dropdown .content a:hover {
-    background-color: #E6E6E6;
+    background-color: #D8D8D8;
 }
 
 .dropdown .content a.disabled {
@@ -246,8 +264,8 @@ tr.divider {
 }
 
 .info-box {
-    background-color: #E6E6E6;
-    border-color: #989898;
+    background-color: #D8D8D8;
+    border-color: #666666;
 }
 
 .info-box .section {
@@ -260,23 +278,18 @@ tr.divider {
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #48A348;
+    background-color: #61C315;
 }
 
 .news-post {
-    background-color: #E6E6E6;
-    border-color: #989898;
+    background-color: #D8D8D8;
+    border-color: #666666;
 }
 
 .news-post .header {
-    background-color: #48A348;
-    color: white;
-    border-bottom-color: #989898;
-}
-
-.pure-table thead {
-    background-color: #48A348;
+    background-color: #249B9B;
     color: #FFFFFF;
+    border-bottom-color: #666666;
 }
 
 .route-number {
@@ -285,17 +298,17 @@ tr.divider {
 }
 
 .service-indicator .details {
-    color: #666666;
+    color: #464646;
 }
 
 .tab-button {
     background-color: #FFFFFF;
-    border-color: #989898;
-    color: #0000FF;
+    border-color: #666666;
+    color: #026E6E;
 }
 
 .tab-button:hover {
-    background-color: #E6E6E6;
+    background-color: #D8D8D8;
     cursor: pointer;
 }
 

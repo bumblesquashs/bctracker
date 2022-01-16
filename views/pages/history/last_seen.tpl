@@ -20,7 +20,7 @@
     
     % include('components/systems', realtime_only=True)
 % else:
-    <table class="pure-table pure-table-horizontal pure-table-striped">
+    <table class="striped">
         <thead>
             <tr>
                 <th class="desktop-only">Number</th>

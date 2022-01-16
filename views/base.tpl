@@ -15,33 +15,44 @@
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         
         <link rel="stylesheet" href="/style/main.css?version={{ version }}" />
-        <link rel="stylesheet" href="/style/tables.css?version={{ version }}" />
         
-        <link rel="stylesheet" media="screen and (min-width: 1001px)" href="/style/desktop.css?version={{ version }}" />
-        <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/tablet.css?version={{ version }}" />
-        <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/mobile.css?version={{ version }}" />
+        <link rel="stylesheet" media="screen and (min-width: 1001px)" href="/style/devices/desktop.css?version={{ version }}" />
+        <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
+        <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
         % if theme == "light":
-            <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
+            <link rel="stylesheet" href="/style/themes/light.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = false
             </script>
         % elif theme == "dark":
-            <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
+            <link rel="stylesheet" href="/style/themes/dark.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = true
             </script>
         % elif theme == "classic":
-            <link rel="stylesheet" href="/style/classic.css?version={{ version }}" />
+            <link rel="stylesheet" href="/style/themes/classic.css?version={{ version }}" />
+            
+            <script>
+                const prefersDarkScheme = false
+            </script>
+        % elif theme == "bchydro":
+            <link rel="stylesheet" href="/style/themes/bchydro.css?version={{ version }}" />
+            
+            <script>
+                const prefersDarkScheme = false
+            </script>
+        % elif theme == "uta":
+            <link rel="stylesheet" href="/style/themes/uta.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = false
             </script>
         % else:
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css?version={{ version }}" />
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css?version={{ version }}" />
+            <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
+            <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
             
             <script>
                 const prefersDarkScheme = window.matchMedia("screen and (prefers-color-scheme: dark)").matches;

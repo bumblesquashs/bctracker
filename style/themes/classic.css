@@ -5,7 +5,7 @@
  * Primary Header: #E20000
  * Secondary Header: #023496
  * Menu: #840000
- * Borders: #989898
+ * Borders: #666666
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
@@ -14,7 +14,7 @@
  * Buttons: #E20000
  * 
  * Other colors may also be used for specific purposes
- */
+*/
 
 a {
     color: #023496;
@@ -26,7 +26,7 @@ body {
 }
 
 form input[type="text"] {
-    border-color: #989898;
+    border-color: #666666;
     background-color: #FFFFFF;
     color: #000000;
 }
@@ -36,11 +36,29 @@ form input[type="text"]:focus {
 }
 
 hr {
-    border-top-color: #989898;
+    border-top-color: #666666;
 }
 
-tr.divider {
-    border-top-color: #989898;
+table.striped {
+    border-color: #666666;
+}
+
+table.striped td {
+    border-color: #666666;
+}
+
+table.striped th {
+    background-color: #023496;
+    color: #FFFFFF;
+    border-color: #666666;
+}
+
+table.striped tr {
+    background-color: #FFFFFF;
+}
+
+table.striped tr:nth-child(2n-1) td {
+    background-color: #E6E6E6;
 }
 
 #header {
@@ -90,7 +108,7 @@ tr.divider {
 }
 
 #map.preview {
-    border-color: #989898;
+    border-color: #666666;
 }
 
 #menu {
@@ -102,7 +120,7 @@ tr.divider {
 }
 
 #refresh-button:hover {
-    background-color: #840000;
+    background-color: #011E58;
 }
 
 #search-desktop #search-desktop-results {
@@ -247,7 +265,7 @@ tr.divider {
 
 .info-box {
     background-color: #E6E6E6;
-    border-color: #989898;
+    border-color: #666666;
 }
 
 .info-box .section {
@@ -265,18 +283,13 @@ tr.divider {
 
 .news-post {
     background-color: #E6E6E6;
-    border-color: #989898;
+    border-color: #666666;
 }
 
 .news-post .header {
     background-color: #023496;
     color: #FFFFFF;
-    border-bottom-color: #989898;
-}
-
-.pure-table thead {
-    background-color: #023496;
-    color: #FFFFFF;
+    border-bottom-color: #666666;
 }
 
 .route-number {
@@ -290,7 +303,7 @@ tr.divider {
 
 .tab-button {
     background-color: #FFFFFF;
-    border-color: #989898;
+    border-color: #666666;
     color: #023496;
 }
 

@@ -39,11 +39,34 @@ p {
     margin-top: 0px;
 }
 
-table hr {
-    margin-bottom: 0.5em;
+table.striped {
+    border-collapse: collapse;
+    border-spacing: 0px;
+    empty-cells: show;
+    border-width: 1px;
+    border-style: solid;
+    margin-bottom: 20px;
 }
 
-tr.divider {
+table.striped td {
+    border-width: 0 0 1 0px;
+    border-style: solid;
+    margin: 0px;
+    overflow: visible;
+    padding: 0.5em 1em;
+}
+
+table.striped th {
+    text-align: left;
+    vertical-align: top;
+    border-width: 0 0 1 0px;
+    border-style: solid;
+    margin: 0px;
+    overflow: visible;
+    padding: 0.5em 1em;
+}
+
+table.striped tr.divider {
     border-top-width: 4px;
     border-top-style: solid;
 }
@@ -195,6 +218,16 @@ tr.divider {
 
 .button.disabled:hover {
     cursor: default;
+}
+
+.button-container {
+    font-size: 0px;
+    margin-bottom: -5px;
+}
+
+.button-container .button {
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 .checkbox {

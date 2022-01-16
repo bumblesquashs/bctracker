@@ -1,5 +1,5 @@
 
-<table class="pure-table pure-table-horizontal pure-table-striped fixed-table">
+<table class="striped fixed-table">
     <thead>
         <tr>
             <th class="desktop-only">Number</th>
