@@ -379,27 +379,27 @@
         <div id="menu" class="non-desktop display-none">
             <div class="tablet-only">
                 % if system is None or system.realtime_enabled:
-                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
-                    <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                    <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                    <a class="menu-button" href="{{ get_url(system, 'history') }}">History</a>
+                    <a class="menu-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                    <a class="menu-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
                 % end
             </div>
             
             <div class="mobile-only">
                 % if system is None or system.realtime_enabled:
-                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
-                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
+                    <a class="menu-button" href="{{ get_url(system, 'map') }}">Map</a>
+                    <a class="menu-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                    <a class="menu-button" href="{{ get_url(system, 'history') }}">History</a>
                 % end
-                <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                <a class="menu-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
             </div>
             
-            <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
+            <a class="menu-button" href="{{ get_url(system, 'about') }}">About</a>
             
             % if len(systems) > 1:
                 % path = get('path', '')
-                <a class="header-button" href="{{ get_url(system, f'systems?path={path}') }}">Change System</a>
+                <a class="menu-button" href="{{ get_url(system, f'systems?path={path}') }}">Change System</a>
             % end
         </div>
         

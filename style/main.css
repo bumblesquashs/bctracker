@@ -1,6 +1,5 @@
 
 a {
-    color: blue;
     text-decoration: none;
 }
 
@@ -13,20 +12,22 @@ form input {
 }
 
 form input[type="text"] {
-    border: 2px solid gray;
+    border-width: 2px;
+    border-style: solid;
     border-radius: 5px;
     padding: 5px;
 }
 
 form input[type="text"]:focus {
     outline: none;
-    border: 2px solid #0C610C;
 }
 
 hr {
     margin-top: 0px;
     margin-bottom: 20px;
-    border-top: 2px solid #989898;
+    border-width: 0px;
+    border-top-width: 2px;
+    border-top-style: solid;
 }
 
 h1, h2, h3, h4 {
@@ -43,7 +44,8 @@ table hr {
 }
 
 tr.divider {
-    border-top: 4px solid #989898;
+    border-top-width: 4px;
+    border-top-style: solid;
 }
 
 #header {
@@ -51,7 +53,6 @@ tr.divider {
     z-index: 20;
     margin: 0px;
     padding: 0px;
-    background-color: #278427;
 }
 
 #header .title {
@@ -61,7 +62,6 @@ tr.divider {
 #header .header-button {
     float: left;
     display: block;
-    color: white;
     text-align: center;
     padding: 15px 20px;
     text-decoration: none !important;
@@ -70,17 +70,9 @@ tr.divider {
     font-weight: normal;
 }
 
-#header .header-button:hover {
-    background-color: #0C610C;
-}
-
 #header .header-button.disabled {
     cursor: default;
     opacity: 0.7;
-}
-
-#header .header-button.disabled:hover {
-    background-color: #48A348 !important;
 }
 
 #header .right {
@@ -105,7 +97,8 @@ tr.divider {
     width: 100%;
     height: 300px;
     margin-bottom: 20px;
-    border: 1px solid #989898;
+    border-width: 1px;
+    border-style: solid;
 }
 
 #refresh-button {
@@ -115,7 +108,6 @@ tr.divider {
 
 #refresh-button:hover {
     cursor: pointer;
-    background-color: #0C610C;
     border-radius: 16px;
 }
 
@@ -129,8 +121,6 @@ tr.divider {
     z-index: 10;
     margin: 0px;
     padding: 10px 20px;
-    background-color: #48A348;
-    color: white;
     cursor: default;
     vertical-align: middle;
 }
@@ -148,15 +138,9 @@ tr.divider {
     z-index: 10;
     margin: 0px;
     padding: 10px 20px;
-    background-color: #FFB960;
     cursor: default;
     vertical-align: middle;
-    color: white;
     text-align: center;
-}
-
-#survey-banner a {
-    color: white;
 }
 
 #survey-banner .close-button {
@@ -191,36 +175,13 @@ tr.divider {
     font-weight: bold;
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
-    color: white;
     float: left;
 }
 
-.adherence-indicator.ahead {
-    background-color: #FF9A3A
-}
-
-.adherence-indicator.behind {
-    background-color: #FF9A3A;
-}
-
-.adherence-indicator.on-time {
-    background-color: #3C5ABE;
-}
-
-.adherence-indicator.very-ahead {
-    background-color: #FD393E;
-}
-
-.adherence-indicator.very-behind {
-    background-color: #FD393E;
-}
-
 .button {
-    background-color: #48A348;
     border-width: 0px;
     border-radius: 5px;
     padding: 10px;
-    color: white;
     cursor: default;
     font-weight: bold;
     font-family: Helvetica, sans-serif;
@@ -229,25 +190,11 @@ tr.divider {
 }
 
 .button:hover {
-    background-color: #0C610C;
     cursor: pointer;
-}
-
-.button.disabled {
-    background-color: #8a8a8a;
 }
 
 .button.disabled:hover {
     cursor: default;
-    background-color: #8a8a8a !important;
-}
-
-.button.survey-button {
-    background-color: #FF8E00;
-}
-
-.button.survey-button:hover {
-    background-color: #AD6100;
 }
 
 .checkbox {
@@ -257,9 +204,9 @@ tr.divider {
 }
 
 .checkbox .box {
-    border: 1px solid black;
+    border-width: 1px;
+    border-style: solid;
     border-radius: 5px;
-    background-color: white;
     display: inline-block;
     vertical-align: middle;
     margin-right: 5px;
@@ -287,18 +234,13 @@ tr.divider {
     opacity: 0;
 }
 
-.horizontal-line {
-    height: 2px;
-    width: calc(100% - 40px);
-    background-color: #989898;
-    margin: 20px;
-}
-
 .info-box {
     background-color: #E6E6E6;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #989898;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #989898;
 }
 
 .info-box .title {
@@ -310,13 +252,15 @@ tr.divider {
 }
 
 .info-box .section {
-    border-bottom: 1px solid #CBCBCB;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #CBCBCB;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
 .info-box .section:last-child {
-    border-bottom: 0px solid #CBCBCB;
+    border-bottom-width: 0px;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
@@ -332,51 +276,12 @@ tr.divider {
     text-align: right;
 }
 
-.lighter-text {
-    color: #666666;
-}
-
 .marker {
     position: relative;
 }
 
 .marker:hover {
     z-index: 100;
-}
-
-.marker .icon {
-    display: block;
-    width: 32px;
-    height: 32px;
-    border-radius: 18px;
-    border: 2px solid white;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #48A348;
-}
-
-.marker .icon img {
-    width: 24px;
-    height: 24px;
-    left: 4px;
-    top: 4px;
-    position: relative;
-}
-
-.marker .icon .link {
-    background-color: black;
-    opacity: 0;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    border-radius: 18px;
-}
-
-.marker .icon ~ * .hover-only {
-    display: none;
 }
 
 .marker .details {
@@ -411,6 +316,41 @@ tr.divider {
     border-radius: 3px;
 }
 
+.marker .icon {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 18px;
+    border-width: 2px;
+    border-style: solid;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.marker .icon img {
+    width: 24px;
+    height: 24px;
+    left: 4px;
+    top: 4px;
+    position: relative;
+}
+
+.marker .icon .link {
+    background-color: #000000;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: 18px;
+}
+
+.marker .icon ~ * .hover-only {
+    display: none;
+}
+
 .marker .icon:hover .link {
     opacity: 0.3;
     cursor: pointer;
@@ -437,14 +377,14 @@ tr.divider {
 }
 
 .news-post {
-    background-color: #E6E6E6;
     margin-top: 20px;
-    border: 1px solid #989898;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .news-post .header {
-    background-color: #CBCBCB;
-    border-bottom: 1px solid #989898;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
     padding: 10px;
 }
 
@@ -483,10 +423,10 @@ tr.divider {
 
 .route-number {
     display: inline-block;
-    color: white;
     padding: 1px 6px;
     font-weight: bold;
-    border: 1px solid white;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .service-indicator {
@@ -510,17 +450,15 @@ tr.divider {
 
 .service-indicator .details {
     font-size: 12pt;
-    color: #464646;
     text-align: center;
 }
 
 .tab-button {
-    background-color: white;
-    border: 1px solid #989898;
+    border-width: 1px;
+    border-style: solid;
     border-bottom-width: 0px;
     padding: 10px;
     margin: 0px;
-    color: blue;
     cursor: default;
     font-size: 13pt;
     font-weight: bold;
@@ -535,13 +473,7 @@ tr.divider {
 }
 
 .tab-button:hover {
-    background-color: #E6E6E6;
     cursor: pointer;
-}
-
-.tab-button.current {
-    background-color: #CBCBCB;
-    color: black;
 }
 
 .tab-button.current:hover {
@@ -555,13 +487,4 @@ tr.divider {
 
 .theme-control .button {
     display: inline-block;
-}
-
-.vertical-line {
-    display: inline-block;
-    vertical-align: middle;
-    height: 25px;
-    width: 2px;
-    background-color: #989898;
-    margin: 0px 10px 0px 5px;
 }

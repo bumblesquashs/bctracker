@@ -1,3 +1,21 @@
+/* COLOR REFERENCE
+ * 
+ * Primary Background: #2F2F2F
+ * Secondary Background: #393939
+ * Site Header: #046204
+ * Menu: #004000
+ * Table Header: #188018
+ * Borders: #565656
+ * Selection: #565656
+ * 
+ * Primary Text: #FFFFFF
+ * Secondary Text: #ABABAB
+ * Links: #04E0FF
+ * Buttons: #188018
+ * Hover/Focus: #004000
+ * 
+ * Other colors may also be used for specific purposes
+ */
 
 a {
     color: #04E0FF;
@@ -5,45 +23,95 @@ a {
 
 body {
     background-color: #2F2F2F;
-    color: white;
+    color: #FFFFFF;
 }
 
 form input[type="text"] {
-    border: 2px solid #565656;
+    border-color: #565656;
     background-color: #2F2F2F;
-    color: white;
+    color: #FFFFFF;
+}
+
+form input[type="text"]:focus {
+    border-color: #004000;
+}
+
+hr {
+    border-top-color: #565656;
 }
 
 tr.divider {
-    border-top: 4px solid #565656;
+    border-top-color: #565656;
 }
 
 #header {
-    background-color: #0A6415;
+    background-color: #046204;
+}
+
+#header .header-button {
+    color: #FFFFFF;
 }
 
 #header .header-button:hover {
-    background-color: #00760F;
+    background-color: #004000;
 }
 
 #header .header-button.disabled:hover {
-    background-color: #0A6415 !important;
+    background-color: #046204 !important;
+}
+
+#header .header-text input[type="text"] {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
 }
 
 #header .header-text input[type="text"]:focus {
-    border: 2px solid #00760F;
+    border-color: #004000;
+}
+
+#header .header-text input[type="text"]::placeholder {
+    color: #666666;
+}
+
+#header .header-text input[type="text"]:-ms-input-placeholder {
+    color: #666666;
+}
+  
+#header .header-text input[type="text"]::-ms-input-placeholder {
+    color: #666666;
+}
+
+#header .menu-toggle .line {
+    background-color: #FFFFFF;
 }
 
 #map.preview {
-    border: 1px solid #565656;
+    border-color: #565656;
 }
 
 #menu {
-    background-color: #00760F;
+    background-color: #004000;
+}
+
+#menu .menu-button {
+    color: #FFFFFF;
+}
+
+#refresh-button:hover {
+    background-color: #004000;
 }
 
 #search-desktop #search-desktop-results {
     background-color: #2F2F2F;
+}
+
+#search-desktop #search-desktop-results a {
+    color: #FFFFFF;
+}
+
+#search-desktop #search-desktop-results a:hover {
+    background-color: #393939
 }
 
 #search-desktop #search-desktop-results .keyboard-selected {
@@ -51,41 +119,51 @@ tr.divider {
 }
 
 #search-desktop #search-desktop-results .message {
-    padding: 12px;
-    color: #CBCBCB;
-    text-align: center;
-}
-
-#search-desktop #search-desktop-results a {
-    padding: 5px 12px;
-    color: white;
-    text-decoration: none;
-    display: block;
-}
-
-#search-desktop #search-desktop-results a:hover {
-    background-color: #565656
+    color: #ABABAB;
 }
 
 #search-non-desktop {
-    background-color: #00760F;
+    background-color: #004000;
+}
+
+#search-non-desktop input[type="text"] {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
 }
 
 #search-non-desktop input[type="text"]:focus {
-    outline: none;
-    border: 2px solid #0A6415;
+    border-color: #125112;
+}
+
+#search-non-desktop #search-non-desktop-results a {
+    color: #FFFFFF;
+}
+
+#search-non-desktop #search-non-desktop-results a .lighter-text {
+    color: #FFFFFF;
+}
+
+#search-non-desktop #search-non-desktop-results .message {
+    color: #FFFFFF;
 }
 
 #subheader {
-    background-color: #565656;
-}
-
-#subheader #last-updated {
-    color: #EEEEEE;
+    background-color: #188018;
+    color: #FFFFFF;
 }
 
 #survey-banner {
     background-color: #8A4D00;
+    color: #FFFFFF;
+}
+
+#survey-banner a {
+    color: #FFFFFF;
+}
+
+.adherence-indicator {
+    color: #FFFFFF;
 }
 
 .adherence-indicator.ahead {
@@ -109,11 +187,12 @@ tr.divider {
 }
 
 .button {
-    background-color: #0A6415;
+    background-color: #188018;
+    color: white;
 }
 
 .button:hover {
-    background-color: #00760F;
+    background-color: #004000;
 }
 
 .button.disabled {
@@ -124,16 +203,29 @@ tr.divider {
     background-color: #565656 !important;
 }
 
+.button.survey-button {
+    background-color: #FF8E00;
+}
+
+.button.survey-button:hover {
+    background-color: #AD6100;
+}
+
+.checkbox .box {
+    border-color: #000000;
+    background-color: #FFFFFF;
+}
+
 .dropdown .content {
     background-color: #2F2F2F;
 }
 
 .dropdown .content a {
-    color: white;
+    color: #FFFFFF;
 }
 
 .dropdown .content a:hover {
-    background-color: #565656
+    background-color: #393939
 }
 
 .dropdown .content a.disabled {
@@ -148,21 +240,13 @@ tr.divider {
     color: #ABABAB;
 }
 
-.horizontal-line {
-    background-color: #565656;
-}
-
 .info-box {
     background-color: #393939;
-    border: 1px solid #565656;
+    border-color: #565656;
 }
 
 .info-box .section {
-    border-bottom: 1px solid #565656;
-}
-
-.info-box .section:last-child {
-    border-bottom: 0px solid #565656;
+    border-bottom-color: #565656;
 }
 
 .light-only {
@@ -174,18 +258,18 @@ tr.divider {
 }
 
 .marker .icon {
-    background-color: #0A6415;
-    border: 2px solid #393939;
+    background-color: #188018;
+    border-color: #393939;
 }
 
 .news-post {
     background-color: #393939;
-    border: 1px solid #565656;
+    border-color: #565656;
 }
 
 .news-post .header {
-    background-color: #565656;
-    border-bottom: 1px solid #565656;
+    background-color: #188018;
+    border-bottom-color: #565656;
 }
 
 .pure-table {
@@ -199,7 +283,7 @@ tr.divider {
 }
 
 .pure-table thead {
-    background-color: #565656;
+    background-color: #188018;
     color: white;
 }
 
@@ -221,13 +305,18 @@ tr.divider {
     border-bottom: 1px solid #565656;
 }
 
+.route-number {
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
 .service-indicator .details {
     color: #ABABAB;
 }
 
 .tab-button {
     background-color: #2F2F2F;
-    border: 1px solid #565656;
+    border-color: #565656;
     color: #04E0FF;
 }
 
@@ -237,9 +326,5 @@ tr.divider {
 
 .tab-button.current {
     background-color: #565656;
-    color: white;
-}
-
-.vertical-line {
-    background-color: #565656;
+    color: #FFFFFF;
 }

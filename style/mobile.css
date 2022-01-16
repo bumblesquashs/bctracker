@@ -41,7 +41,6 @@ table {
 }
 
 #header .menu-toggle .line {
-    background-color: white;
     width: 32px;
     height: 4px;
     border-radius: 2px;
@@ -58,10 +57,9 @@ table {
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;
-    background-color: #0C610C;
 }
 
-#menu .header-button {
+#menu .menu-button {
     display: block;
     color: white;
     padding: 15px 20px;
@@ -73,52 +71,43 @@ table {
 #search-non-desktop {
     position: relative;
     padding: 20px;
-    background-color: #0C610C;
     font-family: Helvetica, sans-serif;
     z-index: 10;
 }
 
 #search-non-desktop input[type="text"] {
-    border: 2px solid white;
+    border-width: 2px;
+    border-style: solid;
     border-radius: 5px;
     font-size: 16px;
     padding: 5px;
     -webkit-appearance: none;
-    background-color: white;
-    color: black;
     width: 100%;
 }
 
 #search-non-desktop input[type="text"]:focus {
     outline: none;
-    border: 2px solid #48A348;
 }
 
 #search-non-desktop #search-non-desktop-results {
     margin-top: 10px;
 }
 
+#search-non-desktop #search-non-desktop-results a {
+    padding: 10px 0px;
+    text-decoration: none;
+    display: block;
+    font-size: 16pt;
+}
+
 #search-non-desktop #search-non-desktop-results .message {
     padding: 10px 0px;
-    color: #CBCBCB;
     text-align: center;
     font-size: 16pt;
 }
 
 #search-non-desktop #search-non-desktop-results .message.smaller-font {
     font-size: 14pt;
-}
-
-#search-non-desktop #search-non-desktop-results a {
-    padding: 10px 0px;
-    color: white;
-    text-decoration: none;
-    display: block;
-    font-size: 16pt;
-}
-
-#search-non-desktop #search-non-desktop-results a .lighter-text {
-    color: #CBCBCB;
 }
 
 #subheader-system {
