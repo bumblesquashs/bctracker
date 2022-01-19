@@ -78,6 +78,12 @@
                     </div>
                 </div>
             % end
+            % if show_speed:
+                <div class="section">
+                    <div class="name">Speed</div>
+                    <div class="value">{{ position.speed }} km/h</div>
+                </div>
+            % end
         </div>
     % end
     

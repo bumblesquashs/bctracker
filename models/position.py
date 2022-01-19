@@ -15,6 +15,7 @@ class Position:
         self.lat = None
         self.lon = None
         self.schedule_adherence = None
+        self.speed = 0
     
     def __eq__(self, other):
         return self.bus == other.bus
