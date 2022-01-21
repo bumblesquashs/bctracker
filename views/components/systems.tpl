@@ -4,7 +4,7 @@
   % available_systems = systems
 % end
 
-<table class="pure-table pure-table-horizontal pure-table-striped">
+<table class="striped">
 	<thead>
 		<tr>
 			<th>System</th>

@@ -15,7 +15,7 @@
     % include('components/systems')
 % else:
     % routes = system.get_routes(sheet)
-    <table class="pure-table pure-table-horizontal pure-table-striped">
+    <table class="striped">
         <thead>
             <tr>
                 <th>Route</th>
@@ -32,7 +32,7 @@
     
     % if system.id == 'chilliwack' or system.id == 'cfv':
         % fvx = get_system('fvx')
-        <table class="pure-table pure-table-horizontal pure-table-striped">
+        <table class="striped">
             <thead>
                 <tr>
                     <th>Fraser Valley Express (FVX)</th>
@@ -49,7 +49,7 @@
     % if system.id == 'fvx':
         % cfv = get_system('cfv')
         % chilliwack = get_system('chilliwack')
-        <table class="pure-table pure-table-horizontal pure-table-striped">
+        <table class="striped">
             <thead>
                 <tr>
                     <th>Related Systems</th>

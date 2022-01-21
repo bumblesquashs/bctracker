@@ -60,7 +60,7 @@
     % related_trips = trip.related_trips
     % if len(related_trips) > 0:
         <h2>Related Trips</h2>
-        <table class="pure-table pure-table-horizontal pure-table-striped">
+        <table class="striped">
             <thead>
                 <tr>
                     <th>Trip</th>
@@ -85,7 +85,7 @@
 <div>
     % if len(positions) > 0:
         <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>
-        <table class="pure-table pure-table-horizontal pure-table-striped">
+        <table class="striped">
             <thead>
                 <tr>
                     <th>Bus</th>
@@ -133,7 +133,7 @@
     % end
     
     <h2>Stop Schedule</h2>
-    <table class="pure-table pure-table-horizontal pure-table-striped">
+    <table class="striped">
         <thead>
             <tr>
                 <th>Time</th>

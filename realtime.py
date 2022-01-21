@@ -59,6 +59,7 @@ def update_positions(system):
         try:
             position.lat = vehicle.position.latitude
             position.lon = vehicle.position.longitude
+            position.speed = int(vehicle.position.speed * 3.6)
         except AttributeError: pass
         positions[bus_number] = position
         position.calculate_schedule_adherence()

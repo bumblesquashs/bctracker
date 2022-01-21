@@ -26,7 +26,7 @@
         <p>{{ system }} does not have any recorded transfers.</p>
     % end
 % else:
-    <table class="pure-table pure-table-horizontal pure-table-striped">
+    <table class="striped">
         <thead>
             <tr>
                 <th>Date</th>

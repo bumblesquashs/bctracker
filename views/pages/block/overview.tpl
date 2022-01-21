@@ -60,7 +60,7 @@
         % related_blocks = block.get_related_blocks(sheet)
         % if len(related_blocks) > 0:
             <h2>Related Blocks</h2>
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Block</th>
@@ -82,7 +82,7 @@
     <div>
         % if len(positions) > 0:
             <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Bus</th>
@@ -134,7 +134,7 @@
         % end
         
         <h2>Trip Schedule</h2>
-        <table class="pure-table pure-table-horizontal pure-table-striped">
+        <table class="striped">
             <thead>
                 <tr>
                     <th class="non-mobile">Start Time</th>
