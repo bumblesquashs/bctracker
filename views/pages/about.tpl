@@ -32,7 +32,7 @@
 <h3>Why is there no transit information for Vancouver?</h3>
 <p>
     As the largest metropolitan area in BC, transit in Vancouver is managed by <a href="https://www.translink.ca/">Translink</a> rather than BC Transit, making it harder to integrate smoothly.
-    Since long before BCTracker was started there have been numerous websites providing transit schedules and realtime information for Vancouver, including <a href="http://tcomm.bustrainferry.com/">T-Comm</a>, <a href="https://sorrybusfull.com/">Sorry Bus Full</a>, and <a href="http://www.transitdb.ca/">TransitDB</a>.
+    Since long before BCTracker was started there have been numerous websites providing transit schedules and realtime information for Vancouver, including <a href="https://tcomm.bustrainferry.com/">T-Comm</a>, <a href="https://sorrybusfull.com/">Sorry Bus Full</a>, and <a href="http://www.transitdb.ca/">TransitDB</a>.
     BCTracker was developed specifically because there were no equivalent websites for the rest of the province, and we choose to leave Vancouver in the good hands of those websites which are dedicated to it.
 </p>
 

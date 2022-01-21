@@ -2,16 +2,16 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #278427
+ * Primary Header: #1A671A
  * Secondary Header: #48A348
- * Menu: #0C610C
+ * Menu: #094409
  * Borders: #989898
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
  * Links: #0040FF
- * Buttons: #0040FF
+ * Buttons: #4170FC
  * 
  * Other colors may also be used for specific purposes
 */
@@ -32,7 +32,7 @@ form input[type="text"] {
 }
 
 form input[type="text"]:focus {
-    border-color: #0C610C;
+    border-color: #094409;
 }
 
 hr {
@@ -62,7 +62,7 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 #header {
-    background-color: #278427;
+    background-color: #1A671A;
 }
 
 #header .header-button {
@@ -70,11 +70,11 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 #header .header-button:hover {
-    background-color: #0C610C;
+    background-color: #094409;
 }
 
 #header .header-button.disabled:hover {
-    background-color: #278427 !important;
+    background-color: #1A671A !important;
 }
 
 #header .header-text {
@@ -88,7 +88,7 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 #header .header-text input[type="text"]:focus {
-    border-color: #0C610C;
+    border-color: #094409;
 }
 
 #header .header-text input[type="text"]::placeholder {
@@ -112,7 +112,7 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 #menu {
-    background-color: #0C610C;
+    background-color: #094409;
 }
 
 #menu .menu-button {
@@ -120,7 +120,7 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 #refresh-button:hover {
-    background-color: #0C610C;
+    background-color: #094409;
 }
 
 #search-desktop #search-desktop-results {
@@ -144,7 +144,7 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 #search-non-desktop {
-    background-color: #0C610C;
+    background-color: #094409;
 }
 
 #search-non-desktop input[type="text"] {
@@ -206,12 +206,12 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 .button {
-    background-color: #0040FF;
+    background-color: #4170FC;
     color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #012590;
+    background-color: #043FF1;
 }
 
 .button.disabled {

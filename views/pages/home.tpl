@@ -93,7 +93,7 @@
         </div>
         <br />
         <p>
-            Alternatively, you can embrace nostalgia with themes based on older BC transit liveries.
+            Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
         </p>
         <div class="button-container">
             <a class="button" href="?theme=classic">BC Transit Classic</a>
