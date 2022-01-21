@@ -150,7 +150,7 @@
                     </thead>
                     <tbody>
                         % last_year = None
-                        % for bus in sorted(model_buses):
+                        % for bus in sorted(unknown_buses):
                             % position = bus.position
                             % order = bus.order
                             % same_year = last_year is None or order.year == last_year
