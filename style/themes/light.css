@@ -11,7 +11,7 @@
  * Primary Text: #000000
  * Secondary Text: #666666
  * Links: #0040FF
- * Buttons: #4170FC
+ * Buttons: #365ccb
  * 
  * Other colors may also be used for specific purposes
 */
@@ -206,12 +206,12 @@ table.striped tr:nth-child(2n-1) td {
 }
 
 .button {
-    background-color: #4170FC;
+    background-color: #365ccb;
     color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #043FF1;
+    background-color: #1440C2;
 }
 
 .button.disabled {
