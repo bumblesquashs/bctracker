@@ -191,8 +191,11 @@
                                                         % else:
                                                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                                         % end
-                                                        <img class="middle-align light-only" src="/img/schedule.png" />
-                                                        <img class="middle-align dark-only" src="/img/schedule-white.png" />
+                                                        <span class="tooltip-anchor">
+                                                            <img class="middle-align light-only" src="/img/schedule.png" />
+                                                            <img class="middle-align dark-only" src="/img/schedule-white.png" />
+                                                            <div class="tooltip">Scheduled</div>
+                                                        </span>
                                                         % if order is not None:
                                                             <span class="non-desktop smaller-font">
                                                                 <br />

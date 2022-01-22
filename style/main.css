@@ -529,3 +529,22 @@ td * {
 .theme-control .button {
     display: inline-block;
 }
+
+.tooltip-anchor {
+    position: relative;
+}
+
+.tooltip-anchor .tooltip {
+    display: none;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 10;
+    left: calc(100% + 5px);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    top: -5px;
+    border-radius: 5px;
+}
+
+.tooltip-anchor:hover .tooltip {
+    display: block;
+}
