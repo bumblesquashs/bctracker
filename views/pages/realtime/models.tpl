@@ -149,13 +149,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % last_year = None
                         % for bus in sorted(unknown_buses):
-                            % position = bus.position
-                            % order = bus.order
-                            % same_year = last_year is None or order.year == last_year
-                            % last_year = order.year
-                            <tr class="{{'' if same_year else 'divider'}}">
+                            <tr>
                                 <td>
                                     % if bus.is_unknown:
                                         {{ bus }}
