@@ -194,7 +194,7 @@
                                                         <span class="tooltip-anchor">
                                                             <img class="middle-align light-only" src="/img/schedule.png" />
                                                             <img class="middle-align dark-only" src="/img/schedule-white.png" />
-                                                            <div class="tooltip">Scheduled</div>
+                                                            <div class="tooltip">Bus is scheduled</div>
                                                         </span>
                                                         % if order is not None:
                                                             <span class="non-desktop smaller-font">
