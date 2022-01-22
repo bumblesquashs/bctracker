@@ -56,6 +56,10 @@ table.striped td {
     padding: 0.5em 1em;
 }
 
+table.striped td * {
+    vertical-align: middle;
+}
+
 table.striped th {
     text-align: left;
     vertical-align: top;
@@ -409,6 +413,10 @@ table.striped tr.divider {
     top: 20px;
 }
 
+.middle-align {
+    vertical-align: middle;
+}
+
 .news-post {
     margin-top: 20px;
     border-width: 1px;
@@ -520,4 +528,24 @@ table.striped tr.divider {
 
 .theme-control .button {
     display: inline-block;
+}
+
+.tooltip-anchor {
+    position: relative;
+}
+
+.tooltip-anchor .tooltip {
+    display: none;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 10;
+    left: calc(100% + 5px);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    top: -5px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.tooltip-anchor:hover .tooltip {
+    display: block;
 }

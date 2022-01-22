@@ -250,3 +250,57 @@ def recorded_buses(system):
     for data in records_data:
         buses.append(Bus(data['DISTINCT bus_number']))
     return buses
+
+def today(system, block_ids):
+    hour = datetime.now().hour
+    today = datetime.today()
+    date = today if hour >= 4 else today - timedelta(days=1)
+    
+    block_id_pattern = ', '.join(['?'] * len(block_ids))
+    
+    args = [
+        system.id,
+        date.strftime('%Y-%m-%d')
+    ]
+    args += block_ids
+    
+    recorded_data = database.select('trip_records tr',
+        columns=['tr.trip_id', 'r.bus_number'],
+        joins='records r ON r.record_id = tr.record_id',
+        filters=[
+            'r.system_id = ?',
+            'r.date = ?',
+            f'r.block_id IN ({block_id_pattern})'
+        ],
+        args=args)
+    recorded_buses = {}
+    for data in recorded_data:
+        trip_id = data['tr.trip_id']
+        bus = Bus(data['r.bus_number'])
+        
+        recorded_buses[trip_id] = bus
+    
+    scheduled_data = database.select(f'''
+        (
+            SELECT bus_number, block_id,
+                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, record_id DESC) AS rn
+            FROM records
+            WHERE system_id = ? AND date = ? AND block_id IN ({block_id_pattern})
+        )
+        ''',
+        columns=['block_id', 'bus_number'],
+        filters={
+            'rn': 1
+        },
+        args=args)
+    scheduled_buses = {}
+    for data in scheduled_data:
+        block_id = data['block_id']
+        bus = Bus(data['bus_number'])
+        
+        scheduled_buses[block_id] = bus
+    
+    return {
+        'recorded': recorded_buses,
+        'scheduled': scheduled_buses
+    }

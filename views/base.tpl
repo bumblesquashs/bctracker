@@ -65,6 +65,47 @@
                 mapboxgl.accessToken = '{{mapbox_api_key}}';
             </script>
         % end
+        
+        % if system is None or system.realtime_enabled:
+            <script>
+                const date = new Date();
+                const timeToNextUpdate = 60 - date.getSeconds();
+                
+                setTimeout(function() {
+                    document.getElementById("refresh-button").classList.remove("display-none");
+                }, 1000 * (timeToNextUpdate + 15));
+                
+                function refresh() {
+                    location.reload();
+                }
+            </script>
+        % end
+        
+        <script>
+            function toggleMenu() {
+                document.getElementById("menu").classList.toggle("display-none");
+                document.getElementById("search-non-desktop").classList.add("display-none");
+            }
+            
+            String.prototype.format = function() {
+                a = this;
+                for (k in arguments) {
+                    a = a.replace("{" + k + "}", arguments[k])
+                }
+                return a
+            }
+            
+            function getUrl(systemID, path) {
+                if (systemID === null || systemID === undefined) {
+                    return "{{ no_system_domain }}".format(path)
+                }
+                return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
+            }
+            
+            function openSurvey() {
+                window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
+            }
+        </script>
     </head>
     
     <body>
@@ -220,26 +261,6 @@
 <script>
     var selectedResultIndex = 0;
     var searchResults = [];
-    
-    function toggleMenu() {
-        document.getElementById("menu").classList.toggle("display-none");
-        document.getElementById("search-non-desktop").classList.add("display-none");
-    }
-    
-    String.prototype.format = function() {
-        a = this;
-        for (k in arguments) {
-            a = a.replace("{" + k + "}", arguments[k])
-        }
-        return a
-    }
-    
-    function getUrl(systemID, path) {
-        if (systemID === null || systemID === undefined) {
-            return "{{ no_system_domain }}".format(path)
-        }
-        return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
-    }
     
     function searchDesktopFocus() {
         const query = document.getElementById("search-desktop-input").value;
@@ -423,23 +444,4 @@
         }
         return html;
     }
-    
-    function openSurvey() {
-        window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
-    }
 </script>
-
-% if system is None or system.realtime_enabled:
-    <script>
-        const date = new Date();
-        const timeToNextUpdate = 60 - date.getSeconds();
-        
-        setTimeout(function() {
-            document.getElementById("refresh-button").classList.remove("display-none");
-        }, 1000 * (timeToNextUpdate + 15));
-        
-        function refresh() {
-            location.reload();
-        }
-    </script>
-% end

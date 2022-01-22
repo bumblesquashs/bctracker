@@ -142,7 +142,7 @@ class Service:
     def is_today(self):
         hour = datetime.now().hour
         today = datetime.today()
-        date = today if hour >= 5 else today - timedelta(days=1)
+        date = today if hour >= 4 else today - timedelta(days=1)
         date_string = format_date(date)
         if date_string in self.special_dates:
             return True

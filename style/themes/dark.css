@@ -312,3 +312,8 @@ table.striped tr:nth-child(2n-1) td {
     background-color: #565656;
     color: #FFFFFF;
 }
+
+.tooltip-anchor .tooltip {
+    background-color: #565656;
+    color: #FFFFFF;
+}
