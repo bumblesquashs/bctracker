@@ -25,7 +25,6 @@ form input[type="submit"] {
 #header .header-text {
     float: left;
     display: block;
-    color: white;
     text-align: center;
     padding: 10px 20px;
     text-decoration: none !important;
@@ -42,32 +41,21 @@ form input[type="submit"] {
 }
 
 #header .header-text input[type="text"] {
-    border: 2px solid white;
+    border-width: 2px;
+    border-style: solid;
     border-radius: 5px;
     font-size: 14px;
     padding: 5px;
     vertical-align: middle;
     -webkit-appearance: none;
-    background-color: white;
-    color: black;
 }
 
 #header .header-text input[type="text"]:focus {
     outline: none;
-    border: 2px solid #255325;
 }
 
 #header .header-text input[type="text"]::placeholder {
-    color: #666666;
     opacity: 1;
-}
-
-#header .header-text input[type="text"]:-ms-input-placeholder {
-    color: #666666;
-}
-  
-#header .header-text input[type="text"]::-ms-input-placeholder {
-    color: #666666;
 }
 
 #search-desktop {
@@ -80,59 +68,24 @@ form input[type="submit"] {
     top: 52px;
     left: 0px;
     right: 0px;
-    background-color: white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 10;
     text-align: left;
 }
 
-#search-desktop #search-desktop-results .keyboard-selected {
-    background-color: #cbcbcb;
-}
-
-#search-desktop #search-desktop-results .message {
-    padding: 12px;
-    color: #666666;
-    text-align: center;
-}
-
 #search-desktop #search-desktop-results a {
     padding: 5px 12px;
-    color: black;
     text-decoration: none;
     display: block;
 }
 
-#search-desktop #search-desktop-results a:hover {
-    background-color: #e6e6e6
-}
-
-#refresh-button {
-    margin-left: 10px;
-    display: inline-block;
-    margin-top: -8px;
-    margin-bottom: -8px;
-}
-
-#refresh-button:hover {
-    cursor: pointer;
-    background-color: #989898;
-    border-radius: 12px;
-}
-
-#refresh-button img {
-    width: 24px;
-    height: 24px;
-}
-
-#subheader #system {
-    display: inline-block;
+#search-desktop #search-desktop-results .message {
+    padding: 12px;
+    text-align: center;
 }
 
 #subheader #last-updated {
-    display: inline-block;
     font-size: 12pt;
-    margin-left: 10px;
 }
 
 #sidebar {
@@ -217,7 +170,6 @@ form input[type="submit"] {
     top: 52px;
     right: 0px;
     min-width: 200%;
-    background-color: white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 20;
 }
@@ -228,21 +180,8 @@ form input[type="submit"] {
 
 .dropdown .content a {
     padding: 12px;
-    color: black;
     text-decoration: none;
     display: block;
-}
-
-.dropdown .content a:hover {
-    background-color: #e6e6e6
-}
-
-.dropdown .content a.disabled {
-    color: grey;
-}
-
-.dropdown .content a.disabled:hover {
-    background-color: white;
 }
 
 .dropdown .content table {
@@ -293,7 +232,6 @@ form input[type="submit"] {
 .tab-button-bar {
     display: flex;
     flex-direction: row;
-    margin-bottom: -1px;
 }
 
 .tab-button {

@@ -38,7 +38,7 @@
         % nearby_stops = sorted(stop.get_nearby_stops(sheet))
         % if len(nearby_stops) > 0:
             <h2>Nearby Stops</h2>
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Number</th>
@@ -80,7 +80,7 @@
                     <span>are scheduled but may be swapped off.</span>
                 </p>
             % end
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Time</th>

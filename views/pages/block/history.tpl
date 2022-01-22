@@ -89,7 +89,7 @@
                 Please check again later!
             </p>
         % else:
-            <table class="pure-table pure-table-horizontal pure-table-striped">
+            <table class="striped">
                 <thead>
                     <tr>
                         <th>Date</th>

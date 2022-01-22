@@ -41,7 +41,6 @@ table {
 }
 
 #header .menu-toggle .line {
-    background-color: white;
     width: 32px;
     height: 4px;
     border-radius: 2px;
@@ -58,93 +57,54 @@ table {
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;
-    background-color: #255325;
 }
 
-#menu .header-button {
+#menu .menu-button {
     display: block;
-    color: white;
     padding: 15px 20px;
     font-family: Helvetica, sans-serif;
     font-size: 16pt;
     font-weight: normal;
 }
 
-#refresh-button {
-    margin-left: 10px;
-    display: inline-block;
-    margin-top: -8px;
-    margin-bottom: -8px;
-}
-
-#refresh-button:hover {
-    cursor: pointer;
-    background-color: #989898;
-    border-radius: 12px;
-}
-
-#refresh-button img {
-    width: 24px;
-    height: 24px;
-}
-
 #search-non-desktop {
     padding: 20px;
-    background-color: #255325;
     font-family: Helvetica, sans-serif;
 }
 
 #search-non-desktop input[type="text"] {
-    border: 2px solid white;
+    border-width: 2px;
+    border-style: solid;
     border-radius: 5px;
     font-size: 16px;
     padding: 5px;
     -webkit-appearance: none;
-    background-color: white;
-    color: black;
     width: 100%;
 }
 
 #search-non-desktop input[type="text"]:focus {
     outline: none;
-    border: 2px solid #49a348;
 }
 
 #search-non-desktop #search-non-desktop-results {
     margin-top: 10px;
 }
 
-#search-non-desktop #search-non-desktop-results .message {
-    padding: 10px 0px;
-    color: #cbcbcb;
-    text-align: center;
-    font-size: 16pt;
-}
-
 #search-non-desktop #search-non-desktop-results a {
     padding: 10px 0px;
-    color: white;
     text-decoration: none;
     display: block;
     font-size: 16pt;
 }
 
-#search-non-desktop #search-non-desktop-results a .lighter-text {
-    color: #cbcbcb;
-}
-
-#subheader * {
-    vertical-align: middle;
-}
-
-#subheader #system {
-    display: inline-block;
+#search-non-desktop #search-non-desktop-results .message {
+    padding: 10px 0px;
+    text-align: center;
+    font-size: 16pt;
 }
 
 #subheader #last-updated {
-    display: inline-block;
     font-size: 12pt;
-    margin-left: 10px;
 }
 
 #survey-banner .content {

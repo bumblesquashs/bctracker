@@ -42,7 +42,7 @@
     % if len(stops) == 0:
         <p>No stops found</p>
     % else:
-        <table class="pure-table pure-table-horizontal pure-table-striped">
+        <table class="striped">
             <thead>
                 <tr>
                     <th class="desktop-only">Stop Number</th>

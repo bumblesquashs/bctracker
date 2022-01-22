@@ -16,7 +16,7 @@ import realtime
 import history
 
 # Increase the version to force CSS reload
-VERSION = 4
+VERSION = 5
 
 app = Bottle()
 
@@ -99,6 +99,7 @@ def systems_template(name, system_id, theme=None, **kwargs):
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
         theme=theme or request.get_cookie('theme'),
+        show_speed=request.get_cookie('speed') == '1994',
         version=VERSION,
         no_system_domain=no_system_domain,
         system_domain=system_domain,
@@ -187,13 +188,62 @@ def route_realtime():
 @app.route('/<system_id>/realtime')
 @app.route('/<system_id>/realtime/')
 def system_realtime(system_id):
-    group = request.query.get('group', 'all')
     system = get_system(system_id)
     if system is None:
         buses = realtime.active_buses()
     else:
         buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('realtime', system_id, group=group, buses=buses, path=f'realtime?group={group}')
+    return systems_template('realtime/all', system_id, buses=buses, path=f'realtime')
+
+@app.route('/realtime/routes')
+@app.route('/realtime/routes/')
+def realtime_routes():
+    return system_realtime_routes(None)
+
+@app.route('/<system_id>/realtime/routes')
+@app.route('/<system_id>/realtime/routes/')
+def system_realtime_routes(system_id):
+    system = get_system(system_id)
+    if system is None:
+        buses = realtime.active_buses()
+    else:
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
+    return systems_template('realtime/routes', system_id, buses=buses, path=f'realtime/routes')
+
+@app.route('/realtime/models')
+@app.route('/realtime/models/')
+def realtime_models():
+    return system_realtime_models(None)
+
+@app.route('/<system_id>/realtime/models')
+@app.route('/<system_id>/realtime/models/')
+def system_realtime_models(system_id):
+    system = get_system(system_id)
+    if system is None:
+        buses = realtime.active_buses()
+    else:
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
+    return systems_template('realtime/models', system_id, buses=buses, path=f'realtime/models')
+
+@app.route('/realtime/speed')
+@app.route('/realtime/speed/')
+def realtime_speed():
+    return system_realtime_speed(None)
+
+@app.route('/<system_id>/realtime/speed')
+@app.route('/<system_id>/realtime/speed/')
+def system_realtime_speed(system_id):
+    max_age = 60*60*24*365*10
+    if cookie_domain is None:
+        response.set_cookie('speed', '1994', max_age=max_age, path='/')
+    else:
+        response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
+    system = get_system(system_id)
+    if system is None:
+        buses = realtime.active_buses()
+    else:
+        buses = [b for b in realtime.active_buses() if b.position.system == system]
+    return systems_template('realtime/speed', system_id, buses=buses, path=f'realtime/speed')
 
 @app.route('/bus/<number:int>')
 @app.route('/bus/<number:int>/')

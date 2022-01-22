@@ -29,7 +29,7 @@
             <div class="section">
                 <h2 class="title" id="{{service}}">{{ service }}</h2>
                 <div class="subtitle">{{ service.date_string }}</div>
-                <table class="pure-table pure-table-horizontal pure-table-striped">
+                <table class="striped">
                     <thead>
                         <tr>
                             <th>Block</th>
