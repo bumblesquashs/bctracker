@@ -39,22 +39,6 @@ class Position:
             return None
         return self.system.get_stop(stop_id=self.stop_id)
     
-    @property
-    def schedule_adherence_string(self):
-        adherence = self.schedule_adherence
-        if adherence is None:
-            return None
-        if adherence > 0:
-            if adherence == 1:
-                return '1 minute ahead of schedule'
-            return f'{adherence} minutes ahead of schedule'
-        elif adherence < 0:
-            adherence = abs(adherence)
-            if adherence == 1:
-                return '1 minute behind schedule'
-            return f'{adherence} minutes behind schedule'
-        return 'On schedule'
-    
     def calculate_schedule_adherence(self):
         trip = self.trip
         stop = self.stop
@@ -78,9 +62,9 @@ class Position:
                     expected_scheduled_mins = previous_departure_mins + self.linear_interpolate(previous_departure.stop, stop, time_difference)
             
             current_mins = get_current_minutes()
-            self.schedule_adherence = expected_scheduled_mins - current_mins
+            self.schedule_adherence = ScheduleAdherence(expected_scheduled_mins - current_mins)
         except AttributeError:
-            pass
+            self.schedule_adherence = None
     
     '''
     Estimate how far the position is between two stops in minutes...
@@ -104,3 +88,45 @@ class Position:
         fraction_travelled = distance_to_previous_stop / scalar_sum_of_displacements
         
         return int(fraction_travelled * time_difference)
+
+class ScheduleAdherence:
+    def __init__(self, value):
+        self.value = value
+        
+        if value <= -8:
+            self.status = 'very-behind'
+        elif value <= -5:
+            self.status = 'behind'
+        elif value >= 5:
+            self.status = 'very-ahead'
+        elif value >= 3:
+            self.status = 'ahead'
+        else:
+            self.status = 'on-time'
+        
+        if value > 0:
+            if value == 1:
+                self.description = '1 minute ahead of schedule'
+            else:
+                self.description = f'{value} minutes ahead of schedule'
+        elif value < 0:
+            value = abs(value)
+            if value == 1:
+                self.description = '1 minute behind schedule'
+            else:
+                self.description = f'{value} minutes behind schedule'
+        else:
+            self.description = 'On schedule'
+    
+    def __str__(self):
+        if self.value > 0:
+            return f'+{self.value}'
+        return str(self.value)
+    
+    @property
+    def json_data(self):
+        return {
+            'value': str(self),
+            'status': self.status,
+            'description': self.description
+        }

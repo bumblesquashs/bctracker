@@ -1,19 +1,6 @@
 % if adherence is not None:
-    % status = 'on-time'
-    % if adherence <= -8:
-        % status = 'very-behind'
-    % elif adherence <= -5:
-        % status = 'behind'
-    % elif adherence >= 5:
-        % status = 'very-ahead'
-    % elif adherence >= 3:
-        % status = 'ahead'
-    % end
-    <div class="adherence-indicator {{ status }}">
-        % if adherence > 0:
-            +{{ adherence }}
-        % else:
-            {{ adherence }}
-        % end
-    </div>
+    <span class="tooltip-anchor adherence-indicator {{ adherence.status }}">
+        {{ adherence }}
+        <div class="tooltip">{{ adherence.description }}</div>
+    </span>
 % end

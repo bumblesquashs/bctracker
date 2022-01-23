@@ -63,5 +63,5 @@ class Bus:
             data['shape_id'] = trip.shape_id
         schedule_adherence = self.position.schedule_adherence
         if schedule_adherence is not None:
-            data['schedule_adherence'] = schedule_adherence
+            data['schedule_adherence'] = schedule_adherence.json_data
         return data

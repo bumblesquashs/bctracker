@@ -257,7 +257,7 @@
         <div id="content">{{ !base }}</div>
     </body>
 </html>
-        
+
 <script>
     var selectedResultIndex = 0;
     var searchResults = [];

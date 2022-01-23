@@ -167,6 +167,13 @@
         const buses = JSON.parse('{{! json.dumps([b.json_data for b in map_buses]) }}');
         
         for (const bus of buses) {
+            const adherenceElement = document.createElement("span")
+            if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
+                const adherence = bus.schedule_adherence
+                adherenceElement.classList.add("adherence-indicator")
+                adherenceElement.classList.add(adherence.status)
+                adherenceElement.innerHTML = adherence.value
+            }
             const element = document.createElement("div");
             element.className = "marker";
             if (bus.number < 0) {
@@ -179,7 +186,7 @@
                 details.className = "details";
                 details.innerHTML = "\
                     <div class='title'>Unknown Bus</div>\
-                    <div class='subtitle hover-only'>" + bus.headsign + "</div>"
+                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>"
                 
                 element.appendChild(icon);
                 element.appendChild(details);
@@ -194,7 +201,7 @@
                 details.className = "details";
                 details.innerHTML = "\
                     <div class='title'>" + bus.number + "</div>\
-                    <div class='subtitle hover-only'>" + bus.headsign + "</div>";
+                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>";
                 
                 element.appendChild(icon);
                 element.appendChild(details);
