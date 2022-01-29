@@ -259,8 +259,10 @@
 </html>
         
 <script>
-    var selectedResultIndex = 0;
-    var searchResults = [];
+    let selectedResultIndex = 0;
+    let searchResults = [];
+    let loadingResults = false;
+    let enterPending = false;
     
     function searchDesktopFocus() {
         const query = document.getElementById("search-desktop-input").value;
@@ -270,14 +272,6 @@
         } else {
             element.classList.remove("display-none");
         }
-    }
-    
-    function clearSearchHighlighting() { 
-        if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-            var selectedElement = searchResults[selectedResultIndex].element;
-            selectedElement.classList.remove("keyboard-selected"); 
-        }
-        selectedResultIndex = 0; searchResults = [];
     }
     
     function searchDesktopBlur() {
@@ -309,11 +303,22 @@
     }
     
     function setSelectedEntry(newIndex) {
-        var oldSelectedElement = searchResults[selectedResultIndex].element;
-        oldSelectedElement.classList.remove("keyboard-selected");
-        var newSelectedElement = searchResults[newIndex].element;
-        newSelectedElement.classList.add("keyboard-selected");
+        const oldElement = searchResults[selectedResultIndex].element;
+        oldElement.classList.remove("keyboard-selected");
+        
+        const newElement = searchResults[newIndex].element;
+        newElement.classList.add("keyboard-selected");
+        
         selectedResultIndex = newIndex;
+    }
+    
+    function clearSearchHighlighting() { 
+        if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
+            const element = searchResults[selectedResultIndex].element;
+            element.classList.remove("keyboard-selected"); 
+        }
+        selectedResultIndex = 0;
+        searchResults = [];
     }
     
     function handleResultsDown() {
@@ -339,7 +344,11 @@
     }
     
     function handleResultsEnter() {
-        window.location = searchResults[selectedResultIndex].url;
+        if (loadingResults) {
+            enterPending = true;
+        } else {
+            window.location = searchResults[selectedResultIndex].url;
+        }
     }
 
     function search(inputElement, resultsElement) {
@@ -349,6 +358,7 @@
             resultsElement.innerHTML = "";
             inputElement.onkeyup = function() {};
         } else {
+            loadingResults = true;
             resultsElement.classList.remove("display-none");
             if (resultsElement.innerHTML === "") {
                 resultsElement.innerHTML = "<div class='message'>Loading...</div>";
@@ -401,10 +411,16 @@
                         }
                     };
                 }
+                loadingResults = false;
+                if (enterPending) {
+                    enterPending = false;
+                    handleResultsEnter();
+                }
             };
             request.onerror = function() {
                 resultsElement.innerHTML = "<div class='message'>Error loading search results</div>";
                 inputElement.onkeyup = function() {};
+                loadingResults = false;
             };
             const data = new FormData()
             data.set("query", query)
