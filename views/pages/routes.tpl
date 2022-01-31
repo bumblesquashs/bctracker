@@ -19,12 +19,16 @@
         <thead>
             <tr>
                 <th>Route</th>
+                <th>Service Days</th>
             </tr>
         </thead>
         <tbody>
             % for route in routes:
                 <tr>
                     <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
+                    <td>
+                        % include('components/services_indicator', services=route.get_services(sheet), compact=True)
+                    </td>
                 </tr>
             % end
         </tbody>
