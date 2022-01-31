@@ -90,26 +90,12 @@
                     }
                 }
                 
-                let adherenceElement = document.createElement("span")
+                const adherenceElement = document.createElement("span")
                 if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
-                    adherence = bus.schedule_adherence
+                    const adherence = bus.schedule_adherence
                     adherenceElement.classList.add("adherence-indicator")
-                    if (adherence <= -8) {
-                        adherenceElement.classList.add("very-behind")
-                    } else if (adherence <= -5) {
-                        adherenceElement.classList.add("behind")
-                    } else if (adherence >= 5) {
-                        adherenceElement.classList.add("very-ahead")
-                    } else if (adherence >= 3) {
-                        adherenceElement.classList.add("ahead")
-                    } else {
-                        adherenceElement.classList.add("on-time")
-                    }
-                    if (adherence > 0) {
-                        adherenceElement.innerHTML = "+" + adherence
-                    } else {
-                        adherenceElement.innerHTML = "" + adherence
-                    }
+                    adherenceElement.classList.add(adherence.status_class)
+                    adherenceElement.innerHTML = adherence.value
                 }
                 
                 const element = document.createElement("div");
@@ -132,7 +118,7 @@
                     details.className = "details";
                     details.innerHTML = "\
                         <div class='title'>Unknown Bus</div>\
-                        <div class='subtitle hover-only'>" + bus.headsign + "</div>"
+                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>"
                     
                     element.appendChild(icon);
                     element.appendChild(details);
@@ -154,7 +140,7 @@
                     details.className = "details";
                     details.innerHTML = "\
                         <div class='title'>" + bus.number + "</div>\
-                        <div class='subtitle hover-only'>" + bus.headsign + "</div>";
+                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>";
                     
                     element.appendChild(icon);
                     element.appendChild(details);

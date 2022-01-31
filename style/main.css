@@ -193,6 +193,7 @@ table.striped tr.divider {
 }
 
 .adherence-indicator {
+    display: inline-block;
     padding: 2px 4px;
     margin-right: 5px;
     border-radius: 4px;
@@ -202,7 +203,7 @@ table.striped tr.divider {
     font-weight: bold;
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
-    float: left;
+    line-height: 9pt;
 }
 
 .button {
