@@ -43,6 +43,10 @@ table.striped {
     border-color: #666666;
 }
 
+table.striped tbody tr:hover {
+    background-color: #CBCBCB;
+}
+
 table.striped td {
     border-color: #666666;
 }
@@ -57,7 +61,7 @@ table.striped tr {
     background-color: #FFFFFF;
 }
 
-table.striped tr:nth-child(2n-1) td {
+table.striped tr:nth-child(2n-1) {
     background-color: #D8D8D8;
 }
 
