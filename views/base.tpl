@@ -346,7 +346,7 @@
     function handleResultsEnter() {
         if (loadingResults) {
             enterPending = true;
-        } else {
+        } else if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
             window.location = searchResults[selectedResultIndex].url;
         }
     }
