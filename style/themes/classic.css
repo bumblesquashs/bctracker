@@ -301,6 +301,18 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
+.service-indicator .dates {
+    border-color: #989898;
+}
+
+.service-indicator .dates .date {
+    background-color: #FF7F7F;
+}
+
+.service-indicator .dates .date.running {
+    background-color: #7DBD88;
+}
+
 .service-indicator .details {
     color: #464646;
 }

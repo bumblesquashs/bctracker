@@ -1,52 +1,40 @@
+% from formatting import format_date
+
 <div class="service-indicator">
-    <div class="date">
-        <div class="name">Mon</div>
-        % if len([s for s in services if s.mon]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
+    % if get('compact', False):
+        <div class="dates compact">
+            <span class="date {{ 'running' if len([s for s in services if s.mon]) > 0 else '' }}">M</span>
+            <span class="date {{ 'running' if len([s for s in services if s.tue]) > 0 else '' }}">T</span>
+            <span class="date {{ 'running' if len([s for s in services if s.wed]) > 0 else '' }}">W</span>
+            <span class="date {{ 'running' if len([s for s in services if s.thu]) > 0 else '' }}">T</span>
+            <span class="date {{ 'running' if len([s for s in services if s.fri]) > 0 else '' }}">F</span>
+            <span class="date {{ 'running' if len([s for s in services if s.sat]) > 0 else '' }}">S</span>
+            <span class="date {{ 'running' if len([s for s in services if s.sun]) > 0 else '' }}">S</span>
+        </div>
+    % else:
+        % start_date = None
+        % end_date = None
+        % for service in services:
+            % if start_date is None or service.start_date < start_date:
+                % start_date = service.start_date
+            % end
+            % if end_date is None or service.end_date > end_date:
+                % end_date = service.end_date
+            % end
         % end
-    </div>
-    <div class="date">
-        <div class="name">Tue</div>
-        % if len([s for s in services if s.tue]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
+        % if start_date is None or end_date is None:
+            <div class="title">Service Days</div>
+        % else:
+            <div class="title">{{ format_date(start_date) }} to {{ format_date(end_date) }}</div>
         % end
-    </div>
-    <div class="date">
-        <div class="name">Wed</div>
-        % if len([s for s in services if s.wed]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
-        % end
-    </div>
-    <div class="date">
-        <div class="name">Thu</div>
-        % if len([s for s in services if s.thu]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
-        % end
-    </div>
-    <div class="date">
-        <div class="name">Fri</div>
-        % if len([s for s in services if s.fri]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
-        % end
-    </div>
-    <div class="date">
-        <div class="name">Sat</div>
-        % if len([s for s in services if s.sat]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
-        % end
-    </div>
-    <div class="date">
-        <div class="name">Sun</div>
-        % if len([s for s in services if s.sun]) > 0:
-            <img class="light-only check" src="/img/check.png" />
-            <img class="dark-only check" src="/img/check-white.png" />
-        % end
-    </div>
+        <div class="dates">
+            <span class="date {{ 'running' if len([s for s in services if s.mon]) > 0 else '' }}">Mon</span>
+            <span class="date {{ 'running' if len([s for s in services if s.tue]) > 0 else '' }}">Tue</span>
+            <span class="date {{ 'running' if len([s for s in services if s.wed]) > 0 else '' }}">Wed</span>
+            <span class="date {{ 'running' if len([s for s in services if s.thu]) > 0 else '' }}">Thu</span>
+            <span class="date {{ 'running' if len([s for s in services if s.fri]) > 0 else '' }}">Fri</span>
+            <span class="date {{ 'running' if len([s for s in services if s.sat]) > 0 else '' }}">Sat</span>
+            <span class="date {{ 'running' if len([s for s in services if s.sun]) > 0 else '' }}">Sun</span>
+        </div>
+    % end
 </div>
-  
