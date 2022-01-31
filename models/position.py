@@ -94,15 +94,15 @@ class ScheduleAdherence:
         self.value = value
         
         if value <= -8:
-            self.status = 'very-behind'
+            self.status_class = 'very-behind'
         elif value <= -5:
-            self.status = 'behind'
+            self.status_class = 'behind'
         elif value >= 5:
-            self.status = 'very-ahead'
+            self.status_class = 'very-ahead'
         elif value >= 3:
-            self.status = 'ahead'
+            self.status_class = 'ahead'
         else:
-            self.status = 'on-time'
+            self.status_class = 'on-time'
         
         if value > 0:
             if value == 1:
@@ -127,6 +127,6 @@ class ScheduleAdherence:
     def json_data(self):
         return {
             'value': str(self),
-            'status': self.status,
+            'status_class': self.status_class,
             'description': self.description
         }

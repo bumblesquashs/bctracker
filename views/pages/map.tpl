@@ -94,7 +94,7 @@
                 if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
                     const adherence = bus.schedule_adherence
                     adherenceElement.classList.add("adherence-indicator")
-                    adherenceElement.classList.add(adherence.status)
+                    adherenceElement.classList.add(adherence.status_class)
                     adherenceElement.innerHTML = adherence.value
                 }
                 
