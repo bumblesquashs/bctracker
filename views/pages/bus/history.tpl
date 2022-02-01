@@ -1,7 +1,5 @@
-% from datetime import datetime
-% import math
 
-% from formatting import format_date, format_date_mobile
+% from formatting import format_date, format_date_mobile, days_since
 % from models.model import BusModelType
 
 % rebase('base', title=f'Bus {bus}')
@@ -19,10 +17,10 @@
 
 % if len(records) > 0:
     % last_tracked = records[0].date
-    % days_since_last_tracked = (datetime.now() - last_tracked).days
+    % days_since_last_tracked = days_since(last_tracked)
     
     % first_tracked = records[-1].date
-    % days_since_first_tracked = (datetime.now() - first_tracked).days
+    % days_since_first_tracked = days_since(first_tracked)
     
     <div id="sidebar">
         <h2>Overview</h2>
@@ -30,17 +28,13 @@
             <div class="section">
                 <div class="name">Last Tracked</div>
                 <div class="value">
-                    % if days_since_last_tracked == 0:
+                    % if days_since_last_tracked == '0 days ago':
                         Today
                     % else:
                         {{ format_date(last_tracked) }}
                         <br />
                         <span class="smaller-font">
-                            % if days_since_last_tracked == 1:
-                                1 day ago
-                            % else:
-                                {{ days_since_last_tracked }} days ago
-                            % end
+                            {{ days_since_last_tracked }}
                         </span>
                     % end
                 </div>
@@ -48,17 +42,13 @@
             <div class="section">
                 <div class="name">First Tracked</div>
                 <div class="value">
-                    % if days_since_first_tracked == 0:
+                    % if days_since_first_tracked == '0 days ago':
                         Today
                     % else:
                         {{ format_date(first_tracked) }}
                         <br />
                         <span class="smaller-font">
-                            % if days_since_first_tracked == 1:
-                                1 day ago
-                            % else:
-                                {{ days_since_first_tracked }} days ago
-                            % end
+                            {{ days_since_first_tracked }}
                         </span>
                     % end
                 </div>
