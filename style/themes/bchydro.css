@@ -65,6 +65,15 @@ table.striped tr:nth-child(2n-1) {
     background-color: #D8D8D8;
 }
 
+#banner {
+    background-color: #FFB960;
+    color: #FFFFFF;
+}
+
+#banner a {
+    color: #FFFFFF;
+}
+
 #header {
     background-color: #61C315;
 }
@@ -173,15 +182,6 @@ table.striped tr:nth-child(2n-1) {
 
 #subheader {
     background-color: #249B9B;
-    color: #FFFFFF;
-}
-
-#survey-banner {
-    background-color: #FFB960;
-    color: #FFFFFF;
-}
-
-#survey-banner a {
     color: #FFFFFF;
 }
 

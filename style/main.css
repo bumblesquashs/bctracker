@@ -75,6 +75,31 @@ table.striped tr.divider {
     border-top-style: solid;
 }
 
+#banner {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 10px 20px;
+    cursor: default;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#banner .close-button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+#banner .close-button:hover {
+    cursor: pointer;
+}
+
+#banner .title {
+    font-weight: bold;
+    font-size: 16pt;
+}
+
 #header {
     position: relative;
     z-index: 20;
@@ -158,31 +183,6 @@ table.striped tr.divider {
 
 #subheader #system {
     font-weight: bold;
-}
-
-#survey-banner {
-    position: relative;
-    z-index: 10;
-    margin: 0px;
-    padding: 10px 20px;
-    cursor: default;
-    vertical-align: middle;
-    text-align: center;
-}
-
-#survey-banner .close-button {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-#survey-banner .close-button:hover {
-    cursor: pointer;
-}
-
-#survey-banner .title {
-    font-weight: bold;
-    font-size: 16pt;
 }
 
 #top-button {

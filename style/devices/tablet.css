@@ -31,6 +31,11 @@ table {
     font-size: 13pt;
 }
 
+#banner .content {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
 #header .header-button {
     font-size: 16pt;
 }
@@ -105,11 +110,6 @@ table {
 
 #subheader #last-updated {
     font-size: 12pt;
-}
-
-#survey-banner .content {
-    display: inline-block;
-    margin-bottom: 10px;
 }
 
 #top-button {
