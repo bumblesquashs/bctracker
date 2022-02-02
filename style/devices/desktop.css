@@ -22,6 +22,20 @@ form input[type="submit"] {
     margin-bottom: 10px;
 }
 
+#banner a {
+    text-decoration: underline;
+}
+
+#banner .content {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+#banner .survey-button {
+    vertical-align: middle;
+}
+
 #header .header-text {
     float: left;
     display: block;
@@ -105,20 +119,6 @@ form input[type="submit"] {
 }
 
 #subheader * {
-    vertical-align: middle;
-}
-
-#survey-banner a {
-    text-decoration: underline;
-}
-
-#survey-banner .content {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 20px;
-}
-
-#survey-banner .survey-button {
     vertical-align: middle;
 }
 

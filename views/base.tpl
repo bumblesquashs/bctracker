@@ -254,6 +254,16 @@
             % end
         </div>
         
+        % if system is not None and (system.id == 'squamish' or system.id == 'whistler'):
+            <div id="banner">
+                <div class="content">
+                    <span class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</span>
+                    <br />
+                    <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.bctransit_id }}/news">BC Transit News Page</a>.</span>
+                </div>
+            </div>
+        % end
+        
         <div id="content">{{ !base }}</div>
     </body>
 </html>
