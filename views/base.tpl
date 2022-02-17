@@ -48,6 +48,12 @@
             <script>
                 const prefersDarkScheme = false
             </script>
+        % elif theme == "tcomm":
+            <link rel="stylesheet" href="/style/themes/tcomm.css?version={{ version }}" />
+            
+            <script>
+                const prefersDarkScheme = false
+            </script>
         % else:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
