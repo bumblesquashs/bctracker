@@ -40,9 +40,17 @@
             % for record in records:
                 % bus = record.bus
                 % order = bus.order
-                % same_model = last_bus is None or order == last_bus.order
+                % if last_bus is None:
+                    % same_order = True
+                % elif order is None and last_bus.order is None:
+                    % same_order = True
+                % elif order is None or last_bus.order is None:
+                    % same_order = False
+                % else:
+                    % same_order = order == last_bus.order
+                % end
                 % last_bus = bus
-                <tr class="{{'' if same_model else 'divider'}}">
+                <tr class="{{'' if same_order else 'divider'}}">
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:

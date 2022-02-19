@@ -30,10 +30,7 @@ def update(system):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
             archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
             rename(data_zip_path, archives_path)
-        if system.realtime_enabled:
-            wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/google_transit.zip', data_zip_path)
-        else:
-            wget.download(f'http://bctransit.com/data/gtfs/{system.bctransit_id}.zip', data_zip_path)
+        wget.download(system.gtfs_url, data_zip_path)
         if path.exists(data_path):
             rmtree(data_path)
         with ZipFile(data_zip_path) as zip:
@@ -53,7 +50,6 @@ def load(system):
     if not system.gtfs_enabled:
         return
     print(f'Loading GTFS data for {system}...')
-    load_feed_info(system)
     load_stops(system)
     load_routes(system)
     load_services(system)
@@ -71,8 +67,6 @@ def load_departures(system):
             continue
         trip_id = values['trip_id']
         if trip_id not in system.trips:
-            if system.non_current_sheets_enabled:
-                print(f'Invalid trip id: {trip_id}')
             continue
         time_string = values['departure_time']
         sequence = int(values['stop_sequence'])
@@ -81,10 +75,6 @@ def load_departures(system):
         
         departure.stop.add_departure(departure)
         departure.trip.add_departure(departure)
-
-def load_feed_info(system):
-    values = read_csv(system, 'feed_info')[0]
-    system.feed_version = values['feed_version']
 
 def load_routes(system):
     system.routes = {}
@@ -189,7 +179,7 @@ def load_trips(system):
         
         trip = Trip(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
         
-        if not system.non_current_sheets_enabled and trip.service.sheet != Sheet.CURRENT:
+        if trip.service.sheet != Sheet.CURRENT:
             continue
         
         if block_id not in system.blocks:

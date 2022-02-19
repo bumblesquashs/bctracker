@@ -24,7 +24,7 @@ def update(system):
             formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
             archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
             rename(data_path, archives_path)
-        wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', data_path)
+        wget.download(system.realtime_url, data_path)
         
         update_positions(system)
         

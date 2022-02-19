@@ -3,17 +3,15 @@ import csv
 from models.service import Sheet
 
 class System:
-    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, non_current_sheets_enabled, bctransit_id, mapstrat_id):
+    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url):
         self.id = system_id
         self.name = name
         self.visible = visible
         self.gtfs_enabled = gtfs_enabled
         self.realtime_enabled = realtime_enabled
-        self.non_current_sheets_enabled = non_current_sheets_enabled
-        self.bctransit_id = bctransit_id
-        self.mapstrat_id = mapstrat_id
+        self.gtfs_url = gtfs_url
+        self.realtime_url = realtime_url
         
-        self.feed_version = ''
         self.realtime_validation_error_count = 0
         
         self.blocks = {}
@@ -131,11 +129,10 @@ def load_systems():
         visible = row['visible'] == '1'
         gtfs_enabled = row['gtfs_enabled'] == '1'
         realtime_enabled = row['realtime_enabled'] == '1'
-        non_current_sheets_enabled = row['non_current_sheets_enabled'] == '1'
-        bctransit_id = row['bctransit_id']
-        mapstrat_id = row['mapstrat_id']
+        gtfs_url = row['gtfs_url']
+        realtime_url = row['realtime_url']
         
-        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, non_current_sheets_enabled, bctransit_id, mapstrat_id)
+        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url)
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:
