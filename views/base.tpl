@@ -259,7 +259,7 @@
                 <div class="content">
                     <span class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</span>
                     <br />
-                    <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.bctransit_id }}/news">BC Transit News Page</a>.</span>
+                    <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.id }}/news">BC Transit News Page</a>.</span>
                 </div>
             </div>
         % end
