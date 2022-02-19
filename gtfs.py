@@ -83,7 +83,7 @@ def load_routes(system):
         route_id = values['route_id']
         number = values['route_short_name']
         name = values['route_long_name']
-        if 'route_color' in values:
+        if 'route_color' in values and values['route_color'] != '000000':
             colour = values['route_color']
         else:
             # Generate a random colour based on system ID and route number
@@ -149,7 +149,10 @@ def load_stops(system):
         try:
             number = int(values['stop_code'])
         except:
-            continue
+            try:
+                number = int(stop_id)
+            except:
+                continue
         name = values['stop_name']
         lat = float(values['stop_lat'])
         lon = float(values['stop_lon'])
@@ -173,7 +176,10 @@ def load_trips(system):
             print(f'Invalid service id: {service_id}')
             continue
         block_id = values['block_id']
-        direction_id = int(values['direction_id'])
+        try:
+            direction_id = int(values['direction_id'])
+        except:
+            direction_id = 0
         shape_id = values['shape_id']
         headsign = values['trip_headsign']
         
@@ -192,7 +198,7 @@ def load_trips(system):
 
 def read_csv(system, name):
     rows = []
-    with open(f'./data/gtfs/{system.id}/{name}.txt', 'r') as file:
+    with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
