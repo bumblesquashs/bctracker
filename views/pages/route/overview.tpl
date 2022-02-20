@@ -1,5 +1,4 @@
 % from datetime import datetime
-% from formatting import format_date
 
 % rebase('base', title=str(route), include_maps=True)
 

@@ -15,7 +15,7 @@ from models.shape import Shape
 from models.stop import Stop
 from models.trip import Trip
 
-from formatting import format_csv
+import formatting
 
 def update(system):
     if not system.gtfs_enabled:
@@ -101,8 +101,8 @@ def load_services(system):
     system.services = {}
     for values in read_csv(system, 'calendar'):
         service_id = values['service_id']
-        start_date = format_csv(values['start_date'])
-        end_date = format_csv(values['end_date'])
+        start_date = formatting.csv(values['start_date'])
+        end_date = formatting.csv(values['end_date'])
         mon = values['monday'] == '1'
         tue = values['tuesday'] == '1'
         wed = values['wednesday'] == '1'
@@ -120,9 +120,9 @@ def load_services(system):
         if service is None:
             continue
         
-        date = format_csv(values['date'])
+        date = formatting.csv(values['date'])
         if exception_type == 1:
-            service.add_special_date(date)
+            service.add_included_date(date)
         if exception_type == 2:
             service.add_excluded_date(date)
 

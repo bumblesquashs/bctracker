@@ -1,5 +1,6 @@
-% from formatting import format_date, format_date_mobile
 % from models.model import BusModelType
+
+% import formatting
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
 
@@ -140,8 +141,8 @@
             <tbody>
                 % for record in records:
                     <tr>
-                        <td class="desktop-only">{{ format_date(record.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                        <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                         <td>{{ record.system }}</td>
                         <td>
                             % if record.is_available:

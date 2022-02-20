@@ -8,6 +8,7 @@ from models.time import Time
 from models.transfer import Transfer
 
 import database
+import formatting
 
 def update(positions):
     for position in positions:
@@ -29,7 +30,7 @@ def update(positions):
             if last_record.system_id != position.system.id:
                 database.insert('transfers', {
                     'bus_number': bus.number,
-                    'date': date.strftime('%Y-%m-%d'),
+                    'date': formatting.database(date),
                     'old_system_id': last_record.system_id,
                     'new_system_id': position.system.id
                 })
@@ -51,7 +52,7 @@ def update(positions):
         
         record_id = database.insert('records', {
             'bus_number': bus.number,
-            'date': date.strftime('%Y-%m-%d'),
+            'date': formatting.database(date),
             'system_id': position.system.id,
             'block_id': block.id,
             'routes': block.get_routes_string(Sheet.CURRENT),
@@ -86,7 +87,7 @@ def get_last_seen(system):
     for data in records_data:
         record_id = data['record_id']
         bus = Bus(data['bus_number'])
-        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        date = formatting.database(data['date'])
         system_id = data['system_id']
         block_id = data['block_id']
         routes = data['routes']
@@ -118,7 +119,7 @@ def get_first_seen(system):
     for data in records_data:
         record_id = data['record_id']
         bus = Bus(data['bus_number'])
-        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        date = formatting.database(data['date'])
         system_id = data['system_id']
         block_id = data['block_id']
         routes = data['routes']
@@ -141,7 +142,7 @@ def get_bus_records(bus, limit=None):
     records = []
     for data in records_data:
         record_id = data['record_id']
-        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        date = formatting.database(data['date'])
         system_id = data['system_id']
         block_id = data['block_id']
         routes = data['routes']
@@ -166,7 +167,7 @@ def get_block_records(block, limit=None):
     for data in records_data:
         record_id = data['record_id']
         bus = Bus(data['bus_number'])
-        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        date = formatting.database(data['date'])
         system_id = data['system_id']
         routes = data['routes']
         start_time = Time(data['start_time'])
@@ -204,7 +205,7 @@ def get_trip_records(trip, limit=None):
     for data in records_data:
         record_id = data['tr.record_id']
         bus = Bus(data['r.bus_number'])
-        date = datetime.strptime(data['r.date'], '%Y-%m-%d')
+        date = formatting.database(data['r.date'])
         system_id = data['r.system_id']
         block_id = data['r.block_id']
         routes = data['r.routes']
@@ -232,7 +233,7 @@ def get_transfers(system, limit=None):
     for data in transfers_data:
         transfer_id = data['transfer_id']
         bus = Bus(data['bus_number'])
-        date = datetime.strptime(data['date'], '%Y-%m-%d')
+        date = formatting.database(data['date'])
         old_system_id = data['old_system_id']
         new_system_id = data['new_system_id']
         
@@ -260,7 +261,7 @@ def today(system, block_ids):
     
     args = [
         system.id,
-        date.strftime('%Y-%m-%d')
+        formatting.database(date)
     ]
     args += block_ids
     
