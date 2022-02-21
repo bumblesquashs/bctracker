@@ -93,6 +93,13 @@ form input[type="submit"] {
     display: block;
 }
 
+#search-desktop #search-desktop-results img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
 #search-desktop #search-desktop-results .message {
     padding: 12px;
     text-align: center;

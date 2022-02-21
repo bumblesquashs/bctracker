@@ -323,7 +323,7 @@
     function searchDesktop() {
         const inputElement = document.getElementById("search-desktop-input");
         const resultsElement = document.getElementById("search-desktop-results");
-        search(inputElement, resultsElement);
+        search(inputElement, resultsElement, false);
     }
     
     function toggleSearchNonDesktop() {
@@ -338,7 +338,7 @@
     function searchNonDesktop() {
         const inputElement = document.getElementById("search-non-desktop-input");
         const resultsElement = document.getElementById("search-non-desktop-results");
-        search(inputElement, resultsElement);
+        search(inputElement, resultsElement, true);
     }
     
     function setSelectedEntry(newIndex) {
@@ -390,7 +390,7 @@
         }
     }
 
-    function search(inputElement, resultsElement) {
+    function search(inputElement, resultsElement, useLightIcons) {
         const query = inputElement.value;
         if (query === undefined || query === null || query === "") {
             resultsElement.classList.add("display-none");
@@ -412,7 +412,7 @@
                     inputElement.onkeyup = function() {};
                 } else {
                     const results = request.response.results;
-                    resultsElement.innerHTML = getSearchHTML(results, count);
+                    resultsElement.innerHTML = getSearchHTML(results, count, useLightIcons);
                     
                     // Reset navigation
                     clearSearchHighlighting();
@@ -467,7 +467,7 @@
         }
     }
     
-    function getSearchHTML(results, count) {
+    function getSearchHTML(results, count, useLightIcons) {
         let html = "";
         if (count === 1) {
             html += "<div class='message smaller-font'>Showing 1 of 1 result</div>";
@@ -479,13 +479,25 @@
             let name = result.name;
             switch (result.type) {
                 case "bus":
-                    name = "Bus " + result.name;
+                    if (prefersDarkScheme || useLightIcons) {
+                        name = "<img src='/img/white/realtime.png' />Bus " + result.name;
+                    } else {
+                        name = "<img src='/img/black/realtime.png' />Bus " + result.name;
+                    }
                     break;
                 case "route":
-                    name = "Route " + result.name;
+                    if (prefersDarkScheme || useLightIcons) {
+                        name = "<img src='/img/white/routes.png' />Route " + result.name;
+                    } else {
+                        name = "<img src='/img/black/routes.png' />Route " + result.name;
+                    }
                     break;
                 case "stop":
-                    name = "Stop " + result.name;
+                    if (prefersDarkScheme || useLightIcons) {
+                        name = "<img src='/img/white/stop.png' />Stop " + result.name;
+                    } else {
+                        name = "<img src='/img/black/stop.png' />Stop " + result.name;
+                    }
                     break;
                 default:
                     break;
