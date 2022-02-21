@@ -15,16 +15,11 @@
     % blocks = system.get_blocks(sheet)
     % services = sorted({ s for b in blocks for s in b.get_services(sheet) })
     
+    % if len(services) > 1:
+        % include('components/service_navigation', services=services)
+    % end
+    
     <div class="container">
-        % if len(services) > 1:
-            <div class="navigation">
-                % for service in services:
-                    <a href="#service-{{service.id}}" class='button'>{{ service }}</a>
-                % end
-            </div>
-            <br />
-        % end
-        
         % for service in services:
             <div class="section">
                 <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>

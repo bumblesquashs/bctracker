@@ -15,15 +15,11 @@
     % services = route.get_services(sheet)
     % trips = route.get_trips(sheet)
     
+    % if len(services) > 1:
+        % include('components/service_navigation', services=services)
+    % end
+    
     <div class="container">
-        % if len(services) > 1:
-            <div class="navigation">
-                % for service in services:
-                    <a href="#service-{{service.id}}" class='button'>{{ service }}</a>
-                % end
-            </div>
-            <br />
-        % end
         
         % for service in services:
             % service_trips = [t for t in trips if t.service == service]

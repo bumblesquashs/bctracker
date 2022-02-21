@@ -128,33 +128,22 @@ form input[type="submit"] {
 }
 
 .container {
-    margin: -20px;
-}
-
-.container .navigation {
-    display: inline-block;
-    margin: 20px 20px -5px 20px;
-    font-size: 0pt;
-}
-
-.container .navigation .button {
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-.container .section {
-    margin: 20px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.container .section.no-inline {
-    display: block !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 40px;
 }
 
 .container .section table:last-child {
     margin-bottom: 0px;
+}
+
+.container.no-inline {
+    display: block;
+}
+
+.container.no-inline .section {
+    margin-bottom: 20px;
 }
 
 .dropdown {

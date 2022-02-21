@@ -122,14 +122,6 @@ table {
     display: block;
 }
 
-.container .navigation .button {
-    margin-bottom: 10px;
-}
-
-.container .navigation .button:last-child {
-    margin-bottom: 0px;
-}
-
 .desktop-only {
     display: none;
 }
