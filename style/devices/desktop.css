@@ -196,18 +196,12 @@ form input[type="submit"] {
     height: 100%;
 }
 
-.dropdown .content .title {
-    padding: 12px;
-    font-size: 12pt;
-    color: grey;
-}
-
 .mobile-only {
-    display: none;
+    display: none !important;
 }
 
 .non-desktop {
-    display: none;
+    display: none !important;
 }
 
 .page-header.map-page {
@@ -228,5 +222,5 @@ form input[type="submit"] {
 }
 
 .tablet-only {
-    display: none;
+    display: none !important;
 }
