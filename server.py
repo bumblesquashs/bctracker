@@ -2,7 +2,6 @@ from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, redirect, request, response, debug
 import cherrypy as cp
-import sys
 
 from models.bus import Bus
 from models.model import load_models
@@ -26,27 +25,23 @@ system_domain = 'https://{0}.bctracker.ca/{1}'
 system_domain_path = 'https://bctracker.ca/{0}/{1}'
 cookie_domain = None
 
-def start():
+def start(args):
     global mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
     
     database.connect()
     
-    force_gtfs_redownload = False
-    if len(sys.argv):
-        arg_str = ''.join(sys.argv[1:])
-        if 'r' in arg_str:
-            print('Forcing GTFS redownload')
-            force_gtfs_redownload = True
-        if 'd' in arg_str:
-            print('Starting bottle in DEBUG mode')
-            debug(True)
+    if args.debug:
+        print('Starting bottle in DEBUG mode')
+        debug(True)
     
     load_models()
     load_orders()
     load_systems()
     
     for system in get_systems():
-        if not gtfs.downloaded(system) or force_gtfs_redownload:
+        if not gtfs.downloaded(system) or args.reload:
+            if args.reload:
+                print('Forcing GTFS redownload')
             gtfs.update(system)
         else:
             gtfs.load(system)
