@@ -95,7 +95,7 @@
             icon.className = "icon";
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.style.backgroundColor = "#" + departure.colour;
-            icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
+            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
             let routesHTML = "";
             for (const route of stop.routes) {
@@ -134,7 +134,7 @@
             const icon = document.createElement("a");
             icon.className = "icon";
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
-            icon.innerHTML = "<div class='link'></div><img src='/img/stop.png' />";
+            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
             let routesHTML = "";
             for (const route of stop.routes) {

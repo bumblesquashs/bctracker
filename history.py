@@ -240,7 +240,7 @@ def today(system, block_ids):
     scheduled_rows = database.select('numbered_records',
         columns={
             'numbered_records.block_id': 'block_id',
-            'numbered_records.': 'bus_number'
+            'numbered_records.bus_number': 'bus_number'
         },
         ctes={
             'numbered_records': cte
