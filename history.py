@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from models.bus import Bus
 from models.record import Record
 from models.service import Sheet
-from models.time import Time
 from models.transfer import Transfer
 
 import database
@@ -24,7 +23,7 @@ def update(positions):
         date = today if hour >= 4 else today - timedelta(days=1)
         now = datetime.now().strftime('%H:%M')
         
-        records = get_bus_records(bus, limit=1)
+        records = get_records(bus=bus, limit=1)
         if len(records) > 0:
             last_record = records[0]
             if last_record.system_id != position.system.id:
@@ -68,240 +67,190 @@ def update(positions):
     database.commit()
 
 def get_last_seen(system):
-    filters = {
-        'rn': 1
-    }
-    if system is not None:
-        filters['system_id'] = system.id
-    records_data = database.select('''
-        (
-            SELECT record_id, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen,
-                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, record_id DESC) AS rn
-            FROM records
-        )
-        ''',
-        columns=['record_id', 'bus_number', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen'],
-        filters=filters,
-        order_by='bus_number')
-    records = []
-    for data in records_data:
-        record_id = data['record_id']
-        bus = Bus(data['bus_number'])
-        date = formatting.database(data['date'])
-        system_id = data['system_id']
-        block_id = data['block_id']
-        routes = data['routes']
-        start_time = Time(data['start_time'])
-        end_time = Time(data['end_time'])
-        first_seen = Time(data['first_seen'])
-        last_seen = Time(data['last_seen'])
-        
-        records.append(Record(record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen))
-    return records
+    row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.record_id DESC)'
+    order_by = 'numbered_records.bus_number'
+    return get_numbered_records(system, row_number_column, order_by)
 
 def get_first_seen(system):
-    filters = {
-        'rn': 1
+    row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.record_id ASC)'
+    order_by = {
+        'numbered_records.record_id': 'DESC'
     }
-    if system is not None:
-        filters['system_id'] = system.id
-    records_data = database.select('''
-        (
-            SELECT record_id, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen,
-                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY record_id ASC) AS rn
-            FROM records
-        )
-        ''',
-        columns=['record_id', 'bus_number', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen'],
+    return get_numbered_records(system, row_number_column, order_by)
+
+def get_numbered_records(system, row_number_column, order_by):
+    cte, args = database.build_select('records',
+        columns={
+            'records.record_id': 'record_id',
+            'records.bus_number': 'bus_number',
+            'records.date': 'date',
+            'records.system_id': 'system_id',
+            'records.block_id': 'block_id',
+            'records.routes': 'routes',
+            'records.start_time': 'start_time',
+            'records.end_time': 'end_time',
+            'records.first_seen': 'first_seen',
+            'records.last_seen': 'last_seen',
+            row_number_column: 'row_number'
+        })
+    rows = database.select('numbered_records',
+        columns={
+            'numbered_records.record_id': Record.ID_COLUMN,
+            'numbered_records.bus_number': Record.BUS_NUMBER_COLUMN,
+            'numbered_records.date': Record.DATE_COLUMN,
+            'numbered_records.system_id': Record.SYSTEM_ID_COLUMN,
+            'numbered_records.block_id': Record.BLOCK_ID_COLUMN,
+            'numbered_records.routes': Record.ROUTES_COLUMN,
+            'numbered_records.start_time': Record.START_TIME_COLUMN,
+            'numbered_records.end_time': Record.END_TIME_COLUMN,
+            'numbered_records.first_seen': Record.FIRST_SEEN_COLUMN,
+            'numbered_records.last_seen': Record.LAST_SEEN_COLUMN
+        },
+        ctes={
+            'numbered_records': cte
+        },
+        filters={
+            'numbered_records.row_number': 1,
+            'numbered_records.system_id': None if system is None else system.id
+        },
+        order_by=order_by,
+        custom_args=args)
+    return [Record(row) for row in rows]
+
+def get_records(bus=None, block=None, limit=None):
+    filters = {}
+    if bus is not None:
+        filters['records.bus_number'] = bus.number
+    if block is not None:
+        filters['records.block_id'] = block.id
+        filters['records.system_id'] = block.system.id
+    rows = database.select('records', 
+        columns={
+            'records.record_id': Record.ID_COLUMN,
+            'records.bus_number': Record.BUS_NUMBER_COLUMN,
+            'records.date': Record.DATE_COLUMN,
+            'records.system_id': Record.SYSTEM_ID_COLUMN,
+            'records.block_id': Record.BLOCK_ID_COLUMN,
+            'records.routes': Record.ROUTES_COLUMN,
+            'records.start_time': Record.START_TIME_COLUMN,
+            'records.end_time': Record.END_TIME_COLUMN,
+            'records.first_seen': Record.FIRST_SEEN_COLUMN,
+            'records.last_seen': Record.LAST_SEEN_COLUMN
+        },
         filters=filters,
-        order_by='date DESC, record_id DESC')
-    records = []
-    for data in records_data:
-        record_id = data['record_id']
-        bus = Bus(data['bus_number'])
-        date = formatting.database(data['date'])
-        system_id = data['system_id']
-        block_id = data['block_id']
-        routes = data['routes']
-        start_time = Time(data['start_time'])
-        end_time = Time(data['end_time'])
-        first_seen = Time(data['first_seen'])
-        last_seen = Time(data['last_seen'])
-        
-        records.append(Record(record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen))
-    return records
-
-def get_bus_records(bus, limit=None):
-    records_data = database.select('records', 
-        columns=['record_id', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen'],
-        filters={
-            'bus_number': bus.number
+        order_by={
+            'records.record_id': 'DESC'
         },
-        order_by='date DESC, record_id DESC',
         limit=limit)
-    records = []
-    for data in records_data:
-        record_id = data['record_id']
-        date = formatting.database(data['date'])
-        system_id = data['system_id']
-        block_id = data['block_id']
-        routes = data['routes']
-        start_time = Time(data['start_time'])
-        end_time = Time(data['end_time'])
-        first_seen = Time(data['first_seen'])
-        last_seen = Time(data['last_seen'])
-        
-        records.append(Record(record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen))
-    return records
-
-def get_block_records(block, limit=None):
-    records_data = database.select('records', 
-        columns=['record_id', 'bus_number', 'date', 'system_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen'],
-        filters={
-            'block_id': block.id,
-            'system_id': block.system.id
-        },
-        order_by='date DESC, record_id DESC',
-        limit=limit)
-    records = []
-    for data in records_data:
-        record_id = data['record_id']
-        bus = Bus(data['bus_number'])
-        date = formatting.database(data['date'])
-        system_id = data['system_id']
-        routes = data['routes']
-        start_time = Time(data['start_time'])
-        end_time = Time(data['end_time'])
-        first_seen = Time(data['first_seen'])
-        last_seen = Time(data['last_seen'])
-        
-        records.append(Record(record_id, bus, date, system_id, block.id, routes, start_time, end_time, first_seen, last_seen))
-    return records
+    return [Record(row) for row in rows]
 
 def get_trip_ids(record):
-    trip_records_data = database.select('trip_records',
-        columns=['trip_id'],
-        filters={
-            'record_id': record.id
-        })
-    trip_ids = set()
-    for data in trip_records_data:
-        trip_ids.add(data['trip_id'])
-    return trip_ids
+    rows = database.select('trip_records', columns=['trip_id'], filters={'record_id': record.id})
+    return {row['trip_id'] for row in rows}
 
 def get_trip_records(trip, limit=None):
-    records_data = database.select('trip_records tr',
-        columns=['tr.record_id', 'r.bus_number', 'r.date', 'r.system_id', 'r.block_id', 'r.routes', 'r.start_time', 'r.end_time', 'r.first_seen', 'r.last_seen'],
+    rows = database.select('trip_records',
+        columns={
+            'trip_records.record_id': Record.ID_COLUMN,
+            'records.bus_number': Record.BUS_NUMBER_COLUMN,
+            'records.date': Record.DATE_COLUMN,
+            'records.system_id': Record.SYSTEM_ID_COLUMN,
+            'records.block_id': Record.BLOCK_ID_COLUMN,
+            'records.routes': Record.ROUTES_COLUMN,
+            'records.start_time': Record.START_TIME_COLUMN,
+            'records.end_time': Record.END_TIME_COLUMN,
+            'records.first_seen': Record.FIRST_SEEN_COLUMN,
+            'records.last_seen': Record.LAST_SEEN_COLUMN
+        },
         joins={
-            'records r': 'r.record_id = tr.record_id'
+            'records': {
+                'records.record_id': 'trip_records.record_id'
+            }
         },
         filters={
-            'tr.trip_id': trip.id,
-            'r.system_id': trip.system.id
+            'trip_records.trip_id': trip.id,
+            'records.system_id': trip.system.id
         },
-        order_by='date DESC, tr.record_id DESC',
+        order_by={
+            'trip_records.record_id': 'DESC'
+        },
         limit=limit)
-    records = []
-    for data in records_data:
-        record_id = data['tr.record_id']
-        bus = Bus(data['r.bus_number'])
-        date = formatting.database(data['r.date'])
-        system_id = data['r.system_id']
-        block_id = data['r.block_id']
-        routes = data['r.routes']
-        start_time = Time(data['r.start_time'])
-        end_time = Time(data['r.end_time'])
-        first_seen = Time(data['r.first_seen'])
-        last_seen = Time(data['r.last_seen'])
-        
-        records.append(Record(record_id, bus, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen))
-    return records
+    return [Record(row) for row in rows]
 
 def get_transfers(system, limit=None):
-    filters = None
-    args = []
+    filters = {}
     if system is not None:
-        filters = 'old_system_id = ? OR new_system_id = ?'
-        args = [system.id, system.id]
-    transfers_data = database.select('transfers', 
-        columns=['transfer_id', 'bus_number', 'date', 'old_system_id', 'new_system_id'],
+        filters['transfers.old_system_id'] = system.id
+        filters['transfers.new_system_id'] = system.id
+    rows = database.select('transfers',
+        columns={
+            'transfers.transfer_id': Transfer.ID_COLUMN,
+            'transfers.bus_number': Transfer.BUS_NUMBER_COLUMN,
+            'transfers.date': Transfer.DATE_COLUMN,
+            'transfers.old_system_id': Transfer.OLD_SYSTEM_ID_COLUMN,
+            'transfers.new_system_id': Transfer.NEW_SYSTEM_ID_COLUMN
+        },
         filters=filters,
-        order_by='date DESC, transfer_id DESC',
-        limit=limit,
-        args=args)
-    transfers = []
-    for data in transfers_data:
-        transfer_id = data['transfer_id']
-        bus = Bus(data['bus_number'])
-        date = formatting.database(data['date'])
-        old_system_id = data['old_system_id']
-        new_system_id = data['new_system_id']
-        
-        transfers.append(Transfer(transfer_id, bus, date, old_system_id, new_system_id))
-    return transfers
+        operation='OR',
+        order_by={
+            'transfers.transfer_id': 'DESC'
+        },
+        limit=limit)
+    return [Transfer(row) for row in rows]
 
 def recorded_buses(system):
-    filters = None
+    filters = {}
     if system is not None:
-        filters = {
-            'system_id': system.id
-        }
-    records_data = database.select('records', columns=['DISTINCT bus_number'], filters=filters)
-    buses = []
-    for data in records_data:
-        buses.append(Bus(data['DISTINCT bus_number']))
-    return buses
+        filters['system_id'] = system.id
+    rows = database.select('records', columns=['bus_number'], distinct=True, filters=filters)
+    return [Bus(row['bus_number']) for row in rows]
 
 def today(system, block_ids):
     hour = datetime.now().hour
     today = datetime.today()
     date = today if hour >= 4 else today - timedelta(days=1)
     
-    block_id_pattern = ', '.join(['?'] * len(block_ids))
-    
-    args = [
-        system.id,
-        formatting.database(date)
-    ]
-    args += block_ids
-    
-    recorded_data = database.select('trip_records tr',
-        columns=['tr.trip_id', 'r.bus_number'],
-        joins='records r ON r.record_id = tr.record_id',
-        filters=[
-            'r.system_id = ?',
-            'r.date = ?',
-            f'r.block_id IN ({block_id_pattern})'
-        ],
-        args=args)
-    recorded_buses = {}
-    for data in recorded_data:
-        trip_id = data['tr.trip_id']
-        bus = Bus(data['r.bus_number'])
-        
-        recorded_buses[trip_id] = bus
-    
-    scheduled_data = database.select(f'''
-        (
-            SELECT bus_number, block_id,
-                ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, record_id DESC) AS rn
-            FROM records
-            WHERE system_id = ? AND date = ? AND block_id IN ({block_id_pattern})
-        )
-        ''',
-        columns=['block_id', 'bus_number'],
-        filters={
-            'rn': 1
+    recorded_rows = database.select('trip_records',
+        columns={
+            'trip_records.trip_id': 'trip_id',
+            'records.bus_number': 'bus_number'
         },
-        args=args)
-    scheduled_buses = {}
-    for data in scheduled_data:
-        block_id = data['block_id']
-        bus = Bus(data['bus_number'])
-        
-        scheduled_buses[block_id] = bus
+        joins={
+            'records': {
+                'records.record_id': 'trip_records.record_id'
+            }
+        },
+        filters={
+            'records.system_id': system.id,
+            'records.date': formatting.database(date),
+            'records.block_id': block_ids
+        })
+    
+    cte, args = database.build_select('records',
+        columns={
+            'records.bus_number': 'bus_number',
+            'records.block_id': 'block_id',
+            'ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, record_id DESC)': 'row_number'
+        },
+        filters={
+            'records.system_id': system.id,
+            'records.date': formatting.database(date),
+            'records.block_id': block_ids
+        })
+    scheduled_rows = database.select('numbered_records',
+        columns={
+            'numbered_records.block_id': 'block_id',
+            'numbered_records.': 'bus_number'
+        },
+        ctes={
+            'numbered_records': cte
+        },
+        filters={
+            'numbered_records.row_number': 1
+        },
+        custom_args=args)
     
     return {
-        'recorded': recorded_buses,
-        'scheduled': scheduled_buses
+        'recorded': {row['trip_id']: Bus(row['bus_number']) for row in recorded_rows},
+        'scheduled': {row['block_id']: Bus(row['bus_number']) for row in scheduled_rows}
     }

@@ -256,7 +256,7 @@ def system_bus_number(system_id, number):
     bus = Bus(number)
     if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus/overview', system_id, bus=bus, records=history.get_bus_records(bus, 20))
+    return systems_template('bus/overview', system_id, bus=bus, records=history.get_records(bus=bus, limit=20))
 
 @app.route('/bus/<number:int>/history')
 @app.route('/bus/<number:int>/history/')
@@ -269,7 +269,7 @@ def system_bus_number_history(system_id, number):
     bus = Bus(number)
     if bus.order is None:
         return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus/history', system_id, bus=bus, records=history.get_bus_records(bus))
+    return systems_template('bus/history', system_id, bus=bus, records=history.get_records(bus=bus))
 
 @app.route('/bus/<number:int>/map')
 @app.route('/bus/<number:int>/map/')
@@ -445,7 +445,7 @@ def system_blocks_id_history(system_id, block_id):
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
     sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/history', system_id, block=block, sheet=sheet, records=history.get_block_records(block))
+    return systems_template('block/history', system_id, block=block, sheet=sheet, records=history.get_records(block=block))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
