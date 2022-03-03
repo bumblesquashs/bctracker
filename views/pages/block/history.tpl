@@ -1,6 +1,6 @@
 % from datetime import datetime
 
-% from formatting import format_date, format_date_mobile
+% import formatting
 
 % rebase('base', title=f'Block {block.id}')
 
@@ -31,7 +31,7 @@
                         % if days_since_last_tracked == 0:
                             Today
                         % else:
-                            {{ format_date(last_tracked) }}
+                            {{ formatting.long(last_tracked) }}
                             <br />
                             <span class="smaller-font">
                                 % if days_since_last_tracked == 1:
@@ -49,7 +49,7 @@
                         % if days_since_first_tracked == 0:
                             Today
                         % else:
-                            {{ format_date(first_tracked) }}
+                            {{ formatting.long(first_tracked) }}
                             <br />
                             <span class="smaller-font">
                                 % if days_since_first_tracked == 1:
@@ -104,8 +104,8 @@
                         % bus = record.bus
                         % order = bus.order
                         <tr>
-                            <td class="desktop-only">{{ format_date(record.date) }}</td>
-                            <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                            <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                            <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                             <td>
                                 % if bus.is_unknown:
                                     {{ bus }}

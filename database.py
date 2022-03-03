@@ -12,6 +12,11 @@ def disconnect():
     connection.close()
     connection = None
 
+def backup():
+    backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
+    connection.backup(backup)
+    backup.close()
+
 def commit():
     connection.commit()
 
@@ -20,65 +25,21 @@ def execute(sql, args=None):
     
     if type(args) is list:
         args = tuple(args)
-    if args is None:
+    if len(args) == 0:
         return connection.cursor().execute(sql)
     else:
         return connection.cursor().execute(sql, args)
 
-def select(table, columns='*', joins=None, filters=None, order_by=None, limit=None, page=None, args=None):
-    args = [] if args is None else args
+def select(table, columns, distinct=False, ctes=None, joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+    custom_args = [] if custom_args is None else custom_args
+    sql, args = build_select(table, columns, distinct, ctes, joins, filters, operation, group_by, order_by, limit, page)
     
-    if type(columns) is not list:
-        columns = [columns]
-    columns_string = ', '.join(columns)
-    sql = f'SELECT {columns_string} FROM {table}'
-    
-    if type(joins) is str:
-        sql += f' JOIN {joins}'
-    elif type(joins) is list:
-        joins_string = f' JOIN '.join(joins)
-        sql += f' JOIN {joins_string}'
-    elif type(joins) is dict:
-        for key in joins.keys():
-            sql += f' JOIN {key}'
-            join_filters = joins[key]
-            if type(join_filters) is str:
-                sql += f' ON {join_filters}'
-            elif type(join_filters) is list:
-                join_filters_string = ' AND '.join(join_filters)
-                sql += f' ON {join_filters_string}'
-            elif type(join_filters) is dict:
-                join_keys = join_filters.keys()
-                args += [join_filters[k] for k in join_keys]
-                join_filters_string = ' AND '.join([f'{k} = ?' for k in join_keys])
-                sql += f' ON {join_filters_string}'
-    
-    if type(filters) is str:
-        sql += f' WHERE {filters}'
-    elif type(filters) is list:
-        if len(filters) > 0:
-            filters_string = ' AND '.join(filters)
-            sql += f' WHERE {filters_string}'
-    elif type(filters) is dict:
-        filters = {k: v for (k, v) in filters.items() if v is not None}
-        keys = filters.keys()
-        if len(keys) > 0:
-            args += [filters[k] for k in keys]
-            filters_string = ' AND '.join([f'{k} = ?' for k in keys])
-            sql += f' WHERE {filters_string}'
-    
-    if order_by is not None:
-        sql += f' ORDER BY {order_by}'
-    if limit is not None:
-        sql += f' LIMIT {int(limit)}'
-        if page is not None:
-            offset = int(limit) * int(page)
-            sql += f' OFFSET {offset}'
-    
-    result = execute(sql, args)
-    if columns == ['*']:
-        return result
-    return [dict(zip(columns, r)) for r in result]
+    result = execute(sql, custom_args + args)
+    if type(columns) is list:
+        return [dict(zip(columns, r)) for r in result]
+    elif type(columns) is dict:
+        return [dict(zip(columns.values(), r)) for r in result]
+    return result
 
 def insert(table, values):
     if type(values) is dict:
@@ -94,45 +55,126 @@ def insert(table, values):
         sql = f'INSERT INTO {table} VALUES ({values_string})'
     return execute(sql, values).lastrowid
 
-def update(table, values, filters=None, args=None):
-    args = [] if args is None else args
-    
+def update(table, values, filters=None, operation='AND'):
     columns = values.keys()
     values = list(values.values())
     columns_string = ', '.join([c + ' = ?' for c in columns])
-    sql = f'UPDATE {table} SET {columns_string}'
     
-    if type(filters) is str:
-        sql += f' WHERE {filters}'
-    elif type(filters) is list:
-        filters_string = ' AND '.join(filters)
-        sql += f' WHERE {filters_string}'
-    elif type(filters) is dict:
-        keys = filters.keys()
-        args += [filters[k] for k in keys]
-        filters_string = ' AND '.join([f'{k} = ?' for k in keys])
-        sql += f' WHERE {filters_string}'
-    return execute(sql, values + args)
+    where, args = build_where(filters, operation)
+    if where is None:
+        return execute(f'UPDATE {table} SET {columns_string}', values)
+    return execute(f'UPDATE {table} SET {columns_string} WHERE {where}', values + args)
 
-def delete(table, filters=None, args=None):
-    args = [] if args is None else args
-    
-    sql = f'DELETE FROM {table}'
-    
-    if type(filters) is str:
-        sql += f' WHERE {filters}'
-    elif type(filters) is list:
-        filters_string = ' AND '.join(filters)
-        sql += f' WHERE {filters_string}'
-    elif type(filters) is dict:
-        keys = filters.keys()
-        args += [filters[k] for k in keys]
-        filters_string = ' AND '.join([f'{k} = ?' for k in keys])
-        sql += f' WHERE {filters_string}'
-    
-    return execute(sql, args)
+def delete(table, filters=None, operation='AND'):
+    where, args = build_where(filters, operation)
+    if where is None:
+        return execute(f'DELETE FROM {table}')
+    return execute(f'DELETE FROM {table} WHERE {where}', args)
 
-def backup():
-    backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
-    connection.backup(backup)
-    backup.close()
+def build_select(table, columns, distinct=False, ctes=None, joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+    custom_args = [] if custom_args is None else custom_args
+    sql = []
+    
+    for cte in build_ctes(ctes):
+        sql.append('WITH ' + cte)
+    
+    sql.append('SELECT')
+    
+    if distinct:
+        sql.append('DISTINCT')
+    
+    if type(columns) is str:
+        sql.append(columns)
+    elif type(columns) is list:
+        sql.append(', '.join(columns))
+    elif type(columns) is dict:
+        sql.append(', '.join([f'{k} AS {v}' for (k, v) in columns.items()]))
+    else:
+        sql.append('*')
+    
+    sql.append('FROM ' + table)
+    
+    for join in build_joins(joins):
+        sql.append('JOIN ' + join)
+    
+    where, args = build_where(filters, operation)
+    if where is not None:
+        sql.append('WHERE ' + where)
+    
+    if type(group_by) is str:
+        sql.append('GROUP BY ' + group_by)
+    elif type(group_by) is list:
+        sql.append('GROUP BY ' + ', '.join(group_by))
+    
+    if type(order_by) is str:
+        sql.append('ORDER BY ' + order_by)
+    elif type(order_by) is list:
+        sql.append('ORDER BY ' + ', '.join(order_by))
+    elif type(order_by) is dict:
+        sql.append('ORDER BY ' + ', '.join([f'{k} {v}' for (k, v) in order_by.items()]))
+    
+    if type(limit) is int:
+        sql.append(f'LIMIT {limit}')
+        if type(page) is int:
+            offset = limit * page
+            sql.append(f'OFFSET {offset}')
+    
+    return ' '.join(sql), custom_args + args
+
+def build_ctes(ctes):
+    if type(ctes) is str:
+        return [ctes]
+    if type(ctes) is list:
+        return ctes
+    if type(ctes) is dict:
+        return [f'{k} AS ({v})' for (k, v) in ctes.items()]
+    return []
+
+def build_joins(joins):
+    if type(joins) is str:
+        return [joins]
+    elif type(joins) is list:
+        return joins
+    elif type(joins) is dict:
+        results = []
+        for key in joins.keys():
+            join = [key]
+            filters = joins[key]
+            if type(filters) is str:
+                join.append('ON ' + filters)
+            elif type(filters) is list:
+                join.append('ON ' + ' AND '.join(filters))
+            elif type(filters) is dict:
+                join.append('ON ' + ' AND '.join([f'{k} = {v}' for (k, v) in filters.items()]))
+            results.append(' '.join(join))
+        return results
+    return []
+
+def build_where(filters, operation):
+    if type(filters) is str:
+        return filters, []
+    elif type(filters) is list:
+        if len(filters) > 0:
+            return f' {operation} '.join(filters), []
+    elif type(filters) is dict:
+        expressions = []
+        args = []
+        for key in filters.keys():
+            value = filters[key]
+            if value is None:
+                continue
+            if type(value) is list:
+                args += value
+                args_string = ', '.join(['?'] * len(value))
+                expressions.append(f'{key} IN ({args_string})')
+            elif type(value) is dict:
+                for (k, v) in value.items():
+                    if v is not None:
+                        args.append(v)
+                        expressions.append(f'{key} {k} ?')
+            else:
+                args.append(value)
+                expressions.append(f'{key} = ?')
+        if len(expressions) > 0:
+            return f' {operation} '.join(expressions), args
+    return None, []

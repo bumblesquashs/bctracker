@@ -1,4 +1,4 @@
-% from formatting import format_date
+% import formatting
 
 <div class="service-indicator">
     % if get('compact', False):
@@ -25,7 +25,7 @@
         % if start_date is None or end_date is None:
             <div class="title">Service Days</div>
         % else:
-            <div class="title">{{ format_date(start_date) }} to {{ format_date(end_date) }}</div>
+            <div class="title">{{ formatting.long(start_date) }} to {{ formatting.long(end_date) }}</div>
         % end
         <div class="dates">
             <span class="date {{ 'running' if len([s for s in services if s.mon]) > 0 else '' }}">Mon</span>

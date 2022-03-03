@@ -1,4 +1,4 @@
-% from formatting import format_date, format_date_mobile
+% import formatting
 
 % rebase('base', title='Vehicle History')
 
@@ -65,8 +65,8 @@
                             {{ order }}
                         % end
                     </td>
-                    <td class="desktop-only">{{ format_date(record.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                     % if system is None:
                         <td class="non-mobile">{{ record.system }}</td>
                     % end

@@ -508,6 +508,39 @@ table.striped tr.divider {
     text-align: center;
 }
 
+.service-navigation {
+    margin-bottom: 20px;
+}
+
+.service-navigation .buttons {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.service-navigation .buttons .button .special-number {
+    font-size: 10pt;
+    line-height: 10pt;
+    position: relative;
+    top: -0.4em;
+}
+
+.service-navigation .special-services {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.service-navigation .special-services li {
+    margin-bottom: 2px;
+}
+
+.service-navigation .special-services .special-number {
+    font-weight: bold;
+}
+
 .tab-button {
     border-width: 1px;
     border-style: solid;

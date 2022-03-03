@@ -1,4 +1,4 @@
-% from formatting import format_date, format_date_mobile
+% import formatting
 
 % rebase('base', title='Vehicle History')
 
@@ -43,8 +43,8 @@
                 % same_date = last_date is None or record.date == last_date
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
-                    <td class="desktop-only">{{ format_date(record.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:

@@ -128,8 +128,17 @@ table.striped tr:nth-child(2n-1) {
     background-color: #094409;
 }
 
+#menu .header {
+    color: #FFFFFF;
+    border-top-color: #ABABAB;
+}
+
 #menu .menu-button {
     color: #FFFFFF;
+}
+
+#menu .menu-button.system.disabled {
+    color: #ABABAB;
 }
 
 #refresh-button:hover {

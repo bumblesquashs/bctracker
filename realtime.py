@@ -84,8 +84,11 @@ def active_buses():
     return [p.bus for p in positions.values()]
 
 def last_updated_string():
-    if last_updated.date() == datetime.now().date():
+    now = datetime.now().date()
+    if last_updated.date() == now:
         return last_updated.strftime("at %H:%M")
+    if last_updated.year == now.year:
+        return last_updated.strftime("%B %-d at %H:%M")
     return last_updated.strftime("%B %-d, %Y at %H:%M")
 
 def validate(system):
