@@ -23,17 +23,16 @@
         
         % for service in services:
             % service_trips = [t for t in trips if t.service == service]
-            % direction_ids = {t.direction_id for t in service_trips}
+            % directions = {t.direction for t in service_trips}
             <div class="section">
                 <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>
                 <div class="subtitle">{{ service.date_string }}</div>
                 <div class="container">
-                    % for direction_id in direction_ids:
-                        % direction_trips = [t for t in service_trips if t.direction_id == direction_id]
+                    % for direction in directions:
+                        % direction_trips = [t for t in service_trips if t.direction == direction]
                         <div class="section">
-                            % if len(direction_ids) > 1:
-                                % directions = sorted({t.direction for t in direction_trips})
-                                <h3>{{ '/'.join(directions) }}</h3>
+                            % if len(directions) > 1:
+                                <h3>{{ direction.value }}</h3>
                             % end
                             <table class="striped">
                                 <thead>

@@ -110,16 +110,15 @@
             % today_buses = today(route.system, list({t.block_id for t in today_trips}))
             % recorded_buses = today_buses['recorded']
             % scheduled_buses = today_buses['scheduled']
-            % direction_ids = {t.direction_id for t in today_trips}
+            % directions = {t.direction for t in today_trips}
             
             <div class="container">
-                % for direction_id in direction_ids:
-                    % direction_trips = [t for t in today_trips if t.direction_id == direction_id]
+                % for direction in directions:
+                    % direction_trips = [t for t in today_trips if t.direction == direction]
                     % if len(direction_trips) > 0:
                         <div class="section">
-                            % if len(direction_ids) > 1:
-                                % directions = sorted({t.direction for t in direction_trips})
-                                <h3>{{ '/'.join(directions) }}</h3>
+                            % if len(directions) > 1:
+                                <h3>{{ direction.value }}</h3>
                             % end
                             
                             % if system is None or system.realtime_enabled:

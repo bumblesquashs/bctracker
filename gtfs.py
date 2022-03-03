@@ -176,9 +176,9 @@ def load_trips(system):
             print(f'Invalid service id: {service_id}')
             continue
         block_id = values['block_id']
-        try:
+        if 'direction_id' in values:
             direction_id = int(values['direction_id'])
-        except:
+        else:
             direction_id = 0
         shape_id = values['shape_id']
         headsign = values['trip_headsign']

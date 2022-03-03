@@ -50,6 +50,8 @@ def update_positions(system):
         bus_number_str = str(bus_number)
         if len(bus_number_str) > 4:
             bus_number = int(bus_number_str[-4:])
+        if bus_number >= 9990:
+            continue
         position = Position(system, True, Bus(bus_number))
         try:
             if vehicle.trip.schedule_relationship == 0 and vehicle.trip.trip_id != '':

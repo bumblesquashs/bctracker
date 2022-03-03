@@ -1,6 +1,16 @@
+from enum import Enum
+
 from datetime import datetime
 
 import realtime
+
+class Direction(Enum):
+    CIRCULAR = 'Circular'
+    SOUTHBOUND = 'Southbound'
+    NORTHBOUND = 'Northbound'
+    WESTBOUND = 'Westbound'
+    EASTBOUND = 'Eastbound'
+    UNKNOWN = 'Unknown'
 
 class Trip:
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -76,13 +86,13 @@ class Trip:
             lat_diff = first_stop.lat - last_stop.lat
             lon_diff = first_stop.lon - last_stop.lon
             if lat_diff == 0 and lon_diff == 0:
-                self._direction = 'Circular'
+                self._direction = Direction.CIRCULAR
             elif abs(lat_diff) > abs(lon_diff):
-                self._direction = 'Southbound' if lat_diff > 0 else 'Northbound'
+                self._direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
             elif abs(lon_diff) > abs(lat_diff):
-                self._direction = 'Westbound' if lon_diff > 0 else 'Eastbound'
+                self._direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
             else:
-                self._direction = ''
+                self._direction = Direction.UNKNOWN
         return self._direction
     
     @property

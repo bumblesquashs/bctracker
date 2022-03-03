@@ -1,3 +1,6 @@
+
+from os.path import commonprefix
+
 import realtime
 
 from models.search_result import SearchResult
@@ -15,8 +18,31 @@ class Route:
         
         self.trips = []
         self._sheets = None
+        self._auto_name = None
     
     def __str__(self):
+        if self.name == '':
+            if self._auto_name is None:
+                headsigns = self.get_headsigns(self.default_sheet)
+                for i in range(len(headsigns)):
+                    headsign = headsigns[i].lstrip(self.number).strip(' ').lstrip('A ').lstrip('B ')
+                    if ' - ' in headsign:
+                        headsign = headsign.split(' - ')[0]
+                    if ' to ' in headsign:
+                        headsign = headsign.split(' to ')[0]
+                    if ' To ' in headsign:
+                        headsign = headsign.split(' To ')[0]
+                    if ' via ' in headsign:
+                        headsign = headsign.split(' via ')[0]
+                    if ' Via ' in headsign:
+                        headsign = headsign.split(' Via ')[0]
+                    headsigns[i] = headsign.strip(' ')
+                prefix = commonprefix(headsigns).strip(' ')
+                if prefix == '':
+                    self._auto_name = f'{self.number} ' + ' / '.join(headsigns)
+                else:
+                    self._auto_name = f'{self.number} {prefix}'
+            return self._auto_name
         return f'{self.number} {self.name}'
     
     def __hash__(self):

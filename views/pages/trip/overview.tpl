@@ -41,7 +41,7 @@
         </div>
         <div class="section">
             <div class="name">Direction</div>
-            <div class="value">{{ trip.direction }}</div>
+            <div class="value">{{ trip.direction.value }}</div>
         </div>
         <div class="section">
             <div class="name">Route</div>
