@@ -120,23 +120,6 @@ table.striped tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
-#menu {
-    background-color: #053305;
-}
-
-#menu .header {
-    color: #FFFFFF;
-    border-top-color: #ABABAB;
-}
-
-#menu .menu-button {
-    color: #FFFFFF;
-}
-
-#menu .menu-button.system.disabled {
-    color: #ABABAB;
-}
-
 #refresh-button:hover {
     background-color: #053305;
 }
@@ -159,10 +142,6 @@ table.striped tr:nth-child(2n-1) {
 
 #search-desktop #search-desktop-results .message {
     color: #ABABAB;
-}
-
-#search-non-desktop {
-    background-color: #053305;
 }
 
 #search-non-desktop input[type="text"] {
@@ -290,6 +269,18 @@ table.striped tr:nth-child(2n-1) {
 .marker .icon {
     background-color: #276227;
     border-color: #393939;
+}
+
+.menu {
+    background-color: #053305;
+}
+
+.menu .menu-button {
+    color: #FFFFFF;
+}
+
+.menu .menu-button.disabled {
+    color: #ABABAB;
 }
 
 .news-post {
