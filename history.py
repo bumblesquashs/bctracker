@@ -74,6 +74,7 @@ def get_last_seen(system):
 def get_first_seen(system):
     row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.record_id ASC)'
     order_by = {
+        'numbered_records.date': 'DESC',
         'numbered_records.record_id': 'DESC'
     }
     return get_numbered_records(system, row_number_column, order_by)
@@ -95,16 +96,16 @@ def get_numbered_records(system, row_number_column, order_by):
         })
     rows = database.select('numbered_records',
         columns={
-            'numbered_records.record_id': Record.ID_COLUMN,
-            'numbered_records.bus_number': Record.BUS_NUMBER_COLUMN,
-            'numbered_records.date': Record.DATE_COLUMN,
-            'numbered_records.system_id': Record.SYSTEM_ID_COLUMN,
-            'numbered_records.block_id': Record.BLOCK_ID_COLUMN,
-            'numbered_records.routes': Record.ROUTES_COLUMN,
-            'numbered_records.start_time': Record.START_TIME_COLUMN,
-            'numbered_records.end_time': Record.END_TIME_COLUMN,
-            'numbered_records.first_seen': Record.FIRST_SEEN_COLUMN,
-            'numbered_records.last_seen': Record.LAST_SEEN_COLUMN
+            'numbered_records.record_id': 'record_id',
+            'numbered_records.bus_number': 'record_bus_number',
+            'numbered_records.date': 'record_date',
+            'numbered_records.system_id': 'record_system_id',
+            'numbered_records.block_id': 'record_block_id',
+            'numbered_records.routes': 'record_routes',
+            'numbered_records.start_time': 'record_start_time',
+            'numbered_records.end_time': 'record_end_time',
+            'numbered_records.first_seen': 'record_first_seen',
+            'numbered_records.last_seen': 'record_last_seen'
         },
         ctes={
             'numbered_records': cte
@@ -126,16 +127,16 @@ def get_records(bus=None, block=None, limit=None):
         filters['records.system_id'] = block.system.id
     rows = database.select('records', 
         columns={
-            'records.record_id': Record.ID_COLUMN,
-            'records.bus_number': Record.BUS_NUMBER_COLUMN,
-            'records.date': Record.DATE_COLUMN,
-            'records.system_id': Record.SYSTEM_ID_COLUMN,
-            'records.block_id': Record.BLOCK_ID_COLUMN,
-            'records.routes': Record.ROUTES_COLUMN,
-            'records.start_time': Record.START_TIME_COLUMN,
-            'records.end_time': Record.END_TIME_COLUMN,
-            'records.first_seen': Record.FIRST_SEEN_COLUMN,
-            'records.last_seen': Record.LAST_SEEN_COLUMN
+            'records.record_id': 'record_id',
+            'records.bus_number': 'record_bus_number',
+            'records.date': 'record_date',
+            'records.system_id': 'record_system_id',
+            'records.block_id': 'record_block_id',
+            'records.routes': 'record_routes',
+            'records.start_time': 'record_start_time',
+            'records.end_time': 'record_end_time',
+            'records.first_seen': 'record_first_seen',
+            'records.last_seen': 'record_last_seen'
         },
         filters=filters,
         order_by={
@@ -151,16 +152,16 @@ def get_trip_ids(record):
 def get_trip_records(trip, limit=None):
     rows = database.select('trip_records',
         columns={
-            'trip_records.record_id': Record.ID_COLUMN,
-            'records.bus_number': Record.BUS_NUMBER_COLUMN,
-            'records.date': Record.DATE_COLUMN,
-            'records.system_id': Record.SYSTEM_ID_COLUMN,
-            'records.block_id': Record.BLOCK_ID_COLUMN,
-            'records.routes': Record.ROUTES_COLUMN,
-            'records.start_time': Record.START_TIME_COLUMN,
-            'records.end_time': Record.END_TIME_COLUMN,
-            'records.first_seen': Record.FIRST_SEEN_COLUMN,
-            'records.last_seen': Record.LAST_SEEN_COLUMN
+            'trip_records.record_id': 'record_id',
+            'records.bus_number': 'record_bus_number',
+            'records.date': 'record_date',
+            'records.system_id': 'record_system_id',
+            'records.block_id': 'record_block_id',
+            'records.routes': 'record_routes',
+            'records.start_time': 'record_start_time',
+            'records.end_time': 'record_end_time',
+            'records.first_seen': 'record_first_seen',
+            'records.last_seen': 'record_last_seen'
         },
         joins={
             'records': {
@@ -184,11 +185,11 @@ def get_transfers(system, limit=None):
         filters['transfers.new_system_id'] = system.id
     rows = database.select('transfers',
         columns={
-            'transfers.transfer_id': Transfer.ID_COLUMN,
-            'transfers.bus_number': Transfer.BUS_NUMBER_COLUMN,
-            'transfers.date': Transfer.DATE_COLUMN,
-            'transfers.old_system_id': Transfer.OLD_SYSTEM_ID_COLUMN,
-            'transfers.new_system_id': Transfer.NEW_SYSTEM_ID_COLUMN
+            'transfers.transfer_id': 'transfer_id',
+            'transfers.bus_number': 'transfer_bus_number',
+            'transfers.date': 'transfer_date',
+            'transfers.old_system_id': 'transfer_old_system_id',
+            'transfers.new_system_id': 'transfer_new_system_id'
         },
         filters=filters,
         operation='OR',

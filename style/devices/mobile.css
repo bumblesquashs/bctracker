@@ -36,9 +36,13 @@ table {
     margin-bottom: 10px;
 }
 
-#header img {
-    width: 36px;
-    height: 36px;
+#change-system-menu {
+    padding: 10px 0px;
+}
+
+#change-system-menu .menu-button {
+    text-align: center;
+    padding: 10px 20px;
 }
 
 #header .title {
@@ -57,64 +61,17 @@ table {
     margin: 6px;
 }
 
-#header .search-non-desktop-toggle {
-    padding: 10px;
+#header .icon-menu-toggle {
+    padding: 10px 5px;
 }
 
-#menu {
-    position: relative;
-    z-index: 10;
-    margin: 0px;
-    padding: 5px 0px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-#menu .header {
-    width: 100%;
-    text-align: center;
-    padding: 15px 20px;
-    margin: 20px 20px 0px 20px;
-    font-family: Helvetica, sans-serif;
-    font-size: 16pt;
-    border-top-width: 1px;
-    border-top-style: solid;
-}
-
-#menu .menu-button {
-    display: inline-block;
-    padding: 15px 20px;
-    font-family: Helvetica, sans-serif;
-    font-size: 16pt;
-    font-weight: normal;
-    width: calc(50% - 40px);
-}
-
-#menu .menu-button img {
-    width: 24px;
-    height: 24px;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-
-#menu .menu-button img + span {
-    vertical-align: middle;
-}
-
-#menu .menu-button.system {
-    text-align: center;
-    font-size: 14pt;
-    padding: 10px 20px;
+#header .icon-menu-toggle img {
+    width: 36px;
+    height: 36px;
 }
 
 #search-non-desktop {
-    position: relative;
     padding: 20px;
-    font-family: Helvetica, sans-serif;
-    z-index: 10;
 }
 
 #search-non-desktop input[type="text"] {
@@ -180,6 +137,38 @@ table {
 
 .fixed-table {
     table-layout: fixed;
+}
+
+.menu {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 5px 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: Helvetica, sans-serif;
+}
+
+.menu .menu-button {
+    display: inline-block;
+    padding: 15px 20px;
+    font-size: 16pt;
+    font-weight: normal;
+    width: calc(50% - 40px);
+}
+
+.menu .menu-button img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.menu .menu-button img + span {
+    vertical-align: middle;
 }
 
 .non-mobile {

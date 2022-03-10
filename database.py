@@ -1,11 +1,52 @@
 import sqlite3
 
+SQL_SCRIPTS = [
+    '''
+        CREATE TABLE IF NOT EXISTS records (
+            record_id INTEGER PRIMARY KEY ASC,
+            bus_number INTEGER NOT NULL,
+            date TEXT NOT NULL,
+            system_id TEXT NOT NULL,
+            block_id TEXT NOT NULL,
+            routes TEXT NOT NULL,
+            start_time TEXT,
+            end_time TEXT,
+            first_seen TEXT,
+            last_seen TEXT
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS trip_records (
+            trip_record_id INTEGER PRIMARY KEY ASC,
+            record_id INTEGER NOT NULL,
+            trip_id TEXT NOT NULL,
+            FOREIGN KEY (record_id) REFERENCES records (record_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS transfers (
+            transfer_id INTEGER PRIMARY KEY ASC,
+            bus_number INTEGER NOT NULL,
+            date TEXT NOT NULL,
+            old_system_id TEXT NOT NULL,
+            new_system_id TEXT NOT NULL
+        )
+    ''',
+    'CREATE INDEX IF NOT EXISTS records_bus_number ON records (bus_number)',
+    'CREATE INDEX IF NOT EXISTS trip_records_record_id ON trip_records (record_id)',
+    'CREATE INDEX IF NOT EXISTS transfers_bus_number ON transfers (bus_number)'
+]
+
 connection = None
 
 def connect():
     global connection
     connection = sqlite3.connect('data/bctracker.db', check_same_thread=False)
     connection.execute('PRAGMA foreign_keys = 1')
+    
+    for sql in SQL_SCRIPTS:
+        execute(sql)
+    commit()
 
 def disconnect():
     global connection

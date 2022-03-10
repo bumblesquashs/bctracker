@@ -82,9 +82,16 @@
         % end
         
         <script>
-            function toggleMenu() {
-                document.getElementById("menu").classList.toggle("display-none");
+            function toggleNavigationMenu() {
+                document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search-non-desktop").classList.add("display-none");
+                document.getElementById("change-system-menu").classList.add("display-none");
+            }
+            
+            function toggleChangeSystemMenu() {
+                document.getElementById("navigation-menu").classList.add("display-none");
+                document.getElementById("search-non-desktop").classList.add("display-none");
+                document.getElementById("change-system-menu").classList.toggle("display-none");
             }
             
             String.prototype.format = function() {
@@ -186,20 +193,26 @@
                 % end
             </div>
             
-            <div class="menu-toggle non-desktop right" onclick="toggleMenu()">
+            <div class="menu-toggle non-desktop right" onclick="toggleNavigationMenu()">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
             
-            <div class="search-non-desktop-toggle non-desktop right" onclick="toggleSearchNonDesktop()">
+            % if len(systems) > 1:
+                <div class="icon-menu-toggle non-desktop right" onclick="toggleChangeSystemMenu()">
+                    <img src="/img/white/system.png" />
+                </div>
+            % end
+            
+            <div class="icon-menu-toggle non-desktop right" onclick="toggleSearchNonDesktop()">
                 <img src="/img/white/search.png" />
             </div>
             
             <br style="clear: both" />
         </div>
         
-        <div id="menu" class="non-desktop display-none">
+        <div id="navigation-menu" class="menu non-desktop display-none">
             % if system is None or system.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
                     <img src="/img/white/map.png" />
@@ -236,30 +249,31 @@
                 <img src="/img/white/about.png" />
                 <span>About</span>
             </a>
-            
-            % if len(systems) > 1:
-                % path = get('path', '')
-                <div class="header">Change System</div>
-                % if system is None:
-                    <a class="menu-button system disabled" style="width: 100%;">All Systems</a>
-                % else:
-                    <a class="menu-button system" style="width: 100%;" href="{{ get_url(None, path) }}">All Systems</a>
-                % end
-                % for alt_system in sorted(systems):
-                    % if system is not None and system == alt_system:
-                        <a class="menu-button system disabled">{{ alt_system }}</a>
-                    % else:
-                        <a class="menu-button system" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
-                    % end
-                % end
-            % end
         </div>
         
-        <div id="search-non-desktop" class="non-desktop display-none">
+        <div id="search-non-desktop" class="menu non-desktop display-none">
             <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">
             
             <div id="search-non-desktop-results" class="display-none"></div>
         </div>
+        
+        % if len(systems) > 1:
+            <div id="change-system-menu" class="menu non-desktop display-none">
+                % path = get('path', '')
+                % if system is None:
+                    <a class="menu-button disabled" style="width: 100%;">All Systems</a>
+                % else:
+                    <a class="menu-button" style="width: 100%;" href="{{ get_url(None, path) }}">All Systems</a>
+                % end
+                % for alt_system in sorted(systems):
+                    % if system is not None and system == alt_system:
+                        <a class="menu-button disabled">{{ alt_system }}</a>
+                    % else:
+                        <a class="menu-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
+                    % end
+                % end
+            </div>
+        % end
         
         <div id="subheader">
             <div class="content">
@@ -332,7 +346,8 @@
         if (!element.classList.contains("display-none")) {
             document.getElementById("search-non-desktop-input").focus();
         }
-        document.getElementById("menu").classList.add("display-none");
+        document.getElementById("navigation-menu").classList.add("display-none");
+        document.getElementById("change-system-menu").classList.add("display-none");
     }
     
     function searchNonDesktop() {

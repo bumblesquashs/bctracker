@@ -1,20 +1,28 @@
 
 from os.path import commonprefix
-
-import realtime
+from random import randint, seed, shuffle
 
 from models.search_result import SearchResult
 from models.service import Sheet
 
+import realtime
+
 class Route:
-    def __init__(self, system, route_id, number, name, colour):
+    def __init__(self, system, row):
         self.system = system
-        self.id = route_id
-        self.number = number
-        self.name = name
-        self.colour = colour
+        self.id = row['route_id']
+        self.number = row['route_short_name']
+        self.name = row['route_long_name']
+        if 'route_color' in row and row['route_color'] != '000000':
+            self.colour = row['route_color']
+        else:
+            # Generate a random colour based on system ID and route number
+            seed(system.id + self.number)
+            rgb = [randint(0, 100), randint(0, 255), randint(100, 255)]
+            shuffle(rgb)
+            self.colour = f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}'
         
-        self.number_value = int(''.join([d for d in number if d.isdigit()]))
+        self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
         
         self.trips = []
         self._sheets = None
