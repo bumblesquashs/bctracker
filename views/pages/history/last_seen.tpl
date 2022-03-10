@@ -1,4 +1,4 @@
-% from formatting import format_date, format_date_mobile
+% import formatting
 
 % rebase('base', title='Vehicle History')
 
@@ -40,9 +40,17 @@
             % for record in records:
                 % bus = record.bus
                 % order = bus.order
-                % same_model = last_bus is None or order == last_bus.order
+                % if last_bus is None:
+                    % same_order = True
+                % elif order is None and last_bus.order is None:
+                    % same_order = True
+                % elif order is None or last_bus.order is None:
+                    % same_order = False
+                % else:
+                    % same_order = order == last_bus.order
+                % end
                 % last_bus = bus
-                <tr class="{{'' if same_model else 'divider'}}">
+                <tr class="{{'' if same_order else 'divider'}}">
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:
@@ -57,8 +65,8 @@
                             {{ order }}
                         % end
                     </td>
-                    <td class="desktop-only">{{ format_date(record.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                     % if system is None:
                         <td class="non-mobile">{{ record.system }}</td>
                     % end

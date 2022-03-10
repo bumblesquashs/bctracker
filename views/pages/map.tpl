@@ -37,13 +37,13 @@
         <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
-                <img class="hidden" id="checkbox-image" src="/img/check.png" />
+                <img class="hidden" id="checkbox-image" src="/img/black/check.png" />
             </div>
             <span class="checkbox-label">Show Route Lines</span>
         </div>
         <div class="checkbox" onclick="toggleAutomaticRefresh()">
             <div class="box">
-                <img class="hidden" id="refresh-image" src="/img/check.png" />
+                <img class="hidden" id="refresh-image" src="/img/black/check.png" />
             </div>
             <span class="checkbox-label">Automatically Refresh</span>
         </div>

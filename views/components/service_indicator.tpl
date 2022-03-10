@@ -1,5 +1,3 @@
-% from models.service import ServiceType
-
 <div class="service-indicator">
     % if get('compact', False):
         <div class="dates compact">
@@ -12,12 +10,13 @@
             <span class="date {{ 'running' if service.sun else '' }}">S</span>
         </div>
     % else:
-        <div class="title">{{ service.date_string }}</div>
-        % if service.type == ServiceType.SPECIAL:
-            % if len(service.special_dates) > 0:
-                <div class="details">{{ service.special_dates_string }}</div>
+        % if service.special:
+            <div class="title">Special Service</div>
+            % if len(service.included_dates) > 0:
+                <div class="details">{{ service.included_dates_string }}</div>
             % end
         % else:
+            <div class="title">{{ service.date_string }}</div>
             <div class="dates">
                 <span class="date {{ 'running' if service.mon else '' }}">Mon</span>
                 <span class="date {{ 'running' if service.tue else '' }}">Tue</span>
@@ -27,8 +26,11 @@
                 <span class="date {{ 'running' if service.sat else '' }}">Sat</span>
                 <span class="date {{ 'running' if service.sun else '' }}">Sun</span>
             </div>
-            % if len(service.special_dates) > 0:
-                <div class="details">Special Service: {{ service.special_dates_string }}</div>
+            % if len(service.included_dates) > 0:
+                <div class="details">Special Service: {{ service.included_dates_string }}</div>
+            % end
+            % if len(service.excluded_dates) > 0:
+                <div class="details">No Service: {{ service.excluded_dates_string }}</div>
             % end
         % end
     % end

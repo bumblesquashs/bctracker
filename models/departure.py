@@ -1,12 +1,12 @@
 from models.time import Time
 
 class Departure:
-    def __init__(self, system, stop_id, trip_id, time_string, sequence):
+    def __init__(self, system, row):
         self.system = system
-        self.stop_id = stop_id
-        self.trip_id = trip_id
-        self.time = Time(time_string)
-        self.sequence = sequence
+        self.stop_id = row['stop_id']
+        self.trip_id = row['trip_id']
+        self.time = Time(row['departure_time'])
+        self.sequence = int(row['stop_sequence'])
     
     def __eq__(self, other):
         return self.stop_id == other.stop_id and self.trip_id == other.trip_id and self.sequence == other.sequence and self.time == other.time

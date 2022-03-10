@@ -93,6 +93,13 @@ form input[type="submit"] {
     display: block;
 }
 
+#search-desktop #search-desktop-results img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
 #search-desktop #search-desktop-results .message {
     padding: 12px;
     text-align: center;
@@ -128,33 +135,22 @@ form input[type="submit"] {
 }
 
 .container {
-    margin: -20px;
-}
-
-.container .navigation {
-    display: inline-block;
-    margin: 20px 20px -5px 20px;
-    font-size: 0pt;
-}
-
-.container .navigation .button {
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-.container .section {
-    margin: 20px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.container .section.no-inline {
-    display: block !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 40px;
 }
 
 .container .section table:last-child {
     margin-bottom: 0px;
+}
+
+.container.no-inline {
+    display: block;
+}
+
+.container.no-inline .section {
+    margin-bottom: 20px;
 }
 
 .dropdown {
@@ -207,18 +203,12 @@ form input[type="submit"] {
     height: 100%;
 }
 
-.dropdown .content .title {
-    padding: 12px;
-    font-size: 12pt;
-    color: grey;
-}
-
 .mobile-only {
-    display: none;
+    display: none !important;
 }
 
 .non-desktop {
-    display: none;
+    display: none !important;
 }
 
 .page-header.map-page {
@@ -239,5 +229,5 @@ form input[type="submit"] {
 }
 
 .tablet-only {
-    display: none;
+    display: none !important;
 }

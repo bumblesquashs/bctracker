@@ -36,6 +36,15 @@ table {
     margin-bottom: 10px;
 }
 
+#change-system-menu {
+    padding: 10px 0px;
+}
+
+#change-system-menu .menu-button {
+    text-align: center;
+    padding: 10px 20px;
+}
+
 #header .title {
     font-size: 18pt;
 }
@@ -52,32 +61,17 @@ table {
     margin: 6px;
 }
 
-#header .search-non-desktop-toggle {
-    padding: 10px;
+#header .icon-menu-toggle {
+    padding: 10px 5px;
 }
 
-#menu {
-    position: relative;
-    z-index: 10;
-    margin: 0px;
-    padding: 5px 0px;
-    overflow: hidden;
-}
-
-#menu .menu-button {
-    display: block;
-    color: white;
-    padding: 15px 20px;
-    font-family: Helvetica, sans-serif;
-    font-size: 16pt;
-    font-weight: normal;
+#header .icon-menu-toggle img {
+    width: 36px;
+    height: 36px;
 }
 
 #search-non-desktop {
-    position: relative;
     padding: 20px;
-    font-family: Helvetica, sans-serif;
-    z-index: 10;
 }
 
 #search-non-desktop input[type="text"] {
@@ -105,6 +99,14 @@ table {
     font-size: 16pt;
 }
 
+#search-non-desktop #search-non-desktop-results img {
+    width: 32px;
+    height: 32px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+}
+
 #search-non-desktop #search-non-desktop-results .message {
     padding: 10px 0px;
     text-align: center;
@@ -129,24 +131,48 @@ table {
     display: block;
 }
 
-.container .navigation .button {
-    margin-bottom: 10px;
-}
-
-.container .navigation .button:last-child {
-    margin-bottom: 0px;
-}
-
 .desktop-only {
-    display: none;
+    display: none !important;
 }
 
 .fixed-table {
     table-layout: fixed;
 }
 
+.menu {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 5px 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: Helvetica, sans-serif;
+}
+
+.menu .menu-button {
+    display: inline-block;
+    padding: 15px 20px;
+    font-size: 16pt;
+    font-weight: normal;
+    width: calc(50% - 40px);
+}
+
+.menu .menu-button img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.menu .menu-button img + span {
+    vertical-align: middle;
+}
+
 .non-mobile {
-    display: none;
+    display: none !important;
 }
 
 .smaller-font {
@@ -165,5 +191,5 @@ table {
 }
 
 .tablet-only {
-    display: none;
+    display: none !important;
 }

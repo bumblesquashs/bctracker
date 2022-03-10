@@ -124,14 +124,6 @@ table.striped tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
-#menu {
-    background-color: #347800;
-}
-
-#menu .menu-button {
-    color: #FFFFFF;
-}
-
 #refresh-button:hover {
     background-color: #026E6E;
 }
@@ -154,10 +146,6 @@ table.striped tr:nth-child(2n-1) {
 
 #search-desktop #search-desktop-results .message {
     color: #666666;
-}
-
-#search-non-desktop {
-    background-color: #347800;
 }
 
 #search-non-desktop input[type="text"] {
@@ -283,6 +271,18 @@ table.striped tr:nth-child(2n-1) {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #61C315;
+}
+
+.menu {
+    background-color: #347800;
+}
+
+.menu .menu-button {
+    color: #FFFFFF;
+}
+
+.menu .menu-button.disabled {
+    color: #ABABAB;
 }
 
 .news-post {

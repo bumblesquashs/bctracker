@@ -1,6 +1,7 @@
 
-% from formatting import format_date, format_date_mobile, days_since
 % from models.model import BusModelType
+
+% import formatting
 
 % rebase('base', title=f'Bus {bus}')
 
@@ -17,10 +18,10 @@
 
 % if len(records) > 0:
     % last_tracked = records[0].date
-    % days_since_last_tracked = days_since(last_tracked)
+    % days_since_last_tracked = formatting.days_since(last_tracked)
     
     % first_tracked = records[-1].date
-    % days_since_first_tracked = days_since(first_tracked)
+    % days_since_first_tracked = formatting.days_since(first_tracked)
     
     <div id="sidebar">
         <h2>Overview</h2>
@@ -31,7 +32,7 @@
                     % if days_since_last_tracked == '0 days ago':
                         Today
                     % else:
-                        {{ format_date(last_tracked) }}
+                        {{ formatting.long(last_tracked) }}
                         <br />
                         <span class="smaller-font">
                             {{ days_since_last_tracked }}
@@ -45,7 +46,7 @@
                     % if days_since_first_tracked == '0 days ago':
                         Today
                     % else:
-                        {{ format_date(first_tracked) }}
+                        {{ formatting.long(first_tracked) }}
                         <br />
                         <span class="smaller-font">
                             {{ days_since_first_tracked }}
@@ -103,8 +104,8 @@
             <tbody>
                 % for record in records:
                     <tr>
-                        <td class="desktop-only">{{ format_date(record.date) }}</td>
-                        <td class="non-desktop no-wrap">{{ format_date_mobile(record.date) }}</td>
+                        <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                        <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                         <td>{{ record.system }}</td>
                         <td>
                             % if record.is_available:
