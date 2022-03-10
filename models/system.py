@@ -3,14 +3,14 @@ import csv
 from models.service import Sheet
 
 class System:
-    def __init__(self, system_id, name, visible, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url):
-        self.id = system_id
-        self.name = name
-        self.visible = visible
-        self.gtfs_enabled = gtfs_enabled
-        self.realtime_enabled = realtime_enabled
-        self.gtfs_url = gtfs_url
-        self.realtime_url = realtime_url
+    def __init__(self, row):
+        self.id = row['system_id']
+        self.name = row['name']
+        self.visible = row['visible'] == '1'
+        self.gtfs_enabled = row['gtfs_enabled'] == '1'
+        self.realtime_enabled = row['realtime_enabled'] == '1'
+        self.gtfs_url = row['gtfs_url']
+        self.realtime_url = row['realtime_url']
         
         self.realtime_validation_error_count = 0
         
@@ -33,7 +33,7 @@ class System:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.name < other.name
+        return str(self) < str(other)
     
     def get_block(self, block_id):
         if block_id in self.blocks:
@@ -124,15 +124,8 @@ def load_systems():
         for row in reader:
             rows.append(dict(zip(columns, row)))
     for row in rows:
-        system_id = row['system_id']
-        name = row['name']
-        visible = row['visible'] == '1'
-        gtfs_enabled = row['gtfs_enabled'] == '1'
-        realtime_enabled = row['realtime_enabled'] == '1'
-        gtfs_url = row['gtfs_url']
-        realtime_url = row['realtime_url']
-        
-        systems[system_id] = System(system_id, name, visible, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url)
+        system = System(row)
+        systems[system.id] = system
 
 def get_system(system_id):
     if system_id is not None and system_id in systems:

@@ -10,66 +10,65 @@ class Sheet(Enum):
     UNKNOWN = 'unknown'
 
 class Service:
-    def __init__(self, system, service_id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun):
+    def __init__(self, system, row):
         self.system = system
-        self.id = service_id
-        self.start_date = start_date
-        self.end_date = end_date
-        
-        self.mon = mon
-        self.tue = tue
-        self.wed = wed
-        self.thu = thu
-        self.fri = fri
-        self.sat = sat
-        self.sun = sun
+        self.id = row['service_id']
+        self.start_date = formatting.csv(row['start_date'])
+        self.end_date = formatting.csv(row['end_date'])
+        self.mon = row['monday'] == '1'
+        self.tue = row['tuesday'] == '1'
+        self.wed = row['wednesday'] == '1'
+        self.thu = row['thursday'] == '1'
+        self.fri = row['friday'] == '1'
+        self.sat = row['saturday'] == '1'
+        self.sun = row['sunday'] == '1'
         
         self.included_dates = []
         self.excluded_dates = []
         
-        self.special = not (mon or tue or wed or thu or fri or sat or sun)
+        self.special = not (self.mon or self.tue or self.wed or self.thu or self.fri or self.sat or self.sun)
         
         if self.special:
             self.name = 'Special Service'
-        elif mon and tue and wed and thu and fri and sat and sun:
+        elif self.mon and self.tue and self.wed and self.thu and self.fri and self.sat and self.sun:
             self.name = 'Every Day'
-        elif mon and tue and wed and thu and fri and not (sat or sun):
+        elif self.mon and self.tue and self.wed and self.thu and self.fri and not (self.sat or self.sun):
             self.name = 'Weekdays'
-        elif mon and not (tue or wed or thu or fri or sat or sun):
+        elif self.mon and not (self.tue or self.wed or self.thu or self.fri or self.sat or self.sun):
             self.name = 'Mondays'
-        elif tue and not (mon or wed or thu or fri or sat or sun):
+        elif self.tue and not (self.mon or self.wed or self.thu or self.fri or self.sat or self.sun):
             self.name = 'Tuesdays'
-        elif wed and not (mon or tue or thu or fri or sat or sun):
+        elif self.wed and not (self.mon or self.tue or self.thu or self.fri or self.sat or self.sun):
             self.name = 'Wednesdays'
-        elif thu and not (mon or tue or wed or fri or sat or sun):
+        elif self.thu and not (self.mon or self.tue or self.wed or self.fri or self.sat or self.sun):
             self.name = 'Thursdays'
-        elif fri and not (mon or tue or wed or thu or sat or sun):
+        elif self.fri and not (self.mon or self.tue or self.wed or self.thu or self.sat or self.sun):
             self.name = 'Fridays'
-        elif sat and sun and not (mon or tue or wed or thu or fri):
+        elif self.sat and self.sun and not (self.mon or self.tue or self.wed or self.thu or self.fri):
             self.name = 'Weekends'
-        elif sat and not (mon or tue or wed or thu or fri or sun):
+        elif self.sat and not (self.mon or self.tue or self.wed or self.thu or self.fri or self.sun):
             self.name = 'Saturdays'
-        elif sun and not (mon or tue or wed or thu or fri or sat):
+        elif self.sun and not (self.mon or self.tue or self.wed or self.thu or self.fri or self.sat):
             self.name = 'Sundays'
         else:
             days = []
-            if mon:
+            if self.mon:
                 days.append('Mon')
-            if tue:
+            if self.tue:
                 days.append('Tue')
-            if wed:
+            if self.wed:
                 days.append('Wed')
-            if thu:
+            if self.thu:
                 days.append('Thu')
-            if fri:
+            if self.fri:
                 days.append('Fri')
-            if sat:
+            if self.sat:
                 days.append('Sat')
-            if sun:
+            if self.sun:
                 days.append('Sun')
             self.name = '/'.join(days)
         
-        self.binary_string = ''.join(['1' if d else '0' for d in [mon, tue, wed, thu, fri, sat, sun]])
+        self.binary_string = ''.join(['1' if d else '0' for d in [self.mon, self.tue, self.wed, self.thu, self.fri, self.sat, self.sun]])
     
     def __str__(self):
         return self.name
