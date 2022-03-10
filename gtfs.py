@@ -62,11 +62,11 @@ def load_departures(system):
     for row in read_csv(system, 'stop_times'):
         departure = Departure(system, row)
         stop = departure.stop
-        if stop is not None:
-            stop.add_departure(departure)
         trip = departure.trip
-        if trip is not None:
-            trip.add_departure(departure)
+        if stop is None or trip is None:
+            continue
+        stop.add_departure(departure)
+        trip.add_departure(departure)
 
 def load_routes(system):
     system.routes = {}
@@ -127,15 +127,14 @@ def load_trips(system):
         trip = Trip(system, row)
         
         service = trip.service
-        if service is None or service.sheet != Sheet.CURRENT:
+        route = trip.route
+        block = trip.block
+        
+        if service is None or service.sheet != Sheet.CURRENT or route is None:
             continue
         
-        route = trip.route
-        if route is None:
-            continue
         route.add_trip(trip)
         
-        block = trip.block
         if block is None:
             system.blocks[trip.block_id] = Block(system, trip)
         else:
