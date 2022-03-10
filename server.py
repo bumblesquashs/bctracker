@@ -505,13 +505,13 @@ def system_stops(system_id):
     sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
     return systems_template('stops', system_id, search=search, sheet=sheet, path=path)
 
-@app.route('/stops/<number:int>')
-@app.route('/stops/<number:int>/')
+@app.route('/stops/<number>')
+@app.route('/stops/<number>/')
 def stops_number(number):
     return system_stops_number(None, number)
 
-@app.route('/<system_id>/stops/<number:int>')
-@app.route('/<system_id>/stops/<number:int>/')
+@app.route('/<system_id>/stops/<number>')
+@app.route('/<system_id>/stops/<number>/')
 def system_stops_number(system_id, number):
     system = get_system(system_id)
     if system is None:
@@ -522,13 +522,13 @@ def system_stops_number(system_id, number):
     sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
     return systems_template('stop/overview', system_id, stop=stop, sheet=sheet, today=history.today)
 
-@app.route('/stops/<number:int>/map')
-@app.route('/stops/<number:int>/map/')
+@app.route('/stops/<number>/map')
+@app.route('/stops/<number>/map/')
 def stops_number_map(number):
     return system_stops_number_map(None, number)
 
-@app.route('/<system_id>/stops/<number:int>/map')
-@app.route('/<system_id>/stops/<number:int>/map/')
+@app.route('/<system_id>/stops/<number>/map')
+@app.route('/<system_id>/stops/<number>/map/')
 def system_stops_number_map(system_id, number):
     system = get_system(system_id)
     if system is None:
@@ -539,13 +539,13 @@ def system_stops_number_map(system_id, number):
     sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
     return systems_template('stop/map', system_id, stop=stop, sheet=sheet)
 
-@app.route('/stops/<number:int>/schedule')
-@app.route('/stops/<number:int>/schedule/')
+@app.route('/stops/<number>/schedule')
+@app.route('/stops/<number>/schedule/')
 def stops_number_schedule(number):
     return system_stops_number_schedule(None, number)
 
-@app.route('/<system_id>/stops/<number:int>/schedule')
-@app.route('/<system_id>/stops/<number:int>/schedule/')
+@app.route('/<system_id>/stops/<number>/schedule')
+@app.route('/<system_id>/stops/<number>/schedule/')
 def system_stops_number_schedule(system_id, number):
     system = get_system(system_id)
     if system is None:
