@@ -1,16 +1,13 @@
 
-from models.service import Sheet
 import realtime
 
 class Block:
-    __slots__ = ('system', 'id', 'trips', '_sheets')
+    __slots__ = ('system', 'id', 'trips')
     
     def __init__(self, system, trip):
         self.system = system
         self.id = trip.block_id
-        
         self.trips = [trip]
-        self._sheets = None
     
     def __eq__(self, other):
         return self.id == other.id
@@ -19,21 +16,42 @@ class Block:
         return self.id < other.id
     
     @property
-    def sheets(self):
-        if self._sheets is None:
-            self._sheets = {t.service.sheet for t in self.trips}
-        return self._sheets
+    def services(self):
+        return sorted({t.service for t in self.trips})
     
     @property
-    def default_sheet(self):
-        sheets = self.sheets
-        if Sheet.CURRENT in sheets:
-            return Sheet.CURRENT
-        if Sheet.NEXT in sheets:
-            return Sheet.NEXT
-        if Sheet.PREVIOUS in sheets:
-            return Sheet.PREVIOUS
-        return Sheet.UNKNOWN
+    def routes(self):
+        return sorted({t.route for t in self.trips})
+    
+    @property
+    def routes_string(self):
+        return ', '.join([r.number for r in self.routes])
+    
+    @property
+    def start_time(self):
+        if len(self.trips) == 0:
+            return None
+        return self.trips[0].start_time
+    
+    @property
+    def end_time(self):
+        if len(self.trips) == 0:
+            return None
+        return self.trips[-1].end_time
+    
+    @property
+    def duration(self):
+        start_time = self.start_time
+        end_time = self.end_time
+        if start_time is None or end_time is None:
+            return None
+        return start_time.get_difference(end_time)
+    
+    @property
+    def related_blocks(self):
+        related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
+        related_blocks.sort(key=lambda b: b.services[0])
+        return related_blocks
     
     @property
     def positions(self):
@@ -42,57 +60,14 @@ class Block:
     
     def add_trip(self, trip):
         self.trips.append(trip)
-        self._sheets = None
     
-    def get_trips(self, sheet):
-        if sheet is None:
-            return self.trips
-        return [t for t in self.trips if t.service.sheet == sheet]
-    
-    def get_services(self, sheet):
-        return sorted({t.service for t in self.get_trips(sheet)})
-    
-    def get_routes(self, sheet):
-        return sorted({t.route for t in self.get_trips(sheet)})
-    
-    def get_routes_string(self, sheet):
-        return ', '.join([str(r.number) for r in self.get_routes(sheet)])
-    
-    def get_start_time(self, sheet):
-        trips = self.get_trips(sheet)
-        if not trips:
-            return None
-        else:
-            return trips[0].start_time
-    
-    def get_end_time(self, sheet):
-        trips = self.get_trips(sheet)
-        if not trips:
-            return None
-        else:
-            return trips[-1].end_time
-    
-    def get_duration(self, sheet):
-        start_time = self.get_start_time(sheet)
-        end_time = self.get_end_time(sheet)
-        if start_time is None or end_time is None:
-            return 0
-        return start_time.get_difference(end_time)
-    
-    def get_related_blocks(self, sheet):
-        related_blocks = [b for b in self.system.get_blocks(sheet) if self.is_related(b, sheet)]
-        related_blocks.sort(key=lambda b: b.get_services(sheet)[0])
-        return related_blocks
-    
-    def is_related(self, other, sheet):
+    def is_related(self, other):
         if self.id == other.id:
             return False
-        if sheet not in other.sheets:
+        if self.routes != other.routes:
             return False
-        if self.get_routes(sheet) != other.get_routes(sheet):
+        if self.start_time != other.start_time:
             return False
-        if self.get_start_time(sheet) != other.get_start_time(sheet):
-            return False
-        if self.get_end_time(sheet) != other.get_end_time(sheet):
+        if self.end_time != other.end_time:
             return False
         return True

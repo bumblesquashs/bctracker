@@ -15,7 +15,7 @@
     </p>
     % include('components/systems')
 % else:
-    % stops = system.get_stops(sheet)
+    % stops = system.get_stops()
     
     % if search is not None:
         % stops = [s for s in stops if search.lower() in s.name.lower()]
@@ -57,7 +57,7 @@
                     <tr>
                         <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                         <td>{{ stop }}</td>
-                        <td>{{ stop.get_routes_string(sheet) }}</td>
+                        <td>{{ stop.routes_string }}</td>
                     </tr>
                 % end
             </tbody>

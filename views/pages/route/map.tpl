@@ -10,7 +10,7 @@
     </div>
 </div>
 
-% trips = route.get_trips(sheet)
+% trips = route.trips
 % departures = [d for t in trips for d in t.departures]
 % buses = [p.bus for p in route.positions]
 

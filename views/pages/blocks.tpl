@@ -12,8 +12,8 @@
     </p>
     % include('components/systems')
 % else:
-    % blocks = system.get_blocks(sheet)
-    % services = sorted({ s for b in blocks for s in b.get_services(sheet) })
+    % blocks = system.get_blocks()
+    % services = sorted({ s for b in blocks for s in b.services })
     
     % if len(services) > 1:
         % include('components/service_navigation', services=services)
@@ -36,16 +36,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % service_blocks = [b for b in blocks if service in b.get_services(sheet)]
+                        % service_blocks = [b for b in blocks if service in b.services]
                         % for block in service_blocks:
-                            % start_time = block.get_start_time(sheet)
-                            % end_time = block.get_end_time(sheet)
+                            % start_time = block.start_time
+                            % end_time = block.end_time
                             <tr>
                                 <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                <td>{{ block.get_routes_string(sheet) }}</td>
+                                <td>{{ block.routes_string }}</td>
                                 <td class="desktop-only">{{ start_time }}</td>
                                 <td class="desktop-only">{{ end_time }}</td>
-                                <td class="desktop-only">{{ block.get_duration(sheet) }}</td>
+                                <td class="desktop-only">{{ block.duration }}</td>
                                 <td class="non-desktop">{{ start_time }} - {{ end_time }}</td>
                             </tr>
                         % end

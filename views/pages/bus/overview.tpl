@@ -33,7 +33,6 @@
         % stop = position.stop
         % block = trip.block
         % route = trip.route
-        % sheet = trip.service.sheet
         
         % include('components/map', map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
         
@@ -55,7 +54,7 @@
                 <div class="value">
                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                     <br />
-                    <span class="smaller-font">{{ block.get_start_time(sheet) }} - {{ block.get_end_time(sheet) }} ({{ block.get_duration(sheet) }})</span>
+                    <span class="smaller-font">{{ block.start_time }} - {{ block.end_time }} ({{ block.duration }})</span>
                 </div>
             </div>
             <div class="section">

@@ -1,13 +1,7 @@
+
 from datetime import datetime, timedelta
-from enum import Enum
 
 import formatting
-
-class Sheet(Enum):
-    PREVIOUS = 'previous'
-    CURRENT = 'current'
-    NEXT = 'next'
-    UNKNOWN = 'unknown'
 
 class Service:
     __slots__ = ('system', 'id', 'start_date', 'end_date', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'included_dates', 'excluded_dates', 'special', 'name', 'binary_string')
@@ -87,20 +81,14 @@ class Service:
         return self.binary_string > other.binary_string
     
     @property
-    def sheet(self):
+    def is_current(self):
         start = self.start_date.date()
         end = self.end_date.date()
         hour = datetime.now().hour
         today = datetime.today()
         date = (today if hour >= 4 else today - timedelta(days=1)).date()
         
-        if start <= date <= end:
-            return Sheet.CURRENT
-        if end < date:
-            return Sheet.PREVIOUS
-        if date < start:
-            return Sheet.NEXT
-        return Sheet.UNKNOWN
+        return start <= date <= end
     
     @property
     def included_dates_string(self):

@@ -1,12 +1,11 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, redirect, request, response, debug
+from bottle import Bottle, static_file, template, request, response, debug
 import cherrypy as cp
 
 from models.bus import Bus
 from models.model import load_models
 from models.order import load_orders, search_buses
-from models.service import Sheet
 from models.system import load_systems, get_system, get_systems
 
 import database
@@ -75,15 +74,6 @@ def get_url(system, path=''):
     if isinstance(system, str):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
-
-def get_sheet_from_query(default_sheet):
-    sheet = request.query.get('sheet')
-    if sheet is None:
-        return default_sheet
-    try:
-        return Sheet[sheet.upper()]
-    except:
-        return default_sheet
 
 def systems_template(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
@@ -320,8 +310,7 @@ def routes():
 @app.route('/<system_id>/routes')
 @app.route('/<system_id>/routes/')
 def system_routes(system_id):
-    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
-    return systems_template('routes', system_id, sheet=sheet, path='routes')
+    return systems_template('routes', system_id, path='routes')
 
 @app.route('/routes/<number>')
 @app.route('/routes/<number>/')
@@ -331,16 +320,13 @@ def routes_number(number):
 @app.route('/<system_id>/routes/<number>')
 @app.route('/<system_id>/routes/<number>/')
 def system_routes_number(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66'))
     system = get_system(system_id)
     if system is None:
         return systems_error_template('system', system_id, path=f'routes/{number}')
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
-    return systems_template('route/overview', system_id, route=route, sheet=sheet, today=history.today)
+    return systems_template('route/overview', system_id, route=route, today=history.today)
 
 @app.route('/routes/<number>/map')
 @app.route('/routes/<number>/map/')
@@ -350,16 +336,13 @@ def routes_number_map(number):
 @app.route('/<system_id>/routes/<number>/map')
 @app.route('/<system_id>/routes/<number>/map/')
 def system_routes_number_map(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66/map'))
     system = get_system(system_id)
     if system is None:
         return systems_error_template('system', system_id, path=f'routes/{number}/map')
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
-    return systems_template('route/map', system_id, route=route, sheet=sheet)
+    return systems_template('route/map', system_id, route=route)
 
 @app.route('/routes/<number>/schedule')
 @app.route('/routes/<number>/schedule/')
@@ -369,16 +352,13 @@ def routes_number_schedule(number):
 @app.route('/<system_id>/routes/<number>/schedule')
 @app.route('/<system_id>/routes/<number>/schedule/')
 def system_routes_number_schedule(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66/schedule'))
     system = get_system(system_id)
     if system is None:
         return systems_error_template('system', system_id, path=f'routes/{number}/schedule')
     route = system.get_route(number=number)
     if route is None:
         return systems_error_template('route', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
-    return systems_template('route/schedule', system_id, route=route, sheet=sheet)
+    return systems_template('route/schedule', system_id, route=route)
 
 @app.route('/blocks')
 @app.route('/blocks/')
@@ -388,8 +368,7 @@ def blocks():
 @app.route('/<system_id>/blocks')
 @app.route('/<system_id>/blocks/')
 def system_blocks(system_id):
-    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
-    return systems_template('blocks', system_id, sheet=sheet, path='blocks')
+    return systems_template('blocks', system_id, path='blocks')
 
 @app.route('/blocks/<block_id>')
 @app.route('/blocks/<block_id>/')
@@ -405,8 +384,7 @@ def system_blocks_id(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/overview', system_id, block=block, sheet=sheet)
+    return systems_template('block/overview', system_id, block=block)
 
 @app.route('/blocks/<block_id>/map')
 @app.route('/blocks/<block_id>/map/')
@@ -422,8 +400,7 @@ def system_blocks_id_map(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/map', system_id, block=block, sheet=sheet)
+    return systems_template('block/map', system_id, block=block)
 
 @app.route('/blocks/<block_id>/history')
 @app.route('/blocks/<block_id>/history/')
@@ -439,8 +416,7 @@ def system_blocks_id_history(system_id, block_id):
     block = system.get_block(block_id)
     if block is None:
         return systems_error_template('block', system_id, block_id=block_id)
-    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/history', system_id, block=block, sheet=sheet, records=history.get_records(block=block))
+    return systems_template('block/history', system_id, block=block, records=history.get_records(block=block))
 
 @app.route('/trips/<trip_id>')
 @app.route('/trips/<trip_id>/')
@@ -502,8 +478,7 @@ def system_stops(system_id):
     search = request.query.get('search')
     if search is not None:
         path += f'?search={search}'
-    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
-    return systems_template('stops', system_id, search=search, sheet=sheet, path=path)
+    return systems_template('stops', system_id, search=search, path=path)
 
 @app.route('/stops/<number>')
 @app.route('/stops/<number>/')
@@ -519,8 +494,7 @@ def system_stops_number(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/overview', system_id, stop=stop, sheet=sheet, today=history.today)
+    return systems_template('stop/overview', system_id, stop=stop, today=history.today)
 
 @app.route('/stops/<number>/map')
 @app.route('/stops/<number>/map/')
@@ -536,8 +510,7 @@ def system_stops_number_map(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/map', system_id, stop=stop, sheet=sheet)
+    return systems_template('stop/map', system_id, stop=stop)
 
 @app.route('/stops/<number>/schedule')
 @app.route('/stops/<number>/schedule/')
@@ -553,8 +526,7 @@ def system_stops_number_schedule(system_id, number):
     stop = system.get_stop(number=number)
     if stop is None:
         return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/schedule', system_id, stop=stop, sheet=sheet)
+    return systems_template('stop/schedule', system_id, stop=stop)
 
 @app.route('/about')
 @app.route('/about/')

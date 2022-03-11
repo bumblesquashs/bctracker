@@ -9,7 +9,7 @@ import csv
 from models.block import Block
 from models.departure import Departure
 from models.route import Route
-from models.service import Service, Sheet
+from models.service import Service
 from models.shape import Shape
 from models.stop import Stop
 from models.trip import Trip
@@ -132,6 +132,8 @@ def load_trips(system):
         
         if service is None or route is None:
             continue
+        if system.current_sheet_only and not service.is_current:
+            continue
         
         route.add_trip(trip)
         
@@ -155,7 +157,7 @@ def validate(system):
     if not system.gtfs_enabled:
         return True
     end_date = None
-    for service in system.get_services(None):
+    for service in system.get_services():
         date = service.end_date.date()
         if end_date is None or date > end_date:
             end_date = date

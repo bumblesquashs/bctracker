@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 
 from models.bus import Bus
 from models.record import Record
-from models.service import Sheet
 from models.transfer import Transfer
 
 import database
@@ -54,9 +53,9 @@ def update(positions):
             'date': formatting.database(date),
             'system_id': position.system.id,
             'block_id': block.id,
-            'routes': block.get_routes_string(Sheet.CURRENT),
-            'start_time': block.get_start_time(Sheet.CURRENT).full_string,
-            'end_time': block.get_end_time(Sheet.CURRENT).full_string,
+            'routes': block.routes_string,
+            'start_time': block.start_time.full_string,
+            'end_time': block.end_time.full_string,
             'first_seen': now,
             'last_seen': now
         })

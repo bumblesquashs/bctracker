@@ -14,7 +14,7 @@
     </p>
     % include('components/systems')
 % else:
-    % routes = system.get_routes(sheet)
+    % routes = system.get_routes()
     <table class="striped">
         <thead>
             <tr>
@@ -27,7 +27,7 @@
                 <tr>
                     <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
                     <td>
-                        % include('components/services_indicator', services=route.get_services(sheet), compact=True)
+                        % include('components/services_indicator', services=route.services, compact=True)
                     </td>
                 </tr>
             % end

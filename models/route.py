@@ -3,12 +3,11 @@ from os.path import commonprefix
 from random import randint, seed, shuffle
 
 from models.search_result import SearchResult
-from models.service import Sheet
 
 import realtime
 
 class Route:
-    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_sheets', '_auto_name')
+    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name')
     
     def __init__(self, system, row):
         self.system = system
@@ -27,13 +26,12 @@ class Route:
         self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
         
         self.trips = []
-        self._sheets = None
         self._auto_name = None
     
     def __str__(self):
         if self.name == '':
             if self._auto_name is None:
-                headsigns = self.get_headsigns(self.default_sheet)
+                headsigns = self.headsigns[:]
                 for i in range(len(headsigns)):
                     headsign = headsigns[i].lstrip(self.number).strip(' ')
                     if headsign.startswith('A '):
@@ -53,6 +51,8 @@ class Route:
                     headsigns[i] = headsign.strip(' ')
                 prefix = commonprefix(headsigns).strip(' ')
                 if len(prefix) < 3:
+                    if len(headsigns) > 2:
+                        headsigns = [h for h in headsigns if not h.startswith('To ')]
                     self._auto_name = f'{self.number} ' + ' / '.join(sorted(set(headsigns)))
                 else:
                     self._auto_name = f'{self.number} {prefix}'
@@ -72,21 +72,12 @@ class Route:
         return self.number_value > other.number_value
     
     @property
-    def sheets(self):
-        if self._sheets is None:
-            self._sheets = {t.service.sheet for t in self.trips}
-        return self._sheets
+    def services(self):
+        return sorted({t.service for t in self.trips})
     
     @property
-    def default_sheet(self):
-        sheets = self.sheets
-        if Sheet.CURRENT in sheets:
-            return Sheet.CURRENT
-        if Sheet.NEXT in sheets:
-            return Sheet.NEXT
-        if Sheet.PREVIOUS in sheets:
-            return Sheet.PREVIOUS
-        return Sheet.UNKNOWN
+    def headsigns(self):
+        return sorted({str(t) for t in self.trips})
     
     @property
     def positions(self):
@@ -104,18 +95,6 @@ class Route:
     
     def add_trip(self, trip):
         self.trips.append(trip)
-        self._sheets = None
-    
-    def get_trips(self, sheet):
-        if sheet is None:
-            return self.trips
-        return [t for t in self.trips if t.service.sheet == sheet]
-    
-    def get_services(self, sheet):
-        return sorted({t.service for t in self.get_trips(sheet)})
-    
-    def get_headsigns(self, sheet):
-        return sorted({str(t) for t in self.get_trips(sheet)})
     
     def get_search_result(self, query):
         query = query.lower()

@@ -108,7 +108,7 @@ class Trip:
     @property
     def related_trips(self):
         if self._related_trips is None:
-            self._related_trips = [t for t in self.system.get_trips(self.service.sheet) if self.is_related(t)]
+            self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
@@ -142,8 +142,6 @@ class Trip:
     
     def is_related(self, other):
         if self.id == other.id:
-            return False
-        if self.service.sheet != other.service.sheet:
             return False
         if self.route_id != other.route_id:
             return False

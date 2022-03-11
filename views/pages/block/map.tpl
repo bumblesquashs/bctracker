@@ -12,7 +12,7 @@
     </div>
 </div>
 
-% trips = block.get_trips(sheet)
+% trips = block.trips
 % departures = [d for t in trips for d in t.departures]
 % buses = [p.bus for p in block.positions]
 

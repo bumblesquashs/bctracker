@@ -1,9 +1,7 @@
 import csv
 
-from models.service import Sheet
-
 class System:
-    __slots__ = ('id', 'name', 'visible', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'stops', 'stops_by_number', 'trips', 'positions')
+    __slots__ = ('id', 'name', 'visible', 'gtfs_enabled', 'realtime_enabled', 'current_sheet_only', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'stops', 'stops_by_number', 'trips', 'positions')
     
     def __init__(self, row):
         self.id = row['system_id']
@@ -11,6 +9,7 @@ class System:
         self.visible = row['visible'] == '1'
         self.gtfs_enabled = row['gtfs_enabled'] == '1'
         self.realtime_enabled = row['realtime_enabled'] == '1'
+        self.current_sheet_only = row['current_sheet_only'] == '1'
         self.gtfs_url = row['gtfs_url']
         self.realtime_url = row['realtime_url']
         
@@ -43,10 +42,8 @@ class System:
             return self.blocks[block_id]
         return None
     
-    def get_blocks(self, sheet):
-        if sheet is None:
-            return sorted(self.blocks.values())
-        return sorted([b for b in self.blocks.values() if sheet in b.sheets])
+    def get_blocks(self):
+        return sorted(self.blocks.values())
     
     def get_route(self, route_id=None, number=None):
         if route_id is not None and route_id in self.routes:
@@ -55,20 +52,16 @@ class System:
             return self.routes_by_number[number]
         return None
     
-    def get_routes(self, sheet):
-        if sheet is None:
-            return sorted(self.routes.values())
-        return sorted([r for r in self.routes.values() if sheet in r.sheets])
+    def get_routes(self):
+        return sorted(self.routes.values())
     
     def get_service(self, service_id):
         if service_id in self.services:
             return self.services[service_id]
         return None
     
-    def get_services(self, sheet):
-        if sheet is None:
-            return sorted(self.services.values())
-        return sorted([s for s in self.services.values() if s.sheet == sheet])
+    def get_services(self):
+        return sorted(self.services.values())
     
     def get_shape(self, shape_id):
         if shape_id in self.shapes:
@@ -82,28 +75,24 @@ class System:
             return self.stops_by_number[number]
         return None
     
-    def get_stops(self, sheet):
-        if sheet is None:
-            return self.stops.values()
-        return [s for s in self.stops.values() if sheet in s.sheets]
+    def get_stops(self):
+        return self.stops.values()
     
     def get_trip(self, trip_id):
         if trip_id in self.trips:
             return self.trips[trip_id]
         return None
     
-    def get_trips(self, sheet):
-        if sheet is None:
-            return self.trips.values()
-        return [t for t in self.trips.values() if t.service.sheet == sheet]
+    def get_trips(self):
+        return self.trips.values()
     
     def search_routes(self, query):
-        routes = self.get_routes(Sheet.CURRENT)
+        routes = self.get_routes()
         results = [r.get_search_result(query) for r in routes]
         return [r for r in results if r.match > 0]
     
     def search_stops(self, query):
-        stops = self.get_stops(Sheet.CURRENT)
+        stops = self.get_stops()
         results = [s.get_search_result(query) for s in stops]
         return [r for r in results if r.match > 0]
     
