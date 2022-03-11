@@ -7,7 +7,6 @@
 
 % realtime_count = len([s for s in systems if s.realtime_enabled])
 % non_realtime_count = len([s for s in systems if not s.realtime_enabled])
-% realtime_system_names = ', '.join([s.name for s in systems if s.realtime_enabled])
 
 <h2>Frequently Asked Questions</h2>
 <br />
@@ -25,7 +24,8 @@
     This process is still ongoing as each additional system requires more server resources and, in some cases, custom support in order to be fully integrated with the website.
 </p>
 <p>
-    Currently we support all {{ realtime_count }} systems with realtime information and {{ non_realtime_count }} systems where only schedule data is available, with plans to add more systems in the future.
+    With the rollout of NextRide in more transit systems around BC, we've started adding more systems to the website as realtime information becomes available.
+    Currently we support {{ realtime_count }} {{ 'system' if realtime_count == 1 else 'systems' }} with realtime information and {{ non_realtime_count }} {{ 'system' if non_realtime_count == 1 else 'systems' }} where only schedule data is available.
     Unfortunately, some of the smallest communities around BC do not have any GTFS information at all, so we are unable to add those systems at this time.
 </p>
 
@@ -38,8 +38,9 @@
 
 <h3>Why do only some systems have realtime information?</h3>
 <p>
-    Realtime information is provided by BC Transit's NextRide API, which is currently only available for {{ realtime_count }} systems: {{ ', and '.join(realtime_system_names.rsplit(', ', 1)) }}.
-    Until NextRide is expanded to more communities, we unfortunately cannot include realtime for anywhere else.
+    Realtime information is provided by BC Transit's NextRide API.
+    Before January 2022, this data was only available for a limited number of larger transit systems.
+    Until the rollout of NextRide to more communities is complete, we unfortunately cannot include realtime for some systems.
 </p>
 
 <h3>How is BCTracker made?</h3>

@@ -108,6 +108,33 @@
     
     <div class="news-post">
         <div class="header">
+            <h3>New Realtime Systems</h3>
+            DATE TBD
+        </div>
+        <div class="content">
+            <p>
+                As you may have heard, BC Transit has started rolling out a new NextRide program in transit systems across BC.
+                Since the first system went live at the end of January, we've been working hard to integrate the new API with BCTracker.
+                This hasn't been an easy task as some of the GTFS information that we use is quite different, and on top of that there have been numerous signs that BC Transit is still actively testing the software.
+            </p>
+            <p>
+                With all that said, we are very pleased to announce that the first new realtime systems are active on BCTracker as of today!
+                There may still be some adjustments that need to be made as the rollout continues, but we are confident at this point that everything is stable enough to display publically.
+            </p>
+            <p>
+                To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, and <b>Campbell River</b> as brand-new systems.
+                Additionally, the Central Fraser Valley and Chilliwack systems have been combined into a new <b>Fraser Valley</b> system with realtime information. [NOTE at time of writing, realtime in Fraser Valley is still in early testing]
+                As realtime information becomes available in more regions, we'll update BCTracker to add those systems.
+                Expect to see more updates over the next few months!
+            </p>
+            <p>
+                For more information about the NextRide rollout and to see what systems will be receiving it next, visit <a href="https://www.bctransit.com/nextride-faq">BC Transit's NextRide FAQ</a>.
+            </p>
+        </div>
+    </div>
+    
+    <div class="news-post">
+        <div class="header">
             <h3>Winter Update</h3>
             January 2, 2022
         </div>
@@ -144,26 +171,6 @@
         </div>
     </div>
     
-    <div class="news-post" id="survey">
-        <div class="header">
-            <h3>BCTracker Survey</h3>
-            November 28, 2021
-        </div>
-        <div class="content">
-            <p>
-                We're running a quick survey over the next few weeks to get a better sense of who is using BCTracker, and for what purpose.
-                This information will help us understand what new features should have the highest priority, as well as what improvements can be made to existing features.
-                It's also a great opportunity for you to give us general feedback about things you like and things you think could be better.
-            </p>
-            <p>
-                If you have a couple spare minutes, we would very much appreciate hearing from you.
-                Thanks for supporting BCTracker!
-            </p>
-            <p>
-                <button class="button survey-button" onclick="openSurvey()">Take the survey!</button>
-            </p>
-        </div>
-    </div>
     <div class="news-post-older">
         <a href="{{ get_url(system, 'news') }}">See older updates</a>
     </div>
