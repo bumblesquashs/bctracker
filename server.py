@@ -78,7 +78,7 @@ def get_url(system, path=''):
 def page(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
-        systems=[s for s in get_systems() if s.visible],
+        systems=[s for s in get_systems() if s.gtfs_enabled],
         system_id=system_id,
         system=get_system(system_id),
         get_url=get_url,
