@@ -13,6 +13,8 @@ class Direction(Enum):
     UNKNOWN = 'Unknown'
 
 class Trip:
+    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', '_direction', '_related_trips')
+    
     def __init__(self, system, row):
         self.system = system
         self.id = row['trip_id']

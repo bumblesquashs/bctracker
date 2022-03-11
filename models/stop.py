@@ -6,6 +6,8 @@ from models.service import Sheet
 from models.time import get_current_minutes
 
 class Stop:
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_sheets')
+    
     def __init__(self, system, row):
         self.system = system
         self.id = row['stop_id']

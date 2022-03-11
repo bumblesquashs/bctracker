@@ -1,6 +1,8 @@
 from models.time import Time
 
 class Departure:
+    __slots__ = ('system', 'stop_id', 'trip_id', 'time', 'sequence')
+    
     def __init__(self, system, row):
         self.system = system
         self.stop_id = row['stop_id']

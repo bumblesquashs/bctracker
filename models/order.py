@@ -5,6 +5,8 @@ from models.model import get_model
 from models.search_result import SearchResult
 
 class Order:
+    __slots__ = ('low', 'high', 'year', 'model_id', 'size')
+    
     def __init__(self, row):
         self.low = int(row['low'])
         self.high = int(row['high'])

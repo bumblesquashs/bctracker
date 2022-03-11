@@ -3,6 +3,8 @@ from models.order import get_order
 import realtime
 
 class Bus:
+    __slots__ = ('number')
+    
     def __init__(self, bus_number):
         self.number = bus_number
     

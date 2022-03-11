@@ -10,6 +10,8 @@ class Sheet(Enum):
     UNKNOWN = 'unknown'
 
 class Service:
+    __slots__ = ('system', 'id', 'start_date', 'end_date', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'included_dates', 'excluded_dates', 'special', 'name', 'binary_string')
+    
     def __init__(self, system, row):
         self.system = system
         self.id = row['service_id']

@@ -2,6 +2,7 @@
 from datetime import datetime
 
 class Time:
+    __slots__ = ('unknown', 'hour', 'minute', 'second')
     
     def __init__(self, time_string):
         if time_string is None or time_string == '':

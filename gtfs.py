@@ -130,7 +130,7 @@ def load_trips(system):
         route = trip.route
         block = trip.block
         
-        if service is None or service.sheet != Sheet.CURRENT or route is None:
+        if service is None or route is None:
             continue
         
         route.add_trip(trip)

@@ -5,7 +5,7 @@ cowichan-valley,Cowichan Valley,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebA
 cranbrook,Cranbrook,0,0,0,https://www.bctransit.com/data/gtfs/cranbrook.zip,
 dawson-creek,Dawson Creek,0,0,0,https://www.bctransit.com/data/gtfs/dawson-creek.zip,
 fort-st-john,Fort St. John,0,0,0,https://www.bctransit.com/data/gtfs/fort-st-john.zip,
-fraser-valley,Fraser Valley,0,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=13,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=13
+fraser-valley,Fraser Valley,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=13,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=13
 kamloops,Kamloops,1,1,1,http://kamloops.mapstrat.com/current/google_transit.zip,http://kamloops.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
 kelowna,Kelowna,1,1,1,http://kelowna.mapstrat.com/current/google_transit.zip,http://kelowna.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
 nanaimo,Nanaimo,1,1,1,http://nanaimo.mapstrat.com/current/google_transit.zip,http://nanaimo.mapstrat.com/current/gtfrealtime_VehiclePositions.bin

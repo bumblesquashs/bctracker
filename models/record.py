@@ -6,6 +6,8 @@ from models.time import Time
 import formatting
 
 class Record:
+    __slots__ = ('id', 'bus', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen')
+    
     def __init__(self, row, prefix='record'):
         self.id = row[f'{prefix}_id']
         self.bus = Bus(row[f'{prefix}_bus_number'])

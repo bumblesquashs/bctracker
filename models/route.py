@@ -8,6 +8,8 @@ from models.service import Sheet
 import realtime
 
 class Route:
+    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_sheets', '_auto_name')
+    
     def __init__(self, system, row):
         self.system = system
         self.id = row['route_id']
@@ -33,7 +35,11 @@ class Route:
             if self._auto_name is None:
                 headsigns = self.get_headsigns(self.default_sheet)
                 for i in range(len(headsigns)):
-                    headsign = headsigns[i].lstrip(self.number).strip(' ').lstrip('A ').lstrip('B ')
+                    headsign = headsigns[i].lstrip(self.number).strip(' ')
+                    if headsign.startswith('A '):
+                        headsign.lstrip('A ')
+                    if headsign.startswith('B '):
+                        headsign.lstrip('B ')
                     if ' - ' in headsign:
                         headsign = headsign.split(' - ')[0]
                     if ' to ' in headsign:
@@ -46,8 +52,8 @@ class Route:
                         headsign = headsign.split(' Via ')[0]
                     headsigns[i] = headsign.strip(' ')
                 prefix = commonprefix(headsigns).strip(' ')
-                if prefix == '':
-                    self._auto_name = f'{self.number} ' + ' / '.join(headsigns)
+                if len(prefix) < 3:
+                    self._auto_name = f'{self.number} ' + ' / '.join(sorted(set(headsigns)))
                 else:
                     self._auto_name = f'{self.number} {prefix}'
             return self._auto_name

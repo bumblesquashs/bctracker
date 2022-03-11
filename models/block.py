@@ -3,6 +3,8 @@ from models.service import Sheet
 import realtime
 
 class Block:
+    __slots__ = ('system', 'id', 'trips', '_sheets')
+    
     def __init__(self, system, trip):
         self.system = system
         self.id = trip.block_id

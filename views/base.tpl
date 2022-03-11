@@ -280,8 +280,6 @@
                 <div id="system">
                     % if system is None:
                         All Transit Systems
-                    % elif system.id == 'fvx':
-                        Fraser Valley Express
                     % else:
                         {{ system }} Regional Transit System
                     % end

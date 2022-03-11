@@ -6,6 +6,8 @@ from models.time import get_current_minutes
 MINIMUM_MINUTES = 4
 
 class Position:
+    __slots__ = ('system', 'active', 'bus', 'trip_id', 'stop_id', 'lat', 'lon', 'schedule_adherence', 'speed')
+    
     def __init__(self, system, active, bus):
         self.system = system
         self.active = active
@@ -90,6 +92,8 @@ class Position:
         return int(fraction_travelled * time_difference)
 
 class ScheduleAdherence:
+    __slots__ = ('value', 'status_class', 'description')
+    
     def __init__(self, value):
         self.value = value
         
