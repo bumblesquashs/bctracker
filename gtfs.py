@@ -156,5 +156,8 @@ def read_csv(system, name):
 def validate(system):
     if not system.gtfs_enabled:
         return True
-    end_date = max([s.end_date for s in system.get_services()])
+    end_dates = [s.end_date for s in system.get_services()]
+    if len(end_dates) == 0:
+        return True
+    end_date = max(end_dates)
     return datetime.now().date() < end_date - timedelta(days=7)
