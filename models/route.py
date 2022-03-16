@@ -3,11 +3,12 @@ from os.path import commonprefix
 from random import randint, seed, shuffle
 
 from models.search_result import SearchResult
+from models.service import create_service_group, create_service_groups
 
 import realtime
 
 class Route:
-    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name')
+    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_service_groups')
     
     def __init__(self, system, row):
         self.system = system
@@ -27,11 +28,14 @@ class Route:
         
         self.trips = []
         self._auto_name = None
+        self._services = None
+        self._service_group = None
+        self._service_groups = None
     
     def __str__(self):
         if self.name == '':
             if self._auto_name is None:
-                headsigns = self.headsigns[:]
+                headsigns = self.get_headsigns()
                 for i in range(len(headsigns)):
                     headsign = headsigns[i].lstrip(self.number).strip(' ')
                     if headsign.startswith('A '):
@@ -73,11 +77,21 @@ class Route:
     
     @property
     def services(self):
-        return sorted({t.service for t in self.trips})
+        if self._services is None:
+            self._services = sorted({t.service for t in self.trips})
+        return self._services
     
     @property
-    def headsigns(self):
-        return sorted({str(t) for t in self.trips})
+    def service_group(self):
+        if self._service_group is None:
+            self._service_group = create_service_group(self.services)
+        return self._service_group
+    
+    @property
+    def service_groups(self):
+        if self._service_groups is None:
+            self._service_groups = create_service_groups(self.services)
+        return self._service_groups
     
     @property
     def positions(self):
@@ -94,7 +108,18 @@ class Route:
         }
     
     def add_trip(self, trip):
+        self._services = None
+        self._service_group = None
+        self._service_groups = None
         self.trips.append(trip)
+    
+    def get_trips(self, service_group=None):
+        if service_group is None:
+            return self.trips
+        return [t for t in self.trips if t.service in service_group.services]
+    
+    def get_headsigns(self, service_group=None):
+        return sorted({str(t) for t in self.get_trips(service_group)})
     
     def get_search_result(self, query):
         query = query.lower()

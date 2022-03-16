@@ -2,10 +2,10 @@
 from math import sqrt
 
 from models.search_result import SearchResult
-from models.time import get_current_minutes
+from models.service import create_service_group, create_service_groups
 
 class Stop:
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_services', '_service_group', '_service_groups')
     
     def __init__(self, system, row):
         self.system = system
@@ -19,6 +19,9 @@ class Stop:
         self.lon = float(row['stop_lon'])
         
         self.departures = []
+        self._services = None
+        self._service_group = None
+        self._service_groups = None
     
     def __str__(self):
         return self.name
@@ -36,25 +39,26 @@ class Stop:
     
     @property
     def services(self):
-        return sorted({d.trip.service for d in self.departures})
+        if self._services is None:
+            self._services = sorted({d.trip.service for d in self.departures})
+        return self._services
     
     @property
-    def routes(self):
-        return sorted({d.trip.route for d in self.departures})
+    def service_group(self):
+        if self._service_group is None:
+            self._service_group = create_service_group(self.services)
+        return self._service_group
     
     @property
-    def routes_string(self):
-        return ', '.join([r.number for r in self.routes])
+    def service_groups(self):
+        if self._service_groups is None:
+            self._service_groups = create_service_groups(self.services)
+        return self._service_groups
     
     @property
     def nearby_stops(self):
         stops = self.system.get_stops()
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
-    
-    @property
-    def upcoming_departures(self):
-        current_mins = get_current_minutes()
-        return [d for d in self.departures if d.trip.service.is_today and current_mins <= d.time.get_minutes() <= current_mins + 30]
     
     @property
     def json_data(self):
@@ -64,11 +68,25 @@ class Stop:
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.json_data for r in self.routes]
+            'routes': [r.json_data for r in self.get_routes()]
         }
     
     def add_departure(self, departure):
+        self._services = None
+        self._service_group = None
+        self._service_groups = None
         self.departures.append(departure)
+    
+    def get_departures(self, service_group=None):
+        if service_group is None:
+            return self.departures
+        return [d for d in self.departures if d.trip.service in service_group.services]
+    
+    def get_routes(self, service_group=None):
+        return sorted({d.trip.route for d in self.get_departures(service_group)})
+    
+    def get_routes_string(self, service_group=None):
+        return ', '.join([r.number for r in self.get_routes(service_group)])
     
     def get_search_result(self, query):
         query = query.lower()

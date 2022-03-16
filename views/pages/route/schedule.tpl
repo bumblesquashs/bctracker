@@ -11,24 +11,22 @@
 </div>
 <hr />
 
-% services = route.services
-% trips = route.trips
+% service_groups = route.service_groups
 
-% if len(services) > 1:
-    % include('components/service_navigation', services=services)
+% if len(service_groups) > 1:
+    % include('components/service_group_navigation', service_groups=service_groups)
 % end
 
 <div class="container">
-    
-    % for service in services:
-        % service_trips = [t for t in trips if t.service == service]
-        % directions = {t.direction for t in service_trips}
+    % for service_group in service_groups:
+        % service_group_trips = route.get_trips(service_group)
+        % directions = {t.direction for t in service_group_trips}
         <div class="section">
-            <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>
-            <div class="subtitle">{{ service.date_string }}</div>
+            <h2 class="title" id="{{ hash(service_group) }}">{{ service_group.schedule }}</h2>
+            <div class="subtitle">{{ service_group }}</div>
             <div class="container">
                 % for direction in directions:
-                    % direction_trips = [t for t in service_trips if t.direction == direction]
+                    % direction_trips = [t for t in service_group_trips if t.direction == direction]
                     <div class="section">
                         % if len(directions) > 1:
                             <h3>{{ direction.value }}</h3>

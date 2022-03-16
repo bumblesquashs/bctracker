@@ -27,7 +27,7 @@
                 <tr>
                     <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
                     <td>
-                        % include('components/services_indicator', services=route.services, compact=True)
+                        % include('components/service_group_indicator', service_group=route.service_group, compact=True)
                     </td>
                 </tr>
             % end

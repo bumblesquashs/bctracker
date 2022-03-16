@@ -11,8 +11,7 @@
 </div>
 <hr />
 
-% services = stop.services
-% routes = stop.routes
+% routes = stop.get_routes()
 % departures = stop.departures
 
 <div id="sidebar">
@@ -21,7 +20,7 @@
     
     <div class="info-box">
         <div class="section">
-            % include('components/services_indicator', services=services)
+            % include('components/service_group_indicator', service_group=stop.service_group)
         </div>
         <div class="section">
             <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
@@ -50,7 +49,7 @@
                     <tr>
                         <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
                         <td>{{ nearby_stop }}</td>
-                        <td>{{ nearby_stop.routes_string }}</td>
+                        <td>{{ nearby_stop.get_routes_string() }}</td>
                     </tr>
                 % end
             </tbody>

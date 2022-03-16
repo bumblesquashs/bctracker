@@ -13,17 +13,17 @@
     % include('components/systems')
 % else:
     % blocks = system.get_blocks()
-    % services = sorted({ s for b in blocks for s in b.services })
+    % service_groups = sorted({ s for b in blocks for s in b.service_groups })
     
-    % if len(services) > 1:
-        % include('components/service_navigation', services=services)
+    % if len(service_groups) > 1:
+        % include('components/service_group_navigation', service_groups=service_groups)
     % end
     
     <div class="container">
-        % for service in services:
-            <div class="section">
-                <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>
-                <div class="subtitle">{{ service.date_string }}</div>
+        % for service_group in service_groups:
+            <div class="section" id="{{ hash(service_group) }}">
+                <h2 class="title">{{ service_group.schedule }}</h2>
+                <div class="subtitle">{{ service_group }}</div>
                 <table class="striped">
                     <thead>
                         <tr>
@@ -36,16 +36,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % service_blocks = [b for b in blocks if service in b.services]
-                        % for block in service_blocks:
-                            % start_time = block.start_time
-                            % end_time = block.end_time
+                        % service_group_blocks = [b for b in blocks if service_group in b.service_groups]
+                        % for block in service_group_blocks:
+                            % start_time = block.get_start_time(service_group)
+                            % end_time = block.get_end_time(service_group)
                             <tr>
                                 <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                <td>{{ block.routes_string }}</td>
+                                <td>{{ block.get_routes_string(service_group) }}</td>
                                 <td class="desktop-only">{{ start_time }}</td>
                                 <td class="desktop-only">{{ end_time }}</td>
-                                <td class="desktop-only">{{ block.duration }}</td>
+                                <td class="desktop-only">{{ block.get_duration(service_group) }}</td>
                                 <td class="non-desktop">{{ start_time }} - {{ end_time }}</td>
                             </tr>
                         % end

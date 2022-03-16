@@ -53,9 +53,9 @@ def update(positions):
             'date': formatting.database(date),
             'system_id': position.system.id,
             'block_id': block.id,
-            'routes': block.routes_string,
-            'start_time': block.start_time.full_string,
-            'end_time': block.end_time.full_string,
+            'routes': block.get_routes_string(),
+            'start_time': block.get_start_time().full_string,
+            'end_time': block.get_end_time().full_string,
             'first_seen': now,
             'last_seen': now
         })

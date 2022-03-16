@@ -41,7 +41,9 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.first_departure < other.first_departure
+        if self.start_time == other.start_time:
+            return self.service < other.service
+        return self.start_time < other.start_time
     
     @property
     def route(self):

@@ -92,9 +92,9 @@ def load_services(system):
         
         date = formatting.csv(row['date'])
         if exception_type == 1:
-            service.add_included_date(date)
+            service.include(date)
         if exception_type == 2:
-            service.add_excluded_date(date)
+            service.exclude(date)
 
 def load_shapes(system):
     system.shapes = {}
@@ -156,11 +156,5 @@ def read_csv(system, name):
 def validate(system):
     if not system.gtfs_enabled:
         return True
-    end_date = None
-    for service in system.get_services():
-        date = service.end_date.date()
-        if end_date is None or date > end_date:
-            end_date = date
-    if end_date is None:
-        return False
+    end_date = max([s.end_date for s in system.get_services()])
     return datetime.now().date() < end_date - timedelta(days=7)
