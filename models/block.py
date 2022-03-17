@@ -40,6 +40,13 @@ class Block:
         return self._service_groups
     
     @property
+    def today_service_group(self):
+        for service_group in self.service_groups:
+            if service_group.is_today:
+                return service_group
+        return None
+    
+    @property
     def related_blocks(self):
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
         related_blocks.sort(key=lambda b: b.services[0])

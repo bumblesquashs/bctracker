@@ -54,7 +54,8 @@
                 <div class="value">
                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                     <br />
-                    <span class="smaller-font">{{ block.start_time }} - {{ block.end_time }} ({{ block.duration }})</span>
+                    % service_group = block.today_service_group
+                    <span class="smaller-font">{{ block.get_start_time(service_group) }} - {{ block.get_end_time(service_group) }} ({{ block.get_duration(service_group) }})</span>
                 </div>
             </div>
             <div class="section">
