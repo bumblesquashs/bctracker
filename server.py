@@ -124,7 +124,8 @@ def img(name, system_id=None):
 
 @app.get([
     '/',
-    '/<system_id>'
+    '/<system_id>',
+    '/<system_id>/'
 ])
 def home_page(system_id=None):
     theme = request.query.get('theme')
@@ -138,14 +139,18 @@ def home_page(system_id=None):
 
 @app.get([
     '/news',
-    '/<system_id>/news'
+    '/news/',
+    '/<system_id>/news',
+    '/<system_id>/news/'
 ])
 def news_page(system_id=None):
     return page('news', system_id, path='news')
 
 @app.get([
     '/map',
-    '/<system_id>/map'
+    '/map/',
+    '/<system_id>/map',
+    '/<system_id>/map/'
 ])
 def map_page(system_id=None):
     system = get_system(system_id)
@@ -157,7 +162,9 @@ def map_page(system_id=None):
 
 @app.get([
     '/realtime',
-    '/<system_id>/realtime'
+    '/realtime/',
+    '/<system_id>/realtime',
+    '/<system_id>/realtime/'
 ])
 def realtime_all_page(system_id=None):
     system = get_system(system_id)
@@ -169,7 +176,9 @@ def realtime_all_page(system_id=None):
 
 @app.get([
     '/realtime/routes',
-    '/<system_id>/realtime/routes'
+    '/realtime/routes/',
+    '/<system_id>/realtime/routes',
+    '/<system_id>/realtime/routes/'
 ])
 def realtime_routes_page(system_id=None):
     system = get_system(system_id)
@@ -181,7 +190,9 @@ def realtime_routes_page(system_id=None):
 
 @app.get([
     '/realtime/models',
-    '/<system_id>/realtime/models'
+    '/realtime/models/',
+    '/<system_id>/realtime/models',
+    '/<system_id>/realtime/models/'
 ])
 def realtime_models_page(system_id=None):
     system = get_system(system_id)
@@ -193,7 +204,9 @@ def realtime_models_page(system_id=None):
 
 @app.get([
     '/realtime/speed',
-    '/<system_id>/realtime/speed'
+    '/realtime/speed/',
+    '/<system_id>/realtime/speed',
+    '/<system_id>/realtime/speed/'
 ])
 def realtime_speed_page(system_id=None):
     max_age = 60*60*24*365*10
@@ -210,7 +223,9 @@ def realtime_speed_page(system_id=None):
 
 @app.get([
     '/bus/<number:int>',
-    '/<system_id>/bus/<number:int>'
+    '/bus/<number:int>/',
+    '/<system_id>/bus/<number:int>',
+    '/<system_id>/bus/<number:int>/'
 ])
 def bus_overview_page(number, system_id=None):
     bus = Bus(number)
@@ -221,7 +236,9 @@ def bus_overview_page(number, system_id=None):
 
 @app.get([
     '/bus/<number:int>/map',
-    '/<system_id>/bus/<number:int>/map'
+    '/bus/<number:int>/map/',
+    '/<system_id>/bus/<number:int>/map',
+    '/<system_id>/bus/<number:int>/map/'
 ])
 def bus_map_page(number, system_id=None):
     bus = Bus(number)
@@ -231,7 +248,9 @@ def bus_map_page(number, system_id=None):
 
 @app.get([
     '/bus/<number:int>/history',
-    '/<system_id>/bus/<number:int>/history'
+    '/bus/<number:int>/history/',
+    '/<system_id>/bus/<number:int>/history',
+    '/<system_id>/bus/<number:int>/history/'
 ])
 def bus_history_page(number, system_id=None):
     bus = Bus(number)
@@ -242,7 +261,9 @@ def bus_history_page(number, system_id=None):
 
 @app.get([
     '/history',
-    '/<system_id>/history'
+    '/history/',
+    '/<system_id>/history',
+    '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
     system = get_system(system_id)
@@ -251,7 +272,9 @@ def history_last_seen_page(system_id=None):
 
 @app.get([
     '/history/first-seen',
-    '/<system_id>/history/first-seen'
+    '/history/first-seen/',
+    '/<system_id>/history/first-seen',
+    '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
     system = get_system(system_id)
@@ -260,7 +283,9 @@ def history_first_seen_page(system_id=None):
 
 @app.get([
     '/history/transfers',
-    '/<system_id>/history/transfers'
+    '/history/transfers/',
+    '/<system_id>/history/transfers',
+    '/<system_id>/history/transfers/'
 ])
 def history_transfers_page(system_id=None):
     system = get_system(system_id)
@@ -269,14 +294,18 @@ def history_transfers_page(system_id=None):
 
 @app.get([
     '/routes',
-    '/<system_id>/routes'
+    '/routes/',
+    '/<system_id>/routes',
+    '/<system_id>/routes/'
 ])
 def routes_page(system_id=None):
     return page('routes', system_id, path='routes')
 
 @app.get([
     '/routes/<number>',
-    '/<system_id>/routes/<number>'
+    '/routes/<number>/',
+    '/<system_id>/routes/<number>',
+    '/<system_id>/routes/<number>/'
 ])
 def route_overview_page(number, system_id=None):
     system = get_system(system_id)
@@ -289,7 +318,9 @@ def route_overview_page(number, system_id=None):
 
 @app.get([
     '/routes/<number>/map',
-    '/<system_id>/routes/<number>/map'
+    '/routes/<number>/map/',
+    '/<system_id>/routes/<number>/map',
+    '/<system_id>/routes/<number>/map/'
 ])
 def route_map_page(number, system_id=None):
     system = get_system(system_id)
@@ -302,7 +333,9 @@ def route_map_page(number, system_id=None):
 
 @app.get([
     '/routes/<number>/schedule',
-    '/<system_id>/routes/<number>/schedule'
+    '/routes/<number>/schedule/',
+    '/<system_id>/routes/<number>/schedule',
+    '/<system_id>/routes/<number>/schedule/'
 ])
 def route_schedule_page(number, system_id=None):
     system = get_system(system_id)
@@ -315,14 +348,18 @@ def route_schedule_page(number, system_id=None):
 
 @app.get([
     '/blocks',
-    '/<system_id>/blocks'
+    '/blocks/',
+    '/<system_id>/blocks',
+    '/<system_id>/blocks/'
 ])
 def blocks_page(system_id=None):
     return page('blocks', system_id, path='blocks')
 
 @app.get([
     '/blocks/<block_id>',
-    '/<system_id>/blocks/<block_id>'
+    '/blocks/<block_id>/',
+    '/<system_id>/blocks/<block_id>',
+    '/<system_id>/blocks/<block_id>/'
 ])
 def block_overview_page(block_id, system_id=None):
     system = get_system(system_id)
@@ -335,7 +372,9 @@ def block_overview_page(block_id, system_id=None):
 
 @app.get([
     '/blocks/<block_id>/map',
-    '/<system_id>/blocks/<block_id>/map'
+    '/blocks/<block_id>/map/',
+    '/<system_id>/blocks/<block_id>/map',
+    '/<system_id>/blocks/<block_id>/map/'
 ])
 def block_map_page(block_id, system_id=None):
     system = get_system(system_id)
@@ -348,7 +387,9 @@ def block_map_page(block_id, system_id=None):
 
 @app.get([
     '/blocks/<block_id>/history',
-    '/<system_id>/blocks/<block_id>/history'
+    '/blocks/<block_id>/history/',
+    '/<system_id>/blocks/<block_id>/history',
+    '/<system_id>/blocks/<block_id>/history/'
 ])
 def block_history_page(block_id, system_id=None):
     system = get_system(system_id)
@@ -362,7 +403,9 @@ def block_history_page(block_id, system_id=None):
 
 @app.get([
     '/trips/<trip_id>',
-    '/<system_id>/trips/<trip_id>'
+    '/trips/<trip_id>/',
+    '/<system_id>/trips/<trip_id>',
+    '/<system_id>/trips/<trip_id>/'
 ])
 def trip_overview_page(trip_id, system_id=None):
     system = get_system(system_id)
@@ -375,7 +418,9 @@ def trip_overview_page(trip_id, system_id=None):
 
 @app.get([
     '/trips/<trip_id>/map',
-    '/<system_id>/trips/<trip_id>/map'
+    '/trips/<trip_id>/map/',
+    '/<system_id>/trips/<trip_id>/map',
+    '/<system_id>/trips/<trip_id>/map/'
 ])
 def trip_map_page(trip_id, system_id=None):
     system = get_system(system_id)
@@ -388,7 +433,9 @@ def trip_map_page(trip_id, system_id=None):
 
 @app.get([
     '/trips/<trip_id>/history',
-    '/<system_id>/trips/<trip_id>/history'
+    '/trips/<trip_id>/history/',
+    '/<system_id>/trips/<trip_id>/history',
+    '/<system_id>/trips/<trip_id>/history/'
 ])
 def trip_history_page(trip_id, system_id=None):
     system = get_system(system_id)
@@ -402,7 +449,9 @@ def trip_history_page(trip_id, system_id=None):
 
 @app.get([
     '/stops',
-    '/<system_id>/stops'
+    '/stops/',
+    '/<system_id>/stops',
+    '/<system_id>/stops/'
 ])
 def stops_page(system_id=None):
     path = 'stops'
@@ -413,7 +462,9 @@ def stops_page(system_id=None):
 
 @app.get([
     '/stops/<number>',
-    '/<system_id>/stops/<number>'
+    '/stops/<number>/',
+    '/<system_id>/stops/<number>',
+    '/<system_id>/stops/<number>/'
 ])
 def stop_overview_page(number, system_id=None):
     system = get_system(system_id)
@@ -426,7 +477,9 @@ def stop_overview_page(number, system_id=None):
 
 @app.get([
     '/stops/<number>/map',
-    '/<system_id>/stops/<number>/map'
+    '/stops/<number>/map/',
+    '/<system_id>/stops/<number>/map',
+    '/<system_id>/stops/<number>/map/'
 ])
 def stop_map_page(number, system_id=None):
     system = get_system(system_id)
@@ -439,7 +492,9 @@ def stop_map_page(number, system_id=None):
 
 @app.get([
     '/stops/<number>/schedule',
-    '/<system_id>/stops/<number>/schedule'
+    '/stops/<number>/schedule/',
+    '/<system_id>/stops/<number>/schedule',
+    '/<system_id>/stops/<number>/schedule/'
 ])
 def stop_schedule_page(number, system_id=None):
     system = get_system(system_id)
@@ -452,14 +507,18 @@ def stop_schedule_page(number, system_id=None):
 
 @app.get([
     '/about',
-    '/<system_id>/about'
+    '/about/',
+    '/<system_id>/about',
+    '/<system_id>/about/'
 ])
 def about_page(system_id=None):
     return page('about', system_id, path='about')
 
 @app.get([
     '/systems',
-    '/<system_id>/systems'
+    '/systems/',
+    '/<system_id>/systems',
+    '/<system_id>/systems/'
 ])
 def systems_page(system_id=None):
     return page('systems', system_id, path=request.query.get('path', ''))
@@ -500,7 +559,9 @@ def api_shape_id(shape_id, system_id=None):
 
 @app.post([
     '/api/search',
-    '/<system_id>/api/search'
+    '/api/search/',
+    '/<system_id>/api/search',
+    '/<system_id>/api/search/'
 ])
 def api_search(system_id=None):
     query = request.forms.get('query', '')
