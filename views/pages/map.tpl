@@ -48,7 +48,7 @@
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
     </div>
-    
+        
     <div id="map" class="full-screen"></div>
     
     <script>

@@ -36,8 +36,8 @@ form input[type="submit"] {
     vertical-align: middle;
 }
 
-#header .header-text {
-    float: left;
+#search-desktop {
+    float: right;
     display: block;
     text-align: center;
     padding: 10px 20px;
@@ -45,16 +45,18 @@ form input[type="submit"] {
     font-family: Helvetica, sans-serif;
     font-size: 14pt;
     font-weight: normal;
+    position: relative;
+    overflow: visible !important;
 }
 
-#header .header-text img {
+#search-desktop img {
     width: 28px;
     height: 28px;
     margin: 2px 0px;
     vertical-align: middle;
 }
 
-#header .header-text input[type="text"] {
+#search-desktop input[type="text"] {
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
@@ -64,49 +66,40 @@ form input[type="submit"] {
     -webkit-appearance: none;
 }
 
-#header .header-text input[type="text"]:focus {
+#search-desktop input[type="text"]:focus {
     outline: none;
 }
 
-#header .header-text input[type="text"]::placeholder {
+#search-desktop input[type="text"]::placeholder {
     opacity: 1;
 }
 
-#search-desktop {
-    position: relative;
-    overflow: visible !important;
-}
-
-#search-desktop #search-desktop-results {
+#search-desktop-results {
     position: absolute;
     top: 52px;
     left: 0px;
     right: 0px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 10;
+    z-index: 30;
     text-align: left;
 }
 
-#search-desktop #search-desktop-results a {
+#search-desktop-results a {
     padding: 5px 12px;
     text-decoration: none;
     display: block;
 }
 
-#search-desktop #search-desktop-results img {
+#search-desktop-results img {
     width: 24px;
     height: 24px;
     margin-right: 5px;
     vertical-align: middle;
 }
 
-#search-desktop #search-desktop-results .message {
+#search-desktop-results .message {
     padding: 12px;
     text-align: center;
-}
-
-#subheader #last-updated {
-    font-size: 12pt;
 }
 
 #sidebar {
@@ -125,8 +118,12 @@ form input[type="submit"] {
     overflow: hidden;
 }
 
-#subheader * {
+#system-bar * {
     vertical-align: middle;
+}
+
+#system-bar #last-updated {
+    font-size: 12pt;
 }
 
 .button {
@@ -167,40 +164,26 @@ form input[type="submit"] {
     right: 0px;
     min-width: 200%;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 20;
+    z-index: 30;
 }
 
 .dropdown:hover .content {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .dropdown .content a {
     padding: 12px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown .content table {
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
-.dropdown .content table tr {
-    height: 100%;
-}
-
-.dropdown .content table tr td {
-    height: 100%;
-    padding: 0px;
-}
-
-.dropdown .content table tr td a {
-    font-size: 14pt;
     text-align: center;
-    height: 100%;
+    text-decoration: none;
+    display: inline-block;
+    width: calc(50% - 24px);
+    vertical-align: middle;
+}
+
+.dropdown .content a.full-width {
+    width: calc(100% - 24px);
 }
 
 .mobile-only {

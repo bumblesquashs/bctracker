@@ -45,29 +45,29 @@ table {
     padding: 10px 20px;
 }
 
-#header .title {
+#navigation-bar .title {
     font-size: 18pt;
 }
 
-#header .menu-toggle {
+#navigation-bar .menu-toggle {
+    padding: 10px 5px;
+}
+
+#navigation-bar .menu-toggle img {
+    width: 36px;
+    height: 36px;
+}
+
+#navigation-bar .navigation-menu-toggle {
     padding: 5px;
     margin: 5px 10px 5px 0px;
 }
 
-#header .menu-toggle .line {
+#navigation-bar .navigation-menu-toggle .line {
     width: 32px;
     height: 4px;
     border-radius: 2px;
     margin: 6px;
-}
-
-#header .icon-menu-toggle {
-    padding: 10px 5px;
-}
-
-#header .icon-menu-toggle img {
-    width: 36px;
-    height: 36px;
 }
 
 #search-non-desktop {
@@ -88,18 +88,18 @@ table {
     outline: none;
 }
 
-#search-non-desktop #search-non-desktop-results {
+#search-non-desktop-results {
     margin-top: 10px;
 }
 
-#search-non-desktop #search-non-desktop-results a {
+#search-non-desktop-results a {
     padding: 10px 0px;
     text-decoration: none;
     display: block;
     font-size: 16pt;
 }
 
-#search-non-desktop #search-non-desktop-results img {
+#search-non-desktop-results img {
     width: 32px;
     height: 32px;
     margin-right: 5px;
@@ -107,17 +107,17 @@ table {
     vertical-align: middle;
 }
 
-#search-non-desktop #search-non-desktop-results .message {
+#search-non-desktop-results .message {
     padding: 10px 0px;
     text-align: center;
     font-size: 16pt;
 }
 
-#search-non-desktop #search-non-desktop-results .message.smaller-font {
+#search-non-desktop-results .message.smaller-font {
     font-size: 14pt;
 }
 
-#subheader-system {
+#system {
     font-size: 14pt;
 }
 
@@ -141,7 +141,6 @@ table {
 
 .menu {
     position: relative;
-    z-index: 10;
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;

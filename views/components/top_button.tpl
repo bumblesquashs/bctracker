@@ -21,6 +21,6 @@
 
 <style>
     #content {
-        margin-bottom: 60px;
+        padding-bottom: 60px;
     }
 </style>

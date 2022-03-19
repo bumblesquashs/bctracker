@@ -77,7 +77,6 @@ table.striped tr.divider {
 
 #banner {
     position: relative;
-    z-index: 10;
     margin: 0px;
     padding: 10px 20px;
     cursor: default;
@@ -100,40 +99,13 @@ table.striped tr.divider {
     font-size: 16pt;
 }
 
+#content {
+    padding: 20px;
+}
+
 #header {
     position: relative;
     z-index: 20;
-    margin: 0px;
-    padding: 0px;
-}
-
-#header .title {
-    font-weight: bold !important;
-}
-
-#header .header-button {
-    float: left;
-    display: block;
-    text-align: center;
-    padding: 15px 20px;
-    text-decoration: none !important;
-    font-family: Helvetica, sans-serif;
-    font-size: 14pt;
-    font-weight: normal;
-}
-
-#header .header-button.disabled {
-    cursor: default;
-    opacity: 0.7;
-}
-
-#header .right {
-    float: right !important;
-}
-
-#content {
-    padding: 20px;
-    overflow: auto;
 }
 
 #map.full-screen {
@@ -153,6 +125,30 @@ table.striped tr.divider {
     border-style: solid;
 }
 
+#navigation-bar .navigation-button {
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 15px 20px;
+    text-decoration: none !important;
+    font-family: Helvetica, sans-serif;
+    font-size: 14pt;
+    font-weight: normal;
+}
+
+#navigation-bar .navigation-button.disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
+#navigation-bar .right {
+    float: right;
+}
+
+#navigation-bar .title {
+    font-weight: bold;
+}
+
 #refresh-button {
     margin-left: 10px;
     display: inline-block;
@@ -168,20 +164,18 @@ table.striped tr.divider {
     height: 32px;
 }
 
-#subheader {
-    position: relative;
-    z-index: 10;
+#system-bar {
     margin: 0px;
     padding: 10px 20px;
     cursor: default;
     vertical-align: middle;
 }
 
-#subheader .content {
+#system-bar .content {
     display: inline-block;
 }
 
-#subheader #system {
+#system {
     font-weight: bold;
 }
 
@@ -319,7 +313,7 @@ table.striped tr.divider {
 }
 
 .marker:hover {
-    z-index: 100;
+    z-index: 10;
 }
 
 .marker .details {
@@ -452,7 +446,7 @@ table.striped tr.divider {
 
 .page-header.map-page {
     position: relative;
-    z-index: 5;
+    z-index: 20;
 }
 
 .page-header.map-page .tab-button {

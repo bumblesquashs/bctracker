@@ -117,193 +117,175 @@
     
     <body>
         <div id="header">
-            <a class="header-button title" href="{{ get_url(system) }}">BCTracker</a>
+            <div id="navigation-bar">
+                <a class="navigation-button title" href="{{ get_url(system) }}">BCTracker</a>
             
-            <div class="desktop-only">
-                % if system is None or system.realtime_enabled:
-                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
-                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                    <a class="header-button" href="{{ get_url(system, 'history') }}">History</a>
-                % else:
-                    <span class="header-button disabled">Map</span>
-                    <span class="header-button disabled">Realtime</span>
-                    <span class="header-button disabled">History</span>
-                % end
+                <div class="desktop-only">
+                    % if system is None or system.realtime_enabled:
+                        <a class="navigation-button" href="{{ get_url(system, 'map') }}">Map</a>
+                        <a class="navigation-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                        <a class="navigation-button" href="{{ get_url(system, 'history') }}">History</a>
+                    % else:
+                        <span class="navigation-button disabled">Map</span>
+                        <span class="navigation-button disabled">Realtime</span>
+                        <span class="navigation-button disabled">History</span>
+                    % end
+                    
+                    <a class="navigation-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                    <a class="navigation-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                    <a class="navigation-button" href="{{ get_url(system, 'about') }}">About</a>
+                    
+                    % if len(systems) > 1:
+                        % path = get('path', '')
+                        <div id="system-dropdown" class="navigation-button dropdown right">
+                            Change System
+                            <div class="content">
+                                % if system is None:
+                                    <a class="dropdown-button full-width disabled">All Systems</a>
+                                % else:
+                                    <a class="dropdown-button full-width" href="{{ get_url(None, path) }}">All Systems</a>
+                                % end
+                                % for alt_system in sorted(systems):
+                                    % if system is not None and system == alt_system:
+                                        <a class="dropdown-button disabled">{{ alt_system }}</a>
+                                    % else:
+                                        <a class="dropdown-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
+                                    % end
+                                % end
+                            </div>
+                        </div>
+                    % end
+                    
+                    <div id="search-desktop" class="right">
+                        <img src="/img/white/search.png" />
+                        <input type="text" id="search-desktop-input" placeholder="Search" oninput="searchDesktop()" onfocus="searchDesktopFocus()" onblur="searchDesktopBlur()">
+                        
+                        <div id="search-desktop-results" class="display-none"></div>
+                    </div>
+                </div>
                 
-                <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
-                <a class="header-button" href="{{ get_url(system, 'about') }}">About</a>
+                <div class="tablet-only">
+                    % if system is None or system.realtime_enabled:
+                        <a class="navigation-button" href="{{ get_url(system, 'map') }}">Map</a>
+                        <a class="navigation-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                    % else:
+                        <a class="navigation-button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                        <a class="navigation-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                    % end
+                </div>
+                
+                <div class="navigation-menu-toggle non-desktop right" onclick="toggleNavigationMenu()">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
                 
                 % if len(systems) > 1:
-                    % path = get('path', '')
-                    <div class="header-button dropdown right" id="system-dropdown">
-                        Change System
-                        <div class="content">
-                            % if system is None:
-                                <a class="disabled">All Systems</a>
-                            % else:
-                                <a href="{{ get_url(None, path) }}">All Systems</a>
-                            % end
-                            % sorted_systems = sorted(systems)
-                            <table>
-                                <tbody>
-                                    % for i in range(0, len(sorted_systems), 2):
-                                        <tr>
-                                            % left_system = sorted_systems[i]
-                                            <td>
-                                                % if system is not None and system == left_system:
-                                                    <a class="disabled">{{ left_system }}</a>
-                                                % else:
-                                                    <a href="{{ get_url(left_system, path) }}">{{ left_system }}</a>
-                                                % end
-                                            </td>
-                                            % if i < len(sorted_systems) - 1:
-                                                % right_system = sorted_systems[i + 1]
-                                                <td>
-                                                    % if system is not None and system == right_system:
-                                                        <a class="disabled">{{ right_system }}</a>
-                                                    % else:
-                                                        <a href="{{ get_url(right_system, path) }}">{{ right_system }}</a>
-                                                    % end
-                                                </td>
-                                            % end
-                                        </tr>
-                                    % end
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="menu-toggle non-desktop right" onclick="toggleChangeSystemMenu()">
+                        <img src="/img/white/system.png" />
                     </div>
                 % end
                 
-                <div id="search-desktop" class="header-text right">
+                <div class="menu-toggle non-desktop right" onclick="toggleSearchNonDesktop()">
                     <img src="/img/white/search.png" />
-                    <input type="text" id="search-desktop-input" placeholder="Search" oninput="searchDesktop()" onfocus="searchDesktopFocus()" onblur="searchDesktopBlur()">
-                    
-                    <div id="search-desktop-results" class="display-none"></div>
                 </div>
+                
+                <br style="clear: both" />
             </div>
-            
-            <div class="tablet-only">
+        
+            <div id="navigation-menu" class="menu non-desktop display-none">
                 % if system is None or system.realtime_enabled:
-                    <a class="header-button" href="{{ get_url(system, 'map') }}">Map</a>
-                    <a class="header-button" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
+                        <img src="/img/white/map.png" />
+                        <span>Map</span>
+                    </a>
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
+                        <img src="/img/white/realtime.png" />
+                        <span>Realtime</span>
+                    </a>
+                    <a class="menu-button" href="{{ get_url(system, 'history') }}">
+                        <img src="/img/white/history.png" />
+                        <span>History</span>
+                    </a>
+                    <a class="menu-button" href="{{ get_url(system, 'routes') }}">
+                        <img src="/img/white/routes.png" />
+                        <span>Routes</span>
+                    </a>
+                    <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+                        <img src="/img/white/blocks.png" />
+                        <span>Blocks</span>
+                    </a>
                 % else:
-                    <a class="header-button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                    <a class="header-button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
+                        <img src="/img/white/routes.png" />
+                        <span>Routes</span>
+                    </a>
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
+                        <img src="/img/white/blocks.png" />
+                        <span>Blocks</span>
+                    </a>
                 % end
+                
+                <a class="menu-button" href="{{ get_url(system, 'about') }}">
+                    <img src="/img/white/about.png" />
+                    <span>About</span>
+                </a>
             </div>
             
-            <div class="menu-toggle non-desktop right" onclick="toggleNavigationMenu()">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
+            <div id="search-non-desktop" class="menu non-desktop display-none">
+                <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">
+                
+                <div id="search-non-desktop-results" class="display-none"></div>
             </div>
             
             % if len(systems) > 1:
-                <div class="icon-menu-toggle non-desktop right" onclick="toggleChangeSystemMenu()">
-                    <img src="/img/white/system.png" />
+                <div id="change-system-menu" class="menu non-desktop display-none">
+                    % path = get('path', '')
+                    % if system is None:
+                        <a class="menu-button disabled" style="width: 100%;">All Systems</a>
+                    % else:
+                        <a class="menu-button" style="width: 100%;" href="{{ get_url(None, path) }}">All Systems</a>
+                    % end
+                    % for alt_system in sorted(systems):
+                        % if system is not None and system == alt_system:
+                            <a class="menu-button disabled">{{ alt_system }}</a>
+                        % else:
+                            <a class="menu-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
+                        % end
+                    % end
                 </div>
             % end
             
-            <div class="icon-menu-toggle non-desktop right" onclick="toggleSearchNonDesktop()">
-                <img src="/img/white/search.png" />
-            </div>
-            
-            <br style="clear: both" />
-        </div>
-        
-        <div id="navigation-menu" class="menu non-desktop display-none">
-            % if system is None or system.realtime_enabled:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
-                    <img src="/img/white/map.png" />
-                    <span>Map</span>
-                </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
-                    <img src="/img/white/realtime.png" />
-                    <span>Realtime</span>
-                </a>
-                <a class="menu-button" href="{{ get_url(system, 'history') }}">
-                    <img src="/img/white/history.png" />
-                    <span>History</span>
-                </a>
-                <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img src="/img/white/routes.png" />
-                    <span>Routes</span>
-                </a>
-                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img src="/img/white/blocks.png" />
-                    <span>Blocks</span>
-                </a>
-            % else:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img src="/img/white/routes.png" />
-                    <span>Routes</span>
-                </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img src="/img/white/blocks.png" />
-                    <span>Blocks</span>
-                </a>
-            % end
-            
-            <a class="menu-button" href="{{ get_url(system, 'about') }}">
-                <img src="/img/white/about.png" />
-                <span>About</span>
-            </a>
-        </div>
-        
-        <div id="search-non-desktop" class="menu non-desktop display-none">
-            <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">
-            
-            <div id="search-non-desktop-results" class="display-none"></div>
-        </div>
-        
-        % if len(systems) > 1:
-            <div id="change-system-menu" class="menu non-desktop display-none">
-                % path = get('path', '')
-                % if system is None:
-                    <a class="menu-button disabled" style="width: 100%;">All Systems</a>
-                % else:
-                    <a class="menu-button" style="width: 100%;" href="{{ get_url(None, path) }}">All Systems</a>
-                % end
-                % for alt_system in sorted(systems):
-                    % if system is not None and system == alt_system:
-                        <a class="menu-button disabled">{{ alt_system }}</a>
-                    % else:
-                        <a class="menu-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
-                    % end
-                % end
-            </div>
-        % end
-        
-        <div id="subheader">
-            <div class="content">
-                <div id="system">
-                    % if system is None:
-                        All Transit Systems
-                    % else:
-                        {{ system }} Regional Transit System
+            <div id="system-bar">
+                <div class="content">
+                    <div id="system">
+                        % if system is None:
+                            All Transit Systems
+                        % else:
+                            {{ system }} Regional Transit System
+                        % end
+                    </div>
+                    % if system is None or system.realtime_enabled:
+                        <div id="last-updated">Updated {{ last_updated }}</div>
                     % end
                 </div>
                 % if system is None or system.realtime_enabled:
-                    <div id="last-updated">Updated {{ last_updated }}</div>
+                    <div id="refresh-button" class="display-none" onclick="refresh()">
+                        <img src="/img/white/refresh.png" />
+                    </div>
                 % end
             </div>
-            % if system is None or system.realtime_enabled:
-                <div id="refresh-button" class="display-none" onclick="refresh()">
-                    <img src="/img/white/refresh.png" />
+            
+            % if system is not None and (system.id == 'squamish' or system.id == 'whistler'):
+                <div id="banner">
+                    <div class="content">
+                        <span class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</span>
+                        <br />
+                        <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.id }}/news">BC Transit News Page</a>.</span>
+                    </div>
                 </div>
             % end
         </div>
-        
-        % if system is not None and (system.id == 'squamish' or system.id == 'whistler'):
-            <div id="banner">
-                <div class="content">
-                    <span class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</span>
-                    <br />
-                    <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.id }}/news">BC Transit News Page</a>.</span>
-                </div>
-            </div>
-        % end
         
         <div id="content">{{ !base }}</div>
     </body>

@@ -74,77 +74,77 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-#header {
+#map.preview {
+    border-color: #666666;
+}
+
+#navigation-bar {
     background-color: #E20000;
 }
 
-#header .header-button {
+#navigation-bar .navigation-button {
     color: #FFFFFF;
 }
 
-#header .header-button:hover {
+#navigation-bar .navigation-button:hover {
     background-color: #840000;
 }
 
-#header .header-button.disabled:hover {
+#navigation-bar .navigation-button.disabled:hover {
     background-color: #E20000 !important;
 }
 
-#header .header-text {
-    color: #FFFFFF;
-}
-
-#header .header-text input[type="text"] {
-    border-color: #FFFFFF;
+#navigation-bar .navigation-menu-toggle .line {
     background-color: #FFFFFF;
-    color: #000000;
-}
-
-#header .header-text input[type="text"]:focus {
-    border-color: #840000;
-}
-
-#header .header-text input[type="text"]::placeholder {
-    color: #666666;
-}
-
-#header .header-text input[type="text"]:-ms-input-placeholder {
-    color: #666666;
-}
-  
-#header .header-text input[type="text"]::-ms-input-placeholder {
-    color: #666666;
-}
-
-#header .menu-toggle .line {
-    background-color: #FFFFFF;
-}
-
-#map.preview {
-    border-color: #666666;
 }
 
 #refresh-button:hover {
     background-color: #011E58;
 }
 
-#search-desktop #search-desktop-results {
-    background-color: #FFFFFF;
+#search-desktop {
+    color: #FFFFFF;
 }
 
-#search-desktop #search-desktop-results a {
+#search-desktop input[type="text"] {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
     color: #000000;
 }
 
-#search-desktop #search-desktop-results a:hover {
+#search-desktop input[type="text"]:focus {
+    border-color: #840000;
+}
+
+#search-desktop input[type="text"]::placeholder {
+    color: #666666;
+}
+
+#search-desktop input[type="text"]:-ms-input-placeholder {
+    color: #666666;
+}
+  
+#search-desktop input[type="text"]::-ms-input-placeholder {
+    color: #666666;
+}
+
+#search-desktop-results {
+    background-color: #FFFFFF;
+}
+
+#search-desktop-results a {
+    color: #000000;
+}
+
+#search-desktop-results a:hover {
     background-color: #E6E6E6;
 }
 
-#search-desktop #search-desktop-results .keyboard-selected {
+#search-desktop-results .keyboard-selected {
     background-color: #CBCBCB;
 }
 
-#search-desktop #search-desktop-results .message {
+#search-desktop-results .message {
     color: #666666;
 }
 
@@ -156,19 +156,19 @@ table.striped tr:nth-child(2n-1) {
     border-color: #E20000;
 }
 
-#search-non-desktop #search-non-desktop-results a {
+#search-non-desktop-results a {
     color: #FFFFFF;
 }
 
-#search-non-desktop #search-non-desktop-results a .lighter-text {
+#search-non-desktop-results a .lighter-text {
     color: #FFFFFF;
 }
 
-#search-non-desktop #search-non-desktop-results .message {
+#search-non-desktop-results .message {
     color: #FFFFFF;
 }
 
-#subheader {
+#system-bar {
     background-color: #023496;
     color: #FFFFFF;
 }
