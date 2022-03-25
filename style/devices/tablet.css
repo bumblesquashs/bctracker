@@ -37,12 +37,27 @@ table {
 }
 
 #change-system-menu {
-    padding: 10px 0px;
+    padding: 0px;
+}
+
+#change-system-menu .header {
+    text-align: center;
+    padding: 5px 20px;
+    font-size: 14pt;
+    width: calc(100% - 40px);
 }
 
 #change-system-menu .menu-button {
     text-align: center;
     padding: 10px 20px;
+}
+
+#change-system-menu .menu-button.full-width {
+    width: calc(100% - 40px);
+}
+
+#main {
+    flex-direction: column;
 }
 
 #navigation-bar .menu-toggle {

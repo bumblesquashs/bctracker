@@ -9,8 +9,8 @@
         <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
+    <hr />
 </div>
-<hr />
 
 % if system is not None and not system.realtime_enabled:
     <p>

@@ -23,8 +23,7 @@ form input[type="text"]:focus {
 }
 
 hr {
-    margin-top: 0px;
-    margin-bottom: 20px;
+    margin:0px;
     border-width: 0px;
     border-top-width: 2px;
     border-top-style: solid;
@@ -413,7 +412,7 @@ table.striped tr.divider {
 }
 
 .news-post {
-    margin-top: 20px;
+    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -436,12 +435,12 @@ table.striped tr.divider {
     margin-bottom: 0px;
 }
 
-.news-post-older {
-    margin-top: 20px;
-}
-
 .no-wrap {
     white-space: nowrap;
+}
+
+.page-header {
+    margin-bottom: 20px;
 }
 
 .page-header.map-page {

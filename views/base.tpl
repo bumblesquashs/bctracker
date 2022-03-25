@@ -8,7 +8,9 @@
             % end
         </title>
         
-        <link rel="icon" type="image/png" href="/img/favicon.png" />
+        <link rel="icon" type="image/png" href="/img/favicon-16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/img/favicon-32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/favicon-48.png" sizes="48x48" />
         
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         
@@ -119,7 +121,7 @@
         <div id="header">
             <div id="navigation-bar">
                 <a class="navigation-button title" href="{{ get_url(system) }}">BCTracker</a>
-            
+                
                 <div class="desktop-only">
                     % if system is None or system.realtime_enabled:
                         <a class="navigation-button" href="{{ get_url(system, 'map') }}">Map</a>
@@ -141,13 +143,22 @@
                             Change System
                             <div class="content">
                                 % if system is None:
-                                    <a class="dropdown-button full-width disabled">All Systems</a>
+                                    <span class="dropdown-button full-width disabled">All Systems</span>
                                 % else:
                                     <a class="dropdown-button full-width" href="{{ get_url(None, path) }}">All Systems</a>
                                 % end
-                                % for alt_system in sorted(systems):
+                                <div class="header">Schedule and Realtime</div>
+                                % for alt_system in sorted([s for s in systems if s.realtime_enabled]):
                                     % if system is not None and system == alt_system:
-                                        <a class="dropdown-button disabled">{{ alt_system }}</a>
+                                        <span class="dropdown-button disabled">{{ alt_system }}</span>
+                                    % else:
+                                        <a class="dropdown-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
+                                    % end
+                                % end
+                                <div class="header">Schedule Only</div>
+                                % for alt_system in sorted([s for s in systems if not s.realtime_enabled]):
+                                    % if system is not None and system == alt_system:
+                                        <span class="dropdown-button disabled">{{ alt_system }}</span>
                                     % else:
                                         <a class="dropdown-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
                                     % end
@@ -242,13 +253,22 @@
                 <div id="change-system-menu" class="menu non-desktop display-none">
                     % path = get('path', '')
                     % if system is None:
-                        <a class="menu-button disabled" style="width: 100%;">All Systems</a>
+                        <span class="menu-button full-width disabled">All Systems</span>
                     % else:
-                        <a class="menu-button" style="width: 100%;" href="{{ get_url(None, path) }}">All Systems</a>
+                        <a class="menu-button full-width" href="{{ get_url(None, path) }}">All Systems</a>
                     % end
-                    % for alt_system in sorted(systems):
+                    <div class="header">Schedule and Realtime</div>
+                    % for alt_system in sorted([s for s in systems if s.realtime_enabled]):
                         % if system is not None and system == alt_system:
-                            <a class="menu-button disabled">{{ alt_system }}</a>
+                            <span class="menu-button disabled">{{ alt_system }}</span>
+                        % else:
+                            <a class="menu-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
+                        % end
+                    % end
+                    <div class="header">Schedule Only</div>
+                    % for alt_system in sorted([s for s in systems if not s.realtime_enabled]):
+                        % if system is not None and system == alt_system:
+                            <span class="menu-button disabled">{{ alt_system }}</span>
                         % else:
                             <a class="menu-button" href="{{ get_url(alt_system, path) }}">{{ alt_system }}</a>
                         % end

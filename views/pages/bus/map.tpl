@@ -11,8 +11,8 @@
             <span class="tab-button current">Map</span>
             <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
         </div>
+        <hr />
     </div>
-    <hr />
     
     <h3>Not in service</h3>
 % else:

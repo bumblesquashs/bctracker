@@ -12,8 +12,8 @@
         <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
+    <hr />
 </div>
-<hr />
 
 % if len(buses) == 0:
     <div>

@@ -229,24 +229,25 @@ table.striped tr:nth-child(2n-1) {
     background-color: #2F2F2F;
 }
 
-.dropdown .content a {
+.dropdown .content .dropdown-button {
     color: #FFFFFF;
 }
 
-.dropdown .content a:hover {
+.dropdown .content .dropdown-button:hover {
     background-color: #393939
 }
 
-.dropdown .content a.disabled {
+.dropdown .content .dropdown-button.disabled {
     color: #ABABAB;
 }
 
-.dropdown .content a.disabled:hover {
+.dropdown .content .dropdown-button.disabled:hover {
     background-color: #2F2F2F !important;
 }
 
-.dropdown .content .title {
-    color: #ABABAB;
+.dropdown .content .header {
+    background-color: #565656;
+    color: #FFFFFF;
 }
 
 .info-box {

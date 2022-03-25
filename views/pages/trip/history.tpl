@@ -11,8 +11,8 @@
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
+    <hr />
 </div>
-<hr />
 
 % if system.realtime_enabled:
     % if len(records) > 0:
@@ -22,7 +22,7 @@
         % first_tracked = records[-1].date
         % days_since_first_tracked = formatting.days_since(first_tracked)
         
-        <div id="sidebar">
+        <div class="sidebar">
             <h2>Overview</h2>
             <div class="info-box">
                 <div class="section">

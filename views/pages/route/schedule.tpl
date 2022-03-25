@@ -8,8 +8,8 @@
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
+    <hr />
 </div>
-<hr />
 
 % service_groups = route.service_groups
 

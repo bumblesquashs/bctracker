@@ -2,8 +2,8 @@
 
 <div class="page-header">
     <h1 class="title">Blocks</h1>
+    <hr />
 </div>
-<hr />
 
 % if system is None:
     <p>

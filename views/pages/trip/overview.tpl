@@ -12,10 +12,10 @@
             <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
+    <hr />
 </div>
-<hr />
 
-<div id="sidebar">
+<div class="sidebar">
     <h2>Overview</h2>
     % include('components/map', map_trip=trip, map_buses=[p.bus for p in positions])
     

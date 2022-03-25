@@ -12,10 +12,10 @@
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
     </div>
+    <hr />
 </div>
-<hr />
 
-<div id="sidebar">
+<div class="sidebar">
     <h2>Realtime Information</h2>
     % position = bus.position
     % if not position.active:

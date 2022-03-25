@@ -3,8 +3,8 @@
 <div class="page-header">
     <h1 class="title">News Archive</h1>
     <a href="{{ get_url(system) }}">Return home</a>
+    <hr />
 </div>
-<hr />
 
 <div class="news-post" id="survey">
     <div class="header">

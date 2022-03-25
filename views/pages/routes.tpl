@@ -4,8 +4,8 @@
 
 <div class="page-header">
     <h1 class="title">Routes</h1>
+    <hr />
 </div>
-<hr />
 
 % if system is None:
     <p>

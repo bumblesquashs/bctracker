@@ -2,8 +2,8 @@
 
 <div class="page-header">
     <h1 class="title">About</h1>
+    <hr />
 </div>
-<hr />
 
 % realtime_count = len([s for s in systems if s.realtime_enabled])
 % non_realtime_count = len([s for s in systems if not s.realtime_enabled])

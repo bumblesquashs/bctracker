@@ -9,14 +9,14 @@
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
+    <hr />
 </div>
-<hr />
 
 % trips = route.trips
 % headsigns = route.get_headsigns()
 % positions = sorted(route.positions)
 
-<div id="sidebar">
+<div class="sidebar">
     <h2>Overview</h2>
     % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
     

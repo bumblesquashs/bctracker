@@ -9,15 +9,15 @@
             <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
+    <hr />
 </div>
-<hr />
 
 % service_groups = block.service_groups
 % routes = block.get_routes()
 % trips = block.get_trips()
 % positions = sorted(block.positions)
 
-<div id="sidebar">
+<div class="sidebar">
     <h2>Overview</h2>
     % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
     

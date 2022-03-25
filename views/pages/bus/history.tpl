@@ -13,8 +13,8 @@
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
+    <hr />
 </div>
-<hr />
 
 % if len(records) > 0:
     % last_tracked = records[0].date
@@ -23,7 +23,7 @@
     % first_tracked = records[-1].date
     % days_since_first_tracked = formatting.days_since(first_tracked)
     
-    <div id="sidebar">
+    <div class="sidebar">
         <h2>Overview</h2>
         <div class="info-box">
             <div class="section">

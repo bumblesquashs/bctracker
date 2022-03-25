@@ -1,7 +1,9 @@
 % rebase('base', title='Error')
 
-<h1>Error: Route {{ number }} Not Found</h1>
-<hr />
+<div class="page-header">
+    <h1 class="title">Error: Route {{ number }} Not Found</h1>
+    <hr />
+</div>
 
 <p>The route you are looking for doesn't seem to exist!</p>
 <p>

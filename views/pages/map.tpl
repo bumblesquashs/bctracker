@@ -5,8 +5,8 @@
 % if len(buses) == 0:
     <div class="page-header">
         <h1 class="title">Map</h1>
+        <hr />
     </div>
-    <hr />
 
     % if system is not None and not system.realtime_enabled:
         <p>

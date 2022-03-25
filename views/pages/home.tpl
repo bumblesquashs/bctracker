@@ -6,10 +6,10 @@
     % else:
         <h1 class="title">Welcome to BCTracker {{ system }}!</h1>
     % end
+    <hr />
 </div>
-<hr />
 
-<div id="sidebar">
+<div class="sidebar">
     <h2>Quick Search</h2>
     
     <script type="text/javascript">
@@ -123,7 +123,7 @@
             </p>
             <p>
                 To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, and <b>Campbell River</b> as brand-new realtime systems.
-                Additionally, the Central Fraser Valley and Chilliwack systems have been combined into a new <b>Fraser Valley</b> system with realtime information. [NOTE at time of writing, realtime in Fraser Valley is still in early testing]
+                Additionally, the Central Fraser Valley and Chilliwack systems have been combined into a new <b>Fraser Valley</b> system with realtime information.
                 Finally, we're introducing the <b>Sunshine Coast</b> and <b>Vernon</b> regional systems with schedule-only data.
                 As realtime information becomes available in more regions, we'll update BCTracker to add/update those systems.
                 Expect to see more updates over the next few months!
@@ -172,7 +172,5 @@
         </div>
     </div>
     
-    <div class="news-post-older">
-        <a href="{{ get_url(system, 'news') }}">See older updates</a>
-    </div>
+    <a href="{{ get_url(system, 'news') }}">See older updates</a>
 </div>
