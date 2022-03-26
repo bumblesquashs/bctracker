@@ -3,12 +3,13 @@ from os.path import commonprefix
 from random import randint, seed, shuffle
 
 from models.search_result import SearchResult
-from models.service import create_service_group, create_service_groups
+from models.service import create_service_group
+from models.sheet import create_sheets
 
 import realtime
 
 class Route:
-    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_service_groups')
+    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, row):
         self.system = system
@@ -30,7 +31,7 @@ class Route:
         self._auto_name = None
         self._services = None
         self._service_group = None
-        self._service_groups = None
+        self._sheets = None
     
     def __str__(self):
         if self.name == '':
@@ -88,10 +89,10 @@ class Route:
         return self._service_group
     
     @property
-    def service_groups(self):
-        if self._service_groups is None:
-            self._service_groups = create_service_groups(self.services)
-        return self._service_groups
+    def sheets(self):
+        if self._sheets is None:
+            self._sheets = create_sheets(self.services)
+        return self._sheets
     
     @property
     def positions(self):
@@ -108,10 +109,10 @@ class Route:
         }
     
     def add_trip(self, trip):
+        self.trips.append(trip)
         self._services = None
         self._service_group = None
-        self._service_groups = None
-        self.trips.append(trip)
+        self._sheets = None
     
     def get_trips(self, service_group=None):
         if service_group is None:

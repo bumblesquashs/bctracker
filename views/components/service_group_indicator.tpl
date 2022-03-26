@@ -20,7 +20,7 @@
                 <div class="details">{{ schedule.included_dates_string }}</div>
             % end
         % else:
-            <div class="title">{{ service_group }}</div>
+            <div class="title">{{ service_group.date_string }}</div>
             <div class="dates">
                 <span class="date {{ 'running' if schedule.mon else '' }}">Mon</span>
                 <span class="date {{ 'running' if schedule.tue else '' }}">Tue</span>

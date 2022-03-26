@@ -501,11 +501,15 @@ table.striped tr.divider {
     text-align: center;
 }
 
-.service-navigation {
+.sheet-navigation {
     margin-bottom: 20px;
 }
 
-.service-navigation .buttons {
+.sheet-navigation .sheet {
+    margin-bottom: 20px;
+}
+
+.sheet-navigation .sheet .buttons {
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
@@ -513,24 +517,24 @@ table.striped tr.divider {
     gap: 5px;
 }
 
-.service-navigation .buttons .button .special-number {
+.sheet-navigation .sheet .buttons .button .special-number {
     font-size: 10pt;
     line-height: 10pt;
     position: relative;
     top: -0.4em;
 }
 
-.service-navigation .special-services {
+.sheet-navigation .sheet .special-services {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
 }
 
-.service-navigation .special-services li {
+.sheet-navigation .sheet .special-services li {
     margin-bottom: 2px;
 }
 
-.service-navigation .special-services .special-number {
+.sheet-navigation .sheet .special-services .special-number {
     font-weight: bold;
 }
 

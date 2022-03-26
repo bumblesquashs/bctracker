@@ -1,10 +1,11 @@
 
-from models.service import create_service_group, create_service_groups
+from models.service import create_service_group
+from models.sheet import create_sheets
 
 import realtime
 
 class Block:
-    __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_service_groups')
+    __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, trip):
         self.system = system
@@ -13,7 +14,7 @@ class Block:
         
         self._services = None
         self._service_group = None
-        self._service_groups = None
+        self._sheets = None
     
     def __eq__(self, other):
         return self.id == other.id
@@ -34,16 +35,17 @@ class Block:
         return self._service_group
     
     @property
-    def service_groups(self):
-        if self._service_groups is None:
-            self._service_groups = create_service_groups(self.services)
-        return self._service_groups
+    def sheets(self):
+        if self._sheets is None:
+            self._sheets = create_sheets(self.services)
+        return self._sheets
     
     @property
     def today_service_group(self):
-        for service_group in self.service_groups:
-            if service_group.is_today:
-                return service_group
+        for sheet in self.sheets:
+            for service_group in sheet.service_groups:
+                if service_group.is_today:
+                    return service_group
         return None
     
     @property
@@ -60,7 +62,7 @@ class Block:
     def add_trip(self, trip):
         self._services = None
         self._service_group = None
-        self._service_groups = None
+        self._sheets = None
         self.trips.append(trip)
     
     def get_trips(self, service_group=None):

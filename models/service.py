@@ -17,7 +17,7 @@ class ServiceSchedule:
         
         values = [mon, tue, wed, thu, fri, sat, sun]
         
-        self.indices = [i for i, b in enumerate(values) if b]
+        self.indices = [i for i, value in enumerate(values) if value]
         self.binary_string = ''.join(['1' if d else '0' for d in values])
         self.special = not (mon or tue or wed or thu or fri or sat or sun)
         
@@ -170,20 +170,26 @@ class ServiceGroup:
         self.schedule = schedule
     
     def __str__(self):
+        return f'{self.schedule} ({self.date_string})'
+    
+    def __hash__(self):
+        return hash(str(self))
+    
+    def __eq__(self, other):
+        return self.start_date == other.start_date and self.end_date == other.end_date and self.schedule == other.schedule
+    
+    def __lt__(self, other):
+        if self.start_date == other.start_date:
+            return self.schedule < other.schedule
+        return self.start_date < other.start_date
+    
+    @property
+    def date_string(self):
         if self.schedule.special:
             return self.schedule.included_dates_string
         start = formatting.long(self.start_date)
         end = formatting.long(self.end_date)
         return f'{start} to {end}'
-    
-    def __hash__(self):
-        return hash(self.schedule)
-    
-    def __eq__(self, other):
-        return self.schedule == other.schedule
-    
-    def __lt__(self, other):
-        return self.schedule < other.schedule
     
     @property
     def is_current(self):
@@ -218,22 +224,3 @@ def create_service_group(services):
     excluded_dates = {d for s in services for d in s.schedule.excluded_dates}
     schedule = ServiceSchedule(mon, tue, wed, thu, fri, sat, sun, {d for d in included_dates if d not in excluded_dates}, {d for d in excluded_dates if d not in included_dates})
     return ServiceGroup(services, schedule)
-
-def create_service_groups(services):
-    groups = [ServiceGroup([s], s.schedule) for s in services if s.schedule.special]
-    services = [s for s in services if not s.schedule.special]
-    indices = {i for s in services for i in s.schedule.indices}
-    index_services = {i:tuple({s for s in services if i in s.schedule.indices}) for i in indices}
-    service_sets = set(index_services.values())
-    for service_set in service_sets:
-        service_set_indices = {k for k,v in index_services.items() if v == service_set}
-        mon = 0 in service_set_indices
-        tue = 1 in service_set_indices
-        wed = 2 in service_set_indices
-        thu = 3 in service_set_indices
-        fri = 4 in service_set_indices
-        sat = 5 in service_set_indices
-        sun = 6 in service_set_indices
-        schedule = ServiceSchedule(mon, tue, wed, thu, fri, sat, sun)
-        groups.append(ServiceGroup(sorted(service_set), schedule))
-    return sorted(groups)

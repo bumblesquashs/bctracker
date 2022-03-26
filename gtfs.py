@@ -11,6 +11,7 @@ from models.departure import Departure
 from models.route import Route
 from models.service import Service
 from models.shape import Shape
+from models.sheet import create_sheets
 from models.stop import Stop
 from models.trip import Trip
 
@@ -95,6 +96,8 @@ def load_services(system):
             service.include(date)
         if exception_type == 2:
             service.exclude(date)
+    sheets = create_sheets(system.get_services())
+    system.sheets = {service.id:sheet for sheet in sheets for service in sheet.services}
 
 def load_shapes(system):
     system.shapes = {}
@@ -132,7 +135,7 @@ def load_trips(system):
         
         if service is None or route is None:
             continue
-        if system.current_sheet_only and not service.is_current:
+        if not system.get_sheet(service).is_current:
             continue
         
         route.add_trip(trip)

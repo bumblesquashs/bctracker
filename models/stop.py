@@ -2,10 +2,11 @@
 from math import sqrt
 
 from models.search_result import SearchResult
-from models.service import create_service_group, create_service_groups
+from models.service import create_service_group
+from models.sheet import create_sheets
 
 class Stop:
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_services', '_service_group', '_service_groups')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, row):
         self.system = system
@@ -21,7 +22,7 @@ class Stop:
         self.departures = []
         self._services = None
         self._service_group = None
-        self._service_groups = None
+        self._sheets = None
     
     def __str__(self):
         return self.name
@@ -50,10 +51,10 @@ class Stop:
         return self._service_group
     
     @property
-    def service_groups(self):
-        if self._service_groups is None:
-            self._service_groups = create_service_groups(self.services)
-        return self._service_groups
+    def sheets(self):
+        if self._sheets is None:
+            self._sheets = create_sheets(self.services)
+        return self._sheets
     
     @property
     def nearby_stops(self):
@@ -72,10 +73,10 @@ class Stop:
         }
     
     def add_departure(self, departure):
+        self.departures.append(departure)
         self._services = None
         self._service_group = None
-        self._service_groups = None
-        self.departures.append(departure)
+        self._sheets = None
     
     def get_departures(self, service_group=None):
         if service_group is None:

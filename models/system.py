@@ -1,7 +1,8 @@
+
 import csv
 
 class System:
-    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'current_sheet_only', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'stops', 'stops_by_number', 'trips', 'positions')
+    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'current_sheet_only', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips', 'positions')
     
     def __init__(self, row):
         self.id = row['system_id']
@@ -19,6 +20,7 @@ class System:
         self.routes_by_number = {}
         self.services = {}
         self.shapes = {}
+        self.sheets = {}
         self.stops = {}
         self.stops_by_number = {}
         self.trips = {}
@@ -60,12 +62,20 @@ class System:
         return None
     
     def get_services(self):
-        return sorted([s for s in self.services.values() if s.is_current])
+        return sorted(self.services.values())
     
     def get_shape(self, shape_id):
         if shape_id in self.shapes:
             return self.shapes[shape_id]
         return None
+    
+    def get_sheet(self, service):
+        if service.id in self.sheets:
+            return self.sheets[service.id]
+        return None
+    
+    def get_sheets(self):
+        return sorted({s for s in self.sheets.values() if s.is_current})
     
     def get_stop(self, stop_id=None, number=None):
         if stop_id is not None and stop_id in self.stops:
