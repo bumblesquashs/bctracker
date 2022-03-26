@@ -2,14 +2,13 @@
 import csv
 
 class System:
-    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'current_sheet_only', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips', 'positions')
+    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips', 'positions')
     
     def __init__(self, row):
         self.id = row['system_id']
         self.name = row['name']
         self.gtfs_enabled = row['gtfs_enabled'] == '1'
         self.realtime_enabled = row['realtime_enabled'] == '1'
-        self.current_sheet_only = row['current_sheet_only'] == '1'
         self.gtfs_url = row['gtfs_url']
         self.realtime_url = row['realtime_url']
         
