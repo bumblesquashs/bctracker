@@ -195,6 +195,10 @@ table {
     display: none !important;
 }
 
+.page-header .title.trip-id {
+    overflow-wrap: break-word;
+}
+
 .smaller-font {
     font-size: 11pt;
 }
