@@ -142,7 +142,7 @@
                             % end
                         </td>
                         <td>{{ trip }}</td>
-                        <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                        <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
                         % if stop is None:
                             <td class="non-mobile lighter-text">Unavailable</td>
                         % else:
@@ -164,7 +164,10 @@
                 % service_group_trips = block.get_trips(service_group)
                 <div class="section">
                     % if len(sheets) > 1 or len(sheet.service_groups) > 1:
-                        <h3 class="name">{{ service_group.schedule }}</h3>
+                        <h3 class="title">{{ service_group.schedule }}</h3>
+                    % end
+                    % if len(sheets) > 1:
+                        <div class="subtitle">{{ sheet }}</div>
                     % end
                     <table class="striped">
                         <thead>
@@ -192,7 +195,7 @@
                                         </span>
                                     </td>
                                     <td class="desktop-only">{{ trip.direction.value }}</td>
-                                    <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                                    <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
                                 </tr>
                             % end
                         </tbody>

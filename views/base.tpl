@@ -74,7 +74,9 @@
                 const timeToNextUpdate = 60 - date.getSeconds();
                 
                 setTimeout(function() {
-                    document.getElementById("refresh-button").classList.remove("display-none");
+                    const element = document.getElementById("refresh-button")
+                    element.classList.remove("hidden");
+                    element.onclick = refresh
                 }, 1000 * (timeToNextUpdate + 15));
                 
                 function refresh() {
@@ -290,7 +292,7 @@
                     % end
                 </div>
                 % if system is None or system.realtime_enabled:
-                    <div id="refresh-button" class="display-none" onclick="refresh()">
+                    <div id="refresh-button" class="hidden">
                         <img src="/img/white/refresh.png" />
                     </div>
                 % end

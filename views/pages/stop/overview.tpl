@@ -168,7 +168,7 @@
                         </td>
                         <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                         <td>
-                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                            <a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                             <span class="mobile-only smaller-font">
                                 <br />
                                 {{ trip }}

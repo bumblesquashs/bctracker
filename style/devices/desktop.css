@@ -102,10 +102,6 @@ form input[type="submit"] {
     text-align: center;
 }
 
-#system-bar * {
-    vertical-align: middle;
-}
-
 #system-bar #last-updated {
     font-size: 12pt;
 }

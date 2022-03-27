@@ -148,14 +148,13 @@ table.striped tr.divider {
     font-weight: bold;
 }
 
-#refresh-button {
-    margin-left: 10px;
-    display: inline-block;
-}
-
 #refresh-button:hover {
     cursor: pointer;
     border-radius: 16px;
+}
+
+#refresh-button.hidden:hover {
+    cursor: default;
 }
 
 #refresh-button img {
@@ -167,11 +166,10 @@ table.striped tr.divider {
     margin: 0px;
     padding: 10px 20px;
     cursor: default;
-    vertical-align: middle;
-}
-
-#system-bar .content {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
 
 #system {
