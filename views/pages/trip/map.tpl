@@ -14,6 +14,5 @@
 </div>
 
 % departures = trip.departures
-% buses = [p.bus for p in trip.positions]
 
-% include('components/map', is_preview=False, map_trip=trip, map_departures=departures, map_buses=buses)
+% include('components/map', is_preview=False, map_trip=trip, map_departures=departures, map_positions=positions)

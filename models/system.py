@@ -2,7 +2,7 @@
 import csv
 
 class System:
-    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips', 'positions')
+    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     def __init__(self, row):
         self.id = row['system_id']
@@ -23,7 +23,6 @@ class System:
         self.stops = {}
         self.stops_by_number = {}
         self.trips = {}
-        self.positions = {}
     
     def __str__(self):
         return self.name

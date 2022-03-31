@@ -19,38 +19,37 @@
     <hr />
 </div>
 
-<div class="container no-inline">
-    % if len(buses) == 0:
-        <div class="section">
-            % if system is not None and not system.realtime_enabled:
+% if len(positions) == 0:
+    <div>
+        % if system is not None and not system.realtime_enabled:
+            <p>
+                {{ system }} does not currently support realtime.
+                You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
+            </p>
+            
+            % include('components/systems', realtime_only=True)
+        % else:
+            % if system is None:
+                There are no buses out right now.
+                BC Transit does not have late night service, so this should be the case overnight.
+                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
+                Please check back later!
+            % else:
                 <p>
-                    {{ system }} does not currently support realtime.
-                    You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
+                    There are no buses out in {{ system }} right now.
+                    Please choose a different system.
                 </p>
                 
                 % include('components/systems', realtime_only=True)
-            % else:
-                % if system is None:
-                    There are no buses out right now.
-                    BC Transit does not have late night service, so this should be the case overnight.
-                    If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
-                    Please check back later!
-                % else:
-                    <p>
-                        There are no buses out in {{ system }} right now.
-                        Please choose a different system.
-                    </p>
-                    
-                    % include('components/systems', realtime_only=True)
-                % end
             % end
-        </div>
-    % else:
-        % known_buses = [b for b in buses if b.order is not None]
-        % models = sorted({b.model for b in known_buses})
+        % end
+    </div>
+% else:
+    <div class="container no-inline">
+        % models = sorted({p.bus.model for p in positions if p.bus.model is not None})
         
         % for model in models:
-            % model_buses = [b for b in known_buses if b.model == model]
+            % model_positions = sorted([p for p in positions if p.bus.model == model])
             <div class="section">
                 <h2 class="title">{{ model }}</h2>
                 <table class="striped fixed-table">
@@ -71,8 +70,8 @@
                     </thead>
                     <tbody>
                         % last_year = None
-                        % for bus in sorted(model_buses):
-                            % position = bus.position
+                        % for position in model_positions:
+                            % bus = position.bus
                             % order = bus.order
                             % same_year = last_year is None or order.year == last_year
                             % last_year = order.year
@@ -127,9 +126,9 @@
             </div>
         % end
         
-        % unknown_buses = [b for b in buses if b.order is None]
-        % if len(unknown_buses) > 0:
-            <div class="section no-inline">
+        % unknown_positions = sorted([p for p in positions if p.bus.order is None])
+        % if len(unknown_positions) > 0:
+            <div class="section">
                 <h2 class="title">Unknown Model</h2>
                 <table class="striped fixed-table">
                     <thead>
@@ -147,15 +146,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % for bus in sorted(unknown_buses):
+                        % for position in unknown_positions:
                             <tr>
-                                <td>
-                                    % if bus.is_unknown:
-                                        {{ bus }}
-                                    % else:
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    % end
-                                </td>
+                                <td>{{ position.bus }}</td>
                                 % if system is None:
                                     <td class="non-mobile">{{ position.system }}</td>
                                 % end
@@ -195,7 +188,7 @@
                 </table>
             </div>
         % end
-    % end
-</div>
+    </div>
+% end
 
 % include('components/top_button')

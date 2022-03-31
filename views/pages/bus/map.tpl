@@ -1,8 +1,7 @@
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
 
-% position = bus.position
-% if not position.active:
+% if position is None:
     <div class="page-header">
         <h1 class="title">Bus {{ bus }}</h1>
         <h2 class="subtitle">{{ bus.order }}</h2>
@@ -26,10 +25,10 @@
         </div>
     </div>
     
-    % if position.trip is None:
-        % include('components/map', is_preview=False, map_bus=bus)
+    % trip = position.trip
+    % if trip is None:
+        % include('components/map', is_preview=False, map_position=position)
     % else:
-        % trip = position.trip
-        % include('components/map', is_preview=False, map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
+        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
     % end
 % end

@@ -1,6 +1,5 @@
-% schedule = service.schedule
-
 <div class="service-indicator">
+    % schedule = service.schedule
     % if get('compact', False):
         <div class="dates compact">
             <span class="date {{ 'running' if schedule.mon else '' }}">M</span>

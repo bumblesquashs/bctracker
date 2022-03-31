@@ -15,7 +15,7 @@
     <hr />
 </div>
 
-% if len(buses) == 0:
+% if len(positions) == 0:
     <div>
         % if system is not None and not system.realtime_enabled:
             <p>
@@ -60,23 +60,18 @@
         </thead>
         <tbody>
             % last_speed = None
-            % for bus in sorted(buses, key=lambda b: b.position.speed, reverse=True):
-                % position = bus.position
+            % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
+                % bus = position.bus
+                % order = bus.order
                 % same_speed = last_speed is None or position.speed // 10 == last_speed
                 % last_speed = position.speed // 10
-                % order = bus.order
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
-                        % if bus.is_unknown:
+                        % if order is None:
                             {{ bus }}
                         % else:
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % end
-                        % if order is not None:
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ order }}
-                            </span>
+                            <div class="non-desktop smaller-font">{{ order }}</div>
                         % end
                     </td>
                     <td class="desktop-only">
@@ -91,10 +86,7 @@
                     % if position.trip is None:
                         <td>
                             <span class="lighter-text">Not in service</span>
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ position.speed }} km/h
-                            </span>
+                            <div class="non-desktop smaller-font">{{ position.speed }} km/h</div>
                         </td>
                         <td class="desktop-only"></td>
                         <td class="desktop-only"></td>

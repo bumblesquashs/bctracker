@@ -1,3 +1,4 @@
+
 from models.time import Time
 
 class Departure:

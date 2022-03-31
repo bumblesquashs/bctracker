@@ -1,3 +1,4 @@
+
 % from datetime import datetime
 
 % rebase('base', title=str(route), include_maps=True)
@@ -12,19 +13,16 @@
     <hr />
 </div>
 
-% trips = route.trips
-% headsigns = route.get_headsigns()
-% positions = sorted(route.positions)
-
 <div class="sidebar">
     <h2>Overview</h2>
-    % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
+    % include('components/map', map_trips=route.trips, map_positions=positions)
     
     <div class="info-box">
         <div class="section">
             % include('components/service_group_indicator', service_group=route.service_group)
         </div>
         <div class="section">
+            % headsigns = route.get_headsigns()
             <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
             <div class="value">
                 % for headsign in headsigns:
@@ -53,17 +51,15 @@
             <tbody>
                 % for position in positions:
                     % bus = position.bus
+                    % order = bus.order
                     % trip = position.trip
                     % stop = position.stop
-                    % order = bus.order
                     <tr>
                         <td>
-                            % if bus.is_unknown:
+                            % if order is None:
                                 {{ bus }}
                             % else:
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % end
-                            % if order is not None:
                                 <span class="non-desktop smaller-font">
                                     <br />
                                     {{ order }}
@@ -96,23 +92,17 @@
     % end
     
     <h2>Today's Schedule</h2>
-    
-    % today_trips = [t for t in trips if t.service.is_today]
-    
-    % if len(today_trips) == 0:
+    % if len(trips) == 0:
         <p>
             There are no trips for this route today.
             You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.
         </p>
     % else:
-        % today_buses = today(route.system, list({t.block_id for t in today_trips}))
-        % recorded_buses = today_buses['recorded']
-        % scheduled_buses = today_buses['scheduled']
-        % directions = {t.direction for t in today_trips}
-        
+        % trip_positions = {p.trip.id:p for p in positions if p.trip is not None and p.trip in trips}
+        % directions = sorted({t.direction for t in trips})
         <div class="container">
             % for direction in directions:
-                % direction_trips = [t for t in today_trips if t.direction == direction]
+                % direction_trips = [t for t in trips if t.direction == direction]
                 % if len(direction_trips) > 0:
                     <div class="section">
                         % if len(directions) > 1:
@@ -153,20 +143,18 @@
                                     <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                         <td>{{ trip.start_time }}</td>
                                         % if system is None or system.realtime_enabled:
-                                            % if trip.id in recorded_buses:
-                                                % bus = recorded_buses[trip.id]
+                                            % if trip.id in recorded_today:
+                                                % bus = recorded_today[trip.id]
                                                 % order = bus.order
-                                                % position = bus.position
                                                 <td>
-                                                    % if position.active and position.trip_id == trip.id and position.schedule_adherence is not None:
+                                                    % if trip.id in trip_positions:
+                                                        % position = trip_positions[trip.id]
                                                         % include('components/adherence_indicator', adherence=position.schedule_adherence)
                                                     % end
-                                                    % if bus.is_unknown:
+                                                    % if order is None:
                                                         {{ bus }}
                                                     % else:
                                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                    % end
-                                                    % if order is not None:
                                                         <span class="non-desktop smaller-font">
                                                             <br />
                                                             {{ order }}
@@ -178,11 +166,11 @@
                                                         {{ order }}
                                                     % end
                                                 </td>
-                                            % elif trip.block_id in scheduled_buses and trip.start_time.is_later:
-                                                % bus = scheduled_buses[trip.block_id]
+                                            % elif trip.block_id in scheduled_today and trip.start_time.is_later:
+                                                % bus = scheduled_today[trip.block_id]
                                                 % order = bus.order
                                                 <td>
-                                                    % if bus.is_unknown:
+                                                    % if order is None:
                                                         {{ bus }}
                                                     % else:
                                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>

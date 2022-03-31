@@ -44,46 +44,51 @@ def update_positions(system):
     for index, entity in enumerate(data.entity):
         vehicle = entity.vehicle
         try:
-            bus_number = int(vehicle.vehicle.id)
+            vehicle_id = vehicle.vehicle.id
+            if len(vehicle_id) > 4:
+                vehicle_id = vehicle_id[-4:]
+            bus_number = int(vehicle_id)
         except:
             bus_number = -(index + 1)
-        bus_number_str = str(bus_number)
-        if len(bus_number_str) > 4:
-            bus_number = int(bus_number_str[-4:])
         if bus_number >= 9990:
             continue
-        position = Position(system, True, Bus(bus_number))
         try:
-            if vehicle.trip.schedule_relationship == 0 and vehicle.trip.trip_id != '':
-                position.trip_id = vehicle.trip.trip_id
-        except AttributeError: pass
+            trip_id = vehicle.trip.trip_id
+            if trip_id == '':
+                trip_id = None
+        except AttributeError:
+            trip_id = None
         try:
-            if vehicle.stop_id != '':
-                position.stop_id = vehicle.stop_id
-        except AttributeError: pass
+            stop_id = vehicle.stop_id
+            if stop_id =='':
+                stop_id = None
+        except AttributeError:
+            stop_id = None
         try:
-            position.lat = vehicle.position.latitude
-            position.lon = vehicle.position.longitude
-            position.speed = int(vehicle.position.speed * 3.6)
-        except AttributeError: pass
-        positions[bus_number] = position
-        position.calculate_schedule_adherence()
+            lat = vehicle.position.latitude
+            lon = vehicle.position.longitude
+        except AttributeError:
+            lat = None
+            lon = None
+        try:
+            speed = int(vehicle.position.speed * 3.6)
+        except AttributeError:
+            speed = None
+        positions[bus_number] = Position(system, Bus(bus_number), trip_id, stop_id, lat, lon, speed)
 
 def reset_positions(system):
     global positions
     positions = {k:v for (k, v) in positions.items() if v.system != system}
-    system.positions = {}
 
-def get_position(bus):
-    if bus.number in positions:
-        return positions[bus.number]
-    return Position(None, False, bus)
+def get_position(bus_number):
+    if bus_number in positions:
+        return positions[bus_number]
+    return None
 
-def get_positions():
-    return positions.values()
-
-def active_buses():
-    return [p.bus for p in positions.values()]
+def get_positions(system_id=None):
+    if system_id is None:
+        return positions.values()
+    return [p for p in positions.values() if p.system.id == system_id]
 
 def last_updated_string():
     now = datetime.now().date()
@@ -97,7 +102,7 @@ def validate(system):
     if not system.realtime_enabled:
         return True
     count = 0
-    for position in [p for p in positions.values() if p.system == system]:
+    for position in get_positions(system.id):
         if count == 10:
             return True
         if position.trip_id is None:

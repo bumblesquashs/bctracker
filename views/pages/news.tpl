@@ -1,3 +1,4 @@
+
 % rebase('base', title='News Archive')
 
 <div class="page-header">

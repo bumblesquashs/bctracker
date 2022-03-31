@@ -1,6 +1,5 @@
-% rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
-% positions = sorted(trip.positions)
+% rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title trip-id">Trip {{ trip.id }}</h1>
@@ -17,7 +16,7 @@
 
 <div class="sidebar">
     <h2>Overview</h2>
-    % include('components/map', map_trip=trip, map_buses=[p.bus for p in positions])
+    % include('components/map', map_trip=trip, map_positions=positions)
     
     <div class="info-box">
         <div class="section">
@@ -94,19 +93,17 @@
                 </tr>
             </thead>
             <tbody>
-                % for position in positions:
+                % for position in sorted(positions):
                     % bus = position.bus
+                    % order = bus.order
                     % trip = position.trip
                     % stop = position.stop
-                    % order = bus.order
                     <tr>
                         <td>
-                            % if bus.is_unknown:
+                            % if order is None:
                                 {{ bus }}
                             % else:
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % end
-                            % if order is not None:
                                 <span class="mobile-only smaller-font">
                                     <br />
                                     {{ order }}

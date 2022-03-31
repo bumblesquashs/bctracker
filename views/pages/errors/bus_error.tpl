@@ -1,7 +1,8 @@
+
 % rebase('base', title='Error')
 
 <div class="page-header">
-    <h1 class="title">Error: Bus {{ number }} Not Found</h1>
+    <h1 class="title">Error: Bus {{ bus_number }} Not Found</h1>
     <hr />
 </div>
 
@@ -9,7 +10,7 @@
 <p>
     There are a few reasons why that might be the case:
     <ol>
-        <li>It may be the wrong number - are you sure bus {{ number }} is the one you want?</li>
+        <li>It may be the wrong number - are you sure bus {{ bus_number }} is the one you want?</li>
         <li>It may have been retired before this tracker was started</li>
         <li>It may be a brand new bus that hasn't been registered with the tracker yet</li>
     </ol>

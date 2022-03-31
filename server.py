@@ -1,3 +1,4 @@
+
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request, response, debug
@@ -32,6 +33,8 @@ def start(args):
     if args.debug:
         print('Starting bottle in DEBUG mode')
         debug(True)
+    if args.reload:
+        print('Forcing GTFS redownload')
     
     load_models()
     load_orders()
@@ -39,8 +42,6 @@ def start(args):
     
     for system in get_systems():
         if not gtfs.downloaded(system) or args.reload:
-            if args.reload:
-                print('Forcing GTFS redownload')
             gtfs.update(system)
         else:
             gtfs.load(system)
@@ -153,12 +154,8 @@ def news_page(system_id=None):
     '/<system_id>/map/'
 ])
 def map_page(system_id=None):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return page('map', system_id, buses=buses, path='map')
+    positions = realtime.get_positions(system_id)
+    return page('map', system_id, positions=positions, path='map')
 
 @app.get([
     '/realtime',
@@ -167,12 +164,8 @@ def map_page(system_id=None):
     '/<system_id>/realtime/'
 ])
 def realtime_all_page(system_id=None):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return page('realtime/all', system_id, buses=buses, path=f'realtime')
+    positions = realtime.get_positions(system_id)
+    return page('realtime/all', system_id, positions=positions, path=f'realtime')
 
 @app.get([
     '/realtime/routes',
@@ -181,12 +174,8 @@ def realtime_all_page(system_id=None):
     '/<system_id>/realtime/routes/'
 ])
 def realtime_routes_page(system_id=None):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return page('realtime/routes', system_id, buses=buses, path=f'realtime/routes')
+    positions = realtime.get_positions(system_id)
+    return page('realtime/routes', system_id, positions=positions, path=f'realtime/routes')
 
 @app.get([
     '/realtime/models',
@@ -195,12 +184,8 @@ def realtime_routes_page(system_id=None):
     '/<system_id>/realtime/models/'
 ])
 def realtime_models_page(system_id=None):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return page('realtime/models', system_id, buses=buses, path=f'realtime/models')
+    positions = realtime.get_positions(system_id)
+    return page('realtime/models', system_id, positions=positions, path=f'realtime/models')
 
 @app.get([
     '/realtime/speed',
@@ -214,49 +199,47 @@ def realtime_speed_page(system_id=None):
         response.set_cookie('speed', '1994', max_age=max_age, path='/')
     else:
         response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return page('realtime/speed', system_id, buses=buses, path=f'realtime/speed')
+    positions = realtime.get_positions(system_id)
+    return page('realtime/speed', system_id, positions=positions, path=f'realtime/speed')
 
 @app.get([
-    '/bus/<number:int>',
-    '/bus/<number:int>/',
-    '/<system_id>/bus/<number:int>',
-    '/<system_id>/bus/<number:int>/'
+    '/bus/<bus_number:int>',
+    '/bus/<bus_number:int>/',
+    '/<system_id>/bus/<bus_number:int>',
+    '/<system_id>/bus/<bus_number:int>/'
 ])
-def bus_overview_page(number, system_id=None):
-    bus = Bus(number)
+def bus_overview_page(bus_number, system_id=None):
+    bus = Bus(bus_number)
     if bus.order is None:
-        return error_page('bus', system_id, number=number)
-    records = history.get_records(bus=bus, limit=20)
-    return page('bus/overview', system_id, bus=bus, records=records)
+        return error_page('bus', system_id, bus_number=bus_number)
+    position = realtime.get_position(bus_number)
+    records = history.get_records(bus_number=bus_number, limit=20)
+    return page('bus/overview', system_id, bus=bus, position=position, records=records)
 
 @app.get([
-    '/bus/<number:int>/map',
-    '/bus/<number:int>/map/',
-    '/<system_id>/bus/<number:int>/map',
-    '/<system_id>/bus/<number:int>/map/'
+    '/bus/<bus_number:int>/map',
+    '/bus/<bus_number:int>/map/',
+    '/<system_id>/bus/<bus_number:int>/map',
+    '/<system_id>/bus/<bus_number:int>/map/'
 ])
-def bus_map_page(number, system_id=None):
-    bus = Bus(number)
+def bus_map_page(bus_number, system_id=None):
+    bus = Bus(bus_number)
     if bus.order is None:
-        return error_page('bus', system_id, number=number)
-    return page('bus/map', system_id, bus=bus)
+        return error_page('bus', system_id, bus_number=bus_number)
+    position = realtime.get_position(bus_number)
+    return page('bus/map', system_id, bus=bus, position=position)
 
 @app.get([
-    '/bus/<number:int>/history',
-    '/bus/<number:int>/history/',
-    '/<system_id>/bus/<number:int>/history',
-    '/<system_id>/bus/<number:int>/history/'
+    '/bus/<bus_number:int>/history',
+    '/bus/<bus_number:int>/history/',
+    '/<system_id>/bus/<bus_number:int>/history',
+    '/<system_id>/bus/<bus_number:int>/history/'
 ])
-def bus_history_page(number, system_id=None):
-    bus = Bus(number)
+def bus_history_page(bus_number, system_id=None):
+    bus = Bus(bus_number)
     if bus.order is None:
-        return error_page('bus', system_id, number=number)
-    records = history.get_records(bus=bus)
+        return error_page('bus', system_id, bus_number=bus_number)
+    records = history.get_records(bus_number=bus_number)
     return page('bus/history', system_id, bus=bus, records=records)
 
 @app.get([
@@ -266,8 +249,7 @@ def bus_history_page(number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    system = get_system(system_id)
-    records = history.get_last_seen(system)
+    records = history.get_last_seen(system_id)
     return page('history/last_seen', system_id, records=records, path='history')
 
 @app.get([
@@ -277,8 +259,7 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    system = get_system(system_id)
-    records = history.get_first_seen(system)
+    records = history.get_first_seen(system_id)
     return page('history/first_seen', system_id, records=records, path='history/first-seen')
 
 @app.get([
@@ -288,8 +269,7 @@ def history_first_seen_page(system_id=None):
     '/<system_id>/history/transfers/'
 ])
 def history_transfers_page(system_id=None):
-    system = get_system(system_id)
-    transfers = history.get_transfers(system)
+    transfers = history.get_transfers(system_id)
     return page('history/transfers', system_id, transfers=transfers, path='history/transfers')
 
 @app.get([
@@ -302,48 +282,53 @@ def routes_page(system_id=None):
     return page('routes', system_id, path='routes')
 
 @app.get([
-    '/routes/<number>',
-    '/routes/<number>/',
-    '/<system_id>/routes/<number>',
-    '/<system_id>/routes/<number>/'
+    '/routes/<route_number>',
+    '/routes/<route_number>/',
+    '/<system_id>/routes/<route_number>',
+    '/<system_id>/routes/<route_number>/'
 ])
-def route_overview_page(number, system_id=None):
+def route_overview_page(route_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return error_page('system', system_id, path=f'routes/{number}')
-    route = system.get_route(number=number)
+        return error_page('system', system_id, path=f'routes/{route_number}')
+    route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id, number=number)
-    return page('route/overview', system_id, route=route, today=history.today)
+        return error_page('route', system_id, route_number=route_number)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
+    trips = [t for t in route.trips if t.service.is_today]
+    recorded_today = history.recorded_today(system_id, trips)
+    scheduled_today = history.scheduled_today(system_id, trips)
+    return page('route/overview', system_id, route=route, positions=positions, trips=trips, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
 @app.get([
-    '/routes/<number>/map',
-    '/routes/<number>/map/',
-    '/<system_id>/routes/<number>/map',
-    '/<system_id>/routes/<number>/map/'
+    '/routes/<route_number>/map',
+    '/routes/<route_number>/map/',
+    '/<system_id>/routes/<route_number>/map',
+    '/<system_id>/routes/<route_number>/map/'
 ])
-def route_map_page(number, system_id=None):
+def route_map_page(route_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return error_page('system', system_id, path=f'routes/{number}/map')
-    route = system.get_route(number=number)
+        return error_page('system', system_id, path=f'routes/{route_number}/map')
+    route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id, number=number)
-    return page('route/map', system_id, route=route)
+        return error_page('route', system_id, route_number=route_number)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
+    return page('route/map', system_id, route=route, positions=positions)
 
 @app.get([
-    '/routes/<number>/schedule',
-    '/routes/<number>/schedule/',
-    '/<system_id>/routes/<number>/schedule',
-    '/<system_id>/routes/<number>/schedule/'
+    '/routes/<route_number>/schedule',
+    '/routes/<route_number>/schedule/',
+    '/<system_id>/routes/<route_number>/schedule',
+    '/<system_id>/routes/<route_number>/schedule/'
 ])
-def route_schedule_page(number, system_id=None):
+def route_schedule_page(route_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return error_page('system', system_id, path=f'routes/{number}/schedule')
-    route = system.get_route(number=number)
+        return error_page('system', system_id, path=f'routes/{route_number}/schedule')
+    route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id, number=number)
+        return error_page('route', system_id, route_number=route_number)
     return page('route/schedule', system_id, route=route)
 
 @app.get([
@@ -368,7 +353,8 @@ def block_overview_page(block_id, system_id=None):
     block = system.get_block(block_id)
     if block is None:
         return error_page('block', system_id, block_id=block_id)
-    return page('block/overview', system_id, block=block)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.block_id == block_id]
+    return page('block/overview', system_id, block=block, positions=positions)
 
 @app.get([
     '/blocks/<block_id>/map',
@@ -383,7 +369,8 @@ def block_map_page(block_id, system_id=None):
     block = system.get_block(block_id)
     if block is None:
         return error_page('block', system_id, block_id=block_id)
-    return page('block/map', system_id, block=block)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.block_id == block_id]
+    return page('block/map', system_id, block=block, positions=positions)
 
 @app.get([
     '/blocks/<block_id>/history',
@@ -398,7 +385,7 @@ def block_history_page(block_id, system_id=None):
     block = system.get_block(block_id)
     if block is None:
         return error_page('block', system_id, block_id=block_id)
-    records = history.get_records(block=block)
+    records = history.get_records(system_id=system_id, block_id=block_id)
     return page('block/history', system_id, block=block, records=records)
 
 @app.get([
@@ -414,7 +401,8 @@ def trip_overview_page(trip_id, system_id=None):
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('trip', system_id, trip_id=trip_id)
-    return page('trip/overview', system_id, trip=trip)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip_id == trip_id]
+    return page('trip/overview', system_id, trip=trip, positions=positions)
 
 @app.get([
     '/trips/<trip_id>/map',
@@ -429,7 +417,8 @@ def trip_map_page(trip_id, system_id=None):
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('trip', system_id, trip_id=trip_id)
-    return page('trip/map', system_id, trip=trip)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip_id == trip_id]
+    return page('trip/map', system_id, trip=trip, positions=positions)
 
 @app.get([
     '/trips/<trip_id>/history',
@@ -461,48 +450,53 @@ def stops_page(system_id=None):
     return page('stops', system_id, search=search, path=path)
 
 @app.get([
-    '/stops/<number>',
-    '/stops/<number>/',
-    '/<system_id>/stops/<number>',
-    '/<system_id>/stops/<number>/'
+    '/stops/<stop_number>',
+    '/stops/<stop_number>/',
+    '/<system_id>/stops/<stop_number>',
+    '/<system_id>/stops/<stop_number>/'
 ])
-def stop_overview_page(number, system_id=None):
+def stop_overview_page(stop_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return error_page('system', system_id, path=f'stops/{number}')
-    stop = system.get_stop(number=number)
+        return error_page('system', system_id, path=f'stops/{stop_number}')
+    stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id, number=number)
-    return page('stop/overview', system_id, stop=stop, today=history.today)
+        return error_page('stop', system_id, stop_number=stop_number)
+    departures = [d for d in stop.departures if d.trip.service.is_today]
+    trips = [d.trip for d in departures]
+    positions = {p.trip.id:p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips}
+    recorded_today = history.recorded_today(system_id, trips)
+    scheduled_today = history.scheduled_today(system_id, trips)
+    return page('stop/overview', system_id, stop=stop, departures=departures, positions=positions, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
 @app.get([
-    '/stops/<number>/map',
-    '/stops/<number>/map/',
-    '/<system_id>/stops/<number>/map',
-    '/<system_id>/stops/<number>/map/'
+    '/stops/<stop_number>/map',
+    '/stops/<stop_number>/map/',
+    '/<system_id>/stops/<stop_number>/map',
+    '/<system_id>/stops/<stop_number>/map/'
 ])
-def stop_map_page(number, system_id=None):
+def stop_map_page(stop_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return error_page('system', system_id, path=f'stops/{number}/map')
-    stop = system.get_stop(number=number)
+        return error_page('system', system_id, path=f'stops/{stop_number}/map')
+    stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id, number=number)
+        return error_page('stop', system_id, stop_number=stop_number)
     return page('stop/map', system_id, stop=stop)
 
 @app.get([
-    '/stops/<number>/schedule',
-    '/stops/<number>/schedule/',
-    '/<system_id>/stops/<number>/schedule',
-    '/<system_id>/stops/<number>/schedule/'
+    '/stops/<stop_number>/schedule',
+    '/stops/<stop_number>/schedule/',
+    '/<system_id>/stops/<stop_number>/schedule',
+    '/<system_id>/stops/<stop_number>/schedule/'
 ])
-def stop_schedule_page(number, system_id=None):
+def stop_schedule_page(stop_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return error_page('system', system_id, path=f'stops/{number}/schedule')
-    stop = system.get_stop(number=number)
+        return error_page('system', system_id, path=f'stops/{stop_number}/schedule')
+    stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id, number=number)
+        return error_page('stop', system_id, stop_number=stop_number)
     return page('stop/schedule', system_id, stop=stop)
 
 @app.get([
@@ -532,13 +526,9 @@ def systems_page(system_id=None):
     '/<system_id>/api/map.json'
 ])
 def system_api_map(system_id=None):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
+    positions = realtime.get_positions(system_id)
     return {
-        'buses': [b.json_data for b in buses if b.position.has_location],
+        'positions': [p.json_data for p in positions if p.has_location],
         'last_updated': realtime.last_updated_string()
     }
 
@@ -569,7 +559,7 @@ def api_search(system_id=None):
     results = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            results += search_buses(query, history.recorded_buses(system))
+            results += search_buses(query, history.recorded_buses(system_id))
         if system is not None:
             results += system.search_routes(query)
             results += system.search_stops(query)

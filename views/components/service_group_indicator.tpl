@@ -1,8 +1,8 @@
+
 % import formatting
 
-% schedule = service_group.schedule
-
 <div class="service-indicator">
+    % schedule = service_group.schedule
     % if get('compact', False):
         <div class="dates compact">
             <span class="date {{ 'running' if schedule.mon else '' }}">M</span>

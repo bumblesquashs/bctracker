@@ -19,7 +19,7 @@
     <hr />
 </div>
 
-% if len(buses) == 0:
+% if len(positions) == 0:
     <div>
         % if system is not None and not system.realtime_enabled:
             <p>
@@ -63,8 +63,8 @@
         </thead>
         <tbody>
             % last_bus = None
-            % for bus in sorted(buses):
-                % position = bus.position
+            % for position in sorted(positions):
+                % bus = position.bus
                 % order = bus.order
                 % if last_bus is None:
                     % same_order = True
@@ -78,12 +78,10 @@
                 % last_bus = bus
                 <tr class="{{'' if same_order else 'divider'}}">
                     <td>
-                        % if bus.is_unknown:
+                        % if order is None:
                             {{ bus }}
                         % else:
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % end
-                        % if order is not None:
                             <span class="non-desktop smaller-font">
                                 <br />
                                 {{ order }}

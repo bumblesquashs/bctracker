@@ -1,3 +1,4 @@
+
 % rebase('base', title=f'Block {block.id}', include_maps=True)
 
 <div class="page-header">
@@ -16,11 +17,10 @@
 % service_groups = sorted({g for s in sheets for g in s.service_groups})
 % routes = block.get_routes()
 % trips = block.get_trips()
-% positions = sorted(block.positions)
 
 <div class="sidebar">
     <h2>Overview</h2>
-    % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
+    % include('components/map', map_trips=trips, map_positions=positions)
     
     <div class="info-box">
         <div class="section">
@@ -117,19 +117,17 @@
                 </tr>
             </thead>
             <tbody>
-                % for position in positions:
+                % for position in sorted(positions):
                     % bus = position.bus
+                    % order = bus.order
                     % trip = position.trip
                     % stop = position.stop
-                    % order = bus.order
                     <tr>
                         <td>
-                            % if bus.is_unknown:
+                            % if order is None:
                                 {{ bus }}
                             % else:
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % end
-                            % if order is not None:
                                 <span class="non-desktop smaller-font">
                                     <br />
                                     {{ order }}

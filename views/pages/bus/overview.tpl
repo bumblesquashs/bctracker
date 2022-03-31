@@ -1,3 +1,4 @@
+
 % from models.model import BusModelType
 
 % import formatting
@@ -17,13 +18,12 @@
 
 <div class="sidebar">
     <h2>Realtime Information</h2>
-    % position = bus.position
-    % if not position.active:
+    % if position is None:
         <div class="info-box">
             <h3 class="title">Not in service</h3>
         </div>
     % elif position.trip is None:
-        % include('components/map', map_bus=bus)
+        % include('components/map', map_position=position)
         
         <div class="info-box">
             <h3 class="title">Not in service</h3>
@@ -34,7 +34,7 @@
         % block = trip.block
         % route = trip.route
         
-        % include('components/map', map_bus=bus, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
+        % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
         
         <div class="info-box">
             <h3 class="title">{{ trip }}</h3>

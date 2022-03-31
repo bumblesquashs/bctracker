@@ -1,4 +1,3 @@
-% from models.system import get_system
 
 % rebase('base', title='Routes')
 

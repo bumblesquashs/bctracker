@@ -1,8 +1,7 @@
+
 from enum import Enum
 
 from datetime import datetime
-
-import realtime
 
 class Direction(Enum):
     CIRCULAR = 'Circular'
@@ -11,6 +10,15 @@ class Direction(Enum):
     WESTBOUND = 'Westbound'
     EASTBOUND = 'Eastbound'
     UNKNOWN = 'Unknown'
+    
+    def __hash__(self):
+        return hash(self.value)
+    
+    def __eq__(self, other):
+        return self.value == other.value
+    
+    def __lt__(self, other):
+        return self.value < other.value
 
 class Trip:
     __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', '_direction', '_related_trips')
@@ -101,11 +109,6 @@ class Trip:
             else:
                 self._direction = Direction.UNKNOWN
         return self._direction
-    
-    @property
-    def positions(self):
-        positions = realtime.get_positions()
-        return [p for p in positions if p.system == self.system and p.trip_id == self.id]
     
     @property
     def related_trips(self):

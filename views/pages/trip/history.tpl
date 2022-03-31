@@ -88,7 +88,7 @@
                         <th>Bus</th>
                         <th class="desktop-only">Model</th>
                         <th class="non-mobile">First Seen</th>
-                        <th class="non-mobile">Last Seen</th>
+                        <th>Last Seen</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,12 +99,10 @@
                             <td class="desktop-only">{{ formatting.long(record.date) }}</td>
                             <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
                             <td>
-                                % if bus.is_unknown:
+                                % if order is None:
                                     {{ bus }}
                                 % else:
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                % end
-                                % if order is not None:
                                     <span class="non-desktop smaller-font">
                                         <br />
                                         {{ order }}
@@ -117,7 +115,7 @@
                                 % end
                             </td>
                             <td class="non-mobile">{{ record.first_seen }}</td>
-                            <td class="non-mobile">{{ record.last_seen }}</td>
+                            <td>{{ record.last_seen }}</td>
                         </tr>
                     % end
                 </tbody>

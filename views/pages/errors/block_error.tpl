@@ -1,3 +1,4 @@
+
 % rebase('base', title='Error')
 
 <div class="page-header">

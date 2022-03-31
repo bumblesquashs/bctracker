@@ -14,6 +14,5 @@
 
 % trips = block.trips
 % departures = [d for t in trips for d in t.departures]
-% buses = [p.bus for p in block.positions]
 
-% include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_buses=buses)
+% include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)

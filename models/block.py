@@ -2,8 +2,6 @@
 from models.service import create_service_group
 from models.sheet import create_sheets
 
-import realtime
-
 class Block:
     __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_sheets')
     
@@ -53,11 +51,6 @@ class Block:
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
         related_blocks.sort(key=lambda b: b.services[0])
         return related_blocks
-    
-    @property
-    def positions(self):
-        positions = realtime.get_positions()
-        return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.block_id == self.id]
     
     def add_trip(self, trip):
         self._services = None

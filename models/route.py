@@ -6,8 +6,6 @@ from models.search_result import SearchResult
 from models.service import create_service_group
 from models.sheet import create_sheets
 
-import realtime
-
 class Route:
     __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
     
@@ -93,11 +91,6 @@ class Route:
         if self._sheets is None:
             self._sheets = create_sheets(self.services)
         return self._sheets
-    
-    @property
-    def positions(self):
-        positions = realtime.get_positions()
-        return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.route_id == self.id]
     
     @property
     def json_data(self):

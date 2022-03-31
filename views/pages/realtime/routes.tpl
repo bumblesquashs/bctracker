@@ -17,7 +17,7 @@
     <hr />
 </div>
 
-% if len(buses) == 0:
+% if len(positions) == 0:
     <div>
         % if system is not None and not system.realtime_enabled:
             <p>
@@ -53,8 +53,11 @@
     </div>
 % else:
     <div class="container no-inline">
-        % for route in sorted({b.position.trip.route for b in buses if b.position.trip is not None}):
-            % route_buses = [b for b in buses if b.position.trip is not None and b.position.trip.route == route]
+        % for route in system.get_routes():
+            % route_positions = [p for p in positions if p.trip is not None and p.trip.route == route]
+            % if len(route_positions) == 0:
+                % continue
+            % end
             <div class="section">
                 <h2 class="title">{{ route }}</h2>
                 <table class="striped fixed-table">
@@ -75,8 +78,8 @@
                     </thead>
                     <tbody>
                         % last_bus = None
-                        % for bus in sorted(route_buses):
-                            % position = bus.position
+                        % for position in sorted(route_positions):
+                            % bus = position.bus
                             % order = bus.order
                             % if last_bus is None:
                                 % same_order = True
@@ -90,12 +93,10 @@
                             % last_bus = bus
                             <tr class="{{'' if same_order else 'divider'}}">
                                 <td>
-                                    % if bus.is_unknown:
+                                    % if order is None:
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    % end
-                                    % if order is not None:
                                         <span class="non-desktop smaller-font">
                                             <br />
                                             {{ order }}
@@ -147,9 +148,9 @@
             </div>
         % end
         
-        % no_route_buses = [b for b in buses if b.position.trip is None]
-        % if len(no_route_buses) > 0:
-            <div class="section no-inline">
+        % no_route_positions = sorted([p for p in positions if p.trip is None])
+        % if len(no_route_positions) > 0:
+            <div class="section">
                 <h2 class="title">Not In Service</h2>
                 <table class="striped fixed-table">
                     <thead>
@@ -164,8 +165,8 @@
                     </thead>
                     <tbody>
                         % last_bus = None
-                        % for bus in sorted(no_route_buses):
-                            % position = bus.position
+                        % for position in no_route_positions:
+                            % bus = position.bus
                             % order = bus.order
                             % if last_bus is None:
                                 % same_order = True
@@ -179,12 +180,10 @@
                             % last_bus = bus
                             <tr class="{{'' if same_order else 'divider'}}">
                                 <td>
-                                    % if bus.is_unknown:
+                                    % if order is None:
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    % end
-                                    % if order is not None:
                                         <span class="non-desktop smaller-font">
                                             <br />
                                             {{ order }}

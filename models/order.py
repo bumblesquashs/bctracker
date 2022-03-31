@@ -38,8 +38,8 @@ class Order:
     def range(self):
         return range(self.low, self.high + 1)
     
-    def contains(self, bus):
-        return self.low <= bus.number <= self.high
+    def contains(self, bus_number):
+        return self.low <= bus_number <= self.high
 
 orders = []
 
@@ -53,16 +53,15 @@ def load_orders():
             rows.append(dict(zip(columns, row)))
     orders = [Order(row) for row in rows]
 
-def get_order(bus):
-    if bus.is_unknown:
+def get_order(bus_number):
+    if bus_number < 0:
         return None
     for order in orders:
-        if order.contains(bus):
+        if order.contains(bus_number):
             return order
     return None
 
-def search_buses(query, recorded_buses):
-    recorded_bus_numbers = [b.number for b in recorded_buses]
+def search_buses(query, recorded_bus_numbers):
     results = []
     for order in orders:
         order_string = str(order)
