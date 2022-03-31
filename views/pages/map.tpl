@@ -140,7 +140,7 @@
                     const details = document.createElement("div");
                     details.className = "details";
                     details.innerHTML = "\
-                        <div class='title'>" + position.number + "</div>\
+                        <div class='title'>" + position.bus_number + "</div>\
                         <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
                     
                     element.appendChild(icon);
