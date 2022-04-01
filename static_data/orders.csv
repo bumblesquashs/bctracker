@@ -32,7 +32,8 @@ low,high,year,model_id
 2663,2687,2018,chevrolet_arboc_4500_som_28
 2688,2722,2020,chevrolet_girardin_4500_g5
 2723,2756,2020,chevrolet_arboc_4500_sof_27
-2757,2783,2021,chevrolet_girardin_4500_g5
+2757,2784,2021,chevrolet_girardin_4500_g5
+2785,2801,2021,ford_girardin_t350_mbii
 3001,3015,2013,grande_west_vicinity_27
 3016,3023,2015,international_eldorado_3200_aero_elite
 3024,3028,2018,international_eldorado_3200_aero_elite

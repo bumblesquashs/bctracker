@@ -3,11 +3,11 @@ from models.service import Sheet
 import realtime
 
 class Block:
-    def __init__(self, system, block_id):
+    def __init__(self, system, trip):
         self.system = system
-        self.id = block_id
+        self.id = trip.block_id
         
-        self.trips = []
+        self.trips = [trip]
         self._sheets = None
     
     def __eq__(self, other):

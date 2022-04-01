@@ -3,15 +3,15 @@ from datetime import datetime
 import realtime
 
 class Trip:
-    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
+    def __init__(self, system, row):
         self.system = system
-        self.id = trip_id
-        self.route_id = route_id
-        self.block_id = block_id
-        self.direction_id = direction_id
-        self.service_id = service_id
-        self.shape_id = shape_id
-        self.headsign = headsign
+        self.id = row['trip_id']
+        self.route_id = row['route_id']
+        self.service_id = row['service_id']
+        self.block_id = row['block_id']
+        self.direction_id = int(row['direction_id'])
+        self.shape_id = row['shape_id']
+        self.headsign = row['trip_headsign']
         
         self.departures = []
         self._direction = None

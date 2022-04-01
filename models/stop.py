@@ -6,13 +6,13 @@ from models.service import Sheet
 from models.time import get_current_minutes
 
 class Stop:
-    def __init__(self, system, stop_id, number, name, lat, lon):
+    def __init__(self, system, row):
         self.system = system
-        self.id = stop_id
-        self.number = number
-        self.name = name
-        self.lat = lat
-        self.lon = lon
+        self.id = row['stop_id']
+        self.number = row['stop_code']
+        self.name = row['stop_name']
+        self.lat = float(row['stop_lat'])
+        self.lon = float(row['stop_lon'])
         
         self.departures = []
         self._sheets = None
@@ -89,7 +89,7 @@ class Stop:
     
     def get_search_result(self, query):
         query = query.lower()
-        number = str(self.number).lower()
+        number = self.number.lower()
         name = self.name.lower()
         match = 0
         if query in number:
@@ -104,4 +104,4 @@ class Stop:
                 match -= 20
             else:
                 match = 1
-        return SearchResult('stop', str(self.number), self.name, f'stops/{self.number}', match)
+        return SearchResult('stop', self.number, self.name, f'stops/{self.number}', match)

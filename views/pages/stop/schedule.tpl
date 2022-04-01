@@ -16,22 +16,17 @@
     % services = stop.get_services(sheet)
     % departures = stop.get_departures(sheet)
     
+    % if len(services) > 1:
+        % include('components/service_navigation', services=services)
+    % end
+    
     <div class="container">
-        % if len(services) > 1:
-            <div class="navigation">
-                % for service in services:
-                    <a href="#{{service}}" class="button">{{ service }}</a>
-                % end
-            </div>
-            <br />
-        % end
-        
         % for service in services:
             % service_departures = [d for d in departures if d.trip.service == service]
             
             % if len(service_departures) > 0:
                 <div class="section">
-                    <h2 class="title" id="{{service}}">{{ service }}</h2>
+                    <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>
                     <div class="subtitle">{{ service.date_string }}</div>
                     <table class="striped">
                         <thead>

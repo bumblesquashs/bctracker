@@ -36,6 +36,15 @@ table {
     margin-bottom: 10px;
 }
 
+#change-system-menu {
+    padding: 10px 0px;
+}
+
+#change-system-menu .menu-button {
+    text-align: center;
+    padding: 10px 20px;
+}
+
 #header .header-button {
     font-size: 16pt;
 }
@@ -52,29 +61,17 @@ table {
     margin: 6px;
 }
 
-#header .search-non-desktop-toggle {
+#header .icon-menu-toggle {
     padding: 10px;
 }
 
-#menu {
-    position: relative;
-    z-index: 10;
-    margin: 0px;
-    padding: 5px 0px;
-    overflow: hidden;
-}
-
-#menu .menu-button {
-    display: block;
-    padding: 15px 20px;
-    font-family: Helvetica, sans-serif;
-    font-size: 16pt;
-    font-weight: normal;
+#header .icon-menu-toggle img {
+    width: 36px;
+    height: 36px;
 }
 
 #search-non-desktop {
     padding: 20px;
-    font-family: Helvetica, sans-serif;
 }
 
 #search-non-desktop input[type="text"] {
@@ -102,6 +99,14 @@ table {
     font-size: 16pt;
 }
 
+#search-non-desktop #search-non-desktop-results img {
+    width: 32px;
+    height: 32px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+}
+
 #search-non-desktop #search-non-desktop-results .message {
     padding: 10px 0px;
     text-align: center;
@@ -122,24 +127,49 @@ table {
     display: block;
 }
 
-.container .navigation .button {
-    margin-bottom: 10px;
-}
-
-.container .navigation .button:last-child {
-    margin-bottom: 0px;
-}
-
 .desktop-only {
-    display: none;
+    display: none !important;
+}
+
+.menu {
+    position: relative;
+    z-index: 10;
+    margin: 0px;
+    padding: 5px 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: Helvetica, sans-serif;
+}
+
+.menu .menu-button {
+    display: inline-block;
+    padding: 15px 20px;
+    font-size: 16pt;
+    font-weight: normal;
+    width: calc(25% - 40px);
+    text-align: center;
+}
+
+.menu .menu-button img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.menu .menu-button img + span {
+    vertical-align: middle;
 }
 
 .mobile-only {
-    display: none;
+    display: none !important;
 }
 
 .non-tablet {
-    display: none;
+    display: none !important;
 }
 
 .smaller-font {

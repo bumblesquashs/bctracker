@@ -24,7 +24,7 @@ def update(system):
             formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
             archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
             rename(data_path, archives_path)
-        wget.download(f'http://{system.mapstrat_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin', data_path)
+        wget.download(system.realtime_url, data_path)
         
         update_positions(system)
         
@@ -81,8 +81,11 @@ def active_buses():
     return [p.bus for p in positions.values()]
 
 def last_updated_string():
-    if last_updated.date() == datetime.now().date():
+    now = datetime.now().date()
+    if last_updated.date() == now:
         return last_updated.strftime("at %H:%M")
+    if last_updated.year == now.year:
+        return last_updated.strftime("%B %-d at %H:%M")
     return last_updated.strftime("%B %-d, %Y at %H:%M")
 
 def validate(system):

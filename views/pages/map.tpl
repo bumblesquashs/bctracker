@@ -37,13 +37,13 @@
         <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
-                <img class="hidden" id="checkbox-image" src="/img/check.png" />
+                <img class="hidden" id="checkbox-image" src="/img/black/check.png" />
             </div>
             <span class="checkbox-label">Show Route Lines</span>
         </div>
         <div class="checkbox" onclick="toggleAutomaticRefresh()">
             <div class="box">
-                <img class="hidden" id="refresh-image" src="/img/check.png" />
+                <img class="hidden" id="refresh-image" src="/img/black/check.png" />
             </div>
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
@@ -105,7 +105,7 @@
                     const icon = document.createElement("div");
                     icon.className = "icon";
                     icon.style.backgroundColor = "#" + bus.colour;
-                    icon.innerHTML = "<img src='/img/bus.png' />";
+                    icon.innerHTML = "<img src='/img/white/bus.png' />";
                 
                     icon.onmouseenter = function() {
                         setHoverBus(bus);
@@ -127,7 +127,7 @@
                     icon.className = "icon";
                     icon.href = "/bus/" + bus.number;
                     icon.style.backgroundColor = "#" + bus.colour;
-                    icon.innerHTML = "<div class='link'></div><img src='/img/bus.png' />";
+                    icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
                 
                     icon.onmouseenter = function() {
                         setHoverBus(bus);

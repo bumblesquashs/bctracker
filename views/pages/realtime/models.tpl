@@ -19,7 +19,7 @@
 </div>
 <hr />
 
-<div class="container">
+<div class="container no-inline">
     % if len(buses) == 0:
         <div class="section">
             % if system is not None and not system.realtime_enabled:
@@ -46,14 +46,12 @@
             % end
         </div>
     % else:
-        <div class="navigation"></div>
-        
         % known_buses = [b for b in buses if b.order is not None]
         % models = sorted({b.model for b in known_buses})
         
         % for model in models:
             % model_buses = [b for b in known_buses if b.model == model]
-            <div class="section no-inline">
+            <div class="section">
                 <h2 class="title">{{ model }}</h2>
                 <table class="striped fixed-table">
                     <thead>

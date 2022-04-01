@@ -62,12 +62,20 @@
             </tr>
         </thead>
         <tbody>
-            % last_order = None
+            % last_bus = None
             % for bus in sorted(buses):
                 % position = bus.position
                 % order = bus.order
-                % same_order = last_order is None or order == last_order
-                % last_order = order
+                % if last_bus is None:
+                    % same_order = True
+                % elif order is None and last_bus.order is None:
+                    % same_order = True
+                % elif order is None or last_bus.order is None:
+                    % same_order = False
+                % else:
+                    % same_order = order == last_bus.order
+                % end
+                % last_bus = bus
                 <tr class="{{'' if same_order else 'divider'}}">
                     <td>
                         % if bus.is_unknown:

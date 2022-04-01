@@ -10,13 +10,13 @@ class BusModelType(Enum):
     shuttle = "Shuttle"
 
 class BusModel:
-    def __init__(self, model_id, manufacturer, name, length, fuel, type):
-        self.id = model_id
-        self.manufacturer = manufacturer
-        self.name = name
-        self.length = length
-        self.fuel = fuel
-        self.type = BusModelType[type]
+    def __init__(self, row):
+        self.id = row['model_id']
+        self.manufacturer = row['manufacturer']
+        self.name = row['name']
+        self.length = float(row['length'])
+        self.fuel = row['fuel']
+        self.type = BusModelType[row['type']]
     
     def __str__(self):
         return f'{self.manufacturer} {self.name}'
@@ -28,9 +28,7 @@ class BusModel:
         return self.id == other.id
     
     def __lt__(self, other):
-        if self.manufacturer == other.manufacturer:
-            return self.name < other.name
-        return self.manufacturer < other.manufacturer
+        return str(self) < str(other)
 
 models = {}
 
@@ -42,14 +40,8 @@ def load_models():
         for row in reader:
             rows.append(dict(zip(columns, row)))
     for row in rows:
-        model_id = row['model_id']
-        manufacturer = row['manufacturer']
-        name = row['name']
-        length = float(row['length'])
-        fuel = row['fuel']
-        type = row['type']
-
-        models[model_id] = BusModel(model_id, manufacturer, name, length, fuel, type)
+        model = BusModel(row)
+        models[model.id] = model
 
 def get_model(model_id):
     return models.get(model_id)
