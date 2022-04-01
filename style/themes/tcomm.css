@@ -133,60 +133,60 @@ table.striped tr {
     border-color: #989898;
 }
 
-#menu {
-    background-color: #094409;
-}
-
-#menu .menu-button {
-    color: #FFFFFF;
-}
-
 #refresh-button:hover {
     background-color: #094409;
 }
 
 #search-desktop #search-desktop-results {
+    text-shadow: none;
     background-color: #FFFFFF;
 }
 
 #search-desktop #search-desktop-results a {
+    text-shadow: none;
     color: #000000;
 }
 
 #search-desktop #search-desktop-results a:hover {
+    text-shadow: none;
     background-color: #E6E6E6;
 }
 
 #search-desktop #search-desktop-results .keyboard-selected {
+    text-shadow: none;
     background-color: #CBCBCB;
 }
 
 #search-desktop #search-desktop-results .message {
+    text-shadow: none;
     color: #666666;
 }
 
 #search-non-desktop {
-    background-color: #094409;
+    background-color: #EEEEEE;
+    color: #222222;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
 #search-non-desktop input[type="text"] {
-    border-color: #FFFFFF;
+    border-color: #000000;
 }
 
 #search-non-desktop input[type="text"]:focus {
-    border-color: #48A348;
+    border-color: #000000;
 }
 
 #search-non-desktop #search-non-desktop-results a {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 #search-non-desktop #search-non-desktop-results a .lighter-text {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 #search-non-desktop #search-non-desktop-results .message {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 #subheader {
@@ -268,7 +268,10 @@ table.striped tr {
 }
 
 .dropdown .content a:hover {
-    background-color: #E6E6E6;
+    background-color: #5393c5;
+    color: #FFFFFF;
+    text-shadow: 0 1px 1px #3373a5;
+    background-image: linear-gradient( #5393c5,#6facd5 );
 }
 
 .dropdown .content a.disabled {
@@ -276,7 +279,9 @@ table.striped tr {
 }
 
 .dropdown .content a.disabled:hover {
-    background-color: #FFFFFF;
+    background-color: #FFFFFF !important;
+    background-image: none;
+    text-shadow: none;
 }
 
 .dropdown .content .title {
@@ -284,7 +289,10 @@ table.striped tr {
 }
 
 .info-box {
-    background-color: #E6E6E6;
+    background-color: #EEEEEE;
+    color: #222222;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
     border-color: #989898;
 }
 
@@ -299,6 +307,22 @@ table.striped tr {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #48A348;
+}
+
+.menu {
+    background-color: #EEEEEE;
+    color: #222222;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+}
+
+.menu .menu-button {
+    color: #000000;
+    text-decoration: none;
+}
+
+.menu .menu-button.disabled {
+    color: #666666;
 }
 
 .news-post {
@@ -336,14 +360,7 @@ table.striped tr {
     color: #666666;
 }
 
-.tab-button-bar {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-}
-
 .tab-button {
-    flex: 1;
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
     text-shadow: 0 -1px 1px #000000;

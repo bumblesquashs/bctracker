@@ -15,7 +15,7 @@ import realtime
 import history
 
 # Increase the version to force CSS reload
-VERSION = 7
+VERSION = 69420
 
 app = Bottle()
 
@@ -93,7 +93,7 @@ def systems_template(name, system_id, theme=None, **kwargs):
         system=get_system(system_id),
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
-        theme=theme or request.get_cookie('theme'),
+        theme='tcomm',
         show_speed=request.get_cookie('speed') == '1994',
         version=VERSION,
         no_system_domain=no_system_domain,

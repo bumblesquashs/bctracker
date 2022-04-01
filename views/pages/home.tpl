@@ -79,28 +79,6 @@
         <p>Choose a system to search for routes and stops</p>
         % include('components/systems')
     % end
-    
-    <div class="theme-control">
-        <h2>Themes</h2>
-        <p>
-            BCTracker is available in both light and dark colours.
-            You can also set it to change automatically based on your system preferences.
-        </p>
-        <div class="button-container">
-            <a class="button" href="?theme=automatic">Automatic</a>
-            <a class="button" href="?theme=light">Light</a>
-            <a class="button" href="?theme=dark">Dark</a>
-        </div>
-        <br />
-        <p>
-            Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
-        </p>
-        <div class="button-container">
-            <a class="button" href="?theme=classic">BC Transit Classic</a>
-            <a class="button" href="?theme=uta">Urban Transit Authority</a>
-            <a class="button" href="?theme=bchydro">BC Hydro</a>
-        </div>
-    </div>
 </div>
 
 <div>

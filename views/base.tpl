@@ -221,38 +221,38 @@
         <div id="navigation-menu" class="menu non-desktop display-none">
             % if system is None or system.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
-                    <img src="/img/white/map.png" />
+                    <img src="/img/black/map.png" />
                     <span>Map</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
-                    <img src="/img/white/realtime.png" />
+                    <img src="/img/black/realtime.png" />
                     <span>Realtime</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'history') }}">
-                    <img src="/img/white/history.png" />
+                    <img src="/img/black/history.png" />
                     <span>History</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img src="/img/white/routes.png" />
+                    <img src="/img/black/routes.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img src="/img/white/blocks.png" />
+                    <img src="/img/black/blocks.png" />
                     <span>Blocks</span>
                 </a>
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img src="/img/white/routes.png" />
+                    <img src="/img/black/routes.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img src="/img/white/blocks.png" />
+                    <img src="/img/black/blocks.png" />
                     <span>Blocks</span>
                 </a>
             % end
             
             <a class="menu-button" href="{{ get_url(system, 'about') }}">
-                <img src="/img/white/about.png" />
+                <img src="/img/black/about.png" />
                 <span>About</span>
             </a>
         </div>
@@ -501,21 +501,21 @@
             switch (result.type) {
                 case "bus":
                     if (prefersDarkScheme || useLightIcons) {
-                        name = "<img src='/img/white/realtime.png' />Bus " + result.name;
+                        name = "<img src='/img/black/realtime.png' />Bus " + result.name;
                     } else {
                         name = "<img src='/img/black/realtime.png' />Bus " + result.name;
                     }
                     break;
                 case "route":
                     if (prefersDarkScheme || useLightIcons) {
-                        name = "<img src='/img/white/routes.png' />Route " + result.name;
+                        name = "<img src='/img/black/routes.png' />Route " + result.name;
                     } else {
                         name = "<img src='/img/black/routes.png' />Route " + result.name;
                     }
                     break;
                 case "stop":
                     if (prefersDarkScheme || useLightIcons) {
-                        name = "<img src='/img/white/stop.png' />Stop " + result.name;
+                        name = "<img src='/img/black/stop.png' />Stop " + result.name;
                     } else {
                         name = "<img src='/img/black/stop.png' />Stop " + result.name;
                     }
