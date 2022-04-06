@@ -87,8 +87,8 @@ def get_position(bus_number):
 
 def get_positions(system_id=None):
     if system_id is None:
-        return positions.values()
-    return [p for p in positions.values() if p.system.id == system_id]
+        return sorted(positions.values())
+    return sorted([p for p in positions.values() if p.system.id == system_id])
 
 def last_updated_string():
     now = datetime.now().date()

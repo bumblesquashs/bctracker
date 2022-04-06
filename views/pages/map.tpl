@@ -278,8 +278,9 @@
                 return
             }
             if (hoverPosition !== null) {
-                if (shapeIDs.includes(hoverPosition.shape_id)) {
-                    map.setLayoutProperty(hoverPosition.shape_id, "visibility", "none");
+                const shapeID = hoverPosition.system_id + "_" + hoverPosition.shape_id
+                if (shapeIDs.includes(shapeID)) {
+                    map.setLayoutProperty(shapeID, "visibility", "none");
                 }
             }
             if (position !== null) {
