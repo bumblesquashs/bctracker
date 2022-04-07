@@ -1,3 +1,4 @@
+
 from os import path, rename
 from datetime import datetime, timedelta
 from zipfile import ZipFile
@@ -162,5 +163,7 @@ def validate(system):
     end_dates = [s.end_date for s in system.get_services()]
     if len(end_dates) == 0:
         return True
-    end_date = max(end_dates)
-    return datetime.now().date() < end_date - timedelta(days=7)
+    hour = datetime.now().hour
+    today = datetime.today()
+    date = (today if hour >= 4 else today - timedelta(days=1)).date()
+    return date < max(end_dates) - timedelta(days=7)

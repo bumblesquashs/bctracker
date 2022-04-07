@@ -45,11 +45,9 @@ def start(args):
             gtfs.update(system)
         else:
             gtfs.load(system)
-        realtime.update(system)
         if not gtfs.validate(system):
             gtfs.update(system)
-        elif not realtime.validate(system):
-            system.realtime_validation_error_count += 1
+        realtime.update(system)
     history.update(realtime.get_positions())
     
     cp.config.update('server.conf')

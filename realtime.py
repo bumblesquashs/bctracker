@@ -13,7 +13,7 @@ positions = {}
 last_updated = datetime.now()
 
 def update(system):
-    global last_updated
+    global last_updated, positions
     if not system.realtime_enabled:
         return
     print(f'Updating realtime data for {system}...')
@@ -26,6 +26,7 @@ def update(system):
             rename(data_path, archives_path)
         wget.download(system.realtime_url, data_path)
         
+        positions = {k:v for (k, v) in positions.items() if v.system != system}
         update_positions(system)
         
         print('\nDone!')
@@ -76,10 +77,6 @@ def update_positions(system):
             speed = None
         positions[bus_number] = Position(system, Bus(bus_number), trip_id, stop_id, lat, lon, speed)
 
-def reset_positions(system):
-    global positions
-    positions = {k:v for (k, v) in positions.items() if v.system != system}
-
 def get_position(bus_number):
     if bus_number in positions:
         return positions[bus_number]
@@ -97,18 +94,3 @@ def last_updated_string():
     if last_updated.year == now.year:
         return last_updated.strftime("%B %-d at %H:%M")
     return last_updated.strftime("%B %-d, %Y at %H:%M")
-
-def validate(system):
-    if not system.realtime_enabled:
-        return True
-    count = 0
-    for position in get_positions(system.id):
-        if count == 10:
-            return True
-        if position.trip_id is None:
-            continue
-        trip = position.trip
-        if trip is None or not trip.service.is_today:
-            return False
-        count += 1
-    return True

@@ -2,7 +2,7 @@
 import csv
 
 class System:
-    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'realtime_validation_error_count', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     def __init__(self, row):
         self.id = row['system_id']
@@ -11,8 +11,6 @@ class System:
         self.realtime_enabled = row['realtime_enabled'] == '1'
         self.gtfs_url = row['gtfs_url']
         self.realtime_url = row['realtime_url']
-        
-        self.realtime_validation_error_count = 0
         
         self.blocks = {}
         self.routes = {}
