@@ -31,10 +31,10 @@
                             <tr>
                                 <th>Block</th>
                                 <th>Routes</th>
-                                <th class="desktop-only">Start Time</th>
-                                <th class="desktop-only">End Time</th>
+                                <th class="non-mobile">Start Time</th>
+                                <th class="non-mobile">End Time</th>
+                                <th class="mobile-only">Time</th>
                                 <th class="desktop-only">Duration</th>
-                                <th class="non-desktop">Time</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,10 +45,10 @@
                                 <tr>
                                     <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                     <td>{{ block.get_routes_string(service_group) }}</td>
-                                    <td class="desktop-only">{{ start_time }}</td>
-                                    <td class="desktop-only">{{ end_time }}</td>
+                                    <td class="non-mobile">{{ start_time }}</td>
+                                    <td class="non-mobile">{{ end_time }}</td>
+                                    <td class="mobile-only">{{ start_time }} - {{ end_time }}</td>
                                     <td class="desktop-only">{{ block.get_duration(service_group) }}</td>
-                                    <td class="non-desktop">{{ start_time }} - {{ end_time }}</td>
                                 </tr>
                             % end
                         </tbody>

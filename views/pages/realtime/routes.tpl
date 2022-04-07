@@ -97,10 +97,8 @@
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <span class="non-desktop smaller-font">
-                                            <br />
-                                            {{ order }}
-                                        </span>
+                                        <br />
+                                        <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>
                                 <td class="desktop-only">
@@ -123,8 +121,8 @@
                                     <td>
                                         {{ trip }}
                                         % if stop is not None:
+                                        <br />
                                             <span class="non-desktop smaller-font">
-                                                <br />
                                                 % include('components/adherence_indicator', adherence=position.schedule_adherence)
                                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                             </span>
@@ -184,10 +182,8 @@
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <span class="non-desktop smaller-font">
-                                            <br />
-                                            {{ order }}
-                                        </span>
+                                        <br />
+                                        <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>
                                 <td class="desktop-only">

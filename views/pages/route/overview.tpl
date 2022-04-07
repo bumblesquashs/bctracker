@@ -42,7 +42,7 @@
                 <tr>
                     <th>Bus</th>
                     <th class="desktop-only">Model</th>
-                    <th>Headsign</th>
+                    <th class="desktop-only">Headsign</th>
                     <th class="desktop-only">Block</th>
                     <th>Trip</th>
                     <th class="non-mobile">Current Stop</th>
@@ -60,10 +60,8 @@
                                 {{ bus }}
                             % else:
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                <span class="non-desktop smaller-font">
-                                    <br />
-                                    {{ order }}
-                                </span>
+                                <br />
+                                <span class="non-desktop smaller-font">{{ order }}</span>
                             % end
                         </td>
                         <td class="desktop-only">
@@ -71,12 +69,16 @@
                                 {{ order }}
                             % end
                         </td>
-                        <td>{{ trip }}</td>
+                        <td class="desktop-only">{{ trip }}</td>
                         <td class="desktop-only">
                             % block = trip.block
                             <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                         </td>
-                        <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                        <td>
+                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ trip }}</span>
+                        </td>
                         % if stop is None:
                             <td class="non-mobile lighter-text">Unavailable</td>
                         % else:
@@ -155,10 +157,8 @@
                                                         {{ bus }}
                                                     % else:
                                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                        <span class="non-desktop smaller-font">
-                                                            <br />
-                                                            {{ order }}
-                                                        </span>
+                                                        <br />
+                                                        <span class="non-desktop smaller-font">{{ order }}</span>
                                                     % end
                                                 </td>
                                                 <td class="desktop-only">
@@ -181,10 +181,8 @@
                                                         <div class="tooltip">Bus is scheduled</div>
                                                     </span>
                                                     % if order is not None:
-                                                        <span class="non-desktop smaller-font">
-                                                            <br />
-                                                            {{ order }}
-                                                        </span>
+                                                        <br />
+                                                        <span class="non-desktop smaller-font">{{ order }}</span>
                                                     % end
                                                 </td>
                                                 <td class="desktop-only">
@@ -202,10 +200,8 @@
                                         <td class="desktop-only"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
                                         <td>
                                             <a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                            <span class="mobile-only smaller-font">
-                                                <br />
-                                                {{ trip }}
-                                            </span>
+                                            <br />
+                                            <span class="mobile-only smaller-font">{{ trip }}</span>
                                         </td>
                                     </tr>
                                     % if this_hour > last_hour:

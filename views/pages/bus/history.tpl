@@ -34,9 +34,7 @@
                     % else:
                         {{ formatting.long(last_tracked) }}
                         <br />
-                        <span class="smaller-font">
-                            {{ days_since_last_tracked }}
-                        </span>
+                        <span class="smaller-font">{{ days_since_last_tracked }}</span>
                     % end
                 </div>
             </div>
@@ -48,9 +46,7 @@
                     % else:
                         {{ formatting.long(first_tracked) }}
                         <br />
-                        <span class="smaller-font">
-                            {{ days_since_first_tracked }}
-                        </span>
+                        <span class="smaller-font">{{ days_since_first_tracked }}</span>
                     % end
                 </div>
             </div>
@@ -114,10 +110,8 @@
                             % else:
                                 <span>{{ record.block_id }}</span>
                             % end
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ record.routes }}
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ record.routes }}</span>
                         </td>
                         <td class="desktop-only">{{ record.routes }}</td>
                         <td class="desktop-only">{{ record.start_time }}</td>

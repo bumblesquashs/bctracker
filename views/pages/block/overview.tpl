@@ -111,7 +111,7 @@
                 <tr>
                     <th>Bus</th>
                     <th class="desktop-only">Model</th>
-                    <th>Headsign</th>
+                    <th class="desktop-only">Headsign</th>
                     <th>Trip</th>
                     <th class="non-mobile">Current Stop</th>
                 </tr>
@@ -128,10 +128,8 @@
                                 {{ bus }}
                             % else:
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                <span class="non-desktop smaller-font">
-                                    <br />
-                                    {{ order }}
-                                </span>
+                                <br />
+                                <span class="non-desktop smaller-font">{{ order }}</span>
                             % end
                         </td>
                         <td class="desktop-only">
@@ -139,8 +137,12 @@
                                 {{ order }}
                             % end
                         </td>
-                        <td>{{ trip }}</td>
-                        <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                        <td class="desktop-only">{{ trip }}</td>
+                        <td>
+                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ trip }}</span>
+                        </td>
                         % if stop is None:
                             <td class="non-mobile lighter-text">Unavailable</td>
                         % else:
@@ -170,11 +172,10 @@
                     <table class="striped">
                         <thead>
                             <tr>
-                                <th class="non-mobile">Start Time</th>
-                                <th class="mobile-only">Start</th>
-                                <th class="desktop-only">End Time</th>
+                                <th>Start Time</th>
+                                <th class="non-mobile">End Time</th>
                                 <th class="desktop-only">Duration</th>
-                                <th class=>Headsign</th>
+                                <th class="non-mobile">Headsign</th>
                                 <th class="desktop-only">Direction</th>
                                 <th>Trip</th>
                             </tr>
@@ -183,17 +184,19 @@
                             % for trip in service_group_trips:
                                 <tr>
                                     <td>{{ trip.start_time }}</td>
-                                    <td class="desktop-only">{{ trip.end_time }}</td>
+                                    <td class="non-mobile">{{ trip.end_time }}</td>
                                     <td class="desktop-only">{{ trip.duration }}</td>
-                                    <td>
+                                    <td class="non-mobile">
                                         {{ trip }}
-                                        <span class="mobile-only smaller-font">
-                                            <br />
-                                            {{ trip.direction.value }}
-                                        </span>
+                                        <br />
+                                        <span class="non-desktop smaller-font">{{ trip.direction.value }}</span>
                                     </td>
                                     <td class="desktop-only">{{ trip.direction.value }}</td>
-                                    <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                                    <td>
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                        <br />
+                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                    </td>
                                 </tr>
                             % end
                         </tbody>

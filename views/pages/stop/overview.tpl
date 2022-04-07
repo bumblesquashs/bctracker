@@ -107,10 +107,8 @@
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <span class="non-desktop smaller-font">
-                                            <br />
-                                            {{ order }}
-                                        </span>
+                                        <br />
+                                        <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>
                                 <td class="desktop-only">
@@ -133,10 +131,8 @@
                                         <div class="tooltip">Bus is scheduled</div>
                                     </span>
                                     % if order is not None:
-                                        <span class="non-desktop smaller-font">
-                                            <br />
-                                            {{ order }}
-                                        </span>
+                                        <br />
+                                        <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>
                                 <td class="desktop-only">
@@ -159,10 +155,8 @@
                         <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                         <td>
                             <a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                            <span class="mobile-only smaller-font">
-                                <br />
-                                {{ trip }}
-                            </span>
+                            <br />
+                            <span class="mobile-only smaller-font">{{ trip }}</span>
                         </td>
                     </tr>
                     % last_hour = this_hour

@@ -21,7 +21,7 @@
     % for sheet in sheets:
         % for service_group in sheet.service_groups:
             % service_group_trips = route.get_trips(service_group)
-            % directions = {t.direction for t in service_group_trips}
+            % directions = sorted({t.direction for t in service_group_trips})
             <div class="section">
                 <h2 class="title" id="{{ hash(service_group) }}">{{ service_group.schedule }}</h2>
                 <div class="subtitle">{{ service_group.date_string }}</div>
@@ -37,7 +37,7 @@
                                     <tr>
                                         <th class="non-mobile">Start Time</th>
                                         <th class="mobile-only">Start</th>
-                                        <th>Headsign</th>
+                                        <th class="non-mobile">Headsign</th>
                                         <th class="desktop-only">Departing From</th>
                                         <th class="non-mobile">Block</th>
                                         <th>Trip</th>
@@ -53,10 +53,14 @@
                                         % end
                                         <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                             <td>{{ trip.start_time }}</td>
-                                            <td>{{ trip }}</td>
+                                            <td class="non-mobile">{{ trip }}</td>
                                             <td class="desktop-only"><a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a></td>
                                             <td class="non-mobile"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
-                                            <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                                            <td>
+                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                                <br />
+                                                <span class="mobile-only smaller-font">{{ trip }}</span>
+                                            </td>
                                         </tr>
                                         % if this_hour > last_hour:
                                             % last_hour = this_hour

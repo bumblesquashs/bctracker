@@ -151,10 +151,8 @@
                             % else:
                                 <span>{{ record.block_id }}</span>
                             % end
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ record.routes }}
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ record.routes }}</span>
                         </td>
                         <td class="desktop-only">{{ record.routes }}</td>
                         <td class="desktop-only">{{ record.start_time }}</td>

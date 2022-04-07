@@ -30,7 +30,7 @@
                     <thead>
                         <tr>
                             <th>Time</th>
-                            <th>Headsign</th>
+                            <th class="non-mobile">Headsign</th>
                             <th class="non-mobile">Block</th>
                             <th>Trip</th>
                         </tr>
@@ -46,7 +46,7 @@
                             % end
                             <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                 <td>{{ departure.time }}</td>
-                                <td>
+                                <td class="non-mobile">
                                     {{ trip }}
                                     % if departure == trip.last_departure:
                                         <br />
@@ -54,7 +54,15 @@
                                     % end
                                 </td>
                                 <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                <td><a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                                <td>
+                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                    <br />
+                                    <span class="mobile-only smaller-font">{{ trip }}</span>
+                                    % if departure == trip.last_departure:
+                                        <br />
+                                        <span class="mobile-only smaller-font">Unloading only</span>
+                                    % end
+                                </td>
                             </tr>
                             % last_hour = this_hour
                         % end

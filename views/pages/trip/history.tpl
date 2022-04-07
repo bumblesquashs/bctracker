@@ -33,9 +33,7 @@
                         % else:
                             {{ formatting.short(last_tracked) }}
                             <br />
-                            <span class="smaller-font">
-                                {{ days_since_last_tracked }}
-                            </span>
+                            <span class="smaller-font">{{ days_since_last_tracked }}</span>
                         % end
                     </div>
                 </div>
@@ -47,9 +45,7 @@
                         % else:
                             {{ formatting.short(first_tracked) }}
                             <br />
-                            <span class="smaller-font">
-                                {{ days_since_first_tracked }}
-                            </span>
+                            <span class="smaller-font">{{ days_since_first_tracked }}</span>
                         % end
                     </div>
                 </div>
@@ -103,10 +99,8 @@
                                     {{ bus }}
                                 % else:
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <span class="non-desktop smaller-font">
-                                        <br />
-                                        {{ order }}
-                                    </span>
+                                    <br />
+                                    <span class="non-desktop smaller-font">{{ order }}</span>
                                 % end
                             </td>
                             <td class="desktop-only">

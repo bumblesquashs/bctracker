@@ -63,7 +63,7 @@
             <thead>
                 <tr>
                     <th>Trip</th>
-                    <th>Block</th>
+                    <th class="non-mobile">Block</th>
                     <th>Service Days</th>
                 </tr>
             </thead>
@@ -71,8 +71,8 @@
                 % for related_trip in related_trips:
                     % block = related_trip.block
                     <tr>
-                        <td><a class="trip-id" href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
-                        <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                        <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
+                        <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                         <td>{{ related_trip.service.schedule }}</td>
                     </tr>
                 % end
@@ -104,10 +104,8 @@
                                 {{ bus }}
                             % else:
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                <span class="mobile-only smaller-font">
-                                    <br />
-                                    {{ order }}
-                                </span>
+                                <br />
+                                <span class="mobile-only smaller-font">{{ order }}</span>
                             % end
                         </td>
                         <td class="non-mobile">
@@ -146,10 +144,8 @@
                     <td>{{ departure.time }}</td>
                     <td>
                         <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                        <span class="mobile-only smaller-font">
-                            <br />
-                            {{ stop }}
-                        </span>
+                        <br />
+                        <span class="mobile-only smaller-font">{{ stop }}</span>
                     </td>
                     <td class="non-mobile">
                         {{ stop }}
