@@ -37,8 +37,7 @@ low,high,year,model_id
 3001,3015,2013,grande_west_vicinity_27
 3016,3023,2015,international_eldorado_3200_aero_elite
 3024,3028,2018,international_eldorado_3200_aero_elite
-4007,4061,2017,grande_west_vicinity_30
-4062,4070,2017,grande_west_vicinity_30
+4007,4070,2017,grande_west_vicinity_30
 4071,4073,2018,grande_west_vicinity_30
 4200,4233,2020,grande_west_vicinity_cng_30
 4400,4432,2017,grande_west_vicinity_35
@@ -55,8 +54,7 @@ low,high,year,model_id
 9051,9078,2000,dennis_dart_slf_35
 9081,9085,2001,dennis_dart_slf_35
 9101,9106,2005,new_flyer_de40lf
-9201,9210,2006,nova_bus_lfs
-9211,9231,2006,nova_bus_lfs
+9201,9231,2006,nova_bus_lfs
 9232,9267,2007,nova_bus_lfs
 9268,9289,2008,nova_bus_lfs
 9290,9300,2008,nova_bus_lfs_suburban
@@ -77,6 +75,4 @@ low,high,year,model_id
 9831,9856,1998,new_flyer_d40lf
 9861,9878,1998,new_flyer_d40lf
 9881,9891,1998,new_flyer_d40lf
-9901,9904,1999,dennis_dart_slf_30
-9905,9909,1999,dennis_dart_slf_30
-9910,9951,1999,dennis_dart_slf_30
+9901,9951,1999,dennis_dart_slf_30
