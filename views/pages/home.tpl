@@ -1,5 +1,5 @@
 
-% rebase('base', title='Home' if system is None else 'BCTracker')
+% rebase('base', title='Home')
 
 <div class="page-header">
     % if system is None:
