@@ -4,7 +4,7 @@
             % if system is None:
                 BCTracker | {{ title }}
             % else:
-                BCTracker | {{ system }} | {{ title }}
+                {{ system }} | {{ title }}
             % end
         </title>
         
@@ -26,7 +26,7 @@
             <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
             <meta property="og:site_name" content="BCTracker" />
         % else:
-            <meta property="og:title" content="BCTracker | {{ system }} | {{ title }}">
+            <meta property="og:title" content="{{ system }} | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
             <meta property="og:site_name" content="BCTracker | {{ system }}" />
         % end
