@@ -13,26 +13,28 @@
     <hr />
 </div>
 
-<div class="sidebar">
-    <h2>Overview</h2>
-    % include('components/map', map_trips=route.trips, map_positions=positions)
-    
-    <div class="info-box">
-        <div class="section">
-            % include('components/service_group_indicator', service_group=route.service_group)
-        </div>
-        <div class="section">
-            % headsigns = route.get_headsigns()
-            <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
-            <div class="value">
-                % for headsign in headsigns:
-                    <span>{{ headsign }}</span>
-                    <br />
-                % end
+% if len(route.trips) > 0:
+    <div class="sidebar">
+        <h2>Overview</h2>
+        % include('components/map', map_trips=route.trips, map_positions=positions)
+        
+        <div class="info-box">
+            <div class="section">
+                % include('components/service_group_indicator', service_group=route.service_group)
+            </div>
+            <div class="section">
+                % headsigns = route.get_headsigns()
+                <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
+                <div class="value">
+                    % for headsign in headsigns:
+                        <span>{{ headsign }}</span>
+                        <br />
+                    % end
+                </div>
             </div>
         </div>
     </div>
-</div>
+% end
 
 <div>
     % if len(positions) > 0:

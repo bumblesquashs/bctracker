@@ -16,21 +16,23 @@
     <h2>Overview</h2>
     % include('components/map', map_stop=stop)
     
-    <div class="info-box">
-        <div class="section">
-            % include('components/service_group_indicator', service_group=stop.service_group)
-        </div>
-        <div class="section">
-            % routes = stop.get_routes()
-            <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
-            <div class="value">
-                % for route in routes:
-                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
-                    <br />
-                % end
+    % if len(stop.departures) > 0:
+        <div class="info-box">
+            <div class="section">
+                % include('components/service_group_indicator', service_group=stop.service_group)
+            </div>
+            <div class="section">
+                % routes = stop.get_routes()
+                <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
+                <div class="value">
+                    % for route in routes:
+                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
+                        <br />
+                    % end
+                </div>
             </div>
         </div>
-    </div>
+    % end
     
     % nearby_stops = sorted(stop.nearby_stops)
     % if len(nearby_stops) > 0:
@@ -59,8 +61,10 @@
 <div>
     <h2>Today's Schedule</h2>
     % if len(departures) == 0:
-        There are no departures from this stop today.
-        You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.
+        <p>
+            There are no departures from this stop today.
+            You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.
+        </p>
     % else:
         % if system is None or system.realtime_enabled:
             <p>
