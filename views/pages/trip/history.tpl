@@ -1,7 +1,7 @@
 
 % import formatting
 
-% rebase('base', title=f'Trip {trip.id}')
+% rebase('base', title=f'Trip {trip.id}', show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title trip-id">Trip {{ trip.id }}</h1>

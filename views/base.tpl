@@ -88,7 +88,7 @@
             </script>
         % end
         
-        % if system is None or system.realtime_enabled:
+        % if (system is None or system.realtime_enabled) and get('show_refresh_button', False):
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();
@@ -311,7 +311,7 @@
                         <div id="last-updated">Updated {{ last_updated }}</div>
                     % end
                 </div>
-                % if system is None or system.realtime_enabled:
+                % if (system is None or system.realtime_enabled) and get('show_refresh_button', False):
                     <div id="refresh-button" class="hidden">
                         <img src="/img/white/refresh.png" />
                     </div>

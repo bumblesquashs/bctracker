@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Trip {trip.id}', include_maps=True)
+% rebase('base', title=f'Trip {trip.id}', include_maps=True, show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title trip-id">Trip {{ trip.id }}</h1>

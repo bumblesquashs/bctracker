@@ -1,5 +1,5 @@
 
-% rebase('base', title='Realtime')
+% rebase('base', title='Realtime', show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Realtime</h1>

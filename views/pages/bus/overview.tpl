@@ -3,7 +3,7 @@
 
 % import formatting
 
-% rebase('base', title=f'Bus {bus}', include_maps=True)
+% rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
