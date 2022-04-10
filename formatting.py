@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import calendar
 
 def csv(date):
@@ -48,4 +48,26 @@ def days_since(date):
     elif days > 1 or len(parts) == 0:
         parts.append(f'{days} days')
     return ', '.join(parts) + ' ago'
-    
+
+def flatten(dates):
+    dates = sorted(dates)
+    date_strings = []
+    previous_date = dates[0]
+    start_date = previous_date
+    end_date = None
+    for date in dates[1:]:
+        if date == previous_date + timedelta(days=1):
+            end_date = date
+        else:
+            if end_date is None:
+                date_strings.append(long(start_date))
+            else:
+                date_strings.append(long(start_date) + ' - ' + long(end_date))
+            start_date = date
+            end_date = None
+        previous_date = date
+    if end_date is None:
+        date_strings.append(long(start_date))
+    else:
+        date_strings.append(long(start_date) + ' - ' + long(end_date))
+    return ', '.join(date_strings)

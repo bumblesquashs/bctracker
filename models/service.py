@@ -84,11 +84,11 @@ class ServiceSchedule:
     
     @property
     def included_dates_string(self):
-        return ', '.join([formatting.long(d) for d in sorted(self.included_dates)])
+        return formatting.flatten(self.included_dates)
     
     @property
     def excluded_dates_string(self):
-        return ', '.join([formatting.long(d) for d in sorted(self.excluded_dates)])
+        return formatting.flatten(self.excluded_dates)
     
     def includes(self, date):
         if date in self.included_dates:
