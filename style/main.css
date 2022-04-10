@@ -22,6 +22,15 @@ form input[type="text"]:focus {
     outline: none;
 }
 
+form .input-container {
+    display: flex;
+    gap: 10px;
+}
+
+form .input-container input[type="text"] {
+    flex: 1;
+}
+
 hr {
     margin:0px;
     border-width: 0px;

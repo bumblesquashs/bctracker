@@ -168,7 +168,7 @@
                                 % else:
                                     <a class="dropdown-button full-width" href="{{ get_url(None, path) }}">All Systems</a>
                                 % end
-                                <div class="header">Schedule and Realtime</div>
+                                <div class="header">Schedule and Bus Tracking</div>
                                 % for alt_system in sorted([s for s in systems if s.realtime_enabled]):
                                     % if system is not None and system == alt_system:
                                         <span class="dropdown-button disabled">{{ alt_system }}</span>
@@ -278,7 +278,7 @@
                     % else:
                         <a class="menu-button full-width" href="{{ get_url(None, path) }}">All Systems</a>
                     % end
-                    <div class="header">Schedule and Realtime</div>
+                    <div class="header">Schedule and Bus Tracking</div>
                     % for alt_system in sorted([s for s in systems if s.realtime_enabled]):
                         % if system is not None and system == alt_system:
                             <span class="menu-button disabled">{{ alt_system }}</span>

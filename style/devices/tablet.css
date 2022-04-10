@@ -11,15 +11,6 @@ button {
     width: 100%;
 }
 
-form .input-container {
-    display: flex;
-    gap: 10px;
-}
-
-form .input-container input[type="text"] {
-    flex: 1;
-}
-
 form input[type="text"] {
     font-size: 16pt;
 }
