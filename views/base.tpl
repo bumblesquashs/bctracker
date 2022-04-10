@@ -14,6 +14,13 @@
         
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         
+        % if system is None:
+            <meta property="og:title" content="BCTracker | {{ title }}">
+            <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
+        % else:
+            <meta property="og:title" content="{{ system }} | {{ title }}">
+            <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
+        % end
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ get_url(system) }}" />
         <meta property="og:image" content="{{ get_url(system, 'img/meta-logo.png') }}" />
@@ -21,15 +28,7 @@
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="BCTracker Logo" />
-        % if system is None:
-            <meta property="og:title" content="BCTracker | {{ title }}">
-            <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
-            <meta property="og:site_name" content="BCTracker" />
-        % else:
-            <meta property="og:title" content="{{ system }} | {{ title }}">
-            <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
-            <meta property="og:site_name" content="BCTracker | {{ system }}" />
-        % end
+        <meta property="og:site_name" content="BCTracker" />
         
         <link rel="stylesheet" href="/style/main.css?version={{ version }}" />
         

@@ -47,32 +47,36 @@
     % if system is None:
         <form onsubmit="busSearch()" action="javascript:void(0)">
             <label for="bus_search">Bus Number:</label>
-            <br />
-            <input type="text" id="bus_search" name="bus_search" method="post">
-            <input type="submit" value="Search" class="button">
+            <div class="input-container">
+                <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                <input type="submit" value="Search" class="button">
+            </div>
         </form>
     % else:
         % if system.realtime_enabled:
             <form onsubmit="busSearch()" action="javascript:void(0)">
                 <label for="bus_search">Bus Number:</label>
-                <br />
-                <input type="text" id="bus_search" name="bus_search" method="post">
-                <input type="submit" value="Search" class="button">
+                <div class="input-container">
+                    <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                    <input type="submit" value="Search" class="button">
+                </div>
             </form>
         % end
         
         <form onsubmit="routeSearch()" action="javascript:void(0)">
             <label for="route_search">Route Number:</label>
-            <br />
-            <input type="text" id="route_search" name="route_search" method="post">
-            <input type="submit" value="Search" class="button">
+            <div class="input-container">
+                <input type="text" id="route_search" name="route_search" method="post" size="10">
+                <input type="submit" value="Search" class="button">
+            </div>
         </form>
         
         <form onsubmit="stopSearch()" action="javascript:void(0)">
             <label for="stop_search">Stop Number or Name:</label>
-            <br />
-            <input type="text" id="stop_search" name="stop_search" method="post">
-            <input type="submit" value="Search" class="button">
+            <div class="input-container">
+                <input type="text" id="stop_search" name="stop_search" method="post" size="10">
+                <input type="submit" value="Search" class="button">
+            </div>
         </form>
     % end
     

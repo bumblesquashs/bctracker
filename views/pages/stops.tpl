@@ -35,9 +35,10 @@
     
     <form onsubmit="stopSearch()" action="javascript:void(0)">
         <label for="stop_id_search">Stop Name:</label>
-        <br />
-        <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}">
-        <input type="submit" value="Search" class="button">
+        <div class="input-container">
+            <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}" size="10">
+            <input type="submit" value="Search" class="button">
+        </div>
     </form>
     
     % if len(stops) == 0:

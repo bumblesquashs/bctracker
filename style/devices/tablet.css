@@ -11,14 +11,17 @@ button {
     width: 100%;
 }
 
-form input[type="text"] {
-    font-size: 16pt;
-    margin-bottom: 10px;
-    width: 100%;
+form .input-container {
+    display: flex;
+    gap: 10px;
 }
 
-form input[type="submit"] {
-    width: 100%;
+form .input-container input[type="text"] {
+    flex: 1;
+}
+
+form input[type="text"] {
+    font-size: 16pt;
 }
 
 form label {
