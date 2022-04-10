@@ -56,6 +56,28 @@
             </tbody>
         </table>
     % end
+    
+    % alt_systems = [s for s in systems if s.get_stop(number=stop.number) is not None and s != system]
+    % if len(alt_systems) > 0:
+        <h2>Other Systems At This Stop</h2>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>System</th>
+                    <th>Routes</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for alt_system in alt_systems:
+                    % alt_stop = alt_system.get_stop(number=stop.number)
+                    <tr>
+                        <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
+                        <td>{{ alt_stop.get_routes_string() }}</td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 </div>
 
 <div>
