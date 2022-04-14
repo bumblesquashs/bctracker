@@ -43,6 +43,8 @@ class Route:
                         headsign.lstrip('B ')
                     if ' - ' in headsign:
                         headsign = headsign.split(' - ')[0]
+                    if '- ' in headsign:
+                        headsign = headsign.split('- ')[0]
                     if ' to ' in headsign:
                         headsign = headsign.split(' to ')[0]
                     if ' To ' in headsign:
