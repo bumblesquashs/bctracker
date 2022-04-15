@@ -276,8 +276,17 @@ def history_transfers_page(system_id=None):
     '/<system_id>/routes',
     '/<system_id>/routes/'
 ])
-def routes_page(system_id=None):
-    return page('routes', system_id, path='routes')
+def routes_list_page(system_id=None):
+    return page('routes/list', system_id, path='routes')
+
+@app.get([
+    '/routes/map',
+    '/routes/map/',
+    '/<system_id>/routes/map',
+    '/<system_id>/routes/map/'
+])
+def routes_map_page(system_id=None):
+    return page('routes/map', system_id, path='routes/map')
 
 @app.get([
     '/routes/<route_number>',

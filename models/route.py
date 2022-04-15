@@ -1,6 +1,7 @@
 
 from os.path import commonprefix
 from random import randint, seed, shuffle
+from math import sqrt
 
 from models.search_result import SearchResult
 from models.service import create_service_group
@@ -99,9 +100,35 @@ class Route:
         return {
             'id': self.id,
             'number': self.number,
-            'name': self.name.replace("'", '&apos;'),
+            'name': str(self).replace("'", '&apos;'),
             'colour': self.colour
         }
+    
+    @property
+    def indicator_json_data(self):
+        json = []
+        trips = sorted(self.trips, key=lambda t: len(t.points), reverse=True)
+        trip = trips[0]
+        first_point = trip.points[0]
+        last_point = trip.points[-1]
+        distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+        if distance <= 0.05:
+            count = min((len(trip.points) // 500) + 1, 3)
+        else:
+            count = min(int(distance * 8) + 1, 4)
+        size = len(trip.points) // count
+        for i in range(count):
+            index = (i * size) + (size // 2)
+            point = trip.points[index]
+            json.append({
+                'system_id': self.system.id,
+                'number': self.number,
+                'name': str(self).replace("'", '&apos;'),
+                'colour': self.colour,
+                'lat': point.lat,
+                'lon': point.lon
+            })
+        return json
     
     def add_trip(self, trip):
         self.trips.append(trip)

@@ -398,6 +398,34 @@ table.striped tr.divider {
     display: block;
 }
 
+.marker .icon.route {
+    width: auto;
+    height: auto;
+    border-radius: 0px;
+}
+
+.marker .icon.route .link {
+    border-radius: 0px;
+}
+
+.marker .icon.route .number {
+    padding: 2px 6px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    line-height: 10pt;
+    font-size: 10pt;
+    vertical-align: middle;
+}
+
+.marker .icon.route:hover {
+    text-decoration: none;
+}
+
+.marder .icon.route .link {
+    border-radius: 0px;
+}
+
 .marker.small .icon {
     width: 16px !important;
     height: 16px !important;

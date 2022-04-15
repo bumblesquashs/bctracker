@@ -272,6 +272,10 @@ table.striped tr:nth-child(2n-1) {
     border-color: #393939;
 }
 
+.marker .icon.route .number {
+    color: #FFFFFF;
+}
+
 .menu {
     background-color: #053305;
 }
