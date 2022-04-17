@@ -167,6 +167,31 @@ form input[type="text"] {
     font-size: 12pt;
 }
 
+.flex-container {
+    flex-direction: row;
+    gap: 40px;
+}
+
+.flex-container .flex-1 {
+    flex: 1;
+}
+
+.flex-container .flex-2 {
+    flex: 2;
+}
+
+.flex-container .flex-3 {
+    flex: 3;
+}
+
+.flex-container .flex-4 {
+    flex: 4;
+}
+
+.flex-container .flex-5 {
+    flex: 5;
+}
+
 .mobile-only {
     display: none !important;
 }
@@ -179,19 +204,8 @@ form input[type="text"] {
     display: inline-block;
 }
 
-.sidebar {
-    float: left;
-    margin-right: 40px;
-    width: 25%;
-}
-
 .sidebar table {
     width: 100%;
-}
-
-.sidebar + * {
-    float: none;
-    overflow: hidden;
 }
 
 .smaller-font {

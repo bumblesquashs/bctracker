@@ -263,6 +263,10 @@ table.striped tr.divider {
     display: none !important;
 }
 
+.flex-container {
+    display: flex;
+}
+
 .flexbox-space-between {
     display: flex;
     justify-content: space-between;

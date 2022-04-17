@@ -3,21 +3,30 @@
 
 % rebase('base', title='Routes', include_maps=True)
 
-<div class="page-header map-page">
-    <h1 class="title">Routes</h1>
-    <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-        <span class="tab-button current">Map</span>
-    </div>
-</div>
-
 % if system is None:
+    <div class="page-header">
+        <h1 class="title">Routes</h1>
+        <div class="tab-button-bar">
+            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+            <span class="tab-button current">Map</span>
+        </div>
+        <hr />
+    </div>
+    
     <p>
         Routes can only be viewed for individual systems.
         Please choose a system.
     </p>
     % include('components/systems')
 % else:
+    <div class="page-header map-page">
+        <h1 class="title">Routes</h1>
+        <div class="tab-button-bar">
+            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+            <span class="tab-button current">Map</span>
+        </div>
+    </div>
+    
     % routes = system.get_routes()
     
     <div id="map" class="full-screen"></div>

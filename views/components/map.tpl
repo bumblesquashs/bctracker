@@ -219,6 +219,7 @@
 
 <script>
     map.on("load", function() {
+        map.resize();
         if (lons.length === 1 && lats.length === 1) {
             map.jumpTo({
                 center: [lons[0], lats[0]],

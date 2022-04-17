@@ -154,6 +154,11 @@ table {
     table-layout: fixed;
 }
 
+.flex-container {
+    flex-direction: column;
+    gap: 20px;
+}
+
 .menu {
     position: relative;
     margin: 0px;
