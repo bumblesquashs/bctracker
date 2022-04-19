@@ -81,6 +81,7 @@ table {
 
 #search-non-desktop {
     padding: 20px;
+    display: block;
 }
 
 #search-non-desktop input[type="text"] {
@@ -104,16 +105,19 @@ table {
 #search-non-desktop-results a {
     padding: 10px 0px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
     font-size: 16pt;
 }
 
-#search-non-desktop-results img {
-    width: 32px;
-    height: 32px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    vertical-align: middle;
+#search-non-desktop-results a img {
+    width: 36px;
+    height: 36px;
+}
+
+#search-non-desktop-results a .description {
+    flex: 1;
 }
 
 #search-non-desktop-results .message {

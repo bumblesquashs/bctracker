@@ -511,38 +511,45 @@
             html += "<div class='message smaller-font'>Showing " + results.length + " of " + count + " results</div>";
         }
         for (i = 0; i < results.length; i++) {
-            let result = results[i]
+            const result = results[i]
+            let icon = "";
             let name = result.name;
             switch (result.type) {
                 case "bus":
                     if (prefersDarkScheme || useLightIcons) {
-                        name = "<img src='/img/white/realtime.png' />Bus " + result.name;
+                        icon = "<img src='/img/white/realtime.png' />";
                     } else {
-                        name = "<img src='/img/black/realtime.png' />Bus " + result.name;
+                        icon = "<img src='/img/black/realtime.png' />";
                     }
+                    name = "Bus " + result.name;
                     break;
                 case "route":
                     if (prefersDarkScheme || useLightIcons) {
-                        name = "<img src='/img/white/routes.png' />Route " + result.name;
+                        icon = "<img src='/img/white/routes.png' />";
                     } else {
-                        name = "<img src='/img/black/routes.png' />Route " + result.name;
+                        icon = "<img src='/img/black/routes.png' />";
                     }
+                    name = "Route " + result.name;
                     break;
                 case "stop":
                     if (prefersDarkScheme || useLightIcons) {
-                        name = "<img src='/img/white/stop.png' />Stop " + result.name;
+                        icon = "<img src='/img/white/stop.png' />";
                     } else {
-                        name = "<img src='/img/black/stop.png' />Stop " + result.name;
+                        icon = "<img src='/img/black/stop.png' />";
                     }
+                    name = "Stop " + result.name;
                     break;
                 default:
                     break;
             }
             html += "\
                 <a id='search-result-entry-" + i + "' href='" + result.url + "'>" +
-                    name +
-                    "<br />\
-                    <span class='smaller-font lighter-text'>" + result.description + "</span>\
+                    icon +
+                    "<div class='description'>" +
+                        name +
+                        "<br />\
+                        <span class='smaller-font lighter-text'>" + result.description + "</span>\
+                    </div>\
                 </a>";
         }
         return html;

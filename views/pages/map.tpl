@@ -240,33 +240,37 @@
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
-                        shapeIDs.push(shapeID);
-                        map.addSource(shapeID, {
-                            'type': 'geojson',
-                            'data': {
-                                'type': 'Feature',
-                                'properties': {},
-                                'geometry': {
-                                    'type': 'LineString',
-                                    'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                        if (shapeIDs.includes(shapeID)) {
+                            map.setLayoutProperty(shapeID, "visibility", "visible");
+                        } else {
+                            shapeIDs.push(shapeID);
+                            map.addSource(shapeID, {
+                                'type': 'geojson',
+                                'data': {
+                                    'type': 'Feature',
+                                    'properties': {},
+                                    'geometry': {
+                                        'type': 'LineString',
+                                        'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                                    }
                                 }
-                            }
-                        });
-                        map.addLayer({
-                            'id': shapeID,
-                            'type': 'line',
-                            'source': shapeID,
-                            'minzoom': 8,
-                            'layout': {
-                                'line-join': 'round',
-                                'line-cap': 'round',
-                                'visibility':  tripLinesVisible ? 'visible' : 'none'
-                            },
-                            'paint': {
-                                'line-color': '#' + position.colour,
-                                'line-width': 4
-                            }
-                        });
+                            });
+                            map.addLayer({
+                                'id': shapeID,
+                                'type': 'line',
+                                'source': shapeID,
+                                'minzoom': 8,
+                                'layout': {
+                                    'line-join': 'round',
+                                    'line-cap': 'round',
+                                    'visibility':  tripLinesVisible ? 'visible' : 'none'
+                                },
+                                'paint': {
+                                    'line-color': '#' + position.colour,
+                                    'line-width': 4
+                                }
+                            });
+                        }
                     }
                 };
                 request.send();
@@ -296,33 +300,37 @@
                     request.responseType = "json";
                     request.onload = function() {
                         if (request.status === 200) {
-                            shapeIDs.push(shapeID);
-                            map.addSource(shapeID, {
-                                'type': 'geojson',
-                                'data': {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                            if (shapeIDs.includes(shapeID)) {
+                                map.setLayoutProperty(shapeID, "visibility", "visible");
+                            } else {
+                                shapeIDs.push(shapeID);
+                                map.addSource(shapeID, {
+                                    'type': 'geojson',
+                                    'data': {
+                                        'type': 'Feature',
+                                        'properties': {},
+                                        'geometry': {
+                                            'type': 'LineString',
+                                            'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                                        }
                                     }
-                                }
-                            });
-                            map.addLayer({
-                                'id': shapeID,
-                                'type': 'line',
-                                'source': shapeID,
-                                'minzoom': 8,
-                                'layout': {
-                                    'line-join': 'round',
-                                    'line-cap': 'round',
-                                    'visibility': (hoverPosition === position) ? 'visible' : 'none'
-                                },
-                                'paint': {
-                                    'line-color': '#' + position.colour,
-                                    'line-width': 4
-                                }
-                            });
+                                });
+                                map.addLayer({
+                                    'id': shapeID,
+                                    'type': 'line',
+                                    'source': shapeID,
+                                    'minzoom': 8,
+                                    'layout': {
+                                        'line-join': 'round',
+                                        'line-cap': 'round',
+                                        'visibility': (hoverPosition === position) ? 'visible' : 'none'
+                                    },
+                                    'paint': {
+                                        'line-color': '#' + position.colour,
+                                        'line-width': 4
+                                    }
+                                });
+                            }
                         }
                     };
                     request.send();
@@ -331,6 +339,8 @@
             hoverPosition = position;
         }
         
+        const date = new Date();
+        const timeToNextUpdate = 60 - date.getSeconds();
         setTimeout(function() {
             if (automaticRefresh) {
                 updatePositionData();
