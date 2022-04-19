@@ -45,7 +45,13 @@
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
+                    <td class="non-desktop no-wrap">
+                        {{ formatting.short(record.date) }}
+                        % if system is None:
+                            <br />
+                            <span class="mobile-only smaller-font">{{ record.system }}</span>
+                        % end
+                    </td>
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:

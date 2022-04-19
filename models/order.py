@@ -74,5 +74,5 @@ def search_buses(query, recorded_bus_numbers):
                     match += len(query)
             if bus_number not in recorded_bus_numbers:
                 match /= 10
-            results.append(SearchResult('bus', str(bus_number), order_string, f'bus/{bus_number}', match))
+            results.append(SearchResult('bus', bus_number_string, order_string, f'bus/{bus_number}', match))
     return [r for r in results if r.match > 0]

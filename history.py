@@ -65,12 +65,12 @@ def update(positions):
     database.commit()
 
 def get_last_seen(system_id):
-    row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.record_id DESC)'
+    row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.date DESC, records.record_id DESC)'
     order_by = 'numbered_records.bus_number'
     return get_numbered_records(system_id, row_number_column, order_by)
 
 def get_first_seen(system_id):
-    row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.record_id ASC)'
+    row_number_column = 'ROW_NUMBER() OVER(PARTITION BY records.bus_number ORDER BY records.date ASC, records.record_id ASC)'
     order_by = {
         'numbered_records.date': 'DESC',
         'numbered_records.record_id': 'DESC'
@@ -136,6 +136,7 @@ def get_records(system_id=None, bus_number=None, block_id=None, limit=None):
             'records.block_id': block_id
         },
         order_by={
+            'records.date': 'DESC',
             'records.record_id': 'DESC'
         },
         limit=limit)
@@ -169,6 +170,7 @@ def get_trip_records(trip, limit=None):
             'records.system_id': trip.system.id
         },
         order_by={
+            'records.date': 'DESC',
             'trip_records.record_id': 'DESC'
         },
         limit=limit)
@@ -189,6 +191,7 @@ def get_transfers(system_id, limit=None):
         },
         operation='OR',
         order_by={
+            'transfers.date': 'DESC',
             'transfers.transfer_id': 'DESC'
         },
         limit=limit)

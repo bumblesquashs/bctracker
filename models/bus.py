@@ -11,7 +11,7 @@ class Bus:
     def __str__(self):
         if self.number < 0:
             return 'Unknown Bus'
-        return str(self.number)
+        return f'{self.number:04d}'
     
     def __hash__(self):
         return hash(self.number)

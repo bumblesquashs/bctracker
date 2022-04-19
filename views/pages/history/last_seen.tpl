@@ -65,7 +65,13 @@
                         % end
                     </td>
                     <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
+                    <td class="non-desktop no-wrap">
+                        {{ formatting.short(record.date) }}
+                        % if system is None:
+                            <br />
+                            <span class="mobile-only smaller-font">{{ record.system }}</span>
+                        % end
+                    </td>
                     % if system is None:
                         <td class="non-mobile">{{ record.system }}</td>
                     % end

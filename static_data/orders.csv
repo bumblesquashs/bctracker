@@ -11,6 +11,7 @@ low,high,year,model_id
 1148,1185,2019,new_flyer_xn40
 1186,1212,2020,new_flyer_xn40
 1213,1232,2021,new_flyer_xn40
+1233,1253,2022,new_flyer_xn40
 2173,2240,2009,ford_cbb_e450_polar_v
 2301,2310,2010,chevrolet_arboc_4500_som23d
 2311,2315,2010,chevrolet_arboc_4500_som28d
@@ -40,6 +41,7 @@ low,high,year,model_id
 4007,4070,2017,grande_west_vicinity_30
 4071,4073,2018,grande_west_vicinity_30
 4200,4233,2020,grande_west_vicinity_cng_30
+4234,4248,2022,vmc_classic_vi30_cng
 4400,4432,2017,grande_west_vicinity_35
 4433,4474,2018,grande_west_vicinity_35
 6000,6029,2017,nova_bus_lfs
