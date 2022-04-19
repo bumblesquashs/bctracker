@@ -8,13 +8,16 @@ from models.service import create_service_group
 from models.sheet import create_sheets
 
 class Route:
-    __slots__ = ('system', 'id', 'number', 'name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
+    __slots__ = ('system', 'id', 'number', 'full_name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, row):
         self.system = system
         self.id = row['route_id']
         self.number = row['route_short_name']
-        self.name = row['route_long_name']
+        if 'route_long_name' in row and row['route_long_name'] != '':
+            self.full_name = row['route_long_name']
+        else:
+            self.full_name = None
         if 'route_color' in row and row['route_color'] != '000000':
             self.colour = row['route_color']
         else:
@@ -33,7 +36,23 @@ class Route:
         self._sheets = None
     
     def __str__(self):
-        if self.name == '':
+        return f'{self.number} {self.name}'
+    
+    def __hash__(self):
+        return hash(self.id)
+    
+    def __eq__(self, other):
+        return self.id == other.id
+    
+    def __lt__(self, other):
+        return self.number_value < other.number_value
+    
+    def __gt__(self, other):
+        return self.number_value > other.number_value
+    
+    @property
+    def name(self):
+        if self.full_name is None:
             if self._auto_name is None:
                 headsigns = self.get_headsigns()
                 for i in range(len(headsigns)):
@@ -59,23 +78,11 @@ class Route:
                 if len(prefix) < 3:
                     if len(headsigns) > 2:
                         headsigns = [h for h in headsigns if not h.startswith('To ')]
-                    self._auto_name = f'{self.number} ' + ' / '.join(sorted(set(headsigns)))
+                    self._auto_name = ' / '.join(sorted(set(headsigns)))
                 else:
-                    self._auto_name = f'{self.number} {prefix}'
+                    self._auto_name = prefix
             return self._auto_name
-        return f'{self.number} {self.name}'
-    
-    def __hash__(self):
-        return hash(self.id)
-    
-    def __eq__(self, other):
-        return self.id == other.id
-    
-    def __lt__(self, other):
-        return self.number_value < other.number_value
-    
-    def __gt__(self, other):
-        return self.number_value > other.number_value
+        return self.full_name
     
     @property
     def services(self):
@@ -100,7 +107,7 @@ class Route:
         return {
             'id': self.id,
             'number': self.number,
-            'name': str(self).replace("'", '&apos;'),
+            'name': self.name.replace("'", '&apos;'),
             'colour': self.colour
         }
     
@@ -123,7 +130,7 @@ class Route:
             json.append({
                 'system_id': self.system.id,
                 'number': self.number,
-                'name': str(self).replace("'", '&apos;'),
+                'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
                 'lat': point.lat,
                 'lon': point.lon
@@ -135,6 +142,7 @@ class Route:
         self._services = None
         self._service_group = None
         self._sheets = None
+        self._auto_name = None
     
     def get_trips(self, service_group=None):
         if service_group is None:
@@ -157,4 +165,4 @@ class Route:
             match += (len(query) / len(name)) * 100
             if name.startswith(query):
                 match += len(query)
-        return SearchResult('route', self.number, str(self), f'routes/{self.number}', match)
+        return SearchResult('route', self.number, self.name, f'routes/{self.number}', match)
