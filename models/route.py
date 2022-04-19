@@ -147,7 +147,7 @@ class Route:
     def get_search_result(self, query):
         query = query.lower()
         number = self.number.lower()
-        name = self.name.lower()
+        name = str(self).lower()
         match = 0
         if query in number:
             match += (len(query) / len(number)) * 100
@@ -157,4 +157,4 @@ class Route:
             match += (len(query) / len(name)) * 100
             if name.startswith(query):
                 match += len(query)
-        return SearchResult('route', self.number, self.name, f'routes/{self.number}', match)
+        return SearchResult('route', self.number, str(self), f'routes/{self.number}', match)
