@@ -1,19 +1,21 @@
 
 from os.path import commonprefix
-from random import randint, seed, shuffle
+from random import randint, seed
 from math import sqrt
+from colorsys import hls_to_rgb
 
 from models.search_result import SearchResult
 from models.service import create_service_group
 from models.sheet import create_sheets
 
 class Route:
-    __slots__ = ('system', 'id', 'number', 'full_name', 'colour', 'number_value', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
+    __slots__ = ('system', 'id', 'number', 'number_value', 'full_name', 'colour', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, row):
         self.system = system
         self.id = row['route_id']
         self.number = row['route_short_name']
+        self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
         if 'route_long_name' in row and row['route_long_name'] != '':
             self.full_name = row['route_long_name']
         else:
@@ -22,12 +24,16 @@ class Route:
             self.colour = row['route_color']
         else:
             # Generate a random colour based on system ID and route number
+            seed(system.id)
+            h = (randint(1, 360) + (self.number_value * 137.508)) / 360.0
             seed(system.id + self.number)
-            rgb = [randint(0, 100), randint(0, 255), randint(100, 255)]
-            shuffle(rgb)
-            self.colour = f'{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}'
-        
-        self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
+            l = randint(30, 50) / 100.0
+            s = randint(50, 100) / 100.0
+            rgb = hls_to_rgb(h, l, s)
+            r = int(rgb[0] * 255)
+            g = int(rgb[1] * 255)
+            b = int(rgb[2] * 255)
+            self.colour = f'{r:02x}{g:02x}{b:02x}'
         
         self.trips = []
         self._auto_name = None
