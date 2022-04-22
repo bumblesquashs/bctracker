@@ -114,28 +114,41 @@
         
         <div class="news-post">
             <div class="header">
-                <h3>New Realtime Systems</h3>
-                DATE TBD
+                <h3>Spring Update</h3>
+                May 1, 2022
             </div>
             <div class="content">
+                <h4>New Realtime Systems</h4>
                 <p>
-                    As you may have heard, BC Transit has started rolling out a new NextRide program in transit systems across BC.
-                    Since the first system went live at the end of January, we've been working hard to integrate the new API with BCTracker.
-                    This hasn't been an easy task as some of the GTFS information that we use is quite different, and on top of that there have been numerous signs that BC Transit is still actively testing the software.
+                    Since the start of this year, BC Transit has been rolling out a new NextRide program in transit systems across BC.
+                    We've been working hard to integrate the new API with BCTracker, which hasn't been easy as some of the data is quite different compared to existing systems.
+                    However, we are very pleased to announce that the first new realtime systems are active on BCTracker as of today!
                 </p>
                 <p>
-                    With all that said, we are very pleased to announce that the first new realtime systems are active on BCTracker as of today!
-                    There may still be some adjustments that need to be made as the rollout continues, but we are confident at this point that everything is stable enough to display publically.
+                    To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, <b>Campbell River</b>, <b>North Okanagan</b>, and <b>Powell River</b> as brand-new realtime systems.
+                    The Central Fraser Valley and Chilliwack systems have been combined into a new <b>Fraser Valley</b> system with realtime information.
+                    And on top of all that, we're introducing the <b>Sunshine Coast</b> regional system with schedule-only data.
+                    Expect more updates in the next few months as additional systems become available!
                 </p>
                 <p>
-                    To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, <b>Campbell River</b>, and <b>North Okanagan</b> as brand-new realtime systems.
-                    Additionally, the Central Fraser Valley and Chilliwack systems have been combined into a new <b>Fraser Valley</b> system with realtime information.
-                    Finally, we're introducing the <b>Sunshine Coast</b> regional system with schedule-only data.
-                    As realtime information becomes available in more regions, we'll update BCTracker to add/update those systems.
-                    Expect to see more updates over the next few months!
-                </p>
-                <p>
+                    Please keep in mind that BC Transit is still testing some components of the new NextRide API, so you may occasionally see buses with incorrect GPS positions or logged into the wrong trip.
+                    If you have any questions or concerns, feel free to reach out to us at <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
                     For more information about the NextRide rollout and to see what systems will be receiving it next, visit <a href="https://www.bctransit.com/nextride-faq">BC Transit's NextRide FAQ</a>.
+                </p>
+                <h4>Other Updates</h4>
+                <p>
+                    Of course, new realtime systems isn't the only exciting thing we've been working on for the past few months.
+                    Since we posted the last update, here's some of the other changes we've made:
+                </p>
+                <ul>
+                    <li>Routes Map: View every route in a system on the map at the same time</li>
+                    <li>Schedules: Easily check today's schedule and upcoming buses (when available) in the overview tab of stops and routes</li>
+                    <li>Mobile Navigation: Updated menu makes it easier to change pages or swap to a different system</li>
+                    <li>Themes: Introduced new themes based on old BC transit liveries</li>
+                    <li>Lots of bug fixes and general improvements for the website interface</li>
+                </ul>
+                <p>
+                    We hope you enjoy the new systems and improvements, and have a great summer!
                 </p>
             </div>
         </div>
