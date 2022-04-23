@@ -48,6 +48,8 @@ def start(args):
         if not gtfs.validate(system):
             gtfs.update(system)
         realtime.update(system)
+        if not realtime.validate(system):
+            system.validation_errors += 1
     history.update(realtime.get_positions())
     
     cp.config.update('server.conf')

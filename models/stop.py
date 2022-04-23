@@ -58,9 +58,8 @@ class Stop:
     
     @property
     def is_current(self):
-        current_services = [s for sheet in self.system.get_sheets() for s in sheet.services if sheet.is_current]
         for service in self.services:
-            if service in current_services:
+            if self.system.get_sheet(service).is_current:
                 return True
         return False
     

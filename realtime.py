@@ -94,3 +94,21 @@ def last_updated_string():
     if last_updated.year == now.year:
         return last_updated.strftime("%B %-d at %H:%M")
     return last_updated.strftime("%B %-d, %Y at %H:%M")
+
+def validate(system):
+    if not system.realtime_enabled:
+        return True
+    for position in [p for p in positions.values() if p.system == system]:
+        trip_id = position.trip_id
+        if trip_id is None:
+            continue
+        if position.trip is None:
+            trip_id_sections = trip_id.split(':')
+            if len(trip_id_sections) == 3:
+                trip_block_section = trip_id_sections[2]
+                other_trip_block_sections = {t.id.split(':')[2] for t in system.get_trips() if len(t.id.split(':')) == 3}
+                if trip_block_section not in other_trip_block_sections:
+                    return False
+            else:
+                return False
+    return True
