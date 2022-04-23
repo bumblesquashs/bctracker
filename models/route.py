@@ -109,6 +109,14 @@ class Route:
         return self._sheets
     
     @property
+    def is_current(self):
+        current_services = [s for sheet in self.system.get_sheets() for s in sheet.services if sheet.is_current]
+        for service in self.services:
+            if service in current_services:
+                return True
+        return False
+    
+    @property
     def json_data(self):
         return {
             'id': self.id,

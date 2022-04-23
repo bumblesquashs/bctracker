@@ -57,6 +57,14 @@ class Stop:
         return self._sheets
     
     @property
+    def is_current(self):
+        current_services = [s for sheet in self.system.get_sheets() for s in sheet.services if sheet.is_current]
+        for service in self.services:
+            if service in current_services:
+                return True
+        return False
+    
+    @property
     def nearby_stops(self):
         stops = self.system.get_stops()
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})

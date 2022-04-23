@@ -114,7 +114,12 @@ class Service:
         sat = row['saturday'] == '1'
         sun = row['sunday'] == '1'
         
-        self.schedule = ServiceSchedule(mon, tue, wed, thu, fri, sat, sun)
+        delta = self.end_date - self.start_date
+        if mon and tue and wed and thu and fri and sat and sun and delta.days < 7:
+            included_dates = [self.start_date + timedelta(days=i) for i in range(delta.days + 1)]
+            self.schedule = ServiceSchedule(False, False, False, False, False, False, False, included_dates)
+        else:
+            self.schedule = ServiceSchedule(mon, tue, wed, thu, fri, sat, sun)
     
     def __str__(self):
         if self.schedule.special:

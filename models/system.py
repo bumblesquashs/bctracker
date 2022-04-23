@@ -50,7 +50,7 @@ class System:
         return None
     
     def get_routes(self):
-        return sorted([r for r in self.routes.values() if r.service_group.is_current])
+        return sorted([r for r in self.routes.values() if r.is_current])
     
     def get_service(self, service_id):
         if service_id in self.services:
@@ -81,7 +81,7 @@ class System:
         return None
     
     def get_stops(self):
-        return [s for s in self.stops.values() if s.service_group.is_current]
+        return [s for s in self.stops.values() if s.is_current]
     
     def get_trip(self, trip_id):
         if trip_id in self.trips:
