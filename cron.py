@@ -58,7 +58,7 @@ def handle_realtime(sig, frame):
                 system.validation_errors = 0
             else:
                 system.validation_errors += 1
-                if system.valdation_errors <= 10 and system.validation_errors % 2 == 0:
+                if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
                     gtfs.update(system)
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
