@@ -125,9 +125,9 @@
                     However, we are very pleased to announce that the first new realtime systems are active on BCTracker as of today!
                 </p>
                 <p>
-                    To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, <b>Campbell River</b>, <b>North Okanagan</b>, and <b>Powell River</b> as brand-new realtime systems.
-                    The Central Fraser Valley and Chilliwack systems have been combined into a new <b>Fraser Valley</b> system with realtime information.
-                    And on top of all that, we're introducing the <b>Sunshine Coast</b> regional system with schedule-only data.
+                    To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, <b>Campbell River</b>, <b>Powell River</b>, and <b>Sunshine Coast</b> as brand-new realtime systems.
+                    The Central Fraser Valley and Chilliwack systems have also been combined into a new <b>Fraser Valley</b> system with realtime information.
+                    And on top of all that, we're introducing the <b>North Okanagan</b> and <b>South Okanagan</b> regional systems with schedule-only data.
                     Expect more updates in the next few months as additional systems become available!
                 </p>
                 <p>
