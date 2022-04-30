@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from models.bus import Bus
 from models.record import Record
+from models.time import Time
 from models.transfer import Transfer
 
 import database
@@ -19,7 +20,7 @@ def update(positions):
         hour = datetime.now().hour
         today = datetime.today()
         date = today if hour >= 4 else today - timedelta(days=1)
-        now = datetime.now().strftime('%H:%M')
+        now = Time.now()
         
         records = get_records(bus_number=bus.number, limit=1)
         if len(records) > 0:
@@ -34,7 +35,7 @@ def update(positions):
             if last_record.date.date() == date.date() and last_record.block_id == block.id:
                 database.update('records',
                     values={
-                        'last_seen': now
+                        'last_seen': str(now)
                     },
                     filters={
                         'record_id': last_record.id
@@ -55,8 +56,8 @@ def update(positions):
             'routes': block.get_routes_string(),
             'start_time': block.get_start_time().full_string,
             'end_time': block.get_end_time().full_string,
-            'first_seen': now,
-            'last_seen': now
+            'first_seen': now.full_string,
+            'last_seen': now.full_string
         })
         database.insert('trip_records', {
             'record_id': record_id,

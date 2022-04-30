@@ -15,10 +15,10 @@ class Record:
         self.system_id = row[f'{prefix}_system_id']
         self.block_id = row[f'{prefix}_block_id']
         self.routes = row[f'{prefix}_routes']
-        self.start_time = Time(row[f'{prefix}_start_time'])
-        self.end_time = Time(row[f'{prefix}_end_time'])
-        self.first_seen = Time(row[f'{prefix}_first_seen'])
-        self.last_seen = Time(row[f'{prefix}_last_seen'])
+        self.start_time = Time.parse(row[f'{prefix}_start_time'])
+        self.end_time = Time.parse(row[f'{prefix}_end_time'])
+        self.first_seen = Time.parse(row[f'{prefix}_first_seen'])
+        self.last_seen = Time.parse(row[f'{prefix}_last_seen'])
     
     @property
     def system(self):

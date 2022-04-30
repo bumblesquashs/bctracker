@@ -1,7 +1,7 @@
 
 import math
 
-from models.time import get_current_minutes
+from models.time import Time
 
 MINIMUM_MINUTES = 4
 
@@ -89,8 +89,7 @@ def calculate_schedule_adherence(trip, stop, lat, lon):
             if time_difference >= MINIMUM_MINUTES:
                 expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
         
-        current_mins = get_current_minutes()
-        return ScheduleAdherence(expected_scheduled_mins - current_mins)
+        return ScheduleAdherence(expected_scheduled_mins - Time.now().get_minutes())
     except AttributeError:
         return None
 
