@@ -69,15 +69,15 @@ class Route:
                         headsign.lstrip('B ')
                     if ' - ' in headsign:
                         headsign = headsign.split(' - ')[0]
-                    if '- ' in headsign:
+                    elif '- ' in headsign:
                         headsign = headsign.split('- ')[0]
-                    if ' to ' in headsign:
+                    elif ' to ' in headsign:
                         headsign = headsign.split(' to ')[0]
-                    if ' To ' in headsign:
+                    elif ' To ' in headsign:
                         headsign = headsign.split(' To ')[0]
-                    if ' via ' in headsign:
+                    elif ' via ' in headsign:
                         headsign = headsign.split(' via ')[0]
-                    if ' Via ' in headsign:
+                    elif ' Via ' in headsign:
                         headsign = headsign.split(' Via ')[0]
                     headsigns[i] = headsign.strip(' ')
                 prefix = commonprefix(headsigns).strip(' ')

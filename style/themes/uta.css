@@ -310,7 +310,11 @@ table.striped tr:nth-child(2n-1) {
     border-color: #989898;
 }
 
-.service-indicator .dates .date {
+.service-indicator .dates .date.limited {
+    background-color: #FFA560;
+}
+
+.service-indicator .dates .date.not-running {
     background-color: #FF7F7F;
 }
 

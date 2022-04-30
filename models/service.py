@@ -83,6 +83,34 @@ class ServiceSchedule:
         return self.binary_string > other.binary_string
     
     @property
+    def mon_status(self):
+        return self.get_status(self.mon, 0)
+    
+    @property
+    def tue_status(self):
+        return self.get_status(self.tue, 1)
+    
+    @property
+    def wed_status(self):
+        return self.get_status(self.wed, 2)
+    
+    @property
+    def thu_status(self):
+        return self.get_status(self.thu, 3)
+    
+    @property
+    def fri_status(self):
+        return self.get_status(self.fri, 4)
+    
+    @property
+    def sat_status(self):
+        return self.get_status(self.sat, 5)
+    
+    @property
+    def sun_status(self):
+        return self.get_status(self.sun, 6)
+    
+    @property
     def included_dates_string(self):
         return formatting.flatten(self.included_dates)
     
@@ -96,6 +124,17 @@ class ServiceSchedule:
         if date in self.excluded_dates:
             return False
         return date.weekday() in self.indices
+    
+    def get_status(self, active, weekday):
+        included_count = len([d for d in self.included_dates if d.weekday() == weekday])
+        excluded_count = len([d for d in self.excluded_dates if d.weekday() == weekday])
+        if active or included_count > 3:
+            if excluded_count > 3:
+                return 'limited'
+            return 'running'
+        if included_count > 0:
+            return 'limited'
+        return 'not-running'
 
 class Service:
     __slots__ = ('system', 'id', 'start_date', 'end_date', 'schedule')

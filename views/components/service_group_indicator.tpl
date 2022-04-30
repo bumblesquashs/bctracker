@@ -5,13 +5,13 @@
     % schedule = service_group.schedule
     % if get('compact', False):
         <div class="dates compact">
-            <span class="date {{ 'running' if schedule.mon else '' }}">M</span>
-            <span class="date {{ 'running' if schedule.tue else '' }}">T</span>
-            <span class="date {{ 'running' if schedule.wed else '' }}">W</span>
-            <span class="date {{ 'running' if schedule.thu else '' }}">T</span>
-            <span class="date {{ 'running' if schedule.fri else '' }}">F</span>
-            <span class="date {{ 'running' if schedule.sat else '' }}">S</span>
-            <span class="date {{ 'running' if schedule.sun else '' }}">S</span>
+            <span class="date {{ schedule.mon_status }}">M</span>
+            <span class="date {{ schedule.tue_status }}">T</span>
+            <span class="date {{ schedule.wed_status }}">W</span>
+            <span class="date {{ schedule.thu_status }}">T</span>
+            <span class="date {{ schedule.fri_status }}">F</span>
+            <span class="date {{ schedule.sat_status }}">S</span>
+            <span class="date {{ schedule.sun_status }}">S</span>
         </div>
     % else:
         % if schedule.special:
@@ -22,13 +22,13 @@
         % else:
             <div class="title">{{ service_group.date_string }}</div>
             <div class="dates">
-                <span class="date {{ 'running' if schedule.mon else '' }}">Mon</span>
-                <span class="date {{ 'running' if schedule.tue else '' }}">Tue</span>
-                <span class="date {{ 'running' if schedule.wed else '' }}">Wed</span>
-                <span class="date {{ 'running' if schedule.thu else '' }}">Thu</span>
-                <span class="date {{ 'running' if schedule.fri else '' }}">Fri</span>
-                <span class="date {{ 'running' if schedule.sat else '' }}">Sat</span>
-                <span class="date {{ 'running' if schedule.sun else '' }}">Sun</span>
+                <span class="date {{ schedule.mon_status }}">Mon</span>
+                <span class="date {{ schedule.tue_status }}">Tue</span>
+                <span class="date {{ schedule.wed_status }}">Wed</span>
+                <span class="date {{ schedule.thu_status }}">Thu</span>
+                <span class="date {{ schedule.fri_status }}">Fri</span>
+                <span class="date {{ schedule.sat_status }}">Sat</span>
+                <span class="date {{ schedule.sun_status }}">Sun</span>
             </div>
             % if len(schedule.included_dates) > 0:
                 <div class="details">Special Service: {{ schedule.included_dates_string }}</div>
