@@ -1,7 +1,7 @@
 import os
 import sys
 import signal
-from datetime import datetime
+from datetime import datetime, timedelta
 from crontab import CronTab
 
 from models.system import get_systems
@@ -22,7 +22,7 @@ def start():
         cron.remove_all(comment=CRON_ID)
         
         gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=CRON_ID)
-        gtfs_job.setall('0 7 * * 1')
+        gtfs_job.setall('0 5 * * */1')
         
         realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=CRON_ID)
         realtime_job.minute.every(1)
@@ -35,11 +35,17 @@ def stop():
         cron.remove_all(comment=CRON_ID)
 
 def handle_gtfs(sig, frame):
-    weekday = datetime.today().weekday()
+    hour = datetime.now().hour
+    today = datetime.today()
+    date = (today if hour >= 4 else today - timedelta(days=1)).date()
     for system in get_systems():
         try:
-            if weekday == 0 or not gtfs.validate(system):
+            if date.weekday() == 0 or not gtfs.validate(system):
                 gtfs.update(system)
+            else:
+                new_services = [s for s in system.get_services() if s.start_date == date]
+                if len(new_services) > 0:
+                    gtfs.load(system)
         except Exception as e:
             print(f'Error: Failed to update gtfs for {system}')
             print(f'Error message: {e}')
@@ -47,14 +53,13 @@ def handle_gtfs(sig, frame):
 def handle_realtime(sig, frame):
     for system in get_systems():
         try:
-            realtime.reset_positions(system)
             realtime.update(system)
-            if not realtime.validate(system):
-                system.realtime_validation_error_count += 1
-                if system.realtime_validation_error_count <= 10 and system.realtime_validation_error_count % 2 == 0:
-                    gtfs.update(system)
+            if realtime.validate(system):
+                system.validation_errors = 0
             else:
-                system.realtime_validation_error_count = 0
+                system.validation_errors += 1
+                if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
+                    gtfs.update(system)
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')

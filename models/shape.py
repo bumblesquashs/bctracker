@@ -1,5 +1,7 @@
 
 class Shape:
+    __slots__ = ('system', 'id', 'points')
+    
     def __init__(self, system, shape_id):
         self.system = system
         self.id = shape_id
@@ -9,6 +11,8 @@ class Shape:
         self.points.append(ShapePoint(lat, lon, sequence))
 
 class ShapePoint:
+    __slots__ = ('lat', 'lon', 'sequence')
+    
     def __init__(self, lat, lon, sequence):
         self.lat = lat
         self.lon = lon

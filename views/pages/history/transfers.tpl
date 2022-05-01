@@ -1,6 +1,7 @@
+
 % import formatting
 
-% rebase('base', title='Vehicle History')
+% rebase('base', title='Vehicle History', show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Vehicle History</h1>
@@ -9,8 +10,8 @@
         <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
+    <hr />
 </div>
-<hr />
 
 % if system is not None and not system.realtime_enabled:
     <p>
@@ -51,10 +52,8 @@
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ order }}
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ order }}</span>
                         % end
                     </td>
                     <td class="desktop-only">

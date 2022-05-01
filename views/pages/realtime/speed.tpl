@@ -1,5 +1,5 @@
 
-% rebase('base', title='Realtime')
+% rebase('base', title='Realtime', show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Realtime</h1>
@@ -12,10 +12,10 @@
         <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
+    <hr />
 </div>
-<hr />
 
-% if len(buses) == 0:
+% if len(positions) == 0:
     <div>
         % if system is not None and not system.realtime_enabled:
             <p>
@@ -60,23 +60,19 @@
         </thead>
         <tbody>
             % last_speed = None
-            % for bus in sorted(buses, key=lambda b: b.position.speed, reverse=True):
-                % position = bus.position
+            % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
+                % bus = position.bus
+                % order = bus.order
                 % same_speed = last_speed is None or position.speed // 10 == last_speed
                 % last_speed = position.speed // 10
-                % order = bus.order
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
-                        % if bus.is_unknown:
+                        % if order is None:
                             {{ bus }}
                         % else:
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % end
-                        % if order is not None:
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ order }}
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ order }}</span>
                         % end
                     </td>
                     <td class="desktop-only">
@@ -91,10 +87,8 @@
                     % if position.trip is None:
                         <td>
                             <span class="lighter-text">Not in service</span>
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ position.speed }} km/h
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
                         </td>
                         <td class="desktop-only"></td>
                         <td class="desktop-only"></td>
@@ -105,10 +99,8 @@
                         % stop = position.stop
                         <td>
                             {{ trip }}
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ position.speed }} km/h
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
                         </td>
                         <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                         <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>

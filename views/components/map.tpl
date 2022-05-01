@@ -161,57 +161,57 @@
     </script>
 % end
 
-% map_buses = get('map_buses', [map_bus] if defined('map_bus') and map_bus is not None else [])
-% if len(map_buses) > 0:
+% map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
+% if len(map_positions) > 0:
     <script>
-        const buses = JSON.parse('{{! json.dumps([b.json_data for b in map_buses]) }}');
+        const positions = JSON.parse('{{! json.dumps([p.json_data for p in map_positions]) }}');
         
-        for (const bus of buses) {
+        for (const position of positions) {
             const adherenceElement = document.createElement("span")
-            if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
-                const adherence = bus.schedule_adherence
+            if (position.schedule_adherence !== null && position.schedule_adherence !== undefined) {
+                const adherence = position.schedule_adherence
                 adherenceElement.classList.add("adherence-indicator")
                 adherenceElement.classList.add(adherence.status_class)
                 adherenceElement.innerHTML = adherence.value
             }
             const element = document.createElement("div");
             element.className = "marker";
-            if (bus.number < 0) {
+            if (position.bus_number < 0) {
                 const icon = document.createElement("div");
                 icon.className = "icon";
-                icon.style.backgroundColor = "#" + bus.colour;
+                icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<img src='/img/white/bus.png' />";
                 
                 const details = document.createElement("div");
                 details.className = "details";
                 details.innerHTML = "\
                     <div class='title'>Unknown Bus</div>\
-                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>"
+                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>"
                 
                 element.appendChild(icon);
                 element.appendChild(details);
             } else {
                 const icon = document.createElement("a");
                 icon.className = "icon";
-                icon.href = "/bus/" + bus.number;
-                icon.style.backgroundColor = "#" + bus.colour;
+                icon.href = "/bus/" + position.bus_number;
+                icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
                 
                 const details = document.createElement("div");
                 details.className = "details";
                 details.innerHTML = "\
-                    <div class='title'>" + bus.number + "</div>\
-                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>";
+                    <div class='title'>" + position.bus_number + "</div>\
+                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
                 
                 element.appendChild(icon);
                 element.appendChild(details);
             }
             
-            new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map);
+            new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map);
             
             if ("{{ get('zoom_buses', True) }}" === "True") {
-                lats.push(bus.lat);
-                lons.push(bus.lon);
+                lats.push(position.lat);
+                lons.push(position.lon);
             }
         }
     </script>
@@ -219,6 +219,7 @@
 
 <script>
     map.on("load", function() {
+        map.resize();
         if (lons.length === 1 && lats.length === 1) {
             map.jumpTo({
                 center: [lons[0], lats[0]],

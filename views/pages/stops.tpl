@@ -1,3 +1,4 @@
+
 % rebase('base', title='Stops')
 
 <div class="page-header">
@@ -5,8 +6,8 @@
     % if search is not None:
         <h2 class="subtitle">Search results for "{{ search }}"</h2>
     % end
+    <hr />
 </div>
-<hr />
 
 % if system is None:
     <p>
@@ -15,7 +16,7 @@
     </p>
     % include('components/systems')
 % else:
-    % stops = system.get_stops(sheet)
+    % stops = system.get_stops()
     
     % if search is not None:
         % stops = [s for s in stops if search.lower() in s.name.lower()]
@@ -34,9 +35,10 @@
     
     <form onsubmit="stopSearch()" action="javascript:void(0)">
         <label for="stop_id_search">Stop Name:</label>
-        <br />
-        <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}">
-        <input type="submit" value="Search" class="button">
+        <div class="input-container">
+            <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}" size="10">
+            <input type="submit" value="Search" class="button">
+        </div>
     </form>
     
     % if len(stops) == 0:
@@ -57,7 +59,7 @@
                     <tr>
                         <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                         <td>{{ stop }}</td>
-                        <td>{{ stop.get_routes_string(sheet) }}</td>
+                        <td>{{ stop.get_routes_string() }}</td>
                     </tr>
                 % end
             </tbody>

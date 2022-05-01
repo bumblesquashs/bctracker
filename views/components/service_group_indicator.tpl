@@ -1,5 +1,8 @@
+
+% import formatting
+
 <div class="service-indicator">
-    % schedule = service.schedule
+    % schedule = service_group.schedule
     % if get('compact', False):
         <div class="dates compact">
             <span class="date {{ schedule.mon_status }}">M</span>
@@ -17,7 +20,7 @@
                 <div class="details">{{ schedule.included_dates_string }}</div>
             % end
         % else:
-            <div class="title">{{ service }}</div>
+            <div class="title">{{ service_group.date_string }}</div>
             <div class="dates">
                 <span class="date {{ schedule.mon_status }}">Mon</span>
                 <span class="date {{ schedule.tue_status }}">Tue</span>

@@ -1,3 +1,4 @@
+
 from os import path, rename
 from datetime import datetime, timedelta
 from zipfile import ZipFile
@@ -9,8 +10,9 @@ import csv
 from models.block import Block
 from models.departure import Departure
 from models.route import Route
-from models.service import Service, Sheet
+from models.service import Service
 from models.shape import Shape
+from models.sheet import create_sheets
 from models.stop import Stop
 from models.trip import Trip
 
@@ -92,9 +94,11 @@ def load_services(system):
         
         date = formatting.csv(row['date'])
         if exception_type == 1:
-            service.add_included_date(date)
+            service.include(date)
         if exception_type == 2:
-            service.add_excluded_date(date)
+            service.exclude(date)
+    sheets = create_sheets(system.get_services())
+    system.sheets = {service.id:sheet for sheet in sheets for service in sheet.services}
 
 def load_shapes(system):
     system.shapes = {}
@@ -130,7 +134,9 @@ def load_trips(system):
         route = trip.route
         block = trip.block
         
-        if service is None or service.sheet != Sheet.CURRENT or route is None:
+        if service is None or route is None:
+            continue
+        if not system.get_sheet(service).is_current:
             continue
         
         route.add_trip(trip)
@@ -144,7 +150,7 @@ def load_trips(system):
 
 def read_csv(system, name):
     rows = []
-    with open(f'./data/gtfs/{system.id}/{name}.txt', 'r') as file:
+    with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
@@ -154,11 +160,10 @@ def read_csv(system, name):
 def validate(system):
     if not system.gtfs_enabled:
         return True
-    end_date = None
-    for service in system.get_services(None):
-        date = service.end_date.date()
-        if end_date is None or date > end_date:
-            end_date = date
-    if end_date is None:
-        return False
-    return datetime.now().date() < end_date - timedelta(days=7)
+    end_dates = [s.end_date for s in system.get_services()]
+    if len(end_dates) == 0:
+        return True
+    hour = datetime.now().hour
+    today = datetime.today()
+    date = (today if hour >= 4 else today - timedelta(days=1)).date()
+    return date < max(end_dates) - timedelta(days=7)

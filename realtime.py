@@ -13,7 +13,7 @@ positions = {}
 last_updated = datetime.now()
 
 def update(system):
-    global last_updated
+    global last_updated, positions
     if not system.realtime_enabled:
         return
     print(f'Updating realtime data for {system}...')
@@ -26,6 +26,7 @@ def update(system):
             rename(data_path, archives_path)
         wget.download(system.realtime_url, data_path)
         
+        positions = {k:v for (k, v) in positions.items() if v.system != system}
         update_positions(system)
         
         print('\nDone!')
@@ -44,41 +45,47 @@ def update_positions(system):
     for index, entity in enumerate(data.entity):
         vehicle = entity.vehicle
         try:
-            bus_number = int(vehicle.vehicle.id)
+            vehicle_id = vehicle.vehicle.id
+            if len(vehicle_id) > 4:
+                vehicle_id = vehicle_id[-4:]
+            bus_number = int(vehicle_id)
         except:
             bus_number = -(index + 1)
-        position = Position(system, True, Bus(bus_number))
+        if bus_number >= 9990:
+            continue
         try:
-            if vehicle.trip.schedule_relationship == 0 and vehicle.trip.trip_id != '':
-                position.trip_id = vehicle.trip.trip_id
-        except AttributeError: pass
+            trip_id = vehicle.trip.trip_id
+            if trip_id == '':
+                trip_id = None
+        except AttributeError:
+            trip_id = None
         try:
-            if vehicle.stop_id != '':
-                position.stop_id = vehicle.stop_id
-        except AttributeError: pass
+            stop_id = vehicle.stop_id
+            if stop_id =='':
+                stop_id = None
+        except AttributeError:
+            stop_id = None
         try:
-            position.lat = vehicle.position.latitude
-            position.lon = vehicle.position.longitude
-            position.speed = int(vehicle.position.speed * 3.6)
-        except AttributeError: pass
-        positions[bus_number] = position
-        position.calculate_schedule_adherence()
+            lat = vehicle.position.latitude
+            lon = vehicle.position.longitude
+        except AttributeError:
+            lat = None
+            lon = None
+        try:
+            speed = int(vehicle.position.speed * 3.6)
+        except AttributeError:
+            speed = None
+        positions[bus_number] = Position(system, Bus(bus_number), trip_id, stop_id, lat, lon, speed)
 
-def reset_positions(system):
-    global positions
-    positions = {k:v for (k, v) in positions.items() if v.system != system}
-    system.positions = {}
+def get_position(bus_number):
+    if bus_number in positions:
+        return positions[bus_number]
+    return None
 
-def get_position(bus):
-    if bus.number in positions:
-        return positions[bus.number]
-    return Position(None, False, bus)
-
-def get_positions():
-    return positions.values()
-
-def active_buses():
-    return [p.bus for p in positions.values()]
+def get_positions(system_id=None):
+    if system_id is None:
+        return sorted(positions.values())
+    return sorted([p for p in positions.values() if p.system.id == system_id])
 
 def last_updated_string():
     now = datetime.now().date()
@@ -91,14 +98,17 @@ def last_updated_string():
 def validate(system):
     if not system.realtime_enabled:
         return True
-    count = 0
     for position in [p for p in positions.values() if p.system == system]:
-        if count == 10:
-            return True
-        if position.trip_id is None:
+        trip_id = position.trip_id
+        if trip_id is None:
             continue
-        trip = position.trip
-        if trip is None or not trip.service.is_today:
-            return False
-        count += 1
+        if position.trip is None:
+            trip_id_sections = trip_id.split(':')
+            if len(trip_id_sections) == 3:
+                trip_block_section = trip_id_sections[2]
+                other_trip_block_sections = {t.id.split(':')[2] for t in system.get_trips() if len(t.id.split(':')) == 3}
+                if trip_block_section not in other_trip_block_sections:
+                    return False
+            else:
+                return False
     return True

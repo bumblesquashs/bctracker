@@ -2,19 +2,26 @@
 from math import sqrt
 
 from models.search_result import SearchResult
-from models.service import Sheet
-from models.time import get_current_minutes
+from models.service import create_service_group
+from models.sheet import create_sheets
 
 class Stop:
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_services', '_service_group', '_sheets')
+    
     def __init__(self, system, row):
         self.system = system
         self.id = row['stop_id']
-        self.number = row['stop_code']
+        if 'stop_code' in row:
+            self.number = row['stop_code']
+        else:
+            self.number = self.id
         self.name = row['stop_name']
         self.lat = float(row['stop_lat'])
         self.lon = float(row['stop_lon'])
         
         self.departures = []
+        self._services = None
+        self._service_group = None
         self._sheets = None
     
     def __str__(self):
@@ -32,60 +39,62 @@ class Stop:
         return self.name < other.name
     
     @property
+    def services(self):
+        if self._services is None:
+            self._services = sorted({d.trip.service for d in self.departures})
+        return self._services
+    
+    @property
+    def service_group(self):
+        if self._service_group is None:
+            self._service_group = create_service_group(self.services)
+        return self._service_group
+    
+    @property
     def sheets(self):
         if self._sheets is None:
-            self._sheets = {d.trip.service.sheet for d in self.departures}
+            self._sheets = create_sheets(self.services)
         return self._sheets
     
     @property
-    def default_sheet(self):
-        sheets = self.sheets
-        if Sheet.CURRENT in sheets:
-            return Sheet.CURRENT
-        if Sheet.NEXT in sheets:
-            return Sheet.NEXT
-        if Sheet.PREVIOUS in sheets:
-            return Sheet.PREVIOUS
-        return Sheet.UNKNOWN
+    def is_current(self):
+        for service in self.services:
+            if self.system.get_sheet(service).is_current:
+                return True
+        return False
+    
+    @property
+    def nearby_stops(self):
+        stops = self.system.get_stops()
+        return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
     
     @property
     def json_data(self):
-        routes = self.get_routes(self.default_sheet)
         return {
             'system_id': self.system.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.json_data for r in routes]
+            'routes': [r.json_data for r in self.get_routes()]
         }
     
     def add_departure(self, departure):
         self.departures.append(departure)
+        self._services = None
+        self._service_group = None
         self._sheets = None
     
-    def get_departures(self, sheet):
-        if sheet is None:
+    def get_departures(self, service_group=None):
+        if service_group is None:
             return self.departures
-        return [d for d in self.departures if d.trip.service.sheet == sheet]
+        return [d for d in self.departures if d.trip.service in service_group.services]
     
-    def get_services(self, sheet):
-        return sorted({d.trip.service for d in self.get_departures(sheet)})
+    def get_routes(self, service_group=None):
+        return sorted({d.trip.route for d in self.get_departures(service_group)})
     
-    def get_routes(self, sheet):
-        return sorted({d.trip.route for d in self.get_departures(sheet)})
-    
-    def get_routes_string(self, sheet):
-        return ', '.join([str(r.number) for r in self.get_routes(sheet)])
-    
-    def get_nearby_stops(self, sheet):
-        stops = self.system.get_stops(sheet)
-        return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
-    
-    def get_upcoming_departures(self, sheet):
-        departures = self.get_departures(sheet)
-        current_mins = get_current_minutes()
-        return [d for d in departures if d.trip.service.is_today and current_mins <= d.time.get_minutes() <= current_mins + 30]
+    def get_routes_string(self, service_group=None):
+        return ', '.join([r.number for r in self.get_routes(service_group)])
     
     def get_search_result(self, query):
         query = query.lower()

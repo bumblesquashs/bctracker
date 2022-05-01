@@ -9,37 +9,47 @@
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
+    <hr />
 </div>
-<hr />
 
-% if sheet is None or sheet in stop.sheets:
-    % services = stop.get_services(sheet)
-    % departures = stop.get_departures(sheet)
-    
-    % if len(services) > 1:
-        % include('components/service_navigation', services=services)
+% if len(stop.departures) == 0:
+    <p>There are currently no departures from this stop.</p>
+    <p>
+        There are a few reasons why that may be the case:
+        <ol>
+            <li>It may be an old stop that used to serve routes but is no longer used</li>
+            <li>It may be a new stop that will soon serve routes that haven't started yet</li>
+            <li>It may be used as an internal reference point in the GTFS that does not serve any routes</li>
+        </ol>
+        Please check again later!
+    </p>
+% else:
+    % sheets = stop.sheets
+
+    % if len(sheets) > 1 or (len(sheets) == 1 and len(sheets[0].service_groups) > 1):
+        % include('components/sheet_navigation', sheets=sheets)
     % end
-    
+
     <div class="container">
-        % for service in services:
-            % service_departures = [d for d in departures if d.trip.service == service]
-            
-            % if len(service_departures) > 0:
+        % for sheet in sheets:
+            % for service_group in sheet.service_groups:
+                % departures = stop.get_departures(service_group)
+                
                 <div class="section">
-                    <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>
-                    <div class="subtitle">{{ service.date_string }}</div>
+                    <h2 class="title" id="{{ hash(service_group) }}">{{ service_group.schedule }}</h2>
+                    <div class="subtitle">{{ service_group.date_string }}</div>
                     <table class="striped">
                         <thead>
                             <tr>
                                 <th>Time</th>
-                                <th>Headsign</th>
+                                <th class="non-mobile">Headsign</th>
                                 <th class="non-mobile">Block</th>
                                 <th>Trip</th>
                             </tr>
                         </thead>
                         <tbody>
                             % last_hour = -1
-                            % for departure in service_departures:
+                            % for departure in departures:
                                 % trip = departure.trip
                                 % block = trip.block
                                 % this_hour = departure.time.hour
@@ -48,7 +58,7 @@
                                 % end
                                 <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                     <td>{{ departure.time }}</td>
-                                    <td>
+                                    <td class="non-mobile">
                                         {{ trip }}
                                         % if departure == trip.last_departure:
                                             <br />
@@ -56,7 +66,15 @@
                                         % end
                                     </td>
                                     <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                    <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                                    <td>
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                        <br />
+                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                        % if departure == trip.last_departure:
+                                            <br />
+                                            <span class="mobile-only smaller-font">Unloading only</span>
+                                        % end
+                                    </td>
                                 </tr>
                                 % last_hour = this_hour
                             % end
@@ -68,8 +86,4 @@
     </div>
 
     % include('components/top_button')
-% else:
-    <p>
-        This stop is not included in the {{ sheet.value }} sheet.
-    </p>
 % end
