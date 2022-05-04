@@ -9,6 +9,9 @@ from models.model import load_models
 from models.order import load_orders, search_buses
 from models.system import load_systems, get_system, get_systems
 
+import queries.records
+import queries.transfers
+
 import database
 import gtfs
 import realtime
@@ -213,7 +216,7 @@ def bus_overview_page(bus_number, system_id=None):
     if bus.order is None:
         return error_page('bus', system_id, bus_number=bus_number)
     position = realtime.get_position(bus_number)
-    records = history.get_records(bus_number=bus_number, limit=20)
+    records = queries.records.find_all(bus_number=bus_number, limit=20)
     return page('bus/overview', system_id, bus=bus, position=position, records=records)
 
 @app.get([
@@ -239,7 +242,7 @@ def bus_history_page(bus_number, system_id=None):
     bus = Bus(bus_number)
     if bus.order is None:
         return error_page('bus', system_id, bus_number=bus_number)
-    records = history.get_records(bus_number=bus_number)
+    records = queries.records.find_all(bus_number=bus_number)
     return page('bus/history', system_id, bus=bus, records=records)
 
 @app.get([
@@ -249,7 +252,7 @@ def bus_history_page(bus_number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    records = history.get_last_seen(system_id)
+    records = queries.records.find_last_seen(system_id)
     return page('history/last_seen', system_id, records=records, path='history')
 
 @app.get([
@@ -259,7 +262,7 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    records = history.get_first_seen(system_id)
+    records = queries.records.find_first_seen(system_id)
     return page('history/first_seen', system_id, records=records, path='history/first-seen')
 
 @app.get([
@@ -269,7 +272,7 @@ def history_first_seen_page(system_id=None):
     '/<system_id>/history/transfers/'
 ])
 def history_transfers_page(system_id=None):
-    transfers = history.get_transfers(system_id)
+    transfers = queries.transfers.find_all(system_id)
     return page('history/transfers', system_id, transfers=transfers, path='history/transfers')
 
 @app.get([
@@ -305,8 +308,8 @@ def route_overview_page(route_number, system_id=None):
         return error_page('route', system_id, route_number=route_number)
     positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
     trips = [t for t in route.trips if t.service.is_today]
-    recorded_today = history.recorded_today(system_id, trips)
-    scheduled_today = history.scheduled_today(system_id, trips)
+    recorded_today = queries.records.find_recorded_today(system_id, trips)
+    scheduled_today = queries.records.find_scheduled_today(system_id, trips)
     return page('route/overview', system_id, route=route, positions=positions, trips=trips, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
 @app.get([
@@ -394,7 +397,7 @@ def block_history_page(block_id, system_id=None):
     block = system.get_block(block_id)
     if block is None:
         return error_page('block', system_id, block_id=block_id)
-    records = history.get_records(system_id=system_id, block_id=block_id)
+    records = queries.records.find_all(system_id=system_id, block_id=block_id)
     return page('block/history', system_id, block=block, records=records)
 
 @app.get([
@@ -442,7 +445,7 @@ def trip_history_page(trip_id, system_id=None):
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('trip', system_id, trip_id=trip_id)
-    records = history.get_trip_records(trip)
+    records = queries.records.find_all(system_id=system_id, trip_id=trip_id)
     return page('trip/history', system_id, trip=trip, records=records)
 
 @app.get([
@@ -474,8 +477,8 @@ def stop_overview_page(stop_number, system_id=None):
     departures = [d for d in stop.departures if d.trip.service.is_today]
     trips = [d.trip for d in departures]
     positions = {p.trip.id:p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips}
-    recorded_today = history.recorded_today(system_id, trips)
-    scheduled_today = history.scheduled_today(system_id, trips)
+    recorded_today = queries.records.find_recorded_today(system_id, trips)
+    scheduled_today = queries.records.find_scheduled_today(system_id, trips)
     return page('stop/overview', system_id, stop=stop, departures=departures, positions=positions, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
 @app.get([
@@ -568,7 +571,7 @@ def api_search(system_id=None):
     results = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            results += search_buses(query, history.recorded_buses(system_id))
+            results += search_buses(query, queries.records.find_recorded_buses(system_id))
         if system is not None:
             results += system.search_routes(query)
             results += system.search_stops(query)

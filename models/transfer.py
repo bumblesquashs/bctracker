@@ -5,19 +5,20 @@ from models.system import get_system
 import formatting
 
 class Transfer:
-    __slots__ = ('id', 'bus', 'date', 'old_system_id', 'new_system_id')
+    __slots__ = ('id', 'bus', 'date', 'old_system', 'new_system')
     
-    def __init__(self, row, prefix='transfer'):
-        self.id = row[f'{prefix}_id']
-        self.bus = Bus(row[f'{prefix}_bus_number'])
-        self.date = formatting.database(row[f'{prefix}_date'])
-        self.old_system_id = row[f'{prefix}_old_system_id']
-        self.new_system_id = row[f'{prefix}_new_system_id']
+    @classmethod
+    def from_db(cls, row, prefix='transfer'):
+        id = row[f'{prefix}_id']
+        bus = Bus(row[f'{prefix}_bus_number'])
+        date = formatting.database(row[f'{prefix}_date'])
+        old_system = get_system(row[f'{prefix}_old_system_id'])
+        new_system = get_system(row[f'{prefix}_new_system_id'])
+        return cls(id, bus, date, old_system, new_system)
     
-    @property
-    def old_system(self):
-        return get_system(self.old_system_id)
-    
-    @property
-    def new_system(self):
-        return get_system(self.new_system_id)
+    def __init__(self, id, bus, date, old_system, new_system):
+        self.id = id
+        self.bus = bus
+        self.date = date
+        self.old_system = old_system
+        self.new_system = new_system
