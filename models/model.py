@@ -8,6 +8,9 @@ class BusModelType(Enum):
     conventional = "Conventional"
     decker = "Double Decker"
     shuttle = "Shuttle"
+    
+    def __str__(self):
+        return self.value
 
 class BusModel:
     __slots__ = ('id', 'manufacturer', 'name', 'length', 'fuel', 'type')

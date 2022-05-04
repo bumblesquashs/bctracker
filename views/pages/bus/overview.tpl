@@ -94,7 +94,7 @@
             % model = bus.model
             <div class="section">
                 <div class="name">Vehicle Type</div>
-                <div class="value">{{ model.type.value }}</div>
+                <div class="value">{{ model.type }}</div>
             </div>
             <div class="section">
                 <div class="name">Length</div>

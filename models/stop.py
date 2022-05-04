@@ -11,10 +11,7 @@ class Stop:
     def __init__(self, system, row):
         self.system = system
         self.id = row['stop_id']
-        if 'stop_code' in row:
-            self.number = row['stop_code']
-        else:
-            self.number = self.id
+        self.number = row['stop_code']
         self.name = row['stop_name']
         self.lat = float(row['stop_lat'])
         self.lon = float(row['stop_lon'])

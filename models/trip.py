@@ -11,6 +11,9 @@ class Direction(Enum):
     EASTBOUND = 'Eastbound'
     UNKNOWN = 'Unknown'
     
+    def __str__(self):
+        return self.value
+    
     def __hash__(self):
         return hash(self.value)
     
@@ -29,10 +32,7 @@ class Trip:
         self.route_id = row['route_id']
         self.service_id = row['service_id']
         self.block_id = row['block_id']
-        if 'direction_id' in row:
-            self.direction_id = int(row['direction_id'])
-        else:
-            self.direction_id = 0
+        self.direction_id = int(row['direction_id'])
         self.shape_id = row['shape_id']
         self.headsign = row['trip_headsign']
         
@@ -96,11 +96,12 @@ class Trip:
     @property
     def direction(self):
         if self._direction is None:
-            first_stop = self.first_departure.stop
-            last_stop = self.last_departure.stop
-            lat_diff = first_stop.lat - last_stop.lat
-            lon_diff = first_stop.lon - last_stop.lon
-            if lat_diff == 0 and lon_diff == 0:
+            points = self.points
+            first_point = points[0]
+            last_point = points[-1]
+            lat_diff = first_point.lat - last_point.lat
+            lon_diff = first_point.lon - last_point.lon
+            if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
                 self._direction = Direction.CIRCULAR
             elif abs(lat_diff) > abs(lon_diff):
                 self._direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND

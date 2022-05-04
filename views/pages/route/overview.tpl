@@ -111,7 +111,7 @@
                     % if len(direction_trips) > 0:
                         <div class="section">
                             % if len(directions) > 1:
-                                <h3>{{ direction.value }}</h3>
+                                <h3>{{ direction }}</h3>
                             % end
                             
                             % if system is None or system.realtime_enabled:

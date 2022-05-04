@@ -42,7 +42,7 @@
                             % direction_trips = [t for t in service_group_trips if t.direction == direction]
                             <div class="section">
                                 % if len(directions) > 1:
-                                    <h3>{{ direction.value }}</h3>
+                                    <h3>{{ direction }}</h3>
                                 % end
                                 <table class="striped">
                                     <thead>

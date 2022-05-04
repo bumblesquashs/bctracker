@@ -190,9 +190,9 @@
                                         <td class="non-mobile">
                                             {{ trip }}
                                             <br />
-                                            <span class="non-desktop smaller-font">{{ trip.direction.value }}</span>
+                                            <span class="non-desktop smaller-font">{{ trip.direction }}</span>
                                         </td>
-                                        <td class="desktop-only">{{ trip.direction.value }}</td>
+                                        <td class="desktop-only">{{ trip.direction }}</td>
                                         <td>
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                                             <br />

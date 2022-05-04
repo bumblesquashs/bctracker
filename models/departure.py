@@ -2,20 +2,20 @@
 from models.time import Time
 
 class Departure:
-    __slots__ = ('system', 'stop_id', 'trip_id', 'sequence', 'time')
+    __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time')
     
     def __init__(self, system, row):
         self.system = system
-        self.stop_id = row['stop_id']
         self.trip_id = row['trip_id']
         self.sequence = int(row['stop_sequence'])
+        self.stop_id = row['stop_id']
         self.time = Time.parse(row['departure_time'])
     
     def __eq__(self, other):
-        return self.stop_id == other.stop_id and self.trip_id == other.trip_id and self.sequence == other.sequence
+        return self.trip_id == other.trip_id and self.sequence == other.sequence
     
     def __lt__(self, other):
-        if self.stop_id == other.stop_id and self.trip_id == other.trip_id:
+        if self.trip_id == other.trip_id:
             return self.sequence < other.sequence
         else:
             return self.time < other.time
