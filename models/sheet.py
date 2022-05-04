@@ -1,9 +1,6 @@
 
-from datetime import datetime, timedelta
-
+from models.date import Date
 from models.service import ServiceGroup, ServiceSchedule
-
-import formatting
 
 class Sheet:
     __slots__ = ('services', 'start_date', 'end_date', '_service_groups')
@@ -16,9 +13,7 @@ class Sheet:
         self._service_groups = None
     
     def __str__(self):
-        start = formatting.long(self.start_date)
-        end = formatting.long(self.end_date)
-        return f'{start} to {end}'
+        return f'{self.start_date} to {self.end_date}'
     
     def __hash__(self):
         return hash(str(self))
@@ -53,10 +48,8 @@ class Sheet:
     
     @property
     def is_current(self):
-        hour = datetime.now().hour
-        today = datetime.today()
-        date = (today if hour >= 4 else today - timedelta(days=1)).date()
-        return self.start_date <= date <= self.end_date
+        today = Date.today()
+        return self.start_date <= today <= self.end_date
     
     def add_service(self, service):
         self.services.append(service)

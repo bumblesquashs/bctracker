@@ -1,6 +1,4 @@
 
-% from datetime import datetime
-
 % rebase('base', title=str(route), include_maps=True, show_refresh_button=True)
 
 <div class="page-header">

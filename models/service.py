@@ -1,7 +1,7 @@
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-import formatting
+from models.date import Date, flatten
 
 class ServiceSchedule:
     __slots__ = ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'indices', 'binary_string', 'special', 'name', 'included_dates', 'excluded_dates')
@@ -112,22 +112,22 @@ class ServiceSchedule:
     
     @property
     def included_dates_string(self):
-        return formatting.flatten(self.included_dates)
+        return flatten(self.included_dates)
     
     @property
     def excluded_dates_string(self):
-        return formatting.flatten(self.excluded_dates)
+        return flatten(self.excluded_dates)
     
     def includes(self, date):
         if date in self.included_dates:
             return True
         if date in self.excluded_dates:
             return False
-        return date.weekday() in self.indices
+        return date.weekday in self.indices
     
     def get_status(self, active, weekday):
-        included_count = len([d for d in self.included_dates if d.weekday() == weekday])
-        excluded_count = len([d for d in self.excluded_dates if d.weekday() == weekday])
+        included_count = len([d for d in self.included_dates if d.weekday == weekday])
+        excluded_count = len([d for d in self.excluded_dates if d.weekday == weekday])
         if active or included_count > 3:
             if excluded_count > 3:
                 return 'limited'
@@ -142,8 +142,8 @@ class Service:
     def __init__(self, system, row):
         self.system = system
         self.id = row['service_id']
-        self.start_date = formatting.csv(row['start_date']).date()
-        self.end_date = formatting.csv(row['end_date']).date()
+        self.start_date = Date.parse_csv(row['start_date'])
+        self.end_date = Date.parse_csv(row['end_date'])
         
         mon = row['monday'] == '1'
         tue = row['tuesday'] == '1'
@@ -153,7 +153,7 @@ class Service:
         sat = row['saturday'] == '1'
         sun = row['sunday'] == '1'
         
-        delta = self.end_date - self.start_date
+        delta = self.end_date.datetime - self.start_date.datetime
         if mon and tue and wed and thu and fri and sat and sun and delta.days < 7:
             included_dates = [self.start_date + timedelta(days=i) for i in range(delta.days + 1)]
             self.schedule = ServiceSchedule(False, False, False, False, False, False, False, included_dates)
@@ -163,9 +163,7 @@ class Service:
     def __str__(self):
         if self.schedule.special:
             return self.schedule.included_dates_string
-        start = formatting.long(self.start_date)
-        end = formatting.long(self.end_date)
-        return f'{start} to {end}'
+        return f'{self.start_date} to {self.end_date}'
     
     def __hash__(self):
         return hash(self.id)
@@ -178,25 +176,21 @@ class Service:
     
     @property
     def is_current(self):
-        hour = datetime.now().hour
-        today = datetime.today()
-        date = (today if hour >= 4 else today - timedelta(days=1)).date()
-        return self.start_date <= date <= self.end_date
+        today = Date.today()
+        return self.start_date <= today <= self.end_date
     
     @property
     def is_today(self):
-        hour = datetime.now().hour
-        today = datetime.today()
-        date = (today if hour >= 4 else today - timedelta(days=1)).date()
-        if date < self.start_date or date > self.end_date:
+        today = Date.today()
+        if today < self.start_date or today > self.end_date:
             return False
-        return self.schedule.includes(date)
+        return self.schedule.includes(today)
     
     def include(self, date):
-        self.schedule.included_dates.add(date.date())
+        self.schedule.included_dates.add(date)
     
     def exclude(self, date):
-        self.schedule.excluded_dates.add(date.date())
+        self.schedule.excluded_dates.add(date)
 
 class ServiceGroup:
     __slots__ = ('services', 'start_date', 'end_date', 'schedule')
@@ -231,29 +225,23 @@ class ServiceGroup:
     def date_string(self):
         if self.schedule.special:
             return self.schedule.included_dates_string
-        start = formatting.long(self.start_date)
-        end = formatting.long(self.end_date)
-        return f'{start} to {end}'
+        return f'{self.start_date} to {self.end_date}'
     
     @property
     def is_current(self):
         if self.start_date is None or self.end_date is None:
             return False
-        hour = datetime.now().hour
-        today = datetime.today()
-        date = (today if hour >= 4 else today - timedelta(days=1)).date()
-        return self.start_date <= date <= self.end_date
+        today = Date.today()
+        return self.start_date <= today <= self.end_date
     
     @property
     def is_today(self):
         if self.start_date is None or self.end_date is None:
             return False
-        hour = datetime.now().hour
-        today = datetime.today()
-        date = (today if hour >= 4 else today - timedelta(days=1)).date()
-        if date < self.start_date or date > self.end_date:
+        today = Date.today()
+        if today < self.start_date or today > self.end_date:
             return False
-        return self.schedule.includes(date)
+        return self.schedule.includes(today)
 
 def create_service_group(services):
     indices = {i for s in services for i in s.schedule.indices}

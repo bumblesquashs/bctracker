@@ -1,6 +1,4 @@
 
-% import formatting
-
 % rebase('base', title='Vehicle History', show_refresh_button=True)
 
 <div class="page-header">
@@ -64,9 +62,9 @@
                             {{ order }}
                         % end
                     </td>
-                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                    <td class="desktop-only">{{ record.date.format_long() }}</td>
                     <td class="non-desktop no-wrap">
-                        {{ formatting.short(record.date) }}
+                        {{ record.date.format_short() }}
                         % if system is None:
                             <br />
                             <span class="mobile-only smaller-font">{{ record.system }}</span>

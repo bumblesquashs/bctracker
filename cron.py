@@ -1,10 +1,12 @@
 import os
 import sys
 import signal
-from datetime import datetime, timedelta
+from datetime import datetime
 from crontab import CronTab
 
+from models.date import Date
 from models.system import get_systems
+
 import gtfs
 import realtime
 import history
@@ -35,15 +37,13 @@ def stop():
         cron.remove_all(comment=CRON_ID)
 
 def handle_gtfs(sig, frame):
-    hour = datetime.now().hour
-    today = datetime.today()
-    date = (today if hour >= 4 else today - timedelta(days=1)).date()
+    today = Date.today()
     for system in get_systems():
         try:
-            if date.weekday() == 0 or not gtfs.validate(system):
+            if today.weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
             else:
-                new_services = [s for s in system.get_services() if s.start_date == date]
+                new_services = [s for s in system.get_services() if s.start_date == today]
                 if len(new_services) > 0:
                     gtfs.load(system)
         except Exception as e:

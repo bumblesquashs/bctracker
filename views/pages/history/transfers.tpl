@@ -1,6 +1,4 @@
 
-% import formatting
-
 % rebase('base', title='Vehicle History', show_refresh_button=True)
 
 <div class="page-header">
@@ -47,8 +45,8 @@
                 % same_date = last_date is None or transfer.date == last_date
                 % last_date = transfer.date
                 <tr class="{{'' if same_date else 'divider'}}">
-                    <td class="desktop-only">{{ formatting.long(transfer.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ formatting.short(transfer.date) }}</td>
+                    <td class="desktop-only">{{ transfer.date.format_long() }}</td>
+                    <td class="non-desktop no-wrap">{{ transfer.date.format_short() }}</td>
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:

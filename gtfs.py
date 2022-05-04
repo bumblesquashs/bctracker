@@ -8,6 +8,7 @@ import wget
 import csv
 
 from models.block import Block
+from models.date import Date
 from models.departure import Departure
 from models.route import Route
 from models.service import Service
@@ -15,8 +16,6 @@ from models.shape import Shape
 from models.sheet import create_sheets
 from models.stop import Stop
 from models.trip import Trip
-
-import formatting
 
 def update(system):
     if not system.gtfs_enabled:
@@ -92,7 +91,7 @@ def load_services(system):
         if service is None:
             continue
         
-        date = formatting.csv(row['date'])
+        date = Date.parse_csv(row['date'])
         if exception_type == 1:
             service.include(date)
         if exception_type == 2:
@@ -163,7 +162,5 @@ def validate(system):
     end_dates = [s.end_date for s in system.get_services()]
     if len(end_dates) == 0:
         return True
-    hour = datetime.now().hour
-    today = datetime.today()
-    date = (today if hour >= 4 else today - timedelta(days=1)).date()
-    return date < max(end_dates) - timedelta(days=7)
+    today = Date.today()
+    return today < max(end_dates) - timedelta(days=7)

@@ -1,6 +1,4 @@
 
-% import formatting
-
 <div class="service-indicator">
     % schedule = service_group.schedule
     % if get('compact', False):

@@ -1,23 +1,21 @@
 
-from datetime import datetime, timedelta
-
 from models.bus import Bus
+from models.date import Date
 from models.record import Record
 
 import database
-import formatting
 
 def create(bus, date, system, block, time, trip):
     record_id = database.insert('records', {
         'bus_number': bus.number,
-        'date': formatting.database(date),
+        'date': date.format_db(),
         'system_id': system.id,
         'block_id': block.id,
         'routes': block.get_routes_string(),
-        'start_time': block.get_start_time().full_string,
-        'end_time': block.get_end_time().full_string,
-        'first_seen': time.full_string,
-        'last_seen': time.full_string
+        'start_time': block.get_start_time().format_db(),
+        'end_time': block.get_end_time().format_db(),
+        'first_seen': time.format_db(),
+        'last_seen': time.format_db()
     })
     create_trip(record_id, trip)
 
@@ -30,7 +28,7 @@ def create_trip(record_id, trip):
 def update(record_id, time):
     database.update('records',
         values={
-            'last_seen': time.full_string
+            'last_seen': time.format_db()
         },
         filters={
             'record_id': record_id
@@ -138,9 +136,7 @@ def find_recorded_buses(system_id):
     return [row['bus_number'] for row in rows]
 
 def find_recorded_today(system_id, trips):
-    hour = datetime.now().hour
-    today = datetime.today()
-    date = today if hour >= 4 else today - timedelta(days=1)
+    today = Date.today()
     rows = database.select('trip_records',
         columns={
             'trip_records.trip_id': 'trip_id',
@@ -153,15 +149,13 @@ def find_recorded_today(system_id, trips):
         },
         filters={
             'records.system_id': system_id,
-            'records.date': formatting.database(date),
+            'records.date': today.format_db(),
             'trip_records.trip_id': [t.id for t in trips]
         })
     return {row['trip_id']: Bus(row['bus_number']) for row in rows}
 
 def find_scheduled_today(system_id, trips):
-    hour = datetime.now().hour
-    today = datetime.today()
-    date = today if hour >= 4 else today - timedelta(days=1)
+    today = Date.today()
     cte, args = database.build_select('records',
         columns={
             'records.bus_number': 'bus_number',
@@ -170,7 +164,7 @@ def find_scheduled_today(system_id, trips):
         },
         filters={
             'records.system_id': system_id,
-            'records.date': formatting.database(date),
+            'records.date': today.format_db(),
             'records.block_id': list({t.block_id for t in trips})
         })
     rows = database.select('numbered_records',

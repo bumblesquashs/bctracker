@@ -1,8 +1,7 @@
 
 from models.bus import Bus
+from models.date import Date
 from models.system import get_system
-
-import formatting
 
 class Transfer:
     __slots__ = ('id', 'bus', 'date', 'old_system', 'new_system')
@@ -11,7 +10,7 @@ class Transfer:
     def from_db(cls, row, prefix='transfer'):
         id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
-        date = formatting.database(row[f'{prefix}_date'])
+        date = Date.parse_db(row[f'{prefix}_date'])
         old_system = get_system(row[f'{prefix}_old_system_id'])
         new_system = get_system(row[f'{prefix}_new_system_id'])
         return cls(id, bus, date, old_system, new_system)

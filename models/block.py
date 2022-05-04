@@ -86,7 +86,7 @@ class Block:
         end_time = self.get_end_time(service_group)
         if start_time is None or end_time is None:
             return None
-        return start_time.get_difference(end_time)
+        return start_time.format_difference(end_time)
     
     def is_related(self, other):
         if self.id == other.id:

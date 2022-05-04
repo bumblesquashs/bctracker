@@ -2,12 +2,11 @@
 from models.transfer import Transfer
 
 import database
-import formatting
 
 def create(bus, date, old_system, new_system):
     database.insert('transfers', {
         'bus_number': bus.number,
-        'date': formatting.database(date),
+        'date': date.format_db(),
         'old_system_id': old_system.id,
         'new_system_id': new_system.id
     })

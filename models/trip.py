@@ -87,7 +87,7 @@ class Trip:
     
     @property
     def duration(self):
-        return self.start_time.get_difference(self.end_time)
+        return self.start_time.format_difference(self.end_time)
     
     @property
     def points(self):
