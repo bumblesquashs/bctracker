@@ -117,7 +117,7 @@ systems = {}
 
 def load_systems():
     rows = []
-    with open(f'./static_data/systems.csv', 'r') as file:
+    with open(f'./data/static/systems.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:

@@ -39,7 +39,7 @@ models = {}
 
 def load_models():
     rows = []
-    with open(f'./static_data/models.csv', 'r') as file:
+    with open(f'./data/static/models.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:

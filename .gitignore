@@ -1,6 +1,8 @@
 archives/
 backups/
-data/
+data/gtfs
+data/realtime
+data/bctracker.db
 logs/
 
 server.conf

@@ -46,7 +46,7 @@ orders = []
 def load_orders():
     global orders
     rows = []
-    with open(f'./static_data/orders.csv', 'r') as file:
+    with open(f'./data/static/orders.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
