@@ -5,11 +5,11 @@ from bottle import Bottle, static_file, template, request, response, debug
 import cherrypy as cp
 
 from models.bus import Bus
-from models.model import load_models
-from models.order import load_orders, search_buses
-from models.system import load_systems, get_system, get_systems
 
+import queries.models
+import queries.orders
 import queries.records
+import queries.systems
 import queries.transfers
 
 import database
@@ -39,11 +39,11 @@ def start(args):
     if args.reload:
         print('Forcing GTFS redownload')
     
-    load_models()
-    load_orders()
-    load_systems()
+    queries.models.load()
+    queries.orders.load()
+    queries.systems.load()
     
-    for system in get_systems():
+    for system in queries.systems.find_all():
         if not gtfs.downloaded(system) or args.reload:
             gtfs.update(system)
         else:
@@ -82,9 +82,9 @@ def get_url(system, path=''):
 def page(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
-        systems=[s for s in get_systems() if s.gtfs_enabled],
+        systems=[s for s in queries.systems.find_all() if s.gtfs_enabled],
         system_id=system_id,
-        system=get_system(system_id),
+        system=queries.systems.find(system_id),
         get_url=get_url,
         last_updated=realtime.last_updated_string(),
         theme=theme or request.get_cookie('theme'),
@@ -300,7 +300,7 @@ def routes_map_page(system_id=None):
     '/<system_id>/routes/<route_number>/'
 ])
 def route_overview_page(route_number, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'routes/{route_number}')
     route = system.get_route(number=route_number)
@@ -319,7 +319,7 @@ def route_overview_page(route_number, system_id=None):
     '/<system_id>/routes/<route_number>/map/'
 ])
 def route_map_page(route_number, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'routes/{route_number}/map')
     route = system.get_route(number=route_number)
@@ -335,7 +335,7 @@ def route_map_page(route_number, system_id=None):
     '/<system_id>/routes/<route_number>/schedule/'
 ])
 def route_schedule_page(route_number, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'routes/{route_number}/schedule')
     route = system.get_route(number=route_number)
@@ -359,7 +359,7 @@ def blocks_page(system_id=None):
     '/<system_id>/blocks/<block_id>/'
 ])
 def block_overview_page(block_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'blocks/{block_id}')
     block = system.get_block(block_id)
@@ -375,7 +375,7 @@ def block_overview_page(block_id, system_id=None):
     '/<system_id>/blocks/<block_id>/map/'
 ])
 def block_map_page(block_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'blocks/{block_id}/map')
     block = system.get_block(block_id)
@@ -391,7 +391,7 @@ def block_map_page(block_id, system_id=None):
     '/<system_id>/blocks/<block_id>/history/'
 ])
 def block_history_page(block_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'blocks/{block_id}/history')
     block = system.get_block(block_id)
@@ -407,7 +407,7 @@ def block_history_page(block_id, system_id=None):
     '/<system_id>/trips/<trip_id>/'
 ])
 def trip_overview_page(trip_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'trips/{trip_id}')
     trip = system.get_trip(trip_id)
@@ -423,7 +423,7 @@ def trip_overview_page(trip_id, system_id=None):
     '/<system_id>/trips/<trip_id>/map/'
 ])
 def trip_map_page(trip_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'trips/{trip_id}/map')
     trip = system.get_trip(trip_id)
@@ -439,7 +439,7 @@ def trip_map_page(trip_id, system_id=None):
     '/<system_id>/trips/<trip_id>/history/'
 ])
 def trip_history_page(trip_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'trips/{trip_id}/history')
     trip = system.get_trip(trip_id)
@@ -468,7 +468,7 @@ def stops_page(system_id=None):
     '/<system_id>/stops/<stop_number>/'
 ])
 def stop_overview_page(stop_number, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'stops/{stop_number}')
     stop = system.get_stop(number=stop_number)
@@ -488,7 +488,7 @@ def stop_overview_page(stop_number, system_id=None):
     '/<system_id>/stops/<stop_number>/map/'
 ])
 def stop_map_page(stop_number, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'stops/{stop_number}/map')
     stop = system.get_stop(number=stop_number)
@@ -503,7 +503,7 @@ def stop_map_page(stop_number, system_id=None):
     '/<system_id>/stops/<stop_number>/schedule/'
 ])
 def stop_schedule_page(stop_number, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return error_page('system', system_id, path=f'stops/{stop_number}/schedule')
     stop = system.get_stop(number=stop_number)
@@ -549,7 +549,7 @@ def system_api_map(system_id=None):
     '/<system_id>/api/shape/<shape_id>.json'
 ])
 def api_shape_id(shape_id, system_id=None):
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     if system is None:
         return {}
     shape = system.get_shape(shape_id)
@@ -567,11 +567,11 @@ def api_shape_id(shape_id, system_id=None):
 ])
 def api_search(system_id=None):
     query = request.forms.get('query', '')
-    system = get_system(system_id)
+    system = queries.systems.find(system_id)
     results = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            results += search_buses(query, queries.records.find_recorded_buses(system_id))
+            results += queries.orders.search_buses(query, queries.records.find_recorded_buses(system_id))
         if system is not None:
             results += system.search_routes(query)
             results += system.search_stops(query)

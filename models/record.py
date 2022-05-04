@@ -1,8 +1,9 @@
 
 from models.bus import Bus
 from models.date import Date
-from models.system import get_system
 from models.time import Time
+
+import queries.systems
 
 class Record:
     __slots__ = ('id', 'bus', 'date', 'system', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen')
@@ -12,7 +13,7 @@ class Record:
         record_id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         date = Date.parse_db(row[f'{prefix}_date'])
-        system = get_system(row[f'{prefix}_system_id'])
+        system = queries.systems.find(row[f'{prefix}_system_id'])
         block_id = row[f'{prefix}_block_id']
         routes = row[f'{prefix}_routes']
         start_time = Time.parse(row[f'{prefix}_start_time'])

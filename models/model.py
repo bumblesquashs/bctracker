@@ -1,8 +1,6 @@
 
 from enum import Enum
 
-import csv
-
 class BusModelType(Enum):
     artic = "Articulated"
     conventional = "Conventional"
@@ -15,13 +13,23 @@ class BusModelType(Enum):
 class BusModel:
     __slots__ = ('id', 'manufacturer', 'name', 'length', 'fuel', 'type')
     
-    def __init__(self, row):
-        self.id = row['model_id']
-        self.manufacturer = row['manufacturer']
-        self.name = row['name']
-        self.length = float(row['length'])
-        self.fuel = row['fuel']
-        self.type = BusModelType[row['type']]
+    @classmethod
+    def from_csv(cls, row):
+        id = row['model_id']
+        manufacturer = row['manufacturer']
+        name = row['name']
+        length = float(row['length'])
+        fuel = row['fuel']
+        type = BusModelType[row['type']]
+        return cls(id, manufacturer, name, length, fuel, type)
+    
+    def __init__(self, id, manufacturer, name, length, fuel, type):
+        self.id = id
+        self.manufacturer = manufacturer
+        self.name = name
+        self.length = length
+        self.fuel = fuel
+        self.type = type
     
     def __str__(self):
         return f'{self.manufacturer} {self.name}'
@@ -34,19 +42,3 @@ class BusModel:
     
     def __lt__(self, other):
         return str(self) < str(other)
-
-models = {}
-
-def load_models():
-    rows = []
-    with open(f'./data/static/models.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            rows.append(dict(zip(columns, row)))
-    for row in rows:
-        model = BusModel(row)
-        models[model.id] = model
-
-def get_model(model_id):
-    return models.get(model_id)

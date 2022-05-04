@@ -1,16 +1,24 @@
 
-import csv
-
 class System:
     __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'validation_errors', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
-    def __init__(self, row):
-        self.id = row['system_id']
-        self.name = row['name']
-        self.gtfs_enabled = row['gtfs_enabled'] == '1'
-        self.realtime_enabled = row['realtime_enabled'] == '1'
-        self.gtfs_url = row['gtfs_url']
-        self.realtime_url = row['realtime_url']
+    @classmethod
+    def from_csv(cls, row):
+        id = row['system_id']
+        name = row['name']
+        gtfs_enabled = row['gtfs_enabled'] == '1'
+        realtime_enabled = row['realtime_enabled'] == '1'
+        gtfs_url = row['gtfs_url']
+        realtime_url = row['realtime_url']
+        return cls(id, name, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url)
+    
+    def __init__(self, id, name, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url):
+        self.id = id
+        self.name = name
+        self.gtfs_enabled = gtfs_enabled
+        self.realtime_enabled = realtime_enabled
+        self.gtfs_url = gtfs_url
+        self.realtime_url = realtime_url
         
         self.validation_errors = 0
         
@@ -112,24 +120,3 @@ class System:
             route.trips.sort()
         for block in self.blocks.values():
             block.trips.sort()
-
-systems = {}
-
-def load_systems():
-    rows = []
-    with open(f'./data/static/systems.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            rows.append(dict(zip(columns, row)))
-    for row in rows:
-        system = System(row)
-        systems[system.id] = system
-
-def get_system(system_id):
-    if system_id is not None and system_id in systems:
-        return systems[system_id]
-    return None
-
-def get_systems():
-    return systems.values()

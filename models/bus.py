@@ -1,12 +1,12 @@
 
-from models.order import get_order
+import queries.orders
 
 class Bus:
     __slots__ = ('number', 'order')
     
     def __init__(self, bus_number):
         self.number = bus_number
-        self.order = get_order(bus_number)
+        self.order = queries.orders.find(bus_number)
     
     def __str__(self):
         if self.number < 0:

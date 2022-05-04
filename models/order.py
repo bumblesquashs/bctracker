@@ -1,17 +1,22 @@
 
-import csv
-
-from models.model import get_model
-from models.search_result import SearchResult
+import queries.models
 
 class Order:
-    __slots__ = ('low', 'high', 'year', 'model_id', 'size')
+    __slots__ = ('low', 'high', 'year', 'model', 'size')
     
-    def __init__(self, row):
-        self.low = int(row['low'])
-        self.high = int(row['high'])
-        self.year = int(row['year'])
-        self.model_id = row['model_id']
+    @classmethod
+    def from_csv(cls, row):
+        low = int(row['low'])
+        high = int(row['high'])
+        year = int(row['year'])
+        model = queries.models.find(row['model_id'])
+        return cls(low, high, year, model)
+    
+    def __init__(self, low, high, year, model):
+        self.low = low
+        self.high = high
+        self.year = year
+        self.model = model
         
         self.size = (self.high - self.low) + 1
     
@@ -22,17 +27,13 @@ class Order:
         return f'{self.year} {model}'
     
     def __hash__(self):
-        return hash(str(self))
+        return hash((self.low, self.high))
     
     def __eq__(self, other):
         return self.low == other.low and self.high == other.high
     
     def __lt__(self, other):
-        return str(self) < str(other)
-    
-    @property
-    def model(self):
-        return get_model(self.model_id)
+        return self.low < other.low
     
     @property
     def range(self):
@@ -40,39 +41,3 @@ class Order:
     
     def contains(self, bus_number):
         return self.low <= bus_number <= self.high
-
-orders = []
-
-def load_orders():
-    global orders
-    rows = []
-    with open(f'./data/static/orders.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            rows.append(dict(zip(columns, row)))
-    orders = [Order(row) for row in rows]
-
-def get_order(bus_number):
-    if bus_number < 0:
-        return None
-    for order in orders:
-        if order.contains(bus_number):
-            return order
-    return None
-
-def search_buses(query, recorded_bus_numbers):
-    results = []
-    for order in orders:
-        order_string = str(order)
-        for bus_number in order.range:
-            bus_number_string = f'{bus_number:04d}'
-            match = 0
-            if query in bus_number_string:
-                match += (len(query) / len(bus_number_string)) * 100
-                if bus_number_string.startswith(query):
-                    match += len(query)
-            if bus_number not in recorded_bus_numbers:
-                match /= 10
-            results.append(SearchResult('bus', bus_number_string, order_string, f'bus/{bus_number}', match))
-    return [r for r in results if r.match > 0]
