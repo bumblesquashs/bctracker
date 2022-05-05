@@ -1,5 +1,5 @@
 
-% from models.model import BusModelType
+% from models.model import ModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
 
@@ -70,7 +70,7 @@
                         <div class="name">Current Stop</div>
                         <div class="value">
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            % adherence = position.schedule_adherence
+                            % adherence = position.adherence
                             % if adherence is not None:
                                 <br />
                                 <span class="smaller-font">{{ adherence.description }}</span>
@@ -115,7 +115,7 @@
                     <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                     <li>It may not have been in service since BCTracker started recording bus history</li>
                     <li>It may not have functional NextRide equipment installed</li>
-                    % if model.type == BusModelType.shuttle:
+                    % if model.type == ModelType.shuttle:
                         <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                     % end
                 </ol>

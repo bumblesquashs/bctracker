@@ -2,6 +2,8 @@
 from models.time import Time
 
 class Departure:
+    '''An association between a trip and a stop'''
+    
     __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time')
     
     def __init__(self, system, row):
@@ -29,9 +31,9 @@ class Departure:
         return self.system.get_trip(self.trip_id)
     
     @property
-    def json_data(self):
+    def json(self):
         return {
-            'stop': self.stop.json_data,
+            'stop': self.stop.json,
             'time': str(self.time),
             'colour': self.trip.route.colour
         }

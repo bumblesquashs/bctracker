@@ -540,7 +540,7 @@ def systems_page(system_id=None):
 def system_api_map(system_id=None):
     positions = realtime.get_positions(system_id)
     return {
-        'positions': [p.json_data for p in positions if p.has_location],
+        'positions': [p.json for p in positions if p.has_location],
         'last_updated': realtime.last_updated_string()
     }
 
@@ -556,7 +556,7 @@ def api_shape_id(shape_id, system_id=None):
     if shape is None:
         return {}
     return {
-        'points': [p.json_data for p in shape.points]
+        'points': [p.json for p in shape.points]
     }
 
 @app.post([
@@ -568,15 +568,15 @@ def api_shape_id(shape_id, system_id=None):
 def api_search(system_id=None):
     query = request.forms.get('query', '')
     system = queries.systems.find(system_id)
-    results = []
+    matches = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            results += queries.orders.search_buses(query, queries.records.find_recorded_buses(system_id))
+            matches += queries.orders.find_matches(query, queries.records.find_recorded_buses(system_id))
         if system is not None:
-            results += system.search_routes(query)
-            results += system.search_stops(query)
-    results.sort()
+            matches += system.search_routes(query)
+            matches += system.search_stops(query)
+    matches.sort()
     return {
-        'results': [r.get_json_data(system, get_url) for r in results[0:10]],
-        'count': len(results)
+        'results': [m.get_json(system, get_url) for m in matches[0:10]],
+        'count': len(matches)
     }

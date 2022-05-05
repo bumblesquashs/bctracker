@@ -4,11 +4,13 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-from models.search_result import SearchResult
+from models.match import Match
 from models.service import create_service_group
 from models.sheet import create_sheets
 
 class Route:
+    '''A list of trips that follow a regular pattern with a given number'''
+    
     __slots__ = ('system', 'id', 'number', 'number_value', 'full_name', 'colour', 'trips', '_auto_name', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, row):
@@ -116,7 +118,7 @@ class Route:
         return False
     
     @property
-    def json_data(self):
+    def json(self):
         return {
             'id': self.id,
             'number': self.number,
@@ -125,7 +127,7 @@ class Route:
         }
     
     @property
-    def indicator_json_data(self):
+    def indicator_json(self):
         json = []
         trips = sorted(self.trips, key=lambda t: len(t.points), reverse=True)
         trip = trips[0]
@@ -165,17 +167,17 @@ class Route:
     def get_headsigns(self, service_group=None):
         return sorted({str(t) for t in self.get_trips(service_group)})
     
-    def get_search_result(self, query):
+    def get_match(self, query):
         query = query.lower()
         number = self.number.lower()
         name = str(self).lower()
-        match = 0
+        value = 0
         if query in number:
-            match += (len(query) / len(number)) * 100
+            value += (len(query) / len(number)) * 100
             if number.startswith(query):
-                match += len(query)
+                value += len(query)
         elif query in name:
-            match += (len(query) / len(name)) * 100
+            value += (len(query) / len(name)) * 100
             if name.startswith(query):
-                match += len(query)
-        return SearchResult('route', self.number, self.name, f'routes/{self.number}', match)
+                value += len(query)
+        return Match('route', self.number, self.name, f'routes/{self.number}', value)

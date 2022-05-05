@@ -2,6 +2,8 @@
 from datetime import datetime
 
 class Time:
+    '''A specific hour, minute, and second'''
+    
     __slots__ = ('unknown', 'hour', 'minute', 'second', 'accurate_seconds')
     
     @classmethod

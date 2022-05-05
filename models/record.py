@@ -6,6 +6,8 @@ from models.time import Time
 import queries.systems
 
 class Record:
+    '''Information about a bus' history on a specific date'''
+    
     __slots__ = ('id', 'bus', 'date', 'system', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen')
     
     @classmethod

@@ -2,6 +2,8 @@
 import queries.models
 
 class Order:
+    '''A range of buses of a specific model ordered in a specific year'''
+    
     __slots__ = ('low', 'high', 'year', 'model', 'size')
     
     @classmethod

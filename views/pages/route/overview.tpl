@@ -84,7 +84,7 @@
                                 <td class="non-mobile lighter-text">Unavailable</td>
                             % else:
                                 <td class="non-mobile">
-                                    % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                    % include('components/adherence_indicator', adherence=position.adherence)
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                 </td>
                             % end
@@ -152,7 +152,7 @@
                                                     <td>
                                                         % if trip.id in trip_positions:
                                                             % position = trip_positions[trip.id]
-                                                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                                            % include('components/adherence_indicator', adherence=position.adherence)
                                                         % end
                                                         % if order is None:
                                                             {{ bus }}

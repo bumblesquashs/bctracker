@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 import calendar
 
 class Date:
+    '''A specific year, month, and day'''
+    
     __slots__ = ('year', 'month', 'day')
     
     @classmethod

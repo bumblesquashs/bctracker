@@ -4,6 +4,8 @@ from enum import Enum
 from datetime import datetime
 
 class Direction(Enum):
+    '''A basic description of the path a trip follows'''
+    
     CIRCULAR = 'Circular'
     SOUTHBOUND = 'Southbound'
     NORTHBOUND = 'Northbound'
@@ -24,6 +26,8 @@ class Direction(Enum):
         return self.value < other.value
 
 class Trip:
+    '''A list of departures for a specific route and a specific service'''
+    
     __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', '_direction', '_related_trips')
     
     def __init__(self, system, row):
@@ -41,9 +45,9 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.headsign.startswith(str(self.route.number)):
-            return self.headsign
-        return f'{self.route.number} {self.headsign}'
+        if self.system.prefix_headsign:
+            return f'{self.route.number} {self.headsign}'
+        return self.headsign
     
     def __eq__(self, other):
         return self.id == other.id
@@ -119,11 +123,11 @@ class Trip:
         return self._related_trips
     
     @property
-    def json_data(self):
+    def json(self):
         return {
             'shape_id': self.shape_id,
             'colour': self.route.colour,
-            'points': [p.json_data for p in self.points]
+            'points': [p.json for p in self.points]
         }
     
     def add_departure(self, departure):

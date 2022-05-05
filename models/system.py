@@ -1,20 +1,24 @@
 
 class System:
-    __slots__ = ('id', 'name', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'validation_errors', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
+    
+    __slots__ = ('id', 'name', 'prefix_headsign', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'validation_errors', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
         id = row['system_id']
         name = row['name']
+        prefix_headsign = row['prefix_headsign']
         gtfs_enabled = row['gtfs_enabled'] == '1'
         realtime_enabled = row['realtime_enabled'] == '1'
         gtfs_url = row['gtfs_url']
         realtime_url = row['realtime_url']
-        return cls(id, name, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url)
+        return cls(id, name, prefix_headsign, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url)
     
-    def __init__(self, id, name, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url):
+    def __init__(self, id, name, prefix_headsign, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url):
         self.id = id
         self.name = name
+        self.prefix_headsign = prefix_headsign
         self.gtfs_enabled = gtfs_enabled
         self.realtime_enabled = realtime_enabled
         self.gtfs_url = gtfs_url
@@ -103,13 +107,13 @@ class System:
     
     def search_routes(self, query):
         routes = self.get_routes()
-        results = [r.get_search_result(query) for r in routes]
-        return [r for r in results if r.match > 0]
+        matches = [r.get_match(query) for r in routes]
+        return [m for m in matches if m.value > 0]
     
     def search_stops(self, query):
         stops = self.get_stops()
-        results = [s.get_search_result(query) for s in stops]
-        return [r for r in results if r.match > 0]
+        matches = [s.get_match(query) for s in stops]
+        return [m for m in matches if m.value > 0]
     
     def sort_data(self):
         for stop in self.stops.values():

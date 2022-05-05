@@ -1,5 +1,6 @@
 
 class Shape:
+    '''A list of sequential points that form a line on a map'''
     __slots__ = ('system', 'id', 'points')
     
     def __init__(self, system, shape_id):
@@ -11,6 +12,7 @@ class Shape:
         self.points.append(ShapePoint(lat, lon, sequence))
 
 class ShapePoint:
+    '''The coordinates and sequence number of a single point in a shape'''
     __slots__ = ('lat', 'lon', 'sequence')
     
     def __init__(self, lat, lon, sequence):
@@ -25,7 +27,7 @@ class ShapePoint:
         return self.sequence < other.sequence
     
     @property
-    def json_data(self):
+    def json(self):
         return {
             'lon': self.lon,
             'lat': self.lat

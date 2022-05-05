@@ -1,3 +1,4 @@
+
 from os import path, rename
 from datetime import datetime
 
@@ -53,29 +54,7 @@ def update_positions(system):
             bus_number = -(index + 1)
         if bus_number >= 9990:
             continue
-        try:
-            trip_id = vehicle.trip.trip_id
-            if trip_id == '':
-                trip_id = None
-        except AttributeError:
-            trip_id = None
-        try:
-            stop_id = vehicle.stop_id
-            if stop_id =='':
-                stop_id = None
-        except AttributeError:
-            stop_id = None
-        try:
-            lat = vehicle.position.latitude
-            lon = vehicle.position.longitude
-        except AttributeError:
-            lat = None
-            lon = None
-        try:
-            speed = int(vehicle.position.speed * 3.6)
-        except AttributeError:
-            speed = None
-        positions[bus_number] = Position(system, Bus(bus_number), trip_id, stop_id, lat, lon, speed)
+        positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
 
 def get_position(bus_number):
     if bus_number in positions:

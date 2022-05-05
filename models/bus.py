@@ -2,6 +2,8 @@
 import queries.orders
 
 class Bus:
+    '''A public transportation vehicle'''
+    
     __slots__ = ('number', 'order')
     
     def __init__(self, bus_number):

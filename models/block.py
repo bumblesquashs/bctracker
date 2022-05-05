@@ -3,6 +3,8 @@ from models.service import create_service_group
 from models.sheet import create_sheets
 
 class Block:
+    '''A list of trips that are operated by the same bus sequentially'''
+    
     __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, trip):

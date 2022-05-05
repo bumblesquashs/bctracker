@@ -5,6 +5,8 @@ from models.date import Date
 import queries.systems
 
 class Transfer:
+    '''Information about a bus moving from one system to another system'''
+    
     __slots__ = ('id', 'bus', 'date', 'old_system', 'new_system')
     
     @classmethod

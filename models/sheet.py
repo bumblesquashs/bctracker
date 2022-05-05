@@ -3,6 +3,8 @@ from models.date import Date
 from models.service import ServiceGroup, ServiceSchedule
 
 class Sheet:
+    '''A collection of overlapping services with defined start and end dates'''
+    
     __slots__ = ('services', 'start_date', 'end_date', '_service_groups')
     
     def __init__(self, service):

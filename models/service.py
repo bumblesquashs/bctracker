@@ -4,6 +4,8 @@ from datetime import timedelta
 from models.date import Date, flatten
 
 class ServiceSchedule:
+    '''The days of a week when a service is or is not running, including specific exceptional dates'''
+    
     __slots__ = ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'indices', 'binary_string', 'special', 'name', 'included_dates', 'excluded_dates')
     
     def __init__(self, mon, tue, wed, thu, fri, sat, sun, included_dates=None, excluded_dates=None):
@@ -137,6 +139,8 @@ class ServiceSchedule:
         return 'not-running'
 
 class Service:
+    '''A schedule with defined start and end dates'''
+    
     __slots__ = ('system', 'id', 'start_date', 'end_date', 'schedule')
     
     def __init__(self, system, row):
@@ -193,6 +197,8 @@ class Service:
         self.schedule.excluded_dates.add(date)
 
 class ServiceGroup:
+    '''A collection of services represented by a single schedule with defined start and end dates'''
+    
     __slots__ = ('services', 'start_date', 'end_date', 'schedule')
     
     def __init__(self, services, schedule):

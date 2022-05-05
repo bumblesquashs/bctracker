@@ -1,7 +1,9 @@
 
 from enum import Enum
 
-class BusModelType(Enum):
+class ModelType(Enum):
+    '''A type of vehicle model'''
+    
     artic = "Articulated"
     conventional = "Conventional"
     decker = "Double Decker"
@@ -10,7 +12,9 @@ class BusModelType(Enum):
     def __str__(self):
         return self.value
 
-class BusModel:
+class Model:
+    '''A specific version of a vehicle'''
+    
     __slots__ = ('id', 'manufacturer', 'name', 'length', 'fuel', 'type')
     
     @classmethod
@@ -20,7 +24,7 @@ class BusModel:
         name = row['name']
         length = float(row['length'])
         fuel = row['fuel']
-        type = BusModelType[row['type']]
+        type = ModelType[row['type']]
         return cls(id, manufacturer, name, length, fuel, type)
     
     def __init__(self, id, manufacturer, name, length, fuel, type):

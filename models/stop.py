@@ -1,11 +1,13 @@
 
 from math import sqrt
 
-from models.search_result import SearchResult
+from models.match import Match
 from models.service import create_service_group
 from models.sheet import create_sheets
 
 class Stop:
+    '''A location where a vehicle stops along a trip'''
+    
     __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_services', '_service_group', '_sheets')
     
     def __init__(self, system, row):
@@ -66,14 +68,14 @@ class Stop:
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
     
     @property
-    def json_data(self):
+    def json(self):
         return {
             'system_id': self.system.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.json_data for r in self.get_routes()]
+            'routes': [r.json for r in self.get_routes()]
         }
     
     def add_departure(self, departure):
@@ -93,21 +95,21 @@ class Stop:
     def get_routes_string(self, service_group=None):
         return ', '.join([r.number for r in self.get_routes(service_group)])
     
-    def get_search_result(self, query):
+    def get_match(self, query):
         query = query.lower()
         number = self.number.lower()
         name = self.name.lower()
-        match = 0
+        value = 0
         if query in number:
-            match += (len(query) / len(number)) * 100
+            value += (len(query) / len(number)) * 100
             if number.startswith(query):
-                match += len(query)
+                value += len(query)
         elif query in name:
-            match += (len(query) / len(name)) * 100
+            value += (len(query) / len(name)) * 100
             if name.startswith(query):
-                match += len(query)
-            if match > 20:
-                match -= 20
+                value += len(query)
+            if value > 20:
+                value -= 20
             else:
-                match = 1
-        return SearchResult('stop', self.number, self.name, f'stops/{self.number}', match)
+                value = 1
+        return Match('stop', self.number, self.name, f'stops/{self.number}', value)

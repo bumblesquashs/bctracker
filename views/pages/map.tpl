@@ -60,7 +60,7 @@
             style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
         });
         
-        let positions = JSON.parse('{{! json.dumps([p.json_data for p in positions if p.has_location]) }}');
+        let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');
         let currentShapeIDs = []
         let markers = [];
         let tripLinesVisible = false;
@@ -92,8 +92,8 @@
                 }
                 
                 const adherenceElement = document.createElement("span")
-                if (position.schedule_adherence !== null && position.schedule_adherence !== undefined) {
-                    const adherence = position.schedule_adherence
+                if (position.adherence !== null && position.adherence !== undefined) {
+                    const adherence = position.adherence
                     adherenceElement.classList.add("adherence-indicator")
                     adherenceElement.classList.add(adherence.status_class)
                     adherenceElement.innerHTML = adherence.value

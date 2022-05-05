@@ -128,7 +128,7 @@
                                     <td>
                                         % if trip.id in positions:
                                             % position = positions[trip.id]
-                                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                            % include('components/adherence_indicator', adherence=position.adherence)
                                         % end
                                         % if order is None:
                                             {{ bus }}
