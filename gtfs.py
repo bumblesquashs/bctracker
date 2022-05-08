@@ -12,10 +12,15 @@ from models.date import Date
 from models.departure import Departure
 from models.route import Route
 from models.service import Service
-from models.shape import Shape
+from models.shape import Shape, ShapePoint
 from models.sheet import create_sheets
 from models.stop import Stop
 from models.trip import Trip
+
+def downloaded(system):
+    if not system.gtfs_enabled:
+        return True
+    return path.exists(f'data/gtfs/{system.id}')
 
 def update(system):
     if not system.gtfs_enabled:
@@ -41,48 +46,53 @@ def update(system):
         print(f'\nError: Failed to update GTFS for {system}')
         print(f'Error message: {e}')
 
-def downloaded(system):
-    if not system.gtfs_enabled:
-        return True
-    return path.exists(f'data/gtfs/{system.id}')
-
 def load(system):
     if not system.gtfs_enabled:
         return
     print(f'Loading GTFS data for {system}...')
-    load_stops(system)
-    load_routes(system)
-    load_services(system)
-    load_shapes(system)
-    load_trips(system)
-    load_departures(system)
-    system.sort_data()
+    services = [Service(system, row) for row in read_csv(system, 'calendar')]
+    system.services = {s.id: s for s in services}
+    
+    load_service_exceptions(system)
+    
+    sheets = create_sheets(services)
+    system.sheets = {service.id: sheet for sheet in sheets for service in sheet.services}
+    
+    points = [ShapePoint.from_csv(row) for row in read_csv(system, 'shapes')]
+    shape_points = {}
+    for point in points:
+        shape_points.setdefault(point.shape_id, []).append(point)
+    system.shapes = {id: Shape(system, id, points) for id, points in shape_points.items()}
+    
+    departures = [Departure.from_csv(row, system) for row in read_csv(system, 'stop_times')]
+    trip_departures = {}
+    stop_departures = {}
+    for departure in departures:
+        trip_departures.setdefault(departure.trip_id, []).append(departure)
+        stop_departures.setdefault(departure.stop_id, []).append(departure)
+    
+    trips = [Trip.from_csv(row, system, trip_departures) for row in read_csv(system, 'trips')]
+    system.trips = {t.id: t for t in trips}
+    
+    stops = [Stop.from_csv(row, system, stop_departures) for row in read_csv(system, 'stops')]
+    system.stops = {s.id: s for s in stops}
+    system.stops_by_number = {s.number: s for s in stops}
+    
+    route_trips = {}
+    block_trips = {}
+    for trip in trips:
+        route_trips.setdefault(trip.route_id, []).append(trip)
+        block_trips.setdefault(trip.block_id, []).append(trip)
+    
+    routes = [Route.from_csv(row, system, route_trips) for row in read_csv(system, 'routes')]
+    system.routes = {r.id: r for r in routes}
+    system.routes_by_number = {r.number: r for r in routes}
+    
+    system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
+    
     print('Done!')
 
-def load_departures(system):
-    for row in read_csv(system, 'stop_times'):
-        departure = Departure(system, row)
-        stop = departure.stop
-        trip = departure.trip
-        if stop is None or trip is None:
-            continue
-        stop.add_departure(departure)
-        trip.add_departure(departure)
-
-def load_routes(system):
-    system.routes = {}
-    system.routes_by_number = {}
-    for row in read_csv(system, 'routes'):
-        route = Route(system, row)
-        
-        system.routes[route.id] = route
-        system.routes_by_number[route.number] = route
-
-def load_services(system):
-    system.services = {}
-    for row in read_csv(system, 'calendar'):
-        service = Service(system, row)
-        system.services[service.id] = service
+def load_service_exceptions(system):
     for row in read_csv(system, 'calendar_dates'):
         service_id = row['service_id']
         exception_type = int(row['exception_type'])
@@ -96,56 +106,6 @@ def load_services(system):
             service.include(date)
         if exception_type == 2:
             service.exclude(date)
-    sheets = create_sheets(system.get_services())
-    system.sheets = {service.id:sheet for sheet in sheets for service in sheet.services}
-
-def load_shapes(system):
-    system.shapes = {}
-    for row in read_csv(system, 'shapes'):
-        shape_id = row['shape_id']
-        lat = float(row['shape_pt_lat'])
-        lon = float(row['shape_pt_lon'])
-        sequence = int(row['shape_pt_sequence'])
-        
-        shape = system.get_shape(shape_id)
-        if shape is None:
-            shape = Shape(system, shape_id)
-            system.shapes[shape_id] = shape
-        
-        shape.add_point(lat, lon, sequence)
-
-def load_stops(system):
-    system.stops = {}
-    system.stops_by_number = {}
-    for row in read_csv(system, 'stops'):
-        stop = Stop(system, row)
-        
-        system.stops[stop.id] = stop
-        system.stops_by_number[stop.number] = stop
-
-def load_trips(system):
-    system.trips = {}
-    system.blocks = {}
-    for row in read_csv(system, 'trips'):
-        trip = Trip(system, row)
-        
-        service = trip.service
-        route = trip.route
-        block = trip.block
-        
-        if service is None or route is None:
-            continue
-        if not system.get_sheet(service).is_current:
-            continue
-        
-        route.add_trip(trip)
-        
-        if block is None:
-            system.blocks[trip.block_id] = Block(system, trip)
-        else:
-            block.add_trip(trip)
-        
-        system.trips[trip.id] = trip
 
 def read_csv(system, name):
     rows = []

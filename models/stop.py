@@ -8,20 +8,29 @@ from models.sheet import create_sheets
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', '_services', '_service_group', '_sheets')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', 'services', 'service_group', 'sheets')
     
-    def __init__(self, system, row):
+    @classmethod
+    def from_csv(cls, row, system, departures):
+        id = row['stop_id']
+        number = row['stop_code']
+        name = row['stop_name']
+        lat = float(row['stop_lat'])
+        lon = float(row['stop_lon'])
+        return cls(system, id, number, name, lat, lon, departures.get(id, []))
+    
+    def __init__(self, system, id, number, name, lat, lon, departures):
         self.system = system
-        self.id = row['stop_id']
-        self.number = row['stop_code']
-        self.name = row['stop_name']
-        self.lat = float(row['stop_lat'])
-        self.lon = float(row['stop_lon'])
+        self.id = id
+        self.number = number
+        self.name = name
+        self.lat = lat
+        self.lon = lon
+        self.departures = sorted(departures)
         
-        self.departures = []
-        self._services = None
-        self._service_group = None
-        self._sheets = None
+        self.services = sorted({d.trip.service for d in departures if d.trip is not None})
+        self.service_group = create_service_group(self.services)
+        self.sheets = create_sheets(self.services)
     
     def __str__(self):
         return self.name
@@ -36,24 +45,6 @@ class Stop:
         if self.name == other.name:
             return self.number < other.number
         return self.name < other.name
-    
-    @property
-    def services(self):
-        if self._services is None:
-            self._services = sorted({d.trip.service for d in self.departures})
-        return self._services
-    
-    @property
-    def service_group(self):
-        if self._service_group is None:
-            self._service_group = create_service_group(self.services)
-        return self._service_group
-    
-    @property
-    def sheets(self):
-        if self._sheets is None:
-            self._sheets = create_sheets(self.services)
-        return self._sheets
     
     @property
     def is_current(self):
@@ -77,12 +68,6 @@ class Stop:
             'lon': self.lon,
             'routes': [r.json for r in self.get_routes()]
         }
-    
-    def add_departure(self, departure):
-        self.departures.append(departure)
-        self._services = None
-        self._service_group = None
-        self._sheets = None
     
     def get_departures(self, service_group=None):
         if service_group is None:

@@ -8,7 +8,7 @@ class System:
     def from_csv(cls, row):
         id = row['system_id']
         name = row['name']
-        prefix_headsign = row['prefix_headsign']
+        prefix_headsign = row['prefix_headsign'] == '1'
         gtfs_enabled = row['gtfs_enabled'] == '1'
         realtime_enabled = row['realtime_enabled'] == '1'
         gtfs_url = row['gtfs_url']
@@ -114,13 +114,3 @@ class System:
         stops = self.get_stops()
         matches = [s.get_match(query) for s in stops]
         return [m for m in matches if m.value > 0]
-    
-    def sort_data(self):
-        for stop in self.stops.values():
-            stop.departures.sort()
-        for trip in self.trips.values():
-            trip.departures.sort()
-        for route in self.routes.values():
-            route.trips.sort()
-        for block in self.blocks.values():
-            block.trips.sort()

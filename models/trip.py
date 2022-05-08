@@ -28,20 +28,44 @@ class Direction(Enum):
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', '_direction', '_related_trips')
+    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', '_related_trips')
     
-    def __init__(self, system, row):
+    @classmethod
+    def from_csv(cls, row, system, departures):
+        trip_id = row['trip_id']
+        route_id = row['route_id']
+        service_id = row['service_id']
+        block_id = row['block_id']
+        direction_id = int(row['direction_id'])
+        shape_id = row['shape_id']
+        headsign = row['trip_headsign']
+        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures.get(trip_id, []))
+    
+    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures):
         self.system = system
-        self.id = row['trip_id']
-        self.route_id = row['route_id']
-        self.service_id = row['service_id']
-        self.block_id = row['block_id']
-        self.direction_id = int(row['direction_id'])
-        self.shape_id = row['shape_id']
-        self.headsign = row['trip_headsign']
+        self.id = trip_id
+        self.route_id = route_id
+        self.service_id = service_id
+        self.block_id = block_id
+        self.direction_id = direction_id
+        self.shape_id = shape_id
+        self.headsign = headsign
+        self.departures = sorted(departures)
         
-        self.departures = []
-        self._direction = None
+        points = self.points
+        first_point = points[0]
+        last_point = points[-1]
+        lat_diff = first_point.lat - last_point.lat
+        lon_diff = first_point.lon - last_point.lon
+        if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
+            self.direction = Direction.CIRCULAR
+        elif abs(lat_diff) > abs(lon_diff):
+            self.direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
+        elif abs(lon_diff) > abs(lat_diff):
+            self.direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
+        else:
+            self.direction = Direction.UNKNOWN
+        
         self._related_trips = None
     
     def __str__(self):
@@ -98,24 +122,6 @@ class Trip:
         return sorted(self.system.get_shape(self.shape_id).points)
     
     @property
-    def direction(self):
-        if self._direction is None:
-            points = self.points
-            first_point = points[0]
-            last_point = points[-1]
-            lat_diff = first_point.lat - last_point.lat
-            lon_diff = first_point.lon - last_point.lon
-            if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
-                self._direction = Direction.CIRCULAR
-            elif abs(lat_diff) > abs(lon_diff):
-                self._direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
-            elif abs(lon_diff) > abs(lat_diff):
-                self._direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
-            else:
-                self._direction = Direction.UNKNOWN
-        return self._direction
-    
-    @property
     def related_trips(self):
         if self._related_trips is None:
             self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
@@ -129,9 +135,6 @@ class Trip:
             'colour': self.route.colour,
             'points': [p.json for p in self.points]
         }
-    
-    def add_departure(self, departure):
-        self.departures.append(departure)
     
     def get_departure(self, stop):
         departures = [d for d in self.departures if d.stop == stop]

@@ -5,40 +5,22 @@ from models.sheet import create_sheets
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_sheets')
+    __slots__ = ('system', 'id', 'trips', 'services', 'service_group', 'sheets')
     
-    def __init__(self, system, trip):
+    def __init__(self, system, id, trips):
         self.system = system
-        self.id = trip.block_id
-        self.trips = [trip]
+        self.id = id
+        self.trips = sorted(trips)
         
-        self._services = None
-        self._service_group = None
-        self._sheets = None
+        self.services = sorted(t.service for t in trips)
+        self.service_group = create_service_group(self.services)
+        self.sheets = create_sheets(self.services)
     
     def __eq__(self, other):
         return self.id == other.id
     
     def __lt__(self, other):
         return self.id < other.id
-    
-    @property
-    def services(self):
-        if self._services is None:
-            self._services = sorted({t.service for t in self.trips})
-        return self._services
-    
-    @property
-    def service_group(self):
-        if self._service_group is None:
-            self._service_group = create_service_group(self.services)
-        return self._service_group
-    
-    @property
-    def sheets(self):
-        if self._sheets is None:
-            self._sheets = create_sheets(self.services)
-        return self._sheets
     
     @property
     def today_service_group(self):
@@ -51,14 +33,7 @@ class Block:
     @property
     def related_blocks(self):
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
-        related_blocks.sort(key=lambda b: b.services[0])
-        return related_blocks
-    
-    def add_trip(self, trip):
-        self._services = None
-        self._service_group = None
-        self._sheets = None
-        self.trips.append(trip)
+        return sorted(related_blocks, key=lambda b: b.services[0])
     
     def get_trips(self, service_group=None):
         if service_group is None:

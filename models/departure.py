@@ -6,12 +6,20 @@ class Departure:
     
     __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time')
     
-    def __init__(self, system, row):
+    @classmethod
+    def from_csv(cls, row, system):
+        trip_id = row['trip_id']
+        sequence = int(row['stop_sequence'])
+        stop_id = row['stop_id']
+        time = Time.parse(row['departure_time'])
+        return cls(system, trip_id, sequence, stop_id, time)
+    
+    def __init__(self, system, trip_id, sequence, stop_id, time):
         self.system = system
-        self.trip_id = row['trip_id']
-        self.sequence = int(row['stop_sequence'])
-        self.stop_id = row['stop_id']
-        self.time = Time.parse(row['departure_time'])
+        self.trip_id = trip_id
+        self.sequence = sequence
+        self.stop_id = stop_id
+        self.time = time
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence
