@@ -5,13 +5,13 @@ from math import sqrt
 from colorsys import hls_to_rgb
 
 from models.match import Match
-from models.service import create_service_group
+from models.service import ServiceGroup
 from models.sheet import create_sheets
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'number_value', 'name', 'colour', 'trips', 'services', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'number_value', 'name', 'colour', 'trips', 'service_group', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -49,7 +49,7 @@ class Route:
                 name = ' / '.join(sorted(set(headsigns)))
             else:
                 name = prefix
-        if 'route_color' in row and row['route_color'] != '000000':
+        if 'route_color' in row and row['route_color'] != '' and row['route_color'] != '000000':
             colour = row['route_color']
         else:
             # Generate a random colour based on system ID and route number
@@ -75,9 +75,9 @@ class Route:
         
         self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
         
-        self.services = sorted({t.service for t in trips})
-        self.service_group = create_service_group(self.services)
-        self.sheets = create_sheets(self.services)
+        services = {t.service for t in trips}
+        self.service_group = ServiceGroup.combine(services)
+        self.sheets = create_sheets(services)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -93,13 +93,6 @@ class Route:
     
     def __gt__(self, other):
         return self.number_value > other.number_value
-    
-    @property
-    def is_current(self):
-        for service in self.services:
-            if self.system.get_sheet(service).is_current:
-                return True
-        return False
     
     @property
     def json(self):

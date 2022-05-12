@@ -1,20 +1,20 @@
 
-from models.service import create_service_group
+from models.service import ServiceGroup
 from models.sheet import create_sheets
 
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = ('system', 'id', 'trips', 'services', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'trips', 'service_group', 'sheets')
     
     def __init__(self, system, id, trips):
         self.system = system
         self.id = id
         self.trips = sorted(trips)
         
-        self.services = sorted(t.service for t in trips)
-        self.service_group = create_service_group(self.services)
-        self.sheets = create_sheets(self.services)
+        services = {t.service for t in trips}
+        self.service_group = ServiceGroup.combine(services)
+        self.sheets = create_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -33,7 +33,7 @@ class Block:
     @property
     def related_blocks(self):
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
-        return sorted(related_blocks, key=lambda b: b.services[0])
+        return sorted(related_blocks, key=lambda b: b.service_group)
     
     def get_trips(self, service_group=None):
         if service_group is None:

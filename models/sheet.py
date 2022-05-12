@@ -1,6 +1,6 @@
 
 from models.date import Date
-from models.service import ServiceGroup, ServiceSchedule
+from models.service import ServiceGroup
 
 class Sheet:
     '''A collection of overlapping services with defined start and end dates'''
@@ -29,12 +29,15 @@ class Sheet:
     @property
     def service_groups(self):
         if self._service_groups is None:
-            groups = [ServiceGroup([s], s.schedule) for s in self.services if s.schedule.special]
-            services = [s for s in self.services if not s.schedule.special]
-            indices = {i for s in services for i in s.schedule.indices}
-            index_services = {i:tuple({s for s in services if i in s.schedule.indices}) for i in indices}
+            groups = [ServiceGroup(s.id, [s], s.start_date, s.end_date, s.mon, s.tue, s.wed, s.thu, s.fri, s.sat, s.sun, s.exceptions) for s in self.services if s.special]
+            services = [s for s in self.services if not s.special]
+            indices = {i for s in services for i in s.indices}
+            index_services = {i:tuple({s for s in services if i in s.indices}) for i in indices}
             service_sets = set(index_services.values())
             for service_set in service_sets:
+                id = '_'.join(sorted([s.id for s in service_set]))
+                start_date = min({s.start_date for s in service_set})
+                end_date = max({s.end_date for s in service_set})
                 service_set_indices = {k for k,v in index_services.items() if v == service_set}
                 mon = 0 in service_set_indices
                 tue = 1 in service_set_indices
@@ -43,15 +46,14 @@ class Sheet:
                 fri = 4 in service_set_indices
                 sat = 5 in service_set_indices
                 sun = 6 in service_set_indices
-                schedule = ServiceSchedule(mon, tue, wed, thu, fri, sat, sun)
-                groups.append(ServiceGroup(sorted(service_set), schedule))
-            self._service_groups = sorted(groups, key=lambda g: g.schedule)
+                exceptions = {e for s in service_set for e in s.exceptions}
+                groups.append(ServiceGroup(id, sorted(service_set), start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions))
+            self._service_groups = sorted(groups)
         return self._service_groups
     
     @property
     def is_current(self):
-        today = Date.today()
-        return self.start_date <= today <= self.end_date
+        return self.start_date <= Date.today() <= self.end_date
     
     def add_service(self, service):
         self.services.append(service)

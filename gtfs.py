@@ -11,7 +11,7 @@ from models.block import Block
 from models.date import Date
 from models.departure import Departure
 from models.route import Route
-from models.service import Service
+from models.service import Service, ServiceException
 from models.shape import Shape, ShapePoint
 from models.sheet import create_sheets
 from models.stop import Stop
@@ -50,10 +50,14 @@ def load(system):
     if not system.gtfs_enabled:
         return
     print(f'Loading GTFS data for {system}...')
-    services = [Service(system, row) for row in read_csv(system, 'calendar')]
-    system.services = {s.id: s for s in services}
     
-    load_service_exceptions(system)
+    exceptions = [ServiceException.from_csv(row) for row in read_csv(system, 'calendar_dates')]
+    service_exceptions = {}
+    for exception in exceptions:
+        service_exceptions.setdefault(exception.service_id, []).append(exception)
+    
+    services = [Service.from_csv(row, system, service_exceptions) for row in read_csv(system, 'calendar')]
+    system.services = {s.id: s for s in services}
     
     sheets = create_sheets(services)
     system.sheets = {service.id: sheet for sheet in sheets for service in sheet.services}
@@ -91,21 +95,6 @@ def load(system):
     system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
     
     print('Done!')
-
-def load_service_exceptions(system):
-    for row in read_csv(system, 'calendar_dates'):
-        service_id = row['service_id']
-        exception_type = int(row['exception_type'])
-        
-        service = system.get_service(service_id)
-        if service is None:
-            continue
-        
-        date = Date.parse_csv(row['date'])
-        if exception_type == 1:
-            service.include(date)
-        if exception_type == 2:
-            service.exclude(date)
 
 def read_csv(system, name):
     rows = []

@@ -2,13 +2,13 @@
 from math import sqrt
 
 from models.match import Match
-from models.service import create_service_group
+from models.service import ServiceGroup
 from models.sheet import create_sheets
 
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', 'services', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', 'service_group', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -28,9 +28,9 @@ class Stop:
         self.lon = lon
         self.departures = sorted(departures)
         
-        self.services = sorted({d.trip.service for d in departures if d.trip is not None})
-        self.service_group = create_service_group(self.services)
-        self.sheets = create_sheets(self.services)
+        services = {d.trip.service for d in departures if d.trip is not None}
+        self.service_group = ServiceGroup.combine(services)
+        self.sheets = create_sheets(services)
     
     def __str__(self):
         return self.name
@@ -45,13 +45,6 @@ class Stop:
         if self.name == other.name:
             return self.number < other.number
         return self.name < other.name
-    
-    @property
-    def is_current(self):
-        for service in self.services:
-            if self.system.get_sheet(service).is_current:
-                return True
-        return False
     
     @property
     def nearby_stops(self):

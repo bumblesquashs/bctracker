@@ -19,7 +19,7 @@
             
             <div class="info-box">
                 <div class="section">
-                    % include('components/service_group_indicator', service_group=route.service_group)
+                    % include('components/service_pattern_indicator', pattern=route.service_group)
                 </div>
                 <div class="section">
                     % headsigns = route.get_headsigns()

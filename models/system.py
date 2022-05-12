@@ -64,7 +64,7 @@ class System:
         return None
     
     def get_routes(self):
-        return sorted([r for r in self.routes.values() if r.is_current])
+        return sorted(self.routes.values())
     
     def get_service(self, service_id):
         if service_id in self.services:
@@ -79,13 +79,13 @@ class System:
             return self.shapes[shape_id]
         return None
     
-    def get_sheet(self, service):
-        if service.id in self.sheets:
-            return self.sheets[service.id]
+    def get_sheet(self, service_id):
+        if service_id in self.sheets:
+            return self.sheets[service_id]
         return None
     
     def get_sheets(self):
-        return sorted({s for s in self.sheets.values() if s.is_current})
+        return sorted(set(self.sheets.values()))
     
     def get_stop(self, stop_id=None, number=None):
         if stop_id is not None and stop_id in self.stops:
@@ -95,7 +95,7 @@ class System:
         return None
     
     def get_stops(self):
-        return [s for s in self.stops.values() if s.is_current]
+        return self.stops.values()
     
     def get_trip(self, trip_id):
         if trip_id in self.trips:
@@ -106,11 +106,9 @@ class System:
         return self.trips.values()
     
     def search_routes(self, query):
-        routes = self.get_routes()
-        matches = [r.get_match(query) for r in routes]
+        matches = [r.get_match(query) for r in self.get_routes()]
         return [m for m in matches if m.value > 0]
     
     def search_stops(self, query):
-        stops = self.get_stops()
-        matches = [s.get_match(query) for s in stops]
+        matches = [s.get_match(query) for s in self.get_stops()]
         return [m for m in matches if m.value > 0]

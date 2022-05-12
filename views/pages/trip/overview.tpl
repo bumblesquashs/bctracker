@@ -21,7 +21,7 @@
         
         <div class="info-box">
             <div class="section">
-                % include('components/service_indicator', service=trip.service)
+                % include('components/service_pattern_indicator', pattern=trip.service)
             </div>
             <div class="section">
                 <div class="name">Start time</div>
@@ -74,7 +74,7 @@
                         <tr>
                             <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
                             <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                            <td>{{ related_trip.service.schedule }}</td>
+                            <td>{{ related_trip.service }}</td>
                         </tr>
                     % end
                 </tbody>

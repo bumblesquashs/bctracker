@@ -7,16 +7,15 @@
             % end
             <div class="buttons">
                 % for service_group in sheet.service_groups:
-                    % schedule = service_group.schedule
-                    % if schedule.special:
+                    % if service_group.special:
                         % number = str(len(special_service_groups) + 1)
                         % special_service_groups.append((service_group, number))
-                        <a href="#{{ hash(service_group) }}" class='button'>
-                            {{ schedule }}
+                        <a href="#{{ service_group.id }}" class='button'>
+                            {{ service_group }}
                             <span class="special-number">{{ number }}</span>
                         </a>
                     % else:
-                        <a href="#{{ hash(service_group) }}" class='button'>{{ schedule }}</a>
+                        <a href="#{{ service_group.id }}" class='button'>{{ service_group }}</a>
                     % end
                 % end
             </div>
