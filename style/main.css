@@ -204,6 +204,14 @@ table.striped tr.divider {
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
     line-height: 9pt;
+    vertical-align: middle;
+}
+
+.adherence-indicator.large {
+    font-size: 12pt;
+    line-height: 12pt;
+    padding: 3px 6px;
+    margin-right: 0px;
 }
 
 .button {
@@ -265,6 +273,33 @@ table.striped tr.divider {
 
 .flex-container {
     display: flex;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.flex-row .flex-1 {
+    flex: 1;
+}
+
+.flex-row .flex-2 {
+    flex: 2;
+}
+
+.flex-row .flex-3 {
+    flex: 3;
+}
+
+.flex-row .flex-4 {
+    flex: 4;
+}
+
+.flex-row .flex-5 {
+    flex: 5;
 }
 
 .flexbox-space-between {
