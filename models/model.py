@@ -7,6 +7,7 @@ class BusModelType(Enum):
     artic = "Articulated"
     conventional = "Conventional"
     decker = "Double Decker"
+    midibus = "Midibus"
     shuttle = "Shuttle"
 
 class BusModel:

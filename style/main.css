@@ -226,13 +226,11 @@ table.striped tr.divider {
 }
 
 .button-container {
-    font-size: 0px;
-    margin-bottom: -5px;
-}
-
-.button-container .button {
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .checkbox {
@@ -548,15 +546,7 @@ table.striped tr.divider {
     margin-bottom: 20px;
 }
 
-.sheet-navigation .sheet .buttons {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.sheet-navigation .sheet .buttons .button .special-number {
+.sheet-navigation .sheet .button-container .button .special-number {
     font-size: 10pt;
     line-height: 10pt;
     position: relative;
