@@ -9,8 +9,9 @@
 </div>
 
 <p>
-    This is the full list of vehicles available on BCTracker.
+    This is the full list of vehicles that are currently available on BCTracker.
     It does not include every bus that has ever been operated by BC Transit, but it should be mostly up-to-date with orders since the 1990s.
+    Many of the older units were retired long before BCTracker was started, but are included for the sake of completion.
 </p>
 <p>
     Any vehicle that is marked as <span class="lighter-text">Unavailable</span> does not have any recorded history.
@@ -22,6 +23,12 @@
         <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
     </ol>
 </p>
+% if system is not None:
+    <p>
+        Please note that this list includes vehicles from every system.
+        To see only buses that have operated in {{ system }}, visit the <a href="{{ get_url(system, 'history') }}">history</a> page.
+    </p>
+% end
 
 % model_types = sorted({o.model.type for o in orders}, key=lambda t: t.name)
 
@@ -51,17 +58,17 @@
                         % for number in order.range:
                             % bus_number = f'{number:04d}'
                             % show_divider = order != type_orders[0] and number == order.low
-                            <tr class="{{ 'divider' if show_divider else '' }}">
-                                <td>
-                                    <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
-                                    <br />
-                                    <span class="non-desktop smaller-font">{{ order }}</span>
-                                </td>
-                                <td class="desktop-only">
-                                    {{ order }}
-                                </td>
-                                % if number in records:
-                                    % record = records[number]
+                            % if number in records:
+                                % record = records[number]
+                                <tr class="{{ 'divider' if show_divider else '' }}">
+                                    <td>
+                                        <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
+                                        <br />
+                                        <span class="non-desktop smaller-font">{{ order }}</span>
+                                    </td>
+                                    <td class="desktop-only">
+                                        {{ order }}
+                                    </td>
                                     <td class="desktop-only">{{ formatting.long(record.date) }}</td>
                                     <td class="non-desktop no-wrap">
                                         {{ formatting.short(record.date) }}
@@ -71,12 +78,20 @@
                                         % end
                                     </td>
                                     <td class="non-mobile">{{ record.system }}</td>
-                                % else:
-                                    <td class="lighter-text" colspan="2">
-                                        Unavailable
+                                </tr>
+                            % else:
+                                <tr class="{{ 'divider' if show_divider else '' }}">
+                                    <td>
+                                        {{ bus_number }}
+                                        <br />
+                                        <span class="non-desktop smaller-font lighter-text">{{ order }}</span>
                                     </td>
-                                % end
-                            </tr>
+                                    <td class="desktop-only lighter-text">
+                                        {{ order }}
+                                    </td>
+                                    <td class="lighter-text" colspan="2">Unavailable</td>
+                                </tr>
+                            % end
                         % end
                     % end
                 </tbody>
