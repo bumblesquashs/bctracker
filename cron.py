@@ -6,7 +6,7 @@ from crontab import CronTab
 
 from models.date import Date
 
-import queries.systems
+import queries.system
 
 import gtfs
 import realtime
@@ -39,7 +39,7 @@ def stop():
 
 def handle_gtfs(sig, frame):
     today = Date.today()
-    for system in queries.systems.find_all():
+    for system in queries.system.find_all():
         try:
             if today.weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
@@ -52,7 +52,7 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
-    for system in queries.systems.find_all():
+    for system in queries.system.find_all():
         try:
             realtime.update(system)
             if realtime.validate(system):
