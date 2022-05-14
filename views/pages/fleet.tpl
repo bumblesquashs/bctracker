@@ -22,6 +22,7 @@
         <li>It may not have functional NextRide equipment installed</li>
         <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
     </ol>
+    Vehicles that do have history show the most recent date and system that they were recorded in.
 </p>
 % if system is not None:
     <p>
