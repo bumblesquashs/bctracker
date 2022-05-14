@@ -5,7 +5,7 @@
             % if len(sheets) > 1:
                 <h3>{{ sheet }}</h3>
             % end
-            <div class="buttons">
+            <div class="button-container">
                 % for service_group in sheet.service_groups:
                     % if service_group.special:
                         % number = str(len(special_service_groups) + 1)

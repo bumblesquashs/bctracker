@@ -36,7 +36,12 @@
             % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
             
             <div class="info-box">
-                <h3 class="title">{{ trip }}</h3>
+                <h3 class="title">
+                    <div class="flex-row">
+                        % include('components/adherence_indicator', adherence=position.schedule_adherence, size='large')
+                        <div class="flex-1">{{ trip }}</div>
+                    </div>
+                </h3>
                 
                 <div class="section">
                     <div class="name">System</div>

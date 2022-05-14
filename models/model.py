@@ -7,6 +7,7 @@ class ModelType(Enum):
     artic = "Articulated"
     conventional = "Conventional"
     decker = "Double Decker"
+    midibus = "Midibus"
     shuttle = "Shuttle"
     
     def __str__(self):

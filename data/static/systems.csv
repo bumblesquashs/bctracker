@@ -3,8 +3,8 @@ campbell-river,Campbell River,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi
 comox,Comox Valley,1,1,1,http://comox.mapstrat.com/current/google_transit.zip,http://comox.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
 cowichan-valley,Cowichan Valley,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=10,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=10
 cranbrook,Cranbrook,1,0,0,https://www.bctransit.com/data/gtfs/cranbrook.zip,
-dawson-creek,Dawson Creek,1,0,0,https://www.bctransit.com/data/gtfs/dawson-creek.zip,
-fort-st-john,Fort St. John,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=28,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=28
+dawson-creek,Dawson Creek,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=27,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=27
+fort-st-john,Fort St. John,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=28,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=28
 fraser-valley,Fraser Valley,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=13,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=13
 kamloops,Kamloops,1,1,1,http://kamloops.mapstrat.com/current/google_transit.zip,http://kamloops.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
 kelowna,Kelowna,1,1,1,http://kelowna.mapstrat.com/current/google_transit.zip,http://kelowna.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
@@ -17,5 +17,5 @@ south-okanagan,South Okanagan,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi
 squamish,Squamish,1,1,1,http://squamish.mapstrat.com/current/google_transit.zip,http://squamish.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
 sunshine-coast,Sunshine Coast,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=18,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=18
 victoria,Victoria,0,1,1,http://victoria.mapstrat.com/current/google_transit.zip,http://victoria.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
-west-kootenay,West Kootenay,1,0,0,https://www.bctransit.com/data/gtfs/west-kootenay.zip,
+west-kootenay,West Kootenay,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=20,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=20
 whistler,Whistler,1,1,1,http://whistler.mapstrat.com/current/google_transit.zip,http://whistler.mapstrat.com/current/gtfrealtime_VehiclePositions.bin

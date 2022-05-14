@@ -18,7 +18,7 @@ import realtime
 import history
 
 # Increase the version to force CSS reload
-VERSION = 8
+VERSION = 9
 
 app = Bottle()
 
@@ -204,6 +204,17 @@ def realtime_speed_page(system_id=None):
         response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
     positions = realtime.get_positions(system_id)
     return page('realtime/speed', system_id, positions=positions, path=f'realtime/speed')
+
+@app.get([
+    '/fleet',
+    '/fleet/',
+    '/<system_id>/fleet',
+    '/<system_id>/fleet/'
+])
+def fleet_page(system_id=None):
+    orders = sorted(queries.orders.find_all(), key=lambda o: o.low)
+    records = queries.records.find_last_seen(None)
+    return page('fleet', system_id, orders=orders, records={r.bus.number: r for r in records}, path='fleet')
 
 @app.get([
     '/bus/<bus_number:int>',

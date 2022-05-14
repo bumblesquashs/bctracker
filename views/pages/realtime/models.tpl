@@ -49,7 +49,7 @@
         % models = sorted({p.bus.model for p in positions if p.bus.model is not None})
         
         % for model in models:
-            % model_positions = sorted([p for p in positions if p.bus.model == model])
+            % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
             <div class="section">
                 <h2 class="title">{{ model }}</h2>
                 <table class="striped fixed-table">

@@ -24,6 +24,9 @@ def find(bus_number):
             return order
     return None
 
+def find_all():
+    return orders
+
 def find_matches(query, recorded_bus_numbers):
     matches = []
     for order in orders:

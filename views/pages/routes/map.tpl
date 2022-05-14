@@ -139,5 +139,7 @@
                 new mapboxgl.Marker(element).setLngLat([route.lon, route.lat]).addTo(map);
             }
         </script>
-    % end    
+    % end
+    
+    % include('components/map_z_toggle')  
 % end
