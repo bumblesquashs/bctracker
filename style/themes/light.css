@@ -11,7 +11,7 @@
  * Primary Text: #000000
  * Secondary Text: #666666
  * Links: #0040FF
- * Buttons: #365ccb
+ * Buttons: #365CCB
  * 
  * Other colors may also be used for specific purposes
 */
@@ -81,6 +81,10 @@ table.striped tr:nth-child(2n-1) {
 
 #map.preview {
     border-color: #989898;
+}
+
+#map-z-toggle {
+    background-color: #365CCB;
 }
 
 #navigation-bar {
