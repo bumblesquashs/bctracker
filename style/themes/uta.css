@@ -78,6 +78,10 @@ table.striped tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
+#map-z-toggle {
+    background-color: #C7743B;
+}
+
 #navigation-bar {
     background-color: #C7743B;
 }

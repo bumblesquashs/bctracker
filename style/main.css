@@ -133,6 +133,28 @@ table.striped tr.divider {
     border-style: solid;
 }
 
+#map.z-override {
+    z-index: 30;
+}
+
+#map-z-toggle {
+    position: absolute;
+    z-index: 10;
+    border-radius: 24px;
+    bottom: 10px;
+    left: calc(50% - 24px);
+}
+
+#map-z-toggle.active {
+    z-index: 40;
+}
+
+#map-z-toggle img {
+    width: 32px;
+    height: 32px;
+    margin: 8px;
+}
+
 #navigation-bar .navigation-button {
     float: left;
     display: block;
