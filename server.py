@@ -6,7 +6,7 @@ import cherrypy as cp
 
 from models.bus import Bus
 from models.model import load_models
-from models.order import load_orders, search_buses
+from models.order import get_orders, load_orders, search_buses
 from models.system import load_systems, get_system, get_systems
 
 import database
@@ -201,6 +201,17 @@ def realtime_speed_page(system_id=None):
         response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
     positions = realtime.get_positions(system_id)
     return page('realtime/speed', system_id, positions=positions, path=f'realtime/speed')
+
+@app.get([
+    '/fleet',
+    '/fleet/',
+    '/<system_id>/fleet',
+    '/<system_id>/fleet/'
+])
+def fleet_page(system_id=None):
+    orders = sorted(get_orders(), key=lambda o: o.low)
+    records = history.get_last_seen(None)
+    return page('fleet', system_id, orders=orders, records={r.bus.number: r for r in records}, path='fleet')
 
 @app.get([
     '/bus/<bus_number:int>',

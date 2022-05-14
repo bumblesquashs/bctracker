@@ -61,6 +61,9 @@ def get_order(bus_number):
             return order
     return None
 
+def get_orders():
+    return orders
+
 def search_buses(query, recorded_bus_numbers):
     results = []
     for order in orders:

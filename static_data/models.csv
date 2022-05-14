@@ -7,15 +7,15 @@ chevrolet_arboc_4500_som28d,Chevrolet/ARBOC,4500/SOM28D,28,Diesel,shuttle
 chevrolet_arboc_4500_som28g,Chevrolet/ARBOC,4500/SOM28G,28,Gasoline,shuttle
 chevrolet_arboc_4500_som_28,Chevrolet/ARBOC,4500/SOM 28,28,Diesel,shuttle
 chevrolet_girardin_4500_g5,Chevrolet/Girardin,4500/G5,28,Gasoline,shuttle
-dennis_dart_slf_30,Dennis,Dart SLF (30'),30,Diesel,conventional
-dennis_dart_slf_35,Dennis,Dart SLF (35'),35,Diesel,conventional
+dennis_dart_slf_30,Dennis,Dart SLF (30'),30,Diesel,midibus
+dennis_dart_slf_35,Dennis,Dart SLF (35'),35,Diesel,midibus
 dennis_trident,Dennis,Trident,42,Diesel,decker
 ford_cbb_e450_polar_v,Ford/CBB,E-450/Polar V,24,Diesel,shuttle
 ford_girardin_t350_mbii,Ford/Girardin,T-350/MB-II,23,Gasoline,shuttle
-grande_west_vicinity_27,Grande West,Vicinity (27.5'),27.5,Diesel,conventional
-grande_west_vicinity_30,Grande West,Vicinity (30'),30,Diesel,conventional
-grande_west_vicinity_cng_30,Grande West,Vicinity CNG (30'),30,CNG,conventional
-grande_west_vicinity_35,Grande West,Vicinity (35'),35,Diesel,conventional
+grande_west_vicinity_27,Grande West,Vicinity (27.5'),27.5,Diesel,midibus
+grande_west_vicinity_30,Grande West,Vicinity (30'),30,Diesel,midibus
+grande_west_vicinity_cng_30,Grande West,Vicinity CNG (30'),30,CNG,midibus
+grande_west_vicinity_35,Grande West,Vicinity (35'),35,Diesel,midibus
 international_eldorado_3200_aero_elite,International/ElDorado,3200/Aero Elite,32,Diesel,shuttle
 mercedes_benz_sprinter_minibus,Mercedes-Benz,Sprinter MiniBus,24,Diesel,shuttle
 new_flyer_d40lf,New Flyer,D40LF,40,Diesel,conventional
@@ -25,4 +25,4 @@ new_flyer_xn40,New Flyer,XN40,40,CNG,conventional
 nova_bus_lfs,Nova Bus,LFS,40,Diesel,conventional
 nova_bus_lfs_suburban,Nova Bus,LFS Suburban,40,Diesel,conventional
 transbus_trident,TransBus,Trident,42,Diesel,decker
-vmc_classic_vi30_cng,VMC,Classic Vi30 CNG,30,CNG,conventional
+vmc_classic_vi30_cng,VMC,Classic Vi30 CNG,30,CNG,midibus
