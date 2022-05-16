@@ -8,13 +8,10 @@ orders = []
 
 def load():
     global orders
-    rows = []
     with open(f'./data/static/orders.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
-        for row in reader:
-            rows.append(dict(zip(columns, row)))
-    orders = [Order.from_csv(row) for row in rows]
+        orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
 
 def find(bus_number):
     if bus_number < 0:
