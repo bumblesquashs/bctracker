@@ -51,34 +51,34 @@ def load(system):
         return
     print(f'Loading GTFS data for {system}...')
     
-    exceptions = [ServiceException.from_csv(row) for row in read_csv(system, 'calendar_dates')]
+    exceptions = read_csv(system, 'calendar_dates', ServiceException.from_csv)
     service_exceptions = {}
     for exception in exceptions:
         service_exceptions.setdefault(exception.service_id, []).append(exception)
     
-    services = [Service.from_csv(row, system, service_exceptions) for row in read_csv(system, 'calendar')]
+    services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
     system.services = {s.id: s for s in services}
     
     sheets = create_sheets(services)
     system.sheets = {service.id: sheet for sheet in sheets for service in sheet.services}
     
-    points = [ShapePoint.from_csv(row) for row in read_csv(system, 'shapes')]
+    points = read_csv(system, 'shapes', ShapePoint.from_csv)
     shape_points = {}
     for point in points:
         shape_points.setdefault(point.shape_id, []).append(point)
     system.shapes = {id: Shape(system, id, points) for id, points in shape_points.items()}
     
-    departures = [Departure.from_csv(row, system) for row in read_csv(system, 'stop_times')]
+    departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
     trip_departures = {}
     stop_departures = {}
     for departure in departures:
         trip_departures.setdefault(departure.trip_id, []).append(departure)
         stop_departures.setdefault(departure.stop_id, []).append(departure)
     
-    trips = [Trip.from_csv(row, system, trip_departures) for row in read_csv(system, 'trips')]
+    trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
     system.trips = {t.id: t for t in trips}
     
-    stops = [Stop.from_csv(row, system, stop_departures) for row in read_csv(system, 'stops')]
+    stops = read_csv(system, 'stops', lambda r: Stop.from_csv(r, system, stop_departures))
     system.stops = {s.id: s for s in stops}
     system.stops_by_number = {s.number: s for s in stops}
     
@@ -88,7 +88,7 @@ def load(system):
         route_trips.setdefault(trip.route_id, []).append(trip)
         block_trips.setdefault(trip.block_id, []).append(trip)
     
-    routes = [Route.from_csv(row, system, route_trips) for row in read_csv(system, 'routes')]
+    routes = read_csv(system, 'routes', lambda r: Route.from_csv(r, system, route_trips))
     system.routes = {r.id: r for r in routes}
     system.routes_by_number = {r.number: r for r in routes}
     
@@ -96,14 +96,11 @@ def load(system):
     
     print('Done!')
 
-def read_csv(system, name):
-    rows = []
+def read_csv(system, name, initializer):
     with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
-        for row in reader:
-            rows.append(dict(zip(columns, row)))
-    return rows
+        return [initializer(dict(zip(columns, row))) for row in reader]
 
 def validate(system):
     if not system.gtfs_enabled:
@@ -111,5 +108,4 @@ def validate(system):
     end_dates = [s.end_date for s in system.get_services()]
     if len(end_dates) == 0:
         return True
-    today = Date.today()
-    return today < max(end_dates) - timedelta(days=7)
+    return Date.today() < max(end_dates) - timedelta(days=7)
