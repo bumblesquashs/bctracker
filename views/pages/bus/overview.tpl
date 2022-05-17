@@ -38,7 +38,7 @@
             <div class="info-box">
                 <h3 class="title">
                     <div class="flex-row">
-                        % include('components/adherence_indicator', adherence=position.schedule_adherence, size='large')
+                        % include('components/adherence_indicator', adherence=position.adherence, size='large')
                         <div class="flex-1">{{ trip }}</div>
                     </div>
                 </h3>

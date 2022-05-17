@@ -47,6 +47,11 @@ table.striped tbody tr:hover {
     background-color: #CBCBCB;
 }
 
+table.striped tbody tr.section {
+    background-color: #989898;
+    color: #FFFFFF;
+}
+
 table.striped td {
     border-color: #989898;
 }

@@ -45,49 +45,36 @@
             <table class="striped">
                 <thead>
                     <tr>
-                        <th class="desktop-only">Number</th>
-                        <th class="desktop-only">Model</th>
-                        <th class="non-desktop">Bus</th>
+                        <th>Number</th>
                         <th>Last Seen</th>
-                        <th class="non-mobile">System</th>
+                        <th>System</th>
                     </tr>
                 </thead>
                 <tbody>
                     % for order in type_orders:
                         % for number in order.range:
                             % bus_number = f'{number:04d}'
-                            % show_divider = order != type_orders[0] and number == order.low
+                            % if number == order.low:
+                                <tr class="section">
+                                    <td colspan="3">
+                                        {{ order }}
+                                    </td>
+                                </tr>
+                                <tr class="display-none"></tr>
+                            % end
                             % if number in records:
                                 % record = records[number]
-                                <tr class="{{ 'divider' if show_divider else '' }}">
+                                <tr>
                                     <td>
                                         <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
-                                        <br />
-                                        <span class="non-desktop smaller-font">{{ order }}</span>
-                                    </td>
-                                    <td class="desktop-only">
-                                        {{ order }}
                                     </td>
                                     <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                    <td class="non-desktop no-wrap">
-                                        {{ record.date.format_short() }}
-                                        % if system is None:
-                                            <br />
-                                            <span class="mobile-only smaller-font">{{ record.system }}</span>
-                                        % end
-                                    </td>
-                                    <td class="non-mobile">{{ record.system }}</td>
+                                    <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
+                                    <td>{{ record.system }}</td>
                                 </tr>
                             % else:
-                                <tr class="{{ 'divider' if show_divider else '' }}">
-                                    <td>
-                                        {{ bus_number }}
-                                        <br />
-                                        <span class="non-desktop smaller-font lighter-text">{{ order }}</span>
-                                    </td>
-                                    <td class="desktop-only lighter-text">
-                                        {{ order }}
-                                    </td>
+                                <tr>
+                                    <td>{{ bus_number }}</td>
                                     <td class="lighter-text" colspan="2">Unavailable</td>
                                 </tr>
                             % end

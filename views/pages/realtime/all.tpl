@@ -45,12 +45,10 @@
         % end
     </div>
 % else:
-    <table class="striped fixed-table">
+    <table class="striped">
         <thead>
             <tr>
-                <th class="desktop-only">Number</th>
-                <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
+                <th>Number</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
@@ -67,7 +65,7 @@
                 % bus = position.bus
                 % order = bus.order
                 % if last_bus is None:
-                    % same_order = True
+                    % same_order = False
                 % elif order is None and last_bus.order is None:
                     % same_order = True
                 % elif order is None or last_bus.order is None:
@@ -76,19 +74,24 @@
                     % same_order = order == last_bus.order
                 % end
                 % last_bus = bus
-                <tr class="{{'' if same_order else 'divider'}}">
+                % if not same_order:
+                    <tr class="section">
+                        <td colspan="7">
+                            % if order is None:
+                                Unknown Year/Model
+                            % else:
+                                {{ order }}
+                            % end
+                        </td>
+                    </tr>
+                    <tr class="display-none"></tr>
+                % end
+                <tr>
                     <td>
                         % if order is None:
                             {{ bus }}
                         % else:
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            <br />
-                            <span class="non-desktop smaller-font">{{ order }}</span>
-                        % end
-                    </td>
-                    <td class="desktop-only">
-                        % if order is not None:
-                            {{ order }}
                         % end
                     </td>
                     % if system is None:

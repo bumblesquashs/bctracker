@@ -83,6 +83,11 @@ table.striped tr.divider {
     border-top-style: solid;
 }
 
+table.striped tr.section td {
+    padding: 4px 16px;
+    font-weight: bold;
+}
+
 #banner {
     position: relative;
     margin: 0px;
