@@ -1,9 +1,10 @@
+
 % rebase('base', title='Blocks')
 
 <div class="page-header">
     <h1 class="title">Blocks</h1>
+    <hr />
 </div>
-<hr />
 
 % if system is None:
     <p>
@@ -12,46 +13,48 @@
     </p>
     % include('components/systems')
 % else:
-    % blocks = system.get_blocks(sheet)
-    % services = sorted({ s for b in blocks for s in b.get_services(sheet) })
+    % blocks = system.get_blocks()
+    % sheets = system.get_sheets()
     
-    % if len(services) > 1:
-        % include('components/service_navigation', services=services)
+    % if len(sheets) > 1 or (len(sheets) == 1 and len(sheets[0].service_groups) > 1):
+        % include('components/sheet_navigation', sheets=sheets)
     % end
     
     <div class="container">
-        % for service in services:
-            <div class="section">
-                <h2 class="title" id="service-{{service.id}}">{{ service }}</h2>
-                <div class="subtitle">{{ service.date_string }}</div>
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th>Block</th>
-                            <th>Routes</th>
-                            <th class="desktop-only">Start Time</th>
-                            <th class="desktop-only">End Time</th>
-                            <th class="desktop-only">Duration</th>
-                            <th class="non-desktop">Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        % service_blocks = [b for b in blocks if service in b.get_services(sheet)]
-                        % for block in service_blocks:
-                            % start_time = block.get_start_time(sheet)
-                            % end_time = block.get_end_time(sheet)
+        % for sheet in sheets:
+            % for service_group in sheet.service_groups:
+                <div class="section" id="{{ hash(service_group) }}">
+                    <h2 class="title">{{ service_group.schedule }}</h2>
+                    <div class="subtitle">{{ service_group.date_string }}</div>
+                    <table class="striped">
+                        <thead>
                             <tr>
-                                <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                <td>{{ block.get_routes_string(sheet) }}</td>
-                                <td class="desktop-only">{{ start_time }}</td>
-                                <td class="desktop-only">{{ end_time }}</td>
-                                <td class="desktop-only">{{ block.get_duration(sheet) }}</td>
-                                <td class="non-desktop">{{ start_time }} - {{ end_time }}</td>
+                                <th>Block</th>
+                                <th>Routes</th>
+                                <th class="non-mobile">Start Time</th>
+                                <th class="non-mobile">End Time</th>
+                                <th class="mobile-only">Time</th>
+                                <th class="desktop-only">Duration</th>
                             </tr>
-                        % end
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            % service_group_blocks = [b for b in blocks if len(b.get_trips(service_group)) > 0]
+                            % for block in service_group_blocks:
+                                % start_time = block.get_start_time(service_group)
+                                % end_time = block.get_end_time(service_group)
+                                <tr>
+                                    <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                    <td>{{ block.get_routes_string(service_group) }}</td>
+                                    <td class="non-mobile">{{ start_time }}</td>
+                                    <td class="non-mobile">{{ end_time }}</td>
+                                    <td class="mobile-only">{{ start_time }} - {{ end_time }}</td>
+                                    <td class="desktop-only">{{ block.get_duration(service_group) }}</td>
+                                </tr>
+                            % end
+                        </tbody>
+                    </table>
+                </div>
+            % end
         % end
     </div>
 % end

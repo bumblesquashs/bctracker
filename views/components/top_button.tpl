@@ -1,5 +1,4 @@
-
-<div class="button" id="top-button" onclick="scrollToTop()">Back to Top</div>
+<div id="top-button" class="button" onclick="scrollToTop()">Back to Top</div>
 
 <script>
     const topButton = document.getElementById("top-button");
@@ -21,6 +20,6 @@
 
 <style>
     #content {
-        margin-bottom: 60px;
+        padding-bottom: 60px;
     }
 </style>

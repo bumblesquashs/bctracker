@@ -1,13 +1,17 @@
 
-from models.service import Sheet
-import realtime
+from models.service import create_service_group
+from models.sheet import create_sheets
 
 class Block:
+    __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_sheets')
+    
     def __init__(self, system, trip):
         self.system = system
         self.id = trip.block_id
-        
         self.trips = [trip]
+        
+        self._services = None
+        self._service_group = None
         self._sheets = None
     
     def __eq__(self, other):
@@ -17,80 +21,80 @@ class Block:
         return self.id < other.id
     
     @property
+    def services(self):
+        if self._services is None:
+            self._services = sorted({t.service for t in self.trips})
+        return self._services
+    
+    @property
+    def service_group(self):
+        if self._service_group is None:
+            self._service_group = create_service_group(self.services)
+        return self._service_group
+    
+    @property
     def sheets(self):
         if self._sheets is None:
-            self._sheets = {t.service.sheet for t in self.trips}
+            self._sheets = create_sheets(self.services)
         return self._sheets
     
     @property
-    def default_sheet(self):
-        sheets = self.sheets
-        if Sheet.CURRENT in sheets:
-            return Sheet.CURRENT
-        if Sheet.NEXT in sheets:
-            return Sheet.NEXT
-        if Sheet.PREVIOUS in sheets:
-            return Sheet.PREVIOUS
-        return Sheet.UNKNOWN
+    def today_service_group(self):
+        for sheet in self.sheets:
+            for service_group in sheet.service_groups:
+                if service_group.is_today:
+                    return service_group
+        return None
     
     @property
-    def positions(self):
-        positions = realtime.get_positions()
-        return [p for p in positions if p.system == self.system and p.trip is not None and p.trip.block_id == self.id]
-    
-    def add_trip(self, trip):
-        self.trips.append(trip)
-        self._sheets = None
-    
-    def get_trips(self, sheet):
-        if sheet is None:
-            return self.trips
-        return [t for t in self.trips if t.service.sheet == sheet]
-    
-    def get_services(self, sheet):
-        return sorted({t.service for t in self.get_trips(sheet)})
-    
-    def get_routes(self, sheet):
-        return sorted({t.route for t in self.get_trips(sheet)})
-    
-    def get_routes_string(self, sheet):
-        return ', '.join([str(r.number) for r in self.get_routes(sheet)])
-    
-    def get_start_time(self, sheet):
-        trips = self.get_trips(sheet)
-        if not trips:
-            return None
-        else:
-            return trips[0].start_time
-    
-    def get_end_time(self, sheet):
-        trips = self.get_trips(sheet)
-        if not trips:
-            return None
-        else:
-            return trips[-1].end_time
-    
-    def get_duration(self, sheet):
-        start_time = self.get_start_time(sheet)
-        end_time = self.get_end_time(sheet)
-        if start_time is None or end_time is None:
-            return 0
-        return start_time.get_difference(end_time)
-    
-    def get_related_blocks(self, sheet):
-        related_blocks = [b for b in self.system.get_blocks(sheet) if self.is_related(b, sheet)]
-        related_blocks.sort(key=lambda b: b.get_services(sheet)[0])
+    def related_blocks(self):
+        related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
+        related_blocks.sort(key=lambda b: b.services[0])
         return related_blocks
     
-    def is_related(self, other, sheet):
+    def add_trip(self, trip):
+        self._services = None
+        self._service_group = None
+        self._sheets = None
+        self.trips.append(trip)
+    
+    def get_trips(self, service_group=None):
+        if service_group is None:
+            return self.trips
+        return [t for t in self.trips if t.service in service_group.services]
+    
+    def get_routes(self, service_group=None):
+        return sorted({t.route for t in self.get_trips(service_group)})
+    
+    def get_routes_string(self, service_group=None):
+        return ', '.join([r.number for r in self.get_routes(service_group)])
+    
+    def get_start_time(self, service_group=None):
+        trips = self.get_trips(service_group)
+        if len(trips) == 0:
+            return None
+        return trips[0].start_time
+    
+    def get_end_time(self, service_group=None):
+        trips = self.get_trips(service_group)
+        if len(trips) == 0:
+            return None
+        return trips[-1].end_time
+    
+    def get_duration(self, service_group=None):
+        start_time = self.get_start_time(service_group)
+        end_time = self.get_end_time(service_group)
+        if start_time is None or end_time is None:
+            return None
+        return start_time.get_difference(end_time)
+    
+    def is_related(self, other):
         if self.id == other.id:
             return False
-        if sheet not in other.sheets:
+        if self.get_routes() != other.get_routes():
             return False
-        if self.get_routes(sheet) != other.get_routes(sheet):
+        if self.get_start_time() != other.get_start_time():
             return False
-        if self.get_start_time(sheet) != other.get_start_time(sheet):
-            return False
-        if self.get_end_time(sheet) != other.get_end_time(sheet):
+        if self.get_end_time() != other.get_end_time():
             return False
         return True

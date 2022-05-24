@@ -1,12 +1,12 @@
+
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, redirect, request, response, debug
+from bottle import Bottle, static_file, template, request, response, debug
 import cherrypy as cp
 
 from models.bus import Bus
 from models.model import load_models
-from models.order import load_orders, search_buses
-from models.service import Sheet
+from models.order import get_orders, load_orders, search_buses
 from models.system import load_systems, get_system, get_systems
 
 import database
@@ -15,7 +15,7 @@ import realtime
 import history
 
 # Increase the version to force CSS reload
-VERSION = 69420
+VERSION = 10
 
 app = Bottle()
 
@@ -33,6 +33,8 @@ def start(args):
     if args.debug:
         print('Starting bottle in DEBUG mode')
         debug(True)
+    if args.reload:
+        print('Forcing GTFS redownload')
     
     load_models()
     load_orders()
@@ -40,16 +42,14 @@ def start(args):
     
     for system in get_systems():
         if not gtfs.downloaded(system) or args.reload:
-            if args.reload:
-                print('Forcing GTFS redownload')
             gtfs.update(system)
         else:
             gtfs.load(system)
-        realtime.update(system)
         if not gtfs.validate(system):
             gtfs.update(system)
-        elif not realtime.validate(system):
-            system.realtime_validation_error_count += 1
+        realtime.update(system)
+        if not realtime.validate(system):
+            system.validation_errors += 1
     history.update(realtime.get_positions())
     
     cp.config.update('server.conf')
@@ -76,19 +76,10 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
-def get_sheet_from_query(default_sheet):
-    sheet = request.query.get('sheet')
-    if sheet is None:
-        return default_sheet
-    try:
-        return Sheet[sheet.upper()]
-    except:
-        return default_sheet
-
-def systems_template(name, system_id, theme=None, **kwargs):
+def page(name, system_id, theme=None, **kwargs):
     return template(f'pages/{name}',
         mapbox_api_key=mapbox_api_key,
-        systems=[s for s in get_systems() if s.visible],
+        systems=[s for s in get_systems() if s.gtfs_enabled],
         system_id=system_id,
         system=get_system(system_id),
         get_url=get_url,
@@ -103,44 +94,41 @@ def systems_template(name, system_id, theme=None, **kwargs):
         **kwargs
     )
 
-def systems_error_template(name, system_id, **kwargs):
-    return systems_template(f'errors/{name}_error', system_id, **kwargs)
+def error_page(name, system_id, **kwargs):
+    return page(f'errors/{name}_error', system_id, **kwargs)
 
 # =============================================================
 # CSS (Static Files)
 # =============================================================
 
-@app.route('/style/<name:path>')
-def style(name):
-    return system_style(None, name)
-
-@app.route('/<system_id>/style/<name:path>')
-def system_style(system_id, name):
+@app.get([
+    '/style/<name:path>',
+    '/<system_id>/style/<name:path>'
+])
+def style(name, system_id=None):
     return static_file(name, root='./style')
 
 # =============================================================
 # Images (Static Files)
 # =============================================================
 
-@app.route('/img/<name:path>')
-def img(name):
-    return system_img(None, name)
-
-@app.route('/<system_id>/img/<name:path>')
-def system_img(system_id, name):
+@app.get([
+    '/img/<name:path>',
+    '/<system_id>/img/<name:path>'
+])
+def img(name, system_id=None):
     return static_file(name, root='./img')
 
 # =============================================================
 # HTML (Templates)
 # =============================================================
 
-@app.route('/')
-def index():
-    return system_index(None)
-
-@app.route('/<system_id>')
-@app.route('/<system_id>/')
-def system_index(system_id):
+@app.get([
+    '/',
+    '/<system_id>',
+    '/<system_id>/'
+])
+def home_page(system_id=None):
     theme = request.query.get('theme')
     if theme is not None:
         max_age = 60*60*24*365*10
@@ -148,457 +136,427 @@ def system_index(system_id):
             response.set_cookie('theme', theme, max_age=max_age)
         else:
             response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
-    return systems_template('home', system_id, theme)
+    return page('home', system_id, theme)
 
-@app.route('/news')
-@app.route('/news/')
-def news():
-    return system_news(None)
+@app.get([
+    '/news',
+    '/news/',
+    '/<system_id>/news',
+    '/<system_id>/news/'
+])
+def news_page(system_id=None):
+    return page('news', system_id, path='news')
 
-@app.route('/<system_id>/news')
-@app.route('/<system_id>/news/')
-def system_news(system_id):
-    return systems_template('news', system_id, path='news')
+@app.get([
+    '/map',
+    '/map/',
+    '/<system_id>/map',
+    '/<system_id>/map/'
+])
+def map_page(system_id=None):
+    positions = realtime.get_positions(system_id)
+    return page('map', system_id, positions=positions, path='map')
 
-@app.route('/map')
-@app.route('/map/')
-def map():
-    return system_map(None)
+@app.get([
+    '/realtime',
+    '/realtime/',
+    '/<system_id>/realtime',
+    '/<system_id>/realtime/'
+])
+def realtime_all_page(system_id=None):
+    positions = realtime.get_positions(system_id)
+    return page('realtime/all', system_id, positions=positions, path=f'realtime')
 
-@app.route('/<system_id>/map')
-@app.route('/<system_id>/map/')
-def system_map(system_id):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('map', system_id, buses=buses, path='map')
+@app.get([
+    '/realtime/routes',
+    '/realtime/routes/',
+    '/<system_id>/realtime/routes',
+    '/<system_id>/realtime/routes/'
+])
+def realtime_routes_page(system_id=None):
+    positions = realtime.get_positions(system_id)
+    return page('realtime/routes', system_id, positions=positions, path=f'realtime/routes')
 
-@app.route('/realtime')
-@app.route('/realtime/')
-def route_realtime():
-    return system_realtime(None)
+@app.get([
+    '/realtime/models',
+    '/realtime/models/',
+    '/<system_id>/realtime/models',
+    '/<system_id>/realtime/models/'
+])
+def realtime_models_page(system_id=None):
+    positions = realtime.get_positions(system_id)
+    return page('realtime/models', system_id, positions=positions, path=f'realtime/models')
 
-@app.route('/<system_id>/realtime')
-@app.route('/<system_id>/realtime/')
-def system_realtime(system_id):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('realtime/all', system_id, buses=buses, path=f'realtime')
-
-@app.route('/realtime/routes')
-@app.route('/realtime/routes/')
-def realtime_routes():
-    return system_realtime_routes(None)
-
-@app.route('/<system_id>/realtime/routes')
-@app.route('/<system_id>/realtime/routes/')
-def system_realtime_routes(system_id):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('realtime/routes', system_id, buses=buses, path=f'realtime/routes')
-
-@app.route('/realtime/models')
-@app.route('/realtime/models/')
-def realtime_models():
-    return system_realtime_models(None)
-
-@app.route('/<system_id>/realtime/models')
-@app.route('/<system_id>/realtime/models/')
-def system_realtime_models(system_id):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('realtime/models', system_id, buses=buses, path=f'realtime/models')
-
-@app.route('/realtime/speed')
-@app.route('/realtime/speed/')
-def realtime_speed():
-    return system_realtime_speed(None)
-
-@app.route('/<system_id>/realtime/speed')
-@app.route('/<system_id>/realtime/speed/')
-def system_realtime_speed(system_id):
+@app.get([
+    '/realtime/speed',
+    '/realtime/speed/',
+    '/<system_id>/realtime/speed',
+    '/<system_id>/realtime/speed/'
+])
+def realtime_speed_page(system_id=None):
     max_age = 60*60*24*365*10
     if cookie_domain is None:
         response.set_cookie('speed', '1994', max_age=max_age, path='/')
     else:
         response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
-    return systems_template('realtime/speed', system_id, buses=buses, path=f'realtime/speed')
+    positions = realtime.get_positions(system_id)
+    return page('realtime/speed', system_id, positions=positions, path=f'realtime/speed')
 
-@app.route('/bus/<number:int>')
-@app.route('/bus/<number:int>/')
-def bus_number(number):
-    return system_bus_number(None, number)
+@app.get([
+    '/fleet',
+    '/fleet/',
+    '/<system_id>/fleet',
+    '/<system_id>/fleet/'
+])
+def fleet_page(system_id=None):
+    orders = sorted(get_orders(), key=lambda o: o.low)
+    records = history.get_last_seen(None)
+    return page('fleet', system_id, orders=orders, records={r.bus.number: r for r in records}, path='fleet')
 
-@app.route('/<system_id>/bus/<number:int>')
-@app.route('/<system_id>/bus/<number:int>/')
-def system_bus_number(system_id, number):
-    bus = Bus(number)
+@app.get([
+    '/bus/<bus_number:int>',
+    '/bus/<bus_number:int>/',
+    '/<system_id>/bus/<bus_number:int>',
+    '/<system_id>/bus/<bus_number:int>/'
+])
+def bus_overview_page(bus_number, system_id=None):
+    bus = Bus(bus_number)
     if bus.order is None:
-        return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus/overview', system_id, bus=bus, records=history.get_records(bus=bus, limit=20))
+        return error_page('bus', system_id, bus_number=bus_number)
+    position = realtime.get_position(bus_number)
+    records = history.get_records(bus_number=bus_number, limit=20)
+    return page('bus/overview', system_id, bus=bus, position=position, records=records)
 
-@app.route('/bus/<number:int>/history')
-@app.route('/bus/<number:int>/history/')
-def bus_number_history(number):
-    return system_bus_number_history(None, number)
-
-@app.route('/<system_id>/bus/<number:int>/history')
-@app.route('/<system_id>/bus/<number:int>/history/')
-def system_bus_number_history(system_id, number):
-    bus = Bus(number)
+@app.get([
+    '/bus/<bus_number:int>/map',
+    '/bus/<bus_number:int>/map/',
+    '/<system_id>/bus/<bus_number:int>/map',
+    '/<system_id>/bus/<bus_number:int>/map/'
+])
+def bus_map_page(bus_number, system_id=None):
+    bus = Bus(bus_number)
     if bus.order is None:
-        return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus/history', system_id, bus=bus, records=history.get_records(bus=bus))
+        return error_page('bus', system_id, bus_number=bus_number)
+    position = realtime.get_position(bus_number)
+    return page('bus/map', system_id, bus=bus, position=position)
 
-@app.route('/bus/<number:int>/map')
-@app.route('/bus/<number:int>/map/')
-def bus_number_map(number):
-    return system_bus_number_map(None, number)
-
-@app.route('/<system_id>/bus/<number:int>/map')
-@app.route('/<system_id>/bus/<number:int>/map/')
-def system_bus_number_map(system_id, number):
-    bus = Bus(number)
+@app.get([
+    '/bus/<bus_number:int>/history',
+    '/bus/<bus_number:int>/history/',
+    '/<system_id>/bus/<bus_number:int>/history',
+    '/<system_id>/bus/<bus_number:int>/history/'
+])
+def bus_history_page(bus_number, system_id=None):
+    bus = Bus(bus_number)
     if bus.order is None:
-        return systems_error_template('bus', system_id, number=number)
-    return systems_template('bus/map', system_id, bus=bus)
+        return error_page('bus', system_id, bus_number=bus_number)
+    records = history.get_records(bus_number=bus_number)
+    return page('bus/history', system_id, bus=bus, records=records)
 
-@app.route('/history')
-@app.route('/history/')
-def history_last_seen():
-    return system_history_last_seen(None)
+@app.get([
+    '/history',
+    '/history/',
+    '/<system_id>/history',
+    '/<system_id>/history/'
+])
+def history_last_seen_page(system_id=None):
+    records = history.get_last_seen(system_id)
+    return page('history/last_seen', system_id, records=records, path='history')
 
-@app.route('/<system_id>/history')
-@app.route('/<system_id>/history/')
-def system_history_last_seen(system_id):
-    system = get_system(system_id)
-    return systems_template('history/last_seen', system_id, records=history.get_last_seen(system), path='history')
+@app.get([
+    '/history/first-seen',
+    '/history/first-seen/',
+    '/<system_id>/history/first-seen',
+    '/<system_id>/history/first-seen/'
+])
+def history_first_seen_page(system_id=None):
+    records = history.get_first_seen(system_id)
+    return page('history/first_seen', system_id, records=records, path='history/first-seen')
 
-@app.route('/history/first-seen')
-@app.route('/history/first-seen')
-def history_first_seen():
-    return system_history_first_seen(None)
+@app.get([
+    '/history/transfers',
+    '/history/transfers/',
+    '/<system_id>/history/transfers',
+    '/<system_id>/history/transfers/'
+])
+def history_transfers_page(system_id=None):
+    transfers = history.get_transfers(system_id)
+    return page('history/transfers', system_id, transfers=transfers, path='history/transfers')
 
-@app.route('/<system_id>/history/first-seen')
-@app.route('/<system_id>/history/first-seen/')
-def system_history_first_seen(system_id):
-    system = get_system(system_id)
-    return systems_template('history/first_seen', system_id, records=history.get_first_seen(system), path='history/first-seen')
+@app.get([
+    '/routes',
+    '/routes/',
+    '/<system_id>/routes',
+    '/<system_id>/routes/'
+])
+def routes_list_page(system_id=None):
+    return page('routes/list', system_id, path='routes')
 
-@app.route('/history/transfers')
-@app.route('/history/transfers/')
-def history_transfers():
-    return system_history_transfers(None)
+@app.get([
+    '/routes/map',
+    '/routes/map/',
+    '/<system_id>/routes/map',
+    '/<system_id>/routes/map/'
+])
+def routes_map_page(system_id=None):
+    return page('routes/map', system_id, path='routes/map')
 
-@app.route('/<system_id>/history/transfers')
-@app.route('/<system_id>/history/transfers/')
-def system_history_transfers(system_id):
-    system = get_system(system_id)
-    return systems_template('history/transfers', system_id, transfers=history.get_transfers(system), path='history/transfers')
-
-@app.route('/routes')
-@app.route('/routes/')
-def routes():
-    return system_routes(None)
-
-@app.route('/<system_id>/routes')
-@app.route('/<system_id>/routes/')
-def system_routes(system_id):
-    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
-    return systems_template('routes', system_id, sheet=sheet, path='routes')
-
-@app.route('/routes/<number>')
-@app.route('/routes/<number>/')
-def routes_number(number):
-    return system_routes_number(None, number)
-
-@app.route('/<system_id>/routes/<number>')
-@app.route('/<system_id>/routes/<number>/')
-def system_routes_number(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66'))
+@app.get([
+    '/routes/<route_number>',
+    '/routes/<route_number>/',
+    '/<system_id>/routes/<route_number>',
+    '/<system_id>/routes/<route_number>/'
+])
+def route_overview_page(route_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'routes/{number}')
-    route = system.get_route(number=number)
+        return error_page('system', system_id, path=f'routes/{route_number}')
+    route = system.get_route(number=route_number)
     if route is None:
-        return systems_error_template('route', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
-    return systems_template('route/overview', system_id, route=route, sheet=sheet, today=history.today)
+        return error_page('route', system_id, route_number=route_number)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
+    trips = [t for t in route.trips if t.service.is_today]
+    recorded_today = history.recorded_today(system_id, trips)
+    scheduled_today = history.scheduled_today(system_id, trips)
+    return page('route/overview', system_id, route=route, positions=positions, trips=trips, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
-@app.route('/routes/<number>/map')
-@app.route('/routes/<number>/map/')
-def routes_number_map(number):
-    return system_routes_number_map(None, number)
-
-@app.route('/<system_id>/routes/<number>/map')
-@app.route('/<system_id>/routes/<number>/map/')
-def system_routes_number_map(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66/map'))
+@app.get([
+    '/routes/<route_number>/map',
+    '/routes/<route_number>/map/',
+    '/<system_id>/routes/<route_number>/map',
+    '/<system_id>/routes/<route_number>/map/'
+])
+def route_map_page(route_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'routes/{number}/map')
-    route = system.get_route(number=number)
+        return error_page('system', system_id, path=f'routes/{route_number}/map')
+    route = system.get_route(number=route_number)
     if route is None:
-        return systems_error_template('route', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
-    return systems_template('route/map', system_id, route=route, sheet=sheet)
+        return error_page('route', system_id, route_number=route_number)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
+    return page('route/map', system_id, route=route, positions=positions)
 
-@app.route('/routes/<number>/schedule')
-@app.route('/routes/<number>/schedule/')
-def routes_number_schedule(number):
-    return system_routes_number_schedule(None, number)
-
-@app.route('/<system_id>/routes/<number>/schedule')
-@app.route('/<system_id>/routes/<number>/schedule/')
-def system_routes_number_schedule(system_id, number):
-    if (system_id == 'chilliwack' or system_id == 'cfv') and number == '66':
-        redirect(get_url('fvx', 'routes/66/schedule'))
+@app.get([
+    '/routes/<route_number>/schedule',
+    '/routes/<route_number>/schedule/',
+    '/<system_id>/routes/<route_number>/schedule',
+    '/<system_id>/routes/<route_number>/schedule/'
+])
+def route_schedule_page(route_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'routes/{number}/schedule')
-    route = system.get_route(number=number)
+        return error_page('system', system_id, path=f'routes/{route_number}/schedule')
+    route = system.get_route(number=route_number)
     if route is None:
-        return systems_error_template('route', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=route.default_sheet)
-    return systems_template('route/schedule', system_id, route=route, sheet=sheet)
+        return error_page('route', system_id, route_number=route_number)
+    return page('route/schedule', system_id, route=route)
 
-@app.route('/blocks')
-@app.route('/blocks/')
-def blocks():
-    return system_blocks(None)
+@app.get([
+    '/blocks',
+    '/blocks/',
+    '/<system_id>/blocks',
+    '/<system_id>/blocks/'
+])
+def blocks_page(system_id=None):
+    return page('blocks', system_id, path='blocks')
 
-@app.route('/<system_id>/blocks')
-@app.route('/<system_id>/blocks/')
-def system_blocks(system_id):
-    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
-    return systems_template('blocks', system_id, sheet=sheet, path='blocks')
-
-@app.route('/blocks/<block_id>')
-@app.route('/blocks/<block_id>/')
-def blocks_id(block_id):
-    return system_blocks_id(None, block_id)
-
-@app.route('/<system_id>/blocks/<block_id>')
-@app.route('/<system_id>/blocks/<block_id>/')
-def system_blocks_id(system_id, block_id):
+@app.get([
+    '/blocks/<block_id>',
+    '/blocks/<block_id>/',
+    '/<system_id>/blocks/<block_id>',
+    '/<system_id>/blocks/<block_id>/'
+])
+def block_overview_page(block_id, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'blocks/{block_id}')
+        return error_page('system', system_id, path=f'blocks/{block_id}')
     block = system.get_block(block_id)
     if block is None:
-        return systems_error_template('block', system_id, block_id=block_id)
-    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/overview', system_id, block=block, sheet=sheet)
+        return error_page('block', system_id, block_id=block_id)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.block_id == block_id]
+    return page('block/overview', system_id, block=block, positions=positions)
 
-@app.route('/blocks/<block_id>/map')
-@app.route('/blocks/<block_id>/map/')
-def blocks_id_map(block_id):
-    return system_blocks_id_map(None, block_id)
-
-@app.route('/<system_id>/blocks/<block_id>/map')
-@app.route('/<system_id>/blocks/<block_id>/map/')
-def system_blocks_id_map(system_id, block_id):
+@app.get([
+    '/blocks/<block_id>/map',
+    '/blocks/<block_id>/map/',
+    '/<system_id>/blocks/<block_id>/map',
+    '/<system_id>/blocks/<block_id>/map/'
+])
+def block_map_page(block_id, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'blocks/{block_id}')
+        return error_page('system', system_id, path=f'blocks/{block_id}/map')
     block = system.get_block(block_id)
     if block is None:
-        return systems_error_template('block', system_id, block_id=block_id)
-    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/map', system_id, block=block, sheet=sheet)
+        return error_page('block', system_id, block_id=block_id)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.block_id == block_id]
+    return page('block/map', system_id, block=block, positions=positions)
 
-@app.route('/blocks/<block_id>/history')
-@app.route('/blocks/<block_id>/history/')
-def blocks_id_history(block_id):
-    return system_blocks_id_map(None, block_id)
-
-@app.route('/<system_id>/blocks/<block_id>/history')
-@app.route('/<system_id>/blocks/<block_id>/history/')
-def system_blocks_id_history(system_id, block_id):
+@app.get([
+    '/blocks/<block_id>/history',
+    '/blocks/<block_id>/history/',
+    '/<system_id>/blocks/<block_id>/history',
+    '/<system_id>/blocks/<block_id>/history/'
+])
+def block_history_page(block_id, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'blocks/{block_id}')
+        return error_page('system', system_id, path=f'blocks/{block_id}/history')
     block = system.get_block(block_id)
     if block is None:
-        return systems_error_template('block', system_id, block_id=block_id)
-    sheet = get_sheet_from_query(default_sheet=block.default_sheet)
-    return systems_template('block/history', system_id, block=block, sheet=sheet, records=history.get_records(block=block))
+        return error_page('block', system_id, block_id=block_id)
+    records = history.get_records(system_id=system_id, block_id=block_id)
+    return page('block/history', system_id, block=block, records=records)
 
-@app.route('/trips/<trip_id>')
-@app.route('/trips/<trip_id>/')
-def trips_id(trip_id):
-    return system_trips_id(None, trip_id)
-
-@app.route('/<system_id>/trips/<trip_id>')
-@app.route('/<system_id>/trips/<trip_id>/')
-def system_trips_id(system_id, trip_id):
+@app.get([
+    '/trips/<trip_id>',
+    '/trips/<trip_id>/',
+    '/<system_id>/trips/<trip_id>',
+    '/<system_id>/trips/<trip_id>/'
+])
+def trip_overview_page(trip_id, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'trips/{trip_id}')
+        return error_page('system', system_id, path=f'trips/{trip_id}')
     trip = system.get_trip(trip_id)
     if trip is None:
-        return systems_error_template('trip', system_id, trip_id=trip_id)
-    return systems_template('trip/overview', system_id, trip=trip)
+        return error_page('trip', system_id, trip_id=trip_id)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip_id == trip_id]
+    return page('trip/overview', system_id, trip=trip, positions=positions)
 
-@app.route('/trips/<trip_id>/map')
-@app.route('/trips/<trip_id>/map/')
-def trips_id_map(trip_id):
-    return system_trips_id_map(None, trip_id)
-
-@app.route('/<system_id>/trips/<trip_id>/map')
-@app.route('/<system_id>/trips/<trip_id>/map')
-def system_trips_id_map(system_id, trip_id):
+@app.get([
+    '/trips/<trip_id>/map',
+    '/trips/<trip_id>/map/',
+    '/<system_id>/trips/<trip_id>/map',
+    '/<system_id>/trips/<trip_id>/map/'
+])
+def trip_map_page(trip_id, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'trips/{trip_id}/map')
+        return error_page('system', system_id, path=f'trips/{trip_id}/map')
     trip = system.get_trip(trip_id)
     if trip is None:
-        return systems_error_template('trip', system_id, trip_id=trip_id)
-    return systems_template('trip/map', system_id, trip=trip)
+        return error_page('trip', system_id, trip_id=trip_id)
+    positions = [p for p in realtime.get_positions(system_id) if p.trip_id == trip_id]
+    return page('trip/map', system_id, trip=trip, positions=positions)
 
-@app.route('/trips/<trip_id>/history')
-@app.route('/trips/<trip_id>/history/')
-def trips_id_history(trip_id):
-    return system_trips_id_map(None, trip_id)
-
-@app.route('/<system_id>/trips/<trip_id>/history')
-@app.route('/<system_id>/trips/<trip_id>/history/')
-def system_trips_id_history(system_id, trip_id):
+@app.get([
+    '/trips/<trip_id>/history',
+    '/trips/<trip_id>/history/',
+    '/<system_id>/trips/<trip_id>/history',
+    '/<system_id>/trips/<trip_id>/history/'
+])
+def trip_history_page(trip_id, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'trips/{trip_id}/history')
+        return error_page('system', system_id, path=f'trips/{trip_id}/history')
     trip = system.get_trip(trip_id)
     if trip is None:
-        return systems_error_template('trip', system_id, trip_id=trip_id)
-    return systems_template('trip/history', system_id, trip=trip, records=history.get_trip_records(trip))
+        return error_page('trip', system_id, trip_id=trip_id)
+    records = history.get_trip_records(trip)
+    return page('trip/history', system_id, trip=trip, records=records)
 
-@app.route('/stops')
-@app.route('/stops/')
-def stops():
-    return system_stops(None)
-
-@app.route('/<system_id>/stops')
-@app.route('/<system_id>/stops/')
-def system_stops(system_id):
+@app.get([
+    '/stops',
+    '/stops/',
+    '/<system_id>/stops',
+    '/<system_id>/stops/'
+])
+def stops_page(system_id=None):
     path = 'stops'
     search = request.query.get('search')
     if search is not None:
         path += f'?search={search}'
-    sheet = get_sheet_from_query(default_sheet=Sheet.CURRENT)
-    return systems_template('stops', system_id, search=search, sheet=sheet, path=path)
+    return page('stops', system_id, search=search, path=path)
 
-@app.route('/stops/<number>')
-@app.route('/stops/<number>/')
-def stops_number(number):
-    return system_stops_number(None, number)
-
-@app.route('/<system_id>/stops/<number>')
-@app.route('/<system_id>/stops/<number>/')
-def system_stops_number(system_id, number):
+@app.get([
+    '/stops/<stop_number>',
+    '/stops/<stop_number>/',
+    '/<system_id>/stops/<stop_number>',
+    '/<system_id>/stops/<stop_number>/'
+])
+def stop_overview_page(stop_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'stops/{number}')
-    stop = system.get_stop(number=number)
+        return error_page('system', system_id, path=f'stops/{stop_number}')
+    stop = system.get_stop(number=stop_number)
     if stop is None:
-        return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/overview', system_id, stop=stop, sheet=sheet, today=history.today)
+        return error_page('stop', system_id, stop_number=stop_number)
+    departures = [d for d in stop.departures if d.trip.service.is_today]
+    trips = [d.trip for d in departures]
+    positions = {p.trip.id:p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips}
+    recorded_today = history.recorded_today(system_id, trips)
+    scheduled_today = history.scheduled_today(system_id, trips)
+    return page('stop/overview', system_id, stop=stop, departures=departures, positions=positions, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
-@app.route('/stops/<number>/map')
-@app.route('/stops/<number>/map/')
-def stops_number_map(number):
-    return system_stops_number_map(None, number)
-
-@app.route('/<system_id>/stops/<number>/map')
-@app.route('/<system_id>/stops/<number>/map/')
-def system_stops_number_map(system_id, number):
+@app.get([
+    '/stops/<stop_number>/map',
+    '/stops/<stop_number>/map/',
+    '/<system_id>/stops/<stop_number>/map',
+    '/<system_id>/stops/<stop_number>/map/'
+])
+def stop_map_page(stop_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'stops/{number}/map')
-    stop = system.get_stop(number=number)
+        return error_page('system', system_id, path=f'stops/{stop_number}/map')
+    stop = system.get_stop(number=stop_number)
     if stop is None:
-        return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/map', system_id, stop=stop, sheet=sheet)
+        return error_page('stop', system_id, stop_number=stop_number)
+    return page('stop/map', system_id, stop=stop)
 
-@app.route('/stops/<number>/schedule')
-@app.route('/stops/<number>/schedule/')
-def stops_number_schedule(number):
-    return system_stops_number_schedule(None, number)
-
-@app.route('/<system_id>/stops/<number>/schedule')
-@app.route('/<system_id>/stops/<number>/schedule/')
-def system_stops_number_schedule(system_id, number):
+@app.get([
+    '/stops/<stop_number>/schedule',
+    '/stops/<stop_number>/schedule/',
+    '/<system_id>/stops/<stop_number>/schedule',
+    '/<system_id>/stops/<stop_number>/schedule/'
+])
+def stop_schedule_page(stop_number, system_id=None):
     system = get_system(system_id)
     if system is None:
-        return systems_error_template('system', system_id, path=f'stops/{number}/schedule')
-    stop = system.get_stop(number=number)
+        return error_page('system', system_id, path=f'stops/{stop_number}/schedule')
+    stop = system.get_stop(number=stop_number)
     if stop is None:
-        return systems_error_template('stop', system_id, number=number)
-    sheet = get_sheet_from_query(default_sheet=stop.default_sheet)
-    return systems_template('stop/schedule', system_id, stop=stop, sheet=sheet)
+        return error_page('stop', system_id, stop_number=stop_number)
+    return page('stop/schedule', system_id, stop=stop)
 
-@app.route('/about')
-@app.route('/about/')
-def about():
-    return system_about(None)
+@app.get([
+    '/about',
+    '/about/',
+    '/<system_id>/about',
+    '/<system_id>/about/'
+])
+def about_page(system_id=None):
+    return page('about', system_id, path='about')
 
-@app.route('/<system_id>/about')
-@app.route('/<system_id>/about/')
-def system_about(system_id):
-    return systems_template('about', system_id, path='about')
-
-@app.route('/systems')
-@app.route('/systems/')
-def systems():
-    return system_systems(None)
-
-@app.route('/<system_id>/systems')
-@app.route('/<system_id>/systems/')
-def system_systems(system_id):
-    path = request.query.get('path', '')
-    return systems_template('systems', system_id, path=path)
+@app.get([
+    '/systems',
+    '/systems/',
+    '/<system_id>/systems',
+    '/<system_id>/systems/'
+])
+def systems_page(system_id=None):
+    return page('systems', system_id, path=request.query.get('path', ''))
 
 # =============================================================
 # JSON (API endpoints)
 # =============================================================
 
-@app.route('/api/map.json')
-def api_map():
-    return system_api_map(None)
-
-@app.route('/<system_id>/api/map.json')
-def system_api_map(system_id):
-    system = get_system(system_id)
-    if system is None:
-        buses = realtime.active_buses()
-    else:
-        buses = [b for b in realtime.active_buses() if b.position.system == system]
+@app.get([
+    '/api/map.json',
+    '/<system_id>/api/map.json'
+])
+def system_api_map(system_id=None):
+    positions = realtime.get_positions(system_id)
     return {
-        'buses': [b.json_data for b in buses if b.position.has_location],
+        'positions': [p.json_data for p in positions if p.has_location],
         'last_updated': realtime.last_updated_string()
     }
 
-@app.route('/<system_id>/api/shape/<shape_id>.json')
-def system_api_shape_id(system_id, shape_id):
+@app.get([
+    '/api/shape/<shape_id>.json',
+    '/<system_id>/api/shape/<shape_id>.json'
+])
+def api_shape_id(shape_id, system_id=None):
     system = get_system(system_id)
     if system is None:
         return {}
@@ -609,18 +567,19 @@ def system_api_shape_id(system_id, shape_id):
         'points': [p.json_data for p in shape.points]
     }
 
-@app.route('/api/search', method='POST')
-def api_search():
-    return system_api_search(None)
-
-@app.route('/<system_id>/api/search', method='POST')
-def system_api_search(system_id):
+@app.post([
+    '/api/search',
+    '/api/search/',
+    '/<system_id>/api/search',
+    '/<system_id>/api/search/'
+])
+def api_search(system_id=None):
     query = request.forms.get('query', '')
     system = get_system(system_id)
     results = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            results += search_buses(query, history.recorded_buses(system))
+            results += search_buses(query, history.recorded_buses(system_id))
         if system is not None:
             results += system.search_routes(query)
             results += system.search_stops(query)

@@ -22,9 +22,17 @@ form input[type="text"]:focus {
     outline: none;
 }
 
+form .input-container {
+    display: flex;
+    gap: 10px;
+}
+
+form .input-container input[type="text"] {
+    flex: 1;
+}
+
 hr {
-    margin-top: 0px;
-    margin-bottom: 20px;
+    margin:0px;
     border-width: 0px;
     border-top-width: 2px;
     border-top-style: solid;
@@ -75,9 +83,13 @@ table.striped tr.divider {
     border-top-style: solid;
 }
 
+table.striped tr.section td {
+    padding: 4px 16px;
+    font-weight: bold;
+}
+
 #banner {
     position: relative;
-    z-index: 10;
     margin: 0px;
     padding: 10px 20px;
     cursor: default;
@@ -100,40 +112,13 @@ table.striped tr.divider {
     font-size: 16pt;
 }
 
+#content {
+    padding: 20px;
+}
+
 #header {
     position: relative;
     z-index: 20;
-    margin: 0px;
-    padding: 0px;
-}
-
-#header .title {
-    font-weight: bold !important;
-}
-
-#header .header-button {
-    float: left;
-    display: block;
-    text-align: center;
-    padding: 15px 20px;
-    text-decoration: none !important;
-    font-family: Helvetica, sans-serif;
-    font-size: 14pt;
-    font-weight: normal;
-}
-
-#header .header-button.disabled {
-    cursor: default;
-    opacity: 0.7;
-}
-
-#header .right {
-    float: right !important;
-}
-
-#content {
-    padding: 20px;
-    overflow: auto;
 }
 
 #map.full-screen {
@@ -153,9 +138,50 @@ table.striped tr.divider {
     border-style: solid;
 }
 
-#refresh-button {
-    margin-left: 10px;
-    display: inline-block;
+#map.z-override {
+    z-index: 30;
+}
+
+#map-z-toggle {
+    position: absolute;
+    z-index: 10;
+    border-radius: 22px;
+    bottom: 40px;
+    right: 15px;
+}
+
+#map-z-toggle.active {
+    z-index: 40;
+}
+
+#map-z-toggle img {
+    width: 28px;
+    height: 28px;
+    margin: 8px;
+}
+
+#navigation-bar .navigation-button {
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 15px 20px;
+    text-decoration: none !important;
+    font-family: Helvetica, sans-serif;
+    font-size: 14pt;
+    font-weight: normal;
+}
+
+#navigation-bar .navigation-button.disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
+#navigation-bar .right {
+    float: right;
+}
+
+#navigation-bar .title {
+    font-weight: bold;
 }
 
 #refresh-button:hover {
@@ -163,25 +189,26 @@ table.striped tr.divider {
     border-radius: 16px;
 }
 
+#refresh-button.hidden:hover {
+    cursor: default;
+}
+
 #refresh-button img {
     width: 32px;
     height: 32px;
 }
 
-#subheader {
-    position: relative;
-    z-index: 10;
+#system-bar {
     margin: 0px;
     padding: 10px 20px;
     cursor: default;
-    vertical-align: middle;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
 
-#subheader .content {
-    display: inline-block;
-}
-
-#subheader #system {
+#system {
     font-weight: bold;
 }
 
@@ -204,6 +231,14 @@ table.striped tr.divider {
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
     line-height: 9pt;
+    vertical-align: middle;
+}
+
+.adherence-indicator.large {
+    font-size: 12pt;
+    line-height: 12pt;
+    padding: 3px 6px;
+    margin-right: 0px;
 }
 
 .button {
@@ -226,13 +261,11 @@ table.striped tr.divider {
 }
 
 .button-container {
-    font-size: 0px;
-    margin-bottom: -5px;
-}
-
-.button-container .button {
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .checkbox {
@@ -261,6 +294,37 @@ table.striped tr.divider {
 
 .display-none {
     display: none !important;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.flex-row .flex-1 {
+    flex: 1;
+}
+
+.flex-row .flex-2 {
+    flex: 2;
+}
+
+.flex-row .flex-3 {
+    flex: 3;
+}
+
+.flex-row .flex-4 {
+    flex: 4;
+}
+
+.flex-row .flex-5 {
+    flex: 5;
 }
 
 .flexbox-space-between {
@@ -319,7 +383,7 @@ table.striped tr.divider {
 }
 
 .marker:hover {
-    z-index: 100;
+    z-index: 10;
 }
 
 .marker .details {
@@ -398,6 +462,34 @@ table.striped tr.divider {
     display: block;
 }
 
+.marker .icon.route {
+    width: auto;
+    height: auto;
+    border-radius: 0px;
+}
+
+.marker .icon.route .link {
+    border-radius: 0px;
+}
+
+.marker .icon.route .number {
+    padding: 2px 6px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    line-height: 10pt;
+    font-size: 10pt;
+    vertical-align: middle;
+}
+
+.marker .icon.route:hover {
+    text-decoration: none;
+}
+
+.marder .icon.route .link {
+    border-radius: 0px;
+}
+
 .marker.small .icon {
     width: 16px !important;
     height: 16px !important;
@@ -419,7 +511,7 @@ table.striped tr.divider {
 }
 
 .news-post {
-    margin-top: 20px;
+    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -442,17 +534,17 @@ table.striped tr.divider {
     margin-bottom: 0px;
 }
 
-.news-post-older {
-    margin-top: 20px;
-}
-
 .no-wrap {
     white-space: nowrap;
 }
 
+.page-header {
+    margin-bottom: 20px;
+}
+
 .page-header.map-page {
     position: relative;
-    z-index: 5;
+    z-index: 20;
 }
 
 .page-header.map-page .tab-button {
@@ -508,36 +600,32 @@ table.striped tr.divider {
     text-align: center;
 }
 
-.service-navigation {
+.sheet-navigation {
     margin-bottom: 20px;
 }
 
-.service-navigation .buttons {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 5px;
+.sheet-navigation .sheet {
+    margin-bottom: 20px;
 }
 
-.service-navigation .buttons .button .special-number {
+.sheet-navigation .sheet .button-container .button .special-number {
     font-size: 10pt;
     line-height: 10pt;
     position: relative;
     top: -0.4em;
 }
 
-.service-navigation .special-services {
+.sheet-navigation .sheet .special-services {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
 }
 
-.service-navigation .special-services li {
+.sheet-navigation .sheet .special-services li {
     margin-bottom: 2px;
 }
 
-.service-navigation .special-services .special-number {
+.sheet-navigation .sheet .special-services .special-number {
     font-weight: bold;
 }
 

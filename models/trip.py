@@ -1,15 +1,38 @@
+
+from enum import Enum
+
 from datetime import datetime
 
-import realtime
+class Direction(Enum):
+    CIRCULAR = 'Circular'
+    SOUTHBOUND = 'Southbound'
+    NORTHBOUND = 'Northbound'
+    WESTBOUND = 'Westbound'
+    EASTBOUND = 'Eastbound'
+    UNKNOWN = 'Unknown'
+    
+    def __hash__(self):
+        return hash(self.value)
+    
+    def __eq__(self, other):
+        return self.value == other.value
+    
+    def __lt__(self, other):
+        return self.value < other.value
 
 class Trip:
+    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', '_direction', '_related_trips')
+    
     def __init__(self, system, row):
         self.system = system
         self.id = row['trip_id']
         self.route_id = row['route_id']
         self.service_id = row['service_id']
         self.block_id = row['block_id']
-        self.direction_id = int(row['direction_id'])
+        if 'direction_id' in row:
+            self.direction_id = int(row['direction_id'])
+        else:
+            self.direction_id = 0
         self.shape_id = row['shape_id']
         self.headsign = row['trip_headsign']
         
@@ -26,7 +49,9 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.first_departure < other.first_departure
+        if self.start_time == other.start_time:
+            return self.service < other.service
+        return self.start_time < other.start_time
     
     @property
     def route(self):
@@ -76,24 +101,19 @@ class Trip:
             lat_diff = first_stop.lat - last_stop.lat
             lon_diff = first_stop.lon - last_stop.lon
             if lat_diff == 0 and lon_diff == 0:
-                self._direction = 'Circular'
+                self._direction = Direction.CIRCULAR
             elif abs(lat_diff) > abs(lon_diff):
-                self._direction = 'Southbound' if lat_diff > 0 else 'Northbound'
+                self._direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
             elif abs(lon_diff) > abs(lat_diff):
-                self._direction = 'Westbound' if lon_diff > 0 else 'Eastbound'
+                self._direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
             else:
-                self._direction = ''
+                self._direction = Direction.UNKNOWN
         return self._direction
-    
-    @property
-    def positions(self):
-        positions = realtime.get_positions()
-        return [p for p in positions if p.system == self.system and p.trip_id == self.id]
     
     @property
     def related_trips(self):
         if self._related_trips is None:
-            self._related_trips = [t for t in self.system.get_trips(self.service.sheet) if self.is_related(t)]
+            self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
@@ -127,8 +147,6 @@ class Trip:
     
     def is_related(self, other):
         if self.id == other.id:
-            return False
-        if self.service.sheet != other.service.sheet:
             return False
         if self.route_id != other.route_id:
             return False

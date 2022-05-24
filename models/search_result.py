@@ -1,5 +1,7 @@
 
 class SearchResult:
+    __slots__ = ('type', 'name', 'description', 'path', 'match')
+    
     def __init__(self, type, name, description, path, match):
         self.type = type
         self.name = name

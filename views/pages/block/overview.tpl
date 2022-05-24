@@ -1,4 +1,5 @@
-% rebase('base', title=f'Block {block.id}', include_maps=True)
+
+% rebase('base', title=f'Block {block.id}', include_maps=True, show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -9,42 +10,66 @@
             <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
+    <hr />
 </div>
-<hr />
 
-% if sheet is None or sheet in block.sheets:
-    % services = block.get_services(sheet)
-    % routes = block.get_routes(sheet)
-    % trips = block.get_trips(sheet)
-    % positions = sorted(block.positions)
-    
-    <div id="sidebar">
+% sheets = block.sheets
+% service_groups = sorted({g for s in sheets for g in s.service_groups})
+% routes = block.get_routes()
+% trips = block.get_trips()
+
+<div class="flex-container">
+    <div class="sidebar flex-1">
         <h2>Overview</h2>
-        % include('components/map', map_trips=trips, map_buses=[p.bus for p in positions])
+        % include('components/map', map_trips=trips, map_positions=positions)
         
         <div class="info-box">
             <div class="section">
-                % if len(services) == 1:
-                    % include('components/service_indicator', service=services[0])
-                % else:
-                    % include('components/services_indicator', services=services)
-                % end
+                % include('components/service_group_indicator', service_group=block.service_group)
             </div>
             <div class="section">
                 <div class="name">Start time</div>
-                <div class="value">{{ block.get_start_time(sheet) }}</div>
+                <div class="value">
+                    % for service_group in service_groups:
+                        % if len(service_groups) > 1:
+                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                        % end
+                        <div>{{ block.get_start_time(service_group) }}</div>
+                    % end
+                </div>
             </div>
             <div class="section">
                 <div class="name">End time</div>
-                <div class="value">{{ block.get_end_time(sheet) }}</div>
+                <div class="value">
+                    % for service_group in service_groups:
+                        % if len(service_groups) > 1:
+                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                        % end
+                        <div>{{ block.get_end_time(service_group) }}</div>
+                    % end
+                </div>
             </div>
             <div class="section">
                 <div class="name">Duration</div>
-                <div class="value">{{ block.get_duration(sheet) }}</div>
+                <div class="value">
+                    % for service_group in service_groups:
+                        % if len(service_groups) > 1:
+                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                        % end
+                        <div>{{ block.get_duration(service_group) }}</div>
+                    % end
+                </div>
             </div>
             <div class="section">
                 <div class="name">Number of trips</div>
-                <div class="value">{{ len(trips) }}</div>
+                <div class="value">
+                    % for service_group in service_groups:
+                        % if len(service_groups) > 1:
+                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                        % end
+                        <div>{{ len(block.get_trips(service_group)) }}</div>
+                    % end
+                </div>
             </div>
             <div class="section">
                 <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
@@ -57,7 +82,7 @@
             </div>
         </div>
         
-        % related_blocks = block.get_related_blocks(sheet)
+        % related_blocks = block.related_blocks
         % if len(related_blocks) > 0:
             <h2>Related Blocks</h2>
             <table class="striped">
@@ -71,7 +96,7 @@
                     % for related_block in related_blocks:
                         <tr>
                             <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
-                            <td>{{ ', '.join([str(s) for s in related_block.get_services(sheet)]) }}</td>
+                            <td>{{ related_block.service_group.schedule }}</td>
                         </tr>
                     % end
                 </tbody>
@@ -79,7 +104,7 @@
         % end
     </div>
     
-    <div>
+    <div class="flex-3">
         % if len(positions) > 0:
             <h2>Active Bus{{ '' if len(positions) == 1 else 'es' }}</h2>
             <table class="striped">
@@ -87,29 +112,25 @@
                     <tr>
                         <th>Bus</th>
                         <th class="desktop-only">Model</th>
-                        <th>Headsign</th>
+                        <th class="desktop-only">Headsign</th>
                         <th>Trip</th>
                         <th class="non-mobile">Current Stop</th>
                     </tr>
                 </thead>
                 <tbody>
-                    % for position in positions:
+                    % for position in sorted(positions):
                         % bus = position.bus
+                        % order = bus.order
                         % trip = position.trip
                         % stop = position.stop
-                        % order = bus.order
                         <tr>
                             <td>
-                                % if bus.is_unknown:
+                                % if order is None:
                                     {{ bus }}
                                 % else:
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                % end
-                                % if order is not None:
-                                    <span class="non-desktop smaller-font">
-                                        <br />
-                                        {{ order }}
-                                    </span>
+                                    <br />
+                                    <span class="non-desktop smaller-font">{{ order }}</span>
                                 % end
                             </td>
                             <td class="desktop-only">
@@ -117,8 +138,12 @@
                                     {{ order }}
                                 % end
                             </td>
-                            <td>{{ trip }}</td>
-                            <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
+                            <td class="desktop-only">{{ trip }}</td>
+                            <td>
+                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                <br />
+                                <span class="non-desktop smaller-font">{{ trip }}</span>
+                            </td>
                             % if stop is None:
                                 <td class="non-mobile lighter-text">Unavailable</td>
                             % else:
@@ -134,40 +159,54 @@
         % end
         
         <h2>Trip Schedule</h2>
-        <table class="striped">
-            <thead>
-                <tr>
-                    <th class="non-mobile">Start Time</th>
-                    <th class="mobile-only">Start</th>
-                    <th class="desktop-only">End Time</th>
-                    <th class="desktop-only">Duration</th>
-                    <th class=>Headsign</th>
-                    <th class="desktop-only">Direction</th>
-                    <th>Trip</th>
-                </tr>
-            </thead>
-            <tbody>
-                % for trip in trips:
-                    <tr>
-                        <td>{{ trip.start_time }}</td>
-                        <td class="desktop-only">{{ trip.end_time }}</td>
-                        <td class="desktop-only">{{ trip.duration }}</td>
-                        <td>
-                            {{ trip }}
-                            <span class="mobile-only smaller-font">
-                                <br />
-                                {{ trip.direction }}
-                            </span>
-                        </td>
-                        <td class="desktop-only">{{ trip.direction }}</td>
-                        <td><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                    </tr>
+        <div class="container">
+            % for sheet in sheets:
+                % for service_group in sheet.service_groups:
+                    % service_group_trips = block.get_trips(service_group)
+                    <div class="section">
+                        % if len(sheets) > 1 or len(sheet.service_groups) > 1:
+                            <h3 class="title">{{ service_group.schedule }}</h3>
+                        % end
+                        % if len(sheets) > 1:
+                            <div class="subtitle">{{ sheet }}</div>
+                        % end
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th>Start Time</th>
+                                    <th class="non-mobile">End Time</th>
+                                    <th class="desktop-only">Duration</th>
+                                    <th class="non-mobile">Headsign</th>
+                                    <th class="desktop-only">Direction</th>
+                                    <th>Trip</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for trip in service_group_trips:
+                                    <tr>
+                                        <td>{{ trip.start_time }}</td>
+                                        <td class="non-mobile">{{ trip.end_time }}</td>
+                                        <td class="desktop-only">{{ trip.duration }}</td>
+                                        <td class="non-mobile">
+                                            {{ trip }}
+                                            <br />
+                                            <span class="non-desktop smaller-font">{{ trip.direction.value }}</span>
+                                        </td>
+                                        <td class="desktop-only">{{ trip.direction.value }}</td>
+                                        <td>
+                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                            <br />
+                                            <span class="mobile-only smaller-font">{{ trip }}</span>
+                                        </td>
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
                 % end
-            </tbody>
-        </table>
+            % end
+        </div>
     </div>
-% else:
-    <p>
-        This block is not included in the {{ sheet.value }} sheet.
-    </p>
-% end
+</div>
+    
+% include('components/top_button')

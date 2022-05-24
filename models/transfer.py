@@ -5,6 +5,8 @@ from models.system import get_system
 import formatting
 
 class Transfer:
+    __slots__ = ('id', 'bus', 'date', 'old_system_id', 'new_system_id')
+    
     def __init__(self, row, prefix='transfer'):
         self.id = row[f'{prefix}_id']
         self.bus = Bus(row[f'{prefix}_bus_number'])

@@ -1,7 +1,8 @@
+
 % if get('realtime_only', False):
 	% available_systems = [s for s in systems if s.realtime_enabled]
 % else:
-  % available_systems = systems
+	% available_systems = systems
 % end
 
 <table class="striped">

@@ -47,6 +47,11 @@ table.striped tbody tr:hover {
     background-color: #CBCBCB;
 }
 
+table.striped tbody tr.section {
+    background-color: #666666;
+    color: #FFFFFF;
+}
+
 table.striped td {
     border-color: #666666;
 }
@@ -74,77 +79,81 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-#header {
+#map.preview {
+    border-color: #666666;
+}
+
+#map-z-toggle {
     background-color: #61C315;
 }
 
-#header .header-button {
+#navigation-bar {
+    background-color: #61C315;
+}
+
+#navigation-bar .navigation-button {
     color: #FFFFFF;
 }
 
-#header .header-button:hover {
+#navigation-bar .navigation-button:hover {
     background-color: #347800;
 }
 
-#header .header-button.disabled:hover {
+#navigation-bar .navigation-button.disabled:hover {
     background-color: #61C315 !important;
 }
 
-#header .header-text {
-    color: #FFFFFF;
-}
-
-#header .header-text input[type="text"] {
-    border-color: #FFFFFF;
+#navigation-bar .navigation-menu-toggle .line {
     background-color: #FFFFFF;
-    color: #000000;
-}
-
-#header .header-text input[type="text"]:focus {
-    border-color: #347800;
-}
-
-#header .header-text input[type="text"]::placeholder {
-    color: #666666;
-}
-
-#header .header-text input[type="text"]:-ms-input-placeholder {
-    color: #666666;
-}
-  
-#header .header-text input[type="text"]::-ms-input-placeholder {
-    color: #666666;
-}
-
-#header .menu-toggle .line {
-    background-color: #FFFFFF;
-}
-
-#map.preview {
-    border-color: #666666;
 }
 
 #refresh-button:hover {
     background-color: #026E6E;
 }
 
-#search-desktop #search-desktop-results {
-    background-color: #FFFFFF;
+#search-desktop {
+    color: #FFFFFF;
 }
 
-#search-desktop #search-desktop-results a {
+#search-desktop input[type="text"] {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
     color: #000000;
 }
 
-#search-desktop #search-desktop-results a:hover {
+#search-desktop input[type="text"]:focus {
+    border-color: #347800;
+}
+
+#search-desktop input[type="text"]::placeholder {
+    color: #666666;
+}
+
+#search-desktop input[type="text"]:-ms-input-placeholder {
+    color: #666666;
+}
+
+#search-desktop input[type="text"]::-ms-input-placeholder {
+    color: #666666;
+}
+
+#search-desktop-results {
+    background-color: #FFFFFF;
+}
+
+#search-desktop-results a {
+    color: #000000;
+}
+
+#search-desktop-results a:hover {
     background-color: #D8D8D8;
 }
 
-#search-desktop #search-desktop-results .keyboard-selected {
+#search-desktop-results .keyboard-selected {
     background-color: #CBCBCB;
 }
 
-#search-desktop #search-desktop-results .message {
+#search-desktop-results .message {
     color: #666666;
 }
 
@@ -156,19 +165,19 @@ table.striped tr:nth-child(2n-1) {
     border-color: #61C315;
 }
 
-#search-non-desktop #search-non-desktop-results a {
+#search-non-desktop-results a {
     color: #FFFFFF;
 }
 
-#search-non-desktop #search-non-desktop-results a .lighter-text {
+#search-non-desktop-results a .lighter-text {
+    color: #CBCBCB;
+}
+
+#search-non-desktop-results .message {
     color: #FFFFFF;
 }
 
-#search-non-desktop #search-non-desktop-results .message {
-    color: #FFFFFF;
-}
-
-#subheader {
+#system-bar {
     background-color: #249B9B;
     color: #FFFFFF;
 }
@@ -235,24 +244,25 @@ table.striped tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
-.dropdown .content a {
+.dropdown .content .dropdown-button {
     color: #000000;
 }
 
-.dropdown .content a:hover {
+.dropdown .content .dropdown-button:hover {
     background-color: #D8D8D8;
 }
 
-.dropdown .content a.disabled {
+.dropdown .content .dropdown-button.disabled {
     color: #666666;
 }
 
-.dropdown .content a.disabled:hover {
+.dropdown .content .dropdown-button.disabled:hover {
     background-color: #FFFFFF;
 }
 
-.dropdown .content .title {
-    color: #666666;
+.dropdown .content .header {
+    background-color: #CBCBCB;
+    color: #000000;
 }
 
 .info-box {
@@ -271,6 +281,10 @@ table.striped tr:nth-child(2n-1) {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #61C315;
+}
+
+.marker .icon.route .number {
+    color: #FFFFFF;
 }
 
 .menu {
@@ -305,7 +319,11 @@ table.striped tr:nth-child(2n-1) {
     border-color: #989898;
 }
 
-.service-indicator .dates .date {
+.service-indicator .dates .date.limited {
+    background-color: #FFA560;
+}
+
+.service-indicator .dates .date.not-running {
     background-color: #FF7F7F;
 }
 

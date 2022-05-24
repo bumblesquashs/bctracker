@@ -1,12 +1,13 @@
+
 % import json
 
 % rebase('base', title='Map', include_maps=True)
 
-% if len(buses) == 0:
+% if len(positions) == 0:
     <div class="page-header">
         <h1 class="title">Map</h1>
+        <hr />
     </div>
-    <hr />
 
     % if system is not None and not system.realtime_enabled:
         <p>
@@ -48,7 +49,7 @@
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
     </div>
-    
+        
     <div id="map" class="full-screen"></div>
     
     <script>
@@ -59,12 +60,12 @@
             style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
         });
         
-        let buses = JSON.parse('{{! json.dumps([b.json_data for b in buses if b.position.has_location]) }}');
+        let positions = JSON.parse('{{! json.dumps([p.json_data for p in positions if p.has_location]) }}');
         let currentShapeIDs = []
         let markers = [];
         let tripLinesVisible = false;
         let automaticRefresh = false;
-        let hoverBus = null
+        let hoverPosition = null
         
         const shapeIDs = [];
         
@@ -72,7 +73,7 @@
             updateMap(true);
         })
         
-        function updateMap(resetPosition) {
+        function updateMap(resetCoordinates) {
             currentShapeIDs = []
             for (const marker of markers) {
                 marker.remove();
@@ -82,77 +83,77 @@
             const lons = [];
             const lats = [];
             
-            for (const bus of buses) {
-                if (bus.shape_id !== null && bus.shape_id !== undefined) {
-                    const shapeID = bus.system_id + "_" + bus.shape_id
+            for (const position of positions) {
+                if (position.shape_id !== null && position.shape_id !== undefined) {
+                    const shapeID = position.system_id + "_" + position.shape_id
                     if (!(currentShapeIDs.includes(shapeID))) {
                         currentShapeIDs.push(shapeID)
                     }
                 }
                 
                 const adherenceElement = document.createElement("span")
-                if (bus.schedule_adherence !== null && bus.schedule_adherence !== undefined) {
-                    const adherence = bus.schedule_adherence
+                if (position.schedule_adherence !== null && position.schedule_adherence !== undefined) {
+                    const adherence = position.schedule_adherence
                     adherenceElement.classList.add("adherence-indicator")
                     adherenceElement.classList.add(adherence.status_class)
                     adherenceElement.innerHTML = adherence.value
                 }
                 
                 const element = document.createElement("div");
-                element.id = "bus-marker-" + bus.number
+                element.id = "bus-marker-" + position.bus_number
                 element.className = "marker";
-                if (bus.number < 0) {
+                if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
-                    icon.style.backgroundColor = "#" + bus.colour;
+                    icon.style.backgroundColor = "#" + position.colour;
                     icon.innerHTML = "<img src='/img/white/bus.png' />";
-                
+                    
                     icon.onmouseenter = function() {
-                        setHoverBus(bus);
+                        setHoverPosition(position);
                     }
                     icon.onmouseleave = function() {
-                        setHoverBus(null);
+                        setHoverPosition(null);
                     }
                     
                     const details = document.createElement("div");
                     details.className = "details";
                     details.innerHTML = "\
                         <div class='title'>Unknown Bus</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>"
+                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>"
                     
                     element.appendChild(icon);
                     element.appendChild(details);
                 } else {
                     const icon = document.createElement("a");
                     icon.className = "icon";
-                    icon.href = "/bus/" + bus.number;
-                    icon.style.backgroundColor = "#" + bus.colour;
+                    icon.href = "/bus/" + position.bus_number;
+                    icon.style.backgroundColor = "#" + position.colour;
                     icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
-                
+                    
                     icon.onmouseenter = function() {
-                        setHoverBus(bus);
+                        setHoverPosition(position);
                     }
                     icon.onmouseleave = function() {
-                        setHoverBus(null);
+                        setHoverPosition(null);
                     }
                     
                     const details = document.createElement("div");
                     details.className = "details";
                     details.innerHTML = "\
-                        <div class='title'>" + bus.number + "</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + bus.headsign + "</div>";
+                        <div class='title'>" + position.bus_number + "</div>\
+                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
                     
                     element.appendChild(icon);
                     element.appendChild(details);
                 }
                 
-                lons.push(bus.lon);
-                lats.push(bus.lat);
+                lons.push(position.lon);
+                lats.push(position.lat);
                 
-                markers.push(new mapboxgl.Marker(element).setLngLat([bus.lon, bus.lat]).addTo(map));
+                markers.push(new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map));
             }
             
-            if (resetPosition) {
+            if (resetCoordinates) {
                 if (lons.length === 1 && lats.length === 1) {
                     map.jumpTo({
                         center: [lons[0], lats[0]],
@@ -200,11 +201,11 @@
             checkboxImage.classList.toggle("hidden");
             
             if (automaticRefresh) {
-                updateBusData()
+                updatePositionData()
             }
         }
         
-        function updateBusData() {
+        function updatePositionData() {
             const request = new XMLHttpRequest();
             request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
             request.responseType = "json";
@@ -214,7 +215,7 @@
                     const element = document.getElementById("last-updated");
                     if (element !== null && element !== undefined && element.innerHTML.trim() !== "Updated " + lastUpdated) {
                         element.innerHTML = "Updated " + lastUpdated;
-                        buses = request.response.buses;
+                        positions = request.response.positions;
                         updateMap(false);
                         if (tripLinesVisible) {
                             updateRouteData()
@@ -226,75 +227,24 @@
         }
         
         function updateRouteData() {
-            for (const bus of buses) {
-                if (bus.shape_id === null || bus.shape_id === undefined) {
+            for (const position of positions) {
+                if (position.shape_id === null || position.shape_id === undefined) {
                     continue;
                 }
-                const shapeID = bus.system_id + "_" + bus.shape_id
+                const shapeID = position.system_id + "_" + position.shape_id
                 if (shapeIDs.includes(shapeID)) {
                     continue;
                 }
                 const request = new XMLHttpRequest();
-                request.open("GET", getUrl(bus.system_id, "api/shape/" + bus.shape_id + ".json"), true);
+                request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
-                        shapeIDs.push(shapeID);
-                        map.addSource(shapeID, {
-                            'type': 'geojson',
-                            'data': {
-                                'type': 'Feature',
-                                'properties': {},
-                                'geometry': {
-                                    'type': 'LineString',
-                                    'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
-                                }
-                            }
-                        });
-                        map.addLayer({
-                            'id': shapeID,
-                            'type': 'line',
-                            'source': shapeID,
-                            'minzoom': 8,
-                            'layout': {
-                                'line-join': 'round',
-                                'line-cap': 'round',
-                                'visibility':  tripLinesVisible ? 'visible' : 'none'
-                            },
-                            'paint': {
-                                'line-color': '#' + bus.colour,
-                                'line-width': 4
-                            }
-                        });
-                    }
-                };
-                request.send();
-            }
-        }
-        
-        function setHoverBus(bus) {
-            if (tripLinesVisible) {
-                return
-            }
-            if (hoverBus !== null) {
-                if (shapeIDs.includes(hoverBus.shape_id)) {
-                    map.setLayoutProperty(hoverBus.shape_id, "visibility", "none");
-                }
-            }
-            if (bus !== null) {
-                if (bus.shape_id === null || bus.shape_id === undefined) {
-                    return;
-                }
-                if (shapeIDs.includes(bus.shape_id)) {
-                    map.setLayoutProperty(bus.shape_id, "visibility", "visible");
-                } else {
-                    const request = new XMLHttpRequest();
-                    request.open("GET", getUrl(bus.system_id, "api/shape/" + bus.shape_id + ".json"), true);
-                    request.responseType = "json";
-                    request.onload = function() {
-                        if (request.status === 200) {
-                            shapeIDs.push(bus.shape_id);
-                            map.addSource(bus.shape_id, {
+                        if (shapeIDs.includes(shapeID)) {
+                            map.setLayoutProperty(shapeID, "visibility", "visible");
+                        } else {
+                            shapeIDs.push(shapeID);
+                            map.addSource(shapeID, {
                                 'type': 'geojson',
                                 'data': {
                                     'type': 'Feature',
@@ -306,37 +256,102 @@
                                 }
                             });
                             map.addLayer({
-                                'id': bus.shape_id,
+                                'id': shapeID,
                                 'type': 'line',
-                                'source': bus.shape_id,
+                                'source': shapeID,
                                 'minzoom': 8,
                                 'layout': {
                                     'line-join': 'round',
                                     'line-cap': 'round',
-                                    'visibility': (hoverBus === bus) ? 'visible' : 'none'
+                                    'visibility':  tripLinesVisible ? 'visible' : 'none'
                                 },
                                 'paint': {
-                                    'line-color': '#' + bus.colour,
+                                    'line-color': '#' + position.colour,
                                     'line-width': 4
                                 }
                             });
+                        }
+                    }
+                };
+                request.send();
+            }
+        }
+        
+        function setHoverPosition(position) {
+            if (tripLinesVisible) {
+                return
+            }
+            if (hoverPosition !== null) {
+                const shapeID = hoverPosition.system_id + "_" + hoverPosition.shape_id
+                if (shapeIDs.includes(shapeID)) {
+                    map.setLayoutProperty(shapeID, "visibility", "none");
+                }
+            }
+            if (position !== null) {
+                if (position.shape_id === null || position.shape_id === undefined) {
+                    return;
+                }
+                const shapeID = position.system_id + "_" + position.shape_id
+                if (shapeIDs.includes(shapeID)) {
+                    map.setLayoutProperty(shapeID, "visibility", "visible");
+                } else {
+                    const request = new XMLHttpRequest();
+                    request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
+                    request.responseType = "json";
+                    request.onload = function() {
+                        if (request.status === 200) {
+                            if (shapeIDs.includes(shapeID)) {
+                                map.setLayoutProperty(shapeID, "visibility", "visible");
+                            } else {
+                                shapeIDs.push(shapeID);
+                                map.addSource(shapeID, {
+                                    'type': 'geojson',
+                                    'data': {
+                                        'type': 'Feature',
+                                        'properties': {},
+                                        'geometry': {
+                                            'type': 'LineString',
+                                            'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
+                                        }
+                                    }
+                                });
+                                map.addLayer({
+                                    'id': shapeID,
+                                    'type': 'line',
+                                    'source': shapeID,
+                                    'minzoom': 8,
+                                    'layout': {
+                                        'line-join': 'round',
+                                        'line-cap': 'round',
+                                        'visibility': (hoverPosition === position) ? 'visible' : 'none'
+                                    },
+                                    'paint': {
+                                        'line-color': '#' + position.colour,
+                                        'line-width': 4
+                                    }
+                                });
+                            }
                         }
                     };
                     request.send();
                 }
             }
-            hoverBus = bus;
+            hoverPosition = position;
         }
         
+        const date = new Date();
+        const timeToNextUpdate = 60 - date.getSeconds();
         setTimeout(function() {
             if (automaticRefresh) {
-                updateBusData();
+                updatePositionData();
             }
             setInterval(function() {
                 if (automaticRefresh) {
-                    updateBusData();
+                    updatePositionData();
                 }
             }, 1000 * 60);
         }, 1000 * (timeToNextUpdate + 15));
     </script>
+
+    % include('components/map_z_toggle')
 % end

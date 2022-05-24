@@ -1,14 +1,19 @@
+
 % rebase('base', title='Error')
 
 % if system_id is None:
-    <h1>Error: System Required</h1>
-    <hr />
+    <div class="page-header">
+        <h1 class="title">Error: System Required</h1>
+        <hr />
+    </div>
     
     <p>The page you are trying to look at requires a system.</p>
     <p>Please choose a system.</p>
 % else:
-    <h1>Error: System {{ system_id }} Not Found</h1>
-    <hr />
+    <div class="page-header">
+        <h1 class="title">Error: System {{ system_id }} Not Found</h1>
+        <hr />
+    </div>
     
     <p>The system you are looking at doesn't seem to exist!</p>
     <p>

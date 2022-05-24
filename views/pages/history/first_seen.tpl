@@ -1,6 +1,7 @@
+
 % import formatting
 
-% rebase('base', title='Vehicle History')
+% rebase('base', title='Vehicle History', show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Vehicle History</h1>
@@ -9,8 +10,8 @@
         <span class="tab-button current">First Seen</span>
         <a href="{{ get_url(system, 'history/transfers') }}" class="tab-button">Transfers</a>
     </div>
+    <hr />
 </div>
-<hr />
 
 % if system is not None and not system.realtime_enabled:
     <p>
@@ -44,14 +45,18 @@
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
+                    <td class="non-desktop no-wrap">
+                        {{ formatting.short(record.date) }}
+                        % if system is None:
+                            <br />
+                            <span class="mobile-only smaller-font">{{ record.system }}</span>
+                        % end
+                    </td>
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ order }}
-                            </span>
+                            <br />
+                            <span class="non-desktop smaller-font">{{ order }}</span>
                         % end
                     </td>
                     <td class="desktop-only">

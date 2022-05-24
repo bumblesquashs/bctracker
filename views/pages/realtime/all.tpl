@@ -1,5 +1,5 @@
 
-% rebase('base', title='Realtime')
+% rebase('base', title='Realtime', show_refresh_button=True)
 
 <div class="page-header">
     <h1 class="title">Realtime</h1>
@@ -16,10 +16,10 @@
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Sandra Bullock and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
     </div>
+    <hr />
 </div>
-<hr />
 
-% if len(buses) == 0:
+% if len(positions) == 0:
     <div>
         % if system is not None and not system.realtime_enabled:
             <p>
@@ -45,12 +45,11 @@
         % end
     </div>
 % else:
-    <table class="striped fixed-table">
+    <table class="striped">
         <thead>
             <tr>
-                <th class="desktop-only">Number</th>
-                <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
+                <th class="non-mobile">Number</th>
+                <th class="mobile-only">Bus</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
@@ -63,11 +62,11 @@
         </thead>
         <tbody>
             % last_bus = None
-            % for bus in sorted(buses):
-                % position = bus.position
+            % for position in sorted(positions):
+                % bus = position.bus
                 % order = bus.order
                 % if last_bus is None:
-                    % same_order = True
+                    % same_order = False
                 % elif order is None and last_bus.order is None:
                     % same_order = True
                 % elif order is None or last_bus.order is None:
@@ -76,23 +75,24 @@
                     % same_order = order == last_bus.order
                 % end
                 % last_bus = bus
-                <tr class="{{'' if same_order else 'divider'}}">
+                % if not same_order:
+                    <tr class="section">
+                        <td colspan="6">
+                            % if order is None:
+                                Unknown Year/Model
+                            % else:
+                                {{ order }}
+                            % end
+                        </td>
+                    </tr>
+                    <tr class="display-none"></tr>
+                % end
+                <tr>
                     <td>
-                        % if bus.is_unknown:
+                        % if order is None:
                             {{ bus }}
                         % else:
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % end
-                        % if order is not None:
-                            <span class="non-desktop smaller-font">
-                                <br />
-                                {{ order }}
-                            </span>
-                        % end
-                    </td>
-                    <td class="desktop-only">
-                        % if order is not None:
-                            {{ order }}
                         % end
                     </td>
                     % if system is None:
@@ -110,8 +110,8 @@
                         <td>
                             {{ trip }}
                             % if stop is not None:
+                                <br />
                                 <span class="non-desktop smaller-font">
-                                    <br />
                                     % include('components/adherence_indicator', adherence=position.schedule_adherence)
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                 </span>

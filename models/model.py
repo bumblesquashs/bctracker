@@ -7,9 +7,12 @@ class BusModelType(Enum):
     artic = "Articulated"
     conventional = "Conventional"
     decker = "Double Decker"
+    midibus = "Midibus"
     shuttle = "Shuttle"
 
 class BusModel:
+    __slots__ = ('id', 'manufacturer', 'name', 'length', 'fuel', 'type')
+    
     def __init__(self, row):
         self.id = row['model_id']
         self.manufacturer = row['manufacturer']

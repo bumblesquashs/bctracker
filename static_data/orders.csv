@@ -11,6 +11,7 @@ low,high,year,model_id
 1148,1185,2019,new_flyer_xn40
 1186,1212,2020,new_flyer_xn40
 1213,1232,2021,new_flyer_xn40
+1233,1253,2022,new_flyer_xn40
 2173,2240,2009,ford_cbb_e450_polar_v
 2301,2310,2010,chevrolet_arboc_4500_som23d
 2311,2315,2010,chevrolet_arboc_4500_som28d
@@ -37,10 +38,10 @@ low,high,year,model_id
 3001,3015,2013,grande_west_vicinity_27
 3016,3023,2015,international_eldorado_3200_aero_elite
 3024,3028,2018,international_eldorado_3200_aero_elite
-4007,4061,2017,grande_west_vicinity_30
-4062,4070,2017,grande_west_vicinity_30
+4007,4070,2017,grande_west_vicinity_30
 4071,4073,2018,grande_west_vicinity_30
 4200,4233,2020,grande_west_vicinity_cng_30
+4234,4248,2022,vmc_classic_vi30_cng
 4400,4432,2017,grande_west_vicinity_35
 4433,4474,2018,grande_west_vicinity_35
 6000,6029,2017,nova_bus_lfs
@@ -55,8 +56,7 @@ low,high,year,model_id
 9051,9078,2000,dennis_dart_slf_35
 9081,9085,2001,dennis_dart_slf_35
 9101,9106,2005,new_flyer_de40lf
-9201,9210,2006,nova_bus_lfs
-9211,9231,2006,nova_bus_lfs
+9201,9231,2006,nova_bus_lfs
 9232,9267,2007,nova_bus_lfs
 9268,9289,2008,nova_bus_lfs
 9290,9300,2008,nova_bus_lfs_suburban
@@ -77,6 +77,4 @@ low,high,year,model_id
 9831,9856,1998,new_flyer_d40lf
 9861,9878,1998,new_flyer_d40lf
 9881,9891,1998,new_flyer_d40lf
-9901,9904,1999,dennis_dart_slf_30
-9905,9909,1999,dennis_dart_slf_30
-9910,9951,1999,dennis_dart_slf_30
+9901,9951,1999,dennis_dart_slf_30

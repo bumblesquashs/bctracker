@@ -13,12 +13,6 @@ button {
 
 form input[type="text"] {
     font-size: 16pt;
-    margin-bottom: 10px;
-    width: 100%;
-}
-
-form input[type="submit"] {
-    width: 100%;
 }
 
 form label {
@@ -37,7 +31,14 @@ table {
 }
 
 #change-system-menu {
-    padding: 10px 0px;
+    padding: 0px;
+}
+
+#change-system-menu .header {
+    text-align: center;
+    padding: 5px 20px;
+    font-size: 14pt;
+    width: calc(100% - 40px);
 }
 
 #change-system-menu .menu-button {
@@ -45,33 +46,42 @@ table {
     padding: 10px 20px;
 }
 
-#header .header-button {
+#change-system-menu .menu-button.full-width {
+    width: calc(100% - 40px);
+}
+
+#main {
+    flex-direction: column;
+}
+
+#navigation-bar .menu-toggle {
+    padding: 10px;
+}
+
+#navigation-bar .menu-toggle img {
+    width: 36px;
+    height: 36px;
+}
+
+#navigation-bar .navigation-button {
     font-size: 16pt;
 }
 
-#header .menu-toggle {
+#navigation-bar .navigation-menu-toggle {
     padding: 5px;
     margin: 5px 10px 5px 0px;
 }
 
-#header .menu-toggle .line {
+#navigation-bar .navigation-menu-toggle .line {
     width: 32px;
     height: 4px;
     border-radius: 2px;
     margin: 6px;
 }
 
-#header .icon-menu-toggle {
-    padding: 10px;
-}
-
-#header .icon-menu-toggle img {
-    width: 36px;
-    height: 36px;
-}
-
 #search-non-desktop {
     padding: 20px;
+    display: block;
 }
 
 #search-non-desktop input[type="text"] {
@@ -88,32 +98,35 @@ table {
     outline: none;
 }
 
-#search-non-desktop #search-non-desktop-results {
+#search-non-desktop-results {
     margin-top: 10px;
 }
 
-#search-non-desktop #search-non-desktop-results a {
+#search-non-desktop-results a {
     padding: 10px 0px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
     font-size: 16pt;
 }
 
-#search-non-desktop #search-non-desktop-results img {
-    width: 32px;
-    height: 32px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    vertical-align: middle;
+#search-non-desktop-results a img {
+    width: 36px;
+    height: 36px;
 }
 
-#search-non-desktop #search-non-desktop-results .message {
+#search-non-desktop-results a .description {
+    flex: 1;
+}
+
+#search-non-desktop-results .message {
     padding: 10px 0px;
     text-align: center;
     font-size: 16pt;
 }
 
-#subheader #last-updated {
+#system-bar #last-updated {
     font-size: 12pt;
 }
 
@@ -131,9 +144,13 @@ table {
     display: none !important;
 }
 
+.flex-container {
+    flex-direction: column;
+    gap: 20px;
+}
+
 .menu {
     position: relative;
-    z-index: 10;
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;
