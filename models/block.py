@@ -1,6 +1,7 @@
 
+import helpers.sheet
+
 from models.service import ServiceGroup
-from models.sheet import create_sheets
 
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
@@ -14,7 +15,7 @@ class Block:
         
         services = {t.service for t in trips}
         self.service_group = ServiceGroup.combine(services)
-        self.sheets = create_sheets(services)
+        self.sheets = helpers.sheet.combine(services)
     
     def __eq__(self, other):
         return self.id == other.id

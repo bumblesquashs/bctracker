@@ -1,5 +1,5 @@
 
-import queries.model
+import helpers.model
 
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
@@ -11,7 +11,7 @@ class Order:
         low = int(row['low'])
         high = int(row['high'])
         year = int(row['year'])
-        model = queries.model.find(row['model_id'])
+        model = helpers.model.find(row['model_id'])
         return cls(low, high, year, model)
     
     def __init__(self, low, high, year, model):

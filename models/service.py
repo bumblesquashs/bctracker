@@ -1,7 +1,9 @@
 
 from enum import IntEnum
 
-from models.date import Date, flatten
+import helpers.date
+
+from models.date import Date
 
 class ServiceExceptionType(IntEnum):
     INCLUDED = 1
@@ -47,11 +49,7 @@ class ServicePattern:
         self.sun = sun
         self.exceptions = exceptions
         
-        if mon and tue and wed and thu and fri and sat and sun:
-            delta = end_date.datetime - start_date.datetime
-            self.special = delta.days < 7
-        else:
-            self.special = not (mon or tue or wed or thu or fri or sat or sun)
+        self.special = not (mon or tue or wed or thu or fri or sat or sun)
         
         values = [mon, tue, wed, thu, fri, sat, sun]
         self.indices = [i for i, value in enumerate(values) if value]
@@ -150,7 +148,7 @@ class ServicePattern:
     
     @property
     def included_dates_string(self):
-        return flatten(self.included_dates)
+        return helpers.date.flatten(self.included_dates)
     
     @property
     def excluded_dates(self):
@@ -160,7 +158,7 @@ class ServicePattern:
     
     @property
     def excluded_dates_string(self):
-        return flatten(self.excluded_dates)
+        return helpers.date.flatten(self.excluded_dates)
     
     @property
     def date_string(self):
@@ -215,6 +213,8 @@ class Service(ServicePattern):
         fri = row['friday'] == '1'
         sat = row['saturday'] == '1'
         sun = row['sunday'] == '1'
+        if mon and tue and wed and thu and fri and sat and sun and (end_date.datetime - start_date.datetime).days < 7:
+            return cls(system, id, start_date, end_date, False, False, False, False, False, False, False, exceptions.get(id, []))
         return cls(system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions.get(id, []))
     
     def __init__(self, system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions):

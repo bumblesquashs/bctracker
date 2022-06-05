@@ -1,5 +1,5 @@
 
-import queries.order
+import helpers.order
 
 class Bus:
     '''A public transportation vehicle'''
@@ -8,7 +8,7 @@ class Bus:
     
     def __init__(self, bus_number):
         self.number = bus_number
-        self.order = queries.order.find(bus_number)
+        self.order = helpers.order.find(bus_number)
     
     def __str__(self):
         if self.number < 0:

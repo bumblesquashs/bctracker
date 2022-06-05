@@ -1,8 +1,8 @@
 
+import helpers.system
+
 from models.bus import Bus
 from models.date import Date
-
-import queries.system
 
 class Transfer:
     '''Information about a bus moving from one system to another system'''
@@ -14,8 +14,8 @@ class Transfer:
         id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         date = Date.parse_db(row[f'{prefix}_date'])
-        old_system = queries.system.find(row[f'{prefix}_old_system_id'])
-        new_system = queries.system.find(row[f'{prefix}_new_system_id'])
+        old_system = helpers.system.find(row[f'{prefix}_old_system_id'])
+        new_system = helpers.system.find(row[f'{prefix}_new_system_id'])
         return cls(id, bus, date, old_system, new_system)
     
     def __init__(self, id, bus, date, old_system, new_system):

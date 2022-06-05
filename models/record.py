@@ -1,9 +1,9 @@
 
+import helpers.system
+
 from models.bus import Bus
 from models.date import Date
 from models.time import Time
-
-import queries.system
 
 class Record:
     '''Information about a bus' history on a specific date'''
@@ -15,7 +15,7 @@ class Record:
         record_id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         date = Date.parse_db(row[f'{prefix}_date'])
-        system = queries.system.find(row[f'{prefix}_system_id'])
+        system = helpers.system.find(row[f'{prefix}_system_id'])
         block_id = row[f'{prefix}_block_id']
         routes = row[f'{prefix}_routes']
         start_time = Time.parse(row[f'{prefix}_start_time'])

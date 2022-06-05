@@ -1,9 +1,10 @@
 
 from math import sqrt
 
+import helpers.sheet
+
 from models.match import Match
 from models.service import ServiceGroup
-from models.sheet import create_sheets
 
 class Stop:
     '''A location where a vehicle stops along a trip'''
@@ -30,7 +31,7 @@ class Stop:
         
         services = {d.trip.service for d in departures if d.trip is not None}
         self.service_group = ServiceGroup.combine(services)
-        self.sheets = create_sheets(services)
+        self.sheets = helpers.sheet.combine(services)
     
     def __str__(self):
         return self.name

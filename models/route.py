@@ -4,9 +4,10 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
+import helpers.sheet
+
 from models.match import Match
 from models.service import ServiceGroup
-from models.sheet import create_sheets
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
@@ -77,7 +78,7 @@ class Route:
         
         services = {t.service for t in trips}
         self.service_group = ServiceGroup.combine(services)
-        self.sheets = create_sheets(services)
+        self.sheets = helpers.sheet.combine(services)
     
     def __str__(self):
         return f'{self.number} {self.name}'

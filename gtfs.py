@@ -7,13 +7,14 @@ from shutil import rmtree
 import wget
 import csv
 
+import helpers.sheet
+
 from models.block import Block
 from models.date import Date
 from models.departure import Departure
 from models.route import Route
 from models.service import Service, ServiceException
 from models.shape import Shape, ShapePoint
-from models.sheet import create_sheets
 from models.stop import Stop
 from models.trip import Trip
 
@@ -59,7 +60,7 @@ def load(system):
     services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
     system.services = {s.id: s for s in services}
     
-    sheets = create_sheets(services)
+    sheets = helpers.sheet.combine(services)
     system.sheets = {service.id: sheet for sheet in sheets for service in sheet.services}
     
     points = read_csv(system, 'shapes', ShapePoint.from_csv)
