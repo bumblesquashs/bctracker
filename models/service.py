@@ -1,4 +1,5 @@
 
+from datetime import timedelta
 from enum import IntEnum
 
 import helpers.date
@@ -213,9 +214,13 @@ class Service(ServicePattern):
         fri = row['friday'] == '1'
         sat = row['saturday'] == '1'
         sun = row['sunday'] == '1'
-        if mon and tue and wed and thu and fri and sat and sun and (end_date.datetime - start_date.datetime).days < 7:
-            return cls(system, id, start_date, end_date, False, False, False, False, False, False, False, exceptions.get(id, []))
-        return cls(system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions.get(id, []))
+        
+        service_exceptions = exceptions.get(id, [])
+        delta = end_date.datetime - start_date.datetime
+        if mon and tue and wed and thu and fri and sat and sun and delta.days < 7:
+            service_exceptions += [ServiceException(id, start_date + timedelta(days=i), ServiceExceptionType.INCLUDED) for i in range(delta.days + 1)]
+            mon = tue = wed = thu = fri = sat = sun = False
+        return cls(system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, service_exceptions)
     
     def __init__(self, system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions):
         super().__init__(start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions)

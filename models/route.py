@@ -25,7 +25,9 @@ class Route:
         else:
             headsigns = sorted(t.headsign for t in route_trips)
             for i in range(len(headsigns)):
-                headsign = headsigns[i].lstrip(number).strip(' ')
+                headsign = headsigns[i]
+                if not system.prefix_headsign:
+                    headsign = headsign.lstrip(number).strip(' ')
                 if headsign.startswith('A '):
                     headsign.lstrip('A ')
                 if headsign.startswith('B '):
@@ -42,7 +44,7 @@ class Route:
                     headsign = headsign.split(' via ')[0]
                 elif ' Via ' in headsign:
                     headsign = headsign.split(' Via ')[0]
-                headsigns[i] = headsign.strip(' ')
+                headsigns[i] = headsign.strip(' ').strip(',')
             prefix = commonprefix(headsigns).strip(' ')
             if len(prefix) < 3:
                 if len(headsigns) > 2:

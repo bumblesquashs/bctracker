@@ -190,9 +190,7 @@
                     <div class="section">
                         % if len(sheets) > 1 or len(sheet.service_groups) > 1:
                             <h3 class="title">{{ service_group }}</h3>
-                        % end
-                        % if len(sheets) > 1:
-                            <div class="subtitle">{{ sheet }}</div>
+                            <div class="subtitle">{{ service_group.date_string }}</div>
                         % end
                         <table class="striped">
                             <thead>

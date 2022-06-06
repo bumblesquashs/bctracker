@@ -1,6 +1,6 @@
 
 from models.date import Date
-from models.service import ServiceGroup
+from models.service import ServiceGroup, ServiceException, ServiceExceptionType
 
 class Sheet:
     '''A collection of overlapping services with defined start and end dates'''
@@ -15,6 +15,8 @@ class Sheet:
         self._service_groups = None
     
     def __str__(self):
+        if self.start_date == self.end_date:
+            return str(self.start_date)
         return f'{self.start_date} to {self.end_date}'
     
     def __hash__(self):
@@ -29,10 +31,21 @@ class Sheet:
     @property
     def service_groups(self):
         if self._service_groups is None:
-            groups = [ServiceGroup(s.id, [s], s.start_date, s.end_date, s.mon, s.tue, s.wed, s.thu, s.fri, s.sat, s.sun, s.exceptions) for s in self.services if s.special]
-            services = [s for s in self.services if not s.special]
-            indices = {i for s in services for i in s.indices}
-            index_services = {i:tuple({s for s in services if i in s.indices}) for i in indices}
+            groups = []
+            
+            dates = {d for s in self.services for d in s.included_dates if s.special}
+            date_services = {d:tuple({s for s in self.services if s.includes(d)}) for d in dates}
+            special_service_sets = set(date_services.values())
+            for service_set in special_service_sets:
+                id = '_'.join(sorted([s.id for s in service_set]))
+                start_date = min({s.start_date for s in service_set})
+                end_date = max({s.end_date for s in service_set})
+                service_set_dates = {k for k,v in date_services.items() if v == service_set}
+                exceptions = [ServiceException(id, d, ServiceExceptionType.INCLUDED) for d in service_set_dates]
+                groups.append(ServiceGroup(id, sorted(service_set), start_date, end_date, False, False, False, False, False, False, False, exceptions))
+            
+            indices = {i for s in self.services for i in s.indices if not s.special}
+            index_services = {i:tuple({s for s in self.services if i in s.indices}) for i in indices}
             service_sets = set(index_services.values())
             for service_set in service_sets:
                 id = '_'.join(sorted([s.id for s in service_set]))
