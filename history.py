@@ -238,7 +238,7 @@ def scheduled_today(system_id, trips):
         columns={
             'records.bus_number': 'bus_number',
             'records.block_id': 'block_id',
-            'ROW_NUMBER() OVER(PARTITION BY bus_number ORDER BY date DESC, record_id DESC)': 'row_number'
+            'ROW_NUMBER() OVER(PARTITION BY records.block_id ORDER BY records.record_id DESC)': 'row_number'
         },
         filters={
             'records.system_id': system_id,
