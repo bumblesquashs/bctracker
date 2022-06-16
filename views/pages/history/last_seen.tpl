@@ -22,12 +22,8 @@
     <table class="striped">
         <thead>
             <tr>
-<<<<<<< HEAD
-                <th>Number</th>
-=======
                 <th class="non-mobile">Number</th>
                 <th class="mobile-only">Bus</th>
->>>>>>> af674afdf42deec2a13665370c130a44e6f4827b
                 <th>Last Seen</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
