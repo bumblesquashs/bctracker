@@ -14,9 +14,9 @@ north-okanagan,North Okanagan,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi
 port-alberni,Port Alberni,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=11,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=11
 powell-river,Powell River,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=29,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=29
 prince-george,Prince George,1,1,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=22,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=22
-south-okanagan,South Okanagan,1,1,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=15,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=15
+south-okanagan,South Okanagan,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=15,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=15
 squamish,Squamish,1,1,1,http://squamish.mapstrat.com/current/google_transit.zip,http://squamish.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
 sunshine-coast,Sunshine Coast,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=18,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=18
 victoria,Victoria,0,1,1,http://victoria.mapstrat.com/current/google_transit.zip,http://victoria.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
-west-kootenay,West Kootenay,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=20,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=20
+west-kootenay,West Kootenay,1,1,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=20,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=20
 whistler,Whistler,1,1,1,http://whistler.mapstrat.com/current/google_transit.zip,http://whistler.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
