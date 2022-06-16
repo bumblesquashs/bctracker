@@ -56,9 +56,7 @@
                             % bus_number = f'{number:04d}'
                             % if number == order.low:
                                 <tr class="section">
-                                    <td colspan="3">
-                                        {{ order }}
-                                    </td>
+                                    <td colspan="3">{{ order }}</td>
                                 </tr>
                                 <tr class="display-none"></tr>
                             % end

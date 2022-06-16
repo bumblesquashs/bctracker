@@ -48,7 +48,8 @@
     <table class="striped">
         <thead>
             <tr>
-                <th>Number</th>
+                <th class="non-mobile">Number</th>
+                <th class="mobile-only">Bus</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
@@ -76,7 +77,7 @@
                 % last_bus = bus
                 % if not same_order:
                     <tr class="section">
-                        <td colspan="7">
+                        <td colspan="8">
                             % if order is None:
                                 Unknown Year/Model
                             % else:

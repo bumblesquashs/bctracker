@@ -41,7 +41,7 @@
         % end
     </div>
 % else:
-    <table class="striped fixed-table">
+    <table class="striped">
         <thead>
             <tr>
                 <th class="desktop-only">Number</th>

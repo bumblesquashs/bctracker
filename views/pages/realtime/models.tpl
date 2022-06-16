@@ -52,12 +52,12 @@
             % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
             <div class="section">
                 <h2 class="title">{{ model }}</h2>
-                <table class="striped fixed-table">
+                <table class="striped">
                     <thead>
                         <tr>
-                            <th class="desktop-only">Number</th>
-                            <th class="desktop-only">Year</th>
-                            <th class="non-desktop" style="width: 20%;">Bus</th>
+                            <th class="non-mobile">Number</th>
+                            <th class="non-mobile">Year</th>
+                            <th class="mobile-only">Bus</th>
                             % if system is None:
                                 <th class="non-mobile">System</th>
                             % end
@@ -79,9 +79,9 @@
                                 <td>
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                     <br />
-                                    <span class="non-desktop smaller-font">{{ order.year }}</span>
+                                    <span class="mobile-only smaller-font">{{ order.year }}</span>
                                 </td>
-                                <td class="desktop-only">
+                                <td class="non-mobile">
                                     {{ order.year }}
                                 </td>
                                 % if system is None:
@@ -127,8 +127,8 @@
         % unknown_positions = sorted([p for p in positions if p.bus.order is None])
         % if len(unknown_positions) > 0:
             <div class="section">
-                <h2 class="title">Unknown Model</h2>
-                <table class="striped fixed-table">
+                <h2 class="title">Unknown Year/Model</h2>
+                <table class="striped">
                     <thead>
                         <tr>
                             <th class="desktop-only">Number</th>
