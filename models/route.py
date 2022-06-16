@@ -78,7 +78,7 @@ class Route:
         
         self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
         
-        services = {t.service for t in trips}
+        services = {t.service for t in trips if t.is_current}
         self.service_group = ServiceGroup.combine(services)
         self.sheets = helpers.sheet.combine(services)
     
@@ -96,6 +96,13 @@ class Route:
     
     def __gt__(self, other):
         return self.number_value > other.number_value
+    
+    @property
+    def is_current(self):
+        for trip in self.trips:
+            if trip.is_current:
+                return True
+        return False
     
     @property
     def json(self):

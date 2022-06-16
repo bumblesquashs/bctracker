@@ -232,6 +232,10 @@ class Service(ServicePattern):
     
     def __eq__(self, other):
         return self.id == other.id
+    
+    @property
+    def sheet(self):
+        return self.system.get_sheet(self.id)
 
 class ServiceGroup(ServicePattern):
     '''A collection of services represented as a single service pattern'''

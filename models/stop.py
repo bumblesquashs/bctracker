@@ -29,7 +29,7 @@ class Stop:
         self.lon = lon
         self.departures = sorted(departures)
         
-        services = {d.trip.service for d in departures if d.trip is not None}
+        services = {d.trip.service for d in departures if d.trip is not None and d.is_current}
         self.service_group = ServiceGroup.combine(services)
         self.sheets = helpers.sheet.combine(services)
     
@@ -46,6 +46,13 @@ class Stop:
         if self.name == other.name:
             return self.number < other.number
         return self.name < other.name
+    
+    @property
+    def is_current(self):
+        for departure in self.departures:
+            if departure.is_current:
+                return True
+        return False
     
     @property
     def nearby_stops(self):

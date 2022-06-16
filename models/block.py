@@ -13,7 +13,7 @@ class Block:
         self.id = id
         self.trips = sorted(trips)
         
-        services = {t.service for t in trips}
+        services = {t.service for t in trips if t.is_current}
         self.service_group = ServiceGroup.combine(services)
         self.sheets = helpers.sheet.combine(services)
     
@@ -22,6 +22,13 @@ class Block:
     
     def __lt__(self, other):
         return self.id < other.id
+    
+    @property
+    def is_current(self):
+        for trip in self.trips:
+            if trip.is_current:
+                return True
+        return False
     
     @property
     def today_service_group(self):

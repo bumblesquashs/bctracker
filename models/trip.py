@@ -122,6 +122,10 @@ class Trip:
         return sorted(self.system.get_shape(self.shape_id).points)
     
     @property
+    def is_current(self):
+        return self.service.sheet.is_current
+    
+    @property
     def related_trips(self):
         if self._related_trips is None:
             self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]

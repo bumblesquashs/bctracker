@@ -39,6 +39,10 @@ class Departure:
         return self.system.get_trip(self.trip_id)
     
     @property
+    def is_current(self):
+        return self.trip.is_current
+    
+    @property
     def json(self):
         return {
             'stop': self.stop.json,
