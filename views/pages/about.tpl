@@ -26,7 +26,11 @@
 </p>
 <p>
     With the rollout of NextRide in more transit systems around BC, we've started adding more systems to the website as realtime information becomes available.
-    Currently we support {{ realtime_count }} {{ 'system' if realtime_count == 1 else 'systems' }} with realtime information and {{ non_realtime_count }} {{ 'system' if non_realtime_count == 1 else 'systems' }} where only schedule data is available.
+    % if non_realtime_count > 0:
+        Currently we support {{ realtime_count }} {{ 'system' if realtime_count == 1 else 'systems' }} with realtime information and {{ non_realtime_count }} {{ 'system' if non_realtime_count == 1 else 'systems' }} where only schedule data is available.
+    % else:
+        Currently we support {{ len(systems) }} {{ 'system' if len(systems) == 1 else 'systems' }}, all of which have realtime information.
+    % end
     Unfortunately, some of the smallest communities around BC do not have any GTFS information at all, so we are unable to add those systems at this time.
 </p>
 
@@ -37,12 +41,14 @@
     BCTracker was developed specifically because there were no equivalent websites for the rest of the province, and we choose to leave Vancouver in the good hands of those websites which are dedicated to it.
 </p>
 
-<h3>Why do only some systems have realtime information?</h3>
-<p>
-    Realtime information is provided by BC Transit's NextRide API.
-    Before January 2022, this data was only available for a limited number of larger transit systems.
-    Until the rollout of NextRide to more communities is complete, we unfortunately cannot include realtime for some systems.
-</p>
+% if non_realtime_count > 0:
+    <h3>Why do only some systems have realtime information?</h3>
+    <p>
+        Realtime information is provided by BC Transit's NextRide API.
+        Before January 2022, this data was only available for a limited number of larger transit systems.
+        Until the rollout of NextRide to more communities is complete, we unfortunately cannot include realtime for some systems.
+    </p>
+% end
 
 <h3>How is BCTracker made?</h3>
 <p>

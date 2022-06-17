@@ -78,26 +78,27 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
-def page(name, system_id, theme=None, **kwargs):
+def page(name, system_id, path='', theme=None, **kwargs):
     return template(f'pages/{name}',
-        mapbox_api_key=mapbox_api_key,
+        version=VERSION,
+        path=path,
         systems=[s for s in helpers.system.find_all() if s.gtfs_enabled],
         system_id=system_id,
         system=helpers.system.find(system_id),
         get_url=get_url,
-        last_updated=realtime.last_updated_string(),
-        theme=theme or request.get_cookie('theme'),
-        show_speed=request.get_cookie('speed') == '1994',
-        version=VERSION,
         no_system_domain=no_system_domain,
         system_domain=system_domain,
         system_domain_path=system_domain_path,
         cookie_domain=cookie_domain,
+        mapbox_api_key=mapbox_api_key,
+        last_updated=realtime.last_updated_string(),
+        theme=theme or request.get_cookie('theme'),
+        show_speed=request.get_cookie('speed') == '1994',
         **kwargs
     )
 
-def error_page(name, system_id, **kwargs):
-    return page(f'errors/{name}_error', system_id, **kwargs)
+def error_page(name, system_id, path='', **kwargs):
+    return page(f'errors/{name}_error', system_id, path, **kwargs)
 
 # =============================================================
 # CSS (Static Files)
@@ -138,7 +139,7 @@ def home_page(system_id=None):
             response.set_cookie('theme', theme, max_age=max_age)
         else:
             response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
-    return page('home', system_id, theme)
+    return page('home', system_id, theme=theme)
 
 @app.get([
     '/news',
@@ -157,7 +158,7 @@ def news_page(system_id=None):
 ])
 def map_page(system_id=None):
     positions = realtime.get_positions(system_id)
-    return page('map', system_id, positions=positions, path='map')
+    return page('map', system_id, path='map', positions=positions)
 
 @app.get([
     '/realtime',
@@ -167,7 +168,7 @@ def map_page(system_id=None):
 ])
 def realtime_all_page(system_id=None):
     positions = realtime.get_positions(system_id)
-    return page('realtime/all', system_id, positions=positions, path=f'realtime')
+    return page('realtime/all', system_id, path='realtime', positions=positions)
 
 @app.get([
     '/realtime/routes',
@@ -177,7 +178,7 @@ def realtime_all_page(system_id=None):
 ])
 def realtime_routes_page(system_id=None):
     positions = realtime.get_positions(system_id)
-    return page('realtime/routes', system_id, positions=positions, path=f'realtime/routes')
+    return page('realtime/routes', system_id, path='realtime/routes', positions=positions)
 
 @app.get([
     '/realtime/models',
@@ -187,7 +188,7 @@ def realtime_routes_page(system_id=None):
 ])
 def realtime_models_page(system_id=None):
     positions = realtime.get_positions(system_id)
-    return page('realtime/models', system_id, positions=positions, path=f'realtime/models')
+    return page('realtime/models', system_id, path='realtime/models', positions=positions)
 
 @app.get([
     '/realtime/speed',
@@ -202,7 +203,7 @@ def realtime_speed_page(system_id=None):
     else:
         response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
     positions = realtime.get_positions(system_id)
-    return page('realtime/speed', system_id, positions=positions, path=f'realtime/speed')
+    return page('realtime/speed', system_id, path='realtime/speed', positions=positions)
 
 @app.get([
     '/fleet',
@@ -213,7 +214,7 @@ def realtime_speed_page(system_id=None):
 def fleet_page(system_id=None):
     orders = sorted(helpers.order.find_all(), key=lambda o: o.low)
     records = helpers.record.find_last_seen(None)
-    return page('fleet', system_id, orders=orders, records={r.bus.number: r for r in records}, path='fleet')
+    return page('fleet', system_id, path='fleet', orders=orders, records={r.bus.number: r for r in records})
 
 @app.get([
     '/bus/<bus_number:int>',
@@ -263,7 +264,7 @@ def bus_history_page(bus_number, system_id=None):
 ])
 def history_last_seen_page(system_id=None):
     records = helpers.record.find_last_seen(system_id)
-    return page('history/last_seen', system_id, records=records, path='history')
+    return page('history/last_seen', system_id, path='history', records=records)
 
 @app.get([
     '/history/first-seen',
@@ -273,7 +274,7 @@ def history_last_seen_page(system_id=None):
 ])
 def history_first_seen_page(system_id=None):
     records = helpers.record.find_first_seen(system_id)
-    return page('history/first_seen', system_id, records=records, path='history/first-seen')
+    return page('history/first_seen', system_id, path='history/first-seen', records=records)
 
 @app.get([
     '/history/transfers',
@@ -283,7 +284,7 @@ def history_first_seen_page(system_id=None):
 ])
 def history_transfers_page(system_id=None):
     transfers = helpers.transfer.find_all(system_id)
-    return page('history/transfers', system_id, transfers=transfers, path='history/transfers')
+    return page('history/transfers', system_id, path='history/transfers', transfers=transfers)
 
 @app.get([
     '/routes',
