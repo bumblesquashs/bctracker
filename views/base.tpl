@@ -329,10 +329,11 @@
                 % end
             </div>
             
-            % if system is not None and (system.id == 'squamish' or system.id == 'whistler'):
+            % from datetime import datetime
+            % if system is not None and (system.id == 'squamish' or system.id == 'whistler') and datetime.now() < datetime(2022, 6, 22):
                 <div id="banner">
                     <div class="content">
-                        <span class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</span>
+                        <span class="title">Service in {{ system }} will resume on June 22nd</span>
                         <br />
                         <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.id }}/news">BC Transit News Page</a>.</span>
                     </div>
