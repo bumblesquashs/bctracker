@@ -60,7 +60,7 @@
             % end
             <div class="section">
                 <h2 class="title">{{ route }}</h2>
-                <table class="striped fixed-table">
+                <table class="striped">
                     <thead>
                         <tr>
                             <th class="desktop-only">Number</th>
@@ -123,7 +123,7 @@
                                         % if stop is not None:
                                         <br />
                                             <span class="non-desktop smaller-font">
-                                                % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                                % include('components/adherence_indicator', adherence=position.adherence)
                                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                             </span>
                                         % end
@@ -134,7 +134,7 @@
                                         <td class="desktop-only lighter-text">Unavailable</td>
                                     % else:
                                         <td class="desktop-only">
-                                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                            % include('components/adherence_indicator', adherence=position.adherence)
                                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                         </td>
                                     % end
@@ -150,7 +150,7 @@
         % if len(no_route_positions) > 0:
             <div class="section">
                 <h2 class="title">Not In Service</h2>
-                <table class="striped fixed-table">
+                <table class="striped">
                     <thead>
                         <tr>
                             <th class="desktop-only">Number</th>

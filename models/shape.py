@@ -1,22 +1,32 @@
 
 class Shape:
+    '''A list of sequential points that form a line on a map'''
+    
     __slots__ = ('system', 'id', 'points')
     
-    def __init__(self, system, shape_id):
+    def __init__(self, system, id, points):
         self.system = system
-        self.id = shape_id
-        self.points = []
-    
-    def add_point(self, lat, lon, sequence):
-        self.points.append(ShapePoint(lat, lon, sequence))
+        self.id = id
+        self.points = sorted(points)
 
 class ShapePoint:
-    __slots__ = ('lat', 'lon', 'sequence')
+    '''The coordinates and sequence number of a single point in a shape'''
     
-    def __init__(self, lat, lon, sequence):
+    __slots__ = ('shape_id', 'sequence', 'lat', 'lon')
+    
+    @classmethod
+    def from_csv(cls, row):
+        shape_id = row['shape_id']
+        sequence = int(row['shape_pt_sequence'])
+        lat = float(row['shape_pt_lat'])
+        lon = float(row['shape_pt_lon'])
+        return cls(shape_id, sequence, lat, lon)
+    
+    def __init__(self, shape_id, sequence, lat, lon):
+        self.shape_id = shape_id
+        self.sequence = sequence
         self.lat = lat
         self.lon = lon
-        self.sequence = sequence
     
     def __eq__(self, other):
         return self.sequence == other.sequence
@@ -25,7 +35,7 @@ class ShapePoint:
         return self.sequence < other.sequence
     
     @property
-    def json_data(self):
+    def json(self):
         return {
             'lon': self.lon,
             'lat': self.lat

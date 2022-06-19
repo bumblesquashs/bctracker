@@ -6,7 +6,6 @@ Available at https://www.bctracker.ca
 
 ## Current Systems
 
-Systems with static GTFS and realtime tracking:
 - Campbell River
 - Comox Valley
 - Cowichan Valley
@@ -16,15 +15,14 @@ Systems with static GTFS and realtime tracking:
 - Nanaimo
 - North Okanagan
 - Port Alberni
+- Prince George
 - Powell River
+- South Okanagan
 - Squamish
 - Sunshine Coast
 - Victoria
+- West Kootenay
 - Whistler
-
-Systems with static GTFS only:
-- Prince George
-- South Okanagan
 
 More systems coming soon!
 

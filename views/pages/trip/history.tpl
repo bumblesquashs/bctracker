@@ -1,6 +1,4 @@
 
-% import formatting
-
 % rebase('base', title=f'Trip {trip.id}', show_refresh_button=True)
 
 <div class="page-header">
@@ -18,10 +16,10 @@
     <div class="flex-container">
         % if len(records) > 0:
             % last_tracked = records[0].date
-            % days_since_last_tracked = formatting.days_since(last_tracked)
+            % days_since_last_tracked = last_tracked.format_since()
             
             % first_tracked = records[-1].date
-            % days_since_first_tracked = formatting.days_since(first_tracked)
+            % days_since_first_tracked = first_tracked.format_since()
             
             <div class="sidebar flex-1">
                 <h2>Overview</h2>
@@ -32,7 +30,7 @@
                             % if days_since_last_tracked == '0 days ago':
                                 Today
                             % else:
-                                {{ formatting.short(last_tracked) }}
+                                {{ last_tracked }}
                                 <br />
                                 <span class="smaller-font">{{ days_since_last_tracked }}</span>
                             % end
@@ -44,7 +42,7 @@
                             % if days_since_first_tracked == '0 days ago':
                                 Today
                             % else:
-                                {{ formatting.short(first_tracked) }}
+                                {{ first_tracked }}
                                 <br />
                                 <span class="smaller-font">{{ days_since_first_tracked }}</span>
                             % end
@@ -93,8 +91,8 @@
                             % bus = record.bus
                             % order = bus.order
                             <tr>
-                                <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                                <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
+                                <td class="desktop-only">{{ record.date.format_long() }}</td>
+                                <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
                                 <td>
                                     % if order is None:
                                         {{ bus }}

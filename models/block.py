@@ -1,18 +1,21 @@
 
-from models.service import create_service_group
-from models.sheet import create_sheets
+import helpers.sheet
+
+from models.service import ServiceGroup
 
 class Block:
-    __slots__ = ('system', 'id', 'trips', '_services', '_service_group', '_sheets')
+    '''A list of trips that are operated by the same bus sequentially'''
     
-    def __init__(self, system, trip):
+    __slots__ = ('system', 'id', 'trips', 'service_group', 'sheets')
+    
+    def __init__(self, system, id, trips):
         self.system = system
-        self.id = trip.block_id
-        self.trips = [trip]
+        self.id = id
+        self.trips = sorted(trips)
         
-        self._services = None
-        self._service_group = None
-        self._sheets = None
+        services = {t.service for t in trips if t.is_current}
+        self.service_group = ServiceGroup.combine(services)
+        self.sheets = helpers.sheet.combine(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -21,22 +24,11 @@ class Block:
         return self.id < other.id
     
     @property
-    def services(self):
-        if self._services is None:
-            self._services = sorted({t.service for t in self.trips})
-        return self._services
-    
-    @property
-    def service_group(self):
-        if self._service_group is None:
-            self._service_group = create_service_group(self.services)
-        return self._service_group
-    
-    @property
-    def sheets(self):
-        if self._sheets is None:
-            self._sheets = create_sheets(self.services)
-        return self._sheets
+    def is_current(self):
+        for trip in self.trips:
+            if trip.is_current:
+                return True
+        return False
     
     @property
     def today_service_group(self):
@@ -49,14 +41,7 @@ class Block:
     @property
     def related_blocks(self):
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
-        related_blocks.sort(key=lambda b: b.services[0])
-        return related_blocks
-    
-    def add_trip(self, trip):
-        self._services = None
-        self._service_group = None
-        self._sheets = None
-        self.trips.append(trip)
+        return sorted(related_blocks, key=lambda b: b.service_group)
     
     def get_trips(self, service_group=None):
         if service_group is None:
@@ -86,7 +71,7 @@ class Block:
         end_time = self.get_end_time(service_group)
         if start_time is None or end_time is None:
             return None
-        return start_time.get_difference(end_time)
+        return start_time.format_difference(end_time)
     
     def is_related(self, other):
         if self.id == other.id:

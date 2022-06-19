@@ -2,6 +2,8 @@
 from datetime import datetime
 
 class Time:
+    '''A specific hour, minute, and second'''
+    
     __slots__ = ('unknown', 'hour', 'minute', 'second', 'accurate_seconds')
     
     @classmethod
@@ -53,12 +55,6 @@ class Time:
         return self.second < other.second
     
     @property
-    def full_string(self):
-        if self.unknown:
-            return None
-        return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
-    
-    @property
     def is_earlier(self):
         return self < Time.now()
     
@@ -73,7 +69,12 @@ class Time:
     def get_minutes(self):
         return (self.hour * 60) + self.minute
     
-    def get_difference(self, other):
+    def format_db(self):
+        if self.unknown:
+            return None
+        return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
+    
+    def format_difference(self, other):
         self_minutes = self.get_minutes()
         other_minutes = other.get_minutes()
         difference = abs(self_minutes - other_minutes)
