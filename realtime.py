@@ -7,6 +7,7 @@ import wget
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 import helpers.record
+import helpers.report
 import helpers.transfer
 
 from models.bus import Bus
@@ -64,28 +65,34 @@ def update_positions(system):
         positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
 
 def update_records():
+    today = Date.today()
+    now = Time.now()
     for position in positions.values():
         system = position.system
         bus = position.bus
-        trip = position.trip
-        if bus.number < 0 or trip is None:
+        if bus.number < 0:
             continue
-        block = trip.block
-        today = Date.today()
-        now = Time.now()
-        
-        records = helpers.record.find_all(bus_number=bus.number, limit=1)
-        if len(records) > 0:
-            last_record = records[0]
-            if last_record.system != system:
-                helpers.transfer.create(bus, today, last_record.system, system)
-            if last_record.date == today and last_record.block_id == block.id:
-                helpers.record.update(last_record.id, now)
-                trip_ids = helpers.record.find_trip_ids(last_record)
-                if trip.id not in trip_ids:
-                    helpers.record.create_trip(last_record.id, trip)
-                continue
-        helpers.record.create(bus, today, system, block, now, trip)
+        report = helpers.report.find(bus.number)
+        trip = position.trip
+        if trip is None:
+            record_id = None
+        else:
+            block = trip.block
+            if report is not None:
+                last_record = report.last_record
+                if last_record.system != system:
+                    helpers.transfer.create(bus, today, last_record.system, system)
+                if last_record.date == today and last_record.block_id == block.id:
+                    helpers.record.update(last_record.id, now)
+                    trip_ids = helpers.record.find_trip_ids(last_record)
+                    if trip.id not in trip_ids:
+                        helpers.record.create_trip(last_record.id, trip)
+                    continue
+            record_id = helpers.record.create(bus, today, system, block, now, trip)
+        if report is None:
+            helpers.report.create(bus, today, system, record_id)
+        else:
+            helpers.report.update(report, today, system, record_id)
     database.commit()
 
 def get_position(bus_number):

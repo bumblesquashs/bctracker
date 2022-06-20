@@ -1,0 +1,37 @@
+
+import helpers.system
+
+from models.bus import Bus
+from models.date import Date
+from models.record import Record
+
+class Report:
+    '''An overview of a bus' records'''
+    
+    __slots__ = ('bus', 'first_seen_date', 'first_seen_system', 'first_record', 'last_seen_date', 'last_seen_system', 'last_record')
+    
+    @classmethod
+    def from_db(cls, row, prefix='report'):
+        bus = Bus(row[f'{prefix}_number'])
+        first_seen_date = Date.parse_db(row[f'{prefix}_first_seen_date'])
+        first_seen_system = helpers.system.find(row[f'{prefix}_first_seen_system_id'])
+        if row[f'{prefix}_first_record_id'] is None:
+            first_record = None
+        else:
+            first_record = Record.from_db(row, prefix=f'{prefix}_first_record')
+        last_seen_date = Date.parse_db(row[f'{prefix}_last_seen_date'])
+        last_seen_system = helpers.system.find(row[f'{prefix}_last_seen_system_id'])
+        if row[f'{prefix}_last_record_id'] is None:
+            last_record = None
+        else:
+            last_record = Record.from_db(row, prefix=f'{prefix}_last_record')
+        return cls(bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record)
+    
+    def __init__(self, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record):
+        self.bus = bus
+        self.first_seen_date = first_seen_date
+        self.first_seen_system = first_seen_system
+        self.first_record = first_record
+        self.last_seen_date = last_seen_date
+        self.last_seen_system = last_seen_system
+        self.last_record = last_record

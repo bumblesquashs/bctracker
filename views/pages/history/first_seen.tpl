@@ -36,7 +36,8 @@
         </thead>
         <tbody>
             % last_date = None
-            % for record in records:
+            % for report in reports:
+                % record = report.first_record
                 % bus = record.bus
                 % order = bus.order
                 % same_date = last_date is None or record.date == last_date

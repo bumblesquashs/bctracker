@@ -60,15 +60,15 @@
                                 </tr>
                                 <tr class="display-none"></tr>
                             % end
-                            % if number in records:
-                                % record = records[number]
+                            % if number in reports:
+                                % report = reports[number]
                                 <tr>
                                     <td>
                                         <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
                                     </td>
-                                    <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                    <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
-                                    <td>{{ record.system }}</td>
+                                    <td class="desktop-only">{{ report.last_seen_date.format_long() }}</td>
+                                    <td class="non-desktop no-wrap">{{ report.last_seen_date.format_short() }}</td>
+                                    <td>{{ report.last_seen_system }}</td>
                                 </tr>
                             % else:
                                 <tr>
