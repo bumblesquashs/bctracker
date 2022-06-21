@@ -11,7 +11,7 @@ class Block:
     def __init__(self, system, id, trips):
         self.system = system
         self.id = id
-        self.trips = sorted(trips)
+        self.trips = trips
         
         services = {t.service for t in trips if t.is_current}
         self.service_group = ServiceGroup.combine(services)
@@ -45,8 +45,8 @@ class Block:
     
     def get_trips(self, service_group=None):
         if service_group is None:
-            return self.trips
-        return [t for t in self.trips if t.service in service_group.services]
+            return sorted(self.trips)
+        return sorted([t for t in self.trips if t.service in service_group.services])
     
     def get_routes(self, service_group=None):
         return sorted({t.route for t in self.get_trips(service_group)})

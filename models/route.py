@@ -74,7 +74,7 @@ class Route:
         self.number = number
         self.name = name
         self.colour = colour
-        self.trips = sorted(trips)
+        self.trips = trips
         
         self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
         
@@ -141,8 +141,8 @@ class Route:
     
     def get_trips(self, service_group=None):
         if service_group is None:
-            return self.trips
-        return [t for t in self.trips if t.service in service_group.services]
+            return sorted(self.trips)
+        return sorted([t for t in self.trips if t.service in service_group.services])
     
     def get_headsigns(self, service_group=None):
         return sorted({str(t) for t in self.get_trips(service_group)})

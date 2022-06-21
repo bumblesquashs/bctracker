@@ -319,7 +319,7 @@ def route_overview_page(route_number, system_id=None):
     if route is None:
         return error_page('route', system_id, route_number=route_number)
     positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
-    trips = [t for t in route.trips if t.service.is_today]
+    trips = sorted([t for t in route.trips if t.service.is_today])
     recorded_today = helpers.record.find_recorded_today(system_id, trips)
     scheduled_today = helpers.record.find_scheduled_today(system_id, trips)
     return page('route/overview', system_id, route=route, positions=positions, trips=trips, recorded_today=recorded_today, scheduled_today=scheduled_today)
@@ -486,7 +486,7 @@ def stop_overview_page(stop_number, system_id=None):
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('stop', system_id, stop_number=stop_number)
-    departures = [d for d in stop.departures if d.trip.service.is_today]
+    departures = sorted([d for d in stop.departures if d.trip.service.is_today])
     trips = [d.trip for d in departures]
     positions = {p.trip.id:p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips}
     recorded_today = helpers.record.find_recorded_today(system_id, trips)
