@@ -65,35 +65,39 @@ def update_positions(system):
         positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
 
 def update_records():
-    today = Date.today()
-    now = Time.now()
-    for position in positions.values():
-        system = position.system
-        bus = position.bus
-        if bus.number < 0:
-            continue
-        report = helpers.report.find(bus.number)
-        trip = position.trip
-        if trip is None:
-            record_id = None
-        else:
-            block = trip.block
-            if report is not None:
-                last_record = report.last_record
-                if last_record.system != system:
-                    helpers.transfer.create(bus, today, last_record.system, system)
-                if last_record.date == today and last_record.block_id == block.id:
-                    helpers.record.update(last_record.id, now)
-                    trip_ids = helpers.record.find_trip_ids(last_record)
-                    if trip.id not in trip_ids:
-                        helpers.record.create_trip(last_record.id, trip)
-                    continue
-            record_id = helpers.record.create(bus, today, system, block, now, trip)
-        if report is None:
-            helpers.report.create(bus, today, system, record_id)
-        else:
-            helpers.report.update(report, today, system, record_id)
-    database.commit()
+    try:
+        today = Date.today()
+        now = Time.now()
+        for position in positions.values():
+            system = position.system
+            bus = position.bus
+            if bus.number < 0:
+                continue
+            report = helpers.report.find(bus.number)
+            trip = position.trip
+            if trip is None:
+                record_id = None
+            else:
+                block = trip.block
+                if report is not None and report.last_record is not None:
+                    last_record = report.last_record
+                    if last_record.system != system:
+                        helpers.transfer.create(bus, today, last_record.system, system)
+                    if last_record.date == today and last_record.block_id == block.id:
+                        helpers.record.update(last_record.id, now)
+                        trip_ids = helpers.record.find_trip_ids(last_record)
+                        if trip.id not in trip_ids:
+                            helpers.record.create_trip(last_record.id, trip)
+                        continue
+                record_id = helpers.record.create(bus, today, system, block, now, trip)
+            if report is None:
+                helpers.report.create(bus, today, system, record_id)
+            else:
+                helpers.report.update(report, today, system, record_id)
+        database.commit()
+    except Exception as e:
+        print(f'Error: Failed to update records')
+        print(f'Error message: {e}')
 
 def get_position(bus_number):
     if bus_number in positions:
