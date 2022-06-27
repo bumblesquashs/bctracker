@@ -35,8 +35,8 @@
         </thead>
         <tbody>
             % last_bus = None
-            % for report in reports:
-                % record = report.last_record
+            % for overview in overviews:
+                % record = overview.last_record
                 % bus = record.bus
                 % order = bus.order
                 % if last_bus is None:

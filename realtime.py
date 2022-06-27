@@ -6,8 +6,8 @@ import wget
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
+import helpers.overview
 import helpers.record
-import helpers.report
 import helpers.transfer
 
 from models.bus import Bus
@@ -73,14 +73,14 @@ def update_records():
             bus = position.bus
             if bus.number < 0:
                 continue
-            report = helpers.report.find(bus.number)
+            overview = helpers.overview.find(bus.number)
             trip = position.trip
             if trip is None:
                 record_id = None
             else:
                 block = trip.block
-                if report is not None and report.last_record is not None:
-                    last_record = report.last_record
+                if overview is not None and overview.last_record is not None:
+                    last_record = overview.last_record
                     if last_record.system != system:
                         helpers.transfer.create(bus, today, last_record.system, system)
                     if last_record.date == today and last_record.block_id == block.id:
@@ -90,10 +90,10 @@ def update_records():
                             helpers.record.create_trip(last_record.id, trip)
                         continue
                 record_id = helpers.record.create(bus, today, system, block, now, trip)
-            if report is None:
-                helpers.report.create(bus, today, system, record_id)
+            if overview is None:
+                helpers.overview.create(bus, today, system, record_id)
             else:
-                helpers.report.update(report, today, system, record_id)
+                helpers.overview.update(overview, today, system, record_id)
         database.commit()
     except Exception as e:
         print(f'Error: Failed to update records')

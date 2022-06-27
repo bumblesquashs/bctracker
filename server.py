@@ -6,8 +6,8 @@ import cherrypy as cp
 
 import helpers.model
 import helpers.order
+import helpers.overview
 import helpers.record
-import helpers.report
 import helpers.system
 import helpers.transfer
 
@@ -214,8 +214,8 @@ def realtime_speed_page(system_id=None):
 ])
 def fleet_page(system_id=None):
     orders = sorted(helpers.order.find_all(), key=lambda o: o.low)
-    reports = helpers.report.find_all()
-    return page('fleet', system_id, path='fleet', orders=orders, reports={r.bus.number: r for r in reports})
+    overviews = helpers.overview.find_all()
+    return page('fleet', system_id, path='fleet', orders=orders, overviews={o.bus.number: o for o in overviews})
 
 @app.get([
     '/bus/<bus_number:int>',
@@ -264,8 +264,8 @@ def bus_history_page(bus_number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    reports = sorted([r for r in helpers.report.find_all(system_id) if r.last_record is not None], key=lambda r: r.bus)
-    return page('history/last_seen', system_id, path='history', reports=reports)
+    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.last_record is not None], key=lambda o: o.bus)
+    return page('history/last_seen', system_id, path='history', overviews=overviews)
 
 @app.get([
     '/history/first-seen',
@@ -274,8 +274,8 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    reports = sorted([r for r in helpers.report.find_all(system_id) if r.first_record is not None], key=lambda r: (r.first_record.date, r.first_record.first_seen, r.bus), reverse=True)
-    return page('history/first_seen', system_id, path='history/first-seen', reports=reports)
+    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.first_record is not None], key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
+    return page('history/first_seen', system_id, path='history/first-seen', overviews=overviews)
 
 @app.get([
     '/history/transfers',

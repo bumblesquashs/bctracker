@@ -5,14 +5,14 @@ from models.bus import Bus
 from models.date import Date
 from models.record import Record
 
-class Report:
-    '''An overview of a bus' records'''
+class Overview:
+    '''An overview of a bus' history'''
     
     __slots__ = ('bus', 'first_seen_date', 'first_seen_system', 'first_record', 'last_seen_date', 'last_seen_system', 'last_record')
     
     @classmethod
-    def from_db(cls, row, prefix='report'):
-        bus = Bus(row[f'{prefix}_number'])
+    def from_db(cls, row, prefix='overview'):
+        bus = Bus(row[f'{prefix}_bus_number'])
         first_seen_date = Date.parse_db(row[f'{prefix}_first_seen_date'])
         first_seen_system = helpers.system.find(row[f'{prefix}_first_seen_system_id'])
         if row[f'{prefix}_first_record_id'] is None:

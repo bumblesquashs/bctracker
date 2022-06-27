@@ -60,15 +60,15 @@
                                 </tr>
                                 <tr class="display-none"></tr>
                             % end
-                            % if number in reports:
-                                % report = reports[number]
+                            % if number in overviews:
+                                % overview = overviews[number]
                                 <tr>
                                     <td>
                                         <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
                                     </td>
-                                    <td class="desktop-only">{{ report.last_seen_date.format_long() }}</td>
-                                    <td class="non-desktop no-wrap">{{ report.last_seen_date.format_short() }}</td>
-                                    <td>{{ report.last_seen_system }}</td>
+                                    <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
+                                    <td class="non-desktop no-wrap">{{ overview.last_seen_date.format_short() }}</td>
+                                    <td>{{ overview.last_seen_system }}</td>
                                 </tr>
                             % else:
                                 <tr>

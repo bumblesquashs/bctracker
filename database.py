@@ -2,7 +2,7 @@ import sqlite3
 
 SQL_SCRIPTS = [
     '''
-        CREATE TABLE IF NOT EXISTS records (
+        CREATE TABLE IF NOT EXISTS record (
             record_id INTEGER PRIMARY KEY ASC,
             bus_number INTEGER NOT NULL,
             date TEXT NOT NULL,
@@ -16,15 +16,15 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS trip_records (
+        CREATE TABLE IF NOT EXISTS trip_record (
             trip_record_id INTEGER PRIMARY KEY ASC,
             record_id INTEGER NOT NULL,
             trip_id TEXT NOT NULL,
-            FOREIGN KEY (record_id) REFERENCES records (record_id)
+            FOREIGN KEY (record_id) REFERENCES record (record_id)
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS transfers (
+        CREATE TABLE IF NOT EXISTS transfer (
             transfer_id INTEGER PRIMARY KEY ASC,
             bus_number INTEGER NOT NULL,
             date TEXT NOT NULL,
@@ -33,7 +33,7 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS reports (
+        CREATE TABLE IF NOT EXISTS overview (
             bus_number INTEGER PRIMARY KEY,
             first_seen_date TEXT NOT NULL,
             first_seen_system_id TEXT NOT NULL,
@@ -41,21 +41,24 @@ SQL_SCRIPTS = [
             last_seen_date TEXT NOT NULL,
             last_seen_system_id TEXT NOT NULL,
             last_record_id INTEGER,
-            FOREIGN KEY (first_record_id) REFERENCES records (record_id),
-            FOREIGN KEY (last_record_id) REFERENCES records (record_id)
+            FOREIGN KEY (first_record_id) REFERENCES record (record_id),
+            FOREIGN KEY (last_record_id) REFERENCES record (record_id)
         )
     ''',
-    'CREATE INDEX IF NOT EXISTS records_bus_number ON records (bus_number)',
-    'CREATE INDEX IF NOT EXISTS trip_records_record_id ON trip_records (record_id)',
-    'CREATE INDEX IF NOT EXISTS transfers_bus_number ON transfers (bus_number)'
+    'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
+    'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
+    'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
 ]
 
 connection = None
 
-def connect():
+def connect(foreign_keys=True):
     global connection
     connection = sqlite3.connect('data/bctracker.db', check_same_thread=False)
-    connection.execute('PRAGMA foreign_keys = 1')
+    if foreign_keys:
+        connection.execute('PRAGMA foreign_keys = 1')
+    else:
+        connection.execute('PRAGMA foreign_keys = 0')
     
     for sql in SQL_SCRIPTS:
         execute(sql)
