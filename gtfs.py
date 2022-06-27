@@ -52,6 +52,12 @@ def load(system):
         return
     print(f'Loading GTFS data for {system}...')
     
+    agencies = read_csv(system, 'agency', lambda r: r)
+    if len(agencies) > 0:
+        agency = agencies[0]
+        if 'agency_timezone' in agency:
+            system.timezone = agency['agency_timezone']
+    
     exceptions = read_csv(system, 'calendar_dates', ServiceException.from_csv)
     service_exceptions = {}
     for exception in exceptions:
@@ -109,4 +115,4 @@ def validate(system):
     end_dates = [s.end_date for s in system.services.values()]
     if len(end_dates) == 0:
         return True
-    return Date.today() < max(end_dates) - timedelta(days=7)
+    return Date.today(system) < max(end_dates) - timedelta(days=7)

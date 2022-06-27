@@ -2,7 +2,7 @@
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'prefix_headsign', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'validation_errors', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'prefix_headsign', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'validation_errors', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
@@ -25,6 +25,8 @@ class System:
         self.realtime_url = realtime_url
         
         self.validation_errors = 0
+        
+        self.timezone = None
         
         self.blocks = {}
         self.routes = {}
