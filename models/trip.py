@@ -53,18 +53,21 @@ class Trip:
         self.departures = sorted(departures)
         
         points = self.points
-        first_point = points[0]
-        last_point = points[-1]
-        lat_diff = first_point.lat - last_point.lat
-        lon_diff = first_point.lon - last_point.lon
-        if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
-            self.direction = Direction.CIRCULAR
-        elif abs(lat_diff) > abs(lon_diff):
-            self.direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
-        elif abs(lon_diff) > abs(lat_diff):
-            self.direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
-        else:
+        if len(points) == 0:
             self.direction = Direction.UNKNOWN
+        else:
+            first_point = points[0]
+            last_point = points[-1]
+            lat_diff = first_point.lat - last_point.lat
+            lon_diff = first_point.lon - last_point.lon
+            if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
+                self.direction = Direction.CIRCULAR
+            elif abs(lat_diff) > abs(lon_diff):
+                self.direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
+            elif abs(lon_diff) > abs(lat_diff):
+                self.direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
+            else:
+                self.direction = Direction.UNKNOWN
         
         self._related_trips = None
     
@@ -119,7 +122,10 @@ class Trip:
     
     @property
     def points(self):
-        return sorted(self.system.get_shape(self.shape_id).points)
+        shape = self.system.get_shape(self.shape_id)
+        if shape is None:
+            return []
+        return sorted(shape.points)
     
     @property
     def is_current(self):
