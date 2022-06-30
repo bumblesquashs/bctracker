@@ -2,10 +2,11 @@ archives/
 backups/
 data/gtfs
 data/realtime
-data/bctracker.db
+data/*.db
 logs/
 
 server.conf
 
 __pycache__/
 .vscode
+.idea

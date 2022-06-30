@@ -27,7 +27,7 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
-        self.departures = sorted(departures)
+        self.departures = departures
         
         services = {d.trip.service for d in departures if d.trip is not None and d.is_current}
         self.service_group = ServiceGroup.combine(services)
@@ -72,8 +72,8 @@ class Stop:
     
     def get_departures(self, service_group=None):
         if service_group is None:
-            return self.departures
-        return [d for d in self.departures if d.trip.service in service_group.services]
+            return sorted(self.departures)
+        return sorted([d for d in self.departures if d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None):
         return sorted({d.trip.route for d in self.get_departures(service_group)})

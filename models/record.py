@@ -12,7 +12,7 @@ class Record:
     
     @classmethod
     def from_db(cls, row, prefix='record'):
-        record_id = row[f'{prefix}_id']
+        id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         date = Date.parse_db(row[f'{prefix}_date'])
         system = helpers.system.find(row[f'{prefix}_system_id'])
@@ -22,10 +22,10 @@ class Record:
         end_time = Time.parse(row[f'{prefix}_end_time'])
         first_seen = Time.parse(row[f'{prefix}_first_seen'])
         last_seen = Time.parse(row[f'{prefix}_last_seen'])
-        return cls(record_id, bus, date, system, block_id, routes, start_time, end_time, first_seen, last_seen)
+        return cls(id, bus, date, system, block_id, routes, start_time, end_time, first_seen, last_seen)
     
-    def __init__(self, record_id, bus, date, system, block_id, routes, start_time, end_time, first_seen, last_seen):
-        self.id = record_id
+    def __init__(self, id, bus, date, system, block_id, routes, start_time, end_time, first_seen, last_seen):
+        self.id = id
         self.bus = bus
         self.date = date
         self.system = system

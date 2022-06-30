@@ -2,7 +2,7 @@ import sqlite3
 
 SQL_SCRIPTS = [
     '''
-        CREATE TABLE IF NOT EXISTS records (
+        CREATE TABLE IF NOT EXISTS record (
             record_id INTEGER PRIMARY KEY ASC,
             bus_number INTEGER NOT NULL,
             date TEXT NOT NULL,
@@ -16,15 +16,15 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS trip_records (
+        CREATE TABLE IF NOT EXISTS trip_record (
             trip_record_id INTEGER PRIMARY KEY ASC,
             record_id INTEGER NOT NULL,
             trip_id TEXT NOT NULL,
-            FOREIGN KEY (record_id) REFERENCES records (record_id)
+            FOREIGN KEY (record_id) REFERENCES record (record_id)
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS transfers (
+        CREATE TABLE IF NOT EXISTS transfer (
             transfer_id INTEGER PRIMARY KEY ASC,
             bus_number INTEGER NOT NULL,
             date TEXT NOT NULL,
@@ -32,17 +32,33 @@ SQL_SCRIPTS = [
             new_system_id TEXT NOT NULL
         )
     ''',
-    'CREATE INDEX IF NOT EXISTS records_bus_number ON records (bus_number)',
-    'CREATE INDEX IF NOT EXISTS trip_records_record_id ON trip_records (record_id)',
-    'CREATE INDEX IF NOT EXISTS transfers_bus_number ON transfers (bus_number)'
+    '''
+        CREATE TABLE IF NOT EXISTS overview (
+            bus_number INTEGER PRIMARY KEY,
+            first_seen_date TEXT NOT NULL,
+            first_seen_system_id TEXT NOT NULL,
+            first_record_id INTEGER,
+            last_seen_date TEXT NOT NULL,
+            last_seen_system_id TEXT NOT NULL,
+            last_record_id INTEGER,
+            FOREIGN KEY (first_record_id) REFERENCES record (record_id),
+            FOREIGN KEY (last_record_id) REFERENCES record (record_id)
+        )
+    ''',
+    'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
+    'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
+    'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
 ]
 
 connection = None
 
-def connect():
+def connect(foreign_keys=True):
     global connection
     connection = sqlite3.connect('data/bctracker.db', check_same_thread=False)
-    connection.execute('PRAGMA foreign_keys = 1')
+    if foreign_keys:
+        connection.execute('PRAGMA foreign_keys = 1')
+    else:
+        connection.execute('PRAGMA foreign_keys = 0')
     
     for sql in SQL_SCRIPTS:
         execute(sql)
@@ -71,9 +87,9 @@ def execute(sql, args=None):
     else:
         return connection.cursor().execute(sql, args)
 
-def select(table, columns, distinct=False, ctes=None, joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+def select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
     custom_args = [] if custom_args is None else custom_args
-    sql, args = build_select(table, columns, distinct, ctes, joins, filters, operation, group_by, order_by, limit, page)
+    sql, args = build_select(table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page)
     
     result = execute(sql, custom_args + args)
     if type(columns) is list:
@@ -112,7 +128,7 @@ def delete(table, filters=None, operation='AND'):
         return execute(f'DELETE FROM {table}')
     return execute(f'DELETE FROM {table} WHERE {where}', args)
 
-def build_select(table, columns, distinct=False, ctes=None, joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
     custom_args = [] if custom_args is None else custom_args
     sql = []
     
@@ -136,7 +152,7 @@ def build_select(table, columns, distinct=False, ctes=None, joins=None, filters=
     sql.append('FROM ' + table)
     
     for join in build_joins(joins):
-        sql.append('JOIN ' + join)
+        sql.append(join_type + ' JOIN ' + join)
     
     where, args = build_where(filters, operation)
     if where is not None:

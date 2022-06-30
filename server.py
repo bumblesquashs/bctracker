@@ -6,6 +6,7 @@ import cherrypy as cp
 
 import helpers.model
 import helpers.order
+import helpers.overview
 import helpers.record
 import helpers.system
 import helpers.transfer
@@ -213,8 +214,8 @@ def realtime_speed_page(system_id=None):
 ])
 def fleet_page(system_id=None):
     orders = sorted(helpers.order.find_all(), key=lambda o: o.low)
-    records = helpers.record.find_last_seen(None)
-    return page('fleet', system_id, path='fleet', orders=orders, records={r.bus.number: r for r in records})
+    overviews = helpers.overview.find_all()
+    return page('fleet', system_id, path='fleet', orders=orders, overviews={o.bus.number: o for o in overviews})
 
 @app.get([
     '/bus/<bus_number:int>',
@@ -263,8 +264,8 @@ def bus_history_page(bus_number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    records = helpers.record.find_last_seen(system_id)
-    return page('history/last_seen', system_id, path='history', records=records)
+    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.last_record is not None], key=lambda o: o.bus)
+    return page('history/last_seen', system_id, path='history', overviews=overviews)
 
 @app.get([
     '/history/first-seen',
@@ -273,8 +274,8 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    records = helpers.record.find_first_seen(system_id)
-    return page('history/first_seen', system_id, path='history/first-seen', records=records)
+    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.first_record is not None], key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
+    return page('history/first_seen', system_id, path='history/first-seen', overviews=overviews)
 
 @app.get([
     '/history/transfers',
@@ -318,7 +319,7 @@ def route_overview_page(route_number, system_id=None):
     if route is None:
         return error_page('route', system_id, route_number=route_number)
     positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
-    trips = [t for t in route.trips if t.service.is_today]
+    trips = sorted([t for t in route.trips if t.service.is_today])
     recorded_today = helpers.record.find_recorded_today(system_id, trips)
     scheduled_today = helpers.record.find_scheduled_today(system_id, trips)
     return page('route/overview', system_id, route=route, positions=positions, trips=trips, recorded_today=recorded_today, scheduled_today=scheduled_today)
@@ -485,7 +486,7 @@ def stop_overview_page(stop_number, system_id=None):
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('stop', system_id, stop_number=stop_number)
-    departures = [d for d in stop.departures if d.trip.service.is_today]
+    departures = sorted([d for d in stop.departures if d.trip.service.is_today])
     trips = [d.trip for d in departures]
     positions = {p.trip.id:p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips}
     recorded_today = helpers.record.find_recorded_today(system_id, trips)
