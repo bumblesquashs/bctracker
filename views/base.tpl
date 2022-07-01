@@ -88,6 +88,7 @@
             
             <script>
                 prefersDarkScheme = window.matchMedia("screen and (prefers-color-scheme: dark)").matches;
+                mapboxStyle = prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10";
             </script>
         % end
         
