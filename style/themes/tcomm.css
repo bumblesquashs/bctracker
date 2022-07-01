@@ -318,6 +318,11 @@ table.striped tr {
     background-color: #5393c5;
 }
 
+.marker .icon.route .number {
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
 .menu {
     background-color: #EEEEEE;
     color: #222222;
@@ -346,6 +351,10 @@ table.striped tr {
     background-color: #FFF9DF;
     border-bottom-color: #F7C942;
     background-image: linear-gradient( #FFFADF,#FFF3A5 );
+}
+
+.page-header.map-page .tab-button {
+    border-bottom-color: #000000;
 }
 
 .route-number {
