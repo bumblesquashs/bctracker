@@ -38,42 +38,49 @@
         
         <script>
             let prefersDarkScheme
+            let mapboxStyle
         </script>
         % if theme == "light":
             <link rel="stylesheet" href="/style/themes/light.css?version={{ version }}" />
             
             <script>
-                prefersDarkScheme = false
+                prefersDarkScheme = false;
+                mapboxStyle = "mapbox://styles/mapbox/light-v10";
             </script>
         % elif theme == "dark":
             <link rel="stylesheet" href="/style/themes/dark.css?version={{ version }}" />
             
             <script>
-                prefersDarkScheme = true
+                prefersDarkScheme = true;
+                mapboxStyle = "mapbox://styles/mapbox/dark-v10";
             </script>
         % elif theme == "classic":
             <link rel="stylesheet" href="/style/themes/classic.css?version={{ version }}" />
             
             <script>
-                prefersDarkScheme = false
+                prefersDarkScheme = false;
+                mapboxStyle = "mapbox://styles/mapbox/light-v10";
             </script>
         % elif theme == "bchydro":
             <link rel="stylesheet" href="/style/themes/bchydro.css?version={{ version }}" />
             
             <script>
-                prefersDarkScheme = false
+                prefersDarkScheme = false;
+                mapboxStyle = "mapbox://styles/mapbox/light-v10";
             </script>
         % elif theme == "uta":
             <link rel="stylesheet" href="/style/themes/uta.css?version={{ version }}" />
             
             <script>
-                prefersDarkScheme = false
+                prefersDarkScheme = false;
+                mapboxStyle = "mapbox://styles/mapbox/light-v10";
             </script>
         % elif theme == "tcomm":
             <link rel="stylesheet" href="/style/themes/tcomm.css?version={{ version }}" />
             
             <script>
-                prefersDarkScheme = false
+                prefersDarkScheme = false;
+                mapboxStyle = "mapbox://styles/mapbox/streets-v11";
             </script>
         % else:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />

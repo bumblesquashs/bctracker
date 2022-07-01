@@ -382,7 +382,8 @@ table.striped tr {
 }
 
 .tab-button:hover {
-    background-color: #E6E6E6;
+    background-color: #444444;
+    background-image: linear-gradient(#555555, #383838);
     cursor: pointer;
 }
 
