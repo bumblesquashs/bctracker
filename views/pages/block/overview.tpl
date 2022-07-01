@@ -25,14 +25,20 @@
         
         <div class="info-box">
             <div class="section">
-                % include('components/service_group_indicator', service_group=block.service_group)
+                % include('components/service_pattern_indicator', pattern=block.service_group)
             </div>
             <div class="section">
                 <div class="name">Start time</div>
                 <div class="value">
                     % for service_group in service_groups:
                         % if len(service_groups) > 1:
-                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                            <div class="smaller-font lighter-text">
+                                % if len(sheets) > 1:
+                                    {{ service_group.date_string }}
+                                % else:
+                                    {{ service_group }}
+                                % end
+                            </div>
                         % end
                         <div>{{ block.get_start_time(service_group) }}</div>
                     % end
@@ -43,7 +49,13 @@
                 <div class="value">
                     % for service_group in service_groups:
                         % if len(service_groups) > 1:
-                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                            <div class="smaller-font lighter-text">
+                                % if len(sheets) > 1:
+                                    {{ service_group.date_string }}
+                                % else:
+                                    {{ service_group }}
+                                % end
+                            </div>
                         % end
                         <div>{{ block.get_end_time(service_group) }}</div>
                     % end
@@ -54,7 +66,13 @@
                 <div class="value">
                     % for service_group in service_groups:
                         % if len(service_groups) > 1:
-                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                            <div class="smaller-font lighter-text">
+                                % if len(sheets) > 1:
+                                    {{ service_group.date_string }}
+                                % else:
+                                    {{ service_group }}
+                                % end
+                            </div>
                         % end
                         <div>{{ block.get_duration(service_group) }}</div>
                     % end
@@ -65,7 +83,13 @@
                 <div class="value">
                     % for service_group in service_groups:
                         % if len(service_groups) > 1:
-                            <div class="smaller-font lighter-text">{{ service_group.schedule }}</div>
+                            <div class="smaller-font lighter-text">
+                                % if len(sheets) > 1:
+                                    {{ service_group.date_string }}
+                                % else:
+                                    {{ service_group }}
+                                % end
+                            </div>
                         % end
                         <div>{{ len(block.get_trips(service_group)) }}</div>
                     % end
@@ -96,7 +120,7 @@
                     % for related_block in related_blocks:
                         <tr>
                             <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
-                            <td>{{ related_block.service_group.schedule }}</td>
+                            <td>{{ related_block.service_group }}</td>
                         </tr>
                     % end
                 </tbody>
@@ -148,7 +172,7 @@
                                 <td class="non-mobile lighter-text">Unavailable</td>
                             % else:
                                 <td class="non-mobile">
-                                    % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                    % include('components/adherence_indicator', adherence=position.adherence)
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                 </td>
                             % end
@@ -165,10 +189,8 @@
                     % service_group_trips = block.get_trips(service_group)
                     <div class="section">
                         % if len(sheets) > 1 or len(sheet.service_groups) > 1:
-                            <h3 class="title">{{ service_group.schedule }}</h3>
-                        % end
-                        % if len(sheets) > 1:
-                            <div class="subtitle">{{ sheet }}</div>
+                            <h3 class="title">{{ service_group }}</h3>
+                            <div class="subtitle">{{ service_group.date_string }}</div>
                         % end
                         <table class="striped">
                             <thead>
@@ -190,9 +212,9 @@
                                         <td class="non-mobile">
                                             {{ trip }}
                                             <br />
-                                            <span class="non-desktop smaller-font">{{ trip.direction.value }}</span>
+                                            <span class="non-desktop smaller-font">{{ trip.direction }}</span>
                                         </td>
-                                        <td class="desktop-only">{{ trip.direction.value }}</td>
+                                        <td class="desktop-only">{{ trip.direction }}</td>
                                         <td>
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                                             <br />

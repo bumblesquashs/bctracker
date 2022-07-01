@@ -1,7 +1,5 @@
 
-% from models.model import BusModelType
-
-% import formatting
+% from models.model import ModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
 
@@ -40,7 +38,7 @@
             <div class="info-box">
                 <h3 class="title">
                     <div class="flex-row">
-                        % include('components/adherence_indicator', adherence=position.schedule_adherence, size='large')
+                        % include('components/adherence_indicator', adherence=position.adherence, size='large')
                         <div class="flex-1">{{ trip }}</div>
                     </div>
                 </h3>
@@ -77,7 +75,7 @@
                         <div class="name">Current Stop</div>
                         <div class="value">
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            % adherence = position.schedule_adherence
+                            % adherence = position.adherence
                             % if adherence is not None:
                                 <br />
                                 <span class="smaller-font">{{ adherence.description }}</span>
@@ -99,7 +97,7 @@
             % model = bus.model
             <div class="section">
                 <div class="name">Vehicle Type</div>
-                <div class="value">{{ model.type.value }}</div>
+                <div class="value">{{ model.type }}</div>
             </div>
             <div class="section">
                 <div class="name">Length</div>
@@ -122,7 +120,7 @@
                     <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                     <li>It may not have been in service since BCTracker started recording bus history</li>
                     <li>It may not have functional NextRide equipment installed</li>
-                    % if model.type == BusModelType.shuttle:
+                    % if model.type == ModelType.shuttle:
                         <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                     % end
                 </ol>
@@ -147,8 +145,8 @@
                 <tbody>
                     % for record in records:
                         <tr>
-                            <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                            <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
+                            <td class="desktop-only">{{ record.date.format_long() }}</td>
+                            <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
                             <td>{{ record.system }}</td>
                             <td>
                                 % if record.is_available:

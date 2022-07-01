@@ -20,7 +20,7 @@
         % if len(stop.departures) > 0:
             <div class="info-box">
                 <div class="section">
-                    % include('components/service_group_indicator', service_group=stop.service_group)
+                    % include('components/service_pattern_indicator', pattern=stop.service_group)
                 </div>
                 <div class="section">
                     % routes = stop.get_routes()
@@ -128,7 +128,7 @@
                                     <td>
                                         % if trip.id in positions:
                                             % position = positions[trip.id]
-                                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                            % include('components/adherence_indicator', adherence=position.adherence)
                                         % end
                                         % if order is None:
                                             {{ bus }}

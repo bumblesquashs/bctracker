@@ -30,7 +30,7 @@
 % end
 % if len(shape_trips) > 0:
     <script>
-        const trips = JSON.parse('{{! json.dumps([t.json_data for t in shape_trips]) }}');
+        const trips = JSON.parse('{{! json.dumps([t.json for t in shape_trips]) }}');
         
         map.on("load", function() {
             for (const trip of trips) {
@@ -83,7 +83,7 @@
 % end
 % if len(stop_departures) > 0:
     <script>
-        const departures = JSON.parse('{{! json.dumps([d.json_data for d in stop_departures]) }}');
+        const departures = JSON.parse('{{! json.dumps([d.json for d in stop_departures]) }}');
         
         for (const departure of departures) {
             const stop = departure.stop;
@@ -125,7 +125,7 @@
 % map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
 % if len(map_stops) > 0:
     <script>
-        const stops = JSON.parse('{{! json.dumps([s.json_data for s in map_stops]) }}');
+        const stops = JSON.parse('{{! json.dumps([s.json for s in map_stops]) }}');
         
         for (const stop of stops) {
             const element = document.createElement("div");
@@ -164,12 +164,12 @@
 % map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
 % if len(map_positions) > 0:
     <script>
-        const positions = JSON.parse('{{! json.dumps([p.json_data for p in map_positions]) }}');
+        const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
         
         for (const position of positions) {
             const adherenceElement = document.createElement("span")
-            if (position.schedule_adherence !== null && position.schedule_adherence !== undefined) {
-                const adherence = position.schedule_adherence
+            if (position.adherence !== null && position.adherence !== undefined) {
+                const adherence = position.adherence
                 adherenceElement.classList.add("adherence-indicator")
                 adherenceElement.classList.add(adherence.status_class)
                 adherenceElement.innerHTML = adherence.value

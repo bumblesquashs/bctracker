@@ -35,14 +35,14 @@
                 % service_group_trips = route.get_trips(service_group)
                 % directions = sorted({t.direction for t in service_group_trips})
                 <div class="section">
-                    <h2 class="title" id="{{ hash(service_group) }}">{{ service_group.schedule }}</h2>
+                    <h2 class="title" id="{{ service_group.id }}">{{ service_group }}</h2>
                     <div class="subtitle">{{ service_group.date_string }}</div>
                     <div class="container">
                         % for direction in directions:
                             % direction_trips = [t for t in service_group_trips if t.direction == direction]
                             <div class="section">
                                 % if len(directions) > 1:
-                                    <h3>{{ direction.value }}</h3>
+                                    <h3>{{ direction }}</h3>
                                 % end
                                 <table class="striped">
                                     <thead>

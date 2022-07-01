@@ -1,6 +1,4 @@
 
-% import formatting
-
 % rebase('base', title='Vehicle History', show_refresh_button=True)
 
 <div class="page-header">
@@ -38,15 +36,16 @@
         </thead>
         <tbody>
             % last_date = None
-            % for record in records:
+            % for overview in overviews:
+                % record = overview.first_record
                 % bus = record.bus
                 % order = bus.order
                 % same_date = last_date is None or record.date == last_date
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
-                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                    <td class="desktop-only">{{ record.date.format_long() }}</td>
                     <td class="non-desktop no-wrap">
-                        {{ formatting.short(record.date) }}
+                        {{ record.date.format_short() }}
                         % if system is None:
                             <br />
                             <span class="mobile-only smaller-font">{{ record.system }}</span>

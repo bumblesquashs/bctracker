@@ -56,7 +56,7 @@
     
     % if len(shape_trips) > 0:
         <script>
-            const trips = JSON.parse('{{! json.dumps([t.json_data for t in shape_trips]) }}');
+            const trips = JSON.parse('{{! json.dumps([t.json for t in shape_trips]) }}');
             
             map.on("load", function() {
                 for (const trip of trips) {
@@ -115,7 +115,7 @@
             });
         </script>
         
-        % routes_json = [j for r in routes for j in r.indicator_json_data]
+        % routes_json = [j for r in routes for j in r.indicator_json]
         <script>
             const routes = JSON.parse('{{! json.dumps(routes_json) }}');
             

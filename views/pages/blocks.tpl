@@ -23,8 +23,8 @@
     <div class="container">
         % for sheet in sheets:
             % for service_group in sheet.service_groups:
-                <div class="section" id="{{ hash(service_group) }}">
-                    <h2 class="title">{{ service_group.schedule }}</h2>
+                <div class="section" id="{{ service_group.id }}">
+                    <h2 class="title">{{ service_group }}</h2>
                     <div class="subtitle">{{ service_group.date_string }}</div>
                     <table class="striped">
                         <thead>

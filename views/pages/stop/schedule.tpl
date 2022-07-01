@@ -36,7 +36,7 @@
                 % departures = stop.get_departures(service_group)
                 
                 <div class="section">
-                    <h2 class="title" id="{{ hash(service_group) }}">{{ service_group.schedule }}</h2>
+                    <h2 class="title" id="{{ service_group.id }}">{{ service_group }}</h2>
                     <div class="subtitle">{{ service_group.date_string }}</div>
                     <table class="striped">
                         <thead>

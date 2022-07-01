@@ -1,0 +1,24 @@
+system_id,name,prefix_headsign,gtfs_enabled,realtime_enabled,gtfs_url,realtime_url
+campbell-river,Campbell River,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=12,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=12
+comox,Comox Valley,1,1,1,http://comox.mapstrat.com/current/google_transit.zip,http://comox.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
+cowichan-valley,Cowichan Valley,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=10,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=10
+creston-valley,Creston Valley,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=16,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=16
+dawson-creek,Dawson Creek,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=27,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=27
+east-kootenay,East Kootenay,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=21,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=21
+fort-st-john,Fort St. John,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=28,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=28
+fraser-valley,Fraser Valley,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=13,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=13
+kamloops,Kamloops,1,1,1,http://kamloops.mapstrat.com/current/google_transit.zip,http://kamloops.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
+kelowna,Kelowna,1,1,1,http://kelowna.mapstrat.com/current/google_transit.zip,http://kelowna.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
+mount-waddington,Mount Waddington,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=17,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=17
+nanaimo,Nanaimo,0,1,1,http://nanaimo.mapstrat.com/current/google_transit.zip,http://nanaimo.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
+north-okanagan,North Okanagan,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=14,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=14
+port-alberni,Port Alberni,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=11,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=11
+powell-river,Powell River,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=29,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=29
+prince-george,Prince George,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=22,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=22
+south-okanagan,South Okanagan,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=15,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=15
+squamish,Squamish,1,1,1,http://squamish.mapstrat.com/current/google_transit.zip,http://squamish.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
+sunshine-coast,Sunshine Coast,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=18,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=18
+terrace,Terrace,1,0,0,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=24,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=24
+victoria,Victoria,0,1,1,http://victoria.mapstrat.com/current/google_transit.zip,http://victoria.mapstrat.com/current/gtfrealtime_VehiclePositions.bin
+west-kootenay,West Kootenay,1,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=20,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=20
+whistler,Whistler,1,1,1,http://whistler.mapstrat.com/current/google_transit.zip,http://whistler.mapstrat.com/current/gtfrealtime_VehiclePositions.bin

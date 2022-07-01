@@ -1,6 +1,4 @@
 
-% import formatting
-
 % rebase('base', title='Vehicle History', show_refresh_button=True)
 
 <div class="page-header">
@@ -37,7 +35,8 @@
         </thead>
         <tbody>
             % last_bus = None
-            % for record in records:
+            % for overview in overviews:
+                % record = overview.last_record
                 % bus = record.bus
                 % order = bus.order
                 % if last_bus is None:
@@ -66,9 +65,9 @@
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                     </td>
-                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
+                    <td class="desktop-only">{{ record.date.format_long() }}</td>
                     <td class="non-desktop no-wrap">
-                        {{ formatting.short(record.date) }}
+                        {{ record.date.format_short() }}
                         % if system is None:
                             <br />
                             <span class="mobile-only smaller-font">{{ record.system }}</span>

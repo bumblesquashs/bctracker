@@ -1,13 +1,15 @@
 import os
 import sys
 import signal
-from datetime import datetime, timedelta
+from datetime import datetime
 from crontab import CronTab
 
-from models.system import get_systems
+import helpers.system
+
+from models.date import Date
+
 import gtfs
 import realtime
-import history
 import database
 
 PID = os.getpid()
@@ -35,15 +37,13 @@ def stop():
         cron.remove_all(comment=CRON_ID)
 
 def handle_gtfs(sig, frame):
-    hour = datetime.now().hour
-    today = datetime.today()
-    date = (today if hour >= 4 else today - timedelta(days=1)).date()
-    for system in get_systems():
+    today = Date.today()
+    for system in helpers.system.find_all():
         try:
-            if date.weekday() == 0 or not gtfs.validate(system):
+            if today.weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
             else:
-                new_services = [s for s in system.get_services() if s.start_date == date]
+                new_services = [s for s in system.get_services() if s.start_date == today]
                 if len(new_services) > 0:
                     gtfs.load(system)
         except Exception as e:
@@ -51,7 +51,7 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
-    for system in get_systems():
+    for system in helpers.system.find_all():
         try:
             realtime.update(system)
             if realtime.validate(system):
@@ -63,7 +63,7 @@ def handle_realtime(sig, frame):
         except Exception as e:
             print(f'Error: Failed to update realtime for {system}')
             print(f'Error message: {e}')
-    history.update(realtime.get_positions())
+    realtime.update_records()
     
     # Backup database at the end of each day
     now = datetime.now()

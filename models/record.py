@@ -1,33 +1,45 @@
 
+import helpers.system
+
 from models.bus import Bus
-from models.system import get_system
+from models.date import Date
 from models.time import Time
 
-import formatting
-
 class Record:
-    __slots__ = ('id', 'bus', 'date', 'system_id', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen')
+    '''Information about a bus' history on a specific date'''
     
-    def __init__(self, row, prefix='record'):
-        self.id = row[f'{prefix}_id']
-        self.bus = Bus(row[f'{prefix}_bus_number'])
-        self.date = formatting.database(row[f'{prefix}_date'])
-        self.system_id = row[f'{prefix}_system_id']
-        self.block_id = row[f'{prefix}_block_id']
-        self.routes = row[f'{prefix}_routes']
-        self.start_time = Time.parse(row[f'{prefix}_start_time'])
-        self.end_time = Time.parse(row[f'{prefix}_end_time'])
-        self.first_seen = Time.parse(row[f'{prefix}_first_seen'])
-        self.last_seen = Time.parse(row[f'{prefix}_last_seen'])
+    __slots__ = ('id', 'bus', 'date', 'system', 'block_id', 'routes', 'start_time', 'end_time', 'first_seen', 'last_seen')
     
-    @property
-    def system(self):
-        return get_system(self.system_id)
+    @classmethod
+    def from_db(cls, row, prefix='record'):
+        id = row[f'{prefix}_id']
+        bus = Bus(row[f'{prefix}_bus_number'])
+        date = Date.parse_db(row[f'{prefix}_date'])
+        system = helpers.system.find(row[f'{prefix}_system_id'])
+        block_id = row[f'{prefix}_block_id']
+        routes = row[f'{prefix}_routes']
+        start_time = Time.parse(row[f'{prefix}_start_time'])
+        end_time = Time.parse(row[f'{prefix}_end_time'])
+        first_seen = Time.parse(row[f'{prefix}_first_seen'])
+        last_seen = Time.parse(row[f'{prefix}_last_seen'])
+        return cls(id, bus, date, system, block_id, routes, start_time, end_time, first_seen, last_seen)
     
-    @property
-    def is_available(self):
-        return self.block is not None
+    def __init__(self, id, bus, date, system, block_id, routes, start_time, end_time, first_seen, last_seen):
+        self.id = id
+        self.bus = bus
+        self.date = date
+        self.system = system
+        self.block_id = block_id
+        self.routes = routes
+        self.start_time = start_time
+        self.end_time = end_time
+        self.first_seen = first_seen
+        self.last_seen = last_seen
     
     @property
     def block(self):
         return self.system.get_block(self.block_id)
+    
+    @property
+    def is_available(self):
+        return self.block is not None

@@ -1,0 +1,131 @@
+
+from models.bus import Bus
+from models.date import Date
+from models.record import Record
+
+import database
+
+def create(bus, date, system, block, time, trip):
+    record_id = database.insert('record', {
+        'bus_number': bus.number,
+        'date': date.format_db(),
+        'system_id': system.id,
+        'block_id': block.id,
+        'routes': block.get_routes_string(),
+        'start_time': block.get_start_time().format_db(),
+        'end_time': block.get_end_time().format_db(),
+        'first_seen': time.format_db(),
+        'last_seen': time.format_db()
+    })
+    create_trip(record_id, trip)
+    return record_id
+
+def create_trip(record_id, trip):
+    database.insert('trip_record', {
+        'record_id': record_id,
+        'trip_id': trip.id
+    })
+
+def update(record_id, time):
+    database.update('record',
+        values={
+            'last_seen': time.format_db()
+        },
+        filters={
+            'record_id': record_id
+        })
+
+def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit=None):
+    joins = {}
+    filters = {
+        'record.system_id': system_id,
+        'record.bus_number': bus_number,
+        'record.block_id': block_id
+    }
+    if trip_id is not None:
+        joins['trip_record'] = {
+            'trip_record.record_id': 'record.record_id'
+        }
+        filters['trip_record.trip_id'] = trip_id
+    rows = database.select('record', 
+        columns={
+            'record.record_id': 'record_id',
+            'record.bus_number': 'record_bus_number',
+            'record.date': 'record_date',
+            'record.system_id': 'record_system_id',
+            'record.block_id': 'record_block_id',
+            'record.routes': 'record_routes',
+            'record.start_time': 'record_start_time',
+            'record.end_time': 'record_end_time',
+            'record.first_seen': 'record_first_seen',
+            'record.last_seen': 'record_last_seen'
+        },
+        joins=joins,
+        filters=filters,
+        order_by={
+            'record.date': 'DESC',
+            'record.record_id': 'DESC'
+        },
+        limit=limit)
+    return [Record.from_db(row) for row in rows]
+
+def find_trip_ids(record):
+    rows = database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id})
+    return {row['trip_id'] for row in rows}
+
+def find_recorded_buses(system_id):
+    rows = database.select('record',
+        columns={
+            'record.bus_number': 'bus_number'
+        },
+        distinct=True,
+        filters={
+            'record.system_id': system_id
+        })
+    return [row['bus_number'] for row in rows]
+
+def find_recorded_today(system_id, trips):
+    today = Date.today()
+    rows = database.select('trip_record',
+        columns={
+            'trip_record.trip_id': 'trip_id',
+            'record.bus_number': 'bus_number'
+        },
+        joins={
+            'record': {
+                'record.record_id': 'trip_record.record_id'
+            }
+        },
+        filters={
+            'record.system_id': system_id,
+            'record.date': today.format_db(),
+            'trip_record.trip_id': [t.id for t in trips]
+        })
+    return {row['trip_id']: Bus(row['bus_number']) for row in rows}
+
+def find_scheduled_today(system_id, trips):
+    today = Date.today()
+    cte, args = database.build_select('record',
+        columns={
+            'record.bus_number': 'bus_number',
+            'record.block_id': 'block_id',
+            'ROW_NUMBER() OVER(PARTITION BY record.block_id ORDER BY record.record_id DESC)': 'row_number'
+        },
+        filters={
+            'record.system_id': system_id,
+            'record.date': today.format_db(),
+            'record.block_id': list({t.block_id for t in trips})
+        })
+    rows = database.select('numbered_record',
+        columns={
+            'numbered_record.block_id': 'block_id',
+            'numbered_record.bus_number': 'bus_number'
+        },
+        ctes={
+            'numbered_record': cte
+        },
+        filters={
+            'numbered_record.row_number': 1
+        },
+        custom_args=args)
+    return {row['block_id']: Bus(row['bus_number']) for row in rows}

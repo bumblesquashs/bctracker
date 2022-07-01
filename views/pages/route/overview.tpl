@@ -1,6 +1,4 @@
 
-% from datetime import datetime
-
 % rebase('base', title=str(route), include_maps=True, show_refresh_button=True)
 
 <div class="page-header">
@@ -21,7 +19,7 @@
             
             <div class="info-box">
                 <div class="section">
-                    % include('components/service_group_indicator', service_group=route.service_group)
+                    % include('components/service_pattern_indicator', pattern=route.service_group)
                 </div>
                 <div class="section">
                     % headsigns = route.get_headsigns()
@@ -86,7 +84,7 @@
                                 <td class="non-mobile lighter-text">Unavailable</td>
                             % else:
                                 <td class="non-mobile">
-                                    % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                    % include('components/adherence_indicator', adherence=position.adherence)
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                 </td>
                             % end
@@ -111,7 +109,7 @@
                     % if len(direction_trips) > 0:
                         <div class="section">
                             % if len(directions) > 1:
-                                <h3>{{ direction.value }}</h3>
+                                <h3>{{ direction }}</h3>
                             % end
                             
                             % if system is None or system.realtime_enabled:
@@ -154,7 +152,7 @@
                                                     <td>
                                                         % if trip.id in trip_positions:
                                                             % position = trip_positions[trip.id]
-                                                            % include('components/adherence_indicator', adherence=position.schedule_adherence)
+                                                            % include('components/adherence_indicator', adherence=position.adherence)
                                                         % end
                                                         % if order is None:
                                                             {{ bus }}

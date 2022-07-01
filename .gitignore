@@ -1,9 +1,12 @@
 archives/
 backups/
-data/
+data/gtfs
+data/realtime
+data/*.db
 logs/
 
 server.conf
 
 __pycache__/
 .vscode
+.idea

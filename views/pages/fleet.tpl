@@ -1,6 +1,4 @@
 
-% import formatting
-
 % rebase('base', title='Fleet', show_refresh_button=True)
 
 <div class="page-header">
@@ -35,7 +33,7 @@
 
 <div class="button-container">
     % for type in model_types:
-        <a href="#{{ type.name }}" class="button">{{ type.value }}</a>
+        <a href="#{{ type.name }}" class="button">{{ type }}</a>
     % end
 </div>
 
@@ -43,7 +41,7 @@
     % for type in model_types:
         % type_orders = [o for o in orders if o.model.type == type]
         <div id="{{ type.name }}" class="section">
-            <h2 class="title">{{ type.value }}</h2>
+            <h2 class="title">{{ type }}</h2>
             <table class="striped">
                 <thead>
                     <tr>
@@ -62,15 +60,15 @@
                                 </tr>
                                 <tr class="display-none"></tr>
                             % end
-                            % if number in records:
-                                % record = records[number]
+                            % if number in overviews:
+                                % overview = overviews[number]
                                 <tr>
                                     <td>
                                         <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
                                     </td>
-                                    <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                                    <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
-                                    <td>{{ record.system }}</td>
+                                    <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
+                                    <td class="non-desktop no-wrap">{{ overview.last_seen_date.format_short() }}</td>
+                                    <td>{{ overview.last_seen_system }}</td>
                                 </tr>
                             % else:
                                 <tr>

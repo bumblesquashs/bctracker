@@ -1,7 +1,5 @@
 
-% from models.model import BusModelType
-
-% import formatting
+% from models.model import ModelType
 
 % rebase('base', title=f'Bus {bus}', show_refresh_button=True)
 
@@ -19,10 +17,10 @@
 <div class="flex-container">
     % if len(records) > 0:
         % last_tracked = records[0].date
-        % days_since_last_tracked = formatting.days_since(last_tracked)
+        % days_since_last_tracked = last_tracked.format_since()
         
         % first_tracked = records[-1].date
-        % days_since_first_tracked = formatting.days_since(first_tracked)
+        % days_since_first_tracked = first_tracked.format_since()
         
         <div class="sidebar flex-1">
             <h2>Overview</h2>
@@ -33,7 +31,7 @@
                         % if days_since_last_tracked == '0 days ago':
                             Today
                         % else:
-                            {{ formatting.long(last_tracked) }}
+                            {{ last_tracked }}
                             <br />
                             <span class="smaller-font">{{ days_since_last_tracked }}</span>
                         % end
@@ -45,7 +43,7 @@
                         % if days_since_first_tracked == '0 days ago':
                             Today
                         % else:
-                            {{ formatting.long(first_tracked) }}
+                            {{ first_tracked }}
                             <br />
                             <span class="smaller-font">{{ days_since_first_tracked }}</span>
                         % end
@@ -76,7 +74,7 @@
                     <li>It may not have been in service since BCTracker started recording bus history</li>
                     <li>It may not have functional NextRide equipment installed</li>
                     % model = bus.model
-                    % if model is not None and model.type == BusModelType.shuttle:
+                    % if model is not None and model.type == ModelType.shuttle:
                         <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                     % end
                 </ol>
@@ -101,8 +99,8 @@
                 <tbody>
                     % for record in records:
                         <tr>
-                            <td class="desktop-only">{{ formatting.long(record.date) }}</td>
-                            <td class="non-desktop no-wrap">{{ formatting.short(record.date) }}</td>
+                            <td class="desktop-only">{{ record.date.format_long() }}</td>
+                            <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
                             <td>{{ record.system }}</td>
                             <td>
                                 % if record.is_available:

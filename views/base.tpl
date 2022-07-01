@@ -165,7 +165,6 @@
                     <a class="navigation-button" href="{{ get_url(system, 'about') }}">About</a>
                     
                     % if len(systems) > 1:
-                        % path = get('path', '')
                         <div id="system-dropdown" class="navigation-button dropdown right">
                             Change System
                             <div class="content">
@@ -177,7 +176,9 @@
                                 % realtime_enabled_systems = sorted([s for s in systems if s.realtime_enabled])
                                 % realtime_disabled_systems = sorted([s for s in systems if not s.realtime_enabled])
                                 % if len(realtime_enabled_systems) > 0:
-                                    <div class="header">Schedule and Bus Tracking</div>
+                                    % if len(realtime_disabled_systems) > 0:
+                                        <div class="header">Schedule and Bus Tracking</div>
+                                    % end
                                     % for alt_system in realtime_enabled_systems:
                                         % if system is not None and system == alt_system:
                                             <span class="dropdown-button disabled">{{ alt_system }}</span>
@@ -187,7 +188,9 @@
                                     % end
                                 % end
                                 % if len(realtime_disabled_systems) > 0:
-                                    <div class="header">Schedule Only</div>
+                                    % if len(realtime_enabled_systems) > 0:
+                                        <div class="header">Schedule Only</div>
+                                    % end
                                     % for alt_system in realtime_disabled_systems:
                                         % if system is not None and system == alt_system:
                                             <span class="dropdown-button disabled">{{ alt_system }}</span>
@@ -284,7 +287,6 @@
             
             % if len(systems) > 1:
                 <div id="change-system-menu" class="menu non-desktop display-none">
-                    % path = get('path', '')
                     % if system is None:
                         <span class="menu-button full-width disabled">All Systems</span>
                     % else:
@@ -293,7 +295,9 @@
                     % realtime_enabled_systems = sorted([s for s in systems if s.realtime_enabled])
                     % realtime_disabled_systems = sorted([s for s in systems if not s.realtime_enabled])
                     % if len(realtime_enabled_systems) > 0:
-                        <div class="header">Schedule and Bus Tracking</div>
+                        % if len(realtime_disabled_systems) > 0:
+                            <div class="header">Schedule and Bus Tracking</div>
+                        % end
                         % for alt_system in sorted([s for s in systems if s.realtime_enabled]):
                             % if system is not None and system == alt_system:
                                 <span class="menu-button disabled">{{ alt_system }}</span>
@@ -303,7 +307,9 @@
                         % end
                     % end
                     % if len(realtime_disabled_systems) > 0:
-                        <div class="header">Schedule Only</div>
+                        % if len(realtime_enabled_systems) > 0:
+                            <div class="header">Schedule Only</div>
+                        % end
                         % for alt_system in sorted([s for s in systems if not s.realtime_enabled]):
                             % if system is not None and system == alt_system:
                                 <span class="menu-button disabled">{{ alt_system }}</span>
@@ -335,10 +341,11 @@
                 % end
             </div>
             
-            % if system is not None and (system.id == 'squamish' or system.id == 'whistler'):
+            % from datetime import datetime
+            % if system is not None and (system.id == 'squamish' or system.id == 'whistler') and datetime.now() < datetime(2022, 6, 22):
                 <div id="banner">
                     <div class="content">
-                        <span class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</span>
+                        <span class="title">Service in {{ system }} will resume on June 22nd</span>
                         <br />
                         <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ system.id }}/news">BC Transit News Page</a>.</span>
                     </div>
