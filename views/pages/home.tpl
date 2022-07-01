@@ -106,6 +106,7 @@
                 <a class="button" href="?theme=uta">Urban Transit Authority</a>
                 <a class="button" href="?theme=bchydro">BC Hydro</a>
             </div>
+            <!-- Oh, hello there! All of these different themes are pretty cool, but I'm from Vancouver and I like the way one of our transit tracking websites, Tcomm, looks... if only there was some way to have a "tcomm" theme on here... -->
         </div>
     </div>
     
