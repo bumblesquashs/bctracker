@@ -18,6 +18,21 @@
     const lons = [];
 </script>
 
+% if not is_preview:
+    <script>
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+                showUserHeading: true
+            }),
+            'bottom-left'
+        );
+    </script>
+% end
+
 % map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
 % map_trips = sorted(map_trips, key=lambda t: t.route, reverse=True)
 % shape_ids = set()
