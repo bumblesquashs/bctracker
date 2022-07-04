@@ -38,13 +38,19 @@
         <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
-                <img class="hidden" id="checkbox-image" src="/img/black/check.png" />
+                <div id="checkbox-image" class="hidden">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
+                </div>
             </div>
             <span class="checkbox-label">Show Route Lines</span>
         </div>
         <div class="checkbox" onclick="toggleAutomaticRefresh()">
             <div class="box">
-                <img class="hidden" id="refresh-image" src="/img/black/check.png" />
+                <div id="refresh-image" class="hidden">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
+                </div>
             </div>
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
@@ -57,7 +63,7 @@
             container: "map",
             center: [0, 0],
             zoom: 1,
-            style: mapboxStyle
+            style: mapStyle
         });
         
         let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');

@@ -36,7 +36,7 @@
             container: "map",
             center: [0, 0],
             zoom: 1,
-            style: mapboxStyle,
+            style: mapStyle,
             interactive: true
         });
         

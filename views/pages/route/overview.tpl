@@ -115,8 +115,8 @@
                             % if system is None or system.realtime_enabled:
                                 <p>
                                     <span>Buses with a</span>
-                                    <img class="middle-align light-only" src="/img/black/schedule.png" />
-                                    <img class="middle-align dark-only" src="/img/white/schedule.png" />
+                                    <img class="middle-align white" src="/img/white/schedule.png" />
+                                    <img class="middle-align black" src="/img/black/schedule.png" />
                                     <span>are scheduled but may be swapped off.</span>
                                 </p>
                             % end
@@ -177,8 +177,8 @@
                                                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                                         % end
                                                         <span class="tooltip-anchor">
-                                                            <img class="middle-align light-only" src="/img/black/schedule.png" />
-                                                            <img class="middle-align dark-only" src="/img/white/schedule.png" />
+                                                            <img class="middle-align white" src="/img/white/schedule.png" />
+                                                            <img class="middle-align black" src="/img/black/schedule.png" />
                                                             <div class="tooltip">Bus is scheduled</div>
                                                         </span>
                                                         % if order is not None:
