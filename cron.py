@@ -18,6 +18,7 @@ EXC = sys.executable
 CRON_ID = f'bctracker-muncher-{PID}'
 
 def start():
+    '''Removes any old cron jobs and creates new jobs'''
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
     with CronTab(user=True) as cron:
@@ -33,10 +34,12 @@ def start():
         backup_job.setall('0 0 1 * *')
 
 def stop():
+    '''Removes all cron jobs'''
     with CronTab(user=True) as cron:
         cron.remove_all(comment=CRON_ID)
 
 def handle_gtfs(sig, frame):
+    '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     today = Date.today()
     for system in helpers.system.find_all():
         try:
@@ -51,6 +54,7 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
+    '''Reloads realtime data for every system, and backs up data at midnight'''
     for system in helpers.system.find_all():
         try:
             realtime.update(system)

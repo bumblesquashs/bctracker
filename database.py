@@ -53,6 +53,7 @@ SQL_SCRIPTS = [
 connection = None
 
 def connect(foreign_keys=True):
+    '''Opens a connection to the database and runs setup scripts'''
     global connection
     connection = sqlite3.connect('data/bctracker.db', check_same_thread=False)
     if foreign_keys:
@@ -65,19 +66,23 @@ def connect(foreign_keys=True):
     commit()
 
 def disconnect():
+    '''Closes the connection to the database'''
     global connection
     connection.close()
     connection = None
 
 def backup():
+    '''Copies all information from the main database to a backup database'''
     backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
     connection.backup(backup)
     backup.close()
 
 def commit():
+    '''Saves all changes made to the database'''
     connection.commit()
 
 def execute(sql, args=None):
+    '''Runs a generic SQL script with the given arguments'''
     args = [] if args is None else args
     
     if type(args) is list:
@@ -88,6 +93,7 @@ def execute(sql, args=None):
         return connection.cursor().execute(sql, args)
 
 def select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+    '''Executes a SELECT script and returns the selected rows'''
     custom_args = [] if custom_args is None else custom_args
     sql, args = build_select(table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page)
     
@@ -99,6 +105,7 @@ def select(table, columns, distinct=False, ctes=None, join_type='', joins=None, 
     return result
 
 def insert(table, values):
+    '''Executes an INSERT script and returns the new row ID'''
     if type(values) is dict:
         columns = values.keys()
         values = list(values.values())
@@ -113,6 +120,7 @@ def insert(table, values):
     return execute(sql, values).lastrowid
 
 def update(table, values, filters=None, operation='AND'):
+    '''Executes an UPDATE script'''
     columns = values.keys()
     values = list(values.values())
     columns_string = ', '.join([c + ' = ?' for c in columns])
@@ -123,12 +131,14 @@ def update(table, values, filters=None, operation='AND'):
     return execute(f'UPDATE {table} SET {columns_string} WHERE {where}', values + args)
 
 def delete(table, filters=None, operation='AND'):
+    '''Executes a DELETE script'''
     where, args = build_where(filters, operation)
     if where is None:
         return execute(f'DELETE FROM {table}')
     return execute(f'DELETE FROM {table} WHERE {where}', args)
 
 def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+    '''Creates a SQL script for a SELECT query'''
     custom_args = [] if custom_args is None else custom_args
     sql = []
     
@@ -179,6 +189,7 @@ def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=
     return ' '.join(sql), custom_args + args
 
 def build_ctes(ctes):
+    '''Creates a SQL script for common table expressions'''
     if type(ctes) is str:
         return [ctes]
     if type(ctes) is list:
@@ -188,6 +199,7 @@ def build_ctes(ctes):
     return []
 
 def build_joins(joins):
+    '''Creates a SQL script for table joins'''
     if type(joins) is str:
         return [joins]
     elif type(joins) is list:
@@ -208,6 +220,7 @@ def build_joins(joins):
     return []
 
 def build_where(filters, operation):
+    '''Creates a SQL script for a WHERE filter'''
     if type(filters) is str:
         return filters, []
     elif type(filters) is list:
