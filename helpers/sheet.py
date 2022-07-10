@@ -2,6 +2,7 @@
 from models.sheet import Sheet
 
 def combine(services):
+    '''Returns a list of sheets made from services with overlapping start/end dates'''
     sheets = []
     for service in sorted(services, key=lambda s: s.start_date):
         added = False

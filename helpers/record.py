@@ -6,6 +6,7 @@ from models.record import Record
 import database
 
 def create(bus, date, system, block, time, trip):
+    '''Inserts a new record into the database'''
     record_id = database.insert('record', {
         'bus_number': bus.number,
         'date': date.format_db(),
@@ -21,12 +22,14 @@ def create(bus, date, system, block, time, trip):
     return record_id
 
 def create_trip(record_id, trip):
+    '''Inserts a new trip record into the database'''
     database.insert('trip_record', {
         'record_id': record_id,
         'trip_id': trip.id
     })
 
 def update(record_id, time):
+    '''Updates a record in the database'''
     database.update('record',
         values={
             'last_seen': time.format_db()
@@ -36,6 +39,7 @@ def update(record_id, time):
         })
 
 def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit=None):
+    '''Returns all records that match the given system ID, bus number, block ID, and trip ID'''
     joins = {}
     filters = {
         'record.system_id': system_id,
@@ -70,10 +74,12 @@ def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit
     return [Record.from_db(row) for row in rows]
 
 def find_trip_ids(record):
+    '''Returns all trip IDs associated with the given record'''
     rows = database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id})
     return {row['trip_id'] for row in rows}
 
 def find_recorded_buses(system_id):
+    '''Returns all bus numbers recorded for the given system ID'''
     rows = database.select('record',
         columns={
             'record.bus_number': 'bus_number'
@@ -85,6 +91,7 @@ def find_recorded_buses(system_id):
     return [row['bus_number'] for row in rows]
 
 def find_recorded_today(system_id, trips):
+    '''Returns all bus numbers matching the given system ID and trips that were recorded on the current date'''
     today = Date.today()
     rows = database.select('trip_record',
         columns={
@@ -104,6 +111,7 @@ def find_recorded_today(system_id, trips):
     return {row['trip_id']: Bus(row['bus_number']) for row in rows}
 
 def find_scheduled_today(system_id, trips):
+    '''Returns all bus numbers matching the given system ID and trips that are scheduled to run on the current date'''
     today = Date.today()
     cte, args = database.build_select('record',
         columns={

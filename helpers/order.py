@@ -7,6 +7,7 @@ from models.order import Order
 orders = []
 
 def load():
+    '''Loads order data from the static CSV file'''
     global orders
     with open(f'./data/static/orders.csv', 'r') as file:
         reader = csv.reader(file)
@@ -14,6 +15,7 @@ def load():
         orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
 
 def find(bus_number):
+    '''Returns the order containing the given bus number, or None'''
     if bus_number < 0:
         return None
     for order in orders:
@@ -22,9 +24,11 @@ def find(bus_number):
     return None
 
 def find_all():
+    '''Returns all orders'''
     return orders
 
 def find_matches(query, recorded_bus_numbers):
+    '''Returns matching buses for a given query'''
     matches = []
     for order in orders:
         order_string = str(order)
