@@ -19,11 +19,11 @@ from models.stop import Stop
 from models.trip import Trip
 
 def downloaded(system):
-    if not system.gtfs_enabled:
-        return True
+    '''Checks that the GTFS is downloaded for the given system'''
     return path.exists(f'data/gtfs/{system.id}')
 
 def update(system):
+    '''Downloads the GTFS for the given system, then loads it into memory'''
     if not system.gtfs_enabled:
         return
     data_zip_path = f'data/gtfs/{system.id}.zip'
@@ -48,6 +48,7 @@ def update(system):
         print(f'Error message: {e}')
 
 def load(system):
+    '''Loads the GTFS for the given system into memory'''
     if not system.gtfs_enabled:
         return
     print(f'Loading GTFS data for {system}...')
@@ -98,12 +99,14 @@ def load(system):
     print('Done!')
 
 def read_csv(system, name, initializer):
+    '''Opens a CSV file and applies an initializer to each row'''
     with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
         return [initializer(dict(zip(columns, row))) for row in reader]
 
 def validate(system):
+    '''Checks that the GTFS for the given system is up-to-date'''
     if not system.gtfs_enabled:
         return True
     end_dates = [s.end_date for s in system.services.values()]

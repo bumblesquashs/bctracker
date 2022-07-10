@@ -22,7 +22,8 @@ positions = {}
 last_updated = datetime.now()
 
 def update(system):
-    global last_updated, positions
+    '''Downloads realtime data for the given system, then loads it into memory'''
+    global last_updated
     if not system.realtime_enabled:
         return
     print(f'Updating realtime data for {system}...')
@@ -35,7 +36,6 @@ def update(system):
             rename(data_path, archives_path)
         wget.download(system.realtime_url, data_path)
         
-        positions = {k:v for (k, v) in positions.items() if v.system != system}
         update_positions(system)
         
         print('\nDone!')
@@ -46,11 +46,15 @@ def update(system):
         print(f'Error message: {e}')
 
 def update_positions(system):
+    '''Loads realtime data for the given system into memory'''
+    global positions
+        
     data_path = f'data/realtime/{system.id}.bin'
     
     data = protobuf.FeedMessage()
     with open(data_path, 'rb') as file:
         data.ParseFromString(file.read())
+    positions = {k:v for (k, v) in positions.items() if v.system != system}
     for index, entity in enumerate(data.entity):
         vehicle = entity.vehicle
         try:
@@ -65,6 +69,7 @@ def update_positions(system):
         positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
 
 def update_records():
+    '''Updates records in the database based on the current realtime data in memory'''
     try:
         today = Date.today()
         now = Time.now()
@@ -100,16 +105,19 @@ def update_records():
         print(f'Error message: {e}')
 
 def get_position(bus_number):
+    '''Returns the position for a given bus number, or None'''
     if bus_number in positions:
         return positions[bus_number]
     return None
 
 def get_positions(system_id=None):
+    '''Returns all positions for a given system ID'''
     if system_id is None:
         return sorted(positions.values())
     return sorted([p for p in positions.values() if p.system.id == system_id])
 
 def last_updated_string():
+    '''Returns the date/time that realtime data was last updated'''
     now = datetime.now().date()
     if last_updated.date() == now:
         return last_updated.strftime("at %H:%M")
@@ -118,6 +126,7 @@ def last_updated_string():
     return last_updated.strftime("%B %-d, %Y at %H:%M")
 
 def validate(system):
+    '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
     if not system.realtime_enabled:
         return True
     for position in [p for p in positions.values() if p.system == system]:
