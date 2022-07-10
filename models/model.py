@@ -20,6 +20,7 @@ class Model:
     
     @classmethod
     def from_csv(cls, row):
+        '''Returns a model initialized from the given CSV row'''
         id = row['model_id']
         manufacturer = row['manufacturer']
         name = row['name']

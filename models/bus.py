@@ -26,6 +26,7 @@ class Bus:
     
     @property
     def model(self):
+        '''Returns the model of this bus, or None'''
         order = self.order
         if order is None:
             return None

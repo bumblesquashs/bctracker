@@ -12,6 +12,7 @@ class Adherence:
     
     @classmethod
     def calculate(cls, trip, stop, lat, lon):
+        '''Returns the calculated adherence for the given stop, trip, and coordinates'''
         departure = trip.get_departure(stop)
         if departure is None:
             return None
@@ -30,7 +31,6 @@ class Adherence:
             return cls(expected_scheduled_mins - Time.now().get_minutes())
         except AttributeError:
             return None
-        return cls()
     
     def __init__(self, value):
         self.value = value
@@ -67,22 +67,23 @@ class Adherence:
     
     @property
     def json(self):
+        '''Returns a representation of this adherence in JSON-compatible format'''
         return {
             'value': str(self),
             'status_class': self.status_class,
             'description': self.description
         }
 
-'''
-Estimate how far the position is between two stops in minutes...
-aka calculate the fraction of distance a point has travelled between two other points.
-
-Another approach might be projecting the vector from previous_stop to lat-lon onto the vector from
-previous_stop to next_stop - this probably involves the dot product somewhere.
-Instead we simply take the ratio of the (scalar) distances to each one, which should be an ok estimate
-This is simpler and avoids weird results when the position is really in an odd spot
-'''
 def linear_interpolate(lat, lon, previous_stop, next_stop, time_difference):
+    '''
+    Estimate how far the position is between two stops in minutes...
+    aka calculate the fraction of distance a point has travelled between two other points.
+
+    Another approach might be projecting the vector from previous_stop to lat-lon onto the vector from
+    previous_stop to next_stop - this probably involves the dot product somewhere.
+    Instead we simply take the ratio of the (scalar) distances to each one, which should be an ok estimate
+    This is simpler and avoids weird results when the position is really in an odd spot
+    '''
     previous_stop_dx = lon - previous_stop.lon
     previous_stop_dy = lat - previous_stop.lat
     next_stop_dx = lon - next_stop.lon

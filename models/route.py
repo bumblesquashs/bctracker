@@ -16,6 +16,7 @@ class Route:
     
     @classmethod
     def from_csv(cls, row, system, trips):
+        '''Returns a route initialized from the given CSV row'''
         id = row['route_id']
         route_trips = trips.get(id, [])
         number = row['route_short_name']
@@ -99,6 +100,7 @@ class Route:
     
     @property
     def is_current(self):
+        '''Checks if this route is included in the current sheet'''
         for trip in self.trips:
             if trip.is_current:
                 return True
@@ -106,6 +108,7 @@ class Route:
     
     @property
     def json(self):
+        '''Returns a representation of this route in JSON-compatible format'''
         return {
             'id': self.id,
             'number': self.number,
@@ -115,6 +118,7 @@ class Route:
     
     @property
     def indicator_json(self):
+        '''Returns a representation of the map indicator for this route in JSON-compatible format'''
         json = []
         trips = sorted(self.trips, key=lambda t: len(t.points), reverse=True)
         trip = trips[0]
@@ -140,14 +144,17 @@ class Route:
         return json
     
     def get_trips(self, service_group=None):
+        '''Returns all trips from this route that are part of the given service group'''
         if service_group is None:
             return sorted(self.trips)
         return sorted([t for t in self.trips if t.service in service_group.services])
     
     def get_headsigns(self, service_group=None):
+        '''Returns all headsigns from this route that are part of the given service group'''
         return sorted({str(t) for t in self.get_trips(service_group)})
     
     def get_match(self, query):
+        '''Returns a match for this route with the given query'''
         query = query.lower()
         number = self.number.lower()
         name = str(self).lower()

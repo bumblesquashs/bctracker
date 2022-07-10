@@ -17,6 +17,7 @@ class ServiceException:
     
     @classmethod
     def from_csv(cls, row):
+        '''Returns a service exception initialized from the given CSV row'''
         service_id = row['service_id']
         date = Date.parse_csv(row['date'])
         type = ServiceExceptionType(int(row['exception_type']))
@@ -115,54 +116,66 @@ class ServicePattern:
     
     @property
     def mon_status(self):
+        '''Returns the status class of this service pattern on Mondays'''
         return self.get_status(self.mon, 0)
     
     @property
     def tue_status(self):
+        '''Returns the status class of this service pattern on Tuesdays'''
         return self.get_status(self.tue, 1)
     
     @property
     def wed_status(self):
+        '''Returns the status class of this service pattern on Wednesdays'''
         return self.get_status(self.wed, 2)
     
     @property
     def thu_status(self):
+        '''Returns the status class of this service pattern on Thursdays'''
         return self.get_status(self.thu, 3)
     
     @property
     def fri_status(self):
+        '''Returns the status class of this service pattern on Fridays'''
         return self.get_status(self.fri, 4)
     
     @property
     def sat_status(self):
+        '''Returns the status class of this service pattern on Saturdays'''
         return self.get_status(self.sat, 5)
     
     @property
     def sun_status(self):
+        '''Returns the status class of this service pattern on Sundays'''
         return self.get_status(self.sun, 6)
     
     @property
     def included_dates(self):
+        '''Returns service exception dates that are included in this service pattern'''
         included_dates = {e.date for e in self.exceptions if e.type == ServiceExceptionType.INCLUDED}
         excluded_dates = {e.date for e in self.exceptions if e.type == ServiceExceptionType.EXCLUDED}
         return sorted(included_dates - excluded_dates)
     
     @property
     def included_dates_string(self):
+        '''Returns a formatted string of service exception dates that are included in this service pattern'''
         return helpers.date.flatten(self.included_dates)
     
     @property
     def excluded_dates(self):
+        '''Returns service exception dates that are excluded from this service pattern'''
         excluded_dates = {e.date for e in self.exceptions if e.type == ServiceExceptionType.EXCLUDED}
         included_dates = {e.date for e in self.exceptions if e.type == ServiceExceptionType.INCLUDED}
         return sorted(excluded_dates - included_dates)
     
     @property
     def excluded_dates_string(self):
+        '''Returns a formatted string of service exception dates that are excluded from this service pattern'''
         return helpers.date.flatten(self.excluded_dates)
     
     @property
     def date_string(self):
+        '''Returns a string indicating the date/dates/date range that this service pattern operates'''
         if len(self.indices) == 0 and len(self.included_dates) > 0:
             return self.included_dates_string
         if self.start_date == self.end_date:
@@ -171,13 +184,16 @@ class ServicePattern:
     
     @property
     def is_current(self):
+        '''Checks if the current date is within this service pattern's start and end dates'''
         return self.start_date <= Date.today() <= self.end_date
     
     @property
     def is_today(self):
+        '''Checks if this service pattern includes the current date'''
         return self.includes(Date.today())
     
     def includes(self, date):
+        '''Checks if this service pattern includes the given date'''
         if date < self.start_date or date > self.end_date:
             return False
         if date in self.included_dates:
@@ -187,6 +203,7 @@ class ServicePattern:
         return date.weekday in self.indices
     
     def get_status(self, active, weekday):
+        '''Returns the status class of this service on the given weekday'''
         included_count = len([d for d in self.included_dates if d.weekday == weekday])
         excluded_count = len([d for d in self.excluded_dates if d.weekday == weekday])
         if active or included_count > 3:
@@ -204,6 +221,7 @@ class Service(ServicePattern):
     
     @classmethod
     def from_csv(cls, row, system, exceptions):
+        '''Returns a service initialized from the given CSV row'''
         id = row['service_id']
         start_date = Date.parse_csv(row['start_date'])
         end_date = Date.parse_csv(row['end_date'])
@@ -235,6 +253,7 @@ class Service(ServicePattern):
     
     @property
     def sheet(self):
+        '''Returns the sheet associated with this service'''
         return self.system.get_sheet(self.id)
 
 class ServiceGroup(ServicePattern):
@@ -244,6 +263,7 @@ class ServiceGroup(ServicePattern):
     
     @classmethod
     def combine(cls, services):
+        '''Returns a service group initialized by combined a list of services'''
         if len(services) == 0:
             return None
         id = '_'.join(sorted({s.id for s in services}))

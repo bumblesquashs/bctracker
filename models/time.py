@@ -8,6 +8,7 @@ class Time:
     
     @classmethod
     def parse(cls, time_string, accurate_seconds=False):
+        '''Returns a time parsed from the given string in HH:MM:SS format'''
         if time_string is None or time_string == '':
             return Time(True, 0, 0, 0, False)
         time_parts = time_string.split(':')
@@ -22,6 +23,7 @@ class Time:
     
     @classmethod
     def now(cls):
+        '''Returns the current time'''
         now = datetime.now()
         hour = now.hour
         if hour < 4:
@@ -56,25 +58,31 @@ class Time:
     
     @property
     def is_earlier(self):
+        '''Checks if this time is before the current time'''
         return self < Time.now()
     
     @property
     def is_now(self):
+        '''Checks if this time is the same as the current time'''
         return self == Time.now()
     
     @property
     def is_later(self):
+        '''Checks if this time is after the current time'''
         return self > Time.now()
     
     def get_minutes(self):
+        '''Returns the total number of minutes in this time'''
         return (self.hour * 60) + self.minute
     
     def format_db(self):
+        '''Returns a string of this time formatted as HH:MM:SS'''
         if self.unknown:
             return None
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
     def format_difference(self, other):
+        '''Returns a string of the number of hours and minutes between this time and another time'''
         self_minutes = self.get_minutes()
         other_minutes = other.get_minutes()
         difference = abs(self_minutes - other_minutes)
