@@ -56,4 +56,10 @@ system_domain_path: 'http://example.com/{0}/{1}
 cookie_domain: 'example.com'
 ```
 
+If you plan on running multiple instances of BCTracker, you can set a unique cron ID in `server.conf` to ensure cron jobs get removed properly per individual server.
+
+```
+cron_id: 'some-unique-id'
+```
+
 Once you've done that, run `setup.sh` to install packages and create directories, and then run `start.py` to load up the server.
