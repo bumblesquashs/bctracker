@@ -49,7 +49,7 @@
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
     </div>
-        
+    
     <div id="map" class="full-screen"></div>
     
     <script>
@@ -59,6 +59,17 @@
             zoom: 1,
             style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
         });
+        
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+                showUserHeading: true
+            }),
+            'bottom-left'
+        );
         
         let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');
         let currentShapeIDs = []

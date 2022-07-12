@@ -54,6 +54,17 @@
                 interactive: true
             });
             
+            map.addControl(
+                new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true
+                    },
+                    trackUserLocation: true,
+                    showUserHeading: true
+                }),
+                'bottom-left'
+            );
+            
             const lats = [];
             const lons = [];
         </script>
