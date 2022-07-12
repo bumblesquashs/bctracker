@@ -671,12 +671,12 @@ table.striped tr.section td {
 }
 
 .theme-control {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .theme-control .button {
-    display: inline-block;
+    display: block;
 }
 
 .tooltip-anchor {

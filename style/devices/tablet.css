@@ -102,7 +102,13 @@ table {
     margin-top: 10px;
 }
 
-#search-non-desktop-results a {
+#search-non-desktop-results .message {
+    padding: 10px 0px;
+    text-align: center;
+    font-size: 16pt;
+}
+
+#search-non-desktop-results .result {
     padding: 10px 0px;
     text-decoration: none;
     display: flex;
@@ -111,19 +117,13 @@ table {
     font-size: 16pt;
 }
 
-#search-non-desktop-results a img {
+#search-non-desktop-results .result img {
     width: 36px;
     height: 36px;
 }
 
-#search-non-desktop-results a .description {
+#search-non-desktop-results .result .description {
     flex: 1;
-}
-
-#search-non-desktop-results .message {
-    padding: 10px 0px;
-    text-align: center;
-    font-size: 16pt;
 }
 
 #system-bar #last-updated {
@@ -202,4 +202,8 @@ table {
 
 .tab-button {
     flex: 1;
+}
+
+.theme-control {
+    flex-direction: column;
 }

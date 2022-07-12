@@ -86,26 +86,16 @@
             % include('components/systems')
         % end
         
-        <div class="theme-control">
+        <div>
             <h2>Themes</h2>
+            % if theme is None:
+                <h3>Current Theme: BC Transit</h3>
+            % else:
+                <h3>Current Theme: {{ theme }}</h3>
+            % end
             <p>
-                BCTracker is available in both light and dark colours.
-                You can also set it to change automatically based on your system preferences.
+                To change the current theme, visit the <a href="{{ get_url(system, 'themes') }}">themes page</a>.
             </p>
-            <div class="button-container">
-                <a class="button" href="?theme=automatic">Automatic</a>
-                <a class="button" href="?theme=light">Light</a>
-                <a class="button" href="?theme=dark">Dark</a>
-            </div>
-            <br />
-            <p>
-                Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
-            </p>
-            <div class="button-container">
-                <a class="button" href="?theme=classic">BC Transit Classic</a>
-                <a class="button" href="?theme=uta">Urban Transit Authority</a>
-                <a class="button" href="?theme=bchydro">BC Hydro</a>
-            </div>
         </div>
     </div>
     
