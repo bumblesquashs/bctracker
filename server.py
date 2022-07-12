@@ -91,7 +91,7 @@ def page(name, system_id, path='', **kwargs):
     return template(f'pages/{name}',
         version=VERSION,
         path=path,
-        systems=[s for s in helpers.system.find_all() if s.gtfs_enabled],
+        systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
         system_id=system_id,
         system=helpers.system.find(system_id),
         get_url=get_url,

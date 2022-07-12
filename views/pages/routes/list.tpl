@@ -18,22 +18,29 @@
     % include('components/systems')
 % else:
     % routes = system.get_routes()
-    <table class="striped">
-        <thead>
-            <tr>
-                <th>Route</th>
-                <th>Service Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            % for route in routes:
+    % if len(routes) == 0:
+        <p>
+            Route information is currently unavailable for {{ system }}.
+            Please check again later!
+        </p>
+    % else:
+        <table class="striped">
+            <thead>
                 <tr>
-                    <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
-                    <td>
-                        % include('components/service_pattern_indicator', pattern=route.service_group, compact=True)
-                    </td>
+                    <th>Route</th>
+                    <th>Service Days</th>
                 </tr>
-            % end
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                % for route in routes:
+                    <tr>
+                        <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
+                        <td>
+                            % include('components/service_pattern_indicator', pattern=route.service_group, compact=True)
+                        </td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % end
 % end

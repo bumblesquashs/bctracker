@@ -1,5 +1,6 @@
 
 from datetime import datetime, timedelta
+from pytz import timezone
 
 import calendar
 
@@ -19,8 +20,11 @@ class Date:
         return cls(date.year, date.month, date.day)
     
     @classmethod
-    def today(cls):
-        now = datetime.now()
+    def today(cls, system=None):
+        if system is not None and system.timezone is not None:
+            now = datetime.now(timezone(system.timezone))
+        else:
+            now = datetime.now()
         date = now if now.hour >= 4 else now - timedelta(days=1)
         return cls(date.year, date.month, date.day)
     

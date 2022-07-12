@@ -2,29 +2,47 @@
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'prefix_headsign', 'gtfs_enabled', 'realtime_enabled', 'gtfs_url', 'realtime_url', 'validation_errors', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
         id = row['system_id']
         name = row['name']
+        enabled = row['enabled'] == '1'
+        visible = row['visible'] == '1'
         prefix_headsign = row['prefix_headsign'] == '1'
-        gtfs_enabled = row['gtfs_enabled'] == '1'
-        realtime_enabled = row['realtime_enabled'] == '1'
-        gtfs_url = row['gtfs_url']
-        realtime_url = row['realtime_url']
-        return cls(id, name, prefix_headsign, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url)
+        version = row['version']
+        if version == '1':
+            remote_id = row['remote_id']
+            gtfs_url = f'http://{remote_id}.mapstrat.com/current/google_transit.zip'
+            realtime_url = f'http://{remote_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin'
+        elif version == '2':
+            remote_id = row['remote_id']
+            gtfs_url = f'https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds={remote_id}'
+            realtime_url = f'https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds={remote_id}'
+        else:
+            if 'gtfs_url' in row and row['gtfs_url'] != '':
+                gtfs_url = row['gtfs_url']
+            else:
+                gtfs_url = None
+            if 'realtime_url' in row and row['realtime_url'] != '':
+                realtime_url = row['realtime_url']
+            else:
+                realtime_url = None
+        return cls(id, name, enabled, visible, prefix_headsign, gtfs_url, realtime_url)
     
-    def __init__(self, id, name, prefix_headsign, gtfs_enabled, realtime_enabled, gtfs_url, realtime_url):
+    def __init__(self, id, name, enabled, visible, prefix_headsign, gtfs_url, realtime_url):
         self.id = id
         self.name = name
+        self.enabled = enabled
+        self.visible = visible
         self.prefix_headsign = prefix_headsign
-        self.gtfs_enabled = gtfs_enabled
-        self.realtime_enabled = realtime_enabled
         self.gtfs_url = gtfs_url
         self.realtime_url = realtime_url
         
         self.validation_errors = 0
+        
+        self.timezone = None
         
         self.blocks = {}
         self.routes = {}
@@ -47,6 +65,14 @@ class System:
     
     def __lt__(self, other):
         return str(self) < str(other)
+    
+    @property
+    def gtfs_enabled(self):
+        return self.enabled and self.gtfs_url is not None
+    
+    @property
+    def realtime_enabled(self):
+        return self.enabled and self.realtime_url is not None
     
     def get_block(self, block_id):
         if block_id in self.blocks:

@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from pytz import timezone
 
 class Time:
     '''A specific hour, minute, and second'''
@@ -21,8 +22,11 @@ class Time:
         return cls(False, hour, minute, second, accurate_seconds)
     
     @classmethod
-    def now(cls):
-        now = datetime.now()
+    def now(cls, system=None):
+        if system is not None and system.timezone is not None:
+            now = datetime.now(timezone(system.timezone))
+        else:
+            now = datetime.now()
         hour = now.hour
         if hour < 4:
             hour += 24

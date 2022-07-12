@@ -348,6 +348,10 @@ table.striped tr:nth-child(2n-1) {
     border-bottom-color: #565656;
 }
 
+.order-indicator .content .separator {
+    color: #565656;
+}
+
 .route-number {
     color: #FFFFFF;
     border-color: #FFFFFF;

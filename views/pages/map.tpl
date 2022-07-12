@@ -164,8 +164,10 @@
                     element.appendChild(details);
                 }
                 
-                lons.push(position.lon);
-                lats.push(position.lat);
+                if (position.lat != 0 && position.lon != 0) {
+                    lons.push(position.lon);
+                    lats.push(position.lat);
+                }
                 
                 markers.push(new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map));
             }
@@ -176,7 +178,7 @@
                         center: [lons[0], lats[0]],
                         zoom: 14
                     });
-                } else {
+                } else if (lons.length > 0 && lats.length > 0) {
                     const minLon = Math.min.apply(Math, lons);
                     const maxLon = Math.max.apply(Math, lons);
                     const minLat = Math.min.apply(Math, lats);

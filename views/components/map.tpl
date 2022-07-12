@@ -224,7 +224,7 @@
             
             new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map);
             
-            if ("{{ get('zoom_buses', True) }}" === "True") {
+            if ("{{ get('zoom_buses', True) }}" === "True" && position.lat != 0 && position.lon != 0) {
                 lats.push(position.lat);
                 lons.push(position.lon);
             }
@@ -240,7 +240,7 @@
                 center: [lons[0], lats[0]],
                 zoom: 14
             });
-        } else {
+        } else if (lons.length > 0 && lats.length > 0) {
             const minLon = Math.min.apply(Math, lons);
             const maxLon = Math.max.apply(Math, lons);
             const minLat = Math.min.apply(Math, lats);

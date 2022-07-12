@@ -66,13 +66,13 @@ def update_positions(system):
 
 def update_records():
     try:
-        today = Date.today()
-        now = Time.now()
         for position in positions.values():
             system = position.system
             bus = position.bus
             if bus.number < 0:
                 continue
+            today = Date.today(system)
+            now = Time.now(system)
             overview = helpers.overview.find(bus.number)
             trip = position.trip
             if trip is None:

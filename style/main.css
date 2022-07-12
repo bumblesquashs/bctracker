@@ -538,6 +538,20 @@ table.striped tr.section td {
     white-space: nowrap;
 }
 
+.order-indicator .content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+
+.order-indicator .title {
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
 .page-header {
     margin-bottom: 20px;
 }

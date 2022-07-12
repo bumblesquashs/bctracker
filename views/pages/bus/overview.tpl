@@ -1,4 +1,5 @@
 
+% from models.bus import Bus
 % from models.model import ModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
@@ -26,6 +27,11 @@
             
             <div class="info-box">
                 <h3 class="title">Not in service</h3>
+                
+                <div class="section">
+                    <div class="name">System</div>
+                    <div class="value">{{ position.system }}</div>
+                </div>
             </div>
         % else:
             % trip = position.trip
@@ -95,6 +101,11 @@
         <h2>Details</h2>
         <div class="info-box">
             % model = bus.model
+            % if bus.order.size > 1:
+                <div class="section">
+                    % include('components/order_indicator', bus=bus)
+                </div>
+            % end
             <div class="section">
                 <div class="name">Vehicle Type</div>
                 <div class="value">{{ model.type }}</div>

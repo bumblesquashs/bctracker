@@ -36,8 +36,8 @@ def stop(cron_id):
         cron.remove_all(comment=cron_id)
 
 def handle_gtfs(sig, frame):
-    today = Date.today()
     for system in helpers.system.find_all():
+        today = Date.today(system)
         try:
             if today.weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
