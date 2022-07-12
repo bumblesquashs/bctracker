@@ -14,6 +14,7 @@ import helpers.transfer
 
 from models.bus import Bus
 
+import cron
 import database
 import gtfs
 import realtime
@@ -23,6 +24,7 @@ VERSION = 11
 
 app = Bottle()
 
+cron_id = 'bctracker-muncher'
 mapbox_api_key = ''
 no_system_domain = 'https://bctracker.ca/{0}'
 system_domain = 'https://{0}.bctracker.ca/{1}'
@@ -30,7 +32,7 @@ system_domain_path = 'https://bctracker.ca/{0}/{1}'
 cookie_domain = None
 
 def start(args):
-    global mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
+    global cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
     
     database.connect()
     
@@ -58,6 +60,7 @@ def start(args):
     realtime.update_records()
     
     cp.config.update('server.conf')
+    cron_id = cp.config.get('cron_id', 'bctracker-muncher')
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
@@ -69,8 +72,10 @@ def start(args):
     
     cp.tree.graft(log, '/')
     cp.server.start()
+    cron.start(cron_id)
 
 def stop():
+    cron.stop(cron_id)
     database.disconnect()
     cp.server.stop()
 
