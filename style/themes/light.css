@@ -84,6 +84,10 @@ table.striped tr:nth-child(2n-1) {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
+#content img.white {
+    display: none;
+}
+
 #map.preview {
     border-color: #989898;
 }
@@ -92,8 +96,16 @@ table.striped tr:nth-child(2n-1) {
     background-color: #365CCB;
 }
 
+#map-z-toggle-icon-black {
+    display: none;
+}
+
 #navigation-bar {
     background-color: #1A671A;
+}
+
+#navigation-bar .menu-toggle img.black {
+    display: none;
 }
 
 #navigation-bar .navigation-button {
@@ -108,6 +120,10 @@ table.striped tr:nth-child(2n-1) {
     background-color: #1A671A !important;
 }
 
+#navigation-bar .navigation-button img.black {
+    display: none;
+}
+
 #navigation-bar .navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
@@ -116,8 +132,16 @@ table.striped tr:nth-child(2n-1) {
     background-color: #094409;
 }
 
+#refresh-button img.black {
+    display: none;
+}
+
 #search-desktop {
     color: #FFFFFF;
+}
+
+#search-desktop > img.black {
+    display: none;
 }
 
 #search-desktop input[type="text"] {
@@ -146,20 +170,24 @@ table.striped tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
-#search-desktop-results a {
-    color: #000000;
-}
-
-#search-desktop-results a:hover {
-    background-color: #E6E6E6;
-}
-
 #search-desktop-results .keyboard-selected {
     background-color: #CBCBCB;
 }
 
 #search-desktop-results .message {
     color: #666666;
+}
+
+#search-desktop-results .result {
+    color: #000000;
+}
+
+#search-desktop-results .result:hover {
+    background-color: #E6E6E6;
+}
+
+#search-desktop-results .result img.white {
+    display: none;
 }
 
 #search-non-desktop input[type="text"] {
@@ -170,16 +198,20 @@ table.striped tr:nth-child(2n-1) {
     border-color: #48A348;
 }
 
-#search-non-desktop-results a {
+#search-non-desktop-results .message {
     color: #FFFFFF;
 }
 
-#search-non-desktop-results a .lighter-text {
+#search-non-desktop-results .result {
+    color: #FFFFFF;
+}
+
+#search-non-desktop-results .result .lighter-text {
     color: #CBCBCB;
 }
 
-#search-non-desktop-results .message {
-    color: #FFFFFF;
+#search-non-desktop-results .result img.black {
+    display: none;
 }
 
 #system-bar {
@@ -241,7 +273,7 @@ table.striped tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
-.dark-only {
+.checkbox .box img.white {
     display: none;
 }
 
@@ -302,6 +334,10 @@ table.striped tr:nth-child(2n-1) {
 
 .menu .menu-button.disabled {
     color: #ABABAB;
+}
+
+.menu .menu-button img.black {
+    display: none;
 }
 
 .news-post {
