@@ -22,7 +22,7 @@
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
         % end
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(system) }}" />
+        <meta property="og:url" content="{{ get_url(system, path) }}" />
         <meta property="og:image" content="{{ get_url(system, 'img/meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
@@ -37,53 +37,31 @@
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
         <script>
-            let prefersDarkScheme
+            let mapStyle
         </script>
-        % if theme == "light":
-            <link rel="stylesheet" href="/style/themes/light.css?version={{ version }}" />
-            
-            <script>
-                prefersDarkScheme = false
-            </script>
-        % elif theme == "dark":
-            <link rel="stylesheet" href="/style/themes/dark.css?version={{ version }}" />
-            
-            <script>
-                prefersDarkScheme = true
-            </script>
-        % elif theme == "classic":
-            <link rel="stylesheet" href="/style/themes/classic.css?version={{ version }}" />
-            
-            <script>
-                prefersDarkScheme = false
-            </script>
-        % elif theme == "bchydro":
-            <link rel="stylesheet" href="/style/themes/bchydro.css?version={{ version }}" />
-            
-            <script>
-                prefersDarkScheme = false
-            </script>
-        % elif theme == "uta":
-            <link rel="stylesheet" href="/style/themes/uta.css?version={{ version }}" />
-            
-            <script>
-                prefersDarkScheme = false
-            </script>
-        % else:
+        % if theme is None:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
-            
             <script>
-                prefersDarkScheme = window.matchMedia("screen and (prefers-color-scheme: dark)").matches;
+                if (window.matchMedia("screen and (prefers-color-scheme: light)").matches) {
+                    mapStyle = "mapbox://styles/mapbox/light-v10";
+                } else {
+                    mapStyle = "mapbox://styles/mapbox/dark-v10";
+                }
+            </script>
+        % else:
+            <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
+            <script>
+                mapStyle = "mapbox://styles/mapbox/{{ theme.map_style }}";
             </script>
         % end
         
-        % if defined("include_maps") and include_maps:
-            <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
-            <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+        % if get('include_maps', False):
+            <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+            <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
             
             <script>
-                mapboxgl.accessToken = '{{mapbox_api_key}}';
+                mapboxgl.accessToken = "{{ mapbox_api_key }}";
             </script>
         % end
         
@@ -198,7 +176,8 @@
                     % end
                     
                     <div id="search-desktop" class="right">
-                        <img src="/img/white/search.png" />
+                        <img class="white" src="/img/white/search.png" />
+                        <img class="black" src="/img/black/search.png" />
                         <input type="text" id="search-desktop-input" placeholder="Search" oninput="searchDesktop()" onfocus="searchDesktopFocus()" onblur="searchDesktopBlur()">
                         
                         <div id="search-desktop-results" class="display-none"></div>
@@ -223,52 +202,62 @@
                 
                 % if len(systems) > 1:
                     <div class="menu-toggle non-desktop right" onclick="toggleChangeSystemMenu()">
-                        <img src="/img/white/system.png" />
+                        <img class="white" src="/img/white/system.png" />
+                        <img class="black" src="/img/black/system.png" />
                     </div>
                 % end
                 
                 <div class="menu-toggle non-desktop right" onclick="toggleSearchNonDesktop()">
-                    <img src="/img/white/search.png" />
+                    <img class="white" src="/img/white/search.png" />
+                    <img class="black" src="/img/black/search.png" />
                 </div>
                 
                 <br style="clear: both" />
             </div>
-        
+            
             <div id="navigation-menu" class="menu non-desktop display-none">
                 % if system is None or system.realtime_enabled:
                     <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
-                        <img src="/img/white/map.png" />
+                        <img class="white" src="/img/white/map.png" />
+                        <img class="black" src="/img/black/map.png" />
                         <span>Map</span>
                     </a>
                     <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
-                        <img src="/img/white/realtime.png" />
+                        <img class="white" src="/img/white/realtime.png" />
+                        <img class="black" src="/img/black/realtime.png" />
                         <span>Realtime</span>
                     </a>
                     <a class="menu-button" href="{{ get_url(system, 'history') }}">
-                        <img src="/img/white/history.png" />
+                        <img class="white" src="/img/white/history.png" />
+                        <img class="black" src="/img/black/history.png" />
                         <span>History</span>
                     </a>
                     <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                        <img src="/img/white/routes.png" />
+                        <img class="white" src="/img/white/routes.png" />
+                        <img class="black" src="/img/black/routes.png" />
                         <span>Routes</span>
                     </a>
                     <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                        <img src="/img/white/blocks.png" />
+                        <img class="white" src="/img/white/blocks.png" />
+                        <img class="black" src="/img/black/blocks.png" />
                         <span>Blocks</span>
                     </a>
                 % else:
                     <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                        <img src="/img/white/routes.png" />
+                        <img class="white" src="/img/white/routes.png" />
+                        <img class="black" src="/img/black/routes.png" />
                         <span>Routes</span>
                     </a>
                     <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                        <img src="/img/white/blocks.png" />
+                        <img class="white" src="/img/white/blocks.png" />
+                        <img class="black" src="/img/black/blocks.png" />
                         <span>Blocks</span>
                     </a>
                 % end
                 
                 <a class="menu-button" href="{{ get_url(system, 'about') }}">
-                    <img src="/img/white/about.png" />
+                    <img class="white" src="/img/white/about.png" />
+                    <img class="black" src="/img/black/about.png" />
                     <span>About</span>
                 </a>
             </div>
@@ -330,7 +319,8 @@
                 </div>
                 % if (system is None or system.realtime_enabled) and get('show_refresh_button', False):
                     <div id="refresh-button" class="hidden">
-                        <img src="/img/white/refresh.png" />
+                        <img class="white" src="/img/white/refresh.png" />
+                        <img class="black" src="/img/black/refresh.png" />
                     </div>
                 % end
             </div>
@@ -377,7 +367,7 @@
     function searchDesktop() {
         const inputElement = document.getElementById("search-desktop-input");
         const resultsElement = document.getElementById("search-desktop-results");
-        search(inputElement, resultsElement, false);
+        search(inputElement, resultsElement);
     }
     
     function toggleSearchNonDesktop() {
@@ -393,7 +383,7 @@
     function searchNonDesktop() {
         const inputElement = document.getElementById("search-non-desktop-input");
         const resultsElement = document.getElementById("search-non-desktop-results");
-        search(inputElement, resultsElement, true);
+        search(inputElement, resultsElement);
     }
     
     function setSelectedEntry(newIndex) {
@@ -445,7 +435,7 @@
         }
     }
 
-    function search(inputElement, resultsElement, useLightIcons) {
+    function search(inputElement, resultsElement) {
         const query = inputElement.value;
         if (query === undefined || query === null || query === "") {
             resultsElement.classList.add("display-none");
@@ -467,7 +457,7 @@
                     inputElement.onkeyup = function() {};
                 } else {
                     const results = request.response.results;
-                    resultsElement.innerHTML = getSearchHTML(results, count, useLightIcons);
+                    resultsElement.innerHTML = getSearchHTML(results, count);
                     
                     // Reset navigation
                     clearSearchHighlighting();
@@ -522,7 +512,7 @@
         }
     }
     
-    function getSearchHTML(results, count, useLightIcons) {
+    function getSearchHTML(results, count) {
         let html = "";
         if (count === 1) {
             html += "<div class='message smaller-font'>Showing 1 of 1 result</div>";
@@ -535,34 +525,22 @@
             let name = result.name;
             switch (result.type) {
                 case "bus":
-                    if (prefersDarkScheme || useLightIcons) {
-                        icon = "<img src='/img/white/realtime.png' />";
-                    } else {
-                        icon = "<img src='/img/black/realtime.png' />";
-                    }
+                    icon = "<img class='white' src='/img/white/realtime.png' /><img class='black' src='/img/black/realtime.png' />";
                     name = "Bus " + result.name;
                     break;
                 case "route":
-                    if (prefersDarkScheme || useLightIcons) {
-                        icon = "<img src='/img/white/routes.png' />";
-                    } else {
-                        icon = "<img src='/img/black/routes.png' />";
-                    }
+                    icon = "<img class='white' src='/img/white/routes.png' /><img class='black' src='/img/black/routes.png' />";
                     name = "Route " + result.name;
                     break;
                 case "stop":
-                    if (prefersDarkScheme || useLightIcons) {
-                        icon = "<img src='/img/white/stop.png' />";
-                    } else {
-                        icon = "<img src='/img/black/stop.png' />";
-                    }
+                    icon = "<img class='white' src='/img/white/stop.png' /><img class='black' src='/img/black/stop.png' />";
                     name = "Stop " + result.name;
                     break;
                 default:
                     break;
             }
             html += "\
-                <a id='search-result-entry-" + i + "' href='" + result.url + "'>" +
+                <a id='search-result-entry-" + i + "' class='result' href='" + result.url + "'>" +
                     icon +
                     "<div class='description'>" +
                         name +

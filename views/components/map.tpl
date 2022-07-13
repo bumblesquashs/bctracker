@@ -10,13 +10,28 @@
         container: "map",
         center: [0, 0],
         zoom: 1,
-        style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10",
+        style: mapStyle,
         interactive: "{{ is_preview }}" === "False"
     });
     
     const lats = [];
     const lons = [];
 </script>
+
+% if not is_preview:
+    <script>
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+                showUserHeading: true
+            }),
+            'bottom-left'
+        );
+    </script>
+% end
 
 % map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
 % map_trips = sorted(map_trips, key=lambda t: t.route, reverse=True)
@@ -209,7 +224,7 @@
             
             new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map);
             
-            if ("{{ get('zoom_buses', True) }}" === "True") {
+            if ("{{ get('zoom_buses', True) }}" === "True" && position.lat != 0 && position.lon != 0) {
                 lats.push(position.lat);
                 lons.push(position.lon);
             }
@@ -225,7 +240,7 @@
                 center: [lons[0], lats[0]],
                 zoom: 14
             });
-        } else {
+        } else if (lons.length > 0 && lats.length > 0) {
             const minLon = Math.min.apply(Math, lons);
             const maxLon = Math.max.apply(Math, lons);
             const minLat = Math.min.apply(Math, lats);

@@ -78,7 +78,12 @@ form input[type="text"] {
     text-align: left;
 }
 
-#search-desktop-results a {
+#search-desktop-results .message {
+    padding: 12px;
+    text-align: center;
+}
+
+#search-desktop-results .result {
     padding: 5px 12px;
     text-decoration: none;
     display: flex;
@@ -86,18 +91,13 @@ form input[type="text"] {
     flex-direction: row;
 }
 
-#search-desktop-results a img {
+#search-desktop-results .result img {
     width: 32px;
     height: 32px;
 }
 
-#search-desktop-results a .description {
+#search-desktop-results .result .description {
     flex: 1;
-}
-
-#search-desktop-results .message {
-    padding: 12px;
-    text-align: center;
 }
 
 #system-bar #last-updated {
@@ -227,4 +227,9 @@ form input[type="text"] {
 
 .tablet-only {
     display: none !important;
+}
+
+.theme-control {
+    flex-direction: row;
+    flex-wrap: wrap;
 }

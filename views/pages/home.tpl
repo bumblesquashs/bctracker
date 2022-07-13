@@ -86,31 +86,46 @@
             % include('components/systems')
         % end
         
-        <div class="theme-control">
+        <div>
             <h2>Themes</h2>
+            % if theme is None:
+                <h3>Current Theme: BC Transit</h3>
+            % else:
+                <h3>Current Theme: {{ theme }}</h3>
+            % end
             <p>
-                BCTracker is available in both light and dark colours.
-                You can also set it to change automatically based on your system preferences.
+                To change the current theme, visit the <a href="{{ get_url(system, 'themes') }}">themes page</a>.
             </p>
-            <div class="button-container">
-                <a class="button" href="?theme=automatic">Automatic</a>
-                <a class="button" href="?theme=light">Light</a>
-                <a class="button" href="?theme=dark">Dark</a>
-            </div>
-            <br />
-            <p>
-                Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
-            </p>
-            <div class="button-container">
-                <a class="button" href="?theme=classic">BC Transit Classic</a>
-                <a class="button" href="?theme=uta">Urban Transit Authority</a>
-                <a class="button" href="?theme=bchydro">BC Hydro</a>
-            </div>
         </div>
     </div>
     
     <div class="flex-3">
         <h2>Latest Updates</h2>
+        
+        <div class="news-post">
+            <div class="header">
+                <h3>Multiple Systems Anniversary</h3>
+                July 12, 2022
+            </div>
+            <div class="content">
+                <p>
+                    Today is exactly one year since we started tracking buses in places other than Victoria.
+                    We're celebrating by keeping the trend going - even more systems are now available!
+                </p>
+                <p>
+                    Starting today, you'll find <b>East Kootenay</b>, <b>Creston Valley</b>, <b>Fort St. John</b>, <b>Dawson Creek</b>, <b>Kitimat</b>, and <b>Prince Rupert</b> in the systems list.
+                    You may have also noticed the addition of <b>West Kootenay</b> as well as realtime information in <b>North Okanagan</b>, <b>South Okanagan</b>, and <b>Prince George</b> since the last update post.
+                    That brings us now to a total of <b>23</b> supported systems, which is an amazing number considering that until a year ago there was only one single system!
+                </p>
+                <p>
+                    This will likely be the last batch of new systems for a while, as BC Transit has completed the NextRide rollout in all the systems originally announced in January.
+                    However, if more systems are ever introduced, rest assured that we'll work hard to get them added as well!
+                </p>
+                <p>
+                    Happy tracking!
+                </p>
+            </div>
+        </div>
         
         <div class="news-post">
             <div class="header">
@@ -149,44 +164,6 @@
                 </ul>
                 <p>
                     We hope you enjoy the new systems and improvements, and have a great summer!
-                </p>
-            </div>
-        </div>
-        
-        <div class="news-post">
-            <div class="header">
-                <h3>Winter Update</h3>
-                January 2, 2022
-            </div>
-            <div class="content">
-                <p>
-                    Hey everyone, it's once again time for a quick(ish) update!
-                </p>
-                <p>
-                    First of all, a huge thank you to everyone who has participated in our survey so far!
-                    Your feedback has been very helpful in planning upcoming additions to the site, and we're glad to know how helpful BCTracker has been for you.
-                    If you haven't had a chance to respond yet, you can still get to it from the link in the previous post.
-                </p>
-                <p>
-                    We've gotten a lot done over the last few months, some of which you may have already noticed, while other things have only just recently been added.
-                    Many of the newest features are among the most highly-requested in the survey responses, so we hope you enjoy them!
-                    Here's an overview of what's new:
-                </p>
-                <ul>
-                    <li>Realtime Frequency: Now updates every minute for even more accurate bus positions</li>
-                    <li>Global Search: An easy way to find buses, routes, and stops from anywhere on the website</li>
-                    <li>Upcoming Departures: Trips leaving a stop in the next 30 minutes, including realtime bus information when available</li>
-                    <li>Transfers and First Seen: Historic updates for when buses are transferred between systems, and when they were recorded for the first time</li>
-                    <li>Block/Trip History: All recorded realtime history for blocks and trips</li>
-                    <li>Map Improvements: Full-screen, interactive maps for buses, routes, stops, blocks, and trips</li>
-                    <li>Some pretty big improvements behind the scenes that made a lot of these updates possible</li>
-                </ul>
-                <p>
-                    Finally, we've updated our <a href="/about">About</a> page with some FAQs, based on some of the survey results we got back.
-                    We hope the answers are enlightening!
-                </p>
-                <p>
-                    As always, stay safe and have a Happy New Year!
                 </p>
             </div>
         </div>

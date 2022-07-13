@@ -9,19 +9,22 @@ import helpers.order
 import helpers.overview
 import helpers.record
 import helpers.system
+import helpers.theme
 import helpers.transfer
 
 from models.bus import Bus
 
+import cron
 import database
 import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 10
+VERSION = 11
 
 app = Bottle()
 
+cron_id = 'bctracker-muncher'
 mapbox_api_key = ''
 no_system_domain = 'https://bctracker.ca/{0}'
 system_domain = 'https://{0}.bctracker.ca/{1}'
@@ -30,7 +33,7 @@ cookie_domain = None
 
 def start(args):
     '''Loads all required data and launches the server'''
-    global mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
+    global cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
     
     database.connect()
     
@@ -43,6 +46,7 @@ def start(args):
     helpers.model.load()
     helpers.order.load()
     helpers.system.load()
+    helpers.theme.load()
     
     for system in helpers.system.find_all():
         if not gtfs.downloaded(system) or args.reload:
@@ -57,6 +61,7 @@ def start(args):
     realtime.update_records()
     
     cp.config.update('server.conf')
+    cron_id = cp.config.get('cron_id', 'bctracker-muncher')
     mapbox_api_key = cp.config['mapbox_api_key']
     no_system_domain = cp.config['no_system_domain']
     system_domain = cp.config['system_domain']
@@ -68,9 +73,11 @@ def start(args):
     
     cp.tree.graft(log, '/')
     cp.server.start()
+    cron.start(cron_id)
 
 def stop():
     '''Terminates the server'''
+    cron.stop(cron_id)
     database.disconnect()
     cp.server.stop()
 
@@ -82,12 +89,13 @@ def get_url(system, path=''):
         return system_domain.format(system, path).rstrip('/')
     return system_domain.format(system.id, path).rstrip('/')
 
-def page(name, system_id, path='', theme=None, **kwargs):
+def page(name, system_id, path='', **kwargs):
     '''Returns an HTML page with the given name and details'''
+    theme_id = request.query.get('theme') or request.get_cookie('theme')
     return template(f'pages/{name}',
         version=VERSION,
         path=path,
-        systems=[s for s in helpers.system.find_all() if s.gtfs_enabled],
+        systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
         system_id=system_id,
         system=helpers.system.find(system_id),
         get_url=get_url,
@@ -97,7 +105,7 @@ def page(name, system_id, path='', theme=None, **kwargs):
         cookie_domain=cookie_domain,
         mapbox_api_key=mapbox_api_key,
         last_updated=realtime.last_updated_string(),
-        theme=theme or request.get_cookie('theme'),
+        theme=helpers.theme.find(theme_id),
         show_speed=request.get_cookie('speed') == '1994',
         **kwargs
     )
@@ -138,14 +146,7 @@ def img(name, system_id=None):
     '/<system_id>/'
 ])
 def home_page(system_id=None):
-    theme = request.query.get('theme')
-    if theme is not None:
-        max_age = 60*60*24*365*10
-        if cookie_domain is None:
-            response.set_cookie('theme', theme, max_age=max_age)
-        else:
-            response.set_cookie('theme', theme, max_age=max_age, domain=cookie_domain)
-    return page('home', system_id, theme=theme)
+    return page('home', system_id)
 
 @app.get([
     '/news',
@@ -536,6 +537,23 @@ def stop_schedule_page(stop_number, system_id=None):
 ])
 def about_page(system_id=None):
     return page('about', system_id, path='about')
+
+@app.get([
+    '/themes',
+    '/themes/',
+    '/<system_id>/themes',
+    '/<system_id>/themes/'
+])
+def themes_page(system_id=None):
+    theme_id = request.query.get('theme')
+    if theme_id is not None:
+        max_age = 60*60*24*365*10
+        if cookie_domain is None:
+            response.set_cookie('theme', theme_id, max_age=max_age, path='/')
+        else:
+            response.set_cookie('theme', theme_id, max_age=max_age, domain=cookie_domain, path='/')
+    themes = helpers.theme.find_all()
+    return page('themes', system_id, path='themes', themes=themes)
 
 @app.get([
     '/systems',

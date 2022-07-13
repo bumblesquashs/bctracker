@@ -38,18 +38,24 @@
         <h1 class="title">Map</h1>
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
-                <img class="hidden" id="checkbox-image" src="/img/black/check.png" />
+                <div id="checkbox-image" class="hidden">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
+                </div>
             </div>
             <span class="checkbox-label">Show Route Lines</span>
         </div>
         <div class="checkbox" onclick="toggleAutomaticRefresh()">
             <div class="box">
-                <img class="hidden" id="refresh-image" src="/img/black/check.png" />
+                <div id="refresh-image" class="hidden">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
+                </div>
             </div>
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
     </div>
-        
+    
     <div id="map" class="full-screen"></div>
     
     <script>
@@ -57,8 +63,19 @@
             container: "map",
             center: [0, 0],
             zoom: 1,
-            style: prefersDarkScheme ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/light-v10"
+            style: mapStyle
         });
+        
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+                showUserHeading: true
+            }),
+            'bottom-left'
+        );
         
         let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');
         let currentShapeIDs = []
@@ -147,8 +164,10 @@
                     element.appendChild(details);
                 }
                 
-                lons.push(position.lon);
-                lats.push(position.lat);
+                if (position.lat != 0 && position.lon != 0) {
+                    lons.push(position.lon);
+                    lats.push(position.lat);
+                }
                 
                 markers.push(new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map));
             }
@@ -159,7 +178,7 @@
                         center: [lons[0], lats[0]],
                         zoom: 14
                     });
-                } else {
+                } else if (lons.length > 0 && lats.length > 0) {
                     const minLon = Math.min.apply(Math, lons);
                     const maxLon = Math.max.apply(Math, lons);
                     const minLat = Math.min.apply(Math, lats);

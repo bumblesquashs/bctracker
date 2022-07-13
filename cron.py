@@ -15,33 +15,32 @@ import database
 PID = os.getpid()
 CWD = os.path.dirname(__file__)
 EXC = sys.executable
-CRON_ID = f'bctracker-muncher-{PID}'
 
-def start():
+def start(cron_id):
     '''Removes any old cron jobs and creates new jobs'''
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=CRON_ID)
+        cron.remove_all(comment=cron_id)
         
-        gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=CRON_ID)
+        gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=cron_id)
         gtfs_job.setall('0 5 * * */1')
         
-        realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=CRON_ID)
+        realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=cron_id)
         realtime_job.minute.every(1)
         
-        backup_job = cron.new(command=f'{EXC} {CWD}/backup.py', comment=CRON_ID)
+        backup_job = cron.new(command=f'{EXC} {CWD}/backup.py', comment=cron_id)
         backup_job.setall('0 0 1 * *')
 
-def stop():
+def stop(cron_id):
     '''Removes all cron jobs'''
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=CRON_ID)
+        cron.remove_all(comment=cron_id)
 
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-    today = Date.today()
     for system in helpers.system.find_all():
+        today = Date.today(system)
         try:
             if today.weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)

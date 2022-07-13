@@ -1,4 +1,6 @@
 
+import re
+
 from os.path import commonprefix
 from random import randint, seed
 from math import sqrt
@@ -12,7 +14,7 @@ from models.service import ServiceGroup
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'number_value', 'name', 'colour', 'trips', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'service_group', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -20,7 +22,6 @@ class Route:
         id = row['route_id']
         route_trips = trips.get(id, [])
         number = row['route_short_name']
-        number_value = int(''.join([d for d in number if d.isdigit()]))
         if 'route_long_name' in row and row['route_long_name'] != '':
             name = row['route_long_name']
         else:
@@ -58,7 +59,11 @@ class Route:
         else:
             # Generate a random colour based on system ID and route number
             seed(system.id)
-            h = (randint(1, 360) + (number_value * 137.508)) / 360.0
+            number_digits = ''.join([d for d in number if d.isdigit()])
+            if len(number_digits) == 0:
+                h = randint(1, 360) / 360.0
+            else:
+                h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
             seed(system.id + number)
             l = randint(30, 50) / 100.0
             s = randint(50, 100) / 100.0
@@ -77,7 +82,7 @@ class Route:
         self.colour = colour
         self.trips = trips
         
-        self.number_value = int(''.join([d for d in self.number if d.isdigit()]))
+        self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
         services = {t.service for t in trips if t.is_current}
         self.service_group = ServiceGroup.combine(services)
@@ -93,10 +98,10 @@ class Route:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.number_value < other.number_value
+        return self.key < other.key
     
     def __gt__(self, other):
-        return self.number_value > other.number_value
+        return self.key > other.key
     
     @property
     def is_current(self):
