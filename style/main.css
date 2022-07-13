@@ -113,7 +113,7 @@ table.striped tr.section td {
 }
 
 #content {
-    padding: 20px;
+    position: relative;
 }
 
 #header {
@@ -160,10 +160,14 @@ table.striped tr.section td {
     margin: 8px;
 }
 
+#navigation-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
 #navigation-bar .navigation-button {
-    float: left;
-    display: block;
-    text-align: center;
+    display: inline-block;
     padding: 15px 20px;
     text-decoration: none !important;
     font-family: Helvetica, sans-serif;
@@ -176,8 +180,8 @@ table.striped tr.section td {
     opacity: 0.7;
 }
 
-#navigation-bar .right {
-    float: right;
+#navigation-bar .spacer {
+    flex: 1;
 }
 
 #navigation-bar .title {
@@ -189,13 +193,14 @@ table.striped tr.section td {
     border-radius: 16px;
 }
 
-#refresh-button.hidden:hover {
-    cursor: default;
+#refresh-button img {
+    width: 28px;
+    height: 28px;
 }
 
-#refresh-button img {
-    width: 32px;
-    height: 32px;
+#refresh-button.disabled {
+    opacity: 50%;
+    cursor: default;
 }
 
 #system-bar {

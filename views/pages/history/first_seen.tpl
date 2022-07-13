@@ -14,10 +14,8 @@
 % if system is not None and not system.realtime_enabled:
     <p>
         {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
+        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
     </p>
-    
-    % include('components/systems', realtime_only=True)
 % else:
     <table class="striped">
         <thead>

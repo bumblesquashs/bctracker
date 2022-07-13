@@ -5,6 +5,10 @@ a:hover {
 
 body {
     font-size: 14pt;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
 form {
@@ -14,6 +18,10 @@ form {
 form input[type="text"] {
     font-size: 14pt;
     vertical-align: middle;
+}
+
+table.striped th {
+    white-space: nowrap;
 }
 
 #banner a {
@@ -28,6 +36,34 @@ form input[type="text"] {
 
 #banner .survey-button {
     vertical-align: middle;
+}
+
+#body {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+#content {
+    overflow: auto;
+    flex: 1;
+    padding: 20px 40px;
+}
+
+#last-updated {
+    padding: 8px 20px;
+    background-color: #48A348;
+    color: #FFFFFF;
+    font-size: 13pt;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #989898;
 }
 
 #search-desktop {
@@ -100,7 +136,55 @@ form input[type="text"] {
     flex: 1;
 }
 
+#side-bar {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: Helvetica, sans-serif;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: #989898;
+}
+
+#system-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    background-color: #E6E6E6;
+}
+
+#system-menu .system-button {
+    display: block;
+    color: #000000;
+    text-decoration: none !important;
+    padding: 5px 20px;
+}
+
+#system-menu .system-button:hover {
+    background-color: #CBCBCB;
+}
+
+#system-menu .system-button.current {
+    background-color: #CBCBCB;
+    font-weight: bold;
+    cursor: default;
+}
+
 #system-bar #last-updated {
+    font-size: 12pt;
+}
+
+#theme {
+    padding: 10px 20px;
+    background-color: #48A348;
+    color: #FFFFFF;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #989898;
+}
+
+#theme .title {
     font-size: 12pt;
 }
 

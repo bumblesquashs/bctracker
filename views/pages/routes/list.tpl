@@ -15,7 +15,6 @@
         Routes can only be viewed for individual systems.
         Please choose a system.
     </p>
-    % include('components/systems')
 % else:
     % routes = system.get_routes()
     % if len(routes) == 0:

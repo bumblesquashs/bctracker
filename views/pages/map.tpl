@@ -12,10 +12,8 @@
     % if system is not None and not system.realtime_enabled:
         <p>
             {{ system }} does not currently support realtime.
-            You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
+            You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
         </p>
-        
-        % include('components/systems', realtime_only=True)
     % else:
         % if system is None:
             <p>
@@ -29,8 +27,6 @@
                 There are no buses out in {{ system }} right now.
                 Please choose a different system.
             </p>
-            
-            % include('components/systems', realtime_only=True)
         % end
     % end
 % else:
@@ -87,6 +83,7 @@
         const shapeIDs = [];
         
         map.on("load", function() {
+            map.resize();
             updateMap(true);
         })
         
@@ -185,7 +182,7 @@
                     const maxLat = Math.max.apply(Math, lats);
                     map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
                         duration: 0,
-                        padding: {top: 200, bottom: 100, left: 100, right: 100}
+                        padding: 100
                     });
                 }
             }
@@ -358,8 +355,6 @@
             hoverPosition = position;
         }
         
-        const date = new Date();
-        const timeToNextUpdate = 60 - date.getSeconds();
         setTimeout(function() {
             if (automaticRefresh) {
                 updatePositionData();

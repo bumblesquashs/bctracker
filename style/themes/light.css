@@ -131,6 +131,9 @@ table.striped tr:nth-child(2n-1) {
 #refresh-button:hover {
     background-color: #094409;
 }
+#refresh-button.disabled:hover {
+    background-color: #48A348;
+}
 
 #refresh-button img.black {
     display: none;

@@ -4,8 +4,10 @@
 <div class="page-header">
     % if system is None:
         <h1 class="title">Welcome to BCTracker!</h1>
+        <h2 class="subtitle">Transit schedules and bus tracking for British Columbia</h2>
     % else:
         <h1 class="title">Welcome to BCTracker {{ system }}!</h1>
+        <h2 class="subtitle">Transit schedules and bus tracking for {{ system }}, BC</h2>
     % end
     <hr />
 </div>
@@ -53,6 +55,7 @@
                     <input type="submit" value="Search" class="button">
                 </div>
             </form>
+            <p>Choose a system to search for routes and stops</p>
         % else:
             % if system.realtime_enabled:
                 <form onsubmit="busSearch()" action="javascript:void(0)">
@@ -81,21 +84,12 @@
             </form>
         % end
         
-        % if system is None:
-            <p>Choose a system to search for routes and stops</p>
-            % include('components/systems')
-        % end
-        
         <div>
-            <h2>Themes</h2>
-            % if theme is None:
-                <h3>Current Theme: BC Transit</h3>
-            % else:
-                <h3>Current Theme: {{ theme }}</h3>
-            % end
+            <h2>Community</h2>
             <p>
-                To change the current theme, visit the <a href="{{ get_url(system, 'themes') }}">themes page</a>.
+                Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!
             </p>
+            <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
     </div>
     

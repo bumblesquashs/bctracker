@@ -11,7 +11,6 @@
         Blocks can only be viewed for individual systems.
         Please choose a system.
     </p>
-    % include('components/systems')
 % else:
     % blocks = system.get_blocks()
     % if len(blocks) == 0:

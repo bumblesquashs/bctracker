@@ -50,6 +50,10 @@ table {
     width: calc(100% - 40px);
 }
 
+#content {
+    padding: 20px;
+}
+
 #main {
     flex-direction: column;
 }
