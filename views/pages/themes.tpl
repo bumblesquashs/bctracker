@@ -4,7 +4,7 @@
 <div class="page-header">
     <h1 class="title">Themes</h1>
     % if theme is None:
-        <h2 class="subtitle">Current Theme: BCTracker</h2>
+        <h2 class="subtitle">Current Theme: BC Transit</h2>
     % else:
         <h2 class="subtitle">Current Theme: {{ theme }}</h2>
     % end

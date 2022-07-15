@@ -88,7 +88,7 @@ table.striped tr {
 }
 
 #map.preview {
-    border-color: #989898;
+    border-color: #000000;
 }
 
 #map-z-toggle {
@@ -137,6 +137,10 @@ table.striped tr {
 
 #refresh-button:hover {
     background-color: #000000;
+}
+
+#refresh-button.disabled {
+    background-color: transparent;
 }
 
 #refresh-button img.black {
@@ -234,6 +238,63 @@ table.striped tr {
     display: none;
 }
 
+#side-bar {
+    border-right-color: #000000;
+}
+
+#status {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    text-shadow: 0 -1px 1px #000000;
+    color: #FFFFFF;
+    border-bottom-color: #000000;
+}
+
+#system-menu {
+    background-color: #EEEEEE;
+}
+
+#system-menu .region {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    text-shadow: 0 -1px 1px #000000;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    background-color: #EEEEEE;
+    color: #222222;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+}
+
+#system-menu .system-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6,#E0E0E0);
+}
+
+#system-menu .system-button.current {
+    border-color: #456F9A;;
+    background-color: #5E87B0;
+    background-image: linear-gradient(#6fACD5,#497BAE);
+    text-shadow: 0 -1px 1px #3E6790;
+    color: #FFFFFF;
+}
+
+#theme {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    text-shadow: 0 -1px 1px #000000;
+    color: #FFFFFF;
+    border-top-color: #000000;
+}
+
+#theme a {
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: none;
+}
+
 #system-bar {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
@@ -272,12 +333,12 @@ table.striped tr {
     color: #222222;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     border: 1px solid #CCCCCC;
-    background-image: linear-gradient( #FFFFFF,#F1F1F1 );
+    background-image: linear-gradient(#FFFFFF,#F1F1F1);
 }
 
 .button:hover {
     background: #DFDFDF;
-    background-image: linear-gradient( #F6F6F6,#E0E0E0 );
+    background-image: linear-gradient(#F6F6F6,#E0E0E0);
 }
 
 .button.disabled {
@@ -342,7 +403,7 @@ table.striped tr {
     color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
-    border-color: #989898;
+    border-color: #000000;
 }
 
 .info-box .section {
@@ -411,7 +472,7 @@ table.striped tr {
 }
 
 .service-indicator .dates {
-    border-color: #989898;
+    border-color: #000000;
 }
 
 .service-indicator .dates .date {
@@ -448,6 +509,6 @@ table.striped tr {
 }
 
 .tooltip-anchor .tooltip {
-    background-color: #989898;
+    background-color: #000000;
     color: #FFFFFF;
 }

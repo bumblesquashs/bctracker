@@ -212,8 +212,17 @@
         </div>
         <div id="body">
             <div id="side-bar" class="desktop-only">
-                <div id="last-updated">
-                    <span id="last-updated-value">Updated {{ last_updated }}</span>
+                <div id="status">
+                    <div class="content">
+                        <div id="system">
+                            % if system is None:
+                                All Transit Systems
+                            % else:
+                                {{ system }}
+                            % end
+                        </div>
+                        <div id="last-updated">Updated {{ last_updated }}</div>
+                    </div>
                     <div id="refresh-button" class="disabled">
                         <img class="white" src="/img/white/refresh.png" />
                         <img class="black" src="/img/black/refresh.png" />
@@ -221,25 +230,33 @@
                 </div>
                 <div id="system-menu">
                     % if system is None:
-                        <span class="system-button current">All Systems</span>
+                        <span class="system-button current">All Transit Systems</span>
                     % else:
-                        <a href="{{ get_url(None, path) }}" class="system-button">All Systems</a>
+                        <a href="{{ get_url(None, path) }}" class="system-button">All Transit Systems</a>
                     % end
-                    <hr />
-                    % for other_system in systems:
-                        % if system is not None and system == other_system:
-                            <span class="system-button current">{{ other_system }}</span>
-                        % else:
-                            <a href="{{ get_url(other_system, path) }}" class="system-button">{{ other_system }}</a>
+                    % for region in regions:
+                        % region_systems = [s for s in systems if s.region == region]
+                            % if len(region_systems) > 0:
+                            <div class="region">{{ region }}</div>
+                            % for other_system in region_systems:
+                                % if system is not None and system == other_system:
+                                    <span class="system-button current">{{ other_system }}</span>
+                                % else:
+                                    <a href="{{ get_url(other_system, path) }}" class="system-button">{{ other_system }}</a>
+                                % end
+                            % end
                         % end
                     % end
                 </div>
                 <div id="theme">
-                    % if theme is None:
-                        <div class="title">Theme: BC Transit</div>
-                    % else:
-                        <div class="title">Theme: {{ theme }}</div>
-                    % end
+                    <span class="title">Theme:</span>
+                    <a href="{{ get_url(system, 'themes') }}">
+                        % if theme is None:
+                            BC Transit
+                        % else:
+                            {{ theme }}
+                        % end
+                    </a>
                 </div>
             </div>
             <div id="content">{{ !base }}</div>

@@ -136,6 +136,10 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
+#refresh-button.disabled:hover {
+    background-color: #DC9B41;
+}
+
 #search-desktop {
     color: #FFFFFF;
 }
@@ -214,8 +218,46 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#system-bar {
+#side-bar {
+    border-right-color: #666666;
+}
+
+#status {
     background-color: #DC9B41;
+    color: #FFFFFF;
+    border-bottom-color: #666666;
+}
+
+#system-menu {
+    background-color: #E6E6E6;
+}
+
+#system-menu .region {
+    background-color: #666666;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    color: #000000;
+}
+
+#system-menu .system-button:hover {
+    background-color: #CBCBCB;
+}
+
+#system-menu .system-button.current {
+    background-color: #CBCBCB;
+    font-weight: bold;
+    cursor: default;
+}
+
+#theme {
+    background-color: #DC9B41;
+    color: #FFFFFF;
+    border-top-color: #666666;
+}
+
+#theme a {
     color: #FFFFFF;
 }
 
@@ -361,7 +403,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .service-indicator .dates {
-    border-color: #989898;
+    border-color: #666666;
 }
 
 .service-indicator .dates .date.limited {

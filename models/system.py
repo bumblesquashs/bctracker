@@ -1,14 +1,17 @@
 
+import helpers.region
+
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
         '''Returns a system initialized from the given CSV row'''
         id = row['system_id']
         name = row['name']
+        region = helpers.region.find(row['region_id'])
         enabled = row['enabled'] == '1'
         visible = row['visible'] == '1'
         prefix_headsign = row['prefix_headsign'] == '1'
@@ -30,11 +33,12 @@ class System:
                 realtime_url = row['realtime_url']
             else:
                 realtime_url = None
-        return cls(id, name, enabled, visible, prefix_headsign, gtfs_url, realtime_url)
+        return cls(id, name, region, enabled, visible, prefix_headsign, gtfs_url, realtime_url)
     
-    def __init__(self, id, name, enabled, visible, prefix_headsign, gtfs_url, realtime_url):
+    def __init__(self, id, name, region, enabled, visible, prefix_headsign, gtfs_url, realtime_url):
         self.id = id
         self.name = name
+        self.region = region
         self.enabled = enabled
         self.visible = visible
         self.prefix_headsign = prefix_headsign

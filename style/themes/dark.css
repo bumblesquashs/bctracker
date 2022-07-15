@@ -132,6 +132,10 @@ table.striped tr:nth-child(2n-1) {
     background-color: #053305;
 }
 
+#refresh-button.disabled:hover {
+    background-color: #276227;
+}
+
 #refresh-button img.black {
     display: none;
 }
@@ -212,8 +216,46 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#system-bar {
+#side-bar {
+    border-right-color: #565656;
+}
+
+#status {
     background-color: #276227;
+    color: #FFFFFF;
+    border-bottom-color: #565656;
+}
+
+#system-menu {
+    background-color: #393939;
+}
+
+#system-menu .region {
+    background-color: #565656;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    color: #FFFFFF;
+}
+
+#system-menu .system-button:hover {
+    background-color: #2F2F2F;
+}
+
+#system-menu .system-button.current {
+    background-color: #2F2F2F;
+    font-weight: bold;
+    cursor: default;
+}
+
+#theme {
+    background-color: #276227;
+    color: #FFFFFF;
+    border-top-color: #565656;
+}
+
+#theme a {
     color: #FFFFFF;
 }
 

@@ -219,7 +219,7 @@ table.striped tr.section td {
 
 #top-button {
     position: fixed;
-    right: 20px;
+    right: 40px;
     bottom: 20px;
     display: none;
 }
@@ -342,12 +342,10 @@ table.striped tr.section td {
 }
 
 .info-box {
-    background-color: #E6E6E6;
     padding: 10px;
     margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
-    border-color: #989898;
 }
 
 .info-box .title {
@@ -361,7 +359,6 @@ table.striped tr.section td {
 .info-box .section {
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #CBCBCB;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }

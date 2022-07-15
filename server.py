@@ -8,6 +8,7 @@ import helpers.model
 import helpers.order
 import helpers.overview
 import helpers.record
+import helpers.region
 import helpers.system
 import helpers.theme
 import helpers.transfer
@@ -45,6 +46,7 @@ def start(args):
     
     helpers.model.load()
     helpers.order.load()
+    helpers.region.load()
     helpers.system.load()
     helpers.theme.load()
     
@@ -95,6 +97,7 @@ def page(name, system_id, path='', **kwargs):
     return template(f'pages/{name}',
         version=VERSION,
         path=path,
+        regions=helpers.region.find_all(),
         systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
         system_id=system_id,
         system=helpers.system.find(system_id),

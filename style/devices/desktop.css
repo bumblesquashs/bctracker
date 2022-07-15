@@ -52,18 +52,7 @@ table.striped th {
 }
 
 #last-updated {
-    padding: 8px 20px;
-    background-color: #48A348;
-    color: #FFFFFF;
-    font-size: 13pt;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #989898;
+    font-size: 11pt;
 }
 
 #search-desktop {
@@ -143,7 +132,26 @@ table.striped th {
     font-family: Helvetica, sans-serif;
     border-right-width: 1px;
     border-right-style: solid;
-    border-right-color: #989898;
+}
+
+#status {
+    padding: 5px 20px 5px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#status .content {
+    flex: 1;
+}
+
+#system {
+    font-size: 13pt;
+    font-weight: bold;
 }
 
 #system-menu {
@@ -151,41 +159,35 @@ table.striped th {
     display: flex;
     flex-direction: column;
     overflow: auto;
-    background-color: #E6E6E6;
+}
+
+#system-menu .region {
+    padding: 2px 20px;
+    font-size: 13pt;
+    font-weight: bold;
 }
 
 #system-menu .system-button {
     display: block;
-    color: #000000;
     text-decoration: none !important;
     padding: 5px 20px;
-}
-
-#system-menu .system-button:hover {
-    background-color: #CBCBCB;
+    font-size: 12pt;
 }
 
 #system-menu .system-button.current {
-    background-color: #CBCBCB;
     font-weight: bold;
     cursor: default;
 }
 
-#system-bar #last-updated {
-    font-size: 12pt;
-}
-
 #theme {
+    font-size: 11pt;
     padding: 10px 20px;
-    background-color: #48A348;
-    color: #FFFFFF;
     border-top-width: 1px;
     border-top-style: solid;
-    border-top-color: #989898;
 }
 
 #theme .title {
-    font-size: 12pt;
+    font-weight: bold;
 }
 
 .button {
