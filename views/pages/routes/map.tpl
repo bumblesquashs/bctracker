@@ -1,7 +1,7 @@
 
 % import json
 
-% rebase('base', title='Routes', include_maps=True)
+% rebase('base', title='Routes', include_maps=True, full_map=True)
 
 % if system is None:
     <div class="page-header">
@@ -128,12 +128,7 @@
                         
                         map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
                             duration: 0,
-                            padding: {
-                                top: 200,
-                                bottom: 100,
-                                left: 100,
-                                right: 100
-                            }
+                            padding: 100
                         });
                     }
                 });

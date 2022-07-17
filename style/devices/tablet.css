@@ -7,6 +7,13 @@ body {
     font-size: 13pt;
 }
 
+body.full-map {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 button {
     width: 100%;
 }
@@ -30,57 +37,43 @@ table {
     margin-bottom: 10px;
 }
 
-#change-system-menu {
-    padding: 0px;
-}
-
-#change-system-menu .header {
-    text-align: center;
-    padding: 5px 20px;
-    font-size: 14pt;
-    width: calc(100% - 40px);
-}
-
-#change-system-menu .menu-button {
-    text-align: center;
-    padding: 10px 20px;
-}
-
-#change-system-menu .menu-button.full-width {
-    width: calc(100% - 40px);
-}
-
-#content {
-    padding: 20px;
-}
-
-#main {
+#body {
+    flex: 1;
     flex-direction: column;
 }
 
-#navigation-bar .menu-toggle {
-    padding: 10px;
+#content {
+    flex: 1;
+    padding: 20px;
 }
 
-#navigation-bar .menu-toggle img {
-    width: 36px;
-    height: 36px;
+#last-updated {
+    font-size: 12pt;
 }
 
 #navigation-bar .navigation-button {
     font-size: 16pt;
 }
 
-#navigation-bar .navigation-menu-toggle {
+#navigation-menu-toggle {
     padding: 5px;
     margin: 5px 10px 5px 0px;
 }
 
-#navigation-bar .navigation-menu-toggle .line {
+#navigation-menu-toggle .line {
     width: 32px;
     height: 4px;
     border-radius: 2px;
     margin: 6px;
+}
+
+#refresh-button {
+    border-radius: 18px;
+}
+
+#refresh-button img {
+    width: 36px;
+    height: 36px;
 }
 
 #search-non-desktop {
@@ -130,8 +123,66 @@ table {
     flex: 1;
 }
 
-#system-bar #last-updated {
-    font-size: 12pt;
+#search-non-desktop-toggle {
+    padding: 10px;
+}
+
+#search-non-desktop-toggle img {
+    width: 36px;
+    height: 36px;
+}
+
+#status {
+    padding: 10px 20px;
+}
+
+#status .content {
+    text-align: center;
+}
+
+#system {
+    font-size: 14pt;
+}
+
+#system-menu {
+    text-align: center;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#system-menu.collapse-non-desktop {
+    display: none !important;
+}
+
+#system-menu .header {
+    font-size: 15pt;
+}
+
+#system-menu .region {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#system-menu .system-button {
+    padding: 5px 20px;
+    font-size: 14pt;
+    font-weight: normal;
+    display: inline-block;
+    width: calc(25% - 40px);
+}
+
+#system-menu .system-button.all-systems {
+    width: calc(100% - 40px);
+}
+
+#system-menu-toggle img {
+    width: 36px;
+    height: 36px;
+}
+
+#theme {
+    display: none;
 }
 
 .button {

@@ -1,5 +1,5 @@
 
-% rebase('base', title=str(route), include_maps=True, show_refresh_button=True)
+% rebase('base', title=str(route), include_maps=True)
 
 <div class="page-header">
     <h1 class="title">{{ route }}</h1>

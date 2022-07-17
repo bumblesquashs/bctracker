@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Stop {stop.number}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Stop {stop.number}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>

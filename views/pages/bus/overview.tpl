@@ -2,7 +2,7 @@
 % from models.bus import Bus
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Bus {bus}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>

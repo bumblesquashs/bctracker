@@ -248,12 +248,7 @@
             
             map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
                 duration: 0,
-                padding: {
-                    top: parseInt("{{ 20 if is_preview else 200 }}"),
-                    bottom: parseInt("{{ 20 if is_preview else 100 }}"),
-                    left: parseInt("{{ 20 if is_preview else 100 }}"),
-                    right: parseInt("{{ 20 if is_preview else 100 }}")
-                }
+                padding: parseInt("{{ 20 if is_preview else 100 }}")
             });
         }
     });

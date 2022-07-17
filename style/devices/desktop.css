@@ -40,7 +40,6 @@ table.striped th {
 
 #body {
     flex: 1;
-    display: flex;
     flex-direction: row;
     overflow: hidden;
 }
@@ -53,6 +52,19 @@ table.striped th {
 
 #last-updated {
     font-size: 11pt;
+}
+
+#navigation-menu-toggle {
+    display: none;
+}
+
+#refresh-button {
+    border-radius: 14px;
+}
+
+#refresh-button img {
+    width: 28px;
+    height: 28px;
 }
 
 #search-desktop {
@@ -125,33 +137,23 @@ table.striped th {
     flex: 1;
 }
 
+#search-non-desktop-toggle {
+    display: none;
+}
+
 #side-bar {
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
-    font-family: Helvetica, sans-serif;
     border-right-width: 1px;
     border-right-style: solid;
 }
 
 #status {
-    padding: 5px 20px 5px 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
 
-#status .content {
-    flex: 1;
-}
-
 #system {
     font-size: 13pt;
-    font-weight: bold;
 }
 
 #system-menu {
@@ -161,10 +163,8 @@ table.striped th {
     overflow: auto;
 }
 
-#system-menu .region {
-    padding: 2px 20px;
+#system-menu .header {
     font-size: 13pt;
-    font-weight: bold;
 }
 
 #system-menu .system-button {
@@ -177,6 +177,10 @@ table.striped th {
 #system-menu .system-button.current {
     font-weight: bold;
     cursor: default;
+}
+
+#system-menu-toggle {
+    display: none;
 }
 
 #theme {

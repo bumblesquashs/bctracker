@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Bus {bus}', include_maps=True, full_map=True)
 
 % if position is None:
     <div class="page-header">

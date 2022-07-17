@@ -86,13 +86,10 @@
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search-non-desktop").classList.add("display-none");
-                document.getElementById("change-system-menu").classList.add("display-none");
             }
             
-            function toggleChangeSystemMenu() {
-                document.getElementById("navigation-menu").classList.add("display-none");
-                document.getElementById("search-non-desktop").classList.add("display-none");
-                document.getElementById("change-system-menu").classList.toggle("display-none");
+            function toggleSystemMenu() {
+                document.getElementById("system-menu").classList.toggle("collapse-non-desktop");
             }
             
             String.prototype.format = function() {
@@ -116,7 +113,7 @@
         </script>
     </head>
     
-    <body>
+    <body class="{{ 'full-map' if get('full_map', False) else '' }}">
         <div id="header">
             <div id="navigation-bar">
                 <a class="navigation-button title" href="{{ get_url(system) }}">BCTracker</a>
@@ -148,12 +145,12 @@
                     <div id="search-desktop-results" class="display-none"></div>
                 </div>
                 
-                <div class="menu-toggle non-desktop" onclick="toggleSearchNonDesktop()">
+                <div id="search-non-desktop-toggle" onclick="toggleSearchNonDesktop()">
                     <img class="white" src="/img/white/search.png" />
                     <img class="black" src="/img/black/search.png" />
                 </div>
                 
-                <div class="navigation-menu-toggle non-desktop" onclick="toggleNavigationMenu()">
+                <div id="navigation-menu-toggle" onclick="toggleNavigationMenu()">
                     <div class="line"></div>
                     <div class="line"></div>
                     <div class="line"></div>
@@ -211,8 +208,12 @@
             </div>
         </div>
         <div id="body">
-            <div id="side-bar" class="desktop-only">
+            <div id="side-bar">
                 <div id="status">
+                    <div id="system-menu-toggle" onclick="toggleSystemMenu()">
+                        <img class="white" src="/img/white/system.png" />
+                        <img class="black" src="/img/black/system.png" />
+                    </div>
                     <div class="content">
                         <div id="system">
                             % if system is None:
@@ -223,28 +224,31 @@
                         </div>
                         <div id="last-updated">Updated {{ last_updated }}</div>
                     </div>
+                    
                     <div id="refresh-button" class="disabled">
                         <img class="white" src="/img/white/refresh.png" />
                         <img class="black" src="/img/black/refresh.png" />
                     </div>
                 </div>
-                <div id="system-menu">
+                <div id="system-menu" class="collapse-non-desktop">
                     % if system is None:
-                        <span class="system-button current">All Transit Systems</span>
+                        <span class="system-button current all-systems">All Transit Systems</span>
                     % else:
-                        <a href="{{ get_url(None, path) }}" class="system-button">All Transit Systems</a>
+                        <a href="{{ get_url(None, path) }}" class="system-button all-systems">All Transit Systems</a>
                     % end
                     % for region in regions:
                         % region_systems = [s for s in systems if s.region == region]
-                            % if len(region_systems) > 0:
-                            <div class="region">{{ region }}</div>
-                            % for other_system in region_systems:
-                                % if system is not None and system == other_system:
-                                    <span class="system-button current">{{ other_system }}</span>
-                                % else:
-                                    <a href="{{ get_url(other_system, path) }}" class="system-button">{{ other_system }}</a>
+                        % if len(region_systems) > 0:
+                            <div class="header">{{ region }}</div>
+                            <div class="region">
+                                % for region_system in region_systems:
+                                    % if system is not None and system == region_system:
+                                        <span class="system-button current">{{ region_system }}</span>
+                                    % else:
+                                        <a href="{{ get_url(region_system, path) }}" class="system-button">{{ region_system }}</a>
+                                    % end
                                 % end
-                            % end
+                            </div>
                         % end
                     % end
                 </div>

@@ -112,6 +112,10 @@ table.striped tr.section td {
     font-size: 16pt;
 }
 
+#body {
+    display: flex;
+}
+
 #content {
     position: relative;
 }
@@ -180,22 +184,12 @@ table.striped tr.section td {
     opacity: 0.7;
 }
 
-#navigation-bar .spacer {
-    flex: 1;
-}
-
 #navigation-bar .title {
     font-weight: bold;
 }
 
 #refresh-button:hover {
     cursor: pointer;
-    border-radius: 16px;
-}
-
-#refresh-button img {
-    width: 28px;
-    height: 28px;
 }
 
 #refresh-button.disabled {
@@ -203,17 +197,31 @@ table.striped tr.section td {
     cursor: default;
 }
 
-#system-bar {
-    margin: 0px;
-    padding: 10px 20px;
-    cursor: default;
+#side-bar {
+    display: flex;
+    flex-direction: column;
+    font-family: Helvetica, sans-serif;
+}
+
+#status {
+    padding: 5px 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#status .content {
+    flex: 1;
 }
 
 #system {
+    font-weight: bold;
+}
+
+#system-menu .header {
+    padding: 5px 20px;
     font-weight: bold;
 }
 
@@ -338,7 +346,7 @@ table.striped tr.section td {
 }
 
 .hidden {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .info-box {
@@ -643,6 +651,10 @@ table.striped tr.section td {
 
 .sheet-navigation .sheet .special-services .special-number {
     font-weight: bold;
+}
+
+.spacer {
+    flex: 1;
 }
 
 .tab-button {

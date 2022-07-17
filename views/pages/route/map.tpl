@@ -1,5 +1,5 @@
 
-% rebase('base', title=str(route), include_maps=True, show_refresh_button=True)
+% rebase('base', title=str(route), include_maps=True, full_map=True)
 
 % if len(route.trips) == 0:
     <div class="page-header">
