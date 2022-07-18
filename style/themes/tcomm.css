@@ -66,15 +66,6 @@ table.striped tr {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
-#banner {
-    background-color: #FFB960;
-    color: #FFFFFF;
-}
-
-#banner a {
-    color: #FFFFFF;
-}
-
 #change-system-menu .header {
     border-color: #456F9A;;
     background-color: #5E87B0;
@@ -326,6 +317,19 @@ table.striped tr {
 
 .adherence-indicator.very-behind {
     color: #174CB3;
+}
+
+.banner {
+    background-color: #FFB960;
+    color: #FFFFFF;
+}
+
+.banner a {
+    color: #FFFFFF;
+}
+
+.banner .close-button img.black {
+    display: none;
 }
 
 .button {

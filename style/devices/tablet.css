@@ -32,19 +32,18 @@ table {
     font-size: 13pt;
 }
 
-#banner .content {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
 #body {
     flex: 1;
     flex-direction: column;
 }
 
 #content {
-    flex: 1;
     padding: 20px;
+}
+
+#content-wrapper {
+    flex: 1;
+    overflow: auto;
 }
 
 #last-updated {
@@ -183,6 +182,11 @@ table {
 
 #theme {
     display: none;
+}
+
+.banner .content {
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 .button {

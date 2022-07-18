@@ -42,8 +42,7 @@
 <h2>Contact</h2>
 <p>
     If you are curious about BCTracker, have questions, or something seems broken, you can contact us directly by emailing <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
-    You can also join the <a href="https://discord.gg/KQX84dgfDa">Transit Vancouver Discord Server</a> where we occasionally discuss upcoming features for the website, and enjoy chatting about all things transit-related.
-    Please note that the server is primarily dedicated to discussing transit in Vancouver (where we are from), but non-Vancouverites are always welcome!
+    You can also chat with us more casually on the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a> where we talk about transit in BC and occasionally discuss upcoming features for the website.
 </p>
 
 <br />

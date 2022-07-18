@@ -88,35 +88,11 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
-#banner {
-    position: relative;
-    margin: 0px;
-    padding: 10px 20px;
-    cursor: default;
-    vertical-align: middle;
-    text-align: center;
-}
-
-#banner .close-button {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-#banner .close-button:hover {
-    cursor: pointer;
-}
-
-#banner .title {
-    font-weight: bold;
-    font-size: 16pt;
-}
-
 #body {
     display: flex;
 }
 
-#content {
+#content-wrapper {
     position: relative;
 }
 
@@ -252,6 +228,34 @@ table.striped tr.section td {
     line-height: 12pt;
     padding: 3px 6px;
     margin-right: 0px;
+}
+
+.banner {
+    margin: 0px;
+    padding: 10px 20px;
+    cursor: default;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.banner .close-button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.banner .close-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.banner .close-button:hover {
+    cursor: pointer;
+}
+
+.banner .title {
+    font-weight: bold;
+    font-size: 16pt;
 }
 
 .button {

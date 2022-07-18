@@ -24,20 +24,6 @@ table.striped th {
     white-space: nowrap;
 }
 
-#banner a {
-    text-decoration: underline;
-}
-
-#banner .content {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 20px;
-}
-
-#banner .survey-button {
-    vertical-align: middle;
-}
-
 #body {
     flex: 1;
     flex-direction: row;
@@ -45,9 +31,12 @@ table.striped th {
 }
 
 #content {
-    overflow: auto;
-    flex: 1;
     padding: 20px 40px;
+}
+
+#content-wrapper {
+    flex: 1;
+    overflow: auto;
 }
 
 #last-updated {
@@ -192,6 +181,16 @@ table.striped th {
 
 #theme .title {
     font-weight: bold;
+}
+
+.banner a {
+    text-decoration: underline;
+}
+
+.banner .content {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20px;
 }
 
 .button {

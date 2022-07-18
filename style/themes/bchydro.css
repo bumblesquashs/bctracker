@@ -70,15 +70,6 @@ table.striped tr:nth-child(2n-1) {
     background-color: #D8D8D8;
 }
 
-#banner {
-    background-color: #FFB960;
-    color: #FFFFFF;
-}
-
-#banner a {
-    color: #FFFFFF;
-}
-
 #change-system-menu .header {
     color: #FFFFFF;
     background-color: rgba(0, 0, 0, 0.2);
@@ -283,6 +274,19 @@ table.striped tr:nth-child(2n-1) {
 
 .adherence-indicator.very-behind {
     background-color: #FD393E;
+}
+
+.banner {
+    background-color: #FFB960;
+    color: #FFFFFF;
+}
+
+.banner a {
+    color: #FFFFFF;
+}
+
+.banner .close-button img.black {
+    display: none;
 }
 
 .button {

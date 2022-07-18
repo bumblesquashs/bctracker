@@ -2,12 +2,11 @@
 % rebase('base', title='Home')
 
 <div class="page-header">
+    <h1 class="title">Welcome to BCTracker!</h1>
     % if system is None:
-        <h1 class="title">Welcome to BCTracker!</h1>
-        <h2 class="subtitle">Transit schedules and bus tracking for British Columbia</h2>
+        <h2 class="subtitle">BC Transit schedules and bus tracking</h2>
     % else:
-        <h1 class="title">Welcome to BCTracker {{ system }}!</h1>
-        <h2 class="subtitle">Transit schedules and bus tracking for {{ system }}, BC</h2>
+        <h2 class="subtitle">{{ system }} transit schedules and bus tracking</h2>
     % end
     <hr />
 </div>
