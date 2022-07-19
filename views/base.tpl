@@ -264,7 +264,9 @@
                 </div>
             </div>
             <div id="content-wrapper">
-                <!-- Banners go here! (Nothing right now) -->
+                <div id="banners">
+                    <!-- Banners go here! (Nothing right now) -->
+                </div>
                 <div id="content">{{ !base }}</div>
             </div>
         </div>

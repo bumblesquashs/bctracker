@@ -367,5 +367,5 @@
         }, 1000 * (timeToNextUpdate + 15));
     </script>
 
-    % include('components/map_z_toggle')
+    % include('components/map_toggle')
 % end

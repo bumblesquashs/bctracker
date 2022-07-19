@@ -122,7 +122,7 @@ table.striped tr.section td {
     z-index: 30;
 }
 
-#map-z-toggle {
+#map-toggle {
     position: absolute;
     z-index: 10;
     border-radius: 22px;
@@ -130,11 +130,11 @@ table.striped tr.section td {
     right: 15px;
 }
 
-#map-z-toggle.active {
+#map-toggle.active {
     z-index: 40;
 }
 
-#map-z-toggle img {
+#map-toggle img {
     width: 28px;
     height: 28px;
     margin: 8px;

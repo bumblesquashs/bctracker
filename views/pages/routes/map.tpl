@@ -160,6 +160,6 @@
             </script>
         % end
         
-        % include('components/map_z_toggle')
+        % include('components/map_toggle')
     % end  
 % end

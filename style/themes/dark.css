@@ -83,11 +83,11 @@ table.striped tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
-#map-z-toggle {
+#map-toggle {
     background-color: #2247B7;
 }
 
-#map-z-toggle-icon-black {
+#map-toggle-icon-black {
     display: none;
 }
 
