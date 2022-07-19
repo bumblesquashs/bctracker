@@ -70,11 +70,6 @@ table.striped tr:nth-child(2n-1) {
     background-color: #E6E6E6;
 }
 
-#change-system-menu .header {
-    color: #FFFFFF;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
 #content img.white {
     display: none;
 }
@@ -97,10 +92,6 @@ table.striped tr:nth-child(2n-1) {
 
 #navigation-bar .navigation-button {
     color: #FFFFFF;
-}
-
-#navigation-bar .menu-toggle img.black {
-    display: none;
 }
 
 #navigation-bar .navigation-button:hover {
@@ -209,6 +200,10 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
+#search-non-desktop-toggle img.black {
+    display: none;
+}
+
 #side-bar {
     border-right-color: #666666;
 }
@@ -221,9 +216,10 @@ table.striped tr:nth-child(2n-1) {
 
 #system-menu {
     background-color: #E6E6E6;
+    border-bottom-color: #666666;
 }
 
-#system-menu .region {
+#system-menu .header {
     background-color: #666666;
     color: #FFFFFF;
 }
@@ -240,6 +236,10 @@ table.striped tr:nth-child(2n-1) {
     background-color: #CBCBCB;
     font-weight: bold;
     cursor: default;
+}
+
+#system-menu-toggle img.black {
+    display: none;
 }
 
 #theme {

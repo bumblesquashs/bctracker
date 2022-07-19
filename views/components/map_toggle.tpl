@@ -3,12 +3,14 @@
     function toggleMap() {
         const headerElement = document.getElementById("header");
         const sideBarElement = document.getElementById("side-bar");
+        const bannersElement = document.getElementById("banners");
         const mapElement = document.getElementById("map");
         const toggleElement = document.getElementById("map-toggle");
         const whiteIconElement = document.getElementById("map-toggle-icon-white");
         const blackIconElement = document.getElementById("map-toggle-icon-black");
         headerElement.classList.toggle("display-none");
         sideBarElement.classList.toggle("display-none");
+        bannersElement.classList.toggle("display-none");
         mapElement.classList.toggle("z-override");
         toggleElement.classList.toggle("active");
         if (toggleElement.classList.contains("active")) {

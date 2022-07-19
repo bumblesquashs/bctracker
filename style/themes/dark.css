@@ -70,11 +70,6 @@ table.striped tr:nth-child(2n-1) {
     background-color: #393939;
 }
 
-#change-system-menu .header {
-    color: #FFFFFF;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
 #content img.black {
     display: none;
 }
@@ -95,10 +90,6 @@ table.striped tr:nth-child(2n-1) {
     background-color: #154E15;
 }
 
-#navigation-bar .menu-toggle img.black {
-    display: none;
-}
-
 #navigation-bar .navigation-button {
     color: #FFFFFF;
 }
@@ -115,7 +106,7 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#navigation-bar .navigation-menu-toggle .line {
+#navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
 
@@ -207,6 +198,10 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
+#search-non-desktop-toggle img.black {
+    display: none;
+}
+
 #side-bar {
     border-right-color: #565656;
 }
@@ -219,9 +214,10 @@ table.striped tr:nth-child(2n-1) {
 
 #system-menu {
     background-color: #393939;
+    border-bottom-color: #565656;
 }
 
-#system-menu .region {
+#system-menu .header {
     background-color: #565656;
     color: #FFFFFF;
 }
@@ -238,6 +234,10 @@ table.striped tr:nth-child(2n-1) {
     background-color: #2F2F2F;
     font-weight: bold;
     cursor: default;
+}
+
+#system-menu-toggle img.black {
+    display: none;
 }
 
 #theme {

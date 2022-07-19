@@ -66,14 +66,6 @@ table.striped tr {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
-#change-system-menu .header {
-    border-color: #456F9A;;
-    background-color: #5E87B0;
-    background-image: linear-gradient(#6fACD5,#497BAE);
-    text-shadow: 0 -1px 1px #3E6790;
-    color: #FFFFFF;
-}
-
 #content img.white {
     display: none;
 }
@@ -100,10 +92,6 @@ table.striped tr {
     text-shadow: 0 -1px 1px #000000;
 }
 
-#navigation-bar .menu-toggle img.black {
-    display: none;
-}
-
 #navigation-bar .navigation-button {
     color: #FFFFFF;
 }
@@ -122,7 +110,7 @@ table.striped tr {
     display: none;
 }
 
-#navigation-bar .navigation-menu-toggle .line {
+#navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
 
@@ -229,6 +217,10 @@ table.striped tr {
     display: none;
 }
 
+#search-non-desktop-toggle img.black {
+    display: none;
+}
+
 #side-bar {
     border-right-color: #000000;
 }
@@ -243,9 +235,10 @@ table.striped tr {
 
 #system-menu {
     background-color: #EEEEEE;
+    border-bottom-color: #000000;
 }
 
-#system-menu .region {
+#system-menu .header {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
     text-shadow: 0 -1px 1px #000000;
@@ -255,6 +248,7 @@ table.striped tr {
 #system-menu .system-button {
     background-color: #EEEEEE;
     color: #222222;
+    text-decoration: none;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
@@ -270,6 +264,10 @@ table.striped tr {
     background-image: linear-gradient(#6fACD5,#497BAE);
     text-shadow: 0 -1px 1px #3E6790;
     color: #FFFFFF;
+}
+
+#system-menu-toggle img.black {
+    display: none;
 }
 
 #theme {

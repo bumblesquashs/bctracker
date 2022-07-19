@@ -20,6 +20,18 @@ body.full-map {
     overflow: hidden;
 }
 
+body.full-map #body {
+    overflow: hidden;
+}
+
+body.full-map #side-bar {
+    overflow: hidden;
+}
+
+body.full-map #system-menu {
+    overflow: auto;
+}
+
 button {
     width: 100%;
 }

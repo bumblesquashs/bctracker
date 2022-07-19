@@ -309,7 +309,6 @@
             document.getElementById("search-non-desktop-input").focus();
         }
         document.getElementById("navigation-menu").classList.add("display-none");
-        document.getElementById("change-system-menu").classList.add("display-none");
     }
     
     function searchNonDesktop() {
