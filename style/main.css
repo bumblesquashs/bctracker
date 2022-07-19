@@ -369,6 +369,9 @@ table.striped tr.section td {
 }
 
 .info-box .section {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     padding-bottom: 10px;
@@ -382,14 +385,15 @@ table.striped tr.section td {
 }
 
 .info-box .section > .name {
-    float: left;
-    margin-right: 20px;
+    flex: 1;
 }
 
 .info-box .section > .value {
-    float: none;
-    overflow: hidden;
     text-align: right;
+}
+
+.info-box .section.no-flex {
+    display: block;
 }
 
 .marker {

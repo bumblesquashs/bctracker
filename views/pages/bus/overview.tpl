@@ -102,7 +102,7 @@
         <div class="info-box">
             % model = bus.model
             % if bus.order.size > 1:
-                <div class="section">
+                <div class="section no-flex">
                     % include('components/order_indicator', bus=bus)
                 </div>
             % end

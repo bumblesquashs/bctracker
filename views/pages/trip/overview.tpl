@@ -20,7 +20,7 @@
         % include('components/map', map_trip=trip, map_positions=positions)
         
         <div class="info-box">
-            <div class="section">
+            <div class="section no-flex">
                 % include('components/service_pattern_indicator', pattern=trip.service)
             </div>
             <div class="section">
