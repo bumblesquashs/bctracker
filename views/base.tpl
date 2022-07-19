@@ -201,6 +201,16 @@
                     <img class="black" src="/img/black/about.png" />
                     <span>About</span>
                 </a>
+                <div id="navigation-menu-theme">
+                    <span class="title">Theme:</span>
+                    <a href="{{ get_url(system, 'themes') }}">
+                        % if theme is None:
+                            BC Transit
+                        % else:
+                            {{ theme }}
+                        % end
+                    </a>
+                </div>
             </div>
             <div id="search-non-desktop" class="menu non-desktop display-none">
                 <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">

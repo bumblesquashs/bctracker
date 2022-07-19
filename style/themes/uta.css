@@ -106,7 +106,15 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#navigation-bar .navigation-menu-toggle .line {
+#navigation-menu-theme {
+    color: #FFFFFF;
+}
+
+#navigation-menu-theme a {
+    color: #FFFFFF;
+}
+
+#navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
 

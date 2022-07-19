@@ -110,6 +110,10 @@ table.striped tr {
     display: none;
 }
 
+#navigation-menu-theme {
+    color: #000000;
+}
+
 #navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
