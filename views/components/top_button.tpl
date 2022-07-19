@@ -2,7 +2,7 @@
 
 <script>
     const topButton = document.getElementById("top-button");
-    const contentElement = document.getElementById("content");
+    const contentElement = document.getElementById("content-wrapper");
     const height = window.innerHeight * 1.5;
     
     contentElement.onscroll = function() {
