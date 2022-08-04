@@ -15,6 +15,9 @@
         Routes can only be viewed for individual systems.
         Please choose a system.
     </p>
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
 % else:
     % routes = system.get_routes()
     % if len(routes) == 0:
@@ -22,6 +25,9 @@
             Route information is currently unavailable for {{ system }}.
             Please check again later!
         </p>
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
     % else:
         <table class="striped">
             <thead>

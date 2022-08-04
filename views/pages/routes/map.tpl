@@ -1,9 +1,9 @@
 
 % import json
 
-% rebase('base', title='Routes', include_maps=True, full_map=True)
-
 % if system is None:
+    % rebase('base', title='Routes')
+    
     <div class="page-header">
         <h1 class="title">Routes</h1>
         <div class="tab-button-bar">
@@ -17,7 +17,12 @@
         Routes can only be viewed for individual systems.
         Please choose a system.
     </p>
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
 % else:
+    % rebase('base', title='Routes', include_maps=True, full_map=True)
+    
     % routes = system.get_routes()
     % if len(routes) == 0:
         <div class="page-header">
