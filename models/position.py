@@ -8,6 +8,7 @@ class Position:
     
     @classmethod
     def from_entity(cls, system, bus, data):
+        '''Returns a position initialized from the given realtime data'''
         try:
             trip_id = data.trip.trip_id
             if trip_id == '':
@@ -56,22 +57,26 @@ class Position:
     
     @property
     def has_location(self):
+        '''Checks if this position has non-null coordinates'''
         return self.lat is not None and self.lon is not None
     
     @property
     def trip(self):
+        '''Returns the trip associated with this position, or None'''
         if self.trip_id is None:
             return None
         return self.system.get_trip(self.trip_id)
     
     @property
     def stop(self):
+        '''Returns the stop associated with this position, or None'''
         if self.stop_id is None:
             return None
         return self.system.get_stop(stop_id=self.stop_id)
     
     @property
     def colour(self):
+        '''Returns the route colour associated with this position'''
         trip = self.trip
         if trip is None:
             return '989898'
@@ -79,6 +84,7 @@ class Position:
     
     @property
     def json(self):
+        '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
             'lon': self.lon,

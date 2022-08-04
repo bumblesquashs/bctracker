@@ -11,6 +11,7 @@ class Transfer:
     
     @classmethod
     def from_db(cls, row, prefix='transfer'):
+        '''Returns a transfer initialized from the given database row'''
         id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         date = Date.parse_db(row[f'{prefix}_date'])

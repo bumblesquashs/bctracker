@@ -4,6 +4,7 @@ from models.transfer import Transfer
 import database
 
 def create(bus, date, old_system, new_system):
+    '''Inserts a new transfer into the database'''
     database.insert('transfer', {
         'bus_number': bus.number,
         'date': date.format_db(),
@@ -12,6 +13,7 @@ def create(bus, date, old_system, new_system):
     })
 
 def find_all(system_id, limit=None):
+    '''Returns all transfers that match the given system ID'''
     rows = database.select('transfer',
         columns={
             'transfer.transfer_id': 'transfer_id',

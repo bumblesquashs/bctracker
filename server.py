@@ -32,6 +32,7 @@ system_domain_path = 'https://bctracker.ca/{0}/{1}'
 cookie_domain = None
 
 def start(args):
+    '''Loads all required data and launches the server'''
     global cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
     
     database.connect()
@@ -75,11 +76,13 @@ def start(args):
     cron.start(cron_id)
 
 def stop():
+    '''Terminates the server'''
     cron.stop(cron_id)
     database.disconnect()
     cp.server.stop()
 
 def get_url(system, path=''):
+    '''Returns a URL formatted based on the given system and path'''
     if system is None:
         return no_system_domain.format(path).rstrip('/')
     if isinstance(system, str):
@@ -87,6 +90,7 @@ def get_url(system, path=''):
     return system_domain.format(system.id, path).rstrip('/')
 
 def page(name, system_id, path='', **kwargs):
+    '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     return template(f'pages/{name}',
         version=VERSION,
@@ -107,6 +111,7 @@ def page(name, system_id, path='', **kwargs):
     )
 
 def error_page(name, system_id, path='', **kwargs):
+    '''Returns an error page with the given name and details'''
     return page(f'errors/{name}_error', system_id, path, **kwargs)
 
 # =============================================================

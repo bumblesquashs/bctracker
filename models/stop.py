@@ -13,6 +13,7 @@ class Stop:
     
     @classmethod
     def from_csv(cls, row, system, departures):
+        '''Returns a stop initialized from the given CSV row'''
         id = row['stop_id']
         number = row['stop_code']
         name = row['stop_name']
@@ -49,6 +50,7 @@ class Stop:
     
     @property
     def is_current(self):
+        '''Checks if this stop is included in the current sheet'''
         for departure in self.departures:
             if departure.is_current:
                 return True
@@ -56,11 +58,13 @@ class Stop:
     
     @property
     def nearby_stops(self):
+        '''Returns all stops with coordinates close to this stop'''
         stops = self.system.get_stops()
         return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
     
     @property
     def json(self):
+        '''Returns a representation of this stop in JSON-compatible format'''
         return {
             'system_id': self.system.id,
             'number': self.number,
@@ -71,17 +75,21 @@ class Stop:
         }
     
     def get_departures(self, service_group=None):
+        '''Returns all departures from this stop that are part of the given service group'''
         if service_group is None:
             return sorted(self.departures)
         return sorted([d for d in self.departures if d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None):
+        '''Returns all routes from this stop that are part of the given service group'''
         return sorted({d.trip.route for d in self.get_departures(service_group)})
     
     def get_routes_string(self, service_group=None):
+        '''Returns a string of all routes from this stop that are part of the given service group'''
         return ', '.join([r.number for r in self.get_routes(service_group)])
     
     def get_match(self, query):
+        '''Returns a match for this stop with the given query'''
         query = query.lower()
         number = self.number.lower()
         name = self.name.lower()

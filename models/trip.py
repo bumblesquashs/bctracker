@@ -32,6 +32,7 @@ class Trip:
     
     @classmethod
     def from_csv(cls, row, system, departures):
+        '''Returns a trip initialized from the given CSV row'''
         trip_id = row['trip_id']
         route_id = row['route_id']
         service_id = row['service_id']
@@ -86,42 +87,52 @@ class Trip:
     
     @property
     def route(self):
+        '''Returns the route associated with this trip'''
         return self.system.get_route(route_id=self.route_id)
     
     @property
     def block(self):
+        '''Returns the block associated with this trip'''
         return self.system.get_block(self.block_id)
     
     @property
     def service(self):
+        '''Returns the service associated with this trip'''
         return self.system.get_service(self.service_id)
     
     @property
     def stops(self):
+        '''Returns all stops associated with this trip'''
         return {d.stop for d in self.departures}
     
     @property
     def first_departure(self):
+        '''Returns the first departure of this trip'''
         return self.departures[0]
     
     @property
     def last_departure(self):
+        '''Returns the last departure of this trip'''
         return self.departures[-1]
     
     @property
     def start_time(self):
+        '''Returns the time of the first departure of this trip'''
         return self.first_departure.time
     
     @property
     def end_time(self):
+        '''Returns the time of the last departure of this trip'''
         return self.last_departure.time
     
     @property
     def duration(self):
+        '''Returns the total time of this trip'''
         return self.start_time.format_difference(self.end_time)
     
     @property
     def points(self):
+        '''Returns all shape points associated with this trip'''
         shape = self.system.get_shape(self.shape_id)
         if shape is None:
             return []
@@ -129,10 +140,12 @@ class Trip:
     
     @property
     def is_current(self):
+        '''Checks if this trip is included in the current sheet'''
         return self.service.sheet.is_current
     
     @property
     def related_trips(self):
+        '''Returns all trips with the same route, direction, start time, and end time as this trip'''
         if self._related_trips is None:
             self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
@@ -140,6 +153,7 @@ class Trip:
     
     @property
     def json(self):
+        '''Returns a representation of this trip in JSON-compatible format'''
         return {
             'shape_id': self.shape_id,
             'colour': self.route.colour,
@@ -147,6 +161,7 @@ class Trip:
         }
     
     def get_departure(self, stop):
+        '''Returns the departure for a given stop on this trip'''
         departures = [d for d in self.departures if d.stop == stop]
         if len(departures) == 0:
             return None
@@ -158,12 +173,14 @@ class Trip:
         return departures[0]
     
     def get_previous_departure(self, departure):
+        '''Returns the departure in this trip that comes before the given departure, or None'''
         for previous_departure in self.departures:
             if previous_departure.sequence == (departure.sequence - 1):
                 return previous_departure
         return None
     
     def is_related(self, other):
+        '''Checks if this trip has the same route, direction, start time, and end time as another trip'''
         if self.id == other.id:
             return False
         if self.route_id != other.route_id:
