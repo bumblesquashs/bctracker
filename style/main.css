@@ -510,6 +510,10 @@ table.striped tr.section td {
     vertical-align: middle;
 }
 
+.negative {
+    font-weight: bold;
+}
+
 .news-post {
     margin-bottom: 20px;
     border-width: 1px;
@@ -567,6 +571,10 @@ table.striped tr.section td {
 
 .page-header .subtitle {
     font-weight: normal;
+}
+
+.positive {
+    font-weight: bold;
 }
 
 .route-number {

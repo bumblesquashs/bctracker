@@ -16,10 +16,13 @@ PID = os.getpid()
 CWD = os.path.dirname(__file__)
 EXC = sys.executable
 
-def start(cron_id):
-    '''Removes any old cron jobs and creates new jobs'''
+def setup():
+    '''Adds signal handlers'''
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
+
+def start(cron_id):
+    '''Removes any old cron jobs and creates new jobs'''
     with CronTab(user=True) as cron:
         cron.remove_all(comment=cron_id)
         
