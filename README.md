@@ -81,7 +81,7 @@ When configured, you must go to `/admin/<key>` in order to access server managem
 To enable this, add the following to `server.conf`:
 
 ```
-admin_key: 'some-admin-key'
+admin_key: '<key>'
 ```
 
 Once you've done that, run `setup.sh` to install packages and create directories, and then run `start.py` to load up the server.

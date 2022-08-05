@@ -1,5 +1,5 @@
 
-% rebase('base', title='Administration')
+% rebase('base', title='Administration', disable_indexing=True)
 
 <div class="page-header">
     <h1 class="title">Administration</h1>
@@ -73,10 +73,10 @@
                     </div>
                     <div class="button-container">
                         % if system.gtfs_enabled:
-                            <div class="button">Reload GTFS</div>
+                            <div class="button" onclick="reloadGTFS('{{ system.id }}')">Reload GTFS</div>
                         % end
                         % if system.realtime_enabled:
-                            <div class="button">Reload Realtime</div>
+                            <div class="button" onclick="reloadRealtime('{{ system.id }}')">Reload Realtime</div>
                         % end
                     </div>
                 </div>
