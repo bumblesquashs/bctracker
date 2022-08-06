@@ -70,7 +70,7 @@
                                                 <td class="non-mobile"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
                                                 <td>
                                                     <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                                    <br />
+                                                    <br class="mobile-only" />
                                                     <span class="mobile-only smaller-font">{{ trip }}</span>
                                                 </td>
                                             </tr>

@@ -91,7 +91,7 @@
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br />
+                                        <br class="non-desktop" />
                                         <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>
@@ -115,7 +115,7 @@
                                     <td>
                                         {{ trip }}
                                         % if stop is not None:
-                                        <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
@@ -176,7 +176,7 @@
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br />
+                                        <br class="non-desktop" />
                                         <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>

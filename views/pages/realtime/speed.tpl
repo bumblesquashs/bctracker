@@ -67,7 +67,7 @@
                             {{ bus }}
                         % else:
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            <br />
+                            <br class="non-desktop" />
                             <span class="non-desktop smaller-font">{{ order }}</span>
                         % end
                     </td>
@@ -83,7 +83,7 @@
                     % if position.trip is None:
                         <td>
                             <span class="lighter-text">Not in service</span>
-                            <br />
+                            <br class="non-desktop" />
                             <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
                         </td>
                         <td class="desktop-only"></td>
@@ -95,7 +95,7 @@
                         % stop = position.stop
                         <td>
                             {{ trip }}
-                            <br />
+                            <br class="non-desktop" />
                             <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
                         </td>
                         <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>

@@ -48,7 +48,7 @@
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:
-                            <br />
+                            <br class="non-desktop" />
                             <span class="non-desktop smaller-font">{{ order }}</span>
                         % end
                     </td>

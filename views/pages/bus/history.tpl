@@ -109,7 +109,7 @@
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end
-                                <br />
+                                <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">{{ record.routes }}</span>
                             </td>
                             <td class="desktop-only">{{ record.routes }}</td>

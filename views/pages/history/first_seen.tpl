@@ -45,14 +45,14 @@
                     <td class="non-desktop no-wrap">
                         {{ record.date.format_short() }}
                         % if system is None:
-                            <br />
+                            <br class="mobile-only" />
                             <span class="mobile-only smaller-font">{{ record.system }}</span>
                         % end
                     </td>
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         % if order is not None:
-                            <br />
+                            <br class="non-desktop" />
                             <span class="non-desktop smaller-font">{{ order }}</span>
                         % end
                     </td>

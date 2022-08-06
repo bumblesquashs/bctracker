@@ -134,7 +134,7 @@
                                             {{ bus }}
                                         % else:
                                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">{{ order }}</span>
                                         % end
                                     </td>
@@ -158,7 +158,7 @@
                                             <div class="tooltip">Bus is scheduled</div>
                                         </span>
                                         % if order is not None:
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">{{ order }}</span>
                                         % end
                                     </td>
@@ -182,7 +182,7 @@
                             <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                             <td>
                                 <a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                <br />
+                                <br class="mobile-only" />
                                 <span class="mobile-only smaller-font">{{ trip }}</span>
                             </td>
                         </tr>

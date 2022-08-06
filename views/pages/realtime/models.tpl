@@ -74,7 +74,7 @@
                             <tr class="{{'' if same_year else 'divider'}}">
                                 <td>
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br />
+                                    <br class="mobile-only" />
                                     <span class="mobile-only smaller-font">{{ order.year }}</span>
                                 </td>
                                 <td class="non-mobile">
@@ -95,7 +95,7 @@
                                     <td>
                                         {{ trip }}
                                         % if stop is not None:
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
@@ -158,7 +158,7 @@
                                     <td>
                                         {{ trip }}
                                         % if stop is not None:
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>

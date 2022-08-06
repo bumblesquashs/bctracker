@@ -105,7 +105,7 @@
                                     {{ bus }}
                                 % else:
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br />
+                                    <br class="mobile-only" />
                                     <span class="mobile-only smaller-font">{{ order }}</span>
                                 % end
                             </td>
@@ -145,7 +145,7 @@
                         <td>{{ departure.time }}</td>
                         <td>
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                            <br />
+                            <br class="mobile-only" />
                             <span class="mobile-only smaller-font">{{ stop }}</span>
                         </td>
                         <td class="non-mobile">

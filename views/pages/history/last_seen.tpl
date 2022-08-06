@@ -67,7 +67,7 @@
                     <td class="non-desktop no-wrap">
                         {{ record.date.format_short() }}
                         % if system is None:
-                            <br />
+                            <br class="mobile-only" />
                             <span class="mobile-only smaller-font">{{ record.system }}</span>
                         % end
                     </td>
