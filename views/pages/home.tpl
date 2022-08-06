@@ -4,9 +4,9 @@
 <div class="page-header">
     <h1 class="title">Welcome to BCTracker!</h1>
     % if system is None:
-        <h2 class="subtitle">BC Transit schedules and bus tracking</h2>
+        <h2 class="subtitle">BC Transit Schedules and Bus Tracking</h2>
     % else:
-        <h2 class="subtitle">{{ system }} transit schedules and bus tracking</h2>
+        <h2 class="subtitle">{{ system }} Transit Schedules and Bus Tracking</h2>
     % end
     <hr />
 </div>

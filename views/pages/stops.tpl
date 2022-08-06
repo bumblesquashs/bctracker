@@ -14,6 +14,9 @@
         Stops can only be viewed for individual systems.
         Please choose a system.
     </p>
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
 % else:
     % stops = system.get_stops()
     % if len(stops) == 0 and search is None:
