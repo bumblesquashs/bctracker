@@ -16,10 +16,10 @@ class ServiceException:
     __slots__ = ('service_id', 'date', 'type')
     
     @classmethod
-    def from_csv(cls, row):
+    def from_csv(cls, row, system):
         '''Returns a service exception initialized from the given CSV row'''
         service_id = row['service_id']
-        date = Date.parse_csv(row['date'])
+        date = Date.parse_csv(row['date'], system.timezone)
         type = ServiceExceptionType(int(row['exception_type']))
         return cls(service_id, date, type)
     
@@ -37,11 +37,12 @@ class ServiceException:
 class ServicePattern:
     '''The days of a week when a service is or is not running within a given date range'''
     
-    __slots__ = ('start_date', 'end_date', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'exceptions', 'special', 'indices', 'binary_string', 'name')
+    __slots__ = ('start_date', 'end_date', 'timezone', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'exceptions', 'special', 'indices', 'binary_string', 'name')
     
-    def __init__(self, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions):
+    def __init__(self, start_date, end_date, timezone, mon, tue, wed, thu, fri, sat, sun, exceptions):
         self.start_date = start_date
         self.end_date = end_date
+        self.timezone = timezone
         self.mon = mon
         self.tue = tue
         self.wed = wed
@@ -185,12 +186,12 @@ class ServicePattern:
     @property
     def is_current(self):
         '''Checks if the current date is within this service pattern's start and end dates'''
-        return self.start_date <= Date.today() <= self.end_date
+        return self.start_date <= Date.today(self.timezone) <= self.end_date
     
     @property
     def is_today(self):
         '''Checks if this service pattern includes the current date'''
-        return self.includes(Date.today())
+        return self.includes(Date.today(self.timezone))
     
     def includes(self, date):
         '''Checks if this service pattern includes the given date'''
@@ -223,8 +224,8 @@ class Service(ServicePattern):
     def from_csv(cls, row, system, exceptions):
         '''Returns a service initialized from the given CSV row'''
         id = row['service_id']
-        start_date = Date.parse_csv(row['start_date'])
-        end_date = Date.parse_csv(row['end_date'])
+        start_date = Date.parse_csv(row['start_date'], system.timezone)
+        end_date = Date.parse_csv(row['end_date'], system.timezone)
         mon = row['monday'] == '1'
         tue = row['tuesday'] == '1'
         wed = row['wednesday'] == '1'
@@ -241,7 +242,7 @@ class Service(ServicePattern):
         return cls(system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, service_exceptions)
     
     def __init__(self, system, id, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions):
-        super().__init__(start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions)
+        super().__init__(start_date, end_date, system.timezone, mon, tue, wed, thu, fri, sat, sun, exceptions)
         self.system = system
         self.id = id
     
@@ -281,7 +282,7 @@ class ServiceGroup(ServicePattern):
         return cls(id, services, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions)
     
     def __init__(self, id, services, start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions):
-        super().__init__(start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions)
+        super().__init__(start_date, end_date, list(services)[0].timezone, mon, tue, wed, thu, fri, sat, sun, exceptions)
         self.id = id
         self.services = services
     

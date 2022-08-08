@@ -90,9 +90,9 @@ def find_recorded_buses(system_id):
         })
     return [row['bus_number'] for row in rows]
 
-def find_recorded_today(system_id, trips):
+def find_recorded_today(system, trips):
     '''Returns all bus numbers matching the given system ID and trips that were recorded on the current date'''
-    today = Date.today()
+    today = Date.today(system.timezone)
     rows = database.select('trip_record',
         columns={
             'trip_record.trip_id': 'trip_id',
@@ -104,15 +104,15 @@ def find_recorded_today(system_id, trips):
             }
         },
         filters={
-            'record.system_id': system_id,
+            'record.system_id': system.id,
             'record.date': today.format_db(),
             'trip_record.trip_id': [t.id for t in trips]
         })
     return {row['trip_id']: Bus(row['bus_number']) for row in rows}
 
-def find_scheduled_today(system_id, trips):
+def find_scheduled_today(system, trips):
     '''Returns all bus numbers matching the given system ID and trips that are scheduled to run on the current date'''
-    today = Date.today()
+    today = Date.today(system.timezone)
     cte, args = database.build_select('record',
         columns={
             'record.bus_number': 'bus_number',
@@ -120,7 +120,7 @@ def find_scheduled_today(system_id, trips):
             'ROW_NUMBER() OVER(PARTITION BY record.block_id ORDER BY record.record_id DESC)': 'row_number'
         },
         filters={
-            'record.system_id': system_id,
+            'record.system_id': system.id,
             'record.date': today.format_db(),
             'record.block_id': list({t.block_id for t in trips})
         })

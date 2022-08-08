@@ -1,40 +1,41 @@
 
 from datetime import datetime, timedelta
-from pytz import timezone
+import pytz
 
 import calendar
 
 class Date:
     '''A specific year, month, and day'''
     
-    __slots__ = ('year', 'month', 'day')
+    __slots__ = ('year', 'month', 'day', 'timezone')
     
     @classmethod
-    def parse_db(cls, date_string):
+    def parse_db(cls, date_string, timezone):
         '''Returns a date parsed from the given string in YYYY-MM-DD format'''
         date = datetime.strptime(date_string, '%Y-%m-%d')
-        return cls(date.year, date.month, date.day)
+        return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
-    def parse_csv(cls, date_string):
+    def parse_csv(cls, date_string, timezone):
         '''Returns a date parsed from the given string in YYYYMMDD format'''
         date = datetime.strptime(date_string, '%Y%m%d')
-        return cls(date.year, date.month, date.day)
+        return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
-    def today(cls, system=None):
+    def today(cls, timezone):
         '''Returns the current date'''
-        if system is not None and system.timezone is not None:
-            now = datetime.now(timezone(system.timezone))
-        else:
+        if timezone is None:
             now = datetime.now()
+        else:
+            now = datetime.now(pytz.timezone(timezone))
         date = now if now.hour >= 4 else now - timedelta(days=1)
-        return cls(date.year, date.month, date.day)
+        return cls(date.year, date.month, date.day, timezone)
     
-    def __init__(self, year, month, day):
+    def __init__(self, year, month, day, timezone):
         self.year = year
         self.month = month
         self.day = day
+        self.timezone = timezone
     
     def __str__(self):
         return self.format_long()
@@ -67,16 +68,37 @@ class Date:
     
     def __add__(self, delta):
         date = self.datetime + delta
-        return Date(date.year, date.month, date.day)
+        return Date(date.year, date.month, date.day, self.timezone)
     
     def __sub__(self, delta):
         date = self.datetime - delta
-        return Date(date.year, date.month, date.day)
+        return Date(date.year, date.month, date.day, self.timezone)
+    
+    @property
+    def is_earlier(self):
+        '''Checks if this date is before the current date'''
+        return self < Date.today(self.timezone)
+    
+    @property
+    def is_today(self):
+        '''Checks if this date is the same as the current date'''
+        return self == Date.today(self.timezone)
+    
+    @property
+    def is_later(self):
+        '''Checks if this date is after the current date'''
+        return self > Date.today(self.timezone)
     
     @property
     def datetime(self):
         '''Returns the datetime equivalent of this date'''
         return datetime(self.year, self.month, self.day)
+    
+    @property
+    def timezone_name(self):
+        if self.timezone is None:
+            return None
+        return datetime.now(pytz.timezone(self.timezone)).tzname()
     
     @property
     def weekday(self):
