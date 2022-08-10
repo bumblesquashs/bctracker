@@ -583,7 +583,7 @@ def systems_page(system_id=None):
 def system_api_map(system_id=None):
     system = helpers.system.find(system_id)
     if system is None:
-        realtime.last_updated()
+        last_updated = realtime.last_updated()
     else:
         last_updated = system.last_updated
     positions = realtime.get_positions(system_id)
