@@ -10,6 +10,7 @@ class Order:
     
     @classmethod
     def from_csv(cls, row):
+        '''Returns an order initialized from the given CSV row'''
         low = int(row['low'])
         high = int(row['high'])
         year = int(row['year'])
@@ -47,17 +48,21 @@ class Order:
     
     @property
     def range(self):
+        '''The full range of every bus in the order'''
         return (n for n in range(self.low, self.high + 1) if n not in self.exceptions)
     
     @property
     def first_bus(self):
+        '''The first bus in the order'''
         return Bus(self.low)
     
     @property
     def last_bus(self):
+        '''The last bus in the order'''
         return Bus(self.high)
     
     def previous_bus(self, bus_number):
+        '''The previous bus before the given bus number'''
         if bus_number <= self.low:
             return None
         previous_bus_number = bus_number - 1
@@ -66,6 +71,7 @@ class Order:
         return Bus(previous_bus_number)
     
     def next_bus(self, bus_number):
+        '''The next bus following the given bus number'''
         if bus_number >= self.high:
             return None
         next_bus_number = bus_number + 1
@@ -74,6 +80,7 @@ class Order:
         return Bus(next_bus_number)
     
     def contains(self, bus_number):
+        '''Checks if this order contains the given bus number'''
         if bus_number in self.exceptions:
             return False
         return self.low <= bus_number <= self.high

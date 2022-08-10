@@ -16,6 +16,7 @@ class ShapePoint:
     
     @classmethod
     def from_csv(cls, row):
+        '''Returns a shape point initialized from the given CSV row'''
         shape_id = row['shape_id']
         sequence = int(row['shape_pt_sequence'])
         lat = float(row['shape_pt_lat'])
@@ -36,6 +37,7 @@ class ShapePoint:
     
     @property
     def json(self):
+        '''Returns a representation of this shape point in JSON-compatible format'''
         return {
             'lon': self.lon,
             'lat': self.lat

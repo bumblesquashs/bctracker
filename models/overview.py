@@ -12,6 +12,7 @@ class Overview:
     
     @classmethod
     def from_db(cls, row, prefix='overview'):
+        '''Returns an overview initialized from the given database row'''
         bus = Bus(row[f'{prefix}_bus_number'])
         first_seen_date = Date.parse_db(row[f'{prefix}_first_seen_date'])
         first_seen_system = helpers.system.find(row[f'{prefix}_first_seen_system_id'])

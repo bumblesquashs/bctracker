@@ -4,6 +4,7 @@ from models.overview import Overview
 import database
 
 def create(bus, date, system, record_id):
+    '''Inserts a new overview into the database'''
     database.insert('overview', {
         'bus_number': bus.number,
         'first_seen_date': date.format_db(),
@@ -15,12 +16,14 @@ def create(bus, date, system, record_id):
     })
 
 def find(bus_number):
-    summaries = find_all(bus_number=bus_number, limit=1)
-    if len(summaries) == 1:
-        return summaries[0]
+    '''Returns the overview of the given bus number, or None'''
+    overviews = find_all(bus_number=bus_number, limit=1)
+    if len(overviews) == 1:
+        return overviews[0]
     return None
 
 def find_all(system_id=None, bus_number=None, limit=None):
+    '''Returns all overviews that match the given system ID and bus number'''
     rows = database.select('overview',
         columns={
             'overview.bus_number': 'overview_bus_number',
@@ -66,6 +69,7 @@ def find_all(system_id=None, bus_number=None, limit=None):
     return [Overview.from_db(row) for row in rows]
 
 def update(overview, date, system, record_id):
+    '''Updates an overview in the database'''
     values = {
         'last_seen_date': date.format_db(),
         'last_seen_system_id': system.id

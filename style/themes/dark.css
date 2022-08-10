@@ -267,11 +267,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .checkbox .box {
-    border-color: #000000;
-    background-color: #FFFFFF;
+    border-color: #FFFFFF;
+    background-color: #565656;
 }
 
-.checkbox .box img.white {
+.checkbox .box img.black {
     display: none;
 }
 

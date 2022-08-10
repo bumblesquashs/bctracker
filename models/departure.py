@@ -8,6 +8,7 @@ class Departure:
     
     @classmethod
     def from_csv(cls, row, system):
+        '''Returns a departure initialized from the given CSV row'''
         trip_id = row['trip_id']
         sequence = int(row['stop_sequence'])
         stop_id = row['stop_id']
@@ -32,18 +33,22 @@ class Departure:
     
     @property
     def stop(self):
+        '''Returns the stop associated with this departure'''
         return self.system.get_stop(stop_id=self.stop_id)
     
     @property
     def trip(self):
+        '''Returns the trip associated with this departure'''
         return self.system.get_trip(self.trip_id)
     
     @property
     def is_current(self):
+        '''Checks if this departure is included in the current sheet'''
         return self.trip.is_current
     
     @property
     def json(self):
+        '''Returns a representation of this departure in JSON-compatible format'''
         return {
             'stop': self.stop.json,
             'time': str(self.time),

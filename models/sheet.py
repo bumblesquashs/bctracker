@@ -30,6 +30,7 @@ class Sheet:
     
     @property
     def service_groups(self):
+        '''Returns a list of non-overlapping service groups created from the services associated with this sheet'''
         if self._service_groups is None:
             groups = []
             
@@ -66,9 +67,11 @@ class Sheet:
     
     @property
     def is_current(self):
+        '''Checks if the current date is within this sheet's start and end dates'''
         return self.start_date <= Date.today() <= self.end_date
     
     def add_service(self, service):
+        '''Adds a service to this sheet'''
         self.services.append(service)
         self.start_date = min(self.start_date, service.start_date)
         self.end_date = max(self.end_date, service.end_date)

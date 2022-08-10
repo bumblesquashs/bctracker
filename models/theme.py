@@ -1,10 +1,12 @@
 
 class Theme:
+    '''A set of CSS styles that feature different colours'''
     
     __slots__ = ('id', 'name', 'map_style', 'visible')
     
     @classmethod
     def from_csv(cls, row):
+        '''Returns a theme initialized from the given CSV row'''
         id = row['id']
         name = row['name']
         map_style = row['map_style']

@@ -12,6 +12,7 @@ class Record:
     
     @classmethod
     def from_db(cls, row, prefix='record'):
+        '''Returns a record initialized from the given database row'''
         id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         date = Date.parse_db(row[f'{prefix}_date'])
@@ -38,8 +39,10 @@ class Record:
     
     @property
     def block(self):
+        '''Returns the block associated with this record, or None'''
         return self.system.get_block(self.block_id)
     
     @property
     def is_available(self):
+        '''Checks if this record has an associated block'''
         return self.block is not None

@@ -17,6 +17,7 @@ CWD = os.path.dirname(__file__)
 EXC = sys.executable
 
 def start(cron_id):
+    '''Removes any old cron jobs and creates new jobs'''
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
     with CronTab(user=True) as cron:
@@ -32,10 +33,12 @@ def start(cron_id):
         backup_job.setall('0 0 1 * *')
 
 def stop(cron_id):
+    '''Removes all cron jobs'''
     with CronTab(user=True) as cron:
         cron.remove_all(comment=cron_id)
 
 def handle_gtfs(sig, frame):
+    '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
         today = Date.today(system)
         try:
@@ -50,6 +53,7 @@ def handle_gtfs(sig, frame):
             print(f'Error message: {e}')
 
 def handle_realtime(sig, frame):
+    '''Reloads realtime data for every system, and backs up data at midnight'''
     for system in helpers.system.find_all():
         try:
             realtime.update(system)
