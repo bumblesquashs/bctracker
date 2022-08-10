@@ -586,7 +586,7 @@ def admin_page(key=None, system_id=None):
         else:
             path = f'admin/{key}'
         return page('admin', system_id, path=path, key=key)
-    return 'Access denied'
+    return page('home', system_id)
 
 # =============================================================
 # JSON (API endpoints)
