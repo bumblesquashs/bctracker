@@ -1,5 +1,4 @@
 
-% from models.bus import Bus
 % from models.model import ModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
