@@ -14,6 +14,10 @@
         
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         
+        % if get('disable_indexing', False):
+            <meta name="robots" content="noindex">
+        % end
+        
         % if system is None:
             <meta property="og:title" content="BCTracker | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />

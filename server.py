@@ -30,10 +30,11 @@ no_system_domain = 'https://bctracker.ca/{0}'
 system_domain = 'https://{0}.bctracker.ca/{1}'
 system_domain_path = 'https://bctracker.ca/{0}/{1}'
 cookie_domain = None
+admin_key = None
 
 def start(args):
     '''Loads all required data and launches the server'''
-    global cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain
+    global cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain, admin_key
     
     database.connect()
     
@@ -60,6 +61,9 @@ def start(args):
             system.validation_errors += 1
     realtime.update_records()
     
+    cron.setup()
+    cron.start(cron_id)
+    
     cp.config.update('server.conf')
     cron_id = cp.config.get('cron_id', 'bctracker-muncher')
     mapbox_api_key = cp.config['mapbox_api_key']
@@ -67,13 +71,13 @@ def start(args):
     system_domain = cp.config['system_domain']
     system_domain_path = cp.config['system_domain_path']
     cookie_domain = cp.config.get('cookie_domain')
+    admin_key = cp.config.get('admin_key')
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
     
     cp.tree.graft(log, '/')
     cp.server.start()
-    cron.start(cron_id)
 
 def stop():
     '''Terminates the server'''
@@ -96,6 +100,7 @@ def page(name, system_id, path='', **kwargs):
         version=VERSION,
         path=path,
         systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
+        admin_systems=helpers.system.find_all(),
         system_id=system_id,
         system=helpers.system.find(system_id),
         get_url=get_url,
@@ -564,6 +569,25 @@ def themes_page(system_id=None):
 def systems_page(system_id=None):
     return page('systems', system_id, path=request.query.get('path', ''))
 
+@app.get([
+    '/admin',
+    '/admin/',
+    '/admin/<key>',
+    '/admin/<key>/',
+    '/<system_id>/admin',
+    '/<system_id>/admin/',
+    '/<system_id>/admin/<key>',
+    '/<system_id>/admin/<key>/'
+])
+def admin_page(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        if key is None:
+            path = 'admin'
+        else:
+            path = f'admin/{key}'
+        return page('admin', system_id, path=path, key=key)
+    return page('home', system_id)
+
 # =============================================================
 # JSON (API endpoints)
 # =============================================================
@@ -615,3 +639,81 @@ def api_search(system_id=None):
         'results': [m.get_json(system, get_url) for m in matches[0:10]],
         'count': len(matches)
     }
+
+@app.post([
+    '/api/admin/restart-cron',
+    '/api/admin/restart-cron/',
+    '/api/admin/<key>/restart-cron',
+    '/api/admin/<key>/restart-cron/',
+    '/<system_id>/api/admin/restart-cron',
+    '/<system_id>/api/admin/restart-cron/',
+    '/<system_id>/api/admin/<key>/restart-cron',
+    '/<system_id>/api/admin/<key>/restart-cron/'
+])
+def api_admin_restart_cron(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        cron.stop(cron_id)
+        cron.start(cron_id)
+        return 'Success'
+    return 'Access denied'
+
+@app.post([
+    '/api/admin/backup-database',
+    '/api/admin/backup-database/',
+    '/api/admin/<key>/backup-database',
+    '/api/admin/<key>/backup-database/',
+    '/<system_id>/api/admin/backup-database',
+    '/<system_id>/api/admin/backup-database/',
+    '/<system_id>/api/admin/<key>/backup-database',
+    '/<system_id>/api/admin/<key>/backup-database/'
+])
+def api_admin_backup_database(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        database.backup()
+        return 'Success'
+    return 'Access denied'
+
+@app.post([
+    '/api/admin/reload-gtfs/<reload_system_id>',
+    '/api/admin/reload-gtfs/<reload_system_id>/',
+    '/api/admin/<key>/reload-gtfs/<reload_system_id>',
+    '/api/admin/<key>/reload-gtfs/<reload_system_id>/',
+    '/<system_id>/api/admin/reload-gtfs/<reload_system_id>',
+    '/<system_id>/api/admin/reload-gtfs/<reload_system_id>/',
+    '/<system_id>/api/admin/<key>/reload-gtfs/<reload_system_id>',
+    '/<system_id>/api/admin/<key>/reload-gtfs/<reload_system_id>/'
+])
+def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        system = helpers.system.find(reload_system_id)
+        if system is None:
+            return 'Invalid system'
+        gtfs.update(system)
+        realtime.update(system)
+        if not realtime.validate(system):
+            system.validation_errors += 1
+        realtime.update_records()
+        return 'Success'
+    return 'Access denied'
+
+@app.post([
+    '/api/admin/reload-realtime/<reload_system_id>',
+    '/api/admin/reload-realtime/<reload_system_id>/',
+    '/api/admin/<key>/reload-realtime/<reload_system_id>',
+    '/api/admin/<key>/reload-realtime/<reload_system_id>/',
+    '/<system_id>/api/admin/reload-realtime/<reload_system_id>',
+    '/<system_id>/api/admin/reload-realtime/<reload_system_id>/',
+    '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>',
+    '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>/'
+])
+def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        system = helpers.system.find(reload_system_id)
+        if system is None:
+            return 'Invalid system'
+        realtime.update(system)
+        if not realtime.validate(system):
+            system.validation_errors += 1
+        realtime.update_records()
+        return 'Success'
+    return 'Access denied'

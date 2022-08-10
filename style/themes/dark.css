@@ -338,6 +338,10 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
+.negative {
+    color: #FF0000;
+}
+
 .news-post {
     background-color: #393939;
     border-color: #565656;
@@ -350,6 +354,10 @@ table.striped tr:nth-child(2n-1) {
 
 .order-indicator .content .separator {
     color: #565656;
+}
+
+.positive {
+    color: #428342;
 }
 
 .route-number {

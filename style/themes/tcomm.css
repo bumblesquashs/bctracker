@@ -383,6 +383,10 @@ table.striped tr {
     display: none;
 }
 
+.negative {
+    color: #FF0000;
+}
+
 .news-post {
     background: #FFF9DF;
     border-color: #F7C942;
@@ -399,6 +403,10 @@ table.striped tr {
 
 .page-header.map-page .tab-button {
     border-bottom-color: #000000;
+}
+
+.positive {
+    color: #1A671A;
 }
 
 .route-number {

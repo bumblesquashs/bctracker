@@ -45,7 +45,7 @@ Requires roughly Python 3.7 or higher, and pip.
 
 Uses the Bottle framework for web stuff and templates, and maps are done with MapBox.
 
-To run the project, create a file in the home directory called `server.conf`, with the following sample content:
+To run the project, start by creating a file in the home directory called `server.conf`, with the following sample content:
 
 ```
 [global]
@@ -74,6 +74,14 @@ If you plan on running multiple instances of BCTracker, you can set a unique cro
 
 ```
 cron_id: 'some-unique-id'
+```
+
+A secret key can also be configured to access the `/admin` page.
+When configured, you must go to `/admin/<key>` in order to access server management tools.
+To enable this, add the following to `server.conf`:
+
+```
+admin_key: '<key>'
 ```
 
 Once you've done that, run `setup.sh` to install packages and create directories, and then run `start.py` to load up the server.
