@@ -503,8 +503,8 @@ def stop_overview_page(stop_number, system_id=None):
     departures = sorted([d for d in stop.departures if d.trip.service.is_today])
     trips = [d.trip for d in departures]
     positions = {p.trip.id:p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips}
-    recorded_today = helpers.record.find_recorded_today(system_id, trips)
-    scheduled_today = helpers.record.find_scheduled_today(system_id, trips)
+    recorded_today = helpers.record.find_recorded_today(system, trips)
+    scheduled_today = helpers.record.find_scheduled_today(system, trips)
     return page('stop/overview', system_id, stop=stop, departures=departures, positions=positions, recorded_today=recorded_today, scheduled_today=scheduled_today)
 
 @app.get([
