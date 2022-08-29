@@ -59,7 +59,7 @@ def load(system):
         if 'agency_timezone' in agency:
             system.timezone = agency['agency_timezone']
     
-    exceptions = read_csv(system, 'calendar_dates', ServiceException.from_csv)
+    exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
     service_exceptions = {}
     for exception in exceptions:
         service_exceptions.setdefault(exception.service_id, []).append(exception)
@@ -118,4 +118,4 @@ def validate(system):
     end_dates = [s.end_date for s in system.services.values()]
     if len(end_dates) == 0:
         return True
-    return Date.today(system) < max(end_dates) - timedelta(days=7)
+    return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)

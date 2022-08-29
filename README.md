@@ -4,7 +4,7 @@ A GTFS schedule browser and realtime bus tracker for BC Transit.
 
 Available at https://www.bctracker.ca
 
-## Current Systems
+## Systems
 
 Systems with full support for schedules and bus tracking:
 - Campbell River
@@ -18,6 +18,7 @@ Systems with full support for schedules and bus tracking:
 - Kamloops
 - Kelowna
 - Kitimat
+- Mount Waddington
 - Nanaimo
 - North Okanagan
 - Port Alberni
@@ -31,8 +32,20 @@ Systems with full support for schedules and bus tracking:
 - West Kootenay
 - Whistler
 
-Systems with limited support for bus tracking only:
-- Mount Waddington
+Systems with no support for schedules or bus tracking:
+- 100 Mile House
+- Ashcroft-Clinton
+- Bella Coola
+- Boundary
+- Bulkley Nechako
+- Clearwater
+- Hazeltons
+- Merritt
+- Quesnel
+- Revelstoke
+- Salt Spring Island
+- Smithers
+- Williams Lake
 
 Additional systems may be added in the future if schedule and/or realtime GTFS becomes available.
 

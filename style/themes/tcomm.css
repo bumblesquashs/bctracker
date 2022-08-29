@@ -66,32 +66,15 @@ table.striped tr {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
-#banner {
-    background-color: #FFB960;
-    color: #FFFFFF;
-}
-
-#banner a {
-    color: #FFFFFF;
-}
-
-#change-system-menu .header {
-    border-color: #456F9A;;
-    background-color: #5E87B0;
-    background-image: linear-gradient(#6fACD5,#497BAE);
-    text-shadow: 0 -1px 1px #3E6790;
-    color: #FFFFFF;
-}
-
 #content img.white {
     display: none;
 }
 
 #map.preview {
-    border-color: #989898;
+    border-color: #000000;
 }
 
-#map-z-toggle {
+#map-toggle {
     background: #EEEEEE;
     color: #222222;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
@@ -99,7 +82,7 @@ table.striped tr {
     background-image: linear-gradient( #FFFFFF,#F1F1F1 );
 }
 
-#map-z-toggle-icon-white {
+#map-toggle-icon-white {
     display: none;
 }
 
@@ -107,10 +90,6 @@ table.striped tr {
     background-color: #111111;
     background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: 0 -1px 1px #000000;
-}
-
-#navigation-bar .menu-toggle img.black {
-    display: none;
 }
 
 #navigation-bar .navigation-button {
@@ -131,12 +110,20 @@ table.striped tr {
     display: none;
 }
 
-#navigation-bar .navigation-menu-toggle .line {
+#navigation-menu-theme {
+    color: #000000;
+}
+
+#navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
 
 #refresh-button:hover {
     background-color: #000000;
+}
+
+#refresh-button.disabled {
+    background-color: transparent;
 }
 
 #refresh-button img.black {
@@ -234,6 +221,73 @@ table.striped tr {
     display: none;
 }
 
+#search-non-desktop-toggle img.black {
+    display: none;
+}
+
+#side-bar {
+    border-right-color: #000000;
+}
+
+#status {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    text-shadow: 0 -1px 1px #000000;
+    color: #FFFFFF;
+    border-bottom-color: #000000;
+}
+
+#system-menu {
+    background-color: #EEEEEE;
+    border-bottom-color: #000000;
+}
+
+#system-menu .header {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    text-shadow: 0 -1px 1px #000000;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    background-color: #EEEEEE;
+    color: #222222;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+}
+
+#system-menu .system-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6,#E0E0E0);
+}
+
+#system-menu .system-button.current {
+    border-color: #456F9A;;
+    background-color: #5E87B0;
+    background-image: linear-gradient(#6fACD5,#497BAE);
+    text-shadow: 0 -1px 1px #3E6790;
+    color: #FFFFFF;
+}
+
+#system-menu-toggle img.black {
+    display: none;
+}
+
+#theme {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    text-shadow: 0 -1px 1px #000000;
+    color: #FFFFFF;
+    border-top-color: #000000;
+}
+
+#theme a {
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: none;
+}
+
 #system-bar {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
@@ -267,17 +321,30 @@ table.striped tr {
     color: #174CB3;
 }
 
+.banner {
+    background-color: #FFB960;
+    color: #FFFFFF;
+}
+
+.banner a {
+    color: #FFFFFF;
+}
+
+.banner .close-button img.black {
+    display: none;
+}
+
 .button {
     background: #EEEEEE;
     color: #222222;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     border: 1px solid #CCCCCC;
-    background-image: linear-gradient( #FFFFFF,#F1F1F1 );
+    background-image: linear-gradient(#FFFFFF,#F1F1F1);
 }
 
 .button:hover {
     background: #DFDFDF;
-    background-image: linear-gradient( #F6F6F6,#E0E0E0 );
+    background-image: linear-gradient(#F6F6F6,#E0E0E0);
 }
 
 .button.disabled {
@@ -342,7 +409,7 @@ table.striped tr {
     color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
-    border-color: #989898;
+    border-color: #000000;
 }
 
 .info-box .section {
@@ -419,7 +486,7 @@ table.striped tr {
 }
 
 .service-indicator .dates {
-    border-color: #989898;
+    border-color: #000000;
 }
 
 .service-indicator .dates .date {
@@ -456,6 +523,6 @@ table.striped tr {
 }
 
 .tooltip-anchor .tooltip {
-    background-color: #989898;
+    background-color: #000000;
     color: #FFFFFF;
 }

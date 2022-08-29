@@ -11,7 +11,9 @@
         Blocks can only be viewed for individual systems.
         Please choose a system.
     </p>
-    % include('components/systems')
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
 % else:
     % blocks = system.get_blocks()
     % if len(blocks) == 0:

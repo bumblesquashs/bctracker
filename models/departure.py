@@ -12,7 +12,7 @@ class Departure:
         trip_id = row['trip_id']
         sequence = int(row['stop_sequence'])
         stop_id = row['stop_id']
-        time = Time.parse(row['departure_time'])
+        time = Time.parse(row['departure_time'], system.timezone)
         return cls(system, trip_id, sequence, stop_id, time)
     
     def __init__(self, system, trip_id, sequence, stop_id, time):

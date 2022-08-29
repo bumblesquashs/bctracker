@@ -88,32 +88,12 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
-#banner {
+#body {
+    display: flex;
+}
+
+#content-wrapper {
     position: relative;
-    margin: 0px;
-    padding: 10px 20px;
-    cursor: default;
-    vertical-align: middle;
-    text-align: center;
-}
-
-#banner .close-button {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-#banner .close-button:hover {
-    cursor: pointer;
-}
-
-#banner .title {
-    font-weight: bold;
-    font-size: 16pt;
-}
-
-#content {
-    padding: 20px;
 }
 
 #header {
@@ -142,7 +122,7 @@ table.striped tr.section td {
     z-index: 30;
 }
 
-#map-z-toggle {
+#map-toggle {
     position: absolute;
     z-index: 10;
     border-radius: 22px;
@@ -150,20 +130,24 @@ table.striped tr.section td {
     right: 15px;
 }
 
-#map-z-toggle.active {
+#map-toggle.active {
     z-index: 40;
 }
 
-#map-z-toggle img {
+#map-toggle img {
     width: 28px;
     height: 28px;
     margin: 8px;
 }
 
+#navigation-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
 #navigation-bar .navigation-button {
-    float: left;
-    display: block;
-    text-align: center;
+    display: inline-block;
     padding: 15px 20px;
     text-decoration: none !important;
     font-family: Helvetica, sans-serif;
@@ -176,45 +160,50 @@ table.striped tr.section td {
     opacity: 0.7;
 }
 
-#navigation-bar .right {
-    float: right;
-}
-
 #navigation-bar .title {
     font-weight: bold;
 }
 
 #refresh-button:hover {
     cursor: pointer;
-    border-radius: 16px;
 }
 
-#refresh-button.hidden:hover {
+#refresh-button.disabled {
+    opacity: 50%;
     cursor: default;
 }
 
-#refresh-button img {
-    width: 32px;
-    height: 32px;
+#side-bar {
+    display: flex;
+    flex-direction: column;
+    font-family: Helvetica, sans-serif;
 }
 
-#system-bar {
-    margin: 0px;
-    padding: 10px 20px;
-    cursor: default;
+#status {
+    padding: 5px 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#status .content {
+    flex: 1;
 }
 
 #system {
     font-weight: bold;
 }
 
+#system-menu .header {
+    padding: 5px 20px;
+    font-weight: bold;
+}
+
 #top-button {
     position: fixed;
-    right: 20px;
+    right: 40px;
     bottom: 20px;
     display: none;
 }
@@ -239,6 +228,34 @@ table.striped tr.section td {
     line-height: 12pt;
     padding: 3px 6px;
     margin-right: 0px;
+}
+
+.banner {
+    margin: 0px;
+    padding: 10px 20px;
+    cursor: default;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.banner .close-button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.banner .close-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.banner .close-button:hover {
+    cursor: pointer;
+}
+
+.banner .title {
+    font-weight: bold;
+    font-size: 16pt;
 }
 
 .button {
@@ -333,16 +350,14 @@ table.striped tr.section td {
 }
 
 .hidden {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .info-box {
-    background-color: #E6E6E6;
     padding: 10px;
     margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
-    border-color: #989898;
 }
 
 .info-box .title {
@@ -354,9 +369,11 @@ table.striped tr.section td {
 }
 
 .info-box .section {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #CBCBCB;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -368,14 +385,15 @@ table.striped tr.section td {
 }
 
 .info-box .section > .name {
-    float: left;
-    margin-right: 20px;
+    flex: 1;
 }
 
 .info-box .section > .value {
-    float: none;
-    overflow: hidden;
     text-align: right;
+}
+
+.info-box .section.no-flex {
+    display: block;
 }
 
 .marker {
@@ -649,6 +667,10 @@ table.striped tr.section td {
 
 .sheet-navigation .sheet .special-services .special-number {
     font-weight: bold;
+}
+
+.spacer {
+    flex: 1;
 }
 
 .tab-button {

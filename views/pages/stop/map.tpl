@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Stop {stop.number}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Stop {stop.number}', include_maps=True, full_map=True)
 
 <div class="page-header map-page">
     <h1 class="title">Stop {{ stop.number }}</h1>
@@ -16,4 +16,4 @@
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
 
-% include('components/map_z_toggle')
+% include('components/map_toggle')

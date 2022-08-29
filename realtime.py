@@ -19,11 +19,12 @@ import database
 
 positions = {}
 
-last_updated = datetime.now()
+last_updated_date = None
+last_updated_time = None
 
 def update(system):
     '''Downloads realtime data for the given system, then loads it into memory'''
-    global last_updated
+    global last_updated_date, last_updated_time
     if not system.realtime_enabled:
         return
     print(f'Updating realtime data for {system}...')
@@ -37,10 +38,12 @@ def update(system):
         wget.download(system.realtime_url, data_path)
         
         update_positions(system)
+        last_updated_date = Date.today('America/Vancouver')
+        last_updated_time = Time.now('America/Vancouver', False)
+        system.last_updated_date = Date.today(system.timezone)
+        system.last_updated_time = Time.now(system.timezone, False)
         
         print('\nDone!')
-        
-        last_updated = datetime.now()
     except Exception as e:
         print(f'\nError: Failed to update realtime for {system}')
         print(f'Error message: {e}')
@@ -76,8 +79,8 @@ def update_records():
             bus = position.bus
             if bus.number < 0:
                 continue
-            today = Date.today(system)
-            now = Time.now(system)
+            today = Date.today(system.timezone)
+            now = Time.now(system.timezone)
             overview = helpers.overview.find(bus.number)
             trip = position.trip
             if trip is None:
@@ -116,14 +119,17 @@ def get_positions(system_id=None):
         return sorted(positions.values())
     return sorted([p for p in positions.values() if p.system.id == system_id])
 
-def last_updated_string():
+def last_updated():
     '''Returns the date/time that realtime data was last updated'''
-    now = datetime.now().date()
-    if last_updated.date() == now:
-        return last_updated.strftime("at %H:%M")
-    if last_updated.year == now.year:
-        return last_updated.strftime("%B %-d at %H:%M")
-    return last_updated.strftime("%B %-d, %Y at %H:%M")
+    date = last_updated_date
+    time = last_updated_time
+    if date is None or time is None:
+        return 'N/A'
+    if date.is_today:
+        if time.timezone is None:
+            return f'at {time}'
+        return f'at {time} {time.timezone_name}'
+    return date.format_since
 
 def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''

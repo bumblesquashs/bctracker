@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Block {block.id}', include_maps=True, full_map=True, show_refresh_button=True)
 
 <div class="page-header map-page">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -17,4 +17,4 @@
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 
-% include('components/map_z_toggle')
+% include('components/map_toggle')

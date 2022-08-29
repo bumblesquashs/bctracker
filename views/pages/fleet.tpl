@@ -1,5 +1,5 @@
 
-% rebase('base', title='Fleet', show_refresh_button=True)
+% rebase('base', title='Fleet')
 
 <div class="page-header">
     <h1 class="title">Fleet</h1>
@@ -71,14 +71,14 @@
                                     <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
                                     <td class="non-desktop no-wrap">
                                         {{ overview.first_seen_date.format_short() }}
-                                        <br />
+                                        <br class="mobile-only" />
                                         <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
                                     </td>
                                     <td class="non-mobile">{{ overview.first_seen_system }}</td>
                                     <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
                                     <td class="non-desktop no-wrap">
                                         {{ overview.last_seen_date.format_short() }}
-                                        <br />
+                                        <br class="mobile-only" />
                                         <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
                                     </td>
                                     <td class="non-mobile">{{ overview.last_seen_system }}</td>

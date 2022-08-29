@@ -2,10 +2,11 @@
 % rebase('base', title='Home')
 
 <div class="page-header">
+    <h1 class="title">Welcome to BCTracker!</h1>
     % if system is None:
-        <h1 class="title">Welcome to BCTracker!</h1>
+        <h2 class="subtitle">BC Transit Schedules and Bus Tracking</h2>
     % else:
-        <h1 class="title">Welcome to BCTracker {{ system }}!</h1>
+        <h2 class="subtitle">{{ system }} Transit Schedules and Bus Tracking</h2>
     % end
     <hr />
 </div>
@@ -53,6 +54,7 @@
                     <input type="submit" value="Search" class="button">
                 </div>
             </form>
+            <p>Choose a system to search for routes and stops</p>
         % else:
             % if system.realtime_enabled:
                 <form onsubmit="busSearch()" action="javascript:void(0)">
@@ -81,26 +83,47 @@
             </form>
         % end
         
-        % if system is None:
-            <p>Choose a system to search for routes and stops</p>
-            % include('components/systems')
-        % end
-        
         <div>
-            <h2>Themes</h2>
-            % if theme is None:
-                <h3>Current Theme: BC Transit</h3>
-            % else:
-                <h3>Current Theme: {{ theme }}</h3>
-            % end
+            <h2>Community</h2>
             <p>
-                To change the current theme, visit the <a href="{{ get_url(system, 'themes') }}">themes page</a>.
+                Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!
             </p>
+            <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
     </div>
     
     <div class="flex-3">
         <h2>Latest Updates</h2>
+        
+        <div class="news-post">
+            <div class="header">
+                <h3>Summer Update</h3>
+                September 1, 2022
+            </div>
+            <div class="content">
+                <p>
+                    It's been a quiet summer, so there aren't many updates to report this time around.
+                </p>
+                <p>
+                    First, we've added <b>Mount Waddington</b> to the list of available transit systems.
+                    This was never mentioned by BC Transit as a planned NextRide system, but it appears to exist nonetheless!
+                </p>
+                <p>
+                    Second, if you use the website on your computer, you may notice that the Change System dropdown has been replaced with a shiny new sidebar.
+                    We're hoping this will make it easier to navigate around the site.
+                    This is still somewhat experimental, so you may see some additional changes as we get feedback.
+                </p>
+                <p>
+                    On the topic of feedback, we have a great new place to go for that: the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a>!
+                    Even if you don't have any feedback, everyone is welcome to come chat, share photos and videos, debate the future of transit in BC, and more.
+                    With the BCTracker Bot, you can get alerted when new buses enter service or transfer between systems.
+                    And if you enjoy transit photography, we're also kicking it off with a back-to-school photo contest with special Discord roles for the winners!
+                </p>
+                <p>
+                    That's all for now - enjoy the rest of the summer!
+                </p>
+            </div>
+        </div>
         
         <div class="news-post">
             <div class="header">
@@ -123,47 +146,6 @@
                 </p>
                 <p>
                     Happy tracking!
-                </p>
-            </div>
-        </div>
-        
-        <div class="news-post">
-            <div class="header">
-                <h3>Spring Update</h3>
-                May 1, 2022
-            </div>
-            <div class="content">
-                <h4>New Realtime Systems</h4>
-                <p>
-                    Since the start of this year, BC Transit has been rolling out a new NextRide program in transit systems across BC.
-                    We've been working hard to integrate the new API with BCTracker, which hasn't been easy as some of the data is quite different compared to existing systems.
-                    However, we are very pleased to announce that the first new realtime systems are active on BCTracker as of today!
-                </p>
-                <p>
-                    To start with, we're launching <b>Cowichan Valley</b>, <b>Port Alberni</b>, <b>Campbell River</b>, <b>Powell River</b>, and <b>Sunshine Coast</b> as brand-new realtime systems.
-                    The Central Fraser Valley and Chilliwack systems have also been combined into a new <b>Fraser Valley</b> system with realtime information.
-                    And on top of all that, we're introducing the <b>North Okanagan</b> and <b>South Okanagan</b> regional systems with schedule-only data.
-                    Expect more updates in the next few months as additional systems become available!
-                </p>
-                <p>
-                    Please keep in mind that BC Transit is still testing some components of the new NextRide API, so you may occasionally see buses with incorrect GPS positions or logged into the wrong trip.
-                    If you have any questions or concerns, feel free to reach out to us at <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
-                    For more information about the NextRide rollout and to see what systems will be receiving it next, visit <a href="https://www.bctransit.com/nextride-faq">BC Transit's NextRide FAQ</a>.
-                </p>
-                <h4>Other Updates</h4>
-                <p>
-                    Of course, new realtime systems isn't the only exciting thing we've been working on for the past few months.
-                    Since we posted the last update, here's some of the other changes we've made:
-                </p>
-                <ul>
-                    <li>Routes Map: View every route in a system on the map at the same time</li>
-                    <li>Schedules: Easily check today's schedule and upcoming buses (when available) in the overview tab of stops and routes</li>
-                    <li>Mobile Navigation: Updated menu makes it easier to change pages or swap to a different system</li>
-                    <li>Themes: Introduced new themes based on old BC transit liveries</li>
-                    <li>Lots of bug fixes and general improvements for the website interface</li>
-                </ul>
-                <p>
-                    We hope you enjoy the new systems and improvements, and have a great summer!
                 </p>
             </div>
         </div>

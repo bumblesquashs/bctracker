@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Block {block.id}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -24,7 +24,7 @@
         % include('components/map', map_trips=trips, map_positions=positions)
         
         <div class="info-box">
-            <div class="section">
+            <div class="section no-flex">
                 % include('components/service_pattern_indicator', pattern=block.service_group)
             </div>
             <div class="section">
@@ -153,7 +153,7 @@
                                     {{ bus }}
                                 % else:
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br />
+                                    <br class="non-desktop" />
                                     <span class="non-desktop smaller-font">{{ order }}</span>
                                 % end
                             </td>
@@ -165,7 +165,7 @@
                             <td class="desktop-only">{{ trip }}</td>
                             <td>
                                 <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                <br />
+                                <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">{{ trip }}</span>
                             </td>
                             % if stop is None:
@@ -211,13 +211,13 @@
                                         <td class="desktop-only">{{ trip.duration }}</td>
                                         <td class="non-mobile">
                                             {{ trip }}
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">{{ trip.direction }}</span>
                                         </td>
                                         <td class="desktop-only">{{ trip.direction }}</td>
                                         <td>
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                            <br />
+                                            <br class="mobile-only" />
                                             <span class="mobile-only smaller-font">{{ trip }}</span>
                                         </td>
                                     </tr>

@@ -28,7 +28,7 @@ class Adherence:
                 if time_difference >= MINIMUM_MINUTES:
                     expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
             
-            return cls(expected_scheduled_mins - Time.now(trip.system).get_minutes())
+            return cls(expected_scheduled_mins - Time.now(trip.system.timezone).get_minutes())
         except AttributeError:
             return None
     

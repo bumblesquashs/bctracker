@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Trip {trip.id}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title trip-id">Trip {{ trip.id }}</h1>
@@ -20,7 +20,7 @@
         % include('components/map', map_trip=trip, map_positions=positions)
         
         <div class="info-box">
-            <div class="section">
+            <div class="section no-flex">
                 % include('components/service_pattern_indicator', pattern=trip.service)
             </div>
             <div class="section">
@@ -105,7 +105,7 @@
                                     {{ bus }}
                                 % else:
                                     <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br />
+                                    <br class="mobile-only" />
                                     <span class="mobile-only smaller-font">{{ order }}</span>
                                 % end
                             </td>
@@ -145,7 +145,7 @@
                         <td>{{ departure.time }}</td>
                         <td>
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                            <br />
+                            <br class="mobile-only" />
                             <span class="mobile-only smaller-font">{{ stop }}</span>
                         </td>
                         <td class="non-mobile">

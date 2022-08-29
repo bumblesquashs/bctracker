@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Stop {stop.number}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Stop {stop.number}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>
@@ -19,7 +19,7 @@
         
         % if len(stop.departures) > 0:
             <div class="info-box">
-                <div class="section">
+                <div class="section no-flex">
                     % include('components/service_pattern_indicator', pattern=stop.service_group)
                 </div>
                 <div class="section">
@@ -134,7 +134,7 @@
                                             {{ bus }}
                                         % else:
                                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">{{ order }}</span>
                                         % end
                                     </td>
@@ -158,7 +158,7 @@
                                             <div class="tooltip">Bus is scheduled</div>
                                         </span>
                                         % if order is not None:
-                                            <br />
+                                            <br class="non-desktop" />
                                             <span class="non-desktop smaller-font">{{ order }}</span>
                                         % end
                                     </td>
@@ -182,7 +182,7 @@
                             <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                             <td>
                                 <a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                <br />
+                                <br class="mobile-only" />
                                 <span class="mobile-only smaller-font">{{ trip }}</span>
                             </td>
                         </tr>

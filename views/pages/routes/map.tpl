@@ -1,9 +1,9 @@
 
 % import json
 
-% rebase('base', title='Routes', include_maps=True)
-
 % if system is None:
+    % rebase('base', title='Routes')
+    
     <div class="page-header">
         <h1 class="title">Routes</h1>
         <div class="tab-button-bar">
@@ -17,8 +17,12 @@
         Routes can only be viewed for individual systems.
         Please choose a system.
     </p>
-    % include('components/systems')
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
 % else:
+    % rebase('base', title='Routes', include_maps=True, full_map=True)
+    
     % routes = system.get_routes()
     % if len(routes) == 0:
         <div class="page-header">
@@ -129,12 +133,7 @@
                         
                         map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
                             duration: 0,
-                            padding: {
-                                top: 200,
-                                bottom: 100,
-                                left: 100,
-                                right: 100
-                            }
+                            padding: 100
                         });
                     }
                 });
@@ -166,6 +165,6 @@
             </script>
         % end
         
-        % include('components/map_z_toggle')
+        % include('components/map_toggle')
     % end  
 % end

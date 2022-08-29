@@ -5,10 +5,11 @@ from models.service import ServiceGroup, ServiceException, ServiceExceptionType
 class Sheet:
     '''A collection of overlapping services with defined start and end dates'''
     
-    __slots__ = ('services', 'start_date', 'end_date', '_service_groups')
+    __slots__ = ('services', 'timezone', 'start_date', 'end_date', '_service_groups')
     
     def __init__(self, service):
         self.services = [service]
+        self.timezone = service.timezone
         self.start_date = service.start_date
         self.end_date = service.end_date
         
@@ -68,7 +69,7 @@ class Sheet:
     @property
     def is_current(self):
         '''Checks if the current date is within this sheet's start and end dates'''
-        return self.start_date <= Date.today() <= self.end_date
+        return self.start_date <= Date.today(self.timezone) <= self.end_date
     
     def add_service(self, service):
         '''Adds a service to this sheet'''

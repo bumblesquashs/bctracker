@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}', show_refresh_button=True)
+% rebase('base', title=f'Block {block.id}')
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -97,7 +97,7 @@
                                         {{ bus }}
                                     % else:
                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br />
+                                        <br class="non-desktop" />
                                         <span class="non-desktop smaller-font">{{ order }}</span>
                                     % end
                                 </td>
@@ -120,8 +120,6 @@
 % else:
     <p>
         {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose another system that supports realtime from the following list.
+        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
     </p>
-
-    % include('components/systems', realtime_only=True)
 % end

@@ -1,7 +1,7 @@
 
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Bus {bus}', include_maps=True)
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
@@ -101,7 +101,7 @@
         <div class="info-box">
             % model = bus.model
             % if bus.order.size > 1:
-                <div class="section">
+                <div class="section no-flex">
                     % include('components/order_indicator', bus=bus)
                 </div>
             % end
@@ -165,7 +165,7 @@
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end
-                                <br />
+                                <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">{{ record.routes }}</span>
                             </td>
                             <td class="desktop-only">{{ record.routes }}</td>

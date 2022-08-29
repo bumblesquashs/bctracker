@@ -1,17 +1,17 @@
 
 from datetime import datetime
-from pytz import timezone
+import pytz
 
 class Time:
     '''A specific hour, minute, and second'''
     
-    __slots__ = ('unknown', 'hour', 'minute', 'second', 'accurate_seconds')
+    __slots__ = ('unknown', 'hour', 'minute', 'second', 'accurate_seconds', 'timezone')
     
     @classmethod
-    def parse(cls, time_string, accurate_seconds=False):
+    def parse(cls, time_string, timezone, accurate_seconds=False):
         '''Returns a time parsed from the given string in HH:MM:SS format'''
         if time_string is None or time_string == '':
-            return Time(True, 0, 0, 0, False)
+            return cls(True, 0, 0, 0, False, timezone)
         time_parts = time_string.split(':')
         
         hour = int(time_parts[0])
@@ -20,26 +20,28 @@ class Time:
             second = int(time_parts[2])
         else:
             second = 0
-        return cls(False, hour, minute, second, accurate_seconds)
+            accurate_seconds = False
+        return cls(False, hour, minute, second, accurate_seconds, timezone)
     
     @classmethod
-    def now(cls, system=None):
+    def now(cls, timezone, accurate_seconds=True):
         '''Returns the current time'''
-        if system is not None and system.timezone is not None:
-            now = datetime.now(timezone(system.timezone))
-        else:
+        if timezone is None:
             now = datetime.now()
+        else:
+            now = datetime.now(pytz.timezone(timezone))
         hour = now.hour
         if hour < 4:
             hour += 24
-        return cls(False, hour, now.minute, now.second, True)
+        return cls(False, hour, now.minute, now.second, accurate_seconds, timezone)
     
-    def __init__(self, unknown, hour, minute, second, accurate_seconds):
+    def __init__(self, unknown, hour, minute, second, accurate_seconds, timezone):
         self.unknown = unknown
         self.hour = hour
         self.minute = minute
         self.second = second
         self.accurate_seconds = accurate_seconds
+        self.timezone = timezone
     
     def __str__(self):
         if self.unknown:
@@ -63,17 +65,23 @@ class Time:
     @property
     def is_earlier(self):
         '''Checks if this time is before the current time'''
-        return self < Time.now()
+        return self < Time.now(self.timezone)
     
     @property
     def is_now(self):
         '''Checks if this time is the same as the current time'''
-        return self == Time.now()
+        return self == Time.now(self.timezone)
     
     @property
     def is_later(self):
         '''Checks if this time is after the current time'''
-        return self > Time.now()
+        return self > Time.now(self.timezone)
+    
+    @property
+    def timezone_name(self):
+        if self.timezone is None:
+            return None
+        return datetime.now(pytz.timezone(self.timezone)).tzname()
     
     def get_minutes(self):
         '''Returns the total number of minutes in this time'''

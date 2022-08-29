@@ -1,7 +1,7 @@
 
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}', show_refresh_button=True)
+% rebase('base', title=f'Bus {bus}')
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
@@ -109,7 +109,7 @@
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end
-                                <br />
+                                <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">{{ record.routes }}</span>
                             </td>
                             <td class="desktop-only">{{ record.routes }}</td>

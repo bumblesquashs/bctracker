@@ -22,5 +22,3 @@
     </p>
     <p>Please choose a valid system and think about what you've done.</p>
 % end
-
-% include('components/systems')

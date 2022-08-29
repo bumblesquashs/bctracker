@@ -2,10 +2,11 @@
 
 <script>
     const topButton = document.getElementById("top-button");
+    const contentElement = document.getElementById("content-wrapper");
     const height = window.innerHeight * 1.5;
     
-    window.onscroll = function() {
-        if (document.body.scrollTop > height || document.documentElement.scrollTop > height) {
+    contentElement.onscroll = function() {
+        if (contentElement.scrollTop > height) {
             topButton.style.display = "block";
         } else {
             topButton.style.display = "none";
@@ -13,8 +14,7 @@
     }
     
     function scrollToTop() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+        contentElement.scrollTop = 0;
     }
 </script>
 

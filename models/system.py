@@ -1,14 +1,17 @@
 
+import helpers.region
+
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
         '''Returns a system initialized from the given CSV row'''
         id = row['system_id']
         name = row['name']
+        region = helpers.region.find(row['region_id'])
         enabled = row['enabled'] == '1'
         visible = row['visible'] == '1'
         prefix_headsign = row['prefix_headsign'] == '1'
@@ -30,11 +33,12 @@ class System:
                 realtime_url = row['realtime_url']
             else:
                 realtime_url = None
-        return cls(id, name, enabled, visible, prefix_headsign, gtfs_url, realtime_url)
+        return cls(id, name, region, enabled, visible, prefix_headsign, gtfs_url, realtime_url)
     
-    def __init__(self, id, name, enabled, visible, prefix_headsign, gtfs_url, realtime_url):
+    def __init__(self, id, name, region, enabled, visible, prefix_headsign, gtfs_url, realtime_url):
         self.id = id
         self.name = name
+        self.region = region
         self.enabled = enabled
         self.visible = visible
         self.prefix_headsign = prefix_headsign
@@ -42,6 +46,8 @@ class System:
         self.realtime_url = realtime_url
         
         self.validation_errors = 0
+        self.last_updated_date = None
+        self.last_updated_time = None
         
         self.timezone = None
         
@@ -74,6 +80,19 @@ class System:
     @property
     def realtime_enabled(self):
         return self.enabled and self.realtime_url is not None
+    
+    @property
+    def last_updated(self):
+        '''Returns the date/time that realtime data was last updated'''
+        date = self.last_updated_date
+        time = self.last_updated_time
+        if date is None or time is None:
+            return 'N/A'
+        if date.is_today:
+            if time.timezone is None:
+                return f'at {time}'
+            return f'at {time} {time.timezone_name}'
+        return date.format_since()
     
     def get_block(self, block_id):
         '''Returns the block with the given ID, or None'''

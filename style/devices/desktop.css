@@ -5,6 +5,10 @@ a:hover {
 
 body {
     font-size: 14pt;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
 form {
@@ -16,18 +20,40 @@ form input[type="text"] {
     vertical-align: middle;
 }
 
-#banner a {
-    text-decoration: underline;
+table.striped th {
+    white-space: nowrap;
 }
 
-#banner .content {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 20px;
+#body {
+    flex: 1;
+    flex-direction: row;
+    overflow: hidden;
 }
 
-#banner .survey-button {
-    vertical-align: middle;
+#content {
+    padding: 20px 40px;
+}
+
+#content-wrapper {
+    flex: 1;
+    overflow: auto;
+}
+
+#last-updated {
+    font-size: 11pt;
+}
+
+#navigation-menu-toggle {
+    display: none;
+}
+
+#refresh-button {
+    border-radius: 14px;
+}
+
+#refresh-button img {
+    width: 28px;
+    height: 28px;
 }
 
 #search-desktop {
@@ -100,8 +126,71 @@ form input[type="text"] {
     flex: 1;
 }
 
-#system-bar #last-updated {
+#search-non-desktop-toggle {
+    display: none;
+}
+
+#side-bar {
+    overflow: hidden;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+#status {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#system {
+    font-size: 13pt;
+}
+
+#system-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+#system-menu .header {
+    font-size: 13pt;
+}
+
+#system-menu .system-button {
+    display: block;
+    text-decoration: none !important;
+    padding: 5px 20px;
     font-size: 12pt;
+}
+
+#system-menu .system-button.current {
+    font-weight: bold;
+    cursor: default;
+}
+
+#system-menu-toggle {
+    display: none;
+}
+
+#theme {
+    font-size: 11pt;
+    padding: 10px 20px;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+#theme .title {
+    font-weight: bold;
+}
+
+.banner a {
+    text-decoration: underline;
+}
+
+.banner .content {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20px;
 }
 
 .button {

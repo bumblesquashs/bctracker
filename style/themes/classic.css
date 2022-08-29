@@ -70,20 +70,6 @@ table.striped tr:nth-child(2n-1) {
     background-color: #E6E6E6;
 }
 
-#banner {
-    background-color: #FFB960;
-    color: #FFFFFF;
-}
-
-#banner a {
-    color: #FFFFFF;
-}
-
-#change-system-menu .header {
-    color: #FFFFFF;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
 #content img.white {
     display: none;
 }
@@ -92,20 +78,16 @@ table.striped tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
-#map-z-toggle {
+#map-toggle {
     background-color: #E20000;
 }
 
-#map-z-toggle-icon-black {
+#map-toggle-icon-black {
     display: none;
 }
 
 #navigation-bar {
     background-color: #E20000;
-}
-
-#navigation-bar .menu-toggle img.black {
-    display: none;
 }
 
 #navigation-bar .navigation-button {
@@ -124,12 +106,24 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#navigation-bar .navigation-menu-toggle .line {
+#navigation-menu-theme {
+    color: #FFFFFF;
+}
+
+#navigation-menu-theme a {
+    color: #FFFFFF;
+}
+
+#navigation-menu-toggle .line {
     background-color: #FFFFFF;
 }
 
 #refresh-button:hover {
     background-color: #011E58;
+}
+
+#refresh-button.disabled:hover {
+    background-color: #023496;
 }
 
 #refresh-button img.black {
@@ -214,8 +208,55 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#system-bar {
+#search-non-desktop-toggle img.black {
+    display: none;
+}
+
+#side-bar {
+    border-right-color: #666666;
+}
+
+#status {
     background-color: #023496;
+    color: #FFFFFF;
+    border-bottom-color: #666666;
+}
+
+#system-menu {
+    background-color: #E6E6E6;
+    border-bottom-color: #666666;
+}
+
+#system-menu .header {
+    background-color: #666666;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    color: #000000;
+}
+
+#system-menu .system-button:hover {
+    background-color: #CBCBCB;
+}
+
+#system-menu .system-button.current {
+    background-color: #CBCBCB;
+    font-weight: bold;
+    cursor: default;
+}
+
+#system-menu-toggle img.black {
+    display: none;
+}
+
+#theme {
+    background-color: #023496;
+    color: #FFFFFF;
+    border-top-color: #666666;
+}
+
+#theme a {
     color: #FFFFFF;
 }
 
@@ -241,6 +282,19 @@ table.striped tr:nth-child(2n-1) {
 
 .adherence-indicator.very-behind {
     background-color: #FD393E;
+}
+
+.banner {
+    background-color: #FFB960;
+    color: #FFFFFF;
+}
+
+.banner a {
+    color: #FFFFFF;
+}
+
+.banner .close-button img.black {
+    display: none;
 }
 
 .button {
@@ -369,7 +423,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .service-indicator .dates {
-    border-color: #989898;
+    border-color: #666666;
 }
 
 .service-indicator .dates .date.limited {

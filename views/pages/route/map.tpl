@@ -1,5 +1,5 @@
 
-% rebase('base', title=str(route), include_maps=True, show_refresh_button=True)
+% rebase('base', title=str(route), include_maps=True, full_map=True)
 
 % if len(route.trips) == 0:
     <div class="page-header">
@@ -37,5 +37,5 @@
     
     % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 
-    % include('components/map_z_toggle')
+    % include('components/map_toggle')
 % end

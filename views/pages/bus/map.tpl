@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Bus {bus}', include_maps=True, show_refresh_button=True)
+% rebase('base', title=f'Bus {bus}', include_maps=True, full_map=True)
 
 % if position is None:
     <div class="page-header">
@@ -32,5 +32,5 @@
         % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
     % end
 
-    % include('components/map_z_toggle')
+    % include('components/map_toggle')
 % end

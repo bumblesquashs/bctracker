@@ -43,7 +43,7 @@ def stop(cron_id):
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
-        today = Date.today(system)
+        today = Date.today(system.timezone)
         try:
             if today.weekday == 0 or not gtfs.validate(system):
                 gtfs.update(system)
