@@ -98,7 +98,7 @@
         <div class="news-post">
             <div class="header">
                 <h3>Summer Update</h3>
-                September 1, 2022
+                August 29, 2022
             </div>
             <div class="content">
                 <p>
@@ -115,7 +115,7 @@
                 </p>
                 <p>
                     On the topic of feedback, we have a great new place to go for that: the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a>!
-                    Even if you don't have any feedback, everyone is welcome to come chat, share photos and videos, debate the future of transit in BC, and more.
+                    Even if you don't have any feedback, everyone is welcome to come chat, share photos and videos, and more.
                     With the BCTracker Bot, you can get alerted when new buses enter service or transfer between systems.
                     And if you enjoy transit photography, we're also kicking it off with a back-to-school photo contest with special Discord roles for the winners!
                 </p>
