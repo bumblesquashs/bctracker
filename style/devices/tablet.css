@@ -146,10 +146,6 @@ table {
     height: 36px;
 }
 
-#status {
-    padding: 10px 20px;
-}
-
 #status .content {
     text-align: center;
 }
@@ -176,6 +172,7 @@ table {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 #system-menu .system-button {

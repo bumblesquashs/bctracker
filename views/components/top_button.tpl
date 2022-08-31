@@ -13,8 +13,17 @@
         }
     }
     
+    document.body.onscroll = function() {
+        if (document.body.scrollTop > height) {
+            topButton.style.display = "block";
+        } else {
+            topButton.style.display = "none";
+        }
+    }
+    
     function scrollToTop() {
         contentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
     }
 </script>
 
