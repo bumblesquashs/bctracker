@@ -1,27 +1,28 @@
 #!/usr/bin/env python
 
 import os
-import sqlite3
 from zipfile import ZipFile
 from glob import glob
-from datetime import datetime, timedelta
 
-CWD = os.path.dirname(os.path.abspath(__file__))
+import database
 
-connection = sqlite3.connect(f'{CWD}/data/bctracker.db')
-backup = sqlite3.connect(f'{CWD}/archives/bctracker.db')
-connection.backup(backup)
-connection.close()
-backup.close()
-
-date = datetime.now().replace(day=1) - timedelta(days=1)
-formatted_date = date.strftime('%Y-%m')
-
-with ZipFile(f'{CWD}/backups/{formatted_date}.zip', 'w') as zip:
-    zip.write(f'{CWD}/archives/bctracker.db', 'bctracker.db')
-    for file in glob(f'{CWD}/archives/gtfs/*_{formatted_date}-*.zip'):
-        zip.write(file, file[len(f'{CWD}/archives/'):])
-        os.remove(file)
-    for file in glob(f'{CWD}/archives/realtime/*_{formatted_date}-*.bin'):
-        zip.write(file, file[len(f'{CWD}/archives/'):])
-        os.remove(file)
+def run(date, include_db):
+    if include_db:
+        database.backup()
+    
+    formatted_date = date.strftime('%Y-%m-%d')
+    
+    gtfs_files = glob(f'archives/gtfs/*_{formatted_date}.zip')
+    realtime_files = glob(f'archives/realtime/*_{formatted_date}-*.bin')
+    
+    if len(gtfs_files) > 0 or len(realtime_files) > 0:
+        print(f'Creating backup for {formatted_date} ({len(gtfs_files)} GTFS, {len(realtime_files)} RT)')
+        with ZipFile(f'backups/{formatted_date}.zip', 'w') as zip:
+            if include_db:
+                zip.write('archives/bctracker.db', 'bctracker.db')
+            for file in gtfs_files:
+                zip.write(file, file[len('archives/'):])
+                os.remove(file)
+            for file in realtime_files:
+                zip.write(file, file[len('archives/'):])
+                os.remove(file)
