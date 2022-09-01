@@ -1,7 +1,7 @@
 import os
 import sys
 import signal
-from datetime import datetime
+from datetime import datetime, timedelta
 from crontab import CronTab
 
 import helpers.system
@@ -11,6 +11,7 @@ from models.date import Date
 import gtfs
 import realtime
 import database
+import backup
 
 PID = os.getpid()
 CWD = os.path.dirname(__file__)
@@ -31,9 +32,6 @@ def start(cron_id):
         
         realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=cron_id)
         realtime_job.minute.every(1)
-        
-        backup_job = cron.new(command=f'{EXC} {CWD}/backup.py', comment=cron_id)
-        backup_job.setall('0 0 1 * *')
 
 def stop(cron_id):
     '''Removes all cron jobs'''
@@ -54,6 +52,8 @@ def handle_gtfs(sig, frame):
         except Exception as e:
             print(f'Error: Failed to update gtfs for {system}')
             print(f'Error message: {e}')
+    date = datetime.now() - timedelta(days=1)
+    backup.run(date, date.weekday() == 0)
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
