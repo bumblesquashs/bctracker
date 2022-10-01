@@ -83,12 +83,12 @@
         );
         
         let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');
-        let currentShapeIDs = []
+        let currentShapeIDs = [];
         let markers = [];
         let tripLinesVisible = false;
         let automaticRefresh = false;
         let showNISBuses = true;
-        let hoverPosition = null
+        let hoverPosition = null;
         
         const shapeIDs = [];
         
@@ -98,7 +98,7 @@
         })
         
         function updateMap(resetCoordinates) {
-            currentShapeIDs = []
+            currentShapeIDs = [];
             for (const marker of markers) {
                 marker.remove();
             }
@@ -109,22 +109,22 @@
             
             for (const position of positions) {
                 if (position.shape_id !== null && position.shape_id !== undefined) {
-                    const shapeID = position.system_id + "_" + position.shape_id
+                    const shapeID = position.system_id + "_" + position.shape_id;
                     if (!(currentShapeIDs.includes(shapeID))) {
-                        currentShapeIDs.push(shapeID)
+                        currentShapeIDs.push(shapeID);
                     }
                 }
                 
                 const adherenceElement = document.createElement("span")
                 if (position.adherence !== null && position.adherence !== undefined) {
-                    const adherence = position.adherence
-                    adherenceElement.classList.add("adherence-indicator")
-                    adherenceElement.classList.add(adherence.status_class)
-                    adherenceElement.innerHTML = adherence.value
+                    const adherence = position.adherence;
+                    adherenceElement.classList.add("adherence-indicator");
+                    adherenceElement.classList.add(adherence.status_class);
+                    adherenceElement.innerHTML = adherence.value;
                 }
                 
                 const element = document.createElement("div");
-                element.id = "bus-marker-" + position.bus_number
+                element.id = "bus-marker-" + position.bus_number;
                 element.className = "marker";
                 if (position.shape_id === null || position.shape_id === undefined) {
                     element.classList.add("nis-bus");
@@ -149,7 +149,7 @@
                     details.className = "details";
                     details.innerHTML = "\
                         <div class='title'>Unknown Bus</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>"
+                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
                     
                     element.appendChild(icon);
                     element.appendChild(details);
@@ -223,7 +223,7 @@
                 }
             }
             if (tripLinesVisible) {
-                updateRouteData()
+                updateRouteData();
             }
         }
         
@@ -233,7 +233,7 @@
             checkboxImage.classList.toggle("hidden");
             
             if (automaticRefresh) {
-                updatePositionData()
+                updatePositionData();
             }
         }
         
@@ -246,7 +246,7 @@
                 if (showNISBuses) {
                     element.classList.remove("hidden");
                 } else {
-                    element.classList.add("hidden")
+                    element.classList.add("hidden");
                 }
             }
         }
