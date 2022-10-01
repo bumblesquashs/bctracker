@@ -50,6 +50,15 @@
             </div>
             <span class="checkbox-label">Automatically Refresh</span>
         </div>
+        <div class="checkbox" onclick="toggleNISBuses()">
+            <div class="box">
+                <div id="nis-image">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
+                </div>
+            </div>
+            <span class="checkbox-label">Show NIS Buses</span>
+        </div>
     </div>
     
     <div id="map" class="full-screen"></div>
@@ -78,6 +87,7 @@
         let markers = [];
         let tripLinesVisible = false;
         let automaticRefresh = false;
+        let showNISBuses = true;
         let hoverPosition = null
         
         const shapeIDs = [];
@@ -116,6 +126,12 @@
                 const element = document.createElement("div");
                 element.id = "bus-marker-" + position.bus_number
                 element.className = "marker";
+                if (position.shape_id === null || position.shape_id === undefined) {
+                    element.classList.add("nis-bus");
+                    if (!showNISBuses) {
+                        element.classList.add("hidden");
+                    }
+                }
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
@@ -218,6 +234,20 @@
             
             if (automaticRefresh) {
                 updatePositionData()
+            }
+        }
+        
+        function toggleNISBuses() {
+            showNISBuses = !showNISBuses;
+            const checkboxImage = document.getElementById("nis-image");
+            checkboxImage.classList.toggle("hidden");
+            
+            for (const element of document.getElementsByClassName("nis-bus")) {
+                if (showNISBuses) {
+                    element.classList.remove("hidden");
+                } else {
+                    element.classList.add("hidden")
+                }
             }
         }
         
