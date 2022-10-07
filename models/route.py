@@ -84,7 +84,7 @@ class Route:
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
-        services = {t.service for t in trips if t.is_current}
+        services = {t.service for t in trips}
         self.service_group = ServiceGroup.combine(services)
         self.sheets = helpers.sheet.combine(services)
     

@@ -37,7 +37,7 @@ class ServiceException:
 class ServicePattern:
     '''The days of a week when a service is or is not running within a given date range'''
     
-    __slots__ = ('start_date', 'end_date', 'timezone', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'exceptions', 'special', 'indices', 'binary_string', 'name')
+    __slots__ = ('start_date', 'end_date', 'timezone', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'exceptions', 'special', 'avg_days', 'indices', 'binary_string', 'name')
     
     def __init__(self, start_date, end_date, timezone, mon, tue, wed, thu, fri, sat, sun, exceptions):
         self.start_date = start_date
@@ -53,6 +53,8 @@ class ServicePattern:
         self.exceptions = exceptions
         
         self.special = not (mon or tue or wed or thu or fri or sat or sun)
+        
+        self.avg_days = ((end_date.datetime - start_date.datetime).days + 1) / 7
         
         values = [mon, tue, wed, thu, fri, sat, sun]
         self.indices = [i for i, value in enumerate(values) if value]
@@ -207,8 +209,8 @@ class ServicePattern:
         '''Returns the status class of this service on the given weekday'''
         included_count = len([d for d in self.included_dates if d.weekday == weekday])
         excluded_count = len([d for d in self.excluded_dates if d.weekday == weekday])
-        if active or included_count > 3:
-            if excluded_count > 3:
+        if active or (included_count / self.avg_days) > 0.3:
+            if (excluded_count / self.avg_days) > 0.7:
                 return 'limited'
             return 'running'
         if included_count > 0:

@@ -1,6 +1,8 @@
 
 import helpers.region
 
+from models.service import ServiceGroup
+
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
@@ -94,6 +96,10 @@ class System:
             return f'at {time} {time.timezone_name}'
         return date.format_since()
     
+    @property
+    def service_group(self):
+        return ServiceGroup.combine(self.services.values())
+    
     def get_block(self, block_id):
         '''Returns the block with the given ID, or None'''
         if block_id in self.blocks:
@@ -102,7 +108,7 @@ class System:
     
     def get_blocks(self):
         '''Returns all blocks that are current'''
-        return sorted([b for b in self.blocks.values() if b.is_current])
+        return sorted(self.blocks.values())
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number, or None'''
@@ -114,7 +120,7 @@ class System:
     
     def get_routes(self):
         '''Returns all routes that are current'''
-        return sorted([r for r in self.routes.values() if r.is_current])
+        return sorted(self.routes.values())
     
     def get_service(self, service_id):
         '''Returns the service with the given ID, or None'''
@@ -124,7 +130,7 @@ class System:
     
     def get_services(self):
         '''Returns all services that are current'''
-        return sorted([s for s in self.services.values() if s.is_current])
+        return sorted(self.services.values())
     
     def get_shape(self, shape_id):
         '''Returns the shape with the given ID, or None'''
@@ -140,7 +146,7 @@ class System:
     
     def get_sheets(self):
         '''Returns all sheets that are current'''
-        return sorted({s for s in self.sheets.values() if s.is_current})
+        return sorted(set(self.sheets.values()))
     
     def get_stop(self, stop_id=None, number=None):
         '''Returns the stop with the given ID or number, or None'''
@@ -152,7 +158,7 @@ class System:
     
     def get_stops(self):
         '''Returns all stops that are current'''
-        return [s for s in self.stops.values() if s.is_current]
+        return sorted(self.stops.values())
     
     def get_trip(self, trip_id):
         '''Returns the trip with the given ID, or None'''
@@ -162,7 +168,7 @@ class System:
     
     def get_trips(self):
         '''Returns all trips that are current'''
-        return [t for t in self.trips.values() if t.is_current]
+        return self.trips.values()
     
     def search_routes(self, query):
         '''Returns all routes that match the given query'''

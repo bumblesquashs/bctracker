@@ -30,7 +30,7 @@ class Stop:
         self.lon = lon
         self.departures = departures
         
-        services = {d.trip.service for d in departures if d.trip is not None and d.is_current}
+        services = {d.trip.service for d in departures if d.trip is not None}
         self.service_group = ServiceGroup.combine(services)
         self.sheets = helpers.sheet.combine(services)
     

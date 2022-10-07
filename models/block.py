@@ -13,7 +13,7 @@ class Block:
         self.id = id
         self.trips = trips
         
-        services = {t.service for t in trips if t.is_current}
+        services = {t.service for t in trips}
         self.service_group = ServiceGroup.combine(services)
         self.sheets = helpers.sheet.combine(services)
     
