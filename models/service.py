@@ -37,35 +37,35 @@ class ServiceException:
 class ServicePattern:
     '''The days of a week when a service is or is not running within a given date range'''
     
-    __slots__ = ('system', 'id', 'start_date', 'end_date', 'weekdays', 'exceptions', 'special', 'avg_days', 'binary_string', 'name')
+    __slots__ = ('system', 'id', 'start_date', 'end_date', 'weekdays', 'included_dates', 'excluded_dates', 'special', 'avg_days', 'binary_string', 'name')
     
-    def __init__(self, system, id, start_date, end_date, weekdays, exceptions):
+    def __init__(self, system, id, start_date, end_date, weekdays, included_dates, excluded_dates):
         for weekday in Weekday:
             if weekday in weekdays:
-                weekday_exceptions = [e for e in exceptions if e.date.weekday == weekday and e.type == ServiceExceptionType.EXCLUDED]
-                missing_dates = get_missing_dates(weekday, start_date, end_date, [e.date for e in weekday_exceptions])
-                if len(weekday_exceptions) == 0 and len(missing_dates) == 0:
-                    weekdays.remove(weekday)
-                elif len(weekday_exceptions) >= len(missing_dates):
-                    weekdays.remove(weekday)
-                    exceptions = [e for e in exceptions if e not in weekday_exceptions]
-                    for date in missing_dates:
-                        exceptions.append(ServiceException(id, date, ServiceExceptionType.INCLUDED))
+                explicit_dates = {d for d in excluded_dates if d.weekday == weekday}
             else:
-                weekday_exceptions = [e for e in exceptions if e.date.weekday == weekday and e.type == ServiceExceptionType.INCLUDED]
-                missing_dates = get_missing_dates(weekday, start_date, end_date, [e.date for e in weekday_exceptions])
-                if len(weekday_exceptions) >= len(missing_dates):
+                explicit_dates = {d for d in included_dates if d.weekday == weekday}
+            implicit_dates = get_implicit_dates(weekday, start_date, end_date, explicit_dates)
+            if len(explicit_dates) == 0 and len(implicit_dates) == 0:
+                if weekday in weekdays:
+                    weekdays.remove(weekday)
+            elif len(explicit_dates) > len(implicit_dates):
+                if weekday in weekdays:
+                    weekdays.remove(weekday)
+                    included_dates = included_dates.union(implicit_dates)
+                    excluded_dates -= explicit_dates
+                else:
                     weekdays.add(weekday)
-                    exceptions = [e for e in exceptions if e not in weekday_exceptions]
-                    for date in missing_dates:
-                        exceptions.append(ServiceException(id, date, ServiceExceptionType.EXCLUDED))
+                    included_dates -= explicit_dates
+                    excluded_dates = excluded_dates.union(implicit_dates)
         
         self.system = system
         self.id = id
         self.start_date = start_date
         self.end_date = end_date
         self.weekdays = weekdays
-        self.exceptions = exceptions
+        self.included_dates = included_dates
+        self.excluded_dates = excluded_dates
         
         self.special = len(weekdays) == 0
         self.avg_days = ((end_date.datetime - start_date.datetime).days + 1) / 7
@@ -109,29 +109,19 @@ class ServicePattern:
     def __lt__(self, other):
         if self.special and other.special:
             if len(self.included_dates) > 0 and len(other.included_dates) > 0:
-                return self.included_dates[0] < other.included_dates[0]
+                return sorted(self.included_dates)[0] < sorted(other.included_dates)[0]
             return self.start_date < other.start_date
         return self.binary_string > other.binary_string
     
     @property
-    def included_dates(self):
-        '''Returns service exception dates that are included in this service pattern'''
-        return sorted({e.date for e in self.exceptions if e.type == ServiceExceptionType.INCLUDED})
-    
-    @property
     def included_dates_string(self):
         '''Returns a formatted string of service exception dates that are included in this service pattern'''
-        return helpers.date.flatten(self.included_dates)
-    
-    @property
-    def excluded_dates(self):
-        '''Returns service exception dates that are excluded from this service pattern'''
-        return sorted({e.date for e in self.exceptions if e.type == ServiceExceptionType.EXCLUDED})
+        return helpers.date.flatten(sorted(self.included_dates))
     
     @property
     def excluded_dates_string(self):
         '''Returns a formatted string of service exception dates that are excluded from this service pattern'''
-        return helpers.date.flatten(self.excluded_dates)
+        return helpers.date.flatten(sorted(self.excluded_dates))
     
     @property
     def date_string(self):
@@ -190,7 +180,9 @@ class Service(ServicePattern):
         values = [mon, tue, wed, thu, fri, sat, sun]
         weekdays = {Weekday(i) for i, v in enumerate(values) if v}
         service_exceptions = exceptions.get(id, [])
-        return cls(system, id, start_date, end_date, weekdays, service_exceptions)
+        included_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
+        excluded_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
+        return cls(system, id, start_date, end_date, weekdays, included_dates, excluded_dates)
     
     def __hash__(self):
         return hash(self.id)
@@ -206,7 +198,7 @@ class Service(ServicePattern):
 class ServiceGroup(ServicePattern):
     '''A collection of services represented as a single service pattern'''
     
-    __slots__ = ('services')
+    __slots__ = ('services', 'modified_dates')
     
     @classmethod
     def combine(cls, system, services):
@@ -217,26 +209,34 @@ class ServiceGroup(ServicePattern):
         start_date = min({s.start_date for s in services})
         end_date = max({s.end_date for s in services})
         weekdays = {d for s in services for d in s.weekdays}
-        exceptions = [e for s in services for e in s.exceptions]
-        return cls(system, id, start_date, end_date, weekdays, exceptions, services)
+        included_dates = {d for s in services for d in s.included_dates}
+        excluded_dates = {d for s in services for d in s.excluded_dates}
+        return cls(system, id, start_date, end_date, weekdays, included_dates, excluded_dates, services)
     
-    def __init__(self, system, id, start_date, end_date, weekdays, exceptions, services):
-        super().__init__(system, id, start_date, end_date, weekdays, exceptions)
+    def __init__(self, system, id, start_date, end_date, weekdays, included_dates, excluded_dates, services):
+        modified_dates = included_dates.intersection(excluded_dates)
+        super().__init__(system, id, start_date, end_date, weekdays, included_dates - modified_dates, excluded_dates - modified_dates)
         self.services = services
+        self.modified_dates = modified_dates
     
     def __hash__(self):
         return hash(self.id)
     
     def __eq__(self, other):
         return self.id == other.id
+    
+    @property
+    def modified_dates_string(self):
+        '''Returns a formatted string of dates that are modified in this service group'''
+        return helpers.date.flatten(sorted(self.modified_dates))
 
-def get_missing_dates(weekday, start_date, end_date, dates):
-    missing_dates = set()
+def get_implicit_dates(weekday, start_date, end_date, explicit_dates):
+    implicit_dates = set()
     date = start_date
     while date.weekday != weekday:
         date += timedelta(days=1)
     while date <= end_date:
-        if date not in dates:
-            missing_dates.add(date)
+        if date not in explicit_dates:
+            implicit_dates.add(date)
         date += timedelta(weeks=1)
-    return missing_dates
+    return implicit_dates
