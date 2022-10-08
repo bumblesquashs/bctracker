@@ -14,7 +14,7 @@ class Block:
         self.trips = trips
         
         services = {t.service for t in trips}
-        self.service_group = ServiceGroup.combine(services)
+        self.service_group = ServiceGroup.combine(system, services)
         self.sheets = helpers.sheet.combine(services)
     
     def __eq__(self, other):

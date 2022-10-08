@@ -98,7 +98,7 @@ class System:
     
     @property
     def service_group(self):
-        return ServiceGroup.combine(self.services.values())
+        return ServiceGroup.combine(self, self.get_services())
     
     def get_block(self, block_id):
         '''Returns the block with the given ID, or None'''

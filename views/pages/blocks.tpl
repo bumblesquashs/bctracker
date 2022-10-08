@@ -22,7 +22,7 @@
             Please check again later!
         </p>
     % else:
-        % sheets = system.get_sheets()
+        % sheets = [s for s in system.get_sheets() if s.is_current]
         
         % if len(sheets) > 1 or (len(sheets) == 1 and len(sheets[0].service_groups) > 1):
             % include('components/sheet_navigation', sheets=sheets)
