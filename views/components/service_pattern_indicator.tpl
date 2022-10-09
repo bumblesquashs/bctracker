@@ -1,4 +1,5 @@
 % from models.date import Weekday
+% from models.service import ServiceGroup
 
 <div class="service-indicator">
     % if pattern is None:
@@ -33,6 +34,9 @@
             % end
             % if len(pattern.excluded_dates) > 0:
                 <div class="details">No Service: {{ pattern.excluded_dates_string }}</div>
+            % end
+            % if type(pattern) is ServiceGroup and len(pattern.modified_dates) > 0:
+                <div class="details">Modified Service: {{ pattern.modified_dates_string }}</div>
             % end
         % end
     % end

@@ -1,6 +1,6 @@
 
 from models.date import Date
-from models.service import ServiceGroup, ServiceException, ServiceExceptionType
+from models.service import ServiceGroup
 
 class Sheet:
     '''A collection of overlapping services with defined start and end dates'''
@@ -39,23 +39,14 @@ class Sheet:
             date_services = {d:tuple({s for s in self.services if s.includes(d)}) for d in dates}
             special_service_sets = set(date_services.values())
             for service_set in special_service_sets:
-                id = '_'.join(sorted([s.id for s in service_set]))
-                start_date = min({s.start_date for s in service_set})
-                end_date = max({s.end_date for s in service_set})
-                service_set_dates = {k for k,v in date_services.items() if v == service_set}
-                exceptions = [ServiceException(id, d, ServiceExceptionType.INCLUDED) for d in service_set_dates]
-                groups.append(ServiceGroup(self.system, id, start_date, end_date, set(), exceptions, sorted(service_set)))
+                groups.append(ServiceGroup.combine(self.system, service_set, set()))
             
-            weekdays = {d for s in self.services for d in s.weekdays if not s.special}
+            weekdays = {w for s in self.services for w in s.weekdays if not s.special}
             weekday_services = {w:tuple({s for s in self.services if w in s.weekdays}) for w in weekdays}
             service_sets = set(weekday_services.values())
             for service_set in service_sets:
-                id = '_'.join(sorted([s.id for s in service_set]))
-                start_date = min({s.start_date for s in service_set})
-                end_date = max({s.end_date for s in service_set})
                 service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
-                exceptions = {e for s in service_set for e in s.exceptions}
-                groups.append(ServiceGroup(self.system, id, start_date, end_date, service_set_weekdays, exceptions, sorted(service_set)))
+                groups.append(ServiceGroup.combine(self.system, service_set, service_set_weekdays))
             self._service_groups = sorted(groups)
         return self._service_groups
     

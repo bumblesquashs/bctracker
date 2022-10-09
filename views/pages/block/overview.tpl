@@ -13,7 +13,7 @@
     <hr />
 </div>
 
-% sheets = block.sheets
+% sheets = [s for s in block.sheets if s.is_current]
 % service_groups = sorted({g for s in sheets for g in s.service_groups})
 % routes = block.get_routes()
 % trips = block.get_trips()

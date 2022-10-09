@@ -201,14 +201,15 @@ class ServiceGroup(ServicePattern):
     __slots__ = ('services', 'modified_dates')
     
     @classmethod
-    def combine(cls, system, services):
+    def combine(cls, system, services, weekdays=None):
         '''Returns a service group that combines a list of services'''
         if len(services) == 0:
             return None
         id = '_'.join(sorted({s.id for s in services}))
         start_date = min({s.start_date for s in services})
         end_date = max({s.end_date for s in services})
-        weekdays = {d for s in services for d in s.weekdays}
+        if weekdays is None:
+            weekdays = {w for s in services for w in s.weekdays}
         included_dates = {d for s in services for d in s.included_dates}
         excluded_dates = {d for s in services for d in s.excluded_dates}
         return cls(system, id, start_date, end_date, weekdays, included_dates, excluded_dates, services)

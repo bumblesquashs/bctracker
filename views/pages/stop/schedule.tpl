@@ -24,12 +24,12 @@
         Please check again later!
     </p>
 % else:
-    % sheets = stop.sheets
-
+    % sheets = [s for s in stop.sheets if s.is_current]
+    
     % if len(sheets) > 1 or (len(sheets) == 1 and len(sheets[0].service_groups) > 1):
         % include('components/sheet_navigation', sheets=sheets)
     % end
-
+    
     <div class="container">
         % for sheet in sheets:
             % for service_group in sheet.service_groups:
