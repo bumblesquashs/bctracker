@@ -20,7 +20,7 @@
         % if len(stop.departures) > 0:
             <div class="info-box">
                 <div class="section no-flex">
-                    % include('components/service_pattern_indicator', pattern=stop.service_group)
+                    % include('components/schedule_indicator', schedule=stop.schedule)
                 </div>
                 <div class="section">
                     % routes = stop.get_routes()

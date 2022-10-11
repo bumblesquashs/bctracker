@@ -6,7 +6,7 @@ from crontab import CronTab
 
 import helpers.system
 
-from models.date import Date
+from models.date import Date, Weekday
 
 import gtfs
 import realtime
@@ -43,10 +43,10 @@ def handle_gtfs(sig, frame):
     for system in helpers.system.find_all():
         today = Date.today(system.timezone)
         try:
-            if today.weekday == 0 or not gtfs.validate(system):
+            if today.weekday == Weekday.MON or not gtfs.validate(system):
                 gtfs.update(system)
             else:
-                new_services = [s for s in system.get_services() if s.start_date == today]
+                new_services = [s for s in system.get_services() if s.schedule.start_date == today]
                 if len(new_services) > 0:
                     gtfs.load(system)
         except Exception as e:

@@ -9,12 +9,12 @@ from colorsys import hls_to_rgb
 import helpers.sheet
 
 from models.match import Match
-from models.service import ServiceGroup
+from models.schedule import Schedule
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'schedule', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -85,8 +85,8 @@ class Route:
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
         services = {t.service for t in trips}
-        self.service_group = ServiceGroup.combine(system, services)
-        self.sheets = helpers.sheet.combine(services)
+        self.schedule = Schedule.combine(system, [s.schedule for s in services])
+        self.sheets = helpers.sheet.combine(system, services)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -102,14 +102,6 @@ class Route:
     
     def __gt__(self, other):
         return self.key > other.key
-    
-    @property
-    def is_current(self):
-        '''Checks if this route is included in the current sheet'''
-        for trip in self.trips:
-            if trip.is_current:
-                return True
-        return False
     
     @property
     def json(self):

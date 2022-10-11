@@ -139,11 +139,6 @@ class Trip:
         return sorted(shape.points)
     
     @property
-    def is_current(self):
-        '''Checks if this trip is included in the current sheet'''
-        return self.service.sheet.is_current
-    
-    @property
     def related_trips(self):
         '''Returns all trips with the same route, direction, start time, and end time as this trip'''
         if self._related_trips is None:

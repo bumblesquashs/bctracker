@@ -1,7 +1,7 @@
 
 import helpers.region
 
-from models.service import ServiceGroup
+from models.schedule import Schedule
 
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
@@ -97,8 +97,8 @@ class System:
         return date.format_since()
     
     @property
-    def service_group(self):
-        return ServiceGroup.combine(self, self.get_services())
+    def schedule(self):
+        return Schedule.combine(self, [s.schedule for s in self.get_services()])
     
     def get_block(self, block_id):
         '''Returns the block with the given ID, or None'''

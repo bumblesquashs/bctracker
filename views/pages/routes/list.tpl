@@ -37,7 +37,7 @@
                             <td><a href="{{ get_url(region_system, path) }}">{{ region_system }}</a></td>
                             <td>{{ len(region_system.get_routes()) }}</td>
                             <td>
-                                % include('components/service_pattern_indicator', pattern=region_system.service_group, compact=True)
+                                % include('components/schedule_indicator', schedule=region_system.schedule, compact=True)
                             </td>
                         </tr>
                     % end
@@ -68,7 +68,7 @@
                     <tr>
                         <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
                         <td>
-                            % include('components/service_pattern_indicator', pattern=route.service_group, compact=True)
+                            % include('components/schedule_indicator', schedule=route.schedule, compact=True)
                         </td>
                     </tr>
                 % end

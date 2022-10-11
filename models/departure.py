@@ -42,11 +42,6 @@ class Departure:
         return self.system.get_trip(self.trip_id)
     
     @property
-    def is_current(self):
-        '''Checks if this departure is included in the current sheet'''
-        return self.trip.is_current
-    
-    @property
     def json(self):
         '''Returns a representation of this departure in JSON-compatible format'''
         return {

@@ -1,12 +1,12 @@
 
 import helpers.sheet
 
-from models.service import ServiceGroup
+from models.schedule import Schedule
 
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = ('system', 'id', 'trips', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'trips', 'schedule', 'sheets')
     
     def __init__(self, system, id, trips):
         self.system = system
@@ -14,22 +14,14 @@ class Block:
         self.trips = trips
         
         services = {t.service for t in trips}
-        self.service_group = ServiceGroup.combine(system, services)
-        self.sheets = helpers.sheet.combine(services)
+        self.schedule = Schedule.combine(system, [s.schedule for s in services])
+        self.sheets = helpers.sheet.combine(system, services)
     
     def __eq__(self, other):
         return self.id == other.id
     
     def __lt__(self, other):
         return self.id < other.id
-    
-    @property
-    def is_current(self):
-        '''Checks if this block is included in the current sheet'''
-        for trip in self.trips:
-            if trip.is_current:
-                return True
-        return False
     
     @property
     def today_service_group(self):
@@ -44,7 +36,7 @@ class Block:
     def related_blocks(self):
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
-        return sorted(related_blocks, key=lambda b: b.service_group)
+        return sorted(related_blocks, key=lambda b: b.schedule)
     
     def get_trips(self, service_group=None):
         '''Returns all trips from this block that are part of the given service group'''

@@ -13,7 +13,7 @@
     <hr />
 </div>
 
-% sheets = [s for s in block.sheets if s.is_current]
+% sheets = block.sheets
 % service_groups = sorted({g for s in sheets for g in s.service_groups})
 % routes = block.get_routes()
 % trips = block.get_trips()
@@ -25,7 +25,7 @@
         
         <div class="info-box">
             <div class="section no-flex">
-                % include('components/service_pattern_indicator', pattern=block.service_group)
+                % include('components/schedule_indicator', schedule=block.schedule)
             </div>
             <div class="section">
                 <div class="name">Start time</div>
@@ -120,7 +120,7 @@
                     % for related_block in related_blocks:
                         <tr>
                             <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
-                            <td>{{ related_block.service_group }}</td>
+                            <td>{{ related_block.schedule }}</td>
                         </tr>
                     % end
                 </tbody>

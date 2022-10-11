@@ -1,34 +1,34 @@
 <div class="sheet-navigation">
     % for sheet in sheets:
-        <div class="sheet">
-            % special_service_groups = []
-            % if len(sheets) > 1:
-                <h3>{{ sheet }}</h3>
-            % end
-            <div class="button-container">
-                % for service_group in sheet.service_groups:
-                    % if service_group.special:
-                        % number = str(len(special_service_groups) + 1)
-                        % special_service_groups.append((service_group, number))
-                        <a href="#{{ service_group.id }}" class='button'>
-                            {{ service_group }}
-                            <span class="special-number">{{ number }}</span>
-                        </a>
-                    % else:
-                        <a href="#{{ service_group.id }}" class='button'>{{ service_group }}</a>
-                    % end
-                % end
+        % regular_service_groups = [g for g in sheet.service_groups if not g.special]
+        % special_service_groups = [g for g in sheet.service_groups if g.special]
+        <div class="info-box">
+            <div class="section no-flex">
+                <div class="service-indicator">
+                    <div class="title">{{ sheet }}</div>
+                </div>
             </div>
+            % if len(regular_service_groups) > 0:
+                <div class="section">
+                    <div class="name">Regular Service</div>
+                    <div class="value">
+                        % for service_group in regular_service_groups:
+                            <a href="#{{ service_group.id }}">{{ service_group }}</a>
+                            <br />
+                        % end
+                    </div>
+                </div>
+            % end
             % if len(special_service_groups) > 0:
-                <b>Special Service</b>
-                <ul class="special-services">
-                    % for (service_group, number) in special_service_groups:
-                        <li>
-                            <span class="special-number">{{ number }}.</span>
-                            {{ service_group.date_string }}
-                        </li>
-                    % end
-                </ul>
+                <div class="section">
+                    <div class="name">Special Service</div>
+                    <div class="value">
+                        % for service_group in special_service_groups:
+                            <a href="#{{ service_group.id }}">{{ service_group.date_string }}</a>
+                            <br />
+                        % end
+                    </div>
+                </div>
             % end
         </div>
     % end
