@@ -25,7 +25,7 @@
         
         <div class="info-box">
             <div class="section no-flex">
-                % include('components/schedule_indicator', schedule=block.schedule)
+                % include('components/sheet_sidebar', sheets=sheets)
             </div>
             <div class="section">
                 <div class="name">Start time</div>
@@ -34,7 +34,7 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
@@ -51,7 +51,7 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
@@ -68,7 +68,7 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
@@ -85,7 +85,7 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
@@ -190,7 +190,7 @@
                     <div class="section">
                         % if len(sheets) > 1 or len(sheet.service_groups) > 1:
                             <h3 class="title">{{ service_group }}</h3>
-                            <div class="subtitle">{{ service_group.date_string }}</div>
+                            <div class="subtitle">{{ service_group.schedule.date_string }}</div>
                         % end
                         <table class="striped">
                             <thead>

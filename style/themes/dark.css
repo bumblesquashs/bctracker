@@ -419,23 +419,23 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
-.service-indicator .dates {
+.schedule .weekdays {
     border-color: #565656;
 }
 
-.service-indicator .dates .date.limited {
+.schedule .weekdays .weekday.limited {
     background-color: #B65901;
 }
 
-.service-indicator .dates .date.not-running {
+.schedule .weekdays .weekday.not-running {
     background-color: #700000;
 }
 
-.service-indicator .dates .date.running {
+.schedule .weekdays .weekday.running {
     background-color: #005900;
 }
 
-.service-indicator .details {
+.schedule .details {
     color: #ABABAB;
 }
 

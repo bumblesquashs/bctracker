@@ -481,23 +481,23 @@ table.striped tr {
     border-color: #FFFFFF;
 }
 
-.service-indicator {
+.schedule {
     text-shadow: none;
 }
 
-.service-indicator .dates {
+.schedule .weekdays {
     border-color: #000000;
 }
 
-.service-indicator .dates .date {
+.schedule .weekdays .date {
     background-color: #FF7F7F;
 }
 
-.service-indicator .dates .date.running {
+.schedule .weekdays .date.running {
     background-color: #7DBD88;
 }
 
-.service-indicator .details {
+.schedule .details {
     color: #666666;
 }
 

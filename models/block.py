@@ -14,8 +14,8 @@ class Block:
         self.trips = trips
         
         services = {t.service for t in trips}
-        self.schedule = Schedule.combine(system, [s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
+        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.sheets = helpers.sheet.combine(system, services, True)
     
     def __eq__(self, other):
         return self.id == other.id

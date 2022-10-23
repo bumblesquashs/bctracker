@@ -68,7 +68,7 @@
                     <tr>
                         <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
                         <td>
-                            % include('components/schedule_indicator', schedule=route.schedule, compact=True)
+                            % include('components/schedule_indicator', schedule=route.schedule, compact=True, url=get_url(system, f'routes/{route.number}/schedule'))
                         </td>
                     </tr>
                 % end

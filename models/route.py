@@ -85,7 +85,7 @@ class Route:
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
         services = {t.service for t in trips}
-        self.schedule = Schedule.combine(system, [s.schedule for s in services])
+        self.schedule = Schedule.combine([s.schedule for s in services])
         self.sheets = helpers.sheet.combine(system, services)
     
     def __str__(self):

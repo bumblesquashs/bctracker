@@ -14,6 +14,7 @@ import helpers.theme
 import helpers.transfer
 
 from models.bus import Bus
+from models.date import Date
 
 import cron
 import database
@@ -381,7 +382,17 @@ def route_schedule_page(route_number, system_id=None):
     '/<system_id>/blocks/'
 ])
 def blocks_page(system_id=None):
-    return page('blocks', system_id, path='blocks')
+    return page('blocks/list', system_id, path='blocks')
+
+@app.get([
+    '/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>',
+    '/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>/',
+    '/<system_id>/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>',
+    '/<system_id>/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>/'
+])
+def blocks_schedule_date_page(date_string, system_id=None):
+    date = Date.parse_db(date_string, None)
+    return page('blocks/date', system_id, path=f'blocks/schedule/{date_string}', date=date)
 
 @app.get([
     '/blocks/<block_id>',

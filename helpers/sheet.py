@@ -1,7 +1,7 @@
 
 from models.sheet import Sheet
 
-def combine(system, services):
+def combine(system, services, include_special = False):
     '''Returns a list of sheets made from services with overlapping start/end dates'''
     sheets = []
     cumulative_services = []
@@ -9,10 +9,11 @@ def combine(system, services):
         if len(cumulative_services) == 0:
             cumulative_services.append(service)
         else:
-            if service.schedule.start_date <= cumulative_services[-1].schedule.end_date:
+            end_date = max({s.schedule.end_date for s in cumulative_services})
+            if service.schedule.start_date <= end_date:
                 cumulative_services.append(service)
             else:
-                sheets.append(Sheet.combine(system, cumulative_services))
+                sheets.append(Sheet.combine(system, cumulative_services, include_special))
                 cumulative_services = [service]
-    sheets.append(Sheet.combine(cumulative_services))
+    sheets.append(Sheet.combine(system, cumulative_services, include_special))
     return sorted(sheets)

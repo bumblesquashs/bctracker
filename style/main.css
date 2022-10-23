@@ -603,70 +603,74 @@ table.striped tr.section td {
     border-style: solid;
 }
 
-.service-indicator .dates {
+.schedule .legend {
     display: flex;
     flex-direction: row;
-    font-weight: bold;
-    font-family: Helvetica, sans-serif;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 11pt;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.schedule .legend .icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.schedule .months {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 5px;
+    column-gap: 10px;
+}
+
+.schedule .months .month {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.schedule .months .month .name {
+    font-size: 13pt;
+}
+
+.schedule .months .month .date {
+    font-size: 11pt;
+    padding: 1px 4px;
+    border-radius: 4px;
+    min-width: 14px;
     user-select: none;
-    border-width: 1px;
-    border-style: solid;
-    margin-bottom: 5px;
-}
-
-.service-indicator .dates .date {
-    flex: 1;
-    padding: 5px;
-    font-size: 10pt;
     text-align: center;
+    text-decoration: none;
 }
 
-.service-indicator .dates.compact {
-    margin-bottom: 0px;
-}
-
-.service-indicator .dates.compact .date {
-    padding: 2px 4px;
-}
-
-.service-indicator .details {
-    font-size: 12pt;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.service-indicator .title {
+.schedule .title {
     margin-bottom: 5px;
     text-align: center;
 }
 
-.sheet-navigation {
+.sheet-header {
+    display: flex;
     margin-bottom: 20px;
 }
 
-.sheet-navigation .sheet {
-    margin-bottom: 20px;
+.sheet-header .title {
+    font-size: 24px;
 }
 
-.sheet-navigation .sheet .button-container .button .special-number {
-    font-size: 10pt;
-    line-height: 10pt;
-    position: relative;
-    top: -0.4em;
-}
-
-.sheet-navigation .sheet .special-services {
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-.sheet-navigation .sheet .special-services li {
-    margin-bottom: 2px;
-}
-
-.sheet-navigation .sheet .special-services .special-number {
-    font-weight: bold;
+.sheet-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .spacer {
@@ -727,4 +731,26 @@ table.striped tr.section td {
 
 .tooltip-anchor:hover .tooltip {
     display: block;
+}
+
+.weekdays {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-family: Helvetica, sans-serif;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.weekdays .weekday {
+    flex: 1;
+    font-size: 11pt;
+    text-align: center;
+    padding: 7px 5px;
+    user-select: none;
+    text-decoration: none;
+}
+
+.weekdays.compact .weekday {
+    padding: 2px 5px;
 }

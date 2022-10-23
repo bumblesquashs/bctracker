@@ -19,7 +19,7 @@
             
             <div class="info-box">
                 <div class="section no-flex">
-                    % include('components/schedule_indicator', schedule=route.schedule)
+                    % include('components/sheet_sidebar', sheets=route.sheets, url=get_url(system, f'routes/{route.number}/schedule'))
                 </div>
                 <div class="section">
                     % headsigns = route.get_headsigns()

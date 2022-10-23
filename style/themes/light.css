@@ -422,24 +422,35 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
-.service-indicator .dates {
-    border-color: #666666;
-}
-
-.service-indicator .dates .date.limited {
-    background-color: #FFA560;
-}
-
-.service-indicator .dates .date.not-running {
-    background-color: #FF7F7F;
-}
-
-.service-indicator .dates .date.running {
-    background-color: #7DBD88;
-}
-
-.service-indicator .details {
+.schedule .legend {
     color: #666666;
+}
+
+.schedule a.added:hover {
+    background-color: #509F5E;
+}
+
+.schedule a.modified:hover {
+    background-color: #E6853A;
+}
+
+.schedule a.removed:hover {
+    background-color: #DC5050;
+}
+
+.schedule .added {
+    background-color: #7DBD88;
+    color: #000000;
+}
+
+.schedule .modified {
+    background-color: #FFA560;
+    color: #000000;
+}
+
+.schedule .removed {
+    background-color: #FF7F7F;
+    color: #000000;
 }
 
 .tab-button {
@@ -461,4 +472,22 @@ table.striped tr:nth-child(2n-1) {
 .tooltip-anchor .tooltip {
     background-color: #666666;
     color: #FFFFFF;
+}
+
+.weekdays a.weekday.running:hover {
+    background-color: #509F5E;
+}
+
+.weekdays a.weekday.not-running:hover {
+    background-color: #DC5050;
+}
+
+.weekdays .weekday.not-running {
+    background-color: #FF7F7F;
+    color: #000000;
+}
+
+.weekdays .weekday.running {
+    background-color: #7DBD88;
+    color: #000000;
 }

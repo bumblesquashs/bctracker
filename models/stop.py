@@ -31,7 +31,7 @@ class Stop:
         self.departures = departures
         
         services = {d.trip.service for d in departures if d.trip is not None}
-        self.schedule = Schedule.combine(system, [s.schedule for s in services])
+        self.schedule = Schedule.combine([s.schedule for s in services])
         self.sheets = helpers.sheet.combine(system, services)
     
     def __str__(self):

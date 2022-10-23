@@ -277,6 +277,11 @@ table {
     overflow-wrap: break-word;
 }
 
+.sheet-header {
+    flex-direction: column;
+    gap: 20px;
+}
+
 .smaller-font {
     font-size: 11pt;
 }

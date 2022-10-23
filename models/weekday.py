@@ -11,17 +11,29 @@ class Weekday(IntEnum):
     SUN = 6
     
     def __str__(self):
+        return self.name
+    
+    @property
+    def name(self):
         if self == Weekday.MON:
-            return 'Mon'
+            return 'Monday'
         if self == Weekday.TUE:
-            return 'Tue'
+            return 'Tuesday'
         if self == Weekday.WED:
-            return 'Wed'
+            return 'Wednesday'
         if self == Weekday.THU:
-            return 'Thu'
+            return 'Thursday'
         if self == Weekday.FRI:
-            return 'Fri'
+            return 'Friday'
         if self == Weekday.SAT:
-            return 'Sat'
+            return 'Saturday'
         if self == Weekday.SUN:
-            return 'Sun'
+            return 'Sunday'
+    
+    @property
+    def short_name(self):
+        return self.name[0:3]
+    
+    @property
+    def abbreviation(self):
+        return self.name[0]

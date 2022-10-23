@@ -1,8 +1,6 @@
 
 from enum import IntEnum
 
-import helpers.date
-
 from models.date import Date
 from models.schedule import Schedule
 from models.weekday import Weekday
@@ -66,8 +64,18 @@ class Service:
         self.id = id
         self.schedule = schedule
     
+    def __str__(self):
+        return str(self.schedule)
+    
     def __hash__(self):
         return hash(self.id)
     
     def __eq__(self, other):
         return self.id == other.id
+    
+    def __lt__(self, other):
+        return self.schedule < other.schedule
+    
+    @property
+    def is_today(self):
+        return self.schedule.includes(Date.today(self.system.timezone))

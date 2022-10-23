@@ -98,7 +98,7 @@ class System:
     
     @property
     def schedule(self):
-        return Schedule.combine(self, [s.schedule for s in self.get_services()])
+        return Schedule.combine([s.schedule for s in self.get_services()])
     
     def get_block(self, block_id):
         '''Returns the block with the given ID, or None'''
@@ -136,12 +136,6 @@ class System:
         '''Returns the shape with the given ID, or None'''
         if shape_id in self.shapes:
             return self.shapes[shape_id]
-        return None
-    
-    def get_sheet(self, service_id):
-        '''Returns the sheet for the given service ID, or None'''
-        if service_id in self.sheets:
-            return self.sheets[service_id]
         return None
     
     def get_sheets(self):
