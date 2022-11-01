@@ -7,41 +7,15 @@
 </div>
 
 % if system is None:
-    <p>Choose a system to see individual blocks.</p>
-    <table class="striped">
-        <thead>
-            <tr>
-                <th>System</th>
-                <th># Blocks</th>
-                <th>Service Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            % for region in regions:
-                % region_systems = [s for s in systems if s.region == region]
-                % if len(region_systems) > 0:
-                    <tr class="section">
-                        <td colspan="3">
-                            {{ region }}
-                        </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                    % for region_system in region_systems:
-                        <tr>
-                            <td><a href="{{ get_url(region_system, path) }}">{{ region_system }}</a></td>
-                            <td>{{ len(region_system.get_blocks()) }}</td>
-                            <td>
-                                % include('components/schedule_indicator', schedule=region_system.schedule, compact=True, url=get_url(region_system, 'blocks'))
-                            </td>
-                        </tr>
-                    % end
-                % end
-            % end
-        </tbody>
-    </table>
+    <p>Blocks can only be viewed for individual systems. Please choose a system.</p>
+    <div class="non-desktop">
+        % include('components/systems')
+    </div>
 % else:
     <h2>{{ date.format_long() }}</h2>
-    <a href="{{ get_url(system, 'blocks') }}">Return to week view</a>
+    <p>
+        <a href="{{ get_url(system, 'blocks') }}">Return to week view</a>
+    </p>
     % blocks = [b for b in system.get_blocks() if b.schedule.includes(date)]
     % if len(blocks) == 0:
         <p>No blocks found for {{ system }} on {{ date.format_long() }}.</p>
@@ -68,15 +42,15 @@
             </thead>
             <tbody>
                 % for block in blocks:
-                    % start_time = block.get_start_time()
-                    % end_time = block.get_end_time()
+                    % start_time = block.get_start_time(date=date)
+                    % end_time = block.get_end_time(date=date)
                     <tr>
                         <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                        <td>{{ block.get_routes_string() }}</td>
+                        <td>{{ block.get_routes_string(date=date) }}</td>
                         <td class="non-mobile">{{ start_time }}</td>
                         <td class="non-mobile">{{ end_time }}</td>
                         <td class="mobile-only">{{ start_time }} - {{ end_time }}</td>
-                        <td class="desktop-only">{{ block.get_duration() }}</td>
+                        <td class="desktop-only">{{ block.get_duration(date=date) }}</td>
                     </tr>
                 % end
             </tbody>

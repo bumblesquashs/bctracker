@@ -40,7 +40,7 @@
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_start_time(service_group) }}</div>
+                        <div>{{ block.get_start_time(service_group=service_group) }}</div>
                     % end
                 </div>
             </div>
@@ -57,7 +57,7 @@
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_end_time(service_group) }}</div>
+                        <div>{{ block.get_end_time(service_group=service_group) }}</div>
                     % end
                 </div>
             </div>
@@ -74,7 +74,7 @@
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_duration(service_group) }}</div>
+                        <div>{{ block.get_duration(service_group=service_group) }}</div>
                     % end
                 </div>
             </div>
@@ -91,7 +91,7 @@
                                 % end
                             </div>
                         % end
-                        <div>{{ len(block.get_trips(service_group)) }}</div>
+                        <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
                     % end
                 </div>
             </div>

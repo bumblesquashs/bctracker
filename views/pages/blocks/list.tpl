@@ -7,7 +7,7 @@
 </div>
 
 % if system is None:
-    <p>Choose a system to see individual blocks.</p>
+    <p>Choose a system to see blocks.</p>
     <table class="striped">
         <thead>
             <tr>
@@ -80,15 +80,15 @@
                                         <tbody>
                                             % service_group_blocks = [b for b in blocks if len(b.get_trips(service_group)) > 0]
                                             % for block in service_group_blocks:
-                                                % start_time = block.get_start_time(service_group)
-                                                % end_time = block.get_end_time(service_group)
+                                                % start_time = block.get_start_time(service_group=service_group)
+                                                % end_time = block.get_end_time(service_group=service_group)
                                                 <tr>
                                                     <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                                    <td>{{ block.get_routes_string(service_group) }}</td>
+                                                    <td>{{ block.get_routes_string(service_group=service_group) }}</td>
                                                     <td class="non-mobile">{{ start_time }}</td>
                                                     <td class="non-mobile">{{ end_time }}</td>
                                                     <td class="mobile-only">{{ start_time }} - {{ end_time }}</td>
-                                                    <td class="desktop-only">{{ block.get_duration(service_group) }}</td>
+                                                    <td class="desktop-only">{{ block.get_duration(service_group=service_group) }}</td>
                                                 </tr>
                                             % end
                                         </tbody>

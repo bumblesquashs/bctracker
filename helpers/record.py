@@ -12,9 +12,9 @@ def create(bus, date, system, block, time, trip):
         'date': date.format_db(),
         'system_id': system.id,
         'block_id': block.id,
-        'routes': block.get_routes_string(),
-        'start_time': block.get_start_time().format_db(),
-        'end_time': block.get_end_time().format_db(),
+        'routes': block.get_routes_string(date=date),
+        'start_time': block.get_start_time(date=date).format_db(),
+        'end_time': block.get_end_time(date=date).format_db(),
         'first_seen': time.format_db(),
         'last_seen': time.format_db()
     })

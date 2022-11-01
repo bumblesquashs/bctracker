@@ -376,6 +376,22 @@ def route_schedule_page(route_number, system_id=None):
     return page('route/schedule', system_id, route=route)
 
 @app.get([
+    '/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
+    '/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/',
+    '/<system_id>/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
+    '/<system_id>/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/'
+])
+def route_schedule_date_page(route_number, date_string, system_id=None):
+    system = helpers.system.find(system_id)
+    if system is None:
+        return error_page('system', system_id, path=f'routes/{route_number}/schedule')
+    route = system.get_route(number=route_number)
+    if route is None:
+        return error_page('route', system_id, route_number=route_number)
+    date = Date.parse_db(date_string, None)
+    return page('route/date', system_id, route=route, date=date)
+
+@app.get([
     '/blocks',
     '/blocks/',
     '/<system_id>/blocks',
@@ -385,10 +401,10 @@ def blocks_page(system_id=None):
     return page('blocks/list', system_id, path='blocks')
 
 @app.get([
-    '/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>',
-    '/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>/',
-    '/<system_id>/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>',
-    '/<system_id>/blocks/schedule/<date_string:re:[0-9]{4}-[0-9]{2}-[0-9]{2}>/'
+    '/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
+    '/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/',
+    '/<system_id>/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
+    '/<system_id>/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/'
 ])
 def blocks_schedule_date_page(date_string, system_id=None):
     date = Date.parse_db(date_string, None)
@@ -552,6 +568,22 @@ def stop_schedule_page(stop_number, system_id=None):
     if stop is None:
         return error_page('stop', system_id, stop_number=stop_number)
     return page('stop/schedule', system_id, stop=stop)
+
+@app.get([
+    '/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
+    '/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/',
+    '/<system_id>/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
+    '/<system_id>/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/'
+])
+def stop_schedule_date_page(stop_number, date_string, system_id=None):
+    system = helpers.system.find(system_id)
+    if system is None:
+        return error_page('system', system_id, path=f'stops/{stop_number}/schedule')
+    stop = system.get_stop(number=stop_number)
+    if stop is None:
+        return error_page('stop', system_id, stop_number=stop_number)
+    date = Date.parse_db(date_string, None)
+    return page('stop/date', system_id, stop=stop, date=date)
 
 @app.get([
     '/about',

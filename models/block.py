@@ -38,38 +38,40 @@ class Block:
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
         return sorted(related_blocks, key=lambda b: b.schedule)
     
-    def get_trips(self, service_group=None):
+    def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block that are part of the given service group'''
         if service_group is None:
-            return sorted(self.trips)
+            if date is None:
+                return sorted(self.trips)
+            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
         return sorted([t for t in self.trips if t.service in service_group.services])
     
-    def get_routes(self, service_group=None):
+    def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this block that are part of the given service group'''
-        return sorted({t.route for t in self.get_trips(service_group)})
+        return sorted({t.route for t in self.get_trips(service_group, date)})
     
-    def get_routes_string(self, service_group=None):
+    def get_routes_string(self, service_group=None, date=None):
         '''Returns a string of all routes from this block that are part of the given service group'''
-        return ', '.join([r.number for r in self.get_routes(service_group)])
+        return ', '.join([r.number for r in self.get_routes(service_group, date)])
     
-    def get_start_time(self, service_group=None):
+    def get_start_time(self, service_group=None, date=None):
         '''Returns the start time of this block based on the given service group'''
-        trips = self.get_trips(service_group)
+        trips = self.get_trips(service_group, date)
         if len(trips) == 0:
             return None
         return trips[0].start_time
     
-    def get_end_time(self, service_group=None):
+    def get_end_time(self, service_group=None, date=None):
         '''Returns the end time of this block based on the given service group'''
-        trips = self.get_trips(service_group)
+        trips = self.get_trips(service_group, date)
         if len(trips) == 0:
             return None
         return trips[-1].end_time
     
-    def get_duration(self, service_group=None):
+    def get_duration(self, service_group=None, date=None):
         '''Returns the duration of this block based on the given service group'''
-        start_time = self.get_start_time(service_group)
-        end_time = self.get_end_time(service_group)
+        start_time = self.get_start_time(service_group, date)
+        end_time = self.get_end_time(service_group, date)
         if start_time is None or end_time is None:
             return None
         return start_time.format_difference(end_time)
