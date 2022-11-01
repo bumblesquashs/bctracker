@@ -3,12 +3,10 @@
 
 <div class="page-header">
     <h1 class="title">Routes</h1>
-    % if system is not None:
-        <div class="tab-button-bar">
-            <span class="tab-button current">List</span>
-            <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
-        </div>
-    % end
+    <div class="tab-button-bar">
+        <span class="tab-button current">List</span>
+        <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
+    </div>
     <hr />
 </div>
 
