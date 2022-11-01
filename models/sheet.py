@@ -14,10 +14,10 @@ class Sheet:
         service_groups = []
         if include_special:
             dates = {d for s in services for d in s.schedule.included_dates if s.schedule.special}
-            date_services = {d:tuple({s for s in services if s.schedule.special and s.schedule.includes(d)}) for d in dates}
+            date_services = {d:tuple({s for s in services if s.schedule.includes(d)}) for d in dates}
             for service_set in set(date_services.values()):
                 included_dates = {k for k,v in date_services.items() if v == service_set}
-                service_groups.append(ServiceGroup.combine(system, service_set, included_dates=included_dates))
+                service_groups.append(ServiceGroup.combine(system, service_set, weekdays=set(), included_dates=included_dates))
         weekdays = {w for s in services for w in s.schedule.weekdays if not s.schedule.special}
         weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in weekdays}
         for service_set in set(weekday_services.values()):
