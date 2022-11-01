@@ -6,7 +6,8 @@ from crontab import CronTab
 
 import helpers.system
 
-from models.date import Date, Weekday
+from models.date import Date
+from models.weekday import Weekday
 
 import gtfs
 import realtime
