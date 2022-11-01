@@ -1,7 +1,7 @@
 
 from models.sheet import Sheet
 
-def combine(system, services, include_special = False):
+def combine(system, services, include_special=False):
     '''Returns a list of sheets made from services with overlapping start/end dates'''
     sheets = []
     cumulative_services = []
@@ -15,5 +15,6 @@ def combine(system, services, include_special = False):
             else:
                 sheets.append(Sheet.combine(system, cumulative_services, include_special))
                 cumulative_services = [service]
-    sheets.append(Sheet.combine(system, cumulative_services, include_special))
+    if len(cumulative_services) > 0:
+        sheets.append(Sheet.combine(system, cumulative_services, include_special))
     return sorted(sheets)

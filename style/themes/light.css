@@ -474,12 +474,12 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.weekdays a.weekday.running:hover {
-    background-color: #509F5E;
-}
-
 .weekdays a.weekday.not-running:hover {
     background-color: #DC5050;
+}
+
+.weekdays a.weekday.running:hover {
+    background-color: #509F5E;
 }
 
 .weekdays .weekday.not-running {

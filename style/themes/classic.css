@@ -422,24 +422,35 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
-.schedule .weekdays {
-    border-color: #666666;
+.schedule .legend {
+    color: #666666;
 }
 
-.schedule .weekdays .weekday.limited {
-    background-color: #FFA560;
+.schedule a.added:hover {
+    background-color: #509F5E;
 }
 
-.schedule .weekdays .weekday.not-running {
-    background-color: #FF7F7F;
+.schedule a.modified:hover {
+    background-color: #E6853A;
 }
 
-.schedule .weekdays .weekday.running {
+.schedule a.removed:hover {
+    background-color: #DC5050;
+}
+
+.schedule .added {
     background-color: #7DBD88;
+    color: #000000;
 }
 
-.schedule .details {
-    color: #464646;
+.schedule .modified {
+    background-color: #FFA560;
+    color: #000000;
+}
+
+.schedule .removed {
+    background-color: #FF7F7F;
+    color: #000000;
 }
 
 .tab-button {
@@ -461,4 +472,22 @@ table.striped tr:nth-child(2n-1) {
 .tooltip-anchor .tooltip {
     background-color: #666666;
     color: #FFFFFF;
+}
+
+.weekdays a.weekday.not-running:hover {
+    background-color: #DC5050;
+}
+
+.weekdays a.weekday.running:hover {
+    background-color: #509F5E;
+}
+
+.weekdays .weekday.not-running {
+    background-color: #FF7F7F;
+    color: #000000;
+}
+
+.weekdays .weekday.running {
+    background-color: #7DBD88;
+    color: #000000;
 }

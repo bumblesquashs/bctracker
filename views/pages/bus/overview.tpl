@@ -65,8 +65,8 @@
                         <br />
                         % service_group = block.today_service_group
                         % start_time = block.get_start_time(service_group=service_group)
-                        % end_time = block.get_end_time(service_groupservice_group)
-                        % duration = block.get_duration(service_group)
+                        % end_time = block.get_end_time(service_group=service_group)
+                        % duration = block.get_duration(service_group=service_group)
                         <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                     </div>
                 </div>

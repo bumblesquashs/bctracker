@@ -7,7 +7,10 @@
 </div>
 
 % if system is None:
-    <p>Blocks can only be viewed for individual systems. Please choose a system.</p>
+    <p>
+        Blocks can only be viewed for individual systems.
+        Please choose a system.
+    </p>
     <div class="non-desktop">
         % include('components/systems')
     </div>

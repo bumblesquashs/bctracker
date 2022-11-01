@@ -112,8 +112,6 @@ class Schedule:
     @property
     def date_string(self):
         '''Returns a string indicating the dates that this schedule operates'''
-        if self.special and len(self.included_dates) > 0:
-            return self.included_dates_string
         if self.start_date == self.end_date:
             return str(self.start_date)
         return f'{self.start_date} to {self.end_date}'

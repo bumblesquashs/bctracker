@@ -419,24 +419,35 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
-.schedule .weekdays {
-    border-color: #565656;
-}
-
-.schedule .weekdays .weekday.limited {
-    background-color: #B65901;
-}
-
-.schedule .weekdays .weekday.not-running {
-    background-color: #700000;
-}
-
-.schedule .weekdays .weekday.running {
-    background-color: #005900;
-}
-
-.schedule .details {
+.schedule .legend {
     color: #ABABAB;
+}
+
+.schedule a.added:hover {
+    background-color: #003B00;
+}
+
+.schedule a.modified:hover {
+    background-color: #934800;
+}
+
+.schedule a.removed:hover {
+    background-color: #4A0000;
+}
+
+.schedule .added {
+    background-color: #005900;
+    color: #FFFFFF;
+}
+
+.schedule .modified {
+    background-color: #B65901;
+    color: #FFFFFF;
+}
+
+.schedule .removed {
+    background-color: #700000;
+    color: #FFFFFF;
 }
 
 .tab-button {
@@ -456,5 +467,23 @@ table.striped tr:nth-child(2n-1) {
 
 .tooltip-anchor .tooltip {
     background-color: #565656;
+    color: #FFFFFF;
+}
+
+.weekdays a.weekday.not-running:hover {
+    background-color: #4A0000;
+}
+
+.weekdays a.weekday.running:hover {
+    background-color: #003B00;
+}
+
+.weekdays .weekday.not-running {
+    background-color: #700000;
+    color: #FFFFFF;
+}
+
+.weekdays .weekday.running {
+    background-color: #005900;
     color: #FFFFFF;
 }
