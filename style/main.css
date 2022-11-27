@@ -614,6 +614,7 @@ table.striped tr.section td {
     justify-content: center;
     gap: 10px;
     font-size: 11pt;
+    margin-bottom: 5px;
 }
 
 .schedule .legend .icon {
@@ -658,10 +659,6 @@ table.striped tr.section td {
 .schedule .title {
     margin-bottom: 5px;
     text-align: center;
-}
-
-.schedule .weekdays {
-    margin-top: 5px;
 }
 
 .sheet-header {
