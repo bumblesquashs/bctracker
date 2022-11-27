@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
 
-import wget
 import csv
+import requests
 
 import helpers.sheet
 
@@ -29,29 +29,32 @@ def update(system):
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
     
-    print(f'Updating GTFS data for {system}...')
+    print(f'Updating GTFS data for {system}...', end=' ', flush=True)
     
     try:
         if path.exists(data_zip_path):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
             archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
             rename(data_zip_path, archives_path)
-        wget.download(system.gtfs_url, data_zip_path)
+        with requests.get(system.gtfs_url, stream=True) as r:
+            with open(data_zip_path, 'wb') as f:
+                for chunk in r.iter_content(128):
+                    f.write(chunk)
         if path.exists(data_path):
             rmtree(data_path)
         with ZipFile(data_zip_path) as zip:
             zip.extractall(data_path)
-        print('\nDone!')
+        print('Done!')
         load(system)
     except Exception as e:
-        print(f'\nError: Failed to update GTFS for {system}')
-        print(f'Error message: {e}')
+        print('Error!')
+        print(f'Failed to update GTFS for {system}: {e}')
 
 def load(system):
     '''Loads the GTFS for the given system into memory'''
     if not system.gtfs_enabled:
         return
-    print(f'Loading GTFS data for {system}...')
+    print(f'Loading GTFS data for {system}...', end=' ', flush=True)
     
     agencies = read_csv(system, 'agency', lambda r: r)
     if len(agencies) > 0:
