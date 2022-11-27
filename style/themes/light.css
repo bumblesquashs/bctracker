@@ -426,10 +426,6 @@ table.striped tr:nth-child(2n-1) {
     color: #666666;
 }
 
-.schedule a.normal-service:hover {
-    background-color: #509F5E;
-}
-
 .schedule a.modified-service:hover {
     background-color: #E6853A;
 }
@@ -438,9 +434,8 @@ table.striped tr:nth-child(2n-1) {
     background-color: #DC5050;
 }
 
-.schedule .normal-service {
-    background-color: #7DBD88;
-    color: #000000;
+.schedule a.normal-service:hover {
+    background-color: #509F5E;
 }
 
 .schedule .modified-service {
@@ -450,6 +445,11 @@ table.striped tr:nth-child(2n-1) {
 
 .schedule .no-service {
     background-color: #FF7F7F;
+    color: #000000;
+}
+
+.schedule .normal-service {
+    background-color: #7DBD88;
     color: #000000;
 }
 

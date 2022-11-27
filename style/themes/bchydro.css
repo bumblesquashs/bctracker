@@ -426,29 +426,29 @@ table.striped tr:nth-child(2n-1) {
     color: #666666;
 }
 
-.schedule a.added:hover {
+.schedule a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.schedule a.modified:hover {
+.schedule a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.schedule a.removed:hover {
+.schedule a.no-service:hover {
     background-color: #DC5050;
 }
 
-.schedule .added {
+.schedule .normal-service {
     background-color: #7DBD88;
     color: #000000;
 }
 
-.schedule .modified {
+.schedule .modified-service {
     background-color: #FFA560;
     color: #000000;
 }
 
-.schedule .removed {
+.schedule .no-service {
     background-color: #FF7F7F;
     color: #000000;
 }
@@ -474,20 +474,20 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.weekdays a.weekday.not-running:hover {
+.weekdays a.weekday.no-service:hover {
     background-color: #DC5050;
 }
 
-.weekdays a.weekday.running:hover {
+.weekdays a.weekday.normal-service:hover {
     background-color: #509F5E;
 }
 
-.weekdays .weekday.not-running {
+.weekdays .weekday.no-service {
     background-color: #FF7F7F;
     color: #000000;
 }
 
-.weekdays .weekday.running {
+.weekdays .weekday.normal-service {
     background-color: #7DBD88;
     color: #000000;
 }
