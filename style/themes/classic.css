@@ -422,33 +422,33 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
-.schedule .legend {
+.schedules .legend {
     color: #666666;
 }
 
-.schedule a.modified-service:hover {
+.schedules a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.schedule a.no-service:hover {
+.schedules a.no-service:hover {
     background-color: #DC5050;
 }
 
-.schedule a.normal-service:hover {
+.schedules a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.schedule .modified-service {
+.schedules .modified-service {
     background-color: #FFA560;
     color: #000000;
 }
 
-.schedule .no-service {
+.schedules .no-service {
     background-color: #FF7F7F;
     color: #000000;
 }
 
-.schedule .normal-service {
+.schedules .normal-service {
     background-color: #7DBD88;
     color: #000000;
 }

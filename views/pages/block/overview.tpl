@@ -25,7 +25,7 @@
         
         <div class="info-box">
             <div class="section no-flex">
-                % include('components/sheet_sidebar', sheets=sheets)
+                % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
             </div>
             <div class="section">
                 <div class="name">Start time</div>
@@ -186,18 +186,14 @@
         <div class="container">
             % for sheet in sheets:
                 <div class="section">
-                    % if len(sheets) > 1:
-                        <h3 class="title">{{ sheet }}</h3>
-                    % end
+                    <h3 class="title">{{ sheet }}</h3>
                     <div class="container">
                         % for service_group in sheet.service_groups:
                             % service_group_trips = block.get_trips(service_group)
                             <div class="section">
-                                % if len(sheet.service_groups) > 1 or service_group.schedule.special:
-                                    <h4 class="title">{{ service_group }}</h4>
-                                    % if service_group.schedule.special:
-                                        <div class="subtitle">{{ service_group.schedule.modified_dates_string }}</div>
-                                    % end
+                                <h4 class="title">{{ service_group }}</h4>
+                                % if service_group.schedule.special:
+                                    <div class="subtitle">{{ service_group.schedule.modified_dates_string }}</div>
                                 % end
                                 <table class="striped">
                                     <thead>

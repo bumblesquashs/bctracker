@@ -19,7 +19,7 @@
             
             <div class="info-box">
                 <div class="section no-flex">
-                    % include('components/sheet_sidebar', sheets=route.sheets, url=get_url(system, f'routes/{route.number}/schedule'))
+                    % include('components/schedules_indicator', schedules=[s.schedule for s in route.sheets], url=get_url(system, f'routes/{route.number}/schedule'))
                 </div>
                 <div class="section">
                     % headsigns = route.get_headsigns()
@@ -108,10 +108,7 @@
                     % direction_trips = [t for t in trips if t.direction == direction]
                     % if len(direction_trips) > 0:
                         <div class="section">
-                            % if len(directions) > 1:
-                                <h3>{{ direction }}</h3>
-                            % end
-                            
+                            <h3>{{ direction }}</h3>
                             % if system is None or system.realtime_enabled:
                                 <p>
                                     <span>Buses with a</span>

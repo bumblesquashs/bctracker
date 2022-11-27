@@ -297,20 +297,6 @@ table.striped th {
     display: inline-block;
 }
 
-.sheet-header {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 40px;
-}
-
-.sheet-header .schedule.normal {
-    width: 40%;
-}
-
-.sheet-header .schedule.special {
-    width: 20%;
-}
-
 .sidebar table {
     width: 100%;
 }

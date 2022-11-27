@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>System</th>
-                <th># Stops</th>
+                <th class="no-wrap"># Stops</th>
                 <th>Service Days</th>
             </tr>
         </thead>
@@ -34,7 +34,7 @@
                             <td><a href="{{ get_url(region_system, path) }}">{{ region_system }}</a></td>
                             <td>{{ len(region_system.get_stops()) }}</td>
                             <td>
-                                % include('components/schedule_indicator', schedule=region_system.schedule, compact=True)
+                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
                             </td>
                         </tr>
                     % end

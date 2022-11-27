@@ -25,75 +25,78 @@
     </p>
 % else:
     % sheets = stop.sheets
-    
-    % include('components/sheet_header', sheets=sheets, url=get_url(system, f'stops/{stop.number}/schedule'))
-    
-    <div class="container">
-        % for (i, sheet) in enumerate(sheets):
-            % if len(sheet.service_groups) > 0:
-                % url_suffix = '' if i == 0 else f'{i + 1}'
-                <div class="section">
-                    % if len(sheets) > 1:
+    <div class="flex-container">
+        <div class="sidebar flex-1">
+            <h2>Overview</h2>
+            <div class="info-box">
+                <div class="section no-flex">
+                    % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
+                </div>
+            </div>
+        </div>
+        <div class="container flex-3">
+            % for (i, sheet) in enumerate(sheets):
+                % if len(sheet.service_groups) > 0:
+                    % url_suffix = '' if i == 0 else f'{i + 1}'
+                    <div class="section">
                         <h2>{{ sheet }}</h2>
-                    % end
-                    <div class="container">
-                        % for service_group in sheet.service_groups:
-                            % departures = stop.get_departures(service_group)
-                            <div class="section">
-                                % for weekday in service_group.schedule.weekdays:
-                                    <div id="{{ weekday.short_name }}{{ url_suffix }}"></div>
-                                % end
-                                % if len(sheet.service_groups) > 1:
+                        <div class="container">
+                            % for service_group in sheet.service_groups:
+                                % departures = stop.get_departures(service_group)
+                                <div class="section">
+                                    % for weekday in service_group.schedule.weekdays:
+                                        <div id="{{ weekday.short_name }}{{ url_suffix }}"></div>
+                                    % end
                                     <h3 class="title">{{ service_group }}</h3>
-                                % end
-                                <table class="striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Time</th>
-                                            <th class="non-mobile">Headsign</th>
-                                            <th class="non-mobile">Block</th>
-                                            <th>Trip</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        % last_hour = -1
-                                        % for departure in departures:
-                                            % trip = departure.trip
-                                            % block = trip.block
-                                            % this_hour = departure.time.hour
-                                            % if last_hour == -1:
+                                    <table class="striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th class="non-mobile">Headsign</th>
+                                                <th class="non-mobile">Block</th>
+                                                <th>Trip</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % last_hour = -1
+                                            % for departure in departures:
+                                                % trip = departure.trip
+                                                % block = trip.block
+                                                % this_hour = departure.time.hour
+                                                % if last_hour == -1:
+                                                    % last_hour = this_hour
+                                                % end
+                                                <tr class="{{'divider' if this_hour > last_hour else ''}}">
+                                                    <td>{{ departure.time }}</td>
+                                                    <td class="non-mobile">
+                                                        {{ trip }}
+                                                        % if departure == trip.last_departure:
+                                                            <br />
+                                                            <span class="smaller-font">Unloading only</span>
+                                                        % end
+                                                    </td>
+                                                    <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                                    <td>
+                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                                        <br class="mobile-only" />
+                                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                        % if departure == trip.last_departure:
+                                                            <br class="mobile-only" />
+                                                            <span class="mobile-only smaller-font">Unloading only</span>
+                                                        % end
+                                                    </td>
+                                                </tr>
                                                 % last_hour = this_hour
                                             % end
-                                            <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                                                <td>{{ departure.time }}</td>
-                                                <td class="non-mobile">
-                                                    {{ trip }}
-                                                    % if departure == trip.last_departure:
-                                                        <br />
-                                                        <span class="smaller-font">Unloading only</span>
-                                                    % end
-                                                </td>
-                                                <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                                <td>
-                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                                    <br class="mobile-only" />
-                                                    <span class="mobile-only smaller-font">{{ trip }}</span>
-                                                    % if departure == trip.last_departure:
-                                                        <br class="mobile-only" />
-                                                        <span class="mobile-only smaller-font">Unloading only</span>
-                                                    % end
-                                                </td>
-                                            </tr>
-                                            % last_hour = this_hour
-                                        % end
-                                    </tbody>
-                                </table>
-                            </div>
-                        % end
+                                        </tbody>
+                                    </table>
+                                </div>
+                            % end
+                        </div>
                     </div>
-                </div>
+                % end
             % end
-        % end
+        </div>
     </div>
 
     % include('components/top_button')

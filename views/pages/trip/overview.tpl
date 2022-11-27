@@ -21,7 +21,7 @@
         
         <div class="info-box">
             <div class="section no-flex">
-                % include('components/schedule_indicator', schedule=trip.service.schedule)
+                % include('components/schedules_indicator', schedules=[trip.service.schedule])
             </div>
             <div class="section">
                 <div class="name">Start time</div>

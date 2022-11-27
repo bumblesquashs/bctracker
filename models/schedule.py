@@ -122,7 +122,7 @@ class Schedule:
     
     def get_date_status(self, date):
         if self.includes(date):
-            if date in self.modified_dates and not self.special:
+            if date in self.modified_dates:
                 return 'modified-service'
             return 'normal-service'
         return 'no-service'
