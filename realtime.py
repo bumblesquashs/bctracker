@@ -2,7 +2,7 @@
 from os import path, rename
 from datetime import datetime
 
-import wget
+import requests
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
@@ -24,52 +24,44 @@ last_updated_time = None
 
 def update(system):
     '''Downloads realtime data for the given system, then loads it into memory'''
-    global last_updated_date, last_updated_time
+    global positions, last_updated_date, last_updated_time
     if not system.realtime_enabled:
         return
-    print(f'Updating realtime data for {system}...')
     data_path = f'data/realtime/{system.id}.bin'
+    
+    print(f'Updating realtime data for {system}...', end=' ', flush=True)
     
     try:
         if path.exists(data_path):
             formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
             archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
             rename(data_path, archives_path)
-        wget.download(system.realtime_url, data_path)
-        
-        update_positions(system)
+        data = protobuf.FeedMessage()
+        with requests.get(system.realtime_url, timeout=10) as r:
+            with open(data_path, 'wb') as f:
+                f.write(r.content)
+            data.ParseFromString(r.content)
+        positions = {k:v for (k, v) in positions.items() if v.system != system}
+        for index, entity in enumerate(data.entity):
+            vehicle = entity.vehicle
+            try:
+                vehicle_id = vehicle.vehicle.id
+                if len(vehicle_id) > 4:
+                    vehicle_id = vehicle_id[-4:]
+                bus_number = int(vehicle_id)
+            except:
+                bus_number = -(index + 1)
+            if bus_number >= 9990:
+                continue
+            positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
         last_updated_date = Date.today('America/Vancouver')
         last_updated_time = Time.now('America/Vancouver', False)
         system.last_updated_date = Date.today(system.timezone)
         system.last_updated_time = Time.now(system.timezone, False)
-        
-        print('\nDone!')
+        print('Done!')
     except Exception as e:
-        print(f'\nError: Failed to update realtime for {system}')
-        print(f'Error message: {e}')
-
-def update_positions(system):
-    '''Loads realtime data for the given system into memory'''
-    global positions
-        
-    data_path = f'data/realtime/{system.id}.bin'
-    
-    data = protobuf.FeedMessage()
-    with open(data_path, 'rb') as file:
-        data.ParseFromString(file.read())
-    positions = {k:v for (k, v) in positions.items() if v.system != system}
-    for index, entity in enumerate(data.entity):
-        vehicle = entity.vehicle
-        try:
-            vehicle_id = vehicle.vehicle.id
-            if len(vehicle_id) > 4:
-                vehicle_id = vehicle_id[-4:]
-            bus_number = int(vehicle_id)
-        except:
-            bus_number = -(index + 1)
-        if bus_number >= 9990:
-            continue
-        positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
+        print('Error!')
+        print(f'Failed to update realtime for {system}: {e}')
 
 def update_records():
     '''Updates records in the database based on the current realtime data in memory'''
