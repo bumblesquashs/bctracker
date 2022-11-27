@@ -20,6 +20,24 @@
         </div>
     % else:
         <div class="title">{{ schedule.date_string }}</div>
+        <div class="legend">
+            <div>
+                <span class="icon normal-service"></span> Normal Service
+            </div>
+            % if not schedule.special:
+                % if len(schedule.modified_dates) > 0:
+                    <div>
+                        <span class="icon modified-service"></span> Modified Service
+                    </div>
+                % end
+                % if len(schedule.excluded_dates) > 0 or len(schedule.weekdays) < 7:
+                    <div>
+                        <span class="icon no-service"></span> No Service
+                    </div>
+                % end
+            % end
+        </div>
+        
         % if not schedule.special:
             <div class="weekdays">
                 % for weekday in Weekday:
@@ -33,26 +51,9 @@
             </div>
         % end
         
-        % dates = schedule.included_dates.union(schedule.excluded_dates).union(schedule.modified_dates)
+        % dates = schedule.modified_dates.union(schedule.excluded_dates)
         % if len(dates) > 0:
             <div class="exceptions">
-                <div class="legend">
-                    % if len(schedule.included_dates) > 0:
-                        <div>
-                            <span class="icon added"></span> Special Service
-                        </div>
-                    % end
-                    % if len(schedule.modified_dates) > 0:
-                        <div>
-                            <span class="icon modified"></span> Modified Service
-                        </div>
-                    % end
-                    % if len(schedule.excluded_dates) > 0:
-                        <div>
-                            <span class="icon removed"></span> No Service
-                        </div>
-                    % end
-                </div>
                 <div class="months">
                     % for (year, month) in sorted({(d.year, d.month) for d in dates}):
                         % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
@@ -63,7 +64,7 @@
                                 % if date_url is None or date in schedule.excluded_dates:
                                     <span class="date {{ status }}">{{ date.day }}</span>
                                 % else:
-                                    <a class="date {{ status }}" href="{{ date_url }}/{{ date.format_db() }}{{ url_suffix }}">{{ date.day }}</a>
+                                    <a class="date {{ status }}" href="{{ date_url }}/{{ date.format_db() }}">{{ date.day }}</a>
                                 % end
                             % end
                         </div>

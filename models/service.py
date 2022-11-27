@@ -54,9 +54,9 @@ class Service:
         
         weekdays = {Weekday(i) for i, v in enumerate([mon, tue, wed, thu, fri, sat, sun]) if v}
         service_exceptions = exceptions.get(id, [])
-        included_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
+        modified_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
         excluded_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(start_date, end_date, weekdays, included_dates, excluded_dates)
+        schedule = Schedule.process(start_date, end_date, weekdays, modified_dates, excluded_dates)
         return cls(system, id, schedule)
     
     def __init__(self, system, id, schedule):

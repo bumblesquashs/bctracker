@@ -8,12 +8,12 @@ from models.weekday import Weekday
 class Schedule:
     '''The days of a week when a service is or is not running within a given date range'''
     
-    __slots__ = ('start_date', 'end_date', 'weekdays', 'included_dates', 'excluded_dates', 'modified_dates', 'name')
+    __slots__ = ('start_date', 'end_date', 'weekdays', 'modified_dates', 'excluded_dates', 'name')
     
     @classmethod
-    def process(cls, start_date, end_date, weekdays, included_dates, excluded_dates):
+    def process(cls, start_date, end_date, weekdays, modified_dates, excluded_dates):
         for weekday in Weekday:
-            dates = excluded_dates if weekday in weekdays else included_dates
+            dates = excluded_dates if weekday in weekdays else modified_dates
             explicit_dates = {d for d in dates if d.weekday == weekday}
             implicit_dates = get_implicit_dates(weekday, start_date, end_date, explicit_dates)
             if len(explicit_dates) == 0 and len(implicit_dates) == 0:
@@ -22,17 +22,17 @@ class Schedule:
             elif len(explicit_dates) + len(implicit_dates) == 1:
                 if weekday in weekdays:
                     weekdays.remove(weekday)
-                    included_dates = included_dates.union(implicit_dates)
+                    modified_dates = modified_dates.union(implicit_dates)
             elif len(explicit_dates) > len(implicit_dates):
                 if weekday in weekdays:
                     weekdays.remove(weekday)
-                    included_dates = included_dates.union(implicit_dates)
+                    modified_dates = modified_dates.union(implicit_dates)
                     excluded_dates -= explicit_dates
                 else:
                     weekdays.add(weekday)
-                    included_dates -= explicit_dates
+                    modified_dates -= explicit_dates
                     excluded_dates = excluded_dates.union(implicit_dates)
-        return cls(start_date, end_date, weekdays, included_dates, excluded_dates, set())
+        return cls(start_date, end_date, weekdays, modified_dates, excluded_dates)
     
     @classmethod
     def combine(cls, schedules):
@@ -41,24 +41,19 @@ class Schedule:
         start_date = min({s.start_date for s in schedules})
         end_date = max({s.end_date for s in schedules})
         weekdays = {w for s in schedules for w in s.weekdays}
-        included_dates = {d for s in schedules for d in s.included_dates}
+        modified_dates = {d for s in schedules for d in s.modified_dates}
         excluded_dates = {d for s in schedules for d in s.excluded_dates}
-        modified_dates = included_dates.intersection(excluded_dates)
-        for date in included_dates:
-            if len([s for s in schedules if date in s.included_dates]) < len([s for s in schedules if date.weekday in s.weekdays]):
-                modified_dates.add(date)
         for date in excluded_dates:
             if len([s for s in schedules if date in s.excluded_dates]) < len([s for s in schedules if date.weekday in s.weekdays]):
                 modified_dates.add(date)
-        return cls(start_date, end_date, weekdays, included_dates - modified_dates, excluded_dates - modified_dates, modified_dates)
+        return cls(start_date, end_date, weekdays, modified_dates, excluded_dates - modified_dates)
     
-    def __init__(self, start_date, end_date, weekdays, included_dates, excluded_dates, modified_dates):
+    def __init__(self, start_date, end_date, weekdays, modified_dates, excluded_dates):
         self.start_date = start_date
         self.end_date = end_date
         self.weekdays = weekdays
-        self.included_dates = included_dates
-        self.excluded_dates = excluded_dates
         self.modified_dates = modified_dates
+        self.excluded_dates = excluded_dates
         
         if self.special:
             self.name = 'Special Service'
@@ -78,12 +73,12 @@ class Schedule:
     
     def __eq__(self, other):
         if self.special and other.special:
-            return self.included_dates == other.included_dates
+            return self.modified_dates == other.modified_dates
         return self.weekdays == other.weekdays
     
     def __lt__(self, other):
         if self.special and other.special:
-            return sorted(self.included_dates) < sorted(other.included_dates)
+            return sorted(self.modified_dates) < sorted(other.modified_dates)
         if self.special:
             return False
         if other.special:
@@ -95,19 +90,14 @@ class Schedule:
         return len(self.weekdays) == 0
     
     @property
-    def included_dates_string(self):
-        '''Returns a formatted string of dates that are included in this schedule'''
-        return helpers.date.flatten(sorted(self.included_dates))
+    def modified_dates_string(self):
+        '''Returns a formatted string of dates that are modified in this schedule'''
+        return helpers.date.flatten(sorted(self.modified_dates))
     
     @property
     def excluded_dates_string(self):
         '''Returns a formatted string of dates that are excluded from this schedule'''
         return helpers.date.flatten(sorted(self.excluded_dates))
-    
-    @property
-    def modified_dates_string(self):
-        '''Returns a formatted string of dates that are modified in this schedule'''
-        return helpers.date.flatten(sorted(self.modified_dates))
     
     @property
     def date_string(self):
@@ -120,7 +110,7 @@ class Schedule:
         '''Checks if this schedule includes the given date'''
         if date < self.start_date or date > self.end_date:
             return False
-        if date in self.included_dates:
+        if date in self.modified_dates:
             return True
         if date in self.excluded_dates:
             return False
@@ -128,15 +118,14 @@ class Schedule:
     
     def get_weekday_status(self, weekday):
         '''Returns the status class of this schedule on the given weekday'''
-        return 'running' if weekday in self.weekdays else 'not-running'
+        return 'normal-service' if weekday in self.weekdays else 'no-service'
     
     def get_date_status(self, date):
-        if date in self.included_dates:
-            return 'added'
-        if date in self.modified_dates:
-            return 'modified'
-        if date in self.excluded_dates:
-            return 'removed'
+        if self.includes(date):
+            if date in self.modified_dates and not self.special:
+                return 'modified-service'
+            return 'normal-service'
+        return 'no-service'
 
 def get_implicit_dates(weekday, start_date, end_date, explicit_dates):
     implicit_dates = set()

@@ -196,7 +196,7 @@
                                 % if len(sheet.service_groups) > 1 or service_group.schedule.special:
                                     <h4 class="title">{{ service_group }}</h4>
                                     % if service_group.schedule.special:
-                                        <div class="subtitle">{{ service_group.schedule.included_dates_string }}</div>
+                                        <div class="subtitle">{{ service_group.schedule.modified_dates_string }}</div>
                                     % end
                                 % end
                                 <table class="striped">
