@@ -70,8 +70,7 @@ def load(system):
     services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
     system.services = {s.id: s for s in services}
     
-    sheets = helpers.sheet.combine(system, services)
-    system.sheets = {service.id: sheet for sheet in sheets for service in sheet.services}
+    system.sheets = helpers.sheet.combine(system, services)
     
     points = read_csv(system, 'shapes', ShapePoint.from_csv)
     shape_points = {}

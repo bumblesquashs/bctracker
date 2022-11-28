@@ -6,10 +6,9 @@ from argparse import ArgumentParser
 import server
 
 def exit(sig, frame):
-    print('\n')
     server.stop()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit)
     
     parser = ArgumentParser()

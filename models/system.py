@@ -58,7 +58,7 @@ class System:
         self.routes_by_number = {}
         self.services = {}
         self.shapes = {}
-        self.sheets = {}
+        self.sheets = []
         self.stops = {}
         self.stops_by_number = {}
         self.trips = {}
@@ -143,7 +143,7 @@ class System:
     
     def get_sheets(self):
         '''Returns all sheets'''
-        return sorted(set(self.sheets.values()))
+        return sorted(self.sheets)
     
     def get_stop(self, stop_id=None, number=None):
         '''Returns the stop with the given ID or number'''
