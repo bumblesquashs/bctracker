@@ -24,15 +24,6 @@ class Block:
         return self.id < other.id
     
     @property
-    def today_service_group(self):
-        '''Returns the service group from this block running on the current date'''
-        for sheet in self.sheets:
-            for service_group in sheet.service_groups:
-                if service_group.is_today:
-                    return service_group
-        return None
-    
-    @property
     def related_blocks(self):
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
