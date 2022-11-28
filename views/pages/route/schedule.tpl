@@ -41,7 +41,7 @@
                         <h2>{{ sheet }}</h2>
                         <div class="container">
                             % for service_group in sheet.service_groups:
-                                % service_group_trips = route.get_trips(service_group)
+                                % service_group_trips = route.get_trips(service_group=service_group)
                                 <div class="section">
                                     % for weekday in service_group.schedule.weekdays:
                                         <div id="{{ weekday.short_name }}{{ url_suffix }}"></div>

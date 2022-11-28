@@ -168,7 +168,7 @@ class Trip:
         return departures[0]
     
     def get_previous_departure(self, departure):
-        '''Returns the departure in this trip that comes before the given departure, or None'''
+        '''Returns the departure in this trip that comes before the given departure'''
         for previous_departure in self.departures:
             if previous_departure.sequence == (departure.sequence - 1):
                 return previous_departure

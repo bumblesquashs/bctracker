@@ -189,7 +189,7 @@
                     <h3 class="title">{{ sheet }}</h3>
                     <div class="container">
                         % for service_group in sheet.service_groups:
-                            % service_group_trips = block.get_trips(service_group)
+                            % service_group_trips = block.get_trips(service_group=service_group)
                             <div class="section">
                                 <h4 class="title">{{ service_group }}</h4>
                                 % if service_group.schedule.special:

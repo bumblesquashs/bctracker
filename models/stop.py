@@ -66,19 +66,21 @@ class Stop:
             'routes': [r.json for r in self.get_routes()]
         }
     
-    def get_departures(self, service_group=None):
-        '''Returns all departures from this stop that are part of the given service group'''
+    def get_departures(self, service_group=None, date=None):
+        '''Returns all departures from this stop'''
         if service_group is None:
-            return sorted(self.departures)
+            if date is None:
+                return sorted(self.departures)
+            return sorted([d for d in self.departures if d.trip.schedule.includes(date)])
         return sorted([d for d in self.departures if d.trip.service in service_group.services])
     
-    def get_routes(self, service_group=None):
-        '''Returns all routes from this stop that are part of the given service group'''
-        return sorted({d.trip.route for d in self.get_departures(service_group)})
+    def get_routes(self, service_group=None, date=None):
+        '''Returns all routes from this stop'''
+        return sorted({d.trip.route for d in self.get_departures(service_group, date)})
     
-    def get_routes_string(self, service_group=None):
-        '''Returns a string of all routes from this stop that are part of the given service group'''
-        return ', '.join([r.number for r in self.get_routes(service_group)])
+    def get_routes_string(self, service_group=None, date=None):
+        '''Returns a string of all routes from this stop'''
+        return ', '.join([r.number for r in self.get_routes(service_group, date)])
     
     def get_match(self, query):
         '''Returns a match for this stop with the given query'''

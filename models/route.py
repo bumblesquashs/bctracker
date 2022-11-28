@@ -140,15 +140,17 @@ class Route:
             })
         return json
     
-    def get_trips(self, service_group=None):
-        '''Returns all trips from this route that are part of the given service group'''
+    def get_trips(self, service_group=None, date=None):
+        '''Returns all trips from this route'''
         if service_group is None:
-            return sorted(self.trips)
+            if date is None:
+                return sorted(self.trips)
+            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
         return sorted([t for t in self.trips if t.service in service_group.services])
     
-    def get_headsigns(self, service_group=None):
-        '''Returns all headsigns from this route that are part of the given service group'''
-        return sorted({str(t) for t in self.get_trips(service_group)})
+    def get_headsigns(self, service_group=None, date=None):
+        '''Returns all headsigns from this route'''
+        return sorted({str(t) for t in self.get_trips(service_group, date)})
     
     def get_match(self, query):
         '''Returns a match for this route with the given query'''

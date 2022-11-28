@@ -5,6 +5,7 @@ class Region:
     
     @classmethod
     def from_csv(cls, row):
+        '''Returns a region initialized from the given CSV row'''
         id = row['id']
         name = row['name']
         return cls(id, name)

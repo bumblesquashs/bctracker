@@ -39,7 +39,7 @@ class Record:
     
     @property
     def block(self):
-        '''Returns the block associated with this record, or None'''
+        '''Returns the block associated with this record'''
         return self.system.get_block(self.block_id)
     
     @property

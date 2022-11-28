@@ -87,6 +87,7 @@ class Schedule:
     
     @property
     def special(self):
+        '''Returns whether or not this schedule is special service'''
         return len(self.weekdays) == 0
     
     @property
@@ -121,6 +122,7 @@ class Schedule:
         return 'normal-service' if weekday in self.weekdays else 'no-service'
     
     def get_date_status(self, date):
+        '''Returns the status class of this schedule on the given date'''
         if self.includes(date):
             if date in self.modified_dates:
                 return 'modified-service'
@@ -128,6 +130,7 @@ class Schedule:
         return 'no-service'
 
 def get_implicit_dates(weekday, start_date, end_date, explicit_dates):
+    '''Returns dates on the given weekday between the start and end dates that are not included in the explicit dates'''
     implicit_dates = set()
     date = start_date
     while date.weekday != weekday:

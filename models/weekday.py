@@ -15,6 +15,7 @@ class Weekday(IntEnum):
     
     @property
     def name(self):
+        '''The full name of this weekday'''
         if self == Weekday.MON:
             return 'Monday'
         if self == Weekday.TUE:
@@ -32,8 +33,10 @@ class Weekday(IntEnum):
     
     @property
     def short_name(self):
+        '''The short name of this weekday'''
         return self.name[0:3]
     
     @property
     def abbreviation(self):
+        '''The abbreviation of this weekday'''
         return self.name[0]

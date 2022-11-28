@@ -15,7 +15,7 @@ def load():
             themes[theme.id] = theme
 
 def find(theme_id):
-    '''Returns the theme with the given ID, or None'''
+    '''Returns the theme with the given ID'''
     if theme_id is not None and theme_id in themes:
         return themes[theme_id]
     return None

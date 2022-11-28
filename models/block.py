@@ -25,7 +25,7 @@ class Block:
     
     @property
     def today_service_group(self):
-        '''Returns the service group from this block running on the current date, or None'''
+        '''Returns the service group from this block running on the current date'''
         for sheet in self.sheets:
             for service_group in sheet.service_groups:
                 if service_group.is_today:
@@ -39,7 +39,7 @@ class Block:
         return sorted(related_blocks, key=lambda b: b.schedule)
     
     def get_trips(self, service_group=None, date=None):
-        '''Returns all trips from this block that are part of the given service group'''
+        '''Returns all trips from this block'''
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
@@ -47,29 +47,29 @@ class Block:
         return sorted([t for t in self.trips if t.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):
-        '''Returns all routes from this block that are part of the given service group'''
+        '''Returns all routes from this block'''
         return sorted({t.route for t in self.get_trips(service_group, date)})
     
     def get_routes_string(self, service_group=None, date=None):
-        '''Returns a string of all routes from this block that are part of the given service group'''
+        '''Returns a string of all routes from this block'''
         return ', '.join([r.number for r in self.get_routes(service_group, date)])
     
     def get_start_time(self, service_group=None, date=None):
-        '''Returns the start time of this block based on the given service group'''
+        '''Returns the start time of this block'''
         trips = self.get_trips(service_group, date)
         if len(trips) == 0:
             return None
         return trips[0].start_time
     
     def get_end_time(self, service_group=None, date=None):
-        '''Returns the end time of this block based on the given service group'''
+        '''Returns the end time of this block'''
         trips = self.get_trips(service_group, date)
         if len(trips) == 0:
             return None
         return trips[-1].end_time
     
     def get_duration(self, service_group=None, date=None):
-        '''Returns the duration of this block based on the given service group'''
+        '''Returns the duration of this block'''
         start_time = self.get_start_time(service_group, date)
         end_time = self.get_end_time(service_group, date)
         if start_time is None or end_time is None:

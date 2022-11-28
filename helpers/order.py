@@ -15,7 +15,7 @@ def load():
         orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
 
 def find(bus_number):
-    '''Returns the order containing the given bus number, or None'''
+    '''Returns the order containing the given bus number'''
     if bus_number < 0:
         return None
     for order in orders:

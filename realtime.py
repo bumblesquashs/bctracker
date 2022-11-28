@@ -100,7 +100,7 @@ def update_records():
         print(f'Error message: {e}')
 
 def get_position(bus_number):
-    '''Returns the position for a given bus number, or None'''
+    '''Returns the position for a given bus number'''
     if bus_number in positions:
         return positions[bus_number]
     return None

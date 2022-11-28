@@ -26,7 +26,7 @@
     </div>
     <div class="flex-3">
         <h2>{{ date.format_long() }}</h2>
-        % departures = [d for d in stop.departures if d.trip.service.schedule.includes(date)]
+        % departures = stop.get_departures(date=date)
         % if len(departures) == 0:
             <p>No trips found on {{ date.format_long() }}.</p>
             <p>

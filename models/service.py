@@ -78,4 +78,5 @@ class Service:
     
     @property
     def is_today(self):
+        '''Returns whether or not this service runs on the current date'''
         return self.schedule.includes(Date.today(self.system.timezone))

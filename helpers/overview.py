@@ -16,7 +16,7 @@ def create(bus, date, system, record_id):
     })
 
 def find(bus_number):
-    '''Returns the overview of the given bus number, or None'''
+    '''Returns the overview of the given bus number'''
     overviews = find_all(bus_number=bus_number, limit=1)
     if len(overviews) == 1:
         return overviews[0]
