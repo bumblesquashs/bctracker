@@ -64,7 +64,11 @@
                     <div class="value">
                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                         <br />
-                        % today = Date.today(system.timezone)
+                        % if system is None:
+                            % today = Date.today(None)
+                        % else:
+                            % today = Date.today(system.timezone)
+                        % end
                         % start_time = block.get_start_time(date=today)
                         % end_time = block.get_end_time(date=today)
                         % duration = block.get_duration(date=today)
