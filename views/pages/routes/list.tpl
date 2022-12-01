@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <th>System</th>
-                <th class="no-wrap"># Routes</th>
+                <th class="non-mobile"># Routes</th>
                 <th>Service Days</th>
             </tr>
         </thead>
@@ -31,9 +31,20 @@
                     </tr>
                     <tr class="display-none"></tr>
                     % for region_system in region_systems:
+                        % count = len(region_system.get_routes())
                         <tr>
-                            <td><a href="{{ get_url(region_system, path) }}">{{ region_system }}</a></td>
-                            <td>{{ len(region_system.get_routes()) }}</td>
+                            <td>
+                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                <br class="mobile-only" />
+                                <span class="mobile-only smaller-font">
+                                    % if count == 1:
+                                        1 Route
+                                    % else:
+                                        {{ count }} Routes
+                                    % end
+                                </span>
+                            </td>
+                            <td class="non-mobile">{{ count }}</td>
                             <td>
                                 % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
                             </td>
