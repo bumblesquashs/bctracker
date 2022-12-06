@@ -9,6 +9,7 @@ class ModelType(Enum):
     decker = "Double Decker"
     midibus = "Midibus"
     shuttle = "Shuttle"
+    test = "Test"
     
     def __str__(self):
         return self.value
@@ -48,3 +49,7 @@ class Model:
     
     def __lt__(self, other):
         return str(self) < str(other)
+    
+    @property
+    def is_test(self):
+        return self.type == ModelType.test

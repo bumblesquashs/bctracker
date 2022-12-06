@@ -31,3 +31,10 @@ class Bus:
         if order is None:
             return None
         return order.model
+    
+    @property
+    def is_test(self):
+        model = self.model
+        if model is None:
+            return False
+        return model.is_test

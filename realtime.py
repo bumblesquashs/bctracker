@@ -51,8 +51,6 @@ def update(system):
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
-            if bus_number >= 9990:
-                continue
             positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
         last_updated_date = Date.today('America/Vancouver')
         last_updated_time = Time.now('America/Vancouver', False)
@@ -81,7 +79,7 @@ def update_records():
                 block = trip.block
                 if overview is not None and overview.last_record is not None:
                     last_record = overview.last_record
-                    if last_record.system != system:
+                    if last_record.system != system and not bus.is_test:
                         helpers.transfer.create(bus, today, last_record.system, system)
                     if last_record.date == today and last_record.block_id == block.id:
                         helpers.record.update(last_record.id, now)
@@ -108,8 +106,8 @@ def get_position(bus_number):
 def get_positions(system_id=None):
     '''Returns all positions for a given system ID'''
     if system_id is None:
-        return sorted(positions.values())
-    return sorted([p for p in positions.values() if p.system.id == system_id])
+        return sorted([p for p in positions.values() if not p.bus.is_test])
+    return sorted([p for p in positions.values() if p.system.id == system_id and not p.bus.is_test])
 
 def last_updated():
     '''Returns the date/time that realtime data was last updated'''

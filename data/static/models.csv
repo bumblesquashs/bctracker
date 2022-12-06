@@ -1,28 +1,29 @@
 model_id,manufacturer,name,length,fuel,type
-alexander_dennis_enviro500,Alexander Dennis,Enviro500,42,Diesel,decker
-alexander_dennis_enviro500h,Alexander Dennis,Enviro500H,42,Hybrid,decker
-chevrolet_arboc_4500_sof_27,Chevrolet/ARBOC,4500/SOF 27,27,Gasoline,shuttle
-chevrolet_arboc_4500_som23d,Chevrolet/ARBOC,4500/SOM23D,23,Diesel,shuttle
-chevrolet_arboc_4500_som28d,Chevrolet/ARBOC,4500/SOM28D,28,Diesel,shuttle
-chevrolet_arboc_4500_som28g,Chevrolet/ARBOC,4500/SOM28G,28,Gasoline,shuttle
-chevrolet_arboc_4500_som_28,Chevrolet/ARBOC,4500/SOM 28,28,Diesel,shuttle
-chevrolet_girardin_4500_g5,Chevrolet/Girardin,4500/G5,28,Gasoline,shuttle
-dennis_dart_slf_30,Dennis,Dart SLF (30'),30,Diesel,midibus
-dennis_dart_slf_35,Dennis,Dart SLF (35'),35,Diesel,midibus
-dennis_trident,Dennis,Trident,42,Diesel,decker
-ford_cbb_e450_polar_v,Ford/CBB,E-450/Polar V,24,Diesel,shuttle
-ford_girardin_t350_mbii,Ford/Girardin,T-350/MB-II,23,Gasoline,shuttle
-grande_west_vicinity_27,Grande West,Vicinity (27.5'),27.5,Diesel,midibus
-grande_west_vicinity_30,Grande West,Vicinity (30'),30,Diesel,midibus
-grande_west_vicinity_cng_30,Grande West,Vicinity CNG (30'),30,CNG,midibus
-grande_west_vicinity_35,Grande West,Vicinity (35'),35,Diesel,midibus
-international_eldorado_3200_aero_elite,International/ElDorado,3200/Aero Elite,32,Diesel,shuttle
-mercedes_benz_sprinter_minibus,Mercedes-Benz,Sprinter MiniBus,24,Diesel,shuttle
-new_flyer_d40lf,New Flyer,D40LF,40,Diesel,conventional
-new_flyer_de40lf,New Flyer,DE40LF,40,Hybrid,conventional
-new_flyer_h40lfr,New Flyer,H40LFR,40,Hydrogen Fuel Cell,conventional
-new_flyer_xn40,New Flyer,XN40,40,CNG,conventional
-nova_bus_lfs,Nova Bus,LFS,40,Diesel,conventional
-nova_bus_lfs_suburban,Nova Bus,LFS Suburban,40,Diesel,conventional
-transbus_trident,TransBus,Trident,42,Diesel,decker
-vmc_classic_vi30_cng,VMC,Classic Vi30 CNG,30,CNG,midibus
+alexander-dennis-enviro500,Alexander Dennis,Enviro500,42,Diesel,decker
+alexander-dennis-enviro500h,Alexander Dennis,Enviro500H,42,Hybrid,decker
+chevrolet-arboc-4500-sof-27,Chevrolet/ARBOC,4500/SOF 27,27,Gasoline,shuttle
+chevrolet-arboc-4500-som23d,Chevrolet/ARBOC,4500/SOM23D,23,Diesel,shuttle
+chevrolet-arboc-4500-som28d,Chevrolet/ARBOC,4500/SOM28D,28,Diesel,shuttle
+chevrolet-arboc-4500-som28g,Chevrolet/ARBOC,4500/SOM28G,28,Gasoline,shuttle
+chevrolet-arboc-4500-som-28,Chevrolet/ARBOC,4500/SOM 28,28,Diesel,shuttle
+chevrolet-girardin-4500-g5,Chevrolet/Girardin,4500/G5,28,Gasoline,shuttle
+consat-test,Consat,Test,0,N/A,test
+dennis-dart-slf-30,Dennis,Dart SLF (30'),30,Diesel,midibus
+dennis-dart-slf-35,Dennis,Dart SLF (35'),35,Diesel,midibus
+dennis-trident,Dennis,Trident,42,Diesel,decker
+ford-cbb-e450-polar-v,Ford/CBB,E-450/Polar V,24,Diesel,shuttle
+ford-girardin-t350-mbii,Ford/Girardin,T-350/MB-II,23,Gasoline,shuttle
+grande-west-vicinity-27,Grande West,Vicinity (27.5'),27.5,Diesel,midibus
+grande-west-vicinity-30,Grande West,Vicinity (30'),30,Diesel,midibus
+grande-west-vicinity-cng-30,Grande West,Vicinity CNG (30'),30,CNG,midibus
+grande-west-vicinity-35,Grande West,Vicinity (35'),35,Diesel,midibus
+international-eldorado-3200-aero-elite,International/ElDorado,3200/Aero Elite,32,Diesel,shuttle
+mercedes-benz-sprinter-minibus,Mercedes-Benz,Sprinter MiniBus,24,Diesel,shuttle
+new-flyer-d40lf,New Flyer,D40LF,40,Diesel,conventional
+new-flyer-de40lf,New Flyer,DE40LF,40,Hybrid,conventional
+new-flyer-h40lfr,New Flyer,H40LFR,40,Hydrogen Fuel Cell,conventional
+new-flyer-xn40,New Flyer,XN40,40,CNG,conventional
+nova-bus-lfs,Nova Bus,LFS,40,Diesel,conventional
+nova-bus-lfs-suburban,Nova Bus,LFS Suburban,40,Diesel,conventional
+transbus-trident,TransBus,Trident,42,Diesel,decker
+vmc-classic-vi30-cng,VMC,Classic Vi30 CNG,30,CNG,midibus
