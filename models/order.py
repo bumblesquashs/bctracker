@@ -47,6 +47,13 @@ class Order:
         return self.low < other.low
     
     @property
+    def is_test(self):
+        model = self.model
+        if model is None:
+            return False
+        return model.is_test
+    
+    @property
     def range(self):
         '''The full range of every bus in the order'''
         return (n for n in range(self.low, self.high + 1) if n not in self.exceptions)

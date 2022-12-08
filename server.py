@@ -232,7 +232,7 @@ def realtime_speed_page(system_id=None):
     '/<system_id>/fleet/'
 ])
 def fleet_page(system_id=None):
-    orders = sorted(helpers.order.find_all(), key=lambda o: o.low)
+    orders = [o for o in sorted(helpers.order.find_all(), key=lambda o: o.low) if not o.is_test]
     overviews = helpers.overview.find_all()
     return page('fleet', system_id, path='fleet', orders=orders, overviews={o.bus.number: o for o in overviews})
 
@@ -244,7 +244,7 @@ def fleet_page(system_id=None):
 ])
 def bus_overview_page(bus_number, system_id=None):
     bus = Bus(bus_number)
-    if bus.order is None:
+    if bus.order is None or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     position = realtime.get_position(bus_number)
     records = helpers.record.find_all(bus_number=bus_number, limit=20)
@@ -258,7 +258,7 @@ def bus_overview_page(bus_number, system_id=None):
 ])
 def bus_map_page(bus_number, system_id=None):
     bus = Bus(bus_number)
-    if bus.order is None:
+    if bus.order is None or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     position = realtime.get_position(bus_number)
     return page('bus/map', system_id, bus=bus, position=position)
@@ -271,7 +271,7 @@ def bus_map_page(bus_number, system_id=None):
 ])
 def bus_history_page(bus_number, system_id=None):
     bus = Bus(bus_number)
-    if bus.order is None:
+    if bus.order is None or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     records = helpers.record.find_all(bus_number=bus_number)
     return page('bus/history', system_id, bus=bus, records=records)
@@ -283,7 +283,7 @@ def bus_history_page(bus_number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.last_record is not None], key=lambda o: o.bus)
+    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.last_record is not None and not o.bus.is_test], key=lambda o: o.bus)
     return page('history/last_seen', system_id, path='history', overviews=overviews)
 
 @app.get([
@@ -293,7 +293,7 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.first_record is not None], key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
+    overviews = sorted([o for o in helpers.overview.find_all(system_id) if o.first_record is not None and not o.bus.is_test], key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
     return page('history/first_seen', system_id, path='history/first-seen', overviews=overviews)
 
 @app.get([
