@@ -9,12 +9,12 @@ from colorsys import hls_to_rgb
 import helpers.sheet
 
 from models.match import Match
-from models.service import ServiceGroup
+from models.schedule import Schedule
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'service_group', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'schedule', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -84,9 +84,9 @@ class Route:
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
-        services = {t.service for t in trips if t.is_current}
-        self.service_group = ServiceGroup.combine(services)
-        self.sheets = helpers.sheet.combine(services)
+        services = {t.service for t in trips}
+        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.sheets = helpers.sheet.combine(system, services)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -102,14 +102,6 @@ class Route:
     
     def __gt__(self, other):
         return self.key > other.key
-    
-    @property
-    def is_current(self):
-        '''Checks if this route is included in the current sheet'''
-        for trip in self.trips:
-            if trip.is_current:
-                return True
-        return False
     
     @property
     def json(self):
@@ -148,15 +140,17 @@ class Route:
             })
         return json
     
-    def get_trips(self, service_group=None):
-        '''Returns all trips from this route that are part of the given service group'''
+    def get_trips(self, service_group=None, date=None):
+        '''Returns all trips from this route'''
         if service_group is None:
-            return sorted(self.trips)
+            if date is None:
+                return sorted(self.trips)
+            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
         return sorted([t for t in self.trips if t.service in service_group.services])
     
-    def get_headsigns(self, service_group=None):
-        '''Returns all headsigns from this route that are part of the given service group'''
-        return sorted({str(t) for t in self.get_trips(service_group)})
+    def get_headsigns(self, service_group=None, date=None):
+        '''Returns all headsigns from this route'''
+        return sorted({str(t) for t in self.get_trips(service_group, date)})
     
     def get_match(self, query):
         '''Returns a match for this route with the given query'''

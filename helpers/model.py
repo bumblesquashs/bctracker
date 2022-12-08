@@ -15,7 +15,7 @@ def load():
             models[model.id] = model
 
 def find(model_id):
-    '''Returns the model with the given ID, or None'''
+    '''Returns the model with the given ID'''
     if model_id in models:
         return models[model_id]
     return None

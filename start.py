@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 
-import sys
 import signal
 from argparse import ArgumentParser
 
 import server
 
 def exit(sig, frame):
-    print('\n')
     server.stop()
-    sys.exit(0)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit)
     
     parser = ArgumentParser()

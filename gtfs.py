@@ -70,8 +70,7 @@ def load(system):
     services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
     system.services = {s.id: s for s in services}
     
-    sheets = helpers.sheet.combine(services)
-    system.sheets = {service.id: sheet for sheet in sheets for service in sheet.services}
+    system.sheets = helpers.sheet.combine(system, services)
     
     points = read_csv(system, 'shapes', ShapePoint.from_csv)
     shape_points = {}
@@ -118,7 +117,7 @@ def validate(system):
     '''Checks that the GTFS for the given system is up-to-date'''
     if not system.gtfs_enabled:
         return True
-    end_dates = [s.end_date for s in system.services.values()]
+    end_dates = [s.schedule.end_date for s in system.get_services()]
     if len(end_dates) == 0:
         return True
     return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)

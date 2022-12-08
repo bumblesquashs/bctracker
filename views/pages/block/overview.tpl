@@ -25,7 +25,7 @@
         
         <div class="info-box">
             <div class="section no-flex">
-                % include('components/service_pattern_indicator', pattern=block.service_group)
+                % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
             </div>
             <div class="section">
                 <div class="name">Start time</div>
@@ -34,13 +34,13 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_start_time(service_group) }}</div>
+                        <div>{{ block.get_start_time(service_group=service_group) }}</div>
                     % end
                 </div>
             </div>
@@ -51,13 +51,13 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_end_time(service_group) }}</div>
+                        <div>{{ block.get_end_time(service_group=service_group) }}</div>
                     % end
                 </div>
             </div>
@@ -68,13 +68,13 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_duration(service_group) }}</div>
+                        <div>{{ block.get_duration(service_group=service_group) }}</div>
                     % end
                 </div>
             </div>
@@ -85,13 +85,13 @@
                         % if len(service_groups) > 1:
                             <div class="smaller-font lighter-text">
                                 % if len(sheets) > 1:
-                                    {{ service_group.date_string }}
+                                    {{ service_group.schedule.date_string }}
                                 % else:
                                     {{ service_group }}
                                 % end
                             </div>
                         % end
-                        <div>{{ len(block.get_trips(service_group)) }}</div>
+                        <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
                     % end
                 </div>
             </div>
@@ -120,7 +120,7 @@
                     % for related_block in related_blocks:
                         <tr>
                             <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
-                            <td>{{ related_block.service_group }}</td>
+                            <td>{{ related_block.schedule }}</td>
                         </tr>
                     % end
                 </tbody>
@@ -185,47 +185,52 @@
         <h2>Trip Schedule</h2>
         <div class="container">
             % for sheet in sheets:
-                % for service_group in sheet.service_groups:
-                    % service_group_trips = block.get_trips(service_group)
-                    <div class="section">
-                        % if len(sheets) > 1 or len(sheet.service_groups) > 1:
-                            <h3 class="title">{{ service_group }}</h3>
-                            <div class="subtitle">{{ service_group.date_string }}</div>
-                        % end
-                        <table class="striped">
-                            <thead>
-                                <tr>
-                                    <th>Start Time</th>
-                                    <th class="non-mobile">End Time</th>
-                                    <th class="desktop-only">Duration</th>
-                                    <th class="non-mobile">Headsign</th>
-                                    <th class="desktop-only">Direction</th>
-                                    <th>Trip</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % for trip in service_group_trips:
-                                    <tr>
-                                        <td>{{ trip.start_time }}</td>
-                                        <td class="non-mobile">{{ trip.end_time }}</td>
-                                        <td class="desktop-only">{{ trip.duration }}</td>
-                                        <td class="non-mobile">
-                                            {{ trip }}
-                                            <br class="non-desktop" />
-                                            <span class="non-desktop smaller-font">{{ trip.direction }}</span>
-                                        </td>
-                                        <td class="desktop-only">{{ trip.direction }}</td>
-                                        <td>
-                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                            <br class="mobile-only" />
-                                            <span class="mobile-only smaller-font">{{ trip }}</span>
-                                        </td>
-                                    </tr>
+                <div class="section">
+                    <h3 class="title">{{ sheet }}</h3>
+                    <div class="container">
+                        % for service_group in sheet.service_groups:
+                            % service_group_trips = block.get_trips(service_group=service_group)
+                            <div class="section">
+                                <h4 class="title">{{ service_group }}</h4>
+                                % if service_group.schedule.special:
+                                    <div class="subtitle">{{ service_group.schedule.modified_dates_string }}</div>
                                 % end
-                            </tbody>
-                        </table>
+                                <table class="striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Start Time</th>
+                                            <th class="non-mobile">End Time</th>
+                                            <th class="desktop-only">Duration</th>
+                                            <th class="non-mobile">Headsign</th>
+                                            <th class="desktop-only">Direction</th>
+                                            <th>Trip</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        % for trip in service_group_trips:
+                                            <tr>
+                                                <td>{{ trip.start_time }}</td>
+                                                <td class="non-mobile">{{ trip.end_time }}</td>
+                                                <td class="desktop-only">{{ trip.duration }}</td>
+                                                <td class="non-mobile">
+                                                    {{ trip }}
+                                                    <br class="non-desktop" />
+                                                    <span class="non-desktop smaller-font">{{ trip.direction }}</span>
+                                                </td>
+                                                <td class="desktop-only">{{ trip.direction }}</td>
+                                                <td>
+                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                                    <br class="mobile-only" />
+                                                    <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                </td>
+                                            </tr>
+                                        % end
+                                    </tbody>
+                                </table>
+                            </div>
+                        % end
                     </div>
-                % end
+                </div>
             % end
         </div>
     </div>

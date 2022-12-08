@@ -10,13 +10,49 @@
 </div>
 
 % if system is None:
-    <p>
-        Stops can only be viewed for individual systems.
-        Please choose a system.
-    </p>
-    <div class="non-desktop">
-        % include('components/systems')
-    </div>
+    <p>Choose a system to see individual stops.</p>
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>System</th>
+                <th class="non-mobile"># Stops</th>
+                <th>Service Days</th>
+            </tr>
+        </thead>
+        <tbody>
+            % for region in regions:
+                % region_systems = [s for s in systems if s.region == region]
+                % if len(region_systems) > 0:
+                    <tr class="section">
+                        <td colspan="3">
+                            {{ region }}
+                        </td>
+                    </tr>
+                    <tr class="display-none"></tr>
+                    % for region_system in region_systems:
+                        % count = len(region_system.get_stops())
+                        <tr>
+                            <td>
+                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                <br class="mobile-only" />
+                                <span class="mobile-only smaller-font">
+                                    % if count == 1:
+                                        1 Stop
+                                    % else:
+                                        {{ count }} Stops
+                                    % end
+                                </span>
+                            </td>
+                            <td class="non-mobile">{{ count }}</td>
+                            <td>
+                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                            </td>
+                        </tr>
+                    % end
+                % end
+            % end
+        </tbody>
+    </table>
 % else:
     % stops = system.get_stops()
     % if len(stops) == 0 and search is None:

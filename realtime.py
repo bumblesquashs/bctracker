@@ -94,11 +94,10 @@ def update_records():
                 helpers.overview.update(overview, today, system, record_id)
         database.commit()
     except Exception as e:
-        print(f'Error: Failed to update records')
-        print(f'Error message: {e}')
+        print(f'Failed to update records: {e}')
 
 def get_position(bus_number):
-    '''Returns the position for a given bus number, or None'''
+    '''Returns the position for a given bus number'''
     if bus_number in positions:
         return positions[bus_number]
     return None

@@ -1,4 +1,5 @@
 
+% from models.date import Date
 % from models.model import ModelType
 
 % rebase('base', title=f'Bus {bus}', include_maps=True)
@@ -63,8 +64,15 @@
                     <div class="value">
                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                         <br />
-                        % service_group = block.today_service_group
-                        <span class="smaller-font">{{ block.get_start_time(service_group) }} - {{ block.get_end_time(service_group) }} ({{ block.get_duration(service_group) }})</span>
+                        % if system is None:
+                            % today = Date.today(None)
+                        % else:
+                            % today = Date.today(system.timezone)
+                        % end
+                        % start_time = block.get_start_time(date=today)
+                        % end_time = block.get_end_time(date=today)
+                        % duration = block.get_duration(date=today)
+                        <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                     </div>
                 </div>
                 <div class="section">

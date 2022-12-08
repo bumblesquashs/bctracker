@@ -15,7 +15,7 @@ def load():
             regions[region.id] = region
 
 def find(region_id):
-    '''Returns the region with the given ID, or None'''
+    '''Returns the region with the given ID'''
     if region_id is not None and region_id in regions:
         return regions[region_id]
     return None

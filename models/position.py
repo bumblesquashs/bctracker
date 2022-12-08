@@ -62,14 +62,14 @@ class Position:
     
     @property
     def trip(self):
-        '''Returns the trip associated with this position, or None'''
+        '''Returns the trip associated with this position'''
         if self.trip_id is None:
             return None
         return self.system.get_trip(self.trip_id)
     
     @property
     def stop(self):
-        '''Returns the stop associated with this position, or None'''
+        '''Returns the stop associated with this position'''
         if self.stop_id is None:
             return None
         return self.system.get_stop(stop_id=self.stop_id)

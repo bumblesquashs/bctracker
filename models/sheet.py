@@ -1,79 +1,94 @@
 
 from models.date import Date
-from models.service import ServiceGroup, ServiceException, ServiceExceptionType
+from models.schedule import Schedule
 
 class Sheet:
-    '''A collection of overlapping services with defined start and end dates'''
+    '''A collection of overlapping services'''
     
-    __slots__ = ('services', 'timezone', 'start_date', 'end_date', '_service_groups')
+    __slots__ = ('system', 'id', 'schedule', 'services', 'service_groups')
     
-    def __init__(self, service):
-        self.services = [service]
-        self.timezone = service.timezone
-        self.start_date = service.start_date
-        self.end_date = service.end_date
-        
-        self._service_groups = None
+    @classmethod
+    def combine(cls, system, services, include_special):
+        id = '_'.join(sorted({s.id for s in services}))
+        schedule = Schedule.combine([s.schedule for s in services])
+        service_groups = []
+        if include_special:
+            dates = {d for s in services for d in s.schedule.modified_dates if s.schedule.special}
+            date_services = {d:tuple({s for s in services if s.schedule.includes(d)}) for d in dates}
+            for service_set in set(date_services.values()):
+                modified_dates = {k for k,v in date_services.items() if v == service_set}
+                service_groups.append(ServiceGroup.combine(system, service_set, weekdays=set(), modified_dates=modified_dates))
+        weekdays = {w for s in services for w in s.schedule.weekdays if not s.schedule.special}
+        weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in weekdays}
+        for service_set in set(weekday_services.values()):
+            service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
+            service_groups.append(ServiceGroup.combine(system, service_set, weekdays=service_set_weekdays))
+        return cls(system, id, schedule, services, sorted(service_groups))
+    
+    def __init__(self, system, id, schedule, services, service_groups):
+        self.system = system
+        self.id = id
+        self.schedule = schedule
+        self.services = services
+        self.service_groups = service_groups
     
     def __str__(self):
-        if self.start_date == self.end_date:
-            return str(self.start_date)
-        return f'{self.start_date} to {self.end_date}'
+        return self.schedule.date_string
     
     def __hash__(self):
-        return hash(str(self))
+        return hash(self.id)
     
     def __eq__(self, other):
-        return self.services == other.services
+        return self.id == other.id
     
     def __lt__(self, other):
-        return self.start_date < other.start_date
+        return self.schedule.start_date < other.schedule.start_date
+
+class ServiceGroup:
+    '''A collection of services represented as a single schedule'''
+    
+    __slots__ = ('system', 'id', 'schedule', 'services')
+    
+    @classmethod
+    def combine(cls, system, services, weekdays=None, modified_dates=None, excluded_dates=None):
+        '''Returns a service group that combines a list of services'''
+        if len(services) == 0:
+            return None
+        id = '_'.join(sorted({s.id for s in services}))
+        schedules = [s.schedule for s in services]
+        start_date = min({s.start_date for s in schedules})
+        end_date = max({s.end_date for s in schedules})
+        if weekdays is None:
+            weekdays = {w for s in schedules for w in s.weekdays}
+        if modified_dates is None:
+            modified_dates = {d for s in schedules for d in s.modified_dates}
+        if excluded_dates is None:
+            excluded_dates = {d for s in schedules for d in s.excluded_dates}
+        for date in excluded_dates:
+            if len([s for s in schedules if date in s.excluded_dates]) < len([s for s in schedules if date.weekday in s.weekdays]):
+                modified_dates.add(date)
+        schedule = Schedule(start_date, end_date, weekdays, modified_dates, excluded_dates - modified_dates)
+        return cls(system, id, schedule, services)
+    
+    def __init__(self, system, id, schedule, services):
+        self.system = system
+        self.id = id
+        self.schedule = schedule
+        self.services = services
+    
+    def __str__(self):
+        return str(self.schedule)
+    
+    def __hash__(self):
+        return hash(self.id)
+    
+    def __eq__(self, other):
+        return self.id == other.id
+    
+    def __lt__(self, other):
+        return self.schedule < other.schedule
     
     @property
-    def service_groups(self):
-        '''Returns a list of non-overlapping service groups created from the services associated with this sheet'''
-        if self._service_groups is None:
-            groups = []
-            
-            dates = {d for s in self.services for d in s.included_dates if s.special}
-            date_services = {d:tuple({s for s in self.services if s.includes(d)}) for d in dates}
-            special_service_sets = set(date_services.values())
-            for service_set in special_service_sets:
-                id = '_'.join(sorted([s.id for s in service_set]))
-                start_date = min({s.start_date for s in service_set})
-                end_date = max({s.end_date for s in service_set})
-                service_set_dates = {k for k,v in date_services.items() if v == service_set}
-                exceptions = [ServiceException(id, d, ServiceExceptionType.INCLUDED) for d in service_set_dates]
-                groups.append(ServiceGroup(id, sorted(service_set), start_date, end_date, False, False, False, False, False, False, False, exceptions))
-            
-            indices = {i for s in self.services for i in s.indices if not s.special}
-            index_services = {i:tuple({s for s in self.services if i in s.indices}) for i in indices}
-            service_sets = set(index_services.values())
-            for service_set in service_sets:
-                id = '_'.join(sorted([s.id for s in service_set]))
-                start_date = min({s.start_date for s in service_set})
-                end_date = max({s.end_date for s in service_set})
-                service_set_indices = {k for k,v in index_services.items() if v == service_set}
-                mon = 0 in service_set_indices
-                tue = 1 in service_set_indices
-                wed = 2 in service_set_indices
-                thu = 3 in service_set_indices
-                fri = 4 in service_set_indices
-                sat = 5 in service_set_indices
-                sun = 6 in service_set_indices
-                exceptions = {e for s in service_set for e in s.exceptions}
-                groups.append(ServiceGroup(id, sorted(service_set), start_date, end_date, mon, tue, wed, thu, fri, sat, sun, exceptions))
-            self._service_groups = sorted(groups)
-        return self._service_groups
-    
-    @property
-    def is_current(self):
-        '''Checks if the current date is within this sheet's start and end dates'''
-        return self.start_date <= Date.today(self.timezone) <= self.end_date
-    
-    def add_service(self, service):
-        '''Adds a service to this sheet'''
-        self.services.append(service)
-        self.start_date = min(self.start_date, service.start_date)
-        self.end_date = max(self.end_date, service.end_date)
-        self._service_groups = None
+    def is_today(self):
+        '''Returns whether or not this service group runs on the current date'''
+        return self.schedule.includes(Date.today(self.system.timezone))

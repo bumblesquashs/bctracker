@@ -1,8 +1,10 @@
 
 from datetime import datetime, timedelta
-import pytz
 
 import calendar
+import pytz
+
+from models.weekday import Weekday
 
 class Date:
     '''A specific year, month, and day'''
@@ -96,6 +98,7 @@ class Date:
     
     @property
     def timezone_name(self):
+        '''Returns the name of this date's timezone'''
         if self.timezone is None:
             return None
         return datetime.now(pytz.timezone(self.timezone)).tzname()
@@ -103,7 +106,7 @@ class Date:
     @property
     def weekday(self):
         '''Returns the weekday of this date'''
-        return self.datetime.weekday()
+        return Weekday(self.datetime.weekday())
     
     def format_db(self):
         '''Returns a string of this date formatted as YYYY-MM-DD'''

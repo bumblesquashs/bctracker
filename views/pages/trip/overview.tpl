@@ -21,7 +21,7 @@
         
         <div class="info-box">
             <div class="section no-flex">
-                % include('components/service_pattern_indicator', pattern=trip.service)
+                % include('components/schedules_indicator', schedules=[trip.service.schedule])
             </div>
             <div class="section">
                 <div class="name">Start time</div>

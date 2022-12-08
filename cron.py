@@ -7,6 +7,7 @@ from crontab import CronTab
 import helpers.system
 
 from models.date import Date
+from models.weekday import Weekday
 
 import gtfs
 import realtime
@@ -42,33 +43,21 @@ def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
         today = Date.today(system.timezone)
-        try:
-            if today.weekday == 0 or not gtfs.validate(system):
-                gtfs.update(system)
-            else:
-                new_services = [s for s in system.get_services() if s.start_date == today]
-                if len(new_services) > 0:
-                    gtfs.load(system)
-        except Exception as e:
-            print(f'Error: Failed to update gtfs for {system}')
-            print(f'Error message: {e}')
+        if today.weekday == Weekday.MON or not gtfs.validate(system):
+            gtfs.update(system)
     date = datetime.now() - timedelta(days=1)
     backup.run(date, date.weekday() == 0)
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
     for system in helpers.system.find_all():
-        try:
-            realtime.update(system)
-            if realtime.validate(system):
-                system.validation_errors = 0
-            else:
-                system.validation_errors += 1
-                if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
-                    gtfs.update(system)
-        except Exception as e:
-            print(f'Error: Failed to update realtime for {system}')
-            print(f'Error message: {e}')
+        realtime.update(system)
+        if realtime.validate(system):
+            system.validation_errors = 0
+        else:
+            system.validation_errors += 1
+            if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
+                gtfs.update(system)
     realtime.update_records()
     
     # Backup database at the end of each day
