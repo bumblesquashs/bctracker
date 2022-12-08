@@ -98,3 +98,27 @@ admin_key: '<key>'
 ```
 
 Once you've done that, run `setup.sh` to install packages and create directories, and then run `start.py` to load up the server.
+
+## Certbot wildcard domain renew
+
+To renew a wildcard domain on certbot, you need to do the following:
+
+in the server:
+
+```
+certbot certonly --manual --preferred-challenges dns
+```
+
+When it asks, enter whatever domain name you are using like so:
+```
+bctracker.ca, *.bctracker.ca
+```
+
+Finally, it give a random string for the "ACME Challenge". You will need to go to your DNS settings and add a TXT record for `_acme-challenge` with the value they provide.
+After applying this change, wait some time before hitting enter to continue. Check out a dig tool like this https://toolbox.googleapps.com/apps/dig/#TXT/_acme-challenge.bctracker.ca 
+to see whether your new record is showing up. You want it to be showing up over dig so that certbot can read it.
+
+After hitting enter, it may ask you to set ANOTHER TXT record too also under `_acme-challenge` which is apparently just fine. Same procedure. Hopefully after that, it will have worked.
+
+After cerbot runs, don't forget to hit `service nginx reload`!! And then all will be good.
+
