@@ -71,7 +71,7 @@ class Stop:
         if service_group is None:
             if date is None:
                 return sorted(self.departures)
-            return sorted([d for d in self.departures if d.trip.schedule.includes(date)])
+            return sorted([d for d in self.departures if d.trip.service.schedule.includes(date)])
         return sorted([d for d in self.departures if d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):
