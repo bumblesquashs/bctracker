@@ -19,7 +19,7 @@
                 <span class="icon modified-service"></span> Modified Service
             </div>
         % end
-        % if len(excluded_dates) > 0 or len([s for s in schedules if len(s.weekdays) < 7 and not s.special]) > 0:
+        % if len(excluded_dates) > 0 or len([s for s in schedules if len(s.weekdays) < 7]) > 0:
             <div>
                 <span class="icon no-service"></span> No Service
             </div>
@@ -27,10 +27,8 @@
     </div>
     % for (i, schedule) in enumerate(schedules):
         <div class="schedule">
-            % if not schedule.special:
-                <div class="title">{{ schedule.date_string }}</div>
-                % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
-            % end
+            <div class="title">{{ schedule.date_string }}</div>
+            % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
         </div>
     % end
     % dates = modified_dates.union(excluded_dates)
