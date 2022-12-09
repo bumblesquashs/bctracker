@@ -419,6 +419,10 @@ table.striped tr:nth-child(2n-1) {
     border-color: #FFFFFF;
 }
 
+.schedules .footer {
+    color: #ABABAB;
+}
+
 .schedules .legend {
     color: #ABABAB;
 }

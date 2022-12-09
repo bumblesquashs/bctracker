@@ -12,17 +12,17 @@ class Sheet:
         id = '_'.join(sorted({s.id for s in services}))
         schedule = Schedule.combine([s.schedule for s in services])
         service_groups = []
-        if include_special:
-            dates = {d for s in services for d in s.schedule.modified_dates if s.schedule.special}
-            date_services = {d:tuple({s for s in services if s.schedule.includes(d)}) for d in dates}
-            for service_set in set(date_services.values()):
-                modified_dates = {k for k,v in date_services.items() if v == service_set}
-                service_groups.append(ServiceGroup.combine(system, service_set, weekdays=set(), modified_dates=modified_dates))
         weekdays = {w for s in services for w in s.schedule.weekdays if not s.schedule.special}
         weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in weekdays}
         for service_set in set(weekday_services.values()):
             service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
             service_groups.append(ServiceGroup.combine(system, service_set, weekdays=service_set_weekdays))
+        if include_special or len(service_groups) == 0:
+            dates = {d for s in services for d in s.schedule.modified_dates if s.schedule.special}
+            date_services = {d:tuple({s for s in services if s.schedule.includes(d)}) for d in dates}
+            for service_set in set(date_services.values()):
+                modified_dates = {k for k,v in date_services.items() if v == service_set}
+                service_groups.append(ServiceGroup.combine(system, service_set, weekdays=set(), modified_dates=modified_dates))
         return cls(system, id, schedule, services, sorted(service_groups))
     
     def __init__(self, system, id, schedule, services, service_groups):

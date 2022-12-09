@@ -489,6 +489,10 @@ table.striped tr {
     text-shadow: none;
 }
 
+.schedules .footer {
+    color: #666666;
+}
+
 .schedules .legend {
     color: #666666;
 }
