@@ -56,4 +56,9 @@
             % end
         </div>
     % end
+    % if url is not None:
+        <div class="footer">
+            Click on a weekday or date to jump to the schedule for that day
+        </div>
+    % end
 </div>

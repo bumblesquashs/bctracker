@@ -1,4 +1,6 @@
 
+% from datetime import timedelta
+
 % rebase('base', title='Blocks')
 
 <div class="page-header">
@@ -19,16 +21,24 @@
         <div class="sidebar flex-1">
             <h2>Overview</h2>
             <div class="info-box">
+                <div class="section vertical-align">
+                    % previous_date = date - timedelta(days=1)
+                    % next_date = date + timedelta(days=1)
+                    <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
+                    <div class="name centred">
+                        <h3>{{ date.format_long() }}</h3>
+                        <a href="{{ get_url(system, 'blocks') }}">Return to week view</a>
+                    </div>
+                    <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
+                </div>
                 <div class="section no-flex">
                     % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], url=get_url(system, 'blocks'), date_url=get_url(system, 'blocks/schedule'))
-                </div>
-                <div class="section">
-                    <a href="{{ get_url(system, 'blocks') }}">Return to week view</a>
                 </div>
             </div>
         </div>
         <div class="flex-3">
             <h2>{{ date.format_long() }}</h2>
+            <h3>{{ date.weekday }}</h3>
             % blocks = [b for b in system.get_blocks() if b.schedule.includes(date)]
             % if len(blocks) == 0:
                 <p>No blocks found for {{ system }} on {{ date.format_long() }}.</p>

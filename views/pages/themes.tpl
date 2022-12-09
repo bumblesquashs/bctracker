@@ -16,6 +16,9 @@
     You can also set it to change automatically based on your system preferences.
     Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
 </p>
+<p>
+    A high contrast option is also available to help distinguish some parts of the website better for anyone who is visually impaired.
+</p>
 
 % visible_themes = [t for t in themes if t.visible]
 % hidden_themes = [t for t in themes if not t.visible]

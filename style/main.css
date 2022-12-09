@@ -285,6 +285,10 @@ table.striped tr.section td {
     gap: 5px;
 }
 
+.centred {
+    text-align: center;
+}
+
 .checkbox {
     cursor: pointer;
     vertical-align: middle;
@@ -376,6 +380,10 @@ table.striped tr.section td {
     border-bottom-style: solid;
     padding-bottom: 10px;
     margin-bottom: 10px;
+}
+
+.info-box .section.vertical-align {
+    align-items: center;
 }
 
 .info-box .section:last-child {
@@ -634,6 +642,13 @@ table.striped tr.section td {
     user-select: none;
     text-align: center;
     text-decoration: none;
+}
+
+.schedules .footer {
+    width: 75%;
+    margin: 10px auto 0px auto;
+    font-size: 11pt;
+    text-align: center;
 }
 
 .schedules .legend {

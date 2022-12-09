@@ -97,6 +97,32 @@
         
         <div class="news-post">
             <div class="header">
+                <h3>Winter Update</h3>
+                December 8, 2022
+            </div>
+            <div class="content">
+                <p>
+                    Starting today, we're introducing a new way to see what days of the week routes, stops, blocks, and trips have normal service, and what dates have modified or no service.
+                    Along with providing a handy overview, the new design works as links to go directly to the detailed schedule view.
+                    This is a big step forward in our quest to make BC Transit's schedules easy to understand - despite their apparent efforts to make it as complex as possible!
+                </p>
+                <p>
+                    A few other small updates have also made their way onto the website, including:
+                </p>
+                <ul>
+                    <li>Total number of routes/stops/blocks is shown per system when looking at all systems</li>
+                    <li>Toggle for NIS buses on the main map</li>
+                    <li>A new high contrast accessibility theme for people who are visually impaired</li>
+                </ul>
+                <p>
+                    As always, feedback on the latest changes is welcome and appreciated.
+                    Enjoy the holidays and stay safe out there!
+                </p>
+            </div>
+        </div>
+        
+        <div class="news-post">
+            <div class="header">
                 <h3>Summer Update</h3>
                 August 29, 2022
             </div>
@@ -121,31 +147,6 @@
                 </p>
                 <p>
                     That's all for now - enjoy the rest of the summer!
-                </p>
-            </div>
-        </div>
-        
-        <div class="news-post">
-            <div class="header">
-                <h3>Multiple Systems Anniversary</h3>
-                July 12, 2022
-            </div>
-            <div class="content">
-                <p>
-                    Today is exactly one year since we started tracking buses in places other than Victoria.
-                    We're celebrating by keeping the trend going - even more systems are now available!
-                </p>
-                <p>
-                    Starting today, you'll find <b>East Kootenay</b>, <b>Creston Valley</b>, <b>Fort St. John</b>, <b>Dawson Creek</b>, <b>Kitimat</b>, and <b>Prince Rupert</b> in the systems list.
-                    You may have also noticed the addition of <b>West Kootenay</b> as well as realtime information in <b>North Okanagan</b>, <b>South Okanagan</b>, and <b>Prince George</b> since the last update post.
-                    That brings us now to a total of <b>23</b> supported systems, which is an amazing number considering that until a year ago there was only one single system!
-                </p>
-                <p>
-                    This will likely be the last batch of new systems for a while, as BC Transit has completed the NextRide rollout in all the systems originally announced in January.
-                    However, if more systems are ever introduced, rest assured that we'll work hard to get them added as well!
-                </p>
-                <p>
-                    Happy tracking!
                 </p>
             </div>
         </div>
