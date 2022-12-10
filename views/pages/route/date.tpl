@@ -52,7 +52,7 @@
                 % for direction in sorted({t.direction for t in trips}):
                     % direction_trips = [t for t in trips if t.direction == direction]
                     <div class="section">
-                        <h3>{{ direction }}</h3>
+                        <h4>{{ direction }}</h4>
                         <table class="striped">
                             <thead>
                                 <tr>

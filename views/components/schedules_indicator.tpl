@@ -4,6 +4,7 @@
 % url = get('url', None)
 % date_url = get('date_url', url)
 
+% show_special_schedules = len([s for s in schedules if not s.special]) == 0
 % modified_dates = {d for s in schedules for d in s.modified_dates}
 % excluded_dates = {d for s in schedules for d in s.excluded_dates}
 
@@ -19,17 +20,19 @@
                 <span class="icon modified-service"></span> Modified Service
             </div>
         % end
-        % if len(excluded_dates) > 0 or len([s for s in schedules if len(s.weekdays) < 7]) > 0:
+        % if len(excluded_dates) > 0 or len([s for s in schedules if len(s.weekdays) < 7]) > 0 or show_special_schedules:
             <div>
                 <span class="icon no-service"></span> No Service
             </div>
         % end
     </div>
     % for (i, schedule) in enumerate(schedules):
-        <div class="schedule">
-            <div class="title">{{ schedule.date_string }}</div>
-            % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
-        </div>
+        % if not schedule.special or show_special_schedules:
+            <div class="schedule">
+                <div class="title">{{ schedule.date_string }}</div>
+                % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
+            </div>
+        % end
     % end
     % dates = modified_dates.union(excluded_dates)
     % if len(dates) > 0:
