@@ -40,7 +40,7 @@
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_start_time(service_group=service_group) }}</div>
+                        <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
                     % end
                 </div>
             </div>
@@ -57,7 +57,7 @@
                                 % end
                             </div>
                         % end
-                        <div>{{ block.get_end_time(service_group=service_group) }}</div>
+                        <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
                     % end
                 </div>
             </div>
@@ -209,8 +209,8 @@
                                     <tbody>
                                         % for trip in service_group_trips:
                                             <tr>
-                                                <td>{{ trip.start_time }}</td>
-                                                <td class="non-mobile">{{ trip.end_time }}</td>
+                                                <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
                                                 <td class="desktop-only">{{ trip.duration }}</td>
                                                 <td class="non-mobile">
                                                     {{ trip }}

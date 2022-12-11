@@ -69,8 +69,8 @@
                         % else:
                             % today = Date.today(system.timezone)
                         % end
-                        % start_time = block.get_start_time(date=today)
-                        % end_time = block.get_end_time(date=today)
+                        % start_time = block.get_start_time(date=today).format_web(time_format)
+                        % end_time = block.get_end_time(date=today).format_web(time_format)
                         % duration = block.get_duration(date=today)
                         <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                     </div>
@@ -80,7 +80,9 @@
                     <div class="value">
                         <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                         <br />
-                        <span class="smaller-font">{{ trip.start_time }} - {{ trip.end_time }} ({{ trip.duration }})</span>
+                        % start_time = trip.start_time.format_web(time_format)
+                        % end_time = trip.end_time.format_web(time_format)
+                        <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
                     </div>
                 </div>
                 % if stop is not None:
@@ -176,12 +178,14 @@
                                 <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">{{ record.routes }}</span>
                             </td>
+                            % start_time = record.start_time.format_web(time_format)
+                            % end_time = record.end_time.format_web(time_format)
                             <td class="desktop-only">{{ record.routes }}</td>
-                            <td class="desktop-only">{{ record.start_time }}</td>
-                            <td class="desktop-only">{{ record.end_time }}</td>
-                            <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
-                            <td class="desktop-only">{{ record.first_seen }}</td>
-                            <td class="desktop-only">{{ record.last_seen }}</td>
+                            <td class="desktop-only">{{ start_time }}</td>
+                            <td class="desktop-only">{{ end_time }}</td>
+                            <td class="tablet-only">{{ start_time }} - {{ end_time }}</td>
+                            <td class="desktop-only">{{ record.first_seen.format_web(time_format) }}</td>
+                            <td class="desktop-only">{{ record.last_seen.format_web(time_format) }}</td>
                         </tr>
                     % end
                 </tbody>

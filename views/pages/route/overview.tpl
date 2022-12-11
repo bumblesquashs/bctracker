@@ -141,7 +141,7 @@
                                             % last_hour = this_hour
                                         % end
                                         <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                                            <td>{{ trip.start_time }}</td>
+                                            <td>{{ trip.start_time.format_web(time_format) }}</td>
                                             % if system is None or system.realtime_enabled:
                                                 % if trip.id in recorded_today:
                                                     % bus = recorded_today[trip.id]

@@ -44,11 +44,7 @@ class Time:
         self.timezone = timezone
     
     def __str__(self):
-        if self.unknown:
-            return ''
-        if self.accurate_seconds:
-            return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
-        return f'{self.hour:02d}:{self.minute:02d}'
+        return self.format_web()
     
     def __eq__(self, other):
         if self.accurate_seconds and other.accurate_seconds:
@@ -93,6 +89,32 @@ class Time:
         if self.unknown:
             return None
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
+    
+    def format_web(self, time_format='24hr'):
+        if self.unknown:
+            return ''
+        hour = self.hour
+        minute = self.minute
+        second = self.second
+        if time_format == '12hr':
+            if hour < 4:
+                hour_str = '12' if hour == 0 else str(hour)
+                am_pm = 'xm'
+            elif hour < 12:
+                hour_str = str(hour)
+                am_pm = 'am'
+            elif hour < 24:
+                hour_str = '12' if hour == 12 else str(hour - 12)
+                am_pm = 'pm'
+            else:
+                hour_str = '12' if hour == 24 else str(hour - 24)
+                am_pm = 'xm'
+            if self.accurate_seconds:
+                return f'{hour_str}:{minute:02d}:{second:02d}{am_pm}'
+            return f'{hour_str}:{minute:02d}{am_pm}'
+        if self.accurate_seconds:
+            return f'{hour:02d}:{minute:02d}:{second:02d}'
+        return f'{hour:02d}:{minute:02d}'
     
     def format_difference(self, other):
         '''Returns a string of the number of hours and minutes between this time and another time'''
