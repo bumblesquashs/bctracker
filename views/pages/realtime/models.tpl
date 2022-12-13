@@ -46,13 +46,13 @@
         
         % for model in models:
             % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
+            % model_years = sorted({p.bus.order.year for p in model_positions})
             <div class="section">
                 <h2 class="title">{{ model }}</h2>
                 <table class="striped">
                     <thead>
                         <tr>
                             <th class="non-mobile">Number</th>
-                            <th class="non-mobile">Year</th>
                             <th class="mobile-only">Bus</th>
                             % if system is None:
                                 <th class="non-mobile">System</th>
@@ -65,55 +65,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % last_year = None
-                        % for position in model_positions:
-                            % bus = position.bus
-                            % order = bus.order
-                            % same_year = last_year is None or order.year == last_year
-                            % last_year = order.year
-                            <tr class="{{'' if same_year else 'divider'}}">
-                                <td>
-                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br class="mobile-only" />
-                                    <span class="mobile-only smaller-font">{{ order.year }}</span>
+                        % for year in model_years:
+                            % year_positions = [p for p in model_positions if p.bus.order.year == year]
+                            <tr class="section">
+                                <td colspan="8">
+                                    <div class="flex-row">
+                                        <div class="flex-1">{{ year }}</div>
+                                        <div>{{ len(year_positions) }}</div>
+                                    </div>
                                 </td>
-                                <td class="non-mobile">
-                                    {{ order.year }}
-                                </td>
-                                % if system is None:
-                                    <td class="non-mobile">{{ position.system }}</td>
-                                % end
-                                % if position.trip is None:
-                                    <td class="lighter-text">Not in service</td>
-                                    <td class="desktop-only"></td>
-                                    <td class="desktop-only"></td>
-                                    <td class="desktop-only"></td>
-                                % else:
-                                    % trip = position.trip
-                                    % block = position.trip.block
-                                    % stop = position.stop
-                                    <td>
-                                        {{ trip }}
-                                        % if stop is not None:
-                                            <br class="non-desktop" />
-                                            <span class="non-desktop smaller-font">
-                                                % include('components/adherence_indicator', adherence=position.adherence)
-                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                            </span>
-                                        % end
-                                    </td>
-                                    <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                    <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                                    % if stop is None:
-                                        <td class="desktop-only lighter-text">Unavailable</td>
-                                    % else:
-                                        <td class="desktop-only">
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                        </td>
-                                    % end
-                                % end
                             </tr>
+                            % for position in year_positions:
+                                % include('components/realtime_row', position=position)
+                            % end
                         % end
                     </tbody>
                 </table>
@@ -141,42 +105,7 @@
                     </thead>
                     <tbody>
                         % for position in unknown_positions:
-                            <tr>
-                                <td>{{ position.bus }}</td>
-                                % if system is None:
-                                    <td class="non-mobile">{{ position.system }}</td>
-                                % end
-                                % if position.trip is None:
-                                    <td class="lighter-text">Not in service</td>
-                                    <td class="desktop-only"></td>
-                                    <td class="desktop-only"></td>
-                                    <td class="desktop-only"></td>
-                                % else:
-                                    % trip = position.trip
-                                    % block = position.trip.block
-                                    % stop = position.stop
-                                    <td>
-                                        {{ trip }}
-                                        % if stop is not None:
-                                            <br class="non-desktop" />
-                                            <span class="non-desktop smaller-font">
-                                                % include('components/adherence_indicator', adherence=position.adherence)
-                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                            </span>
-                                        % end
-                                    </td>
-                                    <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                    <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                                    % if stop is None:
-                                        <td class="desktop-only lighter-text">Unavailable</td>
-                                    % else:
-                                        <td class="desktop-only">
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                        </td>
-                                    % end
-                                % end
-                            </tr>
+                            % include('components/realtime_row', position=position)
                         % end
                     </tbody>
                 </table>
