@@ -25,11 +25,11 @@
             </div>
             <div class="section">
                 <div class="name">Start time</div>
-                <div class="value">{{ trip.start_time }}</div>
+                <div class="value">{{ trip.start_time.format_web(time_format) }}</div>
             </div>
             <div class="section">
                 <div class="name">End time</div>
-                <div class="value">{{ trip.end_time }}</div>
+                <div class="value">{{ trip.end_time.format_web(time_format) }}</div>
             </div>
             <div class="section">
                 <div class="name">Duration</div>
@@ -142,7 +142,7 @@
                 % for departure in trip.departures:
                     % stop = departure.stop
                     <tr>
-                        <td>{{ departure.time }}</td>
+                        <td>{{ departure.time.format_web(time_format) }}</td>
                         <td>
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                             <br class="mobile-only" />

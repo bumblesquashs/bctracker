@@ -113,11 +113,11 @@
                                 <span class="non-desktop smaller-font">{{ record.routes }}</span>
                             </td>
                             <td class="desktop-only">{{ record.routes }}</td>
-                            <td class="desktop-only">{{ record.start_time }}</td>
-                            <td class="desktop-only">{{ record.end_time }}</td>
-                            <td class="tablet-only">{{ record.start_time }} - {{ record.end_time }}</td>
-                            <td class="desktop-only">{{ record.first_seen }}</td>
-                            <td class="desktop-only">{{ record.last_seen }}</td>
+                            <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
+                            <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>
+                            <td class="tablet-only">{{ record.start_time.format_web(time_format) }} - {{ record.end_time.format_web(time_format) }}</td>
+                            <td class="desktop-only">{{ record.first_seen.format_web(time_format) }}</td>
+                            <td class="desktop-only">{{ record.last_seen.format_web(time_format) }}</td>
                         </tr>
                     % end
                 </tbody>

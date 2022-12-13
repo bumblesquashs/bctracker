@@ -86,19 +86,6 @@ class System:
         return self.enabled and self.realtime_url is not None
     
     @property
-    def last_updated(self):
-        '''Returns the date/time that realtime data was last updated'''
-        date = self.last_updated_date
-        time = self.last_updated_time
-        if date is None or time is None:
-            return 'N/A'
-        if date.is_today:
-            if time.timezone is None:
-                return f'at {time}'
-            return f'at {time} {time.timezone_name}'
-        return date.format_since()
-    
-    @property
     def schedule(self):
         '''The overall service schedule for this system'''
         return Schedule.combine([s.schedule for s in self.get_services()])
@@ -166,6 +153,18 @@ class System:
     def get_trips(self):
         '''Returns all trips'''
         return self.trips.values()
+    
+    def get_last_updated(self, time_format):
+        '''Returns the date/time that realtime data was last updated'''
+        date = self.last_updated_date
+        time = self.last_updated_time
+        if date is None or time is None:
+            return 'N/A'
+        if date.is_today:
+            if time.timezone is None:
+                return f'at {time.format_web(time_format)}'
+            return f'at {time.format_web(time_format)} {time.timezone_name}'
+        return date.format_since()
     
     def search_routes(self, query):
         '''Returns all routes that match the given query'''

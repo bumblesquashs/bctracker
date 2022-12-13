@@ -282,7 +282,11 @@ table.striped tr.section td {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 10px;
+}
+
+.button-control .button {
+    display: block;
 }
 
 .centred {
@@ -705,15 +709,6 @@ table.striped tr.section td {
 
 .tab-button.current:hover {
     cursor: default !important;
-}
-
-.theme-control {
-    display: flex;
-    gap: 10px;
-}
-
-.theme-control .button {
-    display: block;
 }
 
 .tooltip-anchor {

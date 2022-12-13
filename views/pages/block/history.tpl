@@ -106,8 +106,8 @@
                                         {{ order }}
                                     % end
                                 </td>
-                                <td class="non-mobile">{{ record.first_seen }}</td>
-                                <td>{{ record.last_seen }}</td>
+                                <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
+                                <td>{{ record.last_seen.format_web(time_format) }}</td>
                             </tr>
                         % end
                     </tbody>

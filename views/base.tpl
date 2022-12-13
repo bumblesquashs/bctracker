@@ -207,7 +207,7 @@
                 </a>
                 <div id="navigation-menu-theme">
                     <span class="title">Theme:</span>
-                    <a href="{{ get_url(system, 'themes') }}">
+                    <a href="{{ get_url(system, 'personalize') }}">
                         % if theme is None:
                             BC Transit
                         % else:

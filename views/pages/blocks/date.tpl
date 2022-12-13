@@ -65,8 +65,8 @@
                     </thead>
                     <tbody>
                         % for block in blocks:
-                            % start_time = block.get_start_time(date=date)
-                            % end_time = block.get_end_time(date=date)
+                            % start_time = block.get_start_time(date=date).format_web(time_format)
+                            % end_time = block.get_end_time(date=date).format_web(time_format)
                             <tr>
                                 <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                 <td>{{ block.get_routes_string(date=date) }}</td>

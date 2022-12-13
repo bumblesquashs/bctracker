@@ -1,7 +1,7 @@
 
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
-from bottle import Bottle, static_file, template, request, response, debug
+from bottle import Bottle, static_file, template, request, response, debug, redirect
 import cherrypy as cp
 
 import helpers.model
@@ -99,11 +99,12 @@ def get_url(system, path=''):
 def page(name, system_id, path='', **kwargs):
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
+    time_format = request.query.get('time_format') or request.get_cookie('time_format')
     system = helpers.system.find(system_id)
     if system is None:
-        last_updated = realtime.last_updated()
+        last_updated = realtime.get_last_updated(time_format)
     else:
-        last_updated = system.last_updated
+        last_updated = system.get_last_updated(time_format)
     return template(f'pages/{name}',
         version=VERSION,
         path=path,
@@ -120,6 +121,7 @@ def page(name, system_id, path='', **kwargs):
         mapbox_api_key=mapbox_api_key,
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
+        time_format=time_format,
         show_speed=request.get_cookie('speed') == '1994',
         **kwargs
     )
@@ -127,6 +129,13 @@ def page(name, system_id, path='', **kwargs):
 def error_page(name, system_id, path='', **kwargs):
     '''Returns an error page with the given name and details'''
     return page(f'errors/{name}_error', system_id, path, **kwargs)
+
+def set_cookie(key, value):
+    max_age = 60*60*24*365*10
+    if cookie_domain is None:
+        response.set_cookie(key, value, max_age=max_age, path='/')
+    else:
+        response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
 
 # =============================================================
 # CSS (Static Files)
@@ -218,11 +227,7 @@ def realtime_models_page(system_id=None):
     '/<system_id>/realtime/speed/'
 ])
 def realtime_speed_page(system_id=None):
-    max_age = 60*60*24*365*10
-    if cookie_domain is None:
-        response.set_cookie('speed', '1994', max_age=max_age, path='/')
-    else:
-        response.set_cookie('speed', '1994', max_age=max_age, domain=cookie_domain, path='/')
+    set_cookie('speed', '1994')
     positions = realtime.get_positions(system_id)
     return page('realtime/speed', system_id, path='realtime/speed', positions=positions)
 
@@ -601,15 +606,23 @@ def about_page(system_id=None):
     '/<system_id>/themes/'
 ])
 def themes_page(system_id=None):
+    redirect(get_url(helpers.system.find(system_id), 'personalize'))
+
+@app.get([
+    '/personalize',
+    '/personalize/',
+    '/<system_id>/personalize',
+    '/<system_id>/personalize/'
+])
+def themes_page(system_id=None):
     theme_id = request.query.get('theme')
     if theme_id is not None:
-        max_age = 60*60*24*365*10
-        if cookie_domain is None:
-            response.set_cookie('theme', theme_id, max_age=max_age, path='/')
-        else:
-            response.set_cookie('theme', theme_id, max_age=max_age, domain=cookie_domain, path='/')
+        set_cookie('theme', theme_id)
+    time_format = request.query.get('time_format')
+    if time_format is not None:
+        set_cookie('time_format', time_format)
     themes = helpers.theme.find_all()
-    return page('themes', system_id, path='themes', themes=themes)
+    return page('personalize', system_id, path='personalize', themes=themes)
 
 @app.get([
     '/systems',
@@ -649,10 +662,11 @@ def admin_page(key=None, system_id=None):
 ])
 def system_api_map(system_id=None):
     system = helpers.system.find(system_id)
+    time_format = request.get_cookie('time_format')
     if system is None:
-        last_updated = realtime.last_updated()
+        last_updated = realtime.get_last_updated(time_format)
     else:
-        last_updated = system.last_updated
+        last_updated = system.get_last_updated(time_format)
     positions = realtime.get_positions(system_id)
     return {
         'positions': [p.json for p in positions if p.has_location],

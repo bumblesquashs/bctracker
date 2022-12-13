@@ -67,7 +67,7 @@
                                                     % last_hour = this_hour
                                                 % end
                                                 <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                                                    <td>{{ departure.time }}</td>
+                                                    <td>{{ departure.time.format_web(time_format) }}</td>
                                                     <td class="non-mobile">
                                                         {{ trip }}
                                                         % if departure == trip.last_departure:

@@ -108,7 +108,7 @@ def get_positions(system_id=None):
         return sorted([p for p in positions.values() if not p.bus.is_test])
     return sorted([p for p in positions.values() if p.system.id == system_id and not p.bus.is_test])
 
-def last_updated():
+def get_last_updated(time_format):
     '''Returns the date/time that realtime data was last updated'''
     date = last_updated_date
     time = last_updated_time
@@ -116,8 +116,8 @@ def last_updated():
         return 'N/A'
     if date.is_today:
         if time.timezone is None:
-            return f'at {time}'
-        return f'at {time} {time.timezone_name}'
+            return f'at {time.format_web(time_format)}'
+        return f'at {time.format_web(time_format)} {time.timezone_name}'
     return date.format_since
 
 def validate(system):
