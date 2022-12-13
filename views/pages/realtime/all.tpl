@@ -41,6 +41,8 @@
         % end
     </div>
 % else:
+    % orders = sorted({p.bus.order for p in positions if p.bus.order is not None})
+    % unknown_positions = sorted([p for p in positions if p.bus.order is None])
     <table class="striped">
         <thead>
             <tr>
@@ -57,74 +59,33 @@
             </tr>
         </thead>
         <tbody>
-            % last_bus = None
-            % for position in sorted(positions):
-                % bus = position.bus
-                % order = bus.order
-                % if last_bus is None:
-                    % same_order = False
-                % elif order is None and last_bus.order is None:
-                    % same_order = True
-                % elif order is None or last_bus.order is None:
-                    % same_order = False
-                % else:
-                    % same_order = order == last_bus.order
-                % end
-                % last_bus = bus
-                % if not same_order:
-                    <tr class="section">
-                        <td colspan="8">
-                            % if order is None:
-                                Unknown Year/Model
-                            % else:
-                                {{ order }}
-                            % end
-                        </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                % end
-                <tr>
-                    <td>
-                        % if order is None:
-                            {{ bus }}
-                        % else:
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % end
+            % if len(unknown_positions) > 0:
+                <tr class="section">
+                    <td colspan="8">
+                        <div class="flex-row">
+                            <div class="flex-1">Unknown Year/Model</div>
+                            <div>{{ len(unknown_positions) }}</div>
+                        </div>
                     </td>
-                    % if system is None:
-                        <td class="non-mobile">{{ position.system }}</td>
-                    % end
-                    % if position.trip is None:
-                        <td class="lighter-text">Not in service</td>
-                        <td class="desktop-only"></td>
-                        <td class="desktop-only"></td>
-                        <td class="desktop-only"></td>
-                    % else:
-                        % trip = position.trip
-                        % block = position.trip.block
-                        % stop = position.stop
-                        <td>
-                            {{ trip }}
-                            % if stop is not None:
-                                <br class="non-desktop" />
-                                <span class="non-desktop smaller-font">
-                                    % include('components/adherence_indicator', adherence=position.adherence)
-                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                </span>
-                            % end
-                        </td>
-                        <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                        <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                        % if stop is None:
-                            <td class="desktop-only lighter-text">Unavailable</td>
-                        % else:
-                            <td class="desktop-only">
-                                % include('components/adherence_indicator', adherence=position.adherence)
-                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            </td>
-                        % end
-                    % end
                 </tr>
+                % for position in unknown_positions:
+                    % include('components/realtime_row', position=position)
+                % end
+            % end
+            % for order in orders:
+                % order_positions = sorted([p for p in positions if p.bus.order == order])
+                <tr class="section">
+                    <td colspan="8">
+                        <div class="flex-row">
+                            <div class="flex-1">{{ order }}</div>
+                            <div>{{ len(order_positions) }}</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="display-none"></tr>
+                % for position in order_positions:
+                    % include('components/realtime_row', position=position)
+                % end
             % end
         </tbody>
     </table>

@@ -17,6 +17,7 @@
         You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
     </p>
 % else:
+    % orders = sorted({o.bus.order for o in overviews if o.bus.order is not None})
     <table class="striped">
         <thead>
             <tr>
@@ -32,58 +33,46 @@
             </tr>
         </thead>
         <tbody>
-            % last_bus = None
-            % for overview in overviews:
-                % record = overview.last_record
-                % bus = record.bus
-                % order = bus.order
-                % if last_bus is None:
-                    % same_order = False
-                % elif order is None and last_bus.order is None:
-                    % same_order = True
-                % elif order is None or last_bus.order is None:
-                    % same_order = False
-                % else:
-                    % same_order = order == last_bus.order
-                % end
-                % last_bus = bus
-                % if not same_order:
-                    <tr class="section">
-                        <td colspan="6">
-                            % if order is None:
-                                Unknown Year/Model
-                            % else:
-                                {{ order }}
+            % for order in orders:
+                % order_overviews = [o for o in overviews if o.bus.order == order]
+                <tr class="section">
+                    <td colspan="6">
+                        <div class="flex-row">
+                            <div class="flex-1">{{ order }}</div>
+                            <div>{{ len(order_overviews) }}</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="display-none"></tr>
+                % for overview in order_overviews:
+                    % record = overview.last_record
+                    % bus = overview.bus
+                    <tr>
+                        <td>
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        </td>
+                        <td class="desktop-only">{{ record.date.format_long() }}</td>
+                        <td class="non-desktop no-wrap">
+                            {{ record.date.format_short() }}
+                            % if system is None:
+                                <br class="mobile-only" />
+                                <span class="mobile-only smaller-font">{{ record.system }}</span>
                             % end
                         </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                % end
-                <tr>
-                    <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                    </td>
-                    <td class="desktop-only">{{ record.date.format_long() }}</td>
-                    <td class="non-desktop no-wrap">
-                        {{ record.date.format_short() }}
                         % if system is None:
-                            <br class="mobile-only" />
-                            <span class="mobile-only smaller-font">{{ record.system }}</span>
+                            <td class="non-mobile">{{ record.system }}</td>
                         % end
-                    </td>
-                    % if system is None:
-                        <td class="non-mobile">{{ record.system }}</td>
-                    % end
-                    <td>
-                        % if record.is_available:
-                            % block = record.block
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                        % else:
-                            <span>{{ record.block_id }}</span>
-                        % end
-                    </td>
-                    <td class="desktop-only">{{ record.routes }}</td>
-                </tr>
+                        <td>
+                            % if record.is_available:
+                                % block = record.block
+                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % else:
+                                <span>{{ record.block_id }}</span>
+                            % end
+                        </td>
+                        <td class="desktop-only">{{ record.routes }}</td>
+                    </tr>
+                % end
             % end
         </tbody>
     </table>

@@ -54,14 +54,17 @@
                 </thead>
                 <tbody>
                     % for order in type_orders:
+                        <tr class="section">
+                            <td colspan="5">
+                                <div class="flex-row">
+                                    <div class="flex-1">{{ order }}</div>
+                                    <div>{{ order.size }}</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="display-none"></tr>
                         % for number in order.range:
                             % bus_number = f'{number:04d}'
-                            % if number == order.low:
-                                <tr class="section">
-                                    <td colspan="5">{{ order }}</td>
-                                </tr>
-                                <tr class="display-none"></tr>
-                            % end
                             % if number in overviews:
                                 % overview = overviews[number]
                                 <tr>
