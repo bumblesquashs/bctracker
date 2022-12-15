@@ -24,7 +24,7 @@ class Time:
         return cls(False, hour, minute, second, accurate_seconds, timezone)
     
     @classmethod
-    def now(cls, timezone, accurate_seconds=True):
+    def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current time'''
         if timezone is None:
             now = datetime.now()

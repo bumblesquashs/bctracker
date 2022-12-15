@@ -24,7 +24,7 @@ class Date:
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
-    def today(cls, timezone):
+    def today(cls, timezone=None):
         '''Returns the current date'''
         if timezone is None:
             now = datetime.now()

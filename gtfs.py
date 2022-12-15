@@ -18,42 +18,12 @@ from models.shape import Shape, ShapePoint
 from models.stop import Stop
 from models.trip import Trip
 
-def downloaded(system):
-    '''Checks that the GTFS is downloaded for the given system'''
-    return path.exists(f'data/gtfs/{system.id}')
-
-def update(system):
-    '''Downloads the GTFS for the given system, then loads it into memory'''
-    if not system.gtfs_enabled:
-        return
-    data_zip_path = f'data/gtfs/{system.id}.zip'
-    data_path = f'data/gtfs/{system.id}'
-    
-    print(f'Updating GTFS data for {system}...', end=' ', flush=True)
-    
-    try:
-        if path.exists(data_zip_path):
-            formatted_date = datetime.now().strftime('%Y-%m-%d')
-            archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
-            rename(data_zip_path, archives_path)
-        with requests.get(system.gtfs_url, stream=True) as r:
-            with open(data_zip_path, 'wb') as f:
-                for chunk in r.iter_content(128):
-                    f.write(chunk)
-        if path.exists(data_path):
-            rmtree(data_path)
-        with ZipFile(data_zip_path) as zip:
-            zip.extractall(data_path)
-        print('Done!')
-        load(system)
-    except Exception as e:
-        print('Error!')
-        print(f'Failed to update GTFS for {system}: {e}')
-
-def load(system):
+def load(system, force_download=False):
     '''Loads the GTFS for the given system into memory'''
     if not system.gtfs_enabled:
         return
+    if not path.exists(f'data/gtfs/{system.id}') or force_download:
+        download(system)
     print(f'Loading GTFS data for {system}...', end=' ', flush=True)
     
     agencies = read_csv(system, 'agency', lambda r: r)
@@ -105,6 +75,33 @@ def load(system):
     system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
     
     print('Done!')
+
+def download(system):
+    '''Downloads the GTFS for the given system, then loads it into memory'''
+    if not system.gtfs_enabled:
+        return
+    data_zip_path = f'data/gtfs/{system.id}.zip'
+    data_path = f'data/gtfs/{system.id}'
+    
+    print(f'Updating GTFS data for {system}...', end=' ', flush=True)
+    
+    try:
+        if path.exists(data_zip_path):
+            formatted_date = datetime.now().strftime('%Y-%m-%d')
+            archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
+            rename(data_zip_path, archives_path)
+        with requests.get(system.gtfs_url, stream=True) as r:
+            with open(data_zip_path, 'wb') as f:
+                for chunk in r.iter_content(128):
+                    f.write(chunk)
+        if path.exists(data_path):
+            rmtree(data_path)
+        with ZipFile(data_zip_path) as zip:
+            zip.extractall(data_path)
+        print('Done!')
+    except Exception as e:
+        print('Error!')
+        print(f'Failed to update GTFS for {system}: {e}')
 
 def read_csv(system, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''

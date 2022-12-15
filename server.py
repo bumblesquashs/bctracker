@@ -53,12 +53,9 @@ def start(args):
     helpers.theme.load()
     
     for system in helpers.system.find_all():
-        if not gtfs.downloaded(system) or args.reload:
-            gtfs.update(system)
-        else:
-            gtfs.load(system)
+        gtfs.load(system, args.reload)
         if not gtfs.validate(system):
-            gtfs.update(system)
+            gtfs.load(system, True)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1
@@ -758,7 +755,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
         system = helpers.system.find(reload_system_id)
         if system is None:
             return 'Invalid system'
-        gtfs.update(system)
+        gtfs.load(system, True)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1
