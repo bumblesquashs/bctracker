@@ -31,6 +31,9 @@
                 <a class="button" href="?theme={{ visible_theme.id }}">{{ visible_theme }}</a>
             % end
         </div>
+        <div class="button-container">
+            <a class="button" style="opacity: 0;" href="?theme=christmas">Christmas</a>
+        </div>
         
         % if len(hidden_themes) > 0:
             <!-- Well well well... are you really so desperate for new themes that you'll willing to dig into the source code to find more? -->
