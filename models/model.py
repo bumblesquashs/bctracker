@@ -13,6 +13,15 @@ class ModelType(Enum):
     
     def __str__(self):
         return self.value
+    
+    def __hash__(self):
+        return hash(self.value)
+    
+    def __eq__(self, other):
+        return self.value == other.value
+    
+    def __lt__(self, other):
+        return self.value < other.value
 
 class Model:
     '''A specific version of a vehicle'''
