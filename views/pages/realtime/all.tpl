@@ -68,6 +68,7 @@
                         </div>
                     </td>
                 </tr>
+                <tr class="display-none"></tr>
                 % for position in unknown_positions:
                     % include('components/realtime_row', position=position)
                 % end

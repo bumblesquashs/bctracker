@@ -50,6 +50,7 @@
                         <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
                         <td>{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
                     </tr>
+                    <tr class="display-none"></tr>
                     % type_models = [m for m in models if m.type == type]
                     % for model in type_models:
                         <tr>
