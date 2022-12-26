@@ -3,6 +3,8 @@ from enum import Enum
 
 from datetime import datetime
 
+from models.time import Time
+
 class Direction(Enum):
     '''A basic description of the path a trip follows'''
     
@@ -108,22 +110,32 @@ class Trip:
     @property
     def first_departure(self):
         '''Returns the first departure of this trip'''
+        if len(self.departures) == 0:
+            return None
         return self.departures[0]
     
     @property
     def last_departure(self):
         '''Returns the last departure of this trip'''
+        if len(self.departures) == 0:
+            return None
         return self.departures[-1]
     
     @property
     def start_time(self):
         '''Returns the time of the first departure of this trip'''
-        return self.first_departure.time
+        departure = self.first_departure
+        if departure is None:
+            return Time.unknown()
+        return departure.time
     
     @property
     def end_time(self):
         '''Returns the time of the last departure of this trip'''
-        return self.last_departure.time
+        departure = self.last_departure
+        if departure is None:
+            return Time.unknown()
+        return departure.time
     
     @property
     def duration(self):
