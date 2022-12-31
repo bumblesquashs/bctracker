@@ -68,6 +68,24 @@ def find_all(system_id=None, bus_number=None, limit=None):
         limit=limit)
     return [Overview.from_db(row) for row in rows]
 
+def find_bus_numbers(system_id=None):
+    joins = {}
+    filters = {}
+    if system_id is not None:
+        joins['record last_record'] = {
+            'last_record.record_id': 'overview.last_record_id'
+        }
+        filters['last_record.system_id'] = system_id
+    rows = database.select('overview',
+        columns={
+            'overview.bus_number': 'bus_number'
+        },
+        join_type='LEFT',
+        joins=joins,
+        filters=filters
+    )
+    return [row['bus_number'] for row in rows]
+
 def update(overview, date, system, record_id):
     '''Updates an overview in the database'''
     values = {

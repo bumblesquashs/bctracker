@@ -44,4 +44,4 @@ def find_matches(query, recorded_bus_numbers):
             if bus_number not in recorded_bus_numbers:
                 value /= 10
             matches.append(Match('bus', bus_number_string, order_string, f'bus/{bus_number}', value))
-    return [m for m in matches if m.value > 0]
+    return matches

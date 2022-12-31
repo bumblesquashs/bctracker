@@ -168,10 +168,8 @@ class System:
     
     def search_routes(self, query):
         '''Returns all routes that match the given query'''
-        matches = [r.get_match(query) for r in self.get_routes()]
-        return [m for m in matches if m.value > 0]
+        return [r.get_match(query) for r in self.routes.values()]
     
     def search_stops(self, query):
         '''Returns all stops that match the given query'''
-        matches = [s.get_match(query) for s in self.get_stops()]
-        return [m for m in matches if m.value > 0]
+        return [s.get_match(query) for s in self.stops.values()]
