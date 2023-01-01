@@ -52,8 +52,8 @@ def update(system):
             except:
                 bus_number = -(index + 1)
             positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
-        last_updated_date = Date.today('America/Vancouver')
-        last_updated_time = Time.now('America/Vancouver', False)
+        last_updated_date = Date.today()
+        last_updated_time = Time.now(accurate_seconds=False)
         system.last_updated_date = Date.today(system.timezone)
         system.last_updated_time = Time.now(system.timezone, False)
         print('Done!')
@@ -65,33 +65,36 @@ def update_records():
     '''Updates records in the database based on the current realtime data in memory'''
     try:
         for position in positions.values():
-            system = position.system
-            bus = position.bus
-            if bus.number < 0:
-                continue
-            today = Date.today(system.timezone)
-            now = Time.now(system.timezone)
-            overview = helpers.overview.find(bus.number)
-            trip = position.trip
-            if trip is None:
-                record_id = None
-            else:
-                block = trip.block
-                if overview is not None and overview.last_record is not None:
-                    last_record = overview.last_record
-                    if last_record.system != system and not bus.is_test:
-                        helpers.transfer.create(bus, today, last_record.system, system)
-                    if last_record.date == today and last_record.block_id == block.id:
-                        helpers.record.update(last_record.id, now)
-                        trip_ids = helpers.record.find_trip_ids(last_record)
-                        if trip.id not in trip_ids:
-                            helpers.record.create_trip(last_record.id, trip)
-                        continue
-                record_id = helpers.record.create(bus, today, system, block, now, trip)
-            if overview is None:
-                helpers.overview.create(bus, today, system, record_id)
-            else:
-                helpers.overview.update(overview, today, system, record_id)
+            try:
+                system = position.system
+                bus = position.bus
+                if bus.number < 0:
+                    continue
+                today = Date.today(system.timezone)
+                now = Time.now(system.timezone)
+                overview = helpers.overview.find(bus.number)
+                trip = position.trip
+                if trip is None:
+                    record_id = None
+                else:
+                    block = trip.block
+                    if overview is not None and overview.last_record is not None:
+                        last_record = overview.last_record
+                        if last_record.system != system and not bus.is_test:
+                            helpers.transfer.create(bus, today, last_record.system, system)
+                        if last_record.date == today and last_record.block_id == block.id:
+                            helpers.record.update(last_record.id, now)
+                            trip_ids = helpers.record.find_trip_ids(last_record)
+                            if trip.id not in trip_ids:
+                                helpers.record.create_trip(last_record.id, trip)
+                            continue
+                    record_id = helpers.record.create(bus, today, system, block, now, trip)
+                if overview is None:
+                    helpers.overview.create(bus, today, system, record_id)
+                else:
+                    helpers.overview.update(overview, today, system, record_id)
+            except Exception as e:
+                print(f'Failed to update records: {e}')
         database.commit()
     except Exception as e:
         print(f'Failed to update records: {e}')

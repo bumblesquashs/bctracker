@@ -1,5 +1,4 @@
 import os
-import sys
 import signal
 from datetime import datetime, timedelta
 from crontab import CronTab
@@ -7,16 +6,13 @@ from crontab import CronTab
 import helpers.system
 
 from models.date import Date
+from models.time import Time
 from models.weekday import Weekday
 
 import gtfs
 import realtime
 import database
 import backup
-
-PID = os.getpid()
-CWD = os.path.dirname(__file__)
-EXC = sys.executable
 
 def setup():
     '''Adds signal handlers'''
@@ -25,13 +21,14 @@ def setup():
 
 def start(cron_id):
     '''Removes any old cron jobs and creates new jobs'''
+    pid = os.getpid()
     with CronTab(user=True) as cron:
         cron.remove_all(comment=cron_id)
         
-        gtfs_job = cron.new(command=f'kill -s USR1 {PID}', comment=cron_id)
+        gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=cron_id)
         gtfs_job.setall('0 5 * * */1')
         
-        realtime_job = cron.new(command=f'kill -s USR2 {PID}', comment=cron_id)
+        realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=cron_id)
         realtime_job.minute.every(1)
 
 def stop(cron_id):
@@ -44,12 +41,15 @@ def handle_gtfs(sig, frame):
     for system in helpers.system.find_all():
         today = Date.today(system.timezone)
         if today.weekday == Weekday.MON or not gtfs.validate(system):
-            gtfs.update(system)
+            gtfs.load(system, True)
     date = datetime.now() - timedelta(days=1)
     backup.run(date, date.weekday() == 0)
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
+    date = Date.today()
+    time = Time.now()
+    print(f'--- {date} at {time} ---')
     for system in helpers.system.find_all():
         realtime.update(system)
         if realtime.validate(system):
@@ -57,10 +57,9 @@ def handle_realtime(sig, frame):
         else:
             system.validation_errors += 1
             if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
-                gtfs.update(system)
+                gtfs.load(system, True)
     realtime.update_records()
     
     # Backup database at the end of each day
-    now = datetime.now()
-    if now.hour == 0 and now.minute == 0:
+    if time.hour == 0 and time.minute == 0:
         database.backup()

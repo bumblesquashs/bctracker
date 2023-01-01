@@ -78,18 +78,6 @@ def find_trip_ids(record):
     rows = database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id})
     return {row['trip_id'] for row in rows}
 
-def find_recorded_buses(system_id):
-    '''Returns all bus numbers recorded for the given system ID'''
-    rows = database.select('record',
-        columns={
-            'record.bus_number': 'bus_number'
-        },
-        distinct=True,
-        filters={
-            'record.system_id': system_id
-        })
-    return [row['bus_number'] for row in rows]
-
 def find_recorded_today(system, trips):
     '''Returns all bus numbers matching the given system ID and trips that were recorded on the current date'''
     today = Date.today(system.timezone)

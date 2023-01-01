@@ -53,12 +53,9 @@ def start(args):
     helpers.theme.load()
     
     for system in helpers.system.find_all():
-        if not gtfs.downloaded(system) or args.reload:
-            gtfs.update(system)
-        else:
-            gtfs.load(system)
+        gtfs.load(system, args.reload)
         if not gtfs.validate(system):
-            gtfs.update(system)
+            gtfs.load(system, True)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1
@@ -700,11 +697,11 @@ def api_search(system_id=None):
     matches = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            matches += helpers.order.find_matches(query, helpers.record.find_recorded_buses(system_id))
+            matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system_id))
         if system is not None:
             matches += system.search_routes(query)
             matches += system.search_stops(query)
-    matches.sort()
+    matches = sorted([m for m in matches if m.value > 0])
     return {
         'results': [m.get_json(system, get_url) for m in matches[0:10]],
         'count': len(matches)
@@ -758,7 +755,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
         system = helpers.system.find(reload_system_id)
         if system is None:
             return 'Invalid system'
-        gtfs.update(system)
+        gtfs.load(system, True)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1

@@ -5,13 +5,13 @@ import pytz
 class Time:
     '''A specific hour, minute, and second'''
     
-    __slots__ = ('unknown', 'hour', 'minute', 'second', 'accurate_seconds', 'timezone')
+    __slots__ = ('hour', 'minute', 'second', 'accurate_seconds', 'timezone')
     
     @classmethod
     def parse(cls, time_string, timezone, accurate_seconds=False):
         '''Returns a time parsed from the given string in HH:MM:SS format'''
         if time_string is None or time_string == '':
-            return cls(True, 0, 0, 0, False, timezone)
+            return cls.unknown(timezone)
         time_parts = time_string.split(':')
         
         hour = int(time_parts[0])
@@ -21,10 +21,10 @@ class Time:
         else:
             second = 0
             accurate_seconds = False
-        return cls(False, hour, minute, second, accurate_seconds, timezone)
+        return cls(hour, minute, second, accurate_seconds, timezone)
     
     @classmethod
-    def now(cls, timezone, accurate_seconds=True):
+    def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current time'''
         if timezone is None:
             now = datetime.now()
@@ -33,10 +33,13 @@ class Time:
         hour = now.hour
         if hour < 4:
             hour += 24
-        return cls(False, hour, now.minute, now.second, accurate_seconds, timezone)
+        return cls(hour, now.minute, now.second, accurate_seconds, timezone)
     
-    def __init__(self, unknown, hour, minute, second, accurate_seconds, timezone):
-        self.unknown = unknown
+    @classmethod
+    def unknown(cls, timezone=None):
+        return cls(-1, 0, 0, False, timezone)
+    
+    def __init__(self, hour, minute, second, accurate_seconds, timezone):
         self.hour = hour
         self.minute = minute
         self.second = second
@@ -57,6 +60,10 @@ class Time:
         if self.minute != other.minute:
             return self.minute < other.minute
         return self.second < other.second
+    
+    @property
+    def is_unknown(self):
+        return self.hour < 0
     
     @property
     def is_earlier(self):
@@ -82,16 +89,18 @@ class Time:
     
     def get_minutes(self):
         '''Returns the total number of minutes in this time'''
+        if self.is_unknown:
+            return 0
         return (self.hour * 60) + self.minute
     
     def format_db(self):
         '''Returns a string of this time formatted as HH:MM:SS'''
-        if self.unknown:
+        if self.is_unknown:
             return None
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
     def format_web(self, time_format='24hr'):
-        if self.unknown:
+        if self.is_unknown:
             return ''
         hour = self.hour
         minute = self.minute
@@ -118,6 +127,8 @@ class Time:
     
     def format_difference(self, other):
         '''Returns a string of the number of hours and minutes between this time and another time'''
+        if self.is_unknown or other.is_unknown:
+            return ''
         self_minutes = self.get_minutes()
         other_minutes = other.get_minutes()
         difference = abs(self_minutes - other_minutes)
