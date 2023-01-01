@@ -41,76 +41,126 @@
         % end
     </div>
 % else:
-    <div class="container no-inline">
-        % models = sorted({p.bus.model for p in positions if p.bus.model is not None})
-        
-        % for model in models:
-            % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
-            % model_years = sorted({p.bus.order.year for p in model_positions})
-            <div class="section">
-                <h2 class="title">{{ model }}</h2>
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th class="non-mobile">Number</th>
-                            <th class="mobile-only">Bus</th>
-                            % if system is None:
-                                <th class="non-mobile">System</th>
-                            % end
-                            <th class="desktop-only">Headsign</th>
-                            <th class="desktop-only">Current Block</th>
-                            <th class="desktop-only">Current Trip</th>
-                            <th class="desktop-only">Current Stop</th>
-                            <th class="non-desktop">Details</th>
+    % models = sorted({p.bus.model for p in positions if p.bus.model is not None})
+    % model_types = sorted({m.type for m in models})
+    <div class="flex-container">
+        <div class="flex-1 sidebar">
+            <h2>Statistics</h2>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th class="no-wrap">In Service</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    % for type in model_types:
+                        % type_positions = [p for p in positions if p.bus.model is not None and p.bus.model.type == type]
+                        <tr class="section">
+                            <td>{{ type }}</td>
+                            <td>{{ len([p for p in type_positions if p.trip is not None]) }}</td>
+                            <td>{{ len(type_positions) }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        % for year in model_years:
-                            % year_positions = [p for p in model_positions if p.bus.order.year == year]
-                            <tr class="section">
-                                <td colspan="8">
-                                    <div class="flex-row">
-                                        <div class="flex-1">{{ year }}</div>
-                                        <div>{{ len(year_positions) }}</div>
-                                    </div>
-                                </td>
+                        <tr class="display-none"></tr>
+                        % type_models = [m for m in models if m.type == type]
+                        % for model in type_models:
+                            % model_positions = [p for p in type_positions if p.bus.model == model]
+                            <tr>
+                                <td><a href="#{{ model.id }}">{{ model }}</a></td>
+                                <td>{{ len([p for p in model_positions if p.trip is not None]) }}</td>
+                                <td>{{ len(model_positions) }}</td>
                             </tr>
-                            % for position in year_positions:
-                                % include('components/realtime_row', position=position)
-                            % end
                         % end
-                    </tbody>
-                </table>
-            </div>
-        % end
-        
-        % unknown_positions = sorted([p for p in positions if p.bus.order is None])
-        % if len(unknown_positions) > 0:
-            <div class="section">
-                <h2 class="title">Unknown Year/Model</h2>
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th class="desktop-only">Number</th>
-                            <th class="non-desktop">Bus</th>
-                            % if system is None:
-                                <th class="non-mobile">System</th>
+                    % end
+                    <tr class="section">
+                        <td>Total</td>
+                        <td>{{ len([p for p in positions if p.trip is not None]) }}</td>
+                        <td>{{ len(positions) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex-3">
+            <div class="container no-inline">
+                % for type in model_types:
+                    % type_models = [m for m in models if m.type == type]
+                    <div class="section">
+                        <h2>{{ type }}</h2>
+                        <div class="container no-inline">
+                            % for model in type_models:
+                                % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
+                                % model_years = sorted({p.bus.order.year for p in model_positions})
+                                <div id="{{ model.id }}" class="section">
+                                    <h3 class="title">{{ model }}</h3>
+                                    <table class="striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="non-mobile">Number</th>
+                                                <th class="mobile-only">Bus</th>
+                                                % if system is None:
+                                                    <th class="non-mobile">System</th>
+                                                % end
+                                                <th class="desktop-only">Headsign</th>
+                                                <th class="desktop-only">Current Block</th>
+                                                <th class="desktop-only">Current Trip</th>
+                                                <th class="desktop-only">Current Stop</th>
+                                                <th class="non-desktop">Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % for year in model_years:
+                                                % year_positions = [p for p in model_positions if p.bus.order.year == year]
+                                                <tr class="section">
+                                                    <td colspan="8">
+                                                        <div class="flex-row">
+                                                            <div class="flex-1">{{ year }}</div>
+                                                            <div>{{ len(year_positions) }}</div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for position in year_positions:
+                                                    % include('components/realtime_row', position=position)
+                                                % end
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
                             % end
-                            <th class="desktop-only">Headsign</th>
-                            <th class="desktop-only">Current Block</th>
-                            <th class="desktop-only">Current Trip</th>
-                            <th class="desktop-only">Current Stop</th>
-                            <th class="non-desktop">Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        % for position in unknown_positions:
-                            % include('components/realtime_row', position=position)
-                        % end
-                    </tbody>
-                </table>
+                        </div>
+                    </div>
+                % end
+                
+                % unknown_positions = sorted([p for p in positions if p.bus.order is None])
+                % if len(unknown_positions) > 0:
+                    <div class="section">
+                        <h2 class="title">Unknown Year/Model</h2>
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th class="desktop-only">Number</th>
+                                    <th class="non-desktop">Bus</th>
+                                    % if system is None:
+                                        <th class="non-mobile">System</th>
+                                    % end
+                                    <th class="desktop-only">Headsign</th>
+                                    <th class="desktop-only">Current Block</th>
+                                    <th class="desktop-only">Current Trip</th>
+                                    <th class="desktop-only">Current Stop</th>
+                                    <th class="non-desktop">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for position in unknown_positions:
+                                    % include('components/realtime_row', position=position)
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
+                % end
             </div>
-        % end
+        </div>
     </div>
 % end
 

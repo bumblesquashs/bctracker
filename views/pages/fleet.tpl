@@ -29,75 +29,117 @@
     </p>
 % end
 
-% model_types = sorted({o.model.type for o in orders}, key=lambda t: t.name)
+% models = sorted({o.model for o in orders})
+% model_types = sorted({m.type for m in models})
 
-<div class="button-container">
-    % for type in model_types:
-        <a href="#{{ type.name }}" class="button">{{ type }}</a>
-    % end
-</div>
-
-<div class="container">
-    % for type in model_types:
-        % type_orders = [o for o in orders if o.model.type == type]
-        <div id="{{ type.name }}" class="section">
-            <h2 class="title">{{ type }}</h2>
-            <table class="striped">
-                <thead>
-                    <tr>
-                        <th>Number</th>
-                        <th>First Seen</th>
-                        <th class="non-mobile">First System</th>
-                        <th>Last Seen</th>
-                        <th class="non-mobile">Last System</th>
+<div class="flex-container">
+    <div class="flex-1 sidebar">
+        <h2>Statistics</h2>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Tracked</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for type in model_types:
+                    <tr class="section">
+                        <td>{{ type }}</td>
+                        <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
+                        <td>{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    % for order in type_orders:
-                        <tr class="section">
-                            <td colspan="5">
-                                <div class="flex-row">
-                                    <div class="flex-1">{{ order }}</div>
-                                    <div>{{ order.size }}</div>
-                                </div>
-                            </td>
+                    <tr class="display-none"></tr>
+                    % type_models = [m for m in models if m.type == type]
+                    % for model in type_models:
+                        <tr>
+                            <td><a href="#{{ model.id }}">{{ model }}</a></td>
+                            <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model == model]) }}</td>
+                            <td>{{ sum([o.size for o in orders if o.model == model]) }}</td>
                         </tr>
-                        <tr class="display-none"></tr>
-                        % for number in order.range:
-                            % bus_number = f'{number:04d}'
-                            % if number in overviews:
-                                % overview = overviews[number]
-                                <tr>
-                                    <td>
-                                        <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
-                                    </td>
-                                    <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
-                                    <td class="non-desktop no-wrap">
-                                        {{ overview.first_seen_date.format_short() }}
-                                        <br class="mobile-only" />
-                                        <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
-                                    </td>
-                                    <td class="non-mobile">{{ overview.first_seen_system }}</td>
-                                    <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
-                                    <td class="non-desktop no-wrap">
-                                        {{ overview.last_seen_date.format_short() }}
-                                        <br class="mobile-only" />
-                                        <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
-                                    </td>
-                                    <td class="non-mobile">{{ overview.last_seen_system }}</td>
-                                </tr>
-                            % else:
-                                <tr>
-                                    <td>{{ bus_number }}</td>
-                                    <td class="lighter-text" colspan="4">Unavailable</td>
-                                </tr>
-                            % end
-                        % end
                     % end
-                </tbody>
-            </table>
+                % end
+                <tr class="section">
+                    <td>Total</td>
+                    <td>{{ len([o for o in overviews.values() if not o.bus.is_test]) }}</td>
+                    <td>{{ sum([o.size for o in orders]) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex-3">
+        <div class="container no-inline">
+            % for type in model_types:
+                <div class="section">
+                    <h2>{{ type }}</h2>
+                    <div class="container no-inline">
+                        % type_models = [m for m in models if m.type == type]
+                        % for model in type_models:
+                            % model_orders = [o for o in orders if o.model == model]
+                            <div id="{{ model.id }}" class="section">
+                                <h3 class="title">{{ model }}</h3>
+                                <table class="striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>First Seen</th>
+                                            <th class="non-mobile">First System</th>
+                                            <th>Last Seen</th>
+                                            <th class="non-mobile">Last System</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        % for order in model_orders:
+                                            <tr class="section">
+                                                <td colspan="5">
+                                                    <div class="flex-row">
+                                                        <div class="flex-1">{{ order.year }}</div>
+                                                        <div>{{ order.size }}</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="display-none"></tr>
+                                            % for number in order.range:
+                                                % bus_number = f'{number:04d}'
+                                                % if number in overviews:
+                                                    % overview = overviews[number]
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
+                                                        </td>
+                                                        <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
+                                                        <td class="non-desktop no-wrap">
+                                                            {{ overview.first_seen_date.format_short() }}
+                                                            <br class="mobile-only" />
+                                                            <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
+                                                        </td>
+                                                        <td class="non-mobile">{{ overview.first_seen_system }}</td>
+                                                        <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
+                                                        <td class="non-desktop no-wrap">
+                                                            {{ overview.last_seen_date.format_short() }}
+                                                            <br class="mobile-only" />
+                                                            <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
+                                                        </td>
+                                                        <td class="non-mobile">{{ overview.last_seen_system }}</td>
+                                                    </tr>
+                                                % else:
+                                                    <tr>
+                                                        <td>{{ bus_number }}</td>
+                                                        <td class="lighter-text" colspan="4">Unavailable</td>
+                                                    </tr>
+                                                % end
+                                            % end
+                                        % end
+                                    </tbody>
+                                </table>
+                            </div>
+                        % end
+                    </div>
+                </div>
+            % end
         </div>
-    % end
+    </div>
 </div>
 
 % include('components/top_button')
