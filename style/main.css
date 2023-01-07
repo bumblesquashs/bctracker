@@ -416,6 +416,19 @@ table.striped tr.section td {
     z-index: 10;
 }
 
+.marker .bearing {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    margin-top: -8px;
+    margin-left: 2px;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-bottom-width: 26px;
+    border-bottom-style: solid;
+    transform-origin: center bottom;
+}
+
 .marker .details {
     display: block;
     position: absolute;
