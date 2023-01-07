@@ -607,6 +607,13 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
+.route-indicator {
+    font-size: 10pt;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .route-number {
     display: inline-block;
     padding: 1px 6px;
