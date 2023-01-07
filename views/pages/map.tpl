@@ -165,7 +165,6 @@
                     icon.className = "icon";
                     icon.href = "/bus/" + position.bus_number;
                     icon.style.backgroundColor = "#" + position.colour;
-                    icon.style.position = "relative";
                     icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
                     
                     icon.onmouseenter = function() {
