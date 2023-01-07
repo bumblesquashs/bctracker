@@ -22,7 +22,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 13
+VERSION = 14
 
 app = Bottle()
 
