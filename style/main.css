@@ -418,8 +418,6 @@ table.striped tr.section td {
 
 .marker .bearing {
     position: absolute;
-    width: 0px;
-    height: 0px;
     margin-top: -8px;
     margin-left: 2px;
     border-left: 16px solid transparent;
