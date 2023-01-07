@@ -479,6 +479,7 @@ table.striped tr {
 .route-number {
     color: #FFFFFF;
     border-color: #FFFFFF;
+    background-color: #989898;
 }
 
 .schedules {

@@ -1,5 +1,9 @@
 <div class="route-indicator">
     % for route in routes:
-        <span class="route-number" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
+        % if type(route) == str:
+            <span class="route-number">{{ route }}</span>
+        % else:
+            <span class="route-number" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
+        % end
     % end
 </div>
