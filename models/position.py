@@ -4,7 +4,7 @@ from models.adherence import Adherence
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'lat', 'lon', 'speed', 'adherence')
+    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'lat', 'lon', 'bearing', 'speed', 'adherence')
     
     @classmethod
     def from_entity(cls, system, bus, data):
@@ -28,18 +28,26 @@ class Position:
             lat = None
             lon = None
         try:
+            if data.position.HasField('bearing'):
+                bearing = data.position.bearing
+            else:
+                bearing = None
+        except AttributeError:
+            bearing = None
+        try:
             speed = int(data.position.speed * 3.6)
         except AttributeError:
             speed = None
-        return cls(system, bus, trip_id, stop_id, lat, lon, speed)
+        return cls(system, bus, trip_id, stop_id, lat, lon, bearing, speed)
     
-    def __init__(self, system, bus, trip_id, stop_id, lat, lon, speed):
+    def __init__(self, system, bus, trip_id, stop_id, lat, lon, bearing, speed):
         self.system = system
         self.bus = bus
         self.trip_id = trip_id
         self.stop_id = stop_id
         self.lat = lat
         self.lon = lon
+        self.bearing = bearing
         self.speed = speed
         
         trip = self.trip
@@ -98,6 +106,9 @@ class Position:
             data['headsign'] = str(trip).replace("'", '&apos;')
             data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id
+        bearing = self.bearing
+        if bearing is not None:
+            data['bearing'] = bearing
         adherence = self.adherence
         if adherence is not None:
             data['adherence'] = adherence.json

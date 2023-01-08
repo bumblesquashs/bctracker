@@ -132,6 +132,13 @@
                         element.classList.add("hidden");
                     }
                 }
+                if (position.bearing !== undefined) {
+                    const bearing = document.createElement("div");
+                    bearing.className = "bearing";
+                    bearing.style.borderBottomColor = "#" + position.colour;
+                    bearing.style.transform = "rotate(" + position.bearing + "deg)";
+                    element.appendChild(bearing)
+                }
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
