@@ -3,7 +3,7 @@
         % if type(route) == str:
             <span class="route-number">{{ route }}</span>
         % else:
-            <span class="route-number" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
+            <a class="route-number" style="background-color: #{{ route.colour }};" href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }}</a>
         % end
     % end
 </div>
