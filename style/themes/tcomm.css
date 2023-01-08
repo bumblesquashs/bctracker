@@ -551,6 +551,10 @@ table.striped tr {
     color: #FFFFFF;
 }
 
+.tooltip-anchor .tooltip::after {
+    border-color: transparent #000000 transparent transparent;
+}
+
 .weekdays a.weekday.no-service:hover {
     background-color: #DC5050;
 }

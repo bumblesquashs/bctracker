@@ -475,6 +475,10 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
+.tooltip-anchor .tooltip::after {
+    border-color: transparent #565656 transparent transparent;
+}
+
 .weekdays a.weekday.no-service:hover {
     background-color: #4A0000;
 }
