@@ -109,6 +109,9 @@ class Position:
         bearing = self.bearing
         if bearing is not None:
             data['bearing'] = bearing
+        speed = self.speed
+        if speed is not None:
+            data['speed'] = speed
         adherence = self.adherence
         if adherence is not None:
             data['adherence'] = adherence.json

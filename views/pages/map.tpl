@@ -133,9 +133,12 @@
                     }
                 }
                 if (position.bearing !== undefined) {
+                    const length = Math.floor(position.speed / 10);
                     const bearing = document.createElement("div");
                     bearing.className = "bearing";
                     bearing.style.borderBottomColor = "#" + position.colour;
+                    bearing.style.marginTop = (-8 - length) + "px";
+                    bearing.style.borderBottomWidth = (26 + length) + "px";
                     bearing.style.transform = "rotate(" + position.bearing + "deg)";
                     element.appendChild(bearing)
                 }
