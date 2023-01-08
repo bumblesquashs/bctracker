@@ -176,11 +176,15 @@
                                     <span>{{ record.block_id }}</span>
                                 % end
                                 <br class="non-desktop" />
-                                <span class="non-desktop smaller-font">{{ record.routes }}</span>
+                                <span class="non-desktop smaller-font">
+                                    % include('components/route_indicator', routes=record.routes)
+                                </span>
                             </td>
                             % start_time = record.start_time.format_web(time_format)
                             % end_time = record.end_time.format_web(time_format)
-                            <td class="desktop-only">{{ record.routes }}</td>
+                            <td class="desktop-only">
+                                % include('components/route_indicator', routes=record.routes)
+                            </td>
                             <td class="desktop-only">{{ start_time }}</td>
                             <td class="desktop-only">{{ end_time }}</td>
                             <td class="tablet-only">{{ start_time }} - {{ end_time }}</td>

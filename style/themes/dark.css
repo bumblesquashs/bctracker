@@ -417,6 +417,7 @@ table.striped tr:nth-child(2n-1) {
 .route-number {
     color: #FFFFFF;
     border-color: #FFFFFF;
+    background-color: #989898;
 }
 
 .schedules .footer {

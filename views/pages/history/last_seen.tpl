@@ -70,7 +70,9 @@
                                 <span>{{ record.block_id }}</span>
                             % end
                         </td>
-                        <td class="desktop-only">{{ record.routes }}</td>
+                        <td class="desktop-only">
+                            % include('components/route_indicator', routes=record.routes)
+                        </td>
                     </tr>
                 % end
             % end

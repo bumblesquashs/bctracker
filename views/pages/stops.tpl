@@ -102,7 +102,9 @@
                         <tr>
                             <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                             <td>{{ stop }}</td>
-                            <td>{{ stop.get_routes_string() }}</td>
+                            <td>
+                                % include('components/route_indicator', routes=stop.get_routes())
+                            </td>
                         </tr>
                     % end
                 </tbody>
