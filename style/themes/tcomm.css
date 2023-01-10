@@ -480,6 +480,7 @@ table.striped tr {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;
+    text-shadow: none;
 }
 
 .schedules {
