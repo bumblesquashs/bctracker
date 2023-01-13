@@ -41,7 +41,8 @@
         % end
     </div>
 % else:
-    % orders = sorted({p.bus.order for p in positions if p.bus.order is not None})
+    % known_positions = [p for p in positions if p.bus.order is not None]
+    % orders = sorted({p.bus.order for p in known_positions})
     % unknown_positions = sorted([p for p in positions if p.bus.order is None])
     <table class="striped">
         <thead>
@@ -74,7 +75,7 @@
                 % end
             % end
             % for order in orders:
-                % order_positions = sorted([p for p in positions if p.bus.order == order])
+                % order_positions = sorted([p for p in known_positions if p.bus.order == order])
                 <tr class="section">
                     <td colspan="8">
                         <div class="flex-row">

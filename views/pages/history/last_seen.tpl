@@ -17,7 +17,8 @@
         You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
     </p>
 % else:
-    % orders = sorted({o.bus.order for o in overviews if o.bus.order is not None})
+    % known_overviews = [o for o in overviews if o.bus.order is not None]
+    % orders = sorted({o.bus.order for o in known_overviews})
     <table class="striped">
         <thead>
             <tr>
@@ -34,7 +35,7 @@
         </thead>
         <tbody>
             % for order in orders:
-                % order_overviews = [o for o in overviews if o.bus.order == order]
+                % order_overviews = [o for o in known_overviews if o.bus.order == order]
                 <tr class="section">
                     <td colspan="6">
                         <div class="flex-row">
