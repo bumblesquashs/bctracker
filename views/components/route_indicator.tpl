@@ -3,7 +3,10 @@
         % if type(route) == str:
             <span class="route-number">{{ route }}</span>
         % else:
-            <a class="route-number" style="background-color: #{{ route.colour }};" href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }}</a>
+            <span class="tooltip-anchor">
+                <a class="route-number" style="background-color: #{{ route.colour }};" href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }}</a>
+                <div class="tooltip">{{ route }}</div>
+            </span>
         % end
     % end
 </div>
