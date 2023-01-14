@@ -52,8 +52,8 @@ def update(system):
             except:
                 bus_number = -(index + 1)
             positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
-        last_updated_date = Date.today()
-        last_updated_time = Time.now(accurate_seconds=False)
+        last_updated_date = Date.today('America/Vancouver')
+        last_updated_time = Time.now('America/Vancouver', False)
         system.last_updated_date = Date.today(system.timezone)
         system.last_updated_time = Time.now(system.timezone, False)
         print('Done!')
