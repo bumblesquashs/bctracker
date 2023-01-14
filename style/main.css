@@ -746,6 +746,7 @@ table.striped tr.section td {
     font-size: 11pt;
     font-weight: bold;
     font-family: Helvetica, sans-serif;
+    text-align: left;
 }
 
 .tooltip-anchor .tooltip::after {
