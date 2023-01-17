@@ -39,7 +39,7 @@ class DropoffType(Enum):
     
     @property
     def is_normal(self):
-        return self == PickupType.NORMAL
+        return self == DropoffType.NORMAL
 
 class Departure:
     '''An association between a trip and a stop'''

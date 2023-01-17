@@ -127,6 +127,7 @@
                 </tbody>
             </table>
         % end
+        
         <h2>Stop Schedule</h2>
         % if len([d for d in trip.departures if d.timepoint]) > 0:
             <p>
