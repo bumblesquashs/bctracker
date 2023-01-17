@@ -174,9 +174,16 @@
                             % end
                             <td class="non-mobile">
                                 {{ trip }}
-                                % if departure == trip.last_departure:
+                                % if not departure.pickup_type.is_normal:
                                     <br />
-                                    <span class="smaller-font">Unloading only</span>
+                                    <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                % elif departure == trip.last_departure:
+                                    <br />
+                                    <span class="smaller-font">Drop off only</span>
+                                % end
+                                % if not departure.dropoff_type.is_normal:
+                                    <br />
+                                    <span class="smaller-font">{{ departure.dropoff_type }}</span>
                                 % end
                             </td>
                             <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>

@@ -127,8 +127,12 @@
                 </tbody>
             </table>
         % end
-        
         <h2>Stop Schedule</h2>
+        % if len([d for d in trip.departures if d.timepoint]) > 0:
+            <p>
+                Departures in <span class="timing-point">bold</span> are timing points.
+            </p>
+        % end
         <table class="striped">
             <thead>
                 <tr>
@@ -142,7 +146,9 @@
                 % for departure in trip.departures:
                     % stop = departure.stop
                     <tr>
-                        <td>{{ departure.time.format_web(time_format) }}</td>
+                        <td class="{{ 'timing-point' if departure.timepoint else '' }}">
+                            {{ departure.time.format_web(time_format) }}
+                        </td>
                         <td>
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                             <br class="mobile-only" />
@@ -150,12 +156,19 @@
                         </td>
                         <td class="non-mobile">
                             {{ stop }}
-                            % if departure == trip.first_departure:
+                            % if not departure.pickup_type.is_normal:
                                 <br />
-                                <span class="smaller-font">Loading only</span>
+                                <span class="smaller-font">{{ departure.pickup_type }}</span>
                             % elif departure == trip.last_departure:
                                 <br />
-                                <span class="smaller-font">Unloading only</span>
+                                <span class="smaller-font">Drop off only</span>
+                            % end
+                            % if not departure.dropoff_type.is_normal:
+                                <br />
+                                <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                            % elif departure == trip.first_departure:
+                                <br />
+                                <span class="smaller-font">Pick up only</span>
                             % end
                         </td>
                     </tr>
