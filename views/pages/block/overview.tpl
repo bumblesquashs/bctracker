@@ -27,6 +27,9 @@
             <div class="section no-flex">
                 % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
             </div>
+            <div class="section no-flex">
+                % include('components/block_indicator')
+            </div>
             <div class="section">
                 <div class="name">Start time</div>
                 <div class="value">

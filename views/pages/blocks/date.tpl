@@ -17,6 +17,7 @@
         % include('components/systems')
     </div>
 % else:
+    % blocks = [b for b in system.get_blocks() if b.schedule.includes(date)]
     <div class="flex-container">
         <div class="sidebar flex-1">
             <h2>Overview</h2>
@@ -35,11 +36,47 @@
                     % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], url=get_url(system, 'blocks'), date_url=get_url(system, 'blocks/schedule'))
                 </div>
             </div>
+            % if len(blocks) > 0:
+                <h2>Trip Distribution</h2>
+                <style>
+                    .block-display {
+                        position: flex;
+                        flex-direction: column;
+                    }
+                    
+                    .block-display .block {
+                        position: relative;
+                        height: 5px;
+                    }
+                    
+                    .block-display .block .trip {
+                        position: absolute;
+                        height: 100%;
+                    }
+                </style>
+                <div class="block-display">
+                    % start_time = min([b.get_start_time(date=date) for b in blocks])
+                    % end_time = max([b.get_end_time(date=date) for b in blocks])
+                    % total_minutes = end_time.get_minutes() - start_time.get_minutes()
+                    % for block in sorted(blocks, key=lambda b: b.get_start_time(date=date)):
+                        <div class="block">
+                            % for trip in block.get_trips(date=date):
+                                % trip_minutes = trip.end_time.get_minutes() - trip.start_time.get_minutes()
+                                % percentage = (trip_minutes / total_minutes) * 100
+                                % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
+                                % offset_percentage = (offset_minutes / total_minutes) * 100
+                                <div class="trip" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
+                                    
+                                </div>
+                            % end
+                        </div>
+                    % end
+                </div>
+            % end
         </div>
         <div class="flex-3">
             <h2>{{ date.format_long() }}</h2>
             <h3>{{ date.weekday }}</h3>
-            % blocks = [b for b in system.get_blocks() if b.schedule.includes(date)]
             % if len(blocks) == 0:
                 <p>No blocks found for {{ system }} on {{ date.format_long() }}.</p>
                 <p>
