@@ -728,6 +728,10 @@ table.striped tr.section td {
     cursor: default !important;
 }
 
+.timing-point {
+    font-weight: bold;
+}
+
 .tooltip-anchor {
     position: relative;
 }

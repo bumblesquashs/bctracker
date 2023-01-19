@@ -70,9 +70,16 @@
                                                     <td>{{ departure.time.format_web(time_format) }}</td>
                                                     <td class="non-mobile">
                                                         {{ trip }}
-                                                        % if departure == trip.last_departure:
+                                                        % if not departure.pickup_type.is_normal:
                                                             <br />
-                                                            <span class="smaller-font">Unloading only</span>
+                                                            <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                        % elif departure == trip.last_departure:
+                                                            <br />
+                                                            <span class="smaller-font">Drop off only</span>
+                                                        % end
+                                                        % if not departure.dropoff_type.is_normal:
+                                                            <br />
+                                                            <span class="smaller-font">{{ departure.dropoff_type }}</span>
                                                         % end
                                                     </td>
                                                     <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
@@ -80,9 +87,16 @@
                                                         <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
                                                         <br class="mobile-only" />
                                                         <span class="mobile-only smaller-font">{{ trip }}</span>
-                                                        % if departure == trip.last_departure:
+                                                        % if not departure.pickup_type.is_normal:
                                                             <br class="mobile-only" />
-                                                            <span class="mobile-only smaller-font">Unloading only</span>
+                                                            <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
+                                                        % elif departure == trip.last_departure:
+                                                            <br class="mobile-only" />
+                                                            <span class="mobile-only smaller-font">Drop off only</span>
+                                                        % end
+                                                        % if not departure.dropoff_type.is_normal:
+                                                            <br class="mobile-only" />
+                                                            <span class="mobile-only smaller-font">{{ departure.dropoff_type }}</span>
                                                         % end
                                                     </td>
                                                 </tr>
