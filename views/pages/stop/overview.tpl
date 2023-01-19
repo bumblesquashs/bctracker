@@ -43,15 +43,18 @@
                     <tr>
                         <th>Number</th>
                         <th>Name</th>
-                        <th>Routes</th>
+                        <th class="non-mobile">Routes</th>
                     </tr>
                 </thead>
                 <tbody>
                     % for nearby_stop in nearby_stops:
                         <tr>
                             <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
-                            <td>{{ nearby_stop }}</td>
-                            <td>{{ nearby_stop.get_routes_string() }}</td>
+                            <td class="non-mobile">{{ nearby_stop }}</td>
+                            <td>
+                                <div class="mobile-only">{{ nearby_stop }}</div>
+                                % include('components/route_indicator', routes=nearby_stop.get_routes())
+                            </td>
                         </tr>
                     % end
                 </tbody>
@@ -73,7 +76,9 @@
                         % alt_stop = alt_system.get_stop(number=stop.number)
                         <tr>
                             <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
-                            <td>{{ alt_stop.get_routes_string() }}</td>
+                            <td>
+                                % include('components/route_indicator', routes=alt_stop.get_routes())
+                            </td>
                         </tr>
                     % end
                 </tbody>
