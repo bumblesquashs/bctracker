@@ -104,11 +104,19 @@
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                 <br class="mobile-only" />
                                 <span class="mobile-only smaller-font">
-                                    {{ 'Unknown Year/Model' if order is None else order }}
+                                    % if order is None:
+                                        <span class="lighter-text">Unknown Year/Model</span>
+                                    % else:
+                                        {{ order }}
+                                    % end
                                 </span>
                             </td>
                             <td class="non-mobile">
-                                {{ 'Unknown Year/Model' if order is None else order }}
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{ order }}
+                                % end
                             </td>
                             % if stop is None:
                                 <td class="lighter-text">Unavailable</td>

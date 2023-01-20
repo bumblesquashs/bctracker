@@ -152,11 +152,19 @@
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                 <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">
-                                    {{ 'Unknown Year/Model' if order is None else order }}
+                                    % if order is None:
+                                        <span class="lighter-text">Unknown Year/Model</span>
+                                    % else:
+                                        {{ order }}
+                                    % end
                                 </span>
                             </td>
                             <td class="desktop-only">
-                                {{ 'Unknown Year/Model' if order is None else order }}
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{ order }}
+                                % end
                             </td>
                             <td class="desktop-only">{{ trip }}</td>
                             <td>

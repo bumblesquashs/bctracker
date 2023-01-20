@@ -60,11 +60,19 @@
                                 <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                 <br class="non-desktop" />
                                 <span class="non-desktop smaller-font">
-                                    {{ 'Unknown Year/Model' if order is None else order }}
+                                    % if order is None:
+                                        <span class="lighter-text">Unknown Year/Model</span>
+                                    % else:
+                                        {{ order }}
+                                    % end
                                 </span>
                             </td>
                             <td class="desktop-only">
-                                {{ 'Unknown Year/Model' if order is None else order }}
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{ order }}
+                                % end
                             </td>
                             <td class="desktop-only">{{ trip }}</td>
                             <td class="desktop-only">
@@ -150,11 +158,19 @@
                                                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                                         <br class="non-desktop" />
                                                         <span class="non-desktop smaller-font">
-                                                            {{ 'Unknown Year/Model' if order is None else order }}
+                                                            % if order is None:
+                                                                <span class="lighter-text">Unknown Year/Model</span>
+                                                            % else:
+                                                                {{ order }}
+                                                            % end
                                                         </span>
                                                     </td>
                                                     <td class="desktop-only">
-                                                        {{ 'Unknown Year/Model' if order is None else order }}
+                                                        % if order is None:
+                                                            <span class="lighter-text">Unknown Year/Model</span>
+                                                        % else:
+                                                            {{ order }}
+                                                        % end
                                                     </td>
                                                 % elif trip.block_id in scheduled_today and trip.start_time.is_later:
                                                     % bus = scheduled_today[trip.block_id]
@@ -168,11 +184,19 @@
                                                         </span>
                                                         <br class="non-desktop" />
                                                         <span class="non-desktop smaller-font">
-                                                            {{ 'Unknown Year/Model' if order is None else order }}
+                                                            % if order is None:
+                                                                <span class="lighter-text">Unknown Year/Model</span>
+                                                            % else:
+                                                                {{ order }}
+                                                            % end
                                                         </span>
                                                     </td>
                                                     <td class="desktop-only">
-                                                        {{ 'Unknown Year/Model' if order is None else order }}
+                                                        % if order is None:
+                                                            <span class="lighter-text">Unknown Year/Model</span>
+                                                        % else:
+                                                            {{ order }}
+                                                        % end
                                                     </td>
                                                 % else:
                                                     <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
