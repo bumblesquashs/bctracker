@@ -135,42 +135,32 @@
                                             % position = positions[trip.id]
                                             % include('components/adherence_indicator', adherence=position.adherence)
                                         % end
-                                        % if order is None:
-                                            {{ bus }}
-                                        % else:
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            <br class="non-desktop" />
-                                            <span class="non-desktop smaller-font">{{ order }}</span>
-                                        % end
+                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                        <br class="non-desktop" />
+                                        <span class="non-desktop smaller-font">
+                                            {{ 'Unknown Year/Model' if order is None else order }}
+                                        </span>
                                     </td>
                                     <td class="desktop-only">
-                                        % if order is not None:
-                                            {{ order }}
-                                        % end
+                                        {{ 'Unknown Year/Model' if order is None else order }}
                                     </td>
                                 % elif trip.block_id in scheduled_today and trip.start_time.is_later:
                                     % bus = scheduled_today[trip.block_id]
                                     % order = bus.order
                                     <td>
-                                        % if order is None:
-                                            <span>{{ bus }}</span>
-                                        % else:
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        % end
+                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                         <span class="tooltip-anchor">
                                             <img class="middle-align white" src="/img/white/schedule.png" />
                                             <img class="middle-align black" src="/img/black/schedule.png" />
                                             <div class="tooltip">Bus is scheduled</div>
                                         </span>
-                                        % if order is not None:
-                                            <br class="non-desktop" />
-                                            <span class="non-desktop smaller-font">{{ order }}</span>
-                                        % end
+                                        <br class="non-desktop" />
+                                        <span class="non-desktop smaller-font">
+                                            {{ 'Unknown Year/Model' if order is None else order }}
+                                        </span>
                                     </td>
                                     <td class="desktop-only">
-                                        % if order is not None:
-                                            {{ order }}
-                                        % end
+                                        {{ 'Unknown Year/Model' if order is None else order }}
                                     </td>
                                 % else:
                                     <td class="desktop-only lighter-text" colspan="2">Unavailable</td>

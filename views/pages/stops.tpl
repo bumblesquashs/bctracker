@@ -94,16 +94,22 @@
                         <th class="non-desktop">Number</th>
                         <th class="desktop-only">Stop Name</th>
                         <th class="non-desktop">Name</th>
-                        <th>Routes</th>
+                        <th class="non-mobile">Routes</th>
                     </tr>
                 </thead>
                 <tbody>
                     % for stop in sorted(stops):
+                        % routes = stop.get_routes()
                         <tr>
                             <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
-                            <td>{{ stop }}</td>
                             <td>
-                                % include('components/route_indicator', routes=stop.get_routes())
+                                {{ stop }}
+                                <div class="mobile-only">
+                                    % include('components/route_indicator', routes=routes)
+                                </div>
+                            </td>
+                            <td class="non-mobile">
+                                % include('components/route_indicator', routes=routes)
                             </td>
                         </tr>
                     % end

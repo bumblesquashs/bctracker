@@ -94,18 +94,14 @@
                                 <td class="desktop-only">{{ record.date.format_long() }}</td>
                                 <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
                                 <td>
-                                    % if order is None:
-                                        {{ bus }}
-                                    % else:
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">{{ order }}</span>
-                                    % end
+                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                    <br class="non-desktop" />
+                                    <span class="non-desktop smaller-font">
+                                        {{ 'Unknown Year/Model' if order is None else order }}
+                                    </span>
                                 </td>
                                 <td class="desktop-only">
-                                    % if order is not None:
-                                        {{ order }}
-                                    % end
+                                    {{ 'Unknown Year/Model' if order is None else order }}
                                 </td>
                                 <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                 <td>{{ record.last_seen.format_web(time_format) }}</td>

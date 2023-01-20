@@ -101,18 +101,14 @@
                         % stop = position.stop
                         <tr>
                             <td>
-                                % if order is None:
-                                    {{ bus }}
-                                % else:
-                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br class="mobile-only" />
-                                    <span class="mobile-only smaller-font">{{ order }}</span>
-                                % end
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                <br class="mobile-only" />
+                                <span class="mobile-only smaller-font">
+                                    {{ 'Unknown Year/Model' if order is None else order }}
+                                </span>
                             </td>
                             <td class="non-mobile">
-                                % if order is not None:
-                                    {{ order }}
-                                % end
+                                {{ 'Unknown Year/Model' if order is None else order }}
                             </td>
                             % if stop is None:
                                 <td class="lighter-text">Unavailable</td>
@@ -153,10 +149,12 @@
                         <td>
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                             <br class="mobile-only" />
-                            <span class="mobile-only smaller-font">{{ stop }}</span>
+                            <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
                         </td>
                         <td class="non-mobile">
-                            {{ stop }}
+                            <span class="{{ 'timing-point' if departure.timepoint else '' }}">
+                                {{ stop }}
+                            </span>
                             % if not departure.pickup_type.is_normal:
                                 <br />
                                 <span class="smaller-font">{{ departure.pickup_type }}</span>
