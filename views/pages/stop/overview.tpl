@@ -87,6 +87,50 @@
     </div>
     
     <div class="flex-3">
+        % if len(departures) > 0:
+            % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:5]
+            <h2>Upcoming Departures</h2>
+            % if len(upcoming_departures) == 0:
+                <p>
+                    There are no departures for the rest of today.
+                </p>
+            % else:
+                % if system is None or system.realtime_enabled:
+                    <p>
+                        <span>Buses with a</span>
+                        <img class="middle-align white" src="/img/white/schedule.png" />
+                        <img class="middle-align black" src="/img/black/schedule.png" />
+                        <span>are scheduled but may be swapped off.</span>
+                    </p>
+                % end
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            % if system is None or system.realtime_enabled:
+                                <th>Bus</th>
+                                <th class="desktop-only">Model</th>
+                            % end
+                            <th class="non-mobile">Headsign</th>
+                            <th class="desktop-only">Block</th>
+                            <th>Trip</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        % last_hour = -1
+                        % for departure in upcoming_departures:
+                            % this_hour = departure.time.hour
+                            % if last_hour == -1:
+                                % last_hour = this_hour
+                            % end
+                            % include('rows/departure', show_divider=this_hour > last_hour)
+                            % last_hour = this_hour
+                        % end
+                    </tbody>
+                </table>
+            % end
+        % end
+        
         <h2>Today's Schedule</h2>
         % if len(departures) == 0:
             <p>
@@ -118,92 +162,11 @@
                 <tbody>
                     % last_hour = -1
                     % for departure in departures:
-                        % trip = departure.trip
-                        % block = trip.block
                         % this_hour = departure.time.hour
                         % if last_hour == -1:
                             % last_hour = this_hour
                         % end
-                        <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                            <td>{{ departure.time.format_web(time_format) }}</td>
-                            % if system is None or system.realtime_enabled:
-                                % if trip.id in recorded_today:
-                                    % bus = recorded_today[trip.id]
-                                    % order = bus.order
-                                    <td>
-                                        % if trip.id in positions:
-                                            % position = positions[trip.id]
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                        % end
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{ order }}
-                                            % end
-                                        </span>
-                                    </td>
-                                    <td class="desktop-only">
-                                        % if order is None:
-                                            <span class="lighter-text">Unknown Year/Model</span>
-                                        % else:
-                                            {{ order }}
-                                        % end
-                                    </td>
-                                % elif trip.block_id in scheduled_today and trip.start_time.is_later:
-                                    % bus = scheduled_today[trip.block_id]
-                                    % order = bus.order
-                                    <td>
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <span class="tooltip-anchor">
-                                            <img class="middle-align white" src="/img/white/schedule.png" />
-                                            <img class="middle-align black" src="/img/black/schedule.png" />
-                                            <div class="tooltip">Bus is scheduled</div>
-                                        </span>
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{ order }}
-                                            % end
-                                        </span>
-                                    </td>
-                                    <td class="desktop-only">
-                                        % if order is None:
-                                            <span class="lighter-text">Unknown Year/Model</span>
-                                        % else:
-                                            {{ order }}
-                                        % end
-                                    </td>
-                                % else:
-                                    <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
-                                    <td class="non-desktop lighter-text">Unavailable</td>
-                                % end
-                            % end
-                            <td class="non-mobile">
-                                {{ trip }}
-                                % if not departure.pickup_type.is_normal:
-                                    <br />
-                                    <span class="smaller-font">{{ departure.pickup_type }}</span>
-                                % elif departure == trip.last_departure:
-                                    <br />
-                                    <span class="smaller-font">Drop off only</span>
-                                % end
-                                % if not departure.dropoff_type.is_normal:
-                                    <br />
-                                    <span class="smaller-font">{{ departure.dropoff_type }}</span>
-                                % end
-                            </td>
-                            <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                            <td>
-                                <a class="trip-id" href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">{{ trip }}</span>
-                            </td>
-                        </tr>
+                        % include('rows/departure', show_divider=this_hour > last_hour)
                         % last_hour = this_hour
                     % end
                 </tbody>
