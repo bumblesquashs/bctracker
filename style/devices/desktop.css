@@ -5,10 +5,13 @@ a:hover {
 
 body {
     font-size: 14pt;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    justify-items: stretch;
+    align-items: stretch;
     height: 100%;
     overflow: hidden;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
 }
 
 form {
@@ -26,7 +29,7 @@ table.striped th {
 
 #body {
     flex: 1;
-    flex-direction: row;
+    flex-direction: column;
     overflow: hidden;
 }
 
@@ -57,23 +60,20 @@ table.striped th {
 }
 
 #search-desktop {
-    float: right;
-    display: block;
-    text-align: center;
-    padding: 10px 20px;
-    text-decoration: none !important;
-    font-family: Helvetica, sans-serif;
+    padding: 0px 20px 0px 10px;
     font-size: 14pt;
     font-weight: normal;
     position: relative;
     overflow: visible !important;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    height: 100%;
 }
 
 #search-desktop img {
     width: 28px;
     height: 28px;
-    margin: 2px 0px;
-    vertical-align: middle;
 }
 
 #search-desktop input[type="text"] {
@@ -82,8 +82,9 @@ table.striped th {
     border-radius: 5px;
     font-size: 14px;
     padding: 5px;
-    vertical-align: middle;
+    margin: 10px 0px;
     -webkit-appearance: none;
+    flex: 1;
 }
 
 #search-desktop input[type="text"]:focus {
@@ -96,7 +97,7 @@ table.striped th {
 
 #search-desktop-results {
     position: absolute;
-    top: 52px;
+    top: 100%;
     left: 0px;
     right: 0px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -118,8 +119,8 @@ table.striped th {
 }
 
 #search-desktop-results .result img {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
 }
 
 #search-desktop-results .result .description {
@@ -181,6 +182,22 @@ table.striped th {
 
 #theme .title {
     font-weight: bold;
+}
+
+#title {
+    font-family: Helvetica, sans-serif;
+    font-size: 22pt;
+    font-weight: bold;
+    display: flex;
+    align-items: stretch;
+}
+
+#title a {
+    flex: 1;
+    padding: 5px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
 }
 
 .banner a {

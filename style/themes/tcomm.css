@@ -92,21 +92,35 @@ table.striped tr {
     text-shadow: 0 -1px 1px #000000;
 }
 
-#navigation-bar .navigation-button {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-button:hover {
+#navigation-bar .navigation-icon:hover {
     background-color: #444444;
     background-image: linear-gradient(#555555, #383838);
 }
 
-#navigation-bar .navigation-button.disabled:hover {
+#navigation-bar .navigation-icon.disabled:hover {
     background-color: #111111 !important;
     background-image: linear-gradient(#3C3C3C, #111111) !important;
 }
 
-#navigation-bar .navigation-button img.black {
+#navigation-bar .navigation-icon img.black {
+    display: none;
+}
+
+#navigation-bar .navigation-item {
+    color: #FFFFFF;
+}
+
+#navigation-bar .navigation-item:hover {
+    background-color: #444444;
+    background-image: linear-gradient(#555555, #383838);
+}
+
+#navigation-bar .navigation-item.disabled:hover {
+    background-color: #111111 !important;
+    background-image: linear-gradient(#3C3C3C, #111111) !important;
+}
+
+#navigation-bar .navigation-item img.black {
     display: none;
 }
 
@@ -274,18 +288,16 @@ table.striped tr {
     display: none;
 }
 
-#theme {
-    background-color: #333333;
-    background-image: linear-gradient(#444444, #2D2D2D);
+#title a {
+    background-color: #111111;
+    background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: 0 -1px 1px #000000;
     color: #FFFFFF;
-    border-top-color: #000000;
 }
 
-#theme a {
-    color: #FFFFFF;
-    text-decoration: none;
-    text-shadow: none;
+#title a:hover {
+    background-color: #444444;
+    background-image: linear-gradient(#555555, #383838);
 }
 
 #system-bar {

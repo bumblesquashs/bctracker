@@ -90,19 +90,31 @@ table.striped tr:nth-child(2n-1) {
     background-color: #E20000;
 }
 
-#navigation-bar .navigation-button {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-button:hover {
+#navigation-bar .navigation-icon:hover {
     background-color: #840000;
 }
 
-#navigation-bar .navigation-button.disabled:hover {
+#navigation-bar .navigation-icon.disabled:hover {
     background-color: #E20000 !important;
 }
 
-#navigation-bar .navigation-button img.black {
+#navigation-bar .navigation-icon img.black {
+    display: none;
+}
+
+#navigation-bar .navigation-item {
+    color: #FFFFFF;
+}
+
+#navigation-bar .navigation-item:hover {
+    background-color: #840000;
+}
+
+#navigation-bar .navigation-item.disabled:hover {
+    background-color: #E20000 !important;
+}
+
+#navigation-bar .navigation-item img.black {
     display: none;
 }
 
@@ -250,14 +262,13 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#theme {
-    background-color: #023496;
+#title a {
+    background-color: #E20000;
     color: #FFFFFF;
-    border-top-color: #666666;
 }
 
-#theme a {
-    color: #FFFFFF;
+#title a:hover {
+    background-color: #840000;
 }
 
 .adherence-indicator {

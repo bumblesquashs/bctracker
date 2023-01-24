@@ -69,22 +69,7 @@ table {
 }
 
 #navigation-bar .title {
-    font-size: 18pt;
-}
-
-#navigation-menu-theme {
-    width: 100%;
-    text-align: center;
-    padding: 10px 20px;
-}
-
-#navigation-menu-theme a {
-    text-decoration: underline;
-    font-weight: normal;
-}
-
-#navigation-menu-theme .title {
-    font-weight: bold;
+    font-size: 22pt;
 }
 
 #navigation-menu-toggle {
@@ -214,7 +199,7 @@ table {
     height: 36px;
 }
 
-#theme {
+#title {
     display: none;
 }
 
