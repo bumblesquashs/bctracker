@@ -2,10 +2,10 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #1A671A
- * Secondary Header: #48A348
+ * Primary Header: #FFFFFF
+ * Secondary Header: #FFFFFF
  * Menu: #094409
- * Borders: #666666
+ * Borders: #DDDDDD
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
@@ -26,48 +26,44 @@ body {
 }
 
 form input[type="text"] {
-    border-color: #666666;
+    border-color: #EEEEEE;
     background-color: #FFFFFF;
     color: #000000;
 }
 
 form input[type="text"]:focus {
-    border-color: #094409;
+    border-color: #AAAAAA;
 }
 
 hr {
-    border-top-color: #666666;
+    border-top-color: #EEEEEE;
 }
 
 table.striped {
-    border-color: #666666;
+    border-color: #FFFFFF;
 }
 
 table.striped tbody tr:hover {
-    background-color: #CBCBCB;
+    background-color: #DDDDDD;
 }
 
 table.striped tbody tr.section {
-    background-color: #666666;
-    color: #FFFFFF;
+    background-color: #EEEEEE;
 }
 
 table.striped td {
-    border-color: #666666;
+    border-color: #FFFFFF;
+    border-width: 0px;
 }
 
 table.striped th {
-    background-color: #48A348;
-    color: #FFFFFF;
-    border-color: #666666;
+    background-color: #DDDDDD;
+    border-color: #FFFFFF;
+    border-width: 0px;
 }
 
 table.striped tr {
     background-color: #FFFFFF;
-}
-
-table.striped tr:nth-child(2n-1) {
-    background-color: #E6E6E6;
 }
 
 #content img.white {
@@ -75,7 +71,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #map.preview {
-    border-color: #666666;
+    border-color: #EEEEEE;
 }
 
 #map-toggle {
@@ -87,81 +83,81 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #navigation-bar {
-    background-color: #1A671A;
+    background-color: #EEEEEE;
 }
 
 #navigation-bar .navigation-icon:hover {
-    background-color: #094409;
+    background-color: #DDDDDD;
 }
 
 #navigation-bar .navigation-icon.disabled:hover {
-    background-color: #1A671A !important;
+    background-color: #FFFFFF !important;
 }
 
-#navigation-bar .navigation-icon img.black {
+#navigation-bar .navigation-icon img.white {
     display: none;
 }
 
 #navigation-bar .navigation-item {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 #navigation-bar .navigation-item:hover {
-    background-color: #094409;
+    background-color: #DDDDDD;
 }
 
 #navigation-bar .navigation-item.disabled:hover {
-    background-color: #1A671A !important;
+    background-color: #FFFFFF !important;
 }
 
-#navigation-bar .navigation-item img.black {
+#navigation-bar .navigation-item img.white {
     display: none;
 }
 
 #navigation-menu-toggle .line {
-    background-color: #FFFFFF;
+    background-color: #000000;
 }
 
 #refresh-button:hover {
-    background-color: #094409;
+    background-color: #DDDDDD;
 }
 
 #refresh-button.disabled:hover {
-    background-color: #48A348;
+    background-color: #FFFFFF;
 }
 
-#refresh-button img.black {
+#refresh-button img.white {
     display: none;
 }
 
 #search-desktop {
-    color: #FFFFFF;
+    color: #000000;
 }
 
-#search-desktop > img.black {
+#search-desktop > img.white {
     display: none;
 }
 
 #search-desktop input[type="text"] {
-    border-color: #FFFFFF;
+    border-color: #EEEEEE;
     background-color: #FFFFFF;
     color: #000000;
 }
 
 #search-desktop input[type="text"]:focus {
-    border-color: #094409;
+    border-color: #DDDDDD;
 }
 
 #search-desktop input[type="text"]::placeholder {
-    color: #666666;
+    color: #888888;
 }
 
 #search-desktop input[type="text"]:-ms-input-placeholder {
-    color: #666666;
+    color: #888888;
 }
 
 #search-desktop input[type="text"]::-ms-input-placeholder {
-    color: #666666;
+    color: #888888;
 }
 
 #search-desktop-results {
@@ -169,11 +165,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #search-desktop-results .keyboard-selected {
-    background-color: #CBCBCB;
+    background-color: #EEEEEE;
 }
 
 #search-desktop-results .message {
-    color: #666666;
+    color: #888888;
 }
 
 #search-desktop-results .result {
@@ -181,7 +177,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #search-desktop-results .result:hover {
-    background-color: #E6E6E6;
+    background-color: #DDDDDD;
 }
 
 #search-desktop-results .result img.white {
@@ -193,47 +189,45 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #search-non-desktop input[type="text"]:focus {
-    border-color: #48A348;
+    border-color: #FFFFFF;
 }
 
 #search-non-desktop-results .message {
-    color: #FFFFFF;
+    color: #888888;
 }
 
 #search-non-desktop-results .result {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 #search-non-desktop-results .result .lighter-text {
-    color: #CBCBCB;
+    color: #888888;
 }
 
-#search-non-desktop-results .result img.black {
+#search-non-desktop-results .result img.white {
     display: none;
 }
 
-#search-non-desktop-toggle img.black {
+#search-non-desktop-toggle img.white {
     display: none;
 }
 
 #side-bar {
-    border-right-color: #666666;
+    border-right-color: #EEEEEE;
 }
 
 #status {
-    background-color: #48A348;
-    color: #FFFFFF;
-    border-bottom-color: #666666;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-bottom-color: #EEEEEE;
 }
 
 #system-menu {
-    background-color: #E6E6E6;
-    border-bottom-color: #666666;
+    background-color: #FFFFFF;
 }
 
 #system-menu .header {
-    background-color: #666666;
-    color: #FFFFFF;
+    background-color: #EEEEEE;
 }
 
 #system-menu .system-button {
@@ -241,11 +235,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #system-menu .system-button:hover {
-    background-color: #CBCBCB;
+    background-color: #DDDDDD;
 }
 
 #system-menu .system-button.current {
-    background-color: #CBCBCB;
+    background-color: #DDDDDD;
     font-weight: bold;
     cursor: default;
 }
@@ -255,12 +249,12 @@ table.striped tr:nth-child(2n-1) {
 }
 
 #title a {
-    background-color: #1A671A;
-    color: #FFFFFF;
+    background-color: #EEEEEE;
+    color: #000000;
 }
 
 #title a:hover {
-    background-color: #094409;
+    background-color: #DDDDDD;
 }
 
 .adherence-indicator {
@@ -310,11 +304,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .button.disabled {
-    background-color: #666666;
+    background-color: #888888;
 }
 
 .button.disabled:hover {
-    background-color: #666666 !important;
+    background-color: #888888 !important;
 }
 
 .button.survey-button {
@@ -343,11 +337,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .dropdown .content .dropdown-button:hover {
-    background-color: #E6E6E6;
+    background-color: #DDDDDD;
 }
 
 .dropdown .content .dropdown-button.disabled {
-    color: #666666;
+    color: #888888;
 }
 
 .dropdown .content .dropdown-button.disabled:hover {
@@ -355,26 +349,26 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .dropdown .content .header {
-    background-color: #CBCBCB;
+    background-color: #EEEEEE;
     color: #000000;
 }
 
 .info-box {
-    background-color: #E6E6E6;
-    border-color: #666666;
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
 }
 
 .info-box .section {
-    border-bottom-color: #CBCBCB;
+    border-bottom-color: #DDDDDD;
 }
 
 .lighter-text {
-    color: #666666;
+    color: #888888;
 }
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #48A348;
+    background-color: #FFFFFF;
 }
 
 .marker .icon.route .number {
@@ -382,18 +376,18 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .menu {
-    background-color: #094409;
+    background-color: #DDDDDD;
 }
 
 .menu .menu-button {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 .menu .menu-button.disabled {
-    color: #ABABAB;
+    color: #888888;
 }
 
-.menu .menu-button img.black {
+.menu .menu-button img.white {
     display: none;
 }
 
@@ -402,18 +396,18 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .news-post {
-    background-color: #E6E6E6;
-    border-color: #666666;
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
 }
 
 .news-post .header {
-    background-color: #48A348;
-    color: white;
-    border-bottom-color: #666666;
+    background-color: #DDDDDD;
+    color: #000000;
+    border-bottom-color: #DDDDDD;
 }
 
 .order-indicator .content .separator {
-    color: #666666;
+    color: #888888;
 }
 
 .positive {
@@ -427,11 +421,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .schedules .footer {
-    color: #666666;
+    color: #888888;
 }
 
 .schedules .legend {
-    color: #666666;
+    color: #888888;
 }
 
 .schedules a.modified-service:hover {
@@ -463,27 +457,27 @@ table.striped tr:nth-child(2n-1) {
 
 .tab-button {
     background-color: #FFFFFF;
-    border-color: #666666;
+    border-color: #EEEEEE;
     color: #0040FF;
 }
 
 .tab-button:hover {
-    background-color: #E6E6E6;
+    background-color: #DDDDDD;
     cursor: pointer;
 }
 
 .tab-button.current {
-    background-color: #CBCBCB;
+    background-color: #EEEEEE;
     color: #000000;
 }
 
 .tooltip-anchor .tooltip {
-    background-color: #666666;
+    background-color: #888888;
     color: #FFFFFF;
 }
 
 .tooltip-anchor .tooltip::after {
-    border-color: transparent #666666 transparent transparent;
+    border-color: transparent #888888 transparent transparent;
 }
 
 .weekdays a.weekday.no-service:hover {
