@@ -151,6 +151,7 @@ table.striped th {
     display: flex;
     flex-direction: column;
     overflow: auto;
+    padding-bottom: 15px;
 }
 
 #system-menu .header {
@@ -198,6 +199,12 @@ table.striped th {
     text-decoration: none;
     display: flex;
     align-items: center;
+}
+
+#title img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
 }
 
 .banner a {

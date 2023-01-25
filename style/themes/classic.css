@@ -263,6 +263,10 @@ table.striped tr:nth-child(2n-1) {
     background-color: #840000;
 }
 
+#title img.black {
+    display: none;
+}
+
 .adherence-indicator {
     color: #FFFFFF;
 }

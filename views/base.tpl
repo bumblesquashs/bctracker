@@ -119,7 +119,11 @@
     
     <body class="{{ 'full-map' if get('full_map', False) else '' }}">
         <div id="title">
-            <a href="{{ get_url(system) }}">BCTracker</a>
+            <a href="{{ get_url(system) }}">
+                <img class="white" src="/img/white/bctracker.png" />
+                <img class="black" src="/img/black/bctracker.png" />
+                BCTracker
+            </a>
         </div>
         <div id="navigation-bar">
             <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>

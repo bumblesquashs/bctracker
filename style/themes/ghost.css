@@ -257,6 +257,10 @@ table.striped tr {
     background-color: #DDDDDD;
 }
 
+#title img.white {
+    display: none;
+}
+
 .adherence-indicator {
     color: #FFFFFF;
 }
