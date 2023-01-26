@@ -372,7 +372,7 @@ table.striped tr {
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #FFFFFF;
+    background-color: #888888;
 }
 
 .marker .icon.route .number {
