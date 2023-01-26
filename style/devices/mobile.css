@@ -162,6 +162,8 @@ table {
 }
 
 #system-menu {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
     text-align: center;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -172,26 +174,18 @@ table {
 }
 
 #system-menu .header {
+    grid-column-end: span 2;
     font-size: 15pt;
-}
-
-#system-menu .region {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
 }
 
 #system-menu .system-button {
     padding: 5px 20px;
     font-size: 14pt;
     font-weight: normal;
-    display: inline-block;
-    width: calc(50% - 40px);
 }
 
 #system-menu .system-button.all-systems {
-    width: calc(100% - 40px);
+    grid-column-end: span 2;
 }
 
 #system-menu-toggle img {
@@ -228,19 +222,16 @@ table {
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     font-family: Helvetica, sans-serif;
 }
 
 .menu .menu-button {
-    display: inline-block;
     padding: 15px 20px;
     font-size: 16pt;
     font-weight: normal;
-    width: calc(50% - 40px);
 }
 
 .menu .menu-button img {

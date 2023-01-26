@@ -205,6 +205,10 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
+#system-menu {
+    display: grid;
+}
+
 #system-menu .header {
     padding: 5px 20px;
     font-weight: bold;

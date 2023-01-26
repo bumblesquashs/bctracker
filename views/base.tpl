@@ -259,15 +259,13 @@
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
                         <div class="header">{{ region }}</div>
-                        <div class="region">
-                            % for region_system in region_systems:
-                                % if system is not None and system == region_system:
-                                    <span class="system-button current">{{ region_system }}</span>
-                                % else:
-                                    <a href="{{ get_url(region_system, path) }}" class="system-button">{{ region_system }}</a>
-                                % end
+                        % for region_system in region_systems:
+                            % if system is not None and system == region_system:
+                                <span class="system-button current">{{ region_system }}</span>
+                            % else:
+                                <a href="{{ get_url(region_system, path) }}" class="system-button">{{ region_system }}</a>
                             % end
-                        </div>
+                        % end
                     % end
                 % end
             </div>

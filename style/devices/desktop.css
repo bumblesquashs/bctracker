@@ -148,8 +148,7 @@ table.striped th {
 
 #system-menu {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: auto;
     overflow: auto;
     padding-bottom: 15px;
 }
@@ -159,7 +158,6 @@ table.striped th {
 }
 
 #system-menu .system-button {
-    display: block;
     text-decoration: none !important;
     padding: 5px 20px;
     font-size: 12pt;
