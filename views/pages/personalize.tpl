@@ -1,5 +1,5 @@
 
-% rebase('base', title='Personalize')
+% rebase('base', title='Personalize', enable_refresh=False)
 
 <div class="page-header">
     <h1 class="title">Personalize</h1>

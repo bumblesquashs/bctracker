@@ -69,7 +69,7 @@
             </script>
         % end
         
-        % if (system is None or system.realtime_enabled) and get('enable_reload', True):
+        % if (system is None or system.realtime_enabled) and get('enable_refresh', True):
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();

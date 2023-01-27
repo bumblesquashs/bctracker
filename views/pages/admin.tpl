@@ -1,5 +1,5 @@
 
-% rebase('base', title='Administration', disable_indexing=True)
+% rebase('base', title='Administration', disable_indexing=True, enable_refresh=False)
 
 <div class="page-header">
     <h1 class="title">Administration</h1>

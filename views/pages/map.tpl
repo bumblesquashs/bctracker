@@ -1,7 +1,7 @@
 
 % import json
 
-% rebase('base', title='Map', include_maps=True, full_map=True)
+% rebase('base', title='Map', include_maps=True, full_map=True, enable_refresh=False)
 
 % if len(positions) == 0:
     <div class="page-header">

@@ -2,7 +2,7 @@
 % import json
 
 % if system is None:
-    % rebase('base', title='Routes')
+    % rebase('base', title='Routes', enable_refresh=False)
     
     <div class="page-header">
         <h1 class="title">Routes</h1>
@@ -57,7 +57,7 @@
         </tbody>
     </table>
 % else:
-    % rebase('base', title='Routes', include_maps=True, full_map=True)
+    % rebase('base', title='Routes', include_maps=True, full_map=True, enable_refresh=False)
     
     % routes = system.get_routes()
     % if len(routes) == 0:

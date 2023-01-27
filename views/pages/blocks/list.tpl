@@ -1,5 +1,5 @@
 
-% rebase('base', title='Blocks')
+% rebase('base', title='Blocks', enable_refresh=False)
 
 <div class="page-header">
     <h1 class="title">Blocks</h1>
