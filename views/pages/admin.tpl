@@ -7,21 +7,21 @@
     <hr />
 </div>
 
-<div class="container no-inline">
-    <div class="section">
-        <h2 class="title">Server Management</h2>
+<div class="container">
+    <div>
+        <h2>Server Management</h2>
         <div class="button-container">
             <div class="button" onclick="restartCron()">Restart Cron</div>
             <div class="button" onclick="backupDatabase()">Backup Database</div>
         </div>
     </div>
-    <div class="section">
-        <h2 class="title">System Management</h2>
-        <div class="container no-inline">
+    <div>
+        <h2>System Management</h2>
+        <div class="container">
             % if system is None:
                 % for admin_system in admin_systems:
-                    <div class="section">
-                        <h3 class="title">{{ admin_system }}</h3>
+                    <div>
+                        <h3>{{ admin_system }}</h3>
                         <div class="subtitle">
                             <div>
                                 Enabled:
@@ -51,8 +51,8 @@
                     </div>
                 % end
             % else:
-                <div class="section">
-                    <h3 class="title">{{ system }}</h3>
+                <div>
+                    <h3>{{ system }}</h3>
                     <div class="subtitle">
                         <div>
                             Enabled:

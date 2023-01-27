@@ -32,18 +32,8 @@ table {
     font-size: 13pt;
 }
 
-#body {
-    flex: 1;
-    flex-direction: column;
-}
-
 #content {
     padding: 20px;
-}
-
-#content-wrapper {
-    flex: 1;
-    overflow: auto;
 }
 
 #last-updated {
@@ -70,10 +60,6 @@ table {
     margin: 6px;
 }
 
-#refresh-button {
-    border-radius: 18px;
-}
-
 #refresh-button img {
     width: 36px;
     height: 36px;
@@ -85,17 +71,8 @@ table {
 }
 
 #search-non-desktop input[type="text"] {
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 5px;
     font-size: 16px;
-    padding: 5px;
-    -webkit-appearance: none;
     width: 100%;
-}
-
-#search-non-desktop input[type="text"]:focus {
-    outline: none;
 }
 
 #search-non-desktop-results {
@@ -249,8 +226,4 @@ table {
 
 .tab-button {
     flex: 1;
-}
-
-.theme-control {
-    flex-direction: column;
 }

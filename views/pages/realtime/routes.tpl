@@ -46,14 +46,14 @@
         </p>
     </div>
 % else:
-    <div class="container no-inline">
+    <div class="container">
         % for route in system.get_routes():
             % route_positions = [p for p in positions if p.trip is not None and p.trip.route == route]
             % if len(route_positions) == 0:
                 % continue
             % end
-            <div class="section">
-                <h2 class="title">{{ route }}</h2>
+            <div>
+                <h2>{{ route }}</h2>
                 <table class="striped">
                     <thead>
                         <tr>
@@ -139,8 +139,8 @@
         
         % no_route_positions = sorted([p for p in positions if p.trip is None])
         % if len(no_route_positions) > 0:
-            <div class="section">
-                <h2 class="title">Not In Service</h2>
+            <div>
+                <h2>Not In Service</h2>
                 <table class="striped">
                     <thead>
                         <tr>

@@ -82,17 +82,17 @@
             </table>
         </div>
         <div class="flex-3">
-            <div class="container no-inline">
+            <div class="container">
                 % for type in model_types:
                     % type_models = [m for m in models if m.type == type]
-                    <div class="section">
+                    <div>
                         <h2>{{ type }}</h2>
-                        <div class="container no-inline">
+                        <div class="container">
                             % for model in type_models:
                                 % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
                                 % model_years = sorted({p.bus.order.year for p in model_positions})
-                                <div id="{{ model.id }}" class="section">
-                                    <h3 class="title">{{ model }}</h3>
+                                <div id="{{ model.id }}">
+                                    <h3>{{ model }}</h3>
                                     <table class="striped">
                                         <thead>
                                             <tr>
@@ -134,8 +134,8 @@
                 
                 % unknown_positions = sorted([p for p in positions if p.bus.order is None])
                 % if len(unknown_positions) > 0:
-                    <div class="section">
-                        <h2 class="title">Unknown Year/Model</h2>
+                    <div>
+                        <h2>Unknown Year/Model</h2>
                         <table class="striped">
                             <thead>
                                 <tr>

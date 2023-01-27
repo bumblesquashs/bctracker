@@ -25,32 +25,34 @@
 % else:
     % sheets = route.sheets
     <div class="flex-container">
-        <div class="sidebar flex-1">
-            <h2>Overview</h2>
-            <div class="info-box">
-                <div class="section no-flex">
-                    % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], url=get_url(system, f'routes/{route.number}/schedule'))
+        <div class="sidebar container flex-1">
+            <div>
+                <h2>Overview</h2>
+                <div class="info-box">
+                    <div class="section no-flex">
+                        % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], url=get_url(system, f'routes/{route.number}/schedule'))
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="container flex-3">
+        <div class="container inline flex-3">
             % for (i, sheet) in enumerate(sheets):
                 % if len(sheet.service_groups) > 0:
                     % url_suffix = '' if i == 0 else f'{i + 1}'
-                    <div class="section">
+                    <div>
                         <h2>{{ sheet }}</h2>
-                        <div class="container">
+                        <div class="container inline">
                             % for service_group in sheet.service_groups:
                                 % service_group_trips = route.get_trips(service_group=service_group)
-                                <div class="section">
+                                <div>
                                     % for weekday in service_group.schedule.weekdays:
                                         <div id="{{ weekday.short_name }}{{ url_suffix }}"></div>
                                     % end
-                                    <h3 class="title">{{ service_group }}</h3>
-                                    <div class="container">
+                                    <h3>{{ service_group }}</h3>
+                                    <div class="container inline">
                                         % for direction in sorted({t.direction for t in service_group_trips}):
                                             % direction_trips = [t for t in service_group_trips if t.direction == direction]
-                                            <div class="section">
+                                            <div>
                                                 <h4>{{ direction }}</h4>
                                                 <table class="striped">
                                                     <thead>

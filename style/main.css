@@ -7,19 +7,23 @@ body {
     margin: 0px;
 }
 
-form input {
+input {
     -webkit-appearance: none;
 }
 
-form input[type="text"] {
+input[type="text"] {
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
     padding: 5px;
 }
 
-form input[type="text"]:focus {
+input[type="text"]:focus {
     outline: none;
+}
+
+input[type="text"]::placeholder {
+    opacity: 1;
 }
 
 form .input-container {
@@ -32,7 +36,7 @@ form .input-container input[type="text"] {
 }
 
 hr {
-    margin:0px;
+    margin: 0px;
     border-width: 0px;
     border-top-width: 2px;
     border-top-style: solid;
@@ -45,7 +49,11 @@ h1, h2, h3, h4 {
 
 p {
     margin-top: 0px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+}
+
+p:last-child {
+    margin-bottom: 0px;
 }
 
 table.striped {
@@ -54,7 +62,6 @@ table.striped {
     empty-cells: show;
     border-width: 1px;
     border-style: solid;
-    margin-bottom: 20px;
 }
 
 table.striped td {
@@ -89,11 +96,9 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
-#body {
-    display: flex;
-}
-
-#content-wrapper {
+#main {
+    flex: 1;
+    overflow: auto;
     position: relative;
 }
 
@@ -120,7 +125,7 @@ table.striped tr.section td {
 #map-toggle {
     position: absolute;
     z-index: 10;
-    border-radius: 22px;
+    border-radius: 50%;
     bottom: 40px;
     right: 15px;
 }
@@ -171,6 +176,10 @@ table.striped tr.section td {
 
 #navigation-bar .title {
     font-weight: bold;
+}
+
+#refresh-button {
+    border-radius: 50%;
 }
 
 #refresh-button:hover {
@@ -291,15 +300,10 @@ table.striped tr.section td {
 }
 
 .button-container {
-    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
-}
-
-.button-control .button {
-    display: block;
 }
 
 .centred {
@@ -307,8 +311,10 @@ table.striped tr.section td {
 }
 
 .checkbox {
+    display: flex;
+    gap: 5px;
+    align-items: center;
     cursor: pointer;
-    vertical-align: middle;
     margin-bottom: 5px;
 }
 
@@ -316,18 +322,16 @@ table.striped tr.section td {
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 5px;
 }
 
 .checkbox .label {
-    vertical-align: middle;
     user-select: none;
 }
 
-.container .section .subtitle {
-    margin-bottom: 5px;
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .display-none {
@@ -345,29 +349,24 @@ table.striped tr.section td {
     align-items: center;
 }
 
-.flex-row .flex-1 {
+.flex-1 {
     flex: 1;
 }
 
-.flex-row .flex-2 {
+.flex-2 {
     flex: 2;
 }
 
-.flex-row .flex-3 {
+.flex-3 {
     flex: 3;
 }
 
-.flex-row .flex-4 {
+.flex-4 {
     flex: 4;
 }
 
-.flex-row .flex-5 {
+.flex-5 {
     flex: 5;
-}
-
-.flexbox-space-between {
-    display: flex;
-    justify-content: space-between;
 }
 
 .hidden {
@@ -376,7 +375,6 @@ table.striped tr.section td {
 
 .info-box {
     padding: 10px;
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -399,6 +397,10 @@ table.striped tr.section td {
     margin-bottom: 10px;
 }
 
+.info-box .section.no-flex {
+    display: block;
+}
+
 .info-box .section.vertical-align {
     align-items: center;
 }
@@ -415,10 +417,6 @@ table.striped tr.section td {
 
 .info-box .section > .value {
     text-align: right;
-}
-
-.info-box .section.no-flex {
-    display: block;
 }
 
 .marker {
@@ -466,8 +464,8 @@ table.striped tr.section td {
 }
 
 .marker .details .subtitle .adherence-indicator {
-    float: none;
     font-size: 8pt;
+    line-height: 8pt;
     padding: 1px 3px;
     border-radius: 3px;
 }
@@ -476,7 +474,7 @@ table.striped tr.section td {
     display: block;
     width: 32px;
     height: 32px;
-    border-radius: 18px;
+    border-radius: 50%;
     border-width: 2px;
     border-style: solid;
     position: relative;
@@ -485,11 +483,9 @@ table.striped tr.section td {
 }
 
 .marker .icon img {
+    margin: 4px;
     width: 24px;
     height: 24px;
-    left: 4px;
-    top: 4px;
-    position: relative;
 }
 
 .marker .icon .link {
@@ -500,7 +496,7 @@ table.striped tr.section td {
     bottom: 0px;
     left: 0px;
     right: 0px;
-    border-radius: 18px;
+    border-radius: 50%;
 }
 
 .marker .icon ~ * .hover-only {
@@ -550,10 +546,9 @@ table.striped tr.section td {
 }
 
 .marker.small .icon img {
+    margin: 2px;
     width: 12px;
     height: 12px;
-    left: 2px;
-    top: 2px;
 }
 
 .marker.small .details {
@@ -569,7 +564,6 @@ table.striped tr.section td {
 }
 
 .news-post {
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -585,11 +579,7 @@ table.striped tr.section td {
 }
 
 .news-post .content p + ul {
-    margin-top: -15px;
-}
-
-.news-post .content p:last-child {
-    margin-bottom: 0px;
+    margin-top: -5px;
 }
 
 .no-wrap {
@@ -709,10 +699,6 @@ table.striped tr.section td {
 .schedules .schedule .title {
     margin-bottom: 5px;
     text-align: center;
-}
-
-.spacer {
-    flex: 1;
 }
 
 .tab-button {

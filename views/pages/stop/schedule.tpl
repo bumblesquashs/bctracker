@@ -26,28 +26,30 @@
 % else:
     % sheets = stop.sheets
     <div class="flex-container">
-        <div class="sidebar flex-1">
-            <h2>Overview</h2>
-            <div class="info-box">
-                <div class="section no-flex">
-                    % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
+        <div class="sidebar container flex-1">
+            <div>
+                <h2>Overview</h2>
+                <div class="info-box">
+                    <div class="section no-flex">
+                        % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="container flex-3">
+        <div class="container inline flex-3">
             % for (i, sheet) in enumerate(sheets):
                 % if len(sheet.service_groups) > 0:
                     % url_suffix = '' if i == 0 else f'{i + 1}'
-                    <div class="section">
+                    <div>
                         <h2>{{ sheet }}</h2>
-                        <div class="container">
+                        <div class="container inline">
                             % for service_group in sheet.service_groups:
                                 % departures = stop.get_departures(service_group)
-                                <div class="section">
+                                <div>
                                     % for weekday in service_group.schedule.weekdays:
                                         <div id="{{ weekday.short_name }}{{ url_suffix }}"></div>
                                     % end
-                                    <h3 class="title">{{ service_group }}</h3>
+                                    <h3>{{ service_group }}</h3>
                                     <table class="striped">
                                         <thead>
                                             <tr>

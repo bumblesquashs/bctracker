@@ -146,7 +146,7 @@
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
             
-            <div class="spacer"></div>
+            <div class="flex-1"></div>
             
             <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
@@ -270,7 +270,7 @@
                 % end
             </div>
         </div>
-        <div id="content-wrapper">
+        <div id="main">
             <div id="banners">
                 <!-- Banners go here! (Nothing right now) -->
             </div>
