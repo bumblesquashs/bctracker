@@ -28,7 +28,7 @@
 </script>
 
 <style>
-    #content {
+    #main {
         padding-bottom: 60px;
     }
 </style>

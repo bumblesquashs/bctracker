@@ -21,15 +21,13 @@
         <thead>
             <tr>
                 <th>First Seen</th>
-                <th class="desktop-only">Number</th>
+                <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
-                <th class="desktop-only">Assigned Block</th>
-                <th class="desktop-only">Assigned Routes</th>
-                <th class="non-desktop">Block</th>
+                <th>Block</th>
+                <th class="desktop-only">Routes</th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +40,7 @@
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ record.date.format_long() }}</td>
-                    <td class="non-desktop no-wrap">
+                    <td class="non-desktop">
                         {{ record.date.format_short() }}
                         % if system is None:
                             <br class="mobile-only" />

@@ -23,21 +23,19 @@
     <table class="striped">
         <thead>
             <tr>
-                <th class="non-mobile">Number</th>
-                <th class="mobile-only">Bus</th>
+                <th>Bus</th>
                 <th>Last Seen</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
-                <th class="desktop-only">Assigned Block</th>
-                <th class="desktop-only">Assigned Routes</th>
-                <th class="non-desktop">Block</th>
+                <th>Block</th>
+                <th class="desktop-only">Routes</th>
             </tr>
         </thead>
         <tbody>
             % if len(unknown_overviews) > 0:
                 <tr class="section">
-                    <td colspan="6">
+                    <td colspan="5">
                         <div class="flex-row">
                             <div class="flex-1">Unknown Year/Model</div>
                             <div>{{ len(unknown_overviews) }}</div>
@@ -80,7 +78,7 @@
             % for order in orders:
                 % order_overviews = [o for o in known_overviews if o.bus.order == order]
                 <tr class="section">
-                    <td colspan="6">
+                    <td colspan="5">
                         <div class="flex-row">
                             <div class="flex-1">{{ order }}</div>
                             <div>{{ len(order_overviews) }}</div>
@@ -96,7 +94,7 @@
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
-                        <td class="non-desktop no-wrap">
+                        <td class="non-desktop">
                             {{ record.date.format_short() }}
                             % if system is None:
                                 <br class="mobile-only" />

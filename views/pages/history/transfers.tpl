@@ -27,12 +27,10 @@
         <thead>
             <tr>
                 <th>Date</th>
-                <th class="desktop-only">Number</th>
+                <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
                 <th class="non-mobile">From</th>
-                <th class="non-mobile">To</th>
-                <th class="mobile-only">From / To</th>
+                <th>To</th>
             </tr>
         </thead>
         <tbody>
@@ -44,7 +42,7 @@
                 % last_date = transfer.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ transfer.date.format_long() }}</td>
-                    <td class="non-desktop no-wrap">{{ transfer.date.format_short() }}</td>
+                    <td class="non-desktop">{{ transfer.date.format_short() }}</td>
                     <td>
                         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         <br class="non-desktop" />
@@ -64,8 +62,7 @@
                         % end
                     </td>
                     <td class="non-mobile">{{ transfer.old_system }}</td>
-                    <td class="non-mobile">{{ transfer.new_system }}</td>
-                    <td class="mobile-only">From {{ transfer.old_system }} to {{ transfer.new_system }}</td>
+                    <td>{{ transfer.new_system }}</td>
                 </tr>
             % end
         </tbody>

@@ -165,23 +165,25 @@
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>System</th>
-                            <th class="desktop-only">Assigned Block</th>
-                            <th class="desktop-only">Assigned Routes</th>
+                            <th class="desktop-only">System</th>
+                            <th>Block</th>
+                            <th class="desktop-only">Routes</th>
                             <th class="desktop-only">Start Time</th>
                             <th class="desktop-only">End Time</th>
-                            <th class="non-desktop">Block</th>
-                            <th class="tablet-only">Time</th>
-                            <th class="desktop-only">First Seen</th>
-                            <th class="desktop-only">Last Seen</th>
+                            <th class="non-mobile">First Seen</th>
+                            <th class="no-wrap">Last Seen</th>
                         </tr>
                     </thead>
                     <tbody>
                         % for record in records:
                             <tr>
                                 <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
-                                <td>{{ record.system }}</td>
+                                <td class="non-desktop">
+                                    {{ record.date.format_short() }}
+                                    <br />
+                                    <span class="smaller-font">{{ record.system }}</span>
+                                </td>
+                                <td class="desktop-only">{{ record.system }}</td>
                                 <td>
                                     % if record.is_available:
                                         % block = record.block
@@ -193,16 +195,13 @@
                                         % include('components/route_indicator', routes=record.routes)
                                     </div>
                                 </td>
-                                % start_time = record.start_time.format_web(time_format)
-                                % end_time = record.end_time.format_web(time_format)
                                 <td class="desktop-only">
                                     % include('components/route_indicator', routes=record.routes)
                                 </td>
-                                <td class="desktop-only">{{ start_time }}</td>
-                                <td class="desktop-only">{{ end_time }}</td>
-                                <td class="tablet-only">{{ start_time }} - {{ end_time }}</td>
-                                <td class="desktop-only">{{ record.first_seen.format_web(time_format) }}</td>
-                                <td class="desktop-only">{{ record.last_seen.format_web(time_format) }}</td>
+                                <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
+                                <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>
+                                <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
+                                <td>{{ record.last_seen.format_web(time_format) }}</td>
                             </tr>
                         % end
                     </tbody>

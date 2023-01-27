@@ -57,15 +57,14 @@
                 <table class="striped">
                     <thead>
                         <tr>
-                            <th class="desktop-only">Number</th>
+                            <th>Bus</th>
                             <th class="desktop-only">Model</th>
-                            <th class="non-desktop">Bus</th>
                             % if system is None:
                                 <th class="non-mobile">System</th>
                             % end
                             <th class="desktop-only">Headsign</th>
-                            <th class="desktop-only">Current Block</th>
-                            <th class="desktop-only">Current Trip</th>
+                            <th class="desktop-only">Block</th>
+                            <th class="desktop-only">Trip</th>
                             <th class="desktop-only">Current Stop</th>
                             <th class="non-desktop">Details</th>
                         </tr>
@@ -144,9 +143,8 @@
                 <table class="striped">
                     <thead>
                         <tr>
-                            <th class="desktop-only">Number</th>
+                            <th>Bus</th>
                             <th class="desktop-only">Model</th>
-                            <th class="non-desktop">Bus</th>
                             % if system is None:
                                 <th>System</th>
                             % end

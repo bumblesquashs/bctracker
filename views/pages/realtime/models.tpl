@@ -96,14 +96,13 @@
                                     <table class="striped">
                                         <thead>
                                             <tr>
-                                                <th class="non-mobile">Number</th>
-                                                <th class="mobile-only">Bus</th>
+                                                <th>Bus</th>
                                                 % if system is None:
                                                     <th class="non-mobile">System</th>
                                                 % end
                                                 <th class="desktop-only">Headsign</th>
-                                                <th class="desktop-only">Current Block</th>
-                                                <th class="desktop-only">Current Trip</th>
+                                                <th class="desktop-only">Block</th>
+                                                <th class="desktop-only">Trip</th>
                                                 <th class="desktop-only">Current Stop</th>
                                                 <th class="non-desktop">Details</th>
                                             </tr>
@@ -112,7 +111,7 @@
                                             % for year in model_years:
                                                 % year_positions = [p for p in model_positions if p.bus.order.year == year]
                                                 <tr class="section">
-                                                    <td colspan="8">
+                                                    <td colspan="7">
                                                         <div class="flex-row">
                                                             <div class="flex-1">{{ year }}</div>
                                                             <div>{{ len(year_positions) }}</div>
@@ -139,14 +138,13 @@
                         <table class="striped">
                             <thead>
                                 <tr>
-                                    <th class="desktop-only">Number</th>
-                                    <th class="non-desktop">Bus</th>
+                                    <th>Bus</th>
                                     % if system is None:
                                         <th class="non-mobile">System</th>
                                     % end
                                     <th class="desktop-only">Headsign</th>
-                                    <th class="desktop-only">Current Block</th>
-                                    <th class="desktop-only">Current Trip</th>
+                                    <th class="desktop-only">Block</th>
+                                    <th class="desktop-only">Trip</th>
                                     <th class="desktop-only">Current Stop</th>
                                     <th class="non-desktop">Details</th>
                                 </tr>
