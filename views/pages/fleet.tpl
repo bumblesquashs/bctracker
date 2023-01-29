@@ -120,14 +120,14 @@
                                                                 <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
                                                             </td>
                                                             <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
-                                                            <td class="non-desktop no-wrap">
+                                                            <td class="non-desktop">
                                                                 {{ overview.first_seen_date.format_short() }}
                                                                 <br class="mobile-only" />
                                                                 <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
                                                             </td>
                                                             <td class="non-mobile">{{ overview.first_seen_system }}</td>
                                                             <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
-                                                            <td class="non-desktop no-wrap">
+                                                            <td class="non-desktop">
                                                                 {{ overview.last_seen_date.format_short() }}
                                                                 <br class="mobile-only" />
                                                                 <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>

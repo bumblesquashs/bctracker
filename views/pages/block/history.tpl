@@ -101,7 +101,7 @@
                                     % order = bus.order
                                     <tr>
                                         <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                        <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
+                                        <td class="non-desktop">{{ record.date.format_short() }}</td>
                                         <td>
                                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                                             <br class="non-desktop" />

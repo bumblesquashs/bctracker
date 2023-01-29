@@ -51,7 +51,7 @@
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
-                        <td class="non-desktop no-wrap">
+                        <td class="non-desktop">
                             {{ record.date.format_short() }}
                             % if system is None:
                                 <br class="mobile-only" />
