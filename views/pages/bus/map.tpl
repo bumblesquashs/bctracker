@@ -8,7 +8,7 @@
             % if bus.order is None:
                 <span class="lighter-text">Unknown Year/Model</span>
             % else:
-                {{ bus.order }}
+                {{! bus.order }}
             % end
         </h2>
         <div class="tab-button-bar">
@@ -27,7 +27,7 @@
             % if bus.order is None:
                 Unknown Year/Model
             % else:
-                {{ bus.order }}
+                {{! bus.order }}
             % end
         </h2>
         <div class="tab-button-bar">

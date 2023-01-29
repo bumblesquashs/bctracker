@@ -58,7 +58,7 @@
                             % type_models = [m for m in models if m.type == type]
                             % for model in type_models:
                                 <tr>
-                                    <td><a href="#{{ model.id }}">{{ model }}</a></td>
+                                    <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                     <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model == model]) }}</td>
                                     <td>{{ sum([o.size for o in orders if o.model == model]) }}</td>
                                 </tr>
@@ -87,7 +87,7 @@
                             % model_orders = [o for o in orders if o.model == model]
                             <div id="{{ model.id }}" class="section">
                                 <div class="header">
-                                    <h3>{{ model }}</h3>
+                                    <h3>{{! model }}</h3>
                                 </div>
                                 <div class="content">
                                     <table class="striped">

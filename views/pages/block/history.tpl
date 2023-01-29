@@ -56,7 +56,7 @@
                                 <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
                                 <div class="value">
                                     % for order in orders:
-                                        <span>{{ order }}</span>
+                                        <span>{{! order }}</span>
                                         <br />
                                     % end
                                 </div>
@@ -109,7 +109,7 @@
                                                 % if order is None:
                                                     <span class="lighter-text">Unknown Year/Model</span>
                                                 % else:
-                                                    {{ order }}
+                                                    {{! order }}
                                                 % end
                                             </span>
                                         </td>
@@ -117,7 +117,7 @@
                                             % if order is None:
                                                 <span class="lighter-text">Unknown Year/Model</span>
                                             % else:
-                                                {{ order }}
+                                                {{! order }}
                                             % end
                                         </td>
                                         <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>

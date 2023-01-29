@@ -78,7 +78,7 @@
                 <tr class="section">
                     <td colspan="7">
                         <div class="flex-row">
-                            <div class="flex-1">{{ order }}</div>
+                            <div class="flex-1">{{! order }}</div>
                             <div>{{ len(order_positions) }}</div>
                         </div>
                     </td>

@@ -175,7 +175,7 @@
                                             % if order is None:
                                                 <span class="lighter-text">Unknown Year/Model</span>
                                             % else:
-                                                {{ order }}
+                                                {{! order }}
                                             % end
                                         </span>
                                     </td>
@@ -183,7 +183,7 @@
                                         % if order is None:
                                             <span class="lighter-text">Unknown Year/Model</span>
                                         % else:
-                                            {{ order }}
+                                            {{! order }}
                                         % end
                                     </td>
                                     <td class="desktop-only">{{ trip }}</td>

@@ -1,4 +1,6 @@
 
+% from math import floor
+
 % rebase('base', title=f'Stop {stop.number}', include_maps=True)
 
 <div class="page-header">
@@ -111,7 +113,8 @@
                     <h2>Upcoming Departures</h2>
                 </div>
                 <div class="content">
-                    % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:5]
+                    % upcoming_count = 3 + floor(len(routes) / 3)
+                    % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                     % if len(upcoming_departures) == 0:
                         <p>
                             There are no departures for the rest of today.

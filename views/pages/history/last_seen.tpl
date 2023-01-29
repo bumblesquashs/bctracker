@@ -80,7 +80,7 @@
                 <tr class="section">
                     <td colspan="5">
                         <div class="flex-row">
-                            <div class="flex-1">{{ order }}</div>
+                            <div class="flex-1">{{! order }}</div>
                             <div>{{ len(order_overviews) }}</div>
                         </div>
                     </td>

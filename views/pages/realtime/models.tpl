@@ -71,7 +71,7 @@
                                 % for model in type_models:
                                     % model_positions = [p for p in type_positions if p.bus.model == model]
                                     <tr>
-                                        <td><a href="#{{ model.id }}">{{ model }}</a></td>
+                                        <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                         <td>{{ len([p for p in model_positions if p.trip is not None]) }}</td>
                                         <td>{{ len(model_positions) }}</td>
                                     </tr>
@@ -101,7 +101,7 @@
                                 % model_years = sorted({p.bus.order.year for p in model_positions})
                                 <div id="{{ model.id }}" class="section">
                                     <div class="header">
-                                        <h3>{{ model }}</h3>
+                                        <h3>{{! model }}</h3>
                                     </div>
                                     <div class="content">
                                         <table class="striped">

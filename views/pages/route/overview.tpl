@@ -73,7 +73,7 @@
                                             % if order is None:
                                                 <span class="lighter-text">Unknown Year/Model</span>
                                             % else:
-                                                {{ order }}
+                                                {{! order }}
                                             % end
                                         </span>
                                     </td>
@@ -81,7 +81,7 @@
                                         % if order is None:
                                             <span class="lighter-text">Unknown Year/Model</span>
                                         % else:
-                                            {{ order }}
+                                            {{! order }}
                                         % end
                                     </td>
                                     <td class="desktop-only">{{ trip }}</td>
@@ -177,7 +177,7 @@
                                                                     % if order is None:
                                                                         <span class="lighter-text">Unknown Year/Model</span>
                                                                     % else:
-                                                                        {{ order }}
+                                                                        {{! order }}
                                                                     % end
                                                                 </span>
                                                             </td>
@@ -185,7 +185,7 @@
                                                                 % if order is None:
                                                                     <span class="lighter-text">Unknown Year/Model</span>
                                                                 % else:
-                                                                    {{ order }}
+                                                                    {{! order }}
                                                                 % end
                                                             </td>
                                                         % elif trip.block_id in scheduled_today and trip.start_time.is_later:
@@ -203,7 +203,7 @@
                                                                     % if order is None:
                                                                         <span class="lighter-text">Unknown Year/Model</span>
                                                                     % else:
-                                                                        {{ order }}
+                                                                        {{! order }}
                                                                     % end
                                                                 </span>
                                                             </td>
@@ -211,7 +211,7 @@
                                                                 % if order is None:
                                                                     <span class="lighter-text">Unknown Year/Model</span>
                                                                 % else:
-                                                                    {{ order }}
+                                                                    {{! order }}
                                                                 % end
                                                             </td>
                                                         % else:
