@@ -47,6 +47,10 @@ h1, h2, h3, h4 {
     margin-bottom: 5px;
 }
 
+h1:last-child, h2:last-child, h3:last-child, h4:last-child {
+    margin-bottom: 0px;
+}
+
 p {
     margin-top: 0px;
     margin-bottom: 10px;
@@ -332,6 +336,12 @@ table.striped tr.section td {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.container > .section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .display-none {

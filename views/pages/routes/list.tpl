@@ -61,9 +61,9 @@
             Route information is currently unavailable for {{ system }}.
             Please check again later!
         </p>
-    <div class="non-desktop">
-        % include('components/systems')
-    </div>
+        <div class="non-desktop">
+            % include('components/systems')
+        </div>
     % else:
         <table class="striped">
             <thead>
