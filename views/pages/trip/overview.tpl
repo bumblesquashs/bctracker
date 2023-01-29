@@ -95,7 +95,7 @@
                         <tr>
                             <th>Bus</th>
                             <th class="non-mobile">Model</th>
-                            <th>Current Stop</th>
+                            <th>Next Stop</th>
                         </tr>
                     </thead>
                     <tbody>

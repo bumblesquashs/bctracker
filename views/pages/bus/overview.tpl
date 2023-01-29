@@ -96,7 +96,7 @@
                     </div>
                     % if stop is not None:
                         <div class="section">
-                            <div class="name">Current Stop</div>
+                            <div class="name">Next Stop</div>
                             <div class="value">
                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                 % adherence = position.adherence

@@ -143,7 +143,7 @@
                             <th class="desktop-only">Model</th>
                             <th class="desktop-only">Headsign</th>
                             <th>Trip</th>
-                            <th class="non-mobile">Current Stop</th>
+                            <th class="non-mobile">Next Stop</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -103,7 +103,7 @@
                                                 <th class="desktop-only">Headsign</th>
                                                 <th class="desktop-only">Block</th>
                                                 <th class="desktop-only">Trip</th>
-                                                <th class="desktop-only">Current Stop</th>
+                                                <th class="desktop-only">Next Stop</th>
                                                 <th class="non-desktop">Details</th>
                                             </tr>
                                         </thead>
@@ -145,7 +145,7 @@
                                     <th class="desktop-only">Headsign</th>
                                     <th class="desktop-only">Block</th>
                                     <th class="desktop-only">Trip</th>
-                                    <th class="desktop-only">Current Stop</th>
+                                    <th class="desktop-only">Next Stop</th>
                                     <th class="non-desktop">Details</th>
                                 </tr>
                             </thead>
