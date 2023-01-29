@@ -96,7 +96,7 @@
                                                             </td>
                                                             <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                                             <td>
-                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
                                                                 <br class="mobile-only" />
                                                                 <span class="mobile-only smaller-font">{{ trip }}</span>
                                                                 % if not departure.pickup_type.is_normal:

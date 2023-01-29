@@ -43,12 +43,7 @@ hr {
 }
 
 h1, h2, h3, h4 {
-    margin-top: 0px;
-    margin-bottom: 5px;
-}
-
-h1:last-child, h2:last-child, h3:last-child, h4:last-child {
-    margin-bottom: 0px;
+    margin: 0px;
 }
 
 p {
@@ -341,7 +336,7 @@ table.striped tr.section td {
 .container > .section {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 
 .display-none {
@@ -625,6 +620,11 @@ table.striped tr.section td {
 
 .page-header .subtitle {
     font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.page-header .title {
+    margin-bottom: 5px;
 }
 
 .positive {

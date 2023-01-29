@@ -2,7 +2,7 @@
 % rebase('base', title=f'Trip {trip.id}')
 
 <div class="page-header">
-    <h1 class="title trip-id">Trip {{ trip.id }}</h1>
+    <h1 class="title">Trip {{! trip.display_id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>

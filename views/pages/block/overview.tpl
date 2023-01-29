@@ -188,7 +188,7 @@
                                     </td>
                                     <td class="desktop-only">{{ trip }}</td>
                                     <td>
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
                                         <br class="non-desktop" />
                                         <span class="non-desktop smaller-font">{{ trip }}</span>
                                     </td>
@@ -255,7 +255,7 @@
                                                                 </td>
                                                                 <td class="desktop-only">{{ trip.direction }}</td>
                                                                 <td>
-                                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a>
+                                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
                                                                     <br class="mobile-only" />
                                                                     <span class="mobile-only smaller-font">{{ trip }}</span>
                                                                 </td>

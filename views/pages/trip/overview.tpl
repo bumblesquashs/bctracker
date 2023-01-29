@@ -2,7 +2,7 @@
 % rebase('base', title=f'Trip {trip.id}', include_maps=True)
 
 <div class="page-header">
-    <h1 class="title trip-id">Trip {{ trip.id }}</h1>
+    <h1 class="title">Trip {{! trip.display_id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -82,7 +82,7 @@
                             % for related_trip in related_trips:
                                 % block = related_trip.block
                                 <tr>
-                                    <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.id }}</a></td>
+                                    <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{! related_trip.display_id }}</a></td>
                                     <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                     <td>{{ related_trip.service }}</td>
                                 </tr>

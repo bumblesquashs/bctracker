@@ -3,12 +3,6 @@ a {
     font-weight: bold;
 }
 
-a.trip-id {
-    display: inline-block;
-    max-width: 100px;
-    overflow-wrap: break-word;
-}
-
 body {
     font-size: 13pt;
 }
@@ -220,10 +214,6 @@ table {
 
 .non-mobile {
     display: none !important;
-}
-
-.page-header .title.trip-id {
-    overflow-wrap: break-word;
 }
 
 .smaller-font {
