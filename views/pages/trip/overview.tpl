@@ -48,15 +48,17 @@
                         <div class="value">{{ trip.direction }}</div>
                     </div>
                     <div class="section">
+                        % route = trip.route
                         <div class="name">Route</div>
                         <div class="value">
-                            <a href="{{ get_url(trip.route.system, f'routes/{trip.route.number}') }}">{{ trip.route }}</a>
+                            <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
                         </div>
                     </div>
                     <div class="section">
+                        % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
-                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                         </div>
                     </div>
                 </div>

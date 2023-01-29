@@ -54,7 +54,7 @@
             % end
             <div class="section">
                 <div class="header">
-                    <h2>{{ route }}</h2>
+                    <h2>{{ route.number }} {{! route.display_name }}</h2>
                 </div>
                 <div class="content">
                     <table class="striped">

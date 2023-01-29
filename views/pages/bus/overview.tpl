@@ -68,7 +68,7 @@
                         <div class="section">
                             <div class="name">Route</div>
                             <div class="value">
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a>
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">

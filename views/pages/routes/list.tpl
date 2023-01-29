@@ -75,7 +75,7 @@
             <tbody>
                 % for route in routes:
                     <tr>
-                        <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
+                        <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a></td>
                         <td>
                             % include('components/weekdays_indicator', schedule=route.schedule, compact=True, url=get_url(system, f'routes/{route.number}/schedule'))
                         </td>

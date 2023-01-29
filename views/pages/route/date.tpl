@@ -4,7 +4,7 @@
 % rebase('base', title=str(route), enable_refresh=False)
 
 <div class="page-header">
-    <h1 class="title">{{ route }}</h1>
+    <h1 class="title">{{ route.number }} {{! route.display_name }}</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
