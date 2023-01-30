@@ -493,6 +493,7 @@ table.striped tr {
     border-color: #FFFFFF;
     background-color: #989898;
     text-shadow: none;
+    text-decoration: none;
 }
 
 .schedules {
@@ -562,6 +563,7 @@ table.striped tr {
 .tooltip-anchor .tooltip {
     background-color: #000000;
     color: #FFFFFF;
+    text-shadow: none;
 }
 
 .tooltip-anchor .tooltip::after {
