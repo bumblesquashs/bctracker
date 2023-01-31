@@ -52,16 +52,15 @@
                     <th class="non-mobile">System</th>
                 % end
                 <th class="desktop-only">Headsign</th>
-                <th class="desktop-only">Block</th>
-                <th class="desktop-only">Trip</th>
+                <th class="non-mobile">Block</th>
+                <th>Trip</th>
                 <th class="desktop-only">Next Stop</th>
-                <th class="non-desktop">Details</th>
             </tr>
         </thead>
         <tbody>
             % if len(unknown_positions) > 0:
                 <tr class="section">
-                    <td colspan="7">
+                    <td colspan="6">
                         <div class="flex-row">
                             <div class="flex-1">Unknown Year/Model</div>
                             <div>{{ len(unknown_positions) }}</div>
@@ -76,7 +75,7 @@
             % for order in orders:
                 % order_positions = sorted([p for p in known_positions if p.bus.order == order])
                 <tr class="section">
-                    <td colspan="7">
+                    <td colspan="6">
                         <div class="flex-row">
                             <div class="flex-1">{{! order }}</div>
                             <div>{{ len(order_positions) }}</div>

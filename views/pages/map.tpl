@@ -115,14 +115,6 @@
                     }
                 }
                 
-                const adherenceElement = document.createElement("span")
-                if (position.adherence !== null && position.adherence !== undefined) {
-                    const adherence = position.adherence;
-                    adherenceElement.classList.add("adherence-indicator");
-                    adherenceElement.classList.add(adherence.status_class);
-                    adherenceElement.innerHTML = adherence.value;
-                }
-                
                 const element = document.createElement("div");
                 element.id = "bus-marker-" + position.bus_number;
                 element.className = "marker";
@@ -142,6 +134,28 @@
                     bearing.style.transform = "rotate(" + position.bearing + "deg)";
                     element.appendChild(bearing)
                 }
+                
+                const details = document.createElement("div");
+                details.className = "details";
+                
+                const title = document.createElement("div");
+                title.className = "title";
+                
+                const content = document.createElement("div");
+                content.className = "content hover-only";
+                if (position.adherence !== null && position.adherence !== undefined) {
+                    const adherence = position.adherence;
+                    const adherenceElement = document.createElement("div")
+                    adherenceElement.classList.add("adherence-indicator");
+                    adherenceElement.classList.add(adherence.status_class);
+                    adherenceElement.innerHTML = adherence.value;
+                    
+                    content.innerHTML = "<div class='flex-row center flex-gap-5'>" + adherenceElement.outerHTML + position.headsign + "</div>";
+                } else {
+                    content.classList.add("centred")
+                    content.innerHTML = position.headsign;
+                }
+                
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
@@ -154,15 +168,9 @@
                     icon.onmouseleave = function() {
                         setHoverPosition(null);
                     }
-                    
-                    const details = document.createElement("div");
-                    details.className = "details";
-                    details.innerHTML = "\
-                        <div class='title'>Unknown Bus</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
-                    
                     element.appendChild(icon);
-                    element.appendChild(details);
+                    
+                    title.innerHTML = "Unknown Bus";
                 } else {
                     const icon = document.createElement("a");
                     icon.className = "icon";
@@ -176,16 +184,14 @@
                     icon.onmouseleave = function() {
                         setHoverPosition(null);
                     }
-                    
-                    const details = document.createElement("div");
-                    details.className = "details";
-                    details.innerHTML = "\
-                        <div class='title'>" + position.bus_number + "</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
-                    
                     element.appendChild(icon);
-                    element.appendChild(details);
+                    
+                    title.innerHTML = position.bus_number;
                 }
+                
+                details.appendChild(title);
+                details.appendChild(content);
+                element.appendChild(details);
                 
                 if (position.lat != 0 && position.lon != 0) {
                     lons.push(position.lon);

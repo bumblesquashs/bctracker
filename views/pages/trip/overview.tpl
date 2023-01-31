@@ -144,8 +144,10 @@
                                         <td class="lighter-text">Unavailable</td>
                                     % else:
                                         <td>
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <div class="flex-row">
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}" class="flex-1">{{ stop }}</a>
+                                            </div>
                                         </td>
                                     % end
                                 </tr>

@@ -66,10 +66,9 @@
                                     <th class="non-mobile">System</th>
                                 % end
                                 <th class="desktop-only">Headsign</th>
-                                <th class="desktop-only">Block</th>
-                                <th class="desktop-only">Trip</th>
+                                <th class="non-mobile">Block</th>
+                                <th>Trip</th>
                                 <th class="desktop-only">Next Stop</th>
-                                <th class="non-desktop">Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,26 +109,32 @@
                                         <td class="non-mobile">{{ position.system }}</td>
                                     % end
                                     % trip = position.trip
-                                    % block = position.trip.block
+                                    % block = trip.block
                                     % stop = position.stop
-                                    <td>
-                                        {{ trip }}
-                                        % if stop is not None:
-                                            <br class="non-desktop" />
-                                            <span class="non-desktop smaller-font">
-                                                % include('components/adherence_indicator', adherence=position.adherence)
-                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                            </span>
-                                        % end
+                                    <td class="desktop-only">{{ trip }}</td>
+                                    <td class="non-mobile">
+                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
-                                    <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                    <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a></td>
+                                    <td>
+                                        <div class="flex-row">
+                                            <div class="non-desktop">
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                            </div>
+                                            <div class="flex-1">
+                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                <br class="non-desktop" />
+                                                <span class="non-desktop smaller-font">{{ trip }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
                                     % if stop is None:
                                         <td class="desktop-only lighter-text">Unavailable</td>
                                     % else:
                                         <td class="desktop-only">
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <div class="flex-row">
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}" class="flex-1">{{ stop }}</a>
+                                            </div>
                                         </td>
                                     % end
                                 </tr>

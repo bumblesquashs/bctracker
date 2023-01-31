@@ -230,9 +230,7 @@ table.striped tr.section td {
 }
 
 .adherence-indicator {
-    display: inline-block;
     padding: 2px 4px;
-    margin-right: 5px;
     border-radius: 4px;
     min-width: 14px;
     text-align: center;
@@ -241,14 +239,12 @@ table.striped tr.section td {
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
     line-height: 9pt;
-    vertical-align: middle;
 }
 
 .adherence-indicator.large {
     font-size: 12pt;
     line-height: 12pt;
     padding: 3px 6px;
-    margin-right: 0px;
 }
 
 .banner {
@@ -354,6 +350,18 @@ table.striped tr.section td {
     align-items: center;
 }
 
+.flex-row.left {
+    justify-content: left;
+}
+
+.flex-row.center {
+    justify-content: center;
+}
+
+.flex-row.right {
+    justify-content: right;
+}
+
 .flex-1 {
     flex: 1;
 }
@@ -372,6 +380,22 @@ table.striped tr.section td {
 
 .flex-5 {
     flex: 5;
+}
+
+.flex-gap-5 {
+    gap: 5px;
+}
+
+.flex-gap-10 {
+    gap: 10px
+}
+
+.flex-gap-20 {
+    gap: 20px;
+}
+
+.flex-gap-40 {
+    gap: 40px;
 }
 
 .hidden {
@@ -446,8 +470,21 @@ table.striped tr.section td {
 .marker .details {
     display: block;
     position: absolute;
-    left: 0px;
-    right: 0px;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.marker .details .content {
+    font-size: 8pt;
+    overflow: visible;
+    line-height: 10pt;
+}
+
+.marker .details .content .adherence-indicator {
+    font-size: 8pt;
+    line-height: 8pt;
+    border-radius: 3px;
 }
 
 .marker .details .title {
@@ -455,24 +492,10 @@ table.striped tr.section td {
     text-align: center;
     font-weight: bold;
     line-height: 10pt;
-    margin-left: -50px;
-    margin-right: -50px;
 }
 
-.marker .details .subtitle {
-    font-size: 8pt;
-    text-align: center;
-    overflow: visible;
-    line-height: 10pt;
-    margin-left: -50px;
-    margin-right: -50px;
-}
-
-.marker .details .subtitle .adherence-indicator {
-    font-size: 8pt;
-    line-height: 8pt;
-    padding: 1px 3px;
-    border-radius: 3px;
+.marker .hover-only {
+    width: 150px;
 }
 
 .marker .icon {

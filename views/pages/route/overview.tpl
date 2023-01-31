@@ -90,16 +90,25 @@
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td>
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">{{ trip }}</span>
+                                        <div class="flex-row">
+                                            <div class="mobile-only">
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                            </div>
+                                            <div class="flex-1">
+                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                <br class="non-desktop" />
+                                                <span class="non-desktop smaller-font">{{ trip }}</span>
+                                            </div>
+                                        </div>
                                     </td>
                                     % if stop is None:
                                         <td class="non-mobile lighter-text">Unavailable</td>
                                     % else:
                                         <td class="non-mobile">
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <div class="flex-row">
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}" class="flex-1">{{ stop }}</a>
+                                            </div>
                                         </td>
                                     % end
                                 </tr>
@@ -146,9 +155,9 @@
                                                     <th>Bus</th>
                                                     <th class="desktop-only">Model</th>
                                                 % end
-                                                <th class="non-mobile">Headsign</th>
+                                                <th class="desktop-only">Headsign</th>
                                                 <th class="desktop-only">Departing From</th>
-                                                <th class="desktop-only">Block</th>
+                                                <th class="non-mobile">Block</th>
                                                 <th>Trip</th>
                                             </tr>
                                         </thead>
@@ -167,12 +176,13 @@
                                                             % bus = recorded_today[trip.id]
                                                             % order = bus.order
                                                             <td>
-                                                                % if trip.id in trip_positions:
-                                                                    % position = trip_positions[trip.id]
-                                                                    % include('components/adherence_indicator', adherence=position.adherence)
-                                                                % end
-                                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                                <br class="non-desktop" />
+                                                                <div class="flex-row left">
+                                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                                    % if trip.id in trip_positions:
+                                                                        % position = trip_positions[trip.id]
+                                                                        % include('components/adherence_indicator', adherence=position.adherence)
+                                                                    % end
+                                                                </div>
                                                                 <span class="non-desktop smaller-font">
                                                                     % if order is None:
                                                                         <span class="lighter-text">Unknown Year/Model</span>
@@ -192,13 +202,14 @@
                                                             % bus = scheduled_today[trip.block_id]
                                                             % order = bus.order
                                                             <td>
-                                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                                <span class="tooltip-anchor">
-                                                                    <img class="middle-align white" src="/img/white/schedule.png" />
-                                                                    <img class="middle-align black" src="/img/black/schedule.png" />
-                                                                    <div class="tooltip">Bus is scheduled</div>
-                                                                </span>
-                                                                <br class="non-desktop" />
+                                                                <div class="flex-row left">
+                                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                                    <div class="tooltip-anchor">
+                                                                        <img class="middle-align white" src="/img/white/schedule.png" />
+                                                                        <img class="middle-align black" src="/img/black/schedule.png" />
+                                                                        <div class="tooltip">Bus is scheduled</div>
+                                                                    </div>
+                                                                </div>
                                                                 <span class="non-desktop smaller-font">
                                                                     % if order is None:
                                                                         <span class="lighter-text">Unknown Year/Model</span>
@@ -219,13 +230,17 @@
                                                             <td class="non-desktop lighter-text">Unavailable</td>
                                                         % end
                                                     % end
-                                                    <td class="non-mobile">{{ trip }}</td>
-                                                    <td class="desktop-only"><a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a></td>
-                                                    <td class="desktop-only"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
+                                                    <td class="desktop-only">{{ trip }}</td>
+                                                    <td class="desktop-only">
+                                                        <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                    </td>
+                                                    <td class="non-mobile">
+                                                        <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                    </td>
                                                     <td>
                                                         <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                        <br class="mobile-only" />
-                                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                        <br class="non-desktop" />
+                                                        <span class="non-desktop smaller-font">{{ trip }}</span>
                                                     </td>
                                                 </tr>
                                                 % if this_hour > last_hour:

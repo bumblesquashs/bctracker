@@ -11,12 +11,13 @@
             % bus = recorded_today[trip.id]
             % order = bus.order
             <td>
-                % if trip.id in positions:
-                    % position = positions[trip.id]
-                    % include('components/adherence_indicator', adherence=position.adherence)
-                % end
-                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                <br class="non-desktop" />
+                <div class="flex-row left">
+                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                    % if trip.id in positions:
+                        % position = positions[trip.id]
+                        % include('components/adherence_indicator', adherence=position.adherence)
+                    % end
+                </div>
                 <span class="non-desktop smaller-font">
                     % if order is None:
                         <span class="lighter-text">Unknown Year/Model</span>
@@ -36,13 +37,14 @@
             % bus = scheduled_today[trip.block_id]
             % order = bus.order
             <td>
-                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                <span class="tooltip-anchor">
-                    <img class="middle-align white" src="/img/white/schedule.png" />
-                    <img class="middle-align black" src="/img/black/schedule.png" />
-                    <div class="tooltip">Bus is scheduled</div>
-                </span>
-                <br class="non-desktop" />
+                <div class="flex-row left">
+                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                    <div class="tooltip-anchor">
+                        <img class="middle-align white" src="/img/white/schedule.png" />
+                        <img class="middle-align black" src="/img/black/schedule.png" />
+                        <div class="tooltip">Bus is scheduled</div>
+                    </div>
+                </div>
                 <span class="non-desktop smaller-font">
                     % if order is None:
                         <span class="lighter-text">Unknown Year/Model</span>
