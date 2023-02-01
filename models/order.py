@@ -6,7 +6,7 @@ from models.bus import Bus
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
     
-    __slots__ = ('low', 'high', 'year', 'model', 'size', 'exceptions')
+    __slots__ = ('low', 'high', 'year', 'model', 'demo', 'exceptions', 'size')
     
     @classmethod
     def from_csv(cls, row):
@@ -15,18 +15,20 @@ class Order:
         high = int(row['high'])
         year = int(row['year'])
         model = helpers.model.find(row['model_id'])
+        demo = row['demo'] == '1'
         exceptions = row['exceptions']
         if exceptions == '':
             exceptions = set()
         else:
             exceptions = {int(e) for e in row['exceptions'].split(';')}
-        return cls(low, high, year, model, exceptions)
+        return cls(low, high, year, model, demo, exceptions)
     
-    def __init__(self, low, high, year, model, exceptions):
+    def __init__(self, low, high, year, model, demo, exceptions):
         self.low = low
         self.high = high
         self.year = year
         self.model = model
+        self.demo = demo
         self.exceptions = exceptions
         
         self.size = (self.high - self.low) + 1 - len(exceptions)
