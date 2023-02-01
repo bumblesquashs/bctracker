@@ -1,6 +1,7 @@
 model_id,manufacturer,name,length,fuel,type
 alexander-dennis-enviro500,Alexander Dennis,Enviro500,42,Diesel,decker
 alexander-dennis-enviro500h,Alexander Dennis,Enviro500H,42,Hybrid,decker
+byd-k9,BYD,K9,39,Battery Electric,conventional
 chevrolet-arboc-4500-sof-27,Chevrolet/ARBOC,4500/SOF 27,27,Gasoline,shuttle
 chevrolet-arboc-4500-som23d,Chevrolet/ARBOC,4500/SOM23D,23,Diesel,shuttle
 chevrolet-arboc-4500-som28d,Chevrolet/ARBOC,4500/SOM28D,28,Diesel,shuttle
@@ -25,5 +26,6 @@ new-flyer-h40lfr,New Flyer,H40LFR,40,Hydrogen Fuel Cell,conventional
 new-flyer-xn40,New Flyer,XN40,40,CNG,conventional
 nova-bus-lfs,Nova Bus,LFS,40,Diesel,conventional
 nova-bus-lfs-suburban,Nova Bus,LFS Suburban,40,Diesel,conventional
+proterra-zx5,Proterra,ZX5,40,Battery Electric,conventional
 transbus-trident,TransBus,Trident,42,Diesel,decker
 vmc-classic-vi30-cng,VMC,Classic Vi30 CNG,30,CNG,midibus
