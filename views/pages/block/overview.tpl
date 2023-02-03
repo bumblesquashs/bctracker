@@ -189,9 +189,11 @@
                                     <td class="desktop-only">{{ trip }}</td>
                                     <td>
                                         <div class="flex-row">
-                                            <div class="mobile-only">
-                                                % include('components/adherence_indicator', adherence=position.adherence)
-                                            </div>
+                                            % if stop is not None:
+                                                <div class="mobile-only">
+                                                    % include('components/adherence_indicator', adherence=position.adherence)
+                                                </div>
+                                            % end
                                             <div class="flex-1">
                                                 <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
                                                 <br class="non-desktop" />
