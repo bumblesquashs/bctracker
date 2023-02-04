@@ -3,6 +3,8 @@ import helpers.region
 
 from models.schedule import Schedule
 
+import realtime
+
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
@@ -99,6 +101,9 @@ class System:
     def get_blocks(self):
         '''Returns all blocks'''
         return sorted(self.blocks.values())
+    
+    def get_positions(self):
+        return realtime.get_positions(self.id)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
