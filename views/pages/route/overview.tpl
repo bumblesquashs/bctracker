@@ -138,121 +138,125 @@
                         % for direction in directions:
                             % direction_trips = [t for t in trips if t.direction == direction]
                             % if len(direction_trips) > 0:
-                                <div>
-                                    <h3>{{ direction }}</h3>
-                                    % if system is None or system.realtime_enabled:
-                                        <p>
-                                            <span>Buses with a</span>
-                                            <img class="middle-align white" src="/img/white/schedule.png" />
-                                            <img class="middle-align black" src="/img/black/schedule.png" />
-                                            <span>are scheduled but may be swapped off.</span>
-                                        </p>
-                                    % end
-                                    <table class="striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="non-mobile">Start Time</th>
-                                                <th class="mobile-only">Start</th>
-                                                % if system is None or system.realtime_enabled:
-                                                    <th>Bus</th>
-                                                    <th class="desktop-only">Model</th>
-                                                % end
-                                                <th class="desktop-only">Headsign</th>
-                                                <th class="desktop-only">Departing From</th>
-                                                <th class="non-mobile">Block</th>
-                                                <th>Trip</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % last_hour = -1
-                                            % for trip in direction_trips:
-                                                % first_stop = trip.first_departure.stop
-                                                % this_hour = trip.start_time.hour
-                                                % if last_hour == -1:
-                                                    % last_hour = this_hour
-                                                % end
-                                                <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                                                    <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                <div class="section">
+                                    <div class="header">
+                                        <h3>{{ direction }}</h3>
+                                    </div>
+                                    <div class="content">
+                                        % if system is None or system.realtime_enabled:
+                                            <p>
+                                                <span>Buses with a</span>
+                                                <img class="middle-align white" src="/img/white/schedule.png" />
+                                                <img class="middle-align black" src="/img/black/schedule.png" />
+                                                <span>are scheduled but may be swapped off.</span>
+                                            </p>
+                                        % end
+                                        <table class="striped">
+                                            <thead>
+                                                <tr>
+                                                    <th class="non-mobile">Start Time</th>
+                                                    <th class="mobile-only">Start</th>
                                                     % if system is None or system.realtime_enabled:
-                                                        % if trip.id in recorded_today:
-                                                            % bus = recorded_today[trip.id]
-                                                            % order = bus.order
-                                                            <td>
-                                                                <div class="flex-row left">
-                                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                                    % if trip.id in trip_positions:
-                                                                        % position = trip_positions[trip.id]
-                                                                        % include('components/adherence_indicator', adherence=position.adherence)
-                                                                    % end
-                                                                </div>
-                                                                <span class="non-desktop smaller-font">
+                                                        <th>Bus</th>
+                                                        <th class="desktop-only">Model</th>
+                                                    % end
+                                                    <th class="desktop-only">Headsign</th>
+                                                    <th class="desktop-only">Departing From</th>
+                                                    <th class="non-mobile">Block</th>
+                                                    <th>Trip</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                % last_hour = -1
+                                                % for trip in direction_trips:
+                                                    % first_stop = trip.first_departure.stop
+                                                    % this_hour = trip.start_time.hour
+                                                    % if last_hour == -1:
+                                                        % last_hour = this_hour
+                                                    % end
+                                                    <tr class="{{'divider' if this_hour > last_hour else ''}}">
+                                                        <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                        % if system is None or system.realtime_enabled:
+                                                            % if trip.id in recorded_today:
+                                                                % bus = recorded_today[trip.id]
+                                                                % order = bus.order
+                                                                <td>
+                                                                    <div class="flex-row left">
+                                                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                                        % if trip.id in trip_positions:
+                                                                            % position = trip_positions[trip.id]
+                                                                            % include('components/adherence_indicator', adherence=position.adherence)
+                                                                        % end
+                                                                    </div>
+                                                                    <span class="non-desktop smaller-font">
+                                                                        % if order is None:
+                                                                            <span class="lighter-text">Unknown Year/Model</span>
+                                                                        % else:
+                                                                            {{! order }}
+                                                                        % end
+                                                                    </span>
+                                                                </td>
+                                                                <td class="desktop-only">
                                                                     % if order is None:
                                                                         <span class="lighter-text">Unknown Year/Model</span>
                                                                     % else:
                                                                         {{! order }}
                                                                     % end
-                                                                </span>
-                                                            </td>
-                                                            <td class="desktop-only">
-                                                                % if order is None:
-                                                                    <span class="lighter-text">Unknown Year/Model</span>
-                                                                % else:
-                                                                    {{! order }}
-                                                                % end
-                                                            </td>
-                                                        % elif trip.block_id in scheduled_today and trip.start_time.is_later:
-                                                            % bus = scheduled_today[trip.block_id]
-                                                            % order = bus.order
-                                                            <td>
-                                                                <div class="flex-row left">
-                                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                                    <div class="tooltip-anchor">
-                                                                        <img class="middle-align white" src="/img/white/schedule.png" />
-                                                                        <img class="middle-align black" src="/img/black/schedule.png" />
-                                                                        <div class="tooltip">
-                                                                            <div class="title">Bus is scheduled</div>
+                                                                </td>
+                                                            % elif trip.block_id in scheduled_today and trip.start_time.is_later:
+                                                                % bus = scheduled_today[trip.block_id]
+                                                                % order = bus.order
+                                                                <td>
+                                                                    <div class="flex-row left">
+                                                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                                        <div class="tooltip-anchor">
+                                                                            <img class="middle-align white" src="/img/white/schedule.png" />
+                                                                            <img class="middle-align black" src="/img/black/schedule.png" />
+                                                                            <div class="tooltip">
+                                                                                <div class="title">Bus is scheduled</div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <span class="non-desktop smaller-font">
+                                                                    <span class="non-desktop smaller-font">
+                                                                        % if order is None:
+                                                                            <span class="lighter-text">Unknown Year/Model</span>
+                                                                        % else:
+                                                                            {{! order }}
+                                                                        % end
+                                                                    </span>
+                                                                </td>
+                                                                <td class="desktop-only">
                                                                     % if order is None:
                                                                         <span class="lighter-text">Unknown Year/Model</span>
                                                                     % else:
                                                                         {{! order }}
                                                                     % end
-                                                                </span>
-                                                            </td>
-                                                            <td class="desktop-only">
-                                                                % if order is None:
-                                                                    <span class="lighter-text">Unknown Year/Model</span>
-                                                                % else:
-                                                                    {{! order }}
-                                                                % end
-                                                            </td>
-                                                        % else:
-                                                            <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
-                                                            <td class="non-desktop lighter-text">Unavailable</td>
+                                                                </td>
+                                                            % else:
+                                                                <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
+                                                                <td class="non-desktop lighter-text">Unavailable</td>
+                                                            % end
                                                         % end
+                                                        <td class="desktop-only">{{ trip }}</td>
+                                                        <td class="desktop-only">
+                                                            <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                        </td>
+                                                        <td class="non-mobile">
+                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                            <br class="non-desktop" />
+                                                            <span class="non-desktop smaller-font">{{ trip }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    % if this_hour > last_hour:
+                                                        % last_hour = this_hour
                                                     % end
-                                                    <td class="desktop-only">{{ trip }}</td>
-                                                    <td class="desktop-only">
-                                                        <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
-                                                    </td>
-                                                    <td class="non-mobile">
-                                                        <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                        <br class="non-desktop" />
-                                                        <span class="non-desktop smaller-font">{{ trip }}</span>
-                                                    </td>
-                                                </tr>
-                                                % if this_hour > last_hour:
-                                                    % last_hour = this_hour
                                                 % end
-                                            % end
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             % end
                         % end
