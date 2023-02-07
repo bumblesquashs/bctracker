@@ -86,6 +86,14 @@
                             Please check again later!
                         </p>
                     % else:
+                        % if len([r for r in records if r.is_suspicious]) > 0:
+                            <p>
+                                <span>Buses with a</span>
+                                <img class="middle-align white inline" src="/img/white/warning.png" />
+                                <img class="middle-align black inline" src="/img/black/warning.png" />
+                                <span>may be accidental logins.</span>
+                            </p>
+                        % end
                         <table class="striped">
                             <thead>
                                 <tr>
@@ -104,8 +112,10 @@
                                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                                         <td class="non-desktop">{{ record.date.format_short() }}</td>
                                         <td>
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            <br class="non-desktop" />
+                                            <div class="flex-row left">
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                % include('components/suspicious_record_indicator', record=record)
+                                            </div>
                                             <span class="non-desktop smaller-font">
                                                 % if order is None:
                                                     <span class="lighter-text">Unknown Year/Model</span>

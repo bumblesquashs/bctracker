@@ -38,6 +38,29 @@ class Record:
         self.last_seen = last_seen
     
     @property
+    def total_seen_minutes(self):
+        '''Returns the total number of minutes between when the record started and ended'''
+        if self.first_seen.is_unknown or self.last_seen.is_unknown:
+            return None
+        first_seen = self.first_seen.get_minutes()
+        if first_seen < (4 * 60):
+            first_seen += (24 * 60)
+        last_seen = self.last_seen.get_minutes()
+        if last_seen < (4 * 60):
+            last_seen += (24 * 60)
+        return (last_seen - first_seen) + 1
+    
+    @property
+    def is_suspicious(self):
+        '''Checks if this record is potentially an accidental login'''
+        if self.date.is_today:
+            return False
+        total_seen_minutes = self.total_seen_minutes
+        if total_seen_minutes is None:
+            return False
+        return total_seen_minutes <= 5
+    
+    @property
     def block(self):
         '''Returns the block associated with this record'''
         return self.system.get_block(self.block_id)
