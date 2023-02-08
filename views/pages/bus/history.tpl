@@ -5,7 +5,13 @@
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
-    <h2 class="subtitle">{{ bus.order }}</h2>
+    <h2 class="subtitle">
+        % if bus.order is None:
+            <span class="lighter-text">Unknown Year/Model</span>
+        % else:
+            {{ bus.order }}
+        % end
+    </h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
@@ -74,7 +80,7 @@
                     <li>It may not have been in service since BCTracker started recording bus history</li>
                     <li>It may not have functional NextRide equipment installed</li>
                     % model = bus.model
-                    % if model is not None and model.type == ModelType.shuttle:
+                    % if model is None or model.type == ModelType.shuttle:
                         <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                     % end
                 </ol>
@@ -109,10 +115,9 @@
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end
-                                <br class="non-desktop" />
-                                <span class="non-desktop smaller-font">
+                                <div class="non-desktop">
                                     % include('components/route_indicator', routes=record.routes)
-                                </span>
+                                </div>
                             </td>
                             <td class="desktop-only">
                                 % include('components/route_indicator', routes=record.routes)

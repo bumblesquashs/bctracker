@@ -63,16 +63,20 @@
                 % last_speed = position.speed // 10
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
-                        % if order is None:
-                            {{ bus }}
-                        % else:
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ order }}</span>
-                        % end
+                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        <br class="non-desktop" />
+                        <span class="non-desktop smaller-font">
+                            % if order is None:
+                                <span class="lighter-text">Unknown Year/Model</span>
+                            % else:
+                                {{ order }}
+                            % end
+                        </span>
                     </td>
                     <td class="desktop-only">
-                        % if order is not None:
+                        % if order is None:
+                            <span class="lighter-text">Unknown Year/Model</span>
+                        % else:
                             {{ order }}
                         % end
                     </td>
@@ -81,14 +85,11 @@
                     % end
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                     % if position.trip is None:
-                        <td>
+                        <td colspan="4">
                             <span class="lighter-text">Not in service</span>
                             <br class="non-desktop" />
                             <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
                         </td>
-                        <td class="desktop-only"></td>
-                        <td class="desktop-only"></td>
-                        <td class="desktop-only"></td>
                     % else:
                         % trip = position.trip
                         % block = position.trip.block

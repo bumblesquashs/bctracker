@@ -71,7 +71,7 @@
                 </tr>
                 <tr class="display-none"></tr>
                 % for position in unknown_positions:
-                    % include('components/realtime_row', position=position)
+                    % include('rows/realtime', position=position)
                 % end
             % end
             % for order in orders:
@@ -86,7 +86,7 @@
                 </tr>
                 <tr class="display-none"></tr>
                 % for position in order_positions:
-                    % include('components/realtime_row', position=position)
+                    % include('rows/realtime', position=position)
                 % end
             % end
         </tbody>
