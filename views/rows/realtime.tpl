@@ -2,13 +2,7 @@
 % bus = position.bus
 
 <tr>
-    <td>
-        % if bus.order is None:
-            {{ bus }}
-        % else:
-            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-        % end
-    </td>
+    <td><a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a></td>
     % if system is None:
         <td class="non-mobile">{{ position.system }}</td>
     % end

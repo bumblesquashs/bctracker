@@ -121,7 +121,7 @@
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for position in year_positions:
-                                                    % include('components/realtime_row', position=position)
+                                                    % include('rows/realtime', position=position)
                                                 % end
                                             % end
                                         </tbody>
@@ -153,7 +153,7 @@
                             </thead>
                             <tbody>
                                 % for position in unknown_positions:
-                                    % include('components/realtime_row', position=position)
+                                    % include('rows/realtime', position=position)
                                 % end
                             </tbody>
                         </table>

@@ -247,7 +247,8 @@ def fleet_page(system_id=None):
 ])
 def bus_overview_page(bus_number, system_id=None):
     bus = Bus(bus_number)
-    if bus.order is None or bus.is_test:
+    overview = helpers.overview.find(bus_number)
+    if (bus.order is None and overview is None) or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     position = realtime.get_position(bus_number)
     records = helpers.record.find_all(bus_number=bus_number, limit=20)
@@ -261,7 +262,8 @@ def bus_overview_page(bus_number, system_id=None):
 ])
 def bus_map_page(bus_number, system_id=None):
     bus = Bus(bus_number)
-    if bus.order is None or bus.is_test:
+    overview = helpers.overview.find(bus_number)
+    if (bus.order is None and overview is None) or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     position = realtime.get_position(bus_number)
     return page('bus/map', system_id, bus=bus, position=position)
@@ -274,7 +276,8 @@ def bus_map_page(bus_number, system_id=None):
 ])
 def bus_history_page(bus_number, system_id=None):
     bus = Bus(bus_number)
-    if bus.order is None or bus.is_test:
+    overview = helpers.overview.find(bus_number)
+    if (bus.order is None and overview is None) or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     records = helpers.record.find_all(bus_number=bus_number)
     return page('bus/history', system_id, bus=bus, records=records)
