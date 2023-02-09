@@ -156,8 +156,8 @@
                             <tr>
                                 <th>Bus</th>
                                 <th class="desktop-only">Model</th>
-                                <th class="desktop-only">Headsign</th>
-                                <th>Trip</th>
+                                <th>Headsign</th>
+                                <th class="non-mobile">Trip</th>
                                 <th class="non-mobile">Next Stop</th>
                             </tr>
                         </thead>
@@ -169,8 +169,10 @@
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br class="non-desktop" />
+                                        <div class="flex-row left">
+                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            % include('components/adherence_indicator', adherence=position.adherence)
+                                        </div>
                                         <span class="non-desktop smaller-font">
                                             % if order is None:
                                                 <span class="lighter-text">Unknown Year/Model</span>
@@ -186,31 +188,21 @@
                                             {{! order }}
                                         % end
                                     </td>
-                                    <td class="desktop-only">{{ trip }}</td>
                                     <td>
-                                        <div class="flex-row">
-                                            % if stop is not None:
-                                                <div class="mobile-only">
-                                                    % include('components/adherence_indicator', adherence=position.adherence)
-                                                </div>
-                                            % end
-                                            <div class="flex-1">
-                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                <br class="non-desktop" />
-                                                <span class="non-desktop smaller-font">{{ trip }}</span>
-                                            </div>
-                                        </div>
+                                        {{ trip }}
+                                        <br class="mobile-only" />
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
                                     </td>
-                                    % if stop is None:
-                                        <td class="non-mobile lighter-text">Unavailable</td>
-                                    % else:
-                                        <td class="non-mobile">
-                                            <div class="flex-row">
-                                                % include('components/adherence_indicator', adherence=position.adherence)
-                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}" class="flex-1">{{ stop }}</a>
-                                            </div>
-                                        </td>
-                                    % end
+                                    <td class="non-mobile">
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                    </td>
+                                    <td class="non-mobile">
+                                        % if stop is None:
+                                            <span class="lighter-text">Unavailable</span>
+                                        % else:
+                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % end
+                                    </td>
                                 </tr>
                             % end
                         </tbody>

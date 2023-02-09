@@ -30,7 +30,8 @@
                 <th>Bus</th>
                 <th class="desktop-only">Model</th>
                 <th class="non-mobile">From</th>
-                <th>To</th>
+                <th class="non-mobile">To</th>
+                <th class="mobile-only">Systems</th>
             </tr>
         </thead>
         <tbody>
@@ -62,7 +63,13 @@
                         % end
                     </td>
                     <td class="non-mobile">{{ transfer.old_system }}</td>
-                    <td>{{ transfer.new_system }}</td>
+                    <td class="non-mobile">{{ transfer.new_system }}</td>
+                    <td class="mobile-only">
+                        <div class="smaller-font">From:</div>
+                        {{ transfer.old_system }}
+                        <div class="smaller-font">To:</div>
+                        {{ transfer.new_system }}
+                    </td>
                 </tr>
             % end
         </tbody>

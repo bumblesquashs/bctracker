@@ -174,7 +174,7 @@
                 % else:
                     % if len([r for r in records if r.is_suspicious]) > 0:
                         <p>
-                            <span>Blocks with a</span>
+                            <span>Rows with a</span>
                             <img class="middle-align white inline" src="/img/white/warning.png" />
                             <img class="middle-align black inline" src="/img/black/warning.png" />
                             <span>may be accidental logins.</span>

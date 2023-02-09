@@ -123,8 +123,10 @@
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br class="mobile-only" />
+                                        <div class="flex-row left">
+                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            % include('components/adherence_indicator', adherence=position.adherence)
+                                        </div>
                                         <span class="mobile-only smaller-font">
                                             % if order is None:
                                                 <span class="lighter-text">Unknown Year/Model</span>
@@ -140,16 +142,13 @@
                                             {{! order }}
                                         % end
                                     </td>
-                                    % if stop is None:
-                                        <td class="lighter-text">Unavailable</td>
-                                    % else:
-                                        <td>
-                                            <div class="flex-row">
-                                                % include('components/adherence_indicator', adherence=position.adherence)
-                                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}" class="flex-1">{{ stop }}</a>
-                                            </div>
-                                        </td>
-                                    % end
+                                    <td>
+                                        % if stop is None:
+                                            <span class="lighter-text">Unavailable</span>
+                                        % else:
+                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % end
+                                    </td>
                                 </tr>
                             % end
                         </tbody>

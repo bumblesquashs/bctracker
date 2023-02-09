@@ -109,11 +109,11 @@
                                                 <tr>
                                                     <th>Bus</th>
                                                     % if system is None:
-                                                        <th class="non-mobile">System</th>
+                                                        <th class="desktop-only">System</th>
                                                     % end
-                                                    <th class="desktop-only">Headsign</th>
+                                                    <th>Headsign</th>
                                                     <th class="non-mobile">Block</th>
-                                                    <th>Trip</th>
+                                                    <th class="non-mobile">Trip</th>
                                                     <th class="desktop-only">Next Stop</th>
                                                 </tr>
                                             </thead>
@@ -155,11 +155,11 @@
                                 <tr>
                                     <th>Bus</th>
                                     % if system is None:
-                                        <th class="non-mobile">System</th>
+                                        <th class="desktop-only">System</th>
                                     % end
-                                    <th class="desktop-only">Headsign</th>
+                                    <th>Headsign</th>
                                     <th class="non-mobile">Block</th>
-                                    <th>Trip</th>
+                                    <th class="non-mobile">Trip</th>
                                     <th class="desktop-only">Next Stop</th>
                                 </tr>
                             </thead>
