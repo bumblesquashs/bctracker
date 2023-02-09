@@ -30,7 +30,7 @@
                             <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
                             <div class="value flex-column">
                                 % for headsign in headsigns:
-                                    <span>{{ headsign }}</span>
+                                    <div>{{ headsign }}</div>
                                 % end
                             </div>
                         </div>

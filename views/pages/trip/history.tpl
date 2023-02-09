@@ -55,7 +55,7 @@
                                 <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
                                 <div class="value flex-column">
                                     % for order in orders:
-                                        <span>{{! order }}</span>
+                                        <div>{{! order }}</div>
                                     % end
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                     % else:
                         % if len([r for r in records if r.is_suspicious]) > 0:
                             <p>
-                                <span>Rows with a</span>
+                                <span>Entries with a</span>
                                 <img class="middle-align white inline" src="/img/white/warning.png" />
                                 <img class="middle-align black inline" src="/img/black/warning.png" />
                                 <span>may be accidental logins.</span>
