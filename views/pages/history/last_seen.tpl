@@ -52,11 +52,12 @@
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
-                            {{ record.date.format_short() }}
-                            % if system is None:
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">{{ record.system }}</span>
-                            % end
+                            <div class="flex-column">
+                                {{ record.date.format_short() }}
+                                % if system is None:
+                                    <span class="mobile-only smaller-font">{{ record.system }}</span>
+                                % end
+                            </div>
                         </td>
                         % if system is None:
                             <td class="non-mobile">{{ record.system }}</td>
@@ -95,11 +96,12 @@
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
-                            {{ record.date.format_short() }}
-                            % if system is None:
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">{{ record.system }}</span>
-                            % end
+                            <div class="flex-column">
+                                {{ record.date.format_short() }}
+                                % if system is None:
+                                    <span class="mobile-only smaller-font">{{ record.system }}</span>
+                                % end
+                            </div>
                         </td>
                         % if system is None:
                             <td class="non-mobile">{{ record.system }}</td>

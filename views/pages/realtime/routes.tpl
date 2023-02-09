@@ -88,17 +88,19 @@
                                 % last_bus = bus
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
-                                        <div class="flex-row left">
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            % include('components/adherence_indicator', adherence=position.adherence)
+                                        <div class="flex-column">
+                                            <div class="flex-row left">
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                            </div>
+                                            <span class="non-desktop smaller-font">
+                                                % if order is None:
+                                                    <span class="lighter-text">Unknown Year/Model</span>
+                                                % else:
+                                                    {{! order }}
+                                                % end
+                                            </span>
                                         </div>
-                                        <span class="non-desktop smaller-font">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{! order }}
-                                            % end
-                                        </span>
                                     </td>
                                     <td class="desktop-only">
                                         % if order is None:
@@ -114,9 +116,10 @@
                                     % block = trip.block
                                     % stop = position.stop
                                     <td>
-                                        {{ trip }}
-                                        <br class="mobile-only" />
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+                                        <div class="flex-column">
+                                            {{ trip }}
+                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+                                        </div>
                                     </td>
                                     <td class="non-mobile">
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
@@ -173,15 +176,16 @@
                                 % last_bus = bus
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{! order }}
-                                            % end
-                                        </span>
+                                        <div class="flex-column">
+                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            <span class="non-desktop smaller-font">
+                                                % if order is None:
+                                                    <span class="lighter-text">Unknown Year/Model</span>
+                                                % else:
+                                                    {{! order }}
+                                                % end
+                                            </span>
+                                        </div>
                                     </td>
                                     <td class="desktop-only">
                                         % if order is None:

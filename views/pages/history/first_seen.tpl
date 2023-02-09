@@ -41,22 +41,24 @@
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                     <td class="non-desktop">
-                        {{ record.date.format_short() }}
-                        % if system is None:
-                            <br class="mobile-only" />
-                            <span class="mobile-only smaller-font">{{ record.system }}</span>
-                        % end
+                        <div class="flex-column">
+                            {{ record.date.format_short() }}
+                            % if system is None:
+                                <span class="mobile-only smaller-font">{{ record.system }}</span>
+                            % end
+                        </div>
                     </td>
                     <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        <br class="non-desktop" />
-                        <span class="non-desktop smaller-font">
-                            % if order is None:
-                                <span class="lighter-text">Unknown Year/Model</span>
-                            % else:
-                                {{! order }}
-                            % end
-                        </span>
+                        <div class="flex-column">
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            <span class="non-desktop smaller-font">
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{! order }}
+                                % end
+                            </span>
+                        </div>
                     </td>
                     <td class="desktop-only">
                         % if order is None:

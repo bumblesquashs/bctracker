@@ -93,7 +93,7 @@
                                     <table class="striped">
                                         <thead>
                                             <tr>
-                                                <th>Number</th>
+                                                <th>Bus</th>
                                                 <th>First Seen</th>
                                                 <th class="non-mobile">First System</th>
                                                 <th>Last Seen</th>
@@ -121,16 +121,18 @@
                                                             </td>
                                                             <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
                                                             <td class="non-desktop">
-                                                                {{ overview.first_seen_date.format_short() }}
-                                                                <br class="mobile-only" />
-                                                                <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
+                                                                <div class="flex-column">
+                                                                    {{ overview.first_seen_date.format_short() }}
+                                                                    <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
+                                                                </div>
                                                             </td>
                                                             <td class="non-mobile">{{ overview.first_seen_system }}</td>
                                                             <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
                                                             <td class="non-desktop">
-                                                                {{ overview.last_seen_date.format_short() }}
-                                                                <br class="mobile-only" />
-                                                                <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
+                                                                <div class="flex-column">
+                                                                    {{ overview.last_seen_date.format_short() }}
+                                                                    <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
+                                                                </div>
                                                             </td>
                                                             <td class="non-mobile">{{ overview.last_seen_system }}</td>
                                                         </tr>

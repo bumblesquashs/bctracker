@@ -37,24 +37,22 @@
                     <div class="info-box">
                         <div class="section">
                             <div class="name">Last Tracked</div>
-                            <div class="value">
+                            <div class="value flex-column">
                                 % if days_since_last_tracked == '0 days ago':
                                     Today
                                 % else:
                                     {{ last_tracked }}
-                                    <br />
                                     <span class="smaller-font">{{ days_since_last_tracked }}</span>
                                 % end
                             </div>
                         </div>
                         <div class="section">
                             <div class="name">First Tracked</div>
-                            <div class="value">
+                            <div class="value flex-column">
                                 % if days_since_first_tracked == '0 days ago':
                                     Today
                                 % else:
                                     {{ first_tracked }}
-                                    <br />
                                     <span class="smaller-font">{{ days_since_first_tracked }}</span>
                                 % end
                             </div>
@@ -62,10 +60,9 @@
                         <div class="section">
                             % record_systems = sorted({r.system for r in records})
                             <div class="name">System{{ '' if len(record_systems) == 1 else 's' }}</div>
-                            <div class="value">
+                            <div class="value flex-column">
                                 % for record_system in record_systems:
                                     <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
-                                    <br />
                                 % end
                             </div>
                         </div>
@@ -123,23 +120,26 @@
                                 <tr>
                                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                                     <td class="non-desktop">
-                                        {{ record.date.format_short() }}
-                                        <br />
-                                        <span class="smaller-font">{{ record.system }}</span>
+                                        <div class="flex-column">
+                                            {{ record.date.format_short() }}
+                                            <span class="smaller-font">{{ record.system }}</span>
+                                        </div>
                                     </td>
                                     <td class="desktop-only">{{ record.system }}</td>
                                     <td>
-                                        <div class="flex-row left">
-                                            % if record.is_available:
-                                                % block = record.block
-                                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                            % else:
-                                                <span>{{ record.block_id }}</span>
-                                            % end
-                                            % include('components/suspicious_record_indicator', record=record)
-                                        </div>
-                                        <div class="non-desktop">
-                                            % include('components/route_indicator', routes=record.routes)
+                                        <div class="flex-column">
+                                            <div class="flex-row left">
+                                                % if record.is_available:
+                                                    % block = record.block
+                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                % else:
+                                                    <span>{{ record.block_id }}</span>
+                                                % end
+                                                % include('components/suspicious_record_indicator', record=record)
+                                            </div>
+                                            <div class="non-desktop">
+                                                % include('components/route_indicator', routes=record.routes)
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">

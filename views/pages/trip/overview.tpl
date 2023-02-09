@@ -123,17 +123,19 @@
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-row left">
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            % include('components/adherence_indicator', adherence=position.adherence)
+                                        <div class="flex-column">
+                                            <div class="flex-row left">
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                            </div>
+                                            <span class="mobile-only smaller-font">
+                                                % if order is None:
+                                                    <span class="lighter-text">Unknown Year/Model</span>
+                                                % else:
+                                                    {{! order }}
+                                                % end
+                                            </span>
                                         </div>
-                                        <span class="mobile-only smaller-font">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{! order }}
-                                            % end
-                                        </span>
                                     </td>
                                     <td class="non-mobile">
                                         % if order is None:
@@ -184,28 +186,27 @@
                                     {{ departure.time.format_web(time_format) }}
                                 </td>
                                 <td>
-                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                                    <br class="mobile-only" />
-                                    <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
+                                    <div class="flex-column">
+                                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                        <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
+                                    </div>
                                 </td>
                                 <td class="non-mobile">
-                                    <span class="{{ 'timing-point' if departure.timepoint else '' }}">
-                                        {{ stop }}
-                                    </span>
-                                    % if not departure.pickup_type.is_normal:
-                                        <br />
-                                        <span class="smaller-font">{{ departure.pickup_type }}</span>
-                                    % elif departure == trip.last_departure:
-                                        <br />
-                                        <span class="smaller-font">Drop off only</span>
-                                    % end
-                                    % if not departure.dropoff_type.is_normal:
-                                        <br />
-                                        <span class="smaller-font">{{ departure.dropoff_type }}</span>
-                                    % elif departure == trip.first_departure:
-                                        <br />
-                                        <span class="smaller-font">Pick up only</span>
-                                    % end
+                                    <div class="flex-column">
+                                        <span class="{{ 'timing-point' if departure.timepoint else '' }}">
+                                            {{ stop }}
+                                        </span>
+                                        % if not departure.pickup_type.is_normal:
+                                            <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                        % elif departure == trip.last_departure:
+                                            <span class="smaller-font">Drop off only</span>
+                                        % end
+                                        % if not departure.dropoff_type.is_normal:
+                                            <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                        % elif departure == trip.first_departure:
+                                            <span class="smaller-font">Pick up only</span>
+                                        % end
+                                    </div>
                                 </td>
                             </tr>
                         % end

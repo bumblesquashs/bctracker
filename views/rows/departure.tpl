@@ -11,20 +11,22 @@
             % bus = recorded_today[trip.id]
             % order = bus.order
             <td>
-                <div class="flex-row left">
-                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                    % if trip.id in positions:
-                        % position = positions[trip.id]
-                        % include('components/adherence_indicator', adherence=position.adherence)
-                    % end
+                <div class="flex-column">
+                    <div class="flex-row left">
+                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        % if trip.id in positions:
+                            % position = positions[trip.id]
+                            % include('components/adherence_indicator', adherence=position.adherence)
+                        % end
+                    </div>
+                    <span class="non-desktop smaller-font">
+                        % if order is None:
+                            <span class="lighter-text">Unknown Year/Model</span>
+                        % else:
+                            {{! order }}
+                        % end
+                    </span>
                 </div>
-                <span class="non-desktop smaller-font">
-                    % if order is None:
-                        <span class="lighter-text">Unknown Year/Model</span>
-                    % else:
-                        {{! order }}
-                    % end
-                </span>
             </td>
             <td class="desktop-only">
                 % if order is None:
@@ -37,23 +39,25 @@
             % bus = scheduled_today[trip.block_id]
             % order = bus.order
             <td>
-                <div class="flex-row left">
-                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                    <div class="tooltip-anchor">
-                        <img class="middle-align white" src="/img/white/schedule.png" />
-                        <img class="middle-align black" src="/img/black/schedule.png" />
-                        <div class="tooltip">
-                            <div class="title">Bus is scheduled</div>
+                <div class="flex-column">
+                    <div class="flex-row left">
+                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        <div class="tooltip-anchor">
+                            <img class="middle-align white" src="/img/white/schedule.png" />
+                            <img class="middle-align black" src="/img/black/schedule.png" />
+                            <div class="tooltip">
+                                <div class="title">Bus is scheduled</div>
+                            </div>
                         </div>
                     </div>
+                    <span class="non-desktop smaller-font">
+                        % if order is None:
+                            <span class="lighter-text">Unknown Year/Model</span>
+                        % else:
+                            {{! order }}
+                        % end
+                    </span>
                 </div>
-                <span class="non-desktop smaller-font">
-                    % if order is None:
-                        <span class="lighter-text">Unknown Year/Model</span>
-                    % else:
-                        {{! order }}
-                    % end
-                </span>
             </td>
             <td class="desktop-only">
                 % if order is None:
@@ -68,23 +72,25 @@
         % end
     % end
     <td class="non-mobile">
-        {{ trip }}
-        % if not departure.pickup_type.is_normal:
-            <br />
-            <span class="smaller-font">{{ departure.pickup_type }}</span>
-        % elif departure == trip.last_departure:
-            <br />
-            <span class="smaller-font">Drop off only</span>
-        % end
-        % if not departure.dropoff_type.is_normal:
-            <br />
-            <span class="smaller-font">{{ departure.dropoff_type }}</span>
-        % end
+        <div class="flex-column">
+            {{ trip }}
+            % if not departure.pickup_type.is_normal:
+                <span class="smaller-font">{{ departure.pickup_type }}</span>
+            % elif departure == trip.last_departure:
+                <span class="smaller-font">Drop off only</span>
+            % end
+            % if not departure.dropoff_type.is_normal:
+                <span class="smaller-font">{{ departure.dropoff_type }}</span>
+            % end
+        </div>
     </td>
-    <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+    <td class="desktop-only">
+        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+    </td>
     <td>
-        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-        <br class="mobile-only" />
-        <span class="mobile-only smaller-font">{{ trip }}</span>
+        <div class="flex-column">
+            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+            <span class="mobile-only smaller-font">{{ trip }}</span>
+        </div>
     </td>
 </tr>

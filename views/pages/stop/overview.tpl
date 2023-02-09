@@ -31,10 +31,9 @@
                         <div class="section">
                             % routes = stop.get_routes()
                             <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
-                            <div class="value">
+                            <div class="value flex-column">
                                 % for route in routes:
                                     <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
-                                    <br />
                                 % end
                             </div>
                         </div>

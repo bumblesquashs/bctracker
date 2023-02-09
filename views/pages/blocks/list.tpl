@@ -30,15 +30,16 @@
                         % count = len(region_system.get_blocks())
                         <tr>
                             <td>
-                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">
-                                    % if count == 1:
-                                        1 Block
-                                    % else:
-                                        {{ count }} Blocks
-                                    % end
-                                </span>
+                                <div class="flex-column">
+                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                    <span class="mobile-only smaller-font">
+                                        % if count == 1:
+                                            1 Block
+                                        % else:
+                                            {{ count }} Blocks
+                                        % end
+                                    </span>
+                                </div>
                             </td>
                             <td class="non-mobile">{{ count }}</td>
                             <td>

@@ -29,24 +29,22 @@
                         <div class="info-box">
                             <div class="section">
                                 <div class="name">Last Tracked</div>
-                                <div class="value">
+                                <div class="value flex-column">
                                     % if days_since_last_tracked == '0 days ago':
                                         Today
                                     % else:
                                         {{ last_tracked }}
-                                        <br />
                                         <span class="smaller-font">{{ days_since_last_tracked }}</span>
                                     % end
                                 </div>
                             </div>
                             <div class="section">
                                 <div class="name">First Tracked</div>
-                                <div class="value">
+                                <div class="value flex-column">
                                     % if days_since_first_tracked == '0 days ago':
                                         Today
                                     % else:
                                         {{ first_tracked }}
-                                        <br />
                                         <span class="smaller-font">{{ days_since_first_tracked }}</span>
                                     % end
                                 </div>
@@ -54,10 +52,9 @@
                             <div class="section">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
                                 <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
-                                <div class="value">
+                                <div class="value flex-column">
                                     % for order in orders:
-                                        <span>{{! order }}</span>
-                                        <br />
+                                        {{! order }}
                                     % end
                                 </div>
                             </div>
@@ -111,17 +108,19 @@
                                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                                         <td class="non-desktop">{{ record.date.format_short() }}</td>
                                         <td>
-                                            <div class="flex-row left">
-                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                % include('components/suspicious_record_indicator', record=record)
+                                            <div class="flex-column">
+                                                <div class="flex-row left">
+                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                    % include('components/suspicious_record_indicator', record=record)
+                                                </div>
+                                                <span class="non-desktop smaller-font">
+                                                    % if order is None:
+                                                        <span class="lighter-text">Unknown Year/Model</span>
+                                                    % else:
+                                                        {{! order }}
+                                                    % end
+                                                </span>
                                             </div>
-                                            <span class="non-desktop smaller-font">
-                                                % if order is None:
-                                                    <span class="lighter-text">Unknown Year/Model</span>
-                                                % else:
-                                                    {{! order }}
-                                                % end
-                                            </span>
                                         </td>
                                         <td class="desktop-only">
                                             % if order is None:

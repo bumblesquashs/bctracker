@@ -69,9 +69,9 @@
                                             <th class="non-mobile">Start Time</th>
                                             <th class="mobile-only">Start</th>
                                             <th class="non-mobile">Headsign</th>
-                                            <th class="desktop-only">Departing From</th>
                                             <th class="non-mobile">Block</th>
                                             <th>Trip</th>
+                                            <th class="desktop-only">First Stop</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,12 +85,17 @@
                                             <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                                 <td>{{ trip.start_time.format_web(time_format) }}</td>
                                                 <td class="non-mobile">{{ trip }}</td>
-                                                <td class="desktop-only"><a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a></td>
-                                                <td class="non-mobile"><a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a></td>
+                                                <td class="non-mobile">
+                                                    <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                </td>
                                                 <td>
-                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                    <br class="mobile-only" />
-                                                    <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                    <div class="flex-column">
+                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="desktop-only">
+                                                    <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
                                                 </td>
                                             </tr>
                                             % if this_hour > last_hour:

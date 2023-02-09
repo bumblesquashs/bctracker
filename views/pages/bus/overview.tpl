@@ -73,9 +73,8 @@
                         </div>
                         <div class="section">
                             <div class="name">Block</div>
-                            <div class="value">
+                            <div class="value flex-column">
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                <br />
                                 % if system is None:
                                     % today = Date.today(None)
                                 % else:
@@ -89,9 +88,8 @@
                         </div>
                         <div class="section">
                             <div class="name">Trip</div>
-                            <div class="value">
+                            <div class="value flex-column">
                                 <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                <br />
                                 % start_time = trip.start_time.format_web(time_format)
                                 % end_time = trip.end_time.format_web(time_format)
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
@@ -100,11 +98,10 @@
                         % if stop is not None:
                             <div class="section">
                                 <div class="name">Next Stop</div>
-                                <div class="value">
+                                <div class="value flex-column">
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                     % adherence = position.adherence
                                     % if adherence is not None:
-                                        <br />
                                         <span class="smaller-font">{{ adherence.description }}</span>
                                     % end
                                 </div>
@@ -198,23 +195,26 @@
                                 <tr>
                                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                                     <td class="non-desktop">
-                                        {{ record.date.format_short() }}
-                                        <br />
-                                        <span class="smaller-font">{{ record.system }}</span>
+                                        <div class="flex-column">
+                                            {{ record.date.format_short() }}
+                                            <span class="smaller-font">{{ record.system }}</span>
+                                        </div>
                                     </td>
                                     <td class="desktop-only">{{ record.system }}</td>
                                     <td>
-                                        <div class="flex-row left">
-                                            % if record.is_available:
-                                                % block = record.block
-                                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                            % else:
-                                                <span>{{ record.block_id }}</span>
-                                            % end
-                                            % include('components/suspicious_record_indicator', record=record)
-                                        </div>
-                                        <div class="non-desktop">
-                                            % include('components/route_indicator', routes=record.routes)
+                                        <div class="flex-column">
+                                            <div class="flex-row left">
+                                                % if record.is_available:
+                                                    % block = record.block
+                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                % else:
+                                                    <span>{{ record.block_id }}</span>
+                                                % end
+                                                % include('components/suspicious_record_indicator', record=record)
+                                            </div>
+                                            <div class="non-desktop">
+                                                % include('components/route_indicator', routes=record.routes)
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">

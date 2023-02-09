@@ -45,15 +45,16 @@
                     <td class="desktop-only">{{ transfer.date.format_long() }}</td>
                     <td class="non-desktop">{{ transfer.date.format_short() }}</td>
                     <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        <br class="non-desktop" />
-                        <span class="non-desktop smaller-font">
-                            % if order is None:
-                                <span class="lighter-text">Unknown Year/Model</span>
-                            % else:
-                                {{! order }}
-                            % end
-                        </span>
+                        <div class="flex-column">
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            <span class="non-desktop smaller-font">
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{! order }}
+                                % end
+                            </span>
+                        </div>
                     </td>
                     <td class="desktop-only">
                         % if order is None:
@@ -65,10 +66,16 @@
                     <td class="non-mobile">{{ transfer.old_system }}</td>
                     <td class="non-mobile">{{ transfer.new_system }}</td>
                     <td class="mobile-only">
-                        <div class="smaller-font">From:</div>
-                        {{ transfer.old_system }}
-                        <div class="smaller-font">To:</div>
-                        {{ transfer.new_system }}
+                        <div class="flex-column">
+                            <div>
+                                <div class="smaller-font">From:</div>
+                                {{ transfer.old_system }}
+                            </div>
+                            <div>
+                                <div class="smaller-font">To:</div>
+                                {{ transfer.new_system }}
+                            </div>
+                        </div>
                     </td>
                 </tr>
             % end

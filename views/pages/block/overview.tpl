@@ -33,78 +33,85 @@
                     </div>
                     <div class="section">
                         <div class="name">Start time</div>
-                        <div class="value">
+                        <div class="value flex-column">
                             % for service_group in service_groups:
-                                % if len(service_groups) > 1:
-                                    <div class="smaller-font lighter-text">
-                                        % if len(sheets) > 1:
-                                            {{ service_group.schedule.date_string }}
-                                        % else:
-                                            {{ service_group }}
-                                        % end
-                                    </div>
-                                % end
-                                <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
+                                <div>
+                                    % if len(service_groups) > 1:
+                                        <div class="smaller-font lighter-text">
+                                            % if len(sheets) > 1:
+                                                {{ service_group.schedule.date_string }}
+                                            % else:
+                                                {{ service_group }}
+                                            % end
+                                        </div>
+                                    % end
+                                    <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
+                                </div>
                             % end
                         </div>
                     </div>
                     <div class="section">
                         <div class="name">End time</div>
-                        <div class="value">
+                        <div class="value flex-column">
                             % for service_group in service_groups:
-                                % if len(service_groups) > 1:
-                                    <div class="smaller-font lighter-text">
-                                        % if len(sheets) > 1:
-                                            {{ service_group.schedule.date_string }}
-                                        % else:
-                                            {{ service_group }}
-                                        % end
-                                    </div>
-                                % end
-                                <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
+                                <div>
+                                    % if len(service_groups) > 1:
+                                        <div class="smaller-font lighter-text">
+                                            % if len(sheets) > 1:
+                                                {{ service_group.schedule.date_string }}
+                                            % else:
+                                                {{ service_group }}
+                                            % end
+                                        </div>
+                                    % end
+                                    <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
+                                </div>
                             % end
                         </div>
                     </div>
                     <div class="section">
                         <div class="name">Duration</div>
-                        <div class="value">
+                        <div class="value flex-column">
                             % for service_group in service_groups:
-                                % if len(service_groups) > 1:
-                                    <div class="smaller-font lighter-text">
-                                        % if len(sheets) > 1:
-                                            {{ service_group.schedule.date_string }}
-                                        % else:
-                                            {{ service_group }}
-                                        % end
-                                    </div>
-                                % end
-                                <div>{{ block.get_duration(service_group=service_group) }}</div>
+                                <div>
+                                    % if len(service_groups) > 1:
+                                        <div class="smaller-font lighter-text">
+                                            % if len(sheets) > 1:
+                                                {{ service_group.schedule.date_string }}
+                                            % else:
+                                                {{ service_group }}
+                                            % end
+                                        </div>
+                                    % end
+                                    <div>{{ block.get_duration(service_group=service_group) }}</div>
+                                </div>
                             % end
                         </div>
                     </div>
                     <div class="section">
                         <div class="name">Number of trips</div>
-                        <div class="value">
+                        <div class="value flex-column">
                             % for service_group in service_groups:
-                                % if len(service_groups) > 1:
-                                    <div class="smaller-font lighter-text">
-                                        % if len(sheets) > 1:
-                                            {{ service_group.schedule.date_string }}
-                                        % else:
-                                            {{ service_group }}
-                                        % end
-                                    </div>
-                                % end
-                                <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
+                                <div>
+                                    % if len(service_groups) > 1:
+                                        <div class="smaller-font lighter-text">
+                                            % if len(sheets) > 1:
+                                                {{ service_group.schedule.date_string }}
+                                            % else:
+                                                {{ service_group }}
+                                            % end
+                                        </div>
+                                    % end
+                                    <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
+                                </div>
                             % end
                         </div>
                     </div>
                     <div class="section">
                         <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
-                        <div class="value">
+                        <div class="value flex-column">
                             % for route in routes:
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
-                                <br />
                             % end
                         </div>
                     </div>
@@ -169,17 +176,19 @@
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-row left">
-                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                            % include('components/adherence_indicator', adherence=position.adherence)
+                                        <div class="flex-column">
+                                            <div class="flex-row left">
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                            </div>
+                                            <span class="non-desktop smaller-font">
+                                                % if order is None:
+                                                    <span class="lighter-text">Unknown Year/Model</span>
+                                                % else:
+                                                    {{! order }}
+                                                % end
+                                            </span>
                                         </div>
-                                        <span class="non-desktop smaller-font">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{! order }}
-                                            % end
-                                        </span>
                                     </td>
                                     <td class="desktop-only">
                                         % if order is None:
@@ -189,9 +198,10 @@
                                         % end
                                     </td>
                                     <td>
-                                        {{ trip }}
-                                        <br class="mobile-only" />
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+                                        <div class="flex-column">
+                                            {{ trip }}
+                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+                                        </div>
                                     </td>
                                     <td class="non-mobile">
                                         <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
@@ -252,15 +262,17 @@
                                                                 <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
                                                                 <td class="desktop-only">{{ trip.duration }}</td>
                                                                 <td class="non-mobile">
-                                                                    {{ trip }}
-                                                                    <br class="non-desktop" />
-                                                                    <span class="non-desktop smaller-font">{{ trip.direction }}</span>
+                                                                    <div class="flex-column">
+                                                                        {{ trip }}
+                                                                        <span class="non-desktop smaller-font">{{ trip.direction }}</span>
+                                                                    </div>
                                                                 </td>
                                                                 <td class="desktop-only">{{ trip.direction }}</td>
                                                                 <td>
-                                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                    <br class="mobile-only" />
-                                                                    <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                                    <div class="flex-column">
+                                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                                    </div>
                                                                 </td>
                                                             </tr>
                                                         % end

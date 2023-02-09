@@ -61,17 +61,19 @@
                 % last_speed = position.speed // 10
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
-                        <div class="flex-row left">
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % include('components/adherence_indicator', adherence=position.adherence)
+                        <div class="flex-column">
+                            <div class="flex-row left">
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                % include('components/adherence_indicator', adherence=position.adherence)
+                            </div>
+                            <span class="non-desktop smaller-font">
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{! order }}
+                                % end
+                            </span>
                         </div>
-                        <span class="non-desktop smaller-font">
-                            % if order is None:
-                                <span class="lighter-text">Unknown Year/Model</span>
-                            % else:
-                                {{! order }}
-                            % end
-                        </span>
                     </td>
                     <td class="desktop-only">
                         % if order is None:
@@ -86,18 +88,20 @@
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                     % if position.trip is None:
                         <td colspan="4">
-                            <span class="lighter-text">Not in service</span>
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                            <div class="flex-column">
+                                <span class="lighter-text">Not in service</span>
+                                <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                            </div>
                         </td>
                     % else:
                         % trip = position.trip
                         % block = trip.block
                         % stop = position.stop
                         <td>
-                            {{ trip }}
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                            <div class="flex-column">
+                                {{ trip }}
+                                <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                            </div>
                         </td>
                         <td class="non-mobile">
                             <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
