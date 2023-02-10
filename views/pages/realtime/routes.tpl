@@ -57,6 +57,9 @@
                     <h2>{{ route.number }} {{! route.display_name }}</h2>
                 </div>
                 <div class="content">
+                    <p>
+                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">View schedule and details</a>
+                    </p>
                     <table class="striped">
                         <thead>
                             <tr>
