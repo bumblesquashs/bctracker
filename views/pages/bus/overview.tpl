@@ -65,12 +65,12 @@
                             <div class="name">System</div>
                             <div class="value">{{ trip.system }}</div>
                         </div>
-                        <div class="section">
-                            <div class="name">Route</div>
-                            <div class="value">
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
+                        % if show_speed:
+                            <div class="section">
+                                <div class="name">Speed</div>
+                                <div class="value">{{ position.speed }} km/h</div>
                             </div>
-                        </div>
+                        % end
                         <div class="section">
                             <div class="name">Block</div>
                             <div class="value flex-column">
@@ -107,12 +107,13 @@
                                 </div>
                             </div>
                         % end
-                        % if show_speed:
-                            <div class="section">
-                                <div class="name">Speed</div>
-                                <div class="value">{{ position.speed }} km/h</div>
+                        <div class="section vertical">
+                            <div class="name">Route</div>
+                            <div class="flex-row">
+                                % include('components/route_indicator')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
-                        % end
+                        </div>
                     </div>
                 % end
             </div>
@@ -213,12 +214,12 @@
                                                 % include('components/suspicious_record_indicator', record=record)
                                             </div>
                                             <div class="non-desktop">
-                                                % include('components/route_indicator', routes=record.routes)
+                                                % include('components/routes_indicator', routes=record.routes)
                                             </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/route_indicator', routes=record.routes)
+                                        % include('components/routes_indicator', routes=record.routes)
                                     </td>
                                     <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
                                     <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>

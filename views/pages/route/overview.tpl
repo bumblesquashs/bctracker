@@ -25,10 +25,10 @@
                         <div class="section no-flex">
                             % include('components/schedules_indicator', schedules=[s.schedule for s in route.sheets], url=get_url(system, f'routes/{route.number}/schedule'))
                         </div>
-                        <div class="section">
+                        <div class="section vertical">
                             % headsigns = route.get_headsigns()
                             <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
-                            <div class="value flex-column">
+                            <div class="flex-column">
                                 % for headsign in headsigns:
                                     <div>{{ headsign }}</div>
                                 % end

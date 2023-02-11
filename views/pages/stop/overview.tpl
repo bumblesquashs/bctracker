@@ -31,12 +31,15 @@
                         <div class="section no-flex">
                             % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
                         </div>
-                        <div class="section">
+                        <div class="section vertical">
                             % routes = stop.get_routes()
                             <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
-                            <div class="value flex-column">
+                            <div class="flex-column">
                                 % for route in routes:
-                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
+                                    <div class="flex-row">
+                                        % include('components/route_indicator')
+                                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                    </div>
                                 % end
                             </div>
                         </div>
@@ -67,7 +70,7 @@
                                     <td class="non-mobile">{{ nearby_stop }}</td>
                                     <td>
                                         <div class="mobile-only">{{ nearby_stop }}</div>
-                                        % include('components/route_indicator', routes=nearby_stop.get_routes())
+                                        % include('components/routes_indicator', routes=nearby_stop.get_routes())
                                     </td>
                                 </tr>
                             % end
@@ -97,7 +100,7 @@
                                 <tr>
                                     <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
                                     <td>
-                                        % include('components/route_indicator', routes=alt_stop.get_routes())
+                                        % include('components/routes_indicator', routes=alt_stop.get_routes())
                                     </td>
                                 </tr>
                             % end

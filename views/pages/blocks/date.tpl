@@ -80,7 +80,7 @@
                                     <tr>
                                         <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                         <td>
-                                            % include('components/route_indicator', routes=block.get_routes(date=date))
+                                            % include('components/routes_indicator', routes=block.get_routes(date=date))
                                         </td>
                                         <td class="non-mobile">{{ start_time }}</td>
                                         <td class="non-mobile">{{ end_time }}</td>

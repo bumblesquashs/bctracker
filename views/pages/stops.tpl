@@ -106,11 +106,11 @@
                             <td>
                                 {{ stop }}
                                 <div class="mobile-only">
-                                    % include('components/route_indicator', routes=routes)
+                                    % include('components/routes_indicator', routes=routes)
                                 </div>
                             </td>
                             <td class="non-mobile">
-                                % include('components/route_indicator', routes=routes)
+                                % include('components/routes_indicator', routes=routes)
                             </td>
                         </tr>
                     % end

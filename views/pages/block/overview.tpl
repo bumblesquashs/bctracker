@@ -107,11 +107,14 @@
                             % end
                         </div>
                     </div>
-                    <div class="section">
+                    <div class="section vertical">
                         <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
-                        <div class="value flex-column">
+                        <div class="flex-column">
                             % for route in routes:
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
+                                <div class="flex-row">
+                                    % include('components/route_indicator')
+                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                </div>
                             % end
                         </div>
                     </div>

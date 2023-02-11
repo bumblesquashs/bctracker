@@ -71,7 +71,7 @@
                             % end
                         </td>
                         <td class="desktop-only">
-                            % include('components/route_indicator', routes=record.routes)
+                            % include('components/routes_indicator', routes=record.routes)
                         </td>
                     </tr>
                 % end
@@ -115,7 +115,7 @@
                             % end
                         </td>
                         <td class="desktop-only">
-                            % include('components/route_indicator', routes=record.routes)
+                            % include('components/routes_indicator', routes=record.routes)
                         </td>
                     </tr>
                 % end

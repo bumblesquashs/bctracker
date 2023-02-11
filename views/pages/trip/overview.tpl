@@ -48,17 +48,18 @@
                         <div class="value">{{ trip.direction }}</div>
                     </div>
                     <div class="section">
-                        % route = trip.route
-                        <div class="name">Route</div>
-                        <div class="value">
-                            <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a>
-                        </div>
-                    </div>
-                    <div class="section">
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
                             <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                        </div>
+                    </div>
+                    <div class="section vertical">
+                        % route = trip.route
+                        <div class="name">Route</div>
+                        <div class="flex-row">
+                            % include('components/route_indicator')
+                            <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                         </div>
                     </div>
                 </div>

@@ -70,14 +70,19 @@
             <thead>
                 <tr>
                     <th>Route</th>
-                    <th>Service Days</th>
+                    <th class="non-mobile">Service Days</th>
                 </tr>
             </thead>
             <tbody>
                 % for route in routes:
                     <tr>
-                        <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }} {{! route.display_name }}</a></td>
                         <td>
+                            <div class="flex-row">
+                                % include('components/route_indicator')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                            </div>
+                        </td>
+                        <td class="non-mobile">
                             % include('components/weekdays_indicator', schedule=route.schedule, compact=True, url=get_url(system, f'routes/{route.number}/schedule'))
                         </td>
                     </tr>

@@ -438,6 +438,11 @@ table.striped tr.section td {
     margin-bottom: 10px;
 }
 
+.info-box .section.vertical {
+    flex-direction: column;
+    gap: 5px;
+}
+
 .info-box .section.no-flex {
     display: block;
 }
@@ -501,6 +506,10 @@ table.striped tr.section td {
     font-size: 8pt;
     line-height: 8pt;
     border-radius: 3px;
+}
+
+.marker .details .content .route-number {
+    font-size: 8pt;
 }
 
 .marker .details .title {
@@ -671,15 +680,19 @@ table.striped tr.section td {
 }
 
 .route-indicator {
-    font-size: 10pt;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
+.route-indicator .route-number {
+    font-size: 10pt;
+}
+
 .route-number {
     display: inline-block;
     padding: 1px 6px;
+    font-size: 12pt;
     font-weight: bold;
     border-width: 1px;
     border-style: solid;

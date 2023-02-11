@@ -138,12 +138,12 @@
                                                 % include('components/suspicious_record_indicator', record=record)
                                             </div>
                                             <div class="non-desktop">
-                                                % include('components/route_indicator', routes=record.routes)
+                                                % include('components/routes_indicator', routes=record.routes)
                                             </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/route_indicator', routes=record.routes)
+                                        % include('components/routes_indicator', routes=record.routes)
                                     </td>
                                     <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
                                     <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>
