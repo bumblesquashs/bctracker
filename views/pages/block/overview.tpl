@@ -31,6 +31,16 @@
                     <div class="section no-flex">
                         % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
                     </div>
+                    <div class="section vertical">
+                        <div class="flex-column">
+                            % for route in routes:
+                                <div class="flex-row">
+                                    % include('components/route_indicator')
+                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                </div>
+                            % end
+                        </div>
+                    </div>
                     <div class="section">
                         <div class="name">Start time</div>
                         <div class="value flex-column">
@@ -103,17 +113,6 @@
                                         </div>
                                     % end
                                     <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
-                                </div>
-                            % end
-                        </div>
-                    </div>
-                    <div class="section vertical">
-                        <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
-                        <div class="flex-column">
-                            % for route in routes:
-                                <div class="flex-row">
-                                    % include('components/route_indicator')
-                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                                 </div>
                             % end
                         </div>
@@ -232,20 +231,24 @@
                 <div class="container inline">
                     % for sheet in sheets:
                         <div class="section">
-                            <div class="header">
-                                <h3>{{ sheet }}</h3>
-                            </div>
+                            % if len(sheets) > 1:
+                                <div class="header">
+                                    <h3>{{ sheet }}</h3>
+                                </div>
+                            % end
                             <div class="content">
                                 <div class="container inline">
                                     % for service_group in sheet.service_groups:
                                         % service_group_trips = block.get_trips(service_group=service_group)
                                         <div class="section">
-                                            <div class="header">
-                                                <h4>{{ service_group }}</h4>
-                                                % if service_group.schedule.special:
-                                                    <div class="subtitle">{{ service_group.schedule.modified_dates_string }}</div>
-                                                % end
-                                            </div>
+                                            % if len(sheet.service_groups) > 1:
+                                                <div class="header">
+                                                    <h4>{{ service_group }}</h4>
+                                                    % if service_group.schedule.special:
+                                                        <div class="subtitle">{{ service_group.schedule.modified_dates_string }}</div>
+                                                    % end
+                                                </div>
+                                            % end
                                             <div class="content">
                                                 <table class="striped">
                                                     <thead>

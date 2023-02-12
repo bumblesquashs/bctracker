@@ -27,7 +27,6 @@
                         </div>
                         <div class="section vertical">
                             % headsigns = route.get_headsigns()
-                            <div class="name">Headsign{{ '' if len(headsigns) == 1 else 's' }}</div>
                             <div class="flex-column">
                                 % for headsign in headsigns:
                                     <div>{{ headsign }}</div>

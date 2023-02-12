@@ -24,7 +24,7 @@
                 <h2>Overview</h2>
             </div>
             <div class="content">
-                % include('components/map', map_stop=stop)
+                % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop.get_departures()], zoom_trips=False)
                 
                 % if len(stop.departures) > 0:
                     <div class="info-box">
@@ -33,7 +33,6 @@
                         </div>
                         <div class="section vertical">
                             % routes = stop.get_routes()
-                            <div class="name">Route{{ '' if len(routes) == 1 else 's' }}</div>
                             <div class="flex-column">
                                 % for route in routes:
                                     <div class="flex-row">

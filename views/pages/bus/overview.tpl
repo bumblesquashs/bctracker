@@ -54,13 +54,19 @@
                     % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
                     
                     <div class="info-box">
-                        <h3 class="title">
+                        <div class="section">
                             <div class="flex-row">
                                 % include('components/adherence_indicator', adherence=position.adherence, size='large')
-                                <div class="flex-1">{{ trip }}</div>
+                                <h3 class="flex-1">{{ trip }}</h3>
                             </div>
-                        </h3>
+                        </div>
                         
+                        <div class="section">
+                            <div class="flex-row">
+                                % include('components/route_indicator')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                            </div>
+                        </div>
                         <div class="section">
                             <div class="name">System</div>
                             <div class="value">{{ trip.system }}</div>
@@ -107,13 +113,6 @@
                                 </div>
                             </div>
                         % end
-                        <div class="section vertical">
-                            <div class="name">Route</div>
-                            <div class="flex-row">
-                                % include('components/route_indicator')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
-                            </div>
-                        </div>
                     </div>
                 % end
             </div>
