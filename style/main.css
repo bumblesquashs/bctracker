@@ -43,6 +43,11 @@ h1, h2, h3, h4 {
     margin-bottom: 5px;
 }
 
+img.inline {
+    height: 18px;
+    width: 18px;
+}
+
 p {
     margin-top: 0px;
 }
@@ -748,7 +753,6 @@ table.striped tr.section td {
     border-radius: 5px;
     white-space: nowrap;
     font-size: 11pt;
-    font-weight: bold;
     font-family: Helvetica, sans-serif;
     text-align: left;
 }
@@ -765,6 +769,10 @@ table.striped tr.section td {
 
 .tooltip-anchor:hover > .tooltip {
     display: block;
+}
+
+.tooltip-anchor .tooltip .title {
+    font-weight: bold;
 }
 
 .weekdays {

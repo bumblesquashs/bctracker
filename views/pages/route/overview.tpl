@@ -180,7 +180,9 @@
                                                         <span class="tooltip-anchor">
                                                             <img class="middle-align white" src="/img/white/schedule.png" />
                                                             <img class="middle-align black" src="/img/black/schedule.png" />
-                                                            <div class="tooltip">Bus is scheduled</div>
+                                                            <div class="tooltip">
+                                                                <div class="title">Bus is scheduled</div>
+                                                            </div>
                                                         </span>
                                                         <br class="non-desktop" />
                                                         <span class="non-desktop smaller-font">

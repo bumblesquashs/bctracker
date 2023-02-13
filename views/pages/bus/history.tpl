@@ -87,6 +87,14 @@
                 Please check again later!
             </p>
         % else:
+            % if len([r for r in records if r.is_suspicious]) > 0:
+                <p>
+                    <span>Blocks with a</span>
+                    <img class="middle-align white inline" src="/img/white/warning.png" />
+                    <img class="middle-align black inline" src="/img/black/warning.png" />
+                    <span>may be accidental logins.</span>
+                </p>
+            % end
             <table class="striped">
                 <thead>
                     <tr>
@@ -115,6 +123,7 @@
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end
+                                % include('components/suspicious_record_indicator', record=record)
                                 <div class="non-desktop">
                                     % include('components/route_indicator', routes=record.routes)
                                 </div>
