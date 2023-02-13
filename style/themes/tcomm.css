@@ -570,6 +570,10 @@ table.striped tr {
     border-color: transparent #000000 transparent transparent;
 }
 
+.weekdays .weekday {
+    text-shadow: none;
+}
+
 .weekdays a.weekday.no-service:hover {
     background-color: #DC5050;
 }
