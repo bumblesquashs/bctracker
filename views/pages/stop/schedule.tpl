@@ -82,7 +82,7 @@
                                                             <td>{{ departure.time.format_web(time_format) }}</td>
                                                             <td class="non-mobile">
                                                                 <div class="flex-column">
-                                                                    {{ trip }}
+                                                                    % include('components/headsign_indicator')
                                                                     % if not departure.pickup_type.is_normal:
                                                                         <span class="smaller-font">{{ departure.pickup_type }}</span>
                                                                     % elif departure == trip.last_departure:
@@ -97,7 +97,9 @@
                                                             <td>
                                                                 <div class="flex-column">
                                                                     <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                    <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                                    <span class="mobile-only smaller-font">
+                                                                        % include('components/headsign_indicator')
+                                                                    </span>
                                                                     % if not departure.pickup_type.is_normal:
                                                                         <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
                                                                     % elif departure == trip.last_departure:

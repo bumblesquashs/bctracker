@@ -38,7 +38,9 @@
                     % include('components/map', map_position=position)
                     
                     <div class="info-box">
-                        <h3 class="title">Not in service</h3>
+                        <div class="section">
+                            <h3>Not in service</h3>
+                        </div>
                         
                         <div class="section">
                             <div class="name">System</div>

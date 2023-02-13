@@ -88,7 +88,7 @@
                                     </td>
                                     <td>
                                         <div class="flex-column">
-                                            {{ trip }}
+                                            % include('components/headsign_indicator')
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
                                         </div>
                                     </td>
@@ -234,14 +234,18 @@
                                                                 <td class="non-desktop lighter-text">Unavailable</td>
                                                             % end
                                                         % end
-                                                        <td class="desktop-only">{{ trip }}</td>
+                                                        <td class="desktop-only">
+                                                            % include('components/headsign_indicator')
+                                                        </td>
                                                         <td class="non-mobile">
                                                             <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="flex-column">
                                                                 <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                <span class="non-desktop smaller-font">{{ trip }}</span>
+                                                                <span class="non-desktop smaller-font">
+                                                                    % include('components/headsign_indicator')
+                                                                </span>
                                                             </div>
                                                         </td>
                                                         <td class="desktop-only">

@@ -689,10 +689,17 @@ table.striped tr.section td {
     font-size: 10pt;
 }
 
+.route-line {
+    width: 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    align-self: stretch;
+}
+
 .route-number {
     display: inline-block;
     padding: 1px 6px;
-    font-size: 12pt;
+    font-size: 11pt;
     font-weight: bold;
     border-width: 1px;
     border-style: solid;

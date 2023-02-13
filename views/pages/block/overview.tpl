@@ -201,7 +201,7 @@
                                     </td>
                                     <td>
                                         <div class="flex-column">
-                                            {{ trip }}
+                                            % include('components/headsign_indicator')
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
                                         </div>
                                     </td>
@@ -269,7 +269,7 @@
                                                                 <td class="desktop-only">{{ trip.duration }}</td>
                                                                 <td class="non-mobile">
                                                                     <div class="flex-column">
-                                                                        {{ trip }}
+                                                                        % include('components/headsign_indicator')
                                                                         <span class="non-desktop smaller-font">{{ trip.direction }}</span>
                                                                     </div>
                                                                 </td>
@@ -277,7 +277,9 @@
                                                                 <td>
                                                                     <div class="flex-column">
                                                                         <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                                        <span class="mobile-only smaller-font">
+                                                                            % include('components/headsign_indicator')
+                                                                        </span>
                                                                     </div>
                                                                 </td>
                                                             </tr>

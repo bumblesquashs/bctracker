@@ -120,7 +120,7 @@
                                     % stop = position.stop
                                     <td>
                                         <div class="flex-column">
-                                            {{ trip }}
+                                            % include('components/headsign_indicator')
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
                                         </div>
                                     </td>

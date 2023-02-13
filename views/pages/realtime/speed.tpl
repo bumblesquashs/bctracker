@@ -99,7 +99,7 @@
                         % stop = position.stop
                         <td>
                             <div class="flex-column">
-                                {{ trip }}
+                                % include('components/headsign_indicator')
                                 <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
                             </div>
                         </td>

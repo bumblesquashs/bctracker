@@ -84,14 +84,18 @@
                                             % end
                                             <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                                 <td>{{ trip.start_time.format_web(time_format) }}</td>
-                                                <td class="non-mobile">{{ trip }}</td>
+                                                <td class="non-mobile">
+                                                    % include('components/headsign_indicator')
+                                                </td>
                                                 <td class="non-mobile">
                                                     <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
                                                 </td>
                                                 <td>
                                                     <div class="flex-column">
                                                         <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                        <span class="mobile-only smaller-font">{{ trip }}</span>
+                                                        <span class="mobile-only smaller-font">
+                                                            % include('components/headsign_indicator')
+                                                        </span>
                                                     </div>
                                                 </td>
                                                 <td class="desktop-only">
