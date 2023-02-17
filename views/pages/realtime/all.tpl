@@ -47,22 +47,20 @@
     <table class="striped">
         <thead>
             <tr>
-                <th class="non-mobile">Number</th>
-                <th class="mobile-only">Bus</th>
+                <th>Bus</th>
                 % if system is None:
-                    <th class="non-mobile">System</th>
+                    <th class="desktop-only">System</th>
                 % end
-                <th class="desktop-only">Headsign</th>
-                <th class="desktop-only">Current Block</th>
-                <th class="desktop-only">Current Trip</th>
-                <th class="desktop-only">Current Stop</th>
-                <th class="non-desktop">Details</th>
+                <th>Headsign</th>
+                <th class="non-mobile">Block</th>
+                <th class="non-mobile">Trip</th>
+                <th class="desktop-only">Next Stop</th>
             </tr>
         </thead>
         <tbody>
             % if len(unknown_positions) > 0:
                 <tr class="section">
-                    <td colspan="8">
+                    <td colspan="6">
                         <div class="flex-row">
                             <div class="flex-1">Unknown Year/Model</div>
                             <div>{{ len(unknown_positions) }}</div>
@@ -77,9 +75,9 @@
             % for order in orders:
                 % order_positions = sorted([p for p in known_positions if p.bus.order == order])
                 <tr class="section">
-                    <td colspan="8">
+                    <td colspan="6">
                         <div class="flex-row">
-                            <div class="flex-1">{{ order }}</div>
+                            <div class="flex-1">{{! order }}</div>
                             <div>{{ len(order_positions) }}</div>
                         </div>
                     </td>

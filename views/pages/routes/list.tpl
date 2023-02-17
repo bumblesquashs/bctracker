@@ -1,5 +1,5 @@
 
-% rebase('base', title='Routes')
+% rebase('base', title='Routes', enable_refresh=False)
 
 <div class="page-header">
     <h1 class="title">Routes</h1>
@@ -34,15 +34,16 @@
                         % count = len(region_system.get_routes())
                         <tr>
                             <td>
-                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">
-                                    % if count == 1:
-                                        1 Route
-                                    % else:
-                                        {{ count }} Routes
-                                    % end
-                                </span>
+                                <div class="flex-column">
+                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                    <span class="mobile-only smaller-font">
+                                        % if count == 1:
+                                            1 Route
+                                        % else:
+                                            {{ count }} Routes
+                                        % end
+                                    </span>
+                                </div>
                             </td>
                             <td class="non-mobile">{{ count }}</td>
                             <td>
@@ -61,22 +62,27 @@
             Route information is currently unavailable for {{ system }}.
             Please check again later!
         </p>
-    <div class="non-desktop">
-        % include('components/systems')
-    </div>
+        <div class="non-desktop">
+            % include('components/systems')
+        </div>
     % else:
         <table class="striped">
             <thead>
                 <tr>
                     <th>Route</th>
-                    <th>Service Days</th>
+                    <th class="non-mobile">Service Days</th>
                 </tr>
             </thead>
             <tbody>
                 % for route in routes:
                     <tr>
-                        <td><a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route }}</a></td>
                         <td>
+                            <div class="flex-row">
+                                % include('components/route_indicator')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                            </div>
+                        </td>
+                        <td class="non-mobile">
                             % include('components/weekdays_indicator', schedule=route.schedule, compact=True, url=get_url(system, f'routes/{route.number}/schedule'))
                         </td>
                     </tr>

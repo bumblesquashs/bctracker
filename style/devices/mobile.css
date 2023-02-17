@@ -3,12 +3,6 @@ a {
     font-weight: bold;
 }
 
-a.trip-id {
-    display: inline-block;
-    max-width: 100px;
-    overflow-wrap: break-word;
-}
-
 body {
     font-size: 13pt;
 }
@@ -17,10 +11,6 @@ body.full-map {
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-}
-
-body.full-map #body {
     overflow: hidden;
 }
 
@@ -50,18 +40,8 @@ table {
     font-size: 13pt;
 }
 
-#body {
-    flex: 1;
-    flex-direction: column;
-}
-
 #content {
     padding: 20px;
-}
-
-#content-wrapper {
-    flex: 1;
-    overflow: auto;
 }
 
 #last-updated {
@@ -69,22 +49,7 @@ table {
 }
 
 #navigation-bar .title {
-    font-size: 18pt;
-}
-
-#navigation-menu-theme {
-    width: 100%;
-    text-align: center;
-    padding: 10px 20px;
-}
-
-#navigation-menu-theme a {
-    text-decoration: underline;
-    font-weight: normal;
-}
-
-#navigation-menu-theme .title {
-    font-weight: bold;
+    font-size: 22pt;
 }
 
 #navigation-menu-toggle {
@@ -99,10 +64,6 @@ table {
     margin: 6px;
 }
 
-#refresh-button {
-    border-radius: 18px;
-}
-
 #refresh-button img {
     width: 36px;
     height: 36px;
@@ -114,17 +75,8 @@ table {
 }
 
 #search-non-desktop input[type="text"] {
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 5px;
     font-size: 16px;
-    padding: 5px;
-    -webkit-appearance: none;
     width: 100%;
-}
-
-#search-non-desktop input[type="text"]:focus {
-    outline: none;
 }
 
 #search-non-desktop-results {
@@ -177,6 +129,8 @@ table {
 }
 
 #system-menu {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
     text-align: center;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -187,26 +141,18 @@ table {
 }
 
 #system-menu .header {
+    grid-column-end: span 2;
     font-size: 15pt;
-}
-
-#system-menu .region {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
 }
 
 #system-menu .system-button {
     padding: 5px 20px;
     font-size: 14pt;
     font-weight: normal;
-    display: inline-block;
-    width: calc(50% - 40px);
 }
 
 #system-menu .system-button.all-systems {
-    width: calc(100% - 40px);
+    grid-column-end: span 2;
 }
 
 #system-menu-toggle img {
@@ -214,7 +160,7 @@ table {
     height: 36px;
 }
 
-#theme {
+#title {
     display: none;
 }
 
@@ -243,19 +189,16 @@ table {
     margin: 0px;
     padding: 5px 0px;
     overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     font-family: Helvetica, sans-serif;
 }
 
 .menu .menu-button {
-    display: inline-block;
     padding: 15px 20px;
     font-size: 16pt;
     font-weight: normal;
-    width: calc(50% - 40px);
 }
 
 .menu .menu-button img {
@@ -271,10 +214,6 @@ table {
 
 .non-mobile {
     display: none !important;
-}
-
-.page-header .title.trip-id {
-    overflow-wrap: break-word;
 }
 
 .smaller-font {
@@ -294,8 +233,4 @@ table {
 
 .tablet-only {
     display: none !important;
-}
-
-.theme-control {
-    flex-direction: column;
 }

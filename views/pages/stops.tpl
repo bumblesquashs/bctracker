@@ -1,5 +1,5 @@
 
-% rebase('base', title='Stops')
+% rebase('base', title='Stops', enable_refresh=False)
 
 <div class="page-header">
     <h1 class="title">Stops</h1>
@@ -33,15 +33,16 @@
                         % count = len(region_system.get_stops())
                         <tr>
                             <td>
-                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">
-                                    % if count == 1:
-                                        1 Stop
-                                    % else:
-                                        {{ count }} Stops
-                                    % end
-                                </span>
+                                <div class="flex-column">
+                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                    <span class="mobile-only smaller-font">
+                                        % if count == 1:
+                                            1 Stop
+                                        % else:
+                                            {{ count }} Stops
+                                        % end
+                                    </span>
+                                </div>
                             </td>
                             <td class="non-mobile">{{ count }}</td>
                             <td>
@@ -105,11 +106,11 @@
                             <td>
                                 {{ stop }}
                                 <div class="mobile-only">
-                                    % include('components/route_indicator', routes=routes)
+                                    % include('components/routes_indicator', routes=routes)
                                 </div>
                             </td>
                             <td class="non-mobile">
-                                % include('components/route_indicator', routes=routes)
+                                % include('components/routes_indicator', routes=routes)
                             </td>
                         </tr>
                     % end

@@ -46,153 +46,165 @@
         </p>
     </div>
 % else:
-    <div class="container no-inline">
+    <div class="container">
         % for route in system.get_routes():
             % route_positions = [p for p in positions if p.trip is not None and p.trip.route == route]
             % if len(route_positions) == 0:
                 % continue
             % end
             <div class="section">
-                <h2 class="title">{{ route }}</h2>
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th class="desktop-only">Number</th>
-                            <th class="desktop-only">Model</th>
-                            <th class="non-desktop">Bus</th>
-                            % if system is None:
-                                <th class="non-mobile">System</th>
-                            % end
-                            <th class="desktop-only">Headsign</th>
-                            <th class="desktop-only">Current Block</th>
-                            <th class="desktop-only">Current Trip</th>
-                            <th class="desktop-only">Current Stop</th>
-                            <th class="non-desktop">Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        % last_bus = None
-                        % for position in sorted(route_positions):
-                            % bus = position.bus
-                            % order = bus.order
-                            % if last_bus is None:
-                                % same_order = True
-                            % elif order is None and last_bus.order is None:
-                                % same_order = True
-                            % elif order is None or last_bus.order is None:
-                                % same_order = False
-                            % else:
-                                % same_order = order == last_bus.order
-                            % end
-                            % last_bus = bus
-                            <tr class="{{'' if same_order else 'divider'}}">
-                                <td>
-                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br class="non-desktop" />
-                                    <span class="non-desktop smaller-font">
+                <div class="header">
+                    <h2>{{ route.number }} {{! route.display_name }}</h2>
+                </div>
+                <div class="content">
+                    <p>
+                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">View schedule and details</a>
+                    </p>
+                    <table class="striped">
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th class="desktop-only">Model</th>
+                                % if system is None:
+                                    <th class="desktop-only">System</th>
+                                % end
+                                <th>Headsign</th>
+                                <th class="non-mobile">Block</th>
+                                <th class="non-mobile">Trip</th>
+                                <th class="desktop-only">Next Stop</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % last_bus = None
+                            % for position in sorted(route_positions):
+                                % bus = position.bus
+                                % order = bus.order
+                                % if last_bus is None:
+                                    % same_order = True
+                                % elif order is None and last_bus.order is None:
+                                    % same_order = True
+                                % elif order is None or last_bus.order is None:
+                                    % same_order = False
+                                % else:
+                                    % same_order = order == last_bus.order
+                                % end
+                                % last_bus = bus
+                                <tr class="{{'' if same_order else 'divider'}}">
+                                    <td>
+                                        <div class="flex-column">
+                                            <div class="flex-row left">
+                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                            </div>
+                                            <span class="non-desktop smaller-font">
+                                                % if order is None:
+                                                    <span class="lighter-text">Unknown Year/Model</span>
+                                                % else:
+                                                    {{! order }}
+                                                % end
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="desktop-only">
                                         % if order is None:
                                             <span class="lighter-text">Unknown Year/Model</span>
                                         % else:
-                                            {{ order }}
+                                            {{! order }}
                                         % end
-                                    </span>
-                                </td>
-                                <td class="desktop-only">
-                                    % if order is None:
-                                        <span class="lighter-text">Unknown Year/Model</span>
-                                    % else:
-                                        {{ order }}
-                                    % end
-                                </td>
-                                % if system is None:
-                                    <td class="non-mobile">{{ position.system }}</td>
-                                % end
-                                % trip = position.trip
-                                % block = position.trip.block
-                                % stop = position.stop
-                                <td>
-                                    {{ trip }}
-                                    % if stop is not None:
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">
-                                            % include('components/adherence_indicator', adherence=position.adherence)
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                        </span>
-                                    % end
-                                </td>
-                                <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                                % if stop is None:
-                                    <td class="desktop-only lighter-text">Unavailable</td>
-                                % else:
-                                    <td class="desktop-only">
-                                        % include('components/adherence_indicator', adherence=position.adherence)
-                                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                     </td>
-                                % end
-                            </tr>
-                        % end
-                    </tbody>
-                </table>
+                                    % if system is None:
+                                        <td class="desktop-only">{{ position.system }}</td>
+                                    % end
+                                    % trip = position.trip
+                                    % block = trip.block
+                                    % stop = position.stop
+                                    <td>
+                                        <div class="flex-column">
+                                            % include('components/headsign_indicator')
+                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+                                        </div>
+                                    </td>
+                                    <td class="non-mobile">
+                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                    </td>
+                                    <td class="non-mobile">
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                    </td>
+                                    <td class="desktop-only">
+                                        % if stop is None:
+                                            <span class="lighter-text">Unavailable</span>
+                                        % else:
+                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % end
+                                    </td>
+                                </tr>
+                            % end
+                        </tbody>
+                    </table>
+                </div>
             </div>
         % end
         
         % no_route_positions = sorted([p for p in positions if p.trip is None])
         % if len(no_route_positions) > 0:
             <div class="section">
-                <h2 class="title">Not In Service</h2>
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th class="desktop-only">Number</th>
-                            <th class="desktop-only">Model</th>
-                            <th class="non-desktop">Bus</th>
-                            % if system is None:
-                                <th>System</th>
-                            % end
-                        </tr>
-                    </thead>
-                    <tbody>
-                        % last_bus = None
-                        % for position in no_route_positions:
-                            % bus = position.bus
-                            % order = bus.order
-                            % if last_bus is None:
-                                % same_order = True
-                            % elif order is None and last_bus.order is None:
-                                % same_order = True
-                            % elif order is None or last_bus.order is None:
-                                % same_order = False
-                            % else:
-                                % same_order = order == last_bus.order
-                            % end
-                            % last_bus = bus
-                            <tr class="{{'' if same_order else 'divider'}}">
-                                <td>
-                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                    <br class="non-desktop" />
-                                    <span class="non-desktop smaller-font">
+                <div class="header">
+                    <h2>Not In Service</h2>
+                </div>
+                <div class="content">
+                    <table class="striped">
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th class="desktop-only">Model</th>
+                                % if system is None:
+                                    <th>System</th>
+                                % end
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % last_bus = None
+                            % for position in no_route_positions:
+                                % bus = position.bus
+                                % order = bus.order
+                                % if last_bus is None:
+                                    % same_order = True
+                                % elif order is None and last_bus.order is None:
+                                    % same_order = True
+                                % elif order is None or last_bus.order is None:
+                                    % same_order = False
+                                % else:
+                                    % same_order = order == last_bus.order
+                                % end
+                                % last_bus = bus
+                                <tr class="{{'' if same_order else 'divider'}}">
+                                    <td>
+                                        <div class="flex-column">
+                                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                            <span class="non-desktop smaller-font">
+                                                % if order is None:
+                                                    <span class="lighter-text">Unknown Year/Model</span>
+                                                % else:
+                                                    {{! order }}
+                                                % end
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="desktop-only">
                                         % if order is None:
                                             <span class="lighter-text">Unknown Year/Model</span>
                                         % else:
-                                            {{ order }}
+                                            {{! order }}
                                         % end
-                                    </span>
-                                </td>
-                                <td class="desktop-only">
-                                    % if order is None:
-                                        <span class="lighter-text">Unknown Year/Model</span>
-                                    % else:
-                                        {{ order }}
+                                    </td>
+                                    % if system is None:
+                                        <td>{{ position.system }}</td>
                                     % end
-                                </td>
-                                % if system is None:
-                                    <td>{{ position.system }}</td>
-                                % end
-                            </tr>
-                        % end
-                    </tbody>
-                </table>
+                                </tr>
+                            % end
+                        </tbody>
+                    </table>
+                </div>
             </div>
         % end
     </div>

@@ -88,6 +88,10 @@ class Trip:
         return self.start_time < other.start_time
     
     @property
+    def display_id(self):
+        return self.id.replace(':', ':<wbr />')
+    
+    @property
     def route(self):
         '''Returns the route associated with this trip'''
         return self.system.get_route(route_id=self.route_id)

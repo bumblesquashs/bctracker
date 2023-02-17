@@ -1,39 +1,45 @@
 
 % bus = position.bus
+% trip = position.trip
 
 <tr>
-    <td><a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a></td>
+    <td>
+        <div class="flex-column">
+            <div class="flex-row left">
+                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                % include('components/adherence_indicator', adherence=position.adherence)
+            </div>
+            % if system is None:
+                <span class="non-desktop smaller-font">{{ position.system }}</span>
+            % end
+        </div>
+    </td>
     % if system is None:
-        <td class="non-mobile">{{ position.system }}</td>
+        <td class="desktop-only">{{ position.system }}</td>
     % end
-    % if position.trip is None:
-        <td class="lighter-text">Not in service</td>
-        <td class="desktop-only"></td>
-        <td class="desktop-only"></td>
-        <td class="desktop-only"></td>
+    % if trip is None:
+        <td class="lighter-text" colspan="4">Not in service</td>
     % else:
-        % trip = position.trip
-        % block = position.trip.block
+        % block = trip.block
         % stop = position.stop
         <td>
-            {{ trip }}
-            % if stop is not None:
-                <br class="non-desktop" />
-                <span class="non-desktop smaller-font">
-                    % include('components/adherence_indicator', adherence=position.adherence)
-                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                </span>
+            <div class="flex-column">
+                % include('components/headsign_indicator')
+                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+            </div>
+        </td>
+        <td class="non-mobile">
+            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+        </td>
+        <td class="non-mobile">
+            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+        </td>
+        <td class="desktop-only">
+            % if stop is None:
+                <span class="lighter-text">Unavailable</span>
+            % else:
+                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
             % end
         </td>
-        <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-        <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-        % if stop is None:
-            <td class="desktop-only lighter-text">Unavailable</td>
-        % else:
-            <td class="desktop-only">
-                % include('components/adherence_indicator', adherence=position.adherence)
-                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-            </td>
-        % end
     % end
 </tr>
