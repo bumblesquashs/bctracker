@@ -102,5 +102,6 @@ class Departure:
         return {
             'stop': self.stop.json,
             'time': str(self.time),
-            'colour': self.trip.route.colour
+            'colour': self.trip.route.colour,
+            'text_colour': self.trip.route.text_colour
         }

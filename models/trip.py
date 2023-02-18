@@ -168,6 +168,7 @@ class Trip:
         return {
             'shape_id': self.shape_id,
             'colour': self.route.colour,
+            'text_colour': self.route.text_colour,
             'points': [p.json for p in self.points]
         }
     

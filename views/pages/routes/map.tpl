@@ -188,7 +188,7 @@
                     icon.className = "icon route";
                     icon.href = getUrl(route.system_id, "routes/" + route.number);
                     icon.style.backgroundColor = "#" + route.colour;
-                    icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
+                    icon.innerHTML = "<div class='link'></div><span class='number' style='color: #" + route.text_colour + "'>" + route.number + "</span>";
                     
                     const details = document.createElement("div");
                     details.className = "details";

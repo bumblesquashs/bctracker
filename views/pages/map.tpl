@@ -176,7 +176,8 @@
                     icon.className = "icon";
                     icon.href = "/bus/" + position.bus_number;
                     icon.style.backgroundColor = "#" + position.colour;
-                    icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                    const iconColour = position.text_colour == "000000" ? "black" : "white";
+                    icon.innerHTML = "<div class='link'></div><img src='/img/" + iconColour + "/bus.png' />";
                     
                     icon.onmouseenter = function() {
                         setHoverPosition(position);

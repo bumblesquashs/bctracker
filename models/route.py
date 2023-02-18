@@ -14,7 +14,7 @@ from models.schedule import Schedule
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -72,14 +72,19 @@ class Route:
             g = int(rgb[1] * 255)
             b = int(rgb[2] * 255)
             colour = f'{r:02x}{g:02x}{b:02x}'
-        return cls(system, id, number, name, colour, route_trips)
+        if 'route_text_color' in row and row['route_text_color'] != '':
+            text_colour = row['route_text_color']
+        else:
+            text_colour = 'FFFFFF'
+        return cls(system, id, number, name, colour, text_colour, route_trips)
     
-    def __init__(self, system, id, number, name, colour, trips):
+    def __init__(self, system, id, number, name, colour, text_colour, trips):
         self.system = system
         self.id = id
         self.number = number
         self.name = name
         self.colour = colour
+        self.text_colour = text_colour
         self.trips = trips
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
@@ -114,7 +119,8 @@ class Route:
             'id': self.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
-            'colour': self.colour
+            'colour': self.colour,
+            'text_colour': self.text_colour
         }
     
     @property
@@ -139,6 +145,7 @@ class Route:
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
+                'text_colour': self.text_colour,
                 'lat': point.lat,
                 'lon': point.lon
             })

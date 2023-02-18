@@ -91,13 +91,22 @@ class Position:
         return trip.route.colour
     
     @property
+    def text_colour(self):
+        '''Returns the route text colour associated with this position'''
+        trip = self.trip
+        if trip is None:
+            return 'FFFFFF'
+        return trip.route.text_colour
+    
+    @property
     def json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
             'lon': self.lon,
             'lat': self.lat,
-            'colour': self.colour
+            'colour': self.colour,
+            'text_colour': self.text_colour
         }
         trip = self.trip
         if trip is None:
