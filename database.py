@@ -68,21 +68,29 @@ def connect(foreign_keys=True):
 def disconnect():
     '''Closes the connection to the database'''
     global connection
+    if connection is None:
+        return
     connection.close()
     connection = None
 
 def backup():
     '''Copies all information from the main database to a backup database'''
+    if connection is None:
+        return
     backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
     connection.backup(backup)
     backup.close()
 
 def commit():
     '''Saves all changes made to the database'''
+    if connection is None:
+        return
     connection.commit()
 
 def execute(sql, args=None):
     '''Runs a generic SQL script with the given arguments'''
+    if connection is None:
+        return
     args = [] if args is None else args
     
     if type(args) is list:

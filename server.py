@@ -25,6 +25,7 @@ import realtime
 VERSION = 15
 
 app = Bottle()
+running = False
 
 cron_id = 'bctracker-muncher'
 mapbox_api_key = ''
@@ -36,7 +37,9 @@ admin_key = None
 
 def start(args):
     '''Loads all required data and launches the server'''
-    global cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain, admin_key
+    global running, cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain, admin_key
+    
+    running = True
     
     database.connect()
     
@@ -53,37 +56,42 @@ def start(args):
     helpers.theme.load()
     
     for system in helpers.system.find_all():
-        gtfs.load(system, args.reload)
-        if not gtfs.validate(system):
-            gtfs.load(system, True)
-        realtime.update(system)
-        if not realtime.validate(system):
-            system.validation_errors += 1
-    realtime.update_records()
-    
-    cron.setup()
-    cron.start(cron_id)
-    
-    cp.config.update('server.conf')
-    cron_id = cp.config.get('cron_id', 'bctracker-muncher')
-    mapbox_api_key = cp.config['mapbox_api_key']
-    no_system_domain = cp.config['no_system_domain']
-    system_domain = cp.config['system_domain']
-    system_domain_path = cp.config['system_domain_path']
-    cookie_domain = cp.config.get('cookie_domain')
-    admin_key = cp.config.get('admin_key')
-    
-    handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
-    log = WSGILogger(app, [handler], ApacheFormatter())
-    
-    cp.tree.graft(log, '/')
-    cp.server.start()
+        if running:
+            gtfs.load(system, args.reload)
+            if not gtfs.validate(system):
+                gtfs.load(system, True)
+            realtime.update(system)
+            if not realtime.validate(system):
+                system.validation_errors += 1
+    if running:
+        realtime.update_records()
+        
+        cron.setup()
+        cron.start(cron_id)
+        
+        cp.config.update('server.conf')
+        cron_id = cp.config.get('cron_id', 'bctracker-muncher')
+        mapbox_api_key = cp.config['mapbox_api_key']
+        no_system_domain = cp.config['no_system_domain']
+        system_domain = cp.config['system_domain']
+        system_domain_path = cp.config['system_domain_path']
+        cookie_domain = cp.config.get('cookie_domain')
+        admin_key = cp.config.get('admin_key')
+        
+        handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
+        log = WSGILogger(app, [handler], ApacheFormatter())
+        
+        cp.tree.graft(log, '/')
+        cp.server.start()
 
 def stop():
     '''Terminates the server'''
+    global running
+    running = False
     cron.stop(cron_id)
     database.disconnect()
-    cp.server.stop()
+    if cp.server.running:
+        cp.server.stop()
 
 def get_url(system, path=''):
     '''Returns a URL formatted based on the given system and path'''
