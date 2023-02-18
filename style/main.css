@@ -46,6 +46,10 @@ h1, h2, h3, h4 {
     margin: 0px;
 }
 
+h1 .route-number {
+    font-size: 20pt;
+}
+
 img.inline {
     height: 18px;
     width: 18px;

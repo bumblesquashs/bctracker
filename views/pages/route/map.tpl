@@ -3,7 +3,12 @@
 
 % if len(route.trips) == 0:
     <div class="page-header">
-        <h1 class="title">{{ route.number }} {{! route.display_name }}</h1>
+        <h1 class="title">
+            <div class="flex-row">
+                % include('components/route_indicator')
+                {{! route.display_name }}
+            </div>
+        </h1>
         <div class="tab-button-bar">
             <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
             <span class="tab-button current">Map</span>
@@ -24,7 +29,12 @@
     </p>
 % else:
     <div class="page-header map-page">
-        <h1 class="title">{{ route.number }} {{! route.display_name }}</h1>
+        <h1 class="title">
+            <div class="flex-row">
+                % include('components/route_indicator')
+                {{! route.display_name }}
+            </div>
+        </h1>
         <div class="tab-button-bar">
             <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
             <span class="tab-button current">Map</span>
