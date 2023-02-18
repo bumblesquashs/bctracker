@@ -54,7 +54,12 @@
             % end
             <div class="section">
                 <div class="header">
-                    <h2>{{ route.number }} {{! route.display_name }}</h2>
+                    <h2>
+                        <div class="flex-row">
+                            % include('components/route_indicator')
+                            {{! route.display_name }}
+                        </div>
+                    </h2>
                 </div>
                 <div class="content">
                     <p>

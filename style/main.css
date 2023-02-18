@@ -50,6 +50,10 @@ h1 .route-number {
     font-size: 20pt;
 }
 
+h2 .route-number {
+    font-size: 16pt;
+}
+
 img.inline {
     height: 18px;
     width: 18px;
