@@ -121,7 +121,14 @@
                                     <td>
                                         <div class="flex-column">
                                             % include('components/headsign_indicator')
-                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="mobile-only smaller-font">{{! trip.display_id }}</a>
+                                            <div class="mobile-only smaller-font">
+                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                            </div>
+                                            % if stop is not None:
+                                                <div class="non-desktop smaller-font">
+                                                    Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                </div>
+                                            % end
                                         </div>
                                     </td>
                                     <td class="non-mobile">
