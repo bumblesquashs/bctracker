@@ -16,6 +16,10 @@
  * Other colors may also be used for specific purposes
 */
 
+:root {
+    color-scheme: dark;
+}
+
 a {
     color: #5CC3FF;
 }
@@ -37,6 +41,10 @@ form input[type="text"]:focus {
 
 hr {
     border-top-color: #565656;
+}
+
+iframe {
+    color-scheme: light;
 }
 
 table.striped {
