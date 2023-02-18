@@ -44,7 +44,7 @@ class DropoffType(Enum):
 class Departure:
     '''An association between a trip and a stop'''
     
-    __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time', 'pickup_type', 'dropoff_type', 'timepoint')
+    __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time', 'pickup_type', 'dropoff_type', 'timepoint', 'distance_traveled')
     
     @classmethod
     def from_csv(cls, row, system):
@@ -65,9 +65,16 @@ class Departure:
             timepoint = row['timepoint'] == '1'
         else:
             timepoint = False
-        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint)
+        if 'shape_dist_traveled' in row:
+            try:
+                distance_traveled = int(row['shape_dist_traveled'])
+            except:
+                distance_traveled = None
+        else:
+            distance_traveled = None
+        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance_traveled)
     
-    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint):
+    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance_traveled):
         self.system = system
         self.trip_id = trip_id
         self.sequence = sequence
@@ -76,6 +83,7 @@ class Departure:
         self.pickup_type = pickup_type
         self.dropoff_type = dropoff_type
         self.timepoint = timepoint
+        self.distance_traveled = distance_traveled
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence

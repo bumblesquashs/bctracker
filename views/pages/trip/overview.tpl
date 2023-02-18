@@ -61,6 +61,13 @@
                         <div class="name">Direction</div>
                         <div class="value">{{ trip.direction }}</div>
                     </div>
+                    % length = trip.length
+                    % if length is not None:
+                        <div class="section">
+                            <div class="name">Length</div>
+                            <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>
