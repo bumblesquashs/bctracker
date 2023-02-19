@@ -21,15 +21,13 @@
         <thead>
             <tr>
                 <th>First Seen</th>
-                <th class="desktop-only">Number</th>
+                <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
-                <th class="desktop-only">Assigned Block</th>
-                <th class="desktop-only">Assigned Routes</th>
-                <th class="non-desktop">Block</th>
+                <th>Block</th>
+                <th class="desktop-only">Routes</th>
             </tr>
         </thead>
         <tbody>
@@ -42,23 +40,31 @@
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ record.date.format_long() }}</td>
-                    <td class="non-desktop no-wrap">
-                        {{ record.date.format_short() }}
-                        % if system is None:
-                            <br class="mobile-only" />
-                            <span class="mobile-only smaller-font">{{ record.system }}</span>
-                        % end
+                    <td class="non-desktop">
+                        <div class="flex-column">
+                            {{ record.date.format_short() }}
+                            % if system is None:
+                                <span class="mobile-only smaller-font">{{ record.system }}</span>
+                            % end
+                        </div>
                     </td>
                     <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % if order is not None:
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ order }}</span>
-                        % end
+                        <div class="flex-column">
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            <span class="non-desktop smaller-font">
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{! order }}
+                                % end
+                            </span>
+                        </div>
                     </td>
                     <td class="desktop-only">
-                        % if order is not None:
-                            {{ order }}
+                        % if order is None:
+                            <span class="lighter-text">Unknown Year/Model</span>
+                        % else:
+                            {{! order }}
                         % end
                     </td>
                     % if system is None:
@@ -73,7 +79,7 @@
                         % end
                     </td>
                     <td class="desktop-only">
-                        % include('components/route_indicator', routes=record.routes)
+                        % include('components/routes_indicator', routes=record.routes)
                     </td>
                 </tr>
             % end

@@ -1,5 +1,5 @@
 
-% rebase('base', title='Error')
+% rebase('base', title='Error', enable_refresh=False)
 
 % if system_id is None:
     <div class="page-header">

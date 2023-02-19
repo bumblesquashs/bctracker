@@ -2,7 +2,7 @@
 % import json
 
 % if system is None:
-    % rebase('base', title='Routes')
+    % rebase('base', title='Routes', enable_refresh=False)
     
     <div class="page-header">
         <h1 class="title">Routes</h1>
@@ -36,15 +36,16 @@
                         % count = len(region_system.get_routes())
                         <tr>
                             <td>
-                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">
-                                    % if count == 1:
-                                        1 Route
-                                    % else:
-                                        {{ count }} Routes
-                                    % end
-                                </span>
+                                <div class="flex-column">
+                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                    <span class="mobile-only smaller-font">
+                                        % if count == 1:
+                                            1 Route
+                                        % else:
+                                            {{ count }} Routes
+                                        % end
+                                    </span>
+                                </div>
                             </td>
                             <td class="non-mobile">{{ count }}</td>
                             <td>
@@ -57,7 +58,7 @@
         </tbody>
     </table>
 % else:
-    % rebase('base', title='Routes', include_maps=True, full_map=True)
+    % rebase('base', title='Routes', include_maps=True, full_map=True, enable_refresh=False)
     
     % routes = system.get_routes()
     % if len(routes) == 0:

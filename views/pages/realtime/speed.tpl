@@ -40,18 +40,16 @@
     <table class="striped">
         <thead>
             <tr>
-                <th class="desktop-only">Number</th>
+                <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
                 % if system is None:
-                    <th class="non-mobile">System</th>
+                    <th class="desktop-only">System</th>
                 % end
                 <th class="desktop-only">Speed</th>
-                <th class="desktop-only">Headsign</th>
-                <th class="desktop-only">Current Block</th>
-                <th class="desktop-only">Current Trip</th>
-                <th class="desktop-only">Current Stop</th>
-                <th class="non-desktop">Details</th>
+                <th>Headsign</th>
+                <th class="non-mobile">Block</th>
+                <th class="non-mobile">Trip</th>
+                <th class="desktop-only">Next Stop</th>
             </tr>
         </thead>
         <tbody>
@@ -63,51 +61,69 @@
                 % last_speed = position.speed // 10
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
-                        % if order is None:
-                            {{ bus }}
-                        % else:
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ order }}</span>
-                        % end
+                        <div class="flex-column">
+                            <div class="flex-row left">
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                % include('components/adherence_indicator', adherence=position.adherence)
+                            </div>
+                            <span class="non-desktop smaller-font">
+                                % if order is None:
+                                    <span class="lighter-text">Unknown Year/Model</span>
+                                % else:
+                                    {{! order }}
+                                % end
+                            </span>
+                        </div>
                     </td>
                     <td class="desktop-only">
-                        % if order is not None:
-                            {{ order }}
+                        % if order is None:
+                            <span class="lighter-text">Unknown Year/Model</span>
+                        % else:
+                            {{! order }}
                         % end
                     </td>
                     % if system is None:
-                        <td class="non-mobile">{{ position.system }}</td>
+                        <td class="desktop-only">{{ position.system }}</td>
                     % end
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                     % if position.trip is None:
-                        <td>
-                            <span class="lighter-text">Not in service</span>
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
+                        <td colspan="4">
+                            <div class="flex-column">
+                                <span class="lighter-text">Not in service</span>
+                                <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                            </div>
                         </td>
-                        <td class="desktop-only"></td>
-                        <td class="desktop-only"></td>
-                        <td class="desktop-only"></td>
                     % else:
                         % trip = position.trip
-                        % block = position.trip.block
+                        % block = trip.block
                         % stop = position.stop
                         <td>
-                            {{ trip }}
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ position.speed }} km/h</span>
+                            <div class="flex-column">
+                                % include('components/headsign_indicator')
+                                <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                                <div class="mobile-only smaller-font">
+                                    Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                </div>
+                                % if stop is not None:
+                                    <div class="non-desktop smaller-font">
+                                        Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                    </div>
+                                % end
+                            </div>
                         </td>
-                        <td class="desktop-only"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                        <td class="desktop-only"><a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.id }}</a></td>
-                        % if stop is None:
-                            <td class="desktop-only lighter-text">Unavailable</td>
-                        % else:
-                            <td class="desktop-only">
-                                % include('components/adherence_indicator', adherence=position.adherence)
+                        <td class="non-mobile">
+                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                        </td>
+                        <td class="non-mobile">
+                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                        </td>
+                        <td class="desktop-only">
+                            % if stop is None:
+                                <span class="lighter-text">Unavailable</span>
+                            % else:
                                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            </td>
-                        % end
+                            % end
+                        </td>
                     % end
                 </tr>
             % end

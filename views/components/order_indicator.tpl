@@ -1,6 +1,6 @@
 % order = bus.order
 <div class="order-indicator">
-    <div class="title">{{ order }}</div>
+    <div class="title">{{! order }}</div>
     <div class="content">
         % if bus.number > order.low:
             % first_bus = order.first_bus

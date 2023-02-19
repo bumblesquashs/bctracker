@@ -48,7 +48,7 @@ class Model:
         self.type = type
     
     def __str__(self):
-        return f'{self.manufacturer} {self.name}'
+        return f'{self.display_manufacturer} {self.display_name}'
     
     def __hash__(self):
         return hash(self.id)
@@ -58,6 +58,14 @@ class Model:
     
     def __lt__(self, other):
         return str(self) < str(other)
+    
+    @property
+    def display_manufacturer(self):
+        return self.manufacturer.replace('/', '/<wbr />')
+    
+    @property
+    def display_name(self):
+        return self.name.replace('/', '/<wbr />')
     
     @property
     def is_test(self):

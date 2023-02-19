@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}', include_maps=True, full_map=True, show_refresh_button=True)
+% rebase('base', title=f'Block {block.id}', include_maps=True, full_map=True)
 
 <div class="page-header map-page">
     <h1 class="title">Block {{ block.id }}</h1>

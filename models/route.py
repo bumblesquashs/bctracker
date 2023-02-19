@@ -104,6 +104,10 @@ class Route:
         return self.key > other.key
     
     @property
+    def display_name(self):
+        return self.name.replace('/', '/<wbr />')
+    
+    @property
     def json(self):
         '''Returns a representation of this route in JSON-compatible format'''
         return {

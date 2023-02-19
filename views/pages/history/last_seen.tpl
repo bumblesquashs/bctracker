@@ -18,34 +18,32 @@
     </p>
 % else:
     % known_overviews = [o for o in overviews if o.bus.order is not None]
+    % unknown_overviews = [o for o in overviews if o.bus.order is None]
     % orders = sorted({o.bus.order for o in known_overviews})
     <table class="striped">
         <thead>
             <tr>
-                <th class="non-mobile">Number</th>
-                <th class="mobile-only">Bus</th>
+                <th>Bus</th>
                 <th>Last Seen</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
-                <th class="desktop-only">Assigned Block</th>
-                <th class="desktop-only">Assigned Routes</th>
-                <th class="non-desktop">Block</th>
+                <th>Block</th>
+                <th class="desktop-only">Routes</th>
             </tr>
         </thead>
         <tbody>
-            % for order in orders:
-                % order_overviews = [o for o in known_overviews if o.bus.order == order]
+            % if len(unknown_overviews) > 0:
                 <tr class="section">
-                    <td colspan="6">
+                    <td colspan="5">
                         <div class="flex-row">
-                            <div class="flex-1">{{ order }}</div>
-                            <div>{{ len(order_overviews) }}</div>
+                            <div class="flex-1">Unknown Year/Model</div>
+                            <div>{{ len(unknown_overviews) }}</div>
                         </div>
                     </td>
                 </tr>
                 <tr class="display-none"></tr>
-                % for overview in order_overviews:
+                % for overview in unknown_overviews:
                     % record = overview.last_record
                     % bus = overview.bus
                     <tr>
@@ -53,12 +51,13 @@
                             <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
-                        <td class="non-desktop no-wrap">
-                            {{ record.date.format_short() }}
-                            % if system is None:
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">{{ record.system }}</span>
-                            % end
+                        <td class="non-desktop">
+                            <div class="flex-column">
+                                {{ record.date.format_short() }}
+                                % if system is None:
+                                    <span class="mobile-only smaller-font">{{ record.system }}</span>
+                                % end
+                            </div>
                         </td>
                         % if system is None:
                             <td class="non-mobile">{{ record.system }}</td>
@@ -72,7 +71,51 @@
                             % end
                         </td>
                         <td class="desktop-only">
-                            % include('components/route_indicator', routes=record.routes)
+                            % include('components/routes_indicator', routes=record.routes)
+                        </td>
+                    </tr>
+                % end
+            % end
+            % for order in orders:
+                % order_overviews = [o for o in known_overviews if o.bus.order == order]
+                <tr class="section">
+                    <td colspan="5">
+                        <div class="flex-row">
+                            <div class="flex-1">{{! order }}</div>
+                            <div>{{ len(order_overviews) }}</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="display-none"></tr>
+                % for overview in order_overviews:
+                    % record = overview.last_record
+                    % bus = overview.bus
+                    <tr>
+                        <td>
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        </td>
+                        <td class="desktop-only">{{ record.date.format_long() }}</td>
+                        <td class="non-desktop">
+                            <div class="flex-column">
+                                {{ record.date.format_short() }}
+                                % if system is None:
+                                    <span class="mobile-only smaller-font">{{ record.system }}</span>
+                                % end
+                            </div>
+                        </td>
+                        % if system is None:
+                            <td class="non-mobile">{{ record.system }}</td>
+                        % end
+                        <td>
+                            % if record.is_available:
+                                % block = record.block
+                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % else:
+                                <span>{{ record.block_id }}</span>
+                            % end
+                        </td>
+                        <td class="desktop-only">
+                            % include('components/routes_indicator', routes=record.routes)
                         </td>
                     </tr>
                 % end

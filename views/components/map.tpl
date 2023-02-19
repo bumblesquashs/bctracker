@@ -112,17 +112,23 @@
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
+            const details = document.createElement("div");
+            details.className = "details";
+            
+            const title = document.createElement("div");
+            title.className = "{{ 'title' if len(map_departures) == 1 else 'title hover-only' }}";
+            title.innerHTML = stop.number;
+            
+            const content = document.createElement("div");
+            content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
                 routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
+            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
-            const details = document.createElement("div");
-            details.className = "details";
-            details.innerHTML = "\
-                <div class='{{ 'title' if len(map_departures) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
-                <div class='subtitle hover-only'>" + stop.name + "</div>\
-                <div class='subtitle hover-only'>" + routesHTML + "</div>";
+            details.appendChild(title);
+            details.appendChild(content);
             
             element.appendChild(icon);
             element.appendChild(details);
@@ -151,17 +157,23 @@
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
+            const details = document.createElement("div");
+            details.className = "details";
+            
+            const title = document.createElement("div");
+            title.className = "{{ 'title' if len(map_stops) == 1 else 'title hover-only' }}";
+            title.innerHTML = stop.number;
+            
+            const content = document.createElement("div");
+            content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
                 routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
+            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
-            const details = document.createElement("div");
-            details.className = "details";
-            details.innerHTML = "\
-                <div class='{{ 'title' if len(map_stops) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
-                <div class='subtitle hover-only'>" + stop.name + "</div>\
-                <div class='subtitle hover-only'>" + routesHTML + "</div>";
+            details.appendChild(title);
+            details.appendChild(content);
             
             element.appendChild(icon);
             element.appendChild(details);
@@ -182,13 +194,6 @@
         const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
         
         for (const position of positions) {
-            const adherenceElement = document.createElement("span")
-            if (position.adherence !== null && position.adherence !== undefined) {
-                const adherence = position.adherence
-                adherenceElement.classList.add("adherence-indicator")
-                adherenceElement.classList.add(adherence.status_class)
-                adherenceElement.innerHTML = adherence.value
-            }
             const element = document.createElement("div");
             element.className = "marker";
             if (position.bearing !== undefined) {
@@ -201,36 +206,50 @@
                 bearing.style.transform = "rotate(" + position.bearing + "deg)";
                 element.appendChild(bearing)
             }
+            
+            const details = document.createElement("div");
+            details.className = "details";
+            
+            const title = document.createElement("div");
+            title.className = "title";
+            
+            const content = document.createElement("div");
+            content.className = "content hover-only";
+            if (position.adherence !== null && position.adherence !== undefined) {
+                const adherence = position.adherence;
+                const adherenceElement = document.createElement("div")
+                adherenceElement.classList.add("adherence-indicator");
+                adherenceElement.classList.add(adherence.status_class);
+                adherenceElement.innerHTML = adherence.value;
+                
+                content.innerHTML = "<div class='flex-row center flex-gap-5'>" + adherenceElement.outerHTML + position.headsign + "</div>";
+            } else {
+                content.classList.add("centred")
+                content.innerHTML = position.headsign;
+            }
+            
             if (position.bus_number < 0) {
                 const icon = document.createElement("div");
                 icon.className = "icon";
                 icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<img src='/img/white/bus.png' />";
-                
-                const details = document.createElement("div");
-                details.className = "details";
-                details.innerHTML = "\
-                    <div class='title'>Unknown Bus</div>\
-                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>"
-                
                 element.appendChild(icon);
-                element.appendChild(details);
+                
+                title.innerHTML = "Unknown Bus";
             } else {
                 const icon = document.createElement("a");
                 icon.className = "icon";
                 icon.href = "/bus/" + position.bus_number;
                 icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
-                
-                const details = document.createElement("div");
-                details.className = "details";
-                details.innerHTML = "\
-                    <div class='title'>" + position.bus_number + "</div>\
-                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
-                
                 element.appendChild(icon);
-                element.appendChild(details);
+                
+                title.innerHTML = position.bus_number;
             }
+            
+            details.appendChild(title);
+            details.appendChild(content);
+            element.appendChild(details);
             
             new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map);
             

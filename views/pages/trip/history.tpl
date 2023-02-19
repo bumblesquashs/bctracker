@@ -2,7 +2,7 @@
 % rebase('base', title=f'Trip {trip.id}')
 
 <div class="page-header">
-    <h1 class="title trip-id">Trip {{ trip.id }}</h1>
+    <h1 class="title">Trip {{! trip.display_id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>
@@ -21,99 +21,124 @@
             % first_tracked = records[-1].date
             % days_since_first_tracked = first_tracked.format_since()
             
-            <div class="sidebar flex-1">
-                <h2>Overview</h2>
-                <div class="info-box">
-                    <div class="section">
-                        <div class="name">Last Tracked</div>
-                        <div class="value">
-                            % if days_since_last_tracked == '0 days ago':
-                                Today
-                            % else:
-                                {{ last_tracked }}
-                                <br />
-                                <span class="smaller-font">{{ days_since_last_tracked }}</span>
-                            % end
-                        </div>
+            <div class="sidebar container flex-1">
+                <div class="section">
+                    <div class="header">
+                        <h2>Overview</h2>
                     </div>
-                    <div class="section">
-                        <div class="name">First Tracked</div>
-                        <div class="value">
-                            % if days_since_first_tracked == '0 days ago':
-                                Today
-                            % else:
-                                {{ first_tracked }}
-                                <br />
-                                <span class="smaller-font">{{ days_since_first_tracked }}</span>
-                            % end
-                        </div>
-                    </div>
-                    <div class="section">
-                        % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                        <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
-                        <div class="value">
-                            % for order in orders:
-                                <span>{{ order }}</span>
-                                <br />
-                            % end
+                    <div class="content">
+                        <div class="info-box">
+                            <div class="section">
+                                <div class="name">Last Tracked</div>
+                                <div class="value flex-column">
+                                    % if days_since_last_tracked == '0 days ago':
+                                        Today
+                                    % else:
+                                        {{ last_tracked }}
+                                        <span class="smaller-font">{{ days_since_last_tracked }}</span>
+                                    % end
+                                </div>
+                            </div>
+                            <div class="section">
+                                <div class="name">First Tracked</div>
+                                <div class="value flex-column">
+                                    % if days_since_first_tracked == '0 days ago':
+                                        Today
+                                    % else:
+                                        {{ first_tracked }}
+                                        <span class="smaller-font">{{ days_since_first_tracked }}</span>
+                                    % end
+                                </div>
+                            </div>
+                            <div class="section">
+                                % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
+                                <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
+                                <div class="value flex-column">
+                                    % for order in orders:
+                                        <div>{{! order }}</div>
+                                    % end
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         % end
         
-        <div class="flex-3">
-            <h2>History</h2>
-            % if len(records) == 0:
-                <p>This trip doesn't have any recorded history.</p>
-                <p>
-                    There are a few reasons why that might be the case:
-                    <ol>
-                        <li>It may be a new trip introduced in the last service change</li>
-                        <li>It may not be operating due to driver or vehicle shortages</li>
-                        <li>It may have only been done by buses without functional NextRide equipment installed</li>
-                    </ol>
-                    Please check again later!
-                </p>
-            % else:
-                <table class="striped">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Bus</th>
-                            <th class="desktop-only">Model</th>
-                            <th class="non-mobile">First Seen</th>
-                            <th>Last Seen</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        % for record in records:
-                            % bus = record.bus
-                            % order = bus.order
-                            <tr>
-                                <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                <td class="non-desktop no-wrap">{{ record.date.format_short() }}</td>
-                                <td>
-                                    % if order is None:
-                                        {{ bus }}
-                                    % else:
-                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                        <br class="non-desktop" />
-                                        <span class="non-desktop smaller-font">{{ order }}</span>
-                                    % end
-                                </td>
-                                <td class="desktop-only">
-                                    % if order is not None:
-                                        {{ order }}
-                                    % end
-                                </td>
-                                <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
-                                <td>{{ record.last_seen.format_web(time_format) }}</td>
-                            </tr>
+        <div class="container flex-3">
+            <div class="section">
+                <div class="header">
+                    <h2>History</h2>
+                </div>
+                <div class="content">
+                    % if len(records) == 0:
+                        <p>This trip doesn't have any recorded history.</p>
+                        <p>
+                            There are a few reasons why that might be the case:
+                            <ol>
+                                <li>It may be a new trip introduced in the last service change</li>
+                                <li>It may not be operating due to driver or vehicle shortages</li>
+                                <li>It may have only been done by buses without functional NextRide equipment installed</li>
+                            </ol>
+                            Please check again later!
+                        </p>
+                    % else:
+                        % if len([r for r in records if r.is_suspicious]) > 0:
+                            <p>
+                                <span>Entries with a</span>
+                                <img class="middle-align white inline" src="/img/white/warning.png" />
+                                <img class="middle-align black inline" src="/img/black/warning.png" />
+                                <span>may be accidental logins.</span>
+                            </p>
                         % end
-                    </tbody>
-                </table>
-            % end
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Bus</th>
+                                    <th class="desktop-only">Model</th>
+                                    <th class="non-mobile">First Seen</th>
+                                    <th>Last Seen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for record in records:
+                                    % bus = record.bus
+                                    % order = bus.order
+                                    <tr>
+                                        <td class="desktop-only">{{ record.date.format_long() }}</td>
+                                        <td class="non-desktop">{{ record.date.format_short() }}</td>
+                                        <td>
+                                            <div class="flex-column">
+                                                <div class="flex-row left">
+                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                    % include('components/suspicious_record_indicator', record=record)
+                                                </div>
+                                                <span class="non-desktop smaller-font">
+                                                    % if order is None:
+                                                        <span class="lighter-text">Unknown Year/Model</span>
+                                                    % else:
+                                                        {{! order }}
+                                                    % end
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="desktop-only">
+                                            % if order is None:
+                                                <span class="lighter-text">Unknown Year/Model</span>
+                                            % else:
+                                                {{! order }}
+                                            % end
+                                        </td>
+                                        <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
+                                        <td>{{ record.last_seen.format_web(time_format) }}</td>
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    % end
+                </div>
+            </div>
         </div>
     </div>
     
