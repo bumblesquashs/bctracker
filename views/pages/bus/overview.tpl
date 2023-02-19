@@ -32,7 +32,26 @@
             <div class="content">
                 % if position is None:
                     <div class="info-box">
-                        <h3 class="title">Not in service</h3>
+                        <div class="section">
+                            <h3>Not in service</h3>
+                        </div>
+                        <div class="section">
+                            <div class="name">Last Seen</div>
+                            <div class="value flex-column">
+                                % if overview is None:
+                                    <div class="lighter-text">Never</div>
+                                % else:
+                                    % last_seen = overview.last_seen_date
+                                    % if last_seen.is_today:
+                                        <div>Today</div>
+                                    % else:
+                                        <div>{{ last_seen.format_long() }}</div>
+                                        <div class="smaller-font">{{ last_seen.format_since() }}</div>
+                                    % end
+                                    <div class="smaller-font">{{ overview.last_seen_system }}</div>
+                                % end
+                            </div>
+                        </div>
                     </div>
                 % elif position.trip is None:
                     % include('components/map', map_position=position)
@@ -41,7 +60,6 @@
                         <div class="section">
                             <h3>Not in service</h3>
                         </div>
-                        
                         <div class="section">
                             <div class="name">System</div>
                             <div class="value">{{ position.system }}</div>

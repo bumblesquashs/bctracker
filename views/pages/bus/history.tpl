@@ -23,10 +23,7 @@
 <div class="flex-container">
     % if len(records) > 0:
         % last_tracked = records[0].date
-        % days_since_last_tracked = last_tracked.format_since()
-        
         % first_tracked = records[-1].date
-        % days_since_first_tracked = first_tracked.format_since()
         
         <div class="sidebar container flex-1">
             <div class="section">
@@ -38,22 +35,22 @@
                         <div class="section">
                             <div class="name">Last Tracked</div>
                             <div class="value flex-column">
-                                % if days_since_last_tracked == '0 days ago':
+                                % if last_tracked.is_today:
                                     Today
                                 % else:
                                     {{ last_tracked }}
-                                    <span class="smaller-font">{{ days_since_last_tracked }}</span>
+                                    <span class="smaller-font">{{ last_tracked.format_since() }}</span>
                                 % end
                             </div>
                         </div>
                         <div class="section">
                             <div class="name">First Tracked</div>
                             <div class="value flex-column">
-                                % if days_since_first_tracked == '0 days ago':
+                                % if first_tracked.is_today:
                                     Today
                                 % else:
                                     {{ first_tracked }}
-                                    <span class="smaller-font">{{ days_since_first_tracked }}</span>
+                                    <span class="smaller-font">{{ first_tracked.format_since() }}</span>
                                 % end
                             </div>
                         </div>
