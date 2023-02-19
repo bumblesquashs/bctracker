@@ -7,9 +7,9 @@
 </div>
 
 <table class="striped">
-	<thead>
-		<tr>
-			<th>System</th>
+    <thead>
+        <tr>
+            <th>System</th>
             <th class="desktop-only">Online</th>
             <th class="desktop-only">In Service</th>
             <th class="desktop-only">Routes</th>
@@ -18,12 +18,12 @@
             <th class="desktop-only">Trips</th>
             <th class="non-desktop">Details</th>
             <th class="non-mobile">Service Days</th>
-		</tr>
-	</thead>
-	<tbody>
+        </tr>
+    </thead>
+    <tbody>
         % for region in regions:
             <tr class="section">
-                <td class="section" colspan="8">{{ region }}</td>
+                <td class="section" colspan="9">{{ region }}</td>
             </tr>
             <tr class="display-none"></tr>
             % region_systems = sorted([s for s in systems if s.region == region])
