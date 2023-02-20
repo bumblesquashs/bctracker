@@ -828,10 +828,11 @@ table.striped tr.section td {
     top: 50%;
     transform: translate(0px, -50%);
     border-radius: 5px;
-    white-space: nowrap;
     font-size: 11pt;
     font-family: Helvetica, sans-serif;
     text-align: left;
+    width: max-content;
+    max-width: 300px;
 }
 
 .tooltip-anchor .tooltip::after {
