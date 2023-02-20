@@ -191,8 +191,8 @@
                     icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
                     
                     const details = document.createElement("div");
-                    details.className = "details";
-                    details.innerHTML = "<div class='title hover-only'>" + route.name + "</div>";
+                    details.className = "details hover-only";
+                    details.innerHTML = "<div class='title'>" + route.name + "</div>";
                     
                     element.appendChild(icon);
                     element.appendChild(details);

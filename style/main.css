@@ -525,6 +525,8 @@ table.striped tr.section td {
     text-align: center;
     font-weight: bold;
     line-height: 10pt;
+    width: max-content;
+    max-width: 150px;
 }
 
 .marker .icon {
