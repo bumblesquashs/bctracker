@@ -375,7 +375,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .marker .details {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .marker .icon {
