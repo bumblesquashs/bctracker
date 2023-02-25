@@ -190,6 +190,7 @@
 
 % map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
 % if len(map_positions) > 0:
+    % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
         
