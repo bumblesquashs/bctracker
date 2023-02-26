@@ -63,9 +63,15 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
+                        % km = length / 1000
+                        % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="section">
                             <div class="name">Length</div>
-                            <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
+                            <div class="value">{{ f'{km:.1f}' }}km</div>
+                        </div>
+                        <div class="section">
+                            <div class="name">Average Speed</div>
+                            <div class="value">{{ f'{(km / hours):.1f}' }}km/h</div>
                         </div>
                     % end
                 </div>
