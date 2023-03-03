@@ -48,10 +48,17 @@
                                         <div>{{ last_seen.format_long() }}</div>
                                         <div class="smaller-font">{{ last_seen.format_since() }}</div>
                                     % end
-                                    <div class="smaller-font">{{ overview.last_seen_system }}</div>
                                 % end
                             </div>
                         </div>
+                        % if overview is not None:
+                            <div class="section">
+                                <div class="name">System</div>
+                                <div class="value flex-column">
+                                    <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
+                                </div>
+                            </div>
+                        % end
                     </div>
                 % elif position.trip is None:
                     % include('components/map', map_position=position)
@@ -62,7 +69,9 @@
                         </div>
                         <div class="section">
                             <div class="name">System</div>
-                            <div class="value">{{ position.system }}</div>
+                            <div class="value">
+                                <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                            </div>
                         </div>
                     </div>
                 % else:
@@ -89,7 +98,9 @@
                         </div>
                         <div class="section">
                             <div class="name">System</div>
-                            <div class="value">{{ trip.system }}</div>
+                            <div class="value">
+                                <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                            </div>
                         </div>
                         % if show_speed:
                             <div class="section">
