@@ -122,6 +122,11 @@ table.striped tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
+#quick-navigation .item {
+    background-color: #393939;
+    border-color: #565656;
+}
+
 #refresh-button:hover {
     background-color: #053305;
 }

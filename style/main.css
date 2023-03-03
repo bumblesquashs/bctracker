@@ -182,6 +182,30 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
+#quick-navigation {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: start;
+}
+
+#quick-navigation .item {
+    flex: 1;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+}
+
+#quick-navigation .item img {
+    width: 48px;
+    height: 48px;
+}
+
 #refresh-button {
     border-radius: 50%;
 }

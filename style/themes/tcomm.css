@@ -140,6 +140,14 @@ table.striped tr {
     display: none;
 }
 
+#quick-navigation .item {
+    background-color: #EEEEEE;
+    color: #222222;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    border-color: #000000;
+}
+
 #search-desktop {
     color: #FFFFFF;
 }

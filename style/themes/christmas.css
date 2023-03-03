@@ -134,6 +134,11 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
+#quick-navigation .item {
+    background-color: #E4F6E3;
+    border-color: #69BB65;
+}
+
 #search-desktop {
     color: #FFFFFF;
 }
