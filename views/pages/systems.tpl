@@ -36,14 +36,32 @@
                         <div class="flex-column">
                             % if region_system.realtime_enabled:
                                 % positions = region_system.get_positions()
-                                <div>Online: {{ len(positions) }}</div>
-                                <div>In Service: {{ len([p for p in positions if p.trip is not None]) }}</div>
+                                <div class="flex-row flex-gap-5">
+                                    <span class="bold">Online:</span>
+                                    {{ len(positions) }}
+                                </div>
+                                <div class="flex-row flex-gap-5">
+                                    <span class="bold">In Service:</span>
+                                    {{ len([p for p in positions if p.trip is not None]) }}
+                                </div>
                             % end
                             % if region_system.gtfs_enabled:
-                                <div>Routes: {{ len(region_system.get_routes()) }}</div>
-                                <div>Stops: {{ len(region_system.get_stops()) }}</div>
-                                <div>Blocks: {{ len(region_system.get_blocks()) }}</div>
-                                <div>Trips: {{ len(region_system.get_trips()) }}</div>
+                                <div class="flex-row flex-gap-5">
+                                    <span class="bold">Routes:</span>
+                                    {{ len(region_system.get_routes()) }}
+                                </div>
+                                <div class="flex-row flex-gap-5">
+                                    <span class="bold">Stops:</span>
+                                    {{ len(region_system.get_stops()) }}
+                                </div>
+                                <div class="flex-row flex-gap-5">
+                                    <span class="bold">Blocks:</span>
+                                    {{ len(region_system.get_blocks()) }}
+                                </div>
+                                <div class="flex-row flex-gap-5">
+                                    <span class="bold">Trips:</span>
+                                    {{ len(region_system.get_trips()) }}
+                                </div>
                             % end
                         </div>
                     </td>

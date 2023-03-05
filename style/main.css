@@ -281,6 +281,10 @@ table.striped tr.section td {
     font-size: 16pt;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .button {
     border-width: 0px;
     border-radius: 5px;
