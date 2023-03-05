@@ -181,11 +181,6 @@ table.striped th {
     vertical-align: middle;
 }
 
-.container.inline {
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
 .dropdown {
     position: relative;
     cursor: default;
@@ -229,9 +224,27 @@ table.striped th {
     font-size: 12pt;
 }
 
-.flex-container {
-    flex-direction: row;
-    gap: 40px;
+@media screen and (min-width: 1001px) and (max-width: 1200px) {
+    .flex-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    table {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1201px) {
+    .flex-container {
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .container.inline {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 }
 
 .mobile-only {
