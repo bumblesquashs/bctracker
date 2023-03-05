@@ -496,8 +496,8 @@ table.striped tr.section td {
     align-items: center;
     justify-content: center;
     margin-top: -2px;
-    padding: 4px 6px;
-    border-radius: 10px;
+    padding: 2px 3px;
+    border-radius: 5px;
     z-index: 5;
 }
 
@@ -507,6 +507,7 @@ table.striped tr.section td {
     line-height: 10pt;
     width: max-content;
     max-width: 150px;
+    padding: 2px;
 }
 
 .marker .details .content .adherence-indicator {
