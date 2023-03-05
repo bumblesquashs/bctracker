@@ -260,7 +260,7 @@ def bus_overview_page(bus_number, system_id=None):
         return error_page('bus', system_id, bus_number=bus_number)
     position = realtime.get_position(bus_number)
     records = helpers.record.find_all(bus_number=bus_number, limit=20)
-    return page('bus/overview', system_id, bus=bus, position=position, records=records)
+    return page('bus/overview', system_id, bus=bus, position=position, records=records, overview=overview)
 
 @app.get([
     '/bus/<bus_number:int>/map',
@@ -288,7 +288,7 @@ def bus_history_page(bus_number, system_id=None):
     if (bus.order is None and overview is None) or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     records = helpers.record.find_all(bus_number=bus_number)
-    return page('bus/history', system_id, bus=bus, records=records)
+    return page('bus/history', system_id, bus=bus, records=records, overview=overview)
 
 @app.get([
     '/history',

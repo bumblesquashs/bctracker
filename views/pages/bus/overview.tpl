@@ -32,7 +32,33 @@
             <div class="content">
                 % if position is None:
                     <div class="info-box">
-                        <h3 class="title">Not in service</h3>
+                        <div class="section">
+                            <h3>Not in service</h3>
+                        </div>
+                        <div class="section">
+                            <div class="name">Last Seen</div>
+                            <div class="value flex-column">
+                                % if overview is None:
+                                    <div class="lighter-text">Never</div>
+                                % else:
+                                    % last_seen = overview.last_seen_date
+                                    % if last_seen.is_today:
+                                        <div>Today</div>
+                                    % else:
+                                        <div>{{ last_seen.format_long() }}</div>
+                                        <div class="smaller-font">{{ last_seen.format_since() }}</div>
+                                    % end
+                                % end
+                            </div>
+                        </div>
+                        % if overview is not None:
+                            <div class="section">
+                                <div class="name">System</div>
+                                <div class="value flex-column">
+                                    <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
+                                </div>
+                            </div>
+                        % end
                     </div>
                 % elif position.trip is None:
                     % include('components/map', map_position=position)
@@ -41,10 +67,11 @@
                         <div class="section">
                             <h3>Not in service</h3>
                         </div>
-                        
                         <div class="section">
                             <div class="name">System</div>
-                            <div class="value">{{ position.system }}</div>
+                            <div class="value">
+                                <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                            </div>
                         </div>
                     </div>
                 % else:
@@ -71,7 +98,9 @@
                         </div>
                         <div class="section">
                             <div class="name">System</div>
-                            <div class="value">{{ trip.system }}</div>
+                            <div class="value">
+                                <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                            </div>
                         </div>
                         % if show_speed:
                             <div class="section">

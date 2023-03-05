@@ -21,56 +21,92 @@
 </div>
 
 <div class="flex-container">
-    % if len(records) > 0:
-        % last_tracked = records[0].date
-        % days_since_last_tracked = last_tracked.format_since()
-        
-        % first_tracked = records[-1].date
-        % days_since_first_tracked = first_tracked.format_since()
-        
-        <div class="sidebar container flex-1">
-            <div class="section">
-                <div class="header">
-                    <h2>Overview</h2>
-                </div>
-                <div class="content">
-                    <div class="info-box">
-                        <div class="section">
-                            <div class="name">Last Tracked</div>
-                            <div class="value flex-column">
-                                % if days_since_last_tracked == '0 days ago':
+    <div class="sidebar container flex-1">
+        <div class="section">
+            <div class="header">
+                <h2>Overview</h2>
+            </div>
+            <div class="content">
+                <div class="info-box">
+                    <div class="section">
+                        <div class="name">Last Seen</div>
+                        <div class="value flex-column">
+                            % if overview is None:
+                                <div class="lighter-text">Never</div>
+                            % else:
+                                % last_seen = overview.last_seen_date
+                                % if last_seen.is_today:
                                     Today
                                 % else:
-                                    {{ last_tracked }}
-                                    <span class="smaller-font">{{ days_since_last_tracked }}</span>
+                                    {{ last_seen }}
+                                    <span class="smaller-font">{{ last_seen.format_since() }}</span>
+                                % end
+                            % end
+                        </div>
+                    </div>
+                    % if overview is not None:
+                        % last_record = overview.last_record
+                        % if last_record is not None:
+                            <div class="section">
+                                <div class="name">Last Tracked</div>
+                                <div class="value flex-column">
+                                    % last_tracked = last_record.date
+                                    % if last_tracked.is_today:
+                                        Today
+                                    % else:
+                                        {{ last_tracked }}
+                                        <span class="smaller-font">{{ last_tracked.format_since() }}</span>
+                                    % end
+                                </div>
+                            </div>
+                        % end
+                        <div class="section">
+                            <div class="name">First Seen</div>
+                            <div class="value flex-column">
+                                % first_seen = overview.first_seen_date
+                                % if first_seen.is_today:
+                                    Today
+                                % else:
+                                    {{ first_seen }}
+                                    <span class="smaller-font">{{ first_seen.format_since() }}</span>
                                 % end
                             </div>
                         </div>
-                        <div class="section">
-                            <div class="name">First Tracked</div>
-                            <div class="value flex-column">
-                                % if days_since_first_tracked == '0 days ago':
-                                    Today
-                                % else:
-                                    {{ first_tracked }}
-                                    <span class="smaller-font">{{ days_since_first_tracked }}</span>
-                                % end
+                        % first_record = overview.first_record
+                        % if first_record is not None:
+                            <div class="section">
+                                <div class="name">First Tracked</div>
+                                <div class="value flex-column">
+                                    % first_tracked = first_record.date
+                                    % if first_tracked.is_today:
+                                        Today
+                                    % else:
+                                        {{ first_tracked }}
+                                        <span class="smaller-font">{{ first_tracked.format_since() }}</span>
+                                    % end
+                                </div>
                             </div>
-                        </div>
+                        % end
+                    % end
+                    % record_systems = {r.system for r in records}
+                    % if overview is not None:
+                        % record_systems.add(overview.first_seen_system)
+                        % record_systems.add(overview.last_seen_system)
+                    % end
+                    % if len(record_systems) > 0:
                         <div class="section">
-                            % record_systems = sorted({r.system for r in records})
-                            <div class="name">System{{ '' if len(record_systems) == 1 else 's' }}</div>
+                            <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
                             <div class="value flex-column">
-                                % for record_system in record_systems:
+                                % for record_system in sorted(record_systems):
                                     <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
                                 % end
                             </div>
                         </div>
-                    </div>
+                    % end
                 </div>
             </div>
         </div>
-    % end
+    </div>
     
     <div class="container flex-3">
         <div class="section">
