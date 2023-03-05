@@ -82,7 +82,7 @@
             'bottom-left'
         );
         
-        let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');
+        let positions = JSON.parse('{{! json.dumps([p.json for p in positions]) }}');
         let currentShapeIDs = [];
         let markers = [];
         let tripLinesVisible = false;

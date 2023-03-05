@@ -486,6 +486,7 @@ table.striped tr.section td {
     border-bottom-width: 26px;
     border-bottom-style: solid;
     transform-origin: center bottom;
+    z-index: 1;
 }
 
 .marker .details {
@@ -498,12 +499,19 @@ table.striped tr.section td {
     gap: 2px;
     align-items: center;
     justify-content: center;
+    margin-top: -2px;
+    padding: 2px 3px;
+    border-radius: 5px;
+    z-index: 5;
 }
 
 .marker .details .content {
     font-size: 8pt;
     overflow: visible;
     line-height: 10pt;
+    width: max-content;
+    max-width: 150px;
+    padding: 2px;
 }
 
 .marker .details .content .adherence-indicator {
@@ -521,10 +529,8 @@ table.striped tr.section td {
     text-align: center;
     font-weight: bold;
     line-height: 10pt;
-}
-
-.marker .hover-only {
-    width: 150px;
+    width: max-content;
+    max-width: 150px;
 }
 
 .marker .icon {
@@ -537,6 +543,7 @@ table.striped tr.section td {
     position: relative;
     margin-left: auto;
     margin-right: auto;
+    z-index: 10;
 }
 
 .marker .icon img {
@@ -556,6 +563,10 @@ table.striped tr.section td {
     border-radius: 50%;
 }
 
+.marker .icon ~ .hover-only {
+    display: none;
+}
+
 .marker .icon ~ * .hover-only {
     display: none;
 }
@@ -563,6 +574,10 @@ table.striped tr.section td {
 .marker .icon:hover .link {
     opacity: 0.3;
     cursor: pointer;
+}
+
+.marker .icon:hover ~ .hover-only {
+    display: block;
 }
 
 .marker .icon:hover ~ * .hover-only {
@@ -819,10 +834,11 @@ table.striped tr.section td {
     top: 50%;
     transform: translate(0px, -50%);
     border-radius: 5px;
-    white-space: nowrap;
     font-size: 11pt;
     font-family: Helvetica, sans-serif;
     text-align: left;
+    width: max-content;
+    max-width: 300px;
 }
 
 .tooltip-anchor .tooltip::after {

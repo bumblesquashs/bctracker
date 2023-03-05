@@ -370,6 +370,10 @@ table.striped tr {
     color: #888888;
 }
 
+.marker .details {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #888888;

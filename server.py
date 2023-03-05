@@ -192,7 +192,7 @@ def news_page(system_id=None):
     '/<system_id>/map/'
 ])
 def map_page(system_id=None):
-    positions = realtime.get_positions(system_id)
+    positions = sorted([p for p in realtime.get_positions(system_id) if p.has_location], key=lambda p: p.lat, reverse=True)
     return page('map', system_id, path='map', positions=positions)
 
 @app.get([
@@ -675,9 +675,9 @@ def system_api_map(system_id=None):
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    positions = realtime.get_positions(system_id)
+    positions = sorted([p for p in realtime.get_positions(system_id) if p.has_location], key=lambda p: p.lat, reverse=True)
     return {
-        'positions': [p.json for p in positions if p.has_location],
+        'positions': [p.json for p in positions],
         'last_updated': last_updated
     }
 

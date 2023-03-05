@@ -113,10 +113,10 @@
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
             const details = document.createElement("div");
-            details.className = "details";
+            details.className = "details {{ '' if len(map_departures) == 1 else 'hover-only' }}";
             
             const title = document.createElement("div");
-            title.className = "{{ 'title' if len(map_departures) == 1 else 'title hover-only' }}";
+            title.className = "title";
             title.innerHTML = stop.number;
             
             const content = document.createElement("div");
@@ -158,10 +158,10 @@
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
             const details = document.createElement("div");
-            details.className = "details";
+            details.className = "details {{ '' if len(map_stops) == 1 else 'hover-only' }}";
             
             const title = document.createElement("div");
-            title.className = "{{ 'title' if len(map_stops) == 1 else 'title hover-only' }}";
+            title.className = "title";
             title.innerHTML = stop.number;
             
             const content = document.createElement("div");
@@ -190,6 +190,7 @@
 
 % map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
 % if len(map_positions) > 0:
+    % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
         
