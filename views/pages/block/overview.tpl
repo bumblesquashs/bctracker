@@ -117,6 +117,28 @@
                             % end
                         </div>
                     </div>
+                    % if len([t for t in block.get_trips() if t.length is not None]) > 0:
+                        <div class="section">
+                            <div class="name">Length</div>
+                            <div class="value flex-column">
+                                % for service_group in service_groups:
+                                    <div>
+                                        % if len(service_groups) > 1:
+                                            <div class="smaller-font lighter-text">
+                                                % if len(sheets) > 1:
+                                                    {{ service_group.schedule.date_string }}
+                                                % else:
+                                                    {{ service_group }}
+                                                % end
+                                            </div>
+                                        % end
+                                        % length = sum([t.length for t in block.get_trips(service_group=service_group) if t.length is not None])
+                                        <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
+                                    </div>
+                                % end
+                            </div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>

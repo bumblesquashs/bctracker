@@ -147,6 +147,13 @@ class Trip:
         return self.start_time.format_difference(self.end_time)
     
     @property
+    def length(self):
+        departure = self.last_departure
+        if departure is None:
+            return None
+        return departure.distance_traveled
+    
+    @property
     def points(self):
         '''Returns all shape points associated with this trip'''
         shape = self.system.get_shape(self.shape_id)
