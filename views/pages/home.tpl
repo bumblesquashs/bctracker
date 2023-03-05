@@ -103,7 +103,53 @@
     <div class="container flex-3">
         <div class="section">
             <div class="header">
-                <h2>Latest Updates</h2>
+                <h2>Quick Navigation</h2>
+            </div>
+            <div class="content">
+                <div id="quick-navigation">
+                    <div class="item">
+                        <img class="white" src="/img/white/realtime.png" />
+                        <img class="black" src="/img/black/realtime.png" />
+                        <h3>Bus Tracking</h3>
+                        <p>
+                            See all buses that are currently active, including current route and location
+                        </p>
+                        <div class="flex-row">
+                            <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
+                            <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="white" src="/img/white/history.png" />
+                        <img class="black" src="/img/black/history.png" />
+                        <h3>Bus History</h3>
+                        <p>
+                            See all buses that have been tracked, including last-seen date and transfers
+                        </p>
+                        <div class="flex-row">
+                            <a class="button" href="{{ get_url(system, 'history') }}">History</a>
+                            <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="white" src="/img/white/routes.png" />
+                        <img class="black" src="/img/black/routes.png" />
+                        <h3>Schedules and Maps</h3>
+                        <p>
+                            See departure times and routing details for routes, stops, blocks, and more
+                        </p>
+                        <div class="flex-row">
+                            <a class="button" href="{{ get_url(system, 'routes') }}">Routes</a>
+                            <a class="button" href="{{ get_url(system, 'stops') }}">Stops</a>
+                            <a class="button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="header">
+                <h2>Latest News</h2>
             </div>
             <div class="content">
                 <div class="container">
@@ -162,7 +208,7 @@
                         </div>
                     </div>
                     <div>
-                        <a href="{{ get_url(system, 'news') }}">See older updates</a>
+                        <a href="{{ get_url(system, 'news') }}">See older news</a>
                     </div>
                 </div>
             </div>
