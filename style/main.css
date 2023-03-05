@@ -46,6 +46,16 @@ h1, h2, h3, h4 {
     margin: 0px;
 }
 
+h1 .route-number {
+    font-size: 20pt;
+    min-width: 20px;
+}
+
+h2 .route-number {
+    font-size: 16pt;
+    min-width: 16px;
+}
+
 img.inline {
     height: 18px;
     width: 18px;
@@ -746,6 +756,7 @@ table.striped tr.section td {
     font-weight: bold;
     border-width: 1px;
     border-style: solid;
+    text-align: center;
 }
 
 .schedules .exceptions {
