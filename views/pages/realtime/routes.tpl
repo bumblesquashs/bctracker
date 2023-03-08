@@ -57,7 +57,7 @@
                     <h2>
                         <div class="flex-row">
                             % include('components/route_indicator')
-                            {{! route.display_name }}
+                            <div class="flex-1">{{! route.display_name }}</div>
                         </div>
                     </h2>
                 </div>
