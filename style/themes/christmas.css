@@ -297,7 +297,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .banner {
-    background-color: #FFB960;
+    background-color: #FFA027;
     color: #FFFFFF;
 }
 
@@ -327,11 +327,11 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .button.survey-button {
-    background-color: #FF8E00;
+    background-color: #DD7D03;
 }
 
 .button.survey-button:hover {
-    background-color: #AD6100;
+    background-color: #AD6000;
 }
 
 .checkbox .box {
