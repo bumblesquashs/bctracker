@@ -1,3 +1,10 @@
+
+% from models.date import Date
+% import helpers.advertisement
+
+% today = Date.today()
+% show_ads = today == Date(2023, 3, 16, None)
+
 <html>
     <head> 
         <title>
@@ -272,10 +279,8 @@
         </div>
         <div id="main">
             <div id="banners">
-                % from models.date import Date
                 % start_date = Date(2023, 3, 9, None)
                 % end_date = Date(2023, 3, 11, None)
-                % today = Date.today()
                 % if system is not None and system.id == 'fraser-valley' and start_date <= today <= end_date:
                     <div class="banner">
                         <div class="content">
@@ -286,7 +291,134 @@
                     </div>
                 % end
             </div>
-            <div id="content">{{ !base }}</div>
+            <style>
+                #af-floating-container {
+                    position: fixed;
+                    top: 0px;
+                    left: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    background-color: rgba(0, 0, 0, 0.4);
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .af-container {
+                    padding: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .af-sidebar {
+                    align-self: flex-start;
+                    margin-right: 40px;
+                    margin-top: 40px;
+                }
+                
+                .desktop-floating-af {
+                    width: 800px;
+                    height: 600px;
+                }
+                
+                .mobile-floating-af {
+                    margin: 20px;
+                    width: 100%;
+                    height: 300px;
+                }
+                
+                .desktop-af {
+                    width: 800px;
+                    height: 150px;
+                }
+                
+                .mobile-af {
+                    width: 100%;
+                    height: 100px;
+                }
+                
+                .af {
+                    position: relative;
+                    background-color: #E6E6E6;
+                    cursor: pointer;
+                }
+                
+                .af .close-button {
+                    position: absolute;
+                    right: 5px;
+                    top: 2px;
+                    color: #FFFFFF;
+                    z-index: 10;
+                }
+            </style>
+            % if show_ads:
+                <script>
+                    function openAf() {
+                        window.location.href = "{{ get_url(system, 'personalize') }}";
+                    }
+                    
+                    function closeAf(event, element) {
+                        element.style.display = "none";
+                        event.stopPropagation();
+                        event.preventDefault();
+                    }
+                </script>
+                <div class="af-container">
+                    <div class="af af-banner" onclick="openAf()">
+                        % ad = helpers.advertisement.find_random()
+                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="non-mobile" style="width: 800px; height: 150px;">
+                        <img src="/img/af/mobile-banner/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
+                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">X</div>
+                    </div>
+                </div>
+                <div class="flex-row">
+                    <div id="content" class="flex-1" style="gap: 40px; align-self: flex-start;">{{ !base }}</div>
+                    <div class="af af-sidebar desktop-only" onclick="openAf()">
+                        % ad = helpers.advertisement.find_random()
+                        <img src="/img/af/desktop-sidebar/{{ ad.file_name }}" style="width: 200px; height: 600px;">
+                        <div class="close-button" onclick="closeAf(event, this.parentElement)">X</div>
+                    </div>
+                </div>
+                <div class="af-container">
+                    <div class="af af-banner" onclick="openAf()">
+                        % ad = helpers.advertisement.find_random()
+                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="non-mobile" style="width: 800px; height: 150px;">
+                        <img src="/img/af/mobile-banner/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
+                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">X</div>
+                    </div>
+                </div>
+                <div id="af-floating-container">
+                    <div class="af af-floating" onclick="openAf()">
+                        % ad = helpers.advertisement.find_random()
+                        <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="non-mobile" style="width: 800px; height: 600px;">
+                        <img src="/img/af/mobile-floating/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
+                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">X</div>
+                    </div>
+                </div>
+                <script>
+                    const floatingAfContainer = document.getElementById("af-floating-container");
+                    const mainElement = document.getElementById("main");
+                    let scrollTriggered = false;
+                    
+                    floatingAfContainer.style.display = "none";
+                    
+                    mainElement.onscroll = function() {
+                        if (mainElement.scrollTop > window.innerHeight && !scrollTriggered) {
+                            floatingAfContainer.style.display = "flex";
+                            scrollTriggered = true;
+                        }
+                    }
+                    
+                    document.body.onscroll = function() {
+                        if (document.body.scrollTop > window.innerHeight && !scrollTriggered) {
+                            floatingAfContainer.style.display = "flex";
+                            scrollTriggered = true;
+                        }
+                    }
+                </script>
+            % else:
+                <div id="content">{{ !base }}</div>
+            % end
         </div>
     </body>
 </html>
