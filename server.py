@@ -107,6 +107,10 @@ def page(name, system_id, path='', **kwargs):
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
+    if 'april' in request.query:
+        disable_ads = request.query.get('april') == 'fools'
+    else:
+        disable_ads = request.get_cookie('april') == 'fools'
     system = helpers.system.find(system_id)
     if system is None:
         last_updated = realtime.get_last_updated(time_format)
@@ -130,6 +134,7 @@ def page(name, system_id, path='', **kwargs):
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
         show_speed=request.get_cookie('speed') == '1994',
+        disable_ads=disable_ads,
         **kwargs
     )
 
@@ -137,8 +142,7 @@ def error_page(name, system_id, path='', **kwargs):
     '''Returns an error page with the given name and details'''
     return page(f'errors/{name}_error', system_id, path, **kwargs)
 
-def set_cookie(key, value):
-    max_age = 60*60*24*365*10
+def set_cookie(key, value, max_age=60*60*24*365*10):
     if cookie_domain is None:
         response.set_cookie(key, value, max_age=max_age, path='/')
     else:
@@ -625,6 +629,9 @@ def themes_page(system_id=None):
     '/<system_id>/personalize/'
 ])
 def themes_page(system_id=None):
+    april = request.query.get('april')
+    if april is not None:
+        set_cookie('april', april, 60*60*24)
     theme_id = request.query.get('theme')
     if theme_id is not None:
         set_cookie('theme', theme_id)

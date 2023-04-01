@@ -1,9 +1,10 @@
 
 % from models.date import Date
 % import helpers.advertisement
+% import random
 
 % today = Date.today()
-% show_ads = today == Date(2023, 4, 1, None)
+% show_ads = today == Date(2023, 4, 1, None) and not disable_ads
 
 <html>
     <head> 
@@ -388,17 +389,19 @@
                         </div>
                     </div>
                 </div>
-                <div id="af-floating-container">
-                    % ad = helpers.advertisement.find_random()
-                    <div class="af af-floating" onclick="openAf('{{ ad.url }}')">
-                        <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="desktop-only" style="width: 800px; height: 600px;">
-                        <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="tablet-only" style="width: 100%; height: auto;">
-                        <img src="/img/af/mobile-floating/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
-                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">
-                            <img src="/img/white/close.png">
+                % if random.random() < 0.3:
+                    <div id="af-floating-container">
+                        % ad = helpers.advertisement.find_random()
+                        <div class="af af-floating" onclick="openAf('{{ ad.url }}')">
+                            <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="desktop-only" style="width: 800px; height: 600px;">
+                            <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="tablet-only" style="width: 100%; height: auto;">
+                            <img src="/img/af/mobile-floating/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
+                            <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">
+                                <img src="/img/white/close.png">
+                            </div>
                         </div>
                     </div>
-                </div>
+                % end
                 <script>
                     const floatingAfContainer = document.getElementById("af-floating-container");
                     const mainElement = document.getElementById("main");
