@@ -3,7 +3,7 @@
 % import helpers.advertisement
 
 % today = Date.today()
-% show_ads = today == Date(2023, 3, 16, None)
+% show_ads = today == Date(2023, 4, 1, None)
 
 <html>
     <head> 
@@ -301,6 +301,7 @@
                     background-color: rgba(0, 0, 0, 0.4);
                     align-items: center;
                     justify-content: center;
+                    z-index: 100;
                 }
                 
                 .af-container {
@@ -316,25 +317,8 @@
                     margin-top: 40px;
                 }
                 
-                .desktop-floating-af {
-                    width: 800px;
-                    height: 600px;
-                }
-                
-                .mobile-floating-af {
-                    margin: 20px;
-                    width: 100%;
-                    height: 300px;
-                }
-                
-                .desktop-af {
-                    width: 800px;
-                    height: 150px;
-                }
-                
-                .mobile-af {
-                    width: 100%;
-                    height: 100px;
+                .af-floating {
+                    margin: 40px;
                 }
                 
                 .af {
@@ -346,15 +330,24 @@
                 .af .close-button {
                     position: absolute;
                     right: 5px;
-                    top: 2px;
-                    color: #FFFFFF;
+                    top: 5px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background: rgba(0, 0, 0, 0.2);
                     z-index: 10;
+                }
+                
+                .af .close-button img {
+                    margin: 2px;
+                    width: 20px;
+                    height: 20px;
                 }
             </style>
             % if show_ads:
                 <script>
-                    function openAf() {
-                        window.location.href = "{{ get_url(system, 'personalize') }}";
+                    function openAf(url) {
+                        window.open(url, '_blank').focus();
                     }
                     
                     function closeAf(event, element) {
@@ -364,35 +357,46 @@
                     }
                 </script>
                 <div class="af-container">
-                    <div class="af af-banner" onclick="openAf()">
-                        % ad = helpers.advertisement.find_random()
-                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="non-mobile" style="width: 800px; height: 150px;">
+                    % ad = helpers.advertisement.find_random()
+                    <div class="af af-banner" onclick="openAf('{{ ad.url }}')">
+                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="desktop-only" style="width: 800px; height: 150px;">
+                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="tablet-only" style="width: 100%; height: auto;">
                         <img src="/img/af/mobile-banner/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
-                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">X</div>
+                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">
+                            <img src="/img/white/close.png">
+                        </div>
                     </div>
                 </div>
                 <div class="flex-row">
                     <div id="content" class="flex-1" style="gap: 40px; align-self: flex-start;">{{ !base }}</div>
-                    <div class="af af-sidebar desktop-only" onclick="openAf()">
-                        % ad = helpers.advertisement.find_random()
+                    % ad = helpers.advertisement.find_random()
+                    <div class="af af-sidebar desktop-only" onclick="openAf('{{ ad.url }}')">
                         <img src="/img/af/desktop-sidebar/{{ ad.file_name }}" style="width: 200px; height: 600px;">
-                        <div class="close-button" onclick="closeAf(event, this.parentElement)">X</div>
+                        <div class="close-button" onclick="closeAf(event, this.parentElement)">
+                            <img src="/img/white/close.png">
+                        </div>
                     </div>
                 </div>
                 <div class="af-container">
-                    <div class="af af-banner" onclick="openAf()">
-                        % ad = helpers.advertisement.find_random()
-                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="non-mobile" style="width: 800px; height: 150px;">
+                    % ad = helpers.advertisement.find_random()
+                    <div class="af af-banner" onclick="openAf('{{ ad.url }}')">
+                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="desktop-only" style="width: 800px; height: 150px;">
+                        <img src="/img/af/desktop-banner/{{ ad.file_name }}" class="tablet-only" style="width: 100%; height: auto;">
                         <img src="/img/af/mobile-banner/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
-                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">X</div>
+                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">
+                            <img src="/img/white/close.png">
+                        </div>
                     </div>
                 </div>
                 <div id="af-floating-container">
-                    <div class="af af-floating" onclick="openAf()">
-                        % ad = helpers.advertisement.find_random()
-                        <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="non-mobile" style="width: 800px; height: 600px;">
+                    % ad = helpers.advertisement.find_random()
+                    <div class="af af-floating" onclick="openAf('{{ ad.url }}')">
+                        <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="desktop-only" style="width: 800px; height: 600px;">
+                        <img src="/img/af/desktop-floating/{{ ad.file_name }}" class="tablet-only" style="width: 100%; height: auto;">
                         <img src="/img/af/mobile-floating/{{ ad.file_name }}" class="mobile-only" style="width: 100%; height: auto;">
-                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">X</div>
+                        <div class="close-button" onclick="closeAf(event, this.parentElement.parentElement)">
+                            <img src="/img/white/close.png">
+                        </div>
                     </div>
                 </div>
                 <script>
