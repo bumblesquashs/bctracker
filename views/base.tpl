@@ -4,7 +4,6 @@
 % import random
 
 % today = Date.today()
-% show_ads = today == Date(2023, 4, 1, None) and not disable_ads
 
 <html>
     <head> 
@@ -343,7 +342,7 @@
                     height: 20px;
                 }
             </style>
-            % if show_ads:
+            % if not disable_ads:
                 <script>
                     function openAf(url) {
                         window.open(url, '_blank').focus();
@@ -387,7 +386,7 @@
                         </div>
                     </div>
                 </div>
-                % if random.random() < 0.3:
+                % if random.random() < 0.6:
                     <div id="af-floating-container">
                         % ad = helpers.advertisement.find_random()
                         <div class="af af-floating" onclick="openAf('{{ ad.url }}')">

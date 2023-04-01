@@ -75,28 +75,25 @@
             </div>
         </div>
     </div>
-    % from models.date import Date
-    % if Date.today() == Date(2023, 4, 1, None):
-        <div class="container flex-1">
-            <div class="section">
-                <div class="header">
-                    <h2>Advertisements</h2>
-                </div>
-                <div class="content">
-                    <p>
-                        If you don't want to support our efforts to keep BCTracker alive (or if you're just annoyed by all the ads) you can turn them off, if you really want.
-                        We aren't going to judge you.
-                    </p>
-                    
-                    <div class="button-container">
-                        % if disable_ads:
-                            <a class="button" href="?april=sensible">Enable ads</a>
-                        % else:
-                            <a class="button" href="?april=fools">Disable ads</a>
-                        % end
-                    </div>
+    <div class="container flex-1">
+        <div class="section">
+            <div class="header">
+                <h2>Advertisements</h2>
+            </div>
+            <div class="content">
+                <p>
+                    If you don't want to support our efforts to keep BCTracker alive (or if you're just annoyed by all the ads) you can turn them off, if you really want.
+                    We (probably) aren't going to judge you.
+                </p>
+                
+                <div class="button-container">
+                    % if disable_ads:
+                        <a class="button" href="?april=sensible">Enable ads</a>
+                    % else:
+                        <a class="button" href="?april=fools">Disable ads</a>
+                    % end
                 </div>
             </div>
         </div>
-    % end
+    </div>
 </div>
