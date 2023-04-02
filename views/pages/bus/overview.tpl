@@ -73,6 +73,12 @@
                                 <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
                             </div>
                         </div>
+                        % if show_speed:
+                            <div class="section">
+                                <div class="name">Speed</div>
+                                <div class="value">{{ position.speed }} km/h</div>
+                            </div>
+                        % end
                     </div>
                 % else:
                     % trip = position.trip
