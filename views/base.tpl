@@ -272,9 +272,7 @@
         </div>
         <div id="main">
             <div id="banners">
-                % from models.date import Date
-                % today = Date.today()
-                % if system is not None and system.id == 'fraser-valley' and today >= Date(2023, 3, 20, None):
+                % if system is not None and system.id == 'fraser-valley':
                     <div class="banner">
                         <div class="content">
                             <span class="title">Due to ongoing job action, service in the Fraser Valley region is currently suspended.</span>
