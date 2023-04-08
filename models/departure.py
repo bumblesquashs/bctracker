@@ -92,6 +92,12 @@ class Departure:
         if self.trip_id == other.trip_id:
             return self.sequence < other.sequence
         else:
+            if self.time == other.time:
+                if self.dropoff_only or other.pickup_only:
+                    return True
+                if self.pickup_only or other.dropoff_only:
+                    return False
+                return self.trip.route < other.trip.route
             return self.time < other.time
     
     @property
@@ -103,6 +109,18 @@ class Departure:
     def trip(self):
         '''Returns the trip associated with this departure'''
         return self.system.get_trip(self.trip_id)
+    
+    @property
+    def pickup_only(self):
+        if self.pickup_type.is_normal:
+            return self == self.trip.first_departure
+        return False
+    
+    @property
+    def dropoff_only(self):
+        if self.dropoff_type.is_normal:
+            return self == self.trip.last_departure
+        return False
     
     @property
     def json(self):
