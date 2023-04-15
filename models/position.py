@@ -103,11 +103,17 @@ class Position:
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
+            'system': str(self.system),
             'lon': self.lon,
             'lat': self.lat,
             'colour': self.colour,
             'text_colour': self.text_colour
         }
+        order = self.bus.order
+        if order is None:
+            data['bus_order'] = 'Unknown Year/Model'
+        else:
+            data['bus_order'] = str(order).replace("'", '&apos;')
         trip = self.trip
         if trip is None:
             data['headsign'] = 'Not In Service'

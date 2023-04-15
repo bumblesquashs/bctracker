@@ -535,7 +535,6 @@ table.striped tr.section td {
     transform: translate(-50%);
     display: flex;
     flex-direction: column;
-    gap: 2px;
     align-items: center;
     justify-content: center;
     margin-top: -2px;
@@ -551,6 +550,9 @@ table.striped tr.section td {
     width: max-content;
     max-width: 150px;
     padding: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 }
 
 .marker .details .content .adherence-indicator {
@@ -618,11 +620,11 @@ table.striped tr.section td {
 }
 
 .marker .icon:hover ~ .hover-only {
-    display: block;
+    display: inherit;
 }
 
 .marker .icon:hover ~ * .hover-only {
-    display: block;
+    display: inherit;
 }
 
 .marker .icon.route {

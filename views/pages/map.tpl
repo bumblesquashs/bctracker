@@ -143,17 +143,33 @@
                 
                 const content = document.createElement("div");
                 content.className = "content hover-only";
+                
+                const model = document.createElement("div");
+                model.className = "lighter-text centred";
+                model.innerHTML = position.bus_order;
+                content.appendChild(model);
+                
+                const headsign = document.createElement("div");
                 if (position.adherence !== null && position.adherence !== undefined) {
+                    headsign.className = "flex-row center flex-gap-5";
                     const adherence = position.adherence;
-                    const adherenceElement = document.createElement("div")
+                    const adherenceElement = document.createElement("div");
                     adherenceElement.classList.add("adherence-indicator");
                     adherenceElement.classList.add(adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     
-                    content.innerHTML = "<div class='flex-row center flex-gap-5'>" + adherenceElement.outerHTML + position.headsign + "</div>";
+                    headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
                 } else {
-                    content.classList.add("centred")
-                    content.innerHTML = position.headsign;
+                    headsign.className = "centred";
+                    headsign.innerHTML = position.headsign;
+                }
+                content.appendChild(headsign);
+                
+                if ("{{ system is None }}" === "True") {
+                    const system = document.createElement("div");
+                    system.className = "lighter-text centred";
+                    system.innerHTML = position.system;
+                    content.appendChild(system);
                 }
                 
                 if (position.bus_number < 0) {
