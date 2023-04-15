@@ -165,10 +165,12 @@
                 }
                 content.appendChild(headsign);
                 
-                const system = document.createElement("div");
-                system.className = "lighter-text centred";
-                system.innerHTML = position.system;
-                content.appendChild(system);
+                if ("{{ system is None }}" === "True") {
+                    const system = document.createElement("div");
+                    system.className = "lighter-text centred";
+                    system.innerHTML = position.system;
+                    content.appendChild(system);
+                }
                 
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
