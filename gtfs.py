@@ -26,55 +26,59 @@ def load(system, force_download=False):
         download(system)
     print(f'Loading GTFS data for {system}...', end=' ', flush=True)
     
-    agencies = read_csv(system, 'agency', lambda r: r)
-    if len(agencies) > 0:
-        agency = agencies[0]
-        if 'agency_timezone' in agency:
-            system.timezone = agency['agency_timezone']
-    
-    exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
-    service_exceptions = {}
-    for exception in exceptions:
-        service_exceptions.setdefault(exception.service_id, []).append(exception)
-    
-    services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
-    system.services = {s.id: s for s in services}
-    
-    system.sheets = helpers.sheet.combine(system, services)
-    
-    points = read_csv(system, 'shapes', ShapePoint.from_csv)
-    shape_points = {}
-    for point in points:
-        shape_points.setdefault(point.shape_id, []).append(point)
-    system.shapes = {id: Shape(system, id, points) for id, points in shape_points.items()}
-    
-    departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
-    trip_departures = {}
-    stop_departures = {}
-    for departure in departures:
-        trip_departures.setdefault(departure.trip_id, []).append(departure)
-        stop_departures.setdefault(departure.stop_id, []).append(departure)
-    
-    trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
-    system.trips = {t.id: t for t in trips}
-    
-    stops = read_csv(system, 'stops', lambda r: Stop.from_csv(r, system, stop_departures))
-    system.stops = {s.id: s for s in stops}
-    system.stops_by_number = {s.number: s for s in stops}
-    
-    route_trips = {}
-    block_trips = {}
-    for trip in trips:
-        route_trips.setdefault(trip.route_id, []).append(trip)
-        block_trips.setdefault(trip.block_id, []).append(trip)
-    
-    routes = read_csv(system, 'routes', lambda r: Route.from_csv(r, system, route_trips))
-    system.routes = {r.id: r for r in routes}
-    system.routes_by_number = {r.number: r for r in routes}
-    
-    system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
-    
-    print('Done!')
+    try:
+        agencies = read_csv(system, 'agency', lambda r: r)
+        if len(agencies) > 0:
+            agency = agencies[0]
+            if 'agency_timezone' in agency:
+                system.timezone = agency['agency_timezone']
+        
+        exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
+        service_exceptions = {}
+        for exception in exceptions:
+            service_exceptions.setdefault(exception.service_id, []).append(exception)
+        
+        services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
+        system.services = {s.id: s for s in services}
+        
+        system.sheets = helpers.sheet.combine(system, services)
+        
+        points = read_csv(system, 'shapes', ShapePoint.from_csv)
+        shape_points = {}
+        for point in points:
+            shape_points.setdefault(point.shape_id, []).append(point)
+        system.shapes = {id: Shape(system, id, points) for id, points in shape_points.items()}
+        
+        departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
+        trip_departures = {}
+        stop_departures = {}
+        for departure in departures:
+            trip_departures.setdefault(departure.trip_id, []).append(departure)
+            stop_departures.setdefault(departure.stop_id, []).append(departure)
+        
+        trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
+        system.trips = {t.id: t for t in trips}
+        
+        stops = read_csv(system, 'stops', lambda r: Stop.from_csv(r, system, stop_departures))
+        system.stops = {s.id: s for s in stops}
+        system.stops_by_number = {s.number: s for s in stops}
+        
+        route_trips = {}
+        block_trips = {}
+        for trip in trips:
+            route_trips.setdefault(trip.route_id, []).append(trip)
+            block_trips.setdefault(trip.block_id, []).append(trip)
+        
+        routes = read_csv(system, 'routes', lambda r: Route.from_csv(r, system, route_trips))
+        system.routes = {r.id: r for r in routes}
+        system.routes_by_number = {r.number: r for r in routes}
+        
+        system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
+        
+        print('Done!')
+    except Exception as e:
+        print('Error!')
+        print(f'Failed to load GTFS for {system}: {e}')
 
 def download(system):
     '''Downloads the GTFS for the given system, then loads it into memory'''
