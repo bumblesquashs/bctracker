@@ -11,9 +11,9 @@ class Bus:
         self.order = helpers.order.find(bus_number)
     
     def __str__(self):
-        if self.number < 0:
-            return 'Unknown Bus'
-        return f'{self.number:04d}'
+        if self.is_known:
+            return f'{self.number:04d}'
+        return 'Unknown Bus'
     
     def __hash__(self):
         return hash(self.number)
@@ -23,6 +23,10 @@ class Bus:
     
     def __lt__(self, other):
         return self.number < other.number
+    
+    @property
+    def is_known(self):
+        return self.number >= 0
     
     @property
     def model(self):

@@ -13,7 +13,11 @@
             <td>
                 <div class="flex-column">
                     <div class="flex-row left">
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        % if bus.is_known:
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        % else:
+                            <span>{{ bus }}</span>
+                        % end
                         % if trip.id in positions:
                             % position = positions[trip.id]
                             % include('components/adherence_indicator', adherence=position.adherence)
@@ -41,7 +45,11 @@
             <td>
                 <div class="flex-column">
                     <div class="flex-row left">
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        % if bus.is_known:
+                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                        % else:
+                            <span>{{ bus }}</span>
+                        % end
                         <div class="tooltip-anchor">
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />

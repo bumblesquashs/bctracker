@@ -110,7 +110,11 @@
                                         <td>
                                             <div class="flex-column">
                                                 <div class="flex-row left">
-                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                    % if bus.is_known:
+                                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                                                    % else:
+                                                        <span>{{ bus }}</span>
+                                                    % end
                                                     % include('components/suspicious_record_indicator', record=record)
                                                 </div>
                                                 <span class="non-desktop smaller-font">

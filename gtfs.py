@@ -38,9 +38,12 @@ def load(system, force_download=False):
         for exception in exceptions:
             service_exceptions.setdefault(exception.service_id, []).append(exception)
         
-        services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
-        system.services = {s.id: s for s in services}
+        try:
+            services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
+        except:
+            services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
+        system.services = {s.id: s for s in services}
         system.sheets = helpers.sheet.combine(system, services)
         
         points = read_csv(system, 'shapes', ShapePoint.from_csv)

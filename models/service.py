@@ -59,6 +59,15 @@ class Service:
         schedule = Schedule.process(start_date, end_date, weekdays, modified_dates, excluded_dates)
         return cls(system, id, schedule)
     
+    @classmethod
+    def combine(cls, system, id, exceptions):
+        start_date = min({e.date for e in exceptions})
+        end_date = max({e.date for e in exceptions})
+        modified_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
+        excluded_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.EXCLUDED}
+        schedule = Schedule.process(start_date, end_date, set(), modified_dates, excluded_dates)
+        return cls(system, id, schedule)
+    
     def __init__(self, system, id, schedule):
         self.system = system
         self.id = id

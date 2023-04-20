@@ -50,7 +50,11 @@
                     </td>
                     <td>
                         <div class="flex-column">
-                            <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            % if bus.is_known:
+                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
+                            % else:
+                                <span>{{ bus }}</span>
+                            % end
                             <span class="non-desktop smaller-font">
                                 % if order is None:
                                     <span class="lighter-text">Unknown Year/Model</span>
