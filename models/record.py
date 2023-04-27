@@ -41,7 +41,7 @@ class Record:
         total_minutes = self.total_minutes
         total_seen_minutes = self.total_seen_minutes
         if total_minutes is not None and total_seen_minutes is not None:
-            if not date.is_today and (total_seen_minutes <= 5 or ((total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 15)):
+            if not date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
                 if total_seen_minutes == 1:
                     self.warnings.append('Bus was logged in for only 1 minute')
                 else:
@@ -56,14 +56,14 @@ class Record:
         '''Returns the total length of the record's block'''
         if self.start_time.is_unknown or self.end_time.is_unknown:
             return None
-        return (self.start_time.get_minutes() - self.end_time.get_minutes()) + 1
+        return (self.end_time.get_minutes() - self.start_time.get_minutes()) + 1
     
     @property
     def total_seen_minutes(self):
         '''Returns the total number of minutes between when the record started and ended'''
         if self.first_seen.is_unknown or self.last_seen.is_unknown:
             return None
-        return (self.first_seen.get_minutes() - self.last_seen.get_minutes()) + 1
+        return (self.last_seen.get_minutes() - self.first_seen.get_minutes()) + 1
     
     @property
     def block(self):
