@@ -83,7 +83,7 @@
                             Please check again later!
                         </p>
                     % else:
-                        % if len([r for r in records if r.is_suspicious]) > 0:
+                        % if len([r for r in records if len(r.warnings) > 0]) > 0:
                             <p>
                                 <span>Entries with a</span>
                                 <img class="middle-align white inline" src="/img/white/warning.png" />
@@ -116,7 +116,7 @@
                                                     % else:
                                                         <span>{{ bus }}</span>
                                                     % end
-                                                    % include('components/suspicious_record_indicator', record=record)
+                                                    % include('components/record_warnings_indicator', record=record)
                                                 </div>
                                                 <span class="non-desktop smaller-font">
                                                     % if order is None:

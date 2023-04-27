@@ -8,7 +8,7 @@ from models.time import Time
 class Record:
     '''Information about a bus' history on a specific date'''
     
-    __slots__ = ('id', 'bus', 'date', 'system', 'block_id', 'route_numbers', 'start_time', 'end_time', 'first_seen', 'last_seen')
+    __slots__ = ('id', 'bus', 'date', 'system', 'block_id', 'route_numbers', 'start_time', 'end_time', 'first_seen', 'last_seen', 'warnings')
     
     @classmethod
     def from_db(cls, row, prefix='record'):
@@ -36,29 +36,34 @@ class Record:
         self.end_time = end_time
         self.first_seen = first_seen
         self.last_seen = last_seen
+        self.warnings = []
+        
+        total_minutes = self.total_minutes
+        total_seen_minutes = self.total_seen_minutes
+        if total_minutes is not None and total_seen_minutes is not None:
+            if not date.is_today and (total_seen_minutes <= 5 or ((total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 15)):
+                if total_seen_minutes == 1:
+                    self.warnings.append('Bus was logged in for only 1 minute')
+                else:
+                    self.warnings.append(f'Bus was logged in for only {total_seen_minutes} minutes')
+            if (start_time.get_minutes() - last_seen.get_minutes()) > 30:
+                self.warnings.append('Bus was logged in before block started')
+            if (first_seen.get_minutes() - end_time.get_minutes()) > 30:
+                self.warnings.append('Bus was logged in after block ended')
+    
+    @property
+    def total_minutes(self):
+        '''Returns the total length of the record's block'''
+        if self.start_time.is_unknown or self.end_time.is_unknown:
+            return None
+        return (self.start_time.get_minutes() - self.end_time.get_minutes()) + 1
     
     @property
     def total_seen_minutes(self):
         '''Returns the total number of minutes between when the record started and ended'''
         if self.first_seen.is_unknown or self.last_seen.is_unknown:
             return None
-        first_seen = self.first_seen.get_minutes()
-        if first_seen < (4 * 60):
-            first_seen += (24 * 60)
-        last_seen = self.last_seen.get_minutes()
-        if last_seen < (4 * 60):
-            last_seen += (24 * 60)
-        return (last_seen - first_seen) + 1
-    
-    @property
-    def is_suspicious(self):
-        '''Checks if this record is potentially an accidental login'''
-        if self.date.is_today:
-            return False
-        total_seen_minutes = self.total_seen_minutes
-        if total_seen_minutes is None:
-            return False
-        return total_seen_minutes <= 5
+        return (self.first_seen.get_minutes() - self.last_seen.get_minutes()) + 1
     
     @property
     def block(self):
