@@ -15,6 +15,7 @@ import helpers.transfer
 
 from models.bus import Bus
 from models.date import Date
+from models.event import Event
 
 import cron
 import database
@@ -288,7 +289,18 @@ def bus_history_page(bus_number, system_id=None):
     if (bus.order is None and overview is None) or bus.is_test:
         return error_page('bus', system_id, bus_number=bus_number)
     records = helpers.record.find_all(bus_number=bus_number)
-    return page('bus/history', system_id, bus=bus, records=records, overview=overview)
+    transfers = helpers.transfer.find_all(bus_number=bus_number)
+    events = []
+    if overview is not None:
+        events.append(Event(overview.first_seen_date, 'First Seen'))
+        if overview.first_record is not None:
+            events.append(Event(overview.first_record.date, 'First Tracked'))
+        events.append(Event(overview.last_seen_date, 'Last Seen'))
+        if overview.last_record is not None:
+            events.append(Event(overview.last_record.date, 'Last Tracked'))
+        for transfer in transfers:
+            events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
+    return page('bus/history', system_id, bus=bus, records=records, transfers=transfers, overview=overview, events=events)
 
 @app.get([
     '/history',
