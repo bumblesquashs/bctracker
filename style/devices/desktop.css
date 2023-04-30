@@ -268,12 +268,7 @@ table.striped th {
 }
 
 .tab-button-bar {
-    display: flex;
-    flex-direction: row;
-}
-
-.tab-button {
-    min-width: 100px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 }
 
 .tablet-only {

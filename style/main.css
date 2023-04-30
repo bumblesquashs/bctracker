@@ -833,12 +833,19 @@ table.striped tr.section td {
     text-align: center;
 }
 
+.tab-button-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    box-sizing: border-box;
+    margin-left: 1px;
+}
+
 .tab-button {
     border-width: 1px;
     border-style: solid;
-    border-bottom-width: 0px;
     padding: 10px;
-    margin: 0px;
+    margin-bottom: -1px;
+    margin-left: -1px;
     cursor: default;
     font-size: 13pt;
     font-weight: bold;
@@ -846,10 +853,6 @@ table.striped tr.section td {
     font-family: Helvetica, sans-serif;
     text-align: center;
     text-decoration: none !important;
-}
-
-.tab-button ~ .tab-button {
-    border-left-width: 0px;
 }
 
 .tab-button:hover {

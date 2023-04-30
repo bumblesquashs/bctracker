@@ -225,17 +225,6 @@ table {
     font-size: 11pt;
 }
 
-.tab-button-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: -1px;
-}
-
-.tab-button {
-    flex: 1;
-}
-
 .tablet-only {
     display: none !important;
 }
