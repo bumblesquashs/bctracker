@@ -362,6 +362,10 @@ table.striped tr {
     color: #000000;
 }
 
+.events .date {
+    border-right-color: #DDDDDD;
+}
+
 .info-box {
     background-color: #EEEEEE;
     border-color: #DDDDDD;

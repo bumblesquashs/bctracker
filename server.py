@@ -23,7 +23,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 16
+VERSION = 17
 
 app = Bottle()
 running = False
@@ -481,7 +481,11 @@ def block_history_page(block_id, system_id=None):
     if block is None:
         return error_page('block', system_id, block_id=block_id)
     records = helpers.record.find_all(system_id=system_id, block_id=block_id)
-    return page('block/history', system_id, block=block, records=records)
+    events = []
+    if len(records) > 0:
+        events.append(Event(records[0].date, 'First Tracked'))
+        events.append(Event(records[-1].date, 'Last Tracked'))
+    return page('block/history', system_id, block=block, records=records, events=events)
 
 @app.get([
     '/trips/<trip_id>',
@@ -529,7 +533,11 @@ def trip_history_page(trip_id, system_id=None):
     if trip is None:
         return error_page('trip', system_id, trip_id=trip_id)
     records = helpers.record.find_all(system_id=system_id, trip_id=trip_id)
-    return page('trip/history', system_id, trip=trip, records=records)
+    events = []
+    if len(records) > 0:
+        events.append(Event(records[0].date, 'First Tracked'))
+        events.append(Event(records[-1].date, 'Last Tracked'))
+    return page('trip/history', system_id, trip=trip, records=records, events=events)
 
 @app.get([
     '/stops',

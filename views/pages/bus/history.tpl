@@ -29,26 +29,22 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        % if len(events) > 0:
-                            <div class="section no-flex">
-                                % include('components/events_indicator', events=events)
-                            </div>
-                        % end
+                        <div class="section no-flex">
+                            % include('components/events_indicator', events=events)
+                        </div>
                         % record_systems = {r.system for r in records}
                         % if overview is not None:
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
-                        % if len(record_systems) > 0:
-                            <div class="section">
-                                <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
-                                <div class="value flex-column">
-                                    % for record_system in sorted(record_systems):
-                                        <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
-                                    % end
-                                </div>
+                        <div class="section">
+                            <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
+                            <div class="value flex-column">
+                                % for record_system in sorted(record_systems):
+                                    <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
+                                % end
                             </div>
-                        % end
+                        </div>
                     </div>
                 </div>
             </div>

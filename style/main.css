@@ -391,13 +391,13 @@ table.striped tr.section td {
 .events {
     display: grid;
     grid-template-columns: minmax(125px, auto) 1fr;
-    row-gap: 20px;
-    column-gap: 10px;
+    gap: 10px;
 }
 
 .events .date {
     padding-right: 10px;
-    border-right: 1px solid #CBCBCB;
+    border-right-width: 1px;
+    border-right-style: solid;
 }
 
 .events .date img {

@@ -368,6 +368,10 @@ table.striped tr:nth-child(2n-1) {
     color: #000000;
 }
 
+.events .date {
+    border-right-color: #C3E9C1;
+}
+
 .info-box {
     background-color: #E4F6E3;
     border-color: #69BB65;
