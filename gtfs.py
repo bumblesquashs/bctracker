@@ -7,23 +7,27 @@ from shutil import rmtree
 import csv
 import requests
 
+import helpers.point
 import helpers.sheet
 
 from models.block import Block
 from models.date import Date
 from models.departure import Departure
+from models.point import Point
 from models.route import Route
 from models.service import Service, ServiceException
-from models.shape import Shape, ShapePoint
 from models.stop import Stop
 from models.trip import Trip
 
-def load(system, force_download=False):
+def load(system, force_download=False, updatedb=False):
     '''Loads the GTFS for the given system into memory'''
     if not system.gtfs_enabled:
         return
     if not path.exists(f'data/gtfs/{system.id}') or force_download:
         download(system)
+        update_database(system)
+    elif updatedb:
+        update_database(system)
     print(f'Loading GTFS data for {system}...', end=' ', flush=True)
     
     try:
@@ -46,12 +50,6 @@ def load(system, force_download=False):
         system.services = {s.id: s for s in services}
         system.sheets = helpers.sheet.combine(system, services)
         
-        points = read_csv(system, 'shapes', ShapePoint.from_csv)
-        shape_points = {}
-        for point in points:
-            shape_points.setdefault(point.shape_id, []).append(point)
-        system.shapes = {id: Shape(system, id, points) for id, points in shape_points.items()}
-        
         departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
         trip_departures = {}
         stop_departures = {}
@@ -59,12 +57,12 @@ def load(system, force_download=False):
             trip_departures.setdefault(departure.trip_id, []).append(departure)
             stop_departures.setdefault(departure.stop_id, []).append(departure)
         
-        trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
-        system.trips = {t.id: t for t in trips}
-        
         stops = read_csv(system, 'stops', lambda r: Stop.from_csv(r, system, stop_departures))
         system.stops = {s.id: s for s in stops}
         system.stops_by_number = {s.number: s for s in stops}
+        
+        trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
+        system.trips = {t.id: t for t in trips}
         
         route_trips = {}
         block_trips = {}
@@ -109,6 +107,12 @@ def download(system):
     except Exception as e:
         print('Error!')
         print(f'Failed to update GTFS for {system}: {e}')
+
+def update_database(system):
+    helpers.point.delete_all(system.id)
+    points = read_csv(system, 'shapes', lambda r: Point.from_csv(r, system))
+    for point in points:
+        helpers.point.create(point)
 
 def read_csv(system, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''

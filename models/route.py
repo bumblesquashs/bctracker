@@ -14,7 +14,7 @@ from models.schedule import Schedule
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'sheets', 'indicator_points')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -87,6 +87,21 @@ class Route:
         self.text_colour = text_colour
         self.trips = trips
         
+        if len(trips) == 0:
+            self.indicator_points = []
+        else:
+            sorted_trips = sorted(trips, key=lambda t: len(t.departures), reverse=True)
+            points = sorted_trips[0].load_points()
+            first_point = points[0]
+            last_point = points[-1]
+            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+            if distance <= 0.05:
+                count = min((len(points) // 500) + 1, 3)
+            else:
+                count = min(int(distance * 8) + 1, 4)
+            size = len(points) // count
+            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+        
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
         services = {t.service for t in trips}
@@ -127,19 +142,7 @@ class Route:
     def indicator_json(self):
         '''Returns a representation of the map indicator for this route in JSON-compatible format'''
         json = []
-        trips = sorted(self.trips, key=lambda t: len(t.points), reverse=True)
-        trip = trips[0]
-        first_point = trip.points[0]
-        last_point = trip.points[-1]
-        distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-        if distance <= 0.05:
-            count = min((len(trip.points) // 500) + 1, 3)
-        else:
-            count = min(int(distance * 8) + 1, 4)
-        size = len(trip.points) // count
-        for i in range(count):
-            index = (i * size) + (size // 2)
-            point = trip.points[index]
+        for point in self.indicator_points:
             json.append({
                 'system_id': self.system.id,
                 'number': self.number,

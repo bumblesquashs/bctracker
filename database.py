@@ -45,6 +45,16 @@ SQL_SCRIPTS = [
             FOREIGN KEY (last_record_id) REFERENCES record (record_id)
         )
     ''',
+    '''
+        CREATE TABLE IF NOT EXISTS point (
+            system_id TEXT NOT NULL,
+            shape_id TEXT NOT NULL,
+            sequence INTEGER NOT NULL,
+            lat REAL NOT NULL,
+            lon REAL NOT NULL,
+            PRIMARY KEY (system_id, shape_id, sequence)
+        )
+    ''',
     'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
     'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'

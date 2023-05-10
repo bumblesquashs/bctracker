@@ -8,7 +8,7 @@ import realtime
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'shapes', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
@@ -59,7 +59,6 @@ class System:
         self.routes = {}
         self.routes_by_number = {}
         self.services = {}
-        self.shapes = {}
         self.sheets = []
         self.stops = {}
         self.stops_by_number = {}
@@ -126,12 +125,6 @@ class System:
     def get_services(self):
         '''Returns all services'''
         return sorted(self.services.values())
-    
-    def get_shape(self, shape_id):
-        '''Returns the shape with the given ID'''
-        if shape_id in self.shapes:
-            return self.shapes[shape_id]
-        return None
     
     def get_sheets(self):
         '''Returns all sheets'''
