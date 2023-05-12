@@ -1,6 +1,7 @@
 
 from math import sqrt
 
+import helpers.departure
 import helpers.sheet
 
 from models.match import Match
@@ -9,7 +10,7 @@ from models.schedule import Schedule
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'schedule', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -28,7 +29,6 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
-        self.departures = departures
         
         services = {d.trip.service for d in departures if d.trip is not None}
         self.schedule = Schedule.combine([s.schedule for s in services])
@@ -68,11 +68,12 @@ class Stop:
     
     def get_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
+        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
         if service_group is None:
             if date is None:
-                return sorted(self.departures)
-            return sorted([d for d in self.departures if d.trip.service.schedule.includes(date)])
-        return sorted([d for d in self.departures if d.trip.service in service_group.services])
+                return sorted(departures)
+            return sorted([d for d in departures if d.trip.service.schedule.includes(date)])
+        return sorted([d for d in departures if d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this stop'''

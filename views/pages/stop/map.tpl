@@ -1,4 +1,6 @@
 
+% import helpers.departure
+
 % rebase('base', title=f'Stop {stop.number}', include_maps=True, full_map=True)
 
 <div class="page-header map-page">
@@ -11,8 +13,8 @@
     </div>
 </div>
 
-% trips = [d.trip for d in stop.departures]
-% departures = [d for t in trips for d in t.departures]
+% trips = [d.trip for d in stop.get_departures()]
+% departures = helpers.departure.find_all(stop.system.id, trip_id=[t.id for t in trips])
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
 

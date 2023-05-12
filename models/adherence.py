@@ -1,6 +1,8 @@
 
 import math
 
+import helpers.departure
+
 from models.time import Time
 
 MINIMUM_MINUTES = 4
@@ -13,10 +15,17 @@ class Adherence:
     @classmethod
     def calculate(cls, trip, stop, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = trip.get_departure(stop)
-        if departure is None:
-            return None
-        previous_departure = trip.get_previous_departure(departure)
+        departures = helpers.departure.find_all(trip.system.id, trip_id=trip.id, stop_id=stop.id)
+        if len(departures) == 0:
+            return
+        if len(departures) == 1:
+            departure = departures[0]
+        else:
+            now = Time.now()
+            current_mins = (now.hour * 60) + now.minute
+            departures.sort(key=lambda d: abs(current_mins - d.time.get_minutes()))
+            departure = departures[0]
+        previous_departure = departure.load_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes()
             

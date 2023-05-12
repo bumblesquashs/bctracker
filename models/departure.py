@@ -1,6 +1,9 @@
 
 from enum import Enum
 
+import helpers.departure
+import helpers.system
+
 from models.time import Time
 
 class PickupType(Enum):
@@ -44,7 +47,7 @@ class DropoffType(Enum):
 class Departure:
     '''An association between a trip and a stop'''
     
-    __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time', 'pickup_type', 'dropoff_type', 'timepoint', 'distance_traveled')
+    __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time', 'pickup_type', 'dropoff_type', 'timepoint', 'distance')
     
     @classmethod
     def from_csv(cls, row, system):
@@ -67,14 +70,33 @@ class Departure:
             timepoint = False
         if 'shape_dist_traveled' in row:
             try:
-                distance_traveled = int(row['shape_dist_traveled'])
+                distance = int(row['shape_dist_traveled'])
             except:
-                distance_traveled = None
+                distance = None
         else:
-            distance_traveled = None
-        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance_traveled)
+            distance = None
+        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance)
     
-    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance_traveled):
+    @classmethod
+    def from_db(cls, row, prefix='departure'):
+        system = helpers.system.find(row[f'{prefix}_system_id'])
+        trip_id = row[f'{prefix}_trip_id']
+        sequence = row[f'{prefix}_sequence']
+        stop_id = row[f'{prefix}_stop_id']
+        time = Time.parse(row[f'{prefix}_time'], system.timezone)
+        try:
+            pickup_type = PickupType(row[f'{prefix}_pickup_type'])
+        except:
+            pickup_type = PickupType.NORMAL
+        try:
+            dropoff_type = DropoffType(row[f'{prefix}_dropoff_type'])
+        except:
+            dropoff_type = DropoffType.NORMAL
+        timepoint = row[f'{prefix}_timepoint'] == 1
+        distance = row[f'{prefix}_distance']
+        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance)
+    
+    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance):
         self.system = system
         self.trip_id = trip_id
         self.sequence = sequence
@@ -83,7 +105,7 @@ class Departure:
         self.pickup_type = pickup_type
         self.dropoff_type = dropoff_type
         self.timepoint = timepoint
-        self.distance_traveled = distance_traveled
+        self.distance = distance
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence
@@ -131,3 +153,9 @@ class Departure:
             'colour': self.trip.route.colour,
             'text_colour': self.trip.route.text_colour
         }
+    
+    def load_previous(self):
+        return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence - 1)
+    
+    def load_next(self):
+        return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence + 1)

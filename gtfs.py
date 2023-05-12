@@ -7,6 +7,7 @@ from shutil import rmtree
 import csv
 import requests
 
+import helpers.departure
 import helpers.point
 import helpers.sheet
 
@@ -50,7 +51,7 @@ def load(system, force_download=False, updatedb=False):
         system.services = {s.id: s for s in services}
         system.sheets = helpers.sheet.combine(system, services)
         
-        departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
+        departures = helpers.departure.find_all(system.id)
         trip_departures = {}
         stop_departures = {}
         for departure in departures:
@@ -88,7 +89,7 @@ def download(system):
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
     
-    print(f'Updating GTFS data for {system}...', end=' ', flush=True)
+    print(f'Downloading GTFS data for {system}...', end=' ', flush=True)
     
     try:
         if path.exists(data_zip_path):
@@ -106,13 +107,25 @@ def download(system):
         print('Done!')
     except Exception as e:
         print('Error!')
-        print(f'Failed to update GTFS for {system}: {e}')
+        print(f'Failed to download GTFS for {system}: {e}')
 
 def update_database(system):
-    helpers.point.delete_all(system.id)
-    points = read_csv(system, 'shapes', lambda r: Point.from_csv(r, system))
-    for point in points:
-        helpers.point.create(point)
+    print(f'Updating database with GTFS data for {system}...', end=' ', flush=True)
+    try:
+        helpers.departure.delete_all(system.id)
+        helpers.point.delete_all(system.id)
+        
+        departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
+        for departure in departures:
+            helpers.departure.create(departure)
+        
+        points = read_csv(system, 'shapes', lambda r: Point.from_csv(r, system))
+        for point in points:
+            helpers.point.create(point)
+        print('Done!')
+    except Exception as e:
+        print('Error!')
+        print(f'Failed to update GTFS for {system}: {e}')
 
 def read_csv(system, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''

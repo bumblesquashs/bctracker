@@ -51,7 +51,7 @@ def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit
             'trip_record.record_id': 'record.record_id'
         }
         filters['trip_record.trip_id'] = trip_id
-    rows = database.select('record', 
+    return database.select('record', 
         columns={
             'record.record_id': 'record_id',
             'record.bus_number': 'record_bus_number',
@@ -70,13 +70,12 @@ def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit
             'record.date': 'DESC',
             'record.record_id': 'DESC'
         },
-        limit=limit)
-    return [Record.from_db(row) for row in rows]
+        limit=limit,
+        initializer=Record.from_db)
 
 def find_trip_ids(record):
     '''Returns all trip IDs associated with the given record'''
-    rows = database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id})
-    return {row['trip_id'] for row in rows}
+    return database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id}, initializer=lambda r: r['trip_id'])
 
 def find_recorded_today(system, trips):
     '''Returns all bus numbers matching the given system ID and trips that were recorded on the current date'''

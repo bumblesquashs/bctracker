@@ -14,7 +14,7 @@ def create(bus, date, old_system, new_system):
 
 def find_all(system_id, limit=None):
     '''Returns all transfers that match the given system ID'''
-    rows = database.select('transfer',
+    return database.select('transfer',
         columns={
             'transfer.transfer_id': 'transfer_id',
             'transfer.bus_number': 'transfer_bus_number',
@@ -31,5 +31,5 @@ def find_all(system_id, limit=None):
             'transfer.date': 'DESC',
             'transfer.transfer_id': 'DESC'
         },
-        limit=limit)
-    return [Transfer.from_db(row) for row in rows]
+        limit=limit,
+        initializer=Transfer.from_db)

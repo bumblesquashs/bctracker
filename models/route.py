@@ -90,7 +90,7 @@ class Route:
         if len(trips) == 0:
             self.indicator_points = []
         else:
-            sorted_trips = sorted(trips, key=lambda t: len(t.departures), reverse=True)
+            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].load_points()
             first_point = points[0]
             last_point = points[-1]

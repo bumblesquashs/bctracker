@@ -1,8 +1,7 @@
 
 from enum import Enum
 
-from datetime import datetime
-
+import helpers.departure
 import helpers.point
 
 from models.time import Time
@@ -32,7 +31,7 @@ class Direction(Enum):
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', '_related_trips')
+    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'first_departure', 'last_departure', 'departure_count', 'direction', '_related_trips')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -55,15 +54,17 @@ class Trip:
         self.direction_id = direction_id
         self.shape_id = shape_id
         self.headsign = headsign
-        self.departures = departures
+        self.departure_count = len(departures)
         
         if len(departures) == 0:
+            self.first_departure = None
+            self.last_departure = None
             self.direction = Direction.UNKNOWN
         else:
-            first_stop = self.first_departure.stop
-            last_stop = self.last_departure.stop
-            lat_diff = first_stop.lat - last_stop.lat
-            lon_diff = first_stop.lon - last_stop.lon
+            self.first_departure = departures[0]
+            self.last_departure = departures[-1]
+            lat_diff = self.first_stop.lat - self.last_stop.lat
+            lon_diff = self.first_stop.lon - self.last_stop.lon
             if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
                 self.direction = Direction.CIRCULAR
             elif abs(lat_diff) > abs(lon_diff):
@@ -108,23 +109,20 @@ class Trip:
         return self.system.get_service(self.service_id)
     
     @property
-    def stops(self):
-        '''Returns all stops associated with this trip'''
-        return {d.stop for d in self.departures}
+    def first_stop(self):
+        '''Returns the first stop of this trip'''
+        departure = self.first_departure
+        if departure is None:
+            return None
+        return departure.stop
     
     @property
-    def first_departure(self):
-        '''Returns the first departure of this trip'''
-        if len(self.departures) == 0:
+    def last_stop(self):
+        '''Returns the last stop of this trip'''
+        departure = self.last_departure
+        if departure is None:
             return None
-        return self.departures[0]
-    
-    @property
-    def last_departure(self):
-        '''Returns the last departure of this trip'''
-        if len(self.departures) == 0:
-            return None
-        return self.departures[-1]
+        return departure.stop
     
     @property
     def start_time(self):
@@ -152,7 +150,7 @@ class Trip:
         departure = self.last_departure
         if departure is None:
             return None
-        return departure.distance_traveled
+        return departure.distance
     
     @property
     def related_trips(self):
@@ -176,24 +174,9 @@ class Trip:
         '''Returns all points associated with this trip'''
         return helpers.point.find_all(self.system.id, self.shape_id)
     
-    def get_departure(self, stop):
-        '''Returns the departure for a given stop on this trip'''
-        departures = [d for d in self.departures if d.stop == stop]
-        if len(departures) == 0:
-            return None
-        if len(departures) == 1:
-            return departures[0]
-        now = datetime.now()
-        current_mins = (now.hour * 60) + now.minute
-        departures.sort(key=lambda d: abs(current_mins - d.time.get_minutes()))
-        return departures[0]
-    
-    def get_previous_departure(self, departure):
-        '''Returns the departure in this trip that comes before the given departure'''
-        for previous_departure in self.departures:
-            if previous_departure.sequence == (departure.sequence - 1):
-                return previous_departure
-        return None
+    def load_departures(self):
+        '''Returns all departures associated with this trip'''
+        return helpers.departure.find_all(self.system.id, trip_id=self.id)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

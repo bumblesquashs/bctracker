@@ -24,9 +24,10 @@
                 <h2>Overview</h2>
             </div>
             <div class="content">
-                % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop.get_departures()], zoom_trips=False)
+                % stop_departures = stop.get_departures()
+                % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop_departures], zoom_trips=False)
                 
-                % if len(stop.departures) > 0:
+                % if len(stop_departures) > 0:
                     <div class="info-box">
                         <div class="section no-flex">
                             % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], url=get_url(system, f'stops/{stop.number}/schedule'))

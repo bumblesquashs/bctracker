@@ -41,7 +41,7 @@
     % if trip is None:
         % include('components/map', is_preview=False, map_position=position)
     % else:
-        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
+        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.load_departures(), zoom_trips=False, zoom_departures=False)
     % end
 
     % include('components/map_toggle')

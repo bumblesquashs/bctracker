@@ -12,7 +12,7 @@
     <hr />
 </div>
 
-% if len(stop.departures) == 0:
+% if len(stop.get_departures()) == 0:
     <p>There are currently no departures from this stop.</p>
     <p>
         There are a few reasons why that may be the case:

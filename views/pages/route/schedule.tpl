@@ -86,7 +86,7 @@
                                                                 <tbody>
                                                                     % last_hour = -1
                                                                     % for trip in direction_trips:
-                                                                        % first_stop = trip.first_departure.stop
+                                                                        % first_stop = trip.first_stop
                                                                         % this_hour = trip.start_time.hour
                                                                         % if last_hour == -1:
                                                                             % last_hour = this_hour
