@@ -17,7 +17,6 @@
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

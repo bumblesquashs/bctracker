@@ -10,7 +10,6 @@
             <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
-    <hr />
 </div>
 
 % sheets = block.sheets

@@ -10,7 +10,6 @@
             <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
-        <hr />
     </div>
     
     <p>Choose a system to see individual routes.</p>
@@ -68,7 +67,6 @@
                 <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
                 <span class="tab-button current">Map</span>
             </div>
-            <hr />
         </div>
         
         <p>

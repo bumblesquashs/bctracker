@@ -11,7 +11,6 @@
             <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

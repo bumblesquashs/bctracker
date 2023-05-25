@@ -6,7 +6,6 @@
 % if len(positions) == 0:
     <div class="page-header">
         <h1 class="title">Map</h1>
-        <hr />
     </div>
 
     % if system is not None and not system.realtime_enabled:

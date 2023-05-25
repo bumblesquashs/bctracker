@@ -7,7 +7,6 @@
         <span class="tab-button current">List</span>
         <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
     </div>
-    <hr />
 </div>
 
 % if system is None:

@@ -4,7 +4,6 @@
 % if system_id is None:
     <div class="page-header">
         <h1 class="title">Error: System Required</h1>
-        <hr />
     </div>
     
     <p>The page you are trying to look at requires a system.</p>

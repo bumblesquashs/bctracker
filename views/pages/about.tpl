@@ -3,7 +3,6 @@
 
 <div class="page-header">
     <h1 class="title">About</h1>
-    <hr />
 </div>
 
 <div class="flex-container">

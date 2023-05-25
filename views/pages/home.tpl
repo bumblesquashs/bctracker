@@ -8,7 +8,6 @@
     % else:
         <h2 class="subtitle">{{ system }} Transit Schedules and Bus Tracking</h2>
     % end
-    <hr />
 </div>
 
 <div class="flex-container">

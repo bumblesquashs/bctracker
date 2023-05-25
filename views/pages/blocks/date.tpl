@@ -5,7 +5,6 @@
 
 <div class="page-header">
     <h1 class="title">Blocks</h1>
-    <hr />
 </div>
 
 % if system is None:

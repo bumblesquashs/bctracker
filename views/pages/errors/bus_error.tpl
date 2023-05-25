@@ -3,7 +3,6 @@
 
 <div class="page-header">
     <h1 class="title">Error: Bus {{ bus_number }} Not Found</h1>
-    <hr />
 </div>
 
 <p>The bus you are looking for doesn't seem to exist!</p>

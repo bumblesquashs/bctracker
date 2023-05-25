@@ -14,7 +14,6 @@
             <span class="tab-button current">Map</span>
             <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
         </div>
-        <hr />
     </div>
     
     <p>There are currently no trips for this route.</p>

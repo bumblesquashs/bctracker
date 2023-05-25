@@ -13,7 +13,6 @@
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

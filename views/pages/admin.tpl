@@ -4,7 +4,6 @@
 <div class="page-header">
     <h1 class="title">Administration</h1>
     <h2 class="subtitle">Tools for server and system management</h2>
-    <hr />
 </div>
 
 <div class="container">

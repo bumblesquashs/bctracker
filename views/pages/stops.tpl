@@ -6,7 +6,6 @@
     % if search is not None:
         <h2 class="subtitle">Search results for "{{ search }}"</h2>
     % end
-    <hr />
 </div>
 
 % if system is None:

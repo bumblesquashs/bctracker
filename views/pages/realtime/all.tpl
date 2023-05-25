@@ -16,7 +16,6 @@
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Sandra Bullock and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
     </div>
-    <hr />
 </div>
 
 % if len(positions) == 0:

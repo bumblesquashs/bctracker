@@ -3,7 +3,6 @@
 
 <div class="page-header">
     <h1 class="title">Error: Stop {{ stop_number }} Not Found</h1>
-    <hr />
 </div>
 
 <p>The stop you are looking for doesn't seem to exist!</p>
