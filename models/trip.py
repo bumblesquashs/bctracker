@@ -1,32 +1,9 @@
 
-from enum import Enum
-
 import helpers.departure
 import helpers.point
 
+from models.direction import Direction
 from models.time import Time
-
-class Direction(Enum):
-    '''A basic description of the path a trip follows'''
-    
-    CIRCULAR = 'Circular'
-    SOUTHBOUND = 'Southbound'
-    NORTHBOUND = 'Northbound'
-    WESTBOUND = 'Westbound'
-    EASTBOUND = 'Eastbound'
-    UNKNOWN = 'Unknown'
-    
-    def __str__(self):
-        return self.value
-    
-    def __hash__(self):
-        return hash(self.value)
-    
-    def __eq__(self, other):
-        return self.value == other.value
-    
-    def __lt__(self, other):
-        return self.value < other.value
 
 class Trip:
     '''A list of departures for a specific route and a specific service'''
@@ -63,16 +40,7 @@ class Trip:
         else:
             self.first_departure = departures[0]
             self.last_departure = departures[-1]
-            lat_diff = self.first_stop.lat - self.last_stop.lat
-            lon_diff = self.first_stop.lon - self.last_stop.lon
-            if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
-                self.direction = Direction.CIRCULAR
-            elif abs(lat_diff) > abs(lon_diff):
-                self.direction = Direction.SOUTHBOUND if lat_diff > 0 else Direction.NORTHBOUND
-            elif abs(lon_diff) > abs(lat_diff):
-                self.direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
-            else:
-                self.direction = Direction.UNKNOWN
+            self.direction = Direction.calculate(self.first_stop, self.last_stop)
         
         self._related_trips = None
     
