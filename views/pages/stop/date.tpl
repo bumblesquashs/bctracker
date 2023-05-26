@@ -1,7 +1,7 @@
 
 % from datetime import timedelta
 
-% rebase('base', title=f'Stop {stop.number}', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>

@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Trip {trip.id}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Trip {{! trip.display_id }}</h1>

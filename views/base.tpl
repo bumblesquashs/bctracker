@@ -60,7 +60,7 @@
             </script>
         % end
         
-        % if get('include_maps', False):
+        % if include_maps:
             <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
             <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
             
@@ -69,7 +69,7 @@
             </script>
         % end
         
-        % if (system is None or system.realtime_enabled) and get('enable_refresh', True):
+        % if enable_refresh and (system is None or system.realtime_enabled):
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();
@@ -117,7 +117,7 @@
         </script>
     </head>
     
-    <body class="{{ 'full-map' if get('full_map', False) else '' }}">
+    <body class="{{ 'full-map' if full_map else '' }}">
         <div id="title">
             <a href="{{ get_url(system) }}">
                 <img class="white" src="/img/white/bctracker.png" />

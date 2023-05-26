@@ -2,7 +2,7 @@
 % from models.date import Date
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}', include_maps=True)
+% rebase('base')
 
 % model = bus.model
 

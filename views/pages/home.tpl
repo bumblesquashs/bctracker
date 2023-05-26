@@ -1,5 +1,5 @@
 
-% rebase('base', title='Home', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Welcome to BCTracker!</h1>

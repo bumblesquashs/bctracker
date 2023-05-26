@@ -1,36 +1,11 @@
 
 % import json
 
-% rebase('base', title='Map', include_maps=True, full_map=True)
+% rebase('base')
 
-% if len(positions) == 0:
-    <div class="page-header">
-        <h1 class="title">Map</h1>
-    </div>
-
-    % if system is not None and not system.realtime_enabled:
-        <p>
-            {{ system }} does not currently support realtime.
-            You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-        </p>
-    % else:
-        % if system is None:
-            <p>
-                There are no buses out right now.
-                BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
-                Please check back later!
-            </p>
-        % else:
-            <p>
-                There are no buses out in {{ system }} right now.
-                Please choose a different system.
-            </p>
-        % end
-    % end
-% else:
-    <div class="page-header map-page">
-        <h1 class="title">Map</h1>
+<div class="page-header">
+    <h1 class="title">Map</h1>
+    % if len(positions) > 0:
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
                 <div id="checkbox-image" class="hidden">
@@ -58,8 +33,31 @@
             </div>
             <span class="checkbox-label">Show NIS Buses</span>
         </div>
-    </div>
-    
+    % end
+</div>
+
+% if len(positions) == 0:
+    % if system is not None and not system.realtime_enabled:
+        <p>
+            {{ system }} does not currently support realtime.
+            You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
+        </p>
+    % else:
+        % if system is None:
+            <p>
+                There are no buses out right now.
+                BC Transit does not have late night service, so this should be the case overnight.
+                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
+                Please check back later!
+            </p>
+        % else:
+            <p>
+                There are no buses out in {{ system }} right now.
+                Please choose a different system.
+            </p>
+        % end
+    % end
+% else:
     <div id="map" class="full-screen"></div>
     
     <script>

@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Stop {stop.number}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>

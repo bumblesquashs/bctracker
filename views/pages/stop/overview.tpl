@@ -4,7 +4,7 @@
 
 % from models.date import Date
 
-% rebase('base', title=f'Stop {stop.number}', include_maps=True)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>

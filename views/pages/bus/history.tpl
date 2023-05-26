@@ -1,7 +1,7 @@
 
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>

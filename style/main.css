@@ -7,6 +7,11 @@ body {
     margin: 0px;
 }
 
+body.full-map .page-header {
+    position: relative;
+    z-index: 20;
+}
+
 input {
     -webkit-appearance: none;
 }
@@ -33,13 +38,6 @@ form .input-container {
 
 form .input-container input[type="text"] {
     flex: 1;
-}
-
-hr {
-    margin: 0px;
-    border-width: 0px;
-    border-top-width: 2px;
-    border-top-style: solid;
 }
 
 h1, h2, h3, h4 {
@@ -717,15 +715,8 @@ table.striped tr.section td {
 
 .page-header {
     margin-bottom: 20px;
-}
-
-.page-header.map-page {
-    position: relative;
-    z-index: 20;
-}
-
-.page-header.map-page .tab-button {
     border-bottom-width: 2px;
+    border-bottom-style: solid;
 }
 
 .page-header .subtitle {
@@ -834,18 +825,17 @@ table.striped tr.section td {
 }
 
 .tab-button-bar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    display: inline-flex;
+    flex-direction: row;
     box-sizing: border-box;
-    margin-left: 1px;
+    margin-bottom: -1px;
+    gap: 1px;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .tab-button {
-    border-width: 1px;
-    border-style: solid;
     padding: 10px;
-    margin-bottom: -1px;
-    margin-left: -1px;
     cursor: default;
     font-size: 13pt;
     font-weight: bold;

@@ -1,17 +1,17 @@
 
 % import json
 
-% if system is None:
-    % rebase('base', title='Routes', enable_refresh=False)
-    
-    <div class="page-header">
-        <h1 class="title">Routes</h1>
-        <div class="tab-button-bar">
-            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-            <span class="tab-button current">Map</span>
-        </div>
+% rebase('base')
+
+<div class="page-header">
+    <h1 class="title">Routes</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+        <span class="tab-button current">Map</span>
     </div>
-    
+</div>
+
+% if system is None:
     <p>Choose a system to see individual routes.</p>
     <table class="striped">
         <thead>
@@ -57,31 +57,12 @@
         </tbody>
     </table>
 % else:
-    % rebase('base', title='Routes', include_maps=True, full_map=True, enable_refresh=False)
-    
-    % routes = system.get_routes()
     % if len(routes) == 0:
-        <div class="page-header">
-            <h1 class="title">Routes</h1>
-            <div class="tab-button-bar">
-                <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-                <span class="tab-button current">Map</span>
-            </div>
-        </div>
-        
         <p>
             Route information is currently unavailable for {{ system }}.
             Please check again later!
         </p>
     % else:
-        <div class="page-header map-page">
-            <h1 class="title">Routes</h1>
-            <div class="tab-button-bar">
-                <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-                <span class="tab-button current">Map</span>
-            </div>
-        </div>
-        
         <div id="map" class="full-screen"></div>
         
         <script>

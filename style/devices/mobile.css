@@ -225,6 +225,11 @@ table {
     font-size: 11pt;
 }
 
+.tab-button-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
 .tablet-only {
     display: none !important;
 }

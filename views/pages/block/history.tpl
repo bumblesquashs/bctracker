@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
