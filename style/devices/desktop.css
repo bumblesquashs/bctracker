@@ -16,7 +16,6 @@ body {
 
 body.full-map .page-header {
     display: inline-block;
-    border-bottom-width: 0px;
 }
 
 form {

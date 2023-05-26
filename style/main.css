@@ -10,6 +10,7 @@ body {
 body.full-map .page-header {
     position: relative;
     z-index: 20;
+    border-bottom-width: 0px;
 }
 
 input {
