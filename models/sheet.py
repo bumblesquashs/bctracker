@@ -9,6 +9,7 @@ class Sheet:
     
     @classmethod
     def combine(cls, system, services, include_special):
+        '''Returns a sheet that includes all of the given services'''
         id = '_'.join(sorted({s.id for s in services}))
         schedule = Schedule.combine([s.schedule for s in services])
         service_groups = []

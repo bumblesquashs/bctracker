@@ -4,6 +4,7 @@ from models.position import Position
 import database
 
 def create(position):
+    '''Inserts a new position into the database'''
     values = {
         'system_id': position.system.id,
         'bus_number': position.bus.number,
@@ -21,6 +22,7 @@ def create(position):
     database.insert('position', values)
 
 def find(bus_number):
+    '''Returns the position of the bus with the given number'''
     rows = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
@@ -43,6 +45,7 @@ def find(bus_number):
     return None
 
 def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id=None, has_location=None):
+    '''Returns all positions that match the given system, trip, stop, block, and route'''
     filters = {
         'position.system_id': system_id,
         'position.trip_id': trip_id,
@@ -82,7 +85,8 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
         filters=filters)
     return [Position.from_db(row) for row in rows]
 
-def delete_all(system_id):
+def delete_all(system):
+    '''Deletes all positions for the given system from the database'''
     database.delete('position', {
-        'position.system_id': system_id
+        'position.system_id': system.id
     })

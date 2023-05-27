@@ -146,6 +146,7 @@ def error_page(name, system_id, title='Error', path='', **kwargs):
     )
 
 def set_cookie(key, value):
+    '''Creates a cookie using the given key and value'''
     max_age = 60*60*24*365*10
     if cookie_domain is None:
         response.set_cookie(key, value, max_age=max_age, path='/')

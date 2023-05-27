@@ -57,6 +57,7 @@ class Position:
     
     @classmethod
     def from_db(cls, row, prefix='position'):
+        '''Returns a position initialized from the given database row'''
         system = helpers.system.find(row[f'{prefix}_system_id'])
         bus = Bus(row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
@@ -111,6 +112,20 @@ class Position:
         if self.stop_id is None:
             return None
         return self.system.get_stop(stop_id=self.stop_id)
+    
+    @property
+    def block(self):
+        '''Returns the block associated with this position'''
+        if self.block_id is None:
+            return None
+        return self.system.get_block(self.block_id)
+    
+    @property
+    def route(self):
+        '''Returns the route associated with this position'''
+        if self.route_id is None:
+            return None
+        return self.system.get_route(route_id=self.route_id)
     
     @property
     def colour(self):

@@ -2,6 +2,8 @@
 from enum import IntEnum
 
 class Weekday(IntEnum):
+    '''A day of the week'''
+    
     MON = 0
     TUE = 1
     WED = 2

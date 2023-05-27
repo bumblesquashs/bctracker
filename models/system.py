@@ -78,12 +78,12 @@ class System:
     
     @property
     def gtfs_enabled(self):
-        '''Whether GTFS data is enabled for this system'''
+        '''Checks if GTFS data is enabled for this system'''
         return self.enabled and self.gtfs_url is not None
     
     @property
     def realtime_enabled(self):
-        '''Whether realtime data is enabled for this system'''
+        '''Checks if realtime data is enabled for this system'''
         return self.enabled and self.realtime_url is not None
     
     @property

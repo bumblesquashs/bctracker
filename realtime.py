@@ -22,7 +22,7 @@ last_updated_date = None
 last_updated_time = None
 
 def update(system):
-    '''Downloads realtime data for the given system, then loads it into memory'''
+    '''Downloads realtime data for the given system and stores it in the database'''
     global last_updated_date, last_updated_time
     if not system.realtime_enabled:
         return
@@ -40,7 +40,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system.id)
+        helpers.position.delete_all(system)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -61,7 +61,7 @@ def update(system):
         print(f'Failed to update realtime for {system}: {e}')
 
 def update_records():
-    '''Updates records in the database based on the current realtime data in memory'''
+    '''Updates records in the database based on the current positions in the database'''
     try:
         for position in helpers.position.find_all():
             try:

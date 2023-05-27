@@ -110,6 +110,7 @@ class Route:
     
     @property
     def display_name(self):
+        '''Formats the route name for web display'''
         return self.name.replace('/', '/<wbr />')
     
     @property

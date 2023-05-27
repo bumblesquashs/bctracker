@@ -69,6 +69,7 @@ def find_all(system_id=None, bus_number=None, limit=None):
     return [Overview.from_db(row) for row in rows]
 
 def find_bus_numbers(system_id=None):
+    '''Returns all bus numbers that have been seen'''
     joins = {}
     filters = {}
     if system_id is not None:

@@ -1,5 +1,6 @@
 
 class Region:
+    '''A large area that contains multiple systems'''
     
     __slots__ = ('id', 'name')
     

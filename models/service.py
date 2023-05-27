@@ -61,6 +61,7 @@ class Service:
     
     @classmethod
     def combine(cls, system, id, exceptions):
+        '''Returns a service based on a list of service exceptions'''
         start_date = min({e.date for e in exceptions})
         end_date = max({e.date for e in exceptions})
         modified_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
@@ -87,5 +88,5 @@ class Service:
     
     @property
     def is_today(self):
-        '''Returns whether or not this service runs on the current date'''
+        '''Checks if this service runs on the current date'''
         return self.schedule.includes(Date.today(self.system.timezone))
