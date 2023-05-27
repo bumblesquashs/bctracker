@@ -109,7 +109,8 @@ def download(system):
         print(f'Failed to update GTFS for {system}: {e}')
 
 def update_database(system):
-    helpers.point.delete_all(system.id)
+    '''Updates GTFS in the database'''
+    helpers.point.delete_all(system)
     points = read_csv(system, 'shapes', lambda r: Point.from_csv(r, system))
     for point in points:
         helpers.point.create(point)
