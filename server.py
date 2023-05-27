@@ -300,7 +300,7 @@ def bus_overview_page(bus_number, system_id=None):
         return error_page('bus', system_id,
             bus_number=bus_number
         )
-    position = realtime.get_position(bus_number)
+    position = helpers.position.find(bus_number)
     records = helpers.record.find_all(bus_number=bus_number, limit=20)
     return page('bus/overview', system_id,
         title=f'Bus {bus}',
@@ -324,7 +324,7 @@ def bus_map_page(bus_number, system_id=None):
         return error_page('bus', system_id,
             bus_number=bus_number
         )
-    position = realtime.get_position(bus_number)
+    position = helpers.position.find(bus_number)
     return page('bus/map', system_id,
         title=f'Bus {bus}',
         include_maps=position is not None,
@@ -446,7 +446,7 @@ def route_overview_page(route_number, system_id=None):
         return error_page('route', system_id,
             route_number=route_number
         )
-    trips = sorted([t for t in route.trips if t.service.is_today])
+    trips = sorted(route.get_trips(date=Date.today()))
     return page('route/overview', system_id,
         title=str(route),
         include_maps=len(trips) > 0,
@@ -454,7 +454,7 @@ def route_overview_page(route_number, system_id=None):
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
         scheduled_today=helpers.record.find_scheduled_today(system, trips),
-        positions=helpers.position.find_all(system_id, trip_id={t.id for t in route.trips})
+        positions=helpers.position.find_all(system_id, route_id=route.id)
     )
 
 @app.get([
@@ -479,7 +479,7 @@ def route_map_page(route_number, system_id=None):
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
-        positions=helpers.position.find_all(system_id, trip_id={t.id for t in route.trips})
+        positions=helpers.position.find_all(system_id, route_id=route.id)
     )
 
 @app.get([
