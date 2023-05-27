@@ -1,10 +1,13 @@
 
+import helpers.system
+
 from models.adherence import Adherence
+from models.bus import Bus
 
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'lat', 'lon', 'bearing', 'speed', 'adherence')
+    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'block_id', 'route_id', 'lat', 'lon', 'bearing', 'speed', 'adherence')
     
     @classmethod
     def from_entity(cls, system, bus, data):
@@ -38,24 +41,51 @@ class Position:
             speed = int(data.position.speed * 3.6)
         except AttributeError:
             speed = None
-        return cls(system, bus, trip_id, stop_id, lat, lon, bearing, speed)
+        trip = system.get_trip(trip_id)
+        stop = system.get_stop(stop_id=stop_id)
+        if trip is None:
+            block_id = None
+            route_id = None
+        else:
+            block_id = trip.block_id
+            route_id = trip.route_id
+        if trip is None or stop is None or lat is None or lon is None:
+            adherence = None
+        else:
+            adherence = Adherence.calculate(trip, stop, lat, lon)
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence)
     
-    def __init__(self, system, bus, trip_id, stop_id, lat, lon, bearing, speed):
+    @classmethod
+    def from_db(cls, row, prefix='position'):
+        system = helpers.system.find(row[f'{prefix}_system_id'])
+        bus = Bus(row[f'{prefix}_bus_number'])
+        trip_id = row[f'{prefix}_trip_id']
+        stop_id = row[f'{prefix}_stop_id']
+        block_id = row[f'{prefix}_block_id']
+        route_id = row[f'{prefix}_route_id']
+        lat = row[f'{prefix}_lat']
+        lon = row[f'{prefix}_lon']
+        bearing = row[f'{prefix}_bearing']
+        speed = row[f'{prefix}_speed']
+        adherence_value = row[f'{prefix}_adherence']
+        if adherence_value is None:
+            adherence = None
+        else:
+            adherence = Adherence(adherence_value)
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence)
+    
+    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence):
         self.system = system
         self.bus = bus
         self.trip_id = trip_id
         self.stop_id = stop_id
+        self.block_id = block_id
+        self.route_id = route_id
         self.lat = lat
         self.lon = lon
         self.bearing = bearing
         self.speed = speed
-        
-        trip = self.trip
-        stop = self.stop
-        if trip is None or stop is None or lat is None or lon is None:
-            self.adherence = None
-        else:
-            self.adherence = Adherence.calculate(trip, stop, lat, lon)
+        self.adherence = adherence
     
     def __eq__(self, other):
         return self.bus == other.bus

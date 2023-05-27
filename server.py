@@ -7,6 +7,7 @@ import cherrypy as cp
 import helpers.model
 import helpers.order
 import helpers.overview
+import helpers.position
 import helpers.record
 import helpers.region
 import helpers.system
@@ -208,7 +209,7 @@ def news_page(system_id=None):
     '/<system_id>/map/'
 ])
 def map_page(system_id=None):
-    positions = [p for p in realtime.get_positions(system_id) if p.has_location]
+    positions = helpers.position.find_all(system_id, has_location=True)
     return page('map', system_id,
         title='Map',
         path='map',
@@ -227,7 +228,7 @@ def realtime_all_page(system_id=None):
     return page('realtime/all', system_id,
         title='Realtime',
         path='realtime',
-        positions=realtime.get_positions(system_id)
+        positions=helpers.position.find_all(system_id)
     )
 
 @app.get([
@@ -240,7 +241,7 @@ def realtime_routes_page(system_id=None):
     return page('realtime/routes', system_id,
         title='Realtime',
         path='realtime/routes',
-        positions=realtime.get_positions(system_id)
+        positions=helpers.position.find_all(system_id)
     )
 
 @app.get([
@@ -253,7 +254,7 @@ def realtime_models_page(system_id=None):
     return page('realtime/models', system_id,
         title='Realtime',
         path='realtime/models',
-        positions=realtime.get_positions(system_id)
+        positions=helpers.position.find_all(system_id)
     )
 
 @app.get([
@@ -267,7 +268,7 @@ def realtime_speed_page(system_id=None):
     return page('realtime/speed', system_id,
         title='Realtime',
         path='realtime/speed',
-        positions=realtime.get_positions(system_id)
+        positions=helpers.position.find_all(system_id)
     )
 
 @app.get([
@@ -453,7 +454,7 @@ def route_overview_page(route_number, system_id=None):
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
         scheduled_today=helpers.record.find_scheduled_today(system, trips),
-        positions=[p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
+        positions=helpers.position.find_all(system_id, trip_id={t.id for t in route.trips})
     )
 
 @app.get([
@@ -478,7 +479,7 @@ def route_map_page(route_number, system_id=None):
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
-        positions=[p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.route_id == route.id]
+        positions=helpers.position.find_all(system_id, trip_id={t.id for t in route.trips})
     )
 
 @app.get([
@@ -577,7 +578,7 @@ def block_overview_page(block_id, system_id=None):
     return page('block/overview', system_id, block=block,
         title=f'Block {block.id}',
         include_maps=True,
-        positions=[p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.block_id == block_id]
+        positions=helpers.position.find_all(system_id, block_id=block_id)
     )
 
 @app.get([
@@ -601,7 +602,7 @@ def block_map_page(block_id, system_id=None):
         title=f'Block {block.id}',
         include_maps=True,
         full_map=True,
-        positions=[p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip.block_id == block_id]
+        positions=helpers.position.find_all(system_id, block_id=block_id)
     )
 
 @app.get([
@@ -648,7 +649,7 @@ def trip_overview_page(trip_id, system_id=None):
         title=f'Trip {trip.id}',
         include_maps=True,
         trip=trip,
-        positions=[p for p in realtime.get_positions(system_id) if p.trip_id == trip_id]
+        positions=helpers.position.find_all(system_id, trip_id=trip_id)
     )
 
 @app.get([
@@ -673,7 +674,7 @@ def trip_map_page(trip_id, system_id=None):
         include_maps=True,
         full_map=True,
         trip=trip,
-        positions=[p for p in realtime.get_positions(system_id) if p.trip_id == trip_id]
+        positions=helpers.position.find_all(system_id, trip_id=trip_id)
     )
 
 @app.get([
@@ -736,7 +737,7 @@ def stop_overview_page(stop_number, system_id=None):
         )
     departures = sorted(stop.get_departures(date=Date.today()))
     trips = [d.trip for d in departures]
-    positions = [p for p in realtime.get_positions(system_id) if p.trip is not None and p.trip in trips]
+    positions = helpers.position.find_all(system_id, trip_id={t.id for t in trips})
     return page('stop/overview', system_id,
         title=f'Stop {stop.number}',
         include_maps=True,
@@ -918,7 +919,7 @@ def system_api_map(system_id=None):
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    positions = sorted([p for p in realtime.get_positions(system_id) if p.has_location], key=lambda p: p.lat, reverse=True)
+    positions = sorted(helpers.position.find_all(system_id, has_location=True), key=lambda p: p.lat, reverse=True)
     return {
         'positions': [p.json for p in positions],
         'last_updated': last_updated
