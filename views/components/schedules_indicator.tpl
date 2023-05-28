@@ -29,7 +29,7 @@
     % for (i, schedule) in enumerate(schedules):
         % if not schedule.special or show_special_schedules:
             <div class="schedule">
-                <div class="title">{{ schedule.date_string }}</div>
+                <div class="title">{{ schedule.date_range }}</div>
                 % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
             </div>
         % end

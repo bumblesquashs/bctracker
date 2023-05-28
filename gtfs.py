@@ -121,7 +121,7 @@ def validate(system):
     '''Checks that the GTFS for the given system is up-to-date'''
     if not system.gtfs_enabled:
         return True
-    end_dates = [s.schedule.end_date for s in system.get_services()]
+    end_dates = [s.schedule.date_range.end for s in system.get_services()]
     if len(end_dates) == 0:
         return True
     return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
