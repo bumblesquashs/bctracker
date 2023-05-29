@@ -387,6 +387,28 @@ table.striped tr.section td {
     display: none !important;
 }
 
+.events {
+    display: grid;
+    grid-template-columns: minmax(125px, auto) 1fr;
+    gap: 10px;
+}
+
+.events .date {
+    padding-right: 10px;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.events .date img {
+    width: 20px;
+    height: 20px;
+}
+
+.events ul {
+    margin: 0px;
+    padding-left: 20px;
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -434,6 +456,14 @@ table.striped tr.section td {
 
 .flex-5 {
     flex: 5;
+}
+
+.flex-gap-0 {
+    gap: 0px;
+}
+
+.flex-gap-2 {
+    gap: 2px;
 }
 
 .flex-gap-5 {
@@ -859,6 +889,7 @@ table.striped tr.section td {
 }
 
 .tooltip-anchor {
+    display: inline-block;
     position: relative;
 }
 

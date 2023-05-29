@@ -13,12 +13,6 @@
 % if system.realtime_enabled:
     <div class="flex-container">
         % if len(records) > 0:
-            % last_tracked = records[0].date
-            % days_since_last_tracked = last_tracked.format_since()
-            
-            % first_tracked = records[-1].date
-            % days_since_first_tracked = first_tracked.format_since()
-            
             <div class="sidebar container flex-1">
                 <div class="section">
                     <div class="header">
@@ -26,31 +20,12 @@
                     </div>
                     <div class="content">
                         <div class="info-box">
-                            <div class="section">
-                                <div class="name">Last Tracked</div>
-                                <div class="value flex-column">
-                                    % if days_since_last_tracked == '0 days ago':
-                                        Today
-                                    % else:
-                                        {{ last_tracked }}
-                                        <span class="smaller-font">{{ days_since_last_tracked }}</span>
-                                    % end
-                                </div>
-                            </div>
-                            <div class="section">
-                                <div class="name">First Tracked</div>
-                                <div class="value flex-column">
-                                    % if days_since_first_tracked == '0 days ago':
-                                        Today
-                                    % else:
-                                        {{ first_tracked }}
-                                        <span class="smaller-font">{{ days_since_first_tracked }}</span>
-                                    % end
-                                </div>
+                            <div class="section no-flex">
+                                % include('components/events_indicator', events=events)
                             </div>
                             <div class="section">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                                <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
+                                <div class="name">{{ 'Model' if len(orders) == 1 else 'Models' }}</div>
                                 <div class="value flex-column">
                                     % for order in orders:
                                         <div>{{! order }}</div>
