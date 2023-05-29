@@ -1,5 +1,5 @@
 
-% rebase('base', title='Home', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Welcome to BCTracker!</h1>
@@ -8,7 +8,6 @@
     % else:
         <h2 class="subtitle">{{ system }} Transit Schedules and Bus Tracking</h2>
     % end
-    <hr />
 </div>
 
 <div class="flex-container">

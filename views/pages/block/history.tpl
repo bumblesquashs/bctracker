@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -8,7 +8,6 @@
         <a href="{{ get_url(system, f'blocks/{block.id}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
-    <hr />
 </div>
 
 % if system.realtime_enabled:

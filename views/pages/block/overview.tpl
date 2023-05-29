@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Block {block.id}', include_maps=True)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
@@ -10,7 +10,6 @@
             <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
-    <hr />
 </div>
 
 % sheets = block.sheets
@@ -49,7 +48,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -68,7 +67,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -87,7 +86,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -106,7 +105,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -126,7 +125,7 @@
                                         % if len(service_groups) > 1:
                                             <div class="smaller-font lighter-text">
                                                 % if len(sheets) > 1:
-                                                    {{ service_group.schedule.date_string }}
+                                                    {{ service_group.schedule.date_range }}
                                                 % else:
                                                     {{ service_group }}
                                                 % end

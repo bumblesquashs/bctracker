@@ -95,7 +95,8 @@ def find_recorded_today(system, trips):
             'record.system_id': system.id,
             'record.date': today.format_db(),
             'trip_record.trip_id': [t.id for t in trips]
-        })
+        },
+        order_by='record.last_seen ASC')
     return {row['trip_id']: Bus(row['bus_number']) for row in rows}
 
 def find_scheduled_today(system, trips):
@@ -105,6 +106,7 @@ def find_scheduled_today(system, trips):
         columns={
             'record.bus_number': 'bus_number',
             'record.block_id': 'block_id',
+            'record.last_seen': 'last_seen',
             'ROW_NUMBER() OVER(PARTITION BY record.block_id ORDER BY record.record_id DESC)': 'row_number'
         },
         filters={
@@ -123,5 +125,6 @@ def find_scheduled_today(system, trips):
         filters={
             'numbered_record.row_number': 1
         },
+        order_by='numbered_record.last_seen ASC',
         custom_args=args)
     return {row['block_id']: Bus(row['bus_number']) for row in rows}

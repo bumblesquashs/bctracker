@@ -1,5 +1,5 @@
 
-% rebase('base', title=str(route), enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">
@@ -13,7 +13,6 @@
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
-    <hr />
 </div>
 
 % if len(route.trips) == 0:

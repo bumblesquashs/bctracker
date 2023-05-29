@@ -1,10 +1,10 @@
 
-% rebase('base', title='Personalize', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Personalize</h1>
-    <hr />
 </div>
+
 <div class="flex-container">
     <div class="container flex-1">
         <div class="section">

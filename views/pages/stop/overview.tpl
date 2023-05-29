@@ -4,7 +4,7 @@
 
 % from models.date import Date
 
-% rebase('base', title=f'Stop {stop.number}', include_maps=True)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>
@@ -14,7 +14,6 @@
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

@@ -2,7 +2,7 @@
 % from models.date import Date
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}', include_maps=True)
+% rebase('base')
 
 % model = bus.model
 
@@ -20,7 +20,6 @@
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

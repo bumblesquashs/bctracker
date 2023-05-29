@@ -3,19 +3,20 @@ from datetime import timedelta
 
 import helpers.date
 
+from models.daterange import DateRange
 from models.weekday import Weekday
 
 class Schedule:
     '''The days of a week when a service is or is not running within a given date range'''
     
-    __slots__ = ('start_date', 'end_date', 'weekdays', 'modified_dates', 'excluded_dates', 'name')
+    __slots__ = ('date_range', 'weekdays', 'modified_dates', 'excluded_dates', 'name')
     
     @classmethod
-    def process(cls, start_date, end_date, weekdays, modified_dates, excluded_dates):
+    def process(cls, date_range, weekdays, modified_dates, excluded_dates):
         for weekday in Weekday:
             dates = excluded_dates if weekday in weekdays else modified_dates
             explicit_dates = {d for d in dates if d.weekday == weekday}
-            implicit_dates = get_implicit_dates(weekday, start_date, end_date, explicit_dates)
+            implicit_dates = get_implicit_dates(weekday, date_range, explicit_dates)
             if len(explicit_dates) == 0 and len(implicit_dates) == 0:
                 if weekday in weekdays:
                     weekdays.remove(weekday)
@@ -32,25 +33,23 @@ class Schedule:
                     weekdays.add(weekday)
                     modified_dates -= explicit_dates
                     excluded_dates = excluded_dates.union(implicit_dates)
-        return cls(start_date, end_date, weekdays, modified_dates, excluded_dates)
+        return cls(date_range, weekdays, modified_dates, excluded_dates)
     
     @classmethod
     def combine(cls, schedules):
         if len(schedules) == 0:
             return None
-        start_date = min({s.start_date for s in schedules})
-        end_date = max({s.end_date for s in schedules})
+        date_range = DateRange.combine([s.date_range for s in schedules])
         weekdays = {w for s in schedules for w in s.weekdays}
         modified_dates = {d for s in schedules for d in s.modified_dates}
         excluded_dates = {d for s in schedules for d in s.excluded_dates}
         for date in excluded_dates:
             if len([s for s in schedules if date in s.excluded_dates]) < len([s for s in schedules if date.weekday in s.weekdays]):
                 modified_dates.add(date)
-        return cls(start_date, end_date, weekdays, modified_dates, excluded_dates - modified_dates)
+        return cls(date_range, weekdays, modified_dates, excluded_dates - modified_dates)
     
-    def __init__(self, start_date, end_date, weekdays, modified_dates, excluded_dates):
-        self.start_date = start_date
-        self.end_date = end_date
+    def __init__(self, date_range, weekdays, modified_dates, excluded_dates):
+        self.date_range = date_range
         self.weekdays = weekdays
         self.modified_dates = modified_dates
         self.excluded_dates = excluded_dates
@@ -100,16 +99,9 @@ class Schedule:
         '''Returns a formatted string of dates that are excluded from this schedule'''
         return helpers.date.flatten(sorted(self.excluded_dates))
     
-    @property
-    def date_string(self):
-        '''Returns a string indicating the dates that this schedule operates'''
-        if self.start_date == self.end_date:
-            return str(self.start_date)
-        return f'{self.start_date} to {self.end_date}'
-    
     def includes(self, date):
         '''Checks if this schedule includes the given date'''
-        if date < self.start_date or date > self.end_date:
+        if date not in self.date_range:
             return False
         if date in self.modified_dates:
             return True
@@ -129,13 +121,13 @@ class Schedule:
             return 'normal-service'
         return 'no-service'
 
-def get_implicit_dates(weekday, start_date, end_date, explicit_dates):
-    '''Returns dates on the given weekday between the start and end dates that are not included in the explicit dates'''
+def get_implicit_dates(weekday, date_range, explicit_dates):
+    '''Returns dates on the given weekday within the date range that are not included in the explicit dates'''
     implicit_dates = set()
-    date = start_date
+    date = date_range.start
     while date.weekday != weekday:
         date += timedelta(days=1)
-    while date <= end_date:
+    while date in date_range:
         if date not in explicit_dates:
             implicit_dates.add(date)
         date += timedelta(weeks=1)

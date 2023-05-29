@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Trip {trip.id}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Trip {{! trip.display_id }}</h1>
@@ -9,7 +9,6 @@
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
-    <hr />
 </div>
 
 % if system.realtime_enabled:

@@ -35,10 +35,6 @@ form input[type="text"]:focus {
     border-color: #AAAAAA;
 }
 
-hr {
-    border-top-color: #EEEEEE;
-}
-
 table.striped {
     border-color: #FFFFFF;
 }
@@ -427,6 +423,10 @@ table.striped tr {
     color: #888888;
 }
 
+.page-header {
+    border-bottom-color: #EEEEEE;
+}
+
 .positive {
     color: #1A671A;
 }
@@ -472,9 +472,13 @@ table.striped tr {
     color: #000000;
 }
 
+.tab-button-bar {
+    background: #EEEEEE;
+    border-color: #EEEEEE;
+}
+
 .tab-button {
     background-color: #FFFFFF;
-    border-color: #EEEEEE;
     color: #0040FF;
 }
 

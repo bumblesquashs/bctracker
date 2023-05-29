@@ -1,9 +1,8 @@
 
-% rebase('base', title='Error', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Error: Trip {{ trip_id }} Not Found</h1>
-    <hr />
 </div>
 
 <p>The trip you are looking for doesn't seem to exist!</p>
