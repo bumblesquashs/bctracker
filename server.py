@@ -7,6 +7,7 @@ import cherrypy as cp
 import helpers.model
 import helpers.order
 import helpers.overview
+import helpers.point
 import helpers.record
 import helpers.region
 import helpers.system
@@ -57,7 +58,7 @@ def start(args):
     
     for system in helpers.system.find_all():
         if running:
-            gtfs.load(system, args.reload)
+            gtfs.load(system, args.reload, args.updatedb)
             if not gtfs.validate(system):
                 gtfs.load(system, True)
             realtime.update(system)
@@ -929,14 +930,8 @@ def system_api_map(system_id=None):
     '/<system_id>/api/shape/<shape_id>.json'
 ])
 def api_shape_id(shape_id, system_id=None):
-    system = helpers.system.find(system_id)
-    if system is None:
-        return {}
-    shape = system.get_shape(shape_id)
-    if shape is None:
-        return {}
     return {
-        'points': [p.json for p in shape.points]
+        'points': [p.json for p in helpers.point.find_all(system_id, shape_id)]
     }
 
 @app.post([
