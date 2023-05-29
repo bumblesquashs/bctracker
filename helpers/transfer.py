@@ -12,7 +12,7 @@ def create(bus, date, old_system, new_system):
         'new_system_id': new_system.id
     })
 
-def find_all(system_id, limit=None):
+def find_all(system_id=None, bus_number=None, limit=None):
     '''Returns all transfers that match the given system ID'''
     rows = database.select('transfer',
         columns={
@@ -24,7 +24,8 @@ def find_all(system_id, limit=None):
         },
         filters={
             'transfer.old_system_id': system_id,
-            'transfer.new_system_id': system_id
+            'transfer.new_system_id': system_id,
+            'transfer.bus_number': bus_number
         },
         operation='OR',
         order_by={

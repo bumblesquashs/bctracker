@@ -48,7 +48,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -67,7 +67,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -86,7 +86,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -105,7 +105,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="smaller-font lighter-text">
                                             % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_string }}
+                                                {{ service_group.schedule.date_range }}
                                             % else:
                                                 {{ service_group }}
                                             % end
@@ -125,7 +125,7 @@
                                         % if len(service_groups) > 1:
                                             <div class="smaller-font lighter-text">
                                                 % if len(sheets) > 1:
-                                                    {{ service_group.schedule.date_string }}
+                                                    {{ service_group.schedule.date_range }}
                                                 % else:
                                                     {{ service_group }}
                                                 % end

@@ -3,6 +3,8 @@ from enum import Enum
 
 from datetime import datetime
 
+import helpers.point
+
 from models.time import Time
 
 class Direction(Enum):
@@ -42,7 +44,7 @@ class Trip:
         direction_id = int(row['direction_id'])
         shape_id = row['shape_id']
         headsign = row['trip_headsign']
-        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures.get(trip_id, []))
+        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, sorted(departures.get(trip_id, [])))
     
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures):
         self.system = system
@@ -53,16 +55,15 @@ class Trip:
         self.direction_id = direction_id
         self.shape_id = shape_id
         self.headsign = headsign
-        self.departures = sorted(departures)
+        self.departures = departures
         
-        points = self.points
-        if len(points) == 0:
+        if len(departures) == 0:
             self.direction = Direction.UNKNOWN
         else:
-            first_point = points[0]
-            last_point = points[-1]
-            lat_diff = first_point.lat - last_point.lat
-            lon_diff = first_point.lon - last_point.lon
+            first_stop = self.first_departure.stop
+            last_stop = self.last_departure.stop
+            lat_diff = first_stop.lat - last_stop.lat
+            lon_diff = first_stop.lon - last_stop.lon
             if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
                 self.direction = Direction.CIRCULAR
             elif abs(lat_diff) > abs(lon_diff):
@@ -156,14 +157,6 @@ class Trip:
         return departure.distance_traveled
     
     @property
-    def points(self):
-        '''Returns all shape points associated with this trip'''
-        shape = self.system.get_shape(self.shape_id)
-        if shape is None:
-            return []
-        return sorted(shape.points)
-    
-    @property
     def related_trips(self):
         '''Returns all trips with the same route, direction, start time, and end time as this trip'''
         if self._related_trips is None:
@@ -178,8 +171,12 @@ class Trip:
             'shape_id': self.shape_id,
             'colour': self.route.colour,
             'text_colour': self.route.text_colour,
-            'points': [p.json for p in self.points]
+            'points': [p.json for p in self.load_points()]
         }
+    
+    def load_points(self):
+        '''Returns all points associated with this trip'''
+        return helpers.point.find_all(self.system.id, self.shape_id)
     
     def get_departure(self, stop):
         '''Returns the departure for a given stop on this trip'''

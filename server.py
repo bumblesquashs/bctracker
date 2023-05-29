@@ -7,6 +7,7 @@ import cherrypy as cp
 import helpers.model
 import helpers.order
 import helpers.overview
+import helpers.point
 import helpers.position
 import helpers.record
 import helpers.region
@@ -16,6 +17,7 @@ import helpers.transfer
 
 from models.bus import Bus
 from models.date import Date
+from models.event import Event
 
 import cron
 import database
@@ -58,7 +60,7 @@ def start(args):
     
     for system in helpers.system.find_all():
         if running:
-            gtfs.load(system, args.reload)
+            gtfs.load(system, args.reload, args.updatedb)
             if not gtfs.validate(system):
                 gtfs.load(system, True)
             realtime.update(system)
@@ -348,11 +350,23 @@ def bus_history_page(bus_number, system_id=None):
             bus_number=bus_number
         )
     records = helpers.record.find_all(bus_number=bus_number)
+    transfers = helpers.transfer.find_all(bus_number=bus_number)
+    events = []
+    if overview is not None:
+        events.append(Event(overview.first_seen_date, 'First Seen'))
+        if overview.first_record is not None:
+            events.append(Event(overview.first_record.date, 'First Tracked'))
+        events.append(Event(overview.last_seen_date, 'Last Seen'))
+        if overview.last_record is not None:
+            events.append(Event(overview.last_record.date, 'Last Tracked'))
+        for transfer in transfers:
+            events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
     return page('bus/history', system_id,
         title=f'Bus {bus}',
         bus=bus,
         records=records,
-        overview=overview
+        overview=overview,
+        events=events
     )
 
 @app.get([
@@ -620,13 +634,17 @@ def block_history_page(block_id, system_id=None):
         )
     block = system.get_block(block_id)
     if block is None:
-        return error_page('block', system_id,
-            block_id=block_id
-        )
+        return error_page('block', system_id, block_id=block_id)
+    records = helpers.record.find_all(system_id=system_id, block_id=block_id)
+    events = []
+    if len(records) > 0:
+        events.append(Event(records[0].date, 'First Tracked'))
+        events.append(Event(records[-1].date, 'Last Tracked'))
     return page('block/history', system_id,
         title=f'Block {block.id}',
         block=block,
-        records=helpers.record.find_all(system_id=system_id, block_id=block_id)
+        records=records,
+        events=events
     )
 
 @app.get([
@@ -692,13 +710,17 @@ def trip_history_page(trip_id, system_id=None):
         )
     trip = system.get_trip(trip_id)
     if trip is None:
-        return error_page('trip', system_id,
-            trip_id=trip_id
-        )
+        return error_page('trip', system_id, trip_id=trip_id)
+    records = helpers.record.find_all(system_id=system_id, trip_id=trip_id)
+    events = []
+    if len(records) > 0:
+        events.append(Event(records[0].date, 'First Tracked'))
+        events.append(Event(records[-1].date, 'Last Tracked'))
     return page('trip/history', system_id,
         title=f'Trip {trip.id}',
         trip=trip,
-        records=helpers.record.find_all(system_id=system_id, trip_id=trip_id)
+        records=records,
+        events=events
     )
 
 @app.get([
@@ -931,14 +953,8 @@ def system_api_map(system_id=None):
     '/<system_id>/api/shape/<shape_id>.json'
 ])
 def api_shape_id(shape_id, system_id=None):
-    system = helpers.system.find(system_id)
-    if system is None:
-        return {}
-    shape = system.get_shape(shape_id)
-    if shape is None:
-        return {}
     return {
-        'points': [p.json for p in shape.points]
+        'points': [p.json for p in helpers.point.find_all(system_id, shape_id)]
     }
 
 @app.post([

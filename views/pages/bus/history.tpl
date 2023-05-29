@@ -20,79 +20,22 @@
 </div>
 
 <div class="flex-container">
-    <div class="sidebar container flex-1">
-        <div class="section">
-            <div class="header">
-                <h2>Overview</h2>
-            </div>
-            <div class="content">
-                <div class="info-box">
-                    <div class="section">
-                        <div class="name">Last Seen</div>
-                        <div class="value flex-column">
-                            % if overview is None:
-                                <div class="lighter-text">Never</div>
-                            % else:
-                                % last_seen = overview.last_seen_date
-                                % if last_seen.is_today:
-                                    Today
-                                % else:
-                                    {{ last_seen }}
-                                    <span class="smaller-font">{{ last_seen.format_since() }}</span>
-                                % end
-                            % end
+    % if overview is not None:
+        <div class="sidebar container flex-1">
+            <div class="section">
+                <div class="header">
+                    <h2>Overview</h2>
+                </div>
+                <div class="content">
+                    <div class="info-box">
+                        <div class="section no-flex">
+                            % include('components/events_indicator', events=events)
                         </div>
-                    </div>
-                    % if overview is not None:
-                        % last_record = overview.last_record
-                        % if last_record is not None:
-                            <div class="section">
-                                <div class="name">Last Tracked</div>
-                                <div class="value flex-column">
-                                    % last_tracked = last_record.date
-                                    % if last_tracked.is_today:
-                                        Today
-                                    % else:
-                                        {{ last_tracked }}
-                                        <span class="smaller-font">{{ last_tracked.format_since() }}</span>
-                                    % end
-                                </div>
-                            </div>
+                        % record_systems = {r.system for r in records}
+                        % if overview is not None:
+                            % record_systems.add(overview.first_seen_system)
+                            % record_systems.add(overview.last_seen_system)
                         % end
-                        <div class="section">
-                            <div class="name">First Seen</div>
-                            <div class="value flex-column">
-                                % first_seen = overview.first_seen_date
-                                % if first_seen.is_today:
-                                    Today
-                                % else:
-                                    {{ first_seen }}
-                                    <span class="smaller-font">{{ first_seen.format_since() }}</span>
-                                % end
-                            </div>
-                        </div>
-                        % first_record = overview.first_record
-                        % if first_record is not None:
-                            <div class="section">
-                                <div class="name">First Tracked</div>
-                                <div class="value flex-column">
-                                    % first_tracked = first_record.date
-                                    % if first_tracked.is_today:
-                                        Today
-                                    % else:
-                                        {{ first_tracked }}
-                                        <span class="smaller-font">{{ first_tracked.format_since() }}</span>
-                                    % end
-                                </div>
-                            </div>
-                        % end
-                    % end
-                    % record_systems = {r.system for r in records}
-                    % if overview is not None:
-                        % record_systems.add(overview.first_seen_system)
-                        % record_systems.add(overview.last_seen_system)
-                    % end
-                    % if len(record_systems) > 0:
                         <div class="section">
                             <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
                             <div class="value flex-column">
@@ -101,11 +44,11 @@
                                 % end
                             </div>
                         </div>
-                    % end
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    % end
     
     <div class="container flex-3">
         <div class="section">

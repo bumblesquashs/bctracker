@@ -2,6 +2,7 @@
 from enum import IntEnum
 
 from models.date import Date
+from models.daterange import DateRange
 from models.schedule import Schedule
 from models.weekday import Weekday
 
@@ -44,6 +45,7 @@ class Service:
         id = row['service_id']
         start_date = Date.parse_csv(row['start_date'], system.timezone)
         end_date = Date.parse_csv(row['end_date'], system.timezone)
+        date_range = DateRange(start_date, end_date)
         mon = row['monday'] == '1'
         tue = row['tuesday'] == '1'
         wed = row['wednesday'] == '1'
@@ -56,7 +58,7 @@ class Service:
         service_exceptions = exceptions.get(id, [])
         modified_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
         excluded_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(start_date, end_date, weekdays, modified_dates, excluded_dates)
+        schedule = Schedule.process(date_range, weekdays, modified_dates, excluded_dates)
         return cls(system, id, schedule)
     
     @classmethod
@@ -64,9 +66,10 @@ class Service:
         '''Returns a service based on a list of service exceptions'''
         start_date = min({e.date for e in exceptions})
         end_date = max({e.date for e in exceptions})
+        date_range = DateRange(start_date, end_date)
         modified_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
         excluded_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(start_date, end_date, set(), modified_dates, excluded_dates)
+        schedule = Schedule.process(date_range, set(), modified_dates, excluded_dates)
         return cls(system, id, schedule)
     
     def __init__(self, system, id, schedule):
