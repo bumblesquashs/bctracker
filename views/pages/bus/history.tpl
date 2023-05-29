@@ -1,7 +1,7 @@
 
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Bus {{ bus }}</h1>
@@ -17,7 +17,6 @@
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

@@ -1,5 +1,5 @@
 
-% rebase('base', title='Routes', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Routes</h1>
@@ -7,7 +7,6 @@
         <span class="tab-button current">List</span>
         <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
     </div>
-    <hr />
 </div>
 
 % if system is None:

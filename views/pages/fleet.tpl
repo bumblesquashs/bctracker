@@ -1,9 +1,8 @@
 
-% rebase('base', title='Fleet')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Fleet</h1>
-    <hr />
 </div>
 
 <p>

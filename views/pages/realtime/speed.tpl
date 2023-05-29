@@ -1,5 +1,5 @@
 
-% rebase('base', title='Realtime')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Realtime</h1>
@@ -12,7 +12,6 @@
         <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
-    <hr />
 </div>
 
 % if len(positions) == 0:

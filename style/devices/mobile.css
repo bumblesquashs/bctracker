@@ -226,14 +226,8 @@ table {
 }
 
 .tab-button-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: -1px;
-}
-
-.tab-button {
-    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
 .tablet-only {
