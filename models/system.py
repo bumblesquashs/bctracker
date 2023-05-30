@@ -103,6 +103,7 @@ class System:
         return sorted(self.blocks.values())
     
     def get_positions(self):
+        '''Returns all positions'''
         return helpers.position.find_all(system_id=self.id)
     
     def get_route(self, route_id=None, number=None):
