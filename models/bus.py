@@ -7,10 +7,16 @@ class Bus:
     
     __slots__ = ('number', 'order', 'adornment')
     
-    def __init__(self, bus_number):
-        self.number = bus_number
-        self.order = helpers.order.find(bus_number)
-        self.adornment = helpers.adornment.find(bus_number)
+    def __init__(self, number, order=None, adornment=None):
+        self.number = number
+        if order is None:
+            self.order = helpers.order.find(number)
+        else:
+            self.order = order
+        if adornment is None:
+            self.adornment = helpers.adornment.find(number)
+        else:
+            self.adornment = adornment
     
     def __str__(self):
         if self.is_known:

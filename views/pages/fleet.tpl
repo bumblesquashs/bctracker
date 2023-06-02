@@ -110,13 +110,12 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
-                                                % for number in order.range:
-                                                    % bus_number = f'{number:04d}'
-                                                    % if number in overviews:
-                                                        % overview = overviews[number]
+                                                % for bus in order:
+                                                    % if bus.number in overviews:
+                                                        % overview = overviews[bus.number]
                                                         <tr>
                                                             <td>
-                                                                <a href="{{ get_url(system, f'bus/{number}') }}">{{ bus_number }}</a>
+                                                                % include('components/bus', bus=bus)
                                                             </td>
                                                             <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
                                                             <td class="non-desktop">
@@ -137,7 +136,9 @@
                                                         </tr>
                                                     % else:
                                                         <tr>
-                                                            <td>{{ bus_number }}</td>
+                                                            <td>
+                                                                % include('components/bus', bus=bus, enable_link=False)
+                                                            </td>
                                                             <td class="lighter-text" colspan="4">Unavailable</td>
                                                         </tr>
                                                     % end
