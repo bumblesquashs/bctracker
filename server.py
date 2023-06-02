@@ -4,6 +4,7 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request, response, debug, redirect
 import cherrypy as cp
 
+import helpers.adornment
 import helpers.model
 import helpers.order
 import helpers.overview
@@ -51,6 +52,7 @@ def start(args):
     if args.reload:
         print('Forcing GTFS redownload')
     
+    helpers.adornment.load()
     helpers.model.load()
     helpers.order.load()
     helpers.region.load()

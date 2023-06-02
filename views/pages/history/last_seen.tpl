@@ -47,11 +47,7 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % if bus.is_known:
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % else:
-                                <span>{{ bus }}</span>
-                            % end
+                            % include('components/bus', bus=bus)
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
@@ -95,11 +91,7 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % if bus.is_known:
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % else:
-                                <span>{{ bus }}</span>
-                            % end
+                            % include('components/bus', bus=bus)
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">

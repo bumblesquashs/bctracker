@@ -1,6 +1,8 @@
 
 import csv
 
+import helpers.adornment
+
 from models.match import Match
 from models.order import Order
 
@@ -36,6 +38,9 @@ def find_matches(query, recorded_bus_numbers):
         order_string = str(order)
         for bus_number in order.range:
             bus_number_string = f'{bus_number:04d}'
+            adornment = helpers.adornment.find(bus_number)
+            if adornment is not None and adornment.enabled:
+                bus_number_string += f' {adornment}'
             value = 0
             if query in bus_number_string:
                 value += (len(query) / len(bus_number_string)) * 100
