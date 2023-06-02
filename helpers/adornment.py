@@ -19,3 +19,8 @@ def find(bus_number):
     if bus_number in adornments:
         return adornments[bus_number]
     return None
+
+def delete_all():
+    '''Deletes all adornments'''
+    global adornments
+    adornments = {}
