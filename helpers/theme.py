@@ -23,3 +23,8 @@ def find(theme_id):
 def find_all():
     '''Returns all themes'''
     return themes.values()
+
+def delete_all():
+    '''Deletes all themes'''
+    global themes
+    themes = {}

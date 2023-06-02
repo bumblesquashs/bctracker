@@ -291,6 +291,10 @@ table.striped tr.section td {
     padding: 3px 6px;
 }
 
+.adornment {
+    user-select: none;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;
@@ -908,6 +912,7 @@ table.striped tr.section td {
     text-align: left;
     width: max-content;
     max-width: 300px;
+    font-weight: normal;
 }
 
 .tooltip-anchor .tooltip::after {

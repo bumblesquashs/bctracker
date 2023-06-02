@@ -23,3 +23,8 @@ def find(region_id):
 def find_all():
     '''Returns all regions'''
     return regions.values()
+
+def delete_all():
+    '''Deletes all regions'''
+    global regions
+    regions = {}

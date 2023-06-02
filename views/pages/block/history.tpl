@@ -84,28 +84,16 @@
                                         <td>
                                             <div class="flex-column">
                                                 <div class="flex-row left">
-                                                    % if bus.is_known:
-                                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                    % else:
-                                                        <span>{{ bus }}</span>
-                                                    % end
+                                                    % include('components/bus', bus=bus)
                                                     % include('components/record_warnings_indicator', record=record)
                                                 </div>
                                                 <span class="non-desktop smaller-font">
-                                                    % if order is None:
-                                                        <span class="lighter-text">Unknown Year/Model</span>
-                                                    % else:
-                                                        {{! order }}
-                                                    % end
+                                                    % include('components/order', order=order)
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="desktop-only">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{! order }}
-                                            % end
+                                            % include('components/order', order=order)
                                         </td>
                                         <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                         <td>{{ record.last_seen.format_web(time_format) }}</td>

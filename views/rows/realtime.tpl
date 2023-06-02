@@ -6,11 +6,7 @@
     <td>
         <div class="flex-column">
             <div class="flex-row left">
-                % if bus.is_known:
-                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                % else:
-                    <span>{{ bus }}</span>
-                % end
+                % include('components/bus', bus=bus)
                 % include('components/adherence_indicator', adherence=position.adherence)
             </div>
             % if system is None:
