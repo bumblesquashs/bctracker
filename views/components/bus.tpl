@@ -1,4 +1,4 @@
-<div class="flex-row">
+<div class="flex-row flex-gap-5">
     % if bus.is_known and get('enable_link', True):
         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
     % else:
