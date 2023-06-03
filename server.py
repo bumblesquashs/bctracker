@@ -4,6 +4,7 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request, response, debug, redirect
 import cherrypy as cp
 
+import helpers.adornment
 import helpers.model
 import helpers.order
 import helpers.overview
@@ -52,6 +53,7 @@ def start(args):
     if args.reload:
         print('Forcing GTFS redownload')
     
+    helpers.adornment.load()
     helpers.model.load()
     helpers.order.load()
     helpers.region.load()
@@ -978,6 +980,78 @@ def api_search(system_id=None):
         'results': [m.get_json(system, get_url) for m in matches[0:10]],
         'count': len(matches)
     }
+
+@app.post([
+    '/api/admin/reload-adornments',
+    '/api/admin/reload-adornments/',
+    '/api/admin/<key>/reload-adornments',
+    '/api/admin/<key>/reload-adornments/',
+    '/<system_id>/api/admin/reload-adornments',
+    '/<system_id>/api/admin/reload-adornments/',
+    '/<system_id>/api/admin/<key>/reload-adornments',
+    '/<system_id>/api/admin/<key>/reload-adornments/'
+])
+def api_admin_reload_adornments(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        helpers.adornment.delete_all()
+        helpers.adornment.load()
+        return 'Success'
+    return 'Access denied'
+
+@app.post([
+    '/api/admin/reload-orders',
+    '/api/admin/reload-orders/',
+    '/api/admin/<key>/reload-orders',
+    '/api/admin/<key>/reload-orders/',
+    '/<system_id>/api/admin/reload-orders',
+    '/<system_id>/api/admin/reload-orders/',
+    '/<system_id>/api/admin/<key>/reload-orders',
+    '/<system_id>/api/admin/<key>/reload-orders/'
+])
+def api_admin_reload_orders(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        helpers.model.delete_all()
+        helpers.order.delete_all()
+        helpers.model.load()
+        helpers.order.load()
+        return 'Success'
+    return 'Access denied'
+
+@app.post([
+    '/api/admin/reload-systems',
+    '/api/admin/reload-systems/',
+    '/api/admin/<key>/reload-systems',
+    '/api/admin/<key>/reload-systems/',
+    '/<system_id>/api/admin/reload-systems',
+    '/<system_id>/api/admin/reload-systems/',
+    '/<system_id>/api/admin/<key>/reload-systems',
+    '/<system_id>/api/admin/<key>/reload-systems/'
+])
+def api_admin_reload_systems(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        helpers.region.delete_all()
+        helpers.system.delete_all()
+        helpers.region.load()
+        helpers.system.load()
+        return 'Success'
+    return 'Access denied'
+
+@app.post([
+    '/api/admin/reload-themes',
+    '/api/admin/reload-themes/',
+    '/api/admin/<key>/reload-themes',
+    '/api/admin/<key>/reload-themes/',
+    '/<system_id>/api/admin/reload-themes',
+    '/<system_id>/api/admin/reload-themes/',
+    '/<system_id>/api/admin/<key>/reload-themes',
+    '/<system_id>/api/admin/<key>/reload-themes/'
+])
+def api_admin_reload_themes(key=None, system_id=None):
+    if admin_key is None or key == admin_key:
+        helpers.theme.delete_all()
+        helpers.theme.load()
+        return 'Success'
+    return 'Access denied'
 
 @app.post([
     '/api/admin/restart-cron',

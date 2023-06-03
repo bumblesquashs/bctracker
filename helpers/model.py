@@ -19,3 +19,8 @@ def find(model_id):
     if model_id in models:
         return models[model_id]
     return None
+
+def delete_all():
+    '''Deletes all models'''
+    global models
+    models = {}

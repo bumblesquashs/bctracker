@@ -7,7 +7,10 @@
 % model = bus.model
 
 <div class="page-header">
-    <h1 class="title">Bus {{ bus }}</h1>
+    <h1 class="title flex-row">
+        <span>Bus</span>
+        % include('components/bus', bus=bus, enable_link=False)
+    </h1>
     <h2 class="subtitle">
         % if bus.order is None:
             <span class="lighter-text">Unknown Year/Model</span>

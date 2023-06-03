@@ -49,26 +49,14 @@
                     </td>
                     <td>
                         <div class="flex-column">
-                            % if bus.is_known:
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % else:
-                                <span>{{ bus }}</span>
-                            % end
+                            % include('components/bus', bus=bus)
                             <span class="non-desktop smaller-font">
-                                % if order is None:
-                                    <span class="lighter-text">Unknown Year/Model</span>
-                                % else:
-                                    {{! order }}
-                                % end
+                                % include('components/order', order=order)
                             </span>
                         </div>
                     </td>
                     <td class="desktop-only">
-                        % if order is None:
-                            <span class="lighter-text">Unknown Year/Model</span>
-                        % else:
-                            {{! order }}
-                        % end
+                        % include('components/order', order=order)
                     </td>
                     % if system is None:
                         <td class="non-mobile">{{ record.system }}</td>

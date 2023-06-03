@@ -264,6 +264,10 @@
                 title.innerHTML = position.bus_number;
             }
             
+            if (position.adornment != null) {
+                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            }
+            
             details.appendChild(title);
             details.appendChild(content);
             element.appendChild(details);
