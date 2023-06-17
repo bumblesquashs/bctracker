@@ -1,24 +1,23 @@
 
 % import helpers.departure
 
-% rebase('base', title=str(route), include_maps=True, full_map=True)
+% rebase('base')
+
+<div class="page-header">
+    <h1 class="title">
+        <div class="flex-row">
+            % include('components/route_indicator')
+            <div class="flex-1">{{! route.display_name }}</div>
+        </div>
+    </h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Map</span>
+        <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
+    </div>
+</div>
 
 % if len(route.trips) == 0:
-    <div class="page-header">
-        <h1 class="title">
-            <div class="flex-row">
-                % include('components/route_indicator')
-                <div class="flex-1">{{! route.display_name }}</div>
-            </div>
-        </h1>
-        <div class="tab-button-bar">
-            <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
-            <span class="tab-button current">Map</span>
-            <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
-        </div>
-        <hr />
-    </div>
-    
     <p>There are currently no trips for this route.</p>
     <p>
         There are a few reasons why that may be the case:
@@ -30,20 +29,6 @@
         Please check again later!
     </p>
 % else:
-    <div class="page-header map-page">
-        <h1 class="title">
-            <div class="flex-row">
-                % include('components/route_indicator')
-                {{! route.display_name }}
-            </div>
-        </h1>
-        <div class="tab-button-bar">
-            <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
-            <span class="tab-button current">Map</span>
-            <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
-        </div>
-    </div>
-    
     % trips = route.trips
     % departures = helpers.departure.find_all(route.system.id, trip_id=[t.id for t in trips])
     

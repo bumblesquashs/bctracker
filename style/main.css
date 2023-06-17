@@ -7,6 +7,12 @@ body {
     margin: 0px;
 }
 
+body.full-map .page-header {
+    position: relative;
+    z-index: 20;
+    border-bottom-width: 0px;
+}
+
 input {
     -webkit-appearance: none;
 }
@@ -33,13 +39,6 @@ form .input-container {
 
 form .input-container input[type="text"] {
     flex: 1;
-}
-
-hr {
-    margin: 0px;
-    border-width: 0px;
-    border-top-width: 2px;
-    border-top-style: solid;
 }
 
 h1, h2, h3, h4 {
@@ -292,6 +291,10 @@ table.striped tr.section td {
     padding: 3px 6px;
 }
 
+.adornment {
+    user-select: none;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;
@@ -388,6 +391,28 @@ table.striped tr.section td {
     display: none !important;
 }
 
+.events {
+    display: grid;
+    grid-template-columns: minmax(125px, auto) 1fr;
+    gap: 10px;
+}
+
+.events .date {
+    padding-right: 10px;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.events .date img {
+    width: 20px;
+    height: 20px;
+}
+
+.events ul {
+    margin: 0px;
+    padding-left: 20px;
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -435,6 +460,14 @@ table.striped tr.section td {
 
 .flex-5 {
     flex: 5;
+}
+
+.flex-gap-0 {
+    gap: 0px;
+}
+
+.flex-gap-2 {
+    gap: 2px;
 }
 
 .flex-gap-5 {
@@ -717,15 +750,8 @@ table.striped tr.section td {
 
 .page-header {
     margin-bottom: 20px;
-}
-
-.page-header.map-page {
-    position: relative;
-    z-index: 20;
-}
-
-.page-header.map-page .tab-button {
     border-bottom-width: 2px;
+    border-bottom-style: solid;
 }
 
 .page-header .subtitle {
@@ -833,12 +859,18 @@ table.striped tr.section td {
     text-align: center;
 }
 
-.tab-button {
+.tab-button-bar {
+    display: inline-flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    margin-bottom: -1px;
+    gap: 1px;
     border-width: 1px;
     border-style: solid;
-    border-bottom-width: 0px;
+}
+
+.tab-button {
     padding: 10px;
-    margin: 0px;
     cursor: default;
     font-size: 13pt;
     font-weight: bold;
@@ -846,10 +878,6 @@ table.striped tr.section td {
     font-family: Helvetica, sans-serif;
     text-align: center;
     text-decoration: none !important;
-}
-
-.tab-button ~ .tab-button {
-    border-left-width: 0px;
 }
 
 .tab-button:hover {
@@ -865,6 +893,7 @@ table.striped tr.section td {
 }
 
 .tooltip-anchor {
+    display: inline-block;
     position: relative;
 }
 
@@ -883,6 +912,7 @@ table.striped tr.section td {
     text-align: left;
     width: max-content;
     max-width: 300px;
+    font-weight: normal;
 }
 
 .tooltip-anchor .tooltip::after {

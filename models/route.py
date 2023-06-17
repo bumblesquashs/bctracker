@@ -54,7 +54,7 @@ class Route:
                 name = ' / '.join(sorted(set(headsigns)))
             else:
                 name = prefix
-        if 'route_color' in row and row['route_color'] != '' and row['route_color'] != '000000':
+        if 'route_color' in row and row['route_color'] != '' and (not system.recolour_black or row['route_color'] != '000000'):
             colour = row['route_color']
         else:
             # Generate a random colour based on system ID and route number
@@ -125,6 +125,7 @@ class Route:
     
     @property
     def display_name(self):
+        '''Formats the route name for web display'''
         return self.name.replace('/', '/<wbr />')
     
     @property

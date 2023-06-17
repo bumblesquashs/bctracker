@@ -2,12 +2,15 @@
 % from models.date import Date
 % from models.model import ModelType
 
-% rebase('base', title=f'Bus {bus}', include_maps=True)
+% rebase('base')
 
 % model = bus.model
 
 <div class="page-header">
-    <h1 class="title">Bus {{ bus }}</h1>
+    <h1 class="title flex-row">
+        <span>Bus</span>
+        % include('components/bus', bus=bus, enable_link=False)
+    </h1>
     <h2 class="subtitle">
         % if bus.order is None:
             <span class="lighter-text">Unknown Year/Model</span>
@@ -20,7 +23,6 @@
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">

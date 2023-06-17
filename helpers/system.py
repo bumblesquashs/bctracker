@@ -23,3 +23,8 @@ def find(system_id):
 def find_all():
     '''Returns all systems'''
     return systems.values()
+
+def delete_all():
+    '''Deletes all systems'''
+    global systems
+    systems = {}

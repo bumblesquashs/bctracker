@@ -1,7 +1,7 @@
 
-% rebase('base', title=f'Trip {trip.id}', include_maps=True, full_map=True)
+% rebase('base')
 
-<div class="page-header map-page">
+<div class="page-header">
     <h1 class="title">Trip {{! trip.display_id }}</h1>
     <h2 class="subtitle">{{ trip }}</h2>
     <div class="tab-button-bar">

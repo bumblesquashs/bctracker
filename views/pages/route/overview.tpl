@@ -1,5 +1,5 @@
 
-% rebase('base', title=str(route), include_maps=True)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">
@@ -13,7 +13,6 @@
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
         <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
-    <hr />
 </div>
 
 <div class="flex-container">
@@ -72,28 +71,16 @@
                                     <td>
                                         <div class="flex-column">
                                             <div class="flex-row left">
-                                                % if bus.is_known:
-                                                    <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                % else:
-                                                    <span>{{ bus }}</span>
-                                                % end
+                                                % include('components/bus', bus=bus)
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % if order is None:
-                                                    <span class="lighter-text">Unknown Year/Model</span>
-                                                % else:
-                                                    {{! order }}
-                                                % end
+                                                % include('components/order', order=order)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % if order is None:
-                                            <span class="lighter-text">Unknown Year/Model</span>
-                                        % else:
-                                            {{! order }}
-                                        % end
+                                        % include('components/order', order=order)
                                     </td>
                                     <td>
                                         <div class="flex-column">
@@ -192,31 +179,19 @@
                                                                 <td>
                                                                     <div class="flex-column">
                                                                         <div class="flex-row left">
-                                                                            % if bus.is_known:
-                                                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                                            % else:
-                                                                                <span>{{ bus }}</span>
-                                                                            % end
+                                                                            % include('components/bus', bus=bus)
                                                                             % if trip.id in trip_positions:
                                                                                 % position = trip_positions[trip.id]
                                                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                                                             % end
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">
-                                                                            % if order is None:
-                                                                                <span class="lighter-text">Unknown Year/Model</span>
-                                                                            % else:
-                                                                                {{! order }}
-                                                                            % end
+                                                                            % include('components/order', order=order)
                                                                         </span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="desktop-only">
-                                                                    % if order is None:
-                                                                        <span class="lighter-text">Unknown Year/Model</span>
-                                                                    % else:
-                                                                        {{! order }}
-                                                                    % end
+                                                                    % include('components/order', order=order)
                                                                 </td>
                                                             % elif trip.block_id in scheduled_today and trip.start_time.is_later:
                                                                 % bus = scheduled_today[trip.block_id]
@@ -224,34 +199,20 @@
                                                                 <td>
                                                                     <div class="flex-column">
                                                                         <div class="flex-row left">
-                                                                            % if bus.is_known:
-                                                                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                                            % else:
-                                                                                <span>{{ bus }}</span>
-                                                                            % end
+                                                                            % include('components/bus', bus=bus)
                                                                             <div class="tooltip-anchor">
                                                                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                                                                 <img class="middle-align black" src="/img/black/schedule.png" />
-                                                                                <div class="tooltip">
-                                                                                    <div class="title">Bus is scheduled</div>
-                                                                                </div>
+                                                                                <div class="tooltip">Bus is scheduled</div>
                                                                             </div>
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">
-                                                                            % if order is None:
-                                                                                <span class="lighter-text">Unknown Year/Model</span>
-                                                                            % else:
-                                                                                {{! order }}
-                                                                            % end
+                                                                            % include('components/order', order=order)
                                                                         </span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="desktop-only">
-                                                                    % if order is None:
-                                                                        <span class="lighter-text">Unknown Year/Model</span>
-                                                                    % else:
-                                                                        {{! order }}
-                                                                    % end
+                                                                    % include('components/order', order=order)
                                                                 </td>
                                                             % else:
                                                                 <td class="desktop-only lighter-text" colspan="2">Unavailable</td>

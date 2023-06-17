@@ -1,12 +1,11 @@
 
-% rebase('base', title='Stops', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Stops</h1>
     % if search is not None:
         <h2 class="subtitle">Search results for "{{ search }}"</h2>
     % end
-    <hr />
 </div>
 
 % if system is None:

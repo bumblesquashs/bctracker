@@ -78,7 +78,7 @@ def find_trip_ids(record):
     return database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id}, initializer=lambda r: r['trip_id'])
 
 def find_recorded_today(system, trips):
-    '''Returns all bus numbers matching the given system ID and trips that were recorded on the current date'''
+    '''Returns all bus numbers matching the given system and trips that were recorded on the current date'''
     today = Date.today(system.timezone)
     rows = database.select('trip_record',
         columns={
@@ -94,16 +94,18 @@ def find_recorded_today(system, trips):
             'record.system_id': system.id,
             'record.date': today.format_db(),
             'trip_record.trip_id': [t.id for t in trips]
-        })
+        },
+        order_by='record.last_seen ASC')
     return {row['trip_id']: Bus(row['bus_number']) for row in rows}
 
 def find_scheduled_today(system, trips):
-    '''Returns all bus numbers matching the given system ID and trips that are scheduled to run on the current date'''
+    '''Returns all bus numbers matching the given system and trips that are scheduled to run on the current date'''
     today = Date.today(system.timezone)
     cte, args = database.build_select('record',
         columns={
             'record.bus_number': 'bus_number',
             'record.block_id': 'block_id',
+            'record.last_seen': 'last_seen',
             'ROW_NUMBER() OVER(PARTITION BY record.block_id ORDER BY record.record_id DESC)': 'row_number'
         },
         filters={
@@ -122,5 +124,6 @@ def find_scheduled_today(system, trips):
         filters={
             'numbered_record.row_number': 1
         },
+        order_by='numbered_record.last_seen ASC',
         custom_args=args)
     return {row['block_id']: Bus(row['bus_number']) for row in rows}

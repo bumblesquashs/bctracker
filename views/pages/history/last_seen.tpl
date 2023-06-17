@@ -1,5 +1,5 @@
 
-% rebase('base', title='Vehicle History')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Vehicle History</h1>
@@ -8,7 +8,6 @@
         <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
         <a href="{{ get_url(system, 'history/transfers') }}" class="tab-button">Transfers</a>
     </div>
-    <hr />
 </div>
 
 % if system is not None and not system.realtime_enabled:
@@ -48,11 +47,7 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % if bus.is_known:
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % else:
-                                <span>{{ bus }}</span>
-                            % end
+                            % include('components/bus', bus=bus)
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
@@ -96,11 +91,7 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % if bus.is_known:
-                                <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                            % else:
-                                <span>{{ bus }}</span>
-                            % end
+                            % include('components/bus', bus=bus)
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">

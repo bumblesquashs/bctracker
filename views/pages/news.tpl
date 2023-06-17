@@ -1,10 +1,9 @@
 
-% rebase('base', title='News Archive', enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">News Archive</h1>
     <a href="{{ get_url(system) }}">Return home</a>
-    <hr />
 </div>
 
 <div class="container">

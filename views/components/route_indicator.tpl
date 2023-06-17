@@ -6,9 +6,7 @@
             <span class="route-number" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
         % end
         % if get('include_tooltip', False):
-            <div class="tooltip">
-                <div class="title">{{ route }}</div>
-            </div>
+            <div class="tooltip">{{ route }}</div>
         % end
     </span>
 % end

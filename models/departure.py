@@ -7,6 +7,8 @@ import helpers.system
 from models.time import Time
 
 class PickupType(Enum):
+    '''Options for pickup behaviour for a departure'''
+    
     NORMAL = '0'
     UNAVAILABLE = '1'
     PHONE_REQUEST = '2'
@@ -23,9 +25,12 @@ class PickupType(Enum):
     
     @property
     def is_normal(self):
+        '''Checks if this is a normal pickup'''
         return self == PickupType.NORMAL
 
 class DropoffType(Enum):
+    '''Options for dropoff behaviour for a departure'''
+    
     NORMAL = '0'
     UNAVAILABLE = '1'
     PHONE_REQUEST = '2'
@@ -42,6 +47,7 @@ class DropoffType(Enum):
     
     @property
     def is_normal(self):
+        '''Checks if this is a normal dropoff'''
         return self == DropoffType.NORMAL
 
 class Departure:
@@ -134,12 +140,14 @@ class Departure:
     
     @property
     def pickup_only(self):
+        '''Checks if this departure is pickup-only'''
         if self.pickup_type.is_normal:
             return self == self.trip.first_departure
         return False
     
     @property
     def dropoff_only(self):
+        '''Checks if this departure is dropoff-only'''
         if self.dropoff_type.is_normal:
             return self == self.trip.last_departure
         return False

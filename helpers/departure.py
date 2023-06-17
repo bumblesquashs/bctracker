@@ -54,7 +54,7 @@ def find_all(system_id, trip_id=None, sequence=None, stop_id=None, limit=None):
         limit=limit,
         initializer=Departure.from_db)
 
-def delete_all(system_id):
+def delete_all(system):
     database.delete('departure', {
-        'system_id': system_id
+        'system_id': system.id
     })

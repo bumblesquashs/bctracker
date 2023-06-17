@@ -1,10 +1,9 @@
 
-% rebase('base', title='Administration', disable_indexing=True, enable_refresh=False)
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Administration</h1>
     <h2 class="subtitle">Tools for server and system management</h2>
-    <hr />
 </div>
 
 <div class="container">
@@ -14,6 +13,10 @@
         </div>
         <div class="content">
             <div class="button-container">
+                <div class="button" onclick="reloadAdornments()">Reload Adornments</div>
+                <div class="button" onclick="reloadOrders()">Reload Orders</div>
+                <div class="button" onclick="reloadSystems()">Reload Systems</div>
+                <div class="button" onclick="reloadThemes()">Reload Themes</div>
                 <div class="button" onclick="restartCron()">Restart Cron</div>
                 <div class="button" onclick="backupDatabase()">Backup Database</div>
             </div>
@@ -100,6 +103,46 @@
 <script>
     let adminKey
     let systemID
+    
+    function reloadAdornments() {
+        const request = new XMLHttpRequest();
+        if (adminKey == null) {
+            request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
+        } else {
+            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-adornments"), true);
+        }
+        request.send();
+    }
+    
+    function reloadOrders() {
+        const request = new XMLHttpRequest();
+        if (adminKey == null) {
+            request.open("POST", getUrl(systemID, "api/admin/reload-orders"), true);
+        } else {
+            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-orders"), true);
+        }
+        request.send();
+    }
+    
+    function reloadSystems() {
+        const request = new XMLHttpRequest();
+        if (adminKey == null) {
+            request.open("POST", getUrl(systemID, "api/admin/reload-systems"), true);
+        } else {
+            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-systems"), true);
+        }
+        request.send();
+    }
+    
+    function reloadThemes() {
+        const request = new XMLHttpRequest();
+        if (adminKey == null) {
+            request.open("POST", getUrl(systemID, "api/admin/reload-themes"), true);
+        } else {
+            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-themes"), true);
+        }
+        request.send();
+    }
     
     function restartCron() {
         const request = new XMLHttpRequest();

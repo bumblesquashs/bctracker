@@ -14,6 +14,10 @@ body {
     grid-template-rows: auto 1fr;
 }
 
+body.full-map .page-header {
+    display: inline-block;
+}
+
 form {
     margin-bottom: 10px;
 }
@@ -255,21 +259,12 @@ table.striped th {
     display: none !important;
 }
 
-.page-header.map-page {
-    display: inline-block;
-}
-
 .sidebar table {
     width: 100%;
 }
 
 .smaller-font {
     font-size: 11pt;
-}
-
-.tab-button-bar {
-    display: flex;
-    flex-direction: row;
 }
 
 .tab-button {

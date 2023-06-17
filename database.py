@@ -46,6 +46,22 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
+        CREATE TABLE IF NOT EXISTS position (
+            system_id TEXT NOT NULL,
+            bus_number INTEGER NOT NULL,
+            trip_id TEXT,
+            stop_id TEXT,
+            block_id TEXT,
+            route_id TEXT,
+            lat REAL,
+            lon REAL,
+            bearing REAL,
+            speed REAL,
+            adherence INTEGER,
+            PRIMARY KEY (system_id, bus_number)
+        )
+    ''',
+    '''
         CREATE TABLE IF NOT EXISTS departure (
             system_id TEXT NOT NULL,
             trip_id TEXT NOT NULL,
@@ -206,12 +222,12 @@ def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=
     
     if type(group_by) is str:
         sql.append('GROUP BY ' + group_by)
-    elif type(group_by) is list:
+    elif type(group_by) is list or type(group_by) is set:
         sql.append('GROUP BY ' + ', '.join(group_by))
     
     if type(order_by) is str:
         sql.append('ORDER BY ' + order_by)
-    elif type(order_by) is list:
+    elif type(order_by) is list or type(order_by) is set:
         sql.append('ORDER BY ' + ', '.join(order_by))
     elif type(order_by) is dict:
         sql.append('ORDER BY ' + ', '.join([f'{k} {v}' for (k, v) in order_by.items()]))
@@ -259,7 +275,7 @@ def build_where(filters, operation):
     '''Creates a SQL script for a WHERE filter'''
     if type(filters) is str:
         return filters, []
-    elif type(filters) is list:
+    elif type(filters) is list or type(filters) is set:
         if len(filters) > 0:
             return f' {operation} '.join(filters), []
     elif type(filters) is dict:
@@ -273,9 +289,16 @@ def build_where(filters, operation):
                 args += value
                 args_string = ', '.join(['?'] * len(value))
                 expressions.append(f'{key} IN ({args_string})')
+            elif type(value) is set:
+                args += list(value)
+                args_string = ', '.join(['?'] * len(value))
+                expressions.append(f'{key} IN ({args_string})')
             elif type(value) is dict:
                 for (k, v) in value.items():
-                    if v is not None:
+                    if v is None:
+                        if k == 'IS' or k == 'IS NOT':
+                            expressions.append(f'{key} {k} NULL')
+                    else:
                         args.append(v)
                         expressions.append(f'{key} {k} ?')
             else:

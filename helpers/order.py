@@ -34,14 +34,22 @@ def find_matches(query, recorded_bus_numbers):
         if order.is_test:
             continue
         order_string = str(order)
-        for bus_number in order.range:
-            bus_number_string = f'{bus_number:04d}'
+        for bus in order:
+            bus_number_string = str(bus)
             value = 0
             if query in bus_number_string:
                 value += (len(query) / len(bus_number_string)) * 100
                 if bus_number_string.startswith(query):
                     value += len(query)
-            if bus_number not in recorded_bus_numbers:
+            if bus.number not in recorded_bus_numbers:
                 value /= 10
-            matches.append(Match('bus', bus_number_string, order_string, f'bus/{bus_number}', value))
+            adornment = bus.adornment
+            if adornment is not None and adornment.enabled:
+                bus_number_string += f' {adornment}'
+            matches.append(Match('bus', bus_number_string, order_string, f'bus/{bus.number}', value))
     return matches
+
+def delete_all():
+    '''Deletes all orders'''
+    global orders
+    orders = []

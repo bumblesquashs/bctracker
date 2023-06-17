@@ -1,5 +1,6 @@
 
 from models.date import Date
+from models.daterange import DateRange
 from models.schedule import Schedule
 
 class Sheet:
@@ -9,6 +10,7 @@ class Sheet:
     
     @classmethod
     def combine(cls, system, services, include_special):
+        '''Returns a sheet that includes all of the given services'''
         id = '_'.join(sorted({s.id for s in services}))
         schedule = Schedule.combine([s.schedule for s in services])
         service_groups = []
@@ -33,7 +35,7 @@ class Sheet:
         self.service_groups = service_groups
     
     def __str__(self):
-        return self.schedule.date_string
+        return str(self.schedule.date_range)
     
     def __hash__(self):
         return hash(self.id)
@@ -42,7 +44,7 @@ class Sheet:
         return self.id == other.id
     
     def __lt__(self, other):
-        return self.schedule.start_date < other.schedule.start_date
+        return self.schedule.date_range < other.schedule.date_range
 
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
@@ -56,8 +58,7 @@ class ServiceGroup:
             return None
         id = '_'.join(sorted({s.id for s in services}))
         schedules = [s.schedule for s in services]
-        start_date = min({s.start_date for s in schedules})
-        end_date = max({s.end_date for s in schedules})
+        date_range = DateRange.combine([s.date_range for s in schedules])
         if weekdays is None:
             weekdays = {w for s in schedules for w in s.weekdays}
         if modified_dates is None:
@@ -67,7 +68,7 @@ class ServiceGroup:
         for date in excluded_dates:
             if len([s for s in schedules if date in s.excluded_dates]) < len([s for s in schedules if date.weekday in s.weekdays]):
                 modified_dates.add(date)
-        schedule = Schedule(start_date, end_date, weekdays, modified_dates, excluded_dates - modified_dates)
+        schedule = Schedule(date_range, weekdays, modified_dates, excluded_dates - modified_dates)
         return cls(system, id, schedule, services)
     
     def __init__(self, system, id, schedule, services):

@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Stop {stop.number}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Stop {{ stop.number }}</h1>
@@ -9,7 +9,6 @@
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
-    <hr />
 </div>
 
 % if len(stop.get_departures()) == 0:

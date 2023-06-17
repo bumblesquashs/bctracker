@@ -39,10 +39,6 @@ form input[type="text"]:focus {
     border-color: #053305;
 }
 
-hr {
-    border-top-color: #565656;
-}
-
 iframe {
     color-scheme: light;
 }
@@ -374,6 +370,10 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
+.events .date {
+    border-right-color: #565656;
+}
+
 .info-box {
     background-color: #393939;
     border-color: #565656;
@@ -434,6 +434,10 @@ table.striped tr:nth-child(2n-1) {
     color: #565656;
 }
 
+.page-header {
+    border-bottom-color: #565656;
+}
+
 .positive {
     color: #428342;
 }
@@ -479,9 +483,13 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
+.tab-button-bar {
+    background: #565656;
+    border-color: #565656;
+}
+
 .tab-button {
     background-color: #2F2F2F;
-    border-color: #565656;
     color: #5CC3FF;
 }
 

@@ -1,14 +1,13 @@
 
+import helpers.position
 import helpers.region
 
 from models.schedule import Schedule
 
-import realtime
-
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'recolour_black', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
@@ -19,6 +18,7 @@ class System:
         enabled = row['enabled'] == '1'
         visible = row['visible'] == '1'
         prefix_headsign = row['prefix_headsign'] == '1'
+        recolour_black = row['recolour_black'] == '1'
         version = row['version']
         if version == '1':
             remote_id = row['remote_id']
@@ -37,15 +37,16 @@ class System:
                 realtime_url = row['realtime_url']
             else:
                 realtime_url = None
-        return cls(id, name, region, enabled, visible, prefix_headsign, gtfs_url, realtime_url)
+        return cls(id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url)
     
-    def __init__(self, id, name, region, enabled, visible, prefix_headsign, gtfs_url, realtime_url):
+    def __init__(self, id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url):
         self.id = id
         self.name = name
         self.region = region
         self.enabled = enabled
         self.visible = visible
         self.prefix_headsign = prefix_headsign
+        self.recolour_black = recolour_black
         self.gtfs_url = gtfs_url
         self.realtime_url = realtime_url
         
@@ -78,12 +79,12 @@ class System:
     
     @property
     def gtfs_enabled(self):
-        '''Whether GTFS data is enabled for this system'''
+        '''Checks if GTFS data is enabled for this system'''
         return self.enabled and self.gtfs_url is not None
     
     @property
     def realtime_enabled(self):
-        '''Whether realtime data is enabled for this system'''
+        '''Checks if realtime data is enabled for this system'''
         return self.enabled and self.realtime_url is not None
     
     @property
@@ -102,7 +103,8 @@ class System:
         return sorted(self.blocks.values())
     
     def get_positions(self):
-        return realtime.get_positions(self.id)
+        '''Returns all positions'''
+        return helpers.position.find_all(system_id=self.id)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''

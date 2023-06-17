@@ -37,6 +37,7 @@ class Time:
     
     @classmethod
     def unknown(cls, timezone=None):
+        '''Returns an unknown time'''
         return cls(-1, 0, 0, False, timezone)
     
     def __init__(self, hour, minute, second, accurate_seconds, timezone):
@@ -63,6 +64,7 @@ class Time:
     
     @property
     def is_unknown(self):
+        '''Checks if this time is unknown'''
         return self.hour < 0
     
     @property
@@ -100,6 +102,7 @@ class Time:
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
     def format_web(self, time_format='24hr'):
+        '''Formats this time for web display'''
         if self.is_unknown:
             return ''
         hour = self.hour

@@ -1,5 +1,5 @@
 
-% rebase('base', title=f'Trip {trip.id}')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Trip {{! trip.display_id }}</h1>
@@ -9,18 +9,11 @@
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
-    <hr />
 </div>
 
 % if system.realtime_enabled:
     <div class="flex-container">
         % if len(records) > 0:
-            % last_tracked = records[0].date
-            % days_since_last_tracked = last_tracked.format_since()
-            
-            % first_tracked = records[-1].date
-            % days_since_first_tracked = first_tracked.format_since()
-            
             <div class="sidebar container flex-1">
                 <div class="section">
                     <div class="header">
@@ -28,31 +21,12 @@
                     </div>
                     <div class="content">
                         <div class="info-box">
-                            <div class="section">
-                                <div class="name">Last Tracked</div>
-                                <div class="value flex-column">
-                                    % if days_since_last_tracked == '0 days ago':
-                                        Today
-                                    % else:
-                                        {{ last_tracked }}
-                                        <span class="smaller-font">{{ days_since_last_tracked }}</span>
-                                    % end
-                                </div>
-                            </div>
-                            <div class="section">
-                                <div class="name">First Tracked</div>
-                                <div class="value flex-column">
-                                    % if days_since_first_tracked == '0 days ago':
-                                        Today
-                                    % else:
-                                        {{ first_tracked }}
-                                        <span class="smaller-font">{{ days_since_first_tracked }}</span>
-                                    % end
-                                </div>
+                            <div class="section no-flex">
+                                % include('components/events_indicator', events=events)
                             </div>
                             <div class="section">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                                <div class="name">Model{{ '' if len(orders) == 1 else 's' }}</div>
+                                <div class="name">{{ 'Model' if len(orders) == 1 else 'Models' }}</div>
                                 <div class="value flex-column">
                                     % for order in orders:
                                         <div>{{! order }}</div>
@@ -111,28 +85,16 @@
                                         <td>
                                             <div class="flex-column">
                                                 <div class="flex-row left">
-                                                    % if bus.is_known:
-                                                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                                                    % else:
-                                                        <span>{{ bus }}</span>
-                                                    % end
+                                                    % include('components/bus', bus=bus)
                                                     % include('components/record_warnings_indicator', record=record)
                                                 </div>
                                                 <span class="non-desktop smaller-font">
-                                                    % if order is None:
-                                                        <span class="lighter-text">Unknown Year/Model</span>
-                                                    % else:
-                                                        {{! order }}
-                                                    % end
+                                                    % include('components/order', order=order)
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="desktop-only">
-                                            % if order is None:
-                                                <span class="lighter-text">Unknown Year/Model</span>
-                                            % else:
-                                                {{! order }}
-                                            % end
+                                            % include('components/order', order=order)
                                         </td>
                                         <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                         <td>{{ record.last_seen.format_web(time_format) }}</td>
