@@ -29,10 +29,6 @@ class Stop:
         self.lat = lat
         self.lon = lon
         self.departures = departures
-        
-        services = {d.trip.service for d in departures if d.trip is not None}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
     
     def __str__(self):
         return self.name
@@ -101,3 +97,8 @@ class Stop:
             else:
                 value = 1
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
+    
+    def setup(self):
+        services = {d.trip.service for d in self.departures if d.trip is not None}
+        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.sheets = helpers.sheet.combine(self.system, services)

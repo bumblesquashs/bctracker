@@ -64,6 +64,9 @@ def load(system, force_download=False, updatedb=False):
         trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
         system.trips = {t.id: t for t in trips}
         
+        for stop in system.stops.values():
+            stop.setup()
+        
         route_trips = {}
         block_trips = {}
         for trip in trips:
