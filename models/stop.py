@@ -9,7 +9,7 @@ from models.schedule import Schedule
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures',  'schedule')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -30,9 +30,7 @@ class Stop:
         self.lon = lon
         self.departures = departures
         
-        services = {d.trip.service for d in departures if d.trip is not None}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
+        self.schedule = Schedule.combine([s.schedule for s in self.services])
     
     def __str__(self):
         return self.name
@@ -47,6 +45,10 @@ class Stop:
         if self.name == other.name:
             return self.number < other.number
         return self.name < other.name
+    
+    @property
+    def services(self):
+        return {d.trip.service for d in self.departures if d.trip is not None}
     
     @property
     def nearby_stops(self):
@@ -71,7 +73,7 @@ class Stop:
         if service_group is None:
             if date is None:
                 return sorted(self.departures)
-            return sorted([d for d in self.departures if d.trip.service.schedule.includes(date)])
+            return sorted([d for d in self.departures if date in d.trip.service.schedule])
         return sorted([d for d in self.departures if d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):

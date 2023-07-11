@@ -36,7 +36,7 @@
                         <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[s.schedule for s in route.sheets], url=get_url(system, f'routes/{route.number}/schedule'))
+                        % include('components/schedules_indicator', services=route.services, url=get_url(system, f'routes/{route.number}/schedule'))
                     </div>
                 </div>
             </div>

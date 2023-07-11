@@ -14,7 +14,7 @@ from models.schedule import Schedule
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'sheets', 'indicator_points')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'indicator_points')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -104,9 +104,7 @@ class Route:
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
-        services = {t.service for t in trips}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
+        self.schedule = Schedule.combine([s.schedule for s in self.services])
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -127,6 +125,10 @@ class Route:
     def display_name(self):
         '''Formats the route name for web display'''
         return self.name.replace('/', '/<wbr />')
+    
+    @property
+    def services(self):
+        return {t.service for t in self.trips}
     
     @property
     def json(self):
@@ -160,7 +162,7 @@ class Route:
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
-            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
+            return sorted([t for t in self.trips if date in t.service.schedule])
         return sorted([t for t in self.trips if t.service in service_group.services])
     
     def get_headsigns(self, service_group=None, date=None):

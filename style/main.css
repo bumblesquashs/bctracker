@@ -841,17 +841,19 @@ table.striped tr.section td {
     justify-content: center;
     gap: 10px;
     font-size: 11pt;
+    margin-bottom: 10px;
 }
 
 .schedules .legend .icon {
-    display: inline-block;
     width: 10px;
     height: 10px;
     border-radius: 2px;
 }
 
 .schedules .schedule {
-    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #CBCBCB;
 }
 
 .schedules .schedule .title {

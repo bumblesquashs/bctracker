@@ -24,3 +24,6 @@ def flatten(dates):
     else:
         date_strings.append(str(start_date) + ' - ' + str(end_date))
     return ', '.join(date_strings)
+
+def days_between(start_date, end_date):
+    return (end_date.datetime - start_date.datetime).days

@@ -24,7 +24,7 @@
                 
                 <div class="info-box">
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[trip.service.schedule])
+                        % include('components/schedules_indicator', services=[trip.service])
                     </div>
                     <div class="section">
                         % route = trip.route
@@ -98,7 +98,12 @@
                                 <tr>
                                     <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{! related_trip.display_id }}</a></td>
                                     <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                    <td>{{ related_trip.service }}</td>
+                                    <td>
+                                        <div class="flex-column">
+                                            <div>{{ related_trip.service.schedule.date_range }}</div>
+                                            <div class="smaller-font lighter-text">{{ related_trip.service }}</div>
+                                        </div>
+                                    </td>
                                 </tr>
                             % end
                         </tbody>
