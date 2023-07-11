@@ -56,7 +56,7 @@ SQL_SCRIPTS = [
             lat REAL,
             lon REAL,
             bearing REAL,
-            speed REAL,
+            speed INTEGER,
             adherence INTEGER,
             PRIMARY KEY (system_id, bus_number)
         )
