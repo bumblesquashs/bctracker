@@ -464,7 +464,7 @@ def route_overview_page(route_number, system_id=None):
     trips = sorted([t for t in route.trips if t.service.is_today])
     return page('route/overview', system_id,
         title=str(route),
-        include_maps=len(trips) > 0,
+        include_maps=len(route.trips) > 0,
         route=route,
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
