@@ -1,9 +1,8 @@
 
+import helpers.position
 import helpers.region
 
 from models.schedule import Schedule
-
-import realtime
 
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
@@ -80,12 +79,12 @@ class System:
     
     @property
     def gtfs_enabled(self):
-        '''Whether GTFS data is enabled for this system'''
+        '''Checks if GTFS data is enabled for this system'''
         return self.enabled and self.gtfs_url is not None
     
     @property
     def realtime_enabled(self):
-        '''Whether realtime data is enabled for this system'''
+        '''Checks if realtime data is enabled for this system'''
         return self.enabled and self.realtime_url is not None
     
     @property
@@ -104,7 +103,8 @@ class System:
         return sorted(self.blocks.values())
     
     def get_positions(self):
-        return realtime.get_positions(self.id)
+        '''Returns all positions'''
+        return helpers.position.find_all(system_id=self.id)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''

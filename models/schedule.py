@@ -13,6 +13,7 @@ class Schedule:
     
     @classmethod
     def process(cls, date_range, weekdays, modified_dates, excluded_dates):
+        '''Returns a schedule based on the given start date, end date, weekdays, modified dates, and excluded dates'''
         for weekday in Weekday:
             dates = excluded_dates if weekday in weekdays else modified_dates
             explicit_dates = {d for d in dates if d.weekday == weekday}
@@ -37,6 +38,7 @@ class Schedule:
     
     @classmethod
     def combine(cls, schedules):
+        '''Returns a schedule that combines the values of list of other schedules'''
         if len(schedules) == 0:
             return None
         date_range = DateRange.combine([s.date_range for s in schedules])
@@ -86,7 +88,7 @@ class Schedule:
     
     @property
     def special(self):
-        '''Returns whether or not this schedule is special service'''
+        '''Checks if this schedule is special service'''
         return len(self.weekdays) == 0
     
     @property

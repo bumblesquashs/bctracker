@@ -34,6 +34,7 @@ class Bus:
     
     @property
     def is_known(self):
+        '''Checks if the bus number is known'''
         return self.number >= 0
     
     @property
@@ -46,6 +47,7 @@ class Bus:
     
     @property
     def is_test(self):
+        '''Checks if this is a test bus'''
         model = self.model
         if model is None:
             return False

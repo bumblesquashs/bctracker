@@ -61,12 +61,15 @@ class Model:
     
     @property
     def display_manufacturer(self):
+        '''Formats the manufacturer for web display'''
         return self.manufacturer.replace('/', '/<wbr />')
     
     @property
     def display_name(self):
+        '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
     
     @property
     def is_test(self):
+        '''Checks if this is a test model'''
         return self.type == ModelType.test

@@ -7,6 +7,7 @@ import requests
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 import helpers.overview
+import helpers.position
 import helpers.record
 import helpers.transfer
 
@@ -17,14 +18,12 @@ from models.time import Time
 
 import database
 
-positions = {}
-
 last_updated_date = None
 last_updated_time = None
 
 def update(system):
-    '''Downloads realtime data for the given system, then loads it into memory'''
-    global positions, last_updated_date, last_updated_time
+    '''Downloads realtime data for the given system and stores it in the database'''
+    global last_updated_date, last_updated_time
     if not system.realtime_enabled:
         return
     data_path = f'data/realtime/{system.id}.bin'
@@ -41,7 +40,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        positions = {k:v for (k, v) in positions.items() if v.system != system}
+        helpers.position.delete_all(system)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -51,7 +50,7 @@ def update(system):
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
-            positions[bus_number] = Position.from_entity(system, Bus(bus_number), vehicle)
+            helpers.position.create(Position.from_entity(system, Bus(bus_number), vehicle))
         last_updated_date = Date.today('America/Vancouver')
         last_updated_time = Time.now('America/Vancouver', False)
         system.last_updated_date = Date.today(system.timezone)
@@ -62,9 +61,9 @@ def update(system):
         print(f'Failed to update realtime for {system}: {e}')
 
 def update_records():
-    '''Updates records in the database based on the current realtime data in memory'''
+    '''Updates records in the database based on the current positions in the database'''
     try:
-        for position in positions.values():
+        for position in helpers.position.find_all():
             try:
                 system = position.system
                 bus = position.bus
@@ -99,18 +98,6 @@ def update_records():
     except Exception as e:
         print(f'Failed to update records: {e}')
 
-def get_position(bus_number):
-    '''Returns the position for a given bus number'''
-    if bus_number in positions:
-        return positions[bus_number]
-    return None
-
-def get_positions(system_id=None):
-    '''Returns all positions for a given system ID'''
-    if system_id is None:
-        return sorted([p for p in positions.values() if not p.bus.is_test])
-    return sorted([p for p in positions.values() if p.system.id == system_id and not p.bus.is_test])
-
 def get_last_updated(time_format):
     '''Returns the date/time that realtime data was last updated'''
     date = last_updated_date
@@ -127,7 +114,7 @@ def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
     if not system.realtime_enabled:
         return True
-    for position in [p for p in positions.values() if p.system == system]:
+    for position in helpers.position.find_all(system_id=system.id):
         trip_id = position.trip_id
         if trip_id is None:
             continue

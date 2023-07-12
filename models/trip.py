@@ -90,6 +90,7 @@ class Trip:
     
     @property
     def display_id(self):
+        '''Formats the trip ID for web display'''
         return self.id.replace(':', ':<wbr />')
     
     @property
@@ -149,6 +150,7 @@ class Trip:
     
     @property
     def length(self):
+        '''Returns the distance travelled on this trip'''
         departure = self.last_departure
         if departure is None:
             return None

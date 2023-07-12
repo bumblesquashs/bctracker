@@ -55,6 +55,7 @@ class Order:
     
     @property
     def is_test(self):
+        '''Checks if this is a test order'''
         model = self.model
         if model is None:
             return False
