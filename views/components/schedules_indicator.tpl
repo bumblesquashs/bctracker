@@ -27,7 +27,7 @@
             % else:
                 % schedule = sheet.get_schedule(services)
             % end
-            % if True:
+            % if not schedule.is_empty:
                 <div class="schedule">
                     <div class="title">{{ schedule.date_range }}</div>
                     % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
