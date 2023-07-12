@@ -58,12 +58,15 @@ def load(system, force_download=False, updatedb=False):
             trip_departures.setdefault(departure.trip_id, []).append(departure)
             stop_departures.setdefault(departure.stop_id, []).append(departure)
         
-        stops = read_csv(system, 'stops', lambda r: Stop.from_csv(r, system, stop_departures))
+        stops = read_csv(system, 'stops', lambda r: Stop.from_csv(r, system))
         system.stops = {s.id: s for s in stops}
         system.stops_by_number = {s.number: s for s in stops}
         
         trips = read_csv(system, 'trips', lambda r: Trip.from_csv(r, system, trip_departures))
         system.trips = {t.id: t for t in trips}
+        
+        for stop in system.stops.values():
+            stop.setup(stop_departures.get(stop.id, []))
         
         route_trips = {}
         block_trips = {}

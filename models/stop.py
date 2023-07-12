@@ -13,26 +13,22 @@ class Stop:
     __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'schedule', 'sheets')
     
     @classmethod
-    def from_csv(cls, row, system, departures):
+    def from_csv(cls, row, system):
         '''Returns a stop initialized from the given CSV row'''
         id = row['stop_id']
         number = row['stop_code']
         name = row['stop_name']
         lat = float(row['stop_lat'])
         lon = float(row['stop_lon'])
-        return cls(system, id, number, name, lat, lon, departures.get(id, []))
+        return cls(system, id, number, name, lat, lon)
     
-    def __init__(self, system, id, number, name, lat, lon, departures):
+    def __init__(self, system, id, number, name, lat, lon):
         self.system = system
         self.id = id
         self.number = number
         self.name = name
         self.lat = lat
         self.lon = lon
-        
-        services = {d.trip.service for d in departures if d.trip is not None}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
     
     def __str__(self):
         return self.name
@@ -102,3 +98,8 @@ class Stop:
             else:
                 value = 1
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
+    
+    def setup(self, departures):
+        services = {d.trip.service for d in departures if d.trip is not None}
+        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.sheets = helpers.sheet.combine(self.system, services)
