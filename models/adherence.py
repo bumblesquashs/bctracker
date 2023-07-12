@@ -13,18 +13,11 @@ class Adherence:
     __slots__ = ('value', 'status_class', 'description')
     
     @classmethod
-    def calculate(cls, trip, stop, lat, lon):
+    def calculate(cls, trip, stop, sequence, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departures = helpers.departure.find_all(trip.system.id, trip_id=trip.id, stop_id=stop.id)
-        if len(departures) == 0:
-            return
-        if len(departures) == 1:
-            departure = departures[0]
-        else:
-            now = Time.now()
-            current_mins = (now.hour * 60) + now.minute
-            departures.sort(key=lambda d: abs(current_mins - d.time.get_minutes()))
-            departure = departures[0]
+        departure = helpers.departure.find(trip.system.id, trip_id=trip.id, sequence=sequence, stop_id=stop.id)
+        if departure is None:
+            return None
         previous_departure = departure.load_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes()

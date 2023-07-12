@@ -15,6 +15,7 @@ class Direction(Enum):
     
     @classmethod
     def calculate(cls, p1, p2):
+        '''Returns a direction calculated based on the latitude and longitude of two points'''
         lat_diff = p2.lat - p1.lat
         lon_diff = p2.lon - p1.lon
         if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:

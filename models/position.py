@@ -49,10 +49,17 @@ class Position:
         else:
             block_id = trip.block_id
             route_id = trip.route_id
+        try:
+            if data.HasField('current_stop_sequence'):
+                sequence = data.current_stop_sequence
+            else:
+                sequence = None
+        except AttributeError:
+            sequence = None
         if trip is None or stop is None or lat is None or lon is None:
             adherence = None
         else:
-            adherence = Adherence.calculate(trip, stop, lat, lon)
+            adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
         return cls(system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence)
     
     @classmethod

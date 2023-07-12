@@ -85,6 +85,7 @@ class Departure:
     
     @classmethod
     def from_db(cls, row, prefix='departure'):
+        '''Returns a departure initialized from the given database row'''
         system = helpers.system.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
@@ -163,7 +164,9 @@ class Departure:
         }
     
     def load_previous(self):
+        '''Returns the previous departure for the trip'''
         return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence - 1)
     
     def load_next(self):
+        '''Returns the next departure for the trip'''
         return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence + 1)
