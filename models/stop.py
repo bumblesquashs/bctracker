@@ -29,8 +29,6 @@ class Stop:
         self.lat = lat
         self.lon = lon
         self.departures = departures
-        
-        self.schedule = Schedule.combine([s.schedule for s in self.services])
     
     def __str__(self):
         return self.name
@@ -103,3 +101,6 @@ class Stop:
             else:
                 value = 1
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
+    
+    def setup(self):
+        self.schedule = Schedule.combine([s.schedule for s in self.services])
