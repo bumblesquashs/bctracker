@@ -25,13 +25,18 @@ class Schedule:
         if exceptions is None:
             added_dates = {d for s in schedules for d in s.added_dates}
             removed_dates = {d for s in schedules for d in s.removed_dates}
+            fully_added_dates = set()
             fully_removed_dates = set()
             for weekday in Weekday:
-                dates = [s.removed_dates for s in schedules if weekday in s.weekdays]
-                if len(dates) > 0:
-                    fully_removed_dates.update(set.intersection(*dates))
+                weekday_added_dates = [s.added_dates for s in schedules if weekday not in s.weekdays]
+                if len(weekday_added_dates) > 0:
+                    fully_added_dates.update(set.intersection(*weekday_added_dates))
+                weekday_removed_dates = [s.removed_dates for s in schedules if weekday in s.weekdays]
+                if len(weekday_removed_dates) > 0:
+                    fully_removed_dates.update(set.intersection(*weekday_removed_dates))
+            fully_added_dates.difference_update(removed_dates)
             fully_removed_dates.difference_update(added_dates)
-            modifications.update(added_dates)
+            modifications.update(added_dates.difference(fully_added_dates))
             modifications.update(removed_dates.difference(fully_removed_dates))
             added_dates = {d for d in added_dates if d.weekday not in weekdays}
             removed_dates = {d for d in fully_removed_dates if d.weekday in weekdays}

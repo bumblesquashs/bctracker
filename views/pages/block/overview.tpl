@@ -164,8 +164,8 @@
                                         <div class="flex-column">
                                             <div class="flex-column">
                                                 % for sheet in related_block.get_sheets():
-                                                    <div>{{ sheet }}</div>
-                                                    <div class="smaller-font lighter-text">{{ related_block.get_schedule(sheet) }}</div>
+                                                    <div>{{ related_block.get_schedule(sheet) }}</div>
+                                                    <div class="smaller-font lighter-text">{{ sheet }}</div>
                                                 % end
                                             </div>
                                         </div>
