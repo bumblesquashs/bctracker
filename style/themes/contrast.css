@@ -474,6 +474,10 @@ table.striped tr:nth-child(2n-1) {
     color: #000000;
 }
 
+.schedules .schedule {
+    background-color: #DDDDDD;
+}
+
 .tab-button-bar {
     background: #666666;
     border-color: #666666;

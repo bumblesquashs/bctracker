@@ -557,6 +557,11 @@ table.striped tr {
     color: #000000;
 }
 
+.schedules .schedule {
+    background-color: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
 .tab-button-bar {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);

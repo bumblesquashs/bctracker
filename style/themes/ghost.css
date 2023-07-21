@@ -472,6 +472,10 @@ table.striped tr {
     color: #000000;
 }
 
+.schedules .schedule {
+    background-color: #DDDDDD;
+}
+
 .tab-button-bar {
     background: #EEEEEE;
     border-color: #EEEEEE;
