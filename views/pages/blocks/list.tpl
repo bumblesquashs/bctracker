@@ -76,8 +76,8 @@
             </div>
             <div class="container inline flex-3">
                 % for (i, sheet) in enumerate(sheets):
-                    % sheet_service_groups = sheet.get_service_groups()
-                    % if len(sheet_service_groups) > 0:
+                    % service_groups = sheet.get_service_groups()
+                    % if len(service_groups) > 0:
                         % url_suffix = '' if i == 0 else f'{i + 1}'
                         <div class="section">
                             <div class="header">
@@ -85,7 +85,7 @@
                             </div>
                             <div class="content">
                                 <div class="container inline">
-                                    % for service_group in sheet_service_groups:
+                                    % for service_group in service_groups:
                                         <div class="section">
                                             <div class="header">
                                                 % for weekday in service_group.schedule.weekdays:
