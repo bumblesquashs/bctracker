@@ -640,8 +640,8 @@ def block_history_page(block_id, system_id=None):
     records = helpers.record.find_all(system_id=system_id, block_id=block_id)
     events = []
     if len(records) > 0:
-        events.append(Event(records[0].date, 'First Tracked'))
-        events.append(Event(records[-1].date, 'Last Tracked'))
+        events.append(Event(records[0].date, 'Last Tracked'))
+        events.append(Event(records[-1].date, 'First Tracked'))
     return page('block/history', system_id,
         title=f'Block {block.id}',
         block=block,
@@ -716,8 +716,8 @@ def trip_history_page(trip_id, system_id=None):
     records = helpers.record.find_all(system_id=system_id, trip_id=trip_id)
     events = []
     if len(records) > 0:
-        events.append(Event(records[0].date, 'First Tracked'))
-        events.append(Event(records[-1].date, 'Last Tracked'))
+        events.append(Event(records[0].date, 'Last Tracked'))
+        events.append(Event(records[-1].date, 'First Tracked'))
     return page('trip/history', system_id,
         title=f'Trip {trip.id}',
         trip=trip,
