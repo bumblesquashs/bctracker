@@ -13,7 +13,6 @@
 </div>
 
 % sheets = block.get_sheets()
-% service_groups = block.get_service_groups()
 % routes = block.get_routes()
 % trips = block.get_trips()
 
@@ -40,103 +39,83 @@
                             % end
                         </div>
                     </div>
-                    <div class="section">
-                        <div class="name">Start time</div>
-                        <div class="value flex-column">
-                            % for service_group in service_groups:
-                                <div>
-                                    % if len(service_groups) > 1:
-                                        <div class="smaller-font lighter-text">
-                                            % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_range }}
-                                            % else:
-                                                {{ service_group }}
-                                            % end
-                                        </div>
-                                    % end
-                                    <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
+                    % for sheet in sheets:
+                        % service_groups = sheet.get_service_groups(block.services, True)
+                        % if len(service_groups) > 0:
+                            % if len(sheets) > 1:
+                                <div class="title">
+                                    <h3>{{ sheet }}</h3>
                                 </div>
                             % end
-                        </div>
-                    </div>
-                    <div class="section">
-                        <div class="name">End time</div>
-                        <div class="value flex-column">
-                            % for service_group in service_groups:
-                                <div>
-                                    % if len(service_groups) > 1:
-                                        <div class="smaller-font lighter-text">
-                                            % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_range }}
-                                            % else:
-                                                {{ service_group }}
+                            <div class="section">
+                                <div class="name">Start time</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
                                             % end
+                                            <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
                                         </div>
                                     % end
-                                    <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
                                 </div>
-                            % end
-                        </div>
-                    </div>
-                    <div class="section">
-                        <div class="name">Duration</div>
-                        <div class="value flex-column">
-                            % for service_group in service_groups:
-                                <div>
-                                    % if len(service_groups) > 1:
-                                        <div class="smaller-font lighter-text">
-                                            % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_range }}
-                                            % else:
-                                                {{ service_group }}
+                            </div>
+                            <div class="section">
+                                <div class="name">End time</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
                                             % end
+                                            <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
                                         </div>
                                     % end
-                                    <div>{{ block.get_duration(service_group=service_group) }}</div>
                                 </div>
-                            % end
-                        </div>
-                    </div>
-                    <div class="section">
-                        <div class="name">Number of trips</div>
-                        <div class="value flex-column">
-                            % for service_group in service_groups:
-                                <div>
-                                    % if len(service_groups) > 1:
-                                        <div class="smaller-font lighter-text">
-                                            % if len(sheets) > 1:
-                                                {{ service_group.schedule.date_range }}
-                                            % else:
-                                                {{ service_group }}
+                            </div>
+                            <div class="section">
+                                <div class="name">Duration</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
                                             % end
+                                            <div>{{ block.get_duration(service_group=service_group) }}</div>
                                         </div>
                                     % end
-                                    <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
                                 </div>
-                            % end
-                        </div>
-                    </div>
-                    % if len([t for t in block.get_trips() if t.length is not None]) > 0:
-                        <div class="section">
-                            <div class="name">Length</div>
-                            <div class="value flex-column">
-                                % for service_group in service_groups:
-                                    <div>
-                                        % if len(service_groups) > 1:
-                                            <div class="smaller-font lighter-text">
-                                                % if len(sheets) > 1:
-                                                    {{ service_group.schedule.date_range }}
-                                                % else:
-                                                    {{ service_group }}
+                            </div>
+                            <div class="section">
+                                <div class="name">Number of trips</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
+                                            % end
+                                            <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                            % if len([t for t in block.get_trips() if t.length is not None]) > 0:
+                                <div class="section">
+                                    <div class="name">Length</div>
+                                    <div class="value flex-column">
+                                        % for service_group in service_groups:
+                                            <div>
+                                                % if len(service_groups) > 1:
+                                                    <div class="smaller-font lighter-text">{{ service_group }}</div>
                                                 % end
+                                                % length = sum([t.length for t in block.get_trips(service_group=service_group) if t.length is not None])
+                                                <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
                                             </div>
                                         % end
-                                        % length = sum([t.length for t in block.get_trips(service_group=service_group) if t.length is not None])
-                                        <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
                                     </div>
-                                % end
-                            </div>
-                        </div>
+                                </div>
+                            % end
+                        % end
                     % end
                 </div>
             </div>
@@ -164,8 +143,8 @@
                                         <div class="flex-column">
                                             <div class="flex-column">
                                                 % for sheet in related_block.get_sheets():
-                                                    <div>{{ related_block.get_schedule(sheet) }}</div>
-                                                    <div class="smaller-font lighter-text">{{ sheet }}</div>
+                                                    <div>{{ sheet }}</div>
+                                                    <div class="smaller-font lighter-text">{{ related_block.get_schedule(sheet) }}</div>
                                                 % end
                                             </div>
                                         </div>
@@ -259,8 +238,8 @@
             <div class="content">
                 <div class="container inline">
                     % for sheet in sheets:
-                        % sheet_service_groups = sheet.get_service_groups(block.services, include_special=True)
-                        % if len(sheet_service_groups) > 0:
+                        % service_groups = sheet.get_service_groups(block.services, True)
+                        % if len(service_groups) > 0:
                             <div class="section">
                                 % if len(sheets) > 1:
                                     <div class="header">
@@ -269,10 +248,10 @@
                                 % end
                                 <div class="content">
                                     <div class="container inline">
-                                        % for service_group in sheet_service_groups:
+                                        % for service_group in service_groups:
                                             % service_group_trips = block.get_trips(service_group=service_group)
                                             <div class="section">
-                                                % if len(sheet_service_groups) > 1:
+                                                % if len(service_groups) > 1:
                                                     <div class="header">
                                                         <h4>{{ service_group }}</h4>
                                                     </div>

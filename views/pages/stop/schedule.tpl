@@ -33,7 +33,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', url=get_url(system, f'stops/{stop.number}/schedule'))
+                            % include('components/schedules_indicator', services=stop.services, url=get_url(system, f'stops/{stop.number}/schedule'))
                         </div>
                     </div>
                 </div>

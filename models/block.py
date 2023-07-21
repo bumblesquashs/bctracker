@@ -38,10 +38,6 @@ class Block:
             return self.schedule
         return Schedule.combine([s.schedule for s in self.services], sheet.schedule.date_range)
     
-    def get_service_groups(self):
-        sheets = self.get_sheets()
-        return sorted({g for s in sheets for g in s.get_service_groups(self.services)})
-    
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''
         if service_group is None:
