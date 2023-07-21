@@ -149,6 +149,15 @@ def error_page(name, system_id, title='Error', path='', **kwargs):
         **kwargs
     )
 
+def frame(name, system_id, **kwargs):
+    return template(f'frames/{name}',
+        system=helpers.system.find(system_id),
+        get_url=get_url,
+        time_format=request.get_cookie('time_format'),
+        show_speed=request.get_cookie('speed') == '1994',
+        **kwargs
+    )
+
 def set_cookie(key, value):
     '''Creates a cookie using the given key and value'''
     max_age = 60*60*24*365*10
@@ -180,7 +189,7 @@ def img(name, system_id=None):
     return static_file(name, root='./img')
 
 # =============================================================
-# HTML (Templates)
+# HTML (Pages)
 # =============================================================
 
 @app.get([
@@ -859,6 +868,18 @@ def about_page(system_id=None):
     )
 
 @app.get([
+    '/nearby',
+    '/nearby/',
+    '/<system_id>/nearby',
+    '/<system_id>/nearby/'
+])
+def nearby_page(system_id=None):
+    return page('nearby', system_id,
+        title='Nearby',
+        path='nearby',
+        include_maps=True)
+
+@app.get([
     '/themes',
     '/themes/',
     '/<system_id>/themes',
@@ -927,6 +948,24 @@ def admin_page(key=None, system_id=None):
     return page('home', system_id,
         title='Home',
         enable_refresh=False
+    )
+
+# =============================================================
+# HTML (Frames)
+# =============================================================
+
+@app.get([
+    '/frame/nearby',
+    '/<system_id>/frame/nearby'
+])
+def frame_nearby(system_id=None):
+    system = helpers.system.find(system_id)
+    if system is None:
+        return 'Error'
+    lat = float(request.query.get('lat'))
+    lon = float(request.query.get('lon'))
+    return frame('nearby', system_id,
+        stops=sorted([s for s in system.get_stops() if s.is_near(lat, lon)])
     )
 
 # =============================================================

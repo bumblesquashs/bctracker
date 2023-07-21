@@ -148,6 +148,11 @@
             
             <div class="flex-1"></div>
             
+            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'nearby') }}">
+                <img class="white" src="/img/white/location.png" />
+                <img class="black" src="/img/black/location.png" />
+            </a>
+            
             <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
