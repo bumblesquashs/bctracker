@@ -6,8 +6,6 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-import helpers.sheet
-
 from models.match import Match
 from models.schedule import Schedule
 
@@ -128,6 +126,7 @@ class Route:
     
     @property
     def services(self):
+        '''Returns the services used by this route'''
         return {t.service for t in self.trips}
     
     @property
@@ -156,6 +155,10 @@ class Route:
                 'lon': point.lon
             })
         return json
+    
+    def get_sheets(self):
+        '''Returns the sheets used by this route'''
+        return self.system.get_sheets(self.services)
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this route'''

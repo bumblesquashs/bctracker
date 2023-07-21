@@ -30,7 +30,7 @@ def combine(system, services):
     sheets = []
     for (start_date, end_date) in zip(i, i):
         date_range = DateRange(start_date, end_date)
-        date_range_services = [s.slice(date_range) for s in services if s.schedule.date_range.overlaps(date_range)]
+        date_range_services = {s.slice(date_range) for s in services if s.schedule.date_range.overlaps(date_range)}
         if len(date_range_services) == 0:
             continue
         if len(sheets) == 0:
@@ -41,7 +41,7 @@ def combine(system, services):
             current_services = {s for s in date_range_services if not s.schedule.is_special}
             if previous_services.issubset(current_services) or current_services.issubset(previous_services):
                 new_date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
-                new_services = [s.slice(new_date_range) for s in services if s.schedule.date_range.overlaps(new_date_range)]
+                new_services = {s.slice(new_date_range) for s in services if s.schedule.date_range.overlaps(new_date_range)}
                 sheets[-1] = Sheet.combine(system, new_services)
             else:
                 sheets.append(Sheet.combine(system, date_range_services))

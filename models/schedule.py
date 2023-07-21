@@ -107,26 +107,32 @@ class Schedule:
     
     @property
     def is_special(self):
+        '''Checks if this schedule is special'''
         return len(self.weekdays) == 0
     
     @property
     def is_empty(self):
+        '''Checks if this schedule is empty'''
         return len(self.weekdays) == 0 and len(self.exceptions) == 0
     
     @property
     def added_dates(self):
+        '''Returns all dates that are added'''
         return {d for d in self.exceptions if d.weekday not in self.weekdays}
     
     @property
     def added_dates_string(self):
+        '''Returns a string of all dates that are added'''
         return helpers.date.flatten(self.added_dates)
     
     @property
     def removed_dates(self):
+        '''Returns all dates that are removed'''
         return {d for d in self.exceptions if d.weekday in self.weekdays}
     
     @property
     def removed_dates_string(self):
+        '''Returns a string of all dates that are removed'''
         return helpers.date.flatten(self.removed_dates)
     
     def get_weekday_status(self, weekday):
@@ -142,4 +148,5 @@ class Schedule:
         return 'no-service'
     
     def slice(self, date_range):
+        '''Returns a version of this schedule limited to the given date range'''
         return Schedule(date_range, self.weekdays.copy(), self.exceptions.copy(), self.modifications.copy())

@@ -100,8 +100,8 @@
                                     <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                     <td>
                                         <div class="flex-column">
-                                            <div>{{ related_trip.service }}</div>
-                                            <div class="smaller-font lighter-text">{{ related_trip.service.schedule.date_range }}</div>
+                                            <div>{{ related_trip.service.schedule.date_range }}</div>
+                                            <div class="smaller-font lighter-text">{{ related_trip.service }}</div>
                                         </div>
                                     </td>
                                 </tr>

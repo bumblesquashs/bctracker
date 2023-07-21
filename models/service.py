@@ -91,5 +91,6 @@ class Service:
         return Date.today(self.system.timezone) in self.schedule
     
     def slice(self, date_range):
+        '''Returns a version of this service limited to the given date range'''
         schedule = self.schedule.slice(date_range)
         return Service(self.system, self.id, schedule)

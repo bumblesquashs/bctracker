@@ -10,7 +10,7 @@ class Sheet:
     @classmethod
     def combine(cls, system, services):
         '''Returns a sheet that includes all of the given services'''
-        services = [s for s in services if not s.schedule.is_empty]
+        services = {s for s in services if not s.schedule.is_empty}
         id = '_'.join(sorted({s.id for s in services}))
         schedule = Schedule.combine([s.schedule for s in services])
         return cls(system, id, schedule, services)
@@ -35,7 +35,11 @@ class Sheet:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
+    def __contains__(self, services):
+        return not self.services.isdisjoint(services)
+    
     def get_schedule(self, services=None):
+        '''Returns the schedule for this sheet'''
         if services is None:
             services = self.services
         else:
@@ -43,6 +47,7 @@ class Sheet:
         return Schedule.combine([s.schedule for s in services], self.schedule.date_range)
     
     def get_service_groups(self, services=None, include_special=False):
+        '''Returns the service groups for this sheet'''
         if services is None:
             services = self.services
         else:
@@ -96,5 +101,5 @@ class ServiceGroup:
     
     @property
     def is_today(self):
-        '''Returns whether or not this service group runs on the current date'''
+        '''Checks if this service group runs on the current date'''
         return Date.today(self.system.timezone) in self.schedule

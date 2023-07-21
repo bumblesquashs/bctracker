@@ -28,12 +28,15 @@ class Block:
     
     @property
     def services(self):
+        '''Returns the services used by this block'''
         return {t.service for t in self.trips}
     
     def get_sheets(self):
-        return [s for s in self.system.get_sheets() if len(set(s.services).intersection(self.services)) > 0]
+        '''Returns the sheets used by this block'''
+        return self.system.get_sheets(self.services)
     
     def get_schedule(self, sheet=None):
+        '''Returns the schedule for this block'''
         if sheet is None:
             return self.schedule
         return Schedule.combine([s.schedule for s in self.services], sheet.schedule.date_range)

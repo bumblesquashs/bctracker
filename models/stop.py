@@ -46,6 +46,7 @@ class Stop:
     
     @property
     def services(self):
+        '''Returns the services used by this stop'''
         return {d.trip.service for d in self.departures if d.trip is not None}
     
     @property
@@ -65,6 +66,10 @@ class Stop:
             'lon': self.lon,
             'routes': [r.json for r in self.get_routes()]
         }
+    
+    def get_sheets(self):
+        '''Returns the sheets used by this stop'''
+        return self.system.get_sheets(self.services)
     
     def get_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
@@ -103,4 +108,5 @@ class Stop:
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
     
     def setup(self):
+        '''Sets the schedule for this stop once trip information is available'''
         self.schedule = Schedule.combine([s.schedule for s in self.services])
