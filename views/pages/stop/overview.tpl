@@ -28,7 +28,7 @@
                 % if len(stop.departures) > 0:
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
+                            % include('components/schedules_indicator', services=stop.services, url=get_url(system, f'stops/{stop.number}/schedule'))
                         </div>
                         <div class="section vertical">
                             % routes = stop.get_routes()

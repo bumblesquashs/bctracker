@@ -9,7 +9,7 @@ from models.schedule import Schedule
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures',  'schedule')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -45,6 +45,11 @@ class Stop:
         return self.name < other.name
     
     @property
+    def services(self):
+        '''Returns the services used by this stop'''
+        return {d.trip.service for d in self.departures if d.trip is not None}
+    
+    @property
     def nearby_stops(self):
         '''Returns all stops with coordinates close to this stop'''
         stops = self.system.get_stops()
@@ -62,12 +67,16 @@ class Stop:
             'routes': [r.json for r in self.get_routes()]
         }
     
+    def get_sheets(self):
+        '''Returns the sheets used by this stop'''
+        return self.system.get_sheets(self.services)
+    
     def get_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
         if service_group is None:
             if date is None:
                 return sorted(self.departures)
-            return sorted([d for d in self.departures if d.trip.service.schedule.includes(date)])
+            return sorted([d for d in self.departures if date in d.trip.service.schedule])
         return sorted([d for d in self.departures if d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):
@@ -99,6 +108,5 @@ class Stop:
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
     
     def setup(self):
-        services = {d.trip.service for d in self.departures if d.trip is not None}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(self.system, services)
+        '''Sets the schedule for this stop once trip information is available'''
+        self.schedule = Schedule.combine([s.schedule for s in self.services])

@@ -1,22 +1,18 @@
 
-import helpers.sheet
-
 from models.schedule import Schedule
 from models.time import Time
 
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = ('system', 'id', 'trips', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'trips', 'schedule')
     
     def __init__(self, system, id, trips):
         self.system = system
         self.id = id
         self.trips = trips
         
-        services = {t.service for t in trips}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services, True)
+        self.schedule = Schedule.combine([s.schedule for s in self.services])
     
     def __eq__(self, other):
         return self.id == other.id
@@ -30,12 +26,27 @@ class Block:
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
         return sorted(related_blocks, key=lambda b: b.schedule)
     
+    @property
+    def services(self):
+        '''Returns the services used by this block'''
+        return {t.service for t in self.trips}
+    
+    def get_sheets(self):
+        '''Returns the sheets used by this block'''
+        return self.system.get_sheets(self.services)
+    
+    def get_schedule(self, sheet=None):
+        '''Returns the schedule for this block'''
+        if sheet is None:
+            return self.schedule
+        return Schedule.combine([s.schedule for s in self.services], sheet.schedule.date_range)
+    
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
-            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
+            return sorted([t for t in self.trips if date in t.service.schedule])
         return sorted([t for t in self.trips if t.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):

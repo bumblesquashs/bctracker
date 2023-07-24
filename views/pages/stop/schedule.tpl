@@ -23,7 +23,7 @@
         Please check again later!
     </p>
 % else:
-    % sheets = stop.sheets
+    % sheets = stop.get_sheets()
     <div class="flex-container">
         <div class="sidebar container flex-1">
             <div class="section">
@@ -33,7 +33,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
+                            % include('components/schedules_indicator', services=stop.services, url=get_url(system, f'stops/{stop.number}/schedule'))
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,8 @@
         </div>
         <div class="container inline flex-3">
             % for (i, sheet) in enumerate(sheets):
-                % if len(sheet.service_groups) > 0:
+                % service_groups = sheet.get_service_groups(stop.services)
+                % if len(service_groups) > 0:
                     % url_suffix = '' if i == 0 else f'{i + 1}'
                     <div class="section">
                         <div class="header">
@@ -49,7 +50,7 @@
                         </div>
                         <div class="content">
                             <div class="container inline">
-                                % for service_group in sheet.service_groups:
+                                % for service_group in service_groups:
                                     % departures = stop.get_departures(service_group)
                                     <div class="section">
                                         <div class="header">
