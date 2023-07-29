@@ -13,6 +13,9 @@
     </div>
 </div>
 
+% sheets = stop.get_sheets()
+% sheet = sheets[0]
+
 <div class="flex-container">
     <div class="sidebar container flex-1">
         <div class="section">
@@ -32,7 +35,7 @@
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', services=stop.services, url=get_url(system, f'stops/{stop.number}/schedule'))
+                        % include('components/schedule_indicator', schedule=sheet.schedule, url=get_url(system, f'stops/{stop.number}/schedule'))
                     </div>
                 </div>
             </div>

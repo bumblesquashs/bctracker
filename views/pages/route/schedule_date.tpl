@@ -17,6 +17,9 @@
     </div>
 </div>
 
+% sheets = route.get_sheets()
+% sheet = sheets[0]
+
 <div class="flex-container">
     <div class="sidebar container flex-1">
         <div class="section">
@@ -28,15 +31,15 @@
                     <div class="section vertical-align">
                         % previous_date = date - timedelta(days=1)
                         % next_date = date + timedelta(days=1)
-                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
+                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule', format='date', date=previous_date.format_db()) }}">&lt;</a>
                         <div class="name centred">
                             <h3>{{ date.format_long() }}</h3>
-                            <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">Return to week view</a>
+                            <a href="{{ get_url(system, f'routes/{route.number}/schedule', format='sheet', date=date.format_db()) }}">Return to week view</a>
                         </div>
-                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
+                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule', format='date', date=next_date.format_db()) }}">&gt;</a>
                     </div>
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', services=route.services, url=get_url(system, f'routes/{route.number}/schedule'))
+                        % include('components/schedule_indicator', schedule=sheet.schedule, url=get_url(system, f'routes/{route.number}/schedule'))
                     </div>
                 </div>
             </div>
