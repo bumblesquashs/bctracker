@@ -128,6 +128,12 @@ class System:
         '''Returns all services'''
         return sorted(self.services.values())
     
+    def get_sheet(self, date):
+        '''Returns the sheet for the given date'''
+        if len(self.sheets) == 0:
+            return None
+        return next((s for s in self.sheets if date in s.schedule.date_range))
+    
     def get_sheets(self, services=None):
         '''Returns all sheets'''
         if services is None:

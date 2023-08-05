@@ -30,7 +30,6 @@
     </p>
 % else:
     % sheets = route.get_sheets()
-    % sheet = next((s for s in sheets if date in s.schedule))
     <div class="flex-container">
         <div class="sidebar container flex-1">
             <div class="section">
@@ -58,7 +57,7 @@
                             % end
                         </div>
                         <div class="section no-flex">
-                            % include('components/schedule_indicator', schedule=sheet.schedule, url=get_url(system, f'routes/{route.number}/schedule'))
+                            % include('components/schedule_indicator', schedule=sheet.schedule, schedule_path=f'routes/{route.number}/schedule')
                         </div>
                     </div>
                 </div>

@@ -523,22 +523,24 @@ def route_schedule_page(route_number, system_id=None):
         )
     format = request.query.get('format')
     date_string = request.query.get('date')
-    if date_string is None:
-        date = Date.today(system.timezone)
-    else:
+    try:
         date = Date.parse_db(date_string, system.timezone)
+    except:
+        date = Date.today(system.timezone)
     if format == 'date':
-        return page('route/schedule_date', system_id,
+        return page('route/schedule/date', system_id,
             title=str(route),
             enable_refresh=False,
             route=route,
             date=date
         )
-    return page('route/schedule_sheet', system_id,
+    sheet = system.get_sheet(date)
+    return page('route/schedule/sheet', system_id,
         title=str(route),
         enable_refresh=False,
         route=route,
-        date=date
+        date=date,
+        sheet=sheet
     )
 
 @app.get([

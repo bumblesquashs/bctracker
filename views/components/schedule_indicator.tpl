@@ -1,8 +1,7 @@
 
 % import calendar
 
-% url = get('url', None)
-% date_url = get('date_url', url)
+% schedule_path = get('schedule_path')
 
 <div class="schedule-indicator">
     <div class="legend">
@@ -30,10 +29,10 @@
                         <div class="name">{{ calendar.month_name[month] }}</div>
                         % for date in month_dates:
                             % status = schedule.get_date_status(date)
-                            % if date_url is None:
+                            % if schedule_path is None:
                                 <span class="date {{ status }}">{{ date.day }}</span>
                             % else:
-                                <a class="date {{ status }}" href="{{ date_url }}/{{ date.format_db() }}">{{ date.day }}</a>
+                                <a class="date {{ status }}" href="{{ get_url(system, schedule_path, format='date', date=date.format_db()) }}">{{ date.day }}</a>
                             % end
                         % end
                     </div>
@@ -41,7 +40,7 @@
             </div>
         % end
     </div>
-    % if url is not None:
+    % if schedule_path is not None:
         <div class="footer">
             Click on a weekday or date to jump to the schedule for that day
         </div>
