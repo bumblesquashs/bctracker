@@ -24,7 +24,7 @@
             <div class="schedule">
                 <div class="title">{{ schedule.date_range }}</div>
                 % include('components/weekdays_indicator', schedule=schedule, path_suffix='' if i == 0 else str(i + 1))
-                % dates = schedule.exceptions.union(schedule.modifications)
+                % dates = schedule.all_dates
                 % if len(dates) > 0:
                     <div class="exceptions">
                         % for (year, month) in sorted({(d.year, d.month) for d in dates}):

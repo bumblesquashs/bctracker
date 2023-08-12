@@ -45,8 +45,9 @@ class Sheet:
         return self.schedule < other.schedule
     
     def copy(self, services, include_special=False):
+        '''Returns a duplicate of this sheet, restricted to the given services'''
         services = [s for s in self.services if s in services]
-        key = tuple(sorted(services))
+        key = (tuple(sorted(services)), include_special)
         if key in self.copies:
             return self.copies[key]
         if len(services) == 0:
