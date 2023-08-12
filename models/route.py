@@ -104,7 +104,7 @@ class Route:
         
         services = {t.service for t in self.trips}
         self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = system.generate_sheets(services)
+        self.sheets = system.copy_sheets(services)
     
     def __str__(self):
         return f'{self.number} {self.name}'

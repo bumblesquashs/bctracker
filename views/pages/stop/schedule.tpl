@@ -1,6 +1,4 @@
 
-% from models.date import Date
-
 % rebase('base')
 
 <div class="page-header">
@@ -42,20 +40,20 @@
             </div>
         </div>
         <div class="container flex-3">
-            % for sheet in sheets:
+            % for (i, sheet) in enumerate(sheets):
+                % path_suffix = '' if i == 0 else str(i + 1)
                 <div class="section">
                     <div class="header">
                         <h2>{{ sheet }}</h2>
                     </div>
                     <div class="content">
                         <div class="container inline">
-                            % service_groups = sheet.service_groups
-                            % for service_group in service_groups:
+                            % for service_group in sheet.service_groups:
                                 % departures = stop.get_departures(service_group)
                                 <div class="section">
                                     <div class="header">
                                         % for weekday in service_group.schedule.weekdays:
-                                            <div id="{{ weekday.short_name }}"></div>
+                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
                                         % end
                                         <h3>{{ service_group }}</h3>
                                     </div>

@@ -102,4 +102,4 @@ class Stop:
         '''Sets the schedule for this stop once trip information is available'''
         services = {d.trip.service for d in self.departures if d.trip is not None}
         self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = self.system.generate_sheets(services)
+        self.sheets = self.system.copy_sheets(services)

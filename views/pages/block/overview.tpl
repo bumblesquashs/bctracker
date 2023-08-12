@@ -244,7 +244,8 @@
                             </div>
                             <div class="content">
                                 <div class="container inline">
-                                    % for service_group in sheet.service_groups:
+                                    % service_groups = sheet.service_groups
+                                    % for service_group in service_groups:
                                         % service_group_trips = block.get_trips(service_group=service_group)
                                         <div class="section">
                                             % if len(service_groups) > 1:

@@ -20,10 +20,10 @@
         </div>
     </div>
     <div class="flex-column flex-gap-10">
-        % for schedule in schedules:
+        % for (i, schedule) in enumerate(schedules):
             <div class="schedule">
                 <div class="title">{{ schedule.date_range }}</div>
-                % include('components/weekdays_indicator', schedule=schedule)
+                % include('components/weekdays_indicator', schedule=schedule, path_suffix='' if i == 0 else str(i + 1))
                 % dates = schedule.exceptions.union(schedule.modifications)
                 % if len(dates) > 0:
                     <div class="exceptions">
@@ -36,7 +36,7 @@
                                     % if schedule_path is None:
                                         <span class="date {{ status }}">{{ date.day }}</span>
                                     % else:
-                                        <a class="date {{ status }}" href="{{ get_url(system, date_path + '/' + date.format_db()) }}">{{ date.day }}</a>
+                                        <a class="date {{ status }}" href="{{ get_url(system, f'{date_path}/{date.format_db()}') }}">{{ date.day }}</a>
                                     % end
                                 % end
                             </div>
