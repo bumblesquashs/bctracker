@@ -107,7 +107,7 @@ def get_url(system, path='', **kwargs):
     else:
         url = system_domain.format(system.id, path).rstrip('/')
     if len(kwargs) > 0:
-        query = '&'.join([f'{k}={v}' for k, v in kwargs.items()])
+        query = '&'.join([f'{k}={v}' for k, v in kwargs.items() if v is not None])
         url += f'?{query}'
     return url
 
@@ -521,26 +521,10 @@ def route_schedule_page(route_number, system_id=None):
         return error_page('route', system_id,
             route_number=route_number
         )
-    format = request.query.get('format')
-    date_string = request.query.get('date')
-    try:
-        date = Date.parse_db(date_string, system.timezone)
-    except:
-        date = Date.today(system.timezone)
-    if format == 'date':
-        return page('route/schedule/date', system_id,
-            title=str(route),
-            enable_refresh=False,
-            route=route,
-            date=date
-        )
-    sheet = system.get_sheet(date)
-    return page('route/schedule/sheet', system_id,
+    return page('route/schedule', system_id,
         title=str(route),
         enable_refresh=False,
-        route=route,
-        date=date,
-        sheet=sheet
+        route=route
     )
 
 @app.get([

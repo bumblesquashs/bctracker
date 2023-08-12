@@ -16,8 +16,6 @@
         % include('components/systems')
     </div>
 % else:
-    % sheets = system.get_sheets()
-    % sheet = sheets[0]
     <div class="flex-container">
         <div class="sidebar container flex-1">
             <div class="section">
@@ -37,7 +35,7 @@
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
                         <div class="section no-flex">
-                            % include('components/schedule_indicator', schedule=sheet.schedule, url=get_url(system, 'blocks'), date_url=get_url(system, 'blocks/schedule'))
+                            % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>
                 </div>

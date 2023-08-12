@@ -13,9 +13,6 @@
     </div>
 </div>
 
-% sheets = system.get_sheets()
-% sheet = sheets[0]
-
 <div class="flex-container">
     <div class="sidebar container flex-1">
         <div class="section">
@@ -26,23 +23,8 @@
                 % include('components/map', map_trip=trip, map_positions=positions)
                 
                 <div class="info-box">
-                    <div class="section vertical-align">
-                        % if sheet == sheets[0]:
-                            <div class="button disabled">&lt;</div>
-                        % else:
-                            <div class="button">&lt;</div>
-                        % end
-                        <div class="name centred">
-                            <h3>{{ sheet }}</h3>
-                        </div>
-                        % if sheet == sheets[-1]:
-                            <div class="button disabled">&gt;</div>
-                        % else:
-                            <div class="button">&gt;</div>
-                        % end
-                    </div>
                     <div class="section no-flex">
-                        % include('components/schedule_indicator', schedule=trip.service.schedule)
+                        % include('components/schedules_indicator', schedules=[trip.service.schedule])
                     </div>
                     <div class="section">
                         % route = trip.route

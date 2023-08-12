@@ -9,7 +9,7 @@ from models.schedule import Schedule
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures',  'schedule')
+    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'departures',  'schedule', 'sheets')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -45,11 +45,6 @@ class Stop:
         return self.name < other.name
     
     @property
-    def services(self):
-        '''Returns the services used by this stop'''
-        return {d.trip.service for d in self.departures if d.trip is not None}
-    
-    @property
     def nearby_stops(self):
         '''Returns all stops with coordinates close to this stop'''
         stops = self.system.get_stops()
@@ -66,10 +61,6 @@ class Stop:
             'lon': self.lon,
             'routes': [r.json for r in self.get_routes()]
         }
-    
-    def get_sheets(self):
-        '''Returns the sheets used by this stop'''
-        return self.system.get_sheets(self.services)
     
     def get_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
@@ -109,4 +100,6 @@ class Stop:
     
     def setup(self):
         '''Sets the schedule for this stop once trip information is available'''
-        self.schedule = Schedule.combine([s.schedule for s in self.services])
+        services = {d.trip.service for d in self.departures if d.trip is not None}
+        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.sheets = self.system.generate_sheets(services)

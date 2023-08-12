@@ -5,14 +5,16 @@ from models.time import Time
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = ('system', 'id', 'trips', 'schedule')
+    __slots__ = ('system', 'id', 'trips', 'schedule', 'sheets')
     
     def __init__(self, system, id, trips):
         self.system = system
         self.id = id
         self.trips = trips
         
-        self.schedule = Schedule.combine([s.schedule for s in self.services])
+        services = {t.service for t in self.trips}
+        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.sheets = system.generate_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -25,21 +27,6 @@ class Block:
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
         return sorted(related_blocks, key=lambda b: b.schedule)
-    
-    @property
-    def services(self):
-        '''Returns the services used by this block'''
-        return {t.service for t in self.trips}
-    
-    def get_sheets(self):
-        '''Returns the sheets used by this block'''
-        return self.system.get_sheets(self.services)
-    
-    def get_schedule(self, sheet=None):
-        '''Returns the schedule for this block'''
-        if sheet is None:
-            return self.schedule
-        return Schedule.combine([s.schedule for s in self.services], sheet.schedule.date_range)
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''

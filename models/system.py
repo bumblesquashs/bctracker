@@ -128,17 +128,15 @@ class System:
         '''Returns all services'''
         return sorted(self.services.values())
     
-    def get_sheet(self, date):
-        '''Returns the sheet for the given date'''
-        if len(self.sheets) == 0:
-            return None
-        return next((s for s in self.sheets if date in s.schedule.date_range))
-    
     def get_sheets(self, services=None):
         '''Returns all sheets'''
         if services is None:
             return sorted(self.sheets)
         return sorted([s for s in self.sheets if services in s])
+    
+    def generate_sheets(self, services):
+        copies = [s.copy(services) for s in self.get_sheets()]
+        return [s for s in copies if s is not None]
     
     def get_stop(self, stop_id=None, number=None):
         '''Returns the stop with the given ID or number'''

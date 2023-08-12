@@ -12,11 +12,9 @@
     </div>
 </div>
 
-% sheets = block.get_sheets()
+% sheets = block.sheets
 % routes = block.get_routes()
 % trips = block.get_trips()
-
-% sheet = sheets[0]
 
 <div class="flex-container">
     <div class="sidebar container flex-1">
@@ -28,23 +26,8 @@
                 % include('components/map', map_trips=trips, map_positions=positions)
                 
                 <div class="info-box">
-                    <div class="section vertical-align">
-                        % if sheet == sheets[0]:
-                            <div class="button disabled">&lt;</div>
-                        % else:
-                            <div class="button">&lt;</div>
-                        % end
-                        <div class="name centred">
-                            <h3>{{ sheet }}</h3>
-                        </div>
-                        % if sheet == sheets[-1]:
-                            <div class="button disabled">&gt;</div>
-                        % else:
-                            <div class="button">&gt;</div>
-                        % end
-                    </div>
                     <div class="section no-flex">
-                        % include('components/schedule_indicator', schedule=sheet.schedule)
+                        % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
                     </div>
                     <div class="section vertical">
                         <div class="flex-column">
@@ -56,75 +39,82 @@
                             % end
                         </div>
                     </div>
-                    % service_groups = sheet.get_service_groups(block.services, True)
-                    % if len(service_groups) > 0:
-                        <div class="section">
-                            <div class="name">Start time</div>
-                            <div class="value flex-column">
-                                % for service_group in service_groups:
-                                    <div>
-                                        % if len(service_groups) > 1:
-                                            <div class="smaller-font lighter-text">{{ service_group }}</div>
-                                        % end
-                                        <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
-                                    </div>
-                                % end
-                            </div>
-                        </div>
-                        <div class="section">
-                            <div class="name">End time</div>
-                            <div class="value flex-column">
-                                % for service_group in service_groups:
-                                    <div>
-                                        % if len(service_groups) > 1:
-                                            <div class="smaller-font lighter-text">{{ service_group }}</div>
-                                        % end
-                                        <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
-                                    </div>
-                                % end
-                            </div>
-                        </div>
-                        <div class="section">
-                            <div class="name">Duration</div>
-                            <div class="value flex-column">
-                                % for service_group in service_groups:
-                                    <div>
-                                        % if len(service_groups) > 1:
-                                            <div class="smaller-font lighter-text">{{ service_group }}</div>
-                                        % end
-                                        <div>{{ block.get_duration(service_group=service_group) }}</div>
-                                    </div>
-                                % end
-                            </div>
-                        </div>
-                        <div class="section">
-                            <div class="name">Number of trips</div>
-                            <div class="value flex-column">
-                                % for service_group in service_groups:
-                                    <div>
-                                        % if len(service_groups) > 1:
-                                            <div class="smaller-font lighter-text">{{ service_group }}</div>
-                                        % end
-                                        <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
-                                    </div>
-                                % end
-                            </div>
-                        </div>
-                        % if len([t for t in block.get_trips() if t.length is not None]) > 0:
+                    % for sheet in sheets:
+                        % service_groups = sheet.service_groups
+                        % if len(service_groups) > 0:
+                            % if len(sheets) > 1:
+                                <div class="title">
+                                    <h3>{{ sheet }}</h3>
+                                </div>
+                            % end
                             <div class="section">
-                                <div class="name">Length</div>
+                                <div class="name">Start time</div>
                                 <div class="value flex-column">
                                     % for service_group in service_groups:
                                         <div>
                                             % if len(service_groups) > 1:
                                                 <div class="smaller-font lighter-text">{{ service_group }}</div>
                                             % end
-                                            % length = sum([t.length for t in block.get_trips(service_group=service_group) if t.length is not None])
-                                            <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
+                                            <div>{{ block.get_start_time(service_group=service_group).format_web(time_format) }}</div>
                                         </div>
                                     % end
                                 </div>
                             </div>
+                            <div class="section">
+                                <div class="name">End time</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
+                                            % end
+                                            <div>{{ block.get_end_time(service_group=service_group).format_web(time_format) }}</div>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                            <div class="section">
+                                <div class="name">Duration</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
+                                            % end
+                                            <div>{{ block.get_duration(service_group=service_group) }}</div>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                            <div class="section">
+                                <div class="name">Number of trips</div>
+                                <div class="value flex-column">
+                                    % for service_group in service_groups:
+                                        <div>
+                                            % if len(service_groups) > 1:
+                                                <div class="smaller-font lighter-text">{{ service_group }}</div>
+                                            % end
+                                            <div>{{ len(block.get_trips(service_group=service_group)) }}</div>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                            % if len([t for t in block.get_trips() if t.length is not None]) > 0:
+                                <div class="section">
+                                    <div class="name">Length</div>
+                                    <div class="value flex-column">
+                                        % for service_group in service_groups:
+                                            <div>
+                                                % if len(service_groups) > 1:
+                                                    <div class="smaller-font lighter-text">{{ service_group }}</div>
+                                                % end
+                                                % length = sum([t.length for t in block.get_trips(service_group=service_group) if t.length is not None])
+                                                <div class="value">{{ f'{(length / 1000):.1f}' }}km</div>
+                                            </div>
+                                        % end
+                                    </div>
+                                </div>
+                            % end
                         % end
                     % end
                 </div>
@@ -152,9 +142,9 @@
                                     <td>
                                         <div class="flex-column">
                                             <div class="flex-column">
-                                                % for sheet in related_block.get_sheets():
+                                                % for sheet in related_block.sheets:
                                                     <div>{{ sheet }}</div>
-                                                    <div class="smaller-font lighter-text">{{ related_block.get_schedule(sheet) }}</div>
+                                                    <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
                                                 % end
                                             </div>
                                         </div>
@@ -247,63 +237,65 @@
             </div>
             <div class="content">
                 <div class="container inline">
-                    <div class="section">
-                        <div class="header">
-                            <h3>{{ sheet }}</h3>
-                        </div>
-                        <div class="content">
-                            <div class="container inline">
-                                % for service_group in service_groups:
-                                    % service_group_trips = block.get_trips(service_group=service_group)
-                                    <div class="section">
-                                        % if len(service_groups) > 1:
-                                            <div class="header">
-                                                <h4>{{ service_group }}</h4>
-                                            </div>
-                                        % end
-                                        <div class="content">
-                                            <table class="striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Start Time</th>
-                                                        <th class="non-mobile">End Time</th>
-                                                        <th class="desktop-only">Duration</th>
-                                                        <th class="non-mobile">Headsign</th>
-                                                        <th class="desktop-only">Direction</th>
-                                                        <th>Trip</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    % for trip in service_group_trips:
+                    % for sheet in sheets:
+                        <div class="section">
+                            <div class="header">
+                                <h3>{{ sheet }}</h3>
+                            </div>
+                            <div class="content">
+                                <div class="container inline">
+                                    % for service_group in sheet.service_groups:
+                                        % service_group_trips = block.get_trips(service_group=service_group)
+                                        <div class="section">
+                                            % if len(service_groups) > 1:
+                                                <div class="header">
+                                                    <h4>{{ service_group }}</h4>
+                                                </div>
+                                            % end
+                                            <div class="content">
+                                                <table class="striped">
+                                                    <thead>
                                                         <tr>
-                                                            <td>{{ trip.start_time.format_web(time_format) }}</td>
-                                                            <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
-                                                            <td class="desktop-only">{{ trip.duration }}</td>
-                                                            <td class="non-mobile">
-                                                                <div class="flex-column">
-                                                                    % include('components/headsign_indicator')
-                                                                    <span class="non-desktop smaller-font">{{ trip.direction }}</span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="desktop-only">{{ trip.direction }}</td>
-                                                            <td>
-                                                                <div class="flex-column">
-                                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                    <span class="mobile-only smaller-font">
-                                                                        % include('components/headsign_indicator')
-                                                                    </span>
-                                                                </div>
-                                                            </td>
+                                                            <th>Start Time</th>
+                                                            <th class="non-mobile">End Time</th>
+                                                            <th class="desktop-only">Duration</th>
+                                                            <th class="non-mobile">Headsign</th>
+                                                            <th class="desktop-only">Direction</th>
+                                                            <th>Trip</th>
                                                         </tr>
-                                                    % end
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        % for trip in service_group_trips:
+                                                            <tr>
+                                                                <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                                <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
+                                                                <td class="desktop-only">{{ trip.duration }}</td>
+                                                                <td class="non-mobile">
+                                                                    <div class="flex-column">
+                                                                        % include('components/headsign_indicator')
+                                                                        <span class="non-desktop smaller-font">{{ trip.direction }}</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="desktop-only">{{ trip.direction }}</td>
+                                                                <td>
+                                                                    <div class="flex-column">
+                                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                        <span class="mobile-only smaller-font">
+                                                                            % include('components/headsign_indicator')
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        % end
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                % end
+                                    % end
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    % end
                 </div>
             </div>
         </div>
