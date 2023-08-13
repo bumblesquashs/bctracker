@@ -239,9 +239,11 @@
                 <div class="container inline">
                     % for sheet in sheets:
                         <div class="section">
-                            <div class="header">
-                                <h3>{{ sheet }}</h3>
-                            </div>
+                            % if len(sheets) > 1:
+                                <div class="header">
+                                    <h3>{{ sheet }}</h3>
+                                </div>
+                            % end
                             <div class="content">
                                 <div class="container inline">
                                     % service_groups = sheet.service_groups

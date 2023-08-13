@@ -28,11 +28,15 @@ class Sheet:
         if include_special or len(service_groups) == 0:
             date_services = {d:tuple({s for s in services if d in s.schedule}) for d in schedule.added_dates}
             for service_set in set(date_services.values()):
+                if service_set in weekday_services.values():
+                    continue
                 exceptions = {k for k,v in date_services.items() if v == service_set}
                 service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=set(), exceptions=exceptions))
         self.service_groups = sorted(service_groups)
     
     def __str__(self):
+        if self.schedule.is_special:
+            return self.schedule.added_dates_string
         return str(self.schedule.date_range)
     
     def __hash__(self):
