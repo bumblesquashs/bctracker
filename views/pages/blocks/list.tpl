@@ -42,7 +42,7 @@
                             </td>
                             <td class="non-mobile">{{ count }}</td>
                             <td>
-                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, url=get_url(region_system, 'blocks'))
+                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
                             </td>
                         </tr>
                     % end

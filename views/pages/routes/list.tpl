@@ -82,7 +82,7 @@
                             </div>
                         </td>
                         <td class="non-mobile">
-                            % include('components/weekdays_indicator', schedule=route.schedule, compact=True, url=get_url(system, f'routes/{route.number}/schedule'))
+                            % include('components/weekdays_indicator', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
                         </td>
                     </tr>
                 % end
