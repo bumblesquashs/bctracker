@@ -155,7 +155,7 @@
                     <div class="news-post">
                         <div class="header">
                             <h3>Summer Update</h3>
-                            August 13, 2023
+                            August 15, 2023
                         </div>
                         <div class="content">
                             <p>
