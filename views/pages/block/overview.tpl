@@ -12,7 +12,7 @@
     </div>
 </div>
 
-% sheets = block.get_sheets()
+% sheets = block.sheets
 % routes = block.get_routes()
 % trips = block.get_trips()
 
@@ -27,7 +27,7 @@
                 
                 <div class="info-box">
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', services=block.services)
+                        % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
                     </div>
                     <div class="section vertical">
                         <div class="flex-column">
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     % for sheet in sheets:
-                        % service_groups = sheet.get_service_groups(block.services, True)
+                        % service_groups = sheet.service_groups
                         % if len(service_groups) > 0:
                             % if len(sheets) > 1:
                                 <div class="title">
@@ -142,9 +142,9 @@
                                     <td>
                                         <div class="flex-column">
                                             <div class="flex-column">
-                                                % for sheet in related_block.get_sheets():
+                                                % for sheet in related_block.sheets:
                                                     <div>{{ sheet }}</div>
-                                                    <div class="smaller-font lighter-text">{{ related_block.get_schedule(sheet) }}</div>
+                                                    <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
                                                 % end
                                             </div>
                                         </div>
@@ -238,68 +238,66 @@
             <div class="content">
                 <div class="container inline">
                     % for sheet in sheets:
-                        % service_groups = sheet.get_service_groups(block.services, True)
-                        % if len(service_groups) > 0:
-                            <div class="section">
-                                % if len(sheets) > 1:
-                                    <div class="header">
-                                        <h3>{{ sheet }}</h3>
-                                    </div>
-                                % end
-                                <div class="content">
-                                    <div class="container inline">
-                                        % for service_group in service_groups:
-                                            % service_group_trips = block.get_trips(service_group=service_group)
-                                            <div class="section">
-                                                % if len(service_groups) > 1:
-                                                    <div class="header">
-                                                        <h4>{{ service_group }}</h4>
-                                                    </div>
-                                                % end
-                                                <div class="content">
-                                                    <table class="striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Start Time</th>
-                                                                <th class="non-mobile">End Time</th>
-                                                                <th class="desktop-only">Duration</th>
-                                                                <th class="non-mobile">Headsign</th>
-                                                                <th class="desktop-only">Direction</th>
-                                                                <th>Trip</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            % for trip in service_group_trips:
-                                                                <tr>
-                                                                    <td>{{ trip.start_time.format_web(time_format) }}</td>
-                                                                    <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
-                                                                    <td class="desktop-only">{{ trip.duration }}</td>
-                                                                    <td class="non-mobile">
-                                                                        <div class="flex-column">
-                                                                            % include('components/headsign_indicator')
-                                                                            <span class="non-desktop smaller-font">{{ trip.direction }}</span>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="desktop-only">{{ trip.direction }}</td>
-                                                                    <td>
-                                                                        <div class="flex-column">
-                                                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                            <span class="mobile-only smaller-font">
-                                                                                % include('components/headsign_indicator')
-                                                                            </span>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            % end
-                                                        </tbody>
-                                                    </table>
+                        <div class="section">
+                            % if len(sheets) > 1:
+                                <div class="header">
+                                    <h3>{{ sheet }}</h3>
+                                </div>
+                            % end
+                            <div class="content">
+                                <div class="container inline">
+                                    % service_groups = sheet.service_groups
+                                    % for service_group in service_groups:
+                                        % service_group_trips = block.get_trips(service_group=service_group)
+                                        <div class="section">
+                                            % if len(service_groups) > 1:
+                                                <div class="header">
+                                                    <h4>{{ service_group }}</h4>
                                                 </div>
+                                            % end
+                                            <div class="content">
+                                                <table class="striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Start Time</th>
+                                                            <th class="non-mobile">End Time</th>
+                                                            <th class="desktop-only">Duration</th>
+                                                            <th class="non-mobile">Headsign</th>
+                                                            <th class="desktop-only">Direction</th>
+                                                            <th>Trip</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        % for trip in service_group_trips:
+                                                            <tr>
+                                                                <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                                <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
+                                                                <td class="desktop-only">{{ trip.duration }}</td>
+                                                                <td class="non-mobile">
+                                                                    <div class="flex-column">
+                                                                        % include('components/headsign_indicator')
+                                                                        <span class="non-desktop smaller-font">{{ trip.direction }}</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="desktop-only">{{ trip.direction }}</td>
+                                                                <td>
+                                                                    <div class="flex-column">
+                                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                        <span class="mobile-only smaller-font">
+                                                                            % include('components/headsign_indicator')
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        % end
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        % end
-                                    </div>
+                                        </div>
+                                    % end
                                 </div>
                             </div>
-                        % end
+                        </div>
                     % end
                 </div>
             </div>

@@ -287,15 +287,7 @@
         </div>
         <div id="main">
             <div id="banners">
-                % if system is not None and system.id == 'fraser-valley':
-                    <div class="banner">
-                        <div class="content">
-                            <span class="title">Due to ongoing job action, service in the Fraser Valley region is currently suspended.</span>
-                            <br />
-                            <span class="description">For more information and updates please visit the <a href="https://www.bctransit.com/central-fraser-valley/news">BC Transit News Page</a>.</span>
-                        </div>
-                    </div>
-                % end
+                <!-- No banners right now -->
             </div>
             <div id="content">{{ !base }}</div>
         </div>

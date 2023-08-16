@@ -32,7 +32,7 @@
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', services=stop.services, url=get_url(system, f'stops/{stop.number}/schedule'))
+                        % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], schedule_path=f'stops/{stop.number}/schedule')
                     </div>
                 </div>
             </div>

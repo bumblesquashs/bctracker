@@ -1,4 +1,6 @@
 
+from datetime import timedelta
+
 import helpers.date
 
 from models.daterange import DateRange
@@ -23,24 +25,21 @@ class Schedule:
         if modifications is None:
             modifications = {d for s in schedules for d in s.modifications}
         if exceptions is None:
-            added_dates = {d for s in schedules for d in s.added_dates}
-            removed_dates = {d for s in schedules for d in s.removed_dates}
             fully_added_dates = set()
             fully_removed_dates = set()
             for weekday in Weekday:
-                weekday_added_dates = [s.added_dates for s in schedules if weekday not in s.weekdays]
+                weekday_added_dates = [s.added_dates for s in schedules if weekday in s.weekdays if len(s.added_dates) > 0]
                 if len(weekday_added_dates) > 0:
                     fully_added_dates.update(set.intersection(*weekday_added_dates))
-                weekday_removed_dates = [s.removed_dates for s in schedules if weekday in s.weekdays]
+                weekday_removed_dates = [s.removed_dates for s in schedules if weekday in s.weekdays if len(s.removed_dates) > 0]
                 if len(weekday_removed_dates) > 0:
                     fully_removed_dates.update(set.intersection(*weekday_removed_dates))
-            fully_added_dates.difference_update(removed_dates)
-            fully_removed_dates.difference_update(added_dates)
-            modifications.update(added_dates.difference(fully_added_dates))
-            modifications.update(removed_dates.difference(fully_removed_dates))
-            added_dates = {d for d in added_dates if d.weekday not in weekdays}
-            removed_dates = {d for d in fully_removed_dates if d.weekday in weekdays}
-            exceptions = added_dates.union(removed_dates)
+            fully_added_dates.update({d for s in schedules for d in s.added_dates if s.is_special})
+            exceptions = fully_added_dates.symmetric_difference(fully_removed_dates)
+            added_dates = {d for s in schedules for d in s.added_dates if d not in exceptions}
+            removed_dates = {d for s in schedules for d in s.removed_dates if d not in exceptions}
+            modifications.update(added_dates)
+            modifications.update(removed_dates)
         return cls(date_range, weekdays, exceptions, modifications)
     
     def __init__(self, date_range, weekdays, exceptions, modifications):
@@ -116,6 +115,11 @@ class Schedule:
         return len(self.weekdays) == 0 and len(self.exceptions) == 0
     
     @property
+    def all_dates(self):
+        '''Returns all exceptions and modified dates'''
+        return self.exceptions.union(self.modifications)
+    
+    @property
     def added_dates(self):
         '''Returns all dates that are added'''
         return {d for d in self.exceptions if d.weekday not in self.weekdays}
@@ -141,12 +145,23 @@ class Schedule:
     
     def get_date_status(self, date):
         '''Returns the status class of this schedule on the given date'''
+        if date in self.modifications and date in self.date_range:
+            return 'modified-service'
         if date in self:
-            if date in self.modifications:
-                return 'modified-service'
             return 'normal-service'
         return 'no-service'
     
     def slice(self, date_range):
         '''Returns a version of this schedule limited to the given date range'''
-        return Schedule(date_range, self.weekdays.copy(), self.exceptions.copy(), self.modifications.copy())
+        exceptions = self.exceptions.copy()
+        date = date_range.start
+        while date < self.date_range.start:
+            if date.weekday in self.weekdays:
+                exceptions.add(date)
+            date = date + timedelta(days=1)
+        date = date_range.end
+        while date > self.date_range.end:
+            if date.weekday in self.weekdays:
+                exceptions.add(date)
+            date = date - timedelta(days=1)
+        return Schedule(date_range, self.weekdays.copy(), exceptions, self.modifications.copy())

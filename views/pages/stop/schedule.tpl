@@ -23,7 +23,7 @@
         Please check again later!
     </p>
 % else:
-    % sheets = stop.get_sheets()
+    % sheets = stop.sheets
     <div class="flex-container">
         <div class="sidebar container flex-1">
             <div class="section">
@@ -33,95 +33,92 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', services=stop.services, url=get_url(system, f'stops/{stop.number}/schedule'))
+                            % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container inline flex-3">
+        <div class="container flex-3">
             % for (i, sheet) in enumerate(sheets):
-                % service_groups = sheet.get_service_groups(stop.services)
-                % if len(service_groups) > 0:
-                    % url_suffix = '' if i == 0 else f'{i + 1}'
-                    <div class="section">
-                        <div class="header">
-                            <h2>{{ sheet }}</h2>
-                        </div>
-                        <div class="content">
-                            <div class="container inline">
-                                % for service_group in service_groups:
-                                    % departures = stop.get_departures(service_group)
-                                    <div class="section">
-                                        <div class="header">
-                                            % for weekday in service_group.schedule.weekdays:
-                                                <div id="{{ weekday.short_name }}{{ url_suffix }}"></div>
-                                            % end
-                                            <h3>{{ service_group }}</h3>
-                                        </div>
-                                        <div class="content">
-                                            <table class="striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Time</th>
-                                                        <th class="non-mobile">Headsign</th>
-                                                        <th class="non-mobile">Block</th>
-                                                        <th>Trip</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    % last_hour = -1
-                                                    % for departure in departures:
-                                                        % trip = departure.trip
-                                                        % block = trip.block
-                                                        % this_hour = departure.time.hour
-                                                        % if last_hour == -1:
-                                                            % last_hour = this_hour
-                                                        % end
-                                                        <tr class="{{'divider' if this_hour > last_hour else ''}}">
-                                                            <td>{{ departure.time.format_web(time_format) }}</td>
-                                                            <td class="non-mobile">
-                                                                <div class="flex-column">
-                                                                    % include('components/headsign_indicator')
-                                                                    % if not departure.pickup_type.is_normal:
-                                                                        <span class="smaller-font">{{ departure.pickup_type }}</span>
-                                                                    % elif departure == trip.last_departure:
-                                                                        <span class="smaller-font">Drop off only</span>
-                                                                    % end
-                                                                    % if not departure.dropoff_type.is_normal:
-                                                                        <span class="smaller-font">{{ departure.dropoff_type }}</span>
-                                                                    % end
-                                                                </div>
-                                                            </td>
-                                                            <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
-                                                            <td>
-                                                                <div class="flex-column">
-                                                                    <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
-                                                                    <span class="mobile-only smaller-font">
-                                                                        % include('components/headsign_indicator')
-                                                                    </span>
-                                                                    % if not departure.pickup_type.is_normal:
-                                                                        <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
-                                                                    % elif departure == trip.last_departure:
-                                                                        <span class="mobile-only smaller-font">Drop off only</span>
-                                                                    % end
-                                                                    % if not departure.dropoff_type.is_normal:
-                                                                        <span class="mobile-only smaller-font">{{ departure.dropoff_type }}</span>
-                                                                    % end
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                % path_suffix = '' if i == 0 else str(i + 1)
+                <div class="section">
+                    <div class="header">
+                        <h2>{{ sheet }}</h2>
+                    </div>
+                    <div class="content">
+                        <div class="container inline">
+                            % for service_group in sheet.service_groups:
+                                % departures = stop.get_departures(service_group)
+                                <div class="section">
+                                    <div class="header">
+                                        % for weekday in service_group.schedule.weekdays:
+                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
+                                        % end
+                                        <h3>{{ service_group }}</h3>
+                                    </div>
+                                    <div class="content">
+                                        <table class="striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th class="non-mobile">Headsign</th>
+                                                    <th class="non-mobile">Block</th>
+                                                    <th>Trip</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                % last_hour = -1
+                                                % for departure in departures:
+                                                    % trip = departure.trip
+                                                    % block = trip.block
+                                                    % this_hour = departure.time.hour
+                                                    % if last_hour == -1:
                                                         % last_hour = this_hour
                                                     % end
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    <tr class="{{'divider' if this_hour > last_hour else ''}}">
+                                                        <td>{{ departure.time.format_web(time_format) }}</td>
+                                                        <td class="non-mobile">
+                                                            <div class="flex-column">
+                                                                % include('components/headsign_indicator')
+                                                                % if not departure.pickup_type.is_normal:
+                                                                    <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                                % elif departure == trip.last_departure:
+                                                                    <span class="smaller-font">Drop off only</span>
+                                                                % end
+                                                                % if not departure.dropoff_type.is_normal:
+                                                                    <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                                                % end
+                                                            </div>
+                                                        </td>
+                                                        <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                                        <td>
+                                                            <div class="flex-column">
+                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                <span class="mobile-only smaller-font">
+                                                                    % include('components/headsign_indicator')
+                                                                </span>
+                                                                % if not departure.pickup_type.is_normal:
+                                                                    <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
+                                                                % elif departure == trip.last_departure:
+                                                                    <span class="mobile-only smaller-font">Drop off only</span>
+                                                                % end
+                                                                % if not departure.dropoff_type.is_normal:
+                                                                    <span class="mobile-only smaller-font">{{ departure.dropoff_type }}</span>
+                                                                % end
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    % last_hour = this_hour
+                                                % end
+                                            </tbody>
+                                        </table>
                                     </div>
-                                % end
-                            </div>
+                                </div>
+                            % end
                         </div>
                     </div>
-                % end
+                </div>
             % end
         </div>
     </div>

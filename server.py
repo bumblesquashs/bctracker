@@ -26,7 +26,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 17
+VERSION = 18
 
 app = Bottle()
 running = False
@@ -98,13 +98,18 @@ def stop():
     if cp.server.running:
         cp.server.stop()
 
-def get_url(system, path=''):
+def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     if system is None:
-        return no_system_domain.format(path).rstrip('/')
-    if isinstance(system, str):
-        return system_domain.format(system, path).rstrip('/')
-    return system_domain.format(system.id, path).rstrip('/')
+        url = no_system_domain.format(path).rstrip('/')
+    elif isinstance(system, str):
+        url = system_domain.format(system, path).rstrip('/')
+    else:
+        url = system_domain.format(system.id, path).rstrip('/')
+    if len(kwargs) > 0:
+        query = '&'.join([f'{k}={v}' for k, v in kwargs.items() if v is not None])
+        url += f'?{query}'
+    return url
 
 def page(name, system_id, title, path='', enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''

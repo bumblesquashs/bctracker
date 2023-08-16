@@ -451,42 +451,42 @@ table.striped tr:nth-child(2n-1) {
     background-color: #989898;
 }
 
-.schedules .footer {
+.schedules-indicator .footer {
     color: #666666;
 }
 
-.schedules .legend {
+.schedules-indicator .legend {
     color: #666666;
 }
 
-.schedules a.modified-service:hover {
+.schedules-indicator a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.schedules a.no-service:hover {
+.schedules-indicator a.no-service:hover {
     background-color: #DC5050;
 }
 
-.schedules a.normal-service:hover {
+.schedules-indicator a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.schedules .modified-service {
+.schedules-indicator .modified-service {
     background-color: #FFA560;
     color: #000000;
 }
 
-.schedules .no-service {
+.schedules-indicator .no-service {
     background-color: #FF7F7F;
     color: #000000;
 }
 
-.schedules .normal-service {
+.schedules-indicator .normal-service {
     background-color: #7DBD88;
     color: #000000;
 }
 
-.schedules .schedule {
+.schedules-indicator .schedule {
     background-color: #DDDDDD;
 }
 
