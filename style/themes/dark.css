@@ -227,6 +227,14 @@ table.striped tr:nth-child(2n-1) {
     border-right-color: #565656;
 }
 
+#side-bar-toggle {
+    background-color: #393939;
+}
+
+#side-bar-toggle:hover {
+    background-color: #565656;
+}
+
 #status {
     background-color: #276227;
     color: #FFFFFF;
@@ -261,12 +269,12 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#title a {
+#title {
     background-color: #154E15;
     color: #FFFFFF;
 }
 
-#title a:hover {
+#title:hover {
     background-color: #053305;
 }
 

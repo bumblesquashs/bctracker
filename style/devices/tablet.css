@@ -112,6 +112,10 @@ table {
     height: 36px;
 }
 
+#side-bar-toggle-container {
+    display: none;
+}
+
 #status .content {
     text-align: center;
 }
@@ -215,6 +219,10 @@ table {
 
 .smaller-font {
     font-size: 11pt;
+}
+
+.side-bar-closed-only {
+    display: none;
 }
 
 .tab-button-bar {

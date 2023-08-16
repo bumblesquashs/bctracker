@@ -221,6 +221,14 @@ table.striped tr:nth-child(2n-1) {
     border-right-color: #666666;
 }
 
+#side-bar-toggle {
+    background-color: #E6E6E6;
+}
+
+#side-bar-toggle:hover {
+    background-color: #CBCBCB;
+}
+
 #status {
     background-color: #DC9B41;
     color: #FFFFFF;
@@ -255,12 +263,12 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#title a {
+#title {
     background-color: #C7743B;
     color: #FFFFFF;
 }
 
-#title a:hover {
+#title:hover {
     background-color: #7E3704;
 }
 
