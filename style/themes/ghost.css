@@ -217,6 +217,14 @@ table.striped tr {
     border-right-color: #EEEEEE;
 }
 
+#side-bar-toggle {
+    background-color: #EEEEEE;
+}
+
+#side-bar-toggle:hover {
+    background-color: #DDDDDD;
+}
+
 #status {
     background-color: #FFFFFF;
     color: #000000;
@@ -225,6 +233,7 @@ table.striped tr {
 
 #system-menu {
     background-color: #FFFFFF;
+    border-bottom-color: #EEEEEE;
 }
 
 #system-menu .header {
@@ -249,12 +258,12 @@ table.striped tr {
     display: none;
 }
 
-#title a {
+#title {
     background-color: #EEEEEE;
     color: #000000;
 }
 
-#title a:hover {
+#title:hover {
     background-color: #DDDDDD;
 }
 

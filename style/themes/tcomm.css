@@ -246,6 +246,16 @@ table.striped tr {
     border-right-color: #000000;
 }
 
+#side-bar-toggle {
+    background-color: #EEEEEE;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+}
+
+#side-bar-toggle:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6,#E0E0E0);
+}
+
 #status {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
@@ -291,14 +301,14 @@ table.striped tr {
     display: none;
 }
 
-#title a {
+#title {
     background-color: #111111;
     background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: none;
     color: #FFFFFF;
 }
 
-#title a:hover {
+#title:hover {
     background-color: #444444;
     background-image: linear-gradient(#555555, #383838);
 }

@@ -110,6 +110,7 @@ def page(name, system_id, title, path='', enable_refresh=True, include_maps=Fals
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
+    hide_systems = request.get_cookie('hide_systems') == 'yes'
     system = helpers.system.find(system_id)
     if system is None:
         last_updated = realtime.get_last_updated(time_format)
@@ -136,6 +137,7 @@ def page(name, system_id, title, path='', enable_refresh=True, include_maps=Fals
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
+        hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
         **kwargs
     )

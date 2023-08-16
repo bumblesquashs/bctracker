@@ -111,20 +111,27 @@
                 return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
             }
             
+            function setCookie(key, value) {
+                const max_age = 60*60*24*365*10;
+                if ("{{ cookie_domain }}" == "None") {
+                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; path=/";
+                } else {
+                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ cookie_domain }}; path=/";
+                }
+            }
+            
             function openSurvey() {
                 window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
             }
         </script>
     </head>
     
-    <body class="{{ 'full-map' if full_map else '' }}">
-        <div id="title">
-            <a href="{{ get_url(system) }}">
-                <img class="white" src="/img/white/bctracker.png" />
-                <img class="black" src="/img/black/bctracker.png" />
-                BCTracker
-            </a>
-        </div>
+    <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
+        <a id="title" href="{{ get_url(system) }}">
+            <img class="white" src="/img/white/bctracker.png" />
+            <img class="black" src="/img/black/bctracker.png" />
+            <div class="side-bar-open-only">BCTracker</div>
+        </a>
         <div id="navigation-bar">
             <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>
             
@@ -228,7 +235,7 @@
             <div id="search-non-desktop-results" class="display-none"></div>
         </div>
         <div id="side-bar">
-            <div id="status">
+            <div id="status" class="side-bar-open-only">
                 <div id="system-menu-toggle" onclick="toggleSystemMenu()">
                     <img class="white" src="/img/white/system.png" />
                     <img class="black" src="/img/black/system.png" />
@@ -249,7 +256,7 @@
                     <img class="black" src="/img/black/refresh.png" />
                 </div>
             </div>
-            <div id="system-menu" class="collapse-non-desktop">
+            <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
                 % if system is None:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % else:
@@ -268,6 +275,14 @@
                         % end
                     % end
                 % end
+            </div>
+            <div class="flex-1 side-bar-closed-only"></div>
+            <div id="side-bar-toggle-container">
+                <div id="side-bar-toggle" onclick="toggleSideBar()">
+                    <div class="side-bar-open-only">&laquo;</div>
+                    <div class="side-bar-closed-only">&raquo;</div>
+                </div>
+                <div class="side-bar-open-only">Hide Systems</div>
             </div>
         </div>
         <div id="main">
@@ -495,5 +510,16 @@
                 </a>";
         }
         return html;
+    }
+    
+    function toggleSideBar() {
+        const element = document.getElementsByTagName("body")[0];
+        element.classList.toggle("side-bar-open");
+        element.classList.toggle("side-bar-closed");
+        if (element.classList.contains("side-bar-open")) {
+            setCookie("hide_systems", "no");
+        } else {
+            setCookie("hide_systems", "yes");
+        }
     }
 </script>

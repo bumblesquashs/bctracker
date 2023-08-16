@@ -113,6 +113,26 @@ table.striped th {
     border-right-style: solid;
 }
 
+#side-bar .spacer {
+    flex: 1;
+}
+
+#side-bar-toggle {
+    padding: 2 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16pt;
+}
+
+#side-bar-toggle-container {
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    font-size: 11pt;
+    gap: 10px;
+}
+
 #status {
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -127,6 +147,8 @@ table.striped th {
     grid-template-columns: auto;
     overflow: auto;
     padding-bottom: 15px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 
 #system-menu .header {
@@ -153,21 +175,15 @@ table.striped th {
     font-size: 22pt;
     font-weight: bold;
     display: flex;
-    align-items: stretch;
-}
-
-#title a {
-    flex: 1;
+    align-items: center;
     padding: 5px 20px;
     text-decoration: none;
-    display: flex;
-    align-items: center;
+    gap: 10px;
 }
 
 #title img {
     width: 24px;
     height: 24px;
-    margin-right: 10px;
 }
 
 .banner a {
@@ -257,6 +273,26 @@ table.striped th {
 
 .non-desktop {
     display: none !important;
+}
+
+.side-bar-open .side-bar-closed-only {
+    display: none !important;
+}
+
+.side-bar-closed .side-bar-open-only {
+    display: none !important;
+}
+
+.side-bar-closed #content {
+    padding-left: 15px;
+}
+
+.side-bar-closed #title {
+    justify-content: center;
+}
+
+.side-bar-closed #side-bar {
+    border-right-width: 0px;
 }
 
 .sidebar table {
