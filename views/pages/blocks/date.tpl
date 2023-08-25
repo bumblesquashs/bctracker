@@ -30,12 +30,12 @@
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
                             <div class="name centred">
                                 <h3>{{ date.format_long() }}</h3>
-                                <a href="{{ get_url(system, 'blocks') }}">Return to week view</a>
+                                <a href="{{ get_url(system, 'blocks') }}">Go to weekly schedule</a>
                             </div>
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], url=get_url(system, 'blocks'), date_url=get_url(system, 'blocks/schedule'))
+                            % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <h3>{{ date.weekday }}</h3>
                 </div>
                 <div class="content">
-                    % blocks = [b for b in system.get_blocks() if b.schedule.includes(date)]
+                    % blocks = [b for b in system.get_blocks() if date in b.schedule]
                     % if len(blocks) == 0:
                         <p>No blocks found for {{ system }} on {{ date.format_long() }}.</p>
                         <p>

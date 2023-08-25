@@ -1,65 +1,52 @@
 
 % import calendar
 
-% url = get('url', None)
-% date_url = get('date_url', url)
+% schedule_path = get('schedule_path')
+% date_path = get('date_path', schedule_path)
 
-% show_special_schedules = len([s for s in schedules if not s.special]) == 0
-% modified_dates = {d for s in schedules for d in s.modified_dates}
-% excluded_dates = {d for s in schedules for d in s.excluded_dates}
-
-<div class="schedules">
+<div class="schedules-indicator">
     <div class="legend">
-        % if len([s for s in schedules if not s.special]) > 0:
-            <div>
-                <span class="icon normal-service"></span> Normal Service
-            </div>
-        % end
-        % if len(modified_dates) > 0:
-            <div>
-                <span class="icon modified-service"></span> Modified Service
-            </div>
-        % end
-        % if len(excluded_dates) > 0 or len([s for s in schedules if len(s.weekdays) < 7]) > 0 or show_special_schedules:
-            <div>
-                <span class="icon no-service"></span> No Service
+        <div class="flex-row flex-gap-5">
+            <div class="icon normal-service"></div>
+            <div>Normal Service</div>
+        </div>
+        <div class="flex-row flex-gap-5">
+            <div class="icon modified-service"></div>
+            <div>Modified Service</div>
+        </div>
+        <div class="flex-row flex-gap-5">
+            <div class="icon no-service"></div>
+            <div>No Service</div>
+        </div>
+    </div>
+    <div class="flex-column flex-gap-10">
+        % for (i, schedule) in enumerate(schedules):
+            <div class="schedule">
+                <div class="title">{{ schedule.date_range }}</div>
+                % include('components/weekdays_indicator', schedule=schedule, path_suffix='' if i == 0 else str(i + 1))
+                % dates = schedule.all_dates
+                % if len(dates) > 0:
+                    <div class="exceptions">
+                        % for (year, month) in sorted({(d.year, d.month) for d in dates}):
+                            % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
+                            <div class="month">
+                                <div class="name">{{ calendar.month_name[month] }}</div>
+                                % for date in month_dates:
+                                    % status = schedule.get_date_status(date)
+                                    % if schedule_path is None:
+                                        <span class="date {{ status }}">{{ date.day }}</span>
+                                    % else:
+                                        <a class="date {{ status }}" href="{{ get_url(system, f'{date_path}/{date.format_db()}') }}">{{ date.day }}</a>
+                                    % end
+                                % end
+                            </div>
+                        % end
+                    </div>
+                % end
             </div>
         % end
     </div>
-    % for (i, schedule) in enumerate(schedules):
-        % if not schedule.special or show_special_schedules:
-            <div class="schedule">
-                <div class="title">{{ schedule.date_range }}</div>
-                % include('components/weekdays_indicator', schedule=schedule, url_suffix='' if i == 0 else f'{i + 1}')
-            </div>
-        % end
-    % end
-    % dates = modified_dates.union(excluded_dates)
-    % if len(dates) > 0:
-        <div class="exceptions">
-            % for (year, month) in sorted({(d.year, d.month) for d in dates}):
-                % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
-                <div class="month">
-                    <div class="name">{{ calendar.month_name[month] }}</div>
-                    % for date in month_dates:
-                        % if date in modified_dates:
-                            % status = 'modified-service'
-                        % elif date in excluded_dates:
-                            % status = 'no-service'
-                        % else:
-                            % status = 'normal-service'
-                        % end
-                        % if date_url is None or date in schedule.excluded_dates:
-                            <span class="date {{ status }}">{{ date.day }}</span>
-                        % else:
-                            <a class="date {{ status }}" href="{{ date_url }}/{{ date.format_db() }}">{{ date.day }}</a>
-                        % end
-                    % end
-                </div>
-            % end
-        </div>
-    % end
-    % if url is not None:
+    % if schedule_path is not None:
         <div class="footer">
             Click on a weekday or date to jump to the schedule for that day
         </div>

@@ -69,7 +69,7 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
             filters['position.lon'] = {
                 'IS': None
             }
-    return database.select('position',
+    positions = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
             'position.bus_number': 'position_bus_number',
@@ -85,6 +85,7 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
         },
         filters=filters,
         initializer=Position.from_db)
+    return [p for p in positions if not p.bus.is_test]
 
 def delete_all(system):
     '''Deletes all positions for the given system from the database'''

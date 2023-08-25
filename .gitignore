@@ -3,6 +3,7 @@ backups/
 data/gtfs
 data/realtime
 data/*.db
+data/*.db-journal
 logs/
 
 server.conf

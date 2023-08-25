@@ -1,79 +1,81 @@
 
 from models.date import Date
-from models.daterange import DateRange
 from models.schedule import Schedule
 
 class Sheet:
     '''A collection of overlapping services'''
     
-    __slots__ = ('system', 'id', 'schedule', 'services', 'service_groups')
+    __slots__ = ('system', 'schedule', 'services', 'service_groups', 'copies')
     
     @classmethod
-    def combine(cls, system, services, include_special):
+    def combine(cls, system, services, include_special=False):
         '''Returns a sheet that includes all of the given services'''
-        id = '_'.join(sorted({s.id for s in services}))
+        services = {s for s in services if not s.schedule.is_empty}
         schedule = Schedule.combine([s.schedule for s in services])
-        service_groups = []
-        weekdays = {w for s in services for w in s.schedule.weekdays if not s.schedule.special}
-        weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in weekdays}
-        for service_set in set(weekday_services.values()):
-            service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
-            service_groups.append(ServiceGroup.combine(system, service_set, weekdays=service_set_weekdays))
-        if include_special or len(service_groups) == 0:
-            dates = {d for s in services for d in s.schedule.modified_dates if s.schedule.special}
-            date_services = {d:tuple({s for s in services if s.schedule.includes(d)}) for d in dates}
-            for service_set in set(date_services.values()):
-                modified_dates = {k for k,v in date_services.items() if v == service_set}
-                service_groups.append(ServiceGroup.combine(system, service_set, weekdays=set(), modified_dates=modified_dates))
-        return cls(system, id, schedule, services, sorted(service_groups))
+        return cls(system, schedule, services, include_special)
     
-    def __init__(self, system, id, schedule, services, service_groups):
+    def __init__(self, system, schedule, services, include_special=False):
         self.system = system
-        self.id = id
         self.schedule = schedule
         self.services = services
-        self.service_groups = service_groups
+        self.copies = {}
+        
+        service_groups = []
+        weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in schedule.weekdays}
+        for service_set in set(weekday_services.values()):
+            service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
+            service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=service_set_weekdays))
+        if include_special or len(service_groups) == 0:
+            date_services = {d:tuple({s for s in services if d in s.schedule}) for d in schedule.added_dates}
+            for service_set in set(date_services.values()):
+                if service_set in weekday_services.values():
+                    continue
+                exceptions = {k for k,v in date_services.items() if v == service_set}
+                service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=set(), exceptions=exceptions))
+        self.service_groups = sorted(service_groups)
     
     def __str__(self):
+        if self.schedule.is_special:
+            return self.schedule.added_dates_string
         return str(self.schedule.date_range)
     
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.schedule)
     
     def __eq__(self, other):
-        return self.id == other.id
+        return self.schedule == other.schedule
     
     def __lt__(self, other):
-        return self.schedule.date_range < other.schedule.date_range
+        return self.schedule < other.schedule
+    
+    def copy(self, services, include_special=False):
+        '''Returns a duplicate of this sheet, restricted to the given services'''
+        services = [s for s in self.services if s in services]
+        key = (tuple(sorted(services)), include_special)
+        if key in self.copies:
+            return self.copies[key]
+        if len(services) == 0:
+            return None
+        copy = Sheet.combine(self.system, services, include_special)
+        self.copies[key] = copy
+        return copy
 
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
-    __slots__ = ('system', 'id', 'schedule', 'services')
+    __slots__ = ('system', 'schedule', 'services', 'name')
     
     @classmethod
-    def combine(cls, system, services, weekdays=None, modified_dates=None, excluded_dates=None):
+    def combine(cls, system, services, date_range=None, weekdays=None, exceptions=None, modifications=None):
         '''Returns a service group that combines a list of services'''
         if len(services) == 0:
             return None
-        id = '_'.join(sorted({s.id for s in services}))
         schedules = [s.schedule for s in services]
-        date_range = DateRange.combine([s.date_range for s in schedules])
-        if weekdays is None:
-            weekdays = {w for s in schedules for w in s.weekdays}
-        if modified_dates is None:
-            modified_dates = {d for s in schedules for d in s.modified_dates}
-        if excluded_dates is None:
-            excluded_dates = {d for s in schedules for d in s.excluded_dates}
-        for date in excluded_dates:
-            if len([s for s in schedules if date in s.excluded_dates]) < len([s for s in schedules if date.weekday in s.weekdays]):
-                modified_dates.add(date)
-        schedule = Schedule(date_range, weekdays, modified_dates, excluded_dates - modified_dates)
-        return cls(system, id, schedule, services)
+        schedule = Schedule.combine(schedules, date_range, weekdays, exceptions, modifications)
+        return cls(system, schedule, services)
     
-    def __init__(self, system, id, schedule, services):
+    def __init__(self, system, schedule, services):
         self.system = system
-        self.id = id
         self.schedule = schedule
         self.services = services
     
@@ -81,15 +83,15 @@ class ServiceGroup:
         return str(self.schedule)
     
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.schedule)
     
     def __eq__(self, other):
-        return self.id == other.id
+        return self.schedule == other.schedule
     
     def __lt__(self, other):
         return self.schedule < other.schedule
     
     @property
     def is_today(self):
-        '''Returns whether or not this service group runs on the current date'''
-        return self.schedule.includes(Date.today(self.system.timezone))
+        '''Checks if this service group runs on the current date'''
+        return Date.today(self.system.timezone) in self.schedule

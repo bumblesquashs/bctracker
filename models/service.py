@@ -55,10 +55,8 @@ class Service:
         sun = row['sunday'] == '1'
         
         weekdays = {Weekday(i) for i, v in enumerate([mon, tue, wed, thu, fri, sat, sun]) if v}
-        service_exceptions = exceptions.get(id, [])
-        modified_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
-        excluded_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(date_range, weekdays, modified_dates, excluded_dates)
+        service_exceptions = {e.date for e in exceptions.get(id, [])}
+        schedule = Schedule(date_range, weekdays, service_exceptions, set())
         return cls(system, id, schedule)
     
     @classmethod
@@ -67,9 +65,7 @@ class Service:
         start_date = min({e.date for e in exceptions})
         end_date = max({e.date for e in exceptions})
         date_range = DateRange(start_date, end_date)
-        modified_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
-        excluded_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(date_range, set(), modified_dates, excluded_dates)
+        schedule = Schedule(date_range, set(), {e.date for e in exceptions}, set())
         return cls(system, id, schedule)
     
     def __init__(self, system, id, schedule):
@@ -92,4 +88,9 @@ class Service:
     @property
     def is_today(self):
         '''Checks if this service runs on the current date'''
-        return self.schedule.includes(Date.today(self.system.timezone))
+        return Date.today(self.system.timezone) in self.schedule
+    
+    def slice(self, date_range):
+        '''Returns a version of this service limited to the given date range'''
+        schedule = self.schedule.slice(date_range)
+        return Service(self.system, self.id, schedule)

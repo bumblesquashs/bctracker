@@ -128,9 +128,15 @@ class System:
         '''Returns all services'''
         return sorted(self.services.values())
     
-    def get_sheets(self):
+    def get_sheets(self, services=None):
         '''Returns all sheets'''
-        return sorted(self.sheets)
+        if services is None:
+            return sorted(self.sheets)
+        return sorted([s for s in self.sheets if services in s])
+    
+    def copy_sheets(self, services, include_special=False):
+        copies = [s.copy(services, include_special) for s in self.get_sheets()]
+        return [s for s in copies if s is not None]
     
     def get_stop(self, stop_id=None, number=None):
         '''Returns the stop with the given ID or number'''

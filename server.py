@@ -26,7 +26,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 17
+VERSION = 18
 
 app = Bottle()
 running = False
@@ -98,18 +98,24 @@ def stop():
     if cp.server.running:
         cp.server.stop()
 
-def get_url(system, path=''):
+def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     if system is None:
-        return no_system_domain.format(path).rstrip('/')
-    if isinstance(system, str):
-        return system_domain.format(system, path).rstrip('/')
-    return system_domain.format(system.id, path).rstrip('/')
+        url = no_system_domain.format(path).rstrip('/')
+    elif isinstance(system, str):
+        url = system_domain.format(system, path).rstrip('/')
+    else:
+        url = system_domain.format(system.id, path).rstrip('/')
+    if len(kwargs) > 0:
+        query = '&'.join([f'{k}={v}' for k, v in kwargs.items() if v is not None])
+        url += f'?{query}'
+    return url
 
 def page(name, system_id, title, path='', enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
+    hide_systems = request.get_cookie('hide_systems') == 'yes'
     system = helpers.system.find(system_id)
     if system is None:
         last_updated = realtime.get_last_updated(time_format)
@@ -136,6 +142,7 @@ def page(name, system_id, title, path='', enable_refresh=True, include_maps=Fals
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
+        hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
         **kwargs
     )
@@ -640,8 +647,8 @@ def block_history_page(block_id, system_id=None):
     records = helpers.record.find_all(system_id=system_id, block_id=block_id)
     events = []
     if len(records) > 0:
-        events.append(Event(records[0].date, 'First Tracked'))
-        events.append(Event(records[-1].date, 'Last Tracked'))
+        events.append(Event(records[0].date, 'Last Tracked'))
+        events.append(Event(records[-1].date, 'First Tracked'))
     return page('block/history', system_id,
         title=f'Block {block.id}',
         block=block,
@@ -716,8 +723,8 @@ def trip_history_page(trip_id, system_id=None):
     records = helpers.record.find_all(system_id=system_id, trip_id=trip_id)
     events = []
     if len(records) > 0:
-        events.append(Event(records[0].date, 'First Tracked'))
-        events.append(Event(records[-1].date, 'Last Tracked'))
+        events.append(Event(records[0].date, 'Last Tracked'))
+        events.append(Event(records[-1].date, 'First Tracked'))
     return page('trip/history', system_id,
         title=f'Trip {trip.id}',
         trip=trip,
