@@ -194,9 +194,9 @@
             </div>
             <div class="content">
                 % if len(records) == 0:
-                    <p>This bus doesn't have any recorded history.</p>
-                    <p>
-                        There are a few reasons why that might be the case:
+                    <div class="placeholder">
+                        <h3 class="title">This bus doesn't have any recorded history</h3>
+                        <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording bus history</li>
@@ -205,8 +205,8 @@
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                             % end
                         </ol>
-                        Please check again later!
-                    </p>
+                        <p>Please check again later!</p>
+                    </div>
                 % else:
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>

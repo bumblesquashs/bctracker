@@ -51,16 +51,21 @@
             <div class="content">
                 % trips = route.get_trips(date=date)
                 % if len(trips) == 0:
-                    <p>No trips found on {{ date.format_long() }}.</p>
-                    <p>
-                        There are a few reasons why that might be the case:
-                        <ol>
-                            <li>It may be a day of the week that does not normally have service</li>
-                            <li>It may be a holiday in which all regular service is suspended</li>
-                            <li>It may be outside of the date range for which schedules are currently available</li>
-                        </ol>
-                        Please check again later!
-                    </p>
+                    <div class="placeholder">
+                        % if system.is_loaded:
+                            <h3 class="title">No trips found on {{ date.format_long() }}</h3>
+                            <p>There are a few reasons why that might be the case:</p>
+                            <ol>
+                                <li>It may be a day of the week that does not normally have service</li>
+                                <li>It may be a holiday in which all regular service is suspended</li>
+                                <li>It may be outside of the date range for which schedules are currently available</li>
+                            </ol>
+                            <p>Please check again later!</p>
+                        % else:
+                            <h3 class="title">Trips for this route are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % else:
                     <div class="container inline">
                         % for direction in sorted({t.direction for t in trips}):

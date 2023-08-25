@@ -21,7 +21,9 @@
 </div>
 
 % if position is None:
-    <h3>Not in service</h3>
+    <div class="placeholder">
+        <h3 class="title">Not in service</h3>
+    </div>
 % else:
     % trip = position.trip
     % if trip is None:

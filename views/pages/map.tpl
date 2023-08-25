@@ -37,26 +37,28 @@
 </div>
 
 % if len(positions) == 0:
-    % if system is not None and not system.realtime_enabled:
-        <p>
-            {{ system }} does not currently support realtime.
-            You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-        </p>
-    % else:
+    <div class="placeholder">
         % if system is None:
+            <h3 class="title">There are no buses out right now</h3>
             <p>
-                There are no buses out right now.
                 BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
-                Please check back later!
+                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
             </p>
+            <p>Please check again later!</p>
+        % elif not system.realtime_enabled:
+            <h3 class="title">{{ system }} does not support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % elif not system.is_loaded:
+            <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
         % else:
-            <p>
-                There are no buses out in {{ system }} right now.
-                Please choose a different system.
-            </p>
+            <h3 class="title">There are no buses out in {{ system }} right now</h3>
+            <p>Please check again later!</p>
         % end
-    % end
+    </div>
 % else:
     <div id="map" class="full-screen"></div>
     

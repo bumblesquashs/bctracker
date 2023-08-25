@@ -123,10 +123,15 @@
             </div>
             <div class="content">
                 % if len(trips) == 0:
-                    <p>
-                        There are no trips for this route today.
-                        You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.
-                    </p>
+                    <div class="placeholder">
+                        % if system.is_loaded:
+                            <h3 class="title">There are no trips for this route today</h3>
+                            <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
+                        % else:
+                            <h3 class="title">Trips for this route are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % else:
                     % trip_positions = {p.trip.id:p for p in positions if p.trip is not None and p.trip in trips}
                     % directions = sorted({t.direction for t in trips})

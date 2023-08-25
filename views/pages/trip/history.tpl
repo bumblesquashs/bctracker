@@ -46,16 +46,16 @@
                 </div>
                 <div class="content">
                     % if len(records) == 0:
-                        <p>This trip doesn't have any recorded history.</p>
-                        <p>
-                            There are a few reasons why that might be the case:
+                        <div class="placeholder">
+                            <h3 class="title">This trip doesn't have any recorded history</h3>
+                            <p>There are a few reasons why that might be the case:</p>
                             <ol>
                                 <li>It may be a new trip introduced in the last service change</li>
                                 <li>It may not be operating due to driver or vehicle shortages</li>
                                 <li>It may have only been done by buses without functional NextRide equipment installed</li>
                             </ol>
-                            Please check again later!
-                        </p>
+                            <p>Please check again later!</p>
+                        </div>
                     % else:
                         % if len([r for r in records if len(r.warnings) > 0]) > 0:
                             <p>
@@ -110,8 +110,8 @@
     
     % include('components/top_button')
 % else:
-    <p>
-        {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-    </p>
+    <div class="placeholder">
+        <h3 class="title">{{ system }} does not currently support realtime</h3>
+        <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+    </div>
 % end

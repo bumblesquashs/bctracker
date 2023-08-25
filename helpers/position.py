@@ -86,8 +86,8 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
     positions = [Position.from_db(row) for row in rows]
     return [p for p in positions if not p.bus.is_test]
 
-def delete_all(system):
+def delete_all(system_id=None):
     '''Deletes all positions for the given system from the database'''
     database.delete('position', {
-        'position.system_id': system.id
+        'position.system_id': system_id
     })

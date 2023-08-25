@@ -40,7 +40,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system)
+        helpers.position.delete_all(system.id)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
