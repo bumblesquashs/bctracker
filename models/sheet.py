@@ -8,10 +8,9 @@ class Sheet:
     __slots__ = ('system', 'schedule', 'services', 'service_groups', 'copies')
     
     @classmethod
-    def combine(cls, system, services, include_special=False):
+    def combine(cls, system, services, date_range, include_special=False):
         '''Returns a sheet that includes all of the given services'''
-        services = {s for s in services if not s.schedule.is_empty}
-        schedule = Schedule.combine([s.schedule for s in services])
+        schedule = Schedule.combine([s.schedule for s in services], date_range)
         return cls(system, schedule, services, include_special)
     
     def __init__(self, system, schedule, services, include_special=False):
@@ -21,17 +20,16 @@ class Sheet:
         self.copies = {}
         
         service_groups = []
-        weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in schedule.weekdays}
-        for service_set in set(weekday_services.values()):
-            service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
-            service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=service_set_weekdays))
-        if include_special or len(service_groups) == 0:
-            date_services = {d:tuple({s for s in services if d in s.schedule}) for d in schedule.added_dates}
-            for service_set in set(date_services.values()):
-                if service_set in weekday_services.values():
-                    continue
-                exceptions = {k for k,v in date_services.items() if v == service_set}
-                service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=set(), exceptions=exceptions))
+        date_services = {d:tuple({s for s in services if d in s.schedule}) for d in schedule.dates}
+        for service_set in set(date_services.values()):
+            if len(service_set) == 0:
+                continue
+            dates = {k for k,v in date_services.items() if v == service_set}
+            service_group_schedule = Schedule(dates, schedule.date_range)
+            service_group = ServiceGroup(system, service_group_schedule, service_set)
+            if include_special or not service_group_schedule.is_special:
+                service_groups.append(service_group)
+        
         self.service_groups = sorted(service_groups)
     
     def __str__(self):
@@ -56,7 +54,7 @@ class Sheet:
             return self.copies[key]
         if len(services) == 0:
             return None
-        copy = Sheet.combine(self.system, services, include_special)
+        copy = Sheet.combine(self.system, services, self.schedule.date_range, include_special)
         self.copies[key] = copy
         return copy
 
@@ -64,15 +62,6 @@ class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
     __slots__ = ('system', 'schedule', 'services', 'name')
-    
-    @classmethod
-    def combine(cls, system, services, date_range=None, weekdays=None, exceptions=None, modifications=None):
-        '''Returns a service group that combines a list of services'''
-        if len(services) == 0:
-            return None
-        schedules = [s.schedule for s in services]
-        schedule = Schedule.combine(schedules, date_range, weekdays, exceptions, modifications)
-        return cls(system, schedule, services)
     
     def __init__(self, system, schedule, services):
         self.system = system

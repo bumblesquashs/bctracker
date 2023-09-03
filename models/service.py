@@ -55,17 +55,23 @@ class Service:
         sun = row['sunday'] == '1'
         
         weekdays = {Weekday(i) for i, v in enumerate([mon, tue, wed, thu, fri, sat, sun]) if v}
-        service_exceptions = {e.date for e in exceptions.get(id, [])}
-        schedule = Schedule(date_range, weekdays, service_exceptions, set())
+        service_exceptions = {e for e in exceptions.get(id, [])}
+        added_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
+        removed_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
+        
+        dates = {d for d in date_range if d.weekday in weekdays}
+        dates.update(added_dates)
+        dates.difference_update(removed_dates)
+        
+        schedule = Schedule(dates, date_range)
         return cls(system, id, schedule)
     
     @classmethod
     def combine(cls, system, id, exceptions):
         '''Returns a service based on a list of service exceptions'''
-        start_date = min({e.date for e in exceptions})
-        end_date = max({e.date for e in exceptions})
-        date_range = DateRange(start_date, end_date)
-        schedule = Schedule(date_range, set(), {e.date for e in exceptions}, set())
+        dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
+        date_range = DateRange(min(dates), max(dates))
+        schedule = Schedule(dates, date_range)
         return cls(system, id, schedule)
     
     def __init__(self, system, id, schedule):
@@ -93,4 +99,6 @@ class Service:
     def slice(self, date_range):
         '''Returns a version of this service limited to the given date range'''
         schedule = self.schedule.slice(date_range)
+        if schedule is None:
+            return None
         return Service(self.system, self.id, schedule)
