@@ -25,16 +25,13 @@ class Sheet:
             if len(service_set) == 0:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
-            service_group_schedule = Schedule(dates, schedule.date_range)
-            service_group = ServiceGroup(system, service_group_schedule, service_set)
-            if include_special or not service_group_schedule.is_special:
+            service_group = ServiceGroup(system, dates, schedule.date_range, service_set)
+            if include_special or not service_group.schedule.is_special:
                 service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
     
     def __str__(self):
-        if self.schedule.is_special:
-            return self.schedule.added_dates_string
         return str(self.schedule.date_range)
     
     def __hash__(self):
@@ -61,11 +58,11 @@ class Sheet:
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
-    __slots__ = ('system', 'schedule', 'services', 'name')
+    __slots__ = ('system', 'schedule', 'services')
     
-    def __init__(self, system, schedule, services):
+    def __init__(self, system, dates, date_range, services):
         self.system = system
-        self.schedule = schedule
+        self.schedule = Schedule(dates, date_range)
         self.services = services
     
     def __str__(self):

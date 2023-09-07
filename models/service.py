@@ -95,10 +95,3 @@ class Service:
     def is_today(self):
         '''Checks if this service runs on the current date'''
         return Date.today(self.system.timezone) in self.schedule
-    
-    def slice(self, date_range):
-        '''Returns a version of this service limited to the given date range'''
-        schedule = self.schedule.slice(date_range)
-        if schedule is None:
-            return None
-        return Service(self.system, self.id, schedule)

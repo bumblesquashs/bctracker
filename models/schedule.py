@@ -7,7 +7,7 @@ from models.weekday import Weekday
 class Schedule:
     '''Dates when a service is running'''
     
-    __slots__ = ('dates', 'date_range', 'weekdays', 'added_dates', 'removed_dates', 'modified_dates', 'name')
+    __slots__ = ('dates', 'date_range', 'weekdays', 'exceptions', 'modified_dates', 'name')
     
     @classmethod
     def combine(cls, schedules, date_range=None):
@@ -19,9 +19,9 @@ class Schedule:
             date_range = DateRange(min(dates), max(dates))
         else:
             dates = {d for d in dates if d in date_range}
-        modified_dates = {d for s in schedules for d in s.modified_dates}
+        modified_dates = {d for s in schedules for d in s.modified_dates if d in date_range}
         for date in dates:
-            if len([s for s in schedules if date in s]) < len([s for s in schedules if date in s or date.weekday in s.weekdays]):
+            if len([s for s in schedules if date in s]) < len([s for s in schedules if date in s.date_range and (date in s or date.weekday in s.weekdays)]):
                 modified_dates.add(date)
         return cls(dates, date_range, modified_dates)
     
@@ -33,21 +33,17 @@ class Schedule:
         else:
             self.modified_dates = modified_dates
         self.weekdays = set()
-        self.added_dates = set()
-        self.removed_dates = set()
-        if len(date_range) <= 7:
-            self.added_dates.update(dates)
-        else:
-            for weekday in Weekday:
-                explicit_dates = {d for d in dates if d.weekday == weekday}
-                implicit_dates = {d for d in self.date_range if d.weekday == weekday and d not in explicit_dates}
-                if len(implicit_dates) == 0 and len(explicit_dates) == 0:
-                    continue
-                if len(explicit_dates) >= len(implicit_dates):
-                    self.weekdays.add(weekday)
-                    self.removed_dates.update(implicit_dates)
-                else:
-                    self.added_dates.update(explicit_dates)
+        self.exceptions = set()
+        for weekday in Weekday:
+            explicit_dates = {d for d in dates if d.weekday == weekday}
+            implicit_dates = {d for d in self.date_range if d.weekday == weekday and d not in explicit_dates}
+            if len(implicit_dates) == 0 and len(explicit_dates) == 0:
+                continue
+            if len(explicit_dates) >= len(implicit_dates):
+                self.weekdays.add(weekday)
+                self.exceptions.update(implicit_dates)
+            else:
+                self.exceptions.update(explicit_dates)
         
         if self.is_special:
             self.name = 'Special Service'
@@ -72,9 +68,9 @@ class Schedule:
         return self.dates == other.dates
     
     def __lt__(self, other):
-        if self.weekdays == other.weekdays:
-            return self.date_range < other.date_range
-        return sorted(self.weekdays) < sorted(other.weekdays)
+        if self.date_range.start == other.date_range.start:
+            return sorted(self.weekdays) < sorted(other.weekdays)
+        return self.date_range < other.date_range
     
     def __contains__(self, date):
         return date in self.dates
@@ -86,13 +82,20 @@ class Schedule:
     
     @property
     def all_dates(self):
-        '''Returns all exceptions and modified dates'''
-        return self.added_dates.union(self.removed_dates).union(self.modified_dates)
+        return self.exceptions.union(self.modified_dates)
+    
+    @property
+    def added_dates(self):
+        return {d for d in self.exceptions if d.weekday not in self.weekdays}
     
     @property
     def added_dates_string(self):
         '''Returns a string of all dates that are added'''
         return helpers.date.flatten(self.added_dates)
+    
+    @property
+    def removed_dates(self):
+        return {d for d in self.exceptions if d.weekday in self.weekdays}
     
     @property
     def removed_dates_string(self):
@@ -110,11 +113,3 @@ class Schedule:
                 return 'modified-service'
             return 'normal-service'
         return 'no-service'
-    
-    def slice(self, date_range):
-        '''Returns a version of this schedule limited to the given date range'''
-        dates = {d for d in self.dates if d in date_range}
-        if len(dates) == 0:
-            return None
-        modified_dates = [d for d in self.modified_dates if d in dates]
-        return Schedule(dates, date_range, modified_dates)
