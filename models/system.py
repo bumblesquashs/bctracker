@@ -78,6 +78,10 @@ class System:
         return str(self) < str(other)
     
     @property
+    def is_loaded(self):
+        return self.last_updated_date is not None and self.last_updated_time is not None
+    
+    @property
     def gtfs_enabled(self):
         '''Checks if GTFS data is enabled for this system'''
         return self.enabled and self.gtfs_url is not None

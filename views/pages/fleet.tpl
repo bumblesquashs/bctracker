@@ -13,14 +13,14 @@
 <p>
     Any vehicle that is marked as <span class="lighter-text">Unavailable</span> has not been tracked.
     There are a few reasons why that may be the case:
-    <ol>
-        <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-        <li>It may not have been in service since BCTracker started tracking buses</li>
-        <li>It may not have functional NextRide equipment installed</li>
-        <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
-    </ol>
-    Vehicles that have been tracked before show the first and last date and system that they were seen in, even if they weren't in service.
 </p>
+<ol>
+    <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
+    <li>It may not have been in service since BCTracker started tracking buses</li>
+    <li>It may not have functional NextRide equipment installed</li>
+    <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
+</ol>
+<p>Vehicles that have been tracked before show the first and last date and system that they were seen in, even if they weren't in service.</p>
 % if system is not None:
     <p>
         Please note that this list includes vehicles from every system.

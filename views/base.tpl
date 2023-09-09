@@ -248,7 +248,11 @@
                             {{ system }}
                         % end
                     </div>
-                    <div id="last-updated">Updated {{ last_updated }}</div>
+                    <div id="last-updated">
+                        % if system is None or (system.is_loaded and system.realtime_enabled):
+                            Updated {{ last_updated }}
+                        % end
+                    </div>
                 </div>
                 
                 <div id="refresh-button" class="disabled">

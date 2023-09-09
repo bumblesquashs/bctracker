@@ -52,6 +52,8 @@ def start(args):
         debug(True)
     if args.reload:
         print('Forcing GTFS redownload')
+    if args.updatedb:
+        print('Forcing database refresh')
     
     helpers.adornment.load()
     helpers.model.load()
@@ -59,6 +61,23 @@ def start(args):
     helpers.region.load()
     helpers.system.load()
     helpers.theme.load()
+    
+    helpers.position.delete_all()
+    
+    cp.config.update('server.conf')
+    cron_id = cp.config.get('cron_id', 'bctracker-muncher')
+    mapbox_api_key = cp.config['mapbox_api_key']
+    no_system_domain = cp.config['no_system_domain']
+    system_domain = cp.config['system_domain']
+    system_domain_path = cp.config['system_domain_path']
+    cookie_domain = cp.config.get('cookie_domain')
+    admin_key = cp.config.get('admin_key')
+    
+    handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
+    log = WSGILogger(app, [handler], ApacheFormatter())
+    
+    cp.tree.graft(log, '/')
+    cp.server.start()
     
     for system in helpers.system.find_all():
         if running:
@@ -73,21 +92,6 @@ def start(args):
         
         cron.setup()
         cron.start(cron_id)
-        
-        cp.config.update('server.conf')
-        cron_id = cp.config.get('cron_id', 'bctracker-muncher')
-        mapbox_api_key = cp.config['mapbox_api_key']
-        no_system_domain = cp.config['no_system_domain']
-        system_domain = cp.config['system_domain']
-        system_domain_path = cp.config['system_domain_path']
-        cookie_domain = cp.config.get('cookie_domain')
-        admin_key = cp.config.get('admin_key')
-        
-        handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
-        log = WSGILogger(app, [handler], ApacheFormatter())
-        
-        cp.tree.graft(log, '/')
-        cp.server.start()
 
 def stop():
     '''Terminates the server'''
@@ -1036,10 +1040,23 @@ def api_admin_reload_orders(key=None, system_id=None):
 ])
 def api_admin_reload_systems(key=None, system_id=None):
     if admin_key is None or key == admin_key:
+        cron.stop(cron_id)
         helpers.region.delete_all()
         helpers.system.delete_all()
+        helpers.position.delete_all()
         helpers.region.load()
         helpers.system.load()
+        for system in helpers.system.find_all():
+            if running:
+                gtfs.load(system)
+                if not gtfs.validate(system):
+                    gtfs.load(system, True)
+                realtime.update(system)
+            if not realtime.validate(system):
+                system.validation_errors += 1
+        if running:
+            realtime.update_records()
+            cron.start(cron_id)
         return 'Success'
     return 'Access denied'
 

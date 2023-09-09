@@ -767,6 +767,10 @@ table.striped tr.section td {
     margin-bottom: 5px;
 }
 
+.placeholder .title {
+    margin-bottom: 10px;
+}
+
 .positive {
     font-weight: bold;
 }
