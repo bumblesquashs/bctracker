@@ -167,12 +167,14 @@ class Trip:
     @property
     def json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
-        return {
+        json = {
             'shape_id': self.shape_id,
-            'colour': self.route.colour,
-            'text_colour': self.route.text_colour,
             'points': [p.json for p in self.load_points()]
         }
+        if self.route is not None:
+            json['colour'] = self.route.colour
+            json['text_colour'] = self.route.text_colour
+        return json
     
     def load_points(self):
         '''Returns all points associated with this trip'''

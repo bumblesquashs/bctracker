@@ -9,7 +9,7 @@
     <h3 class="title">The stop you are looking for doesn't seem to exist!</h3>
     % if not system.is_loaded:
         <p>System data is currently loading and will be available soon.</p>
-    % else
+    % else:
         <p>There are a few reasons why that might be the case:</p>
         <ol>
             <li>It may no longer serve any bus routes and therefore be removed from the system</li>

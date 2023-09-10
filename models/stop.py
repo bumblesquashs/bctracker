@@ -29,6 +29,8 @@ class Stop:
         self.lat = lat
         self.lon = lon
         self.departures = departures
+        self.schedule = None
+        self.sheets = []
     
     def __str__(self):
         return self.name
