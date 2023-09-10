@@ -171,7 +171,10 @@ class Trip:
             'shape_id': self.shape_id,
             'points': [p.json for p in self.load_points()]
         }
-        if self.route is not None:
+        if self.route is None:
+            json['colour'] = '666666'
+            json['text_colour'] = '000000'
+        else:
             json['colour'] = self.route.colour
             json['text_colour'] = self.route.text_colour
         return json

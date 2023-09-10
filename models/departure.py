@@ -103,6 +103,8 @@ class Departure:
                     return True
                 if self.pickup_only or other.dropoff_only:
                     return False
+                if self.trip is None or other.trip is None:
+                    return False
                 return self.trip.route < other.trip.route
             return self.time < other.time
     
@@ -120,22 +122,27 @@ class Departure:
     def pickup_only(self):
         '''Checks if this departure is pickup-only'''
         if self.pickup_type.is_normal:
-            return self == self.trip.first_departure
+            return self.trip is not None and self == self.trip.first_departure
         return False
     
     @property
     def dropoff_only(self):
         '''Checks if this departure is dropoff-only'''
         if self.dropoff_type.is_normal:
-            return self == self.trip.last_departure
+            return self.trip is not None and self == self.trip.last_departure
         return False
     
     @property
     def json(self):
         '''Returns a representation of this departure in JSON-compatible format'''
-        return {
+        json = {
             'stop': self.stop.json,
-            'time': str(self.time),
-            'colour': self.trip.route.colour,
-            'text_colour': self.trip.route.text_colour
+            'time': str(self.time)
         }
+        if self.trip is not None and self.trip.route is not None:
+            json['colour'] = self.trip.route.colour
+            json['text_colour'] = self.trip.route.text_colour
+        else:
+            json['colour'] = '666666'
+            json['text_colour'] = 'FFFFFF'
+        return json

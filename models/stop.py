@@ -69,12 +69,12 @@ class Stop:
         if service_group is None:
             if date is None:
                 return sorted(self.departures)
-            return sorted([d for d in self.departures if date in d.trip.service.schedule])
-        return sorted([d for d in self.departures if d.trip.service in service_group.services])
+            return sorted([d for d in self.departures if d.trip is not None and date in d.trip.service.schedule])
+        return sorted([d for d in self.departures if d.trip is not None and d.trip.service in service_group.services])
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this stop'''
-        return sorted({d.trip.route for d in self.get_departures(service_group, date)})
+        return sorted({d.trip.route for d in self.get_departures(service_group, date) if d.trip is not None and d.trip.route is not None})
     
     def get_routes_string(self, service_group=None, date=None):
         '''Returns a string of all routes from this stop'''
