@@ -76,7 +76,7 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.system.prefix_headsign:
+        if self.system.prefix_headsign and self.route is not None:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -167,12 +167,17 @@ class Trip:
     @property
     def json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
-        return {
+        json = {
             'shape_id': self.shape_id,
-            'colour': self.route.colour,
-            'text_colour': self.route.text_colour,
             'points': [p.json for p in self.load_points()]
         }
+        if self.route is None:
+            json['colour'] = '666666'
+            json['text_colour'] = '000000'
+        else:
+            json['colour'] = self.route.colour
+            json['text_colour'] = self.route.text_colour
+        return json
     
     def load_points(self):
         '''Returns all points associated with this trip'''
