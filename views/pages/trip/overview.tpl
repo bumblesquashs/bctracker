@@ -37,7 +37,11 @@
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % if block is None:
+                                <span class="lighter-text">Loading</span>
+                            % else:
+                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % end
                         </div>
                     </div>
                     <div class="section">
