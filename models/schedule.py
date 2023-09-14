@@ -7,7 +7,7 @@ from models.weekday import Weekday
 class Schedule:
     '''Dates when a service is running'''
     
-    __slots__ = ('dates', 'date_range', 'weekdays', 'exceptions', 'modified_dates', 'name')
+    __slots__ = ('dates', 'date_range', 'weekdays', 'exceptions', 'modifications', 'name')
     
     @classmethod
     def combine(cls, schedules, date_range=None):
@@ -19,19 +19,19 @@ class Schedule:
             date_range = DateRange(min(dates), max(dates))
         else:
             dates = {d for d in dates if d in date_range}
-        modified_dates = {d for s in schedules for d in s.modified_dates if d in date_range}
+        modifications = {d for s in schedules for d in s.modifications if d in date_range}
         for date in dates:
             if len([s for s in schedules if date in s]) < len([s for s in schedules if date in s.date_range and (date in s or date.weekday in s.weekdays)]):
-                modified_dates.add(date)
-        return cls(dates, date_range, modified_dates)
+                modifications.add(date)
+        return cls(dates, date_range, modifications)
     
-    def __init__(self, dates, date_range, modified_dates=None):
+    def __init__(self, dates, date_range, modifications=None):
         self.dates = dates
         self.date_range = date_range
-        if modified_dates is None:
-            self.modified_dates = set()
+        if modifications is None:
+            self.modifications = set()
         else:
-            self.modified_dates = modified_dates
+            self.modifications = modifications
         self.weekdays = set()
         self.exceptions = set()
         for weekday in Weekday:
@@ -84,7 +84,8 @@ class Schedule:
     
     @property
     def all_dates(self):
-        return self.exceptions.union(self.modified_dates)
+        '''Returns all dates that are added'''
+        return self.exceptions.union(self.modifications)
     
     @property
     def added_dates(self):
@@ -97,6 +98,7 @@ class Schedule:
     
     @property
     def removed_dates(self):
+        '''Returns all dates that are removed'''
         return {d for d in self.exceptions if d.weekday in self.weekdays}
     
     @property
@@ -120,7 +122,7 @@ class Schedule:
     def get_date_status(self, date):
         '''Returns the status class of this schedule on the given date'''
         if date in self:
-            if date in self.modified_dates:
+            if date in self.modifications:
                 return 'modified-service'
             return 'normal-service'
         return 'no-service'

@@ -523,6 +523,11 @@ table.striped tr:nth-child(2n-1) {
     background-color: #3D74FF;
 }
 
+.weekdays .weekday {
+    background-color: #C4C4C4;
+    color: #000000;
+}
+
 .weekdays .weekday.no-service {
     background-color: #DC267F;
     color: #000000;
