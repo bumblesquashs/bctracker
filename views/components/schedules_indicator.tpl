@@ -22,14 +22,16 @@
     <div class="flex-column flex-gap-10">
         % for (i, schedule) in enumerate(schedules):
             <div class="schedule">
-                <div class="title">{{ schedule.date_range }}</div>
-                % include('components/weekdays_indicator', schedule=schedule, path_suffix='' if i == 0 else str(i + 1))
+                % if not schedule.is_special:
+                    <div class="title">{{ schedule.date_range }}</div>
+                    % include('components/weekdays_indicator', schedule=schedule, path_suffix='' if i == 0 else str(i + 1))
+                % end
                 % dates = schedule.all_dates
                 % if len(dates) > 0:
                     <div class="exceptions">
                         % for (year, month) in sorted({(d.year, d.month) for d in dates}):
                             % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
-                            <div class="month">
+                            <div class="month {{ 'title' if schedule.is_special else '' }}">
                                 <div class="name">{{ calendar.month_name[month] }}</div>
                                 % for date in month_dates:
                                     % status = schedule.get_date_status(date)

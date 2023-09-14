@@ -14,7 +14,7 @@ class Block:
         
         services = {t.service for t in self.trips}
         self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = system.copy_sheets(services, True)
+        self.sheets = system.copy_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id

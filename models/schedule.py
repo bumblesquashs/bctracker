@@ -69,6 +69,8 @@ class Schedule:
     
     def __lt__(self, other):
         if self.date_range.start == other.date_range.start:
+            if self.is_special and other.is_special:
+                return sorted(self.dates) < sorted(other.dates)
             return sorted(self.weekdays) < sorted(other.weekdays)
         return self.date_range < other.date_range
     
@@ -102,9 +104,18 @@ class Schedule:
         '''Returns a string of all dates that are removed'''
         return helpers.date.flatten(self.removed_dates)
     
+    @property
+    def covered_weekdays(self):
+        '''Returns all weekdays covered by the date range'''
+        return {d.weekday for d in self.date_range}
+    
     def get_weekday_status(self, weekday):
         '''Returns the status class of this schedule on the given weekday'''
-        return 'normal-service' if weekday in self.weekdays else 'no-service'
+        if weekday in self.covered_weekdays:
+            if weekday in self.weekdays:
+                return 'normal-service'
+            return 'no-service'
+        return ''
     
     def get_date_status(self, date):
         '''Returns the status class of this schedule on the given date'''

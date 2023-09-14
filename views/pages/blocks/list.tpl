@@ -93,7 +93,7 @@
                         </div>
                         <div class="content">
                             <div class="container inline">
-                                % for service_group in sheet.service_groups:
+                                % for service_group in sheet.normal_service_groups:
                                     <div class="section">
                                         <div class="header">
                                             % for weekday in service_group.schedule.weekdays:

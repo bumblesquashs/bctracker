@@ -154,3 +154,11 @@ class Date:
         elif days > 1 or len(parts) == 0:
             parts.append(f'{days} days')
         return ', '.join(parts) + ' ago'
+    
+    def next(self):
+        '''Returns the next date'''
+        return self + timedelta(days=1)
+    
+    def previous(self):
+        '''Returns the previous date'''
+        return self - timedelta(days=1)

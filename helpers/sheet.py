@@ -1,6 +1,4 @@
 
-from datetime import timedelta
-
 from models.daterange import DateRange
 from models.sheet import Sheet
 
@@ -11,8 +9,8 @@ def combine(system, services):
     all_date_ranges = {s.schedule.date_range for s in services}
     start_dates = {r.start for r in all_date_ranges}
     end_dates = {r.end for r in all_date_ranges}
-    all_start_dates = start_dates.union({d + timedelta(days=1) for d in end_dates})
-    all_end_dates = end_dates.union({d - timedelta(days=1) for d in start_dates})
+    all_start_dates = start_dates.union({d.next() for d in end_dates})
+    all_end_dates = end_dates.union({d.previous() for d in start_dates})
     dates = list(all_start_dates) + list(all_end_dates)
     sorted_dates = sorted(dates)[1:-1]
     i = iter(sorted_dates)
@@ -27,8 +25,8 @@ def combine(system, services):
             sheets.append(Sheet.combine(system, date_range_services, date_range))
         else:
             previous_sheet = sheets[-1]
-            previous_services = {s for s in previous_sheet.services if not s.schedule.is_special}
-            current_services = {s for s in date_range_services if not s.schedule.is_special}
+            previous_services = {s for s in previous_sheet.services}
+            current_services = {s for s in date_range_services}
             if previous_services.issubset(current_services) or current_services.issubset(previous_services):
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
                 new_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}

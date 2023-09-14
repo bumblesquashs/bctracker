@@ -808,39 +808,6 @@ table.striped tr.section td {
     gap: 10px;
 }
 
-.schedules-indicator .exceptions {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    row-gap: 5px;
-    column-gap: 10px;
-}
-
-.schedules-indicator .exceptions .month {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-}
-
-.schedules-indicator .exceptions .month .name {
-    font-size: 13pt;
-}
-
-.schedules-indicator .exceptions .month .date {
-    font-size: 11pt;
-    padding: 1px 4px;
-    border-radius: 4px;
-    min-width: 14px;
-    user-select: none;
-    text-align: center;
-    text-decoration: none;
-}
-
 .schedules-indicator .footer {
     width: 75%;
     margin: 0px auto 0px auto;
@@ -866,10 +833,49 @@ table.striped tr.section td {
 .schedules-indicator .schedule {
     padding: 10px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.schedules-indicator .schedule .exceptions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 5px;
+    column-gap: 10px;
+}
+
+.schedules-indicator .schedule .exceptions .month {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.schedules-indicator .schedule .exceptions .month .name {
+    font-size: 13pt;
+}
+
+.schedules-indicator .schedule .exceptions .month.title .name {
+    font-size: 14pt;
+}
+
+.schedules-indicator .schedule .exceptions .month .date {
+    font-size: 11pt;
+    padding: 1px 4px;
+    border-radius: 4px;
+    min-width: 14px;
+    user-select: none;
+    text-align: center;
+    text-decoration: none;
 }
 
 .schedules-indicator .schedule .title {
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     text-align: center;
 }
 

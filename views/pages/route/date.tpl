@@ -1,6 +1,4 @@
 
-% from datetime import timedelta
-
 % rebase('base')
 
 <div class="page-header">
@@ -26,8 +24,8 @@
             <div class="content">
                 <div class="info-box">
                     <div class="section vertical-align">
-                        % previous_date = date - timedelta(days=1)
-                        % next_date = date + timedelta(days=1)
+                        % previous_date = date.previous()
+                        % next_date = date.next()
                         <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
                         <div class="name centred">
                             <h3>{{ date.format_long() }}</h3>

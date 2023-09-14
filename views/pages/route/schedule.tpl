@@ -57,7 +57,7 @@
                     </div>
                     <div class="content">
                         <div class="container inline">
-                            % for service_group in sheet.service_groups:
+                            % for service_group in sheet.normal_service_groups:
                                 % service_group_trips = route.get_trips(service_group=service_group)
                                 <div class="section">
                                     <div class="header">

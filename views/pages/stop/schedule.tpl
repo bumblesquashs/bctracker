@@ -53,7 +53,7 @@
                     </div>
                     <div class="content">
                         <div class="container inline">
-                            % for service_group in sheet.service_groups:
+                            % for service_group in sheet.normal_service_groups:
                                 % departures = stop.get_departures(service_group)
                                 <div class="section">
                                     <div class="header">

@@ -138,8 +138,8 @@ class System:
             return sorted(self.sheets)
         return sorted([s for s in self.sheets if services in s])
     
-    def copy_sheets(self, services, include_special=False):
-        copies = [s.copy(services, include_special) for s in self.get_sheets()]
+    def copy_sheets(self, services):
+        copies = [s.copy(services) for s in self.get_sheets()]
         return [s for s in copies if s is not None]
     
     def get_stop(self, stop_id=None, number=None):
