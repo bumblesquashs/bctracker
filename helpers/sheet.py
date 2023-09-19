@@ -1,15 +1,23 @@
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 import helpers.date
 
 from models.daterange import DateRange
+from models.sheet import Schedule
 from models.sheet import Sheet
 
 def combine(system, services):
     '''Returns a list of sheets made from services with overlapping start/end dates'''
     if len(services) == 0:
         return []
+    if system.is_bcf:
+        # We're not even going to try. BCF GTFS uses weird things for schedules
+        # There is a unique calendar_attributes file that we would need to parse
+        # Make up something for now.
+        dr = DateRange(datetime.today(), datetime.today() + timedelta(days=30))
+        schedule = Schedule(dr, list(range(7)), [], [])
+        return [Sheet(system, schedule, services)]
     all_date_ranges = {s.schedule.date_range for s in services}
     all_start_dates = sorted({r.start for r in all_date_ranges})
     start_dates = set()

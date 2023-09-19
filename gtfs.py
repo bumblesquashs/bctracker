@@ -81,8 +81,9 @@ def load(system, force_download=False, updatedb=False):
         
         print('Done!')
     except Exception as e:
-        print('Error!')
-        print(f'Failed to load GTFS for {system}: {e}')
+        raise e
+        #print('Error!')
+        #print(f'Failed to load GTFS for {system}: {e}')
 
 def download(system):
     '''Downloads the GTFS for the given system, then loads it into memory'''

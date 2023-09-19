@@ -10,6 +10,7 @@ import helpers.overview
 import helpers.position
 import helpers.record
 import helpers.transfer
+import helpers.bcf_scraper
 
 from models.bus import Bus
 from models.date import Date
@@ -24,6 +25,10 @@ last_updated_time = None
 def update(system):
     '''Downloads realtime data for the given system and stores it in the database'''
     global last_updated_date, last_updated_time
+    if system.is_bcf:
+        results = helpers.bcf_scraper.scrape()
+        # TODO: do the updates as below with results
+        return
     if not system.realtime_enabled:
         return
     data_path = f'data/realtime/{system.id}.bin'
@@ -112,6 +117,8 @@ def get_last_updated(time_format):
 
 def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
+    if system.is_bcf:
+        return True
     if not system.realtime_enabled:
         return True
     for position in helpers.position.find_all(system_id=system.id):

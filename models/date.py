@@ -20,7 +20,7 @@ class Date:
     @classmethod
     def parse_csv(cls, date_string, timezone):
         '''Returns a date parsed from the given string in YYYYMMDD format'''
-        date = datetime.strptime(date_string, '%Y%m%d')
+        date = datetime.strptime(date_string.strip(), '%Y%m%d')
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod

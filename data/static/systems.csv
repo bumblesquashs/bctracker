@@ -1,4 +1,5 @@
 system_id,name,region_id,enabled,visible,prefix_headsign,recolour_black,version,remote_id,gtfs_url,realtime_url
+bc-ferries,BC Ferries,vancouver-island,1,1,0,1,-1,,,
 100-mile-house,100 Mile House,northern-bc,0,0,1,0,2,34,,
 ashcroft-clinton,Ashcroft-Clinton,southern-interior,0,0,0,0,,,,
 bella-coola,Bella Coola,northern-bc,0,0,0,0,,,,

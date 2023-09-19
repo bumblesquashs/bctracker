@@ -145,11 +145,15 @@
                 <span class="navigation-item desktop-only disabled">History</span>
                 
                 <a class="navigation-item tablet-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                % if system.has_blocks:
+                    <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                % end
             % end
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            % if system is not None and system.has_blocks:
+                <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            % end
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
             
@@ -201,22 +205,26 @@
                     <img class="black" src="/img/black/routes.png" />
                     <span>Routes</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
-                    <span>Blocks</span>
-                </a>
+                % if system is not None and system.has_blocks:
+                    <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+                        <img class="white" src="/img/white/blocks.png" />
+                        <img class="black" src="/img/black/blocks.png" />
+                        <span>Blocks</span>
+                    </a>
+                % end
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
                     <img class="white" src="/img/white/routes.png" />
                     <img class="black" src="/img/black/routes.png" />
                     <span>Routes</span>
                 </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
-                    <span>Blocks</span>
-                </a>
+                % if system.has_blocks:
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
+                        <img class="white" src="/img/white/blocks.png" />
+                        <img class="black" src="/img/black/blocks.png" />
+                        <span>Blocks</span>
+                    </a>
+                % end
             % end
             
             <a class="menu-button" href="{{ get_url(system, 'about') }}">

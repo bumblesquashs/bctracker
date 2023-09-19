@@ -6,6 +6,8 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
+import helpers.bcf_scraper
+
 from models.match import Match
 from models.schedule import Schedule
 
@@ -20,6 +22,8 @@ class Route:
         id = row['route_id']
         route_trips = trips.get(id, [])
         number = row['route_short_name']
+        if system.is_bcf and 'route_long_name' in row:
+            number = str(helpers.bcf_scraper.get_route_number(row['route_long_name']))
         if 'route_long_name' in row and row['route_long_name'] != '':
             name = row['route_long_name']
         else:

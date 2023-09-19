@@ -7,7 +7,7 @@ from models.schedule import Schedule
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'recolour_black', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'recolour_black', 'gtfs_url', 'realtime_url', 'is_bcf', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
     
     @classmethod
     def from_csv(cls, row):
@@ -20,6 +20,7 @@ class System:
         prefix_headsign = row['prefix_headsign'] == '1'
         recolour_black = row['recolour_black'] == '1'
         version = row['version']
+        is_bcf = version == '-1'
         if version == '1':
             remote_id = row['remote_id']
             gtfs_url = f'http://{remote_id}.mapstrat.com/current/google_transit.zip'
@@ -28,6 +29,10 @@ class System:
             remote_id = row['remote_id']
             gtfs_url = f'https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds={remote_id}'
             realtime_url = f'https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds={remote_id}'
+        elif is_bcf:
+            # BC ferries
+            gtfs_url = f'https://transitfeeds.com/p/bc-ferries/916/latest/download'
+            realtime_url = None
         else:
             if 'gtfs_url' in row and row['gtfs_url'] != '':
                 gtfs_url = row['gtfs_url']
@@ -37,9 +42,9 @@ class System:
                 realtime_url = row['realtime_url']
             else:
                 realtime_url = None
-        return cls(id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url)
+        return cls(id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url, is_bcf)
     
-    def __init__(self, id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url):
+    def __init__(self, id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url, is_bcf):
         self.id = id
         self.name = name
         self.region = region
@@ -49,6 +54,7 @@ class System:
         self.recolour_black = recolour_black
         self.gtfs_url = gtfs_url
         self.realtime_url = realtime_url
+        self.is_bcf = is_bcf
         
         self.validation_errors = 0
         self.last_updated_date = None
@@ -95,7 +101,13 @@ class System:
     def schedule(self):
         '''The overall service schedule for this system'''
         return Schedule.combine([s.schedule for s in self.get_services()])
-    
+        
+    @property
+    def has_blocks(self):
+        '''Whether the system has any blocks'''
+        # apparently there is a fake block with empty string key sometimes...
+        return len(self.blocks) > 1
+
     def get_block(self, block_id):
         '''Returns the block with the given ID'''
         if block_id in self.blocks:
