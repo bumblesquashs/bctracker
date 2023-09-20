@@ -9,16 +9,24 @@ bcf_routes = [
         "name": "Vancouver - Victoria (Tsawwassen-Swartz Bay)",
         "route_number": 1,
         "vessel_tracking": {
-          "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route0.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route0.html"
+            "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route0.jpg",
+            "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route0.html",
+            "top": 49.090570, 
+            "right": -122.957330,
+            "bottom": 48.640203, 
+            "left": -123.638279
         }
     },
     {
         "name": "West Vancouver - Nanaimo (Horseshoe Bay-Departure Bay)",
         "route_number": 2,
         "vessel_tracking": {
-          "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route3.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route3.html"
+            "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route3.jpg",
+            "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route3.html",
+            "top": 49.670018, 
+            "right": -122.910209,
+            "bottom": 48.782737, 
+            "left": -124.271125
         }
     },
     {
@@ -199,8 +207,12 @@ bcf_routes = [
         "name": "Vancouver - Nanaimo (Tsawwassen-Duke Point)",
         "route_number": 30,
         "vessel_tracking": {
-          "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route1.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route1.html"
+            "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route1.jpg",
+            "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route1.html",
+            "top": 49.670018, 
+            "right": -122.910209,
+            "bottom": 48.782737, 
+            "left": -124.271125
         }
     }
 ]
@@ -322,16 +334,48 @@ def scrape_vessel_positions(html):
             y = (int(nums[3]) + int(nums[1])) / 2
             vessel_pixel_tuples.append((x, y))
             
-    print(vessel_pixel_tuples)
     return vessel_pixel_tuples
             
+    
+def xy_to_latlon(x, y, route):
+    """
+       Very unfortunate. I manually guessed the lat lon limits of the
+       map views using gmaps to compare. 
+       
+       We can use math to interpolate the pixel coords into real latlons
+    """
+    IMG_X_SIZE = 500
+    IMG_Y_SIZE = 500
+    
+    top = route["vessel_tracking"]["top"]
+    bottom = route["vessel_tracking"]["bottom"]
+    left = route["vessel_tracking"]["left"]
+    right = route["vessel_tracking"]["right"]
+    
+    frac_x = x / IMG_X_SIZE # fraction of pixel distance from left to right
+    frac_y = y / IMG_Y_SIZE
+    
+    lat_size = top - bottom
+    lon_size = right - left
+    
+    frac_lat = lat_size * frac_y # fraction of lat distance, bottom to top
+    frac_lon = lon_size * frac_x
+    
+    final_lat = top - frac_lat # image pixels count down from the top, remember
+    final_lon = left + frac_lon
+    
+    CONST_LAT_CORRECTION = 0 # looks like we're always a bit too far south
+    CONST_LON_CORRECTION = 0 # looks like we're always a bit east, not as much
+    
+    return final_lat + CONST_LAT_CORRECTION, final_lon + CONST_LON_CORRECTION
+    
     
 def scrape():
     for route in bcf_routes:
         if "vessel_tracking" not in route or route["vessel_tracking"] is None:
             continue
         page_url = route["vessel_tracking"]["page_url"]
-        print(f'scraping: {route["route_number"]} {route["name"]}')
+        print(f'\nscraping: {route["route_number"]} {route["name"]} --- --- ---')
         html = requests.get(page_url).text # sync, ASGI would help
         vessels = scrape_vessel_info(html, route)
         vessel_pos_list = scrape_vessel_positions(html)
@@ -340,19 +384,27 @@ def scrape():
         # have no pos data so must skip them
         i = -1
         for vessel in vessels:
-            i += 1
             if vessel.status == 'Temporarily Off Line':
                 continue
+            i += 1
             vessel.x = vessel_pos_list[i][0]
             vessel.y = vessel_pos_list[i][1]
             
+            # check needed if not all images have their coords yet
+            if "vessel_tracking" in route and "top" in route["vessel_tracking"]:
+                lat, lon = xy_to_latlon(vessel.x, vessel.y, route)
+                vessel.lat = lat
+                vessel.lon = lon
+            
+        # just for printing
         for vessel in vessels:
             if vessel.status == 'Temporarily Off Line':
                 print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination}')
-                return
-            print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at {vessel.x}, {vessel.y}')
-
-        break # DEBUG avoid spam
+                continue
+            if vessel.lat is not None:
+                print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at {vessel.lat}, {vessel.lon}')
+                continue
+            print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at pixels {vessel.y}, {vessel.x}')
     
     return {
     'Queen of the North': 'Ded'
