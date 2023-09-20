@@ -9,6 +9,7 @@ pip install wsgi-request-logger
 pip install protobuf
 pip install google
 pip install python-crontab
+pip install beautifulsoup4
 
 # Create directories
 mkdir -p archives/gtfs

@@ -1,3 +1,8 @@
+import re
+import requests
+
+from bs4 import BeautifulSoup
+
 
 bcf_routes = [
     {
@@ -206,9 +211,148 @@ def get_route_number(route_name):
             return bcf_route["route_number"]
     return '???'
 
-def scrape():
+class VesselInfo:
+    def __init__(self, name, status, destination, route):
+        self.name = name
+        self.status = status
+        self.destination = destination
+        self.route_number = route["route_number"]
+        self.x = None
+        self.y = None
+        self.lon = None
+        self.lat = None
+        
+    @classmethod
+    def from_tr_soup(cls, tr_soup, route_dict):
+        tds = tr_soup.find_all('td')
+        return cls(
+            name=tds[0].string, 
+            status=tds[1].string,
+            destination=tds[2].string,
+            route=route_dict
+        )
+        
+        
+
+def scrape_vessel_info(html, route):
+    """
+    For reference, the relevant section
+    <div id="vessel_status" style="width: 500px; background-color: White; ">
+		<table style="width: 100%; font: 11px Verdana, sans-serif;">
+			<tr>
+				<td style="border-bottom: solid 1px black;"><b>Vessel</b></td>
+				<td style="border-bottom: solid 1px black;"><b>Status</b></td>
+				<td style="border-bottom: solid 1px black;"><b>Destination</b></td>
+				<td style="border-bottom: solid 1px black;"><b>Last Update</b></td>
+			</tr>
+			<tr>
+				<td>Queen of Alberni</td>
+				<td>Under Way</td>
+				<td>Tsawwassen</td>
+				<td>0:18 AM</td>
+			</tr>
+			<tr>
+				<td>Coastal Inspiration</td>
+				<td>Under Way</td>
+				<td>Duke Point</td>
+				<td>0:18 AM</td>
+			</tr>
+		<tr><td colspan='4'>&nbsp;</td></tr>
+		<tr><td colspan='4'><i>Each arrow icon <IMG SRC='images/icon1.gif' WIDTH='14' HEIGHT='14'/ > represents one of our vessels.  To view vessel name, destination, heading and speed, move your cursor over the arrow icon.  When <IMG SRC='images/icon0.gif' WIDTH='14' HEIGHT='14'/ > is displayed, the ship is in port.  Vessels not appearing on this map are either not yet in operation or are temporarily off line.</i></td></tr>
+		</table>
+	</div>
+    """
+    soup = BeautifulSoup(html, features="lxml")
     
-    print('scraping!!!')
+    vessel_status_div = soup.find(id="vessel_status")
+    vessel_status_table = vessel_status_div.table
+    vessel_rows = vessel_status_div.find_all('tr')
+    if len(vessel_rows) < 2:
+        return []
+    # Manually specified scrape to get the correct rows only, see example
+    legit_vessel_rows = [vr for vr in vessel_rows[1:] if len(vr.find_all('td')) == 4]
+    return [VesselInfo.from_tr_soup(tr, route) for tr in legit_vessel_rows]
+    
+def scrape_vessel_positions(html):
+    """
+    Example code from which we will get pixel coords:
+    Some lines skipped for brevity
+    
+    function onMapHover(e) {
+	getMouseXY(e);
+    ...
+	if (x >= 163 && y >= 441 && x <= 177 && y <= 455) {
+		if (infoBoxShowing != 2) {
+			...
+			ferryInfo.style.left = 187;
+			ferryInfo.style.top = 286;
+			...
+			infoBoxShowing = 2;
+		}
+	} else 	if (x >= 366 && y >= 91 && x <= 380 && y <= 105) {
+		...
+		}
+	} else 	if (x >= 165 && y >= 441 && x <= 179 && y <= 455) {
+		...
+		}
+	} else {
+	   ...
+	}
+}
+
+    So we can see its checking mouse coords for each boat. 
+    
+    """
+    
+    # This approach is presumptious and reckless but bold
+    # remove everything but some punctuation and newlines
+    filtered_html = re.sub('[^\(\)><=&\n]', '', html)
+    filtered_lines = filtered_html.split('\n') # rely on file having newlines
+    numbers_only = re.sub('[^ 0-9\n]', '', html).split('\n')
+    
+    vessel_pixel_tuples = []
+    
+    for idx, line in enumerate(filtered_lines):
+        # Yes. Yes, my child. I am serious. We did go there.
+        if '(>=&&>=&&<=&&<=)' in line:
+            # so for each vessel
+            nums = numbers_only[idx].split()
+            # take avg of icon bounds
+            x = (int(nums[2]) + int(nums[0])) / 2 
+            y = (int(nums[3]) + int(nums[1])) / 2
+            vessel_pixel_tuples.append((x, y))
+            
+    print(vessel_pixel_tuples)
+    return vessel_pixel_tuples
+            
+    
+def scrape():
+    for route in bcf_routes:
+        if "vessel_tracking" not in route or route["vessel_tracking"] is None:
+            continue
+        page_url = route["vessel_tracking"]["page_url"]
+        print(f'scraping: {route["route_number"]} {route["name"]}')
+        html = requests.get(page_url).text # sync, ASGI would help
+        vessels = scrape_vessel_info(html, route)
+        vessel_pos_list = scrape_vessel_positions(html)
+        
+        # now, associate the positions with the boats. offline boats
+        # have no pos data so must skip them
+        i = -1
+        for vessel in vessels:
+            i += 1
+            if vessel.status == 'Temporarily Off Line':
+                continue
+            vessel.x = vessel_pos_list[i][0]
+            vessel.y = vessel_pos_list[i][1]
+            
+        for vessel in vessels:
+            if vessel.status == 'Temporarily Off Line':
+                print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination}')
+                return
+            print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at {vessel.x}, {vessel.y}')
+
+        break # DEBUG avoid spam
     
     return {
     'Queen of the North': 'Ded'
