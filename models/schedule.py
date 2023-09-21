@@ -14,14 +14,13 @@ class Schedule:
         '''Returns a schedule that combines other schedules'''
         if len(schedules) == 0:
             return None
-        dates = {d for s in schedules for d in s.dates}
         if date_range is None:
-            date_range = DateRange(min(dates), max(dates))
-        else:
-            dates = {d for d in dates if d in date_range}
+            date_range = DateRange.combine([s.date_range for s in schedules])
+        dates = {d for s in schedules for d in s.dates if d in date_range}
         modifications = {d for s in schedules for d in s.modifications if d in date_range}
-        for date in dates:
-            if len([s for s in schedules if date in s]) < len([s for s in schedules if date in s.date_range and (date in s or date.weekday in s.weekdays)]):
+        exceptions = {d for s in schedules for d in s.exceptions if d in date_range}
+        for date in sorted(exceptions):
+            if 0 < len([s for s in schedules if date in s]) < len(schedules):
                 modifications.add(date)
         return cls(dates, date_range, modifications)
     
@@ -34,16 +33,23 @@ class Schedule:
             self.modifications = modifications
         self.weekdays = set()
         self.exceptions = set()
+        explicit_weekdays = {d.weekday for d in dates}
         for weekday in Weekday:
-            explicit_dates = {d for d in dates if d.weekday == weekday}
-            implicit_dates = {d for d in self.date_range if d.weekday == weekday and d not in explicit_dates}
-            if len(implicit_dates) == 0 and len(explicit_dates) == 0:
+            included_dates = {d for d in dates if d.weekday == weekday}
+            excluded_dates = {d for d in self.date_range if d.weekday == weekday and d not in included_dates}
+            if len(included_dates) == 0 and len(excluded_dates) == 0:
                 continue
-            if len(explicit_dates) >= len(implicit_dates):
+            if len(included_dates) == 1 and len(excluded_dates) == 1:
+                if all(w.is_workday for w in explicit_weekdays):
+                    self.weekdays.add(weekday)
+                    self.exceptions.update(excluded_dates)
+                else:
+                    self.exceptions.update(included_dates)
+            elif len(included_dates) >= len(excluded_dates):
                 self.weekdays.add(weekday)
-                self.exceptions.update(implicit_dates)
+                self.exceptions.update(excluded_dates)
             else:
-                self.exceptions.update(explicit_dates)
+                self.exceptions.update(included_dates)
         
         if self.is_special:
             self.name = 'Special Service'

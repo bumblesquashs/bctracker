@@ -42,3 +42,11 @@ class Weekday(IntEnum):
     def abbreviation(self):
         '''The abbreviation of this weekday'''
         return self.name[0]
+    
+    @property
+    def is_workday(self):
+        return self in {Weekday.MON, Weekday.TUE, Weekday.WED, Weekday.THU, Weekday.FRI}
+    
+    @property
+    def is_weekend(self):
+        return self in {Weekday.SAT, Weekday.SUN}

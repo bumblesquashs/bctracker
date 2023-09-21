@@ -33,4 +33,16 @@ def combine(system, services):
                 sheets[-1] = Sheet.combine(system, new_services, date_range)
             else:
                 sheets.append(Sheet.combine(system, date_range_services, date_range))
-    return sorted(sheets)
+    final_sheets = []
+    for sheet in sheets:
+        if len(final_sheets) == 0:
+            final_sheets.append(sheet)
+        else:
+            previous_sheet = final_sheets[-1]
+            if len(previous_sheet.schedule.date_range) <= 7 or len(sheet.schedule.date_range) <= 7:
+                date_range = DateRange.combine([previous_sheet.schedule.date_range, sheet.schedule.date_range])
+                combined_services = previous_sheet.services.union(sheet.services)
+                final_sheets[-1] = Sheet.combine(system, combined_services, date_range)
+            else:
+                final_sheets.append(sheet)
+    return final_sheets
