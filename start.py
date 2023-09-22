@@ -9,8 +9,6 @@ def exit(sig, frame):
     server.stop()
 
 if __name__ == '__main__':
-    import helpers.bcf_scraper
-    helpers.bcf_scraper.scrape()
     signal.signal(signal.SIGINT, exit)
     
     parser = ArgumentParser()

@@ -4,7 +4,7 @@ import helpers.model
 from models.bus import Bus
 
 class Order:
-    '''A range of buses of a specific model ordered in a specific year'''
+    '''A range of vehicles of a specific model ordered in a specific year'''
     
     __slots__ = ('low', 'high', 'year', 'model', 'demo', 'exceptions', 'size')
     
@@ -34,6 +34,7 @@ class Order:
         self.size = (self.high - self.low) + 1 - len(exceptions)
     
     def __str__(self):
+        print(self.model)
         model = self.model
         if model is None:
             return str(self.year)

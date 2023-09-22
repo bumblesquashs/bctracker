@@ -1,21 +1,32 @@
 
 import csv
 
+import helpers.bcf_utils
 from models.match import Match
+from models.vehicle import Vehicle
 from models.order import Order
 
 orders = []
+bcf_orders = []
 
 def load():
     '''Loads order data from the static CSV file'''
     global orders
+    global bcf_orders
     with open(f'./data/static/orders.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
+        bcf_orders = helpers.bcf_utils.all_bcf_orders()
+        
+    helpers.bcf_utils.load()
 
-def find(bus_number):
-    '''Returns the order containing the given bus number'''
+def find(id, is_named):
+    '''Returns the order containing the given vehicle id'''
+    if is_named:
+        # Must be a ferry, right now
+        return bcf_utils.get_order(id)
+    bus_number = int(id)
     if bus_number < 0:
         return None
     for order in orders:
@@ -26,6 +37,10 @@ def find(bus_number):
 def find_all():
     '''Returns all orders'''
     return orders
+    
+def find_all_bcf_orders():
+    '''Returns all bcf_orders'''
+    return bcf_orders
 
 def find_matches(query, recorded_bus_numbers):
     '''Returns matching buses for a given query'''
@@ -52,4 +67,6 @@ def find_matches(query, recorded_bus_numbers):
 def delete_all():
     '''Deletes all orders'''
     global orders
+    global bcf_orders
     orders = []
+    bcf_orders = []

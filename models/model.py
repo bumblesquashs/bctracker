@@ -9,6 +9,10 @@ class ModelType(Enum):
     decker = "Double Decker"
     midibus = "Midibus"
     shuttle = "Shuttle"
+    
+    major_ferry = "Major Ferry"
+    ferry = "Ferry"
+    
     test = "Test"
     
     def __str__(self):
@@ -73,3 +77,8 @@ class Model:
     def is_test(self):
         '''Checks if this is a test model'''
         return self.type == ModelType.test
+        
+    @property
+    def is_ferry(self):
+        '''Checks if this is a ferry model'''
+        return self.type == ModelType.major_ferry or self.type == ModelType.ferry

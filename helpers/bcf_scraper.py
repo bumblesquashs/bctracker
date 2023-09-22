@@ -42,7 +42,11 @@ bcf_routes = [
         "route_number": 4,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route6.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route6.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route6.html",
+          "top": 48.874651, 
+          "right": -123.259735,
+          "bottom": 48.655139, 
+          "left": -123.605804
         }
     },
     {
@@ -135,7 +139,11 @@ bcf_routes = [
         "route_number": 19,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route19.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route19.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route19.html",
+          "top": 49.228360, 
+          "right": -123.816948,
+          "bottom": 49.115456, 
+          "left": -123.992386
         }
     },
     {
@@ -244,8 +252,6 @@ class VesselInfo:
             route=route_dict
         )
         
-        
-
 def scrape_vessel_info(html, route):
     """
     For reference, the relevant section
@@ -364,13 +370,14 @@ def xy_to_latlon(x, y, route):
     final_lat = top - frac_lat # image pixels count down from the top, remember
     final_lon = left + frac_lon
     
-    CONST_LAT_CORRECTION = 0 # looks like we're always a bit too far south
-    CONST_LON_CORRECTION = 0 # looks like we're always a bit east, not as much
+    CONST_LAT_CORRECTION = 0 # 0.0032 # looks like we're always a bit too far south
+    CONST_LON_CORRECTION = -0.002 # looks like we're always a bit east
     
     return final_lat + CONST_LAT_CORRECTION, final_lon + CONST_LON_CORRECTION
     
     
 def scrape():
+    all_vessel_infos = []
     for route in bcf_routes:
         if "vessel_tracking" not in route or route["vessel_tracking"] is None:
             continue
@@ -396,6 +403,8 @@ def scrape():
                 vessel.lat = lat
                 vessel.lon = lon
             
+            all_vessel_infos.append(vessel)
+            
         # just for printing
         for vessel in vessels:
             if vessel.status == 'Temporarily Off Line':
@@ -405,7 +414,6 @@ def scrape():
                 print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at {vessel.lat}, {vessel.lon}')
                 continue
             print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at pixels {vessel.y}, {vessel.x}')
+            
     
-    return {
-    'Queen of the North': 'Ded'
-    }
+    return all_vessel_infos

@@ -30,3 +30,16 @@ nova-bus-lfs-suburban,Nova Bus,LFS Suburban,40,Diesel,conventional
 proterra-zx5,Proterra,ZX5,40,Battery Electric,conventional
 transbus-trident,TransBus,Trident,42,Diesel,decker
 vmc-classic-vi30-cng,VMC,Classic Vi30 CNG,30,CNG,midibus
+c_class,BC Ferries,C Class,1000,Diesel,major_ferry
+i_class,BC Ferries,I Class,1000,Diesel,ferry
+q_class,BC Ferries,Q Class,1000,Diesel,ferry
+t_class,BC Ferries,T Class,1000,Diesel,ferry
+k_class,BC Ferries,K Class,1000,Diesel,ferry
+n_class,BC Ferries,N Class,1000,Diesel,ferry
+s_class,BC Ferries,Spirit Class,1000,Diesel,major_ferry
+island_class,BC Ferries,Island Class,1000,Diesel,ferry
+coastal_class,BC Ferries,Coastal Class,1000,Diesel,major_ferry
+century_class,BC Ferries,Century Class,1000,Diesel,ferry
+salish_class,BC Ferries,Salish Class,1000,Diesel,ferry
+nw_class,BC Ferries,New Westminster Class,1000,Diesel,major_ferry
+unclassed,BC Ferries,Unclassed,0,,ferry

@@ -11,6 +11,7 @@ import helpers.position
 import helpers.record
 import helpers.transfer
 import helpers.bcf_scraper
+import helpers.bcf_utils
 
 from models.bus import Bus
 from models.date import Date
@@ -26,7 +27,10 @@ def update(system):
     '''Downloads realtime data for the given system and stores it in the database'''
     global last_updated_date, last_updated_time
     if system.is_bcf:
-        results = helpers.bcf_scraper.scrape()
+        vessel_infos = helpers.bcf_scraper.scrape()
+        bcf_vessels = [helpers.bcf_utils.vessel_to_bcf_ferry(v.name) for v in vessel_infos]
+        positions = helpers.bcf_utils.create_positions(bcf_vessels, vessel_infos)
+        
         # TODO: do the updates as below with results
         return
     if not system.realtime_enabled:
@@ -64,6 +68,7 @@ def update(system):
     except Exception as e:
         print('Error!')
         print(f'Failed to update realtime for {system}: {e}')
+        raise e
 
 def update_records():
     '''Updates records in the database based on the current positions in the database'''
