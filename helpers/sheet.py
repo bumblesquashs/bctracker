@@ -25,8 +25,8 @@ def combine(system, services):
             sheets.append(Sheet.combine(system, date_range_services, date_range))
         else:
             previous_sheet = sheets[-1]
-            previous_services = {s for s in previous_sheet.services}
-            current_services = {s for s in date_range_services}
+            previous_services = {s for s in previous_sheet.services if not s.schedule.is_special}
+            current_services = {s for s in date_range_services if not s.schedule.is_special}
             if previous_services.issubset(current_services) or current_services.issubset(previous_services):
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
                 new_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}

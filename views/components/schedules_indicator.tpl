@@ -4,21 +4,33 @@
 % schedule_path = get('schedule_path')
 % date_path = get('date_path', schedule_path)
 
+% has_normal_service = any(s.has_normal_service for s in schedules)
+% has_modified_service = any(s.has_modified_service for s in schedules)
+% has_no_service = any(s.has_no_service for s in schedules)
+
 <div class="schedules-indicator">
-    <div class="legend">
-        <div class="flex-row flex-gap-5">
-            <div class="icon normal-service"></div>
-            <div>Normal Service</div>
+    % if has_normal_service or has_modified_service or has_no_service:
+        <div class="legend">
+            % if has_normal_service:
+                <div class="flex-row flex-gap-5">
+                    <div class="icon normal-service"></div>
+                    <div>Normal Service</div>
+                </div>
+            % end
+            % if has_modified_service:
+                <div class="flex-row flex-gap-5">
+                    <div class="icon modified-service"></div>
+                    <div>Modified Service</div>
+                </div>
+            % end
+            % if has_no_service:
+                <div class="flex-row flex-gap-5">
+                    <div class="icon no-service"></div>
+                    <div>No Service</div>
+                </div>
+            % end
         </div>
-        <div class="flex-row flex-gap-5">
-            <div class="icon modified-service"></div>
-            <div>Modified Service</div>
-        </div>
-        <div class="flex-row flex-gap-5">
-            <div class="icon no-service"></div>
-            <div>No Service</div>
-        </div>
-    </div>
+    % end
     <div class="flex-column flex-gap-10">
         % for (i, schedule) in enumerate(schedules):
             <div class="schedule">

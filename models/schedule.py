@@ -32,24 +32,27 @@ class Schedule:
         else:
             self.modifications = modifications
         self.weekdays = set()
-        self.exceptions = set()
-        explicit_weekdays = {d.weekday for d in dates}
-        for weekday in Weekday:
-            included_dates = {d for d in dates if d.weekday == weekday}
-            excluded_dates = {d for d in self.date_range if d.weekday == weekday and d not in included_dates}
-            if len(included_dates) == 0 and len(excluded_dates) == 0:
-                continue
-            if len(included_dates) == 1 and len(excluded_dates) == 1:
-                if all(w.is_workday for w in explicit_weekdays):
+        if len(date_range) <= 7:
+            self.exceptions = dates
+        else:
+            self.exceptions = set()
+            explicit_weekdays = {d.weekday for d in dates}
+            for weekday in Weekday:
+                included_dates = {d for d in dates if d.weekday == weekday}
+                excluded_dates = {d for d in self.date_range if d.weekday == weekday and d not in included_dates}
+                if len(included_dates) == 0 and len(excluded_dates) == 0:
+                    continue
+                if len(included_dates) == 1 and len(excluded_dates) == 1:
+                    if all(w.is_workday for w in explicit_weekdays):
+                        self.weekdays.add(weekday)
+                        self.exceptions.update(excluded_dates)
+                    else:
+                        self.exceptions.update(included_dates)
+                elif len(included_dates) >= len(excluded_dates):
                     self.weekdays.add(weekday)
                     self.exceptions.update(excluded_dates)
                 else:
                     self.exceptions.update(included_dates)
-            elif len(included_dates) >= len(excluded_dates):
-                self.weekdays.add(weekday)
-                self.exceptions.update(excluded_dates)
-            else:
-                self.exceptions.update(included_dates)
         
         if self.is_special:
             self.name = 'Special Service'
@@ -116,6 +119,18 @@ class Schedule:
     def covered_weekdays(self):
         '''Returns all weekdays covered by the date range'''
         return {d.weekday for d in self.date_range}
+    
+    @property
+    def has_normal_service(self):
+        return len(self.weekdays) > 0 or len(self.added_dates) > 0
+    
+    @property
+    def has_modified_service(self):
+        return len(self.modifications) > 0
+    
+    @property
+    def has_no_service(self):
+        return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
     def get_weekday_status(self, weekday):
         '''Returns the status class of this schedule on the given weekday'''
