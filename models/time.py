@@ -147,3 +147,11 @@ class Time:
         if len(parts) == 0:
             return '0h 0m'
         return ' '.join(parts)
+        
+    def minute_difference(self, other):
+        '''Returns number of mins between ths and another time'''
+        if self.is_unknown or other.is_unknown:
+            return None
+        self_minutes = self.get_minutes()
+        other_minutes = other.get_minutes()
+        return self_minutes - other_minutes

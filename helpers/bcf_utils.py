@@ -5,6 +5,7 @@ import helpers.position
 from models.bcf_order import BcfOrder
 from models.bcf_ferry import BcfFerry
 from models.position import Position
+from models.time import Time
 from helpers.model import find as model_find
 from helpers.bcf_scraper import VesselInfo
 from helpers.system import find as find_system
@@ -85,21 +86,17 @@ def guess_trip(route, departed_stop, departed_time):
     possible_trips = [trip for trip in possible_trips if trip.service.is_today]
     
     # only the ones we haven't assigned a boat to yet (???)
-    possible_trips = [trip for trip in possible_trips if trip not in already_done_trips]
-
-    print(f'BCF: trips for {route}')
-    for trip in possible_trips:
-        print(f'trippy {trip.id} {trip.first_departure.stop} {trip.first_departure.time}')
+    # possible_trips = [trip for trip in possible_trips if trip not in already_done_trips]
     
     if len(possible_trips) == 0:
         return None
     
     trip_before, trip_after = None, None
-    now = datetime.datetime.now()
+    now = Time.now()
     
     # possible trips is sorted... get the trip that should leave before and after now
     for trip in possible_trips:
-        if trip.first_departure.time > now:
+        if trip.first_departure.time.is_later:
             # Found the first trip after now
             trip_after = trip
             
@@ -128,9 +125,9 @@ def guess_trip(route, departed_stop, departed_time):
     # main idea, if we're within 15 of a future departure, use it, otherwise, use the previous departure
     early_departure_cutoff_mins = 15
     
-    trip_after_seconds = (trip_after.first_departure.time - now).seconds
+    trip_after_mins = trip_after.first_departure.time.minute_difference(now)
     
-    if (trip_after_seconds/60) <= early_departure_cutoff_mins:
+    if trip_after_mins <= early_departure_cutoff_mins:
         # use the next trip
         already_done_trips.append(trip_after)
         return trip_after
@@ -214,13 +211,12 @@ def create_positions(bcf_vessels, vessel_infos, stops):
         # hopefully we can fix the denman island situation tho
         forbidden_route_numbers = [11, 13, 21, 22, 26, 28]
         if vessel_info.route_number in forbidden_route_numbers:
-            print(f'skipping rt {vessel_info.route_number} boat')
             continue
             
         if not vessel_info.lat or not vessel_info.lon:
             continue
             
-        print(f'Generated vessel: {bcf_vessel} {bcf_vessel.order} {vessel_info.status} {vessel_info.destination} {vessel_info.route_number}')
+        print(f'Generating vessel: {bcf_vessel} {bcf_vessel.order} {vessel_info.status} {vessel_info.destination} {vessel_info.route_number}')
         route = get_route(vessel_info, all_routes)
         
         if route is None:
@@ -259,8 +255,11 @@ def create_positions(bcf_vessels, vessel_infos, stops):
                 # use departed stop, time and route to guess!
                 trip = guess_trip(route, departed_stop, departed_time)
                 
+                print(f'BCF: SUCCESS: guessed trip: {bcf_vessel} on {route} from {departed_stop} to {trip.headsign} at {trip.first_departure.time}')
+
+                
                 # Oh and report the last stop fwiw
-                stop = vessel_last_stops[bcf_vessel.name]
+                stop = vessel_last_stops[bcf_vessel.name][0]
             except KeyError:
                 print(f'BCF: WARN: We are not at a terminal, and we dont have a last terminal in the dict: {bcf_vessel}')
                 trip = None
