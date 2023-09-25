@@ -1,5 +1,6 @@
 import re
 import requests
+from datetime import datetime
 
 from bs4 import BeautifulSoup
 
@@ -7,6 +8,7 @@ from bs4 import BeautifulSoup
 bcf_routes = [
     {
         "name": "Vancouver - Victoria (Tsawwassen-Swartz Bay)",
+        "major": True,
         "route_number": 1,
         "vessel_tracking": {
             "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route0.jpg",
@@ -19,6 +21,7 @@ bcf_routes = [
     },
     {
         "name": "West Vancouver - Nanaimo (Horseshoe Bay-Departure Bay)",
+        "major": True,
         "route_number": 2,
         "vessel_tracking": {
             "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route3.jpg",
@@ -31,14 +34,20 @@ bcf_routes = [
     },
     {
         "name": "West Van - Sunshine Coast (Horseshoe Bay-Langdale)",
+        "major": True,
         "route_number": 3,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route4.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route4.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route4.html",
+          "top": 49.508268, 
+          "right": -123.218880,
+          "bottom": 49.290202, 
+          "left": -123.565292
         }
     },
     {
         "name": "Salt Spring Island - Victoria (Fulford Harbour - Swartz Bay)",
+        "major": False,
         "route_number": 4,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route6.jpg",
@@ -51,14 +60,20 @@ bcf_routes = [
     },
     {
         "name": "Southern Gulf Islands",
+        "major": False,
         "route_number": 5,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route7.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route7.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route7.html",
+          "top": 49.029089, 
+          "right": -123.014774,
+          "bottom": 48.584557, 
+          "left": -123.693352
         }
     },
     {
         "name": "Salt Spring Island (Vesuvius Bay - Crofton)",
+        "major": False,
         "route_number": 6,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route17.jpg",
@@ -67,22 +82,33 @@ bcf_routes = [
     },
     {
         "name": "Sechelt - Powell River (Earls Cove-Saltery Bay)",
+        "major": False,
         "route_number": 7,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route29.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route29.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route29.html",
+          "top": 49.882469, 
+          "right": -123.912735,
+          "bottom": 49.664517, 
+          "left": -124.255714
         }
     },
     {
         "name": "Bowen Island - Vancouver (Snug Cove-Horseshoe Bay)",
+        "major": False,
         "route_number": 8,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route5.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route5.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route5.html",
+          "top": 49.435427, 
+          "right": -123.228149,
+          "bottom": 49.325570, 
+          "left": -123.396721
         }
     },
     {
         "name": "Southern Gulf Islands",
+        "major": False,
         "route_number": 9,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route2.jpg",
@@ -91,6 +117,7 @@ bcf_routes = [
     },
     {
         "name": "Inside Passage",
+        "major": False,
         "route_number": 10,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route13.jpg",
@@ -99,6 +126,7 @@ bcf_routes = [
     },
     {
         "name": "Haida Gwaii (Prince Rupert - Skidegate)",
+        "major": False,
         "route_number": 11,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route13.jpg",
@@ -107,19 +135,26 @@ bcf_routes = [
     },
     {
         "name": "Brentwood Bay - Mill Bay (Saanich Peninsula - Vancouver Island)",
+        "major": False,
         "route_number": 12,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route16.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route16.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route16.html",
+          "top": 48.648562, 
+          "right": -123.407192,
+          "bottom": 48.536841, 
+          "left": -123.582115
         }
     },
     {
         "name": "Langdale to Gambier Island & Keats Island",
+        "major": False,
         "route_number": 13,
         "vessel_tracking": None
     },
     {
         "name": "Comox - Powell River (Little River-Westview)",
+        "major": False,
         "route_number": 17,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route23.jpg",
@@ -128,14 +163,20 @@ bcf_routes = [
     },
     {
         "name": "Powell River - Texada Island (Westview-Blubber Bay)",
+        "major": False,
         "route_number": 18,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route24.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route24.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route24.html",
+           "top": 49.872070, 
+           "right": -124.492607,
+           "bottom": 49.763082, 
+           "left": -124.656029
         }
     },
     {
         "name": "Nanaimo Harbour - Gabriola Island (Vancouver Island - Descanso Bay)",
+        "major": False,
         "route_number": 19,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route19.jpg",
@@ -148,14 +189,20 @@ bcf_routes = [
     },
     {
         "name": "Chemainus - Thetis Island - Penelakut Island",
+        "major": False,
         "route_number": 20,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route18.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route18.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route18.html",
+           "top": 49.024137, 
+           "right": -123.609924,
+           "bottom": 48.914265, 
+           "left": -123.780212
         }
     },
     {
         "name": "Vancouver Island - Denman Island (Buckley Bay - Denman West)",
+        "major": False,
         "route_number": 21,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route20.jpg",
@@ -165,6 +212,7 @@ bcf_routes = [
     },
     {
         "name": "Denman Island - Hornby Island (Gravelly Bay-Shingle Spit)",
+        "major": False,
         "route_number": 22,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route20.jpg",
@@ -173,6 +221,7 @@ bcf_routes = [
     },
     {
         "name": "Campbell River - Quadra Island (Quathiaski Cove)",
+        "major": False,
         "route_number": 23,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route21.jpg",
@@ -181,22 +230,33 @@ bcf_routes = [
     },
     {
         "name": "Quadra Island - Cortes Island (Heriot Bay-Whaletown)",
+        "major": False,
         "route_number": 24,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route22.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route22.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route22.html",
+          "top": 50.092393, 
+          "right": -125.143032,
+          "bottom": 49.983351, 
+          "left": -125.312805
         }
     },
     {
         "name": "Port McNeill - Alert Bay - Sointula (Vancouver Island-Cormorant Island-Malcolm Island)",
+        "major": False,
         "route_number": 25,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route25.jpg",
-          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route25.html"
+          "page_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route25.html",
+          "top": 50.560123, 
+          "right": -126.925907,
+          "bottom": 50.669484, 
+          "left": -127.093964
         }
     },
     {
         "name": "Alliford Bay - Skidegate (Moresby Island-Graham Island)",
+        "major": False,
         "route_number": 26,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route13.jpg",
@@ -205,6 +265,7 @@ bcf_routes = [
     },
     {
         "name": "Inside Passage",
+        "major": False,
         "route_number": 28,
         "vessel_tracking": {
           "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route13.jpg",
@@ -213,6 +274,7 @@ bcf_routes = [
     },
     {
         "name": "Vancouver - Nanaimo (Tsawwassen-Duke Point)",
+        "major": True,
         "route_number": 30,
         "vessel_tracking": {
             "image_url": "https://apigateway.bcferries.com/api/currentconditions/1.0/images/vessels/route1.jpg",
@@ -237,10 +299,15 @@ class VesselInfo:
         self.status = status
         self.destination = destination
         self.route_number = route["route_number"]
+        self.route_name = route["name"]
+        self.is_major = route['major']
         self.x = None
         self.y = None
         self.lon = None
         self.lat = None
+        self.speed = None
+        self.heading = None
+        self.tracked_time = datetime.now()
         
     @classmethod
     def from_tr_soup(cls, tr_soup, route_dict):
@@ -343,6 +410,38 @@ def scrape_vessel_positions(html):
     return vessel_pixel_tuples
             
     
+def scrape_vessel_heading_and_speed(html):
+    '''
+    Example:
+    
+    	html += '</tr>';
+			html += '<tr>';
+			html += '<td>Heading: <b>NE</b></td>';
+			html += '</tr>';
+			html += '<tr>';
+			html += '<td>Speed: <b>0 knots</b></td>';
+			html += '</tr>';
+    
+    '''
+    # grab heading/speed values in the same order as positions and info
+    
+    numbers_only_lines = re.sub('[^. 0-9\n]', '', html).split('\n')
+    
+    vessel_headings = []
+    vessel_speeds = []
+    
+    for idx, line in enumerate(html.split('\n')):
+        if 'Heading: <b>' in line:
+            heading = line.split('<b>')[1].split('</b>')[0]
+            vessel_headings.append(heading)
+        
+        if 'Speed: <b>' in line:
+            speed = numbers_only_lines[idx]
+            vessel_speeds.append(float(speed))
+    
+    return list(zip(vessel_headings, vessel_speeds))
+
+
 def xy_to_latlon(x, y, route):
     """
        Very unfortunate. I manually guessed the lat lon limits of the
@@ -386,6 +485,7 @@ def scrape():
         html = requests.get(page_url).text # sync, ASGI would help
         vessels = scrape_vessel_info(html, route)
         vessel_pos_list = scrape_vessel_positions(html)
+        vessel_hdg_speed_list = scrape_vessel_heading_and_speed(html)
         
         # now, associate the positions with the boats. offline boats
         # have no pos data so must skip them
@@ -396,6 +496,9 @@ def scrape():
             i += 1
             vessel.x = vessel_pos_list[i][0]
             vessel.y = vessel_pos_list[i][1]
+            
+            vessel.heading = vessel_hdg_speed_list[i][0]
+            vessel.speed = vessel_hdg_speed_list[i][1]
             
             # check needed if not all images have their coords yet
             if "vessel_tracking" in route and "top" in route["vessel_tracking"]:
@@ -411,9 +514,9 @@ def scrape():
                 print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination}')
                 continue
             if vessel.lat is not None:
-                print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at {vessel.lat}, {vessel.lon}')
+                print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at {vessel.lat}, {vessel.lon} hdg: {vessel.heading} spd: {vessel.speed}')
                 continue
-            print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at pixels {vessel.y}, {vessel.x}')
+            print(f'--> {vessel.name}: {vessel.status} on {vessel.route_number} to {vessel.destination} at pixels {vessel.y}, {vessel.x} hdg: {vessel.heading} spd: {vessel.speed}')
             
     
     return all_vessel_infos

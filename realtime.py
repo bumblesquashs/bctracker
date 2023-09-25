@@ -9,6 +9,7 @@ import protobuf.data.gtfs_realtime_pb2 as protobuf
 import helpers.overview
 import helpers.position
 import helpers.record
+import helpers.position
 import helpers.transfer
 import helpers.bcf_scraper
 import helpers.bcf_utils
@@ -23,15 +24,23 @@ import database
 last_updated_date = None
 last_updated_time = None
 
+
 def update(system):
     '''Downloads realtime data for the given system and stores it in the database'''
     global last_updated_date, last_updated_time
     if system.is_bcf:
+        helpers.bcf_utils.check_new_day()
         vessel_infos = helpers.bcf_scraper.scrape()
         bcf_vessels = [helpers.bcf_utils.vessel_to_bcf_ferry(v.name) for v in vessel_infos]
-        positions = helpers.bcf_utils.create_positions(bcf_vessels, vessel_infos)
+        positions = helpers.bcf_utils.create_positions(bcf_vessels, vessel_infos, system.get_stops())
         
-        # TODO: do the updates as below with results
+        helpers.position.set_in_memory_bcf_positions_hack(positions)
+        print('BCF: Successfully stored vessel positions!')
+        
+        last_updated_date = Date.today('America/Vancouver')
+        last_updated_time = Time.now('America/Vancouver', False)
+        system.last_updated_date = Date.today(system.timezone)
+        system.last_updated_time = Time.now(system.timezone, False)
         return
     if not system.realtime_enabled:
         return
@@ -74,6 +83,8 @@ def update_records():
     '''Updates records in the database based on the current positions in the database'''
     try:
         for position in helpers.position.find_all():
+            if position.system.is_bcf:
+                continue
             try:
                 system = position.system
                 bus = position.bus

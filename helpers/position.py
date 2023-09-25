@@ -3,6 +3,12 @@ from models.position import Position
 
 import database
 
+in_memory_bcf_positions_hack = []
+
+def set_in_memory_bcf_positions_hack(positions):
+    global in_memory_bcf_positions_hack
+    in_memory_bcf_positions_hack = positions
+
 def create(position):
     '''Inserts a new position into the database'''
     values = {
@@ -23,6 +29,12 @@ def create(position):
 
 def find(bus_number):
     '''Returns the position of the bus with the given number'''
+    
+    # TODO: REMOVE
+    for pos in in_memory_bcf_positions_hack:
+        if pos.bus.id == bus_number: # TODO: REMOVE
+            return pos # TODO: REMOVE
+    
     rows = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
@@ -84,6 +96,19 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
         },
         filters=filters)
     positions = [Position.from_db(row) for row in rows]
+    
+    # TODO: REMOVE ALL THIS
+    if system_id is None or system_id == 'bc-ferries':
+        manual_filtering_hack = in_memory_bcf_positions_hack
+        if route_id is not None:
+            manual_filtering_hack = [p for p in manual_filtering_hack if p.route.id == route_id]
+            
+        if trip_id is not None:
+            manual_filtering_hack = [p for p in manual_filtering_hack if p.trip.id == trip_id]
+            
+        # TODO: REMOVE ALL THIS
+        positions = positions + manual_filtering_hack
+        
     return [p for p in positions if not p.bus.is_test]
 
 def delete_all(system_id=None):
