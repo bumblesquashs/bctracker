@@ -7,7 +7,7 @@ systems = {}
 
 def load():
     '''Loads system data from the static CSV file'''
-    with open(f'./data/static/systems.csv', 'r') as file:
+    with open(f'./static/systems.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:

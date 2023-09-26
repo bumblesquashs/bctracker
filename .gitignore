@@ -8,6 +8,3 @@ server.conf
 __pycache__/
 .vscode
 .idea
-
-# Keep static files in data folder
-!data/static/
