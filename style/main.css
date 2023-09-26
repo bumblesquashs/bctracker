@@ -802,20 +802,20 @@ table.striped tr.section td {
     text-align: center;
 }
 
-.schedules-indicator {
+.sheets-indicator {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.schedules-indicator .footer {
+.sheets-indicator .footer {
     width: 75%;
     margin: 0px auto 0px auto;
     font-size: 11pt;
     text-align: center;
 }
 
-.schedules-indicator .legend {
+.sheets-indicator .legend {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -824,13 +824,13 @@ table.striped tr.section td {
     font-size: 11pt;
 }
 
-.schedules-indicator .legend .icon {
+.sheets-indicator .legend .icon {
     width: 10px;
     height: 10px;
     border-radius: 2px;
 }
 
-.schedules-indicator .schedule {
+.sheets-indicator .sheet {
     padding: 10px;
     border-radius: 10px;
     display: flex;
@@ -838,7 +838,7 @@ table.striped tr.section td {
     gap: 10px;
 }
 
-.schedules-indicator .schedule .exceptions {
+.sheets-indicator .sheet .dates {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -847,7 +847,7 @@ table.striped tr.section td {
     column-gap: 10px;
 }
 
-.schedules-indicator .schedule .exceptions .month {
+.sheets-indicator .sheet .dates .month {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -856,15 +856,15 @@ table.striped tr.section td {
     gap: 5px;
 }
 
-.schedules-indicator .schedule .exceptions .month .name {
+.sheets-indicator .sheet .dates .month .name {
     font-size: 13pt;
 }
 
-.schedules-indicator .schedule .exceptions .month.title .name {
+.sheets-indicator .sheet .dates .month.title .name {
     font-size: 14pt;
 }
 
-.schedules-indicator .schedule .exceptions .month .date {
+.sheets-indicator .sheet .dates .month .date {
     font-size: 11pt;
     padding: 1px 4px;
     border-radius: 4px;
@@ -874,7 +874,7 @@ table.striped tr.section td {
     text-decoration: none;
 }
 
-.schedules-indicator .schedule .title {
+.sheets-indicator .sheet .title {
     margin-bottom: 0px;
     text-align: center;
 }

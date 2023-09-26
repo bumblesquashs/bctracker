@@ -1,34 +1,31 @@
 
-from models.date import Date
 from models.schedule import Schedule
 
 class Sheet:
     '''A collection of overlapping services'''
     
-    __slots__ = ('system', 'schedule', 'services', 'service_groups', 'copies')
+    __slots__ = ('system', 'schedule', 'services', 'service_groups', 'modifications', 'copies')
     
-    @classmethod
-    def combine(cls, system, services, date_range):
-        '''Returns a sheet that includes all of the given services'''
-        schedule = Schedule.combine([s.schedule for s in services], date_range)
-        return cls(system, schedule, services)
-    
-    def __init__(self, system, schedule, services):
+    def __init__(self, system, services, date_range):
         self.system = system
-        self.schedule = schedule
+        self.schedule = Schedule.combine(services, date_range)
         self.services = services
         self.copies = {}
         
         service_groups = []
-        date_services = {d:tuple({s for s in services if d in s.schedule}) for d in schedule.dates}
+        date_services = {d:tuple({s for s in services if d in s}) for d in self.schedule.dates}
         for service_set in set(date_services.values()):
             if len(service_set) == 0:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
-            service_group = ServiceGroup(system, dates, schedule.date_range, service_set)
+            service_group = ServiceGroup(system, dates, date_range, service_set)
             service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
+        
+        added_dates = {d for g in service_groups for d in g.schedule.added_dates}
+        removed_dates = {d for g in service_groups for d in g.schedule.removed_dates}
+        self.modifications = added_dates.intersection(removed_dates)
     
     def __str__(self):
         if self.schedule.is_special:
@@ -52,6 +49,21 @@ class Sheet:
             return self.service_groups
         return service_groups
     
+    @property
+    def has_normal_service(self):
+        '''Checks if this sheet indicates normal service'''
+        return self.schedule.has_normal_service
+    
+    @property
+    def has_modified_service(self):
+        '''Checks if this sheet indicates modified service'''
+        return len(self.modifications) > 0
+    
+    @property
+    def has_no_service(self):
+        '''Checks if this sheet indicates no service'''
+        return self.schedule.has_no_service
+    
     def copy(self, services):
         '''Returns a duplicate of this sheet, restricted to the given services'''
         services = [s for s in self.services if s in services]
@@ -60,9 +72,19 @@ class Sheet:
             return self.copies[key]
         if len(services) == 0:
             return None
-        copy = Sheet.combine(self.system, services, self.schedule.date_range)
+        copy = Sheet(self.system, services, self.schedule.date_range)
         self.copies[key] = copy
         return copy
+    
+    def get_weekday_status(self, weekday):
+        '''Returns the status class of this schedule on the given weekday'''
+        return self.schedule.get_weekday_status(weekday)
+    
+    def get_date_status(self, date):
+        '''Returns the status class of this schedule on the given date'''
+        if date in self.modifications:
+            return 'modified-service'
+        return self.schedule.get_date_status(date)
 
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
@@ -86,7 +108,5 @@ class ServiceGroup:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
-    @property
-    def is_today(self):
-        '''Checks if this service group runs on the current date'''
-        return Date.today(self.system.timezone) in self.schedule
+    def __contains__(self, service):
+        return service in self.services

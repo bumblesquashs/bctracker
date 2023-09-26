@@ -35,7 +35,7 @@ class ServiceException:
         return self.service_id == other.service_id and self.date == other.date
 
 class Service:
-    '''A schedule with an ID'''
+    '''A set of dates when a transit service is operating'''
     
     __slots__ = ('system', 'id', 'schedule')
     
@@ -79,9 +79,6 @@ class Service:
         self.id = id
         self.schedule = schedule
     
-    def __str__(self):
-        return str(self.schedule)
-    
     def __hash__(self):
         return hash(self.id)
     
@@ -91,7 +88,5 @@ class Service:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
-    @property
-    def is_today(self):
-        '''Checks if this service runs on the current date'''
-        return Date.today(self.system.timezone) in self.schedule
+    def __contains__(self, date):
+        return date in self.schedule

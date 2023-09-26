@@ -27,7 +27,7 @@
                 
                 <div class="info-box">
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[s.schedule for s in sheets])
+                        % include('components/sheets_indicator', sheets=sheets)
                     </div>
                     <div class="section vertical">
                         <div class="flex-column">
@@ -141,12 +141,10 @@
                                     <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
                                     <td>
                                         <div class="flex-column">
-                                            <div class="flex-column">
-                                                % for sheet in related_block.sheets:
-                                                    <div>{{ sheet }}</div>
-                                                    <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
-                                                % end
-                                            </div>
+                                            % for sheet in related_block.sheets:
+                                                <div>{{ sheet }}</div>
+                                                <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
+                                            % end
                                         </div>
                                     </td>
                                 </tr>

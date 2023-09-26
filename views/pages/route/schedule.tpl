@@ -42,7 +42,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheets_indicator', sheets=sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
                     </div>
                 </div>

@@ -69,8 +69,8 @@ class Stop:
         if service_group is None:
             if date is None:
                 return sorted(self.departures)
-            return sorted([d for d in self.departures if d.trip is not None and date in d.trip.service.schedule])
-        return sorted([d for d in self.departures if d.trip is not None and d.trip.service in service_group.services])
+            return sorted([d for d in self.departures if d.trip is not None and date in d.trip.service])
+        return sorted([d for d in self.departures if d.trip is not None and d.trip.service in service_group])
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this stop'''
@@ -103,5 +103,5 @@ class Stop:
     def setup(self):
         '''Sets the schedule for this stop once trip information is available'''
         services = {d.trip.service for d in self.departures if d.trip is not None}
-        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.schedule = Schedule.combine(services)
         self.sheets = self.system.copy_sheets(services)

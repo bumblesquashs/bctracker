@@ -27,7 +27,7 @@
                     
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in route.sheets], schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheets_indicator', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
                         <div class="section vertical">
                             % headsigns = route.get_headsigns()

@@ -94,7 +94,7 @@ class System:
     @property
     def schedule(self):
         '''The overall service schedule for this system'''
-        return Schedule.combine([s.schedule for s in self.get_services()])
+        return Schedule.combine(self.get_services())
     
     def get_block(self, block_id):
         '''Returns the block with the given ID'''
@@ -130,7 +130,7 @@ class System:
     
     def get_services(self):
         '''Returns all services'''
-        return sorted(self.services.values())
+        return self.services.values()
     
     def get_sheets(self, services=None):
         '''Returns all sheets'''

@@ -7,30 +7,21 @@ from models.weekday import Weekday
 class Schedule:
     '''Dates when a service is running'''
     
-    __slots__ = ('dates', 'date_range', 'weekdays', 'exceptions', 'modifications', 'name')
+    __slots__ = ('dates', 'date_range', 'weekdays', 'exceptions', 'name')
     
     @classmethod
-    def combine(cls, schedules, date_range=None):
-        '''Returns a schedule that combines other schedules'''
-        if len(schedules) == 0:
+    def combine(cls, services, date_range=None):
+        '''Returns a schedule that combines multiple services'''
+        if len(services) == 0:
             return None
         if date_range is None:
-            date_range = DateRange.combine([s.date_range for s in schedules])
-        dates = {d for s in schedules for d in s.dates if d in date_range}
-        modifications = {d for s in schedules for d in s.modifications if d in date_range}
-        exceptions = {d for s in schedules for d in s.exceptions if d in date_range}
-        for date in sorted(exceptions):
-            if 0 < len([s for s in schedules if date in s]) < len(schedules):
-                modifications.add(date)
-        return cls(dates, date_range, modifications)
+            date_range = DateRange.combine([s.schedule.date_range for s in services])
+        dates = {d for s in services for d in s.schedule.dates if d in date_range}
+        return cls(dates, date_range)
     
-    def __init__(self, dates, date_range, modifications=None):
+    def __init__(self, dates, date_range):
         self.dates = dates
         self.date_range = date_range
-        if modifications is None:
-            self.modifications = set()
-        else:
-            self.modifications = modifications
         self.weekdays = set()
         if len(date_range) <= 7:
             self.exceptions = dates
@@ -92,12 +83,8 @@ class Schedule:
         return len(self.weekdays) == 0
     
     @property
-    def all_dates(self):
-        '''Returns all dates that are added'''
-        return self.exceptions.union(self.modifications)
-    
-    @property
     def added_dates(self):
+        '''Returns all dates that are added'''
         return {d for d in self.exceptions if d.weekday not in self.weekdays}
     
     @property
@@ -116,34 +103,23 @@ class Schedule:
         return helpers.date.flatten(self.removed_dates)
     
     @property
-    def covered_weekdays(self):
-        '''Returns all weekdays covered by the date range'''
-        return {d.weekday for d in self.date_range}
-    
-    @property
     def has_normal_service(self):
+        '''Checks if this schedule indicates normal service'''
         return len(self.weekdays) > 0 or len(self.added_dates) > 0
     
     @property
-    def has_modified_service(self):
-        return len(self.modifications) > 0
-    
-    @property
     def has_no_service(self):
+        '''Checks if this schedule indicates no service'''
         return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
     def get_weekday_status(self, weekday):
         '''Returns the status class of this schedule on the given weekday'''
-        if weekday in self.covered_weekdays:
-            if weekday in self.weekdays:
-                return 'normal-service'
-            return 'no-service'
-        return ''
+        if weekday in self.weekdays:
+            return 'normal-service'
+        return 'no-service'
     
     def get_date_status(self, date):
         '''Returns the status class of this schedule on the given date'''
         if date in self:
-            if date in self.modifications:
-                return 'modified-service'
             return 'normal-service'
         return 'no-service'

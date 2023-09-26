@@ -1,9 +1,6 @@
 archives/
 backups/
-data/gtfs
-data/realtime
-data/*.db
-data/*.db-journal
+data/
 logs/
 
 server.conf
@@ -11,3 +8,6 @@ server.conf
 __pycache__/
 .vscode
 .idea
+
+# Keep static files in data folder
+!data/static/

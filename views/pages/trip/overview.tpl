@@ -24,7 +24,7 @@
                 
                 <div class="info-box">
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[trip.service.schedule])
+                        % include('components/sheets_indicator', sheets=trip.sheets)
                     </div>
                     <div class="section">
                         % route = trip.route
@@ -104,8 +104,10 @@
                                     <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                     <td>
                                         <div class="flex-column">
-                                            <div>{{ related_trip.service.schedule.date_range }}</div>
-                                            <div class="smaller-font lighter-text">{{ related_trip.service }}</div>
+                                            % for sheet in related_trip.sheets:
+                                                <div>{{ sheet }}</div>
+                                                <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
+                                            % end
                                         </div>
                                     </td>
                                 </tr>
