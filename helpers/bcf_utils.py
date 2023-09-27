@@ -254,11 +254,14 @@ def create_positions(bcf_vessels, vessel_infos, stops):
                 
                 # use departed stop, time and route to guess!
                 trip = guess_trip(route, departed_stop, departed_time)
-                
-                print(f'BCF: SUCCESS: guessed trip: {bcf_vessel} on {route} from {departed_stop} to {trip.headsign} at {trip.first_departure.time}')
 
-                # Oh and report the last stop fwiw
-                stop = vessel_last_stops[bcf_vessel.name][0]
+                if trip:
+                    print(f'BCF: SUCCESS: guessed trip: {bcf_vessel} on {route} from {departed_stop} to {trip.headsign} at {trip.first_departure.time}')
+
+                    # Oh and report the last stop fwiw
+                    stop = vessel_last_stops[bcf_vessel.name][0]
+                else:
+                    print(f'BCF: WARN: We are not at a terminal, and we do have a last terminal in the dict, but cant guess a trip: {bcf_vessel}')
             except KeyError:
                 print(f'BCF: WARN: We are not at a terminal, and we dont have a last terminal in the dict: {bcf_vessel}')
                 trip = None
