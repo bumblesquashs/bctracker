@@ -105,6 +105,8 @@ class Departure:
                     return False
                 if self.trip is None or other.trip is None:
                     return False
+                if self.trip.route is None or other.trip.route is None:
+                    return False
                 return self.trip.route < other.trip.route
             return self.time < other.time
     

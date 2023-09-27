@@ -96,7 +96,13 @@
                                                                 % end
                                                             </div>
                                                         </td>
-                                                        <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                                        <td class="non-mobile">
+                                                            % if block is None:
+                                                                <div class="lighter-text">Unknown</div>
+                                                            % else:
+                                                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                            % end
+                                                        </td>
                                                         <td>
                                                             <div class="flex-column">
                                                                 <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>

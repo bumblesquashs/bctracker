@@ -34,7 +34,7 @@
 % end
 
 % map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
-% map_trips = sorted(map_trips, key=lambda t: t.route, reverse=True)
+% map_trips = sorted([t for t in map_trips if t.route is not None], key=lambda t: t.route, reverse=True)
 % shape_ids = set()
 % shape_trips = []
 % for trip in map_trips:
@@ -87,7 +87,7 @@
 % end
 
 % map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure is not None else [])
-% map_departures = sorted(map_departures, key=lambda d: d.trip.route)
+% map_departures = sorted([d for d in map_departures if d.trip is not None and d.trip.route is not None], key=lambda d: d.trip.route)
 % stop_ids = set()
 % stop_departures = []
 % for departure in map_departures:
