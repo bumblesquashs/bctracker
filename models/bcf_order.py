@@ -23,10 +23,16 @@ class BcfOrder:
         return hash(tuple(self.names))
     
     def __eq__(self, other):
-        return self.year_string == other.year_string and self.names == other.names
+        try:
+            return self.year_string == other.year_string and self.names == other.names
+        except AttributeError:
+            return False # For comparison with normal orders
     
     def __lt__(self, other):
-        return self.model.name < other.model.name
+        try:
+            return self.model.name < other.model.name
+        except AttributeError:
+            return False # For comparison with normal orders
     
     def __iter__(self):
         for idx in range(len(self.names)):

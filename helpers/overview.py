@@ -24,6 +24,10 @@ def find(bus_number):
 
 def find_all(system_id=None, bus_number=None, limit=None):
     '''Returns all overviews that match the given system ID and bus number'''
+    
+    if type(bus_number) is str:
+        return []
+         
     rows = database.select('overview',
         columns={
             'overview.bus_number': 'overview_bus_number',

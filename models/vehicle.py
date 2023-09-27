@@ -42,3 +42,8 @@ class Vehicle:
             return False
         return self.order.is_test
         
+    @property
+    def is_known(self):
+        '''Checks if the vehicle is known'''
+        return True
+            

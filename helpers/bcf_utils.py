@@ -257,7 +257,6 @@ def create_positions(bcf_vessels, vessel_infos, stops):
                 
                 print(f'BCF: SUCCESS: guessed trip: {bcf_vessel} on {route} from {departed_stop} to {trip.headsign} at {trip.first_departure.time}')
 
-                
                 # Oh and report the last stop fwiw
                 stop = vessel_last_stops[bcf_vessel.name][0]
             except KeyError:
@@ -266,7 +265,6 @@ def create_positions(bcf_vessels, vessel_infos, stops):
                 stop = None
         
         # could add a from_bcf instead of using the yuge constructor
-        # __init__(self, system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence):
         position = Position(
             system=system,
             bus=bcf_vessel, # adapt pos class to allow vessesls

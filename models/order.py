@@ -44,10 +44,16 @@ class Order:
         return hash((self.low, self.high))
     
     def __eq__(self, other):
-        return self.low == other.low and self.high == other.high
+        try:
+            return self.low == other.low and self.high == other.high
+        except AttributeError:
+            return False # for comparing against bcf_orders
     
     def __lt__(self, other):
-        return self.low < other.low
+        try:
+            return self.low < other.low
+        except AttributeError:
+            return True # for comparing against bcf_orders
     
     def __iter__(self):
         for number in range(self.low, self.high + 1):

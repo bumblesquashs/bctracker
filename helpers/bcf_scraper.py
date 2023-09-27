@@ -482,7 +482,11 @@ def scrape():
             continue
         page_url = route["vessel_tracking"]["page_url"]
         print(f'\nscraping: {route["route_number"]} {route["name"]} --- --- ---')
-        html = requests.get(page_url).text # sync, ASGI would help
+        try:
+            html = requests.get(page_url).text # sync, ASGI would help
+        except requests.exceptions.ConnectionError:
+            print(f'BCF: SCRAPE: Connection error on route {route["route_number"]}!!! Skipping.')
+            continue
         vessels = scrape_vessel_info(html, route)
         vessel_pos_list = scrape_vessel_positions(html)
         vessel_hdg_speed_list = scrape_vessel_heading_and_speed(html)
