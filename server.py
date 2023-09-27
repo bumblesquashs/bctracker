@@ -389,7 +389,7 @@ def bus_history_page(bus_number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    overviews = [o for o in helpers.overview.find_all(system_id) if o.last_record is not None and not o.bus.is_test]
+    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.last_record is not None and not o.bus.is_test]
     return page('history/last_seen', system_id,
         title='Vehicle History',
         path='history',
@@ -403,7 +403,7 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    overviews = [o for o in helpers.overview.find_all(system_id) if o.first_record is not None and not o.bus.is_test]
+    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.first_record is not None and not o.bus.is_test]
     return page('history/first_seen', system_id,
         title='Vehicle History',
         path='history/first-seen',
