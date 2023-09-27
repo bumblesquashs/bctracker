@@ -1,4 +1,4 @@
 system_id,name,region_id,enabled,visible,prefix_headsign,recolour_black,version,remote_id,gtfs_url,realtime_url
-bc-ferries,BC Ferries,vancouver-island,1,1,0,1,-1,,,
+bc-ferries,BC Ferries,vancouver-island,1,1,1,1,-1,,,
 nanaimo,Nanaimo,vancouver-island,1,1,0,0,1,nanaimo,,
 whistler,Whistler,southern-coast,1,1,1,0,2,44,,
