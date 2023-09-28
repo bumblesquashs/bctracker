@@ -38,7 +38,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path=f'stops/{stop.number}/schedule')
+                            % include('components/sheets_indicator', sheets=sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="content">
                         <div class="container inline">
-                            % for service_group in sheet.service_groups:
+                            % for service_group in sheet.normal_service_groups:
                                 % departures = stop.get_departures(service_group)
                                 <div class="section">
                                     <div class="header">

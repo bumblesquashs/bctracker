@@ -1,6 +1,4 @@
 
-from datetime import timedelta
-
 def flatten(dates):
     '''Stringifies a list of dates with '-' between first and last consecutive dates and ',' between non-consecutive dates'''
     dates = sorted(dates)
@@ -9,7 +7,7 @@ def flatten(dates):
     start_date = previous_date
     end_date = None
     for date in dates[1:]:
-        if date == previous_date + timedelta(days=1):
+        if date == previous_date.next():
             end_date = date
         else:
             if end_date is None:

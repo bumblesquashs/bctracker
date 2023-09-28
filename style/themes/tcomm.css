@@ -524,50 +524,50 @@ table.striped tr {
     text-decoration: none;
 }
 
-.schedules-indicator {
+.sheets-indicator {
     text-shadow: none;
 }
 
-.schedules-indicator a {
+.sheets-indicator a {
     text-shadow: none;
 }
 
-.schedules-indicator .footer {
+.sheets-indicator .footer {
     color: #666666;
 }
 
-.schedules-indicator .legend {
+.sheets-indicator .legend {
     color: #666666;
 }
 
-.schedules-indicator a.modified-service:hover {
+.sheets-indicator a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.schedules-indicator a.no-service:hover {
+.sheets-indicator a.no-service:hover {
     background-color: #DC5050;
 }
 
-.schedules-indicator a.normal-service:hover {
+.sheets-indicator a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.schedules-indicator .modified-service {
+.sheets-indicator .modified-service {
     background-color: #FFA560;
     color: #000000;
 }
 
-.schedules-indicator .no-service {
+.sheets-indicator .no-service {
     background-color: #FF7F7F;
     color: #000000;
 }
 
-.schedules-indicator .normal-service {
+.sheets-indicator .normal-service {
     background-color: #7DBD88;
     color: #000000;
 }
 
-.schedules-indicator .schedule {
+.sheets-indicator .sheet {
     background-color: #DFDFDF;
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
@@ -620,6 +620,11 @@ table.striped tr {
 
 .weekdays a.weekday.normal-service:hover {
     background-color: #509F5E;
+}
+
+.weekdays .weekday {
+    background-color: #CBCBCB;
+    color: #000000;
 }
 
 .weekdays .weekday.no-service {

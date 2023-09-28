@@ -1,6 +1,4 @@
 
-% from datetime import timedelta
-
 % rebase('base')
 
 <div class="page-header">
@@ -25,8 +23,8 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section vertical-align">
-                            % previous_date = date - timedelta(days=1)
-                            % next_date = date + timedelta(days=1)
+                            % previous_date = date.previous()
+                            % next_date = date.next()
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
                             <div class="name centred">
                                 <h3>{{ date.format_long() }}</h3>
@@ -35,7 +33,7 @@
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], schedule_path='blocks', date_path='blocks/schedule')
+                            % include('components/sheets_indicator', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
@@ -48,7 +46,7 @@
                     <h3>{{ date.weekday }}</h3>
                 </div>
                 <div class="content">
-                    % blocks = [b for b in system.get_blocks() if date in b.schedule]
+                    % blocks = sorted([b for b in system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
                     % if len(blocks) == 0:
                         <div class="placeholder">
                             % if system.is_loaded:

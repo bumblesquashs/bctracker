@@ -32,7 +32,7 @@ class Direction(Enum):
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', '_related_trips')
+    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', 'sheets', '_related_trips')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -72,6 +72,8 @@ class Trip:
                 self.direction = Direction.WESTBOUND if lon_diff > 0 else Direction.EASTBOUND
             else:
                 self.direction = Direction.UNKNOWN
+        
+        self.sheets = system.copy_sheets([self.service])
         
         self._related_trips = None
     

@@ -26,7 +26,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 18
+VERSION = 19
 
 app = Bottle()
 running = False

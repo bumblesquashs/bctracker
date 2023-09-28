@@ -1,6 +1,5 @@
 
 % from math import floor
-% from datetime import timedelta
 
 % from models.date import Date
 
@@ -28,7 +27,7 @@
                 % if len(stop.departures) > 0:
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], schedule_path=f'stops/{stop.number}/schedule')
+                            % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                         <div class="section vertical">
                             % routes = stop.get_routes()
@@ -119,7 +118,7 @@
                     % upcoming_count = 3 + floor(len(routes) / 3)
                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                     % if len(upcoming_departures) == 0:
-                        % tomorrow = Date.today() + timedelta(days=1)
+                        % tomorrow = Date.today().next()
                         <p>
                             There are no departures for the rest of today.
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>

@@ -12,9 +12,9 @@ class Block:
         self.id = id
         self.trips = trips
         
-        services = {t.service for t in self.trips}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = system.copy_sheets(services, True)
+        services = {t.service for t in trips}
+        self.schedule = Schedule.combine(services)
+        self.sheets = system.copy_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -33,8 +33,8 @@ class Block:
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
-            return sorted([t for t in self.trips if date in t.service.schedule])
-        return sorted([t for t in self.trips if t.service in service_group.services])
+            return sorted([t for t in self.trips if date in t.service])
+        return sorted([t for t in self.trips if t.service in service_group])
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this block'''

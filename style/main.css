@@ -802,14 +802,43 @@ table.striped tr.section td {
     text-align: center;
 }
 
-.schedules-indicator {
+.sheets-indicator {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.schedules-indicator .exceptions {
-    margin-top: 10px;
+.sheets-indicator .footer {
+    width: 75%;
+    margin: 0px auto 0px auto;
+    font-size: 11pt;
+    text-align: center;
+}
+
+.sheets-indicator .legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 11pt;
+}
+
+.sheets-indicator .legend .icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.sheets-indicator .sheet {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sheets-indicator .sheet .dates {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -818,7 +847,7 @@ table.striped tr.section td {
     column-gap: 10px;
 }
 
-.schedules-indicator .exceptions .month {
+.sheets-indicator .sheet .dates .month {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -827,11 +856,15 @@ table.striped tr.section td {
     gap: 5px;
 }
 
-.schedules-indicator .exceptions .month .name {
+.sheets-indicator .sheet .dates .month .name {
     font-size: 13pt;
 }
 
-.schedules-indicator .exceptions .month .date {
+.sheets-indicator .sheet .dates .month.title .name {
+    font-size: 14pt;
+}
+
+.sheets-indicator .sheet .dates .month .date {
     font-size: 11pt;
     padding: 1px 4px;
     border-radius: 4px;
@@ -841,35 +874,8 @@ table.striped tr.section td {
     text-decoration: none;
 }
 
-.schedules-indicator .footer {
-    width: 75%;
-    margin: 0px auto 0px auto;
-    font-size: 11pt;
-    text-align: center;
-}
-
-.schedules-indicator .legend {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    font-size: 11pt;
-}
-
-.schedules-indicator .legend .icon {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-}
-
-.schedules-indicator .schedule {
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.schedules-indicator .schedule .title {
-    margin-bottom: 5px;
+.sheets-indicator .sheet .title {
+    margin-bottom: 0px;
     text-align: center;
 }
 

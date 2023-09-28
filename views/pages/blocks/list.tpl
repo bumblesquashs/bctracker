@@ -78,7 +78,7 @@
                     <div class="content">
                         <div class="info-box">
                             <div class="section no-flex">
-                                % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path='blocks', date_path='blocks/schedule')
+                                % include('components/sheets_indicator', sheets=sheets, schedule_path='blocks', date_path='blocks/schedule')
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="content">
                             <div class="container inline">
-                                % for service_group in sheet.service_groups:
+                                % for service_group in sheet.normal_service_groups:
                                     <div class="section">
                                         <div class="header">
                                             % for weekday in service_group.schedule.weekdays:
@@ -114,7 +114,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    % service_group_blocks = [b for b in blocks if len(b.get_trips(service_group)) > 0]
+                                                    % service_group_blocks = sorted([b for b in blocks if len(b.get_trips(service_group)) > 0], key=lambda b: (b.get_start_time(service_group=service_group), b.get_end_time(service_group=service_group)))
                                                     % for block in service_group_blocks:
                                                         % start_time = block.get_start_time(service_group=service_group).format_web(time_format)
                                                         % end_time = block.get_end_time(service_group=service_group).format_web(time_format)
