@@ -101,7 +101,7 @@ class Time:
             return None
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
-    def format_web(self, time_format='24hr'):
+    def format_web(self, time_format='30hr'):
         '''Formats this time for web display'''
         if self.is_unknown:
             return ''
