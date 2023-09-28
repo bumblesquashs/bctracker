@@ -1,4 +1,5 @@
 
+import helpers.overview
 import helpers.position
 import helpers.region
 
@@ -105,6 +106,10 @@ class System:
     def get_blocks(self):
         '''Returns all blocks'''
         return sorted(self.blocks.values())
+    
+    def get_overviews(self):
+        '''Returns all overviews'''
+        return helpers.overview.find_all(last_seen_system_id=self.id)
     
     def get_positions(self):
         '''Returns all positions'''
