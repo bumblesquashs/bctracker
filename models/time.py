@@ -62,6 +62,20 @@ class Time:
             return self.minute < other.minute
         return self.second < other.second
     
+    def __add__(self, delta):
+        time = self.datetime + delta
+        hour = time.hour
+        while hour < 4:
+            hour += 24
+        return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
+    
+    def __sub__(self, delta):
+        time = self.datetime - delta
+        hour = time.hour
+        while hour < 4:
+            hour += 24
+        return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
+    
     @property
     def is_unknown(self):
         '''Checks if this time is unknown'''
@@ -81,6 +95,14 @@ class Time:
     def is_later(self):
         '''Checks if this time is after the current time'''
         return self > Time.now(self.timezone)
+    
+    @property
+    def datetime(self):
+        '''Returns the datetime equivalent of this time'''
+        hour = self.hour
+        while hour >= 24:
+            hour -= 24
+        return datetime(1996, 11, 19, hour, self.minute, self.second)
     
     @property
     def timezone_name(self):

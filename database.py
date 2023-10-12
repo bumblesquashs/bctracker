@@ -53,6 +53,7 @@ SQL_SCRIPTS = [
             stop_id TEXT,
             block_id TEXT,
             route_id TEXT,
+            sequence INTEGER,
             lat REAL,
             lon REAL,
             bearing REAL,
