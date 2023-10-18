@@ -157,6 +157,7 @@ class Position:
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
+            'bus_display': str(self.bus),
             'system': str(self.system),
             'lon': self.lon,
             'lat': self.lat,

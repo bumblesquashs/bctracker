@@ -139,6 +139,7 @@
                 
                 const title = document.createElement("div");
                 title.className = "title";
+                title.innerHTML = position.bus_display;
                 
                 const content = document.createElement("div");
                 content.className = "content hover-only";
@@ -184,8 +185,6 @@
                         setHoverPosition(null);
                     }
                     element.appendChild(icon);
-                    
-                    title.innerHTML = "Unknown Bus";
                 } else {
                     const icon = document.createElement("a");
                     icon.className = "icon";
@@ -200,8 +199,6 @@
                         setHoverPosition(null);
                     }
                     element.appendChild(icon);
-                    
-                    title.innerHTML = position.bus_number;
                 }
             
                 if (position.adornment != null) {

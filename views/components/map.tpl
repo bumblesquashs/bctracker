@@ -213,6 +213,7 @@
             
             const title = document.createElement("div");
             title.className = "title";
+            title.innerHTML = position.bus_display;
             
             const content = document.createElement("div");
             content.className = "content hover-only";
@@ -251,8 +252,6 @@
                 icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<img src='/img/white/bus.png' />";
                 element.appendChild(icon);
-                
-                title.innerHTML = "Unknown Bus";
             } else {
                 const icon = document.createElement("a");
                 icon.className = "icon";
@@ -260,8 +259,6 @@
                 icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
                 element.appendChild(icon);
-                
-                title.innerHTML = position.bus_number;
             }
             
             if (position.adornment != null) {
