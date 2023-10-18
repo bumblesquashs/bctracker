@@ -11,6 +11,10 @@ body.full-map .page-header {
     position: relative;
     z-index: 20;
     border-bottom-width: 0px;
+    padding: 10px;
+    border-radius: 10px;
+    top: -10px;
+    left: -10px;
 }
 
 input {

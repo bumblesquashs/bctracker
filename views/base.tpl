@@ -517,5 +517,8 @@
         } else {
             setCookie("hide_systems", "yes");
         }
+        if (map !== undefined) {
+            map.resize();
+        }
     }
 </script>
