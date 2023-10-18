@@ -29,6 +29,10 @@ body {
     color: #FFFFFF;
 }
 
+body.full-map .page-header {
+    background-color: rgba(30, 30, 30, 0.7);
+}
+
 form input[type="text"] {
     border-color: #565656;
     background-color: #2F2F2F;
@@ -396,7 +400,7 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .marker .details {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(30, 30, 30, 0.8);
 }
 
 .marker .icon {

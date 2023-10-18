@@ -25,6 +25,10 @@ body {
     color: #000000;
 }
 
+body.full-map .page-header {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
 form input[type="text"] {
     border-color: #666666;
     background-color: #FFFFFF;
