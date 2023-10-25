@@ -11,6 +11,10 @@ body.full-map .page-header {
     position: relative;
     z-index: 20;
     border-bottom-width: 0px;
+    padding: 10px;
+    border-radius: 10px;
+    top: -10px;
+    left: -10px;
 }
 
 input {
@@ -340,6 +344,10 @@ table.striped tr.section td {
 
 .button:hover {
     cursor: pointer;
+}
+
+.button.disabled {
+    opacity: 0.4;
 }
 
 .button.disabled:hover {
@@ -763,6 +771,10 @@ table.striped tr.section td {
     margin-bottom: 5px;
 }
 
+.placeholder .title {
+    margin-bottom: 10px;
+}
+
 .positive {
     font-weight: bold;
 }
@@ -794,8 +806,43 @@ table.striped tr.section td {
     text-align: center;
 }
 
-.schedules .exceptions {
-    margin-top: 10px;
+.sheets-indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sheets-indicator .footer {
+    width: 75%;
+    margin: 0px auto 0px auto;
+    font-size: 11pt;
+    text-align: center;
+}
+
+.sheets-indicator .legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 11pt;
+}
+
+.sheets-indicator .legend .icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.sheets-indicator .sheet {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sheets-indicator .sheet .dates {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -804,7 +851,7 @@ table.striped tr.section td {
     column-gap: 10px;
 }
 
-.schedules .exceptions .month {
+.sheets-indicator .sheet .dates .month {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -813,11 +860,15 @@ table.striped tr.section td {
     gap: 5px;
 }
 
-.schedules .exceptions .month .name {
+.sheets-indicator .sheet .dates .month .name {
     font-size: 13pt;
 }
 
-.schedules .exceptions .month .date {
+.sheets-indicator .sheet .dates .month.title .name {
+    font-size: 14pt;
+}
+
+.sheets-indicator .sheet .dates .month .date {
     font-size: 11pt;
     padding: 1px 4px;
     border-radius: 4px;
@@ -827,35 +878,8 @@ table.striped tr.section td {
     text-decoration: none;
 }
 
-.schedules .footer {
-    width: 75%;
-    margin: 10px auto 0px auto;
-    font-size: 11pt;
-    text-align: center;
-}
-
-.schedules .legend {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    font-size: 11pt;
-}
-
-.schedules .legend .icon {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-}
-
-.schedules .schedule {
-    margin-top: 10px;
-}
-
-.schedules .schedule .title {
-    margin-bottom: 5px;
+.sheets-indicator .sheet .title {
+    margin-bottom: 0px;
     text-align: center;
 }
 

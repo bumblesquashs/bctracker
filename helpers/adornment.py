@@ -7,7 +7,7 @@ adornments = {}
 
 def load():
     '''Loads adornment data from the static CSV file'''
-    with open(f'./data/static/adornments.csv', 'r') as file:
+    with open(f'./static/adornments.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:

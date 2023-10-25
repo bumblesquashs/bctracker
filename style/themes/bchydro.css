@@ -25,6 +25,10 @@ body {
     color: #000000;
 }
 
+body.full-map .page-header {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
 form input[type="text"] {
     border-color: #666666;
     background-color: #FFFFFF;
@@ -221,6 +225,14 @@ table.striped tr:nth-child(2n-1) {
     border-right-color: #666666;
 }
 
+#side-bar-toggle {
+    background-color: #E6E6E6;
+}
+
+#side-bar-toggle:hover {
+    background-color: #CBCBCB;
+}
+
 #status {
     background-color: #249B9B;
     color: #FFFFFF;
@@ -255,12 +267,12 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#title a {
+#title {
     background-color: #61C315;
     color: #FFFFFF;
 }
 
-#title a:hover {
+#title:hover {
     background-color: #347800;
 }
 
@@ -443,39 +455,43 @@ table.striped tr:nth-child(2n-1) {
     background-color: #989898;
 }
 
-.schedules .footer {
+.sheets-indicator .footer {
     color: #666666;
 }
 
-.schedules .legend {
+.sheets-indicator .legend {
     color: #666666;
 }
 
-.schedules a.normal-service:hover {
+.sheets-indicator a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.schedules a.modified-service:hover {
+.sheets-indicator a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.schedules a.no-service:hover {
+.sheets-indicator a.no-service:hover {
     background-color: #DC5050;
 }
 
-.schedules .normal-service {
+.sheets-indicator .normal-service {
     background-color: #7DBD88;
     color: #000000;
 }
 
-.schedules .modified-service {
+.sheets-indicator .modified-service {
     background-color: #FFA560;
     color: #000000;
 }
 
-.schedules .no-service {
+.sheets-indicator .no-service {
     background-color: #FF7F7F;
     color: #000000;
+}
+
+.sheets-indicator .sheet {
+    background-color: #CCCCCC;
 }
 
 .tab-button-bar {
@@ -513,6 +529,11 @@ table.striped tr:nth-child(2n-1) {
 
 .weekdays a.weekday.normal-service:hover {
     background-color: #509F5E;
+}
+
+.weekdays .weekday {
+    background-color: #C4C4C4;
+    color: #000000;
 }
 
 .weekdays .weekday.no-service {

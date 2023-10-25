@@ -12,6 +12,7 @@ def create(position):
         'stop_id': position.stop_id,
         'block_id': position.block_id,
         'route_id': position.route_id,
+        'sequence': position.sequence,
         'lat': position.lat,
         'lon': position.lon,
         'bearing': position.bearing,
@@ -31,6 +32,7 @@ def find(bus_number):
             'position.stop_id': 'position_stop_id',
             'position.block_id': 'position_block_id',
             'position.route_id': 'position_route_id',
+            'position.sequence': 'position_sequence',
             'position.lat': 'position_lat',
             'position.lon': 'position_lon',
             'position.bearing': 'position_bearing',
@@ -76,6 +78,7 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
             'position.stop_id': 'position_stop_id',
             'position.block_id': 'position_block_id',
             'position.route_id': 'position_route_id',
+            'position.sequence': 'position_sequence',
             'position.lat': 'position_lat',
             'position.lon': 'position_lon',
             'position.bearing': 'position_bearing',
@@ -86,8 +89,8 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
     positions = [Position.from_db(row) for row in rows]
     return [p for p in positions if not p.bus.is_test]
 
-def delete_all(system):
+def delete_all(system_id=None):
     '''Deletes all positions for the given system from the database'''
     database.delete('position', {
-        'position.system_id': system.id
+        'position.system_id': system_id
     })

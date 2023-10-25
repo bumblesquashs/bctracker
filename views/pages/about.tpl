@@ -35,7 +35,7 @@
                         </div>
                         <div class="content">
                             Unfortunately, BC Transit does not currently provide GTFS schedules or realtime information for some of the smaller transit systems around the province.
-                            If such information becomes available in the future, we will be sure to add any new systems as soon as possible!
+                            NextRide is expected to be introduced on the remaining transit systems by 2024, so keep an eye out for them coming soon!
                         </div>
                     </div>
                     <div class="section">

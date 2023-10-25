@@ -35,7 +35,7 @@ class ServiceException:
         return self.service_id == other.service_id and self.date == other.date
 
 class Service:
-    '''A schedule with an ID'''
+    '''A set of dates when a transit service is operating'''
     
     __slots__ = ('system', 'id', 'schedule')
     
@@ -55,30 +55,29 @@ class Service:
         sun = row['sunday'] == '1'
         
         weekdays = {Weekday(i) for i, v in enumerate([mon, tue, wed, thu, fri, sat, sun]) if v}
-        service_exceptions = exceptions.get(id, [])
-        modified_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
-        excluded_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(date_range, weekdays, modified_dates, excluded_dates)
+        service_exceptions = {e for e in exceptions.get(id, [])}
+        added_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
+        removed_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
+        
+        dates = {d for d in date_range if d.weekday in weekdays}
+        dates.update(added_dates)
+        dates.difference_update(removed_dates)
+        
+        schedule = Schedule(dates, date_range)
         return cls(system, id, schedule)
     
     @classmethod
     def combine(cls, system, id, exceptions):
         '''Returns a service based on a list of service exceptions'''
-        start_date = min({e.date for e in exceptions})
-        end_date = max({e.date for e in exceptions})
-        date_range = DateRange(start_date, end_date)
-        modified_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
-        excluded_dates = {e.date for e in exceptions if e.type == ServiceExceptionType.EXCLUDED}
-        schedule = Schedule.process(date_range, set(), modified_dates, excluded_dates)
+        dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
+        date_range = DateRange(min(dates), max(dates))
+        schedule = Schedule(dates, date_range)
         return cls(system, id, schedule)
     
     def __init__(self, system, id, schedule):
         self.system = system
         self.id = id
         self.schedule = schedule
-    
-    def __str__(self):
-        return str(self.schedule)
     
     def __hash__(self):
         return hash(self.id)
@@ -89,7 +88,5 @@ class Service:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
-    @property
-    def is_today(self):
-        '''Checks if this service runs on the current date'''
-        return self.schedule.includes(Date.today(self.system.timezone))
+    def __contains__(self, date):
+        return date in self.schedule

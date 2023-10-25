@@ -1,4 +1,6 @@
 
+% from datetime import timedelta
+
 % from models.date import Date
 % from models.model import ModelType
 
@@ -188,15 +190,87 @@
     </div>
     
     <div class="container flex-3">
+        % if position is not None:
+            % upcoming_departures = position.get_upcoming_departures()
+            % if len(upcoming_departures) > 0:
+                <div class="section">
+                    <div class="header">
+                        <h2>Upcoming Stops</h2>
+                        <div class="flex-column">
+                            % if len([d for d in upcoming_departures if d.timepoint]) > 0:
+                                <div>
+                                    Departures in <span class="timing-point">bold</span> are timing points.
+                                </div>
+                            % end
+                            % if position.adherence is not None and position.adherence.value != 0:
+                                <div>
+                                    Times in brackets are estimates based on current location.
+                                </div>
+                            % end
+                        </div>
+                    </div>
+                    <div class="content">
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Stop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for departure in upcoming_departures:
+                                    <tr>
+                                        <td>
+                                            <div class="flex-row">
+                                                <div class="{{ 'timing-point' if departure.timepoint else '' }}">
+                                                    {{ departure.time.format_web(time_format) }}
+                                                </div>
+                                                % if position.adherence is not None and position.adherence.value != 0:
+                                                    % expected_time = departure.time - timedelta(minutes=position.adherence.value)
+                                                    <div class="lighter-text">
+                                                        ({{ expected_time.format_web(time_format) }})
+                                                    </div>
+                                                % end
+                                            </div>
+                                        </td>
+                                        <td>
+                                            % trip = departure.trip
+                                            % stop = departure.stop
+                                            <div class="flex-column">
+                                                % if stop is None:
+                                                    <div class="lighter-text">Unknown</div>
+                                                % else:
+                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                    % if not departure.pickup_type.is_normal:
+                                                        <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                    % elif departure == trip.last_departure:
+                                                        <span class="smaller-font">Drop off only</span>
+                                                    % end
+                                                    % if not departure.dropoff_type.is_normal:
+                                                        <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                                    % elif departure == trip.first_departure:
+                                                        <span class="smaller-font">Pick up only</span>
+                                                    % end
+                                                % end
+                                            </div>
+                                        </td>
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            % end
+        % end
         <div class="section">
             <div class="header">
                 <h2>Recent History</h2>
             </div>
             <div class="content">
                 % if len(records) == 0:
-                    <p>This bus doesn't have any recorded history.</p>
-                    <p>
-                        There are a few reasons why that might be the case:
+                    <div class="placeholder">
+                        <h3 class="title">This bus doesn't have any recorded history</h3>
+                        <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording bus history</li>
@@ -205,8 +279,8 @@
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                             % end
                         </ol>
-                        Please check again later!
-                    </p>
+                        <p>Please check again later!</p>
+                    </div>
                 % else:
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>

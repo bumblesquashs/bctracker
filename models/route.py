@@ -6,8 +6,6 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-import helpers.sheet
-
 from models.match import Match
 from models.schedule import Schedule
 
@@ -105,8 +103,8 @@ class Route:
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
         services = {t.service for t in trips}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
+        self.schedule = Schedule.combine(services)
+        self.sheets = system.copy_sheets(services)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -160,8 +158,8 @@ class Route:
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
-            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
-        return sorted([t for t in self.trips if t.service in service_group.services])
+            return sorted([t for t in self.trips if date in t.service])
+        return sorted([t for t in self.trips if t.service in service_group])
     
     def get_headsigns(self, service_group=None, date=None):
         '''Returns all headsigns from this route'''

@@ -22,6 +22,10 @@ body.full-map #system-menu {
     overflow: auto;
 }
 
+body.full-map .page-header {
+    width: 100%;
+}
+
 button {
     width: 100%;
 }
@@ -125,6 +129,10 @@ table {
     height: 36px;
 }
 
+#side-bar-toggle-container {
+    display: none;
+}
+
 #status .content {
     text-align: center;
 }
@@ -219,6 +227,10 @@ table {
 
 .non-mobile {
     display: none !important;
+}
+
+.side-bar-closed-only {
+    display: none;
 }
 
 .smaller-font {

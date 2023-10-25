@@ -17,7 +17,7 @@ Systems with full support for schedules and bus tracking:
 - Fraser Valley
 - Kamloops
 - Kelowna
-- Kitimat
+- Kitimat-Stikine
 - Mount Waddington
 - Nanaimo
 - North Okanagan
@@ -32,20 +32,20 @@ Systems with full support for schedules and bus tracking:
 - West Kootenay
 - Whistler
 
-Systems with no support for schedules or bus tracking:
+Systems with support for bus tracking only:
 - 100 Mile House
-- Ashcroft-Clinton
-- Bella Coola
-- Boundary
-- Bulkley Nechako
-- Clearwater
-- Hazeltons
 - Merritt
 - Quesnel
 - Revelstoke
 - Salt Spring Island
 - Smithers
 - Williams Lake
+
+Systems with no support for schedules or bus tracking:
+- Ashcroft-Clinton
+- Bella Coola
+- Bulkley Nechako
+- Clearwater
 
 Additional systems may be added in the future if schedule and/or realtime GTFS becomes available.
 

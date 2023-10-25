@@ -1,6 +1,4 @@
 
-% from datetime import timedelta
-
 % rebase('base')
 
 <div class="page-header">
@@ -22,8 +20,8 @@
             <div class="content">
                 <div class="info-box">
                     <div class="section vertical-align">
-                        % previous_date = date - timedelta(days=1)
-                        % next_date = date + timedelta(days=1)
+                        % previous_date = date.previous()
+                        % next_date = date.next()
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
                         <div class="name centred">
                             <h3>{{ date.format_long() }}</h3>
@@ -32,7 +30,7 @@
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], url=get_url(system, f'stops/{stop.number}/schedule'))
+                        % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                     </div>
                 </div>
             </div>
@@ -47,16 +45,21 @@
             <div class="content">
                 % departures = stop.get_departures(date=date)
                 % if len(departures) == 0:
-                    <p>No trips found on {{ date.format_long() }}.</p>
-                    <p>
-                        There are a few reasons why that might be the case:
-                        <ol>
-                            <li>It may be a day of the week that does not normally have service</li>
-                            <li>It may be a holiday in which all regular service is suspended</li>
-                            <li>It may be outside of the date range for which schedules are currently available</li>
-                        </ol>
-                        Please check again later!
-                    </p>
+                    <div class="placeholder">
+                        % if system.is_loaded:
+                            <h3 class="title">No departures found on {{ date.format_long() }}</h3>
+                            <p>There are a few reasons why that might be the case:</p>
+                            <ol>
+                                <li>It may be a day of the week that does not normally have service</li>
+                                <li>It may be a holiday in which all regular service is suspended</li>
+                                <li>It may be outside of the date range for which schedules are currently available</li>
+                            </ol>
+                            <p>Please check again later!</p>
+                        % else:
+                            <h3 class="title">Departures for this stop are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % else:
                     <table class="striped">
                         <thead>
@@ -91,7 +94,13 @@
                                             % end
                                         </div>
                                     </td>
-                                    <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                    <td class="non-mobile">
+                                        % if block is None:
+                                            <div class="lighter-text">Unknown</div>
+                                        % else:
+                                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        % end
+                                    </td>
                                     <td>
                                         <div class="flex-column">
                                             <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>

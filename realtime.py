@@ -40,7 +40,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system)
+        helpers.position.delete_all(system.id)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -108,7 +108,7 @@ def get_last_updated(time_format):
         if time.timezone is None:
             return f'at {time.format_web(time_format)}'
         return f'at {time.format_web(time_format)} {time.timezone_name}'
-    return date.format_since
+    return date.format_since()
 
 def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''

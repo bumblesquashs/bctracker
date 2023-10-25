@@ -11,7 +11,7 @@
     </div>
 </div>
 
-% trips = [d.trip for d in stop.departures]
+% trips = [d.trip for d in stop.departures if d.trip is not None and d.trip.route is not None]
 % departures = [d for t in trips for d in t.departures]
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
