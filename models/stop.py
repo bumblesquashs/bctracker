@@ -107,4 +107,5 @@ class Stop:
         self.sheets = self.system.copy_sheets(services)
     
     def is_near(self, lat, lon, accuracy=0.001):
+        '''Checks if this stop is near the given latitude and longitude'''
         return sqrt(((self.lat - lat) ** 2) + ((self.lon - lon) ** 2)) <= accuracy

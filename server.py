@@ -886,7 +886,7 @@ def about_page(system_id=None):
 ])
 def nearby_page(system_id=None):
     return page('nearby', system_id,
-        title='Nearby',
+        title='Nearby Stops',
         path='nearby',
         include_maps=True)
 
@@ -1029,6 +1029,23 @@ def api_search(system_id=None):
     return {
         'results': [m.get_json(system, get_url) for m in matches[0:10]],
         'count': len(matches)
+    }
+
+@app.get([
+    '/api/nearby.json',
+    '/<system_id>/api/nearby.json'
+])
+def api_nearby(system_id=None):
+    system = helpers.system.find(system_id)
+    if system is None:
+        return {
+            'stops': []
+        }
+    lat = float(request.query.get('lat'))
+    lon = float(request.query.get('lon'))
+    stops = sorted([s for s in system.get_stops() if s.is_near(lat, lon)])
+    return {
+        'stops': [s.json for s in stops]
     }
 
 @app.post([

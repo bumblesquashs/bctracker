@@ -229,6 +229,11 @@
                 <img class="black" src="/img/black/about.png" />
                 <span>About</span>
             </a>
+            <a class="menu-button" href="{{ get_url(system, 'nearby') }}">
+                <img class="white" src="/img/white/location.png" />
+                <img class="black" src="/img/black/location.png" />
+                <span>Nearby</span>
+            </a>
             <a class="menu-button" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
