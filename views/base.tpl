@@ -44,13 +44,6 @@
             let mapStyle
         </script>
         
-        % from models.date import Date
-        % today = Date.today()
-        % if today == Date(2023, 10, 31, None):
-            % import helpers.theme
-            % theme = helpers.theme.find('halloween')
-        % end
-        
         % if theme is None:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
