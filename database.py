@@ -45,6 +45,33 @@ SQL_SCRIPTS = [
             FOREIGN KEY (last_record_id) REFERENCES record (record_id)
         )
     ''',
+    '''
+        CREATE TABLE IF NOT EXISTS position (
+            system_id TEXT NOT NULL,
+            bus_number INTEGER NOT NULL,
+            trip_id TEXT,
+            stop_id TEXT,
+            block_id TEXT,
+            route_id TEXT,
+            sequence INTEGER,
+            lat REAL,
+            lon REAL,
+            bearing REAL,
+            speed INTEGER,
+            adherence INTEGER,
+            PRIMARY KEY (system_id, bus_number)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS point (
+            system_id TEXT NOT NULL,
+            shape_id TEXT NOT NULL,
+            sequence INTEGER NOT NULL,
+            lat REAL NOT NULL,
+            lon REAL NOT NULL,
+            PRIMARY KEY (system_id, shape_id, sequence)
+        )
+    ''',
     'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
     'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
@@ -68,21 +95,29 @@ def connect(foreign_keys=True):
 def disconnect():
     '''Closes the connection to the database'''
     global connection
+    if connection is None:
+        return
     connection.close()
     connection = None
 
 def backup():
     '''Copies all information from the main database to a backup database'''
+    if connection is None:
+        return
     backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
     connection.backup(backup)
     backup.close()
 
 def commit():
     '''Saves all changes made to the database'''
+    if connection is None:
+        return
     connection.commit()
 
 def execute(sql, args=None):
     '''Runs a generic SQL script with the given arguments'''
+    if connection is None:
+        return
     args = [] if args is None else args
     
     if type(args) is list:
@@ -170,12 +205,12 @@ def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=
     
     if type(group_by) is str:
         sql.append('GROUP BY ' + group_by)
-    elif type(group_by) is list:
+    elif type(group_by) is list or type(group_by) is set:
         sql.append('GROUP BY ' + ', '.join(group_by))
     
     if type(order_by) is str:
         sql.append('ORDER BY ' + order_by)
-    elif type(order_by) is list:
+    elif type(order_by) is list or type(order_by) is set:
         sql.append('ORDER BY ' + ', '.join(order_by))
     elif type(order_by) is dict:
         sql.append('ORDER BY ' + ', '.join([f'{k} {v}' for (k, v) in order_by.items()]))
@@ -223,7 +258,7 @@ def build_where(filters, operation):
     '''Creates a SQL script for a WHERE filter'''
     if type(filters) is str:
         return filters, []
-    elif type(filters) is list:
+    elif type(filters) is list or type(filters) is set:
         if len(filters) > 0:
             return f' {operation} '.join(filters), []
     elif type(filters) is dict:
@@ -237,9 +272,16 @@ def build_where(filters, operation):
                 args += value
                 args_string = ', '.join(['?'] * len(value))
                 expressions.append(f'{key} IN ({args_string})')
+            elif type(value) is set:
+                args += list(value)
+                args_string = ', '.join(['?'] * len(value))
+                expressions.append(f'{key} IN ({args_string})')
             elif type(value) is dict:
                 for (k, v) in value.items():
-                    if v is not None:
+                    if v is None:
+                        if k == 'IS' or k == 'IS NOT':
+                            expressions.append(f'{key} {k} NULL')
+                    else:
                         args.append(v)
                         expressions.append(f'{key} {k} ?')
             else:

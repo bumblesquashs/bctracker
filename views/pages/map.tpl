@@ -1,37 +1,11 @@
 
 % import json
 
-% rebase('base', title='Map', include_maps=True, full_map=True)
+% rebase('base')
 
-% if len(positions) == 0:
-    <div class="page-header">
-        <h1 class="title">Map</h1>
-        <hr />
-    </div>
-
-    % if system is not None and not system.realtime_enabled:
-        <p>
-            {{ system }} does not currently support realtime.
-            You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-        </p>
-    % else:
-        % if system is None:
-            <p>
-                There are no buses out right now.
-                BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
-                Please check back later!
-            </p>
-        % else:
-            <p>
-                There are no buses out in {{ system }} right now.
-                Please choose a different system.
-            </p>
-        % end
-    % end
-% else:
-    <div class="page-header map-page">
-        <h1 class="title">Map</h1>
+<div class="page-header">
+    <h1 class="title">Map</h1>
+    % if len(positions) > 0:
         <div class="checkbox" onclick="toggleTripLines()">
             <div class="box">
                 <div id="checkbox-image" class="hidden">
@@ -59,8 +33,33 @@
             </div>
             <span class="checkbox-label">Show NIS Buses</span>
         </div>
+    % end
+</div>
+
+% if len(positions) == 0:
+    <div class="placeholder">
+        % if system is None:
+            <h3 class="title">There are no buses out right now</h3>
+            <p>
+                BC Transit does not have late night service, so this should be the case overnight.
+                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+            </p>
+            <p>Please check again later!</p>
+        % elif not system.realtime_enabled:
+            <h3 class="title">{{ system }} does not support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % elif not system.is_loaded:
+            <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % else:
+            <h3 class="title">There are no buses out in {{ system }} right now</h3>
+            <p>Please check again later!</p>
+        % end
     </div>
-    
+% else:
     <div id="map" class="full-screen"></div>
     
     <script>
@@ -82,7 +81,7 @@
             'bottom-left'
         );
         
-        let positions = JSON.parse('{{! json.dumps([p.json for p in positions if p.has_location]) }}');
+        let positions = JSON.parse('{{! json.dumps([p.json for p in positions]) }}');
         let currentShapeIDs = [];
         let markers = [];
         let tripLinesVisible = false;
@@ -115,14 +114,6 @@
                     }
                 }
                 
-                const adherenceElement = document.createElement("span")
-                if (position.adherence !== null && position.adherence !== undefined) {
-                    const adherence = position.adherence;
-                    adherenceElement.classList.add("adherence-indicator");
-                    adherenceElement.classList.add(adherence.status_class);
-                    adherenceElement.innerHTML = adherence.value;
-                }
-                
                 const element = document.createElement("div");
                 element.id = "bus-marker-" + position.bus_number;
                 element.className = "marker";
@@ -133,12 +124,54 @@
                     }
                 }
                 if (position.bearing !== undefined) {
+                    const length = Math.floor(position.speed / 10);
                     const bearing = document.createElement("div");
                     bearing.className = "bearing";
                     bearing.style.borderBottomColor = "#" + position.colour;
+                    bearing.style.marginTop = (-8 - length) + "px";
+                    bearing.style.borderBottomWidth = (26 + length) + "px";
                     bearing.style.transform = "rotate(" + position.bearing + "deg)";
                     element.appendChild(bearing)
                 }
+                
+                const details = document.createElement("div");
+                details.className = "details";
+                
+                const title = document.createElement("div");
+                title.className = "title";
+                title.innerHTML = position.bus_display;
+                
+                const content = document.createElement("div");
+                content.className = "content hover-only";
+                
+                const model = document.createElement("div");
+                model.className = "lighter-text centred";
+                model.innerHTML = position.bus_order;
+                content.appendChild(model);
+                
+                const headsign = document.createElement("div");
+                if (position.adherence !== null && position.adherence !== undefined) {
+                    headsign.className = "flex-row center flex-gap-5";
+                    const adherence = position.adherence;
+                    const adherenceElement = document.createElement("div");
+                    adherenceElement.classList.add("adherence-indicator");
+                    adherenceElement.classList.add(adherence.status_class);
+                    adherenceElement.innerHTML = adherence.value;
+                    
+                    headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
+                } else {
+                    headsign.className = "centred";
+                    headsign.innerHTML = position.headsign;
+                }
+                content.appendChild(headsign);
+                
+                if ("{{ system is None }}" === "True") {
+                    const system = document.createElement("div");
+                    system.className = "lighter-text centred";
+                    system.innerHTML = position.system;
+                    content.appendChild(system);
+                }
+                
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
@@ -151,15 +184,7 @@
                     icon.onmouseleave = function() {
                         setHoverPosition(null);
                     }
-                    
-                    const details = document.createElement("div");
-                    details.className = "details";
-                    details.innerHTML = "\
-                        <div class='title'>Unknown Bus</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
-                    
                     element.appendChild(icon);
-                    element.appendChild(details);
                 } else {
                     const icon = document.createElement("a");
                     icon.className = "icon";
@@ -173,16 +198,16 @@
                     icon.onmouseleave = function() {
                         setHoverPosition(null);
                     }
-                    
-                    const details = document.createElement("div");
-                    details.className = "details";
-                    details.innerHTML = "\
-                        <div class='title'>" + position.bus_number + "</div>\
-                        <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
-                    
                     element.appendChild(icon);
-                    element.appendChild(details);
                 }
+            
+                if (position.adornment != null) {
+                    title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+                }
+                
+                details.appendChild(title);
+                details.appendChild(content);
+                element.appendChild(details);
                 
                 if (position.lat != 0 && position.lon != 0) {
                     lons.push(position.lon);

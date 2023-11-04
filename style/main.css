@@ -7,19 +7,33 @@ body {
     margin: 0px;
 }
 
-form input {
+body.full-map .page-header {
+    position: relative;
+    z-index: 20;
+    border-bottom-width: 0px;
+    padding: 10px;
+    border-radius: 10px;
+    top: -10px;
+    left: -10px;
+}
+
+input {
     -webkit-appearance: none;
 }
 
-form input[type="text"] {
+input[type="text"] {
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
     padding: 5px;
 }
 
-form input[type="text"]:focus {
+input[type="text"]:focus {
     outline: none;
+}
+
+input[type="text"]::placeholder {
+    opacity: 1;
 }
 
 form .input-container {
@@ -31,20 +45,32 @@ form .input-container input[type="text"] {
     flex: 1;
 }
 
-hr {
-    margin:0px;
-    border-width: 0px;
-    border-top-width: 2px;
-    border-top-style: solid;
+h1, h2, h3, h4 {
+    margin: 0px;
 }
 
-h1, h2, h3, h4 {
-    margin-top: 0px;
-    margin-bottom: 5px;
+h1 .route-number {
+    font-size: 20pt;
+    min-width: 20px;
+}
+
+h2 .route-number {
+    font-size: 16pt;
+    min-width: 16px;
+}
+
+img.inline {
+    height: 18px;
+    width: 18px;
 }
 
 p {
     margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+p:last-child {
+    margin-bottom: 0px;
 }
 
 table.striped {
@@ -53,7 +79,6 @@ table.striped {
     empty-cells: show;
     border-width: 1px;
     border-style: solid;
-    margin-bottom: 20px;
 }
 
 table.striped td {
@@ -88,17 +113,15 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
-#body {
-    display: flex;
-}
-
-#content-wrapper {
-    position: relative;
-}
-
-#header {
+#banners {
     position: relative;
     z-index: 20;
+}
+
+#main {
+    flex: 1;
+    overflow: auto;
+    position: relative;
 }
 
 #map.full-screen {
@@ -124,7 +147,7 @@ table.striped tr.section td {
 #map-toggle {
     position: absolute;
     z-index: 10;
-    border-radius: 22px;
+    border-radius: 50%;
     bottom: 40px;
     right: 15px;
 }
@@ -142,25 +165,67 @@ table.striped tr.section td {
 #navigation-bar {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
+    font-family: Helvetica, sans-serif;
 }
 
-#navigation-bar .navigation-button {
-    display: inline-block;
-    padding: 15px 20px;
+#navigation-bar .navigation-icon {
+    padding: 5px;
+    margin: 0px 2px;
+    border-radius: 50%;
+}
+
+#navigation-bar .navigation-icon:hover {
+    text-decoration: none;
+}
+
+#navigation-bar .navigation-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+#navigation-bar .navigation-item {
+    padding: 15px;
     text-decoration: none !important;
-    font-family: Helvetica, sans-serif;
     font-size: 14pt;
     font-weight: normal;
 }
 
-#navigation-bar .navigation-button.disabled {
+#navigation-bar .navigation-item.disabled {
     cursor: default;
     opacity: 0.7;
 }
 
 #navigation-bar .title {
     font-weight: bold;
+}
+
+#quick-navigation {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: start;
+}
+
+#quick-navigation .item {
+    flex: 1;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+}
+
+#quick-navigation .item img {
+    width: 48px;
+    height: 48px;
+}
+
+#refresh-button {
+    border-radius: 50%;
 }
 
 #refresh-button:hover {
@@ -195,6 +260,10 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
+#system-menu {
+    display: grid;
+}
+
 #system-menu .header {
     padding: 5px 20px;
     font-weight: bold;
@@ -208,9 +277,7 @@ table.striped tr.section td {
 }
 
 .adherence-indicator {
-    display: inline-block;
     padding: 2px 4px;
-    margin-right: 5px;
     border-radius: 4px;
     min-width: 14px;
     text-align: center;
@@ -219,14 +286,17 @@ table.striped tr.section td {
     font-family: Helvetica, sans-serif;
     font-size: 9pt;
     line-height: 9pt;
-    vertical-align: middle;
+    flex-shrink: 0;
 }
 
 .adherence-indicator.large {
     font-size: 12pt;
     line-height: 12pt;
     padding: 3px 6px;
-    margin-right: 0px;
+}
+
+.adornment {
+    user-select: none;
 }
 
 .banner {
@@ -276,6 +346,10 @@ table.striped tr.section td {
     height: 100%;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .button {
     border-width: 0px;
     border-radius: 5px;
@@ -291,20 +365,19 @@ table.striped tr.section td {
     cursor: pointer;
 }
 
+.button.disabled {
+    opacity: 0.4;
+}
+
 .button.disabled:hover {
     cursor: default;
 }
 
 .button-container {
-    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
-}
-
-.button-control .button {
-    display: block;
 }
 
 .centred {
@@ -312,8 +385,10 @@ table.striped tr.section td {
 }
 
 .checkbox {
+    display: flex;
+    gap: 5px;
+    align-items: center;
     cursor: pointer;
-    vertical-align: middle;
     margin-bottom: 5px;
 }
 
@@ -321,22 +396,54 @@ table.striped tr.section td {
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 5px;
 }
 
 .checkbox .label {
-    vertical-align: middle;
     user-select: none;
 }
 
-.container .section .subtitle {
-    margin-bottom: 5px;
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.container > .section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .display-none {
     display: none !important;
+}
+
+.events {
+    display: grid;
+    grid-template-columns: minmax(125px, auto) 1fr;
+    gap: 10px;
+}
+
+.events .date {
+    padding-right: 10px;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.events .date img {
+    width: 20px;
+    height: 20px;
+}
+
+.events ul {
+    margin: 0px;
+    padding-left: 20px;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .flex-container {
@@ -350,29 +457,60 @@ table.striped tr.section td {
     align-items: center;
 }
 
-.flex-row .flex-1 {
+.flex-row.left {
+    justify-content: left;
+}
+
+.flex-row.center {
+    justify-content: center;
+}
+
+.flex-row.right {
+    justify-content: right;
+}
+
+.flex-1 {
     flex: 1;
 }
 
-.flex-row .flex-2 {
+.flex-2 {
     flex: 2;
 }
 
-.flex-row .flex-3 {
+.flex-3 {
     flex: 3;
 }
 
-.flex-row .flex-4 {
+.flex-4 {
     flex: 4;
 }
 
-.flex-row .flex-5 {
+.flex-5 {
     flex: 5;
 }
 
-.flexbox-space-between {
-    display: flex;
-    justify-content: space-between;
+.flex-gap-0 {
+    gap: 0px;
+}
+
+.flex-gap-2 {
+    gap: 2px;
+}
+
+.flex-gap-5 {
+    gap: 5px;
+}
+
+.flex-gap-10 {
+    gap: 10px
+}
+
+.flex-gap-20 {
+    gap: 20px;
+}
+
+.flex-gap-40 {
+    gap: 40px;
 }
 
 .hidden {
@@ -381,7 +519,6 @@ table.striped tr.section td {
 
 .info-box {
     padding: 10px;
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -404,6 +541,15 @@ table.striped tr.section td {
     margin-bottom: 10px;
 }
 
+.info-box .section.vertical {
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-box .section.no-flex {
+    display: block;
+}
+
 .info-box .section.vertical-align {
     align-items: center;
 }
@@ -420,10 +566,6 @@ table.striped tr.section td {
 
 .info-box .section > .value {
     text-align: right;
-}
-
-.info-box .section.no-flex {
-    display: block;
 }
 
 .marker {
@@ -443,13 +585,44 @@ table.striped tr.section td {
     border-bottom-width: 26px;
     border-bottom-style: solid;
     transform-origin: center bottom;
+    z-index: 1;
 }
 
 .marker .details {
-    display: block;
     position: absolute;
-    left: 0px;
-    right: 0px;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -2px;
+    padding: 2px 3px;
+    border-radius: 5px;
+    z-index: 5;
+}
+
+.marker .details .content {
+    font-size: 8pt;
+    overflow: visible;
+    line-height: 10pt;
+    width: max-content;
+    max-width: 150px;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.marker .details .content .adherence-indicator {
+    font-size: 8pt;
+    line-height: 8pt;
+    border-radius: 3px;
+}
+
+.marker .details .content .route-number {
+    font-size: 8pt;
 }
 
 .marker .details .title {
@@ -457,44 +630,29 @@ table.striped tr.section td {
     text-align: center;
     font-weight: bold;
     line-height: 10pt;
-    margin-left: -50px;
-    margin-right: -50px;
-}
-
-.marker .details .subtitle {
-    font-size: 8pt;
-    text-align: center;
-    overflow: visible;
-    line-height: 10pt;
-    margin-left: -50px;
-    margin-right: -50px;
-}
-
-.marker .details .subtitle .adherence-indicator {
-    float: none;
-    font-size: 8pt;
-    padding: 1px 3px;
-    border-radius: 3px;
+    width: max-content;
+    max-width: 150px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .marker .icon {
     display: block;
     width: 32px;
     height: 32px;
-    border-radius: 18px;
+    border-radius: 50%;
     border-width: 2px;
     border-style: solid;
     position: relative;
     margin-left: auto;
     margin-right: auto;
+    z-index: 10;
 }
 
 .marker .icon img {
+    margin: 4px;
     width: 24px;
     height: 24px;
-    left: 4px;
-    top: 4px;
-    position: relative;
 }
 
 .marker .icon .link {
@@ -505,7 +663,11 @@ table.striped tr.section td {
     bottom: 0px;
     left: 0px;
     right: 0px;
-    border-radius: 18px;
+    border-radius: 50%;
+}
+
+.marker .icon ~ .hover-only {
+    display: none;
 }
 
 .marker .icon ~ * .hover-only {
@@ -517,8 +679,12 @@ table.striped tr.section td {
     cursor: pointer;
 }
 
+.marker .icon:hover ~ .hover-only {
+    display: inherit;
+}
+
 .marker .icon:hover ~ * .hover-only {
-    display: block;
+    display: inherit;
 }
 
 .marker .icon.route {
@@ -555,10 +721,9 @@ table.striped tr.section td {
 }
 
 .marker.small .icon img {
+    margin: 2px;
     width: 12px;
     height: 12px;
-    left: 2px;
-    top: 2px;
 }
 
 .marker.small .details {
@@ -574,7 +739,6 @@ table.striped tr.section td {
 }
 
 .news-post {
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -590,11 +754,7 @@ table.striped tr.section td {
 }
 
 .news-post .content p + ul {
-    margin-top: -15px;
-}
-
-.news-post .content p:last-child {
-    margin-bottom: 0px;
+    margin-top: -5px;
 }
 
 .no-wrap {
@@ -617,19 +777,21 @@ table.striped tr.section td {
 
 .page-header {
     margin-bottom: 20px;
-}
-
-.page-header.map-page {
-    position: relative;
-    z-index: 20;
-}
-
-.page-header.map-page .tab-button {
     border-bottom-width: 2px;
+    border-bottom-style: solid;
 }
 
 .page-header .subtitle {
     font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.page-header .title {
+    margin-bottom: 5px;
+}
+
+.placeholder .title {
+    margin-bottom: 10px;
 }
 
 .positive {
@@ -637,22 +799,69 @@ table.striped tr.section td {
 }
 
 .route-indicator {
-    font-size: 10pt;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
+.route-indicator .route-number {
+    font-size: 10pt;
+}
+
+.route-line {
+    width: 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    align-self: stretch;
+}
+
 .route-number {
     display: inline-block;
     padding: 1px 6px;
+    font-size: 11pt;
     font-weight: bold;
     border-width: 1px;
     border-style: solid;
+    text-align: center;
 }
 
-.schedules .exceptions {
-    margin-top: 10px;
+.sheets-indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sheets-indicator .footer {
+    width: 75%;
+    margin: 0px auto 0px auto;
+    font-size: 11pt;
+    text-align: center;
+}
+
+.sheets-indicator .legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 11pt;
+}
+
+.sheets-indicator .legend .icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.sheets-indicator .sheet {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sheets-indicator .sheet .dates {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -661,7 +870,7 @@ table.striped tr.section td {
     column-gap: 10px;
 }
 
-.schedules .exceptions .month {
+.sheets-indicator .sheet .dates .month {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -670,11 +879,15 @@ table.striped tr.section td {
     gap: 5px;
 }
 
-.schedules .exceptions .month .name {
+.sheets-indicator .sheet .dates .month .name {
     font-size: 13pt;
 }
 
-.schedules .exceptions .month .date {
+.sheets-indicator .sheet .dates .month.title .name {
+    font-size: 14pt;
+}
+
+.sheets-indicator .sheet .dates .month .date {
     font-size: 11pt;
     padding: 1px 4px;
     border-radius: 4px;
@@ -684,48 +897,23 @@ table.striped tr.section td {
     text-decoration: none;
 }
 
-.schedules .footer {
-    width: 75%;
-    margin: 10px auto 0px auto;
-    font-size: 11pt;
+.sheets-indicator .sheet .title {
+    margin-bottom: 0px;
     text-align: center;
 }
 
-.schedules .legend {
-    display: flex;
+.tab-button-bar {
+    display: inline-flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    font-size: 11pt;
-}
-
-.schedules .legend .icon {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-}
-
-.schedules .schedule {
-    margin-top: 10px;
-}
-
-.schedules .schedule .title {
-    margin-bottom: 5px;
-    text-align: center;
-}
-
-.spacer {
-    flex: 1;
+    box-sizing: border-box;
+    margin-bottom: -1px;
+    gap: 1px;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .tab-button {
-    border-width: 1px;
-    border-style: solid;
-    border-bottom-width: 0px;
     padding: 10px;
-    margin: 0px;
     cursor: default;
     font-size: 13pt;
     font-weight: bold;
@@ -733,10 +921,6 @@ table.striped tr.section td {
     font-family: Helvetica, sans-serif;
     text-align: center;
     text-decoration: none !important;
-}
-
-.tab-button ~ .tab-button {
-    border-left-width: 0px;
 }
 
 .tab-button:hover {
@@ -747,7 +931,12 @@ table.striped tr.section td {
     cursor: default !important;
 }
 
+.timing-point {
+    font-weight: bold;
+}
+
 .tooltip-anchor {
+    display: inline-block;
     position: relative;
 }
 
@@ -761,11 +950,12 @@ table.striped tr.section td {
     top: 50%;
     transform: translate(0px, -50%);
     border-radius: 5px;
-    white-space: nowrap;
     font-size: 11pt;
-    font-weight: bold;
     font-family: Helvetica, sans-serif;
     text-align: left;
+    width: max-content;
+    max-width: 300px;
+    font-weight: normal;
 }
 
 .tooltip-anchor .tooltip::after {
@@ -780,6 +970,10 @@ table.striped tr.section td {
 
 .tooltip-anchor:hover > .tooltip {
     display: block;
+}
+
+.tooltip-anchor .tooltip .title {
+    font-weight: bold;
 }
 
 .weekdays {

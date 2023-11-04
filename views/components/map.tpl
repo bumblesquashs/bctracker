@@ -34,7 +34,7 @@
 % end
 
 % map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
-% map_trips = sorted(map_trips, key=lambda t: t.route, reverse=True)
+% map_trips = sorted([t for t in map_trips if t.route is not None], key=lambda t: t.route, reverse=True)
 % shape_ids = set()
 % shape_trips = []
 % for trip in map_trips:
@@ -87,7 +87,7 @@
 % end
 
 % map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure is not None else [])
-% map_departures = sorted(map_departures, key=lambda d: d.trip.route)
+% map_departures = sorted([d for d in map_departures if d.trip is not None and d.trip.route is not None], key=lambda d: d.trip.route)
 % stop_ids = set()
 % stop_departures = []
 % for departure in map_departures:
@@ -112,17 +112,23 @@
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
+            const details = document.createElement("div");
+            details.className = "details {{ '' if len(map_departures) == 1 else 'hover-only' }}";
+            
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = stop.number;
+            
+            const content = document.createElement("div");
+            content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
                 routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
+            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
-            const details = document.createElement("div");
-            details.className = "details";
-            details.innerHTML = "\
-                <div class='{{ 'title' if len(map_departures) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
-                <div class='subtitle hover-only'>" + stop.name + "</div>\
-                <div class='subtitle hover-only'>" + routesHTML + "</div>";
+            details.appendChild(title);
+            details.appendChild(content);
             
             element.appendChild(icon);
             element.appendChild(details);
@@ -151,17 +157,23 @@
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
+            const details = document.createElement("div");
+            details.className = "details {{ '' if len(map_stops) == 1 else 'hover-only' }}";
+            
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = stop.number;
+            
+            const content = document.createElement("div");
+            content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
                 routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
+            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
-            const details = document.createElement("div");
-            details.className = "details";
-            details.innerHTML = "\
-                <div class='{{ 'title' if len(map_stops) == 1 else 'title hover-only' }}'>" + stop.number + "</div>\
-                <div class='subtitle hover-only'>" + stop.name + "</div>\
-                <div class='subtitle hover-only'>" + routesHTML + "</div>";
+            details.appendChild(title);
+            details.appendChild(content);
             
             element.appendChild(icon);
             element.appendChild(details);
@@ -178,56 +190,84 @@
 
 % map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
 % if len(map_positions) > 0:
+    % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
         
         for (const position of positions) {
-            const adherenceElement = document.createElement("span")
-            if (position.adherence !== null && position.adherence !== undefined) {
-                const adherence = position.adherence
-                adherenceElement.classList.add("adherence-indicator")
-                adherenceElement.classList.add(adherence.status_class)
-                adherenceElement.innerHTML = adherence.value
-            }
             const element = document.createElement("div");
             element.className = "marker";
             if (position.bearing !== undefined) {
+                const length = Math.floor(position.speed / 10);
                 const bearing = document.createElement("div");
                 bearing.className = "bearing";
                 bearing.style.borderBottomColor = "#" + position.colour;
+                bearing.style.marginTop = (-8 - length) + "px";
+                bearing.style.borderBottomWidth = (26 + length) + "px";
                 bearing.style.transform = "rotate(" + position.bearing + "deg)";
                 element.appendChild(bearing)
             }
+            
+            const details = document.createElement("div");
+            details.className = "details";
+            
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = position.bus_display;
+            
+            const content = document.createElement("div");
+            content.className = "content hover-only";
+            
+            const model = document.createElement("div");
+            model.className = "lighter-text centred";
+            model.innerHTML = position.bus_order;
+            content.appendChild(model);
+            
+            const headsign = document.createElement("div");
+            if (position.adherence !== null && position.adherence !== undefined) {
+                headsign.className = "flex-row center flex-gap-5";
+                const adherence = position.adherence;
+                const adherenceElement = document.createElement("div");
+                adherenceElement.classList.add("adherence-indicator");
+                adherenceElement.classList.add(adherence.status_class);
+                adherenceElement.innerHTML = adherence.value;
+                
+                headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
+            } else {
+                headsign.className = "centred";
+                headsign.innerHTML = position.headsign;
+            }
+            content.appendChild(headsign);
+            
+            if ("{{ system is None }}" === "True") {
+                const system = document.createElement("div");
+                system.className = "lighter-text centred";
+                system.innerHTML = position.system;
+                content.appendChild(system);
+            }
+            
             if (position.bus_number < 0) {
                 const icon = document.createElement("div");
                 icon.className = "icon";
                 icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<img src='/img/white/bus.png' />";
-                
-                const details = document.createElement("div");
-                details.className = "details";
-                details.innerHTML = "\
-                    <div class='title'>Unknown Bus</div>\
-                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>"
-                
                 element.appendChild(icon);
-                element.appendChild(details);
             } else {
                 const icon = document.createElement("a");
                 icon.className = "icon";
                 icon.href = "/bus/" + position.bus_number;
                 icon.style.backgroundColor = "#" + position.colour;
                 icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
-                
-                const details = document.createElement("div");
-                details.className = "details";
-                details.innerHTML = "\
-                    <div class='title'>" + position.bus_number + "</div>\
-                    <div class='subtitle hover-only'>" + adherenceElement.outerHTML + position.headsign + "</div>";
-                
                 element.appendChild(icon);
-                element.appendChild(details);
             }
+            
+            if (position.adornment != null) {
+                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            }
+            
+            details.appendChild(title);
+            details.appendChild(content);
+            element.appendChild(details);
             
             new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map);
             

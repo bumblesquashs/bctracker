@@ -22,7 +22,7 @@
         </div>
     % end
     
-    % if start_time.is_earlier and end_time.is_later and block.schedule.includes(Date.today()):
+    % if start_time.is_earlier and end_time.is_later and Date.today() in block.schedule:
         % now = Time.now(block.system.timezone)
         % offset_minutes = now.get_minutes() - start_time.get_minutes()
         % offset_percentage = (offset_minutes / total_minutes) * 100

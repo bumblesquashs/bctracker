@@ -6,7 +6,7 @@ from models.bus import Bus
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
     
-    __slots__ = ('low', 'high', 'year', 'model', 'size', 'exceptions')
+    __slots__ = ('low', 'high', 'year', 'model', 'demo', 'exceptions', 'size')
     
     @classmethod
     def from_csv(cls, row):
@@ -15,18 +15,20 @@ class Order:
         high = int(row['high'])
         year = int(row['year'])
         model = helpers.model.find(row['model_id'])
+        demo = row['demo'] == '1'
         exceptions = row['exceptions']
         if exceptions == '':
             exceptions = set()
         else:
             exceptions = {int(e) for e in row['exceptions'].split(';')}
-        return cls(low, high, year, model, exceptions)
+        return cls(low, high, year, model, demo, exceptions)
     
-    def __init__(self, low, high, year, model, exceptions):
+    def __init__(self, low, high, year, model, demo, exceptions):
         self.low = low
         self.high = high
         self.year = year
         self.model = model
+        self.demo = demo
         self.exceptions = exceptions
         
         self.size = (self.high - self.low) + 1 - len(exceptions)
@@ -46,27 +48,28 @@ class Order:
     def __lt__(self, other):
         return self.low < other.low
     
+    def __iter__(self):
+        for number in range(self.low, self.high + 1):
+            if number not in self.exceptions:
+                yield Bus(number, order=self)
+    
     @property
     def is_test(self):
+        '''Checks if this is a test order'''
         model = self.model
         if model is None:
             return False
         return model.is_test
     
     @property
-    def range(self):
-        '''The full range of every bus in the order'''
-        return (n for n in range(self.low, self.high + 1) if n not in self.exceptions)
-    
-    @property
     def first_bus(self):
         '''The first bus in the order'''
-        return Bus(self.low)
+        return Bus(self.low, order=self)
     
     @property
     def last_bus(self):
         '''The last bus in the order'''
-        return Bus(self.high)
+        return Bus(self.high, order=self)
     
     def previous_bus(self, bus_number):
         '''The previous bus before the given bus number'''
@@ -75,7 +78,7 @@ class Order:
         previous_bus_number = bus_number - 1
         if previous_bus_number in self.exceptions:
             return self.previous_bus(previous_bus_number)
-        return Bus(previous_bus_number)
+        return Bus(previous_bus_number, order=self)
     
     def next_bus(self, bus_number):
         '''The next bus following the given bus number'''
@@ -84,7 +87,7 @@ class Order:
         next_bus_number = bus_number + 1
         if next_bus_number in self.exceptions:
             return self.next_bus(next_bus_number)
-        return Bus(next_bus_number)
+        return Bus(next_bus_number, order=self)
     
     def contains(self, bus_number):
         '''Checks if this order contains the given bus number'''

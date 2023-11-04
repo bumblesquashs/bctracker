@@ -1,7 +1,7 @@
 
-% rebase('base', title=f'Block {block.id}', include_maps=True, full_map=True, show_refresh_button=True)
+% rebase('base')
 
-<div class="page-header map-page">
+<div class="page-header">
     <h1 class="title">Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'blocks/{block.id}') }}" class="tab-button">Overview</a>

@@ -1,8 +1,6 @@
 archives/
 backups/
-data/gtfs
-data/realtime
-data/*.db
+data/
 logs/
 
 server.conf

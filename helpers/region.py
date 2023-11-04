@@ -7,7 +7,7 @@ regions = {}
 
 def load():
     '''Loads region data from the static CSV file'''
-    with open(f'./data/static/regions.csv', 'r') as file:
+    with open(f'./static/regions.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
@@ -23,3 +23,8 @@ def find(region_id):
 def find_all():
     '''Returns all regions'''
     return regions.values()
+
+def delete_all():
+    '''Deletes all regions'''
+    global regions
+    regions = {}

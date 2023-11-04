@@ -7,7 +7,7 @@ models = {}
 
 def load():
     '''Loads model data from the static CSV file'''
-    with open(f'./data/static/models.csv', 'r') as file:
+    with open(f'./static/models.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
@@ -19,3 +19,8 @@ def find(model_id):
     if model_id in models:
         return models[model_id]
     return None
+
+def delete_all():
+    '''Deletes all models'''
+    global models
+    models = {}

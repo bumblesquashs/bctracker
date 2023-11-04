@@ -3,6 +3,8 @@ from enum import Enum
 
 from datetime import datetime
 
+import helpers.point
+
 from models.time import Time
 
 class Direction(Enum):
@@ -30,7 +32,7 @@ class Direction(Enum):
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', '_related_trips')
+    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', 'sheets', '_related_trips')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -42,7 +44,7 @@ class Trip:
         direction_id = int(row['direction_id'])
         shape_id = row['shape_id']
         headsign = row['trip_headsign']
-        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures.get(trip_id, []))
+        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, sorted(departures.get(trip_id, [])))
     
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures):
         self.system = system
@@ -53,16 +55,15 @@ class Trip:
         self.direction_id = direction_id
         self.shape_id = shape_id
         self.headsign = headsign
-        self.departures = sorted(departures)
+        self.departures = departures
         
-        points = self.points
-        if len(points) == 0:
+        if len(departures) == 0:
             self.direction = Direction.UNKNOWN
         else:
-            first_point = points[0]
-            last_point = points[-1]
-            lat_diff = first_point.lat - last_point.lat
-            lon_diff = first_point.lon - last_point.lon
+            first_stop = self.first_departure.stop
+            last_stop = self.last_departure.stop
+            lat_diff = first_stop.lat - last_stop.lat
+            lon_diff = first_stop.lon - last_stop.lon
             if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
                 self.direction = Direction.CIRCULAR
             elif abs(lat_diff) > abs(lon_diff):
@@ -72,10 +73,12 @@ class Trip:
             else:
                 self.direction = Direction.UNKNOWN
         
+        self.sheets = system.copy_sheets([self.service])
+        
         self._related_trips = None
     
     def __str__(self):
-        if self.system.prefix_headsign:
+        if self.system.prefix_headsign and self.route is not None:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -86,6 +89,11 @@ class Trip:
         if self.start_time == other.start_time:
             return self.service < other.service
         return self.start_time < other.start_time
+    
+    @property
+    def display_id(self):
+        '''Formats the trip ID for web display'''
+        return self.id.replace(':', ':<wbr />')
     
     @property
     def route(self):
@@ -143,12 +151,12 @@ class Trip:
         return self.start_time.format_difference(self.end_time)
     
     @property
-    def points(self):
-        '''Returns all shape points associated with this trip'''
-        shape = self.system.get_shape(self.shape_id)
-        if shape is None:
-            return []
-        return sorted(shape.points)
+    def length(self):
+        '''Returns the distance travelled on this trip'''
+        departure = self.last_departure
+        if departure is None:
+            return None
+        return departure.distance_traveled
     
     @property
     def related_trips(self):
@@ -161,11 +169,21 @@ class Trip:
     @property
     def json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
-        return {
+        json = {
             'shape_id': self.shape_id,
-            'colour': self.route.colour,
-            'points': [p.json for p in self.points]
+            'points': [p.json for p in self.load_points()]
         }
+        if self.route is None:
+            json['colour'] = '666666'
+            json['text_colour'] = '000000'
+        else:
+            json['colour'] = self.route.colour
+            json['text_colour'] = self.route.text_colour
+        return json
+    
+    def load_points(self):
+        '''Returns all points associated with this trip'''
+        return helpers.point.find_all(self.system.id, self.shape_id)
     
     def get_departure(self, stop):
         '''Returns the departure for a given stop on this trip'''

@@ -16,6 +16,10 @@
  * Other colors may also be used for specific purposes
 */
 
+:root {
+    color-scheme: dark;
+}
+
 a {
     color: #5CC3FF;
 }
@@ -23,6 +27,10 @@ a {
 body {
     background-color: #2F2F2F;
     color: #FFFFFF;
+}
+
+body.full-map .page-header {
+    background-color: rgba(30, 30, 30, 0.7);
 }
 
 form input[type="text"] {
@@ -35,8 +43,8 @@ form input[type="text"]:focus {
     border-color: #053305;
 }
 
-hr {
-    border-top-color: #565656;
+iframe {
+    color-scheme: light;
 }
 
 table.striped {
@@ -90,32 +98,41 @@ table.striped tr:nth-child(2n-1) {
     background-color: #154E15;
 }
 
-#navigation-bar .navigation-button {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-button:hover {
+#navigation-bar .navigation-icon:hover {
     background-color: #053305;
 }
 
-#navigation-bar .navigation-button.disabled:hover {
+#navigation-bar .navigation-icon.disabled:hover {
     background-color: #154E15 !important;
 }
 
-#navigation-bar .navigation-button img.black {
+#navigation-bar .navigation-icon img.black {
     display: none;
 }
 
-#navigation-menu-theme {
+#navigation-bar .navigation-item {
     color: #FFFFFF;
 }
 
-#navigation-menu-theme a {
-    color: #FFFFFF;
+#navigation-bar .navigation-item:hover {
+    background-color: #053305;
+}
+
+#navigation-bar .navigation-item.disabled:hover {
+    background-color: #154E15 !important;
+}
+
+#navigation-bar .navigation-item img.black {
+    display: none;
 }
 
 #navigation-menu-toggle .line {
     background-color: #FFFFFF;
+}
+
+#quick-navigation .item {
+    background-color: #393939;
+    border-color: #565656;
 }
 
 #refresh-button:hover {
@@ -214,6 +231,14 @@ table.striped tr:nth-child(2n-1) {
     border-right-color: #565656;
 }
 
+#side-bar-toggle {
+    background-color: #393939;
+}
+
+#side-bar-toggle:hover {
+    background-color: #565656;
+}
+
 #status {
     background-color: #276227;
     color: #FFFFFF;
@@ -248,14 +273,17 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-#theme {
-    background-color: #276227;
+#title {
+    background-color: #154E15;
     color: #FFFFFF;
-    border-top-color: #565656;
 }
 
-#theme a {
-    color: #FFFFFF;
+#title:hover {
+    background-color: #053305;
+}
+
+#title img.black {
+    display: none;
 }
 
 .adherence-indicator {
@@ -354,6 +382,10 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
+.events .date {
+    border-right-color: #565656;
+}
+
 .info-box {
     background-color: #393939;
     border-color: #565656;
@@ -365,6 +397,10 @@ table.striped tr:nth-child(2n-1) {
 
 .lighter-text {
     color: #ABABAB;
+}
+
+.marker .details {
+    background-color: rgba(30, 30, 30, 0.8);
 }
 
 .marker .icon {
@@ -410,54 +446,66 @@ table.striped tr:nth-child(2n-1) {
     color: #565656;
 }
 
+.page-header {
+    border-bottom-color: #565656;
+}
+
 .positive {
     color: #428342;
 }
 
 .route-number {
     color: #FFFFFF;
-    border-color: #FFFFFF;
+    border-color: #393939;
     background-color: #989898;
 }
 
-.schedules .footer {
+.sheets-indicator .footer {
     color: #ABABAB;
 }
 
-.schedules .legend {
+.sheets-indicator .legend {
     color: #ABABAB;
 }
 
-.schedules a.modified-service:hover {
+.sheets-indicator a.modified-service:hover {
     background-color: #934800;
 }
 
-.schedules a.no-service:hover {
+.sheets-indicator a.no-service:hover {
     background-color: #4A0000;
 }
 
-.schedules a.normal-service:hover {
+.sheets-indicator a.normal-service:hover {
     background-color: #003B00;
 }
 
-.schedules .modified-service {
+.sheets-indicator .modified-service {
     background-color: #B65901;
     color: #FFFFFF;
 }
 
-.schedules .no-service {
+.sheets-indicator .no-service {
     background-color: #700000;
     color: #FFFFFF;
 }
 
-.schedules .normal-service {
+.sheets-indicator .normal-service {
     background-color: #005900;
     color: #FFFFFF;
 }
 
+.sheets-indicator .sheet {
+    background-color: #565656;
+}
+
+.tab-button-bar {
+    background: #565656;
+    border-color: #565656;
+}
+
 .tab-button {
     background-color: #2F2F2F;
-    border-color: #565656;
     color: #5CC3FF;
 }
 
@@ -471,12 +519,12 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .tooltip-anchor .tooltip {
-    background-color: #565656;
+    background-color: #2F2F2F;
     color: #FFFFFF;
 }
 
 .tooltip-anchor .tooltip::after {
-    border-color: transparent #565656 transparent transparent;
+    border-color: transparent #2F2F2F transparent transparent;
 }
 
 .weekdays a.weekday.no-service:hover {
@@ -485,6 +533,11 @@ table.striped tr:nth-child(2n-1) {
 
 .weekdays a.weekday.normal-service:hover {
     background-color: #003B00;
+}
+
+.weekdays .weekday {
+    background-color: #393939;
+    color: #FFFFFF;
 }
 
 .weekdays .weekday.no-service {

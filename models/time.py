@@ -37,6 +37,7 @@ class Time:
     
     @classmethod
     def unknown(cls, timezone=None):
+        '''Returns an unknown time'''
         return cls(-1, 0, 0, False, timezone)
     
     def __init__(self, hour, minute, second, accurate_seconds, timezone):
@@ -61,8 +62,23 @@ class Time:
             return self.minute < other.minute
         return self.second < other.second
     
+    def __add__(self, delta):
+        time = self.datetime + delta
+        hour = time.hour
+        while hour < 4:
+            hour += 24
+        return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
+    
+    def __sub__(self, delta):
+        time = self.datetime - delta
+        hour = time.hour
+        while hour < 4:
+            hour += 24
+        return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
+    
     @property
     def is_unknown(self):
+        '''Checks if this time is unknown'''
         return self.hour < 0
     
     @property
@@ -79,6 +95,14 @@ class Time:
     def is_later(self):
         '''Checks if this time is after the current time'''
         return self > Time.now(self.timezone)
+    
+    @property
+    def datetime(self):
+        '''Returns the datetime equivalent of this time'''
+        hour = self.hour
+        while hour >= 24:
+            hour -= 24
+        return datetime(1996, 11, 19, hour, self.minute, self.second)
     
     @property
     def timezone_name(self):
@@ -99,7 +123,8 @@ class Time:
             return None
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
-    def format_web(self, time_format='24hr'):
+    def format_web(self, time_format='30hr'):
+        '''Formats this time for web display'''
         if self.is_unknown:
             return ''
         hour = self.hour

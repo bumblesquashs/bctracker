@@ -14,6 +14,8 @@ import realtime
 import database
 import backup
 
+running = True
+
 def setup():
     '''Adds signal handlers'''
     signal.signal(signal.SIGUSR1, handle_gtfs)
@@ -21,6 +23,8 @@ def setup():
 
 def start(cron_id):
     '''Removes any old cron jobs and creates new jobs'''
+    global running
+    running = True
     pid = os.getpid()
     with CronTab(user=True) as cron:
         cron.remove_all(comment=cron_id)
@@ -33,17 +37,21 @@ def start(cron_id):
 
 def stop(cron_id):
     '''Removes all cron jobs'''
+    global running
+    running = False
     with CronTab(user=True) as cron:
         cron.remove_all(comment=cron_id)
 
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
-        today = Date.today(system.timezone)
-        if today.weekday == Weekday.MON or not gtfs.validate(system):
-            gtfs.load(system, True)
-    date = datetime.now() - timedelta(days=1)
-    backup.run(date, date.weekday() == 0)
+        if running:
+            today = Date.today(system.timezone)
+            if today.weekday == Weekday.MON or not gtfs.validate(system):
+                gtfs.load(system, True)
+    if running:
+        date = datetime.now() - timedelta(days=1)
+        backup.run(date, date.weekday() == 0)
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
@@ -51,15 +59,17 @@ def handle_realtime(sig, frame):
     time = Time.now()
     print(f'--- {date} at {time} ---')
     for system in helpers.system.find_all():
-        realtime.update(system)
-        if realtime.validate(system):
-            system.validation_errors = 0
-        else:
-            system.validation_errors += 1
-            if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
-                gtfs.load(system, True)
-    realtime.update_records()
-    
-    # Backup database at the end of each day
-    if time.hour == 0 and time.minute == 0:
-        database.backup()
+        if running:
+            realtime.update(system)
+            if realtime.validate(system):
+                system.validation_errors = 0
+            else:
+                system.validation_errors += 1
+                if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
+                    gtfs.load(system, True)
+    if running:
+        realtime.update_records()
+        
+        # Backup database at the end of each day
+        if time.hour == 0 and time.minute == 0:
+            database.backup()

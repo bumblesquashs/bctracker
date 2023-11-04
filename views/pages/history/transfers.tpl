@@ -1,5 +1,5 @@
 
-% rebase('base', title='Vehicle History')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Vehicle History</h1>
@@ -8,31 +8,34 @@
         <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
-    <hr />
 </div>
 
-% if system is not None and not system.realtime_enabled:
-    <p>
-        {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-    </p>
-% elif len(transfers) == 0:
-    % if system is None:
-        <p>There are no recorded transfers.</p>
-    % else:
-        <p>{{ system }} does not have any recorded transfers.</p>
-    % end
+% if len(transfers) == 0:
+    <div class="placeholder">
+        % if system is None:
+            <h3 class="title">No transfers found</h3>
+            <p>Something has probably gone terribly wrong if you're seeing this.</p>
+        % elif not system.realtime_enabled:
+            <h3 class="title">{{ system }} does not currently support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % else:
+            <h3 class="title">No buses have been transferred to or from {{ system }}</h3>
+            <p>Please check again later!</p>
+        % end
+    </div>
 % else:
     <table class="striped">
         <thead>
             <tr>
                 <th>Date</th>
-                <th class="desktop-only">Number</th>
+                <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
                 <th class="non-mobile">From</th>
                 <th class="non-mobile">To</th>
-                <th class="mobile-only">From / To</th>
+                <th class="mobile-only">Systems</th>
             </tr>
         </thead>
         <tbody>
@@ -44,22 +47,32 @@
                 % last_date = transfer.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ transfer.date.format_long() }}</td>
-                    <td class="non-desktop no-wrap">{{ transfer.date.format_short() }}</td>
+                    <td class="non-desktop">{{ transfer.date.format_short() }}</td>
                     <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % if order is not None:
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ order }}</span>
-                        % end
+                        <div class="flex-column">
+                            % include('components/bus', bus=bus)
+                            <span class="non-desktop smaller-font">
+                                % include('components/order', order=order)
+                            </span>
+                        </div>
                     </td>
                     <td class="desktop-only">
-                        % if order is not None:
-                            {{ order }}
-                        % end
+                        % include('components/order', order=order)
                     </td>
                     <td class="non-mobile">{{ transfer.old_system }}</td>
                     <td class="non-mobile">{{ transfer.new_system }}</td>
-                    <td class="mobile-only">From {{ transfer.old_system }} to {{ transfer.new_system }}</td>
+                    <td class="mobile-only">
+                        <div class="flex-column">
+                            <div>
+                                <div class="smaller-font">From:</div>
+                                {{ transfer.old_system }}
+                            </div>
+                            <div>
+                                <div class="smaller-font">To:</div>
+                                {{ transfer.new_system }}
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             % end
         </tbody>

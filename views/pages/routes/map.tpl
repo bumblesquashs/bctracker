@@ -1,18 +1,17 @@
 
 % import json
 
-% if system is None:
-    % rebase('base', title='Routes')
-    
-    <div class="page-header">
-        <h1 class="title">Routes</h1>
-        <div class="tab-button-bar">
-            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-            <span class="tab-button current">Map</span>
-        </div>
-        <hr />
+% rebase('base')
+
+<div class="page-header">
+    <h1 class="title">Routes</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+        <span class="tab-button current">Map</span>
     </div>
-    
+</div>
+
+% if system is None:
     <p>Choose a system to see individual routes.</p>
     <table class="striped">
         <thead>
@@ -36,20 +35,27 @@
                         % count = len(region_system.get_routes())
                         <tr>
                             <td>
-                                <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                <br class="mobile-only" />
-                                <span class="mobile-only smaller-font">
-                                    % if count == 1:
-                                        1 Route
-                                    % else:
-                                        {{ count }} Routes
-                                    % end
-                                </span>
+                                <div class="flex-column">
+                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                    <span class="mobile-only smaller-font">
+                                        % if region_system.is_loaded:
+                                            % if count == 1:
+                                                1 Route
+                                            % else:
+                                                {{ count }} Routes
+                                            % end
+                                        % end
+                                    </span>
+                                </div>
                             </td>
-                            <td class="non-mobile">{{ count }}</td>
-                            <td>
-                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
-                            </td>
+                            % if region_system.is_loaded:
+                                <td class="non-mobile">{{ count }}</td>
+                                <td>
+                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                </td>
+                            % else:
+                                <td class="lighter-text" colspan="2">Routes are loading...</td>
+                            % end
                         </tr>
                     % end
                 % end
@@ -57,32 +63,16 @@
         </tbody>
     </table>
 % else:
-    % rebase('base', title='Routes', include_maps=True, full_map=True)
-    
-    % routes = system.get_routes()
     % if len(routes) == 0:
-        <div class="page-header">
-            <h1 class="title">Routes</h1>
-            <div class="tab-button-bar">
-                <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-                <span class="tab-button current">Map</span>
-            </div>
-            <hr />
+        <div class="placeholder">
+            <h3 class="title">Route information for {{ system }} is unavailable</h3>
+            % if system.is_loaded:
+                <p>Please check again later!</p>
+            % else:
+                <p>System data is currently loading and will be available soon.</p>
+            % end
         </div>
-        
-        <p>
-            Route information is currently unavailable for {{ system }}.
-            Please check again later!
-        </p>
     % else:
-        <div class="page-header map-page">
-            <h1 class="title">Routes</h1>
-            <div class="tab-button-bar">
-                <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
-                <span class="tab-button current">Map</span>
-            </div>
-        </div>
-        
         <div id="map" class="full-screen"></div>
         
         <script>
@@ -190,8 +180,8 @@
                     icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
                     
                     const details = document.createElement("div");
-                    details.className = "details";
-                    details.innerHTML = "<div class='title hover-only'>" + route.name + "</div>";
+                    details.className = "details hover-only";
+                    details.innerHTML = "<div class='title'>" + route.name + "</div>";
                     
                     element.appendChild(icon);
                     element.appendChild(details);

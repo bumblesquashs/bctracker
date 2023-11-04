@@ -1,5 +1,5 @@
 
-% rebase('base', title='Vehicle History')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Vehicle History</h1>
@@ -8,28 +8,36 @@
         <span class="tab-button current">First Seen</span>
         <a href="{{ get_url(system, 'history/transfers') }}" class="tab-button">Transfers</a>
     </div>
-    <hr />
 </div>
 
-% if system is not None and not system.realtime_enabled:
-    <p>
-        {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-    </p>
+% if len(overviews) == 0:
+    <div class="placeholder">
+        % if system is None:
+            <h3 class="title">No vehicle history found</h3>
+            <p>Something has probably gone terribly wrong if you're seeing this.</p>
+        % elif not system.realtime_enabled:
+            <h3 class="title">{{ system }} does not currently support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % else:
+            <h3 class="title">No buses have been recorded in {{ system }}</h3>
+            <p>Please check again later!</p>
+        % end
+    </div>
 % else:
     <table class="striped">
         <thead>
             <tr>
                 <th>First Seen</th>
-                <th class="desktop-only">Number</th>
+                <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                <th class="non-desktop">Bus</th>
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
-                <th class="desktop-only">Assigned Block</th>
-                <th class="desktop-only">Assigned Routes</th>
-                <th class="non-desktop">Block</th>
+                <th>Block</th>
+                <th class="desktop-only">Routes</th>
             </tr>
         </thead>
         <tbody>
@@ -42,24 +50,24 @@
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ record.date.format_long() }}</td>
-                    <td class="non-desktop no-wrap">
-                        {{ record.date.format_short() }}
-                        % if system is None:
-                            <br class="mobile-only" />
-                            <span class="mobile-only smaller-font">{{ record.system }}</span>
-                        % end
+                    <td class="non-desktop">
+                        <div class="flex-column">
+                            {{ record.date.format_short() }}
+                            % if system is None:
+                                <span class="mobile-only smaller-font">{{ record.system }}</span>
+                            % end
+                        </div>
                     </td>
                     <td>
-                        <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
-                        % if order is not None:
-                            <br class="non-desktop" />
-                            <span class="non-desktop smaller-font">{{ order }}</span>
-                        % end
+                        <div class="flex-column">
+                            % include('components/bus', bus=bus)
+                            <span class="non-desktop smaller-font">
+                                % include('components/order', order=order)
+                            </span>
+                        </div>
                     </td>
                     <td class="desktop-only">
-                        % if order is not None:
-                            {{ order }}
-                        % end
+                        % include('components/order', order=order)
                     </td>
                     % if system is None:
                         <td class="non-mobile">{{ record.system }}</td>
@@ -73,7 +81,7 @@
                         % end
                     </td>
                     <td class="desktop-only">
-                        % include('components/route_indicator', routes=record.routes)
+                        % include('components/routes_indicator', routes=record.routes)
                     </td>
                 </tr>
             % end

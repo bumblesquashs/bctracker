@@ -7,7 +7,7 @@ themes = {}
 
 def load():
     '''Loads theme data from the static CSV file'''
-    with open(f'./data/static/themes.csv', 'r') as file:
+    with open(f'./static/themes.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
@@ -23,3 +23,8 @@ def find(theme_id):
 def find_all():
     '''Returns all themes'''
     return themes.values()
+
+def delete_all():
+    '''Deletes all themes'''
+    global themes
+    themes = {}

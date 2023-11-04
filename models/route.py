@@ -6,15 +6,13 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-import helpers.sheet
-
 from models.match import Match
 from models.schedule import Schedule
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'trips', 'schedule', 'sheets')
+    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'sheets', 'indicator_points')
     
     @classmethod
     def from_csv(cls, row, system, trips):
@@ -54,7 +52,7 @@ class Route:
                 name = ' / '.join(sorted(set(headsigns)))
             else:
                 name = prefix
-        if 'route_color' in row and row['route_color'] != '' and row['route_color'] != '000000':
+        if 'route_color' in row and row['route_color'] != '' and (not system.recolour_black or row['route_color'] != '000000'):
             colour = row['route_color']
         else:
             # Generate a random colour based on system ID and route number
@@ -72,21 +70,41 @@ class Route:
             g = int(rgb[1] * 255)
             b = int(rgb[2] * 255)
             colour = f'{r:02x}{g:02x}{b:02x}'
-        return cls(system, id, number, name, colour, route_trips)
+        if 'route_text_color' in row and row['route_text_color'] != '':
+            text_colour = row['route_text_color']
+        else:
+            text_colour = 'FFFFFF'
+        return cls(system, id, number, name, colour, text_colour, route_trips)
     
-    def __init__(self, system, id, number, name, colour, trips):
+    def __init__(self, system, id, number, name, colour, text_colour, trips):
         self.system = system
         self.id = id
         self.number = number
         self.name = name
         self.colour = colour
+        self.text_colour = text_colour
         self.trips = trips
+        
+        if len(trips) == 0:
+            self.indicator_points = []
+        else:
+            sorted_trips = sorted(trips, key=lambda t: len(t.departures), reverse=True)
+            points = sorted_trips[0].load_points()
+            first_point = points[0]
+            last_point = points[-1]
+            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+            if distance <= 0.05:
+                count = min((len(points) // 500) + 1, 3)
+            else:
+                count = min(int(distance * 8) + 1, 4)
+            size = len(points) // count
+            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
         services = {t.service for t in trips}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = helpers.sheet.combine(system, services)
+        self.schedule = Schedule.combine(services)
+        self.sheets = system.copy_sheets(services)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -104,37 +122,32 @@ class Route:
         return self.key > other.key
     
     @property
+    def display_name(self):
+        '''Formats the route name for web display'''
+        return self.name.replace('/', '/<wbr />')
+    
+    @property
     def json(self):
         '''Returns a representation of this route in JSON-compatible format'''
         return {
             'id': self.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
-            'colour': self.colour
+            'colour': self.colour,
+            'text_colour': self.text_colour
         }
     
     @property
     def indicator_json(self):
         '''Returns a representation of the map indicator for this route in JSON-compatible format'''
         json = []
-        trips = sorted(self.trips, key=lambda t: len(t.points), reverse=True)
-        trip = trips[0]
-        first_point = trip.points[0]
-        last_point = trip.points[-1]
-        distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-        if distance <= 0.05:
-            count = min((len(trip.points) // 500) + 1, 3)
-        else:
-            count = min(int(distance * 8) + 1, 4)
-        size = len(trip.points) // count
-        for i in range(count):
-            index = (i * size) + (size // 2)
-            point = trip.points[index]
+        for point in self.indicator_points:
             json.append({
                 'system_id': self.system.id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
+                'text_colour': self.text_colour,
                 'lat': point.lat,
                 'lon': point.lon
             })
@@ -145,8 +158,8 @@ class Route:
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
-            return sorted([t for t in self.trips if t.service.schedule.includes(date)])
-        return sorted([t for t in self.trips if t.service in service_group.services])
+            return sorted([t for t in self.trips if date in t.service])
+        return sorted([t for t in self.trips if t.service in service_group])
     
     def get_headsigns(self, service_group=None, date=None):
         '''Returns all headsigns from this route'''

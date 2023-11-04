@@ -1,5 +1,5 @@
 
-% rebase('base', title='Realtime')
+% rebase('base')
 
 <div class="page-header">
     <h1 class="title">Realtime</h1>
@@ -16,28 +16,29 @@
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Sandra Bullock and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
     </div>
-    <hr />
 </div>
 
 % if len(positions) == 0:
-    <div>
-        % if system is not None and not system.realtime_enabled:
+    <div class="placeholder">
+        % if system is None:
+            <h3 class="title">There are no buses out right now</h3>
             <p>
-                {{ system }} does not currently support realtime.
-                You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-            </p>
-        % else:
-            % if system is None:
-                There are no buses out right now.
                 BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
-                Please check back later!
-            % else:
-                <p>
-                    There are no buses out in {{ system }} right now.
-                    Please choose a different system.
-                </p>
-            % end
+                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+            </p>
+            <p>Please check again later!</p>
+        % elif not system.realtime_enabled:
+            <h3 class="title">{{ system }} does not support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % elif not system.is_loaded:
+            <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % else:
+            <h3 class="title">There are no buses out in {{ system }} right now</h3>
+            <p>Please check again later!</p>
         % end
     </div>
 % else:
@@ -47,22 +48,20 @@
     <table class="striped">
         <thead>
             <tr>
-                <th class="non-mobile">Number</th>
-                <th class="mobile-only">Bus</th>
+                <th>Bus</th>
                 % if system is None:
-                    <th class="non-mobile">System</th>
+                    <th class="desktop-only">System</th>
                 % end
-                <th class="desktop-only">Headsign</th>
-                <th class="desktop-only">Current Block</th>
-                <th class="desktop-only">Current Trip</th>
-                <th class="desktop-only">Current Stop</th>
-                <th class="non-desktop">Details</th>
+                <th>Headsign</th>
+                <th class="non-mobile">Block</th>
+                <th class="non-mobile">Trip</th>
+                <th class="desktop-only">Next Stop</th>
             </tr>
         </thead>
         <tbody>
             % if len(unknown_positions) > 0:
                 <tr class="section">
-                    <td colspan="8">
+                    <td colspan="6">
                         <div class="flex-row">
                             <div class="flex-1">Unknown Year/Model</div>
                             <div>{{ len(unknown_positions) }}</div>
@@ -71,22 +70,22 @@
                 </tr>
                 <tr class="display-none"></tr>
                 % for position in unknown_positions:
-                    % include('components/realtime_row', position=position)
+                    % include('rows/realtime', position=position)
                 % end
             % end
             % for order in orders:
                 % order_positions = sorted([p for p in known_positions if p.bus.order == order])
                 <tr class="section">
-                    <td colspan="8">
+                    <td colspan="6">
                         <div class="flex-row">
-                            <div class="flex-1">{{ order }}</div>
+                            <div class="flex-1">{{! order }}</div>
                             <div>{{ len(order_positions) }}</div>
                         </div>
                     </td>
                 </tr>
                 <tr class="display-none"></tr>
                 % for position in order_positions:
-                    % include('components/realtime_row', position=position)
+                    % include('rows/realtime', position=position)
                 % end
             % end
         </tbody>

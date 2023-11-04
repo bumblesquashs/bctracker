@@ -126,18 +126,20 @@ class Date:
     
     def format_since(self):
         '''Returns a string of the number of days, months, and years since this date'''
-        now = datetime.now()
-        years = now.year - self.year
-        if self.month > now.month:
+        if self.is_today:
+            return 'Today'
+        today = Date.today(self.timezone)
+        years = today.year - self.year
+        if self.month > today.month:
             years -= 1
-            months = (now.month + 12) - self.month
+            months = (today.month + 12) - self.month
         else:
-            months = now.month - self.month
-        if self.day > now.day:
+            months = today.month - self.month
+        if self.day > today.day:
             months -= 1
-            days = (now.day + calendar.monthrange(now.year, now.month)[1]) - self.day
+            days = (today.day + calendar.monthrange(today.year, today.month)[1]) - self.day
         else:
-            days = now.day - self.day
+            days = today.day - self.day
         parts = []
         if years == 1:
             parts.append('1 year')
@@ -152,3 +154,11 @@ class Date:
         elif days > 1 or len(parts) == 0:
             parts.append(f'{days} days')
         return ', '.join(parts) + ' ago'
+    
+    def next(self):
+        '''Returns the next date'''
+        return self + timedelta(days=1)
+    
+    def previous(self):
+        '''Returns the previous date'''
+        return self - timedelta(days=1)

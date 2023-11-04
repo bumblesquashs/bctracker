@@ -2,7 +2,7 @@
 
 <script>
     const topButton = document.getElementById("top-button");
-    const contentElement = document.getElementById("content-wrapper");
+    const contentElement = document.getElementById("main");
     const height = window.innerHeight * 1.5;
     
     contentElement.onscroll = function() {
@@ -28,7 +28,7 @@
 </script>
 
 <style>
-    #content {
+    #main {
         padding-bottom: 60px;
     }
 </style>
