@@ -39,15 +39,20 @@
                             % end
                         </div>
                     </div>
-                    <div class="section no-flex">
-                        % include('components/block_indicator')
-                    </div>
                     % for sheet in sheets:
                         % service_groups = sheet.service_groups
                         % if len(service_groups) > 0:
                             % if len(sheets) > 1:
                                 <div class="title">
                                     <h3>{{ sheet }}</h3>
+                                </div>
+                            % end
+                            % for service_group in service_groups:
+                                <div class="section no-flex">
+                                    % if len(service_groups) > 1:
+                                        <div class="lighter-text">{{ service_group }}</div>
+                                    % end
+                                    % include('components/block_indicator', service_group=service_group)
                                 </div>
                             % end
                             <div class="section">

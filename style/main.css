@@ -337,13 +337,20 @@ table.striped tr.section td {
     position: absolute;
     top: -2px;
     bottom: -2px;
-    background-color: #FF0000;
     width: 2px;
 }
 
 .block-indicator .trip {
     position: absolute;
     height: 100%;
+}
+
+.block-indicator .trip:hover {
+    border-width: 2px;
+    border-style: solid;
+    margin-top: -2px;
+    margin-left: -2px;
+    z-index: 20;
 }
 
 .bold {

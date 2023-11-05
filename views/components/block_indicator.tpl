@@ -1,33 +1,37 @@
 
-% from models.date import Date
 % from models.time import Time
 
-% start_time = block.get_start_time()
-% end_time = block.get_end_time()
+% start_time = block.get_start_time(service_group=service_group)
+% end_time = block.get_end_time(service_group=service_group)
 % total_minutes = end_time.get_minutes() - start_time.get_minutes()
 
-<div class="flex-row">
-    <div class="smaller-font lighter-text">{{ start_time.format_web() }}</div>
-    <div class="flex-1"></div>
-    <div class="smaller-font lighter-text">{{ end_time.format_web() }}</div>
-</div>
-<div class="block-indicator">
-    % for trip in block.get_trips():
-        % trip_minutes = trip.end_time.get_minutes() - trip.start_time.get_minutes()
-        % percentage = (trip_minutes / total_minutes) * 100
-        % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
-        % offset_percentage = (offset_minutes / total_minutes) * 100
-        <div class="trip" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
-            
-        </div>
-    % end
-    
-    % if start_time.is_earlier and end_time.is_later and Date.today() in block.schedule:
-        % now = Time.now(block.system.timezone)
-        % offset_minutes = now.get_minutes() - start_time.get_minutes()
-        % offset_percentage = (offset_minutes / total_minutes) * 100
-        <div class="now" style="left: {{ offset_percentage }}%;">
-            
-        </div>
-    % end
+<div>
+    <div class="flex-row">
+        <div class="smaller-font lighter-text">{{ start_time.format_web(time_format) }}</div>
+        <div class="flex-1"></div>
+        <div class="smaller-font lighter-text">{{ end_time.format_web(time_format) }}</div>
+    </div>
+    <div class="block-indicator">
+        % for trip in block.get_trips(service_group=service_group):
+            % trip_minutes = trip.end_time.get_minutes() - trip.start_time.get_minutes()
+            % percentage = (trip_minutes / total_minutes) * 100
+            % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
+            % offset_percentage = (offset_minutes / total_minutes) * 100
+            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="trip tooltip-anchor" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
+                <div class="tooltip">
+                    <div class="title">{{ trip }}</div>
+                    {{ trip.start_time.format_web(time_format) }} - {{ trip.end_time.format_web(time_format) }}
+                </div>
+            </a>
+        % end
+        
+        % if start_time.is_earlier and end_time.is_later and block.schedule.is_today:
+            % now = Time.now(block.system.timezone)
+            % offset_minutes = now.get_minutes() - start_time.get_minutes()
+            % offset_percentage = (offset_minutes / total_minutes) * 100
+            <div class="now" style="left: {{ offset_percentage }}%;">
+                
+            </div>
+        % end
+    </div>
 </div>

@@ -368,6 +368,14 @@ table.striped tr {
     display: none;
 }
 
+.block-indicator .now {
+    background-color: #FF0000;
+}
+
+.block-indicator .trip:hover {
+    border-color: #000000;
+}
+
 .button {
     background: #EEEEEE;
     color: #222222;

@@ -323,6 +323,14 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
+.block-indicator .now {
+    background-color: #FF0000;
+}
+
+.block-indicator .trip:hover {
+    border-color: #565656;
+}
+
 .button {
     background-color: #2247B7;
     color: white;
