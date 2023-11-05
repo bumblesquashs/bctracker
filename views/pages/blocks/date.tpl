@@ -14,7 +14,6 @@
         % include('components/systems')
     </div>
 % else:
-    % blocks = [b for b in system.get_blocks() if date in b.schedule]
     <div class="flex-container">
         <div class="sidebar container flex-1">
             <div class="section">
