@@ -299,7 +299,7 @@ def fleet_page(system_id=None):
     return page('fleet', system_id,
         title='Fleet',
         path='fleet',
-        orders=[o for o in sorted(orders, key=lambda o: o.low) if not o.is_test],
+        orders=[o for o in sorted(orders, key=lambda o: o.low) if o.visible],
         overviews={o.bus.number: o for o in overviews}
     )
 
@@ -312,7 +312,7 @@ def fleet_page(system_id=None):
 def bus_overview_page(bus_number, system_id=None):
     bus = Bus(bus_number)
     overview = helpers.overview.find(bus_number)
-    if (bus.order is None and overview is None) or bus.is_test:
+    if (bus.order is None and overview is None) or not bus.visible:
         return error_page('bus', system_id,
             bus_number=bus_number
         )
@@ -336,7 +336,7 @@ def bus_overview_page(bus_number, system_id=None):
 def bus_map_page(bus_number, system_id=None):
     bus = Bus(bus_number)
     overview = helpers.overview.find(bus_number)
-    if (bus.order is None and overview is None) or bus.is_test:
+    if (bus.order is None and overview is None) or not bus.visible:
         return error_page('bus', system_id,
             bus_number=bus_number
         )
@@ -358,7 +358,7 @@ def bus_map_page(bus_number, system_id=None):
 def bus_history_page(bus_number, system_id=None):
     bus = Bus(bus_number)
     overview = helpers.overview.find(bus_number)
-    if (bus.order is None and overview is None) or bus.is_test:
+    if (bus.order is None and overview is None) or not bus.visible:
         return error_page('bus', system_id,
             bus_number=bus_number
         )
@@ -389,7 +389,7 @@ def bus_history_page(bus_number, system_id=None):
     '/<system_id>/history/'
 ])
 def history_last_seen_page(system_id=None):
-    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.last_record is not None and not o.bus.is_test]
+    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.last_record is not None and o.bus.visible]
     return page('history/last_seen', system_id,
         title='Vehicle History',
         path='history',
@@ -403,7 +403,7 @@ def history_last_seen_page(system_id=None):
     '/<system_id>/history/first-seen/'
 ])
 def history_first_seen_page(system_id=None):
-    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.first_record is not None and not o.bus.is_test]
+    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.first_record is not None and o.bus.visible]
     return page('history/first_seen', system_id,
         title='Vehicle History',
         path='history/first-seen',

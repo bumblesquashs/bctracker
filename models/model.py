@@ -9,7 +9,6 @@ class ModelType(Enum):
     decker = "Double Decker"
     midibus = "Midibus"
     shuttle = "Shuttle"
-    test = "Test"
     
     def __str__(self):
         return self.value
@@ -68,8 +67,3 @@ class Model:
     def display_name(self):
         '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
-    
-    @property
-    def is_test(self):
-        '''Checks if this is a test model'''
-        return self.type == ModelType.test
