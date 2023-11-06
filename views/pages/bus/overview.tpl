@@ -214,11 +214,15 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    <th>Stop</th>
+                                    <th class="non-mobile">Stop Number</th>
+                                    <th class="non-mobile">Stop Name</th>
+                                    <th class="mobile-only">Stop</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 % for departure in upcoming_departures:
+                                    % trip = departure.trip
+                                    % stop = departure.stop
                                     <tr>
                                         <td>
                                             <div class="flex-row">
@@ -233,14 +237,18 @@
                                                 % end
                                             </div>
                                         </td>
-                                        <td>
-                                            % trip = departure.trip
-                                            % stop = departure.stop
-                                            <div class="flex-column">
-                                                % if stop is None:
-                                                    <div class="lighter-text">Unknown</div>
-                                                % else:
-                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % if stop is None:
+                                            <td class="lighter-text" colspan="2">Unknown</td>
+                                        % else:
+                                            <td>
+                                                <div class="flex-column">
+                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                                    <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                </div>
+                                            </td>
+                                            <td class="non-mobile">
+                                                <div class="flex-column">
+                                                    <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                     % if not departure.pickup_type.is_normal:
                                                         <span class="smaller-font">{{ departure.pickup_type }}</span>
                                                     % elif departure == trip.last_departure:
@@ -251,9 +259,9 @@
                                                     % elif departure == trip.first_departure:
                                                         <span class="smaller-font">Pick up only</span>
                                                     % end
-                                                % end
-                                            </div>
-                                        </td>
+                                                </div>
+                                            </td>
+                                        % end
                                     </tr>
                                 % end
                             </tbody>
