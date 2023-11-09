@@ -8,7 +8,6 @@ chevrolet-arboc-4500-som28d,Chevrolet/ARBOC,4500/SOM28D,28,Diesel,shuttle
 chevrolet-arboc-4500-som28g,Chevrolet/ARBOC,4500/SOM28G,28,Gasoline,shuttle
 chevrolet-arboc-4500-som-28,Chevrolet/ARBOC,4500/SOM 28,28,Diesel,shuttle
 chevrolet-girardin-4500-g5,Chevrolet/Girardin,4500/G5,28,Gasoline,shuttle
-consat-test,Consat,Test,0,N/A,test
 dennis-dart-slf-30,Dennis,Dart SLF (30'),30,Diesel,midibus
 dennis-dart-slf-35,Dennis,Dart SLF (35'),35,Diesel,midibus
 dennis-trident,Dennis,Trident,42,Diesel,decker
