@@ -1,6 +1,7 @@
 
 import helpers.date
 
+from models.date import Date
 from models.daterange import DateRange
 from models.weekday import Weekday
 
@@ -81,6 +82,10 @@ class Schedule:
     def is_special(self):
         '''Checks if this schedule is special'''
         return len(self.weekdays) == 0
+    
+    @property
+    def is_today(self):
+        return Date.today() in self.dates
     
     @property
     def added_dates(self):

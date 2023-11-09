@@ -327,6 +327,32 @@ table.striped tr.section td {
     font-size: 16pt;
 }
 
+.block-indicator {
+    position: relative;
+    height: 15px;
+    margin-top: 2px;
+}
+
+.block-indicator .now {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 2px;
+}
+
+.block-indicator .trip {
+    position: absolute;
+    height: 100%;
+}
+
+.block-indicator .trip:hover {
+    border-width: 2px;
+    border-style: solid;
+    margin-top: -2px;
+    margin-left: -2px;
+    z-index: 20;
+}
+
 .bold {
     font-weight: bold;
 }

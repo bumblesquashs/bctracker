@@ -47,6 +47,14 @@
                                     <h3>{{ sheet }}</h3>
                                 </div>
                             % end
+                            % for service_group in service_groups:
+                                <div class="section no-flex">
+                                    % if len(service_groups) > 1:
+                                        <div class="lighter-text">{{ service_group }}</div>
+                                    % end
+                                    % include('components/block_indicator', service_group=service_group)
+                                </div>
+                            % end
                             <div class="section">
                                 <div class="name">Start time</div>
                                 <div class="value flex-column">
