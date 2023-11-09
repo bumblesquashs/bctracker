@@ -51,6 +51,7 @@ low,high,year,model_id,visible,demo,exceptions
 4400,4432,2017,grande-west-vicinity-35,1,0,
 4433,4474,2018,grande-west-vicinity-35,1,0,
 6000,6029,2017,nova-bus-lfs,1,0,
+7404,7404,,,0,1,
 8001,8009,1991,new-flyer-d40lf,1,0,
 8010,8033,1992,new-flyer-d40lf,1,0,
 8034,8048,1994,new-flyer-d40lf,1,0,
