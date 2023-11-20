@@ -857,6 +857,43 @@ def stop_schedule_date_page(stop_number, date_string, system_id=None):
     )
 
 @app.get([
+    '/stats',
+    '/stats/',
+    '/<system_id>/stats',
+    '/<system_id>/stats/'
+])
+def stats_overview_page(system_id=None):
+    return page('stats/overview', system_id,
+        title=f'Statistics',
+        path='stats'
+    )
+
+@app.get([
+    '/stats/realtime',
+    '/stats/realtime/',
+    '/<system_id>/stats/realtime',
+    '/<system_id>/stats/realtime/'
+])
+def stats_realtime_page(system_id=None):
+    return page('stats/realtime', system_id,
+        title=f'Statistics',
+        path='stats/realtime',
+        positions=helpers.position.find_all(system_id)
+    )
+
+@app.get([
+    '/stats/history',
+    '/stats/history/',
+    '/<system_id>/stats/history',
+    '/<system_id>/stats/history/'
+])
+def stats_history_page(system_id=None):
+    return page('stats/history', system_id,
+        title=f'Statistics',
+        path='stats/history'
+    )
+
+@app.get([
     '/about',
     '/about/',
     '/<system_id>/about',

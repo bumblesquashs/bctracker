@@ -156,6 +156,11 @@
             
             <div class="flex-1"></div>
             
+            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'stats') }}">
+                <img class="white" src="/img/white/stats.png" />
+                <img class="black" src="/img/black/stats.png" />
+            </a>
+            
             <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
@@ -220,6 +225,11 @@
                 </a>
             % end
             
+            <a class="menu-button" href="{{ get_url(system, 'stats') }}">
+                <img class="white" src="/img/white/stats.png" />
+                <img class="black" src="/img/black/stats.png" />
+                <span>Statistics</span>
+            </a>
             <a class="menu-button" href="{{ get_url(system, 'about') }}">
                 <img class="white" src="/img/white/about.png" />
                 <img class="black" src="/img/black/about.png" />
