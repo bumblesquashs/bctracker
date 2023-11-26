@@ -110,12 +110,13 @@ def get_url(system, path='', **kwargs):
         url = system_domain.format(system, path).rstrip('/')
     else:
         url = system_domain.format(system.id, path).rstrip('/')
-    if len(kwargs) > 0:
-        query = '&'.join([f'{k}={v}' for k, v in kwargs.items() if v is not None])
+    query_args = {k:v for k, v in kwargs.items() if v is not None}
+    if len(query_args) > 0:
+        query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
-def page(name, system_id, title, path='', enable_refresh=True, include_maps=False, full_map=False, **kwargs):
+def page(name, system_id, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
@@ -129,6 +130,7 @@ def page(name, system_id, title, path='', enable_refresh=True, include_maps=Fals
         version=VERSION,
         title=title,
         path=path,
+        path_args=path_args or {},
         enable_refresh=enable_refresh,
         include_maps=include_maps,
         full_map=full_map,
@@ -167,6 +169,14 @@ def set_cookie(key, value):
         response.set_cookie(key, value, max_age=max_age, path='/')
     else:
         response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
+
+def query_cookie(key, default_value):
+    '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
+    value = request.query.get(key)
+    if value is not None:
+        set_cookie(key, value)
+        return value
+    return request.get_cookie(key, default_value)
 
 # =============================================================
 # CSS (Static Files)
@@ -241,10 +251,15 @@ def map_page(system_id=None):
     '/<system_id>/realtime/'
 ])
 def realtime_all_page(system_id=None):
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') == 'true'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/all', system_id,
         title='Realtime',
         path='realtime',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -254,10 +269,15 @@ def realtime_all_page(system_id=None):
     '/<system_id>/realtime/routes/'
 ])
 def realtime_routes_page(system_id=None):
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') == 'true'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/routes', system_id,
         title='Realtime',
         path='realtime/routes',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -267,10 +287,15 @@ def realtime_routes_page(system_id=None):
     '/<system_id>/realtime/models/'
 ])
 def realtime_models_page(system_id=None):
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') == 'true'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/models', system_id,
         title='Realtime',
         path='realtime/models',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -281,10 +306,15 @@ def realtime_models_page(system_id=None):
 ])
 def realtime_speed_page(system_id=None):
     set_cookie('speed', '1994')
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') == 'true'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/speed', system_id,
         title='Realtime',
         path='realtime/speed',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([

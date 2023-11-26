@@ -396,7 +396,6 @@ table.striped tr.section td {
     gap: 5px;
     align-items: center;
     cursor: pointer;
-    margin-bottom: 5px;
 }
 
 .checkbox .box {
@@ -419,6 +418,10 @@ table.striped tr.section td {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.container > .section.left {
+    align-items: flex-start;
 }
 
 .display-none {
