@@ -236,12 +236,14 @@ def news_page(system_id=None):
 ])
 def map_page(system_id=None):
     positions = helpers.position.find_all(system_id, has_location=True)
+    show_nis = query_cookie('show_nis', 'true') != 'false'
     return page('map', system_id,
         title='Map',
         path='map',
         include_maps=len(positions) > 0,
         full_map=len(positions) > 0,
-        positions=sorted(positions, key=lambda p: p.lat, reverse=True)
+        positions=sorted(positions, key=lambda p: p.lat, reverse=True),
+        show_nis=show_nis
     )
 
 @app.get([
@@ -252,7 +254,7 @@ def map_page(system_id=None):
 ])
 def realtime_all_page(system_id=None):
     positions = helpers.position.find_all(system_id)
-    show_nis = query_cookie('show_nis', 'true') == 'true'
+    show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
     return page('realtime/all', system_id,
@@ -270,7 +272,7 @@ def realtime_all_page(system_id=None):
 ])
 def realtime_routes_page(system_id=None):
     positions = helpers.position.find_all(system_id)
-    show_nis = query_cookie('show_nis', 'true') == 'true'
+    show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
     return page('realtime/routes', system_id,
@@ -288,7 +290,7 @@ def realtime_routes_page(system_id=None):
 ])
 def realtime_models_page(system_id=None):
     positions = helpers.position.find_all(system_id)
-    show_nis = query_cookie('show_nis', 'true') == 'true'
+    show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
     return page('realtime/models', system_id,
@@ -307,7 +309,7 @@ def realtime_models_page(system_id=None):
 def realtime_speed_page(system_id=None):
     set_cookie('speed', '1994')
     positions = helpers.position.find_all(system_id)
-    show_nis = query_cookie('show_nis', 'true') == 'true'
+    show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
     return page('realtime/speed', system_id,

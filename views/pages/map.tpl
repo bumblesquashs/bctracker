@@ -27,7 +27,7 @@
             </div>
             <div class="checkbox" onclick="toggleNISBuses()">
                 <div class="box">
-                    <div id="nis-image">
+                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
                         <img class="white" src="/img/white/check.png" />
                         <img class="black" src="/img/black/check.png" />
                     </div>
@@ -88,7 +88,7 @@
         let markers = [];
         let tripLinesVisible = false;
         let automaticRefresh = false;
-        let showNISBuses = true;
+        let showNISBuses = "{{ show_nis }}" !== "False";
         let hoverPosition = null;
         
         const shapeIDs = [];
@@ -275,6 +275,7 @@
             showNISBuses = !showNISBuses;
             const checkboxImage = document.getElementById("nis-image");
             checkboxImage.classList.toggle("hidden");
+            setCookie("show_nis", showNISBuses ? "true" : "false");
             
             for (const element of document.getElementsByClassName("nis-bus")) {
                 if (showNISBuses) {
