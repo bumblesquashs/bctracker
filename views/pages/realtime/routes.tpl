@@ -120,7 +120,8 @@
                                         <div class="flex-column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
-                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
+                                                Trip:
+                                                % include('components/trip_link', trip=trip, include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="non-desktop smaller-font">
@@ -133,7 +134,7 @@
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
+                                        % include('components/trip_link', trip=trip)
                                     </td>
                                     <td class="desktop-only">
                                         % if stop is None:
