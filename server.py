@@ -237,13 +237,15 @@ def news_page(system_id=None):
 def map_page(system_id=None):
     positions = helpers.position.find_all(system_id, has_location=True)
     show_nis = query_cookie('show_nis', 'true') != 'false'
+    visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
     return page('map', system_id,
         title='Map',
         path='map',
-        include_maps=len(positions) > 0,
-        full_map=len(positions) > 0,
+        include_maps=len(visible_positions) > 0,
+        full_map=len(visible_positions) > 0,
         positions=sorted(positions, key=lambda p: p.lat, reverse=True),
-        show_nis=show_nis
+        show_nis=show_nis,
+        visible_positions=visible_positions
     )
 
 @app.get([
