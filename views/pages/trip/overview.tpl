@@ -104,7 +104,7 @@
                             % for related_trip in related_trips:
                                 % block = related_trip.block
                                 <tr>
-                                    <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{! related_trip.display_id }}</a></td>
+                                    <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{ related_trip.short_id }}</a></td>
                                     <td class="non-mobile">
                                         % if block is None:
                                             <div class="lighter-text">Unknown</div>

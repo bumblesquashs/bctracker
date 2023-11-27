@@ -147,7 +147,7 @@
                         <div class="section">
                             <div class="name">Trip</div>
                             <div class="value flex-column">
-                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
                                 % start_time = trip.start_time.format_web(time_format)
                                 % end_time = trip.end_time.format_web(time_format)
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>

@@ -105,7 +105,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="flex-column">
-                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
                                                                 <span class="mobile-only smaller-font">
                                                                     % include('components/headsign_indicator')
                                                                 </span>

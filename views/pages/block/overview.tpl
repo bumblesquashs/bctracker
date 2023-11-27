@@ -210,7 +210,7 @@
                                         <div class="flex-column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
-                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
                                             </div>
                                             % if stop is not None:
                                                 <div class="mobile-only smaller-font">
@@ -220,7 +220,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % if stop is None:
@@ -288,7 +288,7 @@
                                                                 <td class="desktop-only">{{ trip.direction }}</td>
                                                                 <td>
                                                                     <div class="flex-column">
-                                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{ trip.short_id }}</a>
                                                                         <span class="mobile-only smaller-font">
                                                                             % include('components/headsign_indicator')
                                                                         </span>
