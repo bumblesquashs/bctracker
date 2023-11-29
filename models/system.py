@@ -181,6 +181,10 @@ class System:
             return f'at {time.format_web(time_format)} {time.timezone_name}'
         return date.format_since()
     
+    def search_blocks(self, query):
+        '''Returns all blocks that match the given query'''
+        return [b.get_match(query) for b in self.blocks.values()]
+    
     def search_routes(self, query):
         '''Returns all routes that match the given query'''
         return [r.get_match(query) for r in self.routes.values()]
