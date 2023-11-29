@@ -46,6 +46,13 @@
                             }
                         }
                     }
+                    
+                    function blockSearch() {
+                        let value = document.getElementById('block_search').value;
+                        if (value.length > 0) {
+                            window.location = "{{ get_url(system) }}/blocks/" + value;
+                        }
+                    }
                 </script>
                 
                 % if system is None:
@@ -80,6 +87,14 @@
                         <label for="stop_search">Stop Number or Name:</label>
                         <div class="input-container">
                             <input type="text" id="stop_search" name="stop_search" method="post" size="10">
+                            <input type="submit" value="Search" class="button">
+                        </div>
+                    </form>
+                    
+                    <form onsubmit="blockSearch()" action="javascript:void(0)">
+                        <label for="block_search">Block ID:</label>
+                        <div class="input-container">
+                            <input type="text" id="block_search" name="block_search" method="post" size="10">
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>

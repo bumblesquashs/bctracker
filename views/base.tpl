@@ -481,6 +481,10 @@
             let icon = "";
             let name = result.name;
             switch (result.type) {
+                case "block":
+                    icon = "<img class='white' src='/img/white/blocks.png' /><img class='black' src='/img/black/blocks.png' />";
+                    name = "Block " + result.name;
+                    break;
                 case "bus":
                     icon = "<img class='white' src='/img/white/realtime.png' /><img class='black' src='/img/black/realtime.png' />";
                     name = "Bus " + result.name;

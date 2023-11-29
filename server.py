@@ -984,6 +984,7 @@ def api_search(system_id=None):
         if query.isnumeric() and (system is None or system.realtime_enabled):
             matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system_id))
         if system is not None:
+            matches += system.search_blocks(query)
             matches += system.search_routes(query)
             matches += system.search_stops(query)
     matches = sorted([m for m in matches if m.value > 0])
