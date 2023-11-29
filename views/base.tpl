@@ -265,7 +265,7 @@
                 % if system is None:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % else:
-                    <a href="{{ get_url(None, path) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
@@ -275,7 +275,7 @@
                             % if system is not None and system == region_system:
                                 <span class="system-button current">{{ region_system }}</span>
                             % else:
-                                <a href="{{ get_url(region_system, path) }}" class="system-button">{{ region_system }}</a>
+                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">{{ region_system }}</a>
                             % end
                         % end
                     % end

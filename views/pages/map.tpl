@@ -5,59 +5,89 @@
 
 <div class="page-header">
     <h1 class="title">Map</h1>
-    % if len(positions) > 0:
-        <div class="checkbox" onclick="toggleTripLines()">
-            <div class="box">
-                <div id="checkbox-image" class="hidden">
-                    <img class="white" src="/img/white/check.png" />
-                    <img class="black" src="/img/black/check.png" />
+    % if len(visible_positions) > 0:
+        <div class="flex-column flex-gap-5">
+            <div class="checkbox" onclick="toggleTripLines()">
+                <div class="box">
+                    <div id="checkbox-image" class="hidden">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
                 </div>
+                <span class="checkbox-label">Show Route Lines</span>
             </div>
-            <span class="checkbox-label">Show Route Lines</span>
-        </div>
-        <div class="checkbox" onclick="toggleAutomaticRefresh()">
-            <div class="box">
-                <div id="refresh-image" class="hidden">
-                    <img class="white" src="/img/white/check.png" />
-                    <img class="black" src="/img/black/check.png" />
+            <div class="checkbox" onclick="toggleAutomaticRefresh()">
+                <div class="box">
+                    <div id="refresh-image" class="hidden">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
                 </div>
+                <span class="checkbox-label">Automatically Refresh</span>
             </div>
-            <span class="checkbox-label">Automatically Refresh</span>
-        </div>
-        <div class="checkbox" onclick="toggleNISBuses()">
-            <div class="box">
-                <div id="nis-image">
-                    <img class="white" src="/img/white/check.png" />
-                    <img class="black" src="/img/black/check.png" />
+            <div class="checkbox" onclick="toggleNISBuses()">
+                <div class="box">
+                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
                 </div>
+                <span class="checkbox-label">Show NIS Buses</span>
             </div>
-            <span class="checkbox-label">Show NIS Buses</span>
         </div>
     % end
 </div>
 
-% if len(positions) == 0:
-    <div class="placeholder">
-        % if system is None:
-            <h3 class="title">There are no buses out right now</h3>
-            <p>
-                BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
-            </p>
-            <p>Please check again later!</p>
-        % elif not system.realtime_enabled:
-            <h3 class="title">{{ system }} does not support realtime</h3>
-            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
-            <div class="non-desktop">
-                % include('components/systems')
+% if len(visible_positions) == 0:
+    <div class="container">
+        <div class="section">
+            <div class="checkbox" onclick="toggleNISBusesEmpty()">
+                <div class="box">
+                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
+                </div>
+                <span class="checkbox-label">Show NIS Buses</span>
             </div>
-        % elif not system.is_loaded:
-            <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
-            <p>System data is currently loading and will be available soon.</p>
-        % else:
-            <h3 class="title">There are no buses out in {{ system }} right now</h3>
-            <p>Please check again later!</p>
-        % end
+            <script>
+                function toggleNISBusesEmpty() {
+                    window.location = "{{ get_url(system, 'map', show_nis='false' if show_nis else 'true') }}"
+                }
+            </script>
+        </div>
+        <div class="section">
+            <div class="placeholder">
+                % if system is None:
+                    % if show_nis:
+                        <h3 class="title">There are no buses out right now</h3>
+                        <p>
+                            BC Transit does not have late night service, so this should be the case overnight.
+                            If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                        </p>
+                        <p>Please check again later!</p>
+                    % else:
+                        <h3 class="title">There are no buses in service right now</h3>
+                        <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                    % end
+                % elif not system.realtime_enabled:
+                    <h3 class="title">{{ system }} does not support realtime</h3>
+                    <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+                    <div class="non-desktop">
+                        % include('components/systems')
+                    </div>
+                % elif not system.is_loaded:
+                    <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+                    <p>System data is currently loading and will be available soon.</p>
+                % elif not show_nis:
+                    <h3 class="title">There are no buses in service in {{ system }} right now</h3>
+                    <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                % else:
+                    <h3 class="title">There are no buses out in {{ system }} right now</h3>
+                    <p>Please check again later!</p>
+                % end
+            </div>
+        </div>
     </div>
 % else:
     <div id="map" class="full-screen"></div>
@@ -86,7 +116,7 @@
         let markers = [];
         let tripLinesVisible = false;
         let automaticRefresh = false;
-        let showNISBuses = true;
+        let showNISBuses = "{{ show_nis }}" !== "False";
         let hoverPosition = null;
         
         const shapeIDs = [];
@@ -273,6 +303,7 @@
             showNISBuses = !showNISBuses;
             const checkboxImage = document.getElementById("nis-image");
             checkboxImage.classList.toggle("hidden");
+            setCookie("show_nis", showNISBuses ? "true" : "false");
             
             for (const element of document.getElementsByClassName("nis-bus")) {
                 if (showNISBuses) {
