@@ -32,7 +32,7 @@ class Direction(Enum):
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', 'sheets', '_related_trips')
+    __slots__ = ('system', 'id', 'short_id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'departures', 'direction', 'sheets', '_related_trips')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -56,6 +56,12 @@ class Trip:
         self.shape_id = shape_id
         self.headsign = headsign
         self.departures = departures
+        
+        id_parts = trip_id.split(':')
+        if len(id_parts) == 1:
+            self.short_id = trip_id
+        else:
+            self.short_id = id_parts[0]
         
         if len(departures) == 0:
             self.direction = Direction.UNKNOWN
