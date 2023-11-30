@@ -79,10 +79,10 @@ SQL_SCRIPTS = [
 
 connection = None
 
-def connect(foreign_keys=True):
+def connect(name='bctracker', foreign_keys=True):
     '''Opens a connection to the database and runs setup scripts'''
     global connection
-    connection = sqlite3.connect('data/bctracker.db', check_same_thread=False)
+    connection = sqlite3.connect(f'data/{name}.db', check_same_thread=False)
     if foreign_keys:
         connection.execute('PRAGMA foreign_keys = 1')
     else:
