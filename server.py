@@ -179,7 +179,7 @@ def query_cookie(key, default_value):
     return request.get_cookie(key, default_value)
 
 # =============================================================
-# CSS (Static Files)
+# Static Files
 # =============================================================
 
 @app.get([
@@ -189,16 +189,19 @@ def query_cookie(key, default_value):
 def style(name, system_id=None):
     return static_file(name, root='./style')
 
-# =============================================================
-# Images (Static Files)
-# =============================================================
-
 @app.get([
     '/img/<name:path>',
     '/<system_id>/img/<name:path>'
 ])
 def img(name, system_id=None):
     return static_file(name, root='./img')
+
+@app.get([
+    '/robots.txt',
+    '/<system_id>/robots.txt'
+])
+def robots_text(system_id=None):
+    return static_file('robots.txt', root='.')
 
 # =============================================================
 # HTML (Templates)
