@@ -7,15 +7,6 @@ class Point:
     __slots__ = ('system', 'shape_id', 'sequence', 'lat', 'lon')
     
     @classmethod
-    def from_csv(cls, row, system):
-        '''Returns a point initialized from the given CSV row'''
-        shape_id = row['shape_id']
-        sequence = int(row['shape_pt_sequence'])
-        lat = float(row['shape_pt_lat'])
-        lon = float(row['shape_pt_lon'])
-        return cls(system, shape_id, sequence, lat, lon)
-    
-    @classmethod
     def from_db(cls, row, prefix='point'):
         '''Returns a point initialized from the given database row'''
         system = helpers.system.find(row[f'{prefix}_system_id'])

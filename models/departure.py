@@ -56,34 +56,6 @@ class Departure:
     __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time', 'pickup_type', 'dropoff_type', 'timepoint', 'distance')
     
     @classmethod
-    def from_csv(cls, row, system):
-        '''Returns a departure initialized from the given CSV row'''
-        trip_id = row['trip_id']
-        sequence = int(row['stop_sequence'])
-        stop_id = row['stop_id']
-        time = Time.parse(row['departure_time'], system.timezone)
-        if 'pickup_type' in row:
-            pickup_type = PickupType(row['pickup_type'])
-        else:
-            pickup_type = PickupType.NORMAL
-        if 'drop_off_type' in row:
-            dropoff_type = DropoffType(row['drop_off_type'])
-        else:
-            dropoff_type = DropoffType.NORMAL
-        if 'timepoint' in row:
-            timepoint = row['timepoint'] == '1'
-        else:
-            timepoint = False
-        if 'shape_dist_traveled' in row:
-            try:
-                distance = int(row['shape_dist_traveled'])
-            except:
-                distance = None
-        else:
-            distance = None
-        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance)
-    
-    @classmethod
     def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
         system = helpers.system.find(row[f'{prefix}_system_id'])

@@ -3,14 +3,14 @@ from models.point import Point
 
 import database
 
-def create(point):
+def create(system, row):
     '''Inserts a new point into the database'''
     database.insert('point', {
-        'system_id': point.system.id,
-        'shape_id': point.shape_id,
-        'sequence': point.sequence,
-        'lat': point.lat,
-        'lon': point.lon
+        'system_id': system.id,
+        'shape_id': row['shape_id'],
+        'sequence': int(row['shape_pt_sequence']),
+        'lat': float(row['shape_pt_lat']),
+        'lon': float(row['shape_pt_lon'])
     })
 
 def find_all(system_id, shape_id=None):

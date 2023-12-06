@@ -1,20 +1,39 @@
 
-from models.departure import Departure
+from models.departure import Departure, PickupType, DropoffType
 
 import database
 
-def create(departure):
+def create(system, row):
     '''Inserts a new departure into the database'''
+    if 'pickup_type' in row:
+        pickup_type = PickupType(row['pickup_type'])
+    else:
+        pickup_type = PickupType.NORMAL
+    if 'drop_off_type' in row:
+        dropoff_type = DropoffType(row['drop_off_type'])
+    else:
+        dropoff_type = DropoffType.NORMAL
+    if 'timepoint' in row:
+        timepoint = row['timepoint'] == '1'
+    else:
+        timepoint = False
+    if 'shape_dist_traveled' in row:
+        try:
+            distance = int(row['shape_dist_traveled'])
+        except:
+            distance = None
+    else:
+        distance = None
     database.insert('departure', {
-        'system_id': departure.system.id,
-        'trip_id': departure.trip_id,
-        'sequence': departure.sequence,
-        'stop_id': departure.stop_id,
-        'time': departure.time.format_db(),
-        'pickup_type': departure.pickup_type.value,
-        'dropoff_type': departure.dropoff_type.value,
-        'timepoint': 1 if departure.timepoint else 0,
-        'distance': departure.distance
+        'system_id': system.id,
+        'trip_id': row['trip_id'],
+        'sequence': int(row['stop_sequence']),
+        'stop_id': row['stop_id'],
+        'time': row['departure_time'],
+        'pickup_type': pickup_type.value,
+        'dropoff_type': dropoff_type.value,
+        'timepoint': 1 if timepoint else 0,
+        'distance': distance
     })
 
 def find(system_id, trip_id=None, sequence=None, stop_id=None):

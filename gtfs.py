@@ -20,14 +20,14 @@ from models.service import Service, ServiceException
 from models.stop import Stop
 from models.trip import Trip
 
-def load(system, force_download=False, updatedb=False):
+def load(system, force_download=False, update_db=False):
     '''Loads the GTFS for the given system into memory'''
     if not system.gtfs_enabled:
         return
     if not path.exists(f'data/gtfs/{system.id}') or force_download:
         download(system)
         update_database(system)
-    elif updatedb:
+    elif update_db:
         update_database(system)
     print(f'Loading GTFS data for {system}...', end=' ', flush=True)
     
@@ -83,7 +83,7 @@ def load(system, force_download=False, updatedb=False):
         print('Done!')
     except Exception as e:
         print('Error!')
-        print(f'Failed to load GTFS for {system}: {e}')
+        print(f'  Failed to load GTFS for {system}: {e}')
 
 def download(system):
     '''Downloads the GTFS for the given system, then loads it into memory'''
@@ -110,7 +110,7 @@ def download(system):
         print('Done!')
     except Exception as e:
         print('Error!')
-        print(f'Failed to download GTFS for {system}: {e}')
+        print(f'  Failed to download GTFS for {system}: {e}')
 
 def update_database(system):
     print(f'Updating database with GTFS data for {system}...', end=' ', flush=True)
@@ -118,17 +118,13 @@ def update_database(system):
         helpers.departure.delete_all(system)
         helpers.point.delete_all(system)
         
-        departures = read_csv(system, 'stop_times', lambda r: Departure.from_csv(r, system))
-        for departure in departures:
-            helpers.departure.create(departure)
+        apply_csv(system, 'stop_times', helpers.departure.create)
+        apply_csv(system, 'shapes', helpers.point.create)
         
-        points = read_csv(system, 'shapes', lambda r: Point.from_csv(r, system))
-        for point in points:
-            helpers.point.create(point)
         print('Done!')
     except Exception as e:
         print('Error!')
-        print(f'Failed to update GTFS for {system}: {e}')
+        print(f'  Failed to update GTFS for {system}: {e}')
 
 def read_csv(system, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''
@@ -136,6 +132,14 @@ def read_csv(system, name, initializer):
         reader = csv.reader(file)
         columns = next(reader)
         return [initializer(dict(zip(columns, row))) for row in reader]
+
+def apply_csv(system, name, function):
+    '''Opens a CSV file and applies a function to each row'''
+    with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
+        reader = csv.reader(file)
+        columns = next(reader)
+        for row in reader:
+            function(system, dict(zip(columns, row)))
 
 def validate(system):
     '''Checks that the GTFS for the given system is up-to-date'''
