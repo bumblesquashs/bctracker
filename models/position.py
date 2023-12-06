@@ -7,7 +7,7 @@ from models.bus import Bus
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'block_id', 'route_id', 'lat', 'lon', 'bearing', 'speed', 'adherence')
+    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'block_id', 'route_id', 'sequence', 'lat', 'lon', 'bearing', 'speed', 'adherence')
     
     @classmethod
     def from_entity(cls, system, bus, data):
@@ -24,6 +24,13 @@ class Position:
                 stop_id = None
         except AttributeError:
             stop_id = None
+        try:
+            if data.HasField('current_stop_sequence'):
+                sequence = int(data.current_stop_sequence)
+            else:
+                sequence = None
+        except:
+            sequence = None
         try:
             lat = data.position.latitude
             lon = data.position.longitude
@@ -49,18 +56,11 @@ class Position:
         else:
             block_id = trip.block_id
             route_id = trip.route_id
-        try:
-            if data.HasField('current_stop_sequence'):
-                sequence = data.current_stop_sequence
-            else:
-                sequence = None
-        except AttributeError:
-            sequence = None
         if trip is None or stop is None or lat is None or lon is None:
             adherence = None
         else:
             adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence)
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
     
     @classmethod
     def from_db(cls, row, prefix='position'):
@@ -71,6 +71,7 @@ class Position:
         stop_id = row[f'{prefix}_stop_id']
         block_id = row[f'{prefix}_block_id']
         route_id = row[f'{prefix}_route_id']
+        sequence = row[f'{prefix}_sequence']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
         bearing = row[f'{prefix}_bearing']
@@ -80,15 +81,16 @@ class Position:
             adherence = None
         else:
             adherence = Adherence(adherence_value)
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence)
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, lat, lon, bearing, speed, adherence):
+    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
         self.system = system
         self.bus = bus
         self.trip_id = trip_id
         self.stop_id = stop_id
         self.block_id = block_id
         self.route_id = route_id
+        self.sequence = sequence
         self.lat = lat
         self.lon = lon
         self.bearing = bearing
@@ -155,6 +157,7 @@ class Position:
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
+            'bus_display': str(self.bus),
             'system': str(self.system),
             'lon': self.lon,
             'lat': self.lat,
@@ -186,3 +189,10 @@ class Position:
         if adherence is not None:
             data['adherence'] = adherence.json
         return data
+    
+    def get_upcoming_departures(self):
+        '''Returns the next 5 upcoming departures'''
+        if self.sequence is None or self.trip is None:
+            return []
+        future_departures = [d for d in self.trip.departures if d.sequence >= self.sequence]
+        return future_departures[:5]

@@ -1,6 +1,4 @@
 
-% from datetime import timedelta
-
 % rebase('base')
 
 <div class="page-header">
@@ -26,8 +24,8 @@
             <div class="content">
                 <div class="info-box">
                     <div class="section vertical-align">
-                        % previous_date = date - timedelta(days=1)
-                        % next_date = date + timedelta(days=1)
+                        % previous_date = date.previous()
+                        % next_date = date.next()
                         <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
                         <div class="name centred">
                             <h3>{{ date.format_long() }}</h3>
@@ -36,7 +34,7 @@
                         <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[s.schedule for s in route.sheets], schedule_path=f'routes/{route.number}/schedule')
+                        % include('components/sheets_indicator', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
                     </div>
                 </div>
             </div>
@@ -51,16 +49,21 @@
             <div class="content">
                 % trips = route.get_trips(date=date)
                 % if len(trips) == 0:
-                    <p>No trips found on {{ date.format_long() }}.</p>
-                    <p>
-                        There are a few reasons why that might be the case:
-                        <ol>
-                            <li>It may be a day of the week that does not normally have service</li>
-                            <li>It may be a holiday in which all regular service is suspended</li>
-                            <li>It may be outside of the date range for which schedules are currently available</li>
-                        </ol>
-                        Please check again later!
-                    </p>
+                    <div class="placeholder">
+                        % if system.is_loaded:
+                            <h3 class="title">No trips found on {{ date.format_long() }}</h3>
+                            <p>There are a few reasons why that might be the case:</p>
+                            <ol>
+                                <li>It may be a day of the week that does not normally have service</li>
+                                <li>It may be a holiday in which all regular service is suspended</li>
+                                <li>It may be outside of the date range for which schedules are currently available</li>
+                            </ol>
+                            <p>Please check again later!</p>
+                        % else:
+                            <h3 class="title">Trips for this route are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % else:
                     <div class="container inline">
                         % for direction in sorted({t.direction for t in trips}):
@@ -99,7 +102,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="flex-column">
-                                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                            % include('components/trip_link', trip=trip)
                                                             <span class="mobile-only smaller-font">
                                                                 % include('components/headsign_indicator')
                                                             </span>

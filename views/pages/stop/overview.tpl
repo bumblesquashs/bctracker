@@ -1,6 +1,5 @@
 
 % from math import floor
-% from datetime import timedelta
 
 % from models.date import Date
 
@@ -29,7 +28,7 @@
                 % if len(stop_departures) > 0:
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in stop.sheets], schedule_path=f'stops/{stop.number}/schedule')
+                            % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                         <div class="section vertical">
                             % routes = stop.get_routes()
@@ -120,7 +119,7 @@
                     % upcoming_count = 3 + floor(len(routes) / 3)
                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                     % if len(upcoming_departures) == 0:
-                        % tomorrow = Date.today() + timedelta(days=1)
+                        % tomorrow = Date.today().next()
                         <p>
                             There are no departures for the rest of today.
                             <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
@@ -170,10 +169,15 @@
             </div>
             <div class="content">
                 % if len(departures) == 0:
-                    <p>
-                        There are no departures from this stop today.
-                        You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.
-                    </p>
+                    <div class="placeholder">
+                        % if system.is_loaded:
+                            <h3 class="title">There are no departures from this stop today</h3>
+                            <p>You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                        % else:
+                            <h3 class="title">Departures for this stop are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % else:
                     % if system is None or system.realtime_enabled:
                         <p>

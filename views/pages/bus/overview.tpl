@@ -1,4 +1,6 @@
 
+% from datetime import timedelta
+
 % from models.date import Date
 % from models.model import ModelType
 
@@ -69,6 +71,19 @@
                         <div class="section">
                             <h3>Not in service</h3>
                         </div>
+                        % last_record = overview.last_record
+                        % if last_record is not None and last_record.date.is_today:
+                            % block = last_record.block
+                            % if block is not None:
+                                % today = Date.today(block.system.timezone)
+                                % end_time = block.get_end_time(date=today)
+                                % if end_time is not None and end_time.is_later:
+                                    <div class="section no-flex">
+                                        % include('components/block_indicator', date=today)
+                                    </div>
+                                % end
+                            % end
+                        % end
                         <div class="section">
                             <div class="name">System</div>
                             <div class="value">
@@ -97,12 +112,14 @@
                                 <h3 class="flex-1">{{ trip }}</h3>
                             </div>
                         </div>
-                        
                         <div class="section">
                             <div class="flex-row">
                                 % include('components/route_indicator')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
+                        </div>
+                        <div class="section no-flex">
+                            % include('components/block_indicator', date=Date.today(block.system.timezone))
                         </div>
                         <div class="section">
                             <div class="name">System</div>
@@ -120,11 +137,7 @@
                             <div class="name">Block</div>
                             <div class="value flex-column">
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                % if system is None:
-                                    % today = Date.today(None)
-                                % else:
-                                    % today = Date.today(system.timezone)
-                                % end
+                                % today = Date.today(block.system.timezone)
                                 % start_time = block.get_start_time(date=today).format_web(time_format)
                                 % end_time = block.get_end_time(date=today).format_web(time_format)
                                 % duration = block.get_duration(date=today)
@@ -134,7 +147,7 @@
                         <div class="section">
                             <div class="name">Trip</div>
                             <div class="value flex-column">
-                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                % include('components/trip_link', trip=trip)
                                 % start_time = trip.start_time.format_web(time_format)
                                 % end_time = trip.end_time.format_web(time_format)
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
@@ -188,15 +201,95 @@
     </div>
     
     <div class="container flex-3">
+        % if position is not None:
+            % upcoming_departures = position.get_upcoming_departures()
+            % if len(upcoming_departures) > 0:
+                <div class="section">
+                    <div class="header">
+                        <h2>Upcoming Stops</h2>
+                        <div class="flex-column">
+                            % if len([d for d in upcoming_departures if d.timepoint]) > 0:
+                                <div>
+                                    Departures in <span class="timing-point">bold</span> are timing points.
+                                </div>
+                            % end
+                            % if position.adherence is not None and position.adherence.value != 0:
+                                <div>
+                                    Times in brackets are estimates based on current location.
+                                </div>
+                            % end
+                        </div>
+                    </div>
+                    <div class="content">
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th class="non-mobile">Stop Number</th>
+                                    <th class="non-mobile">Stop Name</th>
+                                    <th class="mobile-only">Stop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for departure in upcoming_departures:
+                                    % trip = departure.trip
+                                    % stop = departure.stop
+                                    <tr>
+                                        <td>
+                                            <div class="flex-row">
+                                                <div class="{{ 'timing-point' if departure.timepoint else '' }}">
+                                                    {{ departure.time.format_web(time_format) }}
+                                                </div>
+                                                % if position.adherence is not None and position.adherence.value != 0:
+                                                    % expected_time = departure.time - timedelta(minutes=position.adherence.value)
+                                                    <div class="lighter-text">
+                                                        ({{ expected_time.format_web(time_format) }})
+                                                    </div>
+                                                % end
+                                            </div>
+                                        </td>
+                                        % if stop is None:
+                                            <td class="lighter-text" colspan="2">Unknown</td>
+                                        % else:
+                                            <td>
+                                                <div class="flex-column">
+                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                                    <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                </div>
+                                            </td>
+                                            <td class="non-mobile">
+                                                <div class="flex-column">
+                                                    <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    % if not departure.pickup_type.is_normal:
+                                                        <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                    % elif departure == trip.last_departure:
+                                                        <span class="smaller-font">Drop off only</span>
+                                                    % end
+                                                    % if not departure.dropoff_type.is_normal:
+                                                        <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                                    % elif departure == trip.first_departure:
+                                                        <span class="smaller-font">Pick up only</span>
+                                                    % end
+                                                </div>
+                                            </td>
+                                        % end
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            % end
+        % end
         <div class="section">
             <div class="header">
                 <h2>Recent History</h2>
             </div>
             <div class="content">
                 % if len(records) == 0:
-                    <p>This bus doesn't have any recorded history.</p>
-                    <p>
-                        There are a few reasons why that might be the case:
+                    <div class="placeholder">
+                        <h3 class="title">This bus doesn't have any recorded history</h3>
+                        <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording bus history</li>
@@ -205,8 +298,8 @@
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                             % end
                         </ol>
-                        Please check again later!
-                    </p>
+                        <p>Please check again later!</p>
+                    </div>
                 % else:
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>

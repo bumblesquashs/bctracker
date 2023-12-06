@@ -67,11 +67,15 @@
         </div>
     </td>
     <td class="desktop-only">
-        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+        % if block is None:
+            <span class="lighter-text">Loading</span>
+        % else:
+            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+        % end
     </td>
     <td>
         <div class="flex-column">
-            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+            % include('components/trip_link', trip=trip)
             <span class="mobile-only smaller-font">
                 % include('components/headsign_indicator')
             </span>

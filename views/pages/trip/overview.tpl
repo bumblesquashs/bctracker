@@ -26,20 +26,28 @@
                 
                 <div class="info-box">
                     <div class="section no-flex">
-                        % include('components/schedules_indicator', schedules=[trip.service.schedule])
+                        % include('components/sheets_indicator', sheets=trip.sheets)
                     </div>
                     <div class="section">
                         % route = trip.route
-                        <div class="flex-row">
-                            % include('components/route_indicator')
-                            <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
-                        </div>
+                        % if route is None:
+                            <div class="lighter-text">Unknown Route</div>
+                        % else:
+                            <div class="flex-row">
+                                % include('components/route_indicator')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                            </div>
+                        % end
                     </div>
                     <div class="section">
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % if block is None:
+                                <span class="lighter-text">Loading</span>
+                            % else:
+                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % end
                         </div>
                     </div>
                     <div class="section">
@@ -98,12 +106,22 @@
                             % for related_trip in related_trips:
                                 % block = related_trip.block
                                 <tr>
-                                    <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{! related_trip.display_id }}</a></td>
-                                    <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                    <td>
+                                        % include('components/trip_link', trip=related_trip)
+                                    </td>
+                                    <td class="non-mobile">
+                                        % if block is None:
+                                            <div class="lighter-text">Unknown</div>
+                                        % else:
+                                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        % end
+                                    </td>
                                     <td>
                                         <div class="flex-column">
-                                            <div>{{ related_trip.service.schedule.date_range }}</div>
-                                            <div class="smaller-font lighter-text">{{ related_trip.service }}</div>
+                                            % for sheet in related_trip.sheets:
+                                                <div>{{ sheet }}</div>
+                                                <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
+                                            % end
                                         </div>
                                     </td>
                                 </tr>

@@ -16,16 +16,21 @@
 </div>
 
 % if len(route.trips) == 0:
-    <p>There are currently no trips for this route.</p>
-    <p>
-        There are a few reasons why that may be the case:
-        <ol>
-            <li>It may be an old route that is no longer in service</li>
-            <li>It may be a new route that hasn't started service yet</li>
-            <li>It may be used as an internal route in the GTFS that does not run any trips</li>
-        </ol>
-        Please check again later!
-    </p>
+    <div class="placeholder">
+        % if system.is_loaded:
+            <h3 class="title">There are currently no trips for this route</h3>
+            <p>There are a few reasons why that may be the case:</p>
+            <ol>
+                <li>It may be an old route that is no longer in service</li>
+                <li>It may be a new route that hasn't started service yet</li>
+                <li>It may be used as an internal route in the GTFS that does not run any trips</li>
+            </ol>
+            <p>Please check again later!</p>
+        % else:
+            <h3 class="title">Trips for this route are unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % end
+    </div>
 % else:
     % sheets = route.sheets
     <div class="flex-container">
@@ -37,7 +42,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheets_indicator', sheets=sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
                     </div>
                 </div>
@@ -52,7 +57,7 @@
                     </div>
                     <div class="content">
                         <div class="container inline">
-                            % for service_group in sheet.service_groups:
+                            % for service_group in sheet.normal_service_groups:
                                 % service_group_trips = route.get_trips(service_group=service_group)
                                 <div class="section">
                                     <div class="header">
@@ -99,7 +104,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="flex-column">
-                                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                                % include('components/trip_link', trip=trip)
                                                                                 <span class="mobile-only smaller-font">
                                                                                     % include('components/headsign_indicator')
                                                                                 </span>

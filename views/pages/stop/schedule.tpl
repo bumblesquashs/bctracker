@@ -12,16 +12,21 @@
 </div>
 
 % if len(stop.get_departures()) == 0:
-    <p>There are currently no departures from this stop.</p>
-    <p>
-        There are a few reasons why that may be the case:
-        <ol>
-            <li>It may be an old stop that used to serve routes but is no longer used</li>
-            <li>It may be a new stop that will soon serve routes that haven't started yet</li>
-            <li>It may be used as an internal reference point in the GTFS that does not serve any routes</li>
-        </ol>
-        Please check again later!
-    </p>
+    <div class="placeholder">
+        % if stop.is_loaded:
+            <h3 class="title">There are currently no departures from this stop</h3>
+            <p>There are a few reasons why that may be the case:</p>
+            <ol>
+                <li>It may be an old stop that used to serve routes but is no longer used</li>
+                <li>It may be a new stop that will soon serve routes that haven't started yet</li>
+                <li>It may be used as an internal reference point in the GTFS that does not serve any routes</li>
+            </ol>
+            <p>Please check again later!</p>
+        % else:
+            <h3 class="title">Departures for this stop are unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % end
+    </div>
 % else:
     % sheets = stop.sheets
     <div class="flex-container">
@@ -33,7 +38,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path=f'stops/{stop.number}/schedule')
+                            % include('components/sheets_indicator', sheets=sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                     </div>
                 </div>
@@ -48,7 +53,7 @@
                     </div>
                     <div class="content">
                         <div class="container inline">
-                            % for service_group in sheet.service_groups:
+                            % for service_group in sheet.normal_service_groups:
                                 % departures = stop.get_departures(service_group)
                                 <div class="section">
                                     <div class="header">
@@ -91,10 +96,16 @@
                                                                 % end
                                                             </div>
                                                         </td>
-                                                        <td class="non-mobile"><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                                        <td class="non-mobile">
+                                                            % if block is None:
+                                                                <div class="lighter-text">Unknown</div>
+                                                            % else:
+                                                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                            % end
+                                                        </td>
                                                         <td>
                                                             <div class="flex-column">
-                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                % include('components/trip_link', trip=trip)
                                                                 <span class="mobile-only smaller-font">
                                                                     % include('components/headsign_indicator')
                                                                 </span>

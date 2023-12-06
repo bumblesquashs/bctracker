@@ -24,12 +24,15 @@
                             <div class="section no-flex">
                                 % include('components/events_indicator', events=events)
                             </div>
-                            <div class="section">
+                            <div class="section no-flex">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                                <div class="name">{{ 'Model' if len(orders) == 1 else 'Models' }}</div>
-                                <div class="value flex-column">
+                                <div class="flex-column">
                                     % for order in orders:
-                                        <div>{{! order }}</div>
+                                        % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
+                                        <div class="flex-row">
+                                            <div class="name flex-1">{{! order }}</div>
+                                            <div class="value lighter-text">{{ round(percentage) }}%</div>
+                                        </div>
                                     % end
                                 </div>
                             </div>
@@ -46,16 +49,16 @@
                 </div>
                 <div class="content">
                     % if len(records) == 0:
-                        <p>This trip doesn't have any recorded history.</p>
-                        <p>
-                            There are a few reasons why that might be the case:
+                        <div class="placeholder">
+                            <h3 class="title">This trip doesn't have any recorded history</h3>
+                            <p>There are a few reasons why that might be the case:</p>
                             <ol>
                                 <li>It may be a new trip introduced in the last service change</li>
                                 <li>It may not be operating due to driver or vehicle shortages</li>
                                 <li>It may have only been done by buses without functional NextRide equipment installed</li>
                             </ol>
-                            Please check again later!
-                        </p>
+                            <p>Please check again later!</p>
+                        </div>
                     % else:
                         % if len([r for r in records if len(r.warnings) > 0]) > 0:
                             <p>
@@ -110,8 +113,8 @@
     
     % include('components/top_button')
 % else:
-    <p>
-        {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-    </p>
+    <div class="placeholder">
+        <h3 class="title">{{ system }} does not currently support realtime</h3>
+        <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+    </div>
 % end

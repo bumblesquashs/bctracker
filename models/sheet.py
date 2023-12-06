@@ -1,38 +1,31 @@
 
-from models.date import Date
 from models.schedule import Schedule
 
 class Sheet:
     '''A collection of overlapping services'''
     
-    __slots__ = ('system', 'schedule', 'services', 'service_groups', 'copies')
+    __slots__ = ('system', 'schedule', 'services', 'service_groups', 'modifications', 'copies')
     
-    @classmethod
-    def combine(cls, system, services, include_special=False):
-        '''Returns a sheet that includes all of the given services'''
-        services = {s for s in services if not s.schedule.is_empty}
-        schedule = Schedule.combine([s.schedule for s in services])
-        return cls(system, schedule, services, include_special)
-    
-    def __init__(self, system, schedule, services, include_special=False):
+    def __init__(self, system, services, date_range):
         self.system = system
-        self.schedule = schedule
+        self.schedule = Schedule.combine(services, date_range)
         self.services = services
         self.copies = {}
         
         service_groups = []
-        weekday_services = {w:tuple({s for s in services if w in s.schedule.weekdays}) for w in schedule.weekdays}
-        for service_set in set(weekday_services.values()):
-            service_set_weekdays = {k for k,v in weekday_services.items() if v == service_set}
-            service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=service_set_weekdays))
-        if include_special or len(service_groups) == 0:
-            date_services = {d:tuple({s for s in services if d in s.schedule}) for d in schedule.added_dates}
-            for service_set in set(date_services.values()):
-                if service_set in weekday_services.values():
-                    continue
-                exceptions = {k for k,v in date_services.items() if v == service_set}
-                service_groups.append(ServiceGroup.combine(self.system, service_set, date_range=self.schedule.date_range, weekdays=set(), exceptions=exceptions))
+        date_services = {d:tuple({s for s in services if d in s}) for d in self.schedule.dates}
+        for service_set in set(date_services.values()):
+            if len(service_set) == 0:
+                continue
+            dates = {k for k,v in date_services.items() if v == service_set}
+            service_group = ServiceGroup(system, dates, date_range, service_set)
+            service_groups.append(service_group)
+        
         self.service_groups = sorted(service_groups)
+        
+        added_dates = {d for g in service_groups for d in g.schedule.added_dates}
+        removed_dates = {d for g in service_groups for d in g.schedule.removed_dates}
+        self.modifications = added_dates.intersection(removed_dates)
     
     def __str__(self):
         if self.schedule.is_special:
@@ -48,35 +41,59 @@ class Sheet:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
-    def copy(self, services, include_special=False):
+    @property
+    def normal_service_groups(self):
+        '''Returns service groups that are not special'''
+        service_groups = [g for g in self.service_groups if not g.schedule.is_special]
+        if len(service_groups) == 0:
+            return self.service_groups
+        return service_groups
+    
+    @property
+    def has_normal_service(self):
+        '''Checks if this sheet indicates normal service'''
+        return self.schedule.has_normal_service
+    
+    @property
+    def has_modified_service(self):
+        '''Checks if this sheet indicates modified service'''
+        return len(self.modifications) > 0
+    
+    @property
+    def has_no_service(self):
+        '''Checks if this sheet indicates no service'''
+        return self.schedule.has_no_service
+    
+    def copy(self, services):
         '''Returns a duplicate of this sheet, restricted to the given services'''
         services = [s for s in self.services if s in services]
-        key = (tuple(sorted(services)), include_special)
+        key = tuple(sorted(services))
         if key in self.copies:
             return self.copies[key]
         if len(services) == 0:
             return None
-        copy = Sheet.combine(self.system, services, include_special)
+        copy = Sheet(self.system, services, self.schedule.date_range)
         self.copies[key] = copy
         return copy
+    
+    def get_weekday_status(self, weekday):
+        '''Returns the status class of this schedule on the given weekday'''
+        return self.schedule.get_weekday_status(weekday)
+    
+    def get_date_status(self, date):
+        '''Returns the status class of this schedule on the given date'''
+        if date in self.modifications:
+            return 'modified-service'
+        return self.schedule.get_date_status(date)
 
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
-    __slots__ = ('system', 'schedule', 'services', 'name')
+    __slots__ = ('system', 'schedule', 'services')
     
-    @classmethod
-    def combine(cls, system, services, date_range=None, weekdays=None, exceptions=None, modifications=None):
-        '''Returns a service group that combines a list of services'''
-        if len(services) == 0:
-            return None
-        schedules = [s.schedule for s in services]
-        schedule = Schedule.combine(schedules, date_range, weekdays, exceptions, modifications)
-        return cls(system, schedule, services)
-    
-    def __init__(self, system, schedule, services):
+    def __init__(self, system, dates, date_range, services):
         self.system = system
-        self.schedule = schedule
+        self.schedule = Schedule(dates, date_range)
         self.services = services
     
     def __str__(self):
@@ -91,7 +108,5 @@ class ServiceGroup:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
-    @property
-    def is_today(self):
-        '''Checks if this service group runs on the current date'''
-        return Date.today(self.system.timezone) in self.schedule
+    def __contains__(self, service):
+        return service in self.services

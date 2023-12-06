@@ -27,7 +27,7 @@
                     
                     <div class="info-box">
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in route.sheets], schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheets_indicator', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
                         <div class="section vertical">
                             % headsigns = route.get_headsigns()
@@ -86,7 +86,8 @@
                                         <div class="flex-column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
-                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                Trip:
+                                                % include('components/trip_link', trip=trip, include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="non-desktop smaller-font">
@@ -100,7 +101,7 @@
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                        % include('components/trip_link', trip=trip)
                                     </td>
                                     <td class="desktop-only">
                                         % if stop is None:
@@ -123,10 +124,15 @@
             </div>
             <div class="content">
                 % if len(trips) == 0:
-                    <p>
-                        There are no trips for this route today.
-                        You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.
-                    </p>
+                    <div class="placeholder">
+                        % if system.is_loaded:
+                            <h3 class="title">There are no trips for this route today</h3>
+                            <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
+                        % else:
+                            <h3 class="title">Trips for this route are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % else:
                     % trip_positions = {p.trip.id:p for p in positions if p.trip is not None and p.trip in trips}
                     % directions = sorted({t.direction for t in trips})
@@ -227,7 +233,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="flex-column">
-                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                % include('components/trip_link', trip=trip)
                                                                 <span class="non-desktop smaller-font">
                                                                     % include('components/headsign_indicator')
                                                                 </span>

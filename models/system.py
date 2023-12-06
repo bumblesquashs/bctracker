@@ -1,4 +1,5 @@
 
+import helpers.overview
 import helpers.position
 import helpers.region
 
@@ -78,6 +79,10 @@ class System:
         return str(self) < str(other)
     
     @property
+    def is_loaded(self):
+        return self.last_updated_date is not None and self.last_updated_time is not None
+    
+    @property
     def gtfs_enabled(self):
         '''Checks if GTFS data is enabled for this system'''
         return self.enabled and self.gtfs_url is not None
@@ -90,7 +95,7 @@ class System:
     @property
     def schedule(self):
         '''The overall service schedule for this system'''
-        return Schedule.combine([s.schedule for s in self.get_services()])
+        return Schedule.combine(self.get_services())
     
     def get_block(self, block_id):
         '''Returns the block with the given ID'''
@@ -101,6 +106,10 @@ class System:
     def get_blocks(self):
         '''Returns all blocks'''
         return sorted(self.blocks.values())
+    
+    def get_overviews(self):
+        '''Returns all overviews'''
+        return helpers.overview.find_all(last_seen_system_id=self.id)
     
     def get_positions(self):
         '''Returns all positions'''
@@ -126,7 +135,7 @@ class System:
     
     def get_services(self):
         '''Returns all services'''
-        return sorted(self.services.values())
+        return self.services.values()
     
     def get_sheets(self, services=None):
         '''Returns all sheets'''
@@ -134,8 +143,8 @@ class System:
             return sorted(self.sheets)
         return sorted([s for s in self.sheets if services in s])
     
-    def copy_sheets(self, services, include_special=False):
-        copies = [s.copy(services, include_special) for s in self.get_sheets()]
+    def copy_sheets(self, services):
+        copies = [s.copy(services) for s in self.get_sheets()]
         return [s for s in copies if s is not None]
     
     def get_stop(self, stop_id=None, number=None):
@@ -171,6 +180,10 @@ class System:
                 return f'at {time.format_web(time_format)}'
             return f'at {time.format_web(time_format)} {time.timezone_name}'
         return date.format_since()
+    
+    def search_blocks(self, query):
+        '''Returns all blocks that match the given query'''
+        return [b.get_match(query) for b in self.blocks.values()]
     
     def search_routes(self, query):
         '''Returns all routes that match the given query'''

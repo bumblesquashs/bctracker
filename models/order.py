@@ -6,28 +6,33 @@ from models.bus import Bus
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
     
-    __slots__ = ('low', 'high', 'year', 'model', 'demo', 'exceptions', 'size')
+    __slots__ = ('low', 'high', 'year', 'model', 'visible', 'demo', 'exceptions', 'size')
     
     @classmethod
     def from_csv(cls, row):
         '''Returns an order initialized from the given CSV row'''
         low = int(row['low'])
         high = int(row['high'])
-        year = int(row['year'])
+        try:
+            year = int(row['year'])
+        except:
+            year = None
         model = helpers.model.find(row['model_id'])
+        visible = row['visible'] == '1'
         demo = row['demo'] == '1'
         exceptions = row['exceptions']
         if exceptions == '':
             exceptions = set()
         else:
             exceptions = {int(e) for e in row['exceptions'].split(';')}
-        return cls(low, high, year, model, demo, exceptions)
+        return cls(low, high, year, model, visible, demo, exceptions)
     
-    def __init__(self, low, high, year, model, demo, exceptions):
+    def __init__(self, low, high, year, model, visible, demo, exceptions):
         self.low = low
         self.high = high
         self.year = year
         self.model = model
+        self.visible = visible
         self.demo = demo
         self.exceptions = exceptions
         
@@ -35,9 +40,10 @@ class Order:
     
     def __str__(self):
         model = self.model
-        if model is None:
-            return str(self.year)
-        return f'{self.year} {model}'
+        year = self.year
+        if model is None or year is None:
+            return 'Unknown year/model'
+        return f'{year} {model}'
     
     def __hash__(self):
         return hash((self.low, self.high))
@@ -52,14 +58,6 @@ class Order:
         for number in range(self.low, self.high + 1):
             if number not in self.exceptions:
                 yield Bus(number, order=self)
-    
-    @property
-    def is_test(self):
-        '''Checks if this is a test order'''
-        model = self.model
-        if model is None:
-            return False
-        return model.is_test
     
     @property
     def first_bus(self):

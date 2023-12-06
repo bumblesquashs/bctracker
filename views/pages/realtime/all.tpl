@@ -18,76 +18,111 @@
     </div>
 </div>
 
-% if len(positions) == 0:
-    <div>
-        % if system is not None and not system.realtime_enabled:
-            <p>
-                {{ system }} does not currently support realtime.
-                You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-            </p>
-        % else:
-            % if system is None:
-                There are no buses out right now.
-                BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue with the GTFS getting up-to-date info.
-                Please check back later!
-            % else:
-                <p>
-                    There are no buses out in {{ system }} right now.
-                    Please choose a different system.
-                </p>
-            % end
-        % end
+<div class="container">
+    <div class="section left">
+        <div class="content">
+            <div class="checkbox" onclick="toggleNISBuses()">
+                <div class="box">
+                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
+                </div>
+                <span class="checkbox-label">Show NIS Buses</span>
+            </div>
+        </div>
     </div>
-% else:
-    % known_positions = [p for p in positions if p.bus.order is not None]
-    % orders = sorted({p.bus.order for p in known_positions})
-    % unknown_positions = sorted([p for p in positions if p.bus.order is None])
-    <table class="striped">
-        <thead>
-            <tr>
-                <th>Bus</th>
-                % if system is None:
-                    <th class="desktop-only">System</th>
-                % end
-                <th>Headsign</th>
-                <th class="non-mobile">Block</th>
-                <th class="non-mobile">Trip</th>
-                <th class="desktop-only">Next Stop</th>
-            </tr>
-        </thead>
-        <tbody>
-            % if len(unknown_positions) > 0:
-                <tr class="section">
-                    <td colspan="6">
-                        <div class="flex-row">
-                            <div class="flex-1">Unknown Year/Model</div>
-                            <div>{{ len(unknown_positions) }}</div>
+    <div class="section">
+        <div class="content">
+            % if len(positions) == 0:
+                <div class="placeholder">
+                    % if system is None:
+                        % if show_nis:
+                            <h3 class="title">There are no buses out right now</h3>
+                            <p>
+                                BC Transit does not have late night service, so this should be the case overnight.
+                                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                            </p>
+                            <p>Please check again later!</p>
+                        % else:
+                            <h3 class="title">There are no buses in service right now</h3>
+                            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                        % end
+                    % elif not system.realtime_enabled:
+                        <h3 class="title">{{ system }} does not support realtime</h3>
+                        <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+                        <div class="non-desktop">
+                            % include('components/systems')
                         </div>
-                    </td>
-                </tr>
-                <tr class="display-none"></tr>
-                % for position in unknown_positions:
-                    % include('rows/realtime', position=position)
-                % end
+                    % elif not system.is_loaded:
+                        <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+                        <p>System data is currently loading and will be available soon.</p>
+                    % elif not show_nis:
+                        <h3 class="title">There are no buses in service in {{ system }} right now</h3>
+                        <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                    % else:
+                        <h3 class="title">There are no buses out in {{ system }} right now</h3>
+                        <p>Please check again later!</p>
+                    % end
+                </div>
+            % else:
+                % known_positions = [p for p in positions if p.bus.order is not None]
+                % orders = sorted({p.bus.order for p in known_positions})
+                % unknown_positions = sorted([p for p in positions if p.bus.order is None])
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>Bus</th>
+                            % if system is None:
+                                <th class="desktop-only">System</th>
+                            % end
+                            <th>Headsign</th>
+                            <th class="non-mobile">Block</th>
+                            <th class="non-mobile">Trip</th>
+                            <th class="desktop-only">Next Stop</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        % if len(unknown_positions) > 0:
+                            <tr class="section">
+                                <td colspan="6">
+                                    <div class="flex-row">
+                                        <div class="flex-1">Unknown Year/Model</div>
+                                        <div>{{ len(unknown_positions) }}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="display-none"></tr>
+                            % for position in unknown_positions:
+                                % include('rows/realtime', position=position)
+                            % end
+                        % end
+                        % for order in orders:
+                            % order_positions = sorted([p for p in known_positions if p.bus.order == order])
+                            <tr class="section">
+                                <td colspan="6">
+                                    <div class="flex-row">
+                                        <div class="flex-1">{{! order }}</div>
+                                        <div>{{ len(order_positions) }}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="display-none"></tr>
+                            % for position in order_positions:
+                                % include('rows/realtime', position=position)
+                            % end
+                        % end
+                    </tbody>
+                </table>
+                    
+                % include('components/top_button')
             % end
-            % for order in orders:
-                % order_positions = sorted([p for p in known_positions if p.bus.order == order])
-                <tr class="section">
-                    <td colspan="6">
-                        <div class="flex-row">
-                            <div class="flex-1">{{! order }}</div>
-                            <div>{{ len(order_positions) }}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="display-none"></tr>
-                % for position in order_positions:
-                    % include('rows/realtime', position=position)
-                % end
-            % end
-        </tbody>
-    </table>
-% end
+        </div>
+    </div>
+</div>
 
-% include('components/top_button')
+<script>
+    function toggleNISBuses() {
+        window.location = "{{ get_url(system, 'realtime', show_nis='false' if show_nis else 'true') }}"
+    }
+</script>

@@ -22,7 +22,7 @@ def find(bus_number):
         return overviews[0]
     return None
 
-def find_all(system_id=None, bus_number=None, limit=None):
+def find_all(system_id=None, last_seen_system_id=None, bus_number=None, limit=None):
     '''Returns all overviews that match the given system ID and bus number'''
     return database.select('overview',
         columns={
@@ -63,7 +63,8 @@ def find_all(system_id=None, bus_number=None, limit=None):
         },
         filters={
             'overview.bus_number': bus_number,
-            'last_record.system_id': system_id
+            'last_record.system_id': system_id,
+            'overview.last_seen_system_id': last_seen_system_id
         },
         limit=limit,
         initializer=Overview.from_db)

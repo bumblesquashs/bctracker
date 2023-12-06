@@ -9,7 +9,7 @@
     % for weekday in Weekday:
         % name = weekday.abbreviation if compact else weekday.short_name
         % if schedule is None:
-            % status = 'no-service'
+            % status = ''
         % else:
             % status = schedule.get_weekday_status(weekday)
         % end

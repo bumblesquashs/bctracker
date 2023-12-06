@@ -62,6 +62,20 @@ class Time:
             return self.minute < other.minute
         return self.second < other.second
     
+    def __add__(self, delta):
+        time = self.datetime + delta
+        hour = time.hour
+        while hour < 4:
+            hour += 24
+        return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
+    
+    def __sub__(self, delta):
+        time = self.datetime - delta
+        hour = time.hour
+        while hour < 4:
+            hour += 24
+        return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
+    
     @property
     def is_unknown(self):
         '''Checks if this time is unknown'''
@@ -83,6 +97,14 @@ class Time:
         return self > Time.now(self.timezone)
     
     @property
+    def datetime(self):
+        '''Returns the datetime equivalent of this time'''
+        hour = self.hour
+        while hour >= 24:
+            hour -= 24
+        return datetime(1996, 11, 19, hour, self.minute, self.second)
+    
+    @property
     def timezone_name(self):
         '''Returns the name of this time's timezone'''
         if self.timezone is None:
@@ -101,7 +123,7 @@ class Time:
             return None
         return f'{self.hour:02d}:{self.minute:02d}:{self.second:02d}'
     
-    def format_web(self, time_format='24hr'):
+    def format_web(self, time_format='30hr'):
         '''Formats this time for web display'''
         if self.is_unknown:
             return ''

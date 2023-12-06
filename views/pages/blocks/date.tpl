@@ -1,6 +1,4 @@
 
-% from datetime import timedelta
-
 % rebase('base')
 
 <div class="page-header">
@@ -25,8 +23,8 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section vertical-align">
-                            % previous_date = date - timedelta(days=1)
-                            % next_date = date + timedelta(days=1)
+                            % previous_date = date.previous()
+                            % next_date = date.next()
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
                             <div class="name centred">
                                 <h3>{{ date.format_long() }}</h3>
@@ -35,7 +33,7 @@
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
                         <div class="section no-flex">
-                            % include('components/schedules_indicator', schedules=[s.schedule for s in system.get_sheets()], schedule_path='blocks', date_path='blocks/schedule')
+                            % include('components/sheets_indicator', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
@@ -48,18 +46,23 @@
                     <h3>{{ date.weekday }}</h3>
                 </div>
                 <div class="content">
-                    % blocks = [b for b in system.get_blocks() if date in b.schedule]
+                    % blocks = sorted([b for b in system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
                     % if len(blocks) == 0:
-                        <p>No blocks found for {{ system }} on {{ date.format_long() }}.</p>
-                        <p>
-                            There are a few reasons why that might be the case:
-                            <ol>
-                                <li>It may be a day of the week that does not normally have service</li>
-                                <li>It may be a holiday in which all regular service is suspended</li>
-                                <li>It may be outside of the date range for which schedules are currently available</li>
-                            </ol>
-                            Please check again later!
-                        </p>
+                        <div class="placeholder">
+                            % if system.is_loaded:
+                                <h3 class="title">No blocks found for {{ system }} on {{ date.format_long() }}</h3>
+                                <p>There are a few reasons why that might be the case:</p>
+                                <ol>
+                                    <li>It may be a day of the week that does not normally have service</li>
+                                    <li>It may be a holiday in which all regular service is suspended</li>
+                                    <li>It may be outside of the date range for which schedules are currently available</li>
+                                </ol>
+                                <p>Please check again later!</p>
+                            % else:
+                                <h3 class="title">Block information for {{ system }} is unavailable</h3>
+                                <p>System data is currently loading and will be available soon.</p>
+                            % end
+                        </div>
                     % else:
                         <table class="striped">
                             <thead>

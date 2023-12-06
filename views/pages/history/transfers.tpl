@@ -10,17 +10,22 @@
     </div>
 </div>
 
-% if system is not None and not system.realtime_enabled:
-    <p>
-        {{ system }} does not currently support realtime.
-        You can browse the schedule data for {{ system }} using the links above, or choose a different system that supports realtime.
-    </p>
-% elif len(transfers) == 0:
-    % if system is None:
-        <p>There are no recorded transfers.</p>
-    % else:
-        <p>{{ system }} does not have any recorded transfers.</p>
-    % end
+% if len(transfers) == 0:
+    <div class="placeholder">
+        % if system is None:
+            <h3 class="title">No transfers found</h3>
+            <p>Something has probably gone terribly wrong if you're seeing this.</p>
+        % elif not system.realtime_enabled:
+            <h3 class="title">{{ system }} does not currently support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % else:
+            <h3 class="title">No buses have been transferred to or from {{ system }}</h3>
+            <p>Please check again later!</p>
+        % end
+    </div>
 % else:
     <table class="striped">
         <thead>

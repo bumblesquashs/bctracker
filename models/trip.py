@@ -8,7 +8,7 @@ from models.time import Time
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'first_departure', 'last_departure', 'departure_count', 'direction', '_related_trips')
+    __slots__ = ('system', 'id', 'short_id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'first_departure', 'last_departure', 'departure_count', 'direction', 'sheets', '_related_trips')
     
     @classmethod
     def from_csv(cls, row, system, departures):
@@ -33,6 +33,12 @@ class Trip:
         self.headsign = headsign
         self.departure_count = len(departures)
         
+        id_parts = trip_id.split(':')
+        if len(id_parts) == 1:
+            self.short_id = trip_id
+        else:
+            self.short_id = id_parts[0]
+        
         if len(departures) == 0:
             self.first_departure = None
             self.last_departure = None
@@ -42,10 +48,12 @@ class Trip:
             self.last_departure = departures[-1]
             self.direction = Direction.calculate(self.first_stop, self.last_stop)
         
+        self.sheets = system.copy_sheets([self.service])
+        
         self._related_trips = None
     
     def __str__(self):
-        if self.system.prefix_headsign:
+        if self.system.prefix_headsign and self.route is not None:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -133,12 +141,17 @@ class Trip:
     @property
     def json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
-        return {
+        json = {
             'shape_id': self.shape_id,
-            'colour': self.route.colour,
-            'text_colour': self.route.text_colour,
             'points': [p.json for p in self.load_points()]
         }
+        if self.route is None:
+            json['colour'] = '666666'
+            json['text_colour'] = '000000'
+        else:
+            json['colour'] = self.route.colour
+            json['text_colour'] = self.route.text_colour
+        return json
     
     def load_points(self):
         '''Returns all points associated with this trip'''

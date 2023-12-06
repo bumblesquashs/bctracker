@@ -38,18 +38,24 @@
                                 <div class="flex-column">
                                     <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                     <span class="mobile-only smaller-font">
-                                        % if count == 1:
-                                            1 Route
-                                        % else:
-                                            {{ count }} Routes
+                                        % if region_system.is_loaded:
+                                            % if count == 1:
+                                                1 Route
+                                            % else:
+                                                {{ count }} Routes
+                                            % end
                                         % end
                                     </span>
                                 </div>
                             </td>
-                            <td class="non-mobile">{{ count }}</td>
-                            <td>
-                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
-                            </td>
+                            % if region_system.is_loaded:
+                                <td class="non-mobile">{{ count }}</td>
+                                <td>
+                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                </td>
+                            % else:
+                                <td class="lighter-text" colspan="2">Routes are loading...</td>
+                            % end
                         </tr>
                     % end
                 % end
@@ -58,10 +64,14 @@
     </table>
 % else:
     % if len(routes) == 0:
-        <p>
-            Route information is currently unavailable for {{ system }}.
-            Please check again later!
-        </p>
+        <div class="placeholder">
+            <h3 class="title">Route information for {{ system }} is unavailable</h3>
+            % if system.is_loaded:
+                <p>Please check again later!</p>
+            % else:
+                <p>System data is currently loading and will be available soon.</p>
+            % end
+        </div>
     % else:
         <div id="map" class="full-screen"></div>
         

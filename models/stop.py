@@ -29,6 +29,8 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
+        self.schedule = None
+        self.sheets = []
     
     def __str__(self):
         return self.name
@@ -68,12 +70,12 @@ class Stop:
         if service_group is None:
             if date is None:
                 return sorted(departures)
-            return sorted([d for d in departures if date in d.trip.service.schedule])
-        return sorted([d for d in departures if d.trip.service in service_group.services])
+            return sorted([d for d in departures if d.trip is not None and date in d.trip.service])
+        return sorted([d for d in departures if d.trip is not None and d.trip.service in service_group])
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this stop'''
-        return sorted({d.trip.route for d in self.get_departures(service_group, date)})
+        return sorted({d.trip.route for d in self.get_departures(service_group, date) if d.trip is not None and d.trip.route is not None})
     
     def get_routes_string(self, service_group=None, date=None):
         '''Returns a string of all routes from this stop'''
@@ -102,5 +104,5 @@ class Stop:
     def setup(self, departures):
         '''Sets the schedule for this stop once trip information is available'''
         services = {d.trip.service for d in departures if d.trip is not None}
-        self.schedule = Schedule.combine([s.schedule for s in services])
+        self.schedule = Schedule.combine(services)
         self.sheets = self.system.copy_sheets(services)

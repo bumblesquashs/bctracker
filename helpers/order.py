@@ -9,7 +9,7 @@ orders = []
 def load():
     '''Loads order data from the static CSV file'''
     global orders
-    with open(f'./data/static/orders.csv', 'r') as file:
+    with open(f'./static/orders.csv', 'r') as file:
         reader = csv.reader(file)
         columns = next(reader)
         orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
@@ -31,7 +31,7 @@ def find_matches(query, recorded_bus_numbers):
     '''Returns matching buses for a given query'''
     matches = []
     for order in orders:
-        if order.is_test:
+        if not order.visible:
             continue
         order_string = str(order)
         for bus in order:

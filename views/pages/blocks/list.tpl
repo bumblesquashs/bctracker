@@ -32,18 +32,24 @@
                                 <div class="flex-column">
                                     <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                     <span class="mobile-only smaller-font">
-                                        % if count == 1:
-                                            1 Block
-                                        % else:
-                                            {{ count }} Blocks
+                                        % if region_system.is_loaded:
+                                            % if count == 1:
+                                                1 Block
+                                            % else:
+                                                {{ count }} Blocks
+                                            % end
                                         % end
                                     </span>
                                 </div>
                             </td>
-                            <td class="non-mobile">{{ count }}</td>
-                            <td>
-                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
-                            </td>
+                            % if region_system.is_loaded:
+                                <td class="non-mobile">{{ count }}</td>
+                                <td>
+                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
+                                </td>
+                            % else:
+                                <td class="lighter-text" colspan="2">Blocks are loading...</td>
+                            % end
                         </tr>
                     % end
                 % end
@@ -53,10 +59,14 @@
 % else:
     % blocks = system.get_blocks()
     % if len(blocks) == 0:
-        <p>
-            Block information is currently unavailable for {{ system }}.
-            Please check again later!
-        </p>
+        <div class="placeholder">
+            <h3 class="title">Block information for {{ system }} is unavailable</h3>
+            % if system.is_loaded:
+                <p>Please check again later!</p>
+            % else:
+                <p>System data is currently loading and will be available soon.</p>
+            % end
+        </div>
     % else:
         % sheets = system.get_sheets()
         <div class="flex-container">
@@ -68,7 +78,7 @@
                     <div class="content">
                         <div class="info-box">
                             <div class="section no-flex">
-                                % include('components/schedules_indicator', schedules=[s.schedule for s in sheets], schedule_path='blocks', date_path='blocks/schedule')
+                                % include('components/sheets_indicator', sheets=sheets, schedule_path='blocks', date_path='blocks/schedule')
                             </div>
                         </div>
                     </div>
@@ -83,7 +93,7 @@
                         </div>
                         <div class="content">
                             <div class="container inline">
-                                % for service_group in sheet.service_groups:
+                                % for service_group in sheet.normal_service_groups:
                                     <div class="section">
                                         <div class="header">
                                             % for weekday in service_group.schedule.weekdays:
@@ -104,7 +114,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    % service_group_blocks = [b for b in blocks if len(b.get_trips(service_group)) > 0]
+                                                    % service_group_blocks = sorted([b for b in blocks if len(b.get_trips(service_group)) > 0], key=lambda b: (b.get_start_time(service_group=service_group), b.get_end_time(service_group=service_group)))
                                                     % for block in service_group_blocks:
                                                         % start_time = block.get_start_time(service_group=service_group).format_web(time_format)
                                                         % end_time = block.get_end_time(service_group=service_group).format_web(time_format)

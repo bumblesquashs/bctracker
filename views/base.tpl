@@ -43,6 +43,7 @@
         <script>
             let mapStyle
         </script>
+        
         % if theme is None:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
@@ -248,7 +249,11 @@
                             {{ system }}
                         % end
                     </div>
-                    <div id="last-updated">Updated {{ last_updated }}</div>
+                    <div id="last-updated">
+                        % if system is None or (system.is_loaded and system.realtime_enabled):
+                            Updated {{ last_updated }}
+                        % end
+                    </div>
                 </div>
                 
                 <div id="refresh-button" class="disabled">
@@ -260,7 +265,7 @@
                 % if system is None:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % else:
-                    <a href="{{ get_url(None, path) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
@@ -270,7 +275,7 @@
                             % if system is not None and system == region_system:
                                 <span class="system-button current">{{ region_system }}</span>
                             % else:
-                                <a href="{{ get_url(region_system, path) }}" class="system-button">{{ region_system }}</a>
+                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">{{ region_system }}</a>
                             % end
                         % end
                     % end
@@ -476,6 +481,10 @@
             let icon = "";
             let name = result.name;
             switch (result.type) {
+                case "block":
+                    icon = "<img class='white' src='/img/white/blocks.png' /><img class='black' src='/img/black/blocks.png' />";
+                    name = "Block " + result.name;
+                    break;
                 case "bus":
                     icon = "<img class='white' src='/img/white/realtime.png' /><img class='black' src='/img/black/realtime.png' />";
                     name = "Bus " + result.name;
@@ -512,6 +521,9 @@
             setCookie("hide_systems", "no");
         } else {
             setCookie("hide_systems", "yes");
+        }
+        if (map !== undefined) {
+            map.resize();
         }
     }
 </script>

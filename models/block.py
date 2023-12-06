@@ -1,4 +1,5 @@
 
+from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
@@ -12,9 +13,9 @@ class Block:
         self.id = id
         self.trips = trips
         
-        services = {t.service for t in self.trips}
-        self.schedule = Schedule.combine([s.schedule for s in services])
-        self.sheets = system.copy_sheets(services, True)
+        services = {t.service for t in trips}
+        self.schedule = Schedule.combine(services)
+        self.sheets = system.copy_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -33,8 +34,8 @@ class Block:
         if service_group is None:
             if date is None:
                 return sorted(self.trips)
-            return sorted([t for t in self.trips if date in t.service.schedule])
-        return sorted([t for t in self.trips if t.service in service_group.services])
+            return sorted([t for t in self.trips if date in t.service])
+        return sorted([t for t in self.trips if t.service in service_group])
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this block'''
@@ -75,3 +76,19 @@ class Block:
         if self.get_end_time() != other.get_end_time():
             return False
         return True
+    
+    def get_match(self, query):
+        '''Returns a match for this block with the given query'''
+        query = query.lower()
+        id = self.id
+        value = 0
+        if query in id:
+            value += (len(query) / len(id)) * 100
+            if id.startswith(query):
+                value += len(query)
+        routes = self.get_routes_string()
+        if routes.count(',') == 0:
+            message = f'Route {routes}'
+        else:
+            message = f'Routes {routes}'
+        return Match('block', id, message, f'blocks/{self.id}', value)

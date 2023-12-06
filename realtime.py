@@ -40,7 +40,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system)
+        helpers.position.delete_all(system.id)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -79,7 +79,7 @@ def update_records():
                     block = trip.block
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
-                        if last_record.system != system and not bus.is_test:
+                        if last_record.system != system and bus.visible:
                             helpers.transfer.create(bus, today, last_record.system, system)
                         if last_record.date == today and last_record.block_id == block.id:
                             helpers.record.update(last_record.id, now)

@@ -1,6 +1,4 @@
 
-from datetime import timedelta
-
 class DateRange:
     '''A set of dates between starting and ending points'''
     
@@ -43,7 +41,7 @@ class DateRange:
         date = self.start
         while date <= self.end:
             yield date
-            date += timedelta(days=1)
+            date = date.next()
     
     def overlaps(self, other):
         '''Checks if this date range overlaps with the given date range'''
