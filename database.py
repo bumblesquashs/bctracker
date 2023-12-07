@@ -63,6 +63,42 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
+        CREATE TABLE IF NOT EXISTS route (
+            system_id TEXT NOT NULL,
+            route_id TEXT NOT NULL,
+            number TEXT NOT NULL,
+            name TEXT NOT NULL,
+            colour TEXT,
+            text_colour TEXT,
+            PRIMARY KEY (system_id, route_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS stop (
+            system_id TEXT NOT NULL,
+            stop_id TEXT NOT NULL,
+            number TEXT NOT NULL,
+            name TEXT NOT NULL,
+            lat REAL NOT NULL,
+            lon REAL NOT NULL,
+            PRIMARY KEY (system_id, stop_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS trip (
+            system_id TEXT NOT NULL,
+            trip_id TEXT NOT NULL,
+            route_id TEXT NOT NULL,
+            service_id TEXT NOT NULL,
+            block_id TEXT,
+            direction_id TEXT,
+            shape_id INTEGER,
+            headsign TEXT NOT NULL,
+            PRIMARY KEY (system_id, trip_id),
+            FOREIGN KEY (system_id, route_id) REFERENCES route (system_id, route_id)
+        )
+    ''',
+    '''
         CREATE TABLE IF NOT EXISTS departure (
             system_id TEXT NOT NULL,
             trip_id TEXT NOT NULL,
@@ -73,7 +109,9 @@ SQL_SCRIPTS = [
             dropoff_type TEXT NOT NULL,
             timepoint INTEGER NOT NULL,
             distance REAL,
-            PRIMARY KEY (system_id, trip_id, sequence)
+            PRIMARY KEY (system_id, trip_id, sequence),
+            FOREIGN KEY (system_id, trip_id) REFERENCES trip (system_id, trip_id),
+            FOREIGN KEY (system_id, stop_id) REFERENCES stop (system_id, stop_id)
         )
     ''',
     '''

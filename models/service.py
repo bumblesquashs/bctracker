@@ -13,7 +13,11 @@ class ServiceExceptionType(IntEnum):
 class ServiceException:
     '''A date that is explicitly included or excluded from a service'''
     
-    __slots__ = ('service_id', 'date', 'type')
+    __slots__ = (
+        'service_id',
+        'date',
+        'type'
+    )
     
     @classmethod
     def from_csv(cls, row, system):
@@ -37,7 +41,11 @@ class ServiceException:
 class Service:
     '''A set of dates when a transit service is operating'''
     
-    __slots__ = ('system', 'id', 'schedule')
+    __slots__ = (
+        'system',
+        'id',
+        'schedule'
+    )
     
     @classmethod
     def from_csv(cls, row, system, exceptions):

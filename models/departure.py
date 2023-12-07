@@ -53,7 +53,17 @@ class DropoffType(Enum):
 class Departure:
     '''An association between a trip and a stop'''
     
-    __slots__ = ('system', 'trip_id', 'sequence', 'stop_id', 'time', 'pickup_type', 'dropoff_type', 'timepoint', 'distance')
+    __slots__ = (
+        'system',
+        'trip_id',
+        'sequence',
+        'stop_id',
+        'time',
+        'pickup_type',
+        'dropoff_type',
+        'timepoint',
+        'distance'
+    )
     
     @classmethod
     def from_db(cls, row, prefix='departure'):
@@ -74,6 +84,30 @@ class Departure:
         timepoint = row[f'{prefix}_timepoint'] == 1
         distance = row[f'{prefix}_distance']
         return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance)
+    
+    @property
+    def stop(self):
+        '''Returns the stop associated with this departure'''
+        return self.system.get_stop(stop_id=self.stop_id)
+    
+    @property
+    def trip(self):
+        '''Returns the trip associated with this departure'''
+        return self.system.get_trip(self.trip_id)
+    
+    @property
+    def pickup_only(self):
+        '''Checks if this departure is pickup-only'''
+        if self.pickup_type.is_normal:
+            return self.trip is not None and self == self.trip.first_departure
+        return False
+    
+    @property
+    def dropoff_only(self):
+        '''Checks if this departure is dropoff-only'''
+        if self.dropoff_type.is_normal:
+            return self.trip is not None and self == self.trip.last_departure
+        return False
     
     def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance):
         self.system = system
@@ -104,30 +138,6 @@ class Departure:
                     return False
                 return self.trip.route < other.trip.route
             return self.time < other.time
-    
-    @property
-    def stop(self):
-        '''Returns the stop associated with this departure'''
-        return self.system.get_stop(stop_id=self.stop_id)
-    
-    @property
-    def trip(self):
-        '''Returns the trip associated with this departure'''
-        return self.system.get_trip(self.trip_id)
-    
-    @property
-    def pickup_only(self):
-        '''Checks if this departure is pickup-only'''
-        if self.pickup_type.is_normal:
-            return self.trip is not None and self == self.trip.first_departure
-        return False
-    
-    @property
-    def dropoff_only(self):
-        '''Checks if this departure is dropoff-only'''
-        if self.dropoff_type.is_normal:
-            return self.trip is not None and self == self.trip.last_departure
-        return False
     
     @property
     def json(self):

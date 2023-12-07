@@ -5,7 +5,11 @@ import helpers.order
 class Bus:
     '''A public transportation vehicle'''
     
-    __slots__ = ('number', 'order', 'adornment')
+    __slots__ = (
+        'number',
+        'order',
+        'adornment'
+    )
     
     def __init__(self, number, order=None, adornment=None):
         self.number = number

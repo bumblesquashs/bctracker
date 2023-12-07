@@ -8,7 +8,29 @@ from models.schedule import Schedule
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'recolour_black', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = (
+        'id',
+        'name',
+        'region',
+        'enabled',
+        'visible',
+        'prefix_headsign',
+        'recolour_black',
+        'gtfs_url',
+        'realtime_url',
+        'validation_errors',
+        'last_updated_date',
+        'last_updated_time',
+        'timezone',
+        'blocks',
+        'routes',
+        'routes_by_number',
+        'services',
+        'sheets',
+        'stops',
+        'stops_by_number',
+        'trips'
+    )
     
     @classmethod
     def from_csv(cls, row):
@@ -39,6 +61,26 @@ class System:
             else:
                 realtime_url = None
         return cls(id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url)
+    
+    @property
+    def is_loaded(self):
+        '''Checks if realtime data has been loaded'''
+        return self.last_updated_date is not None and self.last_updated_time is not None
+    
+    @property
+    def gtfs_enabled(self):
+        '''Checks if GTFS data is enabled for this system'''
+        return self.enabled and self.gtfs_url is not None
+    
+    @property
+    def realtime_enabled(self):
+        '''Checks if realtime data is enabled for this system'''
+        return self.enabled and self.realtime_url is not None
+    
+    @property
+    def schedule(self):
+        '''The overall service schedule for this system'''
+        return Schedule.combine(self.get_services())
     
     def __init__(self, id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url):
         self.id = id
@@ -77,25 +119,6 @@ class System:
     
     def __lt__(self, other):
         return str(self) < str(other)
-    
-    @property
-    def is_loaded(self):
-        return self.last_updated_date is not None and self.last_updated_time is not None
-    
-    @property
-    def gtfs_enabled(self):
-        '''Checks if GTFS data is enabled for this system'''
-        return self.enabled and self.gtfs_url is not None
-    
-    @property
-    def realtime_enabled(self):
-        '''Checks if realtime data is enabled for this system'''
-        return self.enabled and self.realtime_url is not None
-    
-    @property
-    def schedule(self):
-        '''The overall service schedule for this system'''
-        return Schedule.combine(self.get_services())
     
     def get_block(self, block_id):
         '''Returns the block with the given ID'''

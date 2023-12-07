@@ -4,7 +4,37 @@ from models.schedule import Schedule
 class Sheet:
     '''A collection of overlapping services'''
     
-    __slots__ = ('system', 'schedule', 'services', 'service_groups', 'modifications', 'copies')
+    __slots__ = (
+        'system',
+        'schedule',
+        'services',
+        'service_groups',
+        'modifications',
+        'copies'
+    )
+    
+    @property
+    def normal_service_groups(self):
+        '''Returns service groups that are not special'''
+        service_groups = [g for g in self.service_groups if not g.schedule.is_special]
+        if len(service_groups) == 0:
+            return self.service_groups
+        return service_groups
+    
+    @property
+    def has_normal_service(self):
+        '''Checks if this sheet indicates normal service'''
+        return self.schedule.has_normal_service
+    
+    @property
+    def has_modified_service(self):
+        '''Checks if this sheet indicates modified service'''
+        return len(self.modifications) > 0
+    
+    @property
+    def has_no_service(self):
+        '''Checks if this sheet indicates no service'''
+        return self.schedule.has_no_service
     
     def __init__(self, system, services, date_range):
         self.system = system
@@ -41,29 +71,6 @@ class Sheet:
     def __lt__(self, other):
         return self.schedule < other.schedule
     
-    @property
-    def normal_service_groups(self):
-        '''Returns service groups that are not special'''
-        service_groups = [g for g in self.service_groups if not g.schedule.is_special]
-        if len(service_groups) == 0:
-            return self.service_groups
-        return service_groups
-    
-    @property
-    def has_normal_service(self):
-        '''Checks if this sheet indicates normal service'''
-        return self.schedule.has_normal_service
-    
-    @property
-    def has_modified_service(self):
-        '''Checks if this sheet indicates modified service'''
-        return len(self.modifications) > 0
-    
-    @property
-    def has_no_service(self):
-        '''Checks if this sheet indicates no service'''
-        return self.schedule.has_no_service
-    
     def copy(self, services):
         '''Returns a duplicate of this sheet, restricted to the given services'''
         services = [s for s in self.services if s in services]
@@ -89,7 +96,11 @@ class Sheet:
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
-    __slots__ = ('system', 'schedule', 'services')
+    __slots__ = (
+        'system',
+        'schedule',
+        'services'
+    )
     
     def __init__(self, system, dates, date_range, services):
         self.system = system

@@ -10,7 +10,11 @@ MINIMUM_MINUTES = 4
 class Adherence:
     '''Indicates how far ahead or behind a bus is compared to its trip's schedule'''
     
-    __slots__ = ('value', 'status_class', 'description')
+    __slots__ = (
+        'value',
+        'status_class',
+        'description'
+    )
     
     @classmethod
     def calculate(cls, trip, stop, sequence, lat, lon):

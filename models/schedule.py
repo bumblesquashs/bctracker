@@ -8,7 +8,13 @@ from models.weekday import Weekday
 class Schedule:
     '''Dates when a service is running'''
     
-    __slots__ = ('dates', 'date_range', 'weekdays', 'exceptions', 'name')
+    __slots__ = (
+        'dates',
+        'date_range',
+        'weekdays',
+        'exceptions',
+        'name'
+    )
     
     @classmethod
     def combine(cls, services, date_range=None):
@@ -19,6 +25,45 @@ class Schedule:
             date_range = DateRange.combine([s.schedule.date_range for s in services])
         dates = {d for s in services for d in s.schedule.dates if d in date_range}
         return cls(dates, date_range)
+    
+    @property
+    def is_special(self):
+        '''Checks if this schedule is special'''
+        return len(self.weekdays) == 0
+    
+    @property
+    def is_today(self):
+        return Date.today() in self.dates
+    
+    @property
+    def added_dates(self):
+        '''Returns all dates that are added'''
+        return {d for d in self.exceptions if d.weekday not in self.weekdays}
+    
+    @property
+    def added_dates_string(self):
+        '''Returns a string of all dates that are added'''
+        return helpers.date.flatten(self.added_dates)
+    
+    @property
+    def removed_dates(self):
+        '''Returns all dates that are removed'''
+        return {d for d in self.exceptions if d.weekday in self.weekdays}
+    
+    @property
+    def removed_dates_string(self):
+        '''Returns a string of all dates that are removed'''
+        return helpers.date.flatten(self.removed_dates)
+    
+    @property
+    def has_normal_service(self):
+        '''Checks if this schedule indicates normal service'''
+        return len(self.weekdays) > 0 or len(self.added_dates) > 0
+    
+    @property
+    def has_no_service(self):
+        '''Checks if this schedule indicates no service'''
+        return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
     def __init__(self, dates, date_range):
         self.dates = dates
@@ -77,45 +122,6 @@ class Schedule:
     
     def __contains__(self, date):
         return date in self.dates
-    
-    @property
-    def is_special(self):
-        '''Checks if this schedule is special'''
-        return len(self.weekdays) == 0
-    
-    @property
-    def is_today(self):
-        return Date.today() in self.dates
-    
-    @property
-    def added_dates(self):
-        '''Returns all dates that are added'''
-        return {d for d in self.exceptions if d.weekday not in self.weekdays}
-    
-    @property
-    def added_dates_string(self):
-        '''Returns a string of all dates that are added'''
-        return helpers.date.flatten(self.added_dates)
-    
-    @property
-    def removed_dates(self):
-        '''Returns all dates that are removed'''
-        return {d for d in self.exceptions if d.weekday in self.weekdays}
-    
-    @property
-    def removed_dates_string(self):
-        '''Returns a string of all dates that are removed'''
-        return helpers.date.flatten(self.removed_dates)
-    
-    @property
-    def has_normal_service(self):
-        '''Checks if this schedule indicates normal service'''
-        return len(self.weekdays) > 0 or len(self.added_dates) > 0
-    
-    @property
-    def has_no_service(self):
-        '''Checks if this schedule indicates no service'''
-        return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
     def get_weekday_status(self, weekday):
         '''Returns the status class of this schedule on the given weekday'''

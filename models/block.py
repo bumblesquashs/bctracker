@@ -6,7 +6,22 @@ from models.time import Time
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = ('system', 'id', 'trips', 'schedule', 'sheets')
+    __slots__ = (
+        'system',
+        'id',
+        'trips',
+        'schedule',
+        'sheets',
+        '_related_blocks'
+    )
+    
+    @property
+    def related_blocks(self):
+        '''Returns all blocks that have the same start time, end time, and routes as this block'''
+        if self._related_blocks is None:
+            related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
+            self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
+        return self._related_blocks
     
     def __init__(self, system, id, trips):
         self.system = system
@@ -16,18 +31,14 @@ class Block:
         services = {t.service for t in trips}
         self.schedule = Schedule.combine(services)
         self.sheets = system.copy_sheets(services)
+        
+        self._related_blocks = None
     
     def __eq__(self, other):
         return self.id == other.id
     
     def __lt__(self, other):
         return self.id < other.id
-    
-    @property
-    def related_blocks(self):
-        '''Returns all blocks that have the same start time, end time, and routes as this block'''
-        related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
-        return sorted(related_blocks, key=lambda b: b.schedule)
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''

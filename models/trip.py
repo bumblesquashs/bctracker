@@ -1,6 +1,7 @@
 
 import helpers.departure
 import helpers.point
+import helpers.system
 
 from models.direction import Direction
 from models.time import Time
@@ -8,62 +9,36 @@ from models.time import Time
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = ('system', 'id', 'short_id', 'route_id', 'service_id', 'block_id', 'direction_id', 'shape_id', 'headsign', 'first_departure', 'last_departure', 'departure_count', 'direction', 'sheets', '_related_trips')
+    __slots__ = (
+        'system',
+        'id',
+        'short_id',
+        'route_id',
+        'service_id',
+        'block_id',
+        'direction_id',
+        'shape_id',
+        'headsign',
+        'sheets',
+        'is_setup',
+        '_first_departure',
+        '_last_departure',
+        '_departure_count',
+        '_direction',
+        '_related_trips'
+    )
     
     @classmethod
-    def from_csv(cls, row, system, departures):
-        '''Returns a trip initialized from the given CSV row'''
-        trip_id = row['trip_id']
-        route_id = row['route_id']
-        service_id = row['service_id']
-        block_id = row['block_id']
-        direction_id = int(row['direction_id'])
-        shape_id = row['shape_id']
-        headsign = row['trip_headsign']
-        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, sorted(departures.get(trip_id, [])))
-    
-    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, departures):
-        self.system = system
-        self.id = trip_id
-        self.route_id = route_id
-        self.service_id = service_id
-        self.block_id = block_id
-        self.direction_id = direction_id
-        self.shape_id = shape_id
-        self.headsign = headsign
-        self.departure_count = len(departures)
-        
-        id_parts = trip_id.split(':')
-        if len(id_parts) == 1:
-            self.short_id = trip_id
-        else:
-            self.short_id = id_parts[0]
-        
-        if len(departures) == 0:
-            self.first_departure = None
-            self.last_departure = None
-            self.direction = Direction.UNKNOWN
-        else:
-            self.first_departure = departures[0]
-            self.last_departure = departures[-1]
-            self.direction = Direction.calculate(self.first_stop, self.last_stop)
-        
-        self.sheets = system.copy_sheets([self.service])
-        
-        self._related_trips = None
-    
-    def __str__(self):
-        if self.system.prefix_headsign and self.route is not None:
-            return f'{self.route.number} {self.headsign}'
-        return self.headsign
-    
-    def __eq__(self, other):
-        return self.id == other.id
-    
-    def __lt__(self, other):
-        if self.start_time == other.start_time:
-            return self.service < other.service
-        return self.start_time < other.start_time
+    def from_db(cls, row, prefix='trip'):
+        system = helpers.system.find(row[f'{prefix}_system_id'])
+        trip_id = row[f'{prefix}_id']
+        route_id = row[f'{prefix}_route_id']
+        service_id = row[f'{prefix}_service_id']
+        block_id = row[f'{prefix}_block_id']
+        direction_id = row[f'{prefix}_direction_id']
+        shape_id = row[f'{prefix}_shape_id']
+        headsign = row[f'{prefix}_headsign']
+        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property
     def display_id(self):
@@ -137,6 +112,77 @@ class Trip:
             self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
+    
+    @property
+    def first_departure(self):
+        self._setup()
+        return self._first_departure
+    
+    @property
+    def last_departure(self):
+        self._setup()
+        return self._last_departure
+    
+    @property
+    def departure_count(self):
+        self._setup()
+        return self._departure_count
+    
+    @property
+    def direction(self):
+        self._setup()
+        return self._direction
+    
+    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
+        self.system = system
+        self.id = trip_id
+        self.route_id = route_id
+        self.service_id = service_id
+        self.block_id = block_id
+        self.direction_id = direction_id
+        self.shape_id = shape_id
+        self.headsign = headsign
+        
+        id_parts = trip_id.split(':')
+        if len(id_parts) == 1:
+            self.short_id = trip_id
+        else:
+            self.short_id = id_parts[0]
+        
+        self.sheets = system.copy_sheets([self.service])
+        
+        self.is_setup = False
+        self._first_departure = None
+        self._last_departure = None
+        self._departure_count = 0
+        self._direction = Direction.UNKNOWN
+        
+        self._related_trips = None
+    
+    def __str__(self):
+        if self.system.prefix_headsign and self.route is not None:
+            return f'{self.route.number} {self.headsign}'
+        return self.headsign
+    
+    def __eq__(self, other):
+        return self.id == other.id
+    
+    def __lt__(self, other):
+        if self.start_time == other.start_time:
+            return self.service < other.service
+        return self.start_time < other.start_time
+    
+    def _setup(self):
+        if self.is_setup:
+            return
+        self.is_setup = True
+        departures = self.load_departures()
+        if len(departures) == 0:
+            return
+        self._first_departure = departures[0]
+        self._last_departure = departures[-1]
+        self._departure_count = len(departures)
+        self._direction = Direction.calculate(self.first_stop, self.last_stop)
     
     @property
     def json(self):

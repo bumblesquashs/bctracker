@@ -7,7 +7,20 @@ from models.bus import Bus
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'block_id', 'route_id', 'sequence', 'lat', 'lon', 'bearing', 'speed', 'adherence')
+    __slots__ = (
+        'system',
+        'bus',
+        'trip_id',
+        'stop_id',
+        'block_id',
+        'route_id',
+        'sequence',
+        'lat',
+        'lon',
+        'bearing',
+        'speed',
+        'adherence'
+    )
     
     @classmethod
     def from_entity(cls, system, bus, data):
@@ -83,26 +96,6 @@ class Position:
             adherence = Adherence(adherence_value)
         return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
-        self.system = system
-        self.bus = bus
-        self.trip_id = trip_id
-        self.stop_id = stop_id
-        self.block_id = block_id
-        self.route_id = route_id
-        self.sequence = sequence
-        self.lat = lat
-        self.lon = lon
-        self.bearing = bearing
-        self.speed = speed
-        self.adherence = adherence
-    
-    def __eq__(self, other):
-        return self.bus == other.bus
-    
-    def __lt__(self, other):
-        return self.bus < other.bus
-    
     @property
     def has_location(self):
         '''Checks if this position has non-null coordinates'''
@@ -151,6 +144,26 @@ class Position:
         if trip is None:
             return 'FFFFFF'
         return trip.route.text_colour
+    
+    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
+        self.system = system
+        self.bus = bus
+        self.trip_id = trip_id
+        self.stop_id = stop_id
+        self.block_id = block_id
+        self.route_id = route_id
+        self.sequence = sequence
+        self.lat = lat
+        self.lon = lon
+        self.bearing = bearing
+        self.speed = speed
+        self.adherence = adherence
+    
+    def __eq__(self, other):
+        return self.bus == other.bus
+    
+    def __lt__(self, other):
+        return self.bus < other.bus
     
     @property
     def json(self):

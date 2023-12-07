@@ -5,7 +5,13 @@ import pytz
 class Time:
     '''A specific hour, minute, and second'''
     
-    __slots__ = ('hour', 'minute', 'second', 'accurate_seconds', 'timezone')
+    __slots__ = (
+        'hour',
+        'minute',
+        'second',
+        'accurate_seconds',
+        'timezone'
+    )
     
     @classmethod
     def parse(cls, time_string, timezone, accurate_seconds=False):
@@ -39,6 +45,41 @@ class Time:
     def unknown(cls, timezone=None):
         '''Returns an unknown time'''
         return cls(-1, 0, 0, False, timezone)
+    
+    @property
+    def is_unknown(self):
+        '''Checks if this time is unknown'''
+        return self.hour < 0
+    
+    @property
+    def is_earlier(self):
+        '''Checks if this time is before the current time'''
+        return self < Time.now(self.timezone)
+    
+    @property
+    def is_now(self):
+        '''Checks if this time is the same as the current time'''
+        return self == Time.now(self.timezone)
+    
+    @property
+    def is_later(self):
+        '''Checks if this time is after the current time'''
+        return self > Time.now(self.timezone)
+    
+    @property
+    def datetime(self):
+        '''Returns the datetime equivalent of this time'''
+        hour = self.hour
+        while hour >= 24:
+            hour -= 24
+        return datetime(1996, 11, 19, hour, self.minute, self.second)
+    
+    @property
+    def timezone_name(self):
+        '''Returns the name of this time's timezone'''
+        if self.timezone is None:
+            return None
+        return datetime.now(pytz.timezone(self.timezone)).tzname()
     
     def __init__(self, hour, minute, second, accurate_seconds, timezone):
         self.hour = hour
@@ -75,41 +116,6 @@ class Time:
         while hour < 4:
             hour += 24
         return Time(hour, time.minute, time.second, self.accurate_seconds, self.timezone)
-    
-    @property
-    def is_unknown(self):
-        '''Checks if this time is unknown'''
-        return self.hour < 0
-    
-    @property
-    def is_earlier(self):
-        '''Checks if this time is before the current time'''
-        return self < Time.now(self.timezone)
-    
-    @property
-    def is_now(self):
-        '''Checks if this time is the same as the current time'''
-        return self == Time.now(self.timezone)
-    
-    @property
-    def is_later(self):
-        '''Checks if this time is after the current time'''
-        return self > Time.now(self.timezone)
-    
-    @property
-    def datetime(self):
-        '''Returns the datetime equivalent of this time'''
-        hour = self.hour
-        while hour >= 24:
-            hour -= 24
-        return datetime(1996, 11, 19, hour, self.minute, self.second)
-    
-    @property
-    def timezone_name(self):
-        '''Returns the name of this time's timezone'''
-        if self.timezone is None:
-            return None
-        return datetime.now(pytz.timezone(self.timezone)).tzname()
     
     def get_minutes(self):
         '''Returns the total number of minutes in this time'''

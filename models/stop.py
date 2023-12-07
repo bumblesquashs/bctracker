@@ -3,6 +3,7 @@ from math import sqrt
 
 import helpers.departure
 import helpers.sheet
+import helpers.system
 
 from models.match import Match
 from models.schedule import Schedule
@@ -10,17 +11,43 @@ from models.schedule import Schedule
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = ('system', 'id', 'number', 'name', 'lat', 'lon', 'schedule', 'sheets')
+    __slots__ = (
+        'system',
+        'id',
+        'number',
+        'name',
+        'lat',
+        'lon',
+        'is_setup',
+        '_schedule',
+        '_sheets'
+    )
     
     @classmethod
-    def from_csv(cls, row, system):
-        '''Returns a stop initialized from the given CSV row'''
-        id = row['stop_id']
-        number = row['stop_code']
-        name = row['stop_name']
-        lat = float(row['stop_lat'])
-        lon = float(row['stop_lon'])
+    def from_db(cls, row, prefix='stop'):
+        system = helpers.system.find(row[f'{prefix}_system_id'])
+        id = row[f'{prefix}_id']
+        number = row[f'{prefix}_number']
+        name = row[f'{prefix}_name']
+        lat = row[f'{prefix}_lat']
+        lon = row[f'{prefix}_lon']
         return cls(system, id, number, name, lat, lon)
+    
+    @property
+    def nearby_stops(self):
+        '''Returns all stops with coordinates close to this stop'''
+        stops = self.system.get_stops()
+        return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
+    
+    @property
+    def schedule(self):
+        self._setup()
+        return self._schedule
+    
+    @property
+    def sheets(self):
+        self._setup()
+        return self._sheets
     
     def __init__(self, system, id, number, name, lat, lon):
         self.system = system
@@ -29,8 +56,10 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
-        self.schedule = None
-        self.sheets = []
+        
+        self.is_setup = False
+        self._schedule = None
+        self._sheets = []
     
     def __str__(self):
         return self.name
@@ -46,11 +75,14 @@ class Stop:
             return self.number < other.number
         return self.name < other.name
     
-    @property
-    def nearby_stops(self):
-        '''Returns all stops with coordinates close to this stop'''
-        stops = self.system.get_stops()
-        return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
+    def _setup(self):
+        if self.is_setup:
+            return
+        self.is_setup = True
+        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
+        services = {d.trip.service for d in departures if d.trip is not None}
+        self._schedule = Schedule.combine(services)
+        self._sheets = self.system.copy_sheets(services)
     
     @property
     def json(self):
@@ -100,9 +132,3 @@ class Stop:
             else:
                 value = 1
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
-    
-    def setup(self, departures):
-        '''Sets the schedule for this stop once trip information is available'''
-        services = {d.trip.service for d in departures if d.trip is not None}
-        self.schedule = Schedule.combine(services)
-        self.sheets = self.system.copy_sheets(services)

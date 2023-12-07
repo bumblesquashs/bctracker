@@ -2,7 +2,13 @@
 class Match:
     '''A search result with a value indicating how closely it matches the query'''
     
-    __slots__ = ('type', 'name', 'description', 'path', 'value')
+    __slots__ = (
+        'type',
+        'name',
+        'description',
+        'path',
+        'value'
+    )
     
     def __init__(self, type, name, description, path, value):
         self.type = type

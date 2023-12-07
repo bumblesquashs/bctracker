@@ -4,7 +4,13 @@ import helpers.system
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
     
-    __slots__ = ('system', 'shape_id', 'sequence', 'lat', 'lon')
+    __slots__ = (
+        'system',
+        'shape_id',
+        'sequence',
+        'lat',
+        'lon'
+    )
     
     @classmethod
     def from_db(cls, row, prefix='point'):

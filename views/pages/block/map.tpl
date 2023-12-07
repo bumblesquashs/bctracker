@@ -15,7 +15,7 @@
 </div>
 
 % trips = block.trips
-% departures = helpers.departure.find_all(block.system.id, trip_id=[t.id for t in trips])
+% departures = helpers.departure.find_all(block.system.id, block_id=block.id)
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 
