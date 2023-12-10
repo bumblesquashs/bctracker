@@ -1,4 +1,5 @@
 
+import helpers.departure
 import helpers.system
 
 from models.adherence import Adherence
@@ -207,5 +208,4 @@ class Position:
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []
-        future_departures = [d for d in self.trip.departures if d.sequence >= self.sequence]
-        return future_departures[:5]
+        return helpers.departure.find_upcoming(self.system.id, self.trip.id, self.sequence)

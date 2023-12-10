@@ -84,6 +84,30 @@ def find_all(system_id, trip_id=None, sequence=None, stop_id=None, block_id=None
         limit=limit,
         initializer=Departure.from_db)
 
+def find_upcoming(system_id, trip_id, sequence, limit=5):
+    return database.select('departure',
+        columns={
+            'departure.system_id': 'departure_system_id',
+            'departure.trip_id': 'departure_trip_id',
+            'departure.sequence': 'departure_sequence',
+            'departure.stop_id': 'departure_stop_id',
+            'departure.time': 'departure_time',
+            'departure.pickup_type': 'departure_pickup_type',
+            'departure.dropoff_type': 'departure_dropoff_type',
+            'departure.timepoint': 'departure_timepoint',
+            'departure.distance': 'departure_distance'
+        },
+        filters={
+            'departure.system_id': system_id,
+            'departure.trip_id': trip_id,
+            'departure.sequence': {
+                '>=': sequence
+            }
+        },
+        order_by='departure.sequence',
+        limit=limit,
+        initializer=Departure.from_db)
+
 def delete_all(system):
     '''Deletes all departures for the given system from the database'''
     database.delete('departure', {
