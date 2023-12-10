@@ -14,7 +14,7 @@
 </div>
 
 % trips = [d.trip for d in stop.get_departures() if d.trip is not None and d.trip.route is not None]
-% departures = helpers.departure.find_all(stop.system.id, trip_id=[t.id for t in trips])
+% departures = helpers.departure.find_adjacent(stop.system.id, stop.id)
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
 

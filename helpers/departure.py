@@ -108,6 +108,49 @@ def find_upcoming(system_id, trip_id, sequence, limit=5):
         limit=limit,
         initializer=Departure.from_db)
 
+def find_adjacent(system_id, stop_id):
+    '''Returns all departures on trips that serve the given stop ID'''
+    cte, args = database.build_select('departure',
+        columns='trip.*',
+        joins={
+            'trip': {
+                'trip.system_id': 'departure.system_id',
+                'trip.trip_id': 'departure.trip_id'
+            }
+        },
+        filters={
+            'departure.system_id': system_id,
+            'departure.stop_id': stop_id
+        })
+    return database.select('stop_trip',
+        columns={
+            'departure.system_id': 'departure_system_id',
+            'departure.trip_id': 'departure_trip_id',
+            'departure.sequence': 'departure_sequence',
+            'departure.stop_id': 'departure_stop_id',
+            'departure.time': 'departure_time',
+            'departure.pickup_type': 'departure_pickup_type',
+            'departure.dropoff_type': 'departure_dropoff_type',
+            'departure.timepoint': 'departure_timepoint',
+            'departure.distance': 'departure_distance'
+        },
+        ctes={
+            'stop_trip': cte
+        },
+        joins={
+            'departure': {
+                'departure.system_id': 'stop_trip.system_id',
+                'departure.trip_id': 'stop_trip.trip_id'
+            }
+        },
+        filters={
+            'departure.stop_id': {
+                '!=': stop_id
+            }
+        },
+        custom_args=args,
+        initializer=Departure.from_db)
+
 def delete_all(system):
     '''Deletes all departures for the given system from the database'''
     database.delete('departure', {
