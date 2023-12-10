@@ -26,7 +26,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 21
+VERSION = 22
 
 app = Bottle()
 running = False
@@ -120,6 +120,7 @@ def page(name, system_id, title, path='', path_args=None, enable_refresh=True, i
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
+    bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
     system = helpers.system.find(system_id)
     if system is None:
@@ -148,6 +149,7 @@ def page(name, system_id, title, path='', path_args=None, enable_refresh=True, i
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
+        bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
         **kwargs
@@ -928,6 +930,9 @@ def themes_page(system_id=None):
     time_format = request.query.get('time_format')
     if time_format is not None:
         set_cookie('time_format', time_format)
+    bus_marker_style = request.query.get('bus_marker_style')
+    if bus_marker_style is not None:
+        set_cookie('bus_marker_style', bus_marker_style)
     themes = helpers.theme.find_all()
     return page('personalize', system_id,
         title='Personalize',

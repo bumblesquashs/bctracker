@@ -725,6 +725,15 @@ table.striped tr.section td {
     border-radius: 0px;
 }
 
+.marker .icon.bus_route {
+    font-weight: bold;
+    text-align: center;
+    line-height: 32px;
+    font-size: 11pt;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
 .marker.small .icon {
     width: 16px !important;
     height: 16px !important;

@@ -77,4 +77,28 @@
             </div>
         </div>
     </div>
+    <div class="container flex-1">
+        <div class="section">
+            <div class="header">
+                <h2>Map Bus Icon Style</h2>
+                % if bus_marker_style == 'route':
+                    <h3>Current style: Route Number</h3>
+                % elif bus_marker_style == 'mini':
+                    <h3>Current style: Mini</h3>
+                % else:
+                    <h3>Current style: Default</h3>
+                % end
+            </div>
+            <div class="content">
+                <p>
+                    Choose a style for bus icons shown on the map screen.
+                </p>
+                <div class="button-container">
+                    <a class="button" href="?bus_marker_style=default">Default</a>
+                    <a class="button" href="?bus_marker_style=mini">Mini</a>
+                    <a class="button" href="?bus_marker_style=route">Route Number</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
