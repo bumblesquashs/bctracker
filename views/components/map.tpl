@@ -193,17 +193,22 @@
     % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
+        const busMarkerStyle = "{{ bus_marker_style }}";
         
         for (const position of positions) {
             const element = document.createElement("div");
             element.className = "marker";
             if (position.bearing !== undefined) {
+                const sideWidthValue = busMarkerStyle == "mini" ? 8 : 16;
+                const bottomWidthValue = busMarkerStyle == "mini" ? 18 : 26;
                 const length = Math.floor(position.speed / 10);
                 const bearing = document.createElement("div");
                 bearing.className = "bearing";
                 bearing.style.borderBottomColor = "#" + position.colour;
                 bearing.style.marginTop = (-8 - length) + "px";
-                bearing.style.borderBottomWidth = (26 + length) + "px";
+                bearing.style.borderLeftWidth = sideWidthValue + "px";
+                bearing.style.borderRightWidth = sideWidthValue + "px";
+                bearing.style.borderBottomWidth = (bottomWidthValue + length) + "px";
                 bearing.style.transform = "rotate(" + position.bearing + "deg)";
                 element.appendChild(bearing)
             }
@@ -250,14 +255,31 @@
                 const icon = document.createElement("div");
                 icon.className = "icon";
                 icon.style.backgroundColor = "#" + position.colour;
-                icon.innerHTML = "<img src='/img/white/bus.png' />";
+                if (busMarkerStyle == "route") {
+                    icon.classList.add("bus_route");
+                    icon.innerHTML = position.route_number;
+                } else if (busMarkerStyle == "mini") {
+                    element.classList.add("small");
+                    icon.classList.add("mini");
+                } else {
+                    icon.innerHTML = "<img src='/img/white/bus.png' />";
+                }
                 element.appendChild(icon);
             } else {
                 const icon = document.createElement("a");
                 icon.className = "icon";
                 icon.href = "/bus/" + position.bus_number;
                 icon.style.backgroundColor = "#" + position.colour;
-                icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                if (busMarkerStyle == "route") {
+                    icon.classList.add("bus_route");
+                    icon.innerHTML = "<div class='link'></div>" + position.route_number;
+                } else if (busMarkerStyle == "mini") {
+                    element.classList.add("small");
+                    icon.classList.add("mini");
+                    icon.innerHTML = "<div class='link'></div>";
+                } else {
+                    icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                }
                 element.appendChild(icon);
             }
             

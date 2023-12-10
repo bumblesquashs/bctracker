@@ -420,6 +420,10 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
+.marker .icon.bus_route {
+    color: #FFFFFF;
+}
+
 .menu {
     background-color: #053305;
 }

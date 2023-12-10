@@ -409,6 +409,10 @@ table.striped tr {
     color: #FFFFFF;
 }
 
+.marker .icon.bus_route {
+    color: #FFFFFF;
+}
+
 .menu {
     background-color: #DDDDDD;
 }
