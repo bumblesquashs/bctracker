@@ -35,7 +35,7 @@
     </div>
 % else:
     % trips = route.trips
-    % departures = helpers.departure.find_all(route.system.id, trip_id=[t.id for t in trips])
+    % departures = helpers.departure.find_all(route.system.id, route_id=route.id)
     
     % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 

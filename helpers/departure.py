@@ -43,7 +43,7 @@ def find(system_id, trip_id=None, sequence=None, stop_id=None):
         return departures[0]
     return None
 
-def find_all(system_id, trip_id=None, sequence=None, stop_id=None, block_id=None, limit=None):
+def find_all(system_id, trip_id=None, sequence=None, route_id=None, stop_id=None, block_id=None, limit=None):
     '''Returns all departures that match the given system ID, trip ID, sequence, and stop ID'''
     if trip_id is not None:
         order_by = 'departure.sequence ASC'
@@ -55,7 +55,7 @@ def find_all(system_id, trip_id=None, sequence=None, stop_id=None, block_id=None
     else:
         order_by = None
     joins = {}
-    if block_id is not None:
+    if route_id is not None or block_id is not None:
         joins['trip'] = {
             'trip.system_id': 'departure.system_id',
             'trip.trip_id': 'departure.trip_id'
@@ -78,7 +78,8 @@ def find_all(system_id, trip_id=None, sequence=None, stop_id=None, block_id=None
             'departure.trip_id': trip_id,
             'departure.sequence': sequence,
             'departure.stop_id': stop_id,
-            'trip.block_id': block_id
+            'trip.block_id': block_id,
+            'trip.route_id': route_id
         },
         order_by=order_by,
         limit=limit,
