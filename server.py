@@ -999,7 +999,7 @@ def system_api_map(system_id=None):
         last_updated = system.get_last_updated(time_format)
     positions = sorted(helpers.position.find_all(system_id, has_location=True), key=lambda p: p.lat, reverse=True)
     return {
-        'positions': [p.json for p in positions],
+        'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
     }
 
@@ -1009,7 +1009,7 @@ def system_api_map(system_id=None):
 ])
 def api_shape_id(shape_id, system_id=None):
     return {
-        'points': [p.json for p in helpers.point.find_all(system_id, shape_id)]
+        'points': [p.get_json() for p in helpers.point.find_all(system_id, shape_id)]
     }
 
 @app.post([

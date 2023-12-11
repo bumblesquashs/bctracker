@@ -19,7 +19,7 @@ class Adherence:
     @classmethod
     def calculate(cls, trip, stop, sequence, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = helpers.departure.find(trip.system.id, trip_id=trip.id, sequence=sequence, stop_id=stop.id)
+        departure = helpers.departure.find(trip.system.id, trip_id=trip.id, sequence=sequence)
         if departure is None:
             return None
         previous_departure = departure.load_previous()
@@ -71,8 +71,7 @@ class Adherence:
             return f'+{self.value}'
         return str(self.value)
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this adherence in JSON-compatible format'''
         return {
             'value': str(self),

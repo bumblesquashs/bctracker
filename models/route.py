@@ -116,8 +116,7 @@ class Route:
             size = len(points) // count
             self._indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this route in JSON-compatible format'''
         return {
             'id': self.id,
@@ -127,8 +126,7 @@ class Route:
             'text_colour': self.text_colour
         }
     
-    @property
-    def indicator_json(self):
+    def get_indicator_json(self):
         '''Returns a representation of the map indicator for this route in JSON-compatible format'''
         json = []
         for point in self.indicator_points:

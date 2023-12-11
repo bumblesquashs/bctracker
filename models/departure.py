@@ -139,11 +139,10 @@ class Departure:
                 return self.trip.route < other.trip.route
             return self.time < other.time
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this departure in JSON-compatible format'''
         json = {
-            'stop': self.stop.json,
+            'stop': self.stop.get_json(),
             'time': str(self.time)
         }
         if self.trip is not None and self.trip.route is not None:

@@ -35,8 +35,7 @@ class Point:
     def __lt__(self, other):
         return self.sequence < other.sequence
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this point in JSON-compatible format'''
         return {
             'lat': self.lat,

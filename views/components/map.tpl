@@ -45,7 +45,7 @@
 % end
 % if len(shape_trips) > 0:
     <script>
-        const trips = JSON.parse('{{! json.dumps([t.json for t in shape_trips]) }}');
+        const trips = JSON.parse('{{! json.dumps([t.get_json() for t in shape_trips]) }}');
         
         map.on("load", function() {
             for (const trip of trips) {
@@ -98,7 +98,7 @@
 % end
 % if len(stop_departures) > 0:
     <script>
-        const departures = JSON.parse('{{! json.dumps([d.json for d in stop_departures]) }}');
+        const departures = JSON.parse('{{! json.dumps([d.get_json() for d in stop_departures]) }}');
         
         for (const departure of departures) {
             const stop = departure.stop;
@@ -146,7 +146,7 @@
 % map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
 % if len(map_stops) > 0:
     <script>
-        const stops = JSON.parse('{{! json.dumps([s.json for s in map_stops]) }}');
+        const stops = JSON.parse('{{! json.dumps([s.get_json() for s in map_stops]) }}');
         
         for (const stop of stops) {
             const element = document.createElement("div");
@@ -192,7 +192,7 @@
 % if len(map_positions) > 0:
     % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
     <script>
-        const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
+        const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
         const busMarkerStyle = "{{ bus_marker_style }}";
         
         for (const position of positions) {

@@ -84,8 +84,7 @@ class Stop:
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
         return {
             'system_id': self.system.id,
@@ -93,7 +92,7 @@ class Stop:
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.json for r in self.get_routes()]
+            'routes': [r.get_json() for r in self.get_routes()]
         }
     
     def get_departures(self, service_group=None, date=None):

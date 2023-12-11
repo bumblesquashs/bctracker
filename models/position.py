@@ -70,7 +70,7 @@ class Position:
         else:
             block_id = trip.block_id
             route_id = trip.route_id
-        if trip is None or stop is None or lat is None or lon is None:
+        if trip is None or stop is None or sequence is None or lat is None or lon is None:
             adherence = None
         else:
             adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
@@ -166,8 +166,7 @@ class Position:
     def __lt__(self, other):
         return self.bus < other.bus
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
@@ -203,7 +202,7 @@ class Position:
             data['speed'] = speed
         adherence = self.adherence
         if adherence is not None:
-            data['adherence'] = adherence.json
+            data['adherence'] = adherence.get_json()
         return data
     
     def get_upcoming_departures(self):

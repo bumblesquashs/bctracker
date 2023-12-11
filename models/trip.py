@@ -184,12 +184,11 @@ class Trip:
         self._departure_count = len(departures)
         self._direction = Direction.calculate(self.first_stop, self.last_stop)
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
         json = {
             'shape_id': self.shape_id,
-            'points': [p.json for p in self.load_points()]
+            'points': [p.get_json() for p in self.load_points()]
         }
         if self.route is None:
             json['colour'] = '666666'
