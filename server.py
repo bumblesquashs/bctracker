@@ -4,7 +4,7 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request, response, debug, redirect
 import cherrypy as cp
 
-import helpers.adornment
+import helpers.icon
 import helpers.model
 import helpers.order
 import helpers.overview
@@ -55,7 +55,7 @@ def start(args):
     if args.updatedb:
         print('Forcing database refresh')
     
-    helpers.adornment.load()
+    helpers.icon.load()
     helpers.model.load()
     helpers.order.load()
     helpers.region.load()
@@ -1036,19 +1036,19 @@ def api_search(system_id=None):
     }
 
 @app.post([
-    '/api/admin/reload-adornments',
-    '/api/admin/reload-adornments/',
-    '/api/admin/<key>/reload-adornments',
-    '/api/admin/<key>/reload-adornments/',
-    '/<system_id>/api/admin/reload-adornments',
-    '/<system_id>/api/admin/reload-adornments/',
-    '/<system_id>/api/admin/<key>/reload-adornments',
-    '/<system_id>/api/admin/<key>/reload-adornments/'
+    '/api/admin/reload-icons',
+    '/api/admin/reload-icons/',
+    '/api/admin/<key>/reload-icons',
+    '/api/admin/<key>/reload-icons/',
+    '/<system_id>/api/admin/reload-icons',
+    '/<system_id>/api/admin/reload-icons/',
+    '/<system_id>/api/admin/<key>/reload-icons',
+    '/<system_id>/api/admin/<key>/reload-icons/'
 ])
-def api_admin_reload_adornments(key=None, system_id=None):
+def api_admin_reload_icons(key=None, system_id=None):
     if admin_key is None or key == admin_key:
-        helpers.adornment.delete_all()
-        helpers.adornment.load()
+        helpers.icon.delete_all()
+        helpers.icon.load()
         return 'Success'
     return 'Access denied'
 

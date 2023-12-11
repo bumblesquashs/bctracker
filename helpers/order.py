@@ -43,9 +43,9 @@ def find_matches(query, recorded_bus_numbers):
                     value += len(query)
             if bus.number not in recorded_bus_numbers:
                 value /= 10
-            adornment = bus.adornment
-            if adornment is not None and adornment.enabled:
-                bus_number_string += f' {adornment}'
+            icon = bus.icon
+            if icon is not None and icon.enabled:
+                bus_number_string += f' {icon}'
             matches.append(Match('bus', bus_number_string, order_string, f'bus/{bus.number}', value))
     return matches
 

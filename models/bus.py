@@ -1,22 +1,22 @@
 
-import helpers.adornment
+import helpers.icon
 import helpers.order
 
 class Bus:
     '''A public transportation vehicle'''
     
-    __slots__ = ('number', 'order', 'adornment')
+    __slots__ = ('number', 'order', 'icon')
     
-    def __init__(self, number, order=None, adornment=None):
+    def __init__(self, number, order=None, icon=None):
         self.number = number
         if order is None:
             self.order = helpers.order.find(number)
         else:
             self.order = order
-        if adornment is None:
-            self.adornment = helpers.adornment.find(number)
+        if icon is None:
+            self.icon = helpers.icon.find(number)
         else:
-            self.adornment = adornment
+            self.icon = icon
     
     def __str__(self):
         if self.is_known:
