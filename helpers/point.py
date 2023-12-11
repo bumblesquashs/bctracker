@@ -28,7 +28,8 @@ def find_all(system_id, shape_id=None):
             'point.shape_id': shape_id
         },
         order_by='point.sequence ASC',
-        initializer=Point.from_db)
+        initializer=Point.from_db
+    )
 
 def delete_all(system):
     '''Deletes all points for the given system from the database'''

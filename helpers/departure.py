@@ -83,7 +83,8 @@ def find_all(system_id, trip_id=None, sequence=None, route_id=None, stop_id=None
         },
         order_by=order_by,
         limit=limit,
-        initializer=Departure.from_db)
+        initializer=Departure.from_db
+    )
 
 def find_upcoming(system_id, trip_id, sequence, limit=5):
     return database.select('departure',
@@ -107,7 +108,8 @@ def find_upcoming(system_id, trip_id, sequence, limit=5):
         },
         order_by='departure.sequence',
         limit=limit,
-        initializer=Departure.from_db)
+        initializer=Departure.from_db
+    )
 
 def find_adjacent(system_id, stop_id):
     '''Returns all departures on trips that serve the given stop ID'''
@@ -150,7 +152,8 @@ def find_adjacent(system_id, stop_id):
             }
         },
         custom_args=args,
-        initializer=Departure.from_db)
+        initializer=Departure.from_db
+    )
 
 def delete_all(system):
     '''Deletes all departures for the given system from the database'''

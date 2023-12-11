@@ -33,4 +33,5 @@ def find_all(system_id=None, bus_number=None, limit=None):
             'transfer.transfer_id': 'DESC'
         },
         limit=limit,
-        initializer=Transfer.from_db)
+        initializer=Transfer.from_db
+    )

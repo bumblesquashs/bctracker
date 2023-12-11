@@ -67,7 +67,8 @@ def find_all(system_id=None, last_seen_system_id=None, bus_number=None, limit=No
             'overview.last_seen_system_id': last_seen_system_id
         },
         limit=limit,
-        initializer=Overview.from_db)
+        initializer=Overview.from_db
+    )
 
 def find_bus_numbers(system_id=None):
     '''Returns all bus numbers that have been seen'''

@@ -30,7 +30,8 @@ def find(system_id, stop_id):
             'stop.stop_id': stop_id
         },
         limit=1,
-        initializer=Stop.from_db)
+        initializer=Stop.from_db
+    )
     if len(stops) == 0:
         return None
     return stops[0]
@@ -50,7 +51,8 @@ def find_all(system_id, limit=None):
             'stop.system_id': system_id
         },
         limit=limit,
-        initializer=Stop.from_db)
+        initializer=Stop.from_db
+    )
 
 def delete_all(system):
     '''Deletes all stops for the given system from the database'''

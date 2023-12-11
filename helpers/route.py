@@ -38,7 +38,8 @@ def find(system_id, route_id):
             'route.route_id': route_id
         },
         limit=1,
-        initializer=Route.from_db)
+        initializer=Route.from_db
+    )
     if len(routes) == 0:
         return None
     return routes[0]
@@ -58,7 +59,8 @@ def find_all(system_id, limit=None):
             'route.system_id': system_id
         },
         limit=limit,
-        initializer=Route.from_db)
+        initializer=Route.from_db
+    )
 
 def delete_all(system):
     '''Deletes all routes for the given system from the database'''

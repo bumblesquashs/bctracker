@@ -34,7 +34,8 @@ def find(system_id, trip_id):
             'trip.trip_id': trip_id
         },
         limit=1,
-        initializer=Trip.from_db)
+        initializer=Trip.from_db
+    )
     if len(trips) == 0:
         return None
     return trips[0]
@@ -58,7 +59,8 @@ def find_all(system_id, route_id=None, block_id=None, limit=None):
             'trip.block_id': block_id
         },
         limit=limit,
-        initializer=Trip.from_db)
+        initializer=Trip.from_db
+    )
 
 def delete_all(system):
     '''Deletes all trips for the given system from the database'''

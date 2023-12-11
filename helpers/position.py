@@ -42,7 +42,8 @@ def find(bus_number):
         filters={
             'position.bus_number': bus_number
         },
-        initializer=Position.from_db)
+        initializer=Position.from_db
+    )
     if len(positions) == 1:
         return positions[0]
     return None
@@ -87,7 +88,8 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
             'position.adherence': 'position_adherence'
         },
         filters=filters,
-        initializer=Position.from_db)
+        initializer=Position.from_db
+    )
     return [p for p in positions if p.bus.visible]
 
 def delete_all(system_id=None):

@@ -70,7 +70,6 @@ def load(system, force_download=False, update_db=False):
     except Exception as e:
         print('Error!')
         print(f'  Failed to load GTFS for {system}: {e}')
-        raise e
 
 def download(system):
     '''Downloads the GTFS for the given system, then loads it into memory'''
