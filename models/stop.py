@@ -2,6 +2,7 @@
 from math import sqrt
 
 import helpers.departure
+import helpers.route
 import helpers.sheet
 import helpers.system
 
@@ -20,7 +21,8 @@ class Stop:
         'lon',
         'is_setup',
         '_schedule',
-        '_sheets'
+        '_sheets',
+        '_routes'
     )
     
     @classmethod
@@ -49,6 +51,11 @@ class Stop:
         self._setup()
         return self._sheets
     
+    @property
+    def routes(self):
+        self._setup()
+        return self._routes
+    
     def __init__(self, system, id, number, name, lat, lon):
         self.system = system
         self.id = id
@@ -60,6 +67,7 @@ class Stop:
         self.is_setup = False
         self._schedule = None
         self._sheets = []
+        self._routes = []
     
     def __str__(self):
         return self.name
@@ -83,6 +91,7 @@ class Stop:
         services = {d.trip.service for d in departures if d.trip is not None}
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
+        self._routes = {d.trip.route for d in departures if d.trip is not None and d.trip.route is not None}
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
@@ -92,7 +101,7 @@ class Stop:
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.get_json() for r in self.get_routes()]
+            'routes': [r.get_json() for r in self.routes]
         }
     
     def get_departures(self, service_group=None, date=None):
@@ -103,14 +112,6 @@ class Stop:
                 return sorted(departures)
             return sorted([d for d in departures if d.trip is not None and date in d.trip.service])
         return sorted([d for d in departures if d.trip is not None and d.trip.service in service_group])
-    
-    def get_routes(self, service_group=None, date=None):
-        '''Returns all routes from this stop'''
-        return sorted({d.trip.route for d in self.get_departures(service_group, date) if d.trip is not None and d.trip.route is not None})
-    
-    def get_routes_string(self, service_group=None, date=None):
-        '''Returns a string of all routes from this stop'''
-        return ', '.join([r.number for r in self.get_routes(service_group, date)])
     
     def get_match(self, query):
         '''Returns a match for this stop with the given query'''

@@ -31,7 +31,7 @@
                             % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                         <div class="section vertical">
-                            % routes = stop.get_routes()
+                            % routes = stop.routes
                             <div class="flex-column">
                                 % for route in routes:
                                     <div class="flex-row">
@@ -68,7 +68,7 @@
                                     <td class="non-mobile">{{ nearby_stop }}</td>
                                     <td>
                                         <div class="mobile-only">{{ nearby_stop }}</div>
-                                        % include('components/routes_indicator', routes=nearby_stop.get_routes())
+                                        % include('components/routes_indicator', routes=nearby_stop.routes)
                                     </td>
                                 </tr>
                             % end
@@ -98,7 +98,7 @@
                                 <tr>
                                     <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
                                     <td>
-                                        % include('components/routes_indicator', routes=alt_stop.get_routes())
+                                        % include('components/routes_indicator', routes=alt_stop.routes)
                                     </td>
                                 </tr>
                             % end
