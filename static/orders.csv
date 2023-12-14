@@ -41,6 +41,7 @@ low,high,year,model_id,visible,demo,exceptions
 2757,2784,2021,chevrolet-girardin-4500-g5,1,0,
 2785,2801,2021,ford-girardin-t350-mbii,1,0,
 2802,2860,2022,chevrolet-arboc-4500-sof-27,1,0,
+2861,2895,2023,chevrolet-arboc-4500-sof-27,1,0,
 3001,3015,2013,grande-west-vicinity-27,1,0,
 3016,3023,2015,international-eldorado-3200-aero-elite,1,0,3020;3022
 3024,3028,2018,international-eldorado-3200-aero-elite,1,0,
