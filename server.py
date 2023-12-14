@@ -983,14 +983,21 @@ def admin_page(key=None, system_id=None):
     )
 
 # =============================================================
-# JSON (API endpoints)
+# API endpoints
 # =============================================================
+
+@app.get([
+    '/api/health-check',
+    '/<system_id>/api/health-check'
+])
+def api_health_check(system_id=None):
+    return 'Online'
 
 @app.get([
     '/api/map.json',
     '/<system_id>/api/map.json'
 ])
-def system_api_map(system_id=None):
+def api_map(system_id=None):
     system = helpers.system.find(system_id)
     time_format = request.get_cookie('time_format')
     if system is None:
