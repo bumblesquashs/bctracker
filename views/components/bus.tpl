@@ -4,12 +4,12 @@
     % else:
         <div>{{ bus }}</div>
     % end
-    % adornment = bus.adornment
-    % if adornment is not None and adornment.enabled:
-        <div class="adornment tooltip-anchor">
-            {{ adornment }}
-            % if adornment.description is not None:
-                <div class="tooltip">{{ adornment.description }}</div>
+    % icon = bus.icon
+    % if icon is not None and icon.enabled:
+        <div class="icon tooltip-anchor">
+            {{ icon }}
+            % if icon.description is not None:
+                <div class="tooltip">{{ icon.description }}</div>
             % end
         </div>
     % end
