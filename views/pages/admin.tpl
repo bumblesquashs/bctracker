@@ -13,7 +13,7 @@
         </div>
         <div class="content">
             <div class="button-container">
-                <div class="button" onclick="reloadAdornments()">Reload Adornments</div>
+                <div class="button" onclick="reloadIcons()">Reload Icons</div>
                 <div class="button" onclick="reloadOrders()">Reload Orders</div>
                 <div class="button" onclick="reloadSystems()">Reload Systems</div>
                 <div class="button" onclick="reloadThemes()">Reload Themes</div>
@@ -104,12 +104,12 @@
     let adminKey
     let systemID
     
-    function reloadAdornments() {
+    function reloadIcons() {
         const request = new XMLHttpRequest();
         if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
+            request.open("POST", getUrl(systemID, "api/admin/reload-icons"), true);
         } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-adornments"), true);
+            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-icons"), true);
         }
         request.send();
     }
