@@ -115,22 +115,22 @@ class Trip:
     
     @property
     def first_departure(self):
-        self._setup()
+        self.setup()
         return self._first_departure
     
     @property
     def last_departure(self):
-        self._setup()
+        self.setup()
         return self._last_departure
     
     @property
     def departure_count(self):
-        self._setup()
+        self.setup()
         return self._departure_count
     
     @property
     def direction(self):
-        self._setup()
+        self.setup()
         return self._direction
     
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -172,11 +172,12 @@ class Trip:
             return self.service < other.service
         return self.start_time < other.start_time
     
-    def _setup(self):
+    def setup(self, departures=None):
         if self.is_setup:
             return
         self.is_setup = True
-        departures = self.load_departures()
+        if departures is None:
+            departures = self.load_departures()
         if len(departures) == 0:
             return
         self._first_departure = departures[0]

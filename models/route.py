@@ -45,22 +45,22 @@ class Route:
     
     @property
     def trips(self):
-        self._setup()
+        self.setup()
         return self._trips
     
     @property
     def schedule(self):
-        self._setup()
+        self.setup()
         return self._schedule
     
     @property
     def sheets(self):
-        self._setup()
+        self.setup()
         return self._sheets
     
     @property
     def indicator_points(self):
-        self._setup()
+        self.setup()
         return self._indicator_points
     
     def __init__(self, system, id, number, name, colour, text_colour):
@@ -94,11 +94,12 @@ class Route:
     def __gt__(self, other):
         return self.key > other.key
     
-    def _setup(self):
+    def setup(self, trips=None):
         if self.is_setup:
             return
         self.is_setup = True
-        trips = [t for t in self.system.get_trips() if t.route_id == self.id]
+        if trips is None:
+            trips = [t for t in self.system.get_trips() if t.route_id == self.id]
         self._trips = trips
         services = {t.service for t in trips}
         self._schedule = Schedule.combine(services)

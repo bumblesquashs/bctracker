@@ -43,17 +43,17 @@ class Stop:
     
     @property
     def schedule(self):
-        self._setup()
+        self.setup()
         return self._schedule
     
     @property
     def sheets(self):
-        self._setup()
+        self.setup()
         return self._sheets
     
     @property
     def routes(self):
-        self._setup()
+        self.setup()
         return self._routes
     
     def __init__(self, system, id, number, name, lat, lon):
@@ -83,11 +83,12 @@ class Stop:
             return self.number < other.number
         return self.name < other.name
     
-    def _setup(self):
+    def setup(self, departures=None):
         if self.is_setup:
             return
         self.is_setup = True
-        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
+        if departures is None:
+            departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
         services = {d.trip.service for d in departures if d.trip is not None}
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
