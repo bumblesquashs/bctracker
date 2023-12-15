@@ -283,8 +283,8 @@
                 element.appendChild(icon);
             }
             
-            if (position.icon != null) {
-                title.innerHTML += " <span class='icon'>" + position.icon + "</span>";
+            if (position.adornment != null) {
+                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
             }
             
             details.appendChild(title);
