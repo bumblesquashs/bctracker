@@ -1,6 +1,4 @@
 
-% import helpers.departure
-
 % rebase('base')
 
 <div class="page-header">
@@ -15,7 +13,7 @@
 </div>
 
 % trips = block.trips
-% departures = helpers.departure.find_all(block.system.id, block_id=block.id)
+% departures = block.find_departures()
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 

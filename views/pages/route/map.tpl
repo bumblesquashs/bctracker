@@ -1,6 +1,4 @@
 
-% import helpers.departure
-
 % rebase('base')
 
 <div class="page-header">
@@ -35,7 +33,7 @@
     </div>
 % else:
     % trips = route.trips
-    % departures = helpers.departure.find_all(route.system.id, route_id=route.id)
+    % departures = route.find_departures()
     
     % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 

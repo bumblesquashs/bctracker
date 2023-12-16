@@ -5,6 +5,7 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
+import helpers.departure
 import helpers.system
 
 from models.match import Match
@@ -106,7 +107,7 @@ class Route:
         self._sheets = self.system.copy_sheets(services)
         if len(trips) > 0:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
-            points = sorted_trips[0].load_points()
+            points = sorted_trips[0].find_points()
             first_point = points[0]
             last_point = points[-1]
             distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
@@ -169,6 +170,10 @@ class Route:
             if name.startswith(query):
                 value += len(query)
         return Match('route', self.number, self.name, f'routes/{self.number}', value)
+    
+    def find_departures(self):
+        '''Returns all departures for this route'''
+        return helpers.departure.find_all(self.system.id, route_id=self.id)
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''

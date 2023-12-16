@@ -205,7 +205,7 @@ class Position:
             data['adherence'] = adherence.get_json()
         return data
     
-    def get_upcoming_departures(self):
+    def find_upcoming_departures(self):
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []

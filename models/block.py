@@ -1,4 +1,6 @@
 
+import helpers.departure
+
 from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
@@ -103,3 +105,7 @@ class Block:
         else:
             message = f'Routes {routes}'
         return Match('block', id, message, f'blocks/{self.id}', value)
+    
+    def find_departures(self):
+        '''Returns all departures for this block'''
+        return helpers.departure.find_all(self.system.id, block_id=self.id)

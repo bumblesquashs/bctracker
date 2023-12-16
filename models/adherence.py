@@ -22,7 +22,7 @@ class Adherence:
         departure = helpers.departure.find(trip.system.id, trip_id=trip.id, sequence=sequence)
         if departure is None:
             return None
-        previous_departure = departure.load_previous()
+        previous_departure = departure.find_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes()
             

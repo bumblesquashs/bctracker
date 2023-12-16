@@ -1,6 +1,4 @@
 
-% import helpers.departure
-
 % rebase('base')
 
 <div class="page-header">
@@ -13,8 +11,8 @@
     </div>
 </div>
 
-% trips = [d.trip for d in stop.get_departures() if d.trip is not None and d.trip.route is not None]
-% departures = helpers.departure.find_adjacent(stop.system.id, stop.id)
+% trips = [d.trip for d in stop.find_departures() if d.trip is not None and d.trip.route is not None]
+% departures = stop.find_adjacent_departures()
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
 

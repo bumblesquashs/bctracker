@@ -13,7 +13,7 @@
     </div>
 </div>
 
-% departures = trip.load_departures()
+% departures = trip.find_departures()
 
 <div class="flex-container">
     <div class="sidebar container flex-1">

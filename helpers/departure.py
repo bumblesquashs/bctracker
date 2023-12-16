@@ -87,6 +87,7 @@ def find_all(system_id, trip_id=None, sequence=None, route_id=None, stop_id=None
     )
 
 def find_upcoming(system_id, trip_id, sequence, limit=5):
+    '''Returns all departures on a trip from the given sequence number onwards'''
     return database.select('departure',
         columns={
             'departure.system_id': 'departure_system_id',

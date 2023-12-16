@@ -92,7 +92,7 @@ class Stop:
         services = {d.trip.service for d in departures if d.trip is not None}
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
-        self._routes = {d.trip.route for d in departures if d.trip is not None and d.trip.route is not None}
+        self._routes = sorted({d.trip.route for d in departures if d.trip is not None and d.trip.route is not None})
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
@@ -104,15 +104,6 @@ class Stop:
             'lon': self.lon,
             'routes': [r.get_json() for r in self.routes]
         }
-    
-    def get_departures(self, service_group=None, date=None):
-        '''Returns all departures from this stop'''
-        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
-        if service_group is None:
-            if date is None:
-                return sorted(departures)
-            return sorted([d for d in departures if d.trip is not None and date in d.trip.service])
-        return sorted([d for d in departures if d.trip is not None and d.trip.service in service_group])
     
     def get_match(self, query):
         '''Returns a match for this stop with the given query'''
@@ -133,3 +124,16 @@ class Stop:
             else:
                 value = 1
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
+    
+    def find_departures(self, service_group=None, date=None):
+        '''Returns all departures from this stop'''
+        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
+        if service_group is None:
+            if date is None:
+                return sorted(departures)
+            return sorted([d for d in departures if d.trip is not None and date in d.trip.service])
+        return sorted([d for d in departures if d.trip is not None and d.trip.service in service_group])
+    
+    def find_adjacent_departures(self):
+        '''Returns all departures on trips that serve this stop'''
+        return helpers.departure.find_adjacent(self.system.id, self.id)

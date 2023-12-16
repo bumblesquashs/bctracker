@@ -43,7 +43,7 @@
                 <h3>{{ date.weekday }}</h3>
             </div>
             <div class="content">
-                % departures = stop.get_departures(date=date)
+                % departures = stop.find_departures(date=date)
                 % if len(departures) == 0:
                     <div class="placeholder">
                         % if system.is_loaded:

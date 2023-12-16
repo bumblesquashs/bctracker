@@ -845,7 +845,7 @@ def stop_overview_page(stop_number, system_id=None):
         return error_page('stop', system_id,
             stop_number=stop_number
         )
-    departures = stop.get_departures(date=Date.today())
+    departures = stop.find_departures(date=Date.today())
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system_id, trip_id={t.id for t in trips})
     return page('stop/overview', system_id,

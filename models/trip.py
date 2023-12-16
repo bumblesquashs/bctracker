@@ -177,7 +177,7 @@ class Trip:
             return
         self.is_setup = True
         if departures is None:
-            departures = self.load_departures()
+            departures = self.find_departures()
         if len(departures) == 0:
             return
         self._first_departure = departures[0]
@@ -189,7 +189,7 @@ class Trip:
         '''Returns a representation of this trip in JSON-compatible format'''
         json = {
             'shape_id': self.shape_id,
-            'points': [p.get_json() for p in self.load_points()]
+            'points': [p.get_json() for p in self.find_points()]
         }
         if self.route is None:
             json['colour'] = '666666'
@@ -199,11 +199,11 @@ class Trip:
             json['text_colour'] = self.route.text_colour
         return json
     
-    def load_points(self):
+    def find_points(self):
         '''Returns all points associated with this trip'''
         return helpers.point.find_all(self.system.id, self.shape_id)
     
-    def load_departures(self):
+    def find_departures(self):
         '''Returns all departures associated with this trip'''
         return helpers.departure.find_all(self.system.id, trip_id=self.id)
     

@@ -153,10 +153,10 @@ class Departure:
             json['text_colour'] = 'FFFFFF'
         return json
     
-    def load_previous(self):
+    def find_previous(self):
         '''Returns the previous departure for the trip'''
         return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence - 1)
     
-    def load_next(self):
+    def find_next(self):
         '''Returns the next departure for the trip'''
         return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence + 1)

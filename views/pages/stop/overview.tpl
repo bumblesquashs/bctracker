@@ -22,7 +22,7 @@
                 <h2>Overview</h2>
             </div>
             <div class="content">
-                % stop_departures = stop.get_departures()
+                % stop_departures = stop.find_departures()
                 % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop_departures], zoom_trips=False)
                 
                 % if len(stop_departures) > 0:
