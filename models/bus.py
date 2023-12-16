@@ -1,5 +1,5 @@
 
-import helpers.icon
+import helpers.adornment
 import helpers.order
 
 class Bus:
@@ -8,19 +8,19 @@ class Bus:
     __slots__ = (
         'number',
         'order',
-        'icon'
+        'adornment'
     )
     
-    def __init__(self, number, order=None, icon=None):
+    def __init__(self, number, order=None, adornment=None):
         self.number = number
         if order is None:
             self.order = helpers.order.find(number)
         else:
             self.order = order
-        if icon is None:
-            self.icon = helpers.icon.find(number)
+        if adornment is None:
+            self.adornment = helpers.adornment.find(number)
         else:
-            self.icon = icon
+            self.adornment = adornment
     
     def __str__(self):
         if self.is_known:

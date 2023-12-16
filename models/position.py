@@ -182,9 +182,9 @@ class Position:
             data['bus_order'] = 'Unknown Year/Model'
         else:
             data['bus_order'] = str(order).replace("'", '&apos;')
-        icon = self.bus.icon
-        if icon is not None and icon.enabled:
-            data['icon'] = str(icon)
+        adornment = self.bus.adornment
+        if adornment is not None and adornment.enabled:
+            data['adornment'] = str(adornment)
         trip = self.trip
         if trip is None:
             data['headsign'] = 'Not In Service'

@@ -1,5 +1,5 @@
 
-class Icon:
+class Adornment:
     '''Text placed after a bus number'''
     
     __slots__ = (
@@ -11,7 +11,7 @@ class Icon:
     
     @classmethod
     def from_csv(cls, row):
-        '''Returns an icon initialized from the given CSV row'''
+        '''Returns an adornment initialized from the given CSV row'''
         bus_number = int(row['bus_number'])
         enabled = row['enabled'] == '1'
         text = row['text']
