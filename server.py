@@ -2,7 +2,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, static_file, template, request, response, debug, redirect
-from threading import Thread
 import cherrypy as cp
 
 import helpers.adornment
@@ -16,7 +15,6 @@ import helpers.region
 import helpers.system
 import helpers.theme
 import helpers.transfer
-import helpers.departure
 
 from models.bus import Bus
 from models.date import Date
@@ -86,6 +84,7 @@ def start(args):
             gtfs.load(system, args.reload, args.updatedb)
             if not gtfs.validate(system):
                 gtfs.load(system, True)
+            gtfs.update_cache_in_background(system)
             realtime.update(system)
             if not realtime.validate(system):
                 system.validation_errors += 1
@@ -94,39 +93,6 @@ def start(args):
         
         cron.setup()
         cron.start(cron_id)
-        
-        for system in helpers.system.find_all():
-            thread = Thread(target=load_in_background, args=(system,))
-            thread.start()
-
-def load_in_background(system):
-    departures = helpers.departure.find_all(system.id)
-    trip_departures = {}
-    stop_departures = {}
-    for departure in departures:
-        trip_departures.setdefault(departure.trip_id, []).append(departure)
-        stop_departures.setdefault(departure.stop_id, []).append(departure)
-    for trip_id, departures in trip_departures.items():
-        if not running:
-            return
-        trip = system.get_trip(trip_id)
-        if trip is not None:
-            trip.setup(departures)
-    for stop_id, departures in stop_departures.items():
-        if not running:
-            return
-        stop = system.get_stop(stop_id=stop_id)
-        if stop is not None:
-            stop.setup(departures)
-    route_trips = {}
-    for trip in system.get_trips():
-        route_trips.setdefault(trip.route_id, []).append(trip)
-    for route_id, trips in route_trips.items():
-        if not running:
-            return
-        route = system.get_route(route_id=route_id)
-        if route is not None:
-            route.setup(trips)
 
 def stop():
     '''Terminates the server'''
@@ -1136,9 +1102,10 @@ def api_admin_reload_systems(key=None, system_id=None):
                 gtfs.load(system)
                 if not gtfs.validate(system):
                     gtfs.load(system, True)
+                gtfs.update_cache_in_background(system)
                 realtime.update(system)
-            if not realtime.validate(system):
-                system.validation_errors += 1
+                if not realtime.validate(system):
+                    system.validation_errors += 1
         if running:
             realtime.update_records()
             cron.start(cron_id)
@@ -1211,6 +1178,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
         if system is None:
             return 'Invalid system'
         gtfs.load(system, True)
+        gtfs.update_cache_in_background(system)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1
@@ -1228,7 +1196,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
     '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>',
     '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>/'
 ])
-def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
+def api_admin_reload_realtime(reload_system_id, key=None, system_id=None):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:

@@ -28,7 +28,7 @@ def update(system):
         return
     data_path = f'data/realtime/{system.id}.bin'
     
-    print(f'Updating realtime data for {system}...', end=' ', flush=True)
+    print(f'Updating realtime data for {system}')
     
     try:
         if path.exists(data_path):
@@ -55,9 +55,7 @@ def update(system):
         last_updated_time = Time.now('America/Vancouver', False)
         system.last_updated_date = Date.today(system.timezone)
         system.last_updated_time = Time.now(system.timezone, False)
-        print('Done!')
     except Exception as e:
-        print('Error!')
         print(f'Failed to update realtime for {system}: {e}')
 
 def update_records():

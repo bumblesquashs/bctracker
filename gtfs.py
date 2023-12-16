@@ -3,6 +3,7 @@ from os import path, rename
 from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
+from threading import Thread
 
 import csv
 import requests
@@ -27,8 +28,8 @@ def load(system, force_download=False, update_db=False):
         update_database(system)
     elif update_db:
         update_database(system)
-    print(f'Loading GTFS data for {system}...', end=' ', flush=True)
     
+    print(f'Loading GTFS data for {system}')
     try:
         agencies = read_csv(system, 'agency', lambda r: r)
         if len(agencies) > 0:
@@ -65,11 +66,8 @@ def load(system, force_download=False, update_db=False):
         system.routes_by_number = {r.number: r for r in routes}
         
         system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
-        
-        print('Done!')
     except Exception as e:
-        print('Error!')
-        print(f'  Failed to load GTFS for {system}: {e}')
+        print(f'Failed to load GTFS for {system}: {e}')
 
 def download(system):
     '''Downloads the GTFS for the given system, then loads it into memory'''
@@ -78,8 +76,7 @@ def download(system):
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
     
-    print(f'Downloading GTFS data for {system}...', end=' ', flush=True)
-    
+    print(f'Downloading GTFS data for {system}')
     try:
         if path.exists(data_zip_path):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
@@ -93,13 +90,11 @@ def download(system):
             rmtree(data_path)
         with ZipFile(data_zip_path) as zip:
             zip.extractall(data_path)
-        print('Done!')
     except Exception as e:
-        print('Error!')
-        print(f'  Failed to download GTFS for {system}: {e}')
+        print(f'Failed to download GTFS for {system}: {e}')
 
 def update_database(system):
-    print(f'Updating database with GTFS data for {system}...', end=' ', flush=True)
+    print(f'Updating database with GTFS data for {system}')
     try:
         helpers.departure.delete_all(system)
         helpers.trip.delete_all(system)
@@ -112,11 +107,8 @@ def update_database(system):
         apply_csv(system, 'trips', helpers.trip.create)
         apply_csv(system, 'stop_times', helpers.departure.create)
         apply_csv(system, 'shapes', helpers.point.create)
-        
-        print('Done!')
     except Exception as e:
-        print('Error!')
-        print(f'  Failed to update GTFS for {system}: {e}')
+        print(f'Failed to update GTFS for {system}: {e}')
 
 def read_csv(system, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''
@@ -141,3 +133,7 @@ def validate(system):
     if len(end_dates) == 0:
         return True
     return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
+
+def update_cache_in_background(system):
+    thread = Thread(target=system.update_cache)
+    thread.start()

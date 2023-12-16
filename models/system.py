@@ -1,4 +1,5 @@
 
+import helpers.departure
 import helpers.overview
 import helpers.position
 import helpers.region
@@ -215,3 +216,30 @@ class System:
     def search_stops(self, query):
         '''Returns all stops that match the given query'''
         return [s.get_match(query) for s in self.stops.values()]
+    
+    def update_cache(self):
+        print(f'Updating cached data for {self}')
+        try:
+            departures = helpers.departure.find_all(self.id)
+            trip_departures = {}
+            stop_departures = {}
+            for departure in departures:
+                trip_departures.setdefault(departure.trip_id, []).append(departure)
+                stop_departures.setdefault(departure.stop_id, []).append(departure)
+            for trip_id, departures in trip_departures.items():
+                trip = self.get_trip(trip_id)
+                if trip is not None:
+                    trip.setup(departures)
+            for stop_id, departures in stop_departures.items():
+                stop = self.get_stop(stop_id=stop_id)
+                if stop is not None:
+                    stop.setup(departures)
+            route_trips = {}
+            for trip in self.get_trips():
+                route_trips.setdefault(trip.route_id, []).append(trip)
+            for route_id, trips in route_trips.items():
+                route = self.get_route(route_id=route_id)
+                if route is not None:
+                    route.setup(trips)
+        except Exception as e:
+            print(f'Failed to update cached data for {self}: {e}')
