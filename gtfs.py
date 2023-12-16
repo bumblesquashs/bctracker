@@ -135,5 +135,6 @@ def validate(system):
     return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
 
 def update_cache_in_background(system):
+    '''Updates cached data for the given system in a background thread'''
     thread = Thread(target=system.update_cache)
     thread.start()

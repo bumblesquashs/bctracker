@@ -218,6 +218,7 @@ class System:
         return [s.get_match(query) for s in self.stops.values()]
     
     def update_cache(self):
+        '''Loads and caches data from the database'''
         print(f'Updating cached data for {self}')
         try:
             departures = helpers.departure.find_all(self.id)
