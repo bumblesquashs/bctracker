@@ -2,22 +2,13 @@
 class Match:
     '''A search result with a value indicating how closely it matches the query'''
     
-    __slots__ = ('type', 'name', 'description', 'path', 'value')
-    
-    @classmethod
-    def bus(cls, bus_number, order, value):
-        '''Returns a match for a bus'''
-        return cls('bus', bus_number, str(order), f'bus/{bus_number}', value)
-    
-    @classmethod
-    def route(cls, route, value):
-        '''Returns a match for a route'''
-        return cls('route', route.number, route.name, f'routes/{route.number}', value)
-    
-    @classmethod
-    def stop(cls, stop, value):
-        '''Returns a match for a stop'''
-        return cls('stop', stop.number, stop.name, f'stops/{stop.number}', value)
+    __slots__ = (
+        'type',
+        'name',
+        'description',
+        'path',
+        'value'
+    )
     
     def __init__(self, type, name, description, path, value):
         self.type = type

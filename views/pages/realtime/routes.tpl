@@ -16,38 +16,59 @@
     </div>
 </div>
 
-% if len(positions) == 0:
-    <div class="placeholder">
-        % if system is None:
-            <h3 class="title">There are no buses out right now</h3>
-            <p>
-                BC Transit does not have late night service, so this should be the case overnight.
-                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
-            </p>
-            <p>Please check again later!</p>
-        % elif not system.realtime_enabled:
-            <h3 class="title">{{ system }} does not support realtime</h3>
-            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
-            <div class="non-desktop">
-                % include('components/systems')
+<div class="container">
+    <div class="section left">
+        <div class="content">
+            <div class="checkbox" onclick="toggleNISBuses()">
+                <div class="box">
+                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
+                </div>
+                <span class="checkbox-label">Show NIS Buses</span>
             </div>
-        % elif not system.is_loaded:
-            <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
-            <p>System data is currently loading and will be available soon.</p>
-        % else:
-            <h3 class="title">There are no buses out in {{ system }} right now</h3>
-            <p>Please check again later!</p>
-        % end
+        </div>
     </div>
-% elif system is None:
-    <div>
-        <p>
-            Realtime routes can only be viewed for individual systems.
-            Please choose a system.
-        </p>
-    </div>
-% else:
-    <div class="container">
+    % if len(positions) == 0:
+        <div class="placeholder">
+            % if system is None:
+                % if show_nis:
+                    <h3 class="title">There are no buses out right now</h3>
+                    <p>
+                        BC Transit does not have late night service, so this should be the case overnight.
+                        If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                    </p>
+                    <p>Please check again later!</p>
+                % else:
+                    <h3 class="title">There are no buses in service right now</h3>
+                    <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                % end
+            % elif not system.realtime_enabled:
+                <h3 class="title">{{ system }} does not support realtime</h3>
+                <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+                <div class="non-desktop">
+                    % include('components/systems')
+                </div>
+            % elif not system.is_loaded:
+                <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+                <p>System data is currently loading and will be available soon.</p>
+            % elif not show_nis:
+                <h3 class="title">There are no buses in service in {{ system }} right now</h3>
+                <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+            % else:
+                <h3 class="title">There are no buses out in {{ system }} right now</h3>
+                <p>Please check again later!</p>
+            % end
+        </div>
+    % elif system is None:
+        <div>
+            <p>
+                Realtime routes can only be viewed for individual systems.
+                Please choose a system.
+            </p>
+        </div>
+    % else:
         % for route in system.get_routes():
             % route_positions = [p for p in positions if p.trip is not None and p.trip.route == route]
             % if len(route_positions) == 0:
@@ -120,7 +141,8 @@
                                         <div class="flex-column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
-                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                Trip:
+                                                % include('components/trip_link', trip=trip, include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="non-desktop smaller-font">
@@ -133,7 +155,7 @@
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                        % include('components/trip_link', trip=trip)
                                     </td>
                                     <td class="desktop-only">
                                         % if stop is None:
@@ -204,7 +226,13 @@
                 </div>
             </div>
         % end
-    </div>
-% end
+        
+        % include('components/top_button')
+    % end
+</div>
 
-% include('components/top_button')
+<script>
+    function toggleNISBuses() {
+        window.location = "{{ get_url(system, 'realtime/routes', show_nis='false' if show_nis else 'true') }}"
+    }
+</script>

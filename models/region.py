@@ -2,7 +2,10 @@
 class Region:
     '''A large area that contains multiple systems'''
     
-    __slots__ = ('id', 'name')
+    __slots__ = (
+        'id',
+        'name'
+    )
     
     @classmethod
     def from_csv(cls, row):

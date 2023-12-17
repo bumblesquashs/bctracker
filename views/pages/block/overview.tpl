@@ -47,6 +47,14 @@
                                     <h3>{{ sheet }}</h3>
                                 </div>
                             % end
+                            % for service_group in service_groups:
+                                <div class="section no-flex">
+                                    % if len(service_groups) > 1:
+                                        <div class="lighter-text">{{ service_group }}</div>
+                                    % end
+                                    % include('components/block_indicator', service_group=service_group)
+                                </div>
+                            % end
                             <div class="section">
                                 <div class="name">Start time</div>
                                 <div class="value flex-column">
@@ -202,7 +210,8 @@
                                         <div class="flex-column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
-                                                Trip: <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                Trip:
+                                                % include('components/trip_link', trip=trip, include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="mobile-only smaller-font">
@@ -212,7 +221,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                        % include('components/trip_link', trip=trip)
                                     </td>
                                     <td class="non-mobile">
                                         % if stop is None:
@@ -280,7 +289,7 @@
                                                                 <td class="desktop-only">{{ trip.direction }}</td>
                                                                 <td>
                                                                     <div class="flex-column">
-                                                                        <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                        % include('components/trip_link', trip=trip)
                                                                         <span class="mobile-only smaller-font">
                                                                             % include('components/headsign_indicator')
                                                                         </span>

@@ -1,5 +1,6 @@
 
 % from math import floor
+% from datetime import timedelta
 
 % import helpers.position
 % import helpers.record
@@ -19,14 +20,14 @@
     </div>
 % else:
     % for stop in stops:
-        % routes = stop.get_routes()
-        % departures = stop.get_departures(date=Date.today())
+        % departures = stop.find_departures(date=Date.today())
+        % routes = {d.trip.route for d in departures if d.trip is not None and d.trip.route is not None}
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
         % trips = [d.trip for d in upcoming_departures]
-        % recorded_today = helpers.record.find_recorded_today(system, trips)
-        % scheduled_today = helpers.record.find_scheduled_today(system, trips)
-        % positions = {p.trip.id: p for p in helpers.position.find_all(system.id, trip_id={t.id for t in trips})}
+        % recorded_today = helpers.record.find_recorded_today(stop.system, trips)
+        % scheduled_today = helpers.record.find_scheduled_today(stop.system, trips)
+        % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system.id, trip_id={t.id for t in trips})}
         <div class="section">
             <div class="header">
                 <h2>{{ stop }}</h2>

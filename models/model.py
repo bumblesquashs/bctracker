@@ -9,7 +9,6 @@ class ModelType(Enum):
     decker = "Double Decker"
     midibus = "Midibus"
     shuttle = "Shuttle"
-    test = "Test"
     
     def __str__(self):
         return self.value
@@ -26,7 +25,14 @@ class ModelType(Enum):
 class Model:
     '''A specific version of a vehicle'''
     
-    __slots__ = ('id', 'manufacturer', 'name', 'length', 'fuel', 'type')
+    __slots__ = (
+        'id',
+        'manufacturer',
+        'name',
+        'length',
+        'fuel',
+        'type'
+    )
     
     @classmethod
     def from_csv(cls, row):
@@ -38,6 +44,16 @@ class Model:
         fuel = row['fuel']
         type = ModelType[row['type']]
         return cls(id, manufacturer, name, length, fuel, type)
+    
+    @property
+    def display_manufacturer(self):
+        '''Formats the manufacturer for web display'''
+        return self.manufacturer.replace('/', '/<wbr />')
+    
+    @property
+    def display_name(self):
+        '''Formats the model name for web display'''
+        return self.name.replace('/', '/<wbr />')
     
     def __init__(self, id, manufacturer, name, length, fuel, type):
         self.id = id
@@ -58,18 +74,3 @@ class Model:
     
     def __lt__(self, other):
         return str(self) < str(other)
-    
-    @property
-    def display_manufacturer(self):
-        '''Formats the manufacturer for web display'''
-        return self.manufacturer.replace('/', '/<wbr />')
-    
-    @property
-    def display_name(self):
-        '''Formats the model name for web display'''
-        return self.name.replace('/', '/<wbr />')
-    
-    @property
-    def is_test(self):
-        '''Checks if this is a test model'''
-        return self.type == ModelType.test

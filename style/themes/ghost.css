@@ -312,6 +312,14 @@ table.striped tr {
     display: none;
 }
 
+.block-indicator .now {
+    background-color: #FF0000;
+}
+
+.block-indicator .trip:hover {
+    border-color: #888888;
+}
+
 .button {
     background-color: #365ccb;
     color: #FFFFFF;
@@ -398,6 +406,10 @@ table.striped tr {
 }
 
 .marker .icon.route .number {
+    color: #FFFFFF;
+}
+
+.marker .icon.bus_route {
     color: #FFFFFF;
 }
 

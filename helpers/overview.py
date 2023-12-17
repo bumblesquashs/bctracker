@@ -24,7 +24,7 @@ def find(bus_number):
 
 def find_all(system_id=None, last_seen_system_id=None, bus_number=None, limit=None):
     '''Returns all overviews that match the given system ID and bus number'''
-    rows = database.select('overview',
+    return database.select('overview',
         columns={
             'overview.bus_number': 'overview_bus_number',
             'overview.first_seen_date': 'overview_first_seen_date',
@@ -66,8 +66,9 @@ def find_all(system_id=None, last_seen_system_id=None, bus_number=None, limit=No
             'last_record.system_id': system_id,
             'overview.last_seen_system_id': last_seen_system_id
         },
-        limit=limit)
-    return [Overview.from_db(row) for row in rows]
+        limit=limit,
+        initializer=Overview.from_db
+    )
 
 def find_bus_numbers(system_id=None):
     '''Returns all bus numbers that have been seen'''
@@ -78,15 +79,15 @@ def find_bus_numbers(system_id=None):
             'last_record.record_id': 'overview.last_record_id'
         }
         filters['last_record.system_id'] = system_id
-    rows = database.select('overview',
+    return database.select('overview',
         columns={
             'overview.bus_number': 'bus_number'
         },
         join_type='LEFT',
         joins=joins,
-        filters=filters
+        filters=filters,
+        initializer=lambda r: r['bus_number']
     )
-    return [row['bus_number'] for row in rows]
 
 def update(overview, date, system, record_id):
     '''Updates an overview in the database'''

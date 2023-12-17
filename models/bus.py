@@ -5,7 +5,11 @@ import helpers.order
 class Bus:
     '''A public transportation vehicle'''
     
-    __slots__ = ('number', 'order', 'adornment')
+    __slots__ = (
+        'number',
+        'order',
+        'adornment'
+    )
     
     def __init__(self, number, order=None, adornment=None):
         self.number = number
@@ -38,17 +42,17 @@ class Bus:
         return self.number >= 0
     
     @property
+    def visible(self):
+        '''Checks if the bus is visible'''
+        order = self.order
+        if order is None:
+            return True
+        return order.visible
+    
+    @property
     def model(self):
         '''Returns the model of this bus'''
         order = self.order
         if order is None:
             return None
         return order.model
-    
-    @property
-    def is_test(self):
-        '''Checks if this is a test bus'''
-        model = self.model
-        if model is None:
-            return False
-        return model.is_test

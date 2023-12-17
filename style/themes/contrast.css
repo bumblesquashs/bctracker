@@ -326,6 +326,14 @@ table.striped tr:nth-child(2n-1) {
     background-color: #1440C2;
 }
 
+.block-indicator .now {
+    background-color: #FF0000;
+}
+
+.block-indicator .trip:hover {
+    border-color: #666666;
+}
+
 .button.disabled {
     background-color: #666666;
 }
@@ -403,6 +411,10 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .marker .icon.route .number {
+    color: #FFFFFF;
+}
+
+.marker .icon.bus_route {
     color: #FFFFFF;
 }
 

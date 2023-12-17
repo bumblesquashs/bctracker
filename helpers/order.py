@@ -31,7 +31,7 @@ def find_matches(query, recorded_bus_numbers):
     '''Returns matching buses for a given query'''
     matches = []
     for order in orders:
-        if order.is_test:
+        if not order.visible:
             continue
         order_string = str(order)
         for bus in order:

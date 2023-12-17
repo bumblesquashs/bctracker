@@ -65,7 +65,7 @@
                         % end
                         <tr class="section">
                             <td>Total</td>
-                            <td>{{ len([o for o in overviews.values() if not o.bus.is_test]) }}</td>
+                            <td>{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
                             <td>{{ sum([o.size for o in orders]) }}</td>
                         </tr>
                     </tbody>

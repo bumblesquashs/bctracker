@@ -43,7 +43,7 @@
                 <h3>{{ date.weekday }}</h3>
             </div>
             <div class="content">
-                % departures = stop.get_departures(date=date)
+                % departures = stop.find_departures(date=date)
                 % if len(departures) == 0:
                     <div class="placeholder">
                         % if system.is_loaded:
@@ -103,7 +103,7 @@
                                     </td>
                                     <td>
                                         <div class="flex-column">
-                                            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                            % include('components/trip_link', trip=trip)
                                             <span class="mobile-only smaller-font">
                                                 % include('components/headsign_indicator')
                                             </span>

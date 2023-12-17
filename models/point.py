@@ -4,16 +4,13 @@ import helpers.system
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
     
-    __slots__ = ('system', 'shape_id', 'sequence', 'lat', 'lon')
-    
-    @classmethod
-    def from_csv(cls, row, system):
-        '''Returns a point initialized from the given CSV row'''
-        shape_id = row['shape_id']
-        sequence = int(row['shape_pt_sequence'])
-        lat = float(row['shape_pt_lat'])
-        lon = float(row['shape_pt_lon'])
-        return cls(system, shape_id, sequence, lat, lon)
+    __slots__ = (
+        'system',
+        'shape_id',
+        'sequence',
+        'lat',
+        'lon'
+    )
     
     @classmethod
     def from_db(cls, row, prefix='point'):
@@ -38,8 +35,7 @@ class Point:
     def __lt__(self, other):
         return self.sequence < other.sequence
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this point in JSON-compatible format'''
         return {
             'lat': self.lat,

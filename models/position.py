@@ -1,4 +1,5 @@
 
+import helpers.departure
 import helpers.system
 
 from models.adherence import Adherence
@@ -7,7 +8,20 @@ from models.bus import Bus
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = ('system', 'bus', 'trip_id', 'stop_id', 'block_id', 'route_id', 'sequence', 'lat', 'lon', 'bearing', 'speed', 'adherence')
+    __slots__ = (
+        'system',
+        'bus',
+        'trip_id',
+        'stop_id',
+        'block_id',
+        'route_id',
+        'sequence',
+        'lat',
+        'lon',
+        'bearing',
+        'speed',
+        'adherence'
+    )
     
     @classmethod
     def from_entity(cls, system, bus, data):
@@ -56,10 +70,10 @@ class Position:
         else:
             block_id = trip.block_id
             route_id = trip.route_id
-        if trip is None or stop is None or lat is None or lon is None:
+        if trip is None or stop is None or sequence is None or lat is None or lon is None:
             adherence = None
         else:
-            adherence = Adherence.calculate(trip, stop, lat, lon)
+            adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
         return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
     
     @classmethod
@@ -82,26 +96,6 @@ class Position:
         else:
             adherence = Adherence(adherence_value)
         return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
-    
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
-        self.system = system
-        self.bus = bus
-        self.trip_id = trip_id
-        self.stop_id = stop_id
-        self.block_id = block_id
-        self.route_id = route_id
-        self.sequence = sequence
-        self.lat = lat
-        self.lon = lon
-        self.bearing = bearing
-        self.speed = speed
-        self.adherence = adherence
-    
-    def __eq__(self, other):
-        return self.bus == other.bus
-    
-    def __lt__(self, other):
-        return self.bus < other.bus
     
     @property
     def has_location(self):
@@ -152,8 +146,27 @@ class Position:
             return 'FFFFFF'
         return trip.route.text_colour
     
-    @property
-    def json(self):
+    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
+        self.system = system
+        self.bus = bus
+        self.trip_id = trip_id
+        self.stop_id = stop_id
+        self.block_id = block_id
+        self.route_id = route_id
+        self.sequence = sequence
+        self.lat = lat
+        self.lon = lon
+        self.bearing = bearing
+        self.speed = speed
+        self.adherence = adherence
+    
+    def __eq__(self, other):
+        return self.bus == other.bus
+    
+    def __lt__(self, other):
+        return self.bus < other.bus
+    
+    def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'bus_number': self.bus.number,
@@ -175,8 +188,10 @@ class Position:
         trip = self.trip
         if trip is None:
             data['headsign'] = 'Not In Service'
+            data['route_number'] = 'NIS'
         else:
             data['headsign'] = str(trip).replace("'", '&apos;')
+            data['route_number'] = trip.route.number
             data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id
         bearing = self.bearing
@@ -187,12 +202,11 @@ class Position:
             data['speed'] = speed
         adherence = self.adherence
         if adherence is not None:
-            data['adherence'] = adherence.json
+            data['adherence'] = adherence.get_json()
         return data
     
-    def get_upcoming_departures(self):
+    def find_upcoming_departures(self):
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []
-        future_departures = [d for d in self.trip.departures if d.sequence >= self.sequence]
-        return future_departures[:5]
+        return helpers.departure.find_upcoming(self.system.id, self.trip.id, self.sequence)

@@ -15,7 +15,7 @@ def load():
             adornments[adornment.bus_number] = adornment
 
 def find(bus_number):
-    '''Returns the adornment with the given bus number'''
+    '''Returns the adornments with the given bus number'''
     if bus_number in adornments:
         return adornments[bus_number]
     return None

@@ -9,7 +9,12 @@ from models.weekday import Weekday
 class Date:
     '''A specific year, month, and day'''
     
-    __slots__ = ('year', 'month', 'day', 'timezone')
+    __slots__ = (
+        'year',
+        'month',
+        'day',
+        'timezone'
+    )
     
     @classmethod
     def parse_db(cls, date_string, timezone):
@@ -32,6 +37,38 @@ class Date:
             now = datetime.now(pytz.timezone(timezone))
         date = now if now.hour >= 4 else now - timedelta(days=1)
         return cls(date.year, date.month, date.day, timezone)
+    
+    @property
+    def is_earlier(self):
+        '''Checks if this date is before the current date'''
+        return self < Date.today(self.timezone)
+    
+    @property
+    def is_today(self):
+        '''Checks if this date is the same as the current date'''
+        return self == Date.today(self.timezone)
+    
+    @property
+    def is_later(self):
+        '''Checks if this date is after the current date'''
+        return self > Date.today(self.timezone)
+    
+    @property
+    def datetime(self):
+        '''Returns the datetime equivalent of this date'''
+        return datetime(self.year, self.month, self.day)
+    
+    @property
+    def timezone_name(self):
+        '''Returns the name of this date's timezone'''
+        if self.timezone is None:
+            return None
+        return datetime.now(pytz.timezone(self.timezone)).tzname()
+    
+    @property
+    def weekday(self):
+        '''Returns the weekday of this date'''
+        return Weekday(self.datetime.weekday())
     
     def __init__(self, year, month, day, timezone):
         self.year = year
@@ -75,38 +112,6 @@ class Date:
     def __sub__(self, delta):
         date = self.datetime - delta
         return Date(date.year, date.month, date.day, self.timezone)
-    
-    @property
-    def is_earlier(self):
-        '''Checks if this date is before the current date'''
-        return self < Date.today(self.timezone)
-    
-    @property
-    def is_today(self):
-        '''Checks if this date is the same as the current date'''
-        return self == Date.today(self.timezone)
-    
-    @property
-    def is_later(self):
-        '''Checks if this date is after the current date'''
-        return self > Date.today(self.timezone)
-    
-    @property
-    def datetime(self):
-        '''Returns the datetime equivalent of this date'''
-        return datetime(self.year, self.month, self.day)
-    
-    @property
-    def timezone_name(self):
-        '''Returns the name of this date's timezone'''
-        if self.timezone is None:
-            return None
-        return datetime.now(pytz.timezone(self.timezone)).tzname()
-    
-    @property
-    def weekday(self):
-        '''Returns the weekday of this date'''
-        return Weekday(self.datetime.weekday())
     
     def format_db(self):
         '''Returns a string of this date formatted as YYYY-MM-DD'''
