@@ -6,7 +6,16 @@ from models.bus import Bus
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
     
-    __slots__ = ('low', 'high', 'year', 'model', 'visible', 'demo', 'exceptions', 'size')
+    __slots__ = (
+        'low',
+        'high',
+        'year',
+        'model',
+        'visible',
+        'demo',
+        'exceptions',
+        'size'
+    )
     
     @classmethod
     def from_csv(cls, row):
@@ -26,6 +35,16 @@ class Order:
         else:
             exceptions = {int(e) for e in row['exceptions'].split(';')}
         return cls(low, high, year, model, visible, demo, exceptions)
+    
+    @property
+    def first_bus(self):
+        '''The first bus in the order'''
+        return Bus(self.low, order=self)
+    
+    @property
+    def last_bus(self):
+        '''The last bus in the order'''
+        return Bus(self.high, order=self)
     
     def __init__(self, low, high, year, model, visible, demo, exceptions):
         self.low = low
@@ -58,16 +77,6 @@ class Order:
         for number in range(self.low, self.high + 1):
             if number not in self.exceptions:
                 yield Bus(number, order=self)
-    
-    @property
-    def first_bus(self):
-        '''The first bus in the order'''
-        return Bus(self.low, order=self)
-    
-    @property
-    def last_bus(self):
-        '''The last bus in the order'''
-        return Bus(self.high, order=self)
     
     def previous_bus(self, bus_number):
         '''The previous bus before the given bus number'''

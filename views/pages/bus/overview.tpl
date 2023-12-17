@@ -103,7 +103,7 @@
                     % block = trip.block
                     % route = trip.route
                     
-                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
+                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
                     
                     <div class="info-box">
                         <div class="section">
@@ -202,7 +202,7 @@
     
     <div class="container flex-3">
         % if position is not None:
-            % upcoming_departures = position.get_upcoming_departures()
+            % upcoming_departures = position.find_upcoming_departures()
             % if len(upcoming_departures) > 0:
                 <div class="section">
                     <div class="header">

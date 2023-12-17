@@ -7,7 +7,13 @@ from models.date import Date
 class Transfer:
     '''Information about a bus moving from one system to another system'''
     
-    __slots__ = ('id', 'bus', 'date', 'old_system', 'new_system')
+    __slots__ = (
+        'id',
+        'bus',
+        'date',
+        'old_system',
+        'new_system'
+    )
     
     @classmethod
     def from_db(cls, row, prefix='transfer'):

@@ -2,7 +2,12 @@
 class Adornment:
     '''Text placed after a bus number'''
     
-    __slots__ = ('bus_number', 'enabled', 'text', 'description')
+    __slots__ = (
+        'bus_number',
+        'enabled',
+        'text',
+        'description'
+    )
     
     @classmethod
     def from_csv(cls, row):

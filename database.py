@@ -63,6 +63,58 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
+        CREATE TABLE IF NOT EXISTS route (
+            system_id TEXT NOT NULL,
+            route_id TEXT NOT NULL,
+            number TEXT NOT NULL,
+            name TEXT NOT NULL,
+            colour TEXT,
+            text_colour TEXT,
+            PRIMARY KEY (system_id, route_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS stop (
+            system_id TEXT NOT NULL,
+            stop_id TEXT NOT NULL,
+            number TEXT NOT NULL,
+            name TEXT NOT NULL,
+            lat REAL NOT NULL,
+            lon REAL NOT NULL,
+            PRIMARY KEY (system_id, stop_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS trip (
+            system_id TEXT NOT NULL,
+            trip_id TEXT NOT NULL,
+            route_id TEXT NOT NULL,
+            service_id TEXT NOT NULL,
+            block_id TEXT,
+            direction_id TEXT,
+            shape_id INTEGER,
+            headsign TEXT NOT NULL,
+            PRIMARY KEY (system_id, trip_id),
+            FOREIGN KEY (system_id, route_id) REFERENCES route (system_id, route_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS departure (
+            system_id TEXT NOT NULL,
+            trip_id TEXT NOT NULL,
+            sequence INTEGER NOT NULL,
+            stop_id TEXT NOT NULL,
+            time TEXT NOT NULL,
+            pickup_type TEXT NOT NULL,
+            dropoff_type TEXT NOT NULL,
+            timepoint INTEGER NOT NULL,
+            distance REAL,
+            PRIMARY KEY (system_id, trip_id, sequence),
+            FOREIGN KEY (system_id, trip_id) REFERENCES trip (system_id, trip_id),
+            FOREIGN KEY (system_id, stop_id) REFERENCES stop (system_id, stop_id)
+        )
+    ''',
+    '''
         CREATE TABLE IF NOT EXISTS point (
             system_id TEXT NOT NULL,
             shape_id TEXT NOT NULL,
@@ -127,16 +179,20 @@ def execute(sql, args=None):
     else:
         return connection.cursor().execute(sql, args)
 
-def select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
+def select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None, initializer=None):
     '''Executes a SELECT script and returns the selected rows'''
     custom_args = [] if custom_args is None else custom_args
     sql, args = build_select(table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page)
     
     result = execute(sql, custom_args + args)
     if type(columns) is list:
-        return [dict(zip(columns, r)) for r in result]
+        if initializer is None:
+            return [dict(zip(columns, r)) for r in result]
+        return [initializer(dict(zip(columns, r))) for r in result]
     elif type(columns) is dict:
-        return [dict(zip(columns.values(), r)) for r in result]
+        if initializer is None:
+            return [dict(zip(columns.values(), r)) for r in result]
+        return [initializer(dict(zip(columns.values(), r))) for r in result]
     return result
 
 def insert(table, values):

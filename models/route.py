@@ -1,10 +1,12 @@
 
 import re
 
-from os.path import commonprefix
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
+
+import helpers.departure
+import helpers.system
 
 from models.match import Match
 from models.schedule import Schedule
@@ -12,99 +14,71 @@ from models.schedule import Schedule
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = ('system', 'id', 'number', 'key', 'name', 'colour', 'text_colour', 'trips', 'schedule', 'sheets', 'indicator_points')
+    __slots__ = (
+        'system',
+        'id',
+        'number',
+        'key',
+        'name',
+        'colour',
+        'text_colour',
+        'is_setup',
+        '_trips',
+        '_schedule',
+        '_sheets',
+        '_indicator_points'
+    )
     
     @classmethod
-    def from_csv(cls, row, system, trips):
-        '''Returns a route initialized from the given CSV row'''
-        id = row['route_id']
-        route_trips = trips.get(id, [])
-        number = row['route_short_name']
-        if 'route_long_name' in row and row['route_long_name'] != '':
-            name = row['route_long_name']
-        else:
-            headsigns = sorted(t.headsign for t in route_trips)
-            for i in range(len(headsigns)):
-                headsign = headsigns[i]
-                if not system.prefix_headsign:
-                    headsign = headsign.lstrip(number).strip(' ')
-                if headsign.startswith('A '):
-                    headsign.lstrip('A ')
-                if headsign.startswith('B '):
-                    headsign.lstrip('B ')
-                if ' - ' in headsign:
-                    headsign = headsign.split(' - ')[0]
-                elif '- ' in headsign:
-                    headsign = headsign.split('- ')[0]
-                elif ' to ' in headsign:
-                    headsign = headsign.split(' to ')[0]
-                elif ' To ' in headsign:
-                    headsign = headsign.split(' To ')[0]
-                elif ' via ' in headsign:
-                    headsign = headsign.split(' via ')[0]
-                elif ' Via ' in headsign:
-                    headsign = headsign.split(' Via ')[0]
-                headsigns[i] = headsign.strip(' ').strip(',')
-            prefix = commonprefix(headsigns).strip(' ')
-            if len(prefix) < 3:
-                if len(headsigns) > 2:
-                    headsigns = [h for h in headsigns if not h.startswith('To ')]
-                name = ' / '.join(sorted(set(headsigns)))
-            else:
-                name = prefix
-        if 'route_color' in row and row['route_color'] != '' and (not system.recolour_black or row['route_color'] != '000000'):
-            colour = row['route_color']
-        else:
-            # Generate a random colour based on system ID and route number
-            seed(system.id)
-            number_digits = ''.join([d for d in number if d.isdigit()])
-            if len(number_digits) == 0:
-                h = randint(1, 360) / 360.0
-            else:
-                h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-            seed(system.id + number)
-            l = randint(30, 50) / 100.0
-            s = randint(50, 100) / 100.0
-            rgb = hls_to_rgb(h, l, s)
-            r = int(rgb[0] * 255)
-            g = int(rgb[1] * 255)
-            b = int(rgb[2] * 255)
-            colour = f'{r:02x}{g:02x}{b:02x}'
-        if 'route_text_color' in row and row['route_text_color'] != '':
-            text_colour = row['route_text_color']
-        else:
-            text_colour = 'FFFFFF'
-        return cls(system, id, number, name, colour, text_colour, route_trips)
+    def from_db(cls, row, prefix='route'):
+        system = helpers.system.find(row[f'{prefix}_system_id'])
+        id = row[f'{prefix}_id']
+        number = row[f'{prefix}_number']
+        name = row[f'{prefix}_name']
+        colour = row[f'{prefix}_colour'] or generate_colour(system, number)
+        text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
+        return cls(system, id, number, name, colour, text_colour)
     
-    def __init__(self, system, id, number, name, colour, text_colour, trips):
+    @property
+    def display_name(self):
+        '''Formats the route name for web display'''
+        return self.name.replace('/', '/<wbr />')
+    
+    @property
+    def trips(self):
+        self.setup()
+        return self._trips
+    
+    @property
+    def schedule(self):
+        self.setup()
+        return self._schedule
+    
+    @property
+    def sheets(self):
+        self.setup()
+        return self._sheets
+    
+    @property
+    def indicator_points(self):
+        self.setup()
+        return self._indicator_points
+    
+    def __init__(self, system, id, number, name, colour, text_colour):
         self.system = system
         self.id = id
         self.number = number
         self.name = name
         self.colour = colour
         self.text_colour = text_colour
-        self.trips = trips
-        
-        if len(trips) == 0:
-            self.indicator_points = []
-        else:
-            sorted_trips = sorted(trips, key=lambda t: len(t.departures), reverse=True)
-            points = sorted_trips[0].load_points()
-            first_point = points[0]
-            last_point = points[-1]
-            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-            if distance <= 0.05:
-                count = min((len(points) // 500) + 1, 3)
-            else:
-                count = min(int(distance * 8) + 1, 4)
-            size = len(points) // count
-            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
         
-        services = {t.service for t in trips}
-        self.schedule = Schedule.combine(services)
-        self.sheets = system.copy_sheets(services)
+        self.is_setup = False
+        self._trips = []
+        self._schedule = None
+        self._sheets = []
+        self._indicator_points = []
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -121,13 +95,30 @@ class Route:
     def __gt__(self, other):
         return self.key > other.key
     
-    @property
-    def display_name(self):
-        '''Formats the route name for web display'''
-        return self.name.replace('/', '/<wbr />')
+    def setup(self, trips=None):
+        if self.is_setup:
+            return
+        self.is_setup = True
+        if trips is None:
+            trips = [t for t in self.system.get_trips() if t.route_id == self.id]
+        self._trips = trips
+        services = {t.service for t in trips}
+        self._schedule = Schedule.combine(services)
+        self._sheets = self.system.copy_sheets(services)
+        if len(trips) > 0:
+            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
+            points = sorted_trips[0].find_points()
+            first_point = points[0]
+            last_point = points[-1]
+            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+            if distance <= 0.05:
+                count = min((len(points) // 500) + 1, 3)
+            else:
+                count = min(int(distance * 8) + 1, 4)
+            size = len(points) // count
+            self._indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this route in JSON-compatible format'''
         return {
             'id': self.id,
@@ -137,8 +128,7 @@ class Route:
             'text_colour': self.text_colour
         }
     
-    @property
-    def indicator_json(self):
+    def get_indicator_json(self):
         '''Returns a representation of the map indicator for this route in JSON-compatible format'''
         json = []
         for point in self.indicator_points:
@@ -180,3 +170,24 @@ class Route:
             if name.startswith(query):
                 value += len(query)
         return Match('route', self.number, self.name, f'routes/{self.number}', value)
+    
+    def find_departures(self):
+        '''Returns all departures for this route'''
+        return helpers.departure.find_all(self.system.id, route_id=self.id)
+
+def generate_colour(system, number):
+    '''Generate a random colour based on system ID and route number'''
+    seed(system.id)
+    number_digits = ''.join([d for d in number if d.isdigit()])
+    if len(number_digits) == 0:
+        h = randint(1, 360) / 360.0
+    else:
+        h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
+    seed(system.id + number)
+    l = randint(30, 50) / 100.0
+    s = randint(50, 100) / 100.0
+    rgb = hls_to_rgb(h, l, s)
+    r = int(rgb[0] * 255)
+    g = int(rgb[1] * 255)
+    b = int(rgb[2] * 255)
+    return f'{r:02x}{g:02x}{b:02x}'

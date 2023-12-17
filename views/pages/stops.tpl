@@ -111,7 +111,7 @@
                 </thead>
                 <tbody>
                     % for stop in sorted(stops):
-                        % routes = stop.get_routes()
+                        % routes = stop.routes
                         <tr>
                             <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                             <td>

@@ -1,6 +1,8 @@
 
 import math
 
+import helpers.departure
+
 from models.time import Time
 
 MINIMUM_MINUTES = 4
@@ -8,15 +10,19 @@ MINIMUM_MINUTES = 4
 class Adherence:
     '''Indicates how far ahead or behind a bus is compared to its trip's schedule'''
     
-    __slots__ = ('value', 'status_class', 'description')
+    __slots__ = (
+        'value',
+        'status_class',
+        'description'
+    )
     
     @classmethod
-    def calculate(cls, trip, stop, lat, lon):
+    def calculate(cls, trip, stop, sequence, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = trip.get_departure(stop)
+        departure = helpers.departure.find(trip.system.id, trip_id=trip.id, sequence=sequence)
         if departure is None:
             return None
-        previous_departure = trip.get_previous_departure(departure)
+        previous_departure = departure.find_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes()
             
@@ -65,8 +71,7 @@ class Adherence:
             return f'+{self.value}'
         return str(self.value)
     
-    @property
-    def json(self):
+    def get_json(self):
         '''Returns a representation of this adherence in JSON-compatible format'''
         return {
             'value': str(self),

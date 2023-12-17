@@ -84,6 +84,7 @@ def start(args):
             gtfs.load(system, args.reload, args.updatedb)
             if not gtfs.validate(system):
                 gtfs.load(system, True)
+            gtfs.update_cache_in_background(system)
             realtime.update(system)
             if not realtime.validate(system):
                 system.validation_errors += 1
@@ -810,7 +811,7 @@ def stop_overview_page(stop_number, system_id=None):
         return error_page('stop', system_id,
             stop_number=stop_number
         )
-    departures = sorted(stop.get_departures(date=Date.today()))
+    departures = stop.find_departures(date=Date.today())
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system_id, trip_id={t.id for t in trips})
     return page('stop/overview', system_id,
@@ -1006,7 +1007,7 @@ def api_map(system_id=None):
         last_updated = system.get_last_updated(time_format)
     positions = sorted(helpers.position.find_all(system_id, has_location=True), key=lambda p: p.lat, reverse=True)
     return {
-        'positions': [p.json for p in positions],
+        'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
     }
 
@@ -1016,7 +1017,7 @@ def api_map(system_id=None):
 ])
 def api_shape_id(shape_id, system_id=None):
     return {
-        'points': [p.json for p in helpers.point.find_all(system_id, shape_id)]
+        'points': [p.get_json() for p in helpers.point.find_all(system_id, shape_id)]
     }
 
 @app.post([
@@ -1101,9 +1102,10 @@ def api_admin_reload_systems(key=None, system_id=None):
                 gtfs.load(system)
                 if not gtfs.validate(system):
                     gtfs.load(system, True)
+                gtfs.update_cache_in_background(system)
                 realtime.update(system)
-            if not realtime.validate(system):
-                system.validation_errors += 1
+                if not realtime.validate(system):
+                    system.validation_errors += 1
         if running:
             realtime.update_records()
             cron.start(cron_id)
@@ -1176,6 +1178,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
         if system is None:
             return 'Invalid system'
         gtfs.load(system, True)
+        gtfs.update_cache_in_background(system)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1
@@ -1193,7 +1196,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
     '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>',
     '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>/'
 ])
-def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
+def api_admin_reload_realtime(reload_system_id, key=None, system_id=None):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:
