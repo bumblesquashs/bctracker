@@ -11,7 +11,7 @@
     </div>
 </div>
 
-% if len(stop.departures) == 0:
+% if len(stop.find_departures()) == 0:
     <div class="placeholder">
         % if stop.is_loaded:
             <h3 class="title">There are currently no departures from this stop</h3>
@@ -54,7 +54,7 @@
                     <div class="content">
                         <div class="container inline">
                             % for service_group in sheet.normal_service_groups:
-                                % departures = stop.get_departures(service_group)
+                                % departures = stop.find_departures(service_group)
                                 <div class="section">
                                     <div class="header">
                                         % for weekday in service_group.schedule.weekdays:
@@ -105,7 +105,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="flex-column">
-                                                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                                                % include('components/trip_link', trip=trip)
                                                                 <span class="mobile-only smaller-font">
                                                                     % include('components/headsign_indicator')
                                                                 </span>

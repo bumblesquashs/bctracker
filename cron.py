@@ -49,6 +49,7 @@ def handle_gtfs(sig, frame):
             today = Date.today(system.timezone)
             if today.weekday == Weekday.MON or not gtfs.validate(system):
                 gtfs.load(system, True)
+                gtfs.update_cache_in_background(system)
     if running:
         date = datetime.now() - timedelta(days=1)
         backup.run(date, date.weekday() == 0)
@@ -67,6 +68,7 @@ def handle_realtime(sig, frame):
                 system.validation_errors += 1
                 if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
                     gtfs.load(system, True)
+                    gtfs.update_cache_in_background(system)
     if running:
         realtime.update_records()
         

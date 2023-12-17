@@ -24,7 +24,7 @@ def create(position):
 
 def find(bus_number):
     '''Returns the position of the bus with the given number'''
-    rows = database.select('position',
+    positions = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
             'position.bus_number': 'position_bus_number',
@@ -41,9 +41,11 @@ def find(bus_number):
         },
         filters={
             'position.bus_number': bus_number
-        })
-    if len(rows) == 1:
-        return Position.from_db(rows[0])
+        },
+        initializer=Position.from_db
+    )
+    if len(positions) == 1:
+        return positions[0]
     return None
 
 def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id=None, has_location=None):
@@ -70,7 +72,7 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
             filters['position.lon'] = {
                 'IS': None
             }
-    rows = database.select('position',
+    positions = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
             'position.bus_number': 'position_bus_number',
@@ -85,8 +87,9 @@ def find_all(system_id=None, trip_id=None, stop_id=None, block_id=None, route_id
             'position.speed': 'position_speed',
             'position.adherence': 'position_adherence'
         },
-        filters=filters)
-    positions = [Position.from_db(row) for row in rows]
+        filters=filters,
+        initializer=Position.from_db
+    )
     return [p for p in positions if p.bus.visible]
 
 def delete_all(system_id=None):

@@ -13,6 +13,8 @@
     </div>
 </div>
 
+% departures = trip.find_departures()
+
 <div class="flex-container">
     <div class="sidebar container flex-1">
         <div class="section">
@@ -62,7 +64,7 @@
                     </div>
                     <div class="section">
                         <div class="name">Number of stops</div>
-                        <div class="value">{{ len(trip.departures) }}</div>
+                        <div class="value">{{ len(departures) }}</div>
                     </div>
                     <div class="section">
                         <div class="name">Direction</div>
@@ -104,7 +106,9 @@
                             % for related_trip in related_trips:
                                 % block = related_trip.block
                                 <tr>
-                                    <td><a href="{{ get_url(related_trip.system, f'trips/{related_trip.id}') }}">{{! related_trip.display_id }}</a></td>
+                                    <td>
+                                        % include('components/trip_link', trip=related_trip)
+                                    </td>
                                     <td class="non-mobile">
                                         % if block is None:
                                             <div class="lighter-text">Unknown</div>
@@ -189,7 +193,7 @@
                 <h2>Stop Schedule</h2>
             </div>
             <div class="content">
-                % if len([d for d in trip.departures if d.timepoint]) > 0:
+                % if len([d for d in departures if d.timepoint]) > 0:
                     <p>
                         Departures in <span class="timing-point">bold</span> are timing points.
                     </p>
@@ -204,7 +208,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % for departure in trip.departures:
+                        % for departure in departures:
                             % stop = departure.stop
                             <tr>
                                 <td class="{{ 'timing-point' if departure.timepoint else '' }}">
@@ -223,12 +227,12 @@
                                         </span>
                                         % if not departure.pickup_type.is_normal:
                                             <span class="smaller-font">{{ departure.pickup_type }}</span>
-                                        % elif departure == trip.last_departure:
+                                        % elif departure == departures[-1]:
                                             <span class="smaller-font">Drop off only</span>
                                         % end
                                         % if not departure.dropoff_type.is_normal:
                                             <span class="smaller-font">{{ departure.dropoff_type }}</span>
-                                        % elif departure == trip.first_departure:
+                                        % elif departure == departures[0]:
                                             <span class="smaller-font">Pick up only</span>
                                         % end
                                     </div>

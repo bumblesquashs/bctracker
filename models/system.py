@@ -1,4 +1,5 @@
 
+import helpers.departure
 import helpers.overview
 import helpers.position
 import helpers.region
@@ -8,7 +9,29 @@ from models.schedule import Schedule
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = ('id', 'name', 'region', 'enabled', 'visible', 'prefix_headsign', 'recolour_black', 'gtfs_url', 'realtime_url', 'validation_errors', 'last_updated_date', 'last_updated_time', 'timezone', 'blocks', 'routes', 'routes_by_number', 'services', 'sheets', 'stops', 'stops_by_number', 'trips')
+    __slots__ = (
+        'id',
+        'name',
+        'region',
+        'enabled',
+        'visible',
+        'prefix_headsign',
+        'recolour_black',
+        'gtfs_url',
+        'realtime_url',
+        'validation_errors',
+        'last_updated_date',
+        'last_updated_time',
+        'timezone',
+        'blocks',
+        'routes',
+        'routes_by_number',
+        'services',
+        'sheets',
+        'stops',
+        'stops_by_number',
+        'trips'
+    )
     
     @classmethod
     def from_csv(cls, row):
@@ -39,6 +62,26 @@ class System:
             else:
                 realtime_url = None
         return cls(id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url)
+    
+    @property
+    def is_loaded(self):
+        '''Checks if realtime data has been loaded'''
+        return self.last_updated_date is not None and self.last_updated_time is not None
+    
+    @property
+    def gtfs_enabled(self):
+        '''Checks if GTFS data is enabled for this system'''
+        return self.enabled and self.gtfs_url is not None
+    
+    @property
+    def realtime_enabled(self):
+        '''Checks if realtime data is enabled for this system'''
+        return self.enabled and self.realtime_url is not None
+    
+    @property
+    def schedule(self):
+        '''The overall service schedule for this system'''
+        return Schedule.combine(self.get_services())
     
     def __init__(self, id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url):
         self.id = id
@@ -77,25 +120,6 @@ class System:
     
     def __lt__(self, other):
         return str(self) < str(other)
-    
-    @property
-    def is_loaded(self):
-        return self.last_updated_date is not None and self.last_updated_time is not None
-    
-    @property
-    def gtfs_enabled(self):
-        '''Checks if GTFS data is enabled for this system'''
-        return self.enabled and self.gtfs_url is not None
-    
-    @property
-    def realtime_enabled(self):
-        '''Checks if realtime data is enabled for this system'''
-        return self.enabled and self.realtime_url is not None
-    
-    @property
-    def schedule(self):
-        '''The overall service schedule for this system'''
-        return Schedule.combine(self.get_services())
     
     def get_block(self, block_id):
         '''Returns the block with the given ID'''
@@ -181,6 +205,10 @@ class System:
             return f'at {time.format_web(time_format)} {time.timezone_name}'
         return date.format_since()
     
+    def search_blocks(self, query):
+        '''Returns all blocks that match the given query'''
+        return [b.get_match(query) for b in self.blocks.values()]
+    
     def search_routes(self, query):
         '''Returns all routes that match the given query'''
         return [r.get_match(query) for r in self.routes.values()]
@@ -188,3 +216,31 @@ class System:
     def search_stops(self, query):
         '''Returns all stops that match the given query'''
         return [s.get_match(query) for s in self.stops.values()]
+    
+    def update_cache(self):
+        '''Loads and caches data from the database'''
+        print(f'Updating cached data for {self}')
+        try:
+            departures = helpers.departure.find_all(self.id)
+            trip_departures = {}
+            stop_departures = {}
+            for departure in departures:
+                trip_departures.setdefault(departure.trip_id, []).append(departure)
+                stop_departures.setdefault(departure.stop_id, []).append(departure)
+            for trip_id, departures in trip_departures.items():
+                trip = self.get_trip(trip_id)
+                if trip is not None:
+                    trip.setup(departures)
+            for stop_id, departures in stop_departures.items():
+                stop = self.get_stop(stop_id=stop_id)
+                if stop is not None:
+                    stop.setup(departures)
+            route_trips = {}
+            for trip in self.get_trips():
+                route_trips.setdefault(trip.route_id, []).append(trip)
+            for route_id, trips in route_trips.items():
+                route = self.get_route(route_id=route_id)
+                if route is not None:
+                    route.setup(trips)
+        except Exception as e:
+            print(f'Failed to update cached data for {self}: {e}')

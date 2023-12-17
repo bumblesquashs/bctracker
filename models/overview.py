@@ -8,7 +8,15 @@ from models.record import Record
 class Overview:
     '''An overview of a bus' history'''
     
-    __slots__ = ('bus', 'first_seen_date', 'first_seen_system', 'first_record', 'last_seen_date', 'last_seen_system', 'last_record')
+    __slots__ = (
+        'bus',
+        'first_seen_date',
+        'first_seen_system',
+        'first_record',
+        'last_seen_date',
+        'last_seen_system',
+        'last_record'
+    )
     
     @classmethod
     def from_db(cls, row, prefix='overview'):

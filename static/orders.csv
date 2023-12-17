@@ -5,6 +5,7 @@ low,high,year,model_id,visible,demo,exceptions
 92,94,,,0,1,
 101,116,2001,dennis-dart-slf-35,1,0,
 221,237,2002,dennis-dart-slf-35,1,0,
+990,999,,,0,1,
 1000,1019,2009,new-flyer-h40lfr,1,0,
 1020,1044,2013,new-flyer-xn40,1,0,
 1045,1069,2015,new-flyer-xn40,1,0,
@@ -40,6 +41,7 @@ low,high,year,model_id,visible,demo,exceptions
 2757,2784,2021,chevrolet-girardin-4500-g5,1,0,
 2785,2801,2021,ford-girardin-t350-mbii,1,0,
 2802,2860,2022,chevrolet-arboc-4500-sof-27,1,0,
+2861,2895,2023,chevrolet-arboc-4500-sof-27,1,0,
 3001,3015,2013,grande-west-vicinity-27,1,0,
 3016,3023,2015,international-eldorado-3200-aero-elite,1,0,3020;3022
 3024,3028,2018,international-eldorado-3200-aero-elite,1,0,
@@ -52,6 +54,7 @@ low,high,year,model_id,visible,demo,exceptions
 4433,4474,2018,grande-west-vicinity-35,1,0,
 6000,6029,2017,nova-bus-lfs,1,0,
 7404,7404,,,0,1,
+7812,7812,,,0,1,
 8001,8009,1991,new-flyer-d40lf,1,0,
 8010,8033,1992,new-flyer-d40lf,1,0,
 8034,8048,1994,new-flyer-d40lf,1,0,

@@ -1,8 +1,11 @@
 
 % from models.time import Time
 
-% start_time = block.get_start_time(service_group=service_group)
-% end_time = block.get_end_time(service_group=service_group)
+% service_group = get('service_group')
+% date = get('date')
+
+% start_time = block.get_start_time(service_group=service_group, date=date)
+% end_time = block.get_end_time(service_group=service_group, date=date)
 % total_minutes = end_time.get_minutes() - start_time.get_minutes()
 
 <div>
@@ -12,7 +15,7 @@
         <div class="smaller-font lighter-text">{{ end_time.format_web(time_format) }}</div>
     </div>
     <div class="block-indicator">
-        % for trip in block.get_trips(service_group=service_group):
+        % for trip in block.get_trips(service_group=service_group, date=date):
             % trip_minutes = trip.end_time.get_minutes() - trip.start_time.get_minutes()
             % percentage = (trip_minutes / total_minutes) * 100
             % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()

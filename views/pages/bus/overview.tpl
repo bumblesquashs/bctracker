@@ -71,6 +71,19 @@
                         <div class="section">
                             <h3>Not in service</h3>
                         </div>
+                        % last_record = overview.last_record
+                        % if last_record is not None and last_record.date.is_today:
+                            % block = last_record.block
+                            % if block is not None:
+                                % today = Date.today(block.system.timezone)
+                                % end_time = block.get_end_time(date=today)
+                                % if end_time is not None and end_time.is_later:
+                                    <div class="section no-flex">
+                                        % include('components/block_indicator', date=today)
+                                    </div>
+                                % end
+                            % end
+                        % end
                         <div class="section">
                             <div class="name">System</div>
                             <div class="value">
@@ -90,7 +103,7 @@
                     % block = trip.block
                     % route = trip.route
                     
-                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
+                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
                     
                     <div class="info-box">
                         <div class="section">
@@ -99,12 +112,14 @@
                                 <h3 class="flex-1">{{ trip }}</h3>
                             </div>
                         </div>
-                        
                         <div class="section">
                             <div class="flex-row">
                                 % include('components/route_indicator')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
+                        </div>
+                        <div class="section no-flex">
+                            % include('components/block_indicator', date=Date.today(block.system.timezone))
                         </div>
                         <div class="section">
                             <div class="name">System</div>
@@ -122,11 +137,7 @@
                             <div class="name">Block</div>
                             <div class="value flex-column">
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                % if system is None:
-                                    % today = Date.today(None)
-                                % else:
-                                    % today = Date.today(system.timezone)
-                                % end
+                                % today = Date.today(block.system.timezone)
                                 % start_time = block.get_start_time(date=today).format_web(time_format)
                                 % end_time = block.get_end_time(date=today).format_web(time_format)
                                 % duration = block.get_duration(date=today)
@@ -136,7 +147,7 @@
                         <div class="section">
                             <div class="name">Trip</div>
                             <div class="value flex-column">
-                                <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}">{{! trip.display_id }}</a>
+                                % include('components/trip_link', trip=trip)
                                 % start_time = trip.start_time.format_web(time_format)
                                 % end_time = trip.end_time.format_web(time_format)
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
@@ -191,7 +202,7 @@
     
     <div class="container flex-3">
         % if position is not None:
-            % upcoming_departures = position.get_upcoming_departures()
+            % upcoming_departures = position.find_upcoming_departures()
             % if len(upcoming_departures) > 0:
                 <div class="section">
                     <div class="header">

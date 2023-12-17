@@ -26,7 +26,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 21
+VERSION = 22
 
 app = Bottle()
 running = False
@@ -84,6 +84,7 @@ def start(args):
             gtfs.load(system, args.reload, args.updatedb)
             if not gtfs.validate(system):
                 gtfs.load(system, True)
+            gtfs.update_cache_in_background(system)
             realtime.update(system)
             if not realtime.validate(system):
                 system.validation_errors += 1
@@ -110,15 +111,17 @@ def get_url(system, path='', **kwargs):
         url = system_domain.format(system, path).rstrip('/')
     else:
         url = system_domain.format(system.id, path).rstrip('/')
-    if len(kwargs) > 0:
-        query = '&'.join([f'{k}={v}' for k, v in kwargs.items() if v is not None])
+    query_args = {k:v for k, v in kwargs.items() if v is not None}
+    if len(query_args) > 0:
+        query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
-def page(name, system_id, title, path='', enable_refresh=True, include_maps=False, full_map=False, **kwargs):
+def page(name, system_id, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
+    bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
     system = helpers.system.find(system_id)
     if system is None:
@@ -129,6 +132,7 @@ def page(name, system_id, title, path='', enable_refresh=True, include_maps=Fals
         version=VERSION,
         title=title,
         path=path,
+        path_args=path_args or {},
         enable_refresh=enable_refresh,
         include_maps=include_maps,
         full_map=full_map,
@@ -146,6 +150,7 @@ def page(name, system_id, title, path='', enable_refresh=True, include_maps=Fals
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
+        bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
         **kwargs
@@ -168,8 +173,16 @@ def set_cookie(key, value):
     else:
         response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
 
+def query_cookie(key, default_value):
+    '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
+    value = request.query.get(key)
+    if value is not None:
+        set_cookie(key, value)
+        return value
+    return request.get_cookie(key, default_value)
+
 # =============================================================
-# CSS (Static Files)
+# Static Files
 # =============================================================
 
 @app.get([
@@ -179,16 +192,19 @@ def set_cookie(key, value):
 def style(name, system_id=None):
     return static_file(name, root='./style')
 
-# =============================================================
-# Images (Static Files)
-# =============================================================
-
 @app.get([
     '/img/<name:path>',
     '/<system_id>/img/<name:path>'
 ])
 def img(name, system_id=None):
     return static_file(name, root='./img')
+
+@app.get([
+    '/robots.txt',
+    '/<system_id>/robots.txt'
+])
+def robots_text(system_id=None):
+    return static_file('robots.txt', root='.')
 
 # =============================================================
 # HTML (Templates)
@@ -226,12 +242,16 @@ def news_page(system_id=None):
 ])
 def map_page(system_id=None):
     positions = helpers.position.find_all(system_id, has_location=True)
+    show_nis = query_cookie('show_nis', 'true') != 'false'
+    visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
     return page('map', system_id,
         title='Map',
         path='map',
-        include_maps=len(positions) > 0,
-        full_map=len(positions) > 0,
-        positions=sorted(positions, key=lambda p: p.lat, reverse=True)
+        include_maps=len(visible_positions) > 0,
+        full_map=len(visible_positions) > 0,
+        positions=sorted(positions, key=lambda p: p.lat, reverse=True),
+        show_nis=show_nis,
+        visible_positions=visible_positions
     )
 
 @app.get([
@@ -241,10 +261,15 @@ def map_page(system_id=None):
     '/<system_id>/realtime/'
 ])
 def realtime_all_page(system_id=None):
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') != 'false'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/all', system_id,
         title='Realtime',
         path='realtime',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -254,10 +279,15 @@ def realtime_all_page(system_id=None):
     '/<system_id>/realtime/routes/'
 ])
 def realtime_routes_page(system_id=None):
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') != 'false'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/routes', system_id,
         title='Realtime',
         path='realtime/routes',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -267,10 +297,15 @@ def realtime_routes_page(system_id=None):
     '/<system_id>/realtime/models/'
 ])
 def realtime_models_page(system_id=None):
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') != 'false'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/models', system_id,
         title='Realtime',
         path='realtime/models',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -281,10 +316,15 @@ def realtime_models_page(system_id=None):
 ])
 def realtime_speed_page(system_id=None):
     set_cookie('speed', '1994')
+    positions = helpers.position.find_all(system_id)
+    show_nis = query_cookie('show_nis', 'true') != 'false'
+    if not show_nis:
+        positions = [p for p in positions if p.trip is not None]
     return page('realtime/speed', system_id,
         title='Realtime',
         path='realtime/speed',
-        positions=helpers.position.find_all(system_id)
+        positions=positions,
+        show_nis=show_nis
     )
 
 @app.get([
@@ -771,7 +811,7 @@ def stop_overview_page(stop_number, system_id=None):
         return error_page('stop', system_id,
             stop_number=stop_number
         )
-    departures = sorted(stop.get_departures(date=Date.today()))
+    departures = stop.find_departures(date=Date.today())
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system_id, trip_id={t.id for t in trips})
     return page('stop/overview', system_id,
@@ -928,6 +968,9 @@ def themes_page(system_id=None):
     time_format = request.query.get('time_format')
     if time_format is not None:
         set_cookie('time_format', time_format)
+    bus_marker_style = request.query.get('bus_marker_style')
+    if bus_marker_style is not None:
+        set_cookie('bus_marker_style', bus_marker_style)
     themes = helpers.theme.find_all()
     return page('personalize', system_id,
         title='Personalize',
@@ -978,14 +1021,21 @@ def admin_page(key=None, system_id=None):
     )
 
 # =============================================================
-# JSON (API endpoints)
+# API endpoints
 # =============================================================
+
+@app.get([
+    '/api/health-check',
+    '/<system_id>/api/health-check'
+])
+def api_health_check(system_id=None):
+    return 'Online'
 
 @app.get([
     '/api/map.json',
     '/<system_id>/api/map.json'
 ])
-def system_api_map(system_id=None):
+def api_map(system_id=None):
     system = helpers.system.find(system_id)
     time_format = request.get_cookie('time_format')
     if system is None:
@@ -994,7 +1044,7 @@ def system_api_map(system_id=None):
         last_updated = system.get_last_updated(time_format)
     positions = sorted(helpers.position.find_all(system_id, has_location=True), key=lambda p: p.lat, reverse=True)
     return {
-        'positions': [p.json for p in positions],
+        'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
     }
 
@@ -1004,7 +1054,7 @@ def system_api_map(system_id=None):
 ])
 def api_shape_id(shape_id, system_id=None):
     return {
-        'points': [p.json for p in helpers.point.find_all(system_id, shape_id)]
+        'points': [p.get_json() for p in helpers.point.find_all(system_id, shape_id)]
     }
 
 @app.post([
@@ -1021,6 +1071,7 @@ def api_search(system_id=None):
         if query.isnumeric() and (system is None or system.realtime_enabled):
             matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system_id))
         if system is not None:
+            matches += system.search_blocks(query)
             matches += system.search_routes(query)
             matches += system.search_stops(query)
     matches = sorted([m for m in matches if m.value > 0])
@@ -1088,9 +1139,10 @@ def api_admin_reload_systems(key=None, system_id=None):
                 gtfs.load(system)
                 if not gtfs.validate(system):
                     gtfs.load(system, True)
+                gtfs.update_cache_in_background(system)
                 realtime.update(system)
-            if not realtime.validate(system):
-                system.validation_errors += 1
+                if not realtime.validate(system):
+                    system.validation_errors += 1
         if running:
             realtime.update_records()
             cron.start(cron_id)
@@ -1163,6 +1215,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
         if system is None:
             return 'Invalid system'
         gtfs.load(system, True)
+        gtfs.update_cache_in_background(system)
         realtime.update(system)
         if not realtime.validate(system):
             system.validation_errors += 1
@@ -1180,7 +1233,7 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
     '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>',
     '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>/'
 ])
-def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
+def api_admin_reload_realtime(reload_system_id, key=None, system_id=None):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:

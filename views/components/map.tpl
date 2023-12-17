@@ -45,7 +45,7 @@
 % end
 % if len(shape_trips) > 0:
     <script>
-        const trips = JSON.parse('{{! json.dumps([t.json for t in shape_trips]) }}');
+        const trips = JSON.parse('{{! json.dumps([t.get_json() for t in shape_trips]) }}');
         
         map.on("load", function() {
             for (const trip of trips) {
@@ -98,7 +98,7 @@
 % end
 % if len(stop_departures) > 0:
     <script>
-        const departures = JSON.parse('{{! json.dumps([d.json for d in stop_departures]) }}');
+        const departures = JSON.parse('{{! json.dumps([d.get_json() for d in stop_departures]) }}');
         
         for (const departure of departures) {
             const stop = departure.stop;
@@ -146,7 +146,7 @@
 % map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
 % if len(map_stops) > 0:
     <script>
-        const stops = JSON.parse('{{! json.dumps([s.json for s in map_stops]) }}');
+        const stops = JSON.parse('{{! json.dumps([s.get_json() for s in map_stops]) }}');
         
         for (const stop of stops) {
             const element = document.createElement("div");
@@ -192,18 +192,23 @@
 % if len(map_positions) > 0:
     % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
     <script>
-        const positions = JSON.parse('{{! json.dumps([p.json for p in map_positions]) }}');
+        const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
+        const busMarkerStyle = "{{ bus_marker_style }}";
         
         for (const position of positions) {
             const element = document.createElement("div");
             element.className = "marker";
             if (position.bearing !== undefined) {
+                const sideWidthValue = busMarkerStyle == "mini" ? 8 : 16;
+                const bottomWidthValue = busMarkerStyle == "mini" ? 18 : 26;
                 const length = Math.floor(position.speed / 10);
                 const bearing = document.createElement("div");
                 bearing.className = "bearing";
                 bearing.style.borderBottomColor = "#" + position.colour;
                 bearing.style.marginTop = (-8 - length) + "px";
-                bearing.style.borderBottomWidth = (26 + length) + "px";
+                bearing.style.borderLeftWidth = sideWidthValue + "px";
+                bearing.style.borderRightWidth = sideWidthValue + "px";
+                bearing.style.borderBottomWidth = (bottomWidthValue + length) + "px";
                 bearing.style.transform = "rotate(" + position.bearing + "deg)";
                 element.appendChild(bearing)
             }
@@ -250,14 +255,31 @@
                 const icon = document.createElement("div");
                 icon.className = "icon";
                 icon.style.backgroundColor = "#" + position.colour;
-                icon.innerHTML = "<img src='/img/white/bus.png' />";
+                if (busMarkerStyle == "route") {
+                    icon.classList.add("bus_route");
+                    icon.innerHTML = position.route_number;
+                } else if (busMarkerStyle == "mini") {
+                    element.classList.add("small");
+                    icon.classList.add("mini");
+                } else {
+                    icon.innerHTML = "<img src='/img/white/bus.png' />";
+                }
                 element.appendChild(icon);
             } else {
                 const icon = document.createElement("a");
                 icon.className = "icon";
                 icon.href = "/bus/" + position.bus_number;
                 icon.style.backgroundColor = "#" + position.colour;
-                icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                if (busMarkerStyle == "route") {
+                    icon.classList.add("bus_route");
+                    icon.innerHTML = "<div class='link'></div>" + position.route_number;
+                } else if (busMarkerStyle == "mini") {
+                    element.classList.add("small");
+                    icon.classList.add("mini");
+                    icon.innerHTML = "<div class='link'></div>";
+                } else {
+                    icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                }
                 element.appendChild(icon);
             }
             

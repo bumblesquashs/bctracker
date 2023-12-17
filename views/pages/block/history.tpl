@@ -23,12 +23,15 @@
                             <div class="section no-flex">
                                 % include('components/events_indicator', events=events)
                             </div>
-                            <div class="section">
+                            <div class="section no-flex">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                                <div class="name">{{ 'Model' if len(orders) == 1 else 'Models' }}</div>
-                                <div class="value flex-column">
+                                <div class="flex-column">
                                     % for order in orders:
-                                        <div>{{! order }}</div>
+                                        % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
+                                        <div class="flex-row">
+                                            <div class="name flex-1">{{! order }}</div>
+                                            <div class="value lighter-text">{{ round(percentage) }}%</div>
+                                        </div>
                                     % end
                                 </div>
                             </div>

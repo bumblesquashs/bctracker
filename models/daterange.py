@@ -2,7 +2,10 @@
 class DateRange:
     '''A set of dates between starting and ending points'''
     
-    __slots__ = ('start', 'end')
+    __slots__ = (
+        'start',
+        'end'
+    )
     
     @classmethod
     def combine(cls, date_ranges):
