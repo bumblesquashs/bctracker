@@ -122,7 +122,17 @@
             }
             
             function openSurvey() {
-                window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
+                window.open("https://docs.google.com/forms/d/e/1FAIpQLSegYbUi18Qrm40GSAYIel8NEH3r67vBpJXHGbEqEt2xwDOu9A/viewform?usp=sf_link", "_blank").focus();
+                hideSurvey();
+            }
+            
+            function hideSurvey() {
+                document.getElementById("survey-banner").classList.add("display-none");
+                const now = new Date();
+                const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
+                now.setTime(expireTime);
+                
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if cookie_domain is None else cookie_domain }};path=/";
             }
         </script>
     </head>
@@ -292,7 +302,20 @@
         </div>
         <div id="main">
             <div id="banners">
-                <!-- No banners right now -->
+                % if show_survey_banner:
+                    <div id="survey-banner" class="banner">
+                        <span class="close-button" onclick="hideSurvey()">
+                            <img class="white" width="24px" height="24px" src="/img/white/close.png"/>
+                            <img class="black" width="24px" height="24px" src="/img/black/close.png"/>
+                        </span>
+                        <div class="content">
+                            <span class="title">Take the BCTracker Survey!</span>
+                            <br />
+                            <span class="description">For more information, check out the latest update on the <a href="{{ get_url(system) }}">home page</a></span>
+                        </div>
+                        <button class="button survey-button" onclick="openSurvey()">Start Now</button>
+                    </div>
+                % end
             </div>
             <div id="content">{{ !base }}</div>
         </div>
