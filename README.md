@@ -34,20 +34,16 @@ Systems with full support for schedules and bus tracking:
 
 Systems with support for bus tracking only:
 - 100 Mile House
+- Ashcroft-Clinton
+- Bella Coola
+- Clearwater
 - Merritt
+- Pemberton
 - Quesnel
 - Revelstoke
 - Salt Spring Island
 - Smithers
 - Williams Lake
-
-Systems with no support for schedules or bus tracking:
-- Ashcroft-Clinton
-- Bella Coola
-- Bulkley Nechako
-- Clearwater
-
-Additional systems may be added in the future if schedule and/or realtime GTFS becomes available.
 
 ## Running the project
 
