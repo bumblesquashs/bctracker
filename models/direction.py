@@ -21,6 +21,14 @@ class Direction(Enum):
         if abs(lat_diff) <= 0.001 and abs(lon_diff) <= 0.001:
             return cls.CIRCULAR
         angle = math.degrees(math.atan2(lat_diff, lon_diff))
+        if angle < -315:
+            return cls.EASTBOUND
+        if angle < -225:
+            return cls.NORTHBOUND
+        if angle < -136:
+            return cls.WESTBOUND
+        if angle < -45:
+            return cls.SOUTHBOUND
         if angle < 45:
             return cls.EASTBOUND
         if angle < 135:
