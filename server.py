@@ -812,7 +812,16 @@ def stop_overview_page(stop_number, system_id=None):
         return error_page('stop', system_id,
             stop_number=stop_number
         )
-    departures = stop.find_departures(date=Date.today())
+    route_numbers = request.query.get('routes')
+    if route_numbers is not None:
+        route_numbers = route_numbers.split(',')
+    show_dropoff_only = query_cookie('show_dropoff_only', 'true') != 'false'
+    show_pickup_only = query_cookie('show_pickup_only', 'true') != 'false'
+    departures = stop.find_departures(date=Date.today(), route_numbers=route_numbers)
+    if not show_dropoff_only:
+        departures = [d for d in departures if not d.dropoff_only]
+    if not show_pickup_only:
+        departures = [d for d in departures if not d.pickup_only]
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system_id, trip_id={t.id for t in trips})
     return page('stop/overview', system_id,
@@ -822,7 +831,8 @@ def stop_overview_page(stop_number, system_id=None):
         departures=departures,
         recorded_today=helpers.record.find_recorded_today(system, trips),
         scheduled_today=helpers.record.find_scheduled_today(system, trips),
-        positions={p.trip.id: p for p in positions}
+        positions={p.trip.id: p for p in positions},
+        route_numbers=route_numbers
     )
 
 @app.get([
@@ -866,10 +876,14 @@ def stop_schedule_page(stop_number, system_id=None):
         return error_page('stop', system_id,
             stop_number=stop_number
         )
+    route_numbers = request.query.get('routes')
+    if route_numbers is not None:
+        route_numbers = route_numbers.split(',')
     return page('stop/schedule', system_id,
         title=f'Stop {stop.number}',
         enable_refresh=False,
-        stop=stop
+        stop=stop,
+        route_numbers=route_numbers
     )
 
 @app.get([
@@ -889,11 +903,15 @@ def stop_schedule_date_page(stop_number, date_string, system_id=None):
         return error_page('stop', system_id,
             stop_number=stop_number
         )
+    route_numbers = request.query.get('routes')
+    if route_numbers is not None:
+        route_numbers = route_numbers.split(',')
     date = Date.parse_db(date_string, None)
     return page('stop/date', system_id,
         title=f'Stop {stop.number}',
         enable_refresh=False,
         stop=stop,
+        route_numbers=route_numbers,
         date=date
     )
 

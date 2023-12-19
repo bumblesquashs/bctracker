@@ -125,9 +125,9 @@ class Stop:
                 value = 1
         return Match('stop', self.number, self.name, f'stops/{self.number}', value)
     
-    def find_departures(self, service_group=None, date=None):
+    def find_departures(self, service_group=None, date=None, route_numbers=None):
         '''Returns all departures from this stop'''
-        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
+        departures = helpers.departure.find_all(self.system.id, stop_id=self.id, route_number=route_numbers)
         if service_group is None:
             if date is None:
                 return sorted(departures)

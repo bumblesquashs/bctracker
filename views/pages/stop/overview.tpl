@@ -1,4 +1,6 @@
 
+% import json
+
 % from math import floor
 
 % from models.date import Date
@@ -33,12 +35,51 @@
                         <div class="section vertical">
                             % routes = stop.routes
                             <div class="flex-column">
+                                <div class="flex-row right flex-gap-5">
+                                    <span class="lighter-text">Select</span>
+                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">All</a>
+                                    <span class="lighter-text">|</span>
+                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}', routes='') }}">None</a>
+                                </div>
                                 % for route in routes:
+                                    % showing_route = route_numbers is None or route.number in route_numbers
                                     <div class="flex-row">
                                         % include('components/route_indicator')
-                                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}" class="flex-1">{{! route.display_name }}</a>
+                                        <div class="checkbox" onclick="updateRouteNumbers('{{ route.number }}')">
+                                            <div class="box">
+                                                <div class="{{ '' if showing_route else 'hidden' }}">
+                                                    <img class="white" src="/img/white/check.png" />
+                                                    <img class="black" src="/img/black/check.png" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 % end
+                            </div>
+                        </div>
+                        <div class="section vertical">
+                            <div class="flex-row">
+                                <div class="checkbox" onclick="window.location = '{{ get_url(stop.system, f\'stops/{stop.number}\', show_dropoff_only=\'false\' if show_dropoff_only else \'true\') }}'">
+                                    <div class="box">
+                                        <div class="">
+                                            <img class="white" src="/img/white/check.png" />
+                                            <img class="black" src="/img/black/check.png" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>Show drop off only trips</div>
+                            </div>
+                            <div class="flex-row">
+                                <div class="checkbox" onclick="">
+                                    <div class="box">
+                                        <div class="">
+                                            <img class="white" src="/img/white/check.png" />
+                                            <img class="black" src="/img/black/check.png" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>Show pick up only trips</div>
                             </div>
                         </div>
                     </div>
@@ -219,3 +260,17 @@
 </div>
 
 % include('components/top_button')
+
+<script>
+    let routeNumbers = JSON.parse('{{! json.dumps([r.number for r in stop.routes] if route_numbers is None else [r for r in route_numbers]) }}');
+    
+    function updateRouteNumbers(routeNumber) {
+        const index = routeNumbers.indexOf(routeNumber);
+        if (index >= 0) {
+            routeNumbers.splice(index, 1);
+        } else {
+            routeNumbers.push(routeNumber);
+        }
+        window.location = "{{ get_url(stop.system, f'stops/{stop.number}') }}?routes=" + routeNumbers.join(",");
+    }
+</script>
