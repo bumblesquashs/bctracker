@@ -5,15 +5,20 @@ import database
 
 def create(bus, date, old_system, new_system):
     '''Inserts a new transfer into the database'''
+    bus_number = getattr(bus, 'number', bus)
+    old_system_id = getattr(old_system, 'id', old_system)
+    new_system_id = getattr(new_system, 'id', new_system)
     database.insert('transfer', {
-        'bus_number': bus.number,
+        'bus_number': bus_number,
         'date': date.format_db(),
-        'old_system_id': old_system.id,
-        'new_system_id': new_system.id
+        'old_system_id': old_system_id,
+        'new_system_id': new_system_id
     })
 
-def find_all(system_id=None, bus_number=None, limit=None):
-    '''Returns all transfers that match the given system ID'''
+def find_all(system=None, bus=None, limit=None):
+    '''Returns all transfers that match the given system'''
+    system_id = getattr(system, 'id', system)
+    bus_number = getattr(bus, 'number', bus)
     return database.select('transfer',
         columns={
             'transfer.transfer_id': 'transfer_id',

@@ -40,7 +40,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system.id)
+        helpers.position.delete_all(system)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -80,10 +80,10 @@ def update_records():
                         if last_record.system != system and bus.visible:
                             helpers.transfer.create(bus, today, last_record.system, system)
                         if last_record.date == today and last_record.block_id == block.id:
-                            helpers.record.update(last_record.id, now)
+                            helpers.record.update(last_record, now)
                             trip_ids = helpers.record.find_trip_ids(last_record)
                             if trip.id not in trip_ids:
-                                helpers.record.create_trip(last_record.id, trip)
+                                helpers.record.create_trip(last_record, trip)
                             continue
                     record_id = helpers.record.create(bus, today, system, block, now, trip)
                 if overview is None:
@@ -112,7 +112,7 @@ def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
     if not system.realtime_enabled:
         return True
-    for position in helpers.position.find_all(system_id=system.id):
+    for position in helpers.position.find_all(system):
         trip_id = position.trip_id
         if trip_id is None:
             continue

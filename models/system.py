@@ -133,11 +133,11 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return helpers.overview.find_all(last_seen_system_id=self.id)
+        return helpers.overview.find_all(last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        return helpers.position.find_all(system_id=self.id)
+        return helpers.position.find_all(self)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -221,7 +221,7 @@ class System:
         '''Loads and caches data from the database'''
         print(f'Updating cached data for {self}')
         try:
-            departures = helpers.departure.find_all(self.id)
+            departures = helpers.departure.find_all(self)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:

@@ -19,7 +19,7 @@ class Adherence:
     @classmethod
     def calculate(cls, trip, stop, sequence, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = helpers.departure.find(trip.system.id, trip_id=trip.id, sequence=sequence)
+        departure = helpers.departure.find(trip.system, trip=trip, sequence=sequence)
         if departure is None:
             return None
         previous_departure = departure.find_previous()

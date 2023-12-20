@@ -106,25 +106,23 @@ def stop():
 
 def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
-    if system is None:
+    system_id = getattr(system, 'id', system)
+    if system_id is None:
         url = no_system_domain.format(path).rstrip('/')
-    elif isinstance(system, str):
-        url = system_domain.format(system, path).rstrip('/')
     else:
-        url = system_domain.format(system.id, path).rstrip('/')
+        url = system_domain.format(system_id, path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
     if len(query_args) > 0:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
-def page(name, system_id, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
+def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
     bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
-    system = helpers.system.find(system_id)
     if system is None:
         last_updated = realtime.get_last_updated(time_format)
     else:
@@ -140,7 +138,6 @@ def page(name, system_id, title, path='', path_args=None, enable_refresh=True, i
         regions=helpers.region.find_all(),
         systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
         admin_systems=helpers.system.find_all(),
-        system_id=system_id,
         system=system,
         get_url=get_url,
         no_system_domain=no_system_domain,
@@ -158,9 +155,9 @@ def page(name, system_id, title, path='', path_args=None, enable_refresh=True, i
         **kwargs
     )
 
-def error_page(name, system_id, title='Error', path='', **kwargs):
+def error_page(name, system, title='Error', path='', **kwargs):
     '''Returns an error page with the given name and details'''
-    return page(f'errors/{name}_error', system_id,
+    return page(f'errors/{name}_error', system,
         title=title,
         path=path,
         enable_refresh=False,
@@ -192,70 +189,68 @@ def query_cookie(key, default_value):
         return value
     return request.get_cookie(key, default_value)
 
+def endpoint(base_path, method='GET', append_slash=True, system_key='system_id'):
+    def get_system_wrapper(func):
+        paths = [
+            f'/{base_path}',
+            f'/<system_id>/{base_path}'
+        ]
+        if append_slash and base_path != '':
+            paths.append(f'/{base_path}/')
+            paths.append(f'/<system_id>/{base_path}/')
+        @app.route(paths, method)
+        def func_wrapper(*args, **kwargs):
+            if system_key in kwargs:
+                system_id = kwargs[system_key]
+                del kwargs[system_key]
+                system = helpers.system.find(system_id)
+            else:
+                system = None
+            return func(system, *args, **kwargs)
+        return func_wrapper
+    return get_system_wrapper
+
 # =============================================================
 # Static Files
 # =============================================================
 
-@app.get([
-    '/style/<name:path>',
-    '/<system_id>/style/<name:path>'
-])
-def style(name, system_id=None):
+@endpoint('style/<name:path>', append_slash=False)
+def style(system, name):
     return static_file(name, root='./style')
 
-@app.get([
-    '/img/<name:path>',
-    '/<system_id>/img/<name:path>'
-])
-def img(name, system_id=None):
+@endpoint('img/<name:path>', append_slash=False)
+def img(system, name):
     return static_file(name, root='./img')
 
-@app.get([
-    '/robots.txt',
-    '/<system_id>/robots.txt'
-])
-def robots_text(system_id=None):
+@endpoint('robots.txt', append_slash=False)
+def robots_text(system):
     return static_file('robots.txt', root='.')
 
 # =============================================================
 # HTML (Pages)
 # =============================================================
 
-@app.get([
-    '/',
-    '/<system_id>',
-    '/<system_id>/'
-])
-def home_page(system_id=None):
-    return page('home', system_id,
+@endpoint('')
+def home_page(system):
+    return page('home', system,
         title='Home',
         enable_refresh=False
     )
 
-@app.get([
-    '/news',
-    '/news/',
-    '/<system_id>/news',
-    '/<system_id>/news/'
-])
-def news_page(system_id=None):
-    return page('news', system_id,
+@endpoint('news')
+def news_page(system):
+    return page('news', system,
         title='News Archive',
         path='news',
         enable_refresh=False
     )
 
-@app.get([
-    '/map',
-    '/map/',
-    '/<system_id>/map',
-    '/<system_id>/map/'
-])
-def map_page(system_id=None):
-    positions = helpers.position.find_all(system_id, has_location=True)
+@endpoint('map')
+def map_page(system):
+    positions = helpers.position.find_all(system, has_location=True)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
-    return page('map', system_id,
+    return page('map', system,
         title='Map',
         path='map',
         include_maps=len(visible_positions) > 0,
@@ -265,111 +260,81 @@ def map_page(system_id=None):
         visible_positions=visible_positions
     )
 
-@app.get([
-    '/realtime',
-    '/realtime/',
-    '/<system_id>/realtime',
-    '/<system_id>/realtime/'
-])
-def realtime_all_page(system_id=None):
-    positions = helpers.position.find_all(system_id)
+@endpoint('realtime')
+def realtime_all_page(system):
+    positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
-    return page('realtime/all', system_id,
+    return page('realtime/all', system,
         title='Realtime',
         path='realtime',
         positions=positions,
         show_nis=show_nis
     )
 
-@app.get([
-    '/realtime/routes',
-    '/realtime/routes/',
-    '/<system_id>/realtime/routes',
-    '/<system_id>/realtime/routes/'
-])
-def realtime_routes_page(system_id=None):
-    positions = helpers.position.find_all(system_id)
+@endpoint('realtime/routes')
+def realtime_routes_page(system):
+    positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
-    return page('realtime/routes', system_id,
+    return page('realtime/routes', system,
         title='Realtime',
         path='realtime/routes',
         positions=positions,
         show_nis=show_nis
     )
 
-@app.get([
-    '/realtime/models',
-    '/realtime/models/',
-    '/<system_id>/realtime/models',
-    '/<system_id>/realtime/models/'
-])
-def realtime_models_page(system_id=None):
-    positions = helpers.position.find_all(system_id)
+@endpoint('realtime/models')
+def realtime_models_page(system):
+    positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
-    return page('realtime/models', system_id,
+    return page('realtime/models', system,
         title='Realtime',
         path='realtime/models',
         positions=positions,
         show_nis=show_nis
     )
 
-@app.get([
-    '/realtime/speed',
-    '/realtime/speed/',
-    '/<system_id>/realtime/speed',
-    '/<system_id>/realtime/speed/'
-])
-def realtime_speed_page(system_id=None):
+@endpoint('realtime/speed')
+def realtime_speed_page(system):
     set_cookie('speed', '1994')
-    positions = helpers.position.find_all(system_id)
+    positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip is not None]
-    return page('realtime/speed', system_id,
+    return page('realtime/speed', system,
         title='Realtime',
         path='realtime/speed',
         positions=positions,
         show_nis=show_nis
     )
 
-@app.get([
-    '/fleet',
-    '/fleet/',
-    '/<system_id>/fleet',
-    '/<system_id>/fleet/'
-])
-def fleet_page(system_id=None):
+@endpoint('fleet')
+def fleet_page(system):
     orders = helpers.order.find_all()
     overviews = helpers.overview.find_all()
-    return page('fleet', system_id,
+    return page('fleet', system,
         title='Fleet',
         path='fleet',
-        orders=[o for o in sorted(orders, key=lambda o: o.low) if o.visible],
+        orders=[o for o in sorted(orders) if o.visible],
         overviews={o.bus.number: o for o in overviews}
     )
 
-@app.get([
-    '/bus/<bus_number:int>',
-    '/bus/<bus_number:int>/',
-    '/<system_id>/bus/<bus_number:int>',
-    '/<system_id>/bus/<bus_number:int>/'
-])
-def bus_overview_page(bus_number, system_id=None):
+@endpoint('bus/<bus_number:int>')
+def bus_overview_page(system, bus_number):
     bus = Bus(bus_number)
-    overview = helpers.overview.find(bus_number)
+    overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
-        return error_page('bus', system_id,
+        return error_page('bus', system,
             bus_number=bus_number
         )
-    position = helpers.position.find(bus_number)
-    records = helpers.record.find_all(bus_number=bus_number, limit=20)
-    return page('bus/overview', system_id,
+    position = helpers.position.find(bus)
+    records = helpers.record.find_all(bus=bus, limit=20)
+    return page('bus/overview', system,
         title=f'Bus {bus}',
         include_maps=position is not None,
         bus=bus,
@@ -378,21 +343,16 @@ def bus_overview_page(bus_number, system_id=None):
         overview=overview
     )
 
-@app.get([
-    '/bus/<bus_number:int>/map',
-    '/bus/<bus_number:int>/map/',
-    '/<system_id>/bus/<bus_number:int>/map',
-    '/<system_id>/bus/<bus_number:int>/map/'
-])
-def bus_map_page(bus_number, system_id=None):
+@endpoint('bus/<bus_number:int>/map')
+def bus_map_page(system, bus_number):
     bus = Bus(bus_number)
-    overview = helpers.overview.find(bus_number)
+    overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
-        return error_page('bus', system_id,
+        return error_page('bus', system,
             bus_number=bus_number
         )
-    position = helpers.position.find(bus_number)
-    return page('bus/map', system_id,
+    position = helpers.position.find(bus)
+    return page('bus/map', system,
         title=f'Bus {bus}',
         include_maps=position is not None,
         full_map=position is not None,
@@ -400,21 +360,16 @@ def bus_map_page(bus_number, system_id=None):
         position=position
     )
 
-@app.get([
-    '/bus/<bus_number:int>/history',
-    '/bus/<bus_number:int>/history/',
-    '/<system_id>/bus/<bus_number:int>/history',
-    '/<system_id>/bus/<bus_number:int>/history/'
-])
-def bus_history_page(bus_number, system_id=None):
+@endpoint('bus/<bus_number:int>/history')
+def bus_history_page(system, bus_number):
     bus = Bus(bus_number)
-    overview = helpers.overview.find(bus_number)
+    overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
-        return error_page('bus', system_id,
+        return error_page('bus', system,
             bus_number=bus_number
         )
-    records = helpers.record.find_all(bus_number=bus_number)
-    transfers = helpers.transfer.find_all(bus_number=bus_number)
+    records = helpers.record.find_all(bus=bus)
+    transfers = helpers.transfer.find_all(bus=bus)
     events = []
     if overview is not None:
         events.append(Event(overview.first_seen_date, 'First Seen'))
@@ -425,7 +380,7 @@ def bus_history_page(bus_number, system_id=None):
             events.append(Event(overview.last_record.date, 'Last Tracked'))
         for transfer in transfers:
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
-    return page('bus/history', system_id,
+    return page('bus/history', system,
         title=f'Bus {bus}',
         bus=bus,
         records=records,
@@ -433,73 +388,47 @@ def bus_history_page(bus_number, system_id=None):
         events=events
     )
 
-@app.get([
-    '/history',
-    '/history/',
-    '/<system_id>/history',
-    '/<system_id>/history/'
-])
-def history_last_seen_page(system_id=None):
-    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.last_record is not None and o.bus.visible]
-    return page('history/last_seen', system_id,
+@endpoint('history')
+def history_last_seen_page(system):
+    overviews = [o for o in helpers.overview.find_all(system) if o.last_record is not None and o.bus.visible]
+    return page('history/last_seen', system,
         title='Vehicle History',
         path='history',
         overviews=sorted(overviews, key=lambda o: o.bus)
     )
 
-@app.get([
-    '/history/first-seen',
-    '/history/first-seen/',
-    '/<system_id>/history/first-seen',
-    '/<system_id>/history/first-seen/'
-])
-def history_first_seen_page(system_id=None):
-    overviews = [o for o in helpers.overview.find_all(system_id=system_id) if o.first_record is not None and o.bus.visible]
-    return page('history/first_seen', system_id,
+@endpoint('history/first-seen')
+def history_first_seen_page(system):
+    overviews = [o for o in helpers.overview.find_all(system) if o.first_record is not None and o.bus.visible]
+    return page('history/first_seen', system,
         title='Vehicle History',
         path='history/first-seen',
         overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
     )
 
-@app.get([
-    '/history/transfers',
-    '/history/transfers/',
-    '/<system_id>/history/transfers',
-    '/<system_id>/history/transfers/'
-])
-def history_transfers_page(system_id=None):
-    return page('history/transfers', system_id,
+@endpoint('history/transfers')
+def history_transfers_page(system):
+    return page('history/transfers', system,
         title='Vehicle History',
         path='history/transfers',
-        transfers=helpers.transfer.find_all(system_id)
+        transfers=helpers.transfer.find_all(system)
     )
 
-@app.get([
-    '/routes',
-    '/routes/',
-    '/<system_id>/routes',
-    '/<system_id>/routes/'
-])
-def routes_list_page(system_id=None):
-    return page('routes/list', system_id,
+@endpoint('routes')
+def routes_list_page(system):
+    return page('routes/list', system,
         title='Routes',
         path='routes',
         enable_refresh=False
     )
 
-@app.get([
-    '/routes/map',
-    '/routes/map/',
-    '/<system_id>/routes/map',
-    '/<system_id>/routes/map/'
-])
-def routes_map_page(system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('routes/map')
+def routes_map_page(system):
     if system is None:
         routes = []
     else:
         routes = system.get_routes()
-    return page('routes/map', system_id,
+    return page('routes/map', system,
         title='Routes',
         path='routes/map',
         enable_refresh=False,
@@ -508,324 +437,249 @@ def routes_map_page(system_id=None):
         routes=routes
     )
 
-@app.get([
-    '/routes/<route_number>',
-    '/routes/<route_number>/',
-    '/<system_id>/routes/<route_number>',
-    '/<system_id>/routes/<route_number>/'
-])
-def route_overview_page(route_number, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('routes/<route_number>')
+def route_overview_page(system, route_number):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'routes/{route_number}'
         )
     route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id,
+        return error_page('route', system,
             route_number=route_number
         )
     trips = sorted(route.get_trips(date=Date.today()))
-    return page('route/overview', system_id,
+    return page('route/overview', system,
         title=str(route),
         include_maps=len(route.trips) > 0,
         route=route,
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
         scheduled_today=helpers.record.find_scheduled_today(system, trips),
-        positions=helpers.position.find_all(system_id, route_id=route.id)
+        positions=helpers.position.find_all(system, route=route)
     )
 
-@app.get([
-    '/routes/<route_number>/map',
-    '/routes/<route_number>/map/',
-    '/<system_id>/routes/<route_number>/map',
-    '/<system_id>/routes/<route_number>/map/'
-])
-def route_map_page(route_number, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('routes/<route_number>/map')
+def route_map_page(system, route_number):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'routes/{route_number}/map'
         )
     route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id,
+        return error_page('route', system,
             route_number=route_number
         )
-    return page('route/map', system_id,
+    return page('route/map', system,
         title=str(route),
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
-        positions=helpers.position.find_all(system_id, route_id=route.id)
+        positions=helpers.position.find_all(system, route=route)
     )
 
-@app.get([
-    '/routes/<route_number>/schedule',
-    '/routes/<route_number>/schedule/',
-    '/<system_id>/routes/<route_number>/schedule',
-    '/<system_id>/routes/<route_number>/schedule/'
-])
-def route_schedule_page(route_number, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('routes/<route_number>/schedule')
+def route_schedule_page(system, route_number):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id,
+        return error_page('route', system,
             route_number=route_number
         )
-    return page('route/schedule', system_id,
+    return page('route/schedule', system,
         title=str(route),
         enable_refresh=False,
         route=route
     )
 
-@app.get([
-    '/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
-    '/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/',
-    '/<system_id>/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
-    '/<system_id>/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/'
-])
-def route_schedule_date_page(route_number, date_string, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
+def route_schedule_date_page(system, route_number, date_string):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
     if route is None:
-        return error_page('route', system_id,
+        return error_page('route', system,
             route_number=route_number
         )
     date = Date.parse_db(date_string, None)
-    return page('route/date', system_id,
+    return page('route/date', system,
         title=str(route),
         enable_refresh=False,
         route=route,
         date=date
     )
 
-@app.get([
-    '/blocks',
-    '/blocks/',
-    '/<system_id>/blocks',
-    '/<system_id>/blocks/'
-])
-def blocks_page(system_id=None):
-    return page('blocks/list', system_id,
+@endpoint('blocks')
+def blocks_page(system):
+    return page('blocks/list', system,
         title='Blocks',
         enable_refresh=False,
         path='blocks'
     )
 
-@app.get([
-    '/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
-    '/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/',
-    '/<system_id>/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
-    '/<system_id>/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/'
-])
-def blocks_schedule_date_page(date_string, system_id=None):
+@endpoint('blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
+def blocks_schedule_date_page(system, date_string):
     date = Date.parse_db(date_string, None)
-    return page('blocks/date', system_id,
+    return page('blocks/date', system,
         title='Blocks',
         enable_reload=False,
         path=f'blocks/schedule/{date_string}',
         date=date
     )
 
-@app.get([
-    '/blocks/<block_id>',
-    '/blocks/<block_id>/',
-    '/<system_id>/blocks/<block_id>',
-    '/<system_id>/blocks/<block_id>/'
-])
-def block_overview_page(block_id, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('blocks/<block_id>')
+def block_overview_page(system, block_id):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'blocks/{block_id}'
         )
     block = system.get_block(block_id)
     if block is None:
-        return error_page('block', system_id,
+        return error_page('block', system,
             block_id=block_id
         )
-    return page('block/overview', system_id, block=block,
+    return page('block/overview', system,
         title=f'Block {block.id}',
         include_maps=True,
-        positions=helpers.position.find_all(system_id, block_id=block_id)
+        block=block,
+        positions=helpers.position.find_all(system, block=block)
     )
 
-@app.get([
-    '/blocks/<block_id>/map',
-    '/blocks/<block_id>/map/',
-    '/<system_id>/blocks/<block_id>/map',
-    '/<system_id>/blocks/<block_id>/map/'
-])
-def block_map_page(block_id, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('blocks/<block_id>/map')
+def block_map_page(system, block_id):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'blocks/{block_id}/map'
         )
     block = system.get_block(block_id)
     if block is None:
-        return error_page('block', system_id,
+        return error_page('block', system,
             block_id=block_id
         )
-    return page('block/map', system_id, block=block,
+    return page('block/map', system,
         title=f'Block {block.id}',
         include_maps=True,
         full_map=True,
-        positions=helpers.position.find_all(system_id, block_id=block_id)
+        block=block,
+        positions=helpers.position.find_all(system, block=block)
     )
 
-@app.get([
-    '/blocks/<block_id>/history',
-    '/blocks/<block_id>/history/',
-    '/<system_id>/blocks/<block_id>/history',
-    '/<system_id>/blocks/<block_id>/history/'
-])
-def block_history_page(block_id, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('blocks/<block_id>/history')
+def block_history_page(system, block_id):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'blocks/{block_id}/history'
         )
     block = system.get_block(block_id)
     if block is None:
-        return error_page('block', system_id, block_id=block_id)
-    records = helpers.record.find_all(system_id=system_id, block_id=block_id)
+        return error_page('block', system,
+            block_id=block_id
+        )
+    records = helpers.record.find_all(system, block=block)
     events = []
     if len(records) > 0:
         events.append(Event(records[0].date, 'Last Tracked'))
         events.append(Event(records[-1].date, 'First Tracked'))
-    return page('block/history', system_id,
+    return page('block/history', system,
         title=f'Block {block.id}',
         block=block,
         records=records,
         events=events
     )
 
-@app.get([
-    '/trips/<trip_id>',
-    '/trips/<trip_id>/',
-    '/<system_id>/trips/<trip_id>',
-    '/<system_id>/trips/<trip_id>/'
-])
-def trip_overview_page(trip_id, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('trips/<trip_id>')
+def trip_overview_page(system, trip_id):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'trips/{trip_id}'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
-        return error_page('trip', system_id,
+        return error_page('trip', system,
             trip_id=trip_id
         )
-    return page('trip/overview', system_id,
+    return page('trip/overview', system,
         title=f'Trip {trip.id}',
         include_maps=True,
         trip=trip,
-        positions=helpers.position.find_all(system_id, trip_id=trip_id)
+        positions=helpers.position.find_all(system, trip=trip)
     )
 
-@app.get([
-    '/trips/<trip_id>/map',
-    '/trips/<trip_id>/map/',
-    '/<system_id>/trips/<trip_id>/map',
-    '/<system_id>/trips/<trip_id>/map/'
-])
-def trip_map_page(trip_id, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('trips/<trip_id>/map')
+def trip_map_page(system, trip_id):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'trips/{trip_id}/map'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
-        return error_page('trip', system_id,
+        return error_page('trip', system,
             trip_id=trip_id
         )
-    return page('trip/map', system_id,
+    return page('trip/map', system,
         title=f'Trip {trip.id}',
         include_maps=True,
         full_map=True,
         trip=trip,
-        positions=helpers.position.find_all(system_id, trip_id=trip_id)
+        positions=helpers.position.find_all(system, trip=trip)
     )
 
-@app.get([
-    '/trips/<trip_id>/history',
-    '/trips/<trip_id>/history/',
-    '/<system_id>/trips/<trip_id>/history',
-    '/<system_id>/trips/<trip_id>/history/'
-])
-def trip_history_page(trip_id, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('trips/<trip_id>/history')
+def trip_history_page(system, trip_id):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'trips/{trip_id}/history'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
-        return error_page('trip', system_id, trip_id=trip_id)
-    records = helpers.record.find_all(system_id=system_id, trip_id=trip_id)
+        return error_page('trip', system,
+            trip_id=trip_id
+        )
+    records = helpers.record.find_all(system, trip=trip)
     events = []
     if len(records) > 0:
         events.append(Event(records[0].date, 'Last Tracked'))
         events.append(Event(records[-1].date, 'First Tracked'))
-    return page('trip/history', system_id,
+    return page('trip/history', system,
         title=f'Trip {trip.id}',
         trip=trip,
         records=records,
         events=events
     )
 
-@app.get([
-    '/stops',
-    '/stops/',
-    '/<system_id>/stops',
-    '/<system_id>/stops/'
-])
-def stops_page(system_id=None):
+@endpoint('stops')
+def stops_page(system):
     path = 'stops'
     search = request.query.get('search')
     if search is not None:
         path += f'?search={search}'
-    return page('stops', system_id,
+    return page('stops', system,
         title='Stops',
         enable_refresh=False,
         path=path,
         search=search
     )
 
-@app.get([
-    '/stops/<stop_number>',
-    '/stops/<stop_number>/',
-    '/<system_id>/stops/<stop_number>',
-    '/<system_id>/stops/<stop_number>/'
-])
-def stop_overview_page(stop_number, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('stops/<stop_number>')
+def stop_overview_page(system, stop_number):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'stops/{stop_number}'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id,
+        return error_page('stop', system,
             stop_number=stop_number
         )
     departures = stop.find_departures(date=Date.today())
     trips = [d.trip for d in departures]
-    positions = helpers.position.find_all(system_id, trip_id={t.id for t in trips})
-    return page('stop/overview', system_id,
+    positions = helpers.position.find_all(system, trip=trips)
+    return page('stop/overview', system,
         title=f'Stop {stop.number}',
         include_maps=True,
         stop=stop,
@@ -835,119 +689,81 @@ def stop_overview_page(stop_number, system_id=None):
         positions={p.trip.id: p for p in positions}
     )
 
-@app.get([
-    '/stops/<stop_number>/map',
-    '/stops/<stop_number>/map/',
-    '/<system_id>/stops/<stop_number>/map',
-    '/<system_id>/stops/<stop_number>/map/'
-])
-def stop_map_page(stop_number, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('stops/<stop_number>/map')
+def stop_map_page(system, stop_number):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'stops/{stop_number}/map'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id,
+        return error_page('stop', system,
             stop_number=stop_number
         )
-    return page('stop/map', system_id,
+    return page('stop/map', system,
         title=f'Stop {stop.number}',
         include_maps=True,
         full_map=True,
         stop=stop
     )
 
-@app.get([
-    '/stops/<stop_number>/schedule',
-    '/stops/<stop_number>/schedule/',
-    '/<system_id>/stops/<stop_number>/schedule',
-    '/<system_id>/stops/<stop_number>/schedule/'
-])
-def stop_schedule_page(stop_number, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('stops/<stop_number>/schedule')
+def stop_schedule_page(system, stop_number):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id,
+        return error_page('stop', system,
             stop_number=stop_number
         )
-    return page('stop/schedule', system_id,
+    return page('stop/schedule', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
         stop=stop
     )
 
-@app.get([
-    '/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
-    '/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/',
-    '/<system_id>/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>',
-    '/<system_id>/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>/'
-])
-def stop_schedule_date_page(stop_number, date_string, system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
+def stop_schedule_date_page(system, stop_number, date_string):
     if system is None:
-        return error_page('system', system_id,
+        return error_page('system', system,
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
-        return error_page('stop', system_id,
+        return error_page('stop', system,
             stop_number=stop_number
         )
     date = Date.parse_db(date_string, None)
-    return page('stop/date', system_id,
+    return page('stop/date', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
         stop=stop,
         date=date
     )
 
-@app.get([
-    '/about',
-    '/about/',
-    '/<system_id>/about',
-    '/<system_id>/about/'
-])
-def about_page(system_id=None):
-    return page('about', system_id,
+@endpoint('about')
+def about_page(system):
+    return page('about', system,
         title='About',
         enable_refresh=False,
         path='about'
     )
 
-@app.get([
-    '/nearby',
-    '/nearby/',
-    '/<system_id>/nearby',
-    '/<system_id>/nearby/'
-])
-def nearby_page(system_id=None):
-    return page('nearby', system_id,
+@endpoint('nearby')
+def nearby_page(system):
+    return page('nearby', system,
         title='Nearby Stops',
         path='nearby',
         include_maps=True)
 
-@app.get([
-    '/themes',
-    '/themes/',
-    '/<system_id>/themes',
-    '/<system_id>/themes/'
-])
-def themes_page(system_id=None):
-    redirect(get_url(helpers.system.find(system_id), 'personalize'))
+@endpoint('themes')
+def themes_page(system):
+    redirect(get_url(system, 'personalize'))
 
-@app.get([
-    '/personalize',
-    '/personalize/',
-    '/<system_id>/personalize',
-    '/<system_id>/personalize/'
-])
-def themes_page(system_id=None):
+@endpoint('personalize')
+def themes_page(system):
     theme_id = request.query.get('theme')
     if theme_id is not None:
         set_cookie('theme', theme_id)
@@ -958,50 +774,40 @@ def themes_page(system_id=None):
     if bus_marker_style is not None:
         set_cookie('bus_marker_style', bus_marker_style)
     themes = helpers.theme.find_all()
-    return page('personalize', system_id,
+    return page('personalize', system,
         title='Personalize',
         enable_refresh=False,
         path='personalize',
         themes=themes
     )
 
-@app.get([
-    '/systems',
-    '/systems/',
-    '/<system_id>/systems',
-    '/<system_id>/systems/'
-])
-def systems_page(system_id=None):
-    return page('systems', system_id,
+@endpoint('systems')
+def systems_page(system):
+    return page('systems', system,
         title='Systems',
         enable_refresh=False,
         path=request.query.get('path', '')
     )
 
-@app.get([
-    '/admin',
-    '/admin/',
-    '/admin/<key>',
-    '/admin/<key>/',
-    '/<system_id>/admin',
-    '/<system_id>/admin/',
-    '/<system_id>/admin/<key>',
-    '/<system_id>/admin/<key>/'
-])
-def admin_page(key=None, system_id=None):
+@endpoint('admin')
+def admin_page(system):
+    return admin_key_page(system, None)
+
+@endpoint('admin/<key>')
+def admin_key_page(system, key):
     if admin_key is None or key == admin_key:
         if key is None:
             path = 'admin'
         else:
             path = f'admin/{key}'
-        return page('admin', system_id,
+        return page('admin', system,
             title='Administration',
             enable_refresh=False,
             path=path,
             key=key,
             disable_indexing=True
         )
-    return page('home', system_id,
+    return page('home', system,
         title='Home',
         enable_refresh=False
     )
@@ -1030,52 +836,36 @@ def frame_nearby(system_id=None):
 # API endpoints
 # =============================================================
 
-@app.get([
-    '/api/health-check',
-    '/<system_id>/api/health-check'
-])
-def api_health_check(system_id=None):
+@endpoint('api/health-check', append_slash=False)
+def api_health_check(system):
     return 'Online'
 
-@app.get([
-    '/api/map.json',
-    '/<system_id>/api/map.json'
-])
-def api_map(system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('api/map.json', append_slash=False)
+def api_map(system):
     time_format = request.get_cookie('time_format')
     if system is None:
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    positions = sorted(helpers.position.find_all(system_id, has_location=True), key=lambda p: p.lat, reverse=True)
+    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat, reverse=True)
     return {
         'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
     }
 
-@app.get([
-    '/api/shape/<shape_id>.json',
-    '/<system_id>/api/shape/<shape_id>.json'
-])
-def api_shape_id(shape_id, system_id=None):
+@endpoint('api/shape/<shape_id>.json', append_slash=False)
+def api_shape_id(system, shape_id):
     return {
-        'points': [p.get_json() for p in helpers.point.find_all(system_id, shape_id)]
+        'points': [p.get_json() for p in helpers.point.find_all(system, shape_id)]
     }
 
-@app.post([
-    '/api/search',
-    '/api/search/',
-    '/<system_id>/api/search',
-    '/<system_id>/api/search/'
-])
-def api_search(system_id=None):
+@endpoint('api/search', method='POST')
+def api_search(system):
     query = request.forms.get('query', '')
-    system = helpers.system.find(system_id)
     matches = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system_id))
+            matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system))
         if system is not None:
             matches += system.search_blocks(query)
             matches += system.search_routes(query)
@@ -1086,12 +876,8 @@ def api_search(system_id=None):
         'count': len(matches)
     }
 
-@app.get([
-    '/api/nearby.json',
-    '/<system_id>/api/nearby.json'
-])
-def api_nearby(system_id=None):
-    system = helpers.system.find(system_id)
+@endpoint('api/nearby.json', append_slash=False)
+def api_nearby(system):
     if system is None:
         return {
             'stops': []
@@ -1103,34 +889,24 @@ def api_nearby(system_id=None):
         'stops': [s.get_json() for s in stops]
     }
 
-@app.post([
-    '/api/admin/reload-adornments',
-    '/api/admin/reload-adornments/',
-    '/api/admin/<key>/reload-adornments',
-    '/api/admin/<key>/reload-adornments/',
-    '/<system_id>/api/admin/reload-adornments',
-    '/<system_id>/api/admin/reload-adornments/',
-    '/<system_id>/api/admin/<key>/reload-adornments',
-    '/<system_id>/api/admin/<key>/reload-adornments/'
-])
-def api_admin_reload_adornments(key=None, system_id=None):
+@endpoint('api/admin/reload-adornments', method='POST')
+def api_admin_reload_adornments(system):
+    return api_admin_key_reload_adornments(system, None)
+
+@endpoint('api/admin/<key>/reload-adornments', method='POST')
+def api_admin_key_reload_adornments(system, key):
     if admin_key is None or key == admin_key:
         helpers.adornment.delete_all()
         helpers.adornment.load()
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/reload-orders',
-    '/api/admin/reload-orders/',
-    '/api/admin/<key>/reload-orders',
-    '/api/admin/<key>/reload-orders/',
-    '/<system_id>/api/admin/reload-orders',
-    '/<system_id>/api/admin/reload-orders/',
-    '/<system_id>/api/admin/<key>/reload-orders',
-    '/<system_id>/api/admin/<key>/reload-orders/'
-])
-def api_admin_reload_orders(key=None, system_id=None):
+@endpoint('api/admin/reload-orders', method='POST')
+def api_admin_reload_orders(system):
+    return api_admin_key_reload_orders(system, None)
+
+@endpoint('api/admin/<key>/reload-orders', method='POST')
+def api_admin_key_reload_orders(system, key):
     if admin_key is None or key == admin_key:
         helpers.model.delete_all()
         helpers.order.delete_all()
@@ -1139,17 +915,12 @@ def api_admin_reload_orders(key=None, system_id=None):
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/reload-systems',
-    '/api/admin/reload-systems/',
-    '/api/admin/<key>/reload-systems',
-    '/api/admin/<key>/reload-systems/',
-    '/<system_id>/api/admin/reload-systems',
-    '/<system_id>/api/admin/reload-systems/',
-    '/<system_id>/api/admin/<key>/reload-systems',
-    '/<system_id>/api/admin/<key>/reload-systems/'
-])
-def api_admin_reload_systems(key=None, system_id=None):
+@endpoint('api/admin/reload-systems', method='POST')
+def api_admin_reload_systems(system):
+    return api_admin_key_reload_systems(system, None)
+
+@endpoint('api/admin/<key>/reload-systems', method='POST')
+def api_admin_key_reload_systems(system, key):
     if admin_key is None or key == admin_key:
         cron.stop(cron_id)
         helpers.region.delete_all()
@@ -1172,67 +943,47 @@ def api_admin_reload_systems(key=None, system_id=None):
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/reload-themes',
-    '/api/admin/reload-themes/',
-    '/api/admin/<key>/reload-themes',
-    '/api/admin/<key>/reload-themes/',
-    '/<system_id>/api/admin/reload-themes',
-    '/<system_id>/api/admin/reload-themes/',
-    '/<system_id>/api/admin/<key>/reload-themes',
-    '/<system_id>/api/admin/<key>/reload-themes/'
-])
-def api_admin_reload_themes(key=None, system_id=None):
+@endpoint('api/admin/reload-themes', method='POST')
+def api_admin_reload_themes(system):
+    return api_admin_key_reload_themes(system, None)
+
+@endpoint('api/admin/<key>/reload-themes', method='POST')
+def api_admin_key_reload_themes(system, key):
     if admin_key is None or key == admin_key:
         helpers.theme.delete_all()
         helpers.theme.load()
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/restart-cron',
-    '/api/admin/restart-cron/',
-    '/api/admin/<key>/restart-cron',
-    '/api/admin/<key>/restart-cron/',
-    '/<system_id>/api/admin/restart-cron',
-    '/<system_id>/api/admin/restart-cron/',
-    '/<system_id>/api/admin/<key>/restart-cron',
-    '/<system_id>/api/admin/<key>/restart-cron/'
-])
-def api_admin_restart_cron(key=None, system_id=None):
+@endpoint('api/admin/restart-cron', method='POST')
+def api_admin_restart_cron(system):
+    return api_admin_key_restart_cron(system, None)
+
+@endpoint('api/admin/<key>/restart-cron', method='POST')
+def api_admin_key_restart_cron(system, key):
     if admin_key is None or key == admin_key:
         cron.stop(cron_id)
         cron.start(cron_id)
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/backup-database',
-    '/api/admin/backup-database/',
-    '/api/admin/<key>/backup-database',
-    '/api/admin/<key>/backup-database/',
-    '/<system_id>/api/admin/backup-database',
-    '/<system_id>/api/admin/backup-database/',
-    '/<system_id>/api/admin/<key>/backup-database',
-    '/<system_id>/api/admin/<key>/backup-database/'
-])
-def api_admin_backup_database(key=None, system_id=None):
+@endpoint('api/admin/backup-database', method='POST')
+def api_admin_backup_database(system):
+    return api_admin_key_backup_database(system, None)
+
+@endpoint('api/admin/<key>/backup-database', method='POST')
+def api_admin_key_backup_database(system, key):
     if admin_key is None or key == admin_key:
         database.backup()
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/reload-gtfs/<reload_system_id>',
-    '/api/admin/reload-gtfs/<reload_system_id>/',
-    '/api/admin/<key>/reload-gtfs/<reload_system_id>',
-    '/api/admin/<key>/reload-gtfs/<reload_system_id>/',
-    '/<system_id>/api/admin/reload-gtfs/<reload_system_id>',
-    '/<system_id>/api/admin/reload-gtfs/<reload_system_id>/',
-    '/<system_id>/api/admin/<key>/reload-gtfs/<reload_system_id>',
-    '/<system_id>/api/admin/<key>/reload-gtfs/<reload_system_id>/'
-])
-def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
+@endpoint('api/admin/reload-gtfs/<reload_system_id>', method='POST')
+def api_admin_reload_gtfs(system, reload_system_id):
+    return api_admin_key_reload_gtfs(system, None, reload_system_id)
+
+@endpoint('api/admin/<key>/reload-gtfs/<reload_system_id>', method='POST')
+def api_admin_key_reload_gtfs(system, key, reload_system_id):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:
@@ -1246,17 +997,12 @@ def api_admin_reload_gtfs(reload_system_id, key=None, system_id=None):
         return 'Success'
     return 'Access denied'
 
-@app.post([
-    '/api/admin/reload-realtime/<reload_system_id>',
-    '/api/admin/reload-realtime/<reload_system_id>/',
-    '/api/admin/<key>/reload-realtime/<reload_system_id>',
-    '/api/admin/<key>/reload-realtime/<reload_system_id>/',
-    '/<system_id>/api/admin/reload-realtime/<reload_system_id>',
-    '/<system_id>/api/admin/reload-realtime/<reload_system_id>/',
-    '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>',
-    '/<system_id>/api/admin/<key>/reload-realtime/<reload_system_id>/'
-])
-def api_admin_reload_realtime(reload_system_id, key=None, system_id=None):
+@endpoint('api/admin/reload-realtime/<reload_system_id>', method='POST')
+def api_admin_reload_realtime(system, reload_system_id):
+    return api_admin_key_reload_realtime(system, None, reload_system_id)
+
+@endpoint('api/admin/<key>/reload-realtime/<reload_system_id>', method='POST')
+def api_admin_key_reload_realtime(system, key, reload_system_id):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:

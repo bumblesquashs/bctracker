@@ -173,7 +173,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return helpers.departure.find_all(self.system.id, route_id=self.id)
+        return helpers.departure.find_all(self.system, route=self)
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''

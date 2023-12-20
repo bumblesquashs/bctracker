@@ -5,16 +5,19 @@ import database
 
 def create(system, row):
     '''Inserts a new point into the database'''
+    system_id = getattr(system, 'id', system)
     database.insert('point', {
-        'system_id': system.id,
+        'system_id': system_id,
         'shape_id': row['shape_id'],
         'sequence': int(row['shape_pt_sequence']),
         'lat': float(row['shape_pt_lat']),
         'lon': float(row['shape_pt_lon'])
     })
 
-def find_all(system_id, shape_id=None):
-    '''Returns all points that match the given system ID and shape ID'''
+def find_all(system, shape=None):
+    '''Returns all points that match the given system and shape'''
+    system_id = getattr(system, 'id', system)
+    shape_id = getattr(shape, 'id', shape)
     return database.select('point',
         columns={
             'point.system_id': 'point_system_id',
@@ -33,6 +36,7 @@ def find_all(system_id, shape_id=None):
 
 def delete_all(system):
     '''Deletes all points for the given system from the database'''
+    system_id = getattr(system, 'id', system)
     database.delete('point', {
-        'point.system_id': system.id
+        'point.system_id': system_id
     })

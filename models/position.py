@@ -209,4 +209,4 @@ class Position:
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []
-        return helpers.departure.find_upcoming(self.system.id, self.trip.id, self.sequence)
+        return helpers.departure.find_upcoming(self.system, self.trip, self.sequence)

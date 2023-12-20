@@ -5,8 +5,9 @@ import database
 
 def create(system, row):
     '''Inserts a new trip into the database'''
+    system_id = getattr(system, 'id', system)
     database.insert('trip', {
-        'system_id': system.id,
+        'system_id': system_id,
         'trip_id': row['trip_id'],
         'route_id': row['route_id'],
         'service_id': row['service_id'],
@@ -16,8 +17,9 @@ def create(system, row):
         'headsign': row['trip_headsign']
     })
 
-def find(system_id, trip_id):
-    '''Returns the trip with the given system ID and trip ID'''
+def find(system, trip_id):
+    '''Returns the trip with the given system and trip ID'''
+    system_id = getattr(system, 'id', system)
     trips = database.select('trip',
         columns={
             'trip.system_id': 'trip_system_id',
@@ -40,8 +42,11 @@ def find(system_id, trip_id):
         return None
     return trips[0]
 
-def find_all(system_id, route_id=None, block_id=None, limit=None):
-    '''Returns all trips that match the given system ID, route ID, and block ID'''
+def find_all(system, route=None, block=None, limit=None):
+    '''Returns all trips that match the given system, route, and block'''
+    system_id = getattr(system, 'id', system)
+    route_id = getattr(route, 'id', route)
+    block_id = getattr(block, 'id', block)
     return database.select('trip',
         columns={
             'trip.system_id': 'trip_system_id',
@@ -64,6 +69,7 @@ def find_all(system_id, route_id=None, block_id=None, limit=None):
 
 def delete_all(system):
     '''Deletes all trips for the given system from the database'''
+    system_id = getattr(system, 'id', system)
     database.delete('trip', {
-        'system_id': system.id
+        'system_id': system_id
     })

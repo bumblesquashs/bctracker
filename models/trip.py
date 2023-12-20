@@ -201,11 +201,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return helpers.point.find_all(self.system.id, self.shape_id)
+        return helpers.point.find_all(self.system, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return helpers.departure.find_all(self.system.id, trip_id=self.id)
+        return helpers.departure.find_all(self.system, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''
