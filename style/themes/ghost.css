@@ -310,15 +310,15 @@ table.striped tr {
 }
 
 .banner {
-    background-color: #FFA027;
-    color: #FFFFFF;
+    background-color: #FFF7ED;
+    color: #000000;
 }
 
 .banner a {
-    color: #FFFFFF;
+    color: #000000;
 }
 
-.banner .close-button img.black {
+.banner .close-button img.white {
     display: none;
 }
 
