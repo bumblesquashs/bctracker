@@ -166,14 +166,20 @@
             
             <div class="flex-1"></div>
             
-            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
+                <div class="tooltip">
+                    <div class="title">Nearby Stops</div>
+                </div>
             </a>
             
-            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
+                <div class="tooltip">
+                    <div class="title">Personalize</div>
+                </div>
             </a>
             
             <div id="search-desktop" class="desktop-only">

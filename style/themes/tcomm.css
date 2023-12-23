@@ -107,6 +107,14 @@ table.striped tr {
     display: none;
 }
 
+#navigation-bar .navigation-icon .tooltip {
+    background-color: #444444;
+}
+
+#navigation-bar .navigation-icon .tooltip::after {
+    border-color: transparent #444444 transparent transparent;
+}
+
 #navigation-bar .navigation-item {
     color: #FFFFFF;
     text-shadow: none;

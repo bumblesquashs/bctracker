@@ -1019,7 +1019,7 @@ def frame_nearby(system_id=None):
     if system is None:
         response.status = 400
         return None
-    stops = system.get_stops()
+    stops = sorted(system.get_stops())
     lat = float(request.query.get('lat'))
     lon = float(request.query.get('lon'))
     return frame('nearby', system_id,
