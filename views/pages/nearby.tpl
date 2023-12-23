@@ -130,17 +130,17 @@
             request.onload = function() {
                 if (request.status === 200) {
                     if (request.response === null) {
-                        setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+                        setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
                     } else {
                         setStatus("success", "Success", "Showing stops near " + lat + ", " + lon);
                         document.getElementById("result").innerHTML = request.response;
                     }
                 } else {
-                    setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+                    setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
                 }
             };
             request.onerror = function() {
-                setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+                setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
             };
             request.send();
             
@@ -196,13 +196,13 @@
     function onError(error) {
         const code = error.code;
         if (code == error.PERMISSION_DENIED) {
-            setStatus("error", "Error loading upcoming departures", "Access to location is denied");
+            setStatus("error", "Error loading upcoming departures", "Access to location is denied, give your browser access to your devices's location to see nearby stops!");
         } else if (code == error.POSITION_UNAVAILABLE) {
-            setStatus("error", "Error loading upcoming departures", "Location is unavailable");
+            setStatus("error", "Error loading upcoming departures", "Location is unavailable, please try again!");
         } else if (code == error.TIMEOUT) {
-            setStatus("error", "Error loading upcoming departures", "Timed out waiting for location");
+            setStatus("error", "Error loading upcoming departures", "Timed out waiting for location, please try again!");
         } else {
-            setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+            setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
         }
     }
     
@@ -223,7 +223,7 @@
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     } else {
-        setStatus("error", "Error loading upcoming departures", "Location is not supported");
+        setStatus("error", "Error loading upcoming departures", "Location is not supported, make sure you're using a device that has GPS");
     }
     
     map.on("load", function() {
