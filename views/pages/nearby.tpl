@@ -6,8 +6,8 @@
 </div>
 
 <div class="flex-container">
-    <div class="sidebar container flex-1">
-        <div id="current-location" class="section display-none">
+    <div id="current-location" class="sidebar container flex-1 display-none">
+        <div class="section">
             <div class="header">
                 <h2>Current Location</h2>
             </div>
