@@ -1015,7 +1015,11 @@ def admin_page(key=None, system_id=None):
     '/<system_id>/frame/nearby'
 ])
 def frame_nearby(system_id=None):
-    stops = helpers.stop.find_all(system_id)
+    system = helpers.system.find(system_id)
+    if system is None:
+        response.status = 400
+        return None
+    stops = system.get_stops()
     lat = float(request.query.get('lat'))
     lon = float(request.query.get('lon'))
     return frame('nearby', system_id,

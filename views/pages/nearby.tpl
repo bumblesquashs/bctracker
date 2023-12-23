@@ -27,9 +27,55 @@
                     <div class="placeholder">
                         <h3 class="title">Choose a system to see nearby stops</h3>
                     </div>
-                    <div class="non-desktop">
-                        % include('components/systems')
-                    </div>
+                    <table class="striped">
+                        <thead>
+                            <tr>
+                                <th>System</th>
+                                <th class="non-mobile"># Stops</th>
+                                <th>Service Days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % for region in regions:
+                                % region_systems = [s for s in systems if s.region == region]
+                                % if len(region_systems) > 0:
+                                    <tr class="section">
+                                        <td colspan="3">
+                                            {{ region }}
+                                        </td>
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                    % for region_system in region_systems:
+                                        % count = len(region_system.get_stops())
+                                        <tr>
+                                            <td>
+                                                <div class="flex-column">
+                                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                                    <span class="mobile-only smaller-font">
+                                                        % if region_system.is_loaded:
+                                                            % if count == 1:
+                                                                1 Stop
+                                                            % else:
+                                                                {{ count }} Stops
+                                                            % end
+                                                        % end
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            % if region_system.is_loaded:
+                                                <td class="non-mobile">{{ count }}</td>
+                                                <td>
+                                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                                </td>
+                                            % else:
+                                                <td class="lighter-text" colspan="2">Stops are loading...</td>
+                                            % end
+                                        </tr>
+                                    % end
+                                % end
+                            % end
+                        </tbody>
+                    </table>
                 % else:
                     <div id="result" class="container">
                         <div id="nearby-status" class="loading flex-column">
