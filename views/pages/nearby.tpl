@@ -15,45 +15,34 @@
                 <div id="map" class="preview"></div>
             </div>
         </div>
+    </div>
+    
+    <div class="container flex-3">
         <div class="section">
-            <div id="nearby-status" class="loading flex-column">
-                <div id="status-title" class="">Loading nearby stops...</div>
-                <div id="status-message" style="display: none;"></div>
+            <div class="header">
+                <h2>Upcoming Departures</h2>
+            </div>
+            <div class="content">
+                % if system is None:
+                    <div class="placeholder">
+                        <h3 class="title">Choose a system to see nearby stops</h3>
+                    </div>
+                    <div class="non-desktop">
+                        % include('components/systems')
+                    </div>
+                % else:
+                    <div id="result" class="container">
+                        <div id="nearby-status" class="loading flex-column">
+                            <div id="status-title">Loading upcoming departures...</div>
+                            <div id="status-message" class="display-none"></div>
+                        </div>
+                    </div>
+                % end
             </div>
         </div>
     </div>
-    <div class="flex-3">
-        <div id="result" class="container">
-            
-        </div>
-    </div>
 </div>
-
-<style>
-    #nearby-status {
-        padding: 10px;
-        border-radius: 10px;
-    }
-    
-    #nearby-status.loading {
-        border: 2px solid #0000FF;
-        background-color: #CCCCFF;
-    }
-    
-    #nearby-status.error {
-        border: 2px solid #FF0000;
-        background-color: #FFCCCC;
-    }
-    
-    #nearby-status.success {
-        display: none;
-    }
-    
-    #nearby-status #status-title {
-        font-weight: bold;
-    }
-</style>
-
+            
 <script>
     const map = new mapboxgl.Map({
         container: "map",
@@ -62,6 +51,8 @@
         style: mapStyle,
         interactive: false
     });
+    
+    const systemSelected = "{{ system is not None }}" == "True";
     
     const statusElement = document.getElementById("nearby-status");
     const statusTitleElement = document.getElementById("status-title");
@@ -86,26 +77,29 @@
         new mapboxgl.Marker(element).setLngLat([lon, lat]).addTo(map);
         
         updateMap();
-        const request = new XMLHttpRequest();
-        request.open("GET", "{{get_url(system, 'frame/nearby')}}?lat=" + lat + "&lon=" + lon, true);
-        request.onload = function() {
-            if (request.status === 200) {
-                if (request.response === null) {
-                    setStatus("error", "Error", "Unable to load nearby stops");
-                } else {
-                    setStatus("success", "Success", "Showing stops near " + lat + ", " + lon);
-                    document.getElementById("result").innerHTML = request.response;
-                }
-            } else {
-                setStatus("error", "Error", "Unable to load nearby stops");
-            }
-        };
-        request.onerror = function() {
-            setStatus("error", "Error", "Unable to load nearby stops");
-        };
-        request.send();
         
-        loadMapMarkers(lat, lon);
+        if (systemSelected) {
+            const request = new XMLHttpRequest();
+            request.open("GET", "{{get_url(system, 'frame/nearby')}}?lat=" + lat + "&lon=" + lon, true);
+            request.onload = function() {
+                if (request.status === 200) {
+                    if (request.response === null) {
+                        setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+                    } else {
+                        setStatus("success", "Success", "Showing stops near " + lat + ", " + lon);
+                        document.getElementById("result").innerHTML = request.response;
+                    }
+                } else {
+                    setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+                }
+            };
+            request.onerror = function() {
+                setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
+            };
+            request.send();
+            
+            loadMapMarkers(lat, lon);
+        }
     }
     
     function loadMapMarkers(lat, lon) {
@@ -115,7 +109,6 @@
         request.onload = function() {
             if (request.status === 200) {
                 const stops = request.response.stops;
-                console.log(request.response)
         
                 for (const stop of stops) {
                     const element = document.createElement("div");
@@ -157,13 +150,13 @@
     function onError(error) {
         const code = error.code;
         if (code == error.PERMISSION_DENIED) {
-            setStatus("error", "Error", "Access to location is denied");
+            setStatus("error", "Error loading upcoming departures", "Access to location is denied");
         } else if (code == error.POSITION_UNAVAILABLE) {
-            setStatus("error", "Error", "Location is unavailable");
+            setStatus("error", "Error loading upcoming departures", "Location is unavailable");
         } else if (code == error.TIMEOUT) {
-            setStatus("error", "Error", "Timed out waiting for location");
+            setStatus("error", "Error loading upcoming departures", "Timed out waiting for location");
         } else {
-            setStatus("error", "Error", "An unknown error occurred");
+            setStatus("error", "Error loading upcoming departures", "An unknown error occurred");
         }
     }
     
@@ -173,10 +166,10 @@
         
         statusTitleElement.innerHTML = title;
         if (message == null) {
-            statusMessageElement.style.display = "none";
+            statusMessageElement.classList.add("display-none");
             statusMessageElement.innerHTML = "";
         } else {
-            statusMessageElement.style.display = "block";
+            statusMessageElement.classList.remove("display-none");
             statusMessageElement.innerHTML = message;
         }
     }
@@ -184,7 +177,7 @@
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     } else {
-        setStatus("error", "Error", "Location is not supported");
+        setStatus("error", "Error loading upcoming departures", "Location is not supported");
     }
     
     map.on("load", function() {

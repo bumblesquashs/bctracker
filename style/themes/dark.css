@@ -130,6 +130,16 @@ table.striped tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
+#nearby-status.loading {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #360000;
+}
+
 #quick-navigation .item {
     background-color: #393939;
     border-color: #565656;

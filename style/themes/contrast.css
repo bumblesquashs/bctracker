@@ -122,6 +122,21 @@ table.striped tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
+#nearby-status.loading {
+    background-color: #E6E6E6;
+    border-color: #666666;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #FFCCCC;
+}
+
+#quick-navigation .item {
+    background-color: #E6E6E6;
+    border-color: #666666;
+}
+
 #refresh-button:hover {
     background-color: #094409;
 }
@@ -132,11 +147,6 @@ table.striped tr:nth-child(2n-1) {
 
 #refresh-button img.black {
     display: none;
-}
-
-#quick-navigation .item {
-    background-color: #E6E6E6;
-    border-color: #666666;
 }
 
 #search-desktop {

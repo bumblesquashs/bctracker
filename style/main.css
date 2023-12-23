@@ -200,6 +200,20 @@ table.striped tr.section td {
     font-weight: bold;
 }
 
+#nearby-status {
+    padding: 10px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#nearby-status.success {
+    display: none;
+}
+
+#nearby-status #status-title {
+    font-weight: bold;
+}
+
 #quick-navigation {
     display: flex;
     flex-direction: row;

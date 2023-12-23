@@ -30,8 +30,7 @@
         % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system.id, trip_id={t.id for t in trips})}
         <div class="section">
             <div class="header">
-                <h2>{{ stop }}</h2>
-                <h3>Stop {{ stop.number }}</h3>
+                <h3>Stop {{ stop.number }} - {{ stop }}</h3>
                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
             </div>
             <div class="content">

@@ -118,6 +118,21 @@ table.striped tr {
     background-color: #000000;
 }
 
+#nearby-status.loading {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #FFCCCC;
+}
+
+#quick-navigation .item {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
+}
+
 #refresh-button:hover {
     background-color: #DDDDDD;
 }
@@ -128,11 +143,6 @@ table.striped tr {
 
 #refresh-button img.white {
     display: none;
-}
-
-#quick-navigation .item {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
 }
 
 #search-desktop {

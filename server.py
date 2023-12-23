@@ -1095,7 +1095,7 @@ def api_nearby(system_id=None):
     lon = float(request.query.get('lon'))
     stops = sorted([s for s in system.get_stops() if s.is_near(lat, lon)])
     return {
-        'stops': [s.json for s in stops]
+        'stops': [s.get_json() for s in stops]
     }
 
 @app.post([
