@@ -5,6 +5,8 @@
 	% available_systems = systems
 % end
 
+% available_systems = [s for s in available_systems if system is None or s != system]
+
 <table class="striped">
 	<thead>
 		<tr>
@@ -12,18 +14,26 @@
 		</tr>
 	</thead>
 	<tbody>
-		% if system is None:
-			% for available_system in sorted(available_systems):
-				<tr>
-					<td><a href="{{ get_url(available_system, path) }}">{{ available_system }}</a></td>
+		% if system is not None:
+			<td>
+				<a href="{{ get_url(None, path) }}">All Systems</a>
+			</td>
+		% end
+		% for region in regions:
+			% region_systems = [s for s in available_systems if s.region == region]
+			% if len(region_systems) > 0:
+				<tr class="section">
+					<td>
+						{{ region }}
+					</td>
 				</tr>
-			% end
-		% else:
-			<td><a href="{{ get_url(None, path) }}">All Systems</a></td>
-			% for available_system in sorted(available_systems):
-				% if system != available_system:
+				<tr class="display-none"></tr>
+				% for region_system in region_systems:
+					% count = len(region_system.get_routes())
 					<tr>
-						<td><a href="{{ get_url(available_system, path) }}">{{ available_system }}</a></td>
+						<td>
+							<a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+						</td>
 					</tr>
 				% end
 			% end

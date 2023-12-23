@@ -98,6 +98,14 @@ table.striped tr {
     display: none;
 }
 
+#navigation-bar .navigation-icon .tooltip {
+    background-color: #DDDDDD;
+}
+
+#navigation-bar .navigation-icon .tooltip::after {
+    border-color: transparent #DDDDDD transparent transparent;
+}
+
 #navigation-bar .navigation-item {
     color: #000000;
 }
@@ -118,6 +126,21 @@ table.striped tr {
     background-color: #000000;
 }
 
+#nearby-status.loading {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #FFCCCC;
+}
+
+#quick-navigation .item {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
+}
+
 #refresh-button:hover {
     background-color: #DDDDDD;
 }
@@ -128,11 +151,6 @@ table.striped tr {
 
 #refresh-button img.white {
     display: none;
-}
-
-#quick-navigation .item {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
 }
 
 #search-desktop {

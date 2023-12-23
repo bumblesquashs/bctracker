@@ -12,6 +12,7 @@ import helpers.point
 import helpers.position
 import helpers.record
 import helpers.region
+import helpers.stop
 import helpers.system
 import helpers.theme
 import helpers.transfer
@@ -26,7 +27,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 22
+VERSION = 23
 
 app = Bottle()
 running = False
@@ -166,6 +167,15 @@ def error_page(name, system_id, title='Error', path='', **kwargs):
         **kwargs
     )
 
+def frame(name, system_id, **kwargs):
+    return template(f'frames/{name}',
+        system=helpers.system.find(system_id),
+        get_url=get_url,
+        time_format=request.get_cookie('time_format'),
+        show_speed=request.get_cookie('speed') == '1994',
+        **kwargs
+    )
+
 def set_cookie(key, value):
     '''Creates a cookie using the given key and value'''
     max_age = 60*60*24*365*10
@@ -208,7 +218,7 @@ def robots_text(system_id=None):
     return static_file('robots.txt', root='.')
 
 # =============================================================
-# HTML (Templates)
+# HTML (Pages)
 # =============================================================
 
 @app.get([
@@ -911,6 +921,18 @@ def about_page(system_id=None):
     )
 
 @app.get([
+    '/nearby',
+    '/nearby/',
+    '/<system_id>/nearby',
+    '/<system_id>/nearby/'
+])
+def nearby_page(system_id=None):
+    return page('nearby', system_id,
+        title='Nearby Stops',
+        path='nearby',
+        include_maps=True)
+
+@app.get([
     '/themes',
     '/themes/',
     '/<system_id>/themes',
@@ -985,6 +1007,26 @@ def admin_page(key=None, system_id=None):
     )
 
 # =============================================================
+# HTML (Frames)
+# =============================================================
+
+@app.get([
+    '/frame/nearby',
+    '/<system_id>/frame/nearby'
+])
+def frame_nearby(system_id=None):
+    system = helpers.system.find(system_id)
+    if system is None:
+        response.status = 400
+        return None
+    stops = sorted(system.get_stops())
+    lat = float(request.query.get('lat'))
+    lon = float(request.query.get('lon'))
+    return frame('nearby', system_id,
+        stops=sorted([s for s in stops if s.is_near(lat, lon)])
+    )
+
+# =============================================================
 # API endpoints
 # =============================================================
 
@@ -1042,6 +1084,23 @@ def api_search(system_id=None):
     return {
         'results': [m.get_json(system, get_url) for m in matches[0:10]],
         'count': len(matches)
+    }
+
+@app.get([
+    '/api/nearby.json',
+    '/<system_id>/api/nearby.json'
+])
+def api_nearby(system_id=None):
+    system = helpers.system.find(system_id)
+    if system is None:
+        return {
+            'stops': []
+        }
+    lat = float(request.query.get('lat'))
+    lon = float(request.query.get('lon'))
+    stops = sorted([s for s in system.get_stops() if s.is_near(lat, lon)])
+    return {
+        'stops': [s.get_json() for s in stops]
     }
 
 @app.post([
