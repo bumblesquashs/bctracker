@@ -1,25 +1,76 @@
 
+from models.adherence import Adherence
 from models.position import Position
 
 import database
 
-def create(position):
+def create(system, bus, data):
     '''Inserts a new position into the database'''
+    system_id = getattr(system, 'id', system)
+    bus_number = getattr(bus, 'number', bus)
+    try:
+        trip_id = data.trip.trip_id
+        if trip_id == '':
+            trip_id = None
+    except AttributeError:
+        trip_id = None
+    try:
+        stop_id = data.stop_id
+        if stop_id == '':
+            stop_id = None
+    except AttributeError:
+        stop_id = None
+    try:
+        if data.HasField('current_stop_sequence'):
+            sequence = int(data.current_stop_sequence)
+        else:
+            sequence = None
+    except:
+        sequence = None
+    try:
+        lat = data.position.latitude
+        lon = data.position.longitude
+    except AttributeError:
+        lat = None
+        lon = None
+    try:
+        if data.position.HasField('bearing'):
+            bearing = data.position.bearing
+        else:
+            bearing = None
+    except AttributeError:
+        bearing = None
+    try:
+        speed = int(data.position.speed * 3.6)
+    except AttributeError:
+        speed = None
+    trip = system.get_trip(trip_id)
+    stop = system.get_stop(stop_id=stop_id)
+    if trip is None:
+        block_id = None
+        route_id = None
+    else:
+        block_id = trip.block_id
+        route_id = trip.route_id
+    if trip is None or stop is None or sequence is None or lat is None or lon is None:
+        adherence = None
+    else:
+        adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
     values = {
-        'system_id': position.system.id,
-        'bus_number': position.bus.number,
-        'trip_id': position.trip_id,
-        'stop_id': position.stop_id,
-        'block_id': position.block_id,
-        'route_id': position.route_id,
-        'sequence': position.sequence,
-        'lat': position.lat,
-        'lon': position.lon,
-        'bearing': position.bearing,
-        'speed': position.speed
+        'system_id': system_id,
+        'bus_number': bus_number,
+        'trip_id': trip_id,
+        'stop_id': stop_id,
+        'block_id': block_id,
+        'route_id': route_id,
+        'sequence': sequence,
+        'lat': lat,
+        'lon': lon,
+        'bearing': bearing,
+        'speed': speed
     }
-    if position.adherence is not None:
-        values['adherence'] = position.adherence.value
+    if adherence is not None:
+        values['adherence'] = adherence.value
     database.insert('position', values)
 
 def find(bus):

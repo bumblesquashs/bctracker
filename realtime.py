@@ -11,9 +11,7 @@ import helpers.position
 import helpers.record
 import helpers.transfer
 
-from models.bus import Bus
 from models.date import Date
-from models.position import Position
 from models.time import Time
 
 import database
@@ -50,7 +48,7 @@ def update(system):
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
-            helpers.position.create(Position.from_entity(system, Bus(bus_number), vehicle))
+            helpers.position.create(system, bus_number, vehicle)
         last_updated_date = Date.today('America/Vancouver')
         last_updated_time = Time.now('America/Vancouver', False)
         system.last_updated_date = Date.today(system.timezone)
