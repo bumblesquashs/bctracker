@@ -824,7 +824,10 @@ def stop_overview_page(stop_number, system_id=None):
         )
     route_numbers = request.query.get('routes')
     if route_numbers is not None:
-        route_numbers = route_numbers.split(',')
+        if route_numbers == '':
+            route_numbers = []
+        else:
+            route_numbers = route_numbers.split(',')
     show_dropoff_only = query_cookie('show_dropoff_only', 'true') != 'false'
     show_pickup_only = query_cookie('show_pickup_only', 'true') != 'false'
     departures = stop.find_departures(date=Date.today(), route_numbers=route_numbers)
@@ -842,7 +845,9 @@ def stop_overview_page(stop_number, system_id=None):
         recorded_today=helpers.record.find_recorded_today(system, trips),
         scheduled_today=helpers.record.find_scheduled_today(system, trips),
         positions={p.trip.id: p for p in positions},
-        route_numbers=route_numbers
+        route_numbers=route_numbers,
+        show_dropoff_only=show_dropoff_only,
+        show_pickup_only=show_pickup_only
     )
 
 @app.get([

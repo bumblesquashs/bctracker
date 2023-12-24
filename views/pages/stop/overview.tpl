@@ -59,27 +59,23 @@
                             </div>
                         </div>
                         <div class="section vertical">
-                            <div class="flex-row">
-                                <div class="checkbox" onclick="window.location = '{{ get_url(stop.system, f\'stops/{stop.number}\', show_dropoff_only=\'false\' if show_dropoff_only else \'true\') }}'">
-                                    <div class="box">
-                                        <div class="">
-                                            <img class="white" src="/img/white/check.png" />
-                                            <img class="black" src="/img/black/check.png" />
-                                        </div>
+                            <div class="checkbox" onclick="toggleShowDropoffOnly()">
+                                <div class="box">
+                                    <div class="{{ '' if show_dropoff_only else 'hidden' }}">
+                                        <img class="white" src="/img/white/check.png" />
+                                        <img class="black" src="/img/black/check.png" />
                                     </div>
                                 </div>
-                                <div>Show drop off only trips</div>
+                                <div class="label">Show drop off only trips</div>
                             </div>
-                            <div class="flex-row">
-                                <div class="checkbox" onclick="">
-                                    <div class="box">
-                                        <div class="">
-                                            <img class="white" src="/img/white/check.png" />
-                                            <img class="black" src="/img/black/check.png" />
-                                        </div>
+                            <div class="checkbox" onclick="">
+                                <div class="box">
+                                    <div class="{{ '' if show_pickup_only else 'hidden' }}">
+                                        <img class="white" src="/img/white/check.png" />
+                                        <img class="black" src="/img/black/check.png" />
                                     </div>
                                 </div>
-                                <div>Show pick up only trips</div>
+                                <div class="label">Show pick up only trips</div>
                             </div>
                         </div>
                     </div>
@@ -271,6 +267,12 @@
         } else {
             routeNumbers.push(routeNumber);
         }
-        window.location = "{{ get_url(stop.system, f'stops/{stop.number}') }}?routes=" + routeNumbers.join(",");
+        routeNumbers.sort();
+        console.log(routeNumbers)
+        window.location = "{{ get_url(stop.system, f'stops/{stop.number}') }}?routes=" + routeNumbers.join();
+    }
+    
+    function toggleShowDropoffOnly() {
+        window.location = "{{ get_url(stop.system, f'stops/{stop.number}', routes=None if route_numbers is None else ','.join(route_numbers), show_dropoff_only='false' if show_dropoff_only else 'true') }}";
     }
 </script>
