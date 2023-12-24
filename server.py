@@ -193,11 +193,11 @@ def endpoint(base_path, method='GET', append_slash=True, system_key='system_id')
     def get_system_wrapper(func):
         paths = [
             f'/{base_path}',
-            f'/<system_id>/{base_path}'
+            f'/<{system_key}>/{base_path}'
         ]
         if append_slash and base_path != '':
             paths.append(f'/{base_path}/')
-            paths.append(f'/<system_id>/{base_path}/')
+            paths.append(f'/<{system_key}>/{base_path}/')
         @app.route(paths, method)
         def func_wrapper(*args, **kwargs):
             if system_key in kwargs:
