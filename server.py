@@ -164,9 +164,9 @@ def error_page(name, system, title='Error', path='', **kwargs):
         **kwargs
     )
 
-def frame(name, system_id, **kwargs):
+def frame(name, system, **kwargs):
     return template(f'frames/{name}',
-        system=helpers.system.find(system_id),
+        system=system,
         get_url=get_url,
         time_format=request.get_cookie('time_format'),
         show_speed=request.get_cookie('speed') == '1994',
@@ -190,7 +190,7 @@ def query_cookie(key, default_value):
     return request.get_cookie(key, default_value)
 
 def endpoint(base_path, method='GET', append_slash=True, system_key='system_id'):
-    def get_system_wrapper(func):
+    def endpoint_wrapper(func):
         paths = [
             base_path,
             f'/<{system_key}>{base_path}'
@@ -209,7 +209,7 @@ def endpoint(base_path, method='GET', append_slash=True, system_key='system_id')
                 system = None
             return func(system, *args, **kwargs)
         return func_wrapper
-    return get_system_wrapper
+    return endpoint_wrapper
 
 # =============================================================
 # Static Files
@@ -825,7 +825,7 @@ def frame_nearby(system):
     stops = sorted(system.get_stops())
     lat = float(request.query.get('lat'))
     lon = float(request.query.get('lon'))
-    return frame('nearby', system_id,
+    return frame('nearby', system,
         stops=sorted([s for s in stops if s.is_near(lat, lon)])
     )
 
