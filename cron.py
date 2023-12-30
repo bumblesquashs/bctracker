@@ -1,6 +1,5 @@
 import os
 import signal
-from datetime import datetime, timedelta
 from crontab import CronTab
 
 import helpers.system
@@ -46,13 +45,14 @@ def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
         if running:
-            today = Date.today(system.timezone)
-            if today.weekday == Weekday.MON or not gtfs.validate(system):
+            date = Date.today(system.timezone)
+            if date.weekday == Weekday.MON or not gtfs.validate(system):
                 gtfs.load(system, True)
                 gtfs.update_cache_in_background(system)
     if running:
-        date = datetime.now() - timedelta(days=1)
-        backup.run(date, date.weekday() == 0)
+        database.archive()
+        date = Date.today()
+        backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
@@ -71,7 +71,3 @@ def handle_realtime(sig, frame):
                     gtfs.update_cache_in_background(system)
     if running:
         realtime.update_records()
-        
-        # Backup database at the end of each day
-        if time.hour == 0 and time.minute == 0:
-            database.backup()

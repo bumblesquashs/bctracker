@@ -67,8 +67,8 @@ def update_records():
                 bus = position.bus
                 if bus.number < 0:
                     continue
-                today = Date.today(system.timezone)
-                now = Time.now(system.timezone)
+                date = Date.today(system.timezone)
+                time = Time.now(system.timezone)
                 overview = helpers.overview.find(bus.number)
                 trip = position.trip
                 if trip is None:
@@ -78,18 +78,18 @@ def update_records():
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
                         if last_record.system != system and bus.visible:
-                            helpers.transfer.create(bus, today, last_record.system, system)
-                        if last_record.date == today and last_record.block_id == block.id:
-                            helpers.record.update(last_record.id, now)
+                            helpers.transfer.create(bus, date, last_record.system, system)
+                        if last_record.date == date and last_record.block_id == block.id:
+                            helpers.record.update(last_record.id, time)
                             trip_ids = helpers.record.find_trip_ids(last_record)
                             if trip.id not in trip_ids:
                                 helpers.record.create_trip(last_record.id, trip)
                             continue
-                    record_id = helpers.record.create(bus, today, system, block, now, trip)
+                    record_id = helpers.record.create(bus, date, system, block, time, trip)
                 if overview is None:
-                    helpers.overview.create(bus, today, system, record_id)
+                    helpers.overview.create(bus, date, system, record_id)
                 else:
-                    helpers.overview.update(overview, today, system, record_id)
+                    helpers.overview.update(overview, date, system, record_id)
             except Exception as e:
                 print(f'Failed to update records: {e}')
         database.commit()
