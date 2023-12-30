@@ -792,10 +792,13 @@ def systems_page(system):
 
 @endpoint('/admin')
 def admin_page(system):
-    return admin_key_page(system, None)
+    return make_admin_key_page(system, None)
 
 @endpoint('/admin/<key>')
 def admin_key_page(system, key):
+    return make_admin_key_page(system, key)
+
+def make_admin_key_page(system, key):
     if admin_key is None or key == admin_key:
         if key is None:
             path = 'admin'
@@ -888,10 +891,13 @@ def api_nearby(system):
 
 @endpoint('/api/admin/reload-adornments', method='POST')
 def api_admin_reload_adornments(system):
-    return api_admin_key_reload_adornments(system, None)
+    return execute_api_admin_reload_adornments(None)
 
 @endpoint('/api/admin/<key>/reload-adornments', method='POST')
 def api_admin_key_reload_adornments(system, key):
+    return execute_api_admin_reload_adornments(key)
+
+def execute_api_admin_reload_adornments(key):
     if admin_key is None or key == admin_key:
         helpers.adornment.delete_all()
         helpers.adornment.load()
@@ -900,10 +906,13 @@ def api_admin_key_reload_adornments(system, key):
 
 @endpoint('/api/admin/reload-orders', method='POST')
 def api_admin_reload_orders(system):
-    return api_admin_key_reload_orders(system, None)
+    return execute_api_admin_reload_orders(None)
 
 @endpoint('/api/admin/<key>/reload-orders', method='POST')
 def api_admin_key_reload_orders(system, key):
+    return execute_api_admin_reload_orders(key)
+
+def execute_api_admin_reload_orders(key):
     if admin_key is None or key == admin_key:
         helpers.model.delete_all()
         helpers.order.delete_all()
@@ -914,10 +923,13 @@ def api_admin_key_reload_orders(system, key):
 
 @endpoint('/api/admin/reload-systems', method='POST')
 def api_admin_reload_systems(system):
-    return api_admin_key_reload_systems(system, None)
+    return execute_api_admin_reload_systems(None)
 
 @endpoint('/api/admin/<key>/reload-systems', method='POST')
 def api_admin_key_reload_systems(system, key):
+    return execute_api_admin_reload_systems(key)
+
+def execute_api_admin_reload_systems(key):
     if admin_key is None or key == admin_key:
         cron.stop(cron_id)
         helpers.region.delete_all()
@@ -942,10 +954,13 @@ def api_admin_key_reload_systems(system, key):
 
 @endpoint('/api/admin/reload-themes', method='POST')
 def api_admin_reload_themes(system):
-    return api_admin_key_reload_themes(system, None)
+    return execute_api_admin_reload_themes(None)
 
 @endpoint('/api/admin/<key>/reload-themes', method='POST')
 def api_admin_key_reload_themes(system, key):
+    return execute_api_admin_reload_themes(key)
+
+def execute_api_admin_reload_themes(key):
     if admin_key is None or key == admin_key:
         helpers.theme.delete_all()
         helpers.theme.load()
@@ -954,10 +969,13 @@ def api_admin_key_reload_themes(system, key):
 
 @endpoint('/api/admin/restart-cron', method='POST')
 def api_admin_restart_cron(system):
-    return api_admin_key_restart_cron(system, None)
+    return execute_api_admin_restart_cron(None)
 
 @endpoint('/api/admin/<key>/restart-cron', method='POST')
 def api_admin_key_restart_cron(system, key):
+    return execute_api_admin_restart_cron(key)
+
+def execute_api_admin_restart_cron(key):
     if admin_key is None or key == admin_key:
         cron.stop(cron_id)
         cron.start(cron_id)
@@ -966,10 +984,13 @@ def api_admin_key_restart_cron(system, key):
 
 @endpoint('/api/admin/backup-database', method='POST')
 def api_admin_backup_database(system):
-    return api_admin_key_backup_database(system, None)
+    return execute_api_admin_backup_database(None)
 
 @endpoint('/api/admin/<key>/backup-database', method='POST')
 def api_admin_key_backup_database(system, key):
+    return execute_api_admin_backup_database(key)
+
+def execute_api_admin_backup_database(key):
     if admin_key is None or key == admin_key:
         database.backup()
         return 'Success'
@@ -977,10 +998,13 @@ def api_admin_key_backup_database(system, key):
 
 @endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST')
 def api_admin_reload_gtfs(system, reload_system_id):
-    return api_admin_key_reload_gtfs(system, None, reload_system_id)
+    return execute_api_admin_reload_gtfs(None, reload_system_id)
 
 @endpoint('/api/admin/<key>/reload-gtfs/<reload_system_id>', method='POST')
 def api_admin_key_reload_gtfs(system, key, reload_system_id):
+    return execute_api_admin_reload_gtfs(key, reload_system_id)
+
+def execute_api_admin_reload_gtfs(key, reload_system_id):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:
@@ -996,10 +1020,13 @@ def api_admin_key_reload_gtfs(system, key, reload_system_id):
 
 @endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST')
 def api_admin_reload_realtime(system, reload_system_id):
-    return api_admin_key_reload_realtime(system, None, reload_system_id)
+    return execute_api_admin_reload_realtime(None, reload_system_id)
 
 @endpoint('/api/admin/<key>/reload-realtime/<reload_system_id>', method='POST')
 def api_admin_key_reload_realtime(system, key, reload_system_id):
+    return execute_api_admin_reload_realtime(key, reload_system_id)
+
+def execute_api_admin_reload_realtime(key, reload_system_id):
     if admin_key is None or key == admin_key:
         system = helpers.system.find(reload_system_id)
         if system is None:
