@@ -29,7 +29,7 @@ def start(cron_id):
         cron.remove_all(comment=cron_id)
         
         gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=cron_id)
-        gtfs_job.setall('0 5 * * */1')
+        gtfs_job.setall('0 4 * * */1')
         
         realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=cron_id)
         realtime_job.minute.every(1)
