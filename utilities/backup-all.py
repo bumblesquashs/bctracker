@@ -2,13 +2,15 @@
 
 import os
 import sys
-from datetime import datetime, timedelta
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import backup
 
-date = datetime.now() - timedelta(days=1)
-while date >= datetime(2020, 1, 1):
+from models.date import Date
+
+date = Date.today().previous()
+end_date = Date(2020, 1, 1)
+while date >= end_date:
     backup.run(date, False)
-    date = date - timedelta(days=1)
+    date = date.previous()

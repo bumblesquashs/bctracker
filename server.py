@@ -1218,7 +1218,7 @@ def api_admin_restart_cron(key=None, system_id=None):
 ])
 def api_admin_backup_database(key=None, system_id=None):
     if admin_key is None or key == admin_key:
-        database.backup()
+        database.archive()
         return 'Success'
     return 'Access denied'
 
