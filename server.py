@@ -992,7 +992,7 @@ def api_admin_key_backup_database(system, key):
 
 def execute_api_admin_backup_database(key):
     if admin_key is None or key == admin_key:
-        database.backup()
+        database.archive()
         return 'Success'
     return 'Access denied'
 

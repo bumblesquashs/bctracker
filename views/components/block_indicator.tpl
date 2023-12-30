@@ -29,8 +29,8 @@
         % end
         
         % if start_time.is_earlier and end_time.is_later and block.schedule.is_today:
-            % now = Time.now(block.system.timezone)
-            % offset_minutes = now.get_minutes() - start_time.get_minutes()
+            % time = Time.now(block.system.timezone)
+            % offset_minutes = time.get_minutes() - start_time.get_minutes()
             % offset_percentage = (offset_minutes / total_minutes) * 100
             <div class="now" style="left: {{ offset_percentage }}%;">
                 
