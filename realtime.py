@@ -77,8 +77,6 @@ def update_records():
                     block = trip.block
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
-                        if last_record.system != system and bus.visible:
-                            helpers.transfer.create(bus, date, last_record.system, system)
                         if last_record.date == date and last_record.block_id == block.id:
                             helpers.record.update(last_record.id, time)
                             trip_ids = helpers.record.find_trip_ids(last_record)
@@ -90,6 +88,8 @@ def update_records():
                     helpers.overview.create(bus, date, system, record_id)
                 else:
                     helpers.overview.update(overview, date, system, record_id)
+                    if overview.last_seen_system != system:
+                        helpers.transfer.create(bus, date, overview.last_seen_system, system)
             except Exception as e:
                 print(f'Failed to update records: {e}')
         database.commit()

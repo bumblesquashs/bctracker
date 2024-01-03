@@ -468,10 +468,11 @@ def history_first_seen_page(system_id=None):
     '/<system_id>/history/transfers/'
 ])
 def history_transfers_page(system_id=None):
+    transfers = helpers.transfer.find_all(system_id)
     return page('history/transfers', system_id,
         title='Vehicle History',
         path='history/transfers',
-        transfers=helpers.transfer.find_all(system_id)
+        transfers=[t for t in transfers if t.bus.visible]
     )
 
 @app.get([
