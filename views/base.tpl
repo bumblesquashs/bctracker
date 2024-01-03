@@ -318,7 +318,15 @@
         </div>
         <div id="main">
             <div id="banners">
-                % if show_survey_banner:
+                % if system is not None and (system.id == 'comox' or system.id == 'campbell-river'):
+                    <div class="banner">
+                        <div class="content">
+                            <div class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</div>
+                            % bct_id = 'comox-valley' if system.id == 'comox' else system.id
+                            <div class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ bct_id }}/news">BC Transit News Page</a>.</div>
+                        </div>
+                    </div>
+                % elif show_survey_banner:
                     <div id="survey-banner" class="banner">
                         <span class="close-button" onclick="hideSurvey()">
                             <img class="white" width="24px" height="24px" src="/img/white/close.png"/>

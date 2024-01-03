@@ -409,10 +409,11 @@ def history_first_seen_page(system):
 
 @endpoint('/history/transfers')
 def history_transfers_page(system):
+    transfers = helpers.transfer.find_all(system)
     return page('history/transfers', system,
         title='Vehicle History',
         path='history/transfers',
-        transfers=helpers.transfer.find_all(system)
+        transfers=[t for t in transfers if t.bus.visible]
     )
 
 @endpoint('/routes')
