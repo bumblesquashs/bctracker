@@ -7,11 +7,14 @@ import database
 
 def create(bus, date, system, block, time, trip):
     '''Inserts a new record into the database'''
+    bus_number = getattr(bus, 'number', bus)
+    system_id = getattr(system, 'id', system)
+    block_id = getattr(block, 'id', block)
     record_id = database.insert('record', {
-        'bus_number': bus.number,
+        'bus_number': bus_number,
         'date': date.format_db(),
-        'system_id': system.id,
-        'block_id': block.id,
+        'system_id': system_id,
+        'block_id': block_id,
         'routes': block.get_routes_string(date=date),
         'start_time': block.get_start_time(date=date).format_db(),
         'end_time': block.get_end_time(date=date).format_db(),
@@ -21,15 +24,18 @@ def create(bus, date, system, block, time, trip):
     create_trip(record_id, trip)
     return record_id
 
-def create_trip(record_id, trip):
+def create_trip(record, trip):
     '''Inserts a new trip record into the database'''
+    record_id = getattr(record, 'id', record)
+    trip_id = getattr(trip, 'id', trip)
     database.insert('trip_record', {
         'record_id': record_id,
-        'trip_id': trip.id
+        'trip_id': trip_id
     })
 
-def update(record_id, time):
+def update(record, time):
     '''Updates a record in the database'''
+    record_id = getattr(record, 'id', record)
     database.update('record',
         values={
             'last_seen': time.format_db()
@@ -39,8 +45,12 @@ def update(record_id, time):
         }
     )
 
-def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit=None):
-    '''Returns all records that match the given system ID, bus number, block ID, and trip ID'''
+def find_all(system=None, bus=None, block=None, trip=None, limit=None):
+    '''Returns all records that match the given system, bus, block, and trip'''
+    system_id = getattr(system, 'id', system)
+    bus_number = getattr(bus, 'number', bus)
+    block_id = getattr(block, 'id', block)
+    trip_id = getattr(trip, 'id', trip)
     joins = {}
     filters = {
         'record.system_id': system_id,
@@ -77,10 +87,13 @@ def find_all(system_id=None, bus_number=None, block_id=None, trip_id=None, limit
 
 def find_trip_ids(record):
     '''Returns all trip IDs associated with the given record'''
-    return database.select('trip_record', columns=['trip_id'], filters={'record_id': record.id}, initializer=lambda r: r['trip_id'])
+    record_id = getattr(record, 'id', record)
+    return database.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
 
 def find_recorded_today(system, trips):
     '''Returns all bus numbers matching the given system and trips that were recorded on the current date'''
+    system_id = getattr(system, 'id', system)
+    trip_ids = [getattr(t, 'id', t) for t in trips]
     date = Date.today(system.timezone)
     rows = database.select('trip_record',
         columns={
@@ -93,9 +106,9 @@ def find_recorded_today(system, trips):
             }
         },
         filters={
-            'record.system_id': system.id,
+            'record.system_id': system_id,
             'record.date': date.format_db(),
-            'trip_record.trip_id': [t.id for t in trips]
+            'trip_record.trip_id': trip_ids
         },
         order_by='record.last_seen ASC'
     )
@@ -103,6 +116,8 @@ def find_recorded_today(system, trips):
 
 def find_scheduled_today(system, trips):
     '''Returns all bus numbers matching the given system and trips that are scheduled to run on the current date'''
+    system_id = getattr(system, 'id', system)
+    block_ids = list({t.block_id for t in trips})
     date = Date.today(system.timezone)
     cte, args = database.build_select('record',
         columns={
@@ -112,9 +127,9 @@ def find_scheduled_today(system, trips):
             'ROW_NUMBER() OVER(PARTITION BY record.block_id ORDER BY record.record_id DESC)': 'row_number'
         },
         filters={
-            'record.system_id': system.id,
+            'record.system_id': system_id,
             'record.date': date.format_db(),
-            'record.block_id': list({t.block_id for t in trips})
+            'record.block_id': block_ids
         }
     )
     rows = database.select('numbered_record',

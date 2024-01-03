@@ -11,9 +11,7 @@ import helpers.position
 import helpers.record
 import helpers.transfer
 
-from models.bus import Bus
 from models.date import Date
-from models.position import Position
 from models.time import Time
 
 import database
@@ -40,7 +38,7 @@ def update(system):
             with open(data_path, 'wb') as f:
                 f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system.id)
+        helpers.position.delete_all(system)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -50,7 +48,7 @@ def update(system):
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
-            helpers.position.create(Position.from_entity(system, Bus(bus_number), vehicle))
+            helpers.position.create(system, bus_number, vehicle)
         last_updated_date = Date.today('America/Vancouver')
         last_updated_time = Time.now('America/Vancouver', False)
         system.last_updated_date = Date.today(system.timezone)
@@ -78,10 +76,10 @@ def update_records():
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
                         if last_record.date == date and last_record.block_id == block.id:
-                            helpers.record.update(last_record.id, time)
+                            helpers.record.update(last_record, time)
                             trip_ids = helpers.record.find_trip_ids(last_record)
                             if trip.id not in trip_ids:
-                                helpers.record.create_trip(last_record.id, trip)
+                                helpers.record.create_trip(last_record, trip)
                             continue
                     record_id = helpers.record.create(bus, date, system, block, time, trip)
                 if overview is None:
@@ -112,7 +110,7 @@ def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
     if not system.realtime_enabled:
         return True
-    for position in helpers.position.find_all(system_id=system.id):
+    for position in helpers.position.find_all(system):
         trip_id = position.trip_id
         if trip_id is None:
             continue

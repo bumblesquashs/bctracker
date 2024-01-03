@@ -14,8 +14,9 @@ def load():
             adornment = Adornment.from_csv(dict(zip(columns, row)))
             adornments[adornment.bus_number] = adornment
 
-def find(bus_number):
+def find(bus):
     '''Returns the adornments with the given bus number'''
+    bus_number = getattr(bus, 'number', bus)
     if bus_number in adornments:
         return adornments[bus_number]
     return None

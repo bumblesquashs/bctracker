@@ -14,8 +14,9 @@ def load():
         columns = next(reader)
         orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
 
-def find(bus_number):
+def find(bus):
     '''Returns the order containing the given bus number'''
+    bus_number = getattr(bus, 'number', bus)
     if bus_number < 0:
         return None
     for order in orders:

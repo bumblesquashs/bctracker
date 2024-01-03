@@ -3,27 +3,33 @@ from models.overview import Overview
 
 import database
 
-def create(bus, date, system, record_id):
+def create(bus, date, system, record):
     '''Inserts a new overview into the database'''
+    bus_number = getattr(bus, 'number', bus)
+    system_id = getattr(system, 'id', system)
+    record_id = getattr(record, 'id', record)
     database.insert('overview', {
-        'bus_number': bus.number,
+        'bus_number': bus_number,
         'first_seen_date': date.format_db(),
-        'first_seen_system_id': system.id,
+        'first_seen_system_id': system_id,
         'first_record_id': record_id,
         'last_seen_date': date.format_db(),
-        'last_seen_system_id': system.id,
+        'last_seen_system_id': system_id,
         'last_record_id': record_id
     })
 
-def find(bus_number):
-    '''Returns the overview of the given bus number'''
-    overviews = find_all(bus_number=bus_number, limit=1)
+def find(bus):
+    '''Returns the overview of the given bus'''
+    overviews = find_all(bus=bus, limit=1)
     if len(overviews) == 1:
         return overviews[0]
     return None
 
-def find_all(system_id=None, last_seen_system_id=None, bus_number=None, limit=None):
-    '''Returns all overviews that match the given system ID and bus number'''
+def find_all(system=None, last_seen_system=None, bus=None, limit=None):
+    '''Returns all overviews that match the given system and bus'''
+    system_id = getattr(system, 'id', system)
+    last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
+    bus_number = getattr(bus, 'number', bus)
     return database.select('overview',
         columns={
             'overview.bus_number': 'overview_bus_number',
@@ -70,8 +76,9 @@ def find_all(system_id=None, last_seen_system_id=None, bus_number=None, limit=No
         initializer=Overview.from_db
     )
 
-def find_bus_numbers(system_id=None):
+def find_bus_numbers(system=None):
     '''Returns all bus numbers that have been seen'''
+    system_id = getattr(system, 'id', system)
     joins = {}
     filters = {}
     if system_id is not None:
@@ -89,11 +96,13 @@ def find_bus_numbers(system_id=None):
         initializer=lambda r: r['bus_number']
     )
 
-def update(overview, date, system, record_id):
+def update(overview, date, system, record):
     '''Updates an overview in the database'''
+    system_id = getattr(system, 'id', system)
+    record_id = getattr(record, 'id', record)
     values = {
         'last_seen_date': date.format_db(),
-        'last_seen_system_id': system.id
+        'last_seen_system_id': system_id
     }
     if record_id is not None:
         if overview.first_record is None:

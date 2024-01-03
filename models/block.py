@@ -108,4 +108,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return helpers.departure.find_all(self.system.id, block_id=self.id)
+        return helpers.departure.find_all(self.system, block=self)

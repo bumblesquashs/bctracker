@@ -5,6 +5,7 @@ import database
 
 def create(system, row):
     '''Inserts a new departure into the database'''
+    system_id = getattr(system, 'id', system)
     if 'pickup_type' in row:
         pickup_type = PickupType(row['pickup_type'])
     else:
@@ -25,7 +26,7 @@ def create(system, row):
     else:
         distance = None
     database.insert('departure', {
-        'system_id': system.id,
+        'system_id': system_id,
         'trip_id': row['trip_id'],
         'sequence': int(row['stop_sequence']),
         'stop_id': row['stop_id'],
@@ -36,15 +37,20 @@ def create(system, row):
         'distance': distance
     })
 
-def find(system_id, trip_id=None, sequence=None, stop_id=None):
-    '''Returns the departure with the given system ID, trip ID, sequence, and stop ID'''
-    departures = find_all(system_id, trip_id, sequence, stop_id)
+def find(system, trip=None, sequence=None, stop=None):
+    '''Returns the departure with the given system, trip, sequence, and stop'''
+    departures = find_all(system, trip, sequence, stop)
     if len(departures) == 1:
         return departures[0]
     return None
 
-def find_all(system_id, trip_id=None, sequence=None, route_id=None, stop_id=None, block_id=None, limit=None):
-    '''Returns all departures that match the given system ID, trip ID, sequence, and stop ID'''
+def find_all(system, trip=None, sequence=None, route=None, stop=None, block=None, limit=None):
+    '''Returns all departures that match the given system, trip, sequence, and stop'''
+    system_id = getattr(system, 'id', system)
+    trip_id = getattr(trip, 'id', trip)
+    route_id = getattr(route, 'id', route)
+    stop_id = getattr(stop, 'id', stop)
+    block_id = getattr(block, 'id', block)
     if trip_id is not None:
         order_by = 'departure.sequence ASC'
     elif stop_id is not None:
@@ -86,8 +92,10 @@ def find_all(system_id, trip_id=None, sequence=None, route_id=None, stop_id=None
         initializer=Departure.from_db
     )
 
-def find_upcoming(system_id, trip_id, sequence, limit=5):
+def find_upcoming(system, trip, sequence, limit=5):
     '''Returns all departures on a trip from the given sequence number onwards'''
+    system_id = getattr(system, 'id', system)
+    trip_id = getattr(trip, 'id', trip)
     return database.select('departure',
         columns={
             'departure.system_id': 'departure_system_id',
@@ -112,8 +120,10 @@ def find_upcoming(system_id, trip_id, sequence, limit=5):
         initializer=Departure.from_db
     )
 
-def find_adjacent(system_id, stop_id):
-    '''Returns all departures on trips that serve the given stop ID'''
+def find_adjacent(system, stop):
+    '''Returns all departures on trips that serve the given stop'''
+    system_id = getattr(system, 'id', system)
+    stop_id = getattr(stop, 'id', stop)
     cte, args = database.build_select('departure',
         columns='trip.*',
         joins={
@@ -158,6 +168,7 @@ def find_adjacent(system_id, stop_id):
 
 def delete_all(system):
     '''Deletes all departures for the given system from the database'''
+    system_id = getattr(system, 'id', system)
     database.delete('departure', {
-        'system_id': system.id
+        'system_id': system_id
     })
