@@ -203,11 +203,11 @@ def endpoint(base_path, method='GET', append_slash=True, system_key='system_id')
         def func_wrapper(*args, **kwargs):
             if system_key in kwargs:
                 system_id = kwargs[system_key]
-                del kwargs[system_key]
                 system = helpers.system.find(system_id)
             else:
                 system = None
-            return func(system, *args, **kwargs)
+                kwargs[system_key] = None
+            return func(system=system, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
 
@@ -440,10 +440,11 @@ def routes_map_page(system):
     )
 
 @endpoint('/routes/<route_number>')
-def route_overview_page(system, route_number):
+def route_overview_page(system_id, system, route_number):
     if system is None:
         return error_page('system', system,
-            path=f'routes/{route_number}'
+            path=f'routes/{route_number}',
+            system_id=system_id
         )
     route = system.get_route(number=route_number)
     if route is None:
@@ -462,10 +463,11 @@ def route_overview_page(system, route_number):
     )
 
 @endpoint('/routes/<route_number>/map')
-def route_map_page(system, route_number):
+def route_map_page(system_id, system, route_number):
     if system is None:
         return error_page('system', system,
-            path=f'routes/{route_number}/map'
+            path=f'routes/{route_number}/map',
+            system_id=system_id
         )
     route = system.get_route(number=route_number)
     if route is None:
@@ -481,10 +483,11 @@ def route_map_page(system, route_number):
     )
 
 @endpoint('/routes/<route_number>/schedule')
-def route_schedule_page(system, route_number):
+def route_schedule_page(system_id, system, route_number):
     if system is None:
         return error_page('system', system,
-            path=f'routes/{route_number}/schedule'
+            path=f'routes/{route_number}/schedule',
+            system_id=system_id
         )
     route = system.get_route(number=route_number)
     if route is None:
@@ -498,10 +501,11 @@ def route_schedule_page(system, route_number):
     )
 
 @endpoint('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
-def route_schedule_date_page(system, route_number, date_string):
+def route_schedule_date_page(system_id, system, route_number, date_string):
     if system is None:
         return error_page('system', system,
-            path=f'routes/{route_number}/schedule'
+            path=f'routes/{route_number}/schedule',
+            system_id=system_id
         )
     route = system.get_route(number=route_number)
     if route is None:
@@ -535,10 +539,11 @@ def blocks_schedule_date_page(system, date_string):
     )
 
 @endpoint('/blocks/<block_id>')
-def block_overview_page(system, block_id):
+def block_overview_page(system_id, system, block_id):
     if system is None:
         return error_page('system', system,
-            path=f'blocks/{block_id}'
+            path=f'blocks/{block_id}',
+            system_id=system_id
         )
     block = system.get_block(block_id)
     if block is None:
@@ -553,10 +558,11 @@ def block_overview_page(system, block_id):
     )
 
 @endpoint('/blocks/<block_id>/map')
-def block_map_page(system, block_id):
+def block_map_page(system_id, system, block_id):
     if system is None:
         return error_page('system', system,
-            path=f'blocks/{block_id}/map'
+            path=f'blocks/{block_id}/map',
+            system_id=system_id
         )
     block = system.get_block(block_id)
     if block is None:
@@ -572,10 +578,11 @@ def block_map_page(system, block_id):
     )
 
 @endpoint('/blocks/<block_id>/history')
-def block_history_page(system, block_id):
+def block_history_page(system_id, system, block_id):
     if system is None:
         return error_page('system', system,
-            path=f'blocks/{block_id}/history'
+            path=f'blocks/{block_id}/history',
+            system_id=system_id
         )
     block = system.get_block(block_id)
     if block is None:
@@ -595,10 +602,11 @@ def block_history_page(system, block_id):
     )
 
 @endpoint('/trips/<trip_id>')
-def trip_overview_page(system, trip_id):
+def trip_overview_page(system_id, system, trip_id):
     if system is None:
         return error_page('system', system,
-            path=f'trips/{trip_id}'
+            path=f'trips/{trip_id}',
+            system_id=system_id
         )
     trip = system.get_trip(trip_id)
     if trip is None:
@@ -613,10 +621,11 @@ def trip_overview_page(system, trip_id):
     )
 
 @endpoint('/trips/<trip_id>/map')
-def trip_map_page(system, trip_id):
+def trip_map_page(system_id, system, trip_id):
     if system is None:
         return error_page('system', system,
-            path=f'trips/{trip_id}/map'
+            path=f'trips/{trip_id}/map',
+            system_id=system_id
         )
     trip = system.get_trip(trip_id)
     if trip is None:
@@ -632,10 +641,11 @@ def trip_map_page(system, trip_id):
     )
 
 @endpoint('/trips/<trip_id>/history')
-def trip_history_page(system, trip_id):
+def trip_history_page(system_id, system, trip_id):
     if system is None:
         return error_page('system', system,
-            path=f'trips/{trip_id}/history'
+            path=f'trips/{trip_id}/history',
+            system_id=system_id
         )
     trip = system.get_trip(trip_id)
     if trip is None:
@@ -668,10 +678,11 @@ def stops_page(system):
     )
 
 @endpoint('/stops/<stop_number>')
-def stop_overview_page(system, stop_number):
+def stop_overview_page(system_id, system, stop_number):
     if system is None:
         return error_page('system', system,
-            path=f'stops/{stop_number}'
+            path=f'stops/{stop_number}',
+            system_id=system_id
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
@@ -692,10 +703,11 @@ def stop_overview_page(system, stop_number):
     )
 
 @endpoint('/stops/<stop_number>/map')
-def stop_map_page(system, stop_number):
+def stop_map_page(system_id, system, stop_number):
     if system is None:
         return error_page('system', system,
-            path=f'stops/{stop_number}/map'
+            path=f'stops/{stop_number}/map',
+            system_id=system_id
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
@@ -710,10 +722,11 @@ def stop_map_page(system, stop_number):
     )
 
 @endpoint('/stops/<stop_number>/schedule')
-def stop_schedule_page(system, stop_number):
+def stop_schedule_page(system_id, system, stop_number):
     if system is None:
         return error_page('system', system,
-            path=f'stops/{stop_number}/schedule'
+            path=f'stops/{stop_number}/schedule',
+            system_id=system_id
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
@@ -727,10 +740,11 @@ def stop_schedule_page(system, stop_number):
     )
 
 @endpoint('/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
-def stop_schedule_date_page(system, stop_number, date_string):
+def stop_schedule_date_page(system_id, system, stop_number, date_string):
     if system is None:
         return error_page('system', system,
-            path=f'stops/{stop_number}/schedule'
+            path=f'stops/{stop_number}/schedule',
+            system_id=system_id
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
