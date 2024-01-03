@@ -73,12 +73,17 @@
                             <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            % if record.is_available:
-                                % block = record.block
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                            % else:
-                                <span>{{ record.block_id }}</span>
-                            % end
+                            <div class="flex-column">
+                                % if record.is_available:
+                                    % block = record.block
+                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                % else:
+                                    <span>{{ record.block_id }}</span>
+                                % end
+                                <div class="non-desktop">
+                                    % include('components/routes_indicator', routes=record.routes)
+                                </div>
+                            </div>
                         </td>
                         <td class="desktop-only">
                             % include('components/routes_indicator', routes=record.routes)
@@ -117,12 +122,17 @@
                             <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            % if record.is_available:
-                                % block = record.block
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                            % else:
-                                <span>{{ record.block_id }}</span>
-                            % end
+                            <div class="flex-column">
+                                % if record.is_available:
+                                    % block = record.block
+                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                % else:
+                                    <span>{{ record.block_id }}</span>
+                                % end
+                                <div class="non-desktop">
+                                    % include('components/routes_indicator', routes=record.routes)
+                                </div>
+                            </div>
                         </td>
                         <td class="desktop-only">
                             % include('components/routes_indicator', routes=record.routes)
