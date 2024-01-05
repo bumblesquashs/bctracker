@@ -126,7 +126,7 @@
                         </p>
                     % else:
                         % if system is None or system.realtime_enabled:
-                            <p>
+                            <p class="margin-bottom-10">
                                 <span>Buses with a</span>
                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                 <img class="middle-align black" src="/img/black/schedule.png" />
@@ -171,16 +171,16 @@
                 % if len(departures) == 0:
                     <div class="placeholder">
                         % if system.is_loaded:
-                            <h3 class="title">There are no departures from this stop today</h3>
+                            <h3>There are no departures from this stop today</h3>
                             <p>You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                         % else:
-                            <h3 class="title">Departures for this stop are unavailable</h3>
+                            <h3>Departures for this stop are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>
                         % end
                     </div>
                 % else:
                     % if system is None or system.realtime_enabled:
-                        <p>
+                        <p class="margin-bottom-10">
                             <span>Buses with a</span>
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />

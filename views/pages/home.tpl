@@ -106,7 +106,7 @@
                 <h2>Community</h2>
             </div>
             <div class="section">
-                <p>
+                <p class="margin-bottom-10">
                     Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!
                 </p>
                 <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
@@ -125,10 +125,10 @@
                         <img class="white" src="/img/white/realtime.png" />
                         <img class="black" src="/img/black/realtime.png" />
                         <h3>Bus Tracking</h3>
-                        <p>
+                        <p class="margin-bottom-10">
                             See all buses that are currently active, including current route and location
                         </p>
-                        <div class="flex-row">
+                        <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
                             <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
                         </div>
@@ -137,10 +137,10 @@
                         <img class="white" src="/img/white/history.png" />
                         <img class="black" src="/img/black/history.png" />
                         <h3>Bus History</h3>
-                        <p>
+                        <p class="margin-bottom-10">
                             See all buses that have been tracked, including last-seen date and transfers
                         </p>
-                        <div class="flex-row">
+                        <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'history') }}">History</a>
                             <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
                         </div>
@@ -149,10 +149,10 @@
                         <img class="white" src="/img/white/routes.png" />
                         <img class="black" src="/img/black/routes.png" />
                         <h3>Schedules and Maps</h3>
-                        <p>
+                        <p class="margin-bottom-10">
                             See departure times and routing details for routes, stops, blocks, and more
                         </p>
-                        <div class="flex-row">
+                        <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'routes') }}">Routes</a>
                             <a class="button" href="{{ get_url(system, 'stops') }}">Stops</a>
                             <a class="button" href="{{ get_url(system, 'blocks') }}">Blocks</a>

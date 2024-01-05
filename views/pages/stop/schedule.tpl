@@ -14,7 +14,7 @@
 % if len(stop.find_departures()) == 0:
     <div class="placeholder">
         % if stop.is_loaded:
-            <h3 class="title">There are currently no departures from this stop</h3>
+            <h3>There are currently no departures from this stop</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>
                 <li>It may be an old stop that used to serve routes but is no longer used</li>
@@ -23,7 +23,7 @@
             </ol>
             <p>Please check again later!</p>
         % else:
-            <h3 class="title">Departures for this stop are unavailable</h3>
+            <h3>Departures for this stop are unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % end
     </div>

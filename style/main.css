@@ -64,13 +64,12 @@ img.inline {
     width: 18px;
 }
 
-p {
-    margin-top: 0px;
-    margin-bottom: 10px;
+ol {
+    margin: 0px;
 }
 
-p:last-child {
-    margin-bottom: 0px;
+p {
+    margin: 0px;
 }
 
 table.striped {
@@ -111,6 +110,10 @@ table.striped tr.divider {
 table.striped tr.section td {
     padding: 4px 16px;
     font-weight: bold;
+}
+
+ul {
+    margin: 0px;
 }
 
 #banners {
@@ -422,6 +425,15 @@ table.striped tr.section td {
     user-select: none;
 }
 
+.code-block {
+    border-width: 1px;
+    border-style: solid;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 10pt;
+    white-space: pre;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -468,6 +480,18 @@ table.striped tr.section td {
     display: flex;
     flex-direction: column;
     gap: 2px;
+}
+
+.flex-column.left {
+    align-items: flex-start;
+}
+
+.flex-column.center {
+    align-items: center;
+}
+
+.flex-column.right {
+    align-items: flex-end;
 }
 
 .flex-container {
@@ -590,6 +614,26 @@ table.striped tr.section td {
 
 .info-box .section > .value {
     text-align: right;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0px;
+}
+
+.margin-bottom-2 {
+    margin-bottom: 2px;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px;
 }
 
 .marker {
@@ -735,10 +779,6 @@ table.striped tr.section td {
     text-decoration: none;
 }
 
-.marder .icon.route .link {
-    border-radius: 0px;
-}
-
 .marker .icon.bus_route {
     font-weight: bold;
     text-align: center;
@@ -783,11 +823,10 @@ table.striped tr.section td {
 }
 
 .news-post .content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     padding: 10px;
-}
-
-.news-post .content p + ul {
-    margin-top: -5px;
 }
 
 .no-wrap {
@@ -823,8 +862,11 @@ table.striped tr.section td {
     margin-bottom: 5px;
 }
 
-.placeholder .title {
-    margin-bottom: 10px;
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
 }
 
 .positive {

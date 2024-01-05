@@ -25,7 +25,7 @@
             <div class="content">
                 % if system is None:
                     <div class="placeholder">
-                        <h3 class="title">Choose a system to see nearby stops</h3>
+                        <h3>Choose a system to see nearby stops</h3>
                     </div>
                     <table class="striped">
                         <thead>

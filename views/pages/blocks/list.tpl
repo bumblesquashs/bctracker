@@ -6,61 +6,63 @@
 </div>
 
 % if system is None:
-    <p>Choose a system to see blocks.</p>
-    <table class="striped">
-        <thead>
-            <tr>
-                <th>System</th>
-                <th class="non-mobile"># Blocks</th>
-                <th>Service Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            % for region in regions:
-                % region_systems = [s for s in systems if s.region == region]
-                % if len(region_systems) > 0:
-                    <tr class="section">
-                        <td colspan="3">
-                            {{ region }}
-                        </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                    % for region_system in region_systems:
-                        % count = len(region_system.get_blocks())
-                        <tr>
-                            <td>
-                                <div class="flex-column">
-                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                    <span class="mobile-only smaller-font">
-                                        % if region_system.is_loaded:
-                                            % if count == 1:
-                                                1 Block
-                                            % else:
-                                                {{ count }} Blocks
-                                            % end
-                                        % end
-                                    </span>
-                                </div>
+    <div class="placeholder">
+        <p>Choose a system to see blocks.</p>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>System</th>
+                    <th class="non-mobile"># Blocks</th>
+                    <th>Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for region in regions:
+                    % region_systems = [s for s in systems if s.region == region]
+                    % if len(region_systems) > 0:
+                        <tr class="section">
+                            <td colspan="3">
+                                {{ region }}
                             </td>
-                            % if region_system.is_loaded:
-                                <td class="non-mobile">{{ count }}</td>
-                                <td>
-                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
-                                </td>
-                            % else:
-                                <td class="lighter-text" colspan="2">Blocks are loading...</td>
-                            % end
                         </tr>
+                        <tr class="display-none"></tr>
+                        % for region_system in region_systems:
+                            % count = len(region_system.get_blocks())
+                            <tr>
+                                <td>
+                                    <div class="flex-column">
+                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                        <span class="mobile-only smaller-font">
+                                            % if region_system.is_loaded:
+                                                % if count == 1:
+                                                    1 Block
+                                                % else:
+                                                    {{ count }} Blocks
+                                                % end
+                                            % end
+                                        </span>
+                                    </div>
+                                </td>
+                                % if region_system.is_loaded:
+                                    <td class="non-mobile">{{ count }}</td>
+                                    <td>
+                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
+                                    </td>
+                                % else:
+                                    <td class="lighter-text" colspan="2">Blocks are loading...</td>
+                                % end
+                            </tr>
+                        % end
                     % end
                 % end
-            % end
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 % else:
     % blocks = system.get_blocks()
     % if len(blocks) == 0:
         <div class="placeholder">
-            <h3 class="title">Block information for {{ system }} is unavailable</h3>
+            <h3>Block information for {{ system }} is unavailable</h3>
             % if system.is_loaded:
                 <p>Please check again later!</p>
             % else:

@@ -157,7 +157,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
 
 def error_page(name, system, title='Error', path='', **kwargs):
     '''Returns an error page with the given name and details'''
-    return page(f'errors/{name}_error', system,
+    return page(f'errors/{name}', system,
         title=title,
         path=path,
         enable_refresh=False,
@@ -191,14 +191,21 @@ def query_cookie(key, default_value):
 
 def endpoint(base_path, method='GET', append_slash=True, system_key='system_id'):
     def endpoint_wrapper(func):
-        paths = [
-            base_path,
-            f'/<{system_key}>{base_path}'
-        ]
-        if append_slash:
-            if base_path != '/':
+        if base_path == '/':
+            paths = [
+                base_path,
+                f'/<{system_key}>'
+            ]
+            if append_slash:
+                paths.append(f'/<{system_key}>/')
+        else:
+            paths = [
+                base_path,
+                f'/<{system_key}>{base_path}'
+            ]
+            if append_slash:
                 paths.append(f'{base_path}/')
-            paths.append(f'/<{system_key}>{base_path}/')
+                paths.append(f'/<{system_key}>{base_path}/')
         @app.route(paths, method)
         def func_wrapper(*args, **kwargs):
             if system_key in kwargs:
@@ -207,6 +214,10 @@ def endpoint(base_path, method='GET', append_slash=True, system_key='system_id')
             else:
                 system = None
                 kwargs[system_key] = None
+            try:
+                return func(system=system, *args, **kwargs)
+            except TypeError:
+                del kwargs[system_key]
             return func(system=system, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
@@ -228,7 +239,7 @@ def robots_text(system):
     return static_file('robots.txt', root='.')
 
 # =============================================================
-# HTML (Pages)
+# Pages
 # =============================================================
 
 @endpoint('/')
@@ -832,7 +843,7 @@ def make_admin_key_page(system, key):
     )
 
 # =============================================================
-# HTML (Frames)
+# Frames
 # =============================================================
 
 @endpoint('/frame/nearby', append_slash=False)
@@ -1052,3 +1063,15 @@ def execute_api_admin_reload_realtime(key, reload_system_id):
         realtime.update_records()
         return 'Success'
     return 'Access denied'
+
+# =============================================================
+# Errors
+# =============================================================
+
+@app.error(404)
+def error_404_page(error):
+    return error_page('404', None, error=error)
+
+@app.error(500)
+def error_500_page(error):
+    return error_page('500', None, error=error)

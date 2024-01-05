@@ -98,14 +98,6 @@ table.striped tr {
     display: none;
 }
 
-#navigation-bar .navigation-icon .tooltip {
-    background-color: #DDDDDD;
-}
-
-#navigation-bar .navigation-icon .tooltip::after {
-    border-color: transparent #DDDDDD transparent transparent;
-}
-
 #navigation-bar .navigation-item {
     color: #000000;
 }
@@ -370,6 +362,11 @@ table.striped tr {
 
 .checkbox .box img.white {
     display: none;
+}
+
+.code-block {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
 }
 
 .dropdown .content {
