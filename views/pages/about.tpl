@@ -9,7 +9,7 @@
     <div class="container flex-3">
         <div class="section">
             <div class="content">
-                BCTracker is a browser for the <a href="https://developers.google.com/transit/gtfs">GTFS (General Transit Feed Specification)</a> static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
+                BCTracker is a browser for the <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
                 The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in communities around British Columbia. 
             </div>
         </div>
@@ -31,11 +31,12 @@
                     </div>
                     <div class="section">
                         <div class="header">
-                            <h3>Why are some transit systems not available?</h3>
+                            <h3>Why are some transit systems missing schedules?</h3>
                         </div>
                         <div class="content">
-                            Unfortunately, BC Transit does not currently provide GTFS schedules or realtime information for some of the smaller transit systems around the province.
-                            NextRide is expected to be introduced on the remaining transit systems by 2024, so keep an eye out for them coming soon!
+                            Unfortunately, BC Transit does not currently provide GTFS schedules for some of the smaller transit systems around the province.
+                            This data is expected to come when NextRide finishes rolling out in these systems throughout 2024.
+                            Keep an eye out for more info soon!
                         </div>
                     </div>
                     <div class="section">
@@ -74,7 +75,7 @@
                 </p>
                 
                 <br />
-                <i> - James & Perrin, 2022 </i> 
+                <i> - James & Perrin, 2024 </i> 
             </div>  
         </div>     
     </div>
