@@ -117,8 +117,13 @@ def get_url(system, path='', **kwargs):
         url += f'?{query}'
     return url
 
+def validate_admin():
+    return query_cookie('admin_key') == admin_key
+
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
+    is_admin = validate_admin()
+    
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
     bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
@@ -127,6 +132,9 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
+    systems = helpers.system.find_all()
+    if not is_admin:
+        systems = [s for s in systems if s.enabled and s.visible]
     return template(f'pages/{name}',
         version=VERSION,
         title=title,
@@ -136,8 +144,8 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         include_maps=include_maps,
         full_map=full_map,
         regions=helpers.region.find_all(),
-        systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
-        admin_systems=helpers.system.find_all(),
+        systems=systems,
+        is_admin=is_admin,
         system=system,
         get_url=get_url,
         no_system_domain=no_system_domain,
@@ -181,7 +189,7 @@ def set_cookie(key, value):
     else:
         response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
 
-def query_cookie(key, default_value):
+def query_cookie(key, default_value=None):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
     value = request.query.get(key)
     if value is not None:
@@ -189,7 +197,7 @@ def query_cookie(key, default_value):
         return value
     return request.get_cookie(key, default_value)
 
-def endpoint(base_path, method='GET', append_slash=True, system_key='system_id'):
+def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
         if base_path == '/':
             paths = [
@@ -216,6 +224,8 @@ def endpoint(base_path, method='GET', append_slash=True, system_key='system_id')
                 del kwargs[system_key]
             else:
                 system = None
+            if require_admin and not validate_admin():
+                raise HTTPError(403)
             return func(system=system, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
@@ -800,30 +810,13 @@ def systems_page(system):
         path=request.query.get('path', '')
     )
 
-@endpoint('/admin')
+@endpoint('/admin', require_admin=True)
 def admin_page(system):
-    return make_admin_key_page(system, None)
-
-@endpoint('/admin/<key>')
-def admin_key_page(system, key):
-    return make_admin_key_page(system, key)
-
-def make_admin_key_page(system, key):
-    if admin_key is None or key == admin_key:
-        if key is None:
-            path = 'admin'
-        else:
-            path = f'admin/{key}'
-        return page('admin', system,
-            title='Administration',
-            enable_refresh=False,
-            path=path,
-            key=key,
-            disable_indexing=True
-        )
-    return page('home', system,
-        title='Home',
-        enable_refresh=False
+    return page('admin', system,
+        title='Administration',
+        enable_refresh=False,
+        path='admin',
+        disable_indexing=True
     )
 
 # =============================================================
@@ -899,158 +892,90 @@ def api_nearby(system):
         'stops': [s.get_json() for s in stops]
     }
 
-@endpoint('/api/admin/reload-adornments', method='POST')
+@endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
 def api_admin_reload_adornments(system):
-    return execute_api_admin_reload_adornments(None)
+    helpers.adornment.delete_all()
+    helpers.adornment.load()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-adornments', method='POST')
-def api_admin_key_reload_adornments(system, key):
-    return execute_api_admin_reload_adornments(key)
-
-def execute_api_admin_reload_adornments(key):
-    if admin_key is None or key == admin_key:
-        helpers.adornment.delete_all()
-        helpers.adornment.load()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-orders', method='POST')
+@endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
 def api_admin_reload_orders(system):
-    return execute_api_admin_reload_orders(None)
+    helpers.model.delete_all()
+    helpers.order.delete_all()
+    helpers.model.load()
+    helpers.order.load()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-orders', method='POST')
-def api_admin_key_reload_orders(system, key):
-    return execute_api_admin_reload_orders(key)
-
-def execute_api_admin_reload_orders(key):
-    if admin_key is None or key == admin_key:
-        helpers.model.delete_all()
-        helpers.order.delete_all()
-        helpers.model.load()
-        helpers.order.load()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-systems', method='POST')
+@endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
-    return execute_api_admin_reload_systems(None)
-
-@endpoint('/api/admin/<key>/reload-systems', method='POST')
-def api_admin_key_reload_systems(system, key):
-    return execute_api_admin_reload_systems(key)
-
-def execute_api_admin_reload_systems(key):
-    if admin_key is None or key == admin_key:
-        cron.stop(cron_id)
-        helpers.region.delete_all()
-        helpers.system.delete_all()
-        helpers.position.delete_all()
-        helpers.region.load()
-        helpers.system.load()
-        for system in helpers.system.find_all():
-            if running:
-                gtfs.load(system)
-                if not gtfs.validate(system):
-                    gtfs.load(system, True)
-                gtfs.update_cache_in_background(system)
-                realtime.update(system)
-                if not realtime.validate(system):
-                    system.validation_errors += 1
+    cron.stop(cron_id)
+    helpers.region.delete_all()
+    helpers.system.delete_all()
+    helpers.position.delete_all()
+    helpers.region.load()
+    helpers.system.load()
+    for system in helpers.system.find_all():
         if running:
-            realtime.update_records()
-            cron.start(cron_id)
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-themes', method='POST')
-def api_admin_reload_themes(system):
-    return execute_api_admin_reload_themes(None)
-
-@endpoint('/api/admin/<key>/reload-themes', method='POST')
-def api_admin_key_reload_themes(system, key):
-    return execute_api_admin_reload_themes(key)
-
-def execute_api_admin_reload_themes(key):
-    if admin_key is None or key == admin_key:
-        helpers.theme.delete_all()
-        helpers.theme.load()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/restart-cron', method='POST')
-def api_admin_restart_cron(system):
-    return execute_api_admin_restart_cron(None)
-
-@endpoint('/api/admin/<key>/restart-cron', method='POST')
-def api_admin_key_restart_cron(system, key):
-    return execute_api_admin_restart_cron(key)
-
-def execute_api_admin_restart_cron(key):
-    if admin_key is None or key == admin_key:
-        cron.stop(cron_id)
+            gtfs.load(system)
+            if not gtfs.validate(system):
+                gtfs.load(system, True)
+            gtfs.update_cache_in_background(system)
+            realtime.update(system)
+            if not realtime.validate(system):
+                system.validation_errors += 1
+    if running:
+        realtime.update_records()
         cron.start(cron_id)
-        return 'Success'
-    return 'Access denied'
+    return 'Success'
 
-@endpoint('/api/admin/backup-database', method='POST')
+@endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
+def api_admin_reload_themes(system):
+    helpers.theme.delete_all()
+    helpers.theme.load()
+    return 'Success'
+
+@endpoint('/api/admin/restart-cron', method='POST', require_admin=True)
+def api_admin_restart_cron(system):
+    cron.stop(cron_id)
+    cron.start(cron_id)
+    return 'Success'
+
+@endpoint('/api/admin/backup-database', method='POST', require_admin=True)
 def api_admin_backup_database(system):
-    return execute_api_admin_backup_database(None)
+    database.archive()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/backup-database', method='POST')
-def api_admin_key_backup_database(system, key):
-    return execute_api_admin_backup_database(key)
-
-def execute_api_admin_backup_database(key):
-    if admin_key is None or key == admin_key:
-        database.archive()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST')
+@endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_gtfs(system, reload_system_id):
-    return execute_api_admin_reload_gtfs(None, reload_system_id)
+    system = helpers.system.find(reload_system_id)
+    if system is None:
+        return 'Invalid system'
+    gtfs.load(system, True)
+    gtfs.update_cache_in_background(system)
+    realtime.update(system)
+    if not realtime.validate(system):
+        system.validation_errors += 1
+    realtime.update_records()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-gtfs/<reload_system_id>', method='POST')
-def api_admin_key_reload_gtfs(system, key, reload_system_id):
-    return execute_api_admin_reload_gtfs(key, reload_system_id)
-
-def execute_api_admin_reload_gtfs(key, reload_system_id):
-    if admin_key is None or key == admin_key:
-        system = helpers.system.find(reload_system_id)
-        if system is None:
-            return 'Invalid system'
-        gtfs.load(system, True)
-        gtfs.update_cache_in_background(system)
-        realtime.update(system)
-        if not realtime.validate(system):
-            system.validation_errors += 1
-        realtime.update_records()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST')
+@endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_realtime(system, reload_system_id):
-    return execute_api_admin_reload_realtime(None, reload_system_id)
-
-@endpoint('/api/admin/<key>/reload-realtime/<reload_system_id>', method='POST')
-def api_admin_key_reload_realtime(system, key, reload_system_id):
-    return execute_api_admin_reload_realtime(key, reload_system_id)
-
-def execute_api_admin_reload_realtime(key, reload_system_id):
-    if admin_key is None or key == admin_key:
-        system = helpers.system.find(reload_system_id)
-        if system is None:
-            return 'Invalid system'
-        realtime.update(system)
-        if not realtime.validate(system):
-            system.validation_errors += 1
-        realtime.update_records()
-        return 'Success'
-    return 'Access denied'
+    system = helpers.system.find(reload_system_id)
+    if system is None:
+        return 'Invalid system'
+    realtime.update(system)
+    if not realtime.validate(system):
+        system.validation_errors += 1
+    realtime.update_records()
+    return 'Success'
 
 # =============================================================
 # Errors
 # =============================================================
+
+@app.error(403)
+def error_403_page(error):
+    return error_page('403', None, error=error)
 
 @app.error(404)
 def error_404_page(error):
