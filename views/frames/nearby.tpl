@@ -10,7 +10,7 @@
 % if len(stops) == 0:
     <div class="section">
         <div class="placeholder">
-            <h3 class="title">No stops nearby</h3>
+            <h3>No stops nearby</h3>
             % if system.is_loaded:
                 <p>You're gonna have to walk!</p>
             % else:
@@ -42,7 +42,7 @@
                     </p>
                 % else:
                     % if system is None or system.realtime_enabled:
-                        <p>
+                        <p class="margin-bottom-10">
                             <span>Buses with a</span>
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />

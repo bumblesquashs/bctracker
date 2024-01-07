@@ -432,6 +432,15 @@ table.striped tr {
     display: none;
 }
 
+.code-block {
+    background-color: #EEEEEE;
+    color: #222222;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    border-color: #CCCCCC;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+}
+
 .dropdown .content {
     background-color: #FFFFFF;
 }

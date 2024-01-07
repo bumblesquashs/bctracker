@@ -126,10 +126,10 @@
                 % if len(trips) == 0:
                     <div class="placeholder">
                         % if system.is_loaded:
-                            <h3 class="title">There are no trips for this route today</h3>
+                            <h3>There are no trips for this route today</h3>
                             <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
                         % else:
-                            <h3 class="title">Trips for this route are unavailable</h3>
+                            <h3>Trips for this route are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>
                         % end
                     </div>
@@ -146,7 +146,7 @@
                                     </div>
                                     <div class="content">
                                         % if system is None or system.realtime_enabled:
-                                            <p>
+                                            <p class="margin-bottom-10">
                                                 <span>Buses with a</span>
                                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                                 <img class="middle-align black" src="/img/black/schedule.png" />
