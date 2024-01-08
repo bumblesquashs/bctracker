@@ -27,7 +27,7 @@
         % trips = [d.trip for d in upcoming_departures]
         % recorded_today = helpers.record.find_recorded_today(stop.system, trips)
         % scheduled_today = helpers.record.find_scheduled_today(stop.system, trips)
-        % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system.id, trip_id={t.id for t in trips})}
+        % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system, trip=trips)}
         <div class="section">
             <div class="header">
                 <h3>Stop {{ stop.number }} - {{ stop }}</h3>
