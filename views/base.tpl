@@ -163,9 +163,6 @@
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
-            % if is_admin:
-                <a class="navigation-item desktop-only" href="{{ get_url(system, 'admin') }}">Admin</a>
-            % end
             
             <div class="flex-1"></div>
             
