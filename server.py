@@ -118,7 +118,7 @@ def get_url(system, path='', **kwargs):
     return url
 
 def validate_admin():
-    return query_cookie('admin_key') == admin_key
+    return query_cookie('admin_key', max_age_days=1) == admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -181,19 +181,19 @@ def frame(name, system, **kwargs):
         **kwargs
     )
 
-def set_cookie(key, value):
+def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
-    max_age = 60*60*24*365*10
+    max_age = 60 * 60 * 24 * max_age_days
     if cookie_domain is None:
         response.set_cookie(key, value, max_age=max_age, path='/')
     else:
         response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
 
-def query_cookie(key, default_value=None):
+def query_cookie(key, default_value=None, max_age_days=3650):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
     value = request.query.get(key)
     if value is not None:
-        set_cookie(key, value)
+        set_cookie(key, value, max_age_days)
         return value
     return request.get_cookie(key, default_value)
 
