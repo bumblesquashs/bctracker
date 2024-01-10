@@ -216,6 +216,8 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
                 paths.append(f'/<{system_key}>{base_path}/')
         @app.route(paths, method)
         def func_wrapper(*args, **kwargs):
+            if require_admin and not validate_admin():
+                raise HTTPError(403)
             if system_key in kwargs:
                 system_id = kwargs[system_key]
                 system = helpers.system.find(system_id)
@@ -224,8 +226,6 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
                 del kwargs[system_key]
             else:
                 system = None
-            if require_admin and not validate_admin():
-                raise HTTPError(403)
             return func(system=system, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
