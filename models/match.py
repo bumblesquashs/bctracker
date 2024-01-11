@@ -6,14 +6,16 @@ class Match:
         'type',
         'name',
         'description',
+        'icon',
         'path',
         'value'
     )
     
-    def __init__(self, type, name, description, path, value):
+    def __init__(self, type, name, description, icon, path, value):
         self.type = type
         self.name = name
         self.description = description
+        self.icon = icon
         self.path = path
         self.value = value
     
@@ -31,5 +33,6 @@ class Match:
             'type': self.type,
             'name': self.name,
             'description': self.description,
+            'icon': self.icon,
             'url': get_url(system, self.path)
         }

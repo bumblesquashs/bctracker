@@ -35,6 +35,7 @@ def find_matches(query, recorded_bus_numbers):
         if not order.visible:
             continue
         order_string = str(order)
+        model_icon = f'bus-{order.model.type.name}'
         for bus in order:
             bus_number_string = str(bus)
             value = 0
@@ -47,7 +48,7 @@ def find_matches(query, recorded_bus_numbers):
             adornment = bus.adornment
             if adornment is not None and adornment.enabled:
                 bus_number_string += f' {adornment}'
-            matches.append(Match('bus', bus_number_string, order_string, f'bus/{bus.number}', value))
+            matches.append(Match('bus', bus_number_string, order_string, model_icon, f'bus/{bus.number}', value))
     return matches
 
 def delete_all():
