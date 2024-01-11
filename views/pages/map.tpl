@@ -218,7 +218,12 @@
                         element.classList.add("small");
                         icon.classList.add("mini");
                     } else {
-                        icon.innerHTML = "<img src='/img/white/bus.png' />";
+                        const busType = position.bus_type;
+                        if (busType === undefined || busType === null) {
+                            icon.innerHTML = "<img src='/img/white/bus.png' />";
+                        } else {
+                            icon.innerHTML = "<img src='/img/white/bus-" + busType + ".png' />";
+                        }
                     }
                     
                     icon.onmouseenter = function() {
@@ -241,7 +246,12 @@
                         icon.classList.add("mini");
                         icon.innerHTML = "<div class='link'></div>";
                     } else {
-                        icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                        const busType = position.bus_type;
+                        if (busType === undefined || busType === null) {
+                            icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                        } else {
+                            icon.innerHTML = "<div class='link'></div><img src='/img/white/bus-" + busType + ".png#2' />";
+                        }
                     }
                     
                     icon.onmouseenter = function() {
