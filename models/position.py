@@ -127,10 +127,15 @@ class Position:
         order = self.bus.order
         if order is None:
             data['bus_order'] = 'Unknown Year/Model'
+            data['bus_icon'] = 'bus'
         else:
             data['bus_order'] = str(order).replace("'", '&apos;')
-            if order.model is not None:
-                data['bus_type'] = order.model.type.name
+            if order.model is not None and order.model.type is not None:
+                data['bus_icon'] = f'bus-{order.model.type.name}'
+            else:
+                data['bus_icon'] = 'bus'
+        if self.lon == 0 and self.lat == 0:
+            data['bus_icon'] = 'fish'
         adornment = self.bus.adornment
         if adornment is not None and adornment.enabled:
             data['adornment'] = str(adornment)
