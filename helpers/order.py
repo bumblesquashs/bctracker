@@ -35,7 +35,10 @@ def find_matches(query, recorded_bus_numbers):
         if not order.visible:
             continue
         order_string = str(order)
-        model_icon = f'bus-{order.model.type.name}'
+        if order.model is None or order.model.type is None:
+            model_icon = 'ghost'
+        else:
+            model_icon = f'bus-{order.model.type.name}'
         for bus in order:
             bus_number_string = str(bus)
             value = 0
