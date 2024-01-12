@@ -219,24 +219,24 @@
                     <span>History</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % end
