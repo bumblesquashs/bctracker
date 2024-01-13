@@ -219,24 +219,24 @@
                     <span>History</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % end
@@ -525,23 +525,19 @@
         }
         for (i = 0; i < results.length; i++) {
             const result = results[i]
-            let icon = "";
+            const icon = "<img class='white' src='/img/white/" + result.icon + ".png' /><img class='black' src='/img/black/" + result.icon + ".png' />";
             let name = result.name;
             switch (result.type) {
                 case "block":
-                    icon = "<img class='white' src='/img/white/blocks.png' /><img class='black' src='/img/black/blocks.png' />";
                     name = "Block " + result.name;
                     break;
                 case "bus":
-                    icon = "<img class='white' src='/img/white/realtime.png' /><img class='black' src='/img/black/realtime.png' />";
                     name = "Bus " + result.name;
                     break;
                 case "route":
-                    icon = "<img class='white' src='/img/white/routes.png' /><img class='black' src='/img/black/routes.png' />";
                     name = "Route " + result.name;
                     break;
                 case "stop":
-                    icon = "<img class='white' src='/img/white/stop.png' /><img class='black' src='/img/black/stop.png' />";
                     name = "Stop " + result.name;
                     break;
                 default:

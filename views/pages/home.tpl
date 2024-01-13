@@ -146,8 +146,8 @@
                         </div>
                     </div>
                     <div class="item">
-                        <img class="white" src="/img/white/routes.png" />
-                        <img class="black" src="/img/black/routes.png" />
+                        <img class="white" src="/img/white/route.png" />
+                        <img class="black" src="/img/black/route.png" />
                         <h3>Schedules and Maps</h3>
                         <p class="margin-bottom-10">
                             See departure times and routing details for routes, stops, blocks, and more

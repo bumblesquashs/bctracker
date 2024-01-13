@@ -262,7 +262,7 @@
                     element.classList.add("small");
                     icon.classList.add("mini");
                 } else {
-                    icon.innerHTML = "<img src='/img/white/bus.png' />";
+                    icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
                 }
                 element.appendChild(icon);
             } else {
@@ -278,7 +278,7 @@
                     icon.classList.add("mini");
                     icon.innerHTML = "<div class='link'></div>";
                 } else {
-                    icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                    icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
                 }
                 element.appendChild(icon);
             }
