@@ -145,6 +145,8 @@
                     }
                 }
                 
+                const adherence = position.adherence;
+                
                 const element = document.createElement("div");
                 element.id = "bus-marker-" + position.bus_number;
                 element.className = "marker";
@@ -160,7 +162,14 @@
                     const length = Math.floor(position.speed / 10);
                     const bearing = document.createElement("div");
                     bearing.className = "bearing";
-                    bearing.style.borderBottomColor = "#" + position.colour;
+                    if (busMarkerStyle === "adherence") {
+                        bearing.classList.add('adherence');
+                        if (adherence !== undefined && adherence !== null) {
+                            bearing.classList.add(adherence.status_class)
+                        }
+                    } else {
+                        bearing.style.borderBottomColor = "#" + position.colour;
+                    }
                     bearing.style.marginTop = (-8 - length) + "px";
                     bearing.style.borderLeftWidth = sideWidthValue + "px";
                     bearing.style.borderRightWidth = sideWidthValue + "px";
@@ -185,18 +194,16 @@
                 content.appendChild(model);
                 
                 const headsign = document.createElement("div");
-                if (position.adherence !== null && position.adherence !== undefined) {
+                if (adherence === null || adherence === undefined) {
+                    headsign.className = "centred";
+                    headsign.innerHTML = position.headsign;
+                } else {
                     headsign.className = "flex-row center flex-gap-5";
-                    const adherence = position.adherence;
                     const adherenceElement = document.createElement("div");
-                    adherenceElement.classList.add("adherence-indicator");
-                    adherenceElement.classList.add(adherence.status_class);
+                    adherenceElement.classList.add("adherence-indicator", "adherence", adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     
                     headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
-                } else {
-                    headsign.className = "centred";
-                    headsign.innerHTML = position.headsign;
                 }
                 content.appendChild(headsign);
                 
@@ -232,16 +239,26 @@
                     const icon = document.createElement("a");
                     icon.className = "icon";
                     icon.href = "/bus/" + position.bus_number;
-                    icon.style.backgroundColor = "#" + position.colour;
                     if (busMarkerStyle == "route") {
                         icon.classList.add("bus_route");
                         icon.innerHTML = "<div class='link'></div>" + position.route_number;
+                        icon.style.backgroundColor = "#" + position.colour;
                     } else if (busMarkerStyle == "mini") {
                         element.classList.add("small");
                         icon.classList.add("mini");
                         icon.innerHTML = "<div class='link'></div>";
+                        icon.style.backgroundColor = "#" + position.colour;
+                    } else if (busMarkerStyle == "adherence") {
+                        icon.classList.add("adherence");
+                        if (adherence === undefined || adherence === null) {
+                            icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                        } else {
+                            icon.innerHTML = "<div class='link'></div>" + adherence.value;
+                            icon.classList.add(adherence.status_class);
+                        }
                     } else {
                         icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                        icon.style.backgroundColor = "#" + position.colour;
                     }
                     
                     icon.onmouseenter = function() {

@@ -85,6 +85,8 @@
                     <h3>Current style: Route Number</h3>
                 % elif bus_marker_style == 'mini':
                     <h3>Current style: Mini</h3>
+                % elif bus_marker_style == 'adherence':
+                    <h3>Current style: Schedule Adherence</h3>
                 % else:
                     <h3>Current style: Default</h3>
                 % end
@@ -96,6 +98,7 @@
                 <div class="button-container">
                     <a class="button" href="?bus_marker_style=default">Default</a>
                     <a class="button" href="?bus_marker_style=mini">Mini</a>
+                    <a class="button" href="?bus_marker_style=adherence">Schedule Adherence</a>
                     <a class="button" href="?bus_marker_style=route">Route Number</a>
                 </div>
             </div>

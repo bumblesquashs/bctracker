@@ -755,6 +755,15 @@ ul {
     display: inherit;
 }
 
+.marker .icon.adherence {
+    font-weight: bold;
+    text-align: center;
+    line-height: 32px;
+    font-size: 11pt;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
 .marker .icon.route {
     width: auto;
     height: auto;
