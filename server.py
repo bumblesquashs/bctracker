@@ -159,7 +159,6 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
-        show_survey_banner=request.get_cookie('survey_banner', 'show') == 'show',
         **kwargs
     )
 

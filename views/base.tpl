@@ -326,19 +326,6 @@
                             <div class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ bct_id }}/news">BC Transit News Page</a>.</div>
                         </div>
                     </div>
-                % elif show_survey_banner:
-                    <div id="survey-banner" class="banner">
-                        <span class="close-button" onclick="hideSurvey()">
-                            <img class="white" width="24px" height="24px" src="/img/white/close.png"/>
-                            <img class="black" width="24px" height="24px" src="/img/black/close.png"/>
-                        </span>
-                        <div class="content">
-                            <span class="title">Take the BCTracker Survey!</span>
-                            <br />
-                            <span class="description">For more information, check out the latest update on the <a href="{{ get_url(system) }}">home page</a></span>
-                        </div>
-                        <button class="button survey-button" onclick="openSurvey()">Start Now</button>
-                    </div>
                 % end
             </div>
             <div id="content">{{ !base }}</div>
