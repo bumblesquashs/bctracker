@@ -49,7 +49,7 @@
                                         % count = len(region_system.get_stops())
                                         <tr>
                                             <td>
-                                                <div class="flex-column">
+                                                <div class="column">
                                                     <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                                     <span class="mobile-only smaller-font">
                                                         % if region_system.is_loaded:
@@ -78,7 +78,7 @@
                     </table>
                 % else:
                     <div id="result" class="container">
-                        <div id="nearby-status" class="loading flex-column">
+                        <div id="nearby-status" class="loading column">
                             <div id="status-title">Loading upcoming departures...</div>
                             <div id="status-message" class="display-none"></div>
                         </div>

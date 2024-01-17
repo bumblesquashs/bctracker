@@ -3,12 +3,10 @@
         <img class="middle-align white inline" src="/img/white/warning.png" />
         <img class="middle-align black inline" src="/img/black/warning.png" />
         <div class="tooltip">
-            <div class="flex-column">
-                <div class="title">Potential accidental login</div>
-                % for warning in record.warnings:
-                    <div>{{ warning }}</div>
-                % end
-            </div>
+            <div class="title">Potential accidental login</div>
+            % for warning in record.warnings:
+                <div>{{ warning }}</div>
+            % end
         </div>
     </div>
 % end

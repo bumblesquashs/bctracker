@@ -2,11 +2,9 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1>
-        <div class="flex-row">
-            % include('components/route_indicator')
-            <div class="flex-1">{{! route.display_name }}</div>
-        </div>
+    <h1 class="row">
+        % include('components/route_indicator')
+        {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -26,16 +24,14 @@
                     % include('components/map', map_trips=route.trips, map_positions=positions)
                     
                     <div class="info-box">
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/sheets_indicator', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
-                        <div class="section vertical">
+                        <div class="column section">
                             % headsigns = route.get_headsigns()
-                            <div class="flex-column">
-                                % for headsign in headsigns:
-                                    <div>{{ headsign }}</div>
-                                % end
-                            </div>
+                            % for headsign in headsigns:
+                                <div>{{ headsign }}</div>
+                            % end
                         </div>
                     </div>
                 </div>
@@ -69,8 +65,8 @@
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
+                                        <div class="column">
+                                            <div class="row">
                                                 % include('components/bus', bus=bus)
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                             </div>
@@ -83,7 +79,7 @@
                                         % include('components/order', order=order)
                                     </td>
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
                                                 Trip:
@@ -183,8 +179,8 @@
                                                                 % bus = recorded_today[trip.id]
                                                                 % order = bus.order
                                                                 <td>
-                                                                    <div class="flex-column">
-                                                                        <div class="flex-row left">
+                                                                    <div class="column">
+                                                                        <div class="row">
                                                                             % include('components/bus', bus=bus)
                                                                             % if trip.id in trip_positions:
                                                                                 % position = trip_positions[trip.id]
@@ -203,8 +199,8 @@
                                                                 % bus = scheduled_today[trip.block_id]
                                                                 % order = bus.order
                                                                 <td>
-                                                                    <div class="flex-column">
-                                                                        <div class="flex-row left">
+                                                                    <div class="column">
+                                                                        <div class="row">
                                                                             % include('components/bus', bus=bus)
                                                                             <div class="tooltip-anchor">
                                                                                 <img class="middle-align white" src="/img/white/schedule.png" />
@@ -232,7 +228,7 @@
                                                             <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
                                                         </td>
                                                         <td>
-                                                            <div class="flex-column">
+                                                            <div class="column">
                                                                 % include('components/trip_link', trip=trip)
                                                                 <span class="non-desktop smaller-font">
                                                                     % include('components/headsign_indicator')

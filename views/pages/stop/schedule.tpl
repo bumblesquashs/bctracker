@@ -37,7 +37,7 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/sheets_indicator', sheets=sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                                 <div class="section">
                                     <div class="header">
                                         % for weekday in service_group.schedule.weekdays:
-                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
+                                            <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
                                         % end
                                         <h3>{{ service_group }}</h3>
                                     </div>
@@ -84,7 +84,7 @@
                                                     <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                                         <td>{{ departure.time.format_web(time_format) }}</td>
                                                         <td class="non-mobile">
-                                                            <div class="flex-column">
+                                                            <div class="column">
                                                                 % include('components/headsign_indicator')
                                                                 % if not departure.pickup_type.is_normal:
                                                                     <span class="smaller-font">{{ departure.pickup_type }}</span>
@@ -104,7 +104,7 @@
                                                             % end
                                                         </td>
                                                         <td>
-                                                            <div class="flex-column">
+                                                            <div class="column">
                                                                 % include('components/trip_link', trip=trip)
                                                                 <span class="mobile-only smaller-font">
                                                                     % include('components/headsign_indicator')

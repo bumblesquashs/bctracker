@@ -24,17 +24,17 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        <div class="section vertical-align">
+                        <div class="row section align-center">
                             % previous_date = date.previous()
                             % next_date = date.next()
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
-                            <div class="name centred">
+                            <div class="centred">
                                 <h3>{{ date.format_long() }}</h3>
                                 <a href="{{ get_url(system, 'blocks') }}">Go to weekly schedule</a>
                             </div>
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/sheets_indicator', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>

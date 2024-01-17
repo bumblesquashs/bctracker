@@ -151,7 +151,7 @@
                                                                 % year_positions = [p for p in model_positions if p.bus.order.year == year]
                                                                 <tr class="section">
                                                                     <td colspan="7">
-                                                                        <div class="flex-row">
+                                                                        <div class="row">
                                                                             <div class="flex-1">{{ year }}</div>
                                                                             <div>{{ len(year_positions) }}</div>
                                                                         </div>

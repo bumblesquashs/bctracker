@@ -9,7 +9,7 @@
 % model = bus.model
 
 <div class="page-header">
-    <h1 class="flex-row">
+    <h1 class="row">
         <span>Bus</span>
         % include('components/bus', bus=bus, enable_link=False)
     </h1>
@@ -34,12 +34,12 @@
             <div class="content">
                 % if position is None:
                     <div class="info-box">
-                        <div class="section">
+                        <div class="title">
                             <h3>Not in service</h3>
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Last Seen</div>
-                            <div class="value flex-column">
+                            <div class="value">
                                 % if overview is None:
                                     <div class="lighter-text">Never</div>
                                 % else:
@@ -54,9 +54,9 @@
                             </div>
                         </div>
                         % if overview is not None:
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">System</div>
-                                <div class="value flex-column">
+                                <div class="value">
                                     <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                     % include('components/map', map_position=position)
                     
                     <div class="info-box">
-                        <div class="section">
+                        <div class="title">
                             <h3>Not in service</h3>
                         </div>
                         % last_record = overview.last_record
@@ -82,14 +82,14 @@
                                 % end
                             % end
                         % end
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
                                 <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
                             </div>
                         </div>
                         % if show_speed:
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">Speed</div>
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
@@ -105,35 +105,35 @@
                     
                     <div class="info-box">
                         <div class="section">
-                            <div class="flex-row">
+                            <div class="row">
                                 % include('components/adherence_indicator', adherence=position.adherence, size='large')
-                                <h3 class="flex-1">{{ trip }}</h3>
+                                <h3>{{ trip }}</h3>
                             </div>
                         </div>
                         <div class="section">
-                            <div class="flex-row">
+                            <div class="row">
                                 % include('components/route_indicator')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </div>
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/block_indicator', date=Date.today(block.system.timezone))
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
                                 <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
                             </div>
                         </div>
                         % if show_speed:
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">Speed</div>
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
                         % end
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Block</div>
-                            <div class="value flex-column">
+                            <div class="value">
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                 % date = Date.today(block.system.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
@@ -142,9 +142,9 @@
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                             </div>
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Trip</div>
-                            <div class="value flex-column">
+                            <div class="value">
                                 % include('components/trip_link', trip=trip)
                                 % start_time = trip.start_time.format_web(time_format)
                                 % end_time = trip.end_time.format_web(time_format)
@@ -152,9 +152,9 @@
                             </div>
                         </div>
                         % if stop is not None:
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">Next Stop</div>
-                                <div class="value flex-column">
+                                <div class="value">
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                     % adherence = position.adherence
                                     % if adherence is not None:
@@ -176,19 +176,19 @@
                 <div class="section">
                     <div class="info-box">
                         % if bus.order.size > 1:
-                            <div class="section no-flex">
+                            <div class="section">
                                 % include('components/order_indicator', bus=bus)
                             </div>
                         % end
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Vehicle Type</div>
                             <div class="value">{{ model.type }}</div>
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Length</div>
                             <div class="value">{{ str(model.length).rstrip('0').rstrip('.') }} feet</div>
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Fuel Type</div>
                             <div class="value">{{ model.fuel }}</div>
                         </div>
@@ -207,18 +207,12 @@
                         <h2>Upcoming Stops</h2>
                     </div>
                     <div class="content">
-                        <div class="flex-column">
-                            % if len([d for d in upcoming_departures if d.timepoint]) > 0:
-                                <div>
-                                    Departures in <span class="timing-point">bold</span> are timing points.
-                                </div>
-                            % end
-                            % if position.adherence is not None and position.adherence.value != 0:
-                                <div>
-                                    Times in brackets are estimates based on current location.
-                                </div>
-                            % end
-                        </div>
+                        % if len([d for d in upcoming_departures if d.timepoint]) > 0:
+                            <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
+                        % end
+                        % if position.adherence is not None and position.adherence.value != 0:
+                            <p>Times in brackets are estimates based on current location.</p>
+                        % end
                         <table>
                             <thead>
                                 <tr>
@@ -234,7 +228,7 @@
                                     % stop = departure.stop
                                     <tr>
                                         <td>
-                                            <div class="flex-row">
+                                            <div class="row">
                                                 <div class="{{ 'timing-point' if departure.timepoint else '' }}">
                                                     {{ departure.time.format_web(time_format) }}
                                                 </div>
@@ -250,13 +244,13 @@
                                             <td class="lighter-text" colspan="2">Unknown</td>
                                         % else:
                                             <td>
-                                                <div class="flex-column">
+                                                <div class="column">
                                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                                                     <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                 </div>
                                             </td>
                                             <td class="non-mobile">
-                                                <div class="flex-column">
+                                                <div class="column">
                                                     <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                     % if not departure.pickup_type.is_normal:
                                                         <span class="smaller-font">{{ departure.pickup_type }}</span>
@@ -325,15 +319,15 @@
                                 <tr>
                                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                                     <td class="non-desktop">
-                                        <div class="flex-column">
+                                        <div class="column">
                                             {{ record.date.format_short() }}
                                             <span class="smaller-font">{{ record.system }}</span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">{{ record.system }}</td>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
+                                        <div class="column">
+                                            <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
                                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>

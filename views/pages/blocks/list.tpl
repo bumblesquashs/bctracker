@@ -30,7 +30,7 @@
                             % count = len(region_system.get_blocks())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.is_loaded:
@@ -79,7 +79,7 @@
                     </div>
                     <div class="content">
                         <div class="info-box">
-                            <div class="section no-flex">
+                            <div class="section">
                                 % include('components/sheets_indicator', sheets=sheets, schedule_path='blocks', date_path='blocks/schedule')
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                                     <div class="section">
                                         <div class="header">
                                             % for weekday in service_group.schedule.weekdays:
-                                                <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
+                                                <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
                                             % end
                                             <h3>{{ service_group }}</h3>
                                         </div>

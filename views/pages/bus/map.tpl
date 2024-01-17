@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="flex-row">
+    <h1 class="row">
         <span>Bus</span>
         % include('components/bus', bus=bus, enable_link=False)
     </h1>

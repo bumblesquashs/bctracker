@@ -51,7 +51,7 @@
                 <tr class="{{'' if same_date else 'divider'}}">
                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                     <td class="non-desktop">
-                        <div class="flex-column">
+                        <div class="column">
                             {{ record.date.format_short() }}
                             % if system is None:
                                 <span class="mobile-only smaller-font">{{ record.system }}</span>
@@ -59,7 +59,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="flex-column">
+                        <div class="column">
                             % include('components/bus', bus=bus)
                             <span class="non-desktop smaller-font">
                                 % include('components/order', order=order)
@@ -73,7 +73,7 @@
                         <td class="non-mobile">{{ record.system }}</td>
                     % end
                     <td>
-                        <div class="flex-column">
+                        <div class="column">
                             % if record.is_available:
                                 % block = record.block
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>

@@ -34,7 +34,7 @@
                             % count = len(region_system.get_routes())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.is_loaded:
@@ -85,7 +85,7 @@
                 % for route in routes:
                     <tr>
                         <td>
-                            <div class="flex-row">
+                            <div class="row">
                                 % include('components/route_indicator')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>

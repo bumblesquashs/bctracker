@@ -184,7 +184,7 @@
                 
                 const headsign = document.createElement("div");
                 if (position.adherence !== null && position.adherence !== undefined) {
-                    headsign.className = "flex-row center flex-gap-5";
+                    headsign.className = "row center gap-5";
                     const adherence = position.adherence;
                     const adherenceElement = document.createElement("div");
                     adherenceElement.classList.add("adherence-indicator");

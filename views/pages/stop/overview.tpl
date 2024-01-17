@@ -27,19 +27,17 @@
                 
                 % if len(stop_departures) > 0:
                     <div class="info-box">
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
-                        <div class="section vertical">
+                        <div class="column section">
                             % routes = stop.routes
-                            <div class="flex-column">
-                                % for route in routes:
-                                    <div class="flex-row">
-                                        % include('components/route_indicator')
-                                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
-                                    </div>
-                                % end
-                            </div>
+                            % for route in routes:
+                                <div class="row">
+                                    % include('components/route_indicator')
+                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                </div>
+                            % end
                         </div>
                     </div>
                 % end

@@ -25,7 +25,7 @@
                 % include('components/map', map_trip=trip, map_positions=positions)
                 
                 <div class="info-box">
-                    <div class="section no-flex">
+                    <div class="section">
                         % include('components/sheets_indicator', sheets=trip.sheets)
                     </div>
                     <div class="section">
@@ -33,13 +33,13 @@
                         % if route is None:
                             <div class="lighter-text">Unknown Route</div>
                         % else:
-                            <div class="flex-row">
+                            <div class="row">
                                 % include('components/route_indicator')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
@@ -50,23 +50,23 @@
                             % end
                         </div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Start time</div>
                         <div class="value">{{ trip.start_time.format_web(time_format) }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">End time</div>
                         <div class="value">{{ trip.end_time.format_web(time_format) }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Duration</div>
                         <div class="value">{{ trip.duration }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Number of stops</div>
                         <div class="value">{{ len(departures) }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Direction</div>
                         <div class="value">{{ trip.direction }}</div>
                     </div>
@@ -74,11 +74,11 @@
                     % if length is not None:
                         % km = length / 1000
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Length</div>
                             <div class="value">{{ f'{km:.1f}' }}km</div>
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Average Speed</div>
                             <div class="value">{{ f'{(km / hours):.1f}' }}km/h</div>
                         </div>
@@ -117,7 +117,7 @@
                                         % end
                                     </td>
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % for sheet in related_trip.sheets:
                                                 <div>{{ sheet }}</div>
                                                 <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
@@ -160,8 +160,8 @@
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
+                                        <div class="column">
+                                            <div class="row">
                                                 % include('components/bus', bus=bus)
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                             </div>
@@ -194,9 +194,7 @@
             </div>
             <div class="content">
                 % if len([d for d in departures if d.timepoint]) > 0:
-                    <p>
-                        Departures in <span class="timing-point">bold</span> are timing points.
-                    </p>
+                    <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 <table>
                     <thead>
@@ -215,13 +213,13 @@
                                     {{ departure.time.format_web(time_format) }}
                                 </td>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                                         <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
                                     </div>
                                 </td>
                                 <td class="non-mobile">
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <span class="{{ 'timing-point' if departure.timepoint else '' }}">
                                             {{ stop }}
                                         </span>

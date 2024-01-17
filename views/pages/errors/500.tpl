@@ -17,7 +17,7 @@
         <button class="button" onclick="document.getElementById('error-details').classList.remove('display-none')">Show Details</button>
     </div>
     
-    <div id="error-details" class="flex-column left flex-gap-10 display-none">
+    <div id="error-details" class="column left gap-10 display-none">
         <h3>{{ error.exception }}</h3>
         <div class="code-block">{{ error.traceback }}</div>
     </div>

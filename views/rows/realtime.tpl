@@ -4,8 +4,8 @@
 
 <tr>
     <td>
-        <div class="flex-column">
-            <div class="flex-row left">
+        <div class="column">
+            <div class="row">
                 % include('components/bus', bus=bus)
                 % include('components/adherence_indicator', adherence=position.adherence)
             </div>
@@ -23,7 +23,7 @@
         % block = trip.block
         % stop = position.stop
         <td>
-            <div class="flex-column">
+            <div class="column">
                 % include('components/headsign_indicator')
                 <div class="mobile-only smaller-font">
                     Trip:

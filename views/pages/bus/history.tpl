@@ -4,7 +4,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="flex-row">
+    <h1 class="row">
         <span>Bus</span>
         % include('components/bus', bus=bus, enable_link=False)
     </h1>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/events_indicator', events=events)
                         </div>
                         % record_systems = {r.system for r in records}
@@ -37,9 +37,9 @@
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
-                            <div class="value flex-column">
+                            <div class="value">
                                 % for record_system in sorted(record_systems):
                                     <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
                                 % end
@@ -99,15 +99,15 @@
                                 <tr>
                                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                                     <td class="non-desktop">
-                                        <div class="flex-column">
+                                        <div class="column">
                                             {{ record.date.format_short() }}
                                             <span class="smaller-font">{{ record.system }}</span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">{{ record.system }}</td>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
+                                        <div class="column">
+                                            <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
                                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>

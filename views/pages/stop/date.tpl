@@ -19,17 +19,17 @@
             </div>
             <div class="content">
                 <div class="info-box">
-                    <div class="section vertical-align">
+                    <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
-                        <div class="name centred">
+                        <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
                             <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">Return to week view</a>
                         </div>
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
-                    <div class="section no-flex">
+                    <div class="section">
                         % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                                 <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                     <td>{{ departure.time.format_web(time_format) }}</td>
                                     <td class="non-mobile">
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % include('components/headsign_indicator')
                                             % if not departure.pickup_type.is_normal:
                                                 <span class="smaller-font">{{ departure.pickup_type }}</span>
@@ -102,7 +102,7 @@
                                         % end
                                     </td>
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % include('components/trip_link', trip=trip)
                                             <span class="mobile-only smaller-font">
                                                 % include('components/headsign_indicator')

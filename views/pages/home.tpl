@@ -120,7 +120,7 @@
             <div class="content">
                 <div id="quick-navigation">
                     <div class="item">
-                        <div class="flex-column center">
+                        <div class="column center">
                             <img class="white" src="/img/white/realtime.png" />
                             <img class="black" src="/img/black/realtime.png" />
                             <h3>Bus Tracking</h3>
@@ -132,7 +132,7 @@
                         </div>
                     </div>
                     <div class="item">
-                        <div class="flex-column center">
+                        <div class="column center">
                             <img class="white" src="/img/white/history.png" />
                             <img class="black" src="/img/black/history.png" />
                             <h3>Bus History</h3>
@@ -144,7 +144,7 @@
                         </div>
                     </div>
                     <div class="item">
-                        <div class="flex-column center">
+                        <div class="column center">
                             <img class="white" src="/img/white/route.png" />
                             <img class="black" src="/img/black/route.png" />
                             <h3>Schedules and Maps</h3>

@@ -16,7 +16,7 @@
                     <h3>Current Theme: {{ theme }}</h3>
                 % end
             </div>
-            <div class="content flex-column flex-gap-10">
+            <div class="content">
                 <p>
                     The default BCTracker theme (BC Transit) is available in both light and dark colours.
                     You can also set it to change automatically based on your system preferences.
@@ -59,7 +59,7 @@
                     <h3>Current Format: {{ time_format }}</h3>
                 % end
             </div>
-            <div class="content flex-column flex-gap-10">
+            <div class="content">
                 <p>
                     You can choose whether times are displayed as 12hr or 30hr.
                 </p>
@@ -89,7 +89,7 @@
                     <h3>Current style: Default</h3>
                 % end
             </div>
-            <div class="content flex-column flex-gap-10">
+            <div class="content">
                 <p>
                     Choose a style for bus icons shown on the map screen.
                 </p>

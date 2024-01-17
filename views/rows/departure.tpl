@@ -11,8 +11,8 @@
             % bus = recorded_today[trip.id]
             % order = bus.order
             <td>
-                <div class="flex-column">
-                    <div class="flex-row left">
+                <div class="column">
+                    <div class="row">
                         % include('components/bus', bus=bus)
                         % if trip.id in positions:
                             % position = positions[trip.id]
@@ -31,8 +31,8 @@
             % bus = scheduled_today[trip.block_id]
             % order = bus.order
             <td>
-                <div class="flex-column">
-                    <div class="flex-row left">
+                <div class="column">
+                    <div class="row">
                         % include('components/bus', bus=bus)
                         <div class="tooltip-anchor">
                             <img class="middle-align white" src="/img/white/schedule.png" />
@@ -54,7 +54,7 @@
         % end
     % end
     <td class="non-mobile">
-        <div class="flex-column">
+        <div class="column">
             % include('components/headsign_indicator')
             % if not departure.pickup_type.is_normal:
                 <span class="smaller-font">{{ departure.pickup_type }}</span>
@@ -74,7 +74,7 @@
         % end
     </td>
     <td>
-        <div class="flex-column">
+        <div class="column">
             % include('components/trip_link', trip=trip)
             <span class="mobile-only smaller-font">
                 % include('components/headsign_indicator')

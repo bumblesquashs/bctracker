@@ -109,7 +109,7 @@
                                                         % for order in model_orders:
                                                             <tr class="section">
                                                                 <td colspan="5">
-                                                                    <div class="flex-row">
+                                                                    <div class="row">
                                                                         <div class="flex-1">{{ order.year }}</div>
                                                                         <div>{{ order.size }}</div>
                                                                     </div>
@@ -125,7 +125,7 @@
                                                                         </td>
                                                                         <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
-                                                                            <div class="flex-column">
+                                                                            <div class="column">
                                                                                 {{ overview.first_seen_date.format_short() }}
                                                                                 <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
                                                                             </div>
@@ -133,7 +133,7 @@
                                                                         <td class="non-mobile">{{ overview.first_seen_system }}</td>
                                                                         <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
-                                                                            <div class="flex-column">
+                                                                            <div class="column">
                                                                                 {{ overview.last_seen_date.format_short() }}
                                                                                 <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
                                                                             </div>

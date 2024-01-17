@@ -49,7 +49,7 @@
                     <td class="desktop-only">{{ transfer.date.format_long() }}</td>
                     <td class="non-desktop">{{ transfer.date.format_short() }}</td>
                     <td>
-                        <div class="flex-column">
+                        <div class="column">
                             % include('components/bus', bus=bus)
                             <span class="non-desktop smaller-font">
                                 % include('components/order', order=order)
@@ -62,7 +62,7 @@
                     <td class="non-mobile">{{ transfer.old_system }}</td>
                     <td class="non-mobile">{{ transfer.new_system }}</td>
                     <td class="mobile-only">
-                        <div class="flex-column">
+                        <div class="column">
                             <div>
                                 <div class="smaller-font">From:</div>
                                 {{ transfer.old_system }}

@@ -21,20 +21,18 @@
                     </div>
                     <div class="content">
                         <div class="info-box">
-                            <div class="section no-flex">
+                            <div class="section">
                                 % include('components/events_indicator', events=events)
                             </div>
-                            <div class="section no-flex">
+                            <div class="column section">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                                <div class="flex-column">
-                                    % for order in orders:
-                                        % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
-                                        <div class="flex-row">
-                                            <div class="name flex-1">{{! order }}</div>
-                                            <div class="value lighter-text">{{ round(percentage) }}%</div>
-                                        </div>
-                                    % end
-                                </div>
+                                % for order in orders:
+                                    % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
+                                    <div class="row">
+                                        <div class="flex-1">{{! order }}</div>
+                                        <div class="lighter-text">{{ round(percentage) }}%</div>
+                                    </div>
+                                % end
                             </div>
                         </div>
                     </div>
@@ -86,8 +84,8 @@
                                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                                         <td class="non-desktop">{{ record.date.format_short() }}</td>
                                         <td>
-                                            <div class="flex-column">
-                                                <div class="flex-row left">
+                                            <div class="column">
+                                                <div class="row">
                                                     % include('components/bus', bus=bus)
                                                     % include('components/record_warnings_indicator', record=record)
                                                 </div>

@@ -9,7 +9,7 @@
 % total_minutes = end_time.get_minutes() - start_time.get_minutes()
 
 <div>
-    <div class="flex-row">
+    <div class="row">
         <div class="smaller-font lighter-text">{{ start_time.format_web(time_format) }}</div>
         <div class="flex-1"></div>
         <div class="smaller-font lighter-text">{{ end_time.format_web(time_format) }}</div>

@@ -46,7 +46,7 @@
             % if len(unknown_overviews) > 0:
                 <tr class="section">
                     <td colspan="5">
-                        <div class="flex-row">
+                        <div class="row">
                             <div class="flex-1">Unknown Year/Model</div>
                             <div>{{ len(unknown_overviews) }}</div>
                         </div>
@@ -62,7 +62,7 @@
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
-                            <div class="flex-column">
+                            <div class="column">
                                 {{ record.date.format_short() }}
                                 % if system is None:
                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
@@ -73,7 +73,7 @@
                             <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            <div class="flex-column">
+                            <div class="column">
                                 % if record.is_available:
                                     % block = record.block
                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
@@ -95,7 +95,7 @@
                 % order_overviews = [o for o in known_overviews if o.bus.order == order]
                 <tr class="section">
                     <td colspan="5">
-                        <div class="flex-row">
+                        <div class="row">
                             <div class="flex-1">{{! order }}</div>
                             <div>{{ len(order_overviews) }}</div>
                         </div>
@@ -111,7 +111,7 @@
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
-                            <div class="flex-column">
+                            <div class="column">
                                 {{ record.date.format_short() }}
                                 % if system is None:
                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
@@ -122,7 +122,7 @@
                             <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            <div class="flex-column">
+                            <div class="column">
                                 % if record.is_available:
                                     % block = record.block
                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>

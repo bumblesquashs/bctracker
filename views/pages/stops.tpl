@@ -33,7 +33,7 @@
                             % count = len(region_system.get_stops())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.is_loaded:

@@ -73,7 +73,7 @@
             <div class="section">
                 <div class="header">
                     <h2>
-                        <div class="flex-row">
+                        <div class="row">
                             % include('components/route_indicator')
                             <div class="flex-1">{{! route.display_name }}</div>
                         </div>
@@ -114,8 +114,8 @@
                                 % last_bus = bus
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
+                                        <div class="column">
+                                            <div class="row">
                                                 % include('components/bus', bus=bus)
                                                 % include('components/adherence_indicator', adherence=position.adherence)
                                             </div>
@@ -134,7 +134,7 @@
                                     % block = trip.block
                                     % stop = position.stop
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % include('components/headsign_indicator')
                                             <div class="mobile-only smaller-font">
                                                 Trip:
@@ -202,7 +202,7 @@
                                 % last_bus = bus
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % include('components/bus', bus=bus)
                                             <span class="non-desktop smaller-font">
                                                 % include('components/order', order=order)

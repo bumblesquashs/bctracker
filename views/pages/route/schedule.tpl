@@ -2,11 +2,9 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1>
-        <div class="flex-row">
-            % include('components/route_indicator')
-            <div class="flex-1">{{! route.display_name }}</div>
-        </div>
+    <h1 class="row">
+        % include('components/route_indicator')
+        {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
@@ -41,7 +39,7 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        <div class="section no-flex">
+                        <div class="section">
                             % include('components/sheets_indicator', sheets=sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
                     </div>
@@ -62,7 +60,7 @@
                                 <div class="section">
                                     <div class="header">
                                         % for weekday in service_group.schedule.weekdays:
-                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
+                                            <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
                                         % end
                                         <h3>{{ service_group }}</h3>
                                     </div>
@@ -103,7 +101,7 @@
                                                                             <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
                                                                         </td>
                                                                         <td>
-                                                                            <div class="flex-column">
+                                                                            <div class="column">
                                                                                 % include('components/trip_link', trip=trip)
                                                                                 <span class="mobile-only smaller-font">
                                                                                     % include('components/headsign_indicator')
