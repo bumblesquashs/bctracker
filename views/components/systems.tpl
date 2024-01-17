@@ -7,7 +7,7 @@
 
 % available_systems = [s for s in available_systems if system is None or s != system]
 
-<table class="striped">
+<table>
 	<thead>
 		<tr>
 			<th>System</th>

@@ -42,14 +42,14 @@
                     </p>
                 % else:
                     % if system is None or system.realtime_enabled:
-                        <p class="margin-bottom-10">
+                        <p>
                             <span>Buses with a</span>
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Time</th>

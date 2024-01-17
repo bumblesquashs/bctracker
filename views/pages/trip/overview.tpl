@@ -2,8 +2,8 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Trip {{! trip.display_id }}</h1>
-    <h2 class="subtitle">{{ trip }}</h2>
+    <h1>Trip {{! trip.display_id }}</h1>
+    <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
@@ -94,7 +94,7 @@
                     <h2>Related Trips</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Trip</th>
@@ -144,7 +144,7 @@
                     % end
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
@@ -194,11 +194,11 @@
             </div>
             <div class="content">
                 % if len([d for d in departures if d.timepoint]) > 0:
-                    <p class="margin-bottom-10">
+                    <p>
                         Departures in <span class="timing-point">bold</span> are timing points.
                     </p>
                 % end
-                <table class="striped">
+                <table>
                     <thead>
                         <tr>
                             <th>Time</th>

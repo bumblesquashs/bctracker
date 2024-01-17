@@ -2,16 +2,16 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Stops</h1>
+    <h1>Stops</h1>
     % if search is not None:
-        <h2 class="subtitle">Search results for "{{ search }}"</h2>
+        <h2>Search results for "{{ search }}"</h2>
     % end
 </div>
 
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see individual stops.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -101,7 +101,7 @@
                 <h3>No stops found</h3>
             </div>
         % else:
-            <table class="striped">
+            <table>
                 <thead>
                     <tr>
                         <th class="desktop-only">Stop Number</th>

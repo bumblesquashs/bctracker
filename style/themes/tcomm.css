@@ -29,17 +29,17 @@ form input[type="text"]:focus {
     border-color: #000000;
 }
 
-table.striped {
+table {
     border-color: #CCCCCC;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
 }
 
-table.striped tbody tr:hover {
+table tbody tr:hover {
     background-color: #DFDFDF;
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
 
-table.striped tbody tr.section {
+table tbody tr.section {
     border-color: #456F9A;;
     background-color: #5E87B0;
     background-image: linear-gradient(#6fACD5,#497BAE);
@@ -47,11 +47,11 @@ table.striped tbody tr.section {
     color: #FFFFFF;
 }
 
-table.striped td {
+table td {
     border-color: #CCCCCC;
 }
 
-table.striped th {
+table th {
     border-color: #456F9A;;
     background-color: #5E87B0;
     background-image: linear-gradient(#6fACD5,#497BAE);
@@ -59,7 +59,7 @@ table.striped th {
     color: #FFFFFF;
 }
 
-table.striped tr {
+table tr {
     background-color: #EEEEEE;
     color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;

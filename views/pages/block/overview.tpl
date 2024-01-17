@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Block {{ block.id }}</h1>
+    <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'blocks/{block.id}/map') }}" class="tab-button">Map</a>
@@ -136,7 +136,7 @@
                     <h2>Related Blocks</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Block</th>
@@ -175,7 +175,7 @@
                     % end
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
@@ -263,7 +263,7 @@
                                                 </div>
                                             % end
                                             <div class="content">
-                                                <table class="striped">
+                                                <table>
                                                     <thead>
                                                         <tr>
                                                             <th>Start Time</th>

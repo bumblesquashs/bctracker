@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">
+    <h1>
         <div class="flex-row">
             % include('components/route_indicator')
             <div class="flex-1">{{! route.display_name }}</div>
@@ -73,7 +73,7 @@
                                     <h4>{{ direction }}</h4>
                                 </div>
                                 <div class="content">
-                                    <table class="striped">
+                                    <table>
                                         <thead>
                                             <tr>
                                                 <th class="non-mobile">Start Time</th>

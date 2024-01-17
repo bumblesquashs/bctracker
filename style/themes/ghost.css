@@ -39,30 +39,30 @@ form input[type="text"]:focus {
     border-color: #AAAAAA;
 }
 
-table.striped {
+table {
     border-color: #FFFFFF;
 }
 
-table.striped tbody tr:hover {
+table tbody tr:hover {
     background-color: #DDDDDD;
 }
 
-table.striped tbody tr.section {
+table tbody tr.section {
     background-color: #EEEEEE;
 }
 
-table.striped td {
+table td {
     border-color: #FFFFFF;
     border-width: 0px;
 }
 
-table.striped th {
+table th {
     background-color: #DDDDDD;
     border-color: #FFFFFF;
     border-width: 0px;
 }
 
-table.striped tr {
+table tr {
     background-color: #FFFFFF;
 }
 

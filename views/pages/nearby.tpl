@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Nearby Stops</h1>
+    <h1>Nearby Stops</h1>
 </div>
 
 <div class="flex-container">
@@ -27,7 +27,7 @@
                     <div class="placeholder">
                         <h3>Choose a system to see nearby stops</h3>
                     </div>
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>System</th>

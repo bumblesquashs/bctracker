@@ -2,8 +2,8 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Realtime</h1>
-    <h2 class="subtitle">Currently active vehicles</h2>
+    <h1>Realtime</h1>
+    <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">All Buses</span>
         % if system is not None:
@@ -19,18 +19,14 @@
 </div>
 
 <div class="container">
-    <div class="section left">
-        <div class="content">
-            <div class="checkbox" onclick="toggleNISBuses()">
-                <div class="box">
-                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Show NIS Buses</span>
+    <div class="checkbox" onclick="toggleNISBuses()">
+        <div class="box">
+            <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                <img class="white" src="/img/white/check.png" />
+                <img class="black" src="/img/black/check.png" />
             </div>
         </div>
+        <span class="checkbox-label">Show NIS Buses</span>
     </div>
     <div class="section">
         <div class="content">
@@ -69,7 +65,7 @@
                 % known_positions = [p for p in positions if p.bus.order is not None]
                 % orders = sorted({p.bus.order for p in known_positions})
                 % unknown_positions = sorted([p for p in positions if p.bus.order is None])
-                <table class="striped">
+                <table>
                     <thead>
                         <tr>
                             <th>Bus</th>

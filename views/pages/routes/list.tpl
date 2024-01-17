@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Routes</h1>
+    <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
         <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
@@ -12,7 +12,7 @@
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see individual routes.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -74,7 +74,7 @@
             % end
         </div>
     % else:
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>Route</th>

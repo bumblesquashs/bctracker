@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Fleet</h1>
+    <h1>Fleet</h1>
 </div>
 
 % models = sorted({o.model for o in orders})
@@ -10,7 +10,7 @@
 
 <div class="container">
     <div class="section">
-        <div class="content flex-column flex-gap-10">
+        <div class="content">
             <p>
                 This is the full list of vehicles that are currently available on BCTracker.
                 It does not include every bus that has ever been operated by BC Transit, but it should be mostly up-to-date with orders since the 1990s.
@@ -44,7 +44,7 @@
                             <h2>Statistics</h2>
                         </div>
                         <div class="content">
-                            <table class="striped">
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Model</th>
@@ -95,7 +95,7 @@
                                                 <h3>{{! model }}</h3>
                                             </div>
                                             <div class="content">
-                                                <table class="striped">
+                                                <table>
                                                     <thead>
                                                         <tr>
                                                             <th>Bus</th>

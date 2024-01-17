@@ -4,36 +4,34 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Map</h1>
+    <h1>Map</h1>
     % if len(visible_positions) > 0:
-        <div class="flex-column flex-gap-5">
-            <div class="checkbox" onclick="toggleTripLines()">
-                <div class="box">
-                    <div id="checkbox-image" class="hidden">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
+        <div class="checkbox" onclick="toggleTripLines()">
+            <div class="box">
+                <div id="checkbox-image" class="hidden">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
                 </div>
-                <span class="checkbox-label">Show Route Lines</span>
             </div>
-            <div class="checkbox" onclick="toggleAutomaticRefresh()">
-                <div class="box">
-                    <div id="refresh-image" class="hidden">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
+            <span class="checkbox-label">Show Route Lines</span>
+        </div>
+        <div class="checkbox" onclick="toggleAutomaticRefresh()">
+            <div class="box">
+                <div id="refresh-image" class="hidden">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
                 </div>
-                <span class="checkbox-label">Automatically Refresh</span>
             </div>
-            <div class="checkbox" onclick="toggleNISBuses()">
-                <div class="box">
-                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
+            <span class="checkbox-label">Automatically Refresh</span>
+        </div>
+        <div class="checkbox" onclick="toggleNISBuses()">
+            <div class="box">
+                <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
                 </div>
-                <span class="checkbox-label">Show NIS Buses</span>
             </div>
+            <span class="checkbox-label">Show NIS Buses</span>
         </div>
     % end
 </div>

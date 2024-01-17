@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Blocks</h1>
+    <h1>Blocks</h1>
 </div>
 
 % if system is None:
@@ -66,7 +66,7 @@
                             % end
                         </div>
                     % else:
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Block</th>

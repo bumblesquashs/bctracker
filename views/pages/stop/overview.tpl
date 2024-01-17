@@ -6,8 +6,8 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Stop {{ stop.number }}</h1>
-    <h2 class="subtitle">{{ stop }}</h2>
+    <h1>Stop {{ stop.number }}</h1>
+    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
@@ -53,7 +53,7 @@
                     <h2>Nearby Stops</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Number</th>
@@ -85,7 +85,7 @@
                     <h2>Other Systems At This Stop</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>System</th>
@@ -120,20 +120,22 @@
                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                     % if len(upcoming_departures) == 0:
                         % tomorrow = Date.today().next()
-                        <p>
-                            There are no departures for the rest of today.
-                            <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
-                        </p>
+                        <div class="placeholder">
+                            <p>
+                                There are no departures for the rest of today.
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                            </p>
+                        </div>
                     % else:
                         % if system is None or system.realtime_enabled:
-                            <p class="margin-bottom-10">
+                            <p>
                                 <span>Buses with a</span>
                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                 <img class="middle-align black" src="/img/black/schedule.png" />
                                 <span>are scheduled but may be swapped off.</span>
                             </p>
                         % end
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Time</th>
@@ -180,14 +182,14 @@
                     </div>
                 % else:
                     % if system is None or system.realtime_enabled:
-                        <p class="margin-bottom-10">
+                        <p>
                             <span>Buses with a</span>
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Time</th>

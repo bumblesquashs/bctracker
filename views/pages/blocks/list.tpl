@@ -2,13 +2,13 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Blocks</h1>
+    <h1>Blocks</h1>
 </div>
 
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see blocks.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -104,7 +104,7 @@
                                             <h3>{{ service_group }}</h3>
                                         </div>
                                         <div class="content">
-                                            <table class="striped">
+                                            <table>
                                                 <thead>
                                                     <tr>
                                                         <th>Block</th>

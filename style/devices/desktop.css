@@ -15,11 +15,7 @@ body {
 }
 
 body.full-map .page-header {
-    display: inline-block;
-}
-
-form {
-    margin-bottom: 10px;
+    align-self: flex-start;
 }
 
 form input[type="text"] {
@@ -27,7 +23,11 @@ form input[type="text"] {
     vertical-align: middle;
 }
 
-table.striped th {
+table {
+    align-self: flex-start;
+}
+
+table th {
     white-space: nowrap;
 }
 
@@ -296,7 +296,7 @@ table.striped th {
 }
 
 .sidebar table {
-    width: 100%;
+    align-self: stretch;
 }
 
 .smaller-font {
@@ -305,6 +305,10 @@ table.striped th {
 
 .tab-button {
     min-width: 100px;
+}
+
+.tab-button-bar {
+    align-self: flex-start;
 }
 
 .tablet-only {

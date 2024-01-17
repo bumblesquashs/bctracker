@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">
+    <h1>
         <div class="flex-row">
             % include('components/route_indicator')
             <div class="flex-1">{{! route.display_name }}</div>
@@ -50,7 +50,7 @@
                     <h2>Active Buses</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
@@ -146,14 +146,14 @@
                                     </div>
                                     <div class="content">
                                         % if system is None or system.realtime_enabled:
-                                            <p class="margin-bottom-10">
+                                            <p>
                                                 <span>Buses with a</span>
                                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                                 <img class="middle-align black" src="/img/black/schedule.png" />
                                                 <span>are scheduled but may be swapped off.</span>
                                             </p>
                                         % end
-                                        <table class="striped">
+                                        <table>
                                             <thead>
                                                 <tr>
                                                     <th class="non-mobile">Start Time</th>

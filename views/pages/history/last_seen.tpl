@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Vehicle History</h1>
+    <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
         <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
@@ -30,7 +30,7 @@
     % known_overviews = [o for o in overviews if o.bus.order is not None]
     % unknown_overviews = [o for o in overviews if o.bus.order is None]
     % orders = sorted({o.bus.order for o in known_overviews})
-    <table class="striped">
+    <table>
         <thead>
             <tr>
                 <th>Bus</th>

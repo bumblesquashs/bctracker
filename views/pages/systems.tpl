@@ -2,10 +2,10 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Systems</h1>
+    <h1>Systems</h1>
 </div>
 
-<table class="striped">
+<table>
     <thead>
         <tr>
             <th>System</th>

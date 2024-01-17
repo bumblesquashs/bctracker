@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">
+    <h1>
         <div class="flex-row">
             % include('components/route_indicator')
             <div class="flex-1">{{! route.display_name }}</div>

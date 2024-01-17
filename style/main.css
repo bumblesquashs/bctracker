@@ -36,6 +36,10 @@ input[type="text"]::placeholder {
     opacity: 1;
 }
 
+form {
+    margin: 0px;
+}
+
 form .input-container {
     display: flex;
     gap: 10px;
@@ -72,7 +76,7 @@ p {
     margin: 0px;
 }
 
-table.striped {
+table {
     border-collapse: collapse;
     border-spacing: 0px;
     empty-cells: show;
@@ -80,7 +84,7 @@ table.striped {
     border-style: solid;
 }
 
-table.striped td {
+table td {
     border-width: 0 0 1 0px;
     border-style: solid;
     margin: 0px;
@@ -88,11 +92,11 @@ table.striped td {
     padding: 0.5em 1em;
 }
 
-table.striped td * {
+table td * {
     vertical-align: middle;
 }
 
-table.striped th {
+table th {
     text-align: left;
     vertical-align: top;
     border-width: 0 0 1 0px;
@@ -102,12 +106,12 @@ table.striped th {
     padding: 0.5em 1em;
 }
 
-table.striped tr.divider {
+table tr.divider {
     border-top-width: 4px;
     border-top-style: solid;
 }
 
-table.striped tr.section td {
+table tr.section td {
     padding: 4px 16px;
     font-weight: bold;
 }
@@ -119,6 +123,12 @@ ul {
 #banners {
     position: relative;
     z-index: 20;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 #main {
@@ -226,10 +236,10 @@ ul {
 
 #quick-navigation .item {
     flex: 1;
-    padding: 10px 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 10px;
     align-items: center;
     border-width: 1px;
     border-style: solid;
@@ -413,6 +423,7 @@ ul {
     gap: 5px;
     align-items: center;
     cursor: pointer;
+    align-self: flex-start;
 }
 
 .checkbox .box {
@@ -443,11 +454,13 @@ ul {
 .container > .section {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 }
 
-.container > .section.left {
-    align-items: flex-start;
+.container > .section > .content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .display-none {
@@ -614,26 +627,6 @@ ul {
 
 .info-box .section > .value {
     text-align: right;
-}
-
-.margin-bottom-0 {
-    margin-bottom: 0px;
-}
-
-.margin-bottom-2 {
-    margin-bottom: 2px;
-}
-
-.margin-bottom-5 {
-    margin-bottom: 5px;
-}
-
-.margin-bottom-10 {
-    margin-bottom: 10px;
-}
-
-.margin-bottom-20 {
-    margin-bottom: 20px;
 }
 
 .marker {
@@ -848,18 +841,16 @@ ul {
 }
 
 .page-header {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 5px;
     border-bottom-width: 2px;
     border-bottom-style: solid;
 }
 
-.page-header .subtitle {
+.page-header h2 {
     font-weight: normal;
-    margin-bottom: 5px;
-}
-
-.page-header .title {
-    margin-bottom: 5px;
 }
 
 .placeholder {
@@ -978,11 +969,10 @@ ul {
 }
 
 .tab-button-bar {
-    display: inline-flex;
+    display: flex;
     flex-direction: row;
-    box-sizing: border-box;
-    margin-bottom: -1px;
     gap: 1px;
+    margin-bottom: -6px;
     border-width: 1px;
     border-style: solid;
 }

@@ -2,8 +2,8 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Trip {{! trip.display_id }}</h1>
-    <h2 class="subtitle">{{ trip }}</h2>
+    <h1>Trip {{! trip.display_id }}</h1>
+    <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
@@ -61,14 +61,14 @@
                         </div>
                     % else:
                         % if len([r for r in records if len(r.warnings) > 0]) > 0:
-                            <p class="margin-bottom-10">
+                            <p>
                                 <span>Entries with a</span>
                                 <img class="middle-align white inline" src="/img/white/warning.png" />
                                 <img class="middle-align black inline" src="/img/black/warning.png" />
                                 <span>may be accidental logins.</span>
                             </p>
                         % end
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Date</th>

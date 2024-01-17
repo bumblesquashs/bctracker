@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Personalize</h1>
+    <h1>Personalize</h1>
 </div>
 
 <div class="flex-container">

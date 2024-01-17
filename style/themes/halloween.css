@@ -47,34 +47,34 @@ iframe {
     color-scheme: light;
 }
 
-table.striped {
+table {
     border-color: #565656;
 }
 
-table.striped tbody tr:hover {
+table tbody tr:hover {
     background-color: #565656;
 }
 
-table.striped tbody tr.section {
+table tbody tr.section {
     background-color: #565656;
     color: #FFFFFF;
 }
 
-table.striped td {
+table td {
     border-color: #565656;
 }
 
-table.striped th {
+table th {
     background-color: #FF6C00;
     color: #FFFFFF;
     border-color: #565656;
 }
 
-table.striped tr {
+table tr {
     background-color: #2F2F2F;
 }
 
-table.striped tr:nth-child(2n-1) {
+table tr:nth-child(2n-1) {
     background-color: #393939;
 }
 

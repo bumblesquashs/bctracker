@@ -39,34 +39,34 @@ form input[type="text"]:focus {
     border-color: #7A0000;
 }
 
-table.striped {
+table {
     border-color: #69BB65;
 }
 
-table.striped tbody tr:hover {
+table tbody tr:hover {
     background-color: #C3E9C1;
 }
 
-table.striped tbody tr.section {
+table tbody tr.section {
     background-color: #69BB65;
     color: #FFFFFF;
 }
 
-table.striped td {
+table td {
     border-color: #69BB65;
 }
 
-table.striped th {
+table th {
     background-color: #D70000;
     color: #FFFFFF;
     border-color: #69BB65;
 }
 
-table.striped tr {
+table tr {
     background-color: #FFFFFF;
 }
 
-table.striped tr:nth-child(2n-1) {
+table tr:nth-child(2n-1) {
     background-color: #E4F6E3;
 }
 

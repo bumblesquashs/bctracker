@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Error: Trip {{ trip_id }} Not Found</h1>
+    <h1>Error: Trip {{ trip_id }} Not Found</h1>
 </div>
 
 <div class="placeholder">

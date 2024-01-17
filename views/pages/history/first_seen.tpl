@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Vehicle History</h1>
+    <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
         <span class="tab-button current">First Seen</span>
@@ -27,7 +27,7 @@
         % end
     </div>
 % else:
-    <table class="striped">
+    <table>
         <thead>
             <tr>
                 <th>First Seen</th>

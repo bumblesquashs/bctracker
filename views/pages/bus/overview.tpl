@@ -9,17 +9,15 @@
 % model = bus.model
 
 <div class="page-header">
-    <h1 class="title flex-row">
+    <h1 class="flex-row">
         <span>Bus</span>
         % include('components/bus', bus=bus, enable_link=False)
     </h1>
-    <h2 class="subtitle">
-        % if bus.order is None:
-            <span class="lighter-text">Unknown Year/Model</span>
-        % else:
-            {{! bus.order }}
-        % end
-    </h2>
+    % if bus.order is None:
+        <h2 class="lighter-text">Unknown Year/Model</h2>
+    % else:
+        <h2>{{! bus.order }}</h2>
+    % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
@@ -207,6 +205,8 @@
                 <div class="section">
                     <div class="header">
                         <h2>Upcoming Stops</h2>
+                    </div>
+                    <div class="content">
                         <div class="flex-column">
                             % if len([d for d in upcoming_departures if d.timepoint]) > 0:
                                 <div>
@@ -219,9 +219,7 @@
                                 </div>
                             % end
                         </div>
-                    </div>
-                    <div class="content">
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Time</th>
@@ -302,14 +300,14 @@
                     </div>
                 % else:
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
-                        <p class="margin-bottom-10">
+                        <p>
                             <span>Entries with a</span>
                             <img class="middle-align white inline" src="/img/white/warning.png" />
                             <img class="middle-align black inline" src="/img/black/warning.png" />
                             <span>may be accidental logins.</span>
                         </p>
                     % end
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Date</th>

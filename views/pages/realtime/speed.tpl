@@ -2,8 +2,8 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Realtime</h1>
-    <h2 class="subtitle">Currently active vehicles</h2>
+    <h1>Realtime</h1>
+    <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
         % if system is not None:
@@ -15,18 +15,14 @@
 </div>
 
 <div class="container">
-    <div class="section left">
-        <div class="content">
-            <div class="checkbox" onclick="toggleNISBuses()">
-                <div class="box">
-                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Show NIS Buses</span>
+    <div class="checkbox" onclick="toggleNISBuses()">
+        <div class="box">
+            <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                <img class="white" src="/img/white/check.png" />
+                <img class="black" src="/img/black/check.png" />
             </div>
         </div>
+        <span class="checkbox-label">Show NIS Buses</span>
     </div>
     <div class="section">
         <div class="content">
@@ -62,7 +58,7 @@
                     % end
                 </div>
             % else:
-                <table class="striped">
+                <table>
                     <thead>
                         <tr>
                             <th>Bus</th>

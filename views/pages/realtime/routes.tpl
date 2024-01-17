@@ -2,8 +2,8 @@
 % rebase('base')
 
 <div class="page-header">
-    <h1 class="title">Realtime</h1>
-    <h2 class="subtitle">Currently active vehicles</h2>
+    <h1>Realtime</h1>
+    <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
         <span class="tab-button current">By Route</span>
@@ -17,18 +17,14 @@
 </div>
 
 <div class="container">
-    <div class="section left">
-        <div class="content">
-            <div class="checkbox" onclick="toggleNISBuses()">
-                <div class="box">
-                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Show NIS Buses</span>
+    <div class="checkbox" onclick="toggleNISBuses()">
+        <div class="box">
+            <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
+                <img class="white" src="/img/white/check.png" />
+                <img class="black" src="/img/black/check.png" />
             </div>
         </div>
+        <span class="checkbox-label">Show NIS Buses</span>
     </div>
     % if len(positions) == 0:
         <div class="placeholder">
@@ -87,7 +83,7 @@
                     <p>
                         <a href="{{ get_url(route.system, f'routes/{route.number}') }}">View schedule and details</a>
                     </p>
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
