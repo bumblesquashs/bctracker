@@ -44,10 +44,10 @@
         </thead>
         <tbody>
             % if len(unknown_overviews) > 0:
-                <tr class="section">
+                <tr class="header">
                     <td colspan="5">
-                        <div class="row">
-                            <div class="flex-1">Unknown Year/Model</div>
+                        <div class="row space-between">
+                            <div>Unknown Year/Model</div>
                             <div>{{ len(unknown_overviews) }}</div>
                         </div>
                     </td>
@@ -93,10 +93,10 @@
             % end
             % for order in orders:
                 % order_overviews = [o for o in known_overviews if o.bus.order == order]
-                <tr class="section">
+                <tr class="header">
                     <td colspan="5">
-                        <div class="row">
-                            <div class="flex-1">{{! order }}</div>
+                        <div class="row space-between">
+                            <div>{{! order }}</div>
                             <div>{{ len(order_overviews) }}</div>
                         </div>
                     </td>

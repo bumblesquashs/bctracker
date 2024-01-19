@@ -20,10 +20,8 @@
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
-                        <tr class="section">
-                            <td colspan="3">
-                                {{ region }}
-                            </td>
+                        <tr class="header">
+                            <td colspan="3">{{ region }}</td>
                         </tr>
                         <tr class="display-none"></tr>
                         % for region_system in region_systems:
@@ -71,7 +69,7 @@
         </div>
     % else:
         % sheets = system.get_sheets()
-        <div class="flex-container">
+        <div class="page-container">
             <div class="sidebar container flex-1">
                 <div class="section">
                     <div class="header">

@@ -15,7 +15,7 @@
 
 % departures = trip.find_departures()
 
-<div class="flex-container">
+<div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
             <div class="header">

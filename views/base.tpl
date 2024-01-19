@@ -323,7 +323,7 @@
                     </div>
                 % end
             </div>
-            <div id="content">{{ !base }}</div>
+            <div id="page">{{ !base }}</div>
         </div>
     </body>
 </html>

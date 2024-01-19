@@ -31,16 +31,16 @@ table th {
     white-space: nowrap;
 }
 
-#content {
-    padding: 20px 40px 40px 40px;
-}
-
 #last-updated {
     font-size: 11pt;
 }
 
 #navigation-menu-toggle {
     display: none;
+}
+
+#page {
+    padding: 20px 40px 40px 40px;
 }
 
 #refresh-button img {
@@ -201,29 +201,6 @@ table th {
     vertical-align: middle;
 }
 
-@media screen and (min-width: 1001px) and (max-width: 1200px) {
-    .flex-container {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    table {
-        width: 100%;
-    }
-}
-
-@media screen and (min-width: 1201px) {
-    .flex-container {
-        flex-direction: row;
-        gap: 40px;
-    }
-
-    .container.inline {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-}
-
 .mobile-only {
     display: none !important;
 }
@@ -240,7 +217,7 @@ table th {
     display: none !important;
 }
 
-.side-bar-closed #content {
+.side-bar-closed #page {
     padding-left: 15px;
 }
 
@@ -270,4 +247,27 @@ table th {
 
 .tablet-only {
     display: none !important;
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1200px) {
+    .page-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    table {
+        align-self: stretch;
+    }
+}
+
+@media screen and (min-width: 1201px) {
+    .page-container {
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .container.inline {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 }

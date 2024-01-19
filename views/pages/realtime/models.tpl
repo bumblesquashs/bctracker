@@ -60,7 +60,7 @@
 % else:
     % models = sorted({p.bus.model for p in positions if p.bus.model is not None})
     % model_types = sorted({m.type for m in models})
-    <div class="flex-container">
+    <div class="page-container">
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header">
@@ -80,7 +80,7 @@
                         <tbody>
                             % for type in model_types:
                                 % type_positions = [p for p in positions if p.bus.model is not None and p.bus.model.type == type]
-                                <tr class="section">
+                                <tr class="header">
                                     <td>{{ type }}</td>
                                     % if show_nis:
                                         <td>{{ len([p for p in type_positions if p.trip is not None]) }}</td>
@@ -100,7 +100,7 @@
                                     </tr>
                                 % end
                             % end
-                            <tr class="section">
+                            <tr class="header">
                                 <td>Total</td>
                                 % if show_nis:
                                     <td>{{ len([p for p in positions if p.trip is not None]) }}</td>
@@ -145,10 +145,10 @@
                                             <tbody>
                                                 % for year in model_years:
                                                     % year_positions = [p for p in model_positions if p.bus.order.year == year]
-                                                    <tr class="section">
+                                                    <tr class="header">
                                                         <td colspan="7">
-                                                            <div class="row">
-                                                                <div class="flex-1">{{ year }}</div>
+                                                            <div class="row space-between">
+                                                                <div>{{ year }}</div>
                                                                 <div>{{ len(year_positions) }}</div>
                                                             </div>
                                                         </td>

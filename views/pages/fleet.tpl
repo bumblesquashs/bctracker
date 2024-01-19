@@ -37,7 +37,7 @@
     </div>
     <div class="section">
         <div class="content">
-            <div class="flex-container">
+            <div class="page-container">
                 <div class="sidebar container flex-1">
                     <div class="section">
                         <div class="header">
@@ -54,7 +54,7 @@
                                 </thead>
                                 <tbody>
                                     % for type in model_types:
-                                        <tr class="section">
+                                        <tr class="header">
                                             <td>{{ type }}</td>
                                             <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
                                             <td>{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
@@ -69,7 +69,7 @@
                                             </tr>
                                         % end
                                     % end
-                                    <tr class="section">
+                                    <tr class="header">
                                         <td>Total</td>
                                         <td>{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
                                         <td>{{ sum([o.size for o in orders]) }}</td>
@@ -107,10 +107,10 @@
                                                     </thead>
                                                     <tbody>
                                                         % for order in model_orders:
-                                                            <tr class="section">
+                                                            <tr class="header">
                                                                 <td colspan="5">
-                                                                    <div class="row">
-                                                                        <div class="flex-1">{{ order.year }}</div>
+                                                                    <div class="row space-between">
+                                                                        <div>{{ order.year }}</div>
                                                                         <div>{{ order.size }}</div>
                                                                     </div>
                                                                 </td>

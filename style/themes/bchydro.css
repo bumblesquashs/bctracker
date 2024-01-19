@@ -47,7 +47,7 @@ table tbody tr:hover {
     background-color: #CBCBCB;
 }
 
-table tbody tr.section {
+table tbody tr.header {
     background-color: #666666;
     color: #FFFFFF;
 }
@@ -68,10 +68,6 @@ table tr {
 
 table tr:nth-child(2n-1) {
     background-color: #D8D8D8;
-}
-
-#content img.white {
-    display: none;
 }
 
 #map.preview {
@@ -142,6 +138,10 @@ table tr:nth-child(2n-1) {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page img.white {
+    display: none;
 }
 
 #page-header {
@@ -470,7 +470,7 @@ table tr:nth-child(2n-1) {
     color: #1A671A;
 }
 
-.route-number {
+.route {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;

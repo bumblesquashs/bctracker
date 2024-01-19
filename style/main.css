@@ -3,7 +3,8 @@ a {
     text-decoration: none;
 }
 
-body {
+/* Get outta here with your default margins */
+body, ol, ul, p, h1, h2, h3, h4, form {
     margin: 0px;
 }
 
@@ -36,10 +37,6 @@ input[type="text"]::placeholder {
     opacity: 1;
 }
 
-form {
-    margin: 0px;
-}
-
 form .input-container {
     display: flex;
     gap: 10px;
@@ -49,16 +46,12 @@ form .input-container input[type="text"] {
     flex: 1;
 }
 
-h1, h2, h3, h4 {
-    margin: 0px;
-}
-
-h1 .route-number {
+h1 .route {
     font-size: 20pt;
     min-width: 20px;
 }
 
-h2 .route-number {
+h2 .route {
     font-size: 16pt;
     min-width: 16px;
 }
@@ -66,14 +59,6 @@ h2 .route-number {
 img.inline {
     height: 18px;
     width: 18px;
-}
-
-ol {
-    margin: 0px;
-}
-
-p {
-    margin: 0px;
 }
 
 table {
@@ -107,24 +92,14 @@ table tr.divider {
     border-top-style: solid;
 }
 
-table tr.section td {
+table tr.header td {
     padding: 4px 16px;
     font-weight: bold;
-}
-
-ul {
-    margin: 0px;
 }
 
 #banners {
     position: relative;
     z-index: 20;
-}
-
-#content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
 }
 
 #main {
@@ -213,6 +188,12 @@ ul {
 
 #nearby-status #status-title {
     font-weight: bold;
+}
+
+#page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 #page-header {
@@ -503,10 +484,6 @@ ul {
     padding-left: 20px;
 }
 
-.flex-container {
-    display: flex;
-}
-
 .flex-1 {
     flex: 1;
 }
@@ -660,7 +637,7 @@ ul {
     border-radius: 3px;
 }
 
-.marker .details .content .route-number {
+.marker .details .content .route {
     font-size: 8pt;
 }
 
@@ -820,6 +797,10 @@ ul {
     font-weight: bold;
 }
 
+.page-container {
+    display: flex;
+}
+
 .placeholder {
     display: flex;
     flex-direction: column;
@@ -831,13 +812,27 @@ ul {
     font-weight: bold;
 }
 
-.route-indicator {
+.route {
+    display: inline-block;
+    font-size: 11pt;
+    font-weight: bold;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+}
+
+.route .route-number {
+    padding: 1px 6px;
+    color: inherit;
+}
+
+.route-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.route-indicator .route-number {
+.route-list .route {
     font-size: 10pt;
 }
 
@@ -846,16 +841,6 @@ ul {
     border-radius: 2px;
     flex-shrink: 0;
     align-self: stretch;
-}
-
-.route-number {
-    display: inline-block;
-    padding: 1px 6px;
-    font-size: 11pt;
-    font-weight: bold;
-    border-width: 1px;
-    border-style: solid;
-    text-align: center;
 }
 
 .row {
@@ -888,6 +873,7 @@ ul {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-self: stretch;
 }
 
 .sheet .dates {

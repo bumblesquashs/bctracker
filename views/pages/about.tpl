@@ -5,7 +5,7 @@
     <h1>About</h1>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="container flex-3">
         <div class="section">
             <div class="content">

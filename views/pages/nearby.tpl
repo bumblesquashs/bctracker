@@ -5,7 +5,7 @@
     <h1>Nearby Stops</h1>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div id="current-location" class="sidebar container flex-1 display-none">
         <div class="section">
             <div class="header">
@@ -39,10 +39,8 @@
                             % for region in regions:
                                 % region_systems = [s for s in systems if s.region == region]
                                 % if len(region_systems) > 0:
-                                    <tr class="section">
-                                        <td colspan="3">
-                                            {{ region }}
-                                        </td>
+                                    <tr class="header">
+                                        <td colspan="3">{{ region }}</td>
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for region_system in region_systems:
@@ -176,7 +174,7 @@
                     content.classList = "content hover-only centred";
                     let routesHTML = "";
                     for (const route of stop.routes) {
-                        routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                        routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
                     }
                     content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
                     

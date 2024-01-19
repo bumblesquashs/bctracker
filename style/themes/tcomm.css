@@ -39,7 +39,7 @@ table tbody tr:hover {
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
 
-table tbody tr.section {
+table tbody tr.header {
     border-color: #456F9A;;
     background-color: #5E87B0;
     background-image: linear-gradient(#6fACD5,#497BAE);
@@ -64,10 +64,6 @@ table tr {
     color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
-}
-
-#content img.white {
-    display: none;
 }
 
 #map.preview {
@@ -150,6 +146,10 @@ table tr {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page img.white {
+    display: none;
 }
 
 #page-header {
@@ -539,7 +539,7 @@ table tr {
     color: #1A671A;
 }
 
-.route-number {
+.route {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;

@@ -44,10 +44,6 @@ table {
     font-size: 13pt;
 }
 
-#content {
-    padding: 20px;
-}
-
 #last-updated {
     font-size: 12pt;
 }
@@ -66,6 +62,10 @@ table {
     height: 4px;
     border-radius: 2px;
     margin: 6px;
+}
+
+#page {
+    padding: 20px;
 }
 
 #quick-navigation {
@@ -192,11 +192,6 @@ table {
     display: none !important;
 }
 
-.flex-container {
-    flex-direction: column;
-    gap: 20px;
-}
-
 .menu {
     position: relative;
     margin: 0px;
@@ -227,6 +222,11 @@ table {
 
 .non-mobile {
     display: none !important;
+}
+
+.page-container {
+    flex-direction: column;
+    gap: 20px;
 }
 
 .side-bar-closed-only {

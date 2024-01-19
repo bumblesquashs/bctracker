@@ -179,7 +179,7 @@
                     headsign.className = "row center gap-5";
                     const adherence = position.adherence;
                     const adherenceElement = document.createElement("div");
-                    adherenceElement.classList.add("adherence-indicator");
+                    adherenceElement.classList.add("adherence");
                     adherenceElement.classList.add(adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     

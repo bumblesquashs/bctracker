@@ -47,7 +47,7 @@ table tbody tr:hover {
     background-color: #DDDDDD;
 }
 
-table tbody tr.section {
+table tbody tr.header {
     background-color: #EEEEEE;
 }
 
@@ -64,10 +64,6 @@ table th {
 
 table tr {
     background-color: #FFFFFF;
-}
-
-#content img.white {
-    display: none;
 }
 
 #map.preview {
@@ -130,6 +126,10 @@ table tr {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page img.white {
+    display: none;
 }
 
 #page-header {
@@ -457,7 +457,7 @@ table tr {
     color: #1A671A;
 }
 
-.route-number {
+.route {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;

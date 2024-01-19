@@ -23,7 +23,7 @@
     </thead>
     <tbody>
         % for region in regions:
-            <tr class="section">
+            <tr class="header">
                 <td class="section" colspan="11">{{ region }}</td>
             </tr>
             <tr class="display-none"></tr>

@@ -73,7 +73,7 @@
                 <div class="header">
                     <h2 class="row">
                         % include('components/route')
-                        <div class="flex-1">{{! route.display_name }}</div>
+                        <div>{{! route.display_name }}</div>
                     </h2>
                 </div>
                 <div class="content">

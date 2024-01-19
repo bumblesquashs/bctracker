@@ -1,16 +1,18 @@
 % if route is not None:
-    <div class="route tooltip-anchor">
-        % if type(route) == str:
-            <span class="route-number">{{ route }}</span>
-        % else:
+    % if type(route) == str:
+        <div class="route">
+            <div class="route-number">{{ route }}</div>
+        </div>
+    % else:
+        <div class="route tooltip-anchor" style="background-color: #{{ route.colour }};">
             % if get('include_link', False):
-                <a class="route-number" style="background-color: #{{ route.colour }};" href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }}</a>
+                <a class="route-number" href="{{ get_url(route.system, f'routes/{route.number}') }}">{{ route.number }}</a>
             % else:
-                <span class="route-number" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
+                <div class="route-number">{{ route.number }}</div>
             % end
             % if get('include_tooltip', False):
                 <div class="tooltip">{{ route }}</div>
             % end
-        % end
-    </div>
+        </div>
+    % end
 % end

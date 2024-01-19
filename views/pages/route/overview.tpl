@@ -13,7 +13,7 @@
     </div>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     % if len(route.trips) > 0:
         <div class="sidebar container flex-1">
             <div class="section">

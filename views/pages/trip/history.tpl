@@ -12,7 +12,7 @@
 </div>
 
 % if system.realtime_enabled:
-    <div class="flex-container">
+    <div class="page-container">
         % if len(records) > 0:
             <div class="sidebar container flex-1">
                 <div class="section">
@@ -28,8 +28,8 @@
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
                                 % for order in orders:
                                     % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
-                                    <div class="row">
-                                        <div class="flex-1">{{! order }}</div>
+                                    <div class="row space-between">
+                                        <div>{{! order }}</div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
                                     </div>
                                 % end

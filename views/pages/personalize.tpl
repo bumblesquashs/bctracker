@@ -5,7 +5,7 @@
     <h1>Personalize</h1>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="container flex-1">
         <div class="section">
             <div class="header">
