@@ -3,7 +3,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Map</h1>
     % if len(visible_positions) > 0:
         <div class="checkbox-container" onclick="toggleTripLines()">

@@ -7,7 +7,7 @@ body {
     margin: 0px;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     position: relative;
     z-index: 20;
     border-bottom-width: 0px;
@@ -92,10 +92,6 @@ table td {
     padding: 0.5em 1em;
 }
 
-table td * {
-    vertical-align: middle;
-}
-
 table th {
     text-align: left;
     vertical-align: top;
@@ -153,20 +149,12 @@ ul {
     border-style: solid;
 }
 
-#map.z-override {
-    z-index: 30;
-}
-
 #map-toggle {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     border-radius: 50%;
     bottom: 40px;
     right: 15px;
-}
-
-#map-toggle.active {
-    z-index: 40;
 }
 
 #map-toggle img {
@@ -225,6 +213,19 @@ ul {
 
 #nearby-status #status-title {
     font-weight: bold;
+}
+
+#page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 5px;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+}
+
+#page-header h2 {
+    font-weight: normal;
 }
 
 #quick-navigation {
@@ -303,7 +304,7 @@ ul {
     display: none;
 }
 
-.adherence-indicator {
+.adherence {
     padding: 2px 4px;
     border-radius: 4px;
     min-width: 14px;
@@ -316,7 +317,7 @@ ul {
     flex-shrink: 0;
 }
 
-.adherence-indicator.large {
+.adherence.large {
     font-size: 12pt;
     line-height: 12pt;
     padding: 3px 6px;
@@ -382,6 +383,13 @@ ul {
 
 .bold {
     font-weight: bold;
+}
+
+.bus {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
 }
 
 .button {
@@ -562,6 +570,15 @@ ul {
     gap: 40px !important;
 }
 
+.headsign {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-start;
+    justify-self: flex-start;
+}
+
 .hidden {
     opacity: 0 !important;
 }
@@ -656,7 +673,7 @@ ul {
     gap: 1px;
 }
 
-.marker .details .content .adherence-indicator {
+.marker .details .content .adherence {
     font-size: 8pt;
     line-height: 8pt;
     border-radius: 3px;
@@ -808,7 +825,7 @@ ul {
     white-space: nowrap;
 }
 
-.order-indicator .content {
+.order-details .content {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -816,23 +833,10 @@ ul {
     justify-content: center;
 }
 
-.order-indicator .title {
+.order-details .title {
     margin-bottom: 5px;
     text-align: center;
     font-weight: bold;
-}
-
-.page-header {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-bottom: 5px;
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-}
-
-.page-header h2 {
-    font-weight: normal;
 }
 
 .placeholder {
@@ -893,35 +897,7 @@ ul {
     align-items: center;
 }
 
-.sheets-indicator {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.sheets-indicator .footer {
-    width: 75%;
-    margin: 0px auto 0px auto;
-    font-size: 11pt;
-    text-align: center;
-}
-
-.sheets-indicator .legend {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    font-size: 11pt;
-}
-
-.sheets-indicator .legend .icon {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-}
-
-.sheets-indicator .sheet {
+.sheet {
     padding: 10px;
     border-radius: 10px;
     display: flex;
@@ -929,7 +905,7 @@ ul {
     gap: 10px;
 }
 
-.sheets-indicator .sheet .dates {
+.sheet .dates {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -938,7 +914,7 @@ ul {
     column-gap: 10px;
 }
 
-.sheets-indicator .sheet .dates .month {
+.sheet .dates .month {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -947,15 +923,15 @@ ul {
     gap: 5px;
 }
 
-.sheets-indicator .sheet .dates .month .name {
+.sheet .dates .month .name {
     font-size: 13pt;
 }
 
-.sheets-indicator .sheet .dates .month.title .name {
+.sheet .dates .month.title .name {
     font-size: 14pt;
 }
 
-.sheets-indicator .sheet .dates .month .date {
+.sheet .dates .month .date {
     font-size: 11pt;
     padding: 1px 4px;
     border-radius: 4px;
@@ -965,9 +941,37 @@ ul {
     text-decoration: none;
 }
 
-.sheets-indicator .sheet .title {
+.sheet .title {
     margin-bottom: 0px;
     text-align: center;
+}
+
+.sheet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sheet-list .footer {
+    width: 75%;
+    margin: 0px auto 0px auto;
+    font-size: 11pt;
+    text-align: center;
+}
+
+.sheet-list .legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 11pt;
+}
+
+.sheet-list .legend .icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
 }
 
 .tab-button-bar {

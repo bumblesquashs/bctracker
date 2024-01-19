@@ -14,7 +14,7 @@ body {
     color: #000000;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -83,7 +83,11 @@ table tr {
     background-image: linear-gradient( #FFFFFF,#F1F1F1 );
 }
 
-#map-toggle-icon-white {
+#map-toggle img.black {
+    display: block;
+}
+
+#map-toggle img.white {
     display: none;
 }
 
@@ -146,6 +150,10 @@ table tr {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page-header {
+    border-bottom-color: #000000;
 }
 
 #quick-navigation .item {
@@ -346,29 +354,29 @@ table tr {
     color: #FFFFFF;
 }
 
-.adherence-indicator {
+.adherence {
     background-color: #DFDFDF;
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
     text-shadow: none;
 }
 
-.adherence-indicator.ahead {
+.adherence.ahead {
     color: #FF0000
 }
 
-.adherence-indicator.behind {
+.adherence.behind {
     color: #B38A15;
 }
 
-.adherence-indicator.on-time {
+.adherence.on-time {
     color: #43DF28;
 }
 
-.adherence-indicator.very-ahead {
+.adherence.very-ahead {
     color: #FF0000;
 }
 
-.adherence-indicator.very-behind {
+.adherence.very-behind {
     color: #174CB3;
 }
 
@@ -501,6 +509,11 @@ table tr {
     display: none;
 }
 
+.modified-service {
+    background-color: #FFA560;
+    color: #000000;
+}
+
 .negative {
     color: #FF0000;
 }
@@ -520,8 +533,14 @@ table tr {
     background-image: linear-gradient( #FFFADF,#FFF3A5 );
 }
 
-.page-header {
-    border-bottom-color: #000000;
+.no-service {
+    background-color: #FF7F7F;
+    color: #000000;
+}
+
+.normal-service {
+    background-color: #7DBD88;
+    color: #000000;
 }
 
 .positive {
@@ -536,52 +555,37 @@ table tr {
     text-decoration: none;
 }
 
-.sheets-indicator {
+.sheet {
+    background-color: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
+.sheet a {
     text-shadow: none;
 }
 
-.sheets-indicator a {
-    text-shadow: none;
-}
-
-.sheets-indicator .footer {
-    color: #666666;
-}
-
-.sheets-indicator .legend {
-    color: #666666;
-}
-
-.sheets-indicator a.modified-service:hover {
+.sheet a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.sheets-indicator a.no-service:hover {
+.sheet a.no-service:hover {
     background-color: #DC5050;
 }
 
-.sheets-indicator a.normal-service:hover {
+.sheet a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.sheets-indicator .modified-service {
-    background-color: #FFA560;
-    color: #000000;
+.sheet-list {
+    text-shadow: none;
 }
 
-.sheets-indicator .no-service {
-    background-color: #FF7F7F;
-    color: #000000;
+.sheet-list .footer {
+    color: #666666;
 }
 
-.sheets-indicator .normal-service {
-    background-color: #7DBD88;
-    color: #000000;
-}
-
-.sheets-indicator .sheet {
-    background-color: #DFDFDF;
-    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+.sheet-list .legend {
+    color: #666666;
 }
 
 .tab-button-bar {

@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Stop {{ stop.number }}</h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">

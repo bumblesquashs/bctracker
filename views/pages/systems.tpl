@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Systems</h1>
 </div>
 
@@ -90,7 +90,7 @@
                             <td class="desktop-only">{{ len(region_system.get_blocks()) }}</td>
                             <td class="desktop-only">{{ len(region_system.get_trips()) }}</td>
                             <td class="non-mobile">
-                                % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                % include('components/weekdays', schedule=region_system.schedule, compact=True)
                             </td>
                         % else:
                             <td class="lighter-text non-mobile" colspan="5">Unavailable</td>

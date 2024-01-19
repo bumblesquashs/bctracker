@@ -8,7 +8,7 @@
 % end_time = block.get_end_time(service_group=service_group, date=date)
 % total_minutes = end_time.get_minutes() - start_time.get_minutes()
 
-<div>
+<div class="column">
     <div class="row">
         <div class="smaller-font lighter-text">{{ start_time.format_web(time_format) }}</div>
         <div class="flex-1"></div>

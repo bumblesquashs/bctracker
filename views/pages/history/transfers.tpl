@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
@@ -42,7 +42,6 @@
             % last_date = None
             % for transfer in transfers:
                 % bus = transfer.bus
-                % order = bus.order
                 % same_date = last_date is None or transfer.date == last_date
                 % last_date = transfer.date
                 <tr class="{{'' if same_date else 'divider'}}">
@@ -50,14 +49,14 @@
                     <td class="non-desktop">{{ transfer.date.format_short() }}</td>
                     <td>
                         <div class="column">
-                            % include('components/bus', bus=bus)
+                            % include('components/bus')
                             <span class="non-desktop smaller-font">
-                                % include('components/order', order=order)
+                                % include('components/order', order=bus.order)
                             </span>
                         </div>
                     </td>
                     <td class="desktop-only">
-                        % include('components/order', order=order)
+                        % include('components/order', order=bus.order)
                     </td>
                     <td class="non-mobile">{{ transfer.old_system }}</td>
                     <td class="non-mobile">{{ transfer.new_system }}</td>

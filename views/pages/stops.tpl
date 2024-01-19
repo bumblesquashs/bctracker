@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Stops</h1>
     % if search is not None:
         <h2>Search results for "{{ search }}"</h2>
@@ -49,7 +49,7 @@
                                 % if region_system.is_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Stops are loading...</td>
@@ -113,17 +113,16 @@
                 </thead>
                 <tbody>
                     % for stop in sorted(stops):
-                        % routes = stop.routes
                         <tr>
                             <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                             <td>
                                 {{ stop }}
                                 <div class="mobile-only">
-                                    % include('components/routes_indicator', routes=routes)
+                                    % include('components/route_list', routes=stop.routes)
                                 </div>
                             </td>
                             <td class="non-mobile">
-                                % include('components/routes_indicator', routes=routes)
+                                % include('components/route_list', routes=stop.routes)
                             </td>
                         </tr>
                     % end

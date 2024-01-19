@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Blocks</h1>
 </div>
 
@@ -46,7 +46,7 @@
                                 % if region_system.is_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True, schedule_path='blocks')
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Blocks are loading...</td>
@@ -80,7 +80,7 @@
                     <div class="content">
                         <div class="info-box">
                             <div class="section">
-                                % include('components/sheets_indicator', sheets=sheets, schedule_path='blocks', date_path='blocks/schedule')
+                                % include('components/sheet_list', schedule_path='blocks', date_path='blocks/schedule')
                             </div>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                                                         <tr>
                                                             <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                                             <td>
-                                                                % include('components/routes_indicator', routes=block.get_routes(service_group=service_group))
+                                                                % include('components/route_list', routes=block.get_routes(service_group=service_group))
                                                             </td>
                                                             <td class="non-mobile">{{ start_time }}</td>
                                                             <td class="non-mobile">{{ end_time }}</td>

@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -27,12 +27,12 @@
                 
                 <div class="info-box">
                     <div class="section">
-                        % include('components/sheets_indicator', sheets=sheets)
+                        % include('components/sheet_list')
                     </div>
                     <div class="column section">
                         % for route in routes:
                             <div class="row">
-                                % include('components/route_indicator')
+                                % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         % end
@@ -50,7 +50,7 @@
                                     % if len(service_groups) > 1:
                                         <div class="lighter-text">{{ service_group }}</div>
                                     % end
-                                    % include('components/block_indicator', service_group=service_group)
+                                    % include('components/block_timeline', service_group=service_group)
                                 </div>
                             % end
                             <div class="row section">
@@ -186,30 +186,29 @@
                         <tbody>
                             % for position in sorted(positions):
                                 % bus = position.bus
-                                % order = bus.order
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus', bus=bus)
-                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                % include('components/bus')
+                                                % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order', order=bus.order)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=order)
+                                        % include('components/order', order=bus.order)
                                     </td>
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign_indicator')
+                                            % include('components/headsign')
                                             <div class="mobile-only smaller-font">
                                                 Trip:
-                                                % include('components/trip_link', trip=trip, include_tooltip=False)
+                                                % include('components/trip', include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="mobile-only smaller-font">
@@ -219,7 +218,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/trip_link', trip=trip)
+                                        % include('components/trip')
                                     </td>
                                     <td class="non-mobile">
                                         % if stop is None:
@@ -280,16 +279,16 @@
                                                                 <td class="desktop-only">{{ trip.duration }}</td>
                                                                 <td class="non-mobile">
                                                                     <div class="column">
-                                                                        % include('components/headsign_indicator')
+                                                                        % include('components/headsign')
                                                                         <span class="non-desktop smaller-font">{{ trip.direction }}</span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="desktop-only">{{ trip.direction }}</td>
                                                                 <td>
                                                                     <div class="column">
-                                                                        % include('components/trip_link', trip=trip)
+                                                                        % include('components/trip')
                                                                         <span class="mobile-only smaller-font">
-                                                                            % include('components/headsign_indicator')
+                                                                            % include('components/headsign')
                                                                         </span>
                                                                     </div>
                                                                 </td>

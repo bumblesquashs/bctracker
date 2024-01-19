@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Realtime</h1>
     <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
@@ -73,23 +73,22 @@
             % last_speed = None
             % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
                 % bus = position.bus
-                % order = bus.order
                 % same_speed = last_speed is None or position.speed // 10 == last_speed
                 % last_speed = position.speed // 10
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
                         <div class="column">
                             <div class="row">
-                                % include('components/bus', bus=bus)
-                                % include('components/adherence_indicator', adherence=position.adherence)
+                                % include('components/bus')
+                                % include('components/adherence', adherence=position.adherence)
                             </div>
                             <span class="non-desktop smaller-font">
-                                % include('components/order', order=order)
+                                % include('components/order', order=bus.order)
                             </span>
                         </div>
                     </td>
                     <td class="desktop-only">
-                        % include('components/order', order=order)
+                        % include('components/order', order=bus.order)
                     </td>
                     % if system is None:
                         <td class="desktop-only">{{ position.system }}</td>
@@ -108,11 +107,11 @@
                         % stop = position.stop
                         <td>
                             <div class="column">
-                                % include('components/headsign_indicator')
+                                % include('components/headsign')
                                 <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
                                 <div class="mobile-only smaller-font">
                                     Trip:
-                                    % include('components/trip_link', trip=trip)
+                                    % include('components/trip')
                                 </div>
                                 % if stop is not None:
                                     <div class="non-desktop smaller-font">
@@ -125,7 +124,7 @@
                             <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                         </td>
                         <td class="non-mobile">
-                            % include('components/trip_link', trip=trip)
+                            % include('components/trip')
                         </td>
                         <td class="desktop-only">
                             % if stop is None:

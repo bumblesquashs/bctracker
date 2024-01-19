@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Trip {{! trip.display_id }}</h1>
     <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
@@ -26,7 +26,7 @@
                 
                 <div class="info-box">
                     <div class="section">
-                        % include('components/sheets_indicator', sheets=trip.sheets)
+                        % include('components/sheet_list', sheets=trip.sheets)
                     </div>
                     <div class="section">
                         % route = trip.route
@@ -34,7 +34,7 @@
                             <div class="lighter-text">Unknown Route</div>
                         % else:
                             <div class="row">
-                                % include('components/route_indicator')
+                                % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         % end
@@ -107,7 +107,7 @@
                                 % block = related_trip.block
                                 <tr>
                                     <td>
-                                        % include('components/trip_link', trip=related_trip)
+                                        % include('components/trip', trip=related_trip)
                                     </td>
                                     <td class="non-mobile">
                                         % if block is None:
@@ -155,23 +155,22 @@
                         <tbody>
                             % for position in sorted(positions):
                                 % bus = position.bus
-                                % order = bus.order
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus', bus=bus)
-                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                % include('components/bus')
+                                                % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="mobile-only smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order', order=bus.order)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/order', order=order)
+                                        % include('components/order', order=bus.order)
                                     </td>
                                     <td>
                                         % if stop is None:

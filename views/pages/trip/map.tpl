@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Trip {{! trip.display_id }}</h1>
     <h2>{{ trip }}</h2>
     <div class="tab-button-bar">

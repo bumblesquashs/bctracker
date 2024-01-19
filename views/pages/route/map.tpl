@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1 class="row">
-        % include('components/route_indicator')
+        % include('components/route')
         {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">

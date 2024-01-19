@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Blocks</h1>
 </div>
 
@@ -35,7 +35,7 @@
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
                         <div class="section">
-                            % include('components/sheets_indicator', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
+                            % include('components/sheet_list', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                                     <tr>
                                         <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                         <td>
-                                            % include('components/routes_indicator', routes=block.get_routes(date=date))
+                                            % include('components/route_list', routes=block.get_routes(date=date))
                                         </td>
                                         <td class="non-mobile">{{ start_time }}</td>
                                         <td class="non-mobile">{{ end_time }}</td>

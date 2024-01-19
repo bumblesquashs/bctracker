@@ -1,10 +1,10 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1 class="row">
         <span>Bus</span>
-        % include('components/bus', bus=bus, enable_link=False)
+        % include('components/bus', enable_link=False)
     </h1>
     % if bus.order is None:
         <h2 class="lighter-text">Unknown Year/Model</h2>

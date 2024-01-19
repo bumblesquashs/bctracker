@@ -14,7 +14,7 @@ body.full-map {
     overflow: hidden;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     width: 100%;
 }
 

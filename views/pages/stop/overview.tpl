@@ -5,7 +5,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Stop {{ stop.number }}</h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
@@ -28,13 +28,13 @@
                 % if len(stop_departures) > 0:
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
+                            % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                         <div class="column section">
                             % routes = stop.routes
                             % for route in routes:
                                 <div class="row">
-                                    % include('components/route_indicator')
+                                    % include('components/route')
                                     <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                                 </div>
                             % end
@@ -66,7 +66,7 @@
                                     <td class="non-mobile">{{ nearby_stop }}</td>
                                     <td>
                                         <div class="mobile-only">{{ nearby_stop }}</div>
-                                        % include('components/routes_indicator', routes=nearby_stop.routes)
+                                        % include('components/route_list', routes=nearby_stop.routes)
                                     </td>
                                 </tr>
                             % end
@@ -96,7 +96,7 @@
                                 <tr>
                                     <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
                                     <td>
-                                        % include('components/routes_indicator', routes=alt_stop.routes)
+                                        % include('components/route_list', routes=alt_stop.routes)
                                     </td>
                                 </tr>
                             % end

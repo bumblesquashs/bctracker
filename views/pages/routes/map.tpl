@@ -3,7 +3,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Routes</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
@@ -52,7 +52,7 @@
                                 % if region_system.is_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Routes are loading...</td>

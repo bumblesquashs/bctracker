@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
@@ -58,7 +58,7 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % include('components/bus', bus=bus)
+                            % include('components/bus')
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
@@ -81,12 +81,12 @@
                                     <span>{{ record.block_id }}</span>
                                 % end
                                 <div class="non-desktop">
-                                    % include('components/routes_indicator', routes=record.routes)
+                                    % include('components/route_list', routes=record.routes)
                                 </div>
                             </div>
                         </td>
                         <td class="desktop-only">
-                            % include('components/routes_indicator', routes=record.routes)
+                            % include('components/route_list', routes=record.routes)
                         </td>
                     </tr>
                 % end
@@ -107,7 +107,7 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % include('components/bus', bus=bus)
+                            % include('components/bus')
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
@@ -130,12 +130,12 @@
                                     <span>{{ record.block_id }}</span>
                                 % end
                                 <div class="non-desktop">
-                                    % include('components/routes_indicator', routes=record.routes)
+                                    % include('components/route_list', routes=record.routes)
                                 </div>
                             </div>
                         </td>
                         <td class="desktop-only">
-                            % include('components/routes_indicator', routes=record.routes)
+                            % include('components/route_list', routes=record.routes)
                         </td>
                     </tr>
                 % end

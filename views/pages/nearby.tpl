@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Nearby Stops</h1>
 </div>
 
@@ -65,7 +65,7 @@
                                             % if region_system.is_loaded:
                                                 <td class="non-mobile">{{ count }}</td>
                                                 <td>
-                                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                                    % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                                 </td>
                                             % else:
                                                 <td class="lighter-text" colspan="2">Stops are loading...</td>

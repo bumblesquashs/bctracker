@@ -3,10 +3,10 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1 class="row">
         <span>Bus</span>
-        % include('components/bus', bus=bus, enable_link=False)
+        % include('components/bus', enable_link=False)
     </h1>
     % if bus.order is None:
         <h2 class="lighter-text">Unknown Year/Model</h2>
@@ -30,7 +30,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section">
-                            % include('components/events_indicator', events=events)
+                            % include('components/events_list', events=events)
                         </div>
                         % record_systems = {r.system for r in records}
                         % if overview is not None:
@@ -114,15 +114,15 @@
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end
-                                                % include('components/record_warnings_indicator', record=record)
+                                                % include('components/record_warnings')
                                             </div>
                                             <div class="non-desktop">
-                                                % include('components/routes_indicator', routes=record.routes)
+                                                % include('components/route_list', routes=record.routes)
                                             </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/routes_indicator', routes=record.routes)
+                                        % include('components/route_list', routes=record.routes)
                                     </td>
                                     <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
                                     <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>

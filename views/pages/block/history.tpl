@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'blocks/{block.id}') }}" class="tab-button">Overview</a>
@@ -21,7 +21,7 @@
                     <div class="content">
                         <div class="info-box">
                             <div class="section">
-                                % include('components/events_indicator', events=events)
+                                % include('components/events_list', events=events)
                             </div>
                             <div class="column section">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
@@ -78,23 +78,22 @@
                             <tbody>
                                 % for record in records:
                                     % bus = record.bus
-                                    % order = bus.order
                                     <tr>
                                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                                         <td class="non-desktop">{{ record.date.format_short() }}</td>
                                         <td>
                                             <div class="column">
                                                 <div class="row">
-                                                    % include('components/bus', bus=bus)
-                                                    % include('components/record_warnings_indicator', record=record)
+                                                    % include('components/bus')
+                                                    % include('components/record_warnings')
                                                 </div>
                                                 <span class="non-desktop smaller-font">
-                                                    % include('components/order', order=order)
+                                                    % include('components/order', order=bus.order)
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="desktop-only">
-                                            % include('components/order', order=order)
+                                            % include('components/order', order=bus.order)
                                         </td>
                                         <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                         <td>{{ record.last_seen.format_web(time_format) }}</td>

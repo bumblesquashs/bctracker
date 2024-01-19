@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
@@ -50,7 +50,7 @@
                                 % if region_system.is_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Routes are loading...</td>
@@ -86,12 +86,12 @@
                     <tr>
                         <td>
                             <div class="row">
-                                % include('components/route_indicator')
+                                % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </td>
                         <td class="non-mobile">
-                            % include('components/weekdays_indicator', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
                         </td>
                     </tr>
                 % end

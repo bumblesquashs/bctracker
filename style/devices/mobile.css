@@ -22,7 +22,7 @@ body.full-map #system-menu {
     overflow: auto;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     width: 100%;
 }
 

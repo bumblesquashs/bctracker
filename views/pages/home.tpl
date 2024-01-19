@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Welcome to BCTracker!</h1>
     % if system is None:
         <h2>BC Transit Schedules and Bus Tracking</h2>

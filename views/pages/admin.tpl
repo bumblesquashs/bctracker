@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Administration</h1>
     <h2>Tools for server and system management</h2>
 </div>

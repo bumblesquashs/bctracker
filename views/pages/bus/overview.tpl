@@ -8,10 +8,10 @@
 
 % model = bus.model
 
-<div class="page-header">
+<div id="page-header">
     <h1 class="row">
         <span>Bus</span>
-        % include('components/bus', bus=bus, enable_link=False)
+        % include('components/bus', enable_link=False)
     </h1>
     % if bus.order is None:
         <h2 class="lighter-text">Unknown Year/Model</h2>
@@ -77,7 +77,7 @@
                                 % end_time = block.get_end_time(date=date)
                                 % if end_time is not None and end_time.is_later:
                                     <div class="section no-flex">
-                                        % include('components/block_indicator', date=date)
+                                        % include('components/block_timeline', date=date)
                                     </div>
                                 % end
                             % end
@@ -106,18 +106,18 @@
                     <div class="info-box">
                         <div class="section">
                             <div class="row">
-                                % include('components/adherence_indicator', adherence=position.adherence, size='large')
+                                % include('components/adherence', adherence=position.adherence, size='large')
                                 <h3>{{ trip }}</h3>
                             </div>
                         </div>
                         <div class="section">
                             <div class="row">
-                                % include('components/route_indicator')
+                                % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">
-                            % include('components/block_indicator', date=Date.today(block.system.timezone))
+                            % include('components/block_timeline', date=Date.today(block.system.timezone))
                         </div>
                         <div class="row section">
                             <div class="name">System</div>
@@ -145,7 +145,7 @@
                         <div class="row section">
                             <div class="name">Trip</div>
                             <div class="value">
-                                % include('components/trip_link', trip=trip)
+                                % include('components/trip')
                                 % start_time = trip.start_time.format_web(time_format)
                                 % end_time = trip.end_time.format_web(time_format)
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
@@ -177,7 +177,7 @@
                     <div class="info-box">
                         % if bus.order.size > 1:
                             <div class="section">
-                                % include('components/order_indicator', bus=bus)
+                                % include('components/order_details')
                             </div>
                         % end
                         <div class="row section">
@@ -334,15 +334,15 @@
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end
-                                                % include('components/record_warnings_indicator', record=record)
+                                                % include('components/record_warnings')
                                             </div>
                                             <div class="non-desktop">
-                                                % include('components/routes_indicator', routes=record.routes)
+                                                % include('components/route_list', routes=record.routes)
                                             </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/routes_indicator', routes=record.routes)
+                                        % include('components/route_list', routes=record.routes)
                                     </td>
                                     <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
                                     <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>

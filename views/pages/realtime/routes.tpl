@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Realtime</h1>
     <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
@@ -71,11 +71,9 @@
             % end
             <div class="section">
                 <div class="header">
-                    <h2>
-                        <div class="row">
-                            % include('components/route_indicator')
-                            <div class="flex-1">{{! route.display_name }}</div>
-                        </div>
+                    <h2 class="row">
+                        % include('components/route')
+                        <div class="flex-1">{{! route.display_name }}</div>
                     </h2>
                 </div>
                 <div class="content">
@@ -115,16 +113,16 @@
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus', bus=bus)
-                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                % include('components/bus')
+                                                % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order')
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=order)
+                                        % include('components/order')
                                     </td>
                                     % if system is None:
                                         <td class="desktop-only">{{ position.system }}</td>
@@ -134,10 +132,10 @@
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign_indicator')
+                                            % include('components/headsign')
                                             <div class="mobile-only smaller-font">
                                                 Trip:
-                                                % include('components/trip_link', trip=trip, include_tooltip=False)
+                                                % include('components/trip', include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="non-desktop smaller-font">
@@ -150,7 +148,7 @@
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/trip_link', trip=trip)
+                                        % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
                                         % if stop is None:
@@ -202,14 +200,14 @@
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
                                         <div class="column">
-                                            % include('components/bus', bus=bus)
+                                            % include('components/bus')
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order')
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=order)
+                                        % include('components/order')
                                     </td>
                                     % if system is None:
                                         <td>{{ position.system }}</td>

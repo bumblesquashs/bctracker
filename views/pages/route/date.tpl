@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1 class="row">
-        % include('components/route_indicator')
+        % include('components/route')
         {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
@@ -32,7 +32,7 @@
                         <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section">
-                        % include('components/sheets_indicator', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
+                        % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
                     </div>
                 </div>
             </div>
@@ -93,16 +93,16 @@
                                                 <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                                     <td>{{ trip.start_time.format_web(time_format) }}</td>
                                                     <td class="non-mobile">
-                                                        % include('components/headsign_indicator')
+                                                        % include('components/headsign')
                                                     </td>
                                                     <td class="non-mobile">
                                                         <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
                                                     </td>
                                                     <td>
                                                         <div class="column">
-                                                            % include('components/trip_link', trip=trip)
+                                                            % include('components/trip')
                                                             <span class="mobile-only smaller-font">
-                                                                % include('components/headsign_indicator')
+                                                                % include('components/headsign')
                                                             </span>
                                                         </div>
                                                     </td>

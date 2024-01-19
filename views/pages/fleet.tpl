@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Fleet</h1>
 </div>
 
@@ -121,7 +121,7 @@
                                                                     % overview = overviews[bus.number]
                                                                     <tr>
                                                                         <td>
-                                                                            % include('components/bus', bus=bus)
+                                                                            % include('components/bus')
                                                                         </td>
                                                                         <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
@@ -143,7 +143,7 @@
                                                                 % else:
                                                                     <tr>
                                                                         <td>
-                                                                            % include('components/bus', bus=bus, enable_link=False)
+                                                                            % include('components/bus', enable_link=False)
                                                                         </td>
                                                                         <td class="lighter-text" colspan="4">Unavailable</td>
                                                                     </tr>

@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Stop {{ stop.number }}</h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
@@ -38,7 +38,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheets_indicator', sheets=sheets, schedule_path=f'stops/{stop.number}/schedule')
+                            % include('components/sheet_list', schedule_path=f'stops/{stop.number}/schedule')
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                                                         <td>{{ departure.time.format_web(time_format) }}</td>
                                                         <td class="non-mobile">
                                                             <div class="column">
-                                                                % include('components/headsign_indicator')
+                                                                % include('components/headsign')
                                                                 % if not departure.pickup_type.is_normal:
                                                                     <span class="smaller-font">{{ departure.pickup_type }}</span>
                                                                 % elif departure == trip.last_departure:
@@ -105,9 +105,9 @@
                                                         </td>
                                                         <td>
                                                             <div class="column">
-                                                                % include('components/trip_link', trip=trip)
+                                                                % include('components/trip')
                                                                 <span class="mobile-only smaller-font">
-                                                                    % include('components/headsign_indicator')
+                                                                    % include('components/headsign')
                                                                 </span>
                                                                 % if not departure.pickup_type.is_normal:
                                                                     <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>

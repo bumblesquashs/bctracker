@@ -25,7 +25,7 @@ body {
     color: #000000;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -82,8 +82,12 @@ table tr:nth-child(2n-1) {
     background-color: #61C315;
 }
 
-#map-toggle-icon-black {
+#map-toggle img.black {
     display: none;
+}
+
+#map-toggle img.white {
+    display: block;
 }
 
 #navigation-bar {
@@ -138,6 +142,10 @@ table tr:nth-child(2n-1) {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page-header {
+    border-bottom-color: #666666;
 }
 
 #quick-navigation .item {
@@ -298,27 +306,27 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
-.adherence-indicator {
+.adherence {
     color: #FFFFFF;
 }
 
-.adherence-indicator.ahead {
+.adherence.ahead {
     background-color: #FF9A3A
 }
 
-.adherence-indicator.behind {
+.adherence.behind {
     background-color: #FF9A3A;
 }
 
-.adherence-indicator.on-time {
+.adherence.on-time {
     background-color: #3C5ABE;
 }
 
-.adherence-indicator.very-ahead {
+.adherence.very-ahead {
     background-color: #FD393E;
 }
 
-.adherence-indicator.very-behind {
+.adherence.very-behind {
     background-color: #FD393E;
 }
 
@@ -432,6 +440,11 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
+.modified-service {
+    background-color: #FFA560;
+    color: #000000;
+}
+
 .negative {
     color: #FF0000;
 }
@@ -447,12 +460,18 @@ table tr:nth-child(2n-1) {
     border-bottom-color: #666666;
 }
 
-.order-indicator .content .separator {
-    color: #666666;
+.no-service {
+    background-color: #FF7F7F;
+    color: #000000;
 }
 
-.page-header {
-    border-bottom-color: #666666;
+.normal-service {
+    background-color: #7DBD88;
+    color: #000000;
+}
+
+.order-details .content .separator {
+    color: #666666;
 }
 
 .positive {
@@ -465,43 +484,28 @@ table tr:nth-child(2n-1) {
     background-color: #989898;
 }
 
-.sheets-indicator .footer {
-    color: #666666;
+.sheet {
+    background-color: #CCCCCC;
 }
 
-.sheets-indicator .legend {
-    color: #666666;
-}
-
-.sheets-indicator a.normal-service:hover {
+.sheet a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.sheets-indicator a.modified-service:hover {
+.sheet a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.sheets-indicator a.no-service:hover {
+.sheet a.no-service:hover {
     background-color: #DC5050;
 }
 
-.sheets-indicator .normal-service {
-    background-color: #7DBD88;
-    color: #000000;
+.sheet-list .footer {
+    color: #666666;
 }
 
-.sheets-indicator .modified-service {
-    background-color: #FFA560;
-    color: #000000;
-}
-
-.sheets-indicator .no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.sheets-indicator .sheet {
-    background-color: #CCCCCC;
+.sheet-list .legend {
+    color: #666666;
 }
 
 .tab-button-bar {

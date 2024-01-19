@@ -25,7 +25,7 @@ body {
     color: #000000;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -78,8 +78,12 @@ table tr {
     background-color: #365CCB;
 }
 
-#map-toggle-icon-black {
+#map-toggle img.black {
     display: none;
+}
+
+#map-toggle img.white {
+    display: block;
 }
 
 #navigation-bar {
@@ -126,6 +130,10 @@ table tr {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page-header {
+    border-bottom-color: #EEEEEE;
 }
 
 #quick-navigation .item {
@@ -285,27 +293,27 @@ table tr {
     display: none;
 }
 
-.adherence-indicator {
+.adherence {
     color: #FFFFFF;
 }
 
-.adherence-indicator.ahead {
+.adherence.ahead {
     background-color: #FF9A3A
 }
 
-.adherence-indicator.behind {
+.adherence.behind {
     background-color: #FF9A3A;
 }
 
-.adherence-indicator.on-time {
+.adherence.on-time {
     background-color: #3C5ABE;
 }
 
-.adherence-indicator.very-ahead {
+.adherence.very-ahead {
     background-color: #FD393E;
 }
 
-.adherence-indicator.very-behind {
+.adherence.very-behind {
     background-color: #FD393E;
 }
 
@@ -419,6 +427,11 @@ table tr {
     display: none;
 }
 
+.modified-service {
+    background-color: #FFA560;
+    color: #000000;
+}
+
 .negative {
     color: #FF0000;
 }
@@ -434,12 +447,18 @@ table tr {
     border-bottom-color: #DDDDDD;
 }
 
-.order-indicator .content .separator {
-    color: #888888;
+.no-service {
+    background-color: #FF7F7F;
+    color: #000000;
 }
 
-.page-header {
-    border-bottom-color: #EEEEEE;
+.normal-service {
+    background-color: #7DBD88;
+    color: #000000;
+}
+
+.order-details .content .separator {
+    color: #888888;
 }
 
 .positive {
@@ -452,43 +471,28 @@ table tr {
     background-color: #989898;
 }
 
-.sheets-indicator .footer {
-    color: #888888;
+.sheet {
+    background-color: #DDDDDD;
 }
 
-.sheets-indicator .legend {
-    color: #888888;
-}
-
-.sheets-indicator a.modified-service:hover {
+.sheet a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.sheets-indicator a.no-service:hover {
+.sheet a.no-service:hover {
     background-color: #DC5050;
 }
 
-.sheets-indicator a.normal-service:hover {
+.sheet a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.sheets-indicator .modified-service {
-    background-color: #FFA560;
-    color: #000000;
+.sheet-list .footer {
+    color: #888888;
 }
 
-.sheets-indicator .no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.sheets-indicator .normal-service {
-    background-color: #7DBD88;
-    color: #000000;
-}
-
-.sheets-indicator .sheet {
-    background-color: #DDDDDD;
+.sheet-list .legend {
+    color: #888888;
 }
 
 .tab-button-bar {

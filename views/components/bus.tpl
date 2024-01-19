@@ -1,4 +1,4 @@
-<div class="row gap-5">
+<div class="bus">
     % if bus.is_known and get('enable_link', True):
         <a href="{{ get_url(system, f'bus/{bus.number}') }}">{{ bus }}</a>
     % else:

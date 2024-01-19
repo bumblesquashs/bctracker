@@ -14,7 +14,7 @@ body {
     grid-template-rows: auto 1fr;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     align-self: flex-start;
 }
 

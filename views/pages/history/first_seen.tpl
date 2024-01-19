@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
@@ -45,7 +45,6 @@
             % for overview in overviews:
                 % record = overview.first_record
                 % bus = record.bus
-                % order = bus.order
                 % same_date = last_date is None or record.date == last_date
                 % last_date = record.date
                 <tr class="{{'' if same_date else 'divider'}}">
@@ -60,14 +59,14 @@
                     </td>
                     <td>
                         <div class="column">
-                            % include('components/bus', bus=bus)
+                            % include('components/bus')
                             <span class="non-desktop smaller-font">
-                                % include('components/order', order=order)
+                                % include('components/order', order=bus.order)
                             </span>
                         </div>
                     </td>
                     <td class="desktop-only">
-                        % include('components/order', order=order)
+                        % include('components/order', order=bus.order)
                     </td>
                     % if system is None:
                         <td class="non-mobile">{{ record.system }}</td>
@@ -81,12 +80,12 @@
                                 <span>{{ record.block_id }}</span>
                             % end
                             <div class="non-desktop">
-                                % include('components/routes_indicator', routes=record.routes)
+                                % include('components/route_list', routes=record.routes)
                             </div>
                         </div>
                     </td>
                     <td class="desktop-only">
-                        % include('components/routes_indicator', routes=record.routes)
+                        % include('components/route_list', routes=record.routes)
                     </td>
                 </tr>
             % end

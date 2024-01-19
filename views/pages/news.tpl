@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-<div class="page-header">
+<div id="page-header">
     <h1>News Archive</h1>
     <a href="{{ get_url(system) }}">Return home</a>
 </div>

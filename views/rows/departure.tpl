@@ -9,31 +9,29 @@
     % if system is None or system.realtime_enabled:
         % if trip.id in recorded_today:
             % bus = recorded_today[trip.id]
-            % order = bus.order
             <td>
                 <div class="column">
                     <div class="row">
-                        % include('components/bus', bus=bus)
+                        % include('components/bus')
                         % if trip.id in positions:
                             % position = positions[trip.id]
-                            % include('components/adherence_indicator', adherence=position.adherence)
+                            % include('components/adherence', adherence=position.adherence)
                         % end
                     </div>
                     <span class="non-desktop smaller-font">
-                        % include('components/order', order=order)
+                        % include('components/order', order=bus.order)
                     </span>
                 </div>
             </td>
             <td class="desktop-only">
-                % include('components/order', order=order)
+                % include('components/order', order=bus.order)
             </td>
         % elif trip.block_id in scheduled_today and trip.start_time.is_later:
             % bus = scheduled_today[trip.block_id]
-            % order = bus.order
             <td>
                 <div class="column">
                     <div class="row">
-                        % include('components/bus', bus=bus)
+                        % include('components/bus')
                         <div class="tooltip-anchor">
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />
@@ -41,12 +39,12 @@
                         </div>
                     </div>
                     <span class="non-desktop smaller-font">
-                        % include('components/order', order=order)
+                        % include('components/order', order=bus.order)
                     </span>
                 </div>
             </td>
             <td class="desktop-only">
-                % include('components/order', order=order)
+                % include('components/order', order=bus.order)
             </td>
         % else:
             <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
@@ -55,7 +53,7 @@
     % end
     <td class="non-mobile">
         <div class="column">
-            % include('components/headsign_indicator')
+            % include('components/headsign')
             % if not departure.pickup_type.is_normal:
                 <span class="smaller-font">{{ departure.pickup_type }}</span>
             % elif departure == trip.last_departure:
@@ -75,9 +73,9 @@
     </td>
     <td>
         <div class="column">
-            % include('components/trip_link', trip=trip)
+            % include('components/trip')
             <span class="mobile-only smaller-font">
-                % include('components/headsign_indicator')
+                % include('components/headsign')
             </span>
         </div>
     </td>

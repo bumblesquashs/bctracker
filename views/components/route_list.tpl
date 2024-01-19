@@ -1,0 +1,5 @@
+<div class="route-list">
+    % for route in routes:
+        % include('components/route', include_link=True, include_tooltip=True)
+    % end
+</div>
