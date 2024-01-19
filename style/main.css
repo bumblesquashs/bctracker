@@ -279,7 +279,7 @@ ul {
     gap: 20px;
 }
 
-#status .content {
+#status .details {
     flex: 1;
 }
 
@@ -418,22 +418,29 @@ ul {
     text-align: center;
 }
 
-.checkbox {
+.checkbox-container {
     display: flex;
     gap: 5px;
     align-items: center;
     cursor: pointer;
     align-self: flex-start;
+    user-select: none;
 }
 
-.checkbox .box {
+.checkbox-container .checkbox {
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
+    width: 24px;
+    height: 24px;
 }
 
-.checkbox .label {
-    user-select: none;
+.checkbox-container .checkbox img {
+    display: none;
+}
+
+.checkbox-container .checkbox.selected img {
+    display: block;
 }
 
 .code-block {

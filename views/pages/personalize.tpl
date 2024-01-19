@@ -60,12 +60,8 @@
                 % end
             </div>
             <div class="content">
-                <p>
-                    You can choose whether times are displayed as 12hr or 30hr.
-                </p>
-                <p>
-                    Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.
-                </p>
+                <p>You can choose whether times are displayed as 12hr or 30hr.</p>
+                <p>Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
                 <ul>
                     <li>The 12hr format uses xm instead of am, so 1am is shown as 1xm</li>
                     <li>The 30hr format continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</li>
@@ -90,9 +86,7 @@
                 % end
             </div>
             <div class="content">
-                <p>
-                    Choose a style for bus icons shown on the map screen.
-                </p>
+                <p>Choose a style for bus icons shown on the map screen.</p>
                 <div class="button-container">
                     <a class="button" href="?bus_marker_style=default">Default</a>
                     <a class="button" href="?bus_marker_style=mini">Mini</a>

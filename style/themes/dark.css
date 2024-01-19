@@ -374,43 +374,18 @@ table tr:nth-child(2n-1) {
     background-color: #653800;
 }
 
-.checkbox .box {
+.checkbox-container .checkbox {
     border-color: #FFFFFF;
     background-color: #565656;
 }
 
-.checkbox .box img.black {
+.checkbox-container .checkbox img.black {
     display: none;
 }
 
 .code-block {
     background-color: #393939;
     border-color: #565656;
-}
-
-.dropdown .content {
-    background-color: #2F2F2F;
-}
-
-.dropdown .content .dropdown-button {
-    color: #FFFFFF;
-}
-
-.dropdown .content .dropdown-button:hover {
-    background-color: #393939
-}
-
-.dropdown .content .dropdown-button.disabled {
-    color: #ABABAB;
-}
-
-.dropdown .content .dropdown-button.disabled:hover {
-    background-color: #2F2F2F !important;
-}
-
-.dropdown .content .header {
-    background-color: #565656;
-    color: #FFFFFF;
 }
 
 .events .date {

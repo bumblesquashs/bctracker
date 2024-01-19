@@ -423,12 +423,12 @@ table tr {
     background-color: #AD6000;
 }
 
-.checkbox .box {
+.checkbox-container .checkbox {
     border-color: #000000;
     background-color: #FFFFFF;
 }
 
-.checkbox .box img.white {
+.checkbox-container .checkbox img.white {
     display: none;
 }
 
@@ -439,38 +439,6 @@ table tr {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
     border-color: #CCCCCC;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
-}
-
-.dropdown .content {
-    background-color: #FFFFFF;
-}
-
-.dropdown .content .dropdown-button {
-    color: #000000;
-    text-shadow: none;
-}
-
-.dropdown .content .dropdown-button:hover {
-    background-color: #5393c5;
-    color: #FFFFFF;
-    text-shadow: 0 1px 1px #3373a5;
-    background-image: linear-gradient( #5393c5,#6facd5 );
-}
-
-.dropdown .content .dropdown-button.disabled {
-    color: #666666;
-    text-shadow: none;
-}
-
-.dropdown .content .dropdown-button.disabled:hover {
-    background-color: #FFFFFF !important;
-    background-image: none;
-}
-
-.dropdown .content .header {
-    background-color: #CBCBCB;
-    color: #000000;
-    text-shadow: none;
 }
 
 .events .date {
