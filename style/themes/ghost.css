@@ -330,14 +330,6 @@ table tr {
     display: none;
 }
 
-.block-indicator .now {
-    background-color: #FF0000;
-}
-
-.block-indicator .trip:hover {
-    border-color: #888888;
-}
-
 .button {
     background-color: #365ccb;
     color: #FFFFFF;
@@ -515,6 +507,14 @@ table tr {
     color: #000000;
 }
 
+.timeline .now {
+    background-color: #FF0000;
+}
+
+.timeline .section:hover {
+    border-color: #888888;
+}
+
 .tooltip-anchor .tooltip {
     background-color: #888888;
     color: #FFFFFF;
@@ -532,17 +532,7 @@ table tr {
     background-color: #509F5E;
 }
 
-.weekdays .weekday {
+.weekdays {
     background-color: #C4C4C4;
-    color: #000000;
-}
-
-.weekdays .weekday.no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.weekdays .weekday.normal-service {
-    background-color: #7DBD88;
     color: #000000;
 }

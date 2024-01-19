@@ -355,30 +355,10 @@ ul {
     font-size: 16pt;
 }
 
-.block-indicator {
-    position: relative;
-    height: 15px;
-    margin-top: 2px;
-}
-
-.block-indicator .now {
-    position: absolute;
-    top: -2px;
-    bottom: -2px;
-    width: 2px;
-}
-
-.block-indicator .trip {
-    position: absolute;
-    height: 100%;
-}
-
-.block-indicator .trip:hover {
-    border-width: 2px;
-    border-style: solid;
-    margin-top: -2px;
-    margin-left: -2px;
-    z-index: 20;
+.block-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .bold {
@@ -464,6 +444,7 @@ ul {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    align-items: flex-start;
 }
 
 .column.left {
@@ -897,6 +878,10 @@ ul {
     align-items: center;
 }
 
+.row.space-between {
+    justify-content: space-between;
+}
+
 .sheet {
     padding: 10px;
     border-radius: 10px;
@@ -1000,6 +985,32 @@ ul {
 
 .tab-button.current:hover {
     cursor: default !important;
+}
+
+.timeline {
+    position: relative;
+    height: 15px;
+    margin-top: 2px;
+}
+
+.timeline .now {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 2px;
+}
+
+.timeline .section {
+    position: absolute;
+    height: 100%;
+}
+
+.timeline .section:hover {
+    border-width: 2px;
+    border-style: solid;
+    margin-top: -2px;
+    margin-left: -2px;
+    z-index: 20;
 }
 
 .timing-point {

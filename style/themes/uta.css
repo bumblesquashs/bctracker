@@ -343,14 +343,6 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
-.block-indicator .now {
-    background-color: #FF0000;
-}
-
-.block-indicator .trip:hover {
-    border-color: #666666;
-}
-
 .button {
     background-color: #C7743B;
     color: #FFFFFF;
@@ -528,6 +520,14 @@ table tr:nth-child(2n-1) {
     color: #000000;
 }
 
+.timeline .now {
+    background-color: #FF0000;
+}
+
+.timeline .section:hover {
+    border-color: #666666;
+}
+
 .tooltip-anchor .tooltip {
     background-color: #666666;
     color: #FFFFFF;
@@ -545,17 +545,7 @@ table tr:nth-child(2n-1) {
     background-color: #509F5E;
 }
 
-.weekdays .weekday {
+.weekdays {
     background-color: #C4C4C4;
-    color: #000000;
-}
-
-.weekdays .weekday.no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.weekdays .weekday.normal-service {
-    background-color: #7DBD88;
     color: #000000;
 }
