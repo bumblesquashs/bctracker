@@ -8,6 +8,7 @@ from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
+import config
 import gtfs
 import realtime
 import database
@@ -20,26 +21,26 @@ def setup():
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
 
-def start(cron_id):
+def start():
     '''Removes any old cron jobs and creates new jobs'''
     global running
     running = True
     pid = os.getpid()
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=cron_id)
+        cron.remove_all(comment=config.cron_id)
         
-        gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=cron_id)
+        gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=config.cron_id)
         gtfs_job.setall('0 4 * * */1')
         
-        realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=cron_id)
+        realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=config.cron_id)
         realtime_job.minute.every(1)
 
-def stop(cron_id):
+def stop():
     '''Removes all cron jobs'''
     global running
     running = False
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=cron_id)
+        cron.remove_all(comment=config.cron_id)
 
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''

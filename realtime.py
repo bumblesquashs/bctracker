@@ -1,5 +1,5 @@
 
-from os import path, rename
+from os import path, rename, remove
 from datetime import datetime
 
 import requests
@@ -14,6 +14,7 @@ import helpers.transfer
 from models.date import Date
 from models.time import Time
 
+import config
 import database
 
 last_updated_date = None
@@ -30,13 +31,17 @@ def update(system):
     
     try:
         if path.exists(data_path):
-            formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
-            archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
-            rename(data_path, archives_path)
+            if config.enable_realtime_backups:
+                formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
+                archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
+                rename(data_path, archives_path)
+            else:
+                remove(data_path)
         data = protobuf.FeedMessage()
         with requests.get(system.realtime_url, timeout=10) as r:
-            with open(data_path, 'wb') as f:
-                f.write(r.content)
+            if config.enable_realtime_backups:
+                with open(data_path, 'wb') as f:
+                    f.write(r.content)
             data.ParseFromString(r.content)
         helpers.position.delete_all(system)
         for index, entity in enumerate(data.entity):

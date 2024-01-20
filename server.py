@@ -21,6 +21,7 @@ from models.bus import Bus
 from models.date import Date
 from models.event import Event
 
+import config
 import cron
 import database
 import gtfs
@@ -32,17 +33,12 @@ VERSION = 24
 app = Bottle()
 running = False
 
-cron_id = 'bctracker-muncher'
-mapbox_api_key = ''
-no_system_domain = 'https://bctracker.ca/{0}'
-system_domain = 'https://{0}.bctracker.ca/{1}'
-system_domain_path = 'https://bctracker.ca/{0}/{1}'
-cookie_domain = None
-admin_key = None
-
 def start(args):
     '''Loads all required data and launches the server'''
-    global running, cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain, admin_key
+    global running
+    
+    cp.config.update('server.conf')
+    config.setup(cp.config)
     
     running = True
     
@@ -65,15 +61,6 @@ def start(args):
     
     helpers.position.delete_all()
     
-    cp.config.update('server.conf')
-    cron_id = cp.config.get('cron_id', 'bctracker-muncher')
-    mapbox_api_key = cp.config['mapbox_api_key']
-    no_system_domain = cp.config['no_system_domain']
-    system_domain = cp.config['system_domain']
-    system_domain_path = cp.config['system_domain_path']
-    cookie_domain = cp.config.get('cookie_domain')
-    admin_key = cp.config.get('admin_key')
-    
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
     
@@ -93,13 +80,13 @@ def start(args):
         realtime.update_records()
         
         cron.setup()
-        cron.start(cron_id)
+        cron.start()
 
 def stop():
     '''Terminates the server'''
     global running
     running = False
-    cron.stop(cron_id)
+    cron.stop()
     database.disconnect()
     if cp.server.running:
         cp.server.stop()
@@ -108,9 +95,9 @@ def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
     if system_id is None:
-        url = no_system_domain.format(path).rstrip('/')
+        url = config.all_systems_domain.format(path).rstrip('/')
     else:
-        url = system_domain.format(system_id, path).rstrip('/')
+        url = config.system_domain.format(system_id, path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
     if len(query_args) > 0:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
@@ -118,7 +105,7 @@ def get_url(system, path='', **kwargs):
     return url
 
 def validate_admin():
-    return query_cookie('admin_key', max_age_days=1) == admin_key
+    return query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -136,6 +123,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
     if not is_admin:
         systems = [s for s in systems if s.enabled and s.visible]
     return template(f'pages/{name}',
+        config=config,
         version=VERSION,
         title=title,
         path=path,
@@ -148,11 +136,6 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         is_admin=is_admin,
         system=system,
         get_url=get_url,
-        no_system_domain=no_system_domain,
-        system_domain=system_domain,
-        system_domain_path=system_domain_path,
-        cookie_domain=cookie_domain,
-        mapbox_api_key=mapbox_api_key,
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
@@ -183,10 +166,10 @@ def frame(name, system, **kwargs):
 def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
     max_age = 60 * 60 * 24 * max_age_days
-    if cookie_domain is None:
+    if config.cookie_domain is None:
         response.set_cookie(key, value, max_age=max_age, path='/')
     else:
-        response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
+        response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
 
 def query_cookie(key, default_value=None, max_age_days=3650):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
@@ -907,7 +890,7 @@ def api_admin_reload_orders(system):
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
-    cron.stop(cron_id)
+    cron.stop()
     helpers.region.delete_all()
     helpers.system.delete_all()
     helpers.position.delete_all()
@@ -924,7 +907,7 @@ def api_admin_reload_systems(system):
                 system.validation_errors += 1
     if running:
         realtime.update_records()
-        cron.start(cron_id)
+        cron.start()
     return 'Success'
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
@@ -935,8 +918,8 @@ def api_admin_reload_themes(system):
 
 @endpoint('/api/admin/restart-cron', method='POST', require_admin=True)
 def api_admin_restart_cron(system):
-    cron.stop(cron_id)
-    cron.start(cron_id)
+    cron.stop()
+    cron.start()
     return 'Success'
 
 @endpoint('/api/admin/backup-database', method='POST', require_admin=True)
