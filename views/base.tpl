@@ -1,5 +1,16 @@
 <html>
-    <head> 
+    <head>
+        % if config.enable_analytics:
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.analytics_key }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag("js", new Date());
+                gtag("config", "{{ config.analytics_key }}");
+            </script>
+        % end
+        
         <title>
             % if system is None:
                 BCTracker | {{ title }}
@@ -66,7 +77,7 @@
             <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
             
             <script>
-                mapboxgl.accessToken = "{{ mapbox_api_key }}";
+                mapboxgl.accessToken = "{{ config.mapbox_api_key }}";
             </script>
         % end
         
@@ -107,17 +118,17 @@
             
             function getUrl(systemID, path) {
                 if (systemID === null || systemID === undefined) {
-                    return "{{ no_system_domain }}".format(path)
+                    return "{{ config.all_systems_domain }}".format(path)
                 }
-                return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
+                return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID, path)
             }
             
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
-                if ("{{ cookie_domain }}" == "None") {
+                if ("{{ config.cookie_domain }}" == "None") {
                     document.cookie = key + "=" + value + "; max_age=" + max_age + "; path=/";
                 } else {
-                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ cookie_domain }}; path=/";
+                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ config.cookie_domain }}; path=/";
                 }
             }
             
@@ -132,7 +143,7 @@
                 const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
                 now.setTime(expireTime);
                 
-                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if cookie_domain is None else cookie_domain }};path=/";
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if config.cookie_domain is None else config.cookie_domain }};path=/";
             }
         </script>
     </head>
