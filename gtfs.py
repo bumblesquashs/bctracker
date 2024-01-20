@@ -1,5 +1,5 @@
 
-from os import path, rename
+from os import path, rename, remove
 from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
@@ -18,6 +18,8 @@ import helpers.trip
 from models.block import Block
 from models.date import Date
 from models.service import Service, ServiceException
+
+import config
 
 def load(system, force_download=False, update_db=False):
     '''Loads the GTFS for the given system into memory'''
@@ -79,9 +81,12 @@ def download(system):
     print(f'Downloading GTFS data for {system}')
     try:
         if path.exists(data_zip_path):
-            formatted_date = datetime.now().strftime('%Y-%m-%d')
-            archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
-            rename(data_zip_path, archives_path)
+            if config.enable_gtfs_backups:
+                formatted_date = datetime.now().strftime('%Y-%m-%d')
+                archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
+                rename(data_zip_path, archives_path)
+            else:
+                remove(data_zip_path)
         with requests.get(system.gtfs_url, stream=True) as r:
             with open(data_zip_path, 'wb') as f:
                 for chunk in r.iter_content(128):
