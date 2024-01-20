@@ -814,16 +814,12 @@ table tr.header td {
 
 .route {
     display: inline-block;
+    padding: 1px 6px;
     font-size: 11pt;
     font-weight: bold;
     border-width: 1px;
     border-style: solid;
     text-align: center;
-}
-
-.route .route-number {
-    padding: 1px 6px;
-    color: inherit;
 }
 
 .route-list {

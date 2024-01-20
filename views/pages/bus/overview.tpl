@@ -34,7 +34,7 @@
             <div class="content">
                 % if position is None:
                     <div class="info-box">
-                        <div class="title">
+                        <div class="section">
                             <h3>Not in service</h3>
                         </div>
                         <div class="row section">
@@ -66,7 +66,7 @@
                     % include('components/map', map_position=position)
                     
                     <div class="info-box">
-                        <div class="title">
+                        <div class="section">
                             <h3>Not in service</h3>
                         </div>
                         % last_record = overview.last_record
