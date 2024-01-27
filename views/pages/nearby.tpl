@@ -100,7 +100,7 @@
         view: new ol.View({
             center: [0, 0],
             zoom: 1,
-            maxZoom: 18
+            maxZoom: 22
         }),
         interactions: [],
         controls: ol.control.defaults.defaults({
