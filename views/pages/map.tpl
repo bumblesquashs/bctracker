@@ -280,7 +280,7 @@
             if (resetCoordinates) {
                 if (lons.length === 1 && lats.length === 1) {
                     map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
-                    map.getView().setZoom(14);
+                    map.getView().setZoom(15);
                 } else if (lons.length > 0 && lats.length > 0) {
                     const minLon = Math.min.apply(Math, lons);
                     const maxLon = Math.max.apply(Math, lons);
