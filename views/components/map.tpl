@@ -21,7 +21,8 @@
         }),
         interactions: interactive ? ol.interaction.defaults.defaults() : [],
         controls: ol.control.defaults.defaults({
-            zoom: false
+            zoom: false,
+            rotate: false
         })
     });
     

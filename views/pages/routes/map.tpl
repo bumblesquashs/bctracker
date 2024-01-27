@@ -91,7 +91,8 @@
                     maxZoom: 22
                 }),
                 controls: ol.control.defaults.defaults({
-                    zoom: false
+                    zoom: false,
+                    rotate: false
                 })
             });
             

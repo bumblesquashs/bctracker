@@ -104,7 +104,8 @@
         }),
         interactions: [],
         controls: ol.control.defaults.defaults({
-            zoom: false
+            zoom: false,
+            rotate: false
         })
     });
     
