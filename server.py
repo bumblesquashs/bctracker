@@ -5,6 +5,7 @@ from bottle import Bottle, HTTPError, static_file, template, request, response, 
 import cherrypy as cp
 
 import helpers.adornment
+import helpers.agency
 import helpers.model
 import helpers.order
 import helpers.overview
@@ -53,6 +54,7 @@ def start(args):
         print('Forcing database refresh')
     
     helpers.adornment.load()
+    helpers.agency.load()
     helpers.model.load()
     helpers.order.load()
     helpers.region.load()
@@ -105,7 +107,7 @@ def get_url(system, path='', **kwargs):
     return url
 
 def validate_admin():
-    return query_cookie('admin_key', max_age_days=1) == config.admin_key
+    return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -119,9 +121,6 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    systems = helpers.system.find_all()
-    if not is_admin:
-        systems = [s for s in systems if s.enabled and s.visible]
     return template(f'pages/{name}',
         config=config,
         version=VERSION,
@@ -132,7 +131,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         include_maps=include_maps,
         full_map=full_map,
         regions=helpers.region.find_all(),
-        systems=systems,
+        systems=helpers.system.find_all(),
         is_admin=is_admin,
         system=system,
         get_url=get_url,
@@ -891,9 +890,11 @@ def api_admin_reload_orders(system):
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
     cron.stop()
+    helpers.agency.delete_all()
     helpers.region.delete_all()
     helpers.system.delete_all()
     helpers.position.delete_all()
+    helpers.agency.load()
     helpers.region.load()
     helpers.system.load()
     for system in helpers.system.find_all():
