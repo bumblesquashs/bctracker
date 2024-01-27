@@ -147,11 +147,27 @@ ul {
     z-index: 30;
 }
 
+#map .ol-zoom {
+    top: unset;
+    bottom: 0.5em;
+}
+
+#map .ol-rotate {
+    top: unset;
+    right: unset;
+    left: 0.5em;
+    bottom: 4em;
+}
+
+#map .ol-touch .ol-rotate {
+    bottom: 5em;
+}
+
 #map-toggle {
     position: absolute;
     z-index: 10;
     border-radius: 50%;
-    bottom: 40px;
+    bottom: 30px;
     right: 15px;
 }
 

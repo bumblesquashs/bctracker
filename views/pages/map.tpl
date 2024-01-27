@@ -105,10 +105,9 @@
                 zoom: 1,
                 maxZoom: 22
             }),
-            controls: ol.control.defaults.defaults({
-                zoom: false,
-                rotate: false
-            })
+            interactions: ol.interaction.defaults.defaults().extend([
+                new ol.interaction.DblClickDragZoom()
+            ])
         });
         
         let positions = JSON.parse('{{! json.dumps([p.get_json() for p in positions]) }}');

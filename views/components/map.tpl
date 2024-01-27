@@ -19,10 +19,12 @@
             zoom: 1,
             maxZoom: 22
         }),
-        interactions: interactive ? ol.interaction.defaults.defaults() : [],
+        interactions: interactive ? ol.interaction.defaults.defaults().extend([
+            new ol.interaction.DblClickDragZoom()
+        ]) : [],
         controls: ol.control.defaults.defaults({
-            zoom: false,
-            rotate: false
+            zoom: interactive,
+            rotate: interactive
         })
     });
     
