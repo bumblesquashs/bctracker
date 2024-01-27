@@ -638,6 +638,7 @@ ul {
 
 .marker {
     position: relative;
+    font-family: Helvetica, sans-serif;
 }
 
 .marker:hover {
@@ -831,6 +832,10 @@ ul {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.ol-overlay-container:hover {
+    z-index: 10;
 }
 
 .order-indicator .content {

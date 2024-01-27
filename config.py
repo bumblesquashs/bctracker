@@ -10,7 +10,6 @@ system_domain_path = None
 cookie_domain = None
 
 # Key config
-mapbox_api_key = None
 analytics_key = None
 
 # Functionality config
@@ -30,8 +29,7 @@ def setup(config):
     system_domain_path = config['system_domain_path']
     cookie_domain = config.get('cookie_domain')
     
-    global mapbox_api_key, analytics_key
-    mapbox_api_key = config['mapbox_api_key']
+    global analytics_key
     analytics_key = config.get('analytics_key')
     
     global enable_analytics, enable_gtfs_backups, enable_realtime_backups, enable_database_backups

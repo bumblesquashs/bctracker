@@ -6,32 +6,28 @@
 <div id="map" class="{{ 'preview' if is_preview else 'full-screen' }}"></div>
 
 <script>
-    const map = new mapboxgl.Map({
-        container: "map",
-        center: [0, 0],
-        zoom: 1,
-        style: mapStyle,
-        interactive: "{{ is_preview }}" === "False"
+    const interactive = "{{ is_preview }}" === "False";
+    const map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }),
+        ],
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 1,
+            maxZoom: 18
+        }),
+        interactions: interactive ? ol.interaction.defaults.defaults() : [],
+        controls: ol.control.defaults.defaults({
+            zoom: false
+        })
     });
     
     const lats = [];
     const lons = [];
 </script>
-
-% if not is_preview:
-    <script>
-        map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-                trackUserLocation: true,
-                showUserHeading: true
-            }),
-            'bottom-left'
-        );
-    </script>
-% end
 
 % map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
 % map_trips = sorted([t for t in map_trips if t.route is not None], key=lambda t: t.route, reverse=True)
@@ -47,142 +43,33 @@
     <script>
         const trips = JSON.parse('{{! json.dumps([t.get_json() for t in shape_trips]) }}');
         
-        map.on("load", function() {
-            for (const trip of trips) {
-                const shapeID = String(trip.shape_id);
-                map.addSource(shapeID, {
-                    "type": "geojson",
-                    "data": {
-                        "type": "Feature",
-                        "properties": {},
-                        "geometry": {
-                            "type": "LineString",
-                            "coordinates": trip.points.map(function (point) { return [point.lon, point.lat] })
-                        }
-                    }
-                });
-                map.addLayer({
-                    "id": shapeID,
-                    "type": "line",
-                    "source": shapeID,
-                    "layout": {
-                        "line-join": "round",
-                        "line-cap": "round"
-                    },
-                    "paint": {
-                        "line-color": "#" + trip.colour,
-                        "line-width": 4
-                    }
-                });
-                
-                if ("{{ get('zoom_trips', True) }}" === "True") {
-                    for (const point of trip.points) {
-                        lats.push(point.lat);
-                        lons.push(point.lon);
-                    }
+        for (const trip of trips) {
+            map.addLayer(new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [
+                        new ol.Feature({
+                            geometry: new ol.geom.LineString(trip.points.map(function (point) {
+                                return ol.proj.fromLonLat([point.lon, point.lat])
+                            })),
+                            name: String(trip.shape_id)
+                        })
+                    ],
+                    wrapX: false
+                }),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "#" + trip.colour,
+                        width: 4,
+                        lineCap: "butt"
+                    })
+                })
+            }));
+            
+            if ("{{ get('zoom_trips', True) }}" === "True") {
+                for (const point of trip.points) {
+                    lats.push(point.lat);
+                    lons.push(point.lon);
                 }
-            }
-        });
-    </script>
-% end
-
-% map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure is not None else [])
-% map_departures = sorted([d for d in map_departures if d.trip is not None and d.trip.route is not None], key=lambda d: d.trip.route)
-% stop_ids = set()
-% stop_departures = []
-% for departure in map_departures:
-    % if departure.stop_id not in stop_ids:
-        % stop_ids.add(departure.stop.id)
-        % stop_departures.append(departure)
-    % end
-% end
-% if len(stop_departures) > 0:
-    <script>
-        const departures = JSON.parse('{{! json.dumps([d.get_json() for d in stop_departures]) }}');
-        
-        for (const departure of departures) {
-            const stop = departure.stop;
-            
-            const element = document.createElement("div");
-            element.className = "{{ 'marker' if len(map_departures) == 1 else 'marker small' }}";
-            
-            const icon = document.createElement("a");
-            icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
-            icon.style.backgroundColor = "#" + departure.colour;
-            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
-            
-            const details = document.createElement("div");
-            details.className = "details {{ '' if len(map_departures) == 1 else 'hover-only' }}";
-            
-            const title = document.createElement("div");
-            title.className = "title";
-            title.innerHTML = stop.number;
-            
-            const content = document.createElement("div");
-            content.classList = "content hover-only centred";
-            let routesHTML = "";
-            for (const route of stop.routes) {
-                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
-            }
-            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
-            
-            details.appendChild(title);
-            details.appendChild(content);
-            
-            element.appendChild(icon);
-            element.appendChild(details);
-            
-            new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
-            
-            if ("{{ get('zoom_departures', True) }}" === "True") {
-                lats.push(stop.lat);
-                lons.push(stop.lon);
-            }
-        }
-    </script>
-% end
-
-% map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
-% if len(map_stops) > 0:
-    <script>
-        const stops = JSON.parse('{{! json.dumps([s.get_json() for s in map_stops]) }}');
-        
-        for (const stop of stops) {
-            const element = document.createElement("div");
-            element.className = "{{ 'marker' if len(map_stops) == 1 else 'marker small' }}";
-            
-            const icon = document.createElement("a");
-            icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
-            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
-            
-            const details = document.createElement("div");
-            details.className = "details {{ '' if len(map_stops) == 1 else 'hover-only' }}";
-            
-            const title = document.createElement("div");
-            title.className = "title";
-            title.innerHTML = stop.number;
-            
-            const content = document.createElement("div");
-            content.classList = "content hover-only centred";
-            let routesHTML = "";
-            for (const route of stop.routes) {
-                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
-            }
-            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
-            
-            details.appendChild(title);
-            details.appendChild(content);
-            
-            element.appendChild(icon);
-            element.appendChild(details);
-            
-            new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
-            
-            if ("{{ get('zoom_stops', True) }}" === "True") {
-                lats.push(stop.lat);
-                lons.push(stop.lon);
             }
         }
     </script>
@@ -190,7 +77,7 @@
 
 % map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
 % if len(map_positions) > 0:
-    % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat, reverse=True)
+    % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
         const busMarkerStyle = "{{ bus_marker_style }}";
@@ -291,7 +178,12 @@
             details.appendChild(content);
             element.appendChild(details);
             
-            new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map);
+            map.addOverlay(new ol.Overlay({
+                position: ol.proj.fromLonLat([position.lon, position.lat]),
+                positioning: "center-center",
+                element: element,
+                stopEvent: false
+            }));
             
             if ("{{ get('zoom_buses', True) }}" === "True" && position.lat != 0 && position.lon != 0) {
                 lats.push(position.lat);
@@ -301,24 +193,136 @@
     </script>
 % end
 
+% map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
+% if len(map_stops) > 0:
+    % map_stops.sort(key=lambda s: s.lat)
+    <script>
+        const stops = JSON.parse('{{! json.dumps([s.get_json() for s in map_stops]) }}');
+        
+        for (const stop of stops) {
+            const element = document.createElement("div");
+            element.className = "{{ 'marker' if len(map_stops) == 1 else 'marker small' }}";
+            
+            const icon = document.createElement("a");
+            icon.className = "icon";
+            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
+            
+            const details = document.createElement("div");
+            details.className = "details {{ '' if len(map_stops) == 1 else 'hover-only' }}";
+            
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = stop.number;
+            
+            const content = document.createElement("div");
+            content.classList = "content hover-only centred";
+            let routesHTML = "";
+            for (const route of stop.routes) {
+                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+            }
+            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+            
+            details.appendChild(title);
+            details.appendChild(content);
+            
+            element.appendChild(icon);
+            element.appendChild(details);
+            
+            map.addOverlay(new ol.Overlay({
+                position: ol.proj.fromLonLat([stop.lon, stop.lat]),
+                positioning: "center-center",
+                element: element,
+                stopEvent: false
+            }));
+            
+            if ("{{ get('zoom_stops', True) }}" === "True") {
+                lats.push(stop.lat);
+                lons.push(stop.lon);
+            }
+        }
+    </script>
+% end
+
+% map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure is not None else [])
+% map_departures = sorted([d for d in map_departures if d.trip is not None and d.trip.route is not None], key=lambda d: d.trip.route)
+% stop_ids = set()
+% stop_departures = []
+% for departure in map_departures:
+    % if departure.stop_id not in stop_ids:
+        % stop_ids.add(departure.stop.id)
+        % stop_departures.append(departure)
+    % end
+% end
+% if len(stop_departures) > 0:
+    % stop_departures.sort(key=lambda d:d.stop.lat)
+    <script>
+        const departures = JSON.parse('{{! json.dumps([d.get_json() for d in stop_departures]) }}');
+        
+        for (const departure of departures) {
+            const stop = departure.stop;
+            
+            const element = document.createElement("div");
+            element.className = "{{ 'marker' if len(map_departures) == 1 else 'marker small' }}";
+            
+            const icon = document.createElement("a");
+            icon.className = "icon";
+            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+            icon.style.backgroundColor = "#" + departure.colour;
+            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
+            
+            const details = document.createElement("div");
+            details.className = "details {{ '' if len(map_departures) == 1 else 'hover-only' }}";
+            
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = stop.number;
+            
+            const content = document.createElement("div");
+            content.classList = "content hover-only centred";
+            let routesHTML = "";
+            for (const route of stop.routes) {
+                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+            }
+            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+            
+            details.appendChild(title);
+            details.appendChild(content);
+            
+            element.appendChild(icon);
+            element.appendChild(details);
+            
+            map.addOverlay(new ol.Overlay({
+                position: ol.proj.fromLonLat([stop.lon, stop.lat]),
+                positioning: "center-center",
+                element: element,
+                stopEvent: false
+            }));
+            
+            if ("{{ get('zoom_departures', True) }}" === "True") {
+                lats.push(stop.lat);
+                lons.push(stop.lon);
+            }
+        }
+    </script>
+% end
+
 <script>
-    map.on("load", function() {
-        map.resize();
+    document.body.onload = function() {
+        map.updateSize();
         if (lons.length === 1 && lats.length === 1) {
-            map.jumpTo({
-                center: [lons[0], lats[0]],
-                zoom: 14
-            });
+            map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
+            map.getView().setZoom(14);
         } else if (lons.length > 0 && lats.length > 0) {
             const minLon = Math.min.apply(Math, lons);
             const maxLon = Math.max.apply(Math, lons);
             const minLat = Math.min.apply(Math, lats);
             const maxLat = Math.max.apply(Math, lats);
             
-            map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
-                duration: 0,
-                padding: parseInt("{{ 20 if is_preview else 100 }}")
-            });
+            const padding = parseInt("{{ 20 if is_preview else 100 }}");
+            map.getView().fit(ol.proj.transformExtent([minLon, minLat, maxLon, maxLat], ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                padding: [padding, padding, padding, padding]
+            })
         }
-    });
+    }
 </script>
