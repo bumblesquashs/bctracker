@@ -152,7 +152,7 @@
                 if (position.shape_id === null || position.shape_id === undefined) {
                     element.classList.add("nis-bus");
                     if (!showNISBuses) {
-                        element.classList.add("hidden");
+                        element.classList.add("display-none");
                     }
                 }
                 if (position.bearing !== undefined) {
@@ -335,9 +335,9 @@
             
             for (const element of document.getElementsByClassName("nis-bus")) {
                 if (showNISBuses) {
-                    element.classList.remove("hidden");
+                    element.classList.remove("display-none");
                 } else {
-                    element.classList.add("hidden");
+                    element.classList.add("display-none");
                 }
             }
         }
