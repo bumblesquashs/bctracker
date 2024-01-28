@@ -764,7 +764,9 @@ def stats_realtime_page(system):
 def stats_history_page(system):
     return page('stats/history', system,
         title=f'Statistics',
-        path='stats/history'
+        path='stats/history',
+        overviews=helpers.overview.find_all(last_seen_system=system),
+        transfers=helpers.transfer.find_all(system)
     )
 
 @endpoint('/about')
