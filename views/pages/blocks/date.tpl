@@ -1,8 +1,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Blocks</h1>
+<div id="page-header">
+    <h1>Blocks</h1>
 </div>
 
 % if system is None:
@@ -16,7 +16,7 @@
         </div>
     </div>
 % else:
-    <div class="flex-container">
+    <div class="page-container">
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header">
@@ -24,18 +24,18 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        <div class="section vertical-align">
+                        <div class="row section align-center">
                             % previous_date = date.previous()
                             % next_date = date.next()
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
-                            <div class="name centred">
+                            <div class="centred">
                                 <h3>{{ date.format_long() }}</h3>
                                 <a href="{{ get_url(system, 'blocks') }}">Go to weekly schedule</a>
                             </div>
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
-                        <div class="section no-flex">
-                            % include('components/sheets_indicator', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
+                        <div class="section">
+                            % include('components/sheet_list', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                             % end
                         </div>
                     % else:
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Block</th>
@@ -84,7 +84,7 @@
                                     <tr>
                                         <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                         <td>
-                                            % include('components/routes_indicator', routes=block.get_routes(date=date))
+                                            % include('components/route_list', routes=block.get_routes(date=date))
                                         </td>
                                         <td class="non-mobile">{{ start_time }}</td>
                                         <td class="non-mobile">{{ end_time }}</td>

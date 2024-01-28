@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Trip {{! trip.display_id }}</h1>
-    <h2 class="subtitle">{{ trip }}</h2>
+<div id="page-header">
+    <h1>Trip {{! trip.display_id }}</h1>
+    <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
@@ -12,7 +12,7 @@
 </div>
 
 % if system.realtime_enabled:
-    <div class="flex-container">
+    <div class="page-container">
         % if len(records) > 0:
             <div class="sidebar container flex-1">
                 <div class="section">
@@ -21,20 +21,18 @@
                     </div>
                     <div class="content">
                         <div class="info-box">
-                            <div class="section no-flex">
-                                % include('components/events_indicator', events=events)
+                            <div class="section">
+                                % include('components/events_list', events=events)
                             </div>
-                            <div class="section no-flex">
+                            <div class="column section">
                                 % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
-                                <div class="flex-column">
-                                    % for order in orders:
-                                        % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
-                                        <div class="flex-row">
-                                            <div class="name flex-1">{{! order }}</div>
-                                            <div class="value lighter-text">{{ round(percentage) }}%</div>
-                                        </div>
-                                    % end
-                                </div>
+                                % for order in orders:
+                                    % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
+                                    <div class="row space-between">
+                                        <div>{{! order }}</div>
+                                        <div class="lighter-text">{{ round(percentage) }}%</div>
+                                    </div>
+                                % end
                             </div>
                         </div>
                     </div>
@@ -61,14 +59,14 @@
                         </div>
                     % else:
                         % if len([r for r in records if len(r.warnings) > 0]) > 0:
-                            <p class="margin-bottom-10">
+                            <p>
                                 <span>Entries with a</span>
                                 <img class="middle-align white inline" src="/img/white/warning.png" />
                                 <img class="middle-align black inline" src="/img/black/warning.png" />
                                 <span>may be accidental logins.</span>
                             </p>
                         % end
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -81,23 +79,22 @@
                             <tbody>
                                 % for record in records:
                                     % bus = record.bus
-                                    % order = bus.order
                                     <tr>
                                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                                         <td class="non-desktop">{{ record.date.format_short() }}</td>
                                         <td>
-                                            <div class="flex-column">
-                                                <div class="flex-row left">
-                                                    % include('components/bus', bus=bus)
-                                                    % include('components/record_warnings_indicator', record=record)
+                                            <div class="column">
+                                                <div class="row">
+                                                    % include('components/bus')
+                                                    % include('components/record_warnings')
                                                 </div>
                                                 <span class="non-desktop smaller-font">
-                                                    % include('components/order', order=order)
+                                                    % include('components/order', order=bus.order)
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="desktop-only">
-                                            % include('components/order', order=order)
+                                            % include('components/order', order=bus.order)
                                         </td>
                                         <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                         <td>{{ record.last_seen.format_web(time_format) }}</td>

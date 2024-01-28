@@ -1,8 +1,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Vehicle History</h1>
+<div id="page-header">
+    <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
         <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
@@ -30,7 +30,7 @@
     % known_overviews = [o for o in overviews if o.bus.order is not None]
     % unknown_overviews = [o for o in overviews if o.bus.order is None]
     % orders = sorted({o.bus.order for o in known_overviews})
-    <table class="striped">
+    <table>
         <thead>
             <tr>
                 <th>Bus</th>
@@ -44,10 +44,10 @@
         </thead>
         <tbody>
             % if len(unknown_overviews) > 0:
-                <tr class="section">
+                <tr class="header">
                     <td colspan="5">
-                        <div class="flex-row">
-                            <div class="flex-1">Unknown Year/Model</div>
+                        <div class="row space-between">
+                            <div>Unknown Year/Model</div>
                             <div>{{ len(unknown_overviews) }}</div>
                         </div>
                     </td>
@@ -58,11 +58,11 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % include('components/bus', bus=bus)
+                            % include('components/bus')
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
-                            <div class="flex-column">
+                            <div class="column">
                                 {{ record.date.format_short() }}
                                 % if system is None:
                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
@@ -73,7 +73,7 @@
                             <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            <div class="flex-column">
+                            <div class="column">
                                 % if record.is_available:
                                     % block = record.block
                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
@@ -81,22 +81,22 @@
                                     <span>{{ record.block_id }}</span>
                                 % end
                                 <div class="non-desktop">
-                                    % include('components/routes_indicator', routes=record.routes)
+                                    % include('components/route_list', routes=record.routes)
                                 </div>
                             </div>
                         </td>
                         <td class="desktop-only">
-                            % include('components/routes_indicator', routes=record.routes)
+                            % include('components/route_list', routes=record.routes)
                         </td>
                     </tr>
                 % end
             % end
             % for order in orders:
                 % order_overviews = [o for o in known_overviews if o.bus.order == order]
-                <tr class="section">
+                <tr class="header">
                     <td colspan="5">
-                        <div class="flex-row">
-                            <div class="flex-1">{{! order }}</div>
+                        <div class="row space-between">
+                            <div>{{! order }}</div>
                             <div>{{ len(order_overviews) }}</div>
                         </div>
                     </td>
@@ -107,11 +107,11 @@
                     % bus = overview.bus
                     <tr>
                         <td>
-                            % include('components/bus', bus=bus)
+                            % include('components/bus')
                         </td>
                         <td class="desktop-only">{{ record.date.format_long() }}</td>
                         <td class="non-desktop">
-                            <div class="flex-column">
+                            <div class="column">
                                 {{ record.date.format_short() }}
                                 % if system is None:
                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
@@ -122,7 +122,7 @@
                             <td class="non-mobile">{{ record.system }}</td>
                         % end
                         <td>
-                            <div class="flex-column">
+                            <div class="column">
                                 % if record.is_available:
                                     % block = record.block
                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
@@ -130,12 +130,12 @@
                                     <span>{{ record.block_id }}</span>
                                 % end
                                 <div class="non-desktop">
-                                    % include('components/routes_indicator', routes=record.routes)
+                                    % include('components/route_list', routes=record.routes)
                                 </div>
                             </div>
                         </td>
                         <td class="desktop-only">
-                            % include('components/routes_indicator', routes=record.routes)
+                            % include('components/route_list', routes=record.routes)
                         </td>
                     </tr>
                 % end

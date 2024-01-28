@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Stop {{ stop.number }}</h1>
-    <h2 class="subtitle">{{ stop }}</h2>
+<div id="page-header">
+    <h1>Stop {{ stop.number }}</h1>
+    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>

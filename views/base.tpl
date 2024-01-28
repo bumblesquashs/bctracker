@@ -188,17 +188,13 @@
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
-                <div class="tooltip">
-                    <div class="title">Nearby Stops</div>
-                </div>
+                <div class="tooltip">Nearby Stops</div>
             </a>
             
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
-                <div class="tooltip">
-                    <div class="title">Personalize</div>
-                </div>
+                <div class="tooltip">Personalize</div>
             </a>
             
             <div id="search-desktop" class="desktop-only">
@@ -291,7 +287,7 @@
                     <img class="white" src="/img/white/system.png" />
                     <img class="black" src="/img/black/system.png" />
                 </div>
-                <div class="content">
+                <div class="details">
                     <div id="system">
                         % if system is None:
                             All Transit Systems
@@ -305,7 +301,6 @@
                         % end
                     </div>
                 </div>
-                
                 <div id="refresh-button" class="disabled">
                     <img class="white" src="/img/white/refresh.png" />
                     <img class="black" src="/img/black/refresh.png" />
@@ -352,7 +347,7 @@
                     </div>
                 % end
             </div>
-            <div id="content">{{ !base }}</div>
+            <div id="page">{{ !base }}</div>
         </div>
     </body>
 </html>

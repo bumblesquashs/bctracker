@@ -1,11 +1,11 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Personalize</h1>
+<div id="page-header">
+    <h1>Personalize</h1>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="container flex-1">
         <div class="section">
             <div class="header">
@@ -16,7 +16,7 @@
                     <h3>Current Theme: {{ theme }}</h3>
                 % end
             </div>
-            <div class="content flex-column flex-gap-10">
+            <div class="content">
                 <p>
                     The default BCTracker theme (BC Transit) is available in both light and dark colours.
                     You can also set it to change automatically based on your system preferences.
@@ -59,13 +59,9 @@
                     <h3>Current Format: {{ time_format }}</h3>
                 % end
             </div>
-            <div class="content flex-column flex-gap-10">
-                <p>
-                    You can choose whether times are displayed as 12hr or 30hr.
-                </p>
-                <p>
-                    Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.
-                </p>
+            <div class="content">
+                <p>You can choose whether times are displayed as 12hr or 30hr.</p>
+                <p>Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
                 <ul>
                     <li>The 12hr format uses xm instead of am, so 1am is shown as 1xm</li>
                     <li>The 30hr format continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</li>
@@ -89,10 +85,8 @@
                     <h3>Current style: Default</h3>
                 % end
             </div>
-            <div class="content flex-column flex-gap-10">
-                <p>
-                    Choose a style for bus icons shown on the map screen.
-                </p>
+            <div class="content">
+                <p>Choose a style for bus icons shown on the map screen.</p>
                 <div class="button-container">
                     <a class="button" href="?bus_marker_style=default">Default</a>
                     <a class="button" href="?bus_marker_style=mini">Mini</a>

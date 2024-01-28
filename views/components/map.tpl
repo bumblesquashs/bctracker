@@ -123,7 +123,7 @@
             content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
-                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
             content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
@@ -168,7 +168,7 @@
             content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
-                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
             content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
@@ -230,10 +230,10 @@
             
             const headsign = document.createElement("div");
             if (position.adherence !== null && position.adherence !== undefined) {
-                headsign.className = "flex-row center flex-gap-5";
+                headsign.className = "row center gap-5";
                 const adherence = position.adherence;
                 const adherenceElement = document.createElement("div");
-                adherenceElement.classList.add("adherence-indicator");
+                adherenceElement.classList.add("adherence");
                 adherenceElement.classList.add(adherence.status_class);
                 adherenceElement.innerHTML = adherence.value;
                 

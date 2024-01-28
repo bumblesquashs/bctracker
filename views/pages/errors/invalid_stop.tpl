@@ -1,8 +1,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Error: Stop {{ stop_number }} Not Found</h1>
+<div id="page-header">
+    <h1>Error: Stop {{ stop_number }} Not Found</h1>
 </div>
 
 <div class="placeholder">

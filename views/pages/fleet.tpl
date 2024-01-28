@@ -1,8 +1,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Fleet</h1>
+<div id="page-header">
+    <h1>Fleet</h1>
 </div>
 
 % models = sorted({o.model for o in orders})
@@ -10,7 +10,7 @@
 
 <div class="container">
     <div class="section">
-        <div class="content flex-column flex-gap-10">
+        <div class="content">
             <p>
                 This is the full list of vehicles that are currently available on BCTracker.
                 It does not include every bus that has ever been operated by BC Transit, but it should be mostly up-to-date with orders since the 1990s.
@@ -37,14 +37,14 @@
     </div>
     <div class="section">
         <div class="content">
-            <div class="flex-container">
+            <div class="page-container">
                 <div class="sidebar container flex-1">
                     <div class="section">
                         <div class="header">
                             <h2>Statistics</h2>
                         </div>
                         <div class="content">
-                            <table class="striped">
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Model</th>
@@ -54,7 +54,7 @@
                                 </thead>
                                 <tbody>
                                     % for type in model_types:
-                                        <tr class="section">
+                                        <tr class="header">
                                             <td>{{ type }}</td>
                                             <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
                                             <td>{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
@@ -69,7 +69,7 @@
                                             </tr>
                                         % end
                                     % end
-                                    <tr class="section">
+                                    <tr class="header">
                                         <td>Total</td>
                                         <td>{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
                                         <td>{{ sum([o.size for o in orders]) }}</td>
@@ -95,7 +95,7 @@
                                                 <h3>{{! model }}</h3>
                                             </div>
                                             <div class="content">
-                                                <table class="striped">
+                                                <table>
                                                     <thead>
                                                         <tr>
                                                             <th>Bus</th>
@@ -107,10 +107,10 @@
                                                     </thead>
                                                     <tbody>
                                                         % for order in model_orders:
-                                                            <tr class="section">
+                                                            <tr class="header">
                                                                 <td colspan="5">
-                                                                    <div class="flex-row">
-                                                                        <div class="flex-1">{{ order.year }}</div>
+                                                                    <div class="row space-between">
+                                                                        <div>{{ order.year }}</div>
                                                                         <div>{{ order.size }}</div>
                                                                     </div>
                                                                 </td>
@@ -121,11 +121,11 @@
                                                                     % overview = overviews[bus.number]
                                                                     <tr>
                                                                         <td>
-                                                                            % include('components/bus', bus=bus)
+                                                                            % include('components/bus')
                                                                         </td>
                                                                         <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
-                                                                            <div class="flex-column">
+                                                                            <div class="column">
                                                                                 {{ overview.first_seen_date.format_short() }}
                                                                                 <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
                                                                             </div>
@@ -133,7 +133,7 @@
                                                                         <td class="non-mobile">{{ overview.first_seen_system }}</td>
                                                                         <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
-                                                                            <div class="flex-column">
+                                                                            <div class="column">
                                                                                 {{ overview.last_seen_date.format_short() }}
                                                                                 <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
                                                                             </div>
@@ -143,7 +143,7 @@
                                                                 % else:
                                                                     <tr>
                                                                         <td>
-                                                                            % include('components/bus', bus=bus, enable_link=False)
+                                                                            % include('components/bus', enable_link=False)
                                                                         </td>
                                                                         <td class="lighter-text" colspan="4">Unavailable</td>
                                                                     </tr>

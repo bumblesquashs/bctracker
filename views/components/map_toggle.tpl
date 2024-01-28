@@ -1,28 +1,25 @@
 
 <script>
     function toggleMap() {
-        const toggleElement = document.getElementById("map-toggle");
-        const whiteIconElement = document.getElementById("map-toggle-icon-white");
-        const blackIconElement = document.getElementById("map-toggle-icon-black");
+        document.getElementById("open-map-toggle-icon").classList.toggle('display-none');
+        document.getElementById("close-map-toggle-icon").classList.toggle('display-none');
         document.getElementById("navigation-bar").classList.toggle("display-none");
         document.getElementById("navigation-menu").classList.add("display-none");
         document.getElementById("search-non-desktop").classList.add("display-none");
         document.getElementById("side-bar").classList.toggle("display-none");
         document.getElementById("banners").classList.toggle("display-none");
-        document.getElementById("map").classList.toggle("z-override");
-        toggleElement.classList.toggle("active");
-        if (toggleElement.classList.contains("active")) {
-            whiteIconElement.src = "/img/white/close-fullscreen.png";
-            blackIconElement.src = "/img/black/close-fullscreen.png";
-        } else {
-            whiteIconElement.src = "/img/white/open-fullscreen.png";
-            blackIconElement.src = "/img/black/open-fullscreen.png";
-        }
+        document.getElementById("page-header").classList.toggle("display-none");
         map.resize();
     }
 </script>
 
 <div id="map-toggle" class="mobile-only" onclick="toggleMap()">
-    <img id="map-toggle-icon-white" src="/img/white/open-fullscreen.png" />
-    <img id="map-toggle-icon-black" src="/img/black/open-fullscreen.png" />
+    <div id="open-map-toggle-icon" class="display-none">
+        <img class="white" src="/img/white/open-fullscreen.png" />
+        <img class="black" src="/img/black/open-fullscreen.png" />
+    </div>
+    <div id="close-map-toggle-icon">
+        <img class="white" src="/img/white/close-fullscreen.png" />
+        <img class="black" src="/img/black/close-fullscreen.png" />
+    </div>
 </div>
