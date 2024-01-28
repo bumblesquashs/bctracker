@@ -35,22 +35,6 @@
                                 <h3>{{ admin_system }}</h3>
                             </div>
                             <div class="content">
-                                <div>
-                                    Enabled:
-                                    % if admin_system.enabled:
-                                        <span class="positive">Yes</span>
-                                    % else:
-                                        <span class="negative">No</span>
-                                    % end
-                                </div>
-                                <div>
-                                    Visible:
-                                    % if admin_system.visible:
-                                        <span class="positive">Yes</span>
-                                    % else:
-                                        <span class="negative">No</span>
-                                    % end
-                                </div>
                                 <div class="button-container">
                                     % if admin_system.gtfs_enabled:
                                         <div class="button" onclick="reloadGTFS('{{ admin_system.id }}')">Reload GTFS</div>
@@ -68,22 +52,6 @@
                             <h3>{{ system }}</h3>
                         </div>
                         <div class="content">
-                            <div>
-                                Enabled:
-                                % if system.enabled:
-                                    <span class="positive">Yes</span>
-                                % else:
-                                    <span class="negative">No</span>
-                                % end
-                            </div>
-                            <div>
-                                Visible:
-                                % if system.visible:
-                                    <span class="positive">Yes</span>
-                                % else:
-                                    <span class="negative">No</span>
-                                % end
-                            </div>
                             <div class="button-container">
                                 % if system.gtfs_enabled:
                                     <div class="button" onclick="reloadGTFS('{{ system.id }}')">Reload GTFS</div>
