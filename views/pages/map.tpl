@@ -60,30 +60,30 @@
             <div class="placeholder">
                 % if system is None:
                     % if show_nis:
-                        <h3 class="title">There are no buses out right now</h3>
+                        <h3>There are no buses out right now</h3>
                         <p>
                             BC Transit does not have late night service, so this should be the case overnight.
                             If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                         </p>
                         <p>Please check again later!</p>
                     % else:
-                        <h3 class="title">There are no buses in service right now</h3>
+                        <h3>There are no buses in service right now</h3>
                         <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
                     % end
                 % elif not system.realtime_enabled:
-                    <h3 class="title">{{ system }} does not support realtime</h3>
+                    <h3>{{ system }} does not support realtime</h3>
                     <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
                     <div class="non-desktop">
                         % include('components/systems')
                     </div>
                 % elif not system.is_loaded:
-                    <h3 class="title">Realtime information for {{ system }} is unavailable</h3>
+                    <h3>Realtime information for {{ system }} is unavailable</h3>
                     <p>System data is currently loading and will be available soon.</p>
                 % elif not show_nis:
-                    <h3 class="title">There are no buses in service in {{ system }} right now</h3>
+                    <h3>There are no buses in service in {{ system }} right now</h3>
                     <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
                 % else:
-                    <h3 class="title">There are no buses out in {{ system }} right now</h3>
+                    <h3>There are no buses out in {{ system }} right now</h3>
                     <p>Please check again later!</p>
                 % end
             </div>
@@ -218,7 +218,7 @@
                         element.classList.add("small");
                         icon.classList.add("mini");
                     } else {
-                        icon.innerHTML = "<img src='/img/white/bus.png' />";
+                        icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
                     }
                     
                     icon.onmouseenter = function() {
@@ -241,7 +241,7 @@
                         icon.classList.add("mini");
                         icon.innerHTML = "<div class='link'></div>";
                     } else {
-                        icon.innerHTML = "<div class='link'></div><img src='/img/white/bus.png' />";
+                        icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
                     }
                     
                     icon.onmouseenter = function() {

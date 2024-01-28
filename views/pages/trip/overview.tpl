@@ -194,7 +194,7 @@
             </div>
             <div class="content">
                 % if len([d for d in departures if d.timepoint]) > 0:
-                    <p>
+                    <p class="margin-bottom-10">
                         Departures in <span class="timing-point">bold</span> are timing points.
                     </p>
                 % end

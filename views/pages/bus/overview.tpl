@@ -75,11 +75,11 @@
                         % if last_record is not None and last_record.date.is_today:
                             % block = last_record.block
                             % if block is not None:
-                                % today = Date.today(block.system.timezone)
-                                % end_time = block.get_end_time(date=today)
+                                % date = Date.today(block.system.timezone)
+                                % end_time = block.get_end_time(date=date)
                                 % if end_time is not None and end_time.is_later:
                                     <div class="section no-flex">
-                                        % include('components/block_indicator', date=today)
+                                        % include('components/block_indicator', date=date)
                                     </div>
                                 % end
                             % end
@@ -137,10 +137,10 @@
                             <div class="name">Block</div>
                             <div class="value flex-column">
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                % today = Date.today(block.system.timezone)
-                                % start_time = block.get_start_time(date=today).format_web(time_format)
-                                % end_time = block.get_end_time(date=today).format_web(time_format)
-                                % duration = block.get_duration(date=today)
+                                % date = Date.today(block.system.timezone)
+                                % start_time = block.get_start_time(date=date).format_web(time_format)
+                                % end_time = block.get_end_time(date=date).format_web(time_format)
+                                % duration = block.get_duration(date=date)
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
             <div class="content">
                 % if len(records) == 0:
                     <div class="placeholder">
-                        <h3 class="title">This bus doesn't have any recorded history</h3>
+                        <h3>This bus doesn't have any recorded history</h3>
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
@@ -302,7 +302,7 @@
                     </div>
                 % else:
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
-                        <p>
+                        <p class="margin-bottom-10">
                             <span>Entries with a</span>
                             <img class="middle-align white inline" src="/img/white/warning.png" />
                             <img class="middle-align black inline" src="/img/black/warning.png" />

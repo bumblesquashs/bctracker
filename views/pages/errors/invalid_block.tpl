@@ -6,7 +6,7 @@
 </div>
 
 <div class="placeholder">
-    <h3 class="title">The block you are looking for doesn't seem to exist!</h3>
+    <h3>The block you are looking for doesn't seem to exist!</h3>
     % if not system.is_loaded:
         <p>System data is currently loading and will be available soon.</p>
     % else:

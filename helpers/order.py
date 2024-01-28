@@ -14,8 +14,9 @@ def load():
         columns = next(reader)
         orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
 
-def find(bus_number):
+def find(bus):
     '''Returns the order containing the given bus number'''
+    bus_number = getattr(bus, 'number', bus)
     if bus_number < 0:
         return None
     for order in orders:
@@ -34,6 +35,10 @@ def find_matches(query, recorded_bus_numbers):
         if not order.visible:
             continue
         order_string = str(order)
+        if order.model is None or order.model.type is None:
+            model_icon = 'ghost'
+        else:
+            model_icon = f'bus-{order.model.type.name}'
         for bus in order:
             bus_number_string = str(bus)
             value = 0
@@ -46,7 +51,7 @@ def find_matches(query, recorded_bus_numbers):
             adornment = bus.adornment
             if adornment is not None and adornment.enabled:
                 bus_number_string += f' {adornment}'
-            matches.append(Match('bus', bus_number_string, order_string, f'bus/{bus.number}', value))
+            matches.append(Match('bus', bus_number_string, order_string, model_icon, f'bus/{bus.number}', value))
     return matches
 
 def delete_all():

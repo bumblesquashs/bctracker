@@ -1,6 +1,5 @@
 import os
 import signal
-from datetime import datetime, timedelta
 from crontab import CronTab
 
 import helpers.system
@@ -9,6 +8,7 @@ from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
+import config
 import gtfs
 import realtime
 import database
@@ -21,38 +21,39 @@ def setup():
     signal.signal(signal.SIGUSR1, handle_gtfs)
     signal.signal(signal.SIGUSR2, handle_realtime)
 
-def start(cron_id):
+def start():
     '''Removes any old cron jobs and creates new jobs'''
     global running
     running = True
     pid = os.getpid()
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=cron_id)
+        cron.remove_all(comment=config.cron_id)
         
-        gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=cron_id)
-        gtfs_job.setall('0 5 * * */1')
+        gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=config.cron_id)
+        gtfs_job.setall('0 4 * * */1')
         
-        realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=cron_id)
+        realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=config.cron_id)
         realtime_job.minute.every(1)
 
-def stop(cron_id):
+def stop():
     '''Removes all cron jobs'''
     global running
     running = False
     with CronTab(user=True) as cron:
-        cron.remove_all(comment=cron_id)
+        cron.remove_all(comment=config.cron_id)
 
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
         if running:
-            today = Date.today(system.timezone)
-            if today.weekday == Weekday.MON or not gtfs.validate(system):
+            date = Date.today(system.timezone)
+            if date.weekday == Weekday.MON or not gtfs.validate(system):
                 gtfs.load(system, True)
                 gtfs.update_cache_in_background(system)
     if running:
-        date = datetime.now() - timedelta(days=1)
-        backup.run(date, date.weekday() == 0)
+        database.archive()
+        date = Date.today()
+        backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
@@ -71,7 +72,3 @@ def handle_realtime(sig, frame):
                     gtfs.update_cache_in_background(system)
     if running:
         realtime.update_records()
-        
-        # Backup database at the end of each day
-        if time.hour == 0 and time.minute == 0:
-            database.backup()

@@ -10,61 +10,63 @@
 </div>
 
 % if system is None:
-    <p>Choose a system to see individual routes.</p>
-    <table class="striped">
-        <thead>
-            <tr>
-                <th>System</th>
-                <th class="non-mobile"># Routes</th>
-                <th>Service Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            % for region in regions:
-                % region_systems = [s for s in systems if s.region == region]
-                % if len(region_systems) > 0:
-                    <tr class="section">
-                        <td colspan="3">
-                            {{ region }}
-                        </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                    % for region_system in region_systems:
-                        % count = len(region_system.get_routes())
-                        <tr>
-                            <td>
-                                <div class="flex-column">
-                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                    <span class="mobile-only smaller-font">
-                                        % if region_system.is_loaded:
-                                            % if count == 1:
-                                                1 Route
-                                            % else:
-                                                {{ count }} Routes
-                                            % end
-                                        % end
-                                    </span>
-                                </div>
+    <div class="placeholder">
+        <p>Choose a system to see individual routes.</p>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>System</th>
+                    <th class="non-mobile"># Routes</th>
+                    <th>Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for region in regions:
+                    % region_systems = [s for s in systems if s.region == region]
+                    % if len(region_systems) > 0:
+                        <tr class="section">
+                            <td colspan="3">
+                                {{ region }}
                             </td>
-                            % if region_system.is_loaded:
-                                <td class="non-mobile">{{ count }}</td>
-                                <td>
-                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
-                                </td>
-                            % else:
-                                <td class="lighter-text" colspan="2">Routes are loading...</td>
-                            % end
                         </tr>
+                        <tr class="display-none"></tr>
+                        % for region_system in region_systems:
+                            % count = len(region_system.get_routes())
+                            <tr>
+                                <td>
+                                    <div class="flex-column">
+                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                        <span class="mobile-only smaller-font">
+                                            % if region_system.is_loaded:
+                                                % if count == 1:
+                                                    1 Route
+                                                % else:
+                                                    {{ count }} Routes
+                                                % end
+                                            % end
+                                        </span>
+                                    </div>
+                                </td>
+                                % if region_system.is_loaded:
+                                    <td class="non-mobile">{{ count }}</td>
+                                    <td>
+                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                    </td>
+                                % else:
+                                    <td class="lighter-text" colspan="2">Routes are loading...</td>
+                                % end
+                            </tr>
+                        % end
                     % end
                 % end
-            % end
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 % else:
     % routes = system.get_routes()
     % if len(routes) == 0:
         <div class="placeholder">
-            <h3 class="title">Route information for {{ system }} is unavailable</h3>
+            <h3>Route information for {{ system }} is unavailable</h3>
             % if system.is_loaded:
                 <p>Please check again later!</p>
             % else:

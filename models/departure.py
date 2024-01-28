@@ -155,8 +155,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence - 1)
+        return helpers.departure.find(self.system, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return helpers.departure.find(self.system.id, trip_id=self.trip_id, sequence=self.sequence + 1)
+        return helpers.departure.find(self.system, trip=self.trip, sequence=self.sequence + 1)

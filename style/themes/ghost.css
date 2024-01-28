@@ -118,6 +118,21 @@ table.striped tr {
     background-color: #000000;
 }
 
+#nearby-status.loading {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #FFCCCC;
+}
+
+#quick-navigation .item {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
+}
+
 #refresh-button:hover {
     background-color: #DDDDDD;
 }
@@ -128,11 +143,6 @@ table.striped tr {
 
 #refresh-button img.white {
     display: none;
-}
-
-#quick-navigation .item {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
 }
 
 #search-desktop {
@@ -300,15 +310,15 @@ table.striped tr {
 }
 
 .banner {
-    background-color: #FFA027;
-    color: #FFFFFF;
+    background-color: #FFF7ED;
+    color: #000000;
 }
 
 .banner a {
-    color: #FFFFFF;
+    color: #000000;
 }
 
-.banner .close-button img.black {
+.banner .close-button img.white {
     display: none;
 }
 
@@ -352,6 +362,11 @@ table.striped tr {
 
 .checkbox .box img.white {
     display: none;
+}
+
+.code-block {
+    background-color: #EEEEEE;
+    border-color: #DDDDDD;
 }
 
 .dropdown .content {

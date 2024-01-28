@@ -1,4 +1,8 @@
+
 import sqlite3
+import shutil
+
+import config
 
 SQL_SCRIPTS = [
     '''
@@ -152,13 +156,17 @@ def disconnect():
     connection.close()
     connection = None
 
-def backup():
+def backup(name='bctracker'):
     '''Copies all information from the main database to a backup database'''
-    if connection is None:
+    if connection is None or not config.enable_database_backups:
         return
-    backup = sqlite3.connect('archives/bctracker.db', check_same_thread=False)
+    backup = sqlite3.connect(f'archives/{name}.db', check_same_thread=False)
     connection.backup(backup)
     backup.close()
+
+def archive(name='bctracker'):
+    '''Creates a duplicate database file in the archives folder'''
+    shutil.copyfile(f'./data/{name}.db', f'./archives/{name}.db')
 
 def commit():
     '''Saves all changes made to the database'''

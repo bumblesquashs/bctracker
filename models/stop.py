@@ -39,7 +39,7 @@ class Stop:
     def nearby_stops(self):
         '''Returns all stops with coordinates close to this stop'''
         stops = self.system.get_stops()
-        return sorted({s for s in stops if sqrt(((self.lat - s.lat) ** 2) + ((self.lon - s.lon) ** 2)) <= 0.001 and self != s})
+        return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
     
     @property
     def schedule(self):
@@ -88,7 +88,7 @@ class Stop:
             return
         self.is_setup = True
         if departures is None:
-            departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
+            departures = helpers.departure.find_all(self.system, stop=self)
         services = {d.trip.service for d in departures if d.trip is not None}
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
@@ -123,11 +123,15 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match('stop', self.number, self.name, f'stops/{self.number}', value)
+        return Match('stop', self.number, self.name, 'stop', f'stops/{self.number}', value)
+    
+    def is_near(self, lat, lon, accuracy=0.001):
+        '''Checks if this stop is near the given latitude and longitude'''
+        return sqrt(((self.lat - lat) ** 2) + ((self.lon - lon) ** 2)) <= accuracy
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = helpers.departure.find_all(self.system.id, stop_id=self.id)
+        departures = helpers.departure.find_all(self.system, stop=self)
         if service_group is None:
             if date is None:
                 return sorted(departures)
@@ -136,4 +140,4 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return helpers.departure.find_adjacent(self.system.id, self.id)
+        return helpers.departure.find_adjacent(self.system, self)

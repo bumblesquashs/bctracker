@@ -5,6 +5,7 @@ import database
 
 def create(system, row):
     '''Inserts a new route into the database'''
+    system_id = getattr(system, 'id', system)
     if 'route_color' in row and row['route_color'] != '' and (not system.recolour_black or row['route_color'] != '000000'):
         colour = row['route_color']
     else:
@@ -14,7 +15,7 @@ def create(system, row):
     else:
         text_colour = None
     database.insert('route', {
-        'system_id': system.id,
+        'system_id': system_id,
         'route_id': row['route_id'],
         'number': row['route_short_name'],
         'name': row['route_long_name'],
@@ -22,8 +23,9 @@ def create(system, row):
         'text_colour': text_colour
     })
 
-def find(system_id, route_id):
-    '''Returns the route with the given system ID and route ID'''
+def find(system, route_id):
+    '''Returns the route with the given system and route ID'''
+    system_id = getattr(system, 'id', system)
     routes = database.select('route',
         columns={
             'route.system_id': 'route_system_id',
@@ -44,8 +46,9 @@ def find(system_id, route_id):
         return None
     return routes[0]
 
-def find_all(system_id, limit=None):
-    '''Returns all routes that match the given system ID'''
+def find_all(system, limit=None):
+    '''Returns all routes that match the given system'''
+    system_id = getattr(system, 'id', system)
     return database.select('route',
         columns={
             'route.system_id': 'route_system_id',
@@ -64,6 +67,7 @@ def find_all(system_id, limit=None):
 
 def delete_all(system):
     '''Deletes all routes for the given system from the database'''
+    system_id = getattr(system, 'id', system)
     database.delete('route', {
-        'system_id': system.id
+        'system_id': system_id
     })

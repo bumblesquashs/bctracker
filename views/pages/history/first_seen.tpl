@@ -13,16 +13,16 @@
 % if len(overviews) == 0:
     <div class="placeholder">
         % if system is None:
-            <h3 class="title">No vehicle history found</h3>
+            <h3>No vehicle history found</h3>
             <p>Something has probably gone terribly wrong if you're seeing this.</p>
         % elif not system.realtime_enabled:
-            <h3 class="title">{{ system }} does not currently support realtime</h3>
+            <h3>{{ system }} does not currently support realtime</h3>
             <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
         % else:
-            <h3 class="title">No buses have been recorded in {{ system }}</h3>
+            <h3>No buses have been recorded in {{ system }}</h3>
             <p>Please check again later!</p>
         % end
     </div>
@@ -73,12 +73,17 @@
                         <td class="non-mobile">{{ record.system }}</td>
                     % end
                     <td>
-                        % if record.is_available:
-                            % block = record.block
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                        % else:
-                            <span>{{ record.block_id }}</span>
-                        % end
+                        <div class="flex-column">
+                            % if record.is_available:
+                                % block = record.block
+                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % else:
+                                <span>{{ record.block_id }}</span>
+                            % end
+                            <div class="non-desktop">
+                                % include('components/routes_indicator', routes=record.routes)
+                            </div>
+                        </div>
                     </td>
                     <td class="desktop-only">
                         % include('components/routes_indicator', routes=record.routes)

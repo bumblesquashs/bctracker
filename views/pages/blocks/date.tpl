@@ -6,12 +6,14 @@
 </div>
 
 % if system is None:
-    <p>
-        Blocks can only be viewed for individual systems.
-        Please choose a system.
-    </p>
-    <div class="non-desktop">
-        % include('components/systems')
+    <div class="placeholder">
+        <p>
+            Blocks can only be viewed for individual systems.
+            Please choose a system.
+        </p>
+        <div class="non-desktop">
+            % include('components/systems')
+        </div>
     </div>
 % else:
     <div class="flex-container">
@@ -50,7 +52,7 @@
                     % if len(blocks) == 0:
                         <div class="placeholder">
                             % if system.is_loaded:
-                                <h3 class="title">No blocks found for {{ system }} on {{ date.format_long() }}</h3>
+                                <h3>No blocks found for {{ system }} on {{ date.format_long() }}</h3>
                                 <p>There are a few reasons why that might be the case:</p>
                                 <ol>
                                     <li>It may be a day of the week that does not normally have service</li>
@@ -59,7 +61,7 @@
                                 </ol>
                                 <p>Please check again later!</p>
                             % else:
-                                <h3 class="title">Block information for {{ system }} is unavailable</h3>
+                                <h3>Block information for {{ system }} is unavailable</h3>
                                 <p>System data is currently loading and will be available soon.</p>
                             % end
                         </div>

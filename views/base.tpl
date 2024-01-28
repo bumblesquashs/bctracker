@@ -1,5 +1,16 @@
 <html>
-    <head> 
+    <head>
+        % if config.enable_analytics:
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.analytics_key }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag("js", new Date());
+                gtag("config", "{{ config.analytics_key }}");
+            </script>
+        % end
+        
         <title>
             % if system is None:
                 BCTracker | {{ title }}
@@ -66,7 +77,7 @@
             <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
             
             <script>
-                mapboxgl.accessToken = "{{ mapbox_api_key }}";
+                mapboxgl.accessToken = "{{ config.mapbox_api_key }}";
             </script>
         % end
         
@@ -107,22 +118,32 @@
             
             function getUrl(systemID, path) {
                 if (systemID === null || systemID === undefined) {
-                    return "{{ no_system_domain }}".format(path)
+                    return "{{ config.all_systems_domain }}".format(path)
                 }
-                return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
+                return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID, path)
             }
             
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
-                if ("{{ cookie_domain }}" == "None") {
+                if ("{{ config.cookie_domain }}" == "None") {
                     document.cookie = key + "=" + value + "; max_age=" + max_age + "; path=/";
                 } else {
-                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ cookie_domain }}; path=/";
+                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ config.cookie_domain }}; path=/";
                 }
             }
             
             function openSurvey() {
-                window.open("https://docs.google.com/forms/d/e/1FAIpQLSfxtrvodzaJzmNwt6CQxfDfQcR2F9D6crOrxwCtP6LA6aeCgQ/viewform?usp=sf_link", "_blank").focus();
+                window.open("https://docs.google.com/forms/d/e/1FAIpQLSegYbUi18Qrm40GSAYIel8NEH3r67vBpJXHGbEqEt2xwDOu9A/viewform?usp=sf_link", "_blank").focus();
+                hideSurvey();
+            }
+            
+            function hideSurvey() {
+                document.getElementById("survey-banner").classList.add("display-none");
+                const now = new Date();
+                const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
+                now.setTime(expireTime);
+                
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if config.cookie_domain is None else config.cookie_domain }};path=/";
             }
         </script>
     </head>
@@ -156,14 +177,28 @@
             
             <div class="flex-1"></div>
             
-            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'stats') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'stats') }}">
                 <img class="white" src="/img/white/stats.png" />
                 <img class="black" src="/img/black/stats.png" />
+                <div class="tooltip">
+                    <div class="title">Statistics</div>
+                </div>
             </a>
             
-            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
+                <img class="white" src="/img/white/location.png" />
+                <img class="black" src="/img/black/location.png" />
+                <div class="tooltip">
+                    <div class="title">Nearby Stops</div>
+                </div>
+            </a>
+            
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
+                <div class="tooltip">
+                    <div class="title">Personalize</div>
+                </div>
             </a>
             
             <div id="search-desktop" class="desktop-only">
@@ -203,24 +238,24 @@
                     <span>History</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % end
@@ -234,6 +269,11 @@
                 <img class="white" src="/img/white/about.png" />
                 <img class="black" src="/img/black/about.png" />
                 <span>About</span>
+            </a>
+            <a class="menu-button" href="{{ get_url(system, 'nearby') }}">
+                <img class="white" src="/img/white/location.png" />
+                <img class="black" src="/img/black/location.png" />
+                <span>Nearby</span>
             </a>
             <a class="menu-button" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
@@ -302,7 +342,15 @@
         </div>
         <div id="main">
             <div id="banners">
-                <!-- No banners right now -->
+                % if system is not None and (system.id == 'comox' or system.id == 'campbell-river'):
+                    <div class="banner">
+                        <div class="content">
+                            <div class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</div>
+                            % bct_id = 'comox-valley' if system.id == 'comox' else system.id
+                            <div class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ bct_id }}/news">BC Transit News Page</a>.</div>
+                        </div>
+                    </div>
+                % end
             </div>
             <div id="content">{{ !base }}</div>
         </div>
@@ -488,23 +536,19 @@
         }
         for (i = 0; i < results.length; i++) {
             const result = results[i]
-            let icon = "";
+            const icon = "<img class='white' src='/img/white/" + result.icon + ".png' /><img class='black' src='/img/black/" + result.icon + ".png' />";
             let name = result.name;
             switch (result.type) {
                 case "block":
-                    icon = "<img class='white' src='/img/white/blocks.png' /><img class='black' src='/img/black/blocks.png' />";
                     name = "Block " + result.name;
                     break;
                 case "bus":
-                    icon = "<img class='white' src='/img/white/realtime.png' /><img class='black' src='/img/black/realtime.png' />";
                     name = "Bus " + result.name;
                     break;
                 case "route":
-                    icon = "<img class='white' src='/img/white/routes.png' /><img class='black' src='/img/black/routes.png' />";
                     name = "Route " + result.name;
                     break;
                 case "stop":
-                    icon = "<img class='white' src='/img/white/stop.png' /><img class='black' src='/img/black/stop.png' />";
                     name = "Stop " + result.name;
                     break;
                 default:

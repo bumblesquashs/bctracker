@@ -9,7 +9,7 @@
     <div class="container flex-3">
         <div class="section">
             <div class="content">
-                BCTracker is a browser for the <a href="https://developers.google.com/transit/gtfs">GTFS (General Transit Feed Specification)</a> static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
+                BCTracker is a browser for the <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
                 The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in communities around British Columbia. 
             </div>
         </div>
@@ -31,11 +31,12 @@
                     </div>
                     <div class="section">
                         <div class="header">
-                            <h3>Why are some transit systems not available?</h3>
+                            <h3>Why are some transit systems missing schedules?</h3>
                         </div>
                         <div class="content">
-                            Unfortunately, BC Transit does not currently provide GTFS schedules or realtime information for some of the smaller transit systems around the province.
-                            NextRide is expected to be introduced on the remaining transit systems by 2024, so keep an eye out for them coming soon!
+                            Unfortunately, BC Transit does not currently provide GTFS schedules for some of the smaller transit systems around the province.
+                            This data is expected to come when NextRide finishes rolling out in these systems throughout 2024.
+                            Keep an eye out for more info soon!
                         </div>
                     </div>
                     <div class="section">
@@ -61,6 +62,30 @@
                 </div>
             </div>
         </div>
+        <div class="section">
+            <div class="header">
+                <h2>About the Developers</h2>
+            </div>
+            <div class="content">
+                <div class="flex-column flex-gap-10">
+                    <p>
+                        We're a couple of software developers and transit enthusiasts from Vancouver, BC.
+                        Our interest in transit systems began in 2014 when we started keeping track of the buses we rode every day.
+                        Since then we've expanded our interests to photo-taking, learning the history of transit in BC, and more.
+                    </p>
+                    <p>
+                        <b>James</b> graduated with a bachelors degree in physics from the University of British Columbia in 2020.
+                        Currently he works to develop websites and other custom software for contracted clients.
+                        He first started working on BCTracker in spring 2020.
+                    </p>
+                    <p>
+                        <b>Perrin</b> graduated with a bachelors degree in information technology from Kwantlen Polytechnic University in 2019.
+                        Currently he works as a mobile app developer for a construction safety startup.
+                        He began helping to develop BCTracker in summer 2020.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="sidebar container flex-1">
         <div class="section">
@@ -74,7 +99,7 @@
                 </p>
                 
                 <br />
-                <i> - James & Perrin, 2022 </i> 
+                <i> - James & Perrin, 2024 </i> 
             </div>  
         </div>     
     </div>

@@ -169,11 +169,11 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match('route', self.number, self.name, f'routes/{self.number}', value)
+        return Match('route', self.number, self.name, 'route', f'routes/{self.number}', value)
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return helpers.departure.find_all(self.system.id, route_id=self.id)
+        return helpers.departure.find_all(self.system, route=self)
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''

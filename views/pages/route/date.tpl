@@ -51,7 +51,7 @@
                 % if len(trips) == 0:
                     <div class="placeholder">
                         % if system.is_loaded:
-                            <h3 class="title">No trips found on {{ date.format_long() }}</h3>
+                            <h3>No trips found on {{ date.format_long() }}</h3>
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>
                                 <li>It may be a day of the week that does not normally have service</li>
@@ -60,7 +60,7 @@
                             </ol>
                             <p>Please check again later!</p>
                         % else:
-                            <h3 class="title">Trips for this route are unavailable</h3>
+                            <h3>Trips for this route are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>
                         % end
                     </div>
