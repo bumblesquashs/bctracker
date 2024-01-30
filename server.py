@@ -847,6 +847,8 @@ def api_shape_id(system, shape_id):
 @endpoint('/api/search', method='POST')
 def api_search(system):
     query = request.forms.get('query', '')
+    page = int(request.forms.get('page', 0))
+    count = int(request.forms.get('count', 10))
     matches = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
@@ -856,8 +858,10 @@ def api_search(system):
             matches += system.search_routes(query)
             matches += system.search_stops(query)
     matches = sorted([m for m in matches if m.value > 0])
+    min = page * count
+    max = min + count
     return {
-        'results': [m.get_json(system, get_url) for m in matches[0:10]],
+        'results': [m.get_json(system, get_url) for m in matches[min:max]],
         'count': len(matches)
     }
 

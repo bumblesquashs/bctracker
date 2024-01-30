@@ -262,6 +262,9 @@ ul {
 
 #search-bar {
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #search-bar input[type=text] {
@@ -269,8 +272,15 @@ ul {
 }
 
 #search-count {
-    padding: 10px;
     text-align: center;
+}
+
+#search-page {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
 }
 
 #search-placeholder {
@@ -430,6 +440,7 @@ ul {
     font-family: Helvetica, sans-serif;
     text-align: center;
     text-decoration: none !important;
+    user-select: none;
 }
 
 .button:hover {

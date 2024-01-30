@@ -325,7 +325,7 @@
         </div>
         <div id="search" class="display-none">
             <div id="search-bar">
-                <input type="text" id="search-input" placeholder="Search" oninput="search()">
+                <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
             </div>
             <div id="search-placeholder">
                 % if system is None:
@@ -334,8 +334,12 @@
                     Search for buses, routes, stops, and blocks in {{ system }}
                 % end
             </div>
-            <div id="search-count" class="display-none lighter-text">
-                
+            <div id="search-page" class="display-none">
+                <div id="search-page-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-count" class="flex-1 lighter-text">
+                    
+                </div>
+                <div id="search-page-next" class="button" onclick="searchNextPage()">&gt;</div>
             </div>
             <div id="search-results" class="display-none">
                 
@@ -347,6 +351,8 @@
 <script>
     let selectedResultIndex = 0;
     let searchResults = [];
+    let searchPage = 0;
+    const resultsPerPage = 10;
     let loadingResults = false;
     let enterPending = false;
     
@@ -410,8 +416,29 @@
         }
     }
     
+    function searchInputChanged() {
+        searchPage = 0;
+        search();
+    }
+    
+    function searchNextPage() {
+        searchPage += 1;
+        search();
+        document.getElementById("search-input").focus();
+    }
+    
+    function searchPreviousPage() {
+        if (searchPage === 0) {
+            return;
+        }
+        searchPage -= 1;
+        search();
+        document.getElementById("search-input").focus();
+    }
+    
     function search() {
         const inputElement = document.getElementById("search-input");
+        const pageElement = document.getElementById("search-page");
         const countElement = document.getElementById("search-count");
         const placeholderElement = document.getElementById("search-placeholder");
         const resultsElement = document.getElementById("search-results");
@@ -421,7 +448,7 @@
             loadingResults = false;
             placeholderElement.classList.remove("display-none");
             placeholderElement.innerHTML = "{{ 'Search for buses' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}";
-            countElement.classList.add("display-none");
+            pageElement.classList.add("display-none");
             countElement.innerHTML = "";
             resultsElement.classList.add("display-none");
             resultsElement.innerHTML = "";
@@ -441,7 +468,7 @@
                 if (count === 0) {
                     placeholderElement.classList.remove("display-none");
                     placeholderElement.innerHTML = "No Results";
-                    countElement.classList.add("display-none");
+                    pageElement.classList.add("display-none");
                     countElement.innerHTML = "";
                     resultsElement.classList.add("display-none");
                     resultsElement.innerHTML = "";
@@ -449,12 +476,15 @@
                 } else {
                     placeholderElement.classList.add("display-none");
                     placeholderElement.innerHTML = "";
-                    countElement.classList.remove("display-none");
+                    pageElement.classList.remove("display-none");
+                    const min = (searchPage * results.length) + 1;
+                    const max = Math.min(count, min + resultsPerPage - 1);
                     if (count === 1) {
                         countElement.innerHTML = "Showing 1 of 1 result";
                     } else {
-                        countElement.innerHTML = "Showing " + results.length + " of " + count + " results";
+                        countElement.innerHTML = "Showing " + min + " to " + max + " of " + count + " results";
                     }
+                    updatePagingButtons(count);
                     resultsElement.classList.remove("display-none");
                     resultsElement.innerHTML = getSearchHTML(results);
                     
@@ -505,8 +535,10 @@
                 inputElement.onkeyup = function() {};
                 loadingResults = false;
             };
-            const data = new FormData()
-            data.set("query", query)
+            const data = new FormData();
+            data.set("query", query);
+            data.set("page", searchPage);
+            data.set("count", resultsPerPage);
             request.send(data);
         }
     }
@@ -544,6 +576,25 @@
                 </a>";
         }
         return html;
+    }
+    
+    function updatePagingButtons(count) {
+        const previousButton = document.getElementById("search-page-previous");
+        const nextButton = document.getElementById("search-page-next");
+        if (searchPage === 0) {
+            previousButton.classList.add("disabled");
+            previousButton.onclick = function() {};
+        } else {
+            previousButton.classList.remove("disabled");
+            previousButton.onclick = searchPreviousPage;
+        }
+        if ((searchPage * resultsPerPage) >= (count - resultsPerPage)) {
+            nextButton.classList.add("disabled");
+            nextButton.onclick = function() {};
+        } else {
+            nextButton.classList.remove("disabled");
+            nextButton.onclick = searchNextPage;
+        }
     }
     
     function toggleSideBar() {
