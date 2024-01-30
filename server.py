@@ -849,14 +849,22 @@ def api_search(system):
     query = request.forms.get('query', '')
     page = int(request.forms.get('page', 0))
     count = int(request.forms.get('count', 10))
+    include_buses = int(request.forms.get('include_buses', 1)) == 1
+    include_routes = int(request.forms.get('include_routes', 1)) == 1
+    include_stops = int(request.forms.get('include_stops', 1)) == 1
+    include_blocks = int(request.forms.get('include_blocks', 1)) == 1
     matches = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system))
+            if include_buses:
+                matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system))
         if system is not None:
-            matches += system.search_blocks(query)
-            matches += system.search_routes(query)
-            matches += system.search_stops(query)
+            if include_blocks:
+                matches += system.search_blocks(query)
+            if include_routes:
+                matches += system.search_routes(query)
+            if include_stops:
+                matches += system.search_stops(query)
     matches = sorted([m for m in matches if m.value > 0])
     min = page * count
     max = min + count

@@ -326,6 +326,27 @@
         <div id="search" class="display-none">
             <div id="search-bar">
                 <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
+                % if system is not None:
+                    <div id="search-filters">
+                        <div class="flex-1 smaller-font lighter-text">Filters:</div>
+                        <div id="search-filter-bus" class="filter-button" onclick="toggleSearchBusFilter()">
+                            <img class="white" src="/img/white/bus.png" />
+                            <img class="black" src="/img/black/bus.png" />
+                        </div>
+                        <div id="search-filter-route" class="filter-button" onclick="toggleSearchRouteFilter()">
+                            <img class="white" src="/img/white/route.png" />
+                            <img class="black" src="/img/black/route.png" />
+                        </div>
+                        <div id="search-filter-stop" class="filter-button" onclick="toggleSearchStopFilter()">
+                            <img class="white" src="/img/white/stop.png" />
+                            <img class="black" src="/img/black/stop.png" />
+                        </div>
+                        <div id="search-filter-block" class="filter-button" onclick="toggleSearchBlockFilter()">
+                            <img class="white" src="/img/white/block.png" />
+                            <img class="black" src="/img/black/block.png" />
+                        </div>
+                    </div>
+                % end
             </div>
             <div id="search-placeholder">
                 % if system is None:
@@ -355,6 +376,11 @@
     const resultsPerPage = 10;
     let loadingResults = false;
     let enterPending = false;
+    
+    let searchIncludeBuses = true;
+    let searchIncludeRoutes = true;
+    let searchIncludeStops = true;
+    let searchIncludeBlocks = true;
     
     function toggleSearch() {
         const element = document.getElementById("search");
@@ -414,6 +440,54 @@
         } else if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
             window.location = searchResults[selectedResultIndex].url;
         }
+    }
+    
+    function toggleSearchBusFilter() {
+        searchIncludeBuses = !searchIncludeBuses;
+        const element = document.getElementById("search-filter-bus");
+        if (searchIncludeBuses) {
+            element.classList.remove("disabled");
+        } else {
+            element.classList.add("disabled");
+        }
+        searchpage = 0;
+        search();
+    }
+    
+    function toggleSearchRouteFilter() {
+        searchIncludeRoutes = !searchIncludeRoutes;
+        const element = document.getElementById("search-filter-route");
+        if (searchIncludeRoutes) {
+            element.classList.remove("disabled");
+        } else {
+            element.classList.add("disabled");
+        }
+        searchpage = 0;
+        search();
+    }
+    
+    function toggleSearchStopFilter() {
+        searchIncludeStops = !searchIncludeStops;
+        const element = document.getElementById("search-filter-stop");
+        if (searchIncludeStops) {
+            element.classList.remove("disabled");
+        } else {
+            element.classList.add("disabled");
+        }
+        searchpage = 0;
+        search();
+    }
+    
+    function toggleSearchBlockFilter() {
+        searchIncludeBlocks = !searchIncludeBlocks;
+        const element = document.getElementById("search-filter-block");
+        if (searchIncludeBlocks) {
+            element.classList.remove("disabled");
+        } else {
+            element.classList.add("disabled");
+        }
+        searchpage = 0;
+        search();
     }
     
     function searchInputChanged() {
@@ -477,7 +551,7 @@
                     placeholderElement.classList.add("display-none");
                     placeholderElement.innerHTML = "";
                     pageElement.classList.remove("display-none");
-                    const min = (searchPage * results.length) + 1;
+                    const min = (searchPage * resultsPerPage) + 1;
                     const max = Math.min(count, min + resultsPerPage - 1);
                     if (count === 1) {
                         countElement.innerHTML = "Showing 1 of 1 result";
@@ -539,6 +613,10 @@
             data.set("query", query);
             data.set("page", searchPage);
             data.set("count", resultsPerPage);
+            data.set("include_buses", searchIncludeBuses ? 1 : 0);
+            data.set("include_routes", searchIncludeRoutes ? 1 : 0);
+            data.set("include_stops", searchIncludeStops ? 1 : 0);
+            data.set("include_blocks", searchIncludeBlocks ? 1 : 0);
             request.send(data);
         }
     }
