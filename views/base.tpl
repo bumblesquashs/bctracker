@@ -101,7 +101,7 @@
         <script>
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
-                document.getElementById("search-non-desktop").classList.add("display-none");
+                document.getElementById("search").classList.add("display-none");
             }
             
             function toggleSystemMenu() {
@@ -177,31 +177,17 @@
             
             <div class="flex-1"></div>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
-                <div class="tooltip">
-                    <div class="title">Nearby Stops</div>
-                </div>
             </a>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
-                <div class="tooltip">
-                    <div class="title">Personalize</div>
-                </div>
             </a>
             
-            <div id="search-desktop" class="desktop-only">
-                <img class="white" src="/img/white/search.png" />
-                <img class="black" src="/img/black/search.png" />
-                <input type="text" id="search-desktop-input" placeholder="Search" oninput="searchDesktop()" onfocus="searchDesktopFocus()" onblur="searchDesktopBlur()">
-                
-                <div id="search-desktop-results" class="display-none"></div>
-            </div>
-            
-            <div id="search-non-desktop-toggle" onclick="toggleSearchNonDesktop()">
+            <div class="navigation-icon" onclick="toggleSearch()">
                 <img class="white" src="/img/white/search.png" />
                 <img class="black" src="/img/black/search.png" />
             </div>
@@ -212,7 +198,7 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div id="navigation-menu" class="menu non-desktop display-none">
+        <div id="navigation-menu" class="non-desktop display-none">
             % if system is None or system.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
                     <img class="white" src="/img/white/map.png" />
@@ -267,10 +253,6 @@
                 <img class="black" src="/img/black/personalize.png" />
                 <span>Personalize</span>
             </a>
-        </div>
-        <div id="search-non-desktop" class="menu non-desktop display-none">
-            <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">
-            <div id="search-non-desktop-results" class="display-none"></div>
         </div>
         <div id="side-bar">
             <div id="status" class="side-bar-open-only">
@@ -341,6 +323,24 @@
             </div>
             <div id="content">{{ !base }}</div>
         </div>
+        <div id="search" class="display-none">
+            <div id="search-bar">
+                <input type="text" id="search-input" placeholder="Search" oninput="search()">
+            </div>
+            <div id="search-placeholder">
+                % if system is None:
+                    Search for buses
+                % else:
+                    Search for buses, routes, stops, and blocks in {{ system }}
+                % end
+            </div>
+            <div id="search-count" class="display-none lighter-text">
+                
+            </div>
+            <div id="search-results" class="display-none">
+                
+            </div>
+        </div>
     </body>
 </html>
 
@@ -350,42 +350,15 @@
     let loadingResults = false;
     let enterPending = false;
     
-    function searchDesktopFocus() {
-        const query = document.getElementById("search-desktop-input").value;
-        const element = document.getElementById("search-desktop-results");
-        if (query === undefined || query === null || query === "") {
-            element.classList.add("display-none");
-        } else {
-            element.classList.remove("display-none");
-        }
-    }
-    
-    function searchDesktopBlur() {
-        setTimeout(function() {
-            const element = document.getElementById("search-desktop-results");
-            element.classList.add("display-none");
-        }, 200);
-    }
-    
-    function searchDesktop() {
-        const inputElement = document.getElementById("search-desktop-input");
-        const resultsElement = document.getElementById("search-desktop-results");
-        search(inputElement, resultsElement);
-    }
-    
-    function toggleSearchNonDesktop() {
-        const element = document.getElementById("search-non-desktop");
+    function toggleSearch() {
+        const element = document.getElementById("search");
         element.classList.toggle("display-none");
         if (!element.classList.contains("display-none")) {
-            document.getElementById("search-non-desktop-input").focus();
+            document.getElementById("search-input").focus();
         }
-        document.getElementById("navigation-menu").classList.add("display-none");
-    }
-    
-    function searchNonDesktop() {
-        const inputElement = document.getElementById("search-non-desktop-input");
-        const resultsElement = document.getElementById("search-non-desktop-results");
-        search(inputElement, resultsElement);
+        if (map !== undefined) {
+            map.resize();
+        }
     }
     
     function setSelectedEntry(newIndex) {
@@ -417,7 +390,7 @@
       
         setSelectedEntry(selectedResultIndex + 1);
     }
-
+    
     function handleResultsUp() {
         if (searchResults.length < 2){
             return; // Nothing to change for 0 or 1 results
@@ -436,30 +409,54 @@
             window.location = searchResults[selectedResultIndex].url;
         }
     }
-
-    function search(inputElement, resultsElement) {
+    
+    function search() {
+        const inputElement = document.getElementById("search-input");
+        const countElement = document.getElementById("search-count");
+        const placeholderElement = document.getElementById("search-placeholder");
+        const resultsElement = document.getElementById("search-results");
+        
         const query = inputElement.value;
         if (query === undefined || query === null || query === "") {
+            loadingResults = false;
+            placeholderElement.classList.remove("display-none");
+            placeholderElement.innerHTML = "{{ 'Search for buses' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}";
+            countElement.classList.add("display-none");
+            countElement.innerHTML = "";
             resultsElement.classList.add("display-none");
             resultsElement.innerHTML = "";
             inputElement.onkeyup = function() {};
         } else {
             loadingResults = true;
-            resultsElement.classList.remove("display-none");
             if (resultsElement.innerHTML === "") {
-                resultsElement.innerHTML = "<div class='message'>Loading...</div>";
+                placeholderElement.classList.remove("display-none");
+                placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
             request.open("POST", "{{get_url(system, 'api/search')}}", true);
             request.responseType = "json";
             request.onload = function() {
                 const count = request.response.count;
+                const results = request.response.results;
                 if (count === 0) {
-                    resultsElement.innerHTML = "<div class='message'>No Results</div>";
+                    placeholderElement.classList.remove("display-none");
+                    placeholderElement.innerHTML = "No Results";
+                    countElement.classList.add("display-none");
+                    countElement.innerHTML = "";
+                    resultsElement.classList.add("display-none");
+                    resultsElement.innerHTML = "";
                     inputElement.onkeyup = function() {};
                 } else {
-                    const results = request.response.results;
-                    resultsElement.innerHTML = getSearchHTML(results, count);
+                    placeholderElement.classList.add("display-none");
+                    placeholderElement.innerHTML = "";
+                    countElement.classList.remove("display-none");
+                    if (count === 1) {
+                        countElement.innerHTML = "Showing 1 of 1 result";
+                    } else {
+                        countElement.innerHTML = "Showing " + results.length + " of " + count + " results";
+                    }
+                    resultsElement.classList.remove("display-none");
+                    resultsElement.innerHTML = getSearchHTML(results);
                     
                     // Reset navigation
                     clearSearchHighlighting();
@@ -514,13 +511,8 @@
         }
     }
     
-    function getSearchHTML(results, count) {
+    function getSearchHTML(results) {
         let html = "";
-        if (count === 1) {
-            html += "<div class='message smaller-font'>Showing 1 of 1 result</div>";
-        } else {
-            html += "<div class='message smaller-font'>Showing " + results.length + " of " + count + " results</div>";
-        }
         for (i = 0; i < results.length; i++) {
             const result = results[i]
             const icon = "<img class='white' src='/img/white/" + result.icon + ".png' /><img class='black' src='/img/black/" + result.icon + ".png' />";

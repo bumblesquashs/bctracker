@@ -123,7 +123,6 @@ ul {
 
 #main {
     flex: 1;
-    overflow: auto;
     position: relative;
 }
 
@@ -176,6 +175,7 @@ ul {
     padding: 5px;
     margin: 0px 2px;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 #navigation-bar .navigation-icon:hover {
@@ -183,8 +183,8 @@ ul {
 }
 
 #navigation-bar .navigation-icon img {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
 }
 
 #navigation-bar .navigation-item {
@@ -252,6 +252,53 @@ ul {
 #refresh-button.disabled {
     opacity: 50%;
     cursor: default;
+}
+
+#search {
+    display: flex;
+    flex-direction: column;
+    font-family: Helvetica, sans-serif;
+}
+
+#search-bar {
+    padding: 10px;
+}
+
+#search-bar input[type=text] {
+    width: 100%;
+}
+
+#search-count {
+    padding: 10px;
+    text-align: center;
+}
+
+#search-placeholder {
+    padding: 10px;
+    text-align: center;
+}
+
+#search-results {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+#search-results .result {
+    padding: 5px 12px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#search-results .result img {
+    width: 24px;
+    height: 24px;
+}
+
+#search-results .result .description {
+    flex: 1;
 }
 
 #side-bar {
