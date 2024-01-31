@@ -188,8 +188,11 @@
             </a>
             
             <div class="navigation-icon" onclick="toggleSearch()">
-                <img class="white" src="/img/white/search.png" />
-                <img class="black" src="/img/black/search.png" />
+                <div>
+                    <img class="white" src="/img/white/search.png" />
+                    <img class="black" src="/img/black/search.png" />
+                </div>
+                <div class="label">Search</div>
             </div>
             
             <div id="navigation-menu-toggle" onclick="toggleNavigationMenu()">
@@ -328,20 +331,20 @@
                 <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                 % if system is not None:
                     <div id="search-filters">
-                        <div class="flex-1 smaller-font lighter-text">Filters:</div>
-                        <div id="search-filter-bus" class="filter-button" onclick="toggleSearchBusFilter()">
+                        <div class="flex-1">Filters:</div>
+                        <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
                             <img class="white" src="/img/white/bus.png" />
                             <img class="black" src="/img/black/bus.png" />
                         </div>
-                        <div id="search-filter-route" class="filter-button" onclick="toggleSearchRouteFilter()">
+                        <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
                             <img class="white" src="/img/white/route.png" />
                             <img class="black" src="/img/black/route.png" />
                         </div>
-                        <div id="search-filter-stop" class="filter-button" onclick="toggleSearchStopFilter()">
+                        <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
                             <img class="white" src="/img/white/stop.png" />
                             <img class="black" src="/img/black/stop.png" />
                         </div>
-                        <div id="search-filter-block" class="filter-button" onclick="toggleSearchBlockFilter()">
+                        <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
                             <img class="white" src="/img/white/block.png" />
                             <img class="black" src="/img/black/block.png" />
                         </div>
@@ -350,17 +353,17 @@
             </div>
             <div id="search-placeholder">
                 % if system is None:
-                    Search for buses
+                    Search for buses in all systems
                 % else:
                     Search for buses, routes, stops, and blocks in {{ system }}
                 % end
             </div>
-            <div id="search-page" class="display-none">
-                <div id="search-page-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
-                <div id="search-count" class="flex-1 lighter-text">
+            <div id="search-paging" class="display-none">
+                <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-count" class="flex-1">
                     
                 </div>
-                <div id="search-page-next" class="button" onclick="searchNextPage()">&gt;</div>
+                <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
             </div>
             <div id="search-results" class="display-none">
                 
@@ -383,12 +386,13 @@
     let searchIncludeBlocks = true;
     
     function toggleSearch() {
+        document.getElementById("navigation-menu").classList.add("display-none");
         const element = document.getElementById("search");
         element.classList.toggle("display-none");
         if (!element.classList.contains("display-none")) {
             document.getElementById("search-input").focus();
         }
-        if (map !== undefined) {
+        if ("map" in window) {
             map.resize();
         }
     }
@@ -444,50 +448,34 @@
     
     function toggleSearchBusFilter() {
         searchIncludeBuses = !searchIncludeBuses;
-        const element = document.getElementById("search-filter-bus");
-        if (searchIncludeBuses) {
-            element.classList.remove("disabled");
-        } else {
-            element.classList.add("disabled");
-        }
-        searchpage = 0;
-        search();
+        toggleFilter(searchIncludeBuses, "search-filter-bus");
     }
     
     function toggleSearchRouteFilter() {
         searchIncludeRoutes = !searchIncludeRoutes;
-        const element = document.getElementById("search-filter-route");
-        if (searchIncludeRoutes) {
-            element.classList.remove("disabled");
-        } else {
-            element.classList.add("disabled");
-        }
-        searchpage = 0;
-        search();
+        toggleFilter(searchIncludeRoutes, "search-filter-route");
     }
     
     function toggleSearchStopFilter() {
         searchIncludeStops = !searchIncludeStops;
-        const element = document.getElementById("search-filter-stop");
-        if (searchIncludeStops) {
-            element.classList.remove("disabled");
-        } else {
-            element.classList.add("disabled");
-        }
-        searchpage = 0;
-        search();
+        toggleFilter(searchIncludeStops, "search-filter-stop");
     }
     
     function toggleSearchBlockFilter() {
         searchIncludeBlocks = !searchIncludeBlocks;
-        const element = document.getElementById("search-filter-block");
-        if (searchIncludeBlocks) {
-            element.classList.remove("disabled");
+        toggleFilter(searchIncludeBlocks, "search-filter-block");
+    }
+    
+    function toggleFilter(selected, id) {
+        const element = document.getElementById(id);
+        if (selected) {
+            element.classList.remove("inactive");
         } else {
-            element.classList.add("disabled");
+            element.classList.add("inactive");
         }
-        searchpage = 0;
+        searchPage = 0;
         search();
+        document.getElementById("search-input").focus();
     }
     
     function searchInputChanged() {
@@ -512,7 +500,7 @@
     
     function search() {
         const inputElement = document.getElementById("search-input");
-        const pageElement = document.getElementById("search-page");
+        const pagingElement = document.getElementById("search-paging");
         const countElement = document.getElementById("search-count");
         const placeholderElement = document.getElementById("search-placeholder");
         const resultsElement = document.getElementById("search-results");
@@ -521,8 +509,8 @@
         if (query === undefined || query === null || query === "") {
             loadingResults = false;
             placeholderElement.classList.remove("display-none");
-            placeholderElement.innerHTML = "{{ 'Search for buses' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}";
-            pageElement.classList.add("display-none");
+            placeholderElement.innerHTML = "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}";
+            pagingElement.classList.add("display-none");
             countElement.innerHTML = "";
             resultsElement.classList.add("display-none");
             resultsElement.innerHTML = "";
@@ -542,7 +530,7 @@
                 if (count === 0) {
                     placeholderElement.classList.remove("display-none");
                     placeholderElement.innerHTML = "No Results";
-                    pageElement.classList.add("display-none");
+                    pagingElement.classList.add("display-none");
                     countElement.innerHTML = "";
                     resultsElement.classList.add("display-none");
                     resultsElement.innerHTML = "";
@@ -550,7 +538,7 @@
                 } else {
                     placeholderElement.classList.add("display-none");
                     placeholderElement.innerHTML = "";
-                    pageElement.classList.remove("display-none");
+                    pagingElement.classList.remove("display-none");
                     const min = (searchPage * resultsPerPage) + 1;
                     const max = Math.min(count, min + resultsPerPage - 1);
                     if (count === 1) {
@@ -560,7 +548,10 @@
                     }
                     updatePagingButtons(count);
                     resultsElement.classList.remove("display-none");
-                    resultsElement.innerHTML = getSearchHTML(results);
+                    resultsElement.innerHTML = "";
+                    for (i = 0; i < results.length; i++) {
+                        resultsElement.appendChild(buildSearchResultElement(i, results[i]))
+                    }
                     
                     // Reset navigation
                     clearSearchHighlighting();
@@ -621,44 +612,43 @@
         }
     }
     
-    function getSearchHTML(results) {
-        let html = "";
-        for (i = 0; i < results.length; i++) {
-            const result = results[i]
-            const icon = "<img class='white' src='/img/white/" + result.icon + ".png' /><img class='black' src='/img/black/" + result.icon + ".png' />";
-            let name = result.name;
-            switch (result.type) {
-                case "block":
-                    name = "Block " + result.name;
-                    break;
-                case "bus":
-                    name = "Bus " + result.name;
-                    break;
-                case "route":
-                    name = "Route " + result.name;
-                    break;
-                case "stop":
-                    name = "Stop " + result.name;
-                    break;
-                default:
-                    break;
-            }
-            html += "\
-                <a id='search-result-entry-" + i + "' class='result' href='" + result.url + "'>" +
-                    icon +
-                    "<div class='description'>" +
-                        name +
-                        "<br />\
-                        <span class='smaller-font lighter-text'>" + result.description + "</span>\
-                    </div>\
-                </a>";
-        }
-        return html;
+    function buildSearchResultElement(index, result) {
+        const element = document.createElement("a");
+        element.id = "search-result-entry-" + index;
+        element.classList.add("result");
+        element.href = result.url;
+        
+        const lightIcon = document.createElement("img");
+        lightIcon.classList.add("white");
+        lightIcon.src = "/img/white/" + result.icon + ".png";
+        element.appendChild(lightIcon);
+        
+        const darkIcon = document.createElement("img");
+        darkIcon.classList.add("black");
+        darkIcon.src = "/img/black/" + result.icon + ".png";
+        element.appendChild(darkIcon);
+        
+        const details = document.createElement("div");
+        details.classList.add("details");
+        
+        const name = document.createElement("div");
+        name.classList.add("name")
+        name.innerHTML = result.name;
+        details.appendChild(name);
+        
+        const description = document.createElement("div");
+        description.classList.add("description");
+        description.innerHTML = result.description;
+        details.appendChild(description);
+        
+        element.appendChild(details);
+        
+        return element;
     }
     
     function updatePagingButtons(count) {
-        const previousButton = document.getElementById("search-page-previous");
-        const nextButton = document.getElementById("search-page-next");
+        const previousButton = document.getElementById("search-paging-previous");
+        const nextButton = document.getElementById("search-paging-next");
         if (searchPage === 0) {
             previousButton.classList.add("disabled");
             previousButton.onclick = function() {};

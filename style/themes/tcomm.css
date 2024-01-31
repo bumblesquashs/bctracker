@@ -93,6 +93,10 @@ table.striped tr {
     text-shadow: 0 -1px 1px #000000;
 }
 
+#navigation-bar .navigation-icon {
+    color: #FFFFFF;
+}
+
 #navigation-bar .navigation-icon:hover {
     background-color: #444444;
     background-image: linear-gradient(#555555, #383838);
@@ -197,8 +201,14 @@ table.striped tr {
     border-color: #CCCCCC;
 }
 
-#search img.white {
-    display: none;
+#search-count {
+    color: #666666;
+    text-shadow: none;
+}
+
+#search-filters {
+    color: #666666;
+    text-shadow: none;
 }
 
 #search-placeholder {
@@ -206,17 +216,56 @@ table.striped tr {
     text-shadow: none;
 }
 
+#search-results img.white {
+    display: none;
+}
+
 #search-results .result {
     color: #000000;
     text-shadow: none;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
 #search-results .result:hover {
-    background-color: #CBCBCB;
+    background-color: #5393c5;
+    color: #FFFFFF;
+    text-shadow: 0 1px 1px #3373a5;
+    background-image: linear-gradient(#5393c5, #6facd5);
+}
+
+#search-results .result:hover img.black {
+    display: none;
+}
+
+#search-results .result:hover img.white {
+    display: initial;
+}
+
+#search-results .result:hover .description {
+    color: #D6D6D6;
 }
 
 #search-results .result.keyboard-selected {
-    background-color: #CBCBCB;
+    background-color: #5393c5;
+    color: #FFFFFF;
+    text-shadow: 0 1px 1px #3373a5;
+    background-image: linear-gradient(#5393c5, #6facd5);
+}
+
+#search-results .result.keyboard-selected img.black {
+    display: none;
+}
+
+#search-results .result.keyboard-selected img.white {
+    display: initial;
+}
+
+#search-results .result.keyboard-selected .description {
+    color: #D6D6D6;
+}
+
+#search-results .result .description {
+    color: #666666;
 }
 
 #side-bar {
@@ -230,7 +279,7 @@ table.striped tr {
 
 #side-bar-toggle:hover {
     background: #DFDFDF;
-    background-image: linear-gradient(#F6F6F6,#E0E0E0);
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
 
 #status {
@@ -354,20 +403,34 @@ table.striped tr {
     color: #222222;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     border: 1px solid #CCCCCC;
-    background-image: linear-gradient(#FFFFFF,#F1F1F1);
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
 .button:hover {
     background: #DFDFDF;
-    background-image: linear-gradient(#F6F6F6,#E0E0E0);
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
 
 .button.disabled {
     background-color: #666666;
+    background-image: linear-gradient(#666666, #565656);
+    color: #000000;
+    text-shadow: none;
 }
 
 .button.disabled:hover {
     background-color: #666666 !important;
+    background-image: linear-gradient(#666666, #565656);
+}
+
+.button.inactive {
+    background-color: #ABABAB;
+    background-image: linear-gradient(#BCBCBC, #ABABAB);
+}
+
+.button.inactive:hover {
+    background-color: #666666;
+    background-image: linear-gradient(#666666, #565656);
 }
 
 .button.survey-button {
@@ -376,6 +439,10 @@ table.striped tr {
 
 .button.survey-button:hover {
     background-color: #AD6000;
+}
+
+.button img.white {
+    display: none;
 }
 
 .checkbox .box {

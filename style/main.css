@@ -174,8 +174,12 @@ ul {
 #navigation-bar .navigation-icon {
     padding: 5px;
     margin: 0px 2px;
-    border-radius: 50%;
+    border-radius: 100px;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
 }
 
 #navigation-bar .navigation-icon:hover {
@@ -185,6 +189,10 @@ ul {
 #navigation-bar .navigation-icon img {
     width: 28px;
     height: 28px;
+}
+
+#navigation-bar .navigation-icon .label {
+    margin-right: 5px;
 }
 
 #navigation-bar .navigation-item {
@@ -264,7 +272,7 @@ ul {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 }
 
 #search-count {
@@ -278,46 +286,16 @@ ul {
     align-items: center;
 }
 
-#search-filters .filter-button {
-    background-color: #365ccb;
-    width: 28px;
-    height: 28px;
+#search-filters .button {
     border-radius: 50%;
-    cursor: pointer;
-}
-
-#search-filters .filter-button:hover {
-    background-color: #1440C2;
-}
-
-#search-filters .filter-button.disabled {
-    background-color: #666666;
-}
-
-#search-filters .filter-button.disabled:hover {
-    background-color: #565656;
-}
-
-#search-filters .filter-button img {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-}
-
-#search-filters .filter-button img.white {
-    display: initial;
-}
-
-#search-filters .filter-button img.black {
-    display: none;
+    padding: 4px;
 }
 
 #search-input {
     width: 100%;
 }
 
-#search-page {
-    padding: 10px;
+#search-paging {
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -325,7 +303,6 @@ ul {
 }
 
 #search-placeholder {
-    padding: 10px;
     text-align: center;
 }
 
@@ -336,20 +313,17 @@ ul {
 }
 
 #search-results .result {
-    padding: 5px 12px;
     text-decoration: none;
     display: flex;
     flex-direction: row;
     gap: 10px;
+    align-items: center;
 }
 
-#search-results .result img {
-    width: 24px;
-    height: 24px;
-}
-
-#search-results .result .description {
+#search-results .result .details {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 #side-bar {

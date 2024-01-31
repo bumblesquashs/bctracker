@@ -51,7 +51,7 @@ def find_matches(query, recorded_bus_numbers):
             adornment = bus.adornment
             if adornment is not None and adornment.enabled:
                 bus_number_string += f' {adornment}'
-            matches.append(Match('bus', bus_number_string, order_string, model_icon, f'bus/{bus.number}', value))
+            matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.number}', value))
     return matches
 
 def delete_all():

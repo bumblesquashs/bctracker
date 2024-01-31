@@ -59,6 +59,7 @@ table {
 
 #navigation-bar {
     order: 2;
+    padding: 0px 5px;
 }
 
 #navigation-bar .title {
@@ -68,6 +69,10 @@ table {
 #navigation-bar .navigation-icon img {
     width: 36px;
     height: 36px;
+}
+
+#navigation-bar .navigation-icon .label {
+    display: none;
 }
 
 #navigation-menu {
@@ -124,12 +129,45 @@ table {
     order: 4;
 }
 
+#search-bar {
+    padding: 10px 20px;
+}
+
 #search-bar input[type="text"] {
     font-size: 14pt;
 }
 
+#search-filters {
+    font-size: 14pt;
+}
+
+#search-filters .button img {
+    width: 32px;
+    height: 32px;
+}
+
+#search-paging {
+    padding: 10px 20px;
+}
+
+#search-placeholder {
+    font-size: 15pt;
+    padding: 20px;
+}
+
 #search-results .result {
     font-weight: normal;
+    font-size: 15pt;
+    padding: 5px 20px;
+}
+
+#search-results .result img {
+    width: 28px;
+    height: 28px;
+}
+
+#search-results .result .description {
+    font-size: 12pt;
 }
 
 #side-bar {

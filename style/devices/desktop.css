@@ -22,7 +22,7 @@ form {
     margin-bottom: 10px;
 }
 
-form input[type="text"] {
+input[type="text"] {
     font-size: 14pt;
     vertical-align: middle;
 }
@@ -58,17 +58,39 @@ table.striped th {
 }
 
 #search {
-    width: 250px;
+    width: 275px;
     border-left-width: 1px;
     border-left-style: solid;
-}
-
-#search input[type="text"] {
-    font-size: 14px;
-    flex: 1;
+    overflow: auto;
 }
 
 #search-count {
+    font-size: 11pt;
+}
+
+#search-filters .button img {
+    width: 24px;
+    height: 24px;
+}
+
+#search-paging {
+    padding: 10px;
+}
+
+#search-placeholder {
+    padding: 10px;
+}
+
+#search-results .result {
+    padding: 5px 10px;
+}
+
+#search-results .result img {
+    width: 24px;
+    height: 24px;
+}
+
+#search-results .result .description {
     font-size: 11pt;
 }
 

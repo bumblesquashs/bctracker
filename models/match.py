@@ -3,7 +3,6 @@ class Match:
     '''A search result with a value indicating how closely it matches the query'''
     
     __slots__ = (
-        'type',
         'name',
         'description',
         'icon',
@@ -11,8 +10,7 @@ class Match:
         'value'
     )
     
-    def __init__(self, type, name, description, icon, path, value):
-        self.type = type
+    def __init__(self, name, description, icon, path, value):
         self.name = name
         self.description = description
         self.icon = icon
@@ -30,7 +28,6 @@ class Match:
     def get_json(self, system, get_url):
         '''Returns a representation of this match in JSON-compatible format'''
         return {
-            'type': self.type,
             'name': self.name,
             'description': self.description,
             'icon': self.icon,
