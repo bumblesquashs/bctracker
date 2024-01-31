@@ -201,6 +201,12 @@ table.striped tr {
     border-color: #CCCCCC;
 }
 
+#search-bar {
+    background-color: #333333;
+    background-image: linear-gradient(#444444, #2D2D2D);
+    border-bottom-color: #000000;
+}
+
 #search-count {
     color: #666666;
     text-shadow: none;
@@ -209,6 +215,14 @@ table.striped tr {
 #search-filters {
     color: #666666;
     text-shadow: none;
+}
+
+#search-input {
+    border-color: #FFFFFF;
+}
+
+#search-input:focus {
+    border-color: #000000;
 }
 
 #search-placeholder {

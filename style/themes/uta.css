@@ -182,12 +182,25 @@ table.striped tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
+#search-bar {
+    background-color: #DC9B41;
+    border-bottom-color: #666666;
+}
+
 #search-count {
     color: #666666;
 }
 
 #search-filters {
     color: #666666;
+}
+
+#search-input {
+    border-color: #FFFFFF;
+}
+
+#search-input:focus {
+    border-color: #7E3704;
 }
 
 #search-placeholder {

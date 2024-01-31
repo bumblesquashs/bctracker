@@ -182,6 +182,11 @@ table.striped tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
+#search-bar {
+    background-color: #249B9B;
+    border-bottom-color: #666666;
+}
+
 #search-count {
     color: #666666;
 }
@@ -190,8 +195,12 @@ table.striped tr:nth-child(2n-1) {
     color: #666666;
 }
 
-#search-filters .filter-button img.black {
-    display: none;
+#search-input {
+    border-color: #FFFFFF;
+}
+
+#search-input:focus {
+    border-color: #347800;
 }
 
 #search-placeholder {

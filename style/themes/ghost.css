@@ -170,12 +170,25 @@ table.striped tr {
     border-color: #EEEEEE;
 }
 
+#search-bar {
+    background-color: #FFFFFF;
+    border-bottom-color: #EEEEEE;
+}
+
 #search-count {
     color: #888888;
 }
 
 #search-filters {
     color: #888888;
+}
+
+#search-input {
+    border-color: #EEEEEE;
+}
+
+#search-input:focus {
+    border-color: #DDDDDD;
 }
 
 #search-placeholder {

@@ -329,28 +329,28 @@
         <div id="search" class="display-none">
             <div id="search-bar">
                 <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
-                % if system is not None:
-                    <div id="search-filters">
-                        <div class="flex-1">Filters:</div>
-                        <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
-                            <img class="white" src="/img/white/bus.png" />
-                            <img class="black" src="/img/black/bus.png" />
-                        </div>
-                        <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
-                            <img class="white" src="/img/white/route.png" />
-                            <img class="black" src="/img/black/route.png" />
-                        </div>
-                        <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
-                            <img class="white" src="/img/white/stop.png" />
-                            <img class="black" src="/img/black/stop.png" />
-                        </div>
-                        <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
-                            <img class="white" src="/img/white/block.png" />
-                            <img class="black" src="/img/black/block.png" />
-                        </div>
-                    </div>
-                % end
             </div>
+            % if system is not None:
+                <div id="search-filters">
+                    <div class="flex-1">Filters:</div>
+                    <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
+                        <img class="white" src="/img/white/bus.png" />
+                        <img class="black" src="/img/black/bus.png" />
+                    </div>
+                    <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
+                        <img class="white" src="/img/white/route.png" />
+                        <img class="black" src="/img/black/route.png" />
+                    </div>
+                    <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
+                        <img class="white" src="/img/white/stop.png" />
+                        <img class="black" src="/img/black/stop.png" />
+                    </div>
+                    <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
+                        <img class="white" src="/img/white/block.png" />
+                        <img class="black" src="/img/black/block.png" />
+                    </div>
+                </div>
+            % end
             <div id="search-placeholder">
                 % if system is None:
                     Search for buses in all systems

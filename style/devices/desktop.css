@@ -68,6 +68,10 @@ table.striped th {
     font-size: 11pt;
 }
 
+#search-filters {
+    padding: 10px;
+}
+
 #search-filters .button img {
     width: 24px;
     height: 24px;
