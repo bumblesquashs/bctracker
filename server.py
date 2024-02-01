@@ -256,7 +256,7 @@ def map_page(system):
         path='map',
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
-        positions=sorted(positions, key=lambda p: p.lat, reverse=True),
+        positions=sorted(positions, key=lambda p: p.lat),
         show_nis=show_nis,
         visible_positions=visible_positions
     )
@@ -862,7 +862,7 @@ def api_map(system):
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat, reverse=True)
+    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
         'last_updated': last_updated

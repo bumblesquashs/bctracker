@@ -1,11 +1,11 @@
-id,name,visible,map_style
-light,BC Transit (Light),1,light-v10
-dark,BC Transit (Dark),1,dark-v10
-classic,BC Transit Classic,1,light-v10
-bchydro,BC Hydro,1,light-v10
-uta,Urban Transit Authority,1,light-v10
-contrast,High Contrast,1,light-v10
-tcomm,T-Comm,0,streets-v11
-christmas,Christmas,0,streets-v11
-halloween,Halloween,0,dark-v10
-ghost,Ghost,0,light-v10
+id,name,visible
+light,BC Transit (Light),1,
+dark,BC Transit (Dark),1
+classic,BC Transit Classic,1
+bchydro,BC Hydro,1
+uta,Urban Transit Authority,1
+contrast,High Contrast,1
+tcomm,T-Comm,0
+christmas,Christmas,0
+halloween,Halloween,0
+ghost,Ghost,0

@@ -90,12 +90,23 @@
 </div>
             
 <script>
-    const map = new mapboxgl.Map({
-        container: "map",
-        center: [0, 0],
-        zoom: 1,
-        style: mapStyle,
-        interactive: false
+    const map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }),
+        ],
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 1,
+            maxZoom: 22
+        }),
+        interactions: [],
+        controls: ol.control.defaults.defaults({
+            zoom: false,
+            rotate: false
+        })
     });
     
     const systemSelected = "{{ system is not None }}" == "True";
@@ -120,7 +131,12 @@
         
         element.appendChild(icon);
         
-        new mapboxgl.Marker(element).setLngLat([lon, lat]).addTo(map);
+        map.addOverlay(new ol.Overlay({
+            position: ol.proj.fromLonLat([lon, lat]),
+            positioning: "center-center",
+            element: element,
+            stopEvent: false
+        }));
         
         updateMap();
         
@@ -186,7 +202,12 @@
                     element.appendChild(icon);
                     element.appendChild(details);
                     
-                    new mapboxgl.Marker(element).setLngLat([stop.lon, stop.lat]).addTo(map);
+                    map.addOverlay(new ol.Overlay({
+                        position: ol.proj.fromLonLat([stop.lon, stop.lat]),
+                        positioning: "center-center",
+                        element: element,
+                        stopEvent: false
+                    }));
                 }
             }
         };
@@ -226,18 +247,16 @@
         setStatus("error", "Error loading upcoming departures", "Location is not supported, make sure you're using a device that has GPS");
     }
     
-    map.on("load", function() {
-        map.resize();
+    document.body.onload = function() {
+        map.updateSize();
         updateMap();
-    });
+    }
     
     function updateMap() {
         if (lat !== null && lon !== null) {
             document.getElementById("current-location").classList.remove("display-none");
-            map.jumpTo({
-                center: [lon, lat],
-                zoom: 16
-            });
+            map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
+            map.getView().setZoom(17);
         }
     }
 </script>

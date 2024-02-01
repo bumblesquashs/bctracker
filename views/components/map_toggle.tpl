@@ -18,7 +18,7 @@
             whiteIconElement.src = "/img/white/open-fullscreen.png";
             blackIconElement.src = "/img/black/open-fullscreen.png";
         }
-        map.resize();
+        map.updateSize();
     }
 </script>
 
