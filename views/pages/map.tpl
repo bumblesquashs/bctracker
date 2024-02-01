@@ -83,44 +83,45 @@
     <div id="map" class="full-screen"></div>
     
     <script>
-        const map = new mapboxgl.Map({
-            container: "map",
-            center: [0, 0],
-            zoom: 1,
-            style: mapStyle
-        });
-        
-        map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-                trackUserLocation: true,
-                showUserHeading: true
+        const map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                }),
+            ],
+            view: new ol.View({
+                center: [0, 0],
+                zoom: 1,
+                maxZoom: 22
             }),
-            'bottom-left'
-        );
+            interactions: ol.interaction.defaults.defaults().extend([
+                new ol.interaction.DblClickDragZoom()
+            ])
+        });
         
         let positions = JSON.parse('{{! json.dumps([p.get_json() for p in positions]) }}');
         let currentShapeIDs = [];
         let markers = [];
+        let routeLayers = {};
         let tripLinesVisible = false;
         let automaticRefresh = false;
         let showNISBuses = "{{ show_nis }}" !== "False";
         let hoverPosition = null;
         const busMarkerStyle = "{{ bus_marker_style }}";
         
-        const shapeIDs = [];
+        const shapes = {};
         
-        map.on("load", function() {
-            map.resize();
-            updateMap(true);
-        })
+        document.body.onload = function() {
+            map.updateSize();
+        }
+        
+        updateMap(true);
         
         function updateMap(resetCoordinates) {
             currentShapeIDs = [];
             for (const marker of markers) {
-                marker.remove();
+                map.removeOverlay(marker);
             }
             markers = [];
             
@@ -141,7 +142,7 @@
                 if (position.shape_id === null || position.shape_id === undefined) {
                     element.classList.add("nis-bus");
                     if (!showNISBuses) {
-                        element.classList.add("hidden");
+                        element.classList.add("display-none");
                     }
                 }
                 if (position.bearing !== undefined) {
@@ -256,32 +257,37 @@
                     lats.push(position.lat);
                 }
                 
-                markers.push(new mapboxgl.Marker(element).setLngLat([position.lon, position.lat]).addTo(map));
+                const marker = new ol.Overlay({
+                    position: ol.proj.fromLonLat([position.lon, position.lat]),
+                    positioning: 'center-center',
+                    element: element,
+                    stopEvent: false,
+                });
+                map.addOverlay(marker);
+                markers.push(marker);
             }
             
             if (resetCoordinates) {
                 if (lons.length === 1 && lats.length === 1) {
-                    map.jumpTo({
-                        center: [lons[0], lats[0]],
-                        zoom: 14
-                    });
+                    map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
+                    map.getView().setZoom(15);
                 } else if (lons.length > 0 && lats.length > 0) {
                     const minLon = Math.min.apply(Math, lons);
                     const maxLon = Math.max.apply(Math, lons);
                     const minLat = Math.min.apply(Math, lats);
                     const maxLat = Math.max.apply(Math, lats);
-                    map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
-                        duration: 0,
-                        padding: 100
+                    
+                    map.getView().fit(ol.proj.transformExtent([minLon, minLat, maxLon, maxLat], ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                        padding: [100, 100, 100, 100]
                     });
                 }
             }
             
-            for (const shapeID of shapeIDs) {
+            for (const shapeID in shapes) {
                 if (currentShapeIDs.includes(shapeID)) {
-                    map.setLayoutProperty(shapeID, "visibility", tripLinesVisible ? "visible" : "none");
+                    shapes[shapeID].setVisible(tripLinesVisible);
                 } else {
-                    map.setLayoutProperty(shapeID, "visibility", "none");
+                    shapes[shapeID].setVisible(false);
                 }
             }
         }
@@ -292,8 +298,8 @@
             checkbox.classList.toggle("selected");
             
             for (const shapeID of currentShapeIDs) {
-                if (shapeIDs.includes(shapeID)) {
-                    map.setLayoutProperty(shapeID, "visibility", tripLinesVisible ? "visible" : "none");
+                if (shapeID in shapes) {
+                    shapes[shapeID].setVisible(tripLinesVisible);
                 }
             }
             if (tripLinesVisible) {
@@ -319,9 +325,9 @@
             
             for (const element of document.getElementsByClassName("nis-bus")) {
                 if (showNISBuses) {
-                    element.classList.remove("hidden");
+                    element.classList.remove("display-none");
                 } else {
-                    element.classList.add("hidden");
+                    element.classList.add("display-none");
                 }
             }
         }
@@ -353,7 +359,7 @@
                     continue;
                 }
                 const shapeID = position.system_id + "_" + position.shape_id
-                if (shapeIDs.includes(shapeID)) {
+                if (shapeID in shapes) {
                     continue;
                 }
                 const request = new XMLHttpRequest();
@@ -361,36 +367,32 @@
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
-                        if (shapeIDs.includes(shapeID)) {
-                            map.setLayoutProperty(shapeID, "visibility", "visible");
+                        if (shapeID in shapes) {
+                            shapes[shapeID].setVisible(tripLinesVisible);
                         } else {
-                            shapeIDs.push(shapeID);
-                            map.addSource(shapeID, {
-                                'type': 'geojson',
-                                'data': {
-                                    'type': 'Feature',
-                                    'properties': {},
-                                    'geometry': {
-                                        'type': 'LineString',
-                                        'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
-                                    }
-                                }
-                            });
-                            map.addLayer({
-                                'id': shapeID,
-                                'type': 'line',
-                                'source': shapeID,
-                                'minzoom': 8,
-                                'layout': {
-                                    'line-join': 'round',
-                                    'line-cap': 'round',
-                                    'visibility':  tripLinesVisible ? 'visible' : 'none'
-                                },
-                                'paint': {
-                                    'line-color': '#' + position.colour,
-                                    'line-width': 4
-                                }
-                            });
+                            const layer = new ol.layer.Vector({
+                                source: new ol.source.Vector({
+                                    features: [
+                                        new ol.Feature({
+                                            geometry: new ol.geom.LineString(request.response.points.map(function (point) {
+                                                return ol.proj.fromLonLat([point.lon, point.lat])
+                                            })),
+                                            name: shapeID
+                                        })
+                                    ],
+                                    wrapX: false
+                                }),
+                                style: new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: "#" + position.colour,
+                                        width: 4,
+                                        lineCap: "butt"
+                                    })
+                                }),
+                                visible: tripLinesVisible
+                            })
+                            shapes[shapeID] = layer;
+                            map.addLayer(layer);
                         }
                     }
                 };
@@ -404,8 +406,8 @@
             }
             if (hoverPosition !== null) {
                 const shapeID = hoverPosition.system_id + "_" + hoverPosition.shape_id
-                if (shapeIDs.includes(shapeID)) {
-                    map.setLayoutProperty(shapeID, "visibility", "none");
+                if (shapeID in shapes) {
+                    shapes[shapeID].setVisible(false);
                 }
             }
             if (position !== null) {
@@ -413,44 +415,40 @@
                     return;
                 }
                 const shapeID = position.system_id + "_" + position.shape_id
-                if (shapeIDs.includes(shapeID)) {
-                    map.setLayoutProperty(shapeID, "visibility", "visible");
+                if (shapeID in shapes) {
+                    shapes[shapeID].setVisible(true);
                 } else {
                     const request = new XMLHttpRequest();
                     request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
                     request.responseType = "json";
                     request.onload = function() {
                         if (request.status === 200) {
-                            if (shapeIDs.includes(shapeID)) {
-                                map.setLayoutProperty(shapeID, "visibility", "visible");
+                            if (shapeID in shapes) {
+                                shapes[shapeID].setVisible(shapeID, hoverPosition == position);
                             } else {
-                                shapeIDs.push(shapeID);
-                                map.addSource(shapeID, {
-                                    'type': 'geojson',
-                                    'data': {
-                                        'type': 'Feature',
-                                        'properties': {},
-                                        'geometry': {
-                                            'type': 'LineString',
-                                            'coordinates': request.response.points.map(function (point) { return [point.lon, point.lat] })
-                                        }
-                                    }
-                                });
-                                map.addLayer({
-                                    'id': shapeID,
-                                    'type': 'line',
-                                    'source': shapeID,
-                                    'minzoom': 8,
-                                    'layout': {
-                                        'line-join': 'round',
-                                        'line-cap': 'round',
-                                        'visibility': (hoverPosition === position) ? 'visible' : 'none'
-                                    },
-                                    'paint': {
-                                        'line-color': '#' + position.colour,
-                                        'line-width': 4
-                                    }
-                                });
+                                const layer = new ol.layer.Vector({
+                                    source: new ol.source.Vector({
+                                        features: [
+                                            new ol.Feature({
+                                                geometry: new ol.geom.LineString(request.response.points.map(function (point) {
+                                                    return ol.proj.fromLonLat([point.lon, point.lat])
+                                                })),
+                                                name: shapeID
+                                            })
+                                        ],
+                                        wrapX: false
+                                    }),
+                                    style: new ol.style.Style({
+                                        stroke: new ol.style.Stroke({
+                                            color: "#" + position.colour,
+                                            width: 4,
+                                            lineCap: "butt"
+                                        })
+                                    }),
+                                    visible: hoverPosition == position
+                                })
+                                shapes[shapeID] = layer;
+                                map.addLayer(layer);
                             }
                         }
                     };

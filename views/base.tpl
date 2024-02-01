@@ -51,34 +51,16 @@
         <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
-        <script>
-            let mapStyle
-        </script>
-        
         % if theme is None:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
-            <script>
-                if (window.matchMedia("screen and (prefers-color-scheme: light)").matches) {
-                    mapStyle = "mapbox://styles/mapbox/light-v10";
-                } else {
-                    mapStyle = "mapbox://styles/mapbox/dark-v10";
-                }
-            </script>
         % else:
             <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
-            <script>
-                mapStyle = "mapbox://styles/mapbox/{{ theme.map_style }}";
-            </script>
         % end
         
         % if include_maps:
-            <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
-            <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
-            
-            <script>
-                mapboxgl.accessToken = "{{ config.mapbox_api_key }}";
-            </script>
+            <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css">
         % end
         
         % if enable_refresh and (system is None or system.realtime_enabled):
@@ -559,7 +541,7 @@
             setCookie("hide_systems", "yes");
         }
         if (map !== undefined) {
-            map.resize();
+            map.updateSize();
         }
     }
 </script>

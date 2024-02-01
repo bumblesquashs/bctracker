@@ -9,7 +9,7 @@
         document.getElementById("side-bar").classList.toggle("display-none");
         document.getElementById("banners").classList.toggle("display-none");
         document.getElementById("page-header").classList.toggle("display-none");
-        map.resize();
+        map.updateSize();
     }
 </script>
 

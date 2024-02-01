@@ -49,7 +49,7 @@ Also has been tested and confirmed to work on macOS.
 Not tested on Windows.
 Requires roughly Python 3.7 or higher, and pip.
 
-Uses the Bottle framework for web stuff and templates, and maps are done with MapBox.
+Uses the [Bottle](https://bottlepy.org) framework for web stuff and templates, and maps are done with [OpenLayers](https://openlayers.org).
 
 Before running the server, some configuration needs to be set up first by following the steps in the Configuration section below.
 Once you've done that, run `setup.sh` to install packages and create directories, and then run `start.py` to load up the server.
@@ -117,12 +117,6 @@ cookie_domain: 'example.com'
 ```
 
 ### Key Configuration
-
-In order to display maps, BCTracker **requires** a MapBox API Key:
-
-```
-mapbox_api_key: '<key>'
-```
 
 If analytics is enabled (see below), a Google Analytics tag must be included:
 

@@ -76,24 +76,22 @@
         <div id="map" class="full-screen"></div>
         
         <script>
-            const map = new mapboxgl.Map({
-                container: "map",
-                center: [0, 0],
-                zoom: 1,
-                style: mapStyle,
-                interactive: true
-            });
-            
-            map.addControl(
-                new mapboxgl.GeolocateControl({
-                    positionOptions: {
-                        enableHighAccuracy: true
-                    },
-                    trackUserLocation: true,
-                    showUserHeading: true
+            const map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM(),
+                    }),
+                ],
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 1,
+                    maxZoom: 22
                 }),
-                'bottom-left'
-            );
+                interactions: ol.interaction.defaults.defaults().extend([
+                    new ol.interaction.DblClickDragZoom()
+                ])
+            });
             
             const lats = [];
             const lons = [];
@@ -113,59 +111,53 @@
             <script>
                 const trips = JSON.parse('{{! json.dumps([t.get_json() for t in shape_trips]) }}');
                 
-                map.on("load", function() {
-                    for (const trip of trips) {
-                        const shapeID = String(trip.shape_id);
-                        map.addSource(shapeID, {
-                            "type": "geojson",
-                            "data": {
-                                "type": "Feature",
-                                "properties": {},
-                                "geometry": {
-                                    "type": "LineString",
-                                    "coordinates": trip.points.map(function (point) { return [point.lon, point.lat] })
-                                }
-                            }
-                        });
-                        map.addLayer({
-                            "id": shapeID,
-                            "type": "line",
-                            "source": shapeID,
-                            "layout": {
-                                "line-join": "round",
-                                "line-cap": "round"
-                            },
-                            "paint": {
-                                "line-color": "#" + trip.colour,
-                                "line-width": 4
-                            }
-                        });
-                        
-                        for (const point of trip.points) {
-                            lats.push(point.lat);
-                            lons.push(point.lon);
-                        }
+                for (const trip of trips) {
+                    map.addLayer(new ol.layer.Vector({
+                        source: new ol.source.Vector({
+                            features: [
+                                new ol.Feature({
+                                    geometry: new ol.geom.LineString(trip.points.map(function (point) {
+                                        return ol.proj.fromLonLat([point.lon, point.lat])
+                                    })),
+                                    name: String(trip.shape_id)
+                                })
+                            ],
+                            wrapX: false
+                        }),
+                        style: new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: "#" + trip.colour,
+                                width: 4,
+                                lineCap: "butt"
+                            })
+                        })
+                    }));
+                    
+                    for (const point of trip.points) {
+                        lats.push(point.lat);
+                        lons.push(point.lon);
                     }
+                }
+                
+                document.body.onload = function() {
+                    map.updateSize();
                     if (lons.length === 1 && lats.length === 1) {
-                        map.jumpTo({
-                            center: [lons[0], lats[0]],
-                            zoom: 14
-                        });
-                    } else {
+                        map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
+                        map.getView().setZoom(15);
+                    } else if (lons.length > 0 && lats.length > 0) {
                         const minLon = Math.min.apply(Math, lons);
                         const maxLon = Math.max.apply(Math, lons);
                         const minLat = Math.min.apply(Math, lats);
                         const maxLat = Math.max.apply(Math, lats);
                         
-                        map.fitBounds([[minLon, minLat], [maxLon, maxLat]], {
-                            duration: 0,
-                            padding: 100
-                        });
+                        map.getView().fit(ol.proj.transformExtent([minLon, minLat, maxLon, maxLat], ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                            padding: [100, 100, 100, 100]
+                        })
                     }
-                });
+                }
             </script>
             
-            % routes_json = [j for r in routes for j in r.get_indicator_json()]
+            % routes_json = sorted([j for r in routes for j in r.get_indicator_json()], key=lambda j: j['lat'])
             <script>
                 const routes = JSON.parse('{{! json.dumps(routes_json) }}');
                 
@@ -186,7 +178,12 @@
                     element.appendChild(icon);
                     element.appendChild(details);
                     
-                    new mapboxgl.Marker(element).setLngLat([route.lon, route.lat]).addTo(map);
+                    map.addOverlay(new ol.Overlay({
+                        position: ol.proj.fromLonLat([route.lon, route.lat]),
+                        positioning: "center-center",
+                        element: element,
+                        stopEvent: false
+                    }));
                 }
             </script>
         % end

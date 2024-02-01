@@ -1,0 +1,2 @@
+agency_id,name,enabled,prefix_headsigns,gtfs_url,realtime_url
+bc-transit,BC Transit,1,1,https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID,https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID
