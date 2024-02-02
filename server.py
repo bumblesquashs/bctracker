@@ -5,6 +5,7 @@ from bottle import Bottle, HTTPError, static_file, template, request, response, 
 import cherrypy as cp
 
 import helpers.adornment
+import helpers.agency
 import helpers.model
 import helpers.order
 import helpers.overview
@@ -53,6 +54,7 @@ def start(args):
         print('Forcing database refresh')
     
     helpers.adornment.load()
+    helpers.agency.load()
     helpers.model.load()
     helpers.order.load()
     helpers.region.load()
@@ -105,7 +107,7 @@ def get_url(system, path='', **kwargs):
     return url
 
 def validate_admin():
-    return query_cookie('admin_key', max_age_days=1) == config.admin_key
+    return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -119,9 +121,6 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    systems = helpers.system.find_all()
-    if not is_admin:
-        systems = [s for s in systems if s.enabled and s.visible]
     return template(f'pages/{name}',
         config=config,
         version=VERSION,
@@ -132,7 +131,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         include_maps=include_maps,
         full_map=full_map,
         regions=helpers.region.find_all(),
-        systems=systems,
+        systems=helpers.system.find_all(),
         is_admin=is_admin,
         system=system,
         get_url=get_url,
@@ -145,7 +144,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         **kwargs
     )
 
-def error_page(name, system, title='Error', path='', **kwargs):
+def error_page(name, system, title, path='', **kwargs):
     '''Returns an error page with the given name and details'''
     return page(f'errors/{name}', system,
         title=title,
@@ -257,7 +256,7 @@ def map_page(system):
         path='map',
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
-        positions=sorted(positions, key=lambda p: p.lat, reverse=True),
+        positions=sorted(positions, key=lambda p: p.lat),
         show_nis=show_nis,
         visible_positions=visible_positions
     )
@@ -332,6 +331,7 @@ def bus_overview_page(system, bus_number):
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
+            title='Unknown Bus',
             bus_number=bus_number
         )
     position = helpers.position.find(bus)
@@ -351,6 +351,7 @@ def bus_map_page(system, bus_number):
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
+            title='Unknown Bus',
             bus_number=bus_number
         )
     position = helpers.position.find(bus)
@@ -368,6 +369,7 @@ def bus_history_page(system, bus_number):
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
+            title='Unknown Bus',
             bus_number=bus_number
         )
     records = helpers.record.find_all(bus=bus)
@@ -444,11 +446,13 @@ def routes_map_page(system):
 def route_overview_page(system, route_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     trips = sorted(route.get_trips(date=Date.today()))
@@ -466,11 +470,13 @@ def route_overview_page(system, route_number):
 def route_map_page(system, route_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}/map'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     return page('route/map', system,
@@ -485,11 +491,13 @@ def route_map_page(system, route_number):
 def route_schedule_page(system, route_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     return page('route/schedule', system,
@@ -502,11 +510,13 @@ def route_schedule_page(system, route_number):
 def route_schedule_date_page(system, route_number, date_string):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     date = Date.parse_db(date_string, None)
@@ -539,11 +549,13 @@ def blocks_schedule_date_page(system, date_string):
 def block_overview_page(system, block_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'blocks/{block_id}'
         )
     block = system.get_block(block_id)
     if block is None:
         return error_page('invalid_block', system,
+            title='Unknown Block',
             block_id=block_id
         )
     return page('block/overview', system,
@@ -557,11 +569,13 @@ def block_overview_page(system, block_id):
 def block_map_page(system, block_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'blocks/{block_id}/map'
         )
     block = system.get_block(block_id)
     if block is None:
         return error_page('invalid_block', system,
+            title='Unknown Block',
             block_id=block_id
         )
     return page('block/map', system,
@@ -576,11 +590,13 @@ def block_map_page(system, block_id):
 def block_history_page(system, block_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'blocks/{block_id}/history'
         )
     block = system.get_block(block_id)
     if block is None:
         return error_page('invalid_block', system,
+            title='Unknown Block',
             block_id=block_id
         )
     records = helpers.record.find_all(system, block=block)
@@ -599,11 +615,13 @@ def block_history_page(system, block_id):
 def trip_overview_page(system, trip_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'trips/{trip_id}'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('invalid_trip', system,
+            title='Unknown Trip',
             trip_id=trip_id
         )
     return page('trip/overview', system,
@@ -617,11 +635,13 @@ def trip_overview_page(system, trip_id):
 def trip_map_page(system, trip_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'trips/{trip_id}/map'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('invalid_trip', system,
+            title='Unknown Trip',
             trip_id=trip_id
         )
     return page('trip/map', system,
@@ -636,11 +656,13 @@ def trip_map_page(system, trip_id):
 def trip_history_page(system, trip_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'trips/{trip_id}/history'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('invalid_trip', system,
+            title='Unknown Trip',
             trip_id=trip_id
         )
     records = helpers.record.find_all(system, trip=trip)
@@ -672,11 +694,13 @@ def stops_page(system):
 def stop_overview_page(system, stop_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     departures = stop.find_departures(date=Date.today())
@@ -696,11 +720,13 @@ def stop_overview_page(system, stop_number):
 def stop_map_page(system, stop_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}/map'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     return page('stop/map', system,
@@ -714,11 +740,13 @@ def stop_map_page(system, stop_number):
 def stop_schedule_page(system, stop_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     return page('stop/schedule', system,
@@ -731,11 +759,13 @@ def stop_schedule_page(system, stop_number):
 def stop_schedule_date_page(system, stop_number, date_string):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     date = Date.parse_db(date_string, None)
@@ -832,7 +862,7 @@ def api_map(system):
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat, reverse=True)
+    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
@@ -903,9 +933,11 @@ def api_admin_reload_orders(system):
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
     cron.stop()
+    helpers.agency.delete_all()
     helpers.region.delete_all()
     helpers.system.delete_all()
     helpers.position.delete_all()
+    helpers.agency.load()
     helpers.region.load()
     helpers.system.load()
     for system in helpers.system.find_all():
@@ -969,12 +1001,12 @@ def api_admin_reload_realtime(system, reload_system_id):
 
 @app.error(403)
 def error_403_page(error):
-    return error_page('403', None, error=error)
+    return error_page('403', None, 'Forbidden', error=error)
 
 @app.error(404)
 def error_404_page(error):
-    return error_page('404', None, error=error)
+    return error_page('404', None, 'Not Found', error=error)
 
 @app.error(500)
 def error_500_page(error):
-    return error_page('500', None, error=error)
+    return error_page('500', None, 'Internal Error', error=error)
