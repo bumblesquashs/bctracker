@@ -285,7 +285,7 @@
             content.classList = "content hover-only centred";
             let routesHTML = "";
             for (const route of stop.routes) {
-                routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
             }
             content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
