@@ -355,10 +355,13 @@
 </html>
 
 <script>
+    const resultsPerPage = 10;
+    
+    let showSearch = false;
+    
     let selectedResultIndex = 0;
     let searchResults = [];
     let searchPage = 0;
-    const resultsPerPage = 10;
     let loadingResults = false;
     let enterPending = false;
     
@@ -368,219 +371,53 @@
     let searchIncludeBlocks = true;
     
     function toggleSearch() {
-        document.getElementById("navigation-menu").classList.add("display-none");
-        const element = document.getElementById("search");
-        element.classList.toggle("display-none");
-        if (!element.classList.contains("display-none")) {
-            document.getElementById("search-input").focus();
+        const searchElement = document.getElementById("search");
+        const inputElement = document.getElementById("search-input");
+        const menuElement = document.getElementById("navigation-menu");
+        
+        showSearch = !showSearch;
+        if (showSearch) {
+            searchElement.classList.remove("display-none");
+            menuElement.classList.add("display-none");
+            inputElement.focus();
+        } else {
+            searchElement.classList.add("display-none");
         }
         if ("map" in window) {
             map.resize();
         }
     }
     
-    function setSelectedEntry(newIndex) {
-        const oldElement = searchResults[selectedResultIndex].element;
-        oldElement.classList.remove("keyboard-selected");
-        
-        const newElement = searchResults[newIndex].element;
-        newElement.classList.add("keyboard-selected");
-        
-        selectedResultIndex = newIndex;
-    }
-    
-    function clearSearchHighlighting() { 
-        if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-            const element = searchResults[selectedResultIndex].element;
-            element.classList.remove("keyboard-selected"); 
-        }
-        selectedResultIndex = 0;
-        searchResults = [];
-    }
-    
-    function handleResultsDown() {
-        if (searchResults.length < 2){
-            return; // Nothing to change for 0 or 1 results
-        }
-        if (selectedResultIndex === searchResults.length - 1){
-            return; // Can't go down from the last result
-        }
-      
-        setSelectedEntry(selectedResultIndex + 1);
-    }
-    
-    function handleResultsUp() {
-        if (searchResults.length < 2){
-            return; // Nothing to change for 0 or 1 results
-        }
-        if (selectedResultIndex === 0){
-            return; // Can't go up from the first result
-        }
-      
-        setSelectedEntry(selectedResultIndex - 1);
-    }
-    
-    function handleResultsEnter() {
-        if (loadingResults) {
-            enterPending = true;
-        } else if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-            window.location = searchResults[selectedResultIndex].url;
-        }
-    }
-    
-    function toggleSearchBusFilter() {
-        searchIncludeBuses = !searchIncludeBuses;
-        toggleFilter(searchIncludeBuses, "search-filter-bus");
-    }
-    
-    function toggleSearchRouteFilter() {
-        searchIncludeRoutes = !searchIncludeRoutes;
-        toggleFilter(searchIncludeRoutes, "search-filter-route");
-    }
-    
-    function toggleSearchStopFilter() {
-        searchIncludeStops = !searchIncludeStops;
-        toggleFilter(searchIncludeStops, "search-filter-stop");
-    }
-    
-    function toggleSearchBlockFilter() {
-        searchIncludeBlocks = !searchIncludeBlocks;
-        toggleFilter(searchIncludeBlocks, "search-filter-block");
-    }
-    
-    function toggleFilter(selected, id) {
-        const element = document.getElementById(id);
-        if (selected) {
-            element.classList.remove("inactive");
-        } else {
-            element.classList.add("inactive");
-        }
-        searchPage = 0;
-        search();
-        document.getElementById("search-input").focus();
-    }
-    
-    function searchInputChanged() {
-        searchPage = 0;
-        search();
-    }
-    
-    function searchNextPage() {
-        searchPage += 1;
-        search();
-        document.getElementById("search-input").focus();
-    }
-    
-    function searchPreviousPage() {
-        if (searchPage === 0) {
-            return;
-        }
-        searchPage -= 1;
-        search();
-        document.getElementById("search-input").focus();
-    }
-    
     function search() {
         const inputElement = document.getElementById("search-input");
-        const pagingElement = document.getElementById("search-paging");
-        const countElement = document.getElementById("search-count");
         const placeholderElement = document.getElementById("search-placeholder");
-        const resultsElement = document.getElementById("search-results");
-        
         const query = inputElement.value;
+        
+        inputElement.focus();
+        
         if (query === undefined || query === null || query === "") {
-            loadingResults = false;
-            placeholderElement.classList.remove("display-none");
-            placeholderElement.innerHTML = "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}";
-            pagingElement.classList.add("display-none");
-            countElement.innerHTML = "";
-            resultsElement.classList.add("display-none");
-            resultsElement.innerHTML = "";
-            inputElement.onkeyup = function() {};
+            updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
         } else {
             loadingResults = true;
-            if (resultsElement.innerHTML === "") {
-                placeholderElement.classList.remove("display-none");
+            if (searchResults.length === 0) {
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
             request.open("POST", "{{get_url(system, 'api/search')}}", true);
             request.responseType = "json";
             request.onload = function() {
-                const count = request.response.count;
                 const results = request.response.results;
-                if (count === 0) {
-                    placeholderElement.classList.remove("display-none");
-                    placeholderElement.innerHTML = "No Results";
-                    pagingElement.classList.add("display-none");
-                    countElement.innerHTML = "";
-                    resultsElement.classList.add("display-none");
-                    resultsElement.innerHTML = "";
-                    inputElement.onkeyup = function() {};
-                } else {
-                    placeholderElement.classList.add("display-none");
-                    placeholderElement.innerHTML = "";
-                    pagingElement.classList.remove("display-none");
-                    const min = (searchPage * resultsPerPage) + 1;
-                    const max = Math.min(count, min + resultsPerPage - 1);
-                    if (count === 1) {
-                        countElement.innerHTML = "Showing 1 of 1 result";
-                    } else {
-                        countElement.innerHTML = "Showing " + min + " to " + max + " of " + count + " results";
-                    }
-                    updatePagingButtons(count);
-                    resultsElement.classList.remove("display-none");
-                    resultsElement.innerHTML = "";
-                    for (i = 0; i < results.length; i++) {
-                        resultsElement.appendChild(buildSearchResultElement(i, results[i]))
-                    }
-                    
-                    // Reset navigation
-                    clearSearchHighlighting();
-                    
-                    // Save the global array of results, including their URL and the HTML element reference for them
-                    searchResults = results.map(function(result, index) {
-                      return { 
-                        url: result.url, 
-                        element: document.getElementById("search-result-entry-" + index)
-                      }
-                    });
-                    
-                    setSelectedEntry(0);
-                    inputElement.onkeyup = function(event) {
-                        if (event.keyCode === 13) { // ENTER
-                            event.preventDefault();
-                            handleResultsEnter();
-                            return;
-                        }
-                        if (event.keyCode === 38) { // ARROW KEY UP
-                            event.preventDefault();
-                            handleResultsUp();
-                            return;
-                        }
-                        if (event.keyCode === 40) { // ARROW KEY DOWN
-                            event.preventDefault();
-                            handleResultsDown();
-                        }
-                    };
-                    inputElement.onkeydown = function(event) {
-                        // Prevent up/down presses from moving cursor
-                        if (event.keyCode === 38 || event.keyCode === 40) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    };
-                }
-                loadingResults = false;
+                const total = request.response.total;
+                
+                updateSearchView(results, total, total === 0 ? "No Results" : "Results");
+                
                 if (enterPending) {
                     enterPending = false;
                     handleResultsEnter();
                 }
             };
             request.onerror = function() {
-                resultsElement.innerHTML = "<div class='message'>Error loading search results</div>";
-                inputElement.onkeyup = function() {};
-                loadingResults = false;
+                updateSearchView([], 0, "Error loading search results");
             };
             const data = new FormData();
             data.set("query", query);
@@ -628,7 +465,55 @@
         return element;
     }
     
-    function updatePagingButtons(count) {
+    function updateSearchView(results, total, message) {
+        const placeholderElement = document.getElementById("search-placeholder");
+        const pagingElement = document.getElementById("search-paging");
+        const countElement = document.getElementById("search-count");
+        const resultsElement = document.getElementById("search-results");
+        
+        loadingResults = false;
+        selectedResultIndex = 0;
+        
+        if (total == 0) {
+            placeholderElement.classList.remove("display-none");
+            placeholderElement.innerHTML = message;
+            pagingElement.classList.add("display-none");
+            countElement.innerHTML = "";
+            resultsElement.classList.add("display-none");
+            resultsElement.innerHTML = "";
+            
+            searchResults = [];
+        } else {
+            placeholderElement.classList.add("display-none");
+            placeholderElement.innerHTML = "";
+            pagingElement.classList.remove("display-none");
+            const min = (searchPage * resultsPerPage) + 1;
+            const max = Math.min(total, min + resultsPerPage - 1);
+            if (total === 1) {
+                countElement.innerHTML = "Showing 1 of 1 result";
+            } else {
+                countElement.innerHTML = "Showing " + min + " to " + max + " of " + total + " results";
+            }
+            resultsElement.classList.remove("display-none");
+            resultsElement.innerHTML = "";
+            for (i = 0; i < results.length; i++) {
+                resultsElement.appendChild(buildSearchResultElement(i, results[i]))
+            }
+            
+            searchResults = results.map(function(result, index) {
+                return {
+                    url: result.url,
+                    element: document.getElementById("search-result-entry-" + index)
+                }
+            });
+            setSelectedEntry(0);
+        }
+        
+        updatePagingButtons(total);
+        updateKeyboardPressHandlers(total);
+    }
+    
+    function updatePagingButtons(total) {
         const previousButton = document.getElementById("search-paging-previous");
         const nextButton = document.getElementById("search-paging-next");
         if (searchPage === 0) {
@@ -638,13 +523,132 @@
             previousButton.classList.remove("disabled");
             previousButton.onclick = searchPreviousPage;
         }
-        if ((searchPage * resultsPerPage) >= (count - resultsPerPage)) {
+        if ((searchPage * resultsPerPage) >= (total - resultsPerPage)) {
             nextButton.classList.add("disabled");
             nextButton.onclick = function() {};
         } else {
             nextButton.classList.remove("disabled");
             nextButton.onclick = searchNextPage;
         }
+    }
+    
+    function updateKeyboardPressHandlers(total) {
+        const inputElement = document.getElementById("search-input");
+        if (total == 0) {
+            inputElement.onkeyup = function() {};
+            inputElement.onkeydown = function() {};
+        } else {
+            inputElement.onkeyup = function(event) {
+                if (event.keyCode === 13) { // ENTER
+                    event.preventDefault();
+                    handleResultsEnter();
+                    return;
+                }
+                if (event.keyCode === 38) { // ARROW KEY UP
+                    event.preventDefault();
+                    handleResultsUp();
+                    return;
+                }
+                if (event.keyCode === 40) { // ARROW KEY DOWN
+                    event.preventDefault();
+                    handleResultsDown();
+                }
+            };
+            inputElement.onkeydown = function(event) {
+                // Prevent up/down presses from moving cursor
+                if (event.keyCode === 38 || event.keyCode === 40) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            };
+        }
+    }
+    
+    function handleResultsEnter() {
+        if (loadingResults) {
+            enterPending = true;
+        } else if (selectedResultIndex !== null) {
+            window.location = searchResults[selectedResultIndex].url;
+        }
+    }
+    
+    function handleResultsDown() {
+        if (searchResults.length < 2) {
+            return; // Nothing to change for 0 or 1 results
+        }
+        if (selectedResultIndex === searchResults.length - 1) {
+            return; // Can't go down from the last result
+        }
+        setSelectedEntry(selectedResultIndex + 1);
+    }
+    
+    function handleResultsUp() {
+        if (searchResults.length < 2) {
+            return; // Nothing to change for 0 or 1 results
+        }
+        if (selectedResultIndex === 0) {
+            return; // Can't go up from the first result
+        }
+        setSelectedEntry(selectedResultIndex - 1);
+    }
+    
+    function setSelectedEntry(index) {
+        if (selectedResultIndex < searchResults.length) {
+            searchResults[selectedResultIndex].element.classList.remove("keyboard-selected");
+        }
+        if (index < searchResults.length) {
+            searchResults[index].element.classList.add("keyboard-selected");
+        }
+        selectedResultIndex = index;
+    }
+    
+    function toggleSearchBusFilter() {
+        searchIncludeBuses = !searchIncludeBuses;
+        toggleFilter(searchIncludeBuses, "search-filter-bus");
+    }
+    
+    function toggleSearchRouteFilter() {
+        searchIncludeRoutes = !searchIncludeRoutes;
+        toggleFilter(searchIncludeRoutes, "search-filter-route");
+    }
+    
+    function toggleSearchStopFilter() {
+        searchIncludeStops = !searchIncludeStops;
+        toggleFilter(searchIncludeStops, "search-filter-stop");
+    }
+    
+    function toggleSearchBlockFilter() {
+        searchIncludeBlocks = !searchIncludeBlocks;
+        toggleFilter(searchIncludeBlocks, "search-filter-block");
+    }
+    
+    function toggleFilter(selected, id) {
+        const element = document.getElementById(id);
+        if (selected) {
+            element.classList.remove("inactive");
+        } else {
+            element.classList.add("inactive");
+        }
+        searchPage = 0;
+        search();
+    }
+    
+    function searchInputChanged() {
+        searchPage = 0;
+        search();
+    }
+    
+    function searchNextPage() {
+        searchPage += 1;
+        search();
+    }
+    
+    function searchPreviousPage() {
+        if (searchPage === 0) {
+            return;
+        }
+        searchPage -= 1;
+        search();
     }
     
     function toggleSideBar() {
@@ -656,7 +660,7 @@
         } else {
             setCookie("hide_systems", "yes");
         }
-        if (map !== undefined) {
+        if ("map" in window) {
             map.updateSize();
         }
     }

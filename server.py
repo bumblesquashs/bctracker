@@ -29,7 +29,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 24
+VERSION = 25
 
 app = Bottle()
 running = False
@@ -900,7 +900,7 @@ def api_search(system):
     max = min + count
     return {
         'results': [m.get_json(system, get_url) for m in matches[min:max]],
-        'count': len(matches)
+        'total': len(matches)
     }
 
 @endpoint('/api/nearby.json', append_slash=False)
