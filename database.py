@@ -2,6 +2,8 @@
 import sqlite3
 import shutil
 
+import config
+
 SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS record (
@@ -156,7 +158,7 @@ def disconnect():
 
 def backup(name='bctracker'):
     '''Copies all information from the main database to a backup database'''
-    if connection is None:
+    if connection is None or not config.enable_database_backups:
         return
     backup = sqlite3.connect(f'archives/{name}.db', check_same_thread=False)
     connection.backup(backup)

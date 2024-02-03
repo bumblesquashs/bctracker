@@ -1,5 +1,16 @@
 <html>
-    <head> 
+    <head>
+        % if config.enable_analytics:
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.analytics_key }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag("js", new Date());
+                gtag("config", "{{ config.analytics_key }}");
+            </script>
+        % end
+        
         <title>
             % if system is None:
                 BCTracker | {{ title }}
@@ -40,34 +51,16 @@
         <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
-        <script>
-            let mapStyle
-        </script>
-        
         % if theme is None:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
-            <script>
-                if (window.matchMedia("screen and (prefers-color-scheme: light)").matches) {
-                    mapStyle = "mapbox://styles/mapbox/light-v10";
-                } else {
-                    mapStyle = "mapbox://styles/mapbox/dark-v10";
-                }
-            </script>
         % else:
             <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
-            <script>
-                mapStyle = "mapbox://styles/mapbox/{{ theme.map_style }}";
-            </script>
         % end
         
         % if include_maps:
-            <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
-            <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
-            
-            <script>
-                mapboxgl.accessToken = "{{ mapbox_api_key }}";
-            </script>
+            <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css">
         % end
         
         % if enable_refresh and (system is None or system.realtime_enabled):
@@ -107,17 +100,17 @@
             
             function getUrl(systemID, path) {
                 if (systemID === null || systemID === undefined) {
-                    return "{{ no_system_domain }}".format(path)
+                    return "{{ config.all_systems_domain }}".format(path)
                 }
-                return "{{ system_domain_path if system is None else system_domain }}".format(systemID, path)
+                return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID, path)
             }
             
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
-                if ("{{ cookie_domain }}" == "None") {
+                if ("{{ config.cookie_domain }}" == "None") {
                     document.cookie = key + "=" + value + "; max_age=" + max_age + "; path=/";
                 } else {
-                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ cookie_domain }}; path=/";
+                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ config.cookie_domain }}; path=/";
                 }
             }
             
@@ -132,7 +125,7 @@
                 const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
                 now.setTime(expireTime);
                 
-                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if cookie_domain is None else cookie_domain }};path=/";
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if config.cookie_domain is None else config.cookie_domain }};path=/";
             }
         </script>
     </head>
@@ -219,24 +212,24 @@
                     <span>History</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/routes.png" />
-                    <img class="black" src="/img/black/routes.png" />
+                    <img class="white" src="/img/white/route.png" />
+                    <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/blocks.png" />
-                    <img class="black" src="/img/black/blocks.png" />
+                    <img class="white" src="/img/white/block.png" />
+                    <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % end
@@ -325,19 +318,6 @@
                             % bct_id = 'comox-valley' if system.id == 'comox' else system.id
                             <div class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ bct_id }}/news">BC Transit News Page</a>.</div>
                         </div>
-                    </div>
-                % elif show_survey_banner:
-                    <div id="survey-banner" class="banner">
-                        <span class="close-button" onclick="hideSurvey()">
-                            <img class="white" width="24px" height="24px" src="/img/white/close.png"/>
-                            <img class="black" width="24px" height="24px" src="/img/black/close.png"/>
-                        </span>
-                        <div class="content">
-                            <span class="title">Take the BCTracker Survey!</span>
-                            <br />
-                            <span class="description">For more information, check out the latest update on the <a href="{{ get_url(system) }}">home page</a></span>
-                        </div>
-                        <button class="button survey-button" onclick="openSurvey()">Start Now</button>
                     </div>
                 % end
             </div>
@@ -525,23 +505,19 @@
         }
         for (i = 0; i < results.length; i++) {
             const result = results[i]
-            let icon = "";
+            const icon = "<img class='white' src='/img/white/" + result.icon + ".png' /><img class='black' src='/img/black/" + result.icon + ".png' />";
             let name = result.name;
             switch (result.type) {
                 case "block":
-                    icon = "<img class='white' src='/img/white/blocks.png' /><img class='black' src='/img/black/blocks.png' />";
                     name = "Block " + result.name;
                     break;
                 case "bus":
-                    icon = "<img class='white' src='/img/white/realtime.png' /><img class='black' src='/img/black/realtime.png' />";
                     name = "Bus " + result.name;
                     break;
                 case "route":
-                    icon = "<img class='white' src='/img/white/routes.png' /><img class='black' src='/img/black/routes.png' />";
                     name = "Route " + result.name;
                     break;
                 case "stop":
-                    icon = "<img class='white' src='/img/white/stop.png' /><img class='black' src='/img/black/stop.png' />";
                     name = "Stop " + result.name;
                     break;
                 default:
@@ -570,7 +546,7 @@
             setCookie("hide_systems", "yes");
         }
         if (map !== undefined) {
-            map.resize();
+            map.updateSize();
         }
     }
 </script>

@@ -29,28 +29,12 @@
         <div class="content">
             <div class="container">
                 % if system is None:
-                    % for admin_system in admin_systems:
+                    % for admin_system in systems:
                         <div class="section">
                             <div class="header">
                                 <h3>{{ admin_system }}</h3>
                             </div>
                             <div class="content">
-                                <div>
-                                    Enabled:
-                                    % if admin_system.enabled:
-                                        <span class="positive">Yes</span>
-                                    % else:
-                                        <span class="negative">No</span>
-                                    % end
-                                </div>
-                                <div>
-                                    Visible:
-                                    % if admin_system.visible:
-                                        <span class="positive">Yes</span>
-                                    % else:
-                                        <span class="negative">No</span>
-                                    % end
-                                </div>
                                 <div class="button-container">
                                     % if admin_system.gtfs_enabled:
                                         <div class="button" onclick="reloadGTFS('{{ admin_system.id }}')">Reload GTFS</div>
@@ -68,22 +52,6 @@
                             <h3>{{ system }}</h3>
                         </div>
                         <div class="content">
-                            <div>
-                                Enabled:
-                                % if system.enabled:
-                                    <span class="positive">Yes</span>
-                                % else:
-                                    <span class="negative">No</span>
-                                % end
-                            </div>
-                            <div>
-                                Visible:
-                                % if system.visible:
-                                    <span class="positive">Yes</span>
-                                % else:
-                                    <span class="negative">No</span>
-                                % end
-                            </div>
                             <div class="button-container">
                                 % if system.gtfs_enabled:
                                     <div class="button" onclick="reloadGTFS('{{ system.id }}')">Reload GTFS</div>
@@ -101,99 +69,56 @@
 </div>
 
 <script>
-    let adminKey
     let systemID
     
     function reloadAdornments() {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-adornments"), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
         request.send();
     }
     
     function reloadOrders() {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-orders"), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-orders"), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/reload-orders"), true);
         request.send();
     }
     
     function reloadSystems() {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-systems"), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-systems"), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/reload-systems"), true);
         request.send();
     }
     
     function reloadThemes() {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-themes"), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-themes"), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/reload-themes"), true);
         request.send();
     }
     
     function restartCron() {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/restart-cron"), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/restart-cron"), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/restart-cron"), true);
         request.send();
     }
     
     function backupDatabase() {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/backup-database"), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/backup-database"), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/backup-database"), true);
         request.send();
     }
     
     function reloadGTFS(reloadSystemID) {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-gtfs/" + reloadSystemID), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-gtfs/" + reloadSystemID), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/reload-gtfs/" + reloadSystemID), true);
         request.send();
     }
     
     function reloadRealtime(reloadSystemID) {
         const request = new XMLHttpRequest();
-        if (adminKey == null) {
-            request.open("POST", getUrl(systemID, "api/admin/reload-realtime/" + reloadSystemID), true);
-        } else {
-            request.open("POST", getUrl(systemID, "api/admin/" + adminKey + "/reload-realtime/" + reloadSystemID), true);
-        }
+        request.open("POST", getUrl(systemID, "api/admin/reload-realtime/" + reloadSystemID), true);
         request.send();
     }
 </script>
-
-% if key is None:
-    <script>
-        adminKey = null;
-    </script>
-% else:
-    <script>
-        adminKey = "{{ key }}";
-    </script>
-% end
 
 % if system is None:
     <script>

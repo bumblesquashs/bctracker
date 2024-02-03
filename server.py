@@ -5,6 +5,7 @@ from bottle import Bottle, HTTPError, static_file, template, request, response, 
 import cherrypy as cp
 
 import helpers.adornment
+import helpers.agency
 import helpers.model
 import helpers.order
 import helpers.overview
@@ -21,28 +22,24 @@ from models.bus import Bus
 from models.date import Date
 from models.event import Event
 
+import config
 import cron
 import database
 import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 24
+VERSION = 25
 
 app = Bottle()
 running = False
 
-cron_id = 'bctracker-muncher'
-mapbox_api_key = ''
-no_system_domain = 'https://bctracker.ca/{0}'
-system_domain = 'https://{0}.bctracker.ca/{1}'
-system_domain_path = 'https://bctracker.ca/{0}/{1}'
-cookie_domain = None
-admin_key = None
-
 def start(args):
     '''Loads all required data and launches the server'''
-    global running, cron_id, mapbox_api_key, no_system_domain, system_domain, system_domain_path, cookie_domain, admin_key
+    global running
+    
+    cp.config.update('server.conf')
+    config.setup(cp.config)
     
     running = True
     
@@ -57,6 +54,7 @@ def start(args):
         print('Forcing database refresh')
     
     helpers.adornment.load()
+    helpers.agency.load()
     helpers.model.load()
     helpers.order.load()
     helpers.region.load()
@@ -64,15 +62,6 @@ def start(args):
     helpers.theme.load()
     
     helpers.position.delete_all()
-    
-    cp.config.update('server.conf')
-    cron_id = cp.config.get('cron_id', 'bctracker-muncher')
-    mapbox_api_key = cp.config['mapbox_api_key']
-    no_system_domain = cp.config['no_system_domain']
-    system_domain = cp.config['system_domain']
-    system_domain_path = cp.config['system_domain_path']
-    cookie_domain = cp.config.get('cookie_domain')
-    admin_key = cp.config.get('admin_key')
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
@@ -93,13 +82,13 @@ def start(args):
         realtime.update_records()
         
         cron.setup()
-        cron.start(cron_id)
+        cron.start()
 
 def stop():
     '''Terminates the server'''
     global running
     running = False
-    cron.stop(cron_id)
+    cron.stop()
     database.disconnect()
     if cp.server.running:
         cp.server.stop()
@@ -108,17 +97,22 @@ def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
     if system_id is None:
-        url = no_system_domain.format(path).rstrip('/')
+        url = config.all_systems_domain.format(path).rstrip('/')
     else:
-        url = system_domain.format(system_id, path).rstrip('/')
+        url = config.system_domain.format(system_id, path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
     if len(query_args) > 0:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
+def validate_admin():
+    return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
+
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
+    is_admin = validate_admin()
+    
     theme_id = request.query.get('theme') or request.get_cookie('theme')
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
     bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
@@ -128,6 +122,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
     else:
         last_updated = system.get_last_updated(time_format)
     return template(f'pages/{name}',
+        config=config,
         version=VERSION,
         title=title,
         path=path,
@@ -136,26 +131,20 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         include_maps=include_maps,
         full_map=full_map,
         regions=helpers.region.find_all(),
-        systems=[s for s in helpers.system.find_all() if s.enabled and s.visible],
-        admin_systems=helpers.system.find_all(),
+        systems=helpers.system.find_all(),
+        is_admin=is_admin,
         system=system,
         get_url=get_url,
-        no_system_domain=no_system_domain,
-        system_domain=system_domain,
-        system_domain_path=system_domain_path,
-        cookie_domain=cookie_domain,
-        mapbox_api_key=mapbox_api_key,
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
         time_format=time_format,
         bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
-        show_survey_banner=request.get_cookie('survey_banner', 'show') == 'show',
         **kwargs
     )
 
-def error_page(name, system, title='Error', path='', **kwargs):
+def error_page(name, system, title, path='', **kwargs):
     '''Returns an error page with the given name and details'''
     return page(f'errors/{name}', system,
         title=title,
@@ -173,23 +162,23 @@ def frame(name, system, **kwargs):
         **kwargs
     )
 
-def set_cookie(key, value):
+def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
-    max_age = 60*60*24*365*10
-    if cookie_domain is None:
+    max_age = 60 * 60 * 24 * max_age_days
+    if config.cookie_domain is None:
         response.set_cookie(key, value, max_age=max_age, path='/')
     else:
-        response.set_cookie(key, value, max_age=max_age, domain=cookie_domain, path='/')
+        response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
 
-def query_cookie(key, default_value):
+def query_cookie(key, default_value=None, max_age_days=3650):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
     value = request.query.get(key)
     if value is not None:
-        set_cookie(key, value)
+        set_cookie(key, value, max_age_days)
         return value
     return request.get_cookie(key, default_value)
 
-def endpoint(base_path, method='GET', append_slash=True, system_key='system_id'):
+def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
         if base_path == '/':
             paths = [
@@ -208,6 +197,8 @@ def endpoint(base_path, method='GET', append_slash=True, system_key='system_id')
                 paths.append(f'/<{system_key}>{base_path}/')
         @app.route(paths, method)
         def func_wrapper(*args, **kwargs):
+            if require_admin and not validate_admin():
+                raise HTTPError(403)
             if system_key in kwargs:
                 system_id = kwargs[system_key]
                 system = helpers.system.find(system_id)
@@ -265,7 +256,7 @@ def map_page(system):
         path='map',
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
-        positions=sorted(positions, key=lambda p: p.lat, reverse=True),
+        positions=sorted(positions, key=lambda p: p.lat),
         show_nis=show_nis,
         visible_positions=visible_positions
     )
@@ -340,6 +331,7 @@ def bus_overview_page(system, bus_number):
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
+            title='Unknown Bus',
             bus_number=bus_number
         )
     position = helpers.position.find(bus)
@@ -359,6 +351,7 @@ def bus_map_page(system, bus_number):
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
+            title='Unknown Bus',
             bus_number=bus_number
         )
     position = helpers.position.find(bus)
@@ -376,6 +369,7 @@ def bus_history_page(system, bus_number):
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
+            title='Unknown Bus',
             bus_number=bus_number
         )
     records = helpers.record.find_all(bus=bus)
@@ -452,11 +446,13 @@ def routes_map_page(system):
 def route_overview_page(system, route_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     trips = sorted(route.get_trips(date=Date.today()))
@@ -474,11 +470,13 @@ def route_overview_page(system, route_number):
 def route_map_page(system, route_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}/map'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     return page('route/map', system,
@@ -493,11 +491,13 @@ def route_map_page(system, route_number):
 def route_schedule_page(system, route_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     return page('route/schedule', system,
@@ -510,11 +510,13 @@ def route_schedule_page(system, route_number):
 def route_schedule_date_page(system, route_number, date_string):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
     if route is None:
         return error_page('invalid_route', system,
+            title='Unknown Route',
             route_number=route_number
         )
     date = Date.parse_db(date_string, None)
@@ -547,11 +549,13 @@ def blocks_schedule_date_page(system, date_string):
 def block_overview_page(system, block_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'blocks/{block_id}'
         )
     block = system.get_block(block_id)
     if block is None:
         return error_page('invalid_block', system,
+            title='Unknown Block',
             block_id=block_id
         )
     return page('block/overview', system,
@@ -565,11 +569,13 @@ def block_overview_page(system, block_id):
 def block_map_page(system, block_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'blocks/{block_id}/map'
         )
     block = system.get_block(block_id)
     if block is None:
         return error_page('invalid_block', system,
+            title='Unknown Block',
             block_id=block_id
         )
     return page('block/map', system,
@@ -584,11 +590,13 @@ def block_map_page(system, block_id):
 def block_history_page(system, block_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'blocks/{block_id}/history'
         )
     block = system.get_block(block_id)
     if block is None:
         return error_page('invalid_block', system,
+            title='Unknown Block',
             block_id=block_id
         )
     records = helpers.record.find_all(system, block=block)
@@ -607,11 +615,13 @@ def block_history_page(system, block_id):
 def trip_overview_page(system, trip_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'trips/{trip_id}'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('invalid_trip', system,
+            title='Unknown Trip',
             trip_id=trip_id
         )
     return page('trip/overview', system,
@@ -625,11 +635,13 @@ def trip_overview_page(system, trip_id):
 def trip_map_page(system, trip_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'trips/{trip_id}/map'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('invalid_trip', system,
+            title='Unknown Trip',
             trip_id=trip_id
         )
     return page('trip/map', system,
@@ -644,11 +656,13 @@ def trip_map_page(system, trip_id):
 def trip_history_page(system, trip_id):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'trips/{trip_id}/history'
         )
     trip = system.get_trip(trip_id)
     if trip is None:
         return error_page('invalid_trip', system,
+            title='Unknown Trip',
             trip_id=trip_id
         )
     records = helpers.record.find_all(system, trip=trip)
@@ -680,11 +694,13 @@ def stops_page(system):
 def stop_overview_page(system, stop_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     departures = stop.find_departures(date=Date.today())
@@ -704,11 +720,13 @@ def stop_overview_page(system, stop_number):
 def stop_map_page(system, stop_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}/map'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     return page('stop/map', system,
@@ -722,11 +740,13 @@ def stop_map_page(system, stop_number):
 def stop_schedule_page(system, stop_number):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     return page('stop/schedule', system,
@@ -739,11 +759,13 @@ def stop_schedule_page(system, stop_number):
 def stop_schedule_date_page(system, stop_number, date_string):
     if system is None:
         return error_page('system_required', system,
+            title='System Required',
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
     if stop is None:
         return error_page('invalid_stop', system,
+            title='Unknown Stop',
             stop_number=stop_number
         )
     date = Date.parse_db(date_string, None)
@@ -800,30 +822,13 @@ def systems_page(system):
         path=request.query.get('path', '')
     )
 
-@endpoint('/admin')
+@endpoint('/admin', require_admin=True)
 def admin_page(system):
-    return make_admin_key_page(system, None)
-
-@endpoint('/admin/<key>')
-def admin_key_page(system, key):
-    return make_admin_key_page(system, key)
-
-def make_admin_key_page(system, key):
-    if admin_key is None or key == admin_key:
-        if key is None:
-            path = 'admin'
-        else:
-            path = f'admin/{key}'
-        return page('admin', system,
-            title='Administration',
-            enable_refresh=False,
-            path=path,
-            key=key,
-            disable_indexing=True
-        )
-    return page('home', system,
-        title='Home',
-        enable_refresh=False
+    return page('admin', system,
+        title='Administration',
+        enable_refresh=False,
+        path='admin',
+        disable_indexing=True
     )
 
 # =============================================================
@@ -857,7 +862,7 @@ def api_map(system):
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
-    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat, reverse=True)
+    positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
@@ -899,163 +904,97 @@ def api_nearby(system):
         'stops': [s.get_json() for s in stops]
     }
 
-@endpoint('/api/admin/reload-adornments', method='POST')
+@endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
 def api_admin_reload_adornments(system):
-    return execute_api_admin_reload_adornments(None)
+    helpers.adornment.delete_all()
+    helpers.adornment.load()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-adornments', method='POST')
-def api_admin_key_reload_adornments(system, key):
-    return execute_api_admin_reload_adornments(key)
-
-def execute_api_admin_reload_adornments(key):
-    if admin_key is None or key == admin_key:
-        helpers.adornment.delete_all()
-        helpers.adornment.load()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-orders', method='POST')
+@endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
 def api_admin_reload_orders(system):
-    return execute_api_admin_reload_orders(None)
+    helpers.model.delete_all()
+    helpers.order.delete_all()
+    helpers.model.load()
+    helpers.order.load()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-orders', method='POST')
-def api_admin_key_reload_orders(system, key):
-    return execute_api_admin_reload_orders(key)
-
-def execute_api_admin_reload_orders(key):
-    if admin_key is None or key == admin_key:
-        helpers.model.delete_all()
-        helpers.order.delete_all()
-        helpers.model.load()
-        helpers.order.load()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-systems', method='POST')
+@endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
-    return execute_api_admin_reload_systems(None)
-
-@endpoint('/api/admin/<key>/reload-systems', method='POST')
-def api_admin_key_reload_systems(system, key):
-    return execute_api_admin_reload_systems(key)
-
-def execute_api_admin_reload_systems(key):
-    if admin_key is None or key == admin_key:
-        cron.stop(cron_id)
-        helpers.region.delete_all()
-        helpers.system.delete_all()
-        helpers.position.delete_all()
-        helpers.region.load()
-        helpers.system.load()
-        for system in helpers.system.find_all():
-            if running:
-                gtfs.load(system)
-                if not gtfs.validate(system):
-                    gtfs.load(system, True)
-                gtfs.update_cache_in_background(system)
-                realtime.update(system)
-                if not realtime.validate(system):
-                    system.validation_errors += 1
+    cron.stop()
+    helpers.agency.delete_all()
+    helpers.region.delete_all()
+    helpers.system.delete_all()
+    helpers.position.delete_all()
+    helpers.agency.load()
+    helpers.region.load()
+    helpers.system.load()
+    for system in helpers.system.find_all():
         if running:
-            realtime.update_records()
-            cron.start(cron_id)
-        return 'Success'
-    return 'Access denied'
+            gtfs.load(system)
+            if not gtfs.validate(system):
+                gtfs.load(system, True)
+            gtfs.update_cache_in_background(system)
+            realtime.update(system)
+            if not realtime.validate(system):
+                system.validation_errors += 1
+    if running:
+        realtime.update_records()
+        cron.start()
+    return 'Success'
 
-@endpoint('/api/admin/reload-themes', method='POST')
+@endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
 def api_admin_reload_themes(system):
-    return execute_api_admin_reload_themes(None)
+    helpers.theme.delete_all()
+    helpers.theme.load()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-themes', method='POST')
-def api_admin_key_reload_themes(system, key):
-    return execute_api_admin_reload_themes(key)
-
-def execute_api_admin_reload_themes(key):
-    if admin_key is None or key == admin_key:
-        helpers.theme.delete_all()
-        helpers.theme.load()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/restart-cron', method='POST')
+@endpoint('/api/admin/restart-cron', method='POST', require_admin=True)
 def api_admin_restart_cron(system):
-    return execute_api_admin_restart_cron(None)
+    cron.stop()
+    cron.start()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/restart-cron', method='POST')
-def api_admin_key_restart_cron(system, key):
-    return execute_api_admin_restart_cron(key)
-
-def execute_api_admin_restart_cron(key):
-    if admin_key is None or key == admin_key:
-        cron.stop(cron_id)
-        cron.start(cron_id)
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/backup-database', method='POST')
+@endpoint('/api/admin/backup-database', method='POST', require_admin=True)
 def api_admin_backup_database(system):
-    return execute_api_admin_backup_database(None)
+    database.archive()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/backup-database', method='POST')
-def api_admin_key_backup_database(system, key):
-    return execute_api_admin_backup_database(key)
-
-def execute_api_admin_backup_database(key):
-    if admin_key is None or key == admin_key:
-        database.archive()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST')
+@endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_gtfs(system, reload_system_id):
-    return execute_api_admin_reload_gtfs(None, reload_system_id)
+    system = helpers.system.find(reload_system_id)
+    if system is None:
+        return 'Invalid system'
+    gtfs.load(system, True)
+    gtfs.update_cache_in_background(system)
+    realtime.update(system)
+    if not realtime.validate(system):
+        system.validation_errors += 1
+    realtime.update_records()
+    return 'Success'
 
-@endpoint('/api/admin/<key>/reload-gtfs/<reload_system_id>', method='POST')
-def api_admin_key_reload_gtfs(system, key, reload_system_id):
-    return execute_api_admin_reload_gtfs(key, reload_system_id)
-
-def execute_api_admin_reload_gtfs(key, reload_system_id):
-    if admin_key is None or key == admin_key:
-        system = helpers.system.find(reload_system_id)
-        if system is None:
-            return 'Invalid system'
-        gtfs.load(system, True)
-        gtfs.update_cache_in_background(system)
-        realtime.update(system)
-        if not realtime.validate(system):
-            system.validation_errors += 1
-        realtime.update_records()
-        return 'Success'
-    return 'Access denied'
-
-@endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST')
+@endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_realtime(system, reload_system_id):
-    return execute_api_admin_reload_realtime(None, reload_system_id)
-
-@endpoint('/api/admin/<key>/reload-realtime/<reload_system_id>', method='POST')
-def api_admin_key_reload_realtime(system, key, reload_system_id):
-    return execute_api_admin_reload_realtime(key, reload_system_id)
-
-def execute_api_admin_reload_realtime(key, reload_system_id):
-    if admin_key is None or key == admin_key:
-        system = helpers.system.find(reload_system_id)
-        if system is None:
-            return 'Invalid system'
-        realtime.update(system)
-        if not realtime.validate(system):
-            system.validation_errors += 1
-        realtime.update_records()
-        return 'Success'
-    return 'Access denied'
+    system = helpers.system.find(reload_system_id)
+    if system is None:
+        return 'Invalid system'
+    realtime.update(system)
+    if not realtime.validate(system):
+        system.validation_errors += 1
+    realtime.update_records()
+    return 'Success'
 
 # =============================================================
 # Errors
 # =============================================================
 
+@app.error(403)
+def error_403_page(error):
+    return error_page('403', None, 'Forbidden', error=error)
+
 @app.error(404)
 def error_404_page(error):
-    return error_page('404', None, error=error)
+    return error_page('404', None, 'Not Found', error=error)
 
 @app.error(500)
 def error_500_page(error):
-    return error_page('500', None, error=error)
+    return error_page('500', None, 'Internal Error', error=error)

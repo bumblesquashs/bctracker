@@ -160,7 +160,7 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.system.prefix_headsign and self.route is not None:
+        if self.system.agency.prefix_headsigns and self.route is not None:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     

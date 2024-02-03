@@ -1,4 +1,5 @@
 
+import helpers.agency
 import helpers.departure
 import helpers.overview
 import helpers.position
@@ -12,13 +13,10 @@ class System:
     __slots__ = (
         'id',
         'name',
+        'agency',
         'region',
-        'enabled',
-        'visible',
-        'prefix_headsign',
         'recolour_black',
-        'gtfs_url',
-        'realtime_url',
+        'remote_id',
         'validation_errors',
         'last_updated_date',
         'last_updated_time',
@@ -38,30 +36,13 @@ class System:
         '''Returns a system initialized from the given CSV row'''
         id = row['system_id']
         name = row['name']
+        agency = helpers.agency.find(row['agency_id'])
         region = helpers.region.find(row['region_id'])
-        enabled = row['enabled'] == '1'
-        visible = row['visible'] == '1'
-        prefix_headsign = row['prefix_headsign'] == '1'
         recolour_black = row['recolour_black'] == '1'
-        version = row['version']
-        if version == '1':
-            remote_id = row['remote_id']
-            gtfs_url = f'http://{remote_id}.mapstrat.com/current/google_transit.zip'
-            realtime_url = f'http://{remote_id}.mapstrat.com/current/gtfrealtime_VehiclePositions.bin'
-        elif version == '2':
-            remote_id = row['remote_id']
-            gtfs_url = f'https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds={remote_id}'
-            realtime_url = f'https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds={remote_id}'
-        else:
-            if 'gtfs_url' in row and row['gtfs_url'] != '':
-                gtfs_url = row['gtfs_url']
-            else:
-                gtfs_url = None
-            if 'realtime_url' in row and row['realtime_url'] != '':
-                realtime_url = row['realtime_url']
-            else:
-                realtime_url = None
-        return cls(id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url)
+        remote_id = row['remote_id']
+        if remote_id == '':
+            remote_id = None
+        return cls(id, name, agency, region, recolour_black, remote_id)
     
     @property
     def is_loaded(self):
@@ -71,28 +52,45 @@ class System:
     @property
     def gtfs_enabled(self):
         '''Checks if GTFS data is enabled for this system'''
-        return self.enabled and self.gtfs_url is not None
+        return self.agency.gtfs_enabled
+    
+    @property
+    def gtfs_url(self):
+        '''Returns the URL to load GTFS for this system'''
+        if self.gtfs_enabled:
+            url = self.agency.gtfs_url
+            if self.remote_id:
+                url = url.replace('$REMOTE_ID', self.remote_id)
+            return url
+        return None
     
     @property
     def realtime_enabled(self):
         '''Checks if realtime data is enabled for this system'''
-        return self.enabled and self.realtime_url is not None
+        return self.agency.realtime_enabled
+    
+    @property
+    def realtime_url(self):
+        '''Returns the URL to load realtime for this system'''
+        if self.realtime_enabled:
+            url = self.agency.realtime_url
+            if self.remote_id:
+                url = url.replace('$REMOTE_ID', self.remote_id)
+            return url
+        return None
     
     @property
     def schedule(self):
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, name, region, enabled, visible, prefix_headsign, recolour_black, gtfs_url, realtime_url):
+    def __init__(self, id, name, agency, region, recolour_black, remote_id):
         self.id = id
         self.name = name
+        self.agency = agency
         self.region = region
-        self.enabled = enabled
-        self.visible = visible
-        self.prefix_headsign = prefix_headsign
         self.recolour_black = recolour_black
-        self.gtfs_url = gtfs_url
-        self.realtime_url = realtime_url
+        self.remote_id = remote_id
         
         self.validation_errors = 0
         self.last_updated_date = None

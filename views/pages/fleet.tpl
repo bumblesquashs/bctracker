@@ -48,7 +48,7 @@
                                 <thead>
                                     <tr>
                                         <th>Model</th>
-                                        <th>Tracked</th>
+                                        <th>Seen</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
