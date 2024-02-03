@@ -218,15 +218,25 @@
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
-                    icon.style.backgroundColor = "#" + position.colour;
                     if (busMarkerStyle == "route") {
                         icon.classList.add("bus_route");
                         icon.innerHTML = position.route_number;
+                        icon.style.backgroundColor = "#" + position.colour;
                     } else if (busMarkerStyle == "mini") {
                         element.classList.add("small");
                         icon.classList.add("mini");
+                        icon.style.backgroundColor = "#" + position.colour;
+                    } else if (busMarkerStyle == "adherence") {
+                        icon.classList.add("adherence");
+                        if (adherence === undefined || adherence === null) {
+                            icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                        } else {
+                            icon.innerHTML = adherence.value;
+                            icon.classList.add(adherence.status_class);
+                        }
                     } else {
                         icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.style.backgroundColor = "#" + position.colour;
                     }
                     
                     icon.onmouseenter = function() {
