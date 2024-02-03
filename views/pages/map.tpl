@@ -229,7 +229,7 @@
                     } else if (busMarkerStyle == "adherence") {
                         icon.classList.add("adherence");
                         if (adherence === undefined || adherence === null) {
-                            icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                            icon.innerHTML = "N/A";
                         } else {
                             icon.innerHTML = adherence.value;
                             icon.classList.add(adherence.status_class);
@@ -262,7 +262,7 @@
                     } else if (busMarkerStyle == "adherence") {
                         icon.classList.add("adherence");
                         if (adherence === undefined || adherence === null) {
-                            icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
+                            icon.innerHTML = "<div class='link'></div>N/A";
                         } else {
                             icon.innerHTML = "<div class='link'></div>" + adherence.value;
                             icon.classList.add(adherence.status_class);

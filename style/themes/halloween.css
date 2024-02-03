@@ -304,28 +304,29 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-.adherence-indicator {
+.adherence {
     color: #FFFFFF;
+    background-color: #989898 !important;
 }
 
-.adherence-indicator.ahead {
-    background-color: #FF6A00
+.adherence.ahead {
+    background-color: #FF6A00 !important;
 }
 
-.adherence-indicator.behind {
-    background-color: #FF6A00;
+.adherence.behind {
+    background-color: #FF6A00 !important;
 }
 
-.adherence-indicator.on-time {
-    background-color: #0093A8;
+.adherence.on-time {
+    background-color: #0093A8 !important;
 }
 
-.adherence-indicator.very-ahead {
-    background-color: #FF0007;
+.adherence.very-ahead {
+    background-color: #FF0007 !important;
 }
 
-.adherence-indicator.very-behind {
-    background-color: #FF0007;
+.adherence.very-behind {
+    background-color: #FF0007 !important;
 }
 
 .banner {
@@ -339,6 +340,31 @@ table.striped tr:nth-child(2n-1) {
 
 .banner .close-button img.black {
     display: none;
+}
+
+.bearing.adherence {
+    background-color: transparent !important;
+    border-bottom-color: #989898;
+}
+
+.bearing.adherence.ahead {
+    border-bottom-color: #FF6A00;
+}
+
+.bearing.adherence.behind {
+    border-bottom-color: #FF6A00;
+}
+
+.bearing.adherence.on-time {
+    border-bottom-color: #0093A8;
+}
+
+.bearing.adherence.very-ahead {
+    border-bottom-color: #FF0007;
+}
+
+.bearing.adherence.very-behind {
+    border-bottom-color: #FF0007;
 }
 
 .block-indicator .now {
