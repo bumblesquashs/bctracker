@@ -133,18 +133,21 @@ class Date:
         '''Returns a string of the number of days, months, and years since this date'''
         if self.is_today:
             return 'Today'
-        date = Date.today(self.timezone)
-        years = date.year - self.year
-        if self.month > date.month:
+        today = Date.today(self.timezone)
+        years = today.year - self.year
+        if self.month > today.month:
             years -= 1
-            months = (date.month + 12) - self.month
+            months = (today.month + 12) - self.month
         else:
-            months = date.month - self.month
-        if self.day > date.day:
+            months = today.month - self.month
+        if self.day > today.day:
             months -= 1
-            days = (date.day + calendar.monthrange(date.year, date.month)[1]) - self.day
+            current_month = today.month - 1
+            if current_month == 0:
+                current_month = 12
+            days = (today.day + calendar.monthrange(today.year, current_month)[1]) - self.day
         else:
-            days = date.day - self.day
+            days = today.day - self.day
         parts = []
         if years == 1:
             parts.append('1 year')
