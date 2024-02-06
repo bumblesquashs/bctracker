@@ -249,6 +249,8 @@ def news_page(system):
 @endpoint('/map')
 def map_page(system):
     positions = helpers.position.find_all(system, has_location=True)
+    auto_refresh = query_cookie('auto_refresh', 'false') != 'false'
+    show_route_lines = query_cookie('show_route_lines', 'false') != 'false'
     show_nis = query_cookie('show_nis', 'true') != 'false'
     visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
     return page('map', system,
@@ -257,6 +259,8 @@ def map_page(system):
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
         positions=sorted(positions, key=lambda p: p.lat),
+        auto_refresh=auto_refresh,
+        show_route_lines=show_route_lines,
         show_nis=show_nis,
         visible_positions=visible_positions
     )
