@@ -1,18 +1,23 @@
 
-import csv
+import json
 
 from models.match import Match
 from models.order import Order
 
+import helpers.model
+
 orders = []
 
 def load():
-    '''Loads order data from the static CSV file'''
+    '''Loads order data from the static JSON file'''
     global orders
-    with open(f'./static/orders.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        orders = [Order.from_csv(dict(zip(columns, row))) for row in reader]
+    orders = []
+    helpers.model.load()
+    with open(f'./static/orders.json', 'r') as file:
+        for (model_id, model_values) in json.load(file).items():
+            model = helpers.model.find(model_id)
+            for values in model_values:
+                orders.append(Order(model=model, **values))
 
 def find(bus):
     '''Returns the order containing the given bus number'''
@@ -20,7 +25,7 @@ def find(bus):
     if bus_number < 0:
         return None
     for order in orders:
-        if order.contains(bus_number):
+        if bus_number in order:
             return order
     return None
 
@@ -53,8 +58,3 @@ def find_matches(query, recorded_bus_numbers):
                 bus_number_string += f' {adornment}'
             matches.append(Match('bus', bus_number_string, order_string, model_icon, f'bus/{bus.number}', value))
     return matches
-
-def delete_all():
-    '''Deletes all orders'''
-    global orders
-    orders = []

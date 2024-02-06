@@ -1,0 +1,14 @@
+{
+    "vancouver-island": {
+        "name": "Vancouver Island"
+    },
+    "southern-coast": {
+        "name": "Southern Coast"
+    },
+    "southern-interior": {
+        "name": "Southern Interior"
+    },
+    "northern-bc": {
+        "name": "Northern BC"
+    }
+}

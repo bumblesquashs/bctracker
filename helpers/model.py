@@ -1,26 +1,22 @@
 
-import csv
+import json
 
-from models.model import Model
+from models.model import Model, ModelType
 
 models = {}
 
 def load():
-    '''Loads model data from the static CSV file'''
-    with open(f'./static/models.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            model = Model.from_csv(dict(zip(columns, row)))
-            models[model.id] = model
+    '''Loads model data from the static JSON file'''
+    global models
+    models = {}
+    with open(f'./static/models.json', 'r') as file:
+        for (type_id, type_values) in json.load(file).items():
+            type = ModelType[type_id]
+            for (id, values) in type_values.items():
+                models[id] = Model(id, type, **values)
 
 def find(model_id):
     '''Returns the model with the given ID'''
     if model_id in models:
         return models[model_id]
     return None
-
-def delete_all():
-    '''Deletes all models'''
-    global models
-    models = {}

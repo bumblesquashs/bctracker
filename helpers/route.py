@@ -6,7 +6,7 @@ import database
 def create(system, row):
     '''Inserts a new route into the database'''
     system_id = getattr(system, 'id', system)
-    if 'route_color' in row and row['route_color'] != '' and (not system.recolour_black or row['route_color'] != '000000'):
+    if 'route_color' in row and row['route_color'] != '' and (not system.colour_routes or row['route_color'] != '000000'):
         colour = row['route_color']
     else:
         colour = None
