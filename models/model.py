@@ -27,23 +27,12 @@ class Model:
     
     __slots__ = (
         'id',
+        'type',
         'manufacturer',
         'name',
         'length',
-        'fuel',
-        'type'
+        'fuel'
     )
-    
-    @classmethod
-    def from_csv(cls, row):
-        '''Returns a model initialized from the given CSV row'''
-        id = row['model_id']
-        manufacturer = row['manufacturer']
-        name = row['name']
-        length = float(row['length'])
-        fuel = row['fuel']
-        type = ModelType[row['type']]
-        return cls(id, manufacturer, name, length, fuel, type)
     
     @property
     def display_manufacturer(self):
@@ -55,13 +44,13 @@ class Model:
         '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
     
-    def __init__(self, id, manufacturer, name, length, fuel, type):
+    def __init__(self, id, type, manufacturer, name, length, fuel):
         self.id = id
+        self.type = type
         self.manufacturer = manufacturer
         self.name = name
         self.length = length
         self.fuel = fuel
-        self.type = type
     
     def __str__(self):
         return f'{self.display_manufacturer} {self.display_name}'

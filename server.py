@@ -54,10 +54,7 @@ def start(args):
         print('Forcing database refresh')
     
     helpers.adornment.load()
-    helpers.agency.load()
-    helpers.model.load()
     helpers.order.load()
-    helpers.region.load()
     helpers.system.load()
     helpers.theme.load()
     
@@ -906,27 +903,18 @@ def api_nearby(system):
 
 @endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
 def api_admin_reload_adornments(system):
-    helpers.adornment.delete_all()
     helpers.adornment.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
 def api_admin_reload_orders(system):
-    helpers.model.delete_all()
-    helpers.order.delete_all()
-    helpers.model.load()
     helpers.order.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
     cron.stop()
-    helpers.agency.delete_all()
-    helpers.region.delete_all()
-    helpers.system.delete_all()
     helpers.position.delete_all()
-    helpers.agency.load()
-    helpers.region.load()
     helpers.system.load()
     for system in helpers.system.find_all():
         if running:
@@ -944,7 +932,6 @@ def api_admin_reload_systems(system):
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
 def api_admin_reload_themes(system):
-    helpers.theme.delete_all()
     helpers.theme.load()
     return 'Success'
 

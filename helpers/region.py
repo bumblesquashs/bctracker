@@ -1,18 +1,17 @@
 
-import csv
+import json
 
 from models.region import Region
 
 regions = {}
 
 def load():
-    '''Loads region data from the static CSV file'''
-    with open(f'./static/regions.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            region = Region.from_csv(dict(zip(columns, row)))
-            regions[region.id] = region
+    '''Loads region data from the static JSON file'''
+    global regions
+    regions = {}
+    with open(f'./static/regions.json', 'r') as file:
+        for (id, values) in json.load(file).items():
+            regions[id] = Region(id, **values)
 
 def find(region_id):
     '''Returns the region with the given ID'''
@@ -23,8 +22,3 @@ def find(region_id):
 def find_all():
     '''Returns all regions'''
     return regions.values()
-
-def delete_all():
-    '''Deletes all regions'''
-    global regions
-    regions = {}
