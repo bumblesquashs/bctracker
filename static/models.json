@@ -50,13 +50,13 @@
         }
     },
     "decker": {
-        "alexander-dennis-enviro-500": {
+        "alexander-dennis-enviro500": {
             "manufacturer": "Alexander Dennis",
             "name": "Enviro 500",
             "length": 42,
             "fuel": "Diesel"
         },
-        "alexander-dennis-enviro-500h": {
+        "alexander-dennis-enviro500h": {
             "manufacturer": "Alexander Dennis",
             "name": "Enviro 500H",
             "length": 42,

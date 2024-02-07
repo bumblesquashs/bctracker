@@ -13,13 +13,17 @@
     "byd-k9": [
         { "year": 2016, "number": 9092, "demo": true }
     ],
-    "chevrolet-arboc-4500-som23d": [
-        { "year": 2010, "low": 2301, "high": 2310 }
-    ],
     "chevrolet-arboc-4500-sof-27": [
         { "year": 2020, "low": 2723, "high": 2756 },
         { "year": 2022, "low": 2802, "high": 2860 },
         { "year": 2023, "low": 2861, "high": 2895 }
+    ],
+    "chevrolet-arboc-4500-som-28": [
+        { "year": 2017, "low": 2641, "high": 2662 },
+        { "year": 2018, "low": 2663, "high": 2687 }
+    ],
+    "chevrolet-arboc-4500-som23d": [
+        { "year": 2010, "low": 2301, "high": 2310 }
     ],
     "chevrolet-arboc-4500-som28d": [
         { "year": 2010, "low": 2311, "high": 2315 },
@@ -35,10 +39,6 @@
     "chevrolet-arboc-4500-som28g": [
         { "year": 2015, "low": 2619, "high": 2624 },
         { "year": 2016, "low": 2637, "high": 2640 }
-    ],
-    "chevrolet-arboc-4500-som-28": [
-        { "year": 2017, "low": 2641, "high": 2662 },
-        { "year": 2018, "low": 2663, "high": 2687 }
     ],
     "chevrolet-girardin-4500-g5": [
         { "year": 2020, "low": 2688, "high": 2722 },
@@ -134,7 +134,7 @@
     "nova-bus-lfs-suburban": [
         { "year": 2008, "low": 9290, "high": 9300 }
     ],
-    "proterra": [
+    "proterra-zx5": [
         { "year": 2022, "number": 9093, "demo": true }
     ],
     "transbus-trident": [
