@@ -1,0 +1,159 @@
+{
+    "alexander-dennis-enviro500": [
+        { "year": 2004, "low": 9041, "high": 9049 },
+        { "year": 2008, "low": 9501, "high": 9526 },
+        { "year": 2007, "number": 9528 },
+        { "year": 2008, "low": 9529, "high": 9531 },
+        { "year": 2020, "low": 9532, "high": 9542 },
+        { "year": 2022, "low": 9543, "high": 9550 }
+    ],
+    "alexander-dennis-enviro500h": [
+        { "year": 2008, "number":9527 }
+    ],
+    "byd-k9": [
+        { "year": 2016, "number": 9092, "demo": true }
+    ],
+    "chevrolet-arboc-4500-sof-27": [
+        { "year": 2020, "low": 2723, "high": 2756 },
+        { "year": 2022, "low": 2802, "high": 2860 },
+        { "year": 2023, "low": 2861, "high": 2895 }
+    ],
+    "chevrolet-arboc-4500-som-28": [
+        { "year": 2017, "low": 2641, "high": 2662 },
+        { "year": 2018, "low": 2663, "high": 2687 }
+    ],
+    "chevrolet-arboc-4500-som23d": [
+        { "year": 2010, "low": 2301, "high": 2310 }
+    ],
+    "chevrolet-arboc-4500-som28d": [
+        { "year": 2010, "low": 2311, "high": 2315 },
+        { "year": 2012, "low": 2316, "high": 2399 },
+        { "year": 2012, "low": 2342, "high": 2344 },
+        { "year": 2012, "low": 2347, "high": 2367 },
+        { "year": 2012, "low": 2369, "high": 2377 },
+        { "year": 2013, "low": 2378, "high": 2449 },
+        { "year": 2014, "low": 2451, "high": 2557 },
+        { "year": 2015, "low": 2558, "high": 2618 },
+        { "year": 2016, "low": 2625, "high": 2636 }
+    ],
+    "chevrolet-arboc-4500-som28g": [
+        { "year": 2015, "low": 2619, "high": 2624 },
+        { "year": 2016, "low": 2637, "high": 2640 }
+    ],
+    "chevrolet-girardin-4500-g5": [
+        { "year": 2020, "low": 2688, "high": 2722 },
+        { "year": 2021, "low": 2757, "high": 2784 }
+    ],
+    "dennis-dart-slf-30": [
+        { "year": 1999, "low": 9901, "high": 9951 }
+    ],
+    "dennis-dart-slf-35": [
+        { "year": 2000, "low": 1, "high": 18 },
+        { "year": 2001, "low": 101, "high": 116 },
+        { "year": 2002, "low": 221, "high": 237 },
+        { "year": 2000, "low": 9051, "high": 9078 },
+        { "year": 2001, "low": 9081, "high": 9085 }
+    ],
+    "dennis-trident": [
+        { "year": 2000, "low": 9001, "high": 9010 }
+    ],
+    "ford-cbb-e450-polar-v": [
+        { "year": 2009, "low": 2173, "high": 2240 }
+    ],
+    "ford-girardin-t350-mbii": [
+        { "year": 2021, "low": 2785, "high": 2801 }
+    ],
+    "grande-west-vicinity-27": [
+        { "year": 2013, "low": 3001, "high": 3015 }
+    ],
+    "grande-west-vicinity-30": [
+        { "year": 2017, "low": 4007, "high": 4070 },
+        { "year": 2018, "low": 4071, "high": 4073 }
+    ],
+    "grande-west-vicinity-35": [
+        { "year": 2017, "low": 4400, "high": 4432 },
+        { "year": 2018, "low": 4433, "high": 4474 }
+    ],
+    "grande-west-vicinity-cng-30": [
+        { "year": 2020, "low": 4200, "high": 4233 }
+    ],
+    "international-eldorado-3200-advantage": [
+        { "year": 2022, "low": 3029, "high": 3034 }
+    ],
+    "international-eldorado-3200-aero-elite": [
+        { "year": 2015, "low": 3016, "high": 3023, "exceptions": [ 3020, 3022 ] },
+        { "year": 2018, "low": 3024, "high": 3028 }
+    ],
+    "mercedes-benz-sprinter-minibus": [
+        { "year": 2012, "low": 2340, "high": 2341 },
+        { "year": 2012, "low": 2345, "high": 2346 },
+        { "year": 2012, "number": 2368 },
+        { "year": 2011, "number": 2450 }
+    ],
+    "new-flyer-d40lf": [
+        { "year": 1991, "low": 8001, "high": 8009 },
+        { "year": 1992, "low": 8010, "high": 8033 },
+        { "year": 1994, "low": 8034, "high": 8048 },
+        { "year": 1995, "low": 8049, "high": 8094 },
+        { "year": 1996, "low": 8095, "high": 8117 },
+        { "year": 1996, "low": 9701, "high": 9749 },
+        { "year": 1995, "low": 9750, "high": 9760 },
+        { "year": 1998, "low": 9815, "high": 9828 },
+        { "year": 1998, "low": 9831, "high": 9856 },
+        { "year": 1998, "low": 9861, "high": 9878 },
+        { "year": 1998, "low": 9881, "high": 9891 }
+    ],
+    "new-flyer-de40lf": [
+        { "year": 2005, "low": 9101, "high": 9106 }
+    ],
+    "new-flyer-h40lfr": [
+        { "year": 2009, "low": 1000, "high": 1019 }
+    ],
+    "new-flyer-xn40": [
+        { "year": 2013, "low": 1020, "high": 1044 },
+        { "year": 2015, "low": 1045, "high": 1069 },
+        { "year": 2016, "low": 1070, "high": 1114 },
+        { "year": 2017, "low": 1115, "high": 1139 },
+        { "year": 2018, "low": 1140, "high": 1148 },
+        { "year": 2019, "low": 1149, "high": 1185 },
+        { "year": 2020, "low": 1186, "high": 1212 },
+        { "year": 2021, "low": 1213, "high": 1232 },
+        { "year": 2022, "low": 1233, "high": 1253 }
+    ],
+    "nova-bus-lfs": [
+        { "year": 2017, "low": 6000, "high": 6029 },
+        { "year": 2006, "low": 9201, "high": 9231 },
+        { "year": 2007, "low": 9232, "high": 9267 },
+        { "year": 2008, "low": 9268, "high": 9289 },
+        { "year": 2008, "low": 9301, "high": 9318 },
+        { "year": 2009, "low": 9319, "high": 9433 },
+        { "year": 2012, "number": 9434 },
+        { "year": 2013, "low": 9435, "high": 9446 },
+        { "year": 2015, "low": 9447, "high": 9486 }
+    ],
+    "nova-bus-lfs-suburban": [
+        { "year": 2008, "low": 9290, "high": 9300 }
+    ],
+    "proterra-zx5": [
+        { "year": 2022, "number": 9093, "demo": true }
+    ],
+    "transbus-trident": [
+        { "year": 2002, "low": 9021, "high": 9039 }
+    ],
+    "unknown": [
+        { "number": 0, "visible": false },
+        { "number": 46, "visible": false },
+        { "number": 49, "visible": false },
+        { "number": 53, "visible": false },
+        { "number": 65, "visible": false },
+        { "low": 92, "high": 94, "visible": false },
+        { "low": 990, "high": 999, "visible": false },
+        { "number": 1717, "visible": false },
+        { "number": 7404, "visible": false },
+        { "number": 7812, "visible": false },
+        { "low": 9980, "high": 9999, "visible": false }
+    ],
+    "vmc-classic-vi30-cng": [
+        { "year": 2022, "low": 4234, "high": 4248 }
+    ]
+}

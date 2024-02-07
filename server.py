@@ -29,7 +29,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 25
+VERSION = 27
 
 app = Bottle()
 running = False
@@ -54,10 +54,7 @@ def start(args):
         print('Forcing database refresh')
     
     helpers.adornment.load()
-    helpers.agency.load()
-    helpers.model.load()
     helpers.order.load()
-    helpers.region.load()
     helpers.system.load()
     helpers.theme.load()
     
@@ -249,6 +246,8 @@ def news_page(system):
 @endpoint('/map')
 def map_page(system):
     positions = helpers.position.find_all(system, has_location=True)
+    auto_refresh = query_cookie('auto_refresh', 'false') != 'false'
+    show_route_lines = query_cookie('show_route_lines', 'false') != 'false'
     show_nis = query_cookie('show_nis', 'true') != 'false'
     visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
     return page('map', system,
@@ -257,6 +256,8 @@ def map_page(system):
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
         positions=sorted(positions, key=lambda p: p.lat),
+        auto_refresh=auto_refresh,
+        show_route_lines=show_route_lines,
         show_nis=show_nis,
         visible_positions=visible_positions
     )
@@ -918,27 +919,18 @@ def api_nearby(system):
 
 @endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
 def api_admin_reload_adornments(system):
-    helpers.adornment.delete_all()
     helpers.adornment.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
 def api_admin_reload_orders(system):
-    helpers.model.delete_all()
-    helpers.order.delete_all()
-    helpers.model.load()
     helpers.order.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
     cron.stop()
-    helpers.agency.delete_all()
-    helpers.region.delete_all()
-    helpers.system.delete_all()
     helpers.position.delete_all()
-    helpers.agency.load()
-    helpers.region.load()
     helpers.system.load()
     for system in helpers.system.find_all():
         if running:
@@ -956,7 +948,6 @@ def api_admin_reload_systems(system):
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
 def api_admin_reload_themes(system):
-    helpers.theme.delete_all()
     helpers.theme.load()
     return 'Success'
 

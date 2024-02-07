@@ -1,18 +1,17 @@
 
-import csv
+import json
 
 from models.agency import Agency
 
 agencies = {}
 
 def load():
-    '''Loads agency data from the static CSV file'''
-    with open(f'./static/agencies.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            agency = Agency.from_csv(dict(zip(columns, row)))
-            agencies[agency.id] = agency
+    '''Loads agency data from the static JSON file'''
+    global agencies
+    agencies = {}
+    with open(f'./static/agencies.json', 'r') as file:
+        for (id, values) in json.load(file).items():
+            agencies[id] = Agency(id, **values)
 
 def find(agency_id):
     '''Returns the agency with the given ID'''
@@ -23,8 +22,3 @@ def find(agency_id):
 def find_all():
     '''Returns all agencies'''
     return agencies.values()
-
-def delete_all():
-    '''Deletes all agencies'''
-    global agencies
-    agencies = {}

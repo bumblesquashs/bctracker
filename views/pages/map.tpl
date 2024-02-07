@@ -7,23 +7,23 @@
     <h1 class="title">Map</h1>
     % if len(visible_positions) > 0:
         <div class="flex-column flex-gap-5">
-            <div class="checkbox" onclick="toggleTripLines()">
-                <div class="box">
-                    <div id="checkbox-image" class="hidden">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Show Route Lines</span>
-            </div>
             <div class="checkbox" onclick="toggleAutomaticRefresh()">
                 <div class="box">
-                    <div id="refresh-image" class="hidden">
+                    <div id="refresh-image" class="{{ '' if auto_refresh else 'hidden' }}">
                         <img class="white" src="/img/white/check.png" />
                         <img class="black" src="/img/black/check.png" />
                     </div>
                 </div>
                 <span class="checkbox-label">Automatically Refresh</span>
+            </div>
+            <div class="checkbox" onclick="toggleRouteLines()">
+                <div class="box">
+                    <div id="checkbox-image" class="{{ '' if show_route_lines else 'hidden' }}">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
+                </div>
+                <span class="checkbox-label">Show Route Lines</span>
             </div>
             <div class="checkbox" onclick="toggleNISBuses()">
                 <div class="box">
@@ -114,8 +114,8 @@
         let currentShapeIDs = [];
         let markers = [];
         let routeLayers = {};
-        let tripLinesVisible = false;
-        let automaticRefresh = false;
+        let automaticRefresh = "{{ auto_refresh }}" !== "False";
+        let showRouteLines = "{{ show_route_lines }}" !== "False";
         let showNISBuses = "{{ show_nis }}" !== "False";
         let hoverPosition = null;
         const busMarkerStyle = "{{ bus_marker_style }}";
@@ -127,6 +127,9 @@
         }
         
         updateMap(true);
+        if (showRouteLines) {
+            updateRouteData();
+        }
         
         function updateMap(resetCoordinates) {
             currentShapeIDs = [];
@@ -146,6 +149,8 @@
                     }
                 }
                 
+                const adherence = position.adherence;
+                
                 const element = document.createElement("div");
                 element.id = "bus-marker-" + position.bus_number;
                 element.className = "marker";
@@ -161,7 +166,14 @@
                     const length = Math.floor(position.speed / 10);
                     const bearing = document.createElement("div");
                     bearing.className = "bearing";
-                    bearing.style.borderBottomColor = "#" + position.colour;
+                    if (busMarkerStyle === "adherence") {
+                        bearing.classList.add('adherence');
+                        if (adherence !== undefined && adherence !== null) {
+                            bearing.classList.add(adherence.status_class)
+                        }
+                    } else {
+                        bearing.style.borderBottomColor = "#" + position.colour;
+                    }
                     bearing.style.marginTop = (-8 - length) + "px";
                     bearing.style.borderLeftWidth = sideWidthValue + "px";
                     bearing.style.borderRightWidth = sideWidthValue + "px";
@@ -186,18 +198,16 @@
                 content.appendChild(model);
                 
                 const headsign = document.createElement("div");
-                if (position.adherence !== null && position.adherence !== undefined) {
+                if (adherence === null || adherence === undefined) {
+                    headsign.className = "centred";
+                    headsign.innerHTML = position.headsign;
+                } else {
                     headsign.className = "flex-row center flex-gap-5";
-                    const adherence = position.adherence;
                     const adherenceElement = document.createElement("div");
-                    adherenceElement.classList.add("adherence-indicator");
-                    adherenceElement.classList.add(adherence.status_class);
+                    adherenceElement.classList.add("adherence-indicator", "adherence", adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     
                     headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
-                } else {
-                    headsign.className = "centred";
-                    headsign.innerHTML = position.headsign;
                 }
                 content.appendChild(headsign);
                 
@@ -211,15 +221,25 @@
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
-                    icon.style.backgroundColor = "#" + position.colour;
                     if (busMarkerStyle == "route") {
                         icon.classList.add("bus_route");
                         icon.innerHTML = position.route_number;
+                        icon.style.backgroundColor = "#" + position.colour;
                     } else if (busMarkerStyle == "mini") {
                         element.classList.add("small");
                         icon.classList.add("mini");
+                        icon.style.backgroundColor = "#" + position.colour;
+                    } else if (busMarkerStyle == "adherence") {
+                        icon.classList.add("adherence");
+                        if (adherence === undefined || adherence === null) {
+                            icon.innerHTML = "N/A";
+                        } else {
+                            icon.innerHTML = adherence.value;
+                            icon.classList.add(adherence.status_class);
+                        }
                     } else {
                         icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.style.backgroundColor = "#" + position.colour;
                     }
                     
                     icon.onmouseenter = function() {
@@ -233,16 +253,26 @@
                     const icon = document.createElement("a");
                     icon.className = "icon";
                     icon.href = "/bus/" + position.bus_number;
-                    icon.style.backgroundColor = "#" + position.colour;
                     if (busMarkerStyle == "route") {
                         icon.classList.add("bus_route");
                         icon.innerHTML = "<div class='link'></div>" + position.route_number;
+                        icon.style.backgroundColor = "#" + position.colour;
                     } else if (busMarkerStyle == "mini") {
                         element.classList.add("small");
                         icon.classList.add("mini");
                         icon.innerHTML = "<div class='link'></div>";
+                        icon.style.backgroundColor = "#" + position.colour;
+                    } else if (busMarkerStyle == "adherence") {
+                        icon.classList.add("adherence");
+                        if (adherence === undefined || adherence === null) {
+                            icon.innerHTML = "<div class='link'></div>N/A";
+                        } else {
+                            icon.innerHTML = "<div class='link'></div>" + adherence.value;
+                            icon.classList.add(adherence.status_class);
+                        }
                     } else {
                         icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.style.backgroundColor = "#" + position.colour;
                     }
                     
                     icon.onmouseenter = function() {
@@ -295,25 +325,10 @@
             
             for (const shapeID in shapes) {
                 if (currentShapeIDs.includes(shapeID)) {
-                    shapes[shapeID].setVisible(tripLinesVisible);
+                    shapes[shapeID].setVisible(showRouteLines);
                 } else {
                     shapes[shapeID].setVisible(false);
                 }
-            }
-        }
-        
-        function toggleTripLines() {
-            tripLinesVisible = !tripLinesVisible;
-            const checkboxImage = document.getElementById("checkbox-image");
-            checkboxImage.classList.toggle("hidden");
-            
-            for (const shapeID of currentShapeIDs) {
-                if (shapeID in shapes) {
-                    shapes[shapeID].setVisible(tripLinesVisible);
-                }
-            }
-            if (tripLinesVisible) {
-                updateRouteData();
             }
         }
         
@@ -321,9 +336,26 @@
             automaticRefresh = !automaticRefresh;
             const checkboxImage = document.getElementById("refresh-image");
             checkboxImage.classList.toggle("hidden");
+            setCookie("auto_refresh", automaticRefresh ? "true" : "false");
             
             if (automaticRefresh) {
                 updatePositionData();
+            }
+        }
+        
+        function toggleRouteLines() {
+            showRouteLines = !showRouteLines;
+            const checkboxImage = document.getElementById("checkbox-image");
+            checkboxImage.classList.toggle("hidden");
+            setCookie("show_route_lines", showRouteLines ? "true" : "false");
+            
+            for (const shapeID of currentShapeIDs) {
+                if (shapeID in shapes) {
+                    shapes[shapeID].setVisible(showRouteLines);
+                }
+            }
+            if (showRouteLines) {
+                updateRouteData();
             }
         }
         
@@ -354,7 +386,7 @@
                         element.innerHTML = "Updated " + lastUpdated;
                         positions = request.response.positions;
                         updateMap(false);
-                        if (tripLinesVisible) {
+                        if (showRouteLines) {
                             updateRouteData()
                         }
                     }
@@ -378,7 +410,7 @@
                 request.onload = function() {
                     if (request.status === 200) {
                         if (shapeID in shapes) {
-                            shapes[shapeID].setVisible(tripLinesVisible);
+                            shapes[shapeID].setVisible(showRouteLines);
                         } else {
                             const layer = new ol.layer.Vector({
                                 source: new ol.source.Vector({
@@ -399,7 +431,7 @@
                                         lineCap: "butt"
                                     })
                                 }),
-                                visible: tripLinesVisible
+                                visible: showRouteLines
                             })
                             shapes[shapeID] = layer;
                             map.addLayer(layer);
@@ -411,7 +443,7 @@
         }
         
         function setHoverPosition(position) {
-            if (tripLinesVisible) {
+            if (showRouteLines) {
                 return
             }
             if (hoverPosition !== null) {

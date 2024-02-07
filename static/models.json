@@ -1,0 +1,190 @@
+{
+    "conventional": {
+        "byd-k9": {
+            "manufacturer": "BYD",
+            "name": "K9",
+            "length": 39,
+            "fuel": "Battery Electric"
+        },
+        "new-flyer-d40lf": {
+            "manufacturer": "New Flyer",
+            "name": "D40LF",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "new-flyer-de40lf": {
+            "manufacturer": "New Flyer",
+            "name": "DE40LF",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "new-flyer-h40lfr": {
+            "manufacturer": "New Flyer",
+            "name": "H40LFR",
+            "length": 40,
+            "fuel": "Hydrogen Fuel Cell"
+        },
+        "new-flyer-xn40": {
+            "manufacturer": "New Flyer",
+            "name": "XN40",
+            "length": 40,
+            "fuel": "CNG"
+        },
+        "nova-bus-lfs": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "nova-bus-lfs-suburban": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS Suburban",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "proterra-zx5": {
+            "manufacturer": "Proterra",
+            "name": "ZX5",
+            "length": 40,
+            "fuel": "Battery Electric"
+        }
+    },
+    "decker": {
+        "alexander-dennis-enviro500": {
+            "manufacturer": "Alexander Dennis",
+            "name": "Enviro 500",
+            "length": 42,
+            "fuel": "Diesel"
+        },
+        "alexander-dennis-enviro500h": {
+            "manufacturer": "Alexander Dennis",
+            "name": "Enviro 500H",
+            "length": 42,
+            "fuel": "Hybrid"
+        },
+        "dennis-trident": {
+            "manufacturer": "Dennis",
+            "name": "Trident",
+            "length": 42,
+            "fuel": "Diesel"
+        },
+        "transbus-trident": {
+            "manufacturer": "TransBus",
+            "name": "Trident",
+            "length": 42,
+            "fuel": "Diesel"
+        }
+    },
+    "midibus": {
+        "dennis-dart-slf-30": {
+            "manufacturer": "Dennis",
+            "name": "Dart SLF (30')",
+            "length": 30,
+            "fuel": "Diesel"
+        },
+        "dennis-dart-slf-35": {
+            "manufacturer": "Dennis",
+            "name": "Dart SLF (35')",
+            "length": 35,
+            "fuel": "Diesel"
+        },
+        "grande-west-vicinity-27": {
+            "manufacturer": "Grande West",
+            "name": "Vicinity (27.5')",
+            "length": 27.5,
+            "fuel": "Diesel"
+        },
+        "grande-west-vicinity-30": {
+            "manufacturer": "Grande West",
+            "name": "Vicinity (30')",
+            "length": 30,
+            "fuel": "Diesel"
+        },
+        "grande-west-vicinity-cng-30": {
+            "manufacturer": "Grande West",
+            "name": "Vicinity CNG (30')",
+            "length": 30,
+            "fuel": "CNG"
+        },
+        "grande-west-vicinity-35": {
+            "manufacturer": "Grande West",
+            "name": "Vicinity (35')",
+            "length": 235,
+            "fuel": "Diesel"
+        },
+        "vmc-classic-vi30-cng": {
+            "manufacturer": "VMC",
+            "name": "Classic Vi30 CNG",
+            "length": 30,
+            "fuel": "CNG"
+        }
+    },
+    "shuttle": {
+        "chevrolet-arboc-4500-sof-27": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOF 27",
+            "length": 27,
+            "fuel": "Gasoline"
+        },
+        "chevrolet-arboc-4500-som23d": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOM23D",
+            "length": 23,
+            "fuel": "Diesel"
+        },
+        "chevrolet-arboc-4500-som28d": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOM28D",
+            "length": 28,
+            "fuel": "Diesel"
+        },
+        "chevrolet-arboc-4500-som28g": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOM28G",
+            "length": 28,
+            "fuel": "Gasoline"
+        },
+        "chevrolet-arboc-4500-som-28": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOM 28",
+            "length": 28,
+            "fuel": "Diesel"
+        },
+        "chevrolet-girardin-4500-g5": {
+            "manufacturer": "Chevrolet/Girardin",
+            "name": "4500/G5",
+            "length": 28,
+            "fuel": "Gasoline"
+        },
+        "ford-cbb-e450-polar-v": {
+            "manufacturer": "Ford/CBB",
+            "name": "E-450/Polar V",
+            "length": 24,
+            "fuel": "Diesel"
+        },
+        "ford-girardin-t350-mbii": {
+            "manufacturer": "Ford/Girardin",
+            "name": "T-350/MB-II",
+            "length": 23,
+            "fuel": "Gasoline"
+        },
+        "international-eldorado-3200-advantage": {
+            "manufacturer": "International/ElDorado",
+            "name": "3200/Advantage",
+            "length": 32,
+            "fuel": "Diesel"
+        },
+        "international-eldorado-3200-aero-elite": {
+            "manufacturer": "International/ElDorado",
+            "name": "3200/Aero Elite",
+            "length": 32,
+            "fuel": "Diesel"
+        },
+        "mercedes-benz-sprinter-minibus": {
+            "manufacturer": "Mercedes-Benz",
+            "name": "Sprinter Minibus",
+            "length": 24,
+            "fuel": "Diesel"
+        }
+    }
+}
