@@ -311,10 +311,11 @@
         </div>
         <div id="main">
             <div id="banners">
-                % if system is not None and (system.id == 'comox' or system.id == 'campbell-river'):
+                % from models.date import Date
+                % if system is not None and (system.id == 'comox' or system.id == 'campbell-river') and Date.today(system.timezone) < Date(2024, 2, 12, system.timezone):
                     <div class="banner">
                         <div class="content">
-                            <div class="title">Due to ongoing job action, service in {{ system }} is currently suspended.</div>
+                            <div class="title">Service in {{ system }} will resume on February 12th</div>
                             % bct_id = 'comox-valley' if system.id == 'comox' else system.id
                             <div class="description">For more information and updates please visit the <a href="https://www.bctransit.com/{{ bct_id }}/news">BC Transit News Page</a>.</div>
                         </div>
