@@ -126,6 +126,12 @@
             "length": 27,
             "fuel": "Gasoline"
         },
+        "chevrolet-arboc-4500-som-28": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOM 28",
+            "length": 28,
+            "fuel": "Gasoline"
+        },
         "chevrolet-arboc-4500-som23d": {
             "manufacturer": "Chevrolet/ARBOC",
             "name": "4500/SOM23D",
@@ -143,12 +149,6 @@
             "name": "4500/SOM28G",
             "length": 28,
             "fuel": "Gasoline"
-        },
-        "chevrolet-arboc-4500-som-28": {
-            "manufacturer": "Chevrolet/ARBOC",
-            "name": "4500/SOM 28",
-            "length": 28,
-            "fuel": "Diesel"
         },
         "chevrolet-girardin-4500-g5": {
             "manufacturer": "Chevrolet/Girardin",

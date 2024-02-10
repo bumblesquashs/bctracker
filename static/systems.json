@@ -85,7 +85,8 @@
             },
             "kamloops": {
                 "name": "Kamloops",
-                "remote_id": 46
+                "remote_id": 46,
+                "colour_routes": true
             },
             "kelowna": {
                 "name": "Kelowna",
