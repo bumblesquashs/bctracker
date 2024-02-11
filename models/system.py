@@ -201,6 +201,8 @@ class System:
     
     def update_cache(self):
         '''Loads and caches data from the database'''
+        if not self.gtfs_enabled:
+            return
         print(f'Updating cached data for {self}')
         try:
             departures = helpers.departure.find_all(self)

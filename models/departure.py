@@ -16,7 +16,7 @@ class PickupType(Enum):
     
     def __str__(self):
         if self == PickupType.UNAVAILABLE:
-            return 'Drop off only'
+            return 'No pick up'
         if self == PickupType.PHONE_REQUEST:
             return 'Pick up by phone request only'
         if self == PickupType.DRIVER_REQUEST:
@@ -38,7 +38,7 @@ class DropoffType(Enum):
     
     def __str__(self):
         if self == DropoffType.UNAVAILABLE:
-            return 'Pick up only'
+            return 'No drop off'
         if self == DropoffType.PHONE_REQUEST:
             return 'Drop off by phone request only'
         if self == DropoffType.DRIVER_REQUEST:
