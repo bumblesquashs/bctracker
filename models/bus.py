@@ -10,6 +10,12 @@ class Bus:
         'order'
     )
     
+    @classmethod
+    def find(cls, agency, number):
+        '''Returns a bus for the given agency with the given number'''
+        order = helpers.order.find(agency, number)
+        return cls(number, order)
+    
     @property
     def is_known(self):
         '''Checks if the bus number is known'''
@@ -30,11 +36,6 @@ class Bus:
         if order is None:
             return None
         return order.model
-    
-    @classmethod
-    def find(cls, agency, number):
-        order = helpers.order.find(agency, number)
-        return cls(number, order)
     
     def __init__(self, number, order):
         self.number = number
@@ -57,6 +58,7 @@ class Bus:
         return self.number < other.number
     
     def find_adornment(self):
+        '''Returns the adornment for this bus, if one exists'''
         if self.order is None:
             return None
         return helpers.adornment.find(self.order.agency, self)
