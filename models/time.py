@@ -31,9 +31,8 @@ class Time:
     def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current time'''
         if timezone is None:
-            now = datetime.now()
-        else:
-            now = datetime.now(pytz.timezone(timezone))
+            timezone = pytz.timezone('America/Vancouver')
+        now = datetime.now(timezone)
         hour = now.hour
         if hour < 4:
             hour += 24
@@ -82,9 +81,7 @@ class Time:
     @property
     def timezone_name(self):
         '''Returns the name of this time's timezone'''
-        if self.timezone is None:
-            return None
-        return datetime.now(pytz.timezone(self.timezone)).tzname()
+        return datetime.now(self.timezone).tzname()
     
     def __init__(self, hour, minute, second, timezone):
         self.hour = hour

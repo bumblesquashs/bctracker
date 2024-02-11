@@ -55,7 +55,7 @@ def update(system):
                 bus_number = -(index + 1)
             helpers.position.create(system, bus_number, vehicle)
         last_updated_date = Date.today()
-        last_updated_time = Time.now()
+        last_updated_time = Time.now(accurate_seconds=False)
         system.last_updated_date = Date.today(system.timezone)
         system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
     except Exception as e:
@@ -106,8 +106,6 @@ def get_last_updated(time_format):
     if date is None or time is None:
         return 'N/A'
     if date.is_today:
-        if time.timezone is None:
-            return f'at {time.format_web(time_format)}'
         return f'at {time.format_web(time_format)} {time.timezone_name}'
     return date.format_since()
 

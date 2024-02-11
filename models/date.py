@@ -26,9 +26,8 @@ class Date:
     def today(cls, timezone=None):
         '''Returns the current date'''
         if timezone is None:
-            now = datetime.now()
-        else:
-            now = datetime.now(pytz.timezone(timezone))
+            timezone = pytz.timezone('America/Vancouver')
+        now = datetime.now(timezone)
         date = now if now.hour >= 4 else now - timedelta(days=1)
         return cls(date.year, date.month, date.day, timezone)
     
@@ -55,9 +54,7 @@ class Date:
     @property
     def timezone_name(self):
         '''Returns the name of this date's timezone'''
-        if self.timezone is None:
-            return None
-        return datetime.now(pytz.timezone(self.timezone)).tzname()
+        return datetime.now(self.timezone).tzname()
     
     @property
     def weekday(self):
