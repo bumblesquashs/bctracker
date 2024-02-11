@@ -20,6 +20,8 @@ class Date:
     def parse(cls, date_string, timezone=None, format='%Y-%m-%d'):
         '''Returns a date parsed from a string in the given format'''
         date = datetime.strptime(date_string, format)
+        if timezone is None:
+            timezone = pytz.timezone('America/Vancouver')
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
