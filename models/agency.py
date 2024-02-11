@@ -8,7 +8,8 @@ class Agency:
         'gtfs_url',
         'realtime_url',
         'enabled',
-        'prefix_headsigns'
+        'prefix_headsigns',
+        'vehicle_name_length'
     )
     
     @property
@@ -21,13 +22,14 @@ class Agency:
         '''Checks if realtime is enabled for this agency'''
         return self.enabled and self.realtime_url
     
-    def __init__(self, id, name, gtfs_url=None, realtime_url=None, enabled=True, prefix_headsigns=False):
+    def __init__(self, id, name, gtfs_url=None, realtime_url=None, enabled=True, prefix_headsigns=False, vehicle_name_length=None):
         self.id = id
         self.name = name
         self.gtfs_url = gtfs_url
         self.realtime_url = realtime_url
         self.enabled = enabled
         self.prefix_headsigns = prefix_headsigns
+        self.vehicle_name_length = vehicle_name_length
     
     def __str__(self):
         return self.name

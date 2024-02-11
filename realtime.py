@@ -48,8 +48,9 @@ def update(system):
             vehicle = entity.vehicle
             try:
                 vehicle_id = vehicle.vehicle.id
-                if len(vehicle_id) > 4:
-                    vehicle_id = vehicle_id[-4:]
+                vehicle_name_length = system.agency.vehicle_name_length
+                if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
+                    vehicle_id = vehicle_id[-vehicle_name_length:]
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)

@@ -42,7 +42,9 @@ class Bus:
     
     def __str__(self):
         if self.is_known:
-            return f'{self.number:04d}'
+            if self.order is None or self.order.agency.vehicle_name_length is None:
+                return str(self.number)
+            return f'{self.number:0{self.order.agency.vehicle_name_length}d}'
         return 'Unknown Bus'
     
     def __hash__(self):
