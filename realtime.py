@@ -54,10 +54,10 @@ def update(system):
             except:
                 bus_number = -(index + 1)
             helpers.position.create(system, bus_number, vehicle)
-        last_updated_date = Date.today('America/Vancouver')
-        last_updated_time = Time.now('America/Vancouver', False)
+        last_updated_date = Date.today()
+        last_updated_time = Time.now()
         system.last_updated_date = Date.today(system.timezone)
-        system.last_updated_time = Time.now(system.timezone, False)
+        system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
     except Exception as e:
         print(f'Failed to update realtime for {system}: {e}')
 
