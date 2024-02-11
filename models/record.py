@@ -1,4 +1,5 @@
 
+import helpers.agency
 import helpers.system
 
 from models.bus import Bus
@@ -26,7 +27,8 @@ class Record:
     def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
         id = row[f'{prefix}_id']
-        bus = Bus(row[f'{prefix}_bus_number'])
+        agency = helpers.agency.find('bc-transit')
+        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         system = helpers.system.find(row[f'{prefix}_system_id'])
         date = Date.parse_db(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']

@@ -10,13 +10,19 @@ def load():
     global adornments
     adornments = {}
     with open(f'./static/adornments.json', 'r') as file:
-        for (bus_number, values) in json.load(file).items():
-            bus_number = int(bus_number)
-            adornments[bus_number] = Adornment(bus_number, **values)
+        for (agency_id, agency_values) in json.load(file).items():
+            agency_adornments = {}
+            for (bus_number, values) in agency_values.items():
+                bus_number = int(bus_number)
+                agency_adornments[bus_number] = Adornment(agency_id, bus_number, **values)
+            adornments[agency_id] = agency_adornments
 
-def find(bus):
+def find(agency, bus):
     '''Returns the adornments with the given bus number'''
+    agency_id = getattr(agency, 'id', agency)
     bus_number = getattr(bus, 'number', bus)
-    if bus_number in adornments:
-        return adornments[bus_number]
+    if agency_id in adornments:
+        agency_adornments = adornments[agency_id]
+        if bus_number in agency_adornments:
+            return agency_adornments[bus_number]
     return None
