@@ -15,6 +15,7 @@ class System:
         'name',
         'remote_id',
         'colour_routes',
+        'gtfs_loaded',
         'validation_errors',
         'last_updated_date',
         'last_updated_time',
@@ -30,7 +31,7 @@ class System:
     )
     
     @property
-    def is_loaded(self):
+    def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
         return self.last_updated_date is not None and self.last_updated_time is not None
     
@@ -77,6 +78,7 @@ class System:
         self.remote_id = remote_id
         self.colour_routes = colour_routes
         
+        self.gtfs_loaded = False
         self.validation_errors = 0
         self.last_updated_date = None
         self.last_updated_time = None

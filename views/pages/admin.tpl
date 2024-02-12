@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="content">
                                     <div class="container inline">
-                                        % for region_system in region_systems:
+                                        % for region_system in sorted(region_systems):
                                             <div class="section">
                                                 <div class="header">
                                                     <h4>{{ region_system }}</h4>

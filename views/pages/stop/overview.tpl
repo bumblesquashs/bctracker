@@ -170,7 +170,7 @@
             <div class="content">
                 % if len(departures) == 0:
                     <div class="placeholder">
-                        % if system.is_loaded:
+                        % if system.gtfs_loaded:
                             <h3>There are no departures from this stop today</h3>
                             <p>You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                         % else:

@@ -36,7 +36,7 @@
                                     <div class="flex-column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
-                                            % if region_system.is_loaded:
+                                            % if region_system.gtfs_loaded:
                                                 % if count == 1:
                                                     1 Stop
                                                 % else:
@@ -46,7 +46,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                % if region_system.is_loaded:
+                                % if region_system.gtfs_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
                                         % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
@@ -66,7 +66,7 @@
     % if len(stops) == 0 and search is None:
         <div class="placeholder">
             <h3>Stop information for {{ system }} is unavailable</h3>
-            % if system.is_loaded:
+            % if system.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>

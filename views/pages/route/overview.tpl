@@ -125,7 +125,7 @@
             <div class="content">
                 % if len(trips) == 0:
                     <div class="placeholder">
-                        % if system.is_loaded:
+                        % if system.gtfs_loaded:
                             <h3>There are no trips for this route today</h3>
                             <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
                         % else:

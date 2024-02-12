@@ -30,14 +30,14 @@
                             </td>
                         </tr>
                         <tr class="display-none"></tr>
-                        % for region_system in region_systems:
+                        % for region_system in sorted(region_systems):
                             % count = len(region_system.get_routes())
                             <tr>
                                 <td>
                                     <div class="flex-column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
-                                            % if region_system.is_loaded:
+                                            % if region_system.gtfs_loaded:
                                                 % if count == 1:
                                                     1 Route
                                                 % else:
@@ -47,7 +47,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                % if region_system.is_loaded:
+                                % if region_system.gtfs_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
                                         % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
@@ -67,7 +67,7 @@
     % if len(routes) == 0:
         <div class="placeholder">
             <h3>Route information for {{ system }} is unavailable</h3>
-            % if system.is_loaded:
+            % if system.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>
