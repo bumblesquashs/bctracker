@@ -28,13 +28,15 @@ class Record:
         id = row[f'{prefix}_id']
         bus = Bus(row[f'{prefix}_bus_number'])
         system = helpers.system.find(row[f'{prefix}_system_id'])
-        date = Date.parse_db(row[f'{prefix}_date'], system.timezone)
+        date = Date.parse(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']
         route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]
-        start_time = Time.parse(row[f'{prefix}_start_time'], system.timezone)
-        end_time = Time.parse(row[f'{prefix}_end_time'], system.timezone)
-        first_seen = Time.parse(row[f'{prefix}_first_seen'], system.timezone)
-        last_seen = Time.parse(row[f'{prefix}_last_seen'], system.timezone)
+        timezone = system.timezone
+        accurate_seconds = system.agency.accurate_seconds
+        start_time = Time.parse(row[f'{prefix}_start_time'], timezone, accurate_seconds)
+        end_time = Time.parse(row[f'{prefix}_end_time'], timezone, accurate_seconds)
+        first_seen = Time.parse(row[f'{prefix}_first_seen'], timezone, accurate_seconds)
+        last_seen = Time.parse(row[f'{prefix}_last_seen'], timezone, accurate_seconds)
         return cls(id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property

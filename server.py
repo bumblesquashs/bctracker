@@ -520,7 +520,7 @@ def route_schedule_date_page(system, route_number, date_string):
             title='Unknown Route',
             route_number=route_number
         )
-    date = Date.parse_db(date_string, None)
+    date = Date.parse(date_string, system.timezone)
     return page('route/date', system,
         title=str(route),
         enable_refresh=False,
@@ -538,7 +538,10 @@ def blocks_page(system):
 
 @endpoint('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
 def blocks_schedule_date_page(system, date_string):
-    date = Date.parse_db(date_string, None)
+    if system is None:
+        date = Date.parse(date_string)
+    else:
+        date = Date.parse(date_string, system.timezone)
     return page('blocks/date', system,
         title='Blocks',
         enable_reload=False,
@@ -769,7 +772,7 @@ def stop_schedule_date_page(system, stop_number, date_string):
             title='Unknown Stop',
             stop_number=stop_number
         )
-    date = Date.parse_db(date_string, None)
+    date = Date.parse(date_string, system.timezone)
     return page('stop/date', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
