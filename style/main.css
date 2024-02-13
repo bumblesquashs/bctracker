@@ -919,12 +919,12 @@ ul {
 }
 
 .radio-button-container .radio-button {
-    width: 18px;
-    height: 18px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
-    padding: 2px;
+    padding: 3px;
     flex-shrink: 0;
 }
 
