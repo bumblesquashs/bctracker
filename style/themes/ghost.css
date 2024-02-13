@@ -345,12 +345,12 @@ table.striped tr {
 }
 
 .button {
-    background-color: #365ccb;
+    background-color: #AAAAAA;
     color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #1440C2;
+    background-color: #888888;
 }
 
 .button.disabled {
@@ -479,6 +479,18 @@ table.striped tr {
 
 .positive {
     color: #1A671A;
+}
+
+.radio-button-container:hover {
+    background-color: #EEEEEE;
+}
+
+.radio-button-container .radio-button {
+    border-color: #AAAAAA;
+}
+
+.radio-button-container .radio-button.selected::before {
+    background-color: #AAAAAA;
 }
 
 .route-number {

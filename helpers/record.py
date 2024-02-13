@@ -1,4 +1,6 @@
 
+import helpers.agency
+
 from models.bus import Bus
 from models.date import Date
 from models.record import Record
@@ -112,7 +114,8 @@ def find_recorded_today(system, trips):
         },
         order_by='record.last_seen ASC'
     )
-    return {row['trip_id']: Bus(row['bus_number']) for row in rows}
+    agency = helpers.agency.find('bc-transit')
+    return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
 
 def find_scheduled_today(system, trips):
     '''Returns all bus numbers matching the given system and trips that are scheduled to run on the current date'''
@@ -146,4 +149,5 @@ def find_scheduled_today(system, trips):
         order_by='numbered_record.last_seen ASC',
         custom_args=args
     )
-    return {row['block_id']: Bus(row['bus_number']) for row in rows}
+    agency = helpers.agency.find('bc-transit')
+    return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}

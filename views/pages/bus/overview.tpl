@@ -188,7 +188,7 @@
                         </div>
                         <div class="section">
                             <div class="name">Length</div>
-                            <div class="value">{{ str(model.length).rstrip('0').rstrip('.') }} feet</div>
+                            <div class="value">{{ model.length }} feet</div>
                         </div>
                         <div class="section">
                             <div class="name">Fuel Type</div>

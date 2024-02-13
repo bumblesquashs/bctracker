@@ -317,7 +317,8 @@ def realtime_speed_page(system):
 
 @endpoint('/fleet')
 def fleet_page(system):
-    orders = helpers.order.find_all()
+    agency = helpers.agency.find('bc-transit')
+    orders = helpers.order.find_all(agency)
     overviews = helpers.overview.find_all()
     return page('fleet', system,
         title='Fleet',
@@ -328,7 +329,8 @@ def fleet_page(system):
 
 @endpoint('/bus/<bus_number:int>')
 def bus_overview_page(system, bus_number):
-    bus = Bus(bus_number)
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
@@ -348,7 +350,8 @@ def bus_overview_page(system, bus_number):
 
 @endpoint('/bus/<bus_number:int>/map')
 def bus_map_page(system, bus_number):
-    bus = Bus(bus_number)
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
@@ -366,7 +369,8 @@ def bus_map_page(system, bus_number):
 
 @endpoint('/bus/<bus_number:int>/history')
 def bus_history_page(system, bus_number):
-    bus = Bus(bus_number)
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
@@ -520,7 +524,7 @@ def route_schedule_date_page(system, route_number, date_string):
             title='Unknown Route',
             route_number=route_number
         )
-    date = Date.parse_db(date_string, None)
+    date = Date.parse(date_string, system.timezone)
     return page('route/date', system,
         title=str(route),
         enable_refresh=False,
@@ -538,7 +542,10 @@ def blocks_page(system):
 
 @endpoint('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
 def blocks_schedule_date_page(system, date_string):
-    date = Date.parse_db(date_string, None)
+    if system is None:
+        date = Date.parse(date_string)
+    else:
+        date = Date.parse(date_string, system.timezone)
     return page('blocks/date', system,
         title='Blocks',
         enable_reload=False,
@@ -769,7 +776,7 @@ def stop_schedule_date_page(system, stop_number, date_string):
             title='Unknown Stop',
             stop_number=stop_number
         )
-    date = Date.parse_db(date_string, None)
+    date = Date.parse(date_string, system.timezone)
     return page('stop/date', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
@@ -877,6 +884,7 @@ def api_shape_id(system, shape_id):
 
 @endpoint('/api/search', method='POST')
 def api_search(system):
+    agency = helpers.agency.find('bc-transit')
     query = request.forms.get('query', '')
     page = int(request.forms.get('page', 0))
     count = int(request.forms.get('count', 10))
@@ -888,7 +896,7 @@ def api_search(system):
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
             if include_buses:
-                matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system))
+                matches += helpers.order.find_matches(agency, query, helpers.overview.find_bus_numbers(system))
         if system is not None:
             if include_blocks:
                 matches += system.search_blocks(query)

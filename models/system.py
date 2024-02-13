@@ -1,4 +1,6 @@
 
+import pytz
+
 import helpers.departure
 import helpers.overview
 import helpers.position
@@ -14,11 +16,11 @@ class System:
         'region',
         'name',
         'remote_id',
+        'timezone',
         'colour_routes',
         'validation_errors',
         'last_updated_date',
         'last_updated_time',
-        'timezone',
         'blocks',
         'routes',
         'routes_by_number',
@@ -69,19 +71,18 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, agency, region, name, remote_id=None, colour_routes=False):
+    def __init__(self, id, agency, region, name, remote_id=None, timezone='America/Vancouver', colour_routes=False):
         self.id = id
         self.agency = agency
         self.region = region
         self.name = name
         self.remote_id = remote_id
+        self.timezone = pytz.timezone(timezone)
         self.colour_routes = colour_routes
         
         self.validation_errors = 0
         self.last_updated_date = None
         self.last_updated_time = None
-        
-        self.timezone = None
         
         self.blocks = {}
         self.routes = {}
@@ -183,8 +184,6 @@ class System:
         if date is None or time is None:
             return 'N/A'
         if date.is_today:
-            if time.timezone is None:
-                return f'at {time.format_web(time_format)}'
             return f'at {time.format_web(time_format)} {time.timezone_name}'
         return date.format_since()
     
@@ -202,6 +201,8 @@ class System:
     
     def update_cache(self):
         '''Loads and caches data from the database'''
+        if not self.gtfs_enabled:
+            return
         print(f'Updating cached data for {self}')
         try:
             departures = helpers.departure.find_all(self)

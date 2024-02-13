@@ -77,11 +77,14 @@
             },
             "creston-valley": {
                 "name": "Creston Valley",
-                "remote_id": 16
+                "remote_id": 16,
+                "timezone": "America/Creston"
             },
             "east-kootenay": {
                 "name": "East Kootenay",
-                "remote_id": 21
+                "remote_id": 21,
+                "timezone": "America/Edmonton",
+                "colour_routes": true
             },
             "kamloops": {
                 "name": "Kamloops",
@@ -127,11 +130,13 @@
             },
             "dawson-creek": {
                 "name": "Dawson Creek",
-                "remote_id": 27
+                "remote_id": 27,
+                "timezone": "America/Dawson_Creek"
             },
             "fort-st-john": {
                 "name": "Fort St. John",
-                "remote_id": 28
+                "remote_id": 28,
+                "timezone": "America/Dawson_Creek"
             },
             "kitimat": {
                 "name": "Kitimat-Stikine",

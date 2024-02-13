@@ -33,12 +33,6 @@ def load(system, force_download=False, update_db=False):
     
     print(f'Loading GTFS data for {system}')
     try:
-        agencies = read_csv(system, 'agency', lambda r: r)
-        if len(agencies) > 0:
-            agency = agencies[0]
-            if 'agency_timezone' in agency:
-                system.timezone = agency['agency_timezone']
-        
         exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
         service_exceptions = {}
         for exception in exceptions:
@@ -72,7 +66,7 @@ def load(system, force_download=False, update_db=False):
         print(f'Failed to load GTFS for {system}: {e}')
 
 def download(system):
-    '''Downloads the GTFS for the given system, then loads it into memory'''
+    '''Downloads the GTFS for the given system'''
     if not system.gtfs_enabled:
         return
     data_zip_path = f'data/gtfs/{system.id}.zip'
@@ -99,6 +93,9 @@ def download(system):
         print(f'Failed to download GTFS for {system}: {e}')
 
 def update_database(system):
+    '''Updates cached GTFS data for the given system'''
+    if not system.gtfs_enabled:
+        return
     print(f'Updating database with GTFS data for {system}')
     try:
         helpers.departure.delete_all(system)
