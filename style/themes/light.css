@@ -510,6 +510,18 @@ table.striped tr:nth-child(2n-1) {
     color: #1A671A;
 }
 
+.radio-button-container:hover {
+    background-color: #E6E6E6;
+}
+
+.radio-button-container .radio-button {
+    border-color: #365CCB;
+}
+
+.radio-button-container .radio-button.selected::before {
+    background-color: #365CCB;
+}
+
 .route-number {
     color: #FFFFFF;
     border-color: #FFFFFF;
