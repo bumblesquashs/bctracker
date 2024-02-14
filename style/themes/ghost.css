@@ -170,17 +170,9 @@ table.striped tr {
     border-color: #EEEEEE;
 }
 
-#search-bar {
+#search-header {
     background-color: #FFFFFF;
-    border-bottom-color: #EEEEEE;
-}
-
-#search-count {
-    color: #888888;
-}
-
-#search-filters {
-    color: #888888;
+    border-color: #EEEEEE;
 }
 
 #search-input {
@@ -189,6 +181,10 @@ table.striped tr {
 
 #search-input:focus {
     border-color: #DDDDDD;
+}
+
+#search-paging {
+    border-color: #EEEEEE;
 }
 
 #search-placeholder {
@@ -362,11 +358,11 @@ table.striped tr {
 }
 
 .button.inactive {
-    background-color: #ABABAB;
+    background-color: #DDDDDD;
 }
 
 .button.inactive:hover {
-    background-color: #666666;
+    background-color: #AAAAAA;
 }
 
 .button.survey-button {

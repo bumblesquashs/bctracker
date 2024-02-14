@@ -61,15 +61,11 @@ table.striped th {
     width: 275px;
     border-left-width: 1px;
     border-left-style: solid;
-    overflow: auto;
+    overflow: hidden;
 }
 
 #search-count {
     font-size: 11pt;
-}
-
-#search-filters {
-    padding: 10px;
 }
 
 #search-filters .button img {
@@ -77,12 +73,22 @@ table.striped th {
     height: 24px;
 }
 
+#search-header {
+    padding: 10px;
+}
+
 #search-paging {
     padding: 10px;
+    border-top-width: 1px;
+    border-top-style: solid;
 }
 
 #search-placeholder {
     padding: 10px;
+}
+
+#search-results {
+    overflow: auto;
 }
 
 #search-results .result {

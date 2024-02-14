@@ -310,30 +310,32 @@
             <div id="content">{{ !base }}</div>
         </div>
         <div id="search" class="display-none">
-            <div id="search-bar">
-                <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
-            </div>
-            % if system is not None:
-                <div id="search-filters">
-                    <div class="flex-1">Filters:</div>
-                    <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
-                        <img class="white" src="/img/white/bus.png" />
-                        <img class="black" src="/img/black/bus.png" />
-                    </div>
-                    <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
-                        <img class="white" src="/img/white/route.png" />
-                        <img class="black" src="/img/black/route.png" />
-                    </div>
-                    <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
-                        <img class="white" src="/img/white/stop.png" />
-                        <img class="black" src="/img/black/stop.png" />
-                    </div>
-                    <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
-                        <img class="white" src="/img/white/block.png" />
-                        <img class="black" src="/img/black/block.png" />
-                    </div>
+            <div id="search-header">
+                <div id="search-bar">
+                    <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                 </div>
-            % end
+                % if system is not None:
+                    <div id="search-filters">
+                        <div class="flex-1">Filters:</div>
+                        <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
+                            <img class="white" src="/img/white/bus.png" />
+                            <img class="black" src="/img/black/bus.png" />
+                        </div>
+                        <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
+                            <img class="white" src="/img/white/route.png" />
+                            <img class="black" src="/img/black/route.png" />
+                        </div>
+                        <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
+                            <img class="white" src="/img/white/stop.png" />
+                            <img class="black" src="/img/black/stop.png" />
+                        </div>
+                        <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
+                            <img class="white" src="/img/white/block.png" />
+                            <img class="black" src="/img/black/block.png" />
+                        </div>
+                    </div>
+                % end
+            </div>
             <div id="search-placeholder">
                 % if system is None:
                     Search for buses in all systems
@@ -341,15 +343,15 @@
                     Search for buses, routes, stops, and blocks in {{ system }}
                 % end
             </div>
+            <div id="search-results" class="display-none">
+                
+            </div>
             <div id="search-paging" class="display-none">
                 <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
                 <div id="search-count" class="flex-1">
                     
                 </div>
                 <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
-            </div>
-            <div id="search-results" class="display-none">
-                
             </div>
         </div>
     </body>
@@ -409,6 +411,8 @@
             request.onload = function() {
                 const results = request.response.results;
                 const total = request.response.total;
+                
+                console.log(request.response);
                 
                 updateSearchView(results, total, total === 0 ? "No Results" : "Results");
                 
@@ -475,7 +479,7 @@
         loadingResults = false;
         selectedResultIndex = 0;
         
-        if (total == 0) {
+        if (total === 0) {
             placeholderElement.classList.remove("display-none");
             placeholderElement.innerHTML = message;
             pagingElement.classList.add("display-none");

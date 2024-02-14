@@ -166,17 +166,10 @@ table.striped tr:nth-child(2n-1) {
     border-color: #69BB65;
 }
 
-#search-bar {
+#search-header {
     background-color: #D70000;
-    border-bottom-color: #69BB65;
-}
-
-#search-count {
-    color: #666666;
-}
-
-#search-filters {
-    color: #666666;
+    color: #FFFFFF;
+    border-color: #69BB65;
 }
 
 #search-input {
@@ -185,6 +178,11 @@ table.striped tr:nth-child(2n-1) {
 
 #search-input:focus {
     border-color: #7A0000;
+}
+
+#search-paging {
+    background-color: #FFFFFF;
+    border-color: #69BB65;
 }
 
 #search-placeholder {
@@ -342,12 +340,12 @@ table.striped tr:nth-child(2n-1) {
 }
 
 .button {
-    background-color: #D70000;
+    background-color: #AB0000;
     color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #AB0000;
+    background-color: #7A0000;
 }
 
 .button.disabled {

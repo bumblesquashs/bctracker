@@ -284,15 +284,6 @@ ul {
     font-family: Helvetica, sans-serif;
 }
 
-#search-bar {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-}
-
 #search-count {
     text-align: center;
 }
@@ -307,6 +298,14 @@ ul {
 #search-filters .button {
     border-radius: 50%;
     padding: 4px;
+}
+
+#search-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 
 #search-input {
@@ -328,6 +327,7 @@ ul {
     display: flex;
     flex-direction: column;
     padding-bottom: 10px;
+    flex: 1;
 }
 
 #search-results .result {

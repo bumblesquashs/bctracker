@@ -35,12 +35,16 @@ body.full-map .page-header {
 
 input[type="text"] {
     border-color: #565656;
-    background-color: #2F2F2F;
+    background-color: #393939;
     color: #FFFFFF;
 }
 
 input[type="text"]:focus {
     border-color: #053305;
+}
+
+input[type="text"]::placeholder {
+    color: #ABABAB;
 }
 
 iframe {
@@ -190,17 +194,9 @@ table.striped tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
-#search-bar {
+#search-header {
     background-color: #276227;
-    border-bottom-color: #565656;
-}
-
-#search-count {
-    color: #ABABAB;
-}
-
-#search-filters {
-    color: #ABABAB;
+    border-color: #565656;
 }
 
 #search-input {
@@ -209,6 +205,11 @@ table.striped tr:nth-child(2n-1) {
 
 #search-input:focus {
     border-color: #053305;
+}
+
+#search-paging {
+    background-color: #2F2F2F;
+    border-color: #565656;
 }
 
 #search-placeholder {

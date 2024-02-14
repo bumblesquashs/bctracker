@@ -127,10 +127,8 @@ table {
 
 #search {
     order: 4;
-}
-
-#search-bar {
-    padding: 10px 20px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 
 #search-bar input[type="text"] {
@@ -139,7 +137,6 @@ table {
 
 #search-filters {
     font-size: 14pt;
-    padding: 10px 20px;
 }
 
 #search-filters .button img {
@@ -147,13 +144,26 @@ table {
     height: 32px;
 }
 
+#search-header {
+    padding: 10px 20px;
+    order: 1;
+}
+
 #search-paging {
     padding: 10px 20px;
+    order: 2;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 
 #search-placeholder {
     font-size: 15pt;
     padding: 20px;
+    order: 3;
+}
+
+#search-results {
+    order: 4;
 }
 
 #search-results .result {
