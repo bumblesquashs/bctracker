@@ -121,7 +121,7 @@ class TestTimezoneName:
 class TestWeekday:
     def test_default(self):
         date = Date.today()
-        now = datetime.now()
+        now = datetime.now(timezone)
         weekday = Weekday(now.weekday())
         
         assert date.weekday == weekday
@@ -404,7 +404,7 @@ class TestFormatLong:
         assert date.format_long() == 'January 1, 2000'
     
     def test_current_year(self):
-        now = datetime.now()
+        now = datetime.now(timezone)
         date = Date(now.year, 1, 1, timezone)
         
         assert date.format_long() == 'January 1'
@@ -416,7 +416,7 @@ class TestFormatShort:
         assert date.format_short() == 'Jan 1, 2000'
     
     def test_current_year(self):
-        now = datetime.now()
+        now = datetime.now(timezone)
         date = Date(now.year, 1, 1, timezone)
         
         assert date.format_short() == 'Jan 1'
