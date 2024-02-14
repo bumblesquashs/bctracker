@@ -77,7 +77,7 @@ class Date:
         return hash((self.year, self.month, self.day))
     
     def __eq__(self, other):
-        return self.year == other.year and self.month == other.month and self.day == other.day
+        return self.year == other.year and self.month == other.month and self.day == other.day and self.timezone == other.timezone
     
     def __lt__(self, other):
         if self.year != other.year:

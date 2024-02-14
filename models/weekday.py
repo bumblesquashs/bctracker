@@ -45,8 +45,10 @@ class Weekday(IntEnum):
     
     @property
     def is_workday(self):
+        '''Checks if this weekday is a workday'''
         return self in {Weekday.MON, Weekday.TUE, Weekday.WED, Weekday.THU, Weekday.FRI}
     
     @property
     def is_weekend(self):
+        '''Checks if this weekday is a weekend'''
         return self in {Weekday.SAT, Weekday.SUN}
