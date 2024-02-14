@@ -10,11 +10,6 @@
         <div class="section">
             <div class="header">
                 <h2>Theme</h2>
-                % if theme is None:
-                    <h3>Current Theme: BC Transit</h3>
-                % else:
-                    <h3>Current Theme: {{ theme }}</h3>
-                % end
             </div>
             <div class="content flex-column flex-gap-10">
                 <p>
@@ -29,10 +24,24 @@
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 
-                <div class="button-container">
-                    <a class="button" href="?theme=automatic">BC Transit (Auto)</a>
+                <div class="flex-column">
+                    <div class="radio-button-container" onclick="setTheme('automatic')">
+                        <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
+                        <div class="label">BC Transit (Auto)</div>
+                    </div>
+                    
                     % for visible_theme in visible_themes:
-                        <a class="button" href="?theme={{ visible_theme.id }}">{{ visible_theme }}</a>
+                        <div class="radio-button-container" onclick="setTheme('{{ visible_theme.id }}')">
+                            <div class="radio-button {{ 'selected' if theme is not None and visible_theme == theme else '' }}"></div>
+                            <div class="label">{{ visible_theme }}</div>
+                        </div>
+                    % end
+                    
+                    % if theme is not None and not theme.visible:
+                        <div class="radio-button-container" onclick="setTheme('{{ theme.id }}')">
+                            <div class="radio-button selected"></div>
+                            <div class="label">{{ theme }}</div>
+                        </div>
                     % end
                 </div>
                 
@@ -53,11 +62,6 @@
         <div class="section">
             <div class="header">
                 <h2>Time Format</h2>
-                % if time_format is None or time_format == '24hr':
-                    <h3>Current Format: 30hr</h3>
-                % else:
-                    <h3>Current Format: {{ time_format }}</h3>
-                % end
             </div>
             <div class="content flex-column flex-gap-10">
                 <p>
@@ -66,13 +70,21 @@
                 <p>
                     Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.
                 </p>
-                <ul>
-                    <li>The 12hr format uses xm instead of am, so 1am is shown as 1xm</li>
-                    <li>The 30hr format continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</li>
-                </ul>
-                <div class="button-container">
-                    <a class="button" href="?time_format=12hr">12hr</a>
-                    <a class="button" href="?time_format=30hr">30hr</a>
+                <div class="flex-column">
+                    <div class="radio-button-container" onclick="setTimeFormat('12hr')">
+                        <div class="radio-button {{ 'selected' if time_format == '12hr' else '' }}"></div>
+                        <div class="label flex-column">
+                            <p>12hr</p>
+                            <p class="smaller-font lighter-text">Uses xm instead of am, so 1am is shown as 1xm</p>
+                        </div>
+                    </div>
+                    <div class="radio-button-container" onclick="setTimeFormat('30hr')">
+                        <div class="radio-button {{ 'selected' if time_format is None or time_format == '24hr' or time_format == '30hr' else '' }}"></div>
+                        <div class="label flex-column">
+                            <p>30hr</p>
+                            <p class="smaller-font lighter-text">Continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,27 +93,44 @@
         <div class="section">
             <div class="header">
                 <h2>Map Bus Icon Style</h2>
-                % if bus_marker_style == 'route':
-                    <h3>Current style: Route Number</h3>
-                % elif bus_marker_style == 'mini':
-                    <h3>Current style: Mini</h3>
-                % elif bus_marker_style == 'adherence':
-                    <h3>Current style: Schedule Adherence</h3>
-                % else:
-                    <h3>Current style: Default</h3>
-                % end
             </div>
             <div class="content flex-column flex-gap-10">
                 <p>
                     Choose a style for bus icons shown on the map screen.
                 </p>
-                <div class="button-container">
-                    <a class="button" href="?bus_marker_style=default">Default</a>
-                    <a class="button" href="?bus_marker_style=mini">Mini</a>
-                    <a class="button" href="?bus_marker_style=adherence">Schedule Adherence</a>
-                    <a class="button" href="?bus_marker_style=route">Route Number</a>
+                <div class="flex-column">
+                    <div class="radio-button-container" onclick="setBusMarkerStyle('default')">
+                        <div class="radio-button {{ 'selected' if bus_marker_style is None or bus_marker_style == 'default' else '' }}"></div>
+                        <div class="label">Default</div>
+                    </div>
+                    <div class="radio-button-container" onclick="setBusMarkerStyle('mini')">
+                        <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
+                        <div class="label">Mini</div>
+                    </div>
+                    <div class="radio-button-container" onclick="setBusMarkerStyle('adherence')">
+                        <div class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
+                        <div class="label">Schedule Adherence</div>
+                    </div>
+                    <div class="radio-button-container" onclick="setBusMarkerStyle('route')">
+                        <div class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
+                        <div class="label">Route Number</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function setTheme(themeID) {
+        window.location = "?theme=" + themeID
+    }
+    
+    function setTimeFormat(format) {
+        window.location = "?time_format=" + format
+    }
+    
+    function setBusMarkerStyle(style) {
+        window.location = "?bus_marker_style=" + style
+    }
+</script>

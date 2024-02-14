@@ -4,6 +4,7 @@
         "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
         "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
         "prefix_headsigns": true,
-        "accurate_seconds": false
+        "accurate_seconds": false,
+        "vehicle_name_length": 4
     }
 }

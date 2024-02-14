@@ -588,6 +588,18 @@ table.striped tr {
     color: #1A671A;
 }
 
+.radio-button-container:hover {
+    background-color: #EEEEEE;
+}
+
+.radio-button-container .radio-button {
+    border-color: #222222;
+}
+
+.radio-button-container .radio-button.selected::before {
+    background-color: #222222;
+}
+
 .route-number {
     color: #FFFFFF;
     border-color: #FFFFFF;
