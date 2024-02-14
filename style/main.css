@@ -284,6 +284,10 @@ ul {
     font-family: Helvetica, sans-serif;
 }
 
+#search:focus {
+    outline-width: 0px;
+}
+
 #search-count {
     text-align: center;
 }

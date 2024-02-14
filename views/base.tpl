@@ -309,7 +309,7 @@
             </div>
             <div id="content">{{ !base }}</div>
         </div>
-        <div id="search" class="display-none">
+        <div id="search" class="display-none" tabindex="0">
             <div id="search-header">
                 <div id="search-bar">
                     <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
@@ -396,8 +396,6 @@
         const placeholderElement = document.getElementById("search-placeholder");
         const query = inputElement.value;
         
-        inputElement.focus();
-        
         if (query === undefined || query === null || query === "") {
             updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
         } else {
@@ -411,8 +409,6 @@
             request.onload = function() {
                 const results = request.response.results;
                 const total = request.response.total;
-                
-                console.log(request.response);
                 
                 updateSearchView(results, total, total === 0 ? "No Results" : "Results");
                 
@@ -538,30 +534,38 @@
     }
     
     function updateKeyboardPressHandlers(total) {
-        const inputElement = document.getElementById("search-input");
+        const searchElement = document.getElementById("search");
         if (total == 0) {
-            inputElement.onkeyup = function() {};
-            inputElement.onkeydown = function() {};
+            searchElement.onkeyup = function() {};
+            searchElement.onkeydown = function() {};
         } else {
-            inputElement.onkeyup = function(event) {
+            searchElement.onkeyup = function(event) {
                 if (event.keyCode === 13) { // ENTER
                     event.preventDefault();
-                    handleResultsEnter();
-                    return;
+                    searchResultsEnter();
+                }
+                if (event.keyCode === 37) { // ARROW KEY LEFT
+                    event.preventDefault();
+                    searchPreviousPage();
                 }
                 if (event.keyCode === 38) { // ARROW KEY UP
                     event.preventDefault();
-                    handleResultsUp();
-                    return;
+                    searchResultsUp();
+                }
+                if (event.keyCode === 39) { // ARROW KEY RIGHT
+                    event.preventDefault();
+                    if ((searchPage + 1) * resultsPerPage < total) {
+                        searchNextPage();
+                    }
                 }
                 if (event.keyCode === 40) { // ARROW KEY DOWN
                     event.preventDefault();
-                    handleResultsDown();
+                    searchResultsDown();
                 }
             };
-            inputElement.onkeydown = function(event) {
+            searchElement.onkeydown = function(event) {
                 // Prevent up/down presses from moving cursor
-                if (event.keyCode === 38 || event.keyCode === 40) {
+                if ([37, 38, 39, 40].includes(event.keyCode)) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
@@ -569,7 +573,7 @@
         }
     }
     
-    function handleResultsEnter() {
+    function searchResultsEnter() {
         if (loadingResults) {
             enterPending = true;
         } else if (selectedResultIndex !== null) {
@@ -577,7 +581,7 @@
         }
     }
     
-    function handleResultsDown() {
+    function searchResultsDown() {
         if (searchResults.length < 2) {
             return; // Nothing to change for 0 or 1 results
         }
@@ -587,7 +591,7 @@
         setSelectedEntry(selectedResultIndex + 1);
     }
     
-    function handleResultsUp() {
+    function searchResultsUp() {
         if (searchResults.length < 2) {
             return; // Nothing to change for 0 or 1 results
         }
