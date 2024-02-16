@@ -903,6 +903,39 @@ ul {
     font-weight: bold;
 }
 
+.radio-button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    cursor: pointer;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    align-self: flex-start;
+}
+
+.radio-button-container .label {
+    user-select: none;
+}
+
+.radio-button-container .radio-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-style: solid;
+    padding: 3px;
+    flex-shrink: 0;
+}
+
+.radio-button-container .radio-button.selected::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
 .route-indicator {
     display: flex;
     flex-direction: row;

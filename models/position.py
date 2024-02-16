@@ -1,4 +1,5 @@
 
+import helpers.agency
 import helpers.departure
 import helpers.system
 
@@ -26,8 +27,9 @@ class Position:
     @classmethod
     def from_db(cls, row, prefix='position'):
         '''Returns a position initialized from the given database row'''
+        agency = helpers.agency.find('bc-transit')
         system = helpers.system.find(row[f'{prefix}_system_id'])
-        bus = Bus(row[f'{prefix}_bus_number'])
+        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
         stop_id = row[f'{prefix}_stop_id']
         block_id = row[f'{prefix}_block_id']
@@ -136,7 +138,7 @@ class Position:
                 data['bus_icon'] = 'ghost'
         if self.lon == 0 and self.lat == 0:
             data['bus_icon'] = 'fish'
-        adornment = self.bus.adornment
+        adornment = self.bus.find_adornment()
         if adornment is not None and adornment.enabled:
             data['adornment'] = str(adornment)
         trip = self.trip

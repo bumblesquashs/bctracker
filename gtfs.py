@@ -33,12 +33,6 @@ def load(system, force_download=False, update_db=False):
     
     print(f'Loading GTFS data for {system}')
     try:
-        agencies = read_csv(system, 'agency', lambda r: r)
-        if len(agencies) > 0:
-            agency = agencies[0]
-            if 'agency_timezone' in agency:
-                system.timezone = agency['agency_timezone']
-        
         exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
         service_exceptions = {}
         for exception in exceptions:

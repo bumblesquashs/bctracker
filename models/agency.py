@@ -9,6 +9,8 @@ class Agency:
         'realtime_url',
         'enabled',
         'prefix_headsigns',
+        'accurate_seconds',
+        'vehicle_name_length',
         'distance_scale'
     )
     
@@ -22,13 +24,15 @@ class Agency:
         '''Checks if realtime is enabled for this agency'''
         return self.enabled and self.realtime_url
     
-    def __init__(self, id, name, gtfs_url=None, realtime_url=None, enabled=True, prefix_headsigns=False, distance_scale=1):
+    def __init__(self, id, name, gtfs_url=None, realtime_url=None, enabled=True, prefix_headsigns=False, accurate_seconds=True, vehicle_name_length=None, distance_scale=1):
         self.id = id
         self.name = name
         self.gtfs_url = gtfs_url
         self.realtime_url = realtime_url
         self.enabled = enabled
         self.prefix_headsigns = prefix_headsigns
+        self.accurate_seconds = accurate_seconds
+        self.vehicle_name_length = vehicle_name_length
         self.distance_scale = distance_scale
     
     def __str__(self):
