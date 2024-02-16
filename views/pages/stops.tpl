@@ -29,7 +29,7 @@
                             </td>
                         </tr>
                         <tr class="display-none"></tr>
-                        % for region_system in region_systems:
+                        % for region_system in sorted(region_systems):
                             % count = len(region_system.get_stops())
                             <tr>
                                 <td>

@@ -24,16 +24,16 @@ class Agency:
         '''Checks if realtime is enabled for this agency'''
         return self.enabled and self.realtime_url
     
-    def __init__(self, id, name, gtfs_url=None, realtime_url=None, enabled=True, prefix_headsigns=False, accurate_seconds=True, vehicle_name_length=None, distance_scale=1):
+    def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
-        self.gtfs_url = gtfs_url
-        self.realtime_url = realtime_url
-        self.enabled = enabled
-        self.prefix_headsigns = prefix_headsigns
-        self.accurate_seconds = accurate_seconds
-        self.vehicle_name_length = vehicle_name_length
-        self.distance_scale = distance_scale
+        self.gtfs_url = kwargs.get('gtfs_url')
+        self.realtime_url = kwargs.get('realtime_url')
+        self.enabled = kwargs.get('enabled', True)
+        self.prefix_headsigns = kwargs.get('prefix_headsigns', False)
+        self.accurate_seconds = kwargs.get('accurate_seconds', True)
+        self.vehicle_name_length = kwargs.get('vehicle_name_length')
+        self.distance_scale = kwargs.get('distance_scale', 1)
     
     def __str__(self):
         return self.name

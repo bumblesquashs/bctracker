@@ -8,10 +8,10 @@ class Theme:
         'visible'
     )
     
-    def __init__(self, id, name, visible=True):
+    def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
-        self.visible = visible
+        self.visible = kwargs.get('visible', True)
     
     def __str__(self):
         return self.name

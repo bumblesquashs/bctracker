@@ -28,8 +28,8 @@ class Model:
     __slots__ = (
         'id',
         'type',
-        'manufacturer',
         'name',
+        'manufacturer',
         'length',
         'fuel'
     )
@@ -37,6 +37,8 @@ class Model:
     @property
     def display_manufacturer(self):
         '''Formats the manufacturer for web display'''
+        if self.manufacturer is None:
+            return None
         return self.manufacturer.replace('/', '/<wbr />')
     
     @property
@@ -44,15 +46,17 @@ class Model:
         '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
     
-    def __init__(self, id, type, manufacturer, name, length, fuel):
+    def __init__(self, id, type, name, **kwargs):
         self.id = id
         self.type = type
-        self.manufacturer = manufacturer
         self.name = name
-        self.length = length
-        self.fuel = fuel
+        self.manufacturer = kwargs.get('manufacturer')
+        self.length = kwargs.get('length')
+        self.fuel = kwargs.get('fuel')
     
     def __str__(self):
+        if self.manufacturer is None:
+            return self.display_name
         return f'{self.display_manufacturer} {self.display_name}'
     
     def __hash__(self):

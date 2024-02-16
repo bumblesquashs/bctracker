@@ -72,14 +72,14 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, agency, region, name, remote_id=None, timezone='America/Vancouver', colour_routes=False):
+    def __init__(self, id, agency, region, name, **kwargs):
         self.id = id
         self.agency = agency
         self.region = region
         self.name = name
-        self.remote_id = remote_id
-        self.timezone = pytz.timezone(timezone)
-        self.colour_routes = colour_routes
+        self.remote_id = kwargs.get('remote_id')
+        self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
+        self.colour_routes = kwargs.get('colour_routes', False)
         
         self.gtfs_loaded = False
         self.validation_errors = 0

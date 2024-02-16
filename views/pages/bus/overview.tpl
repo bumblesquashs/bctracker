@@ -186,14 +186,18 @@
                             <div class="name">Vehicle Type</div>
                             <div class="value">{{ model.type }}</div>
                         </div>
-                        <div class="section">
-                            <div class="name">Length</div>
-                            <div class="value">{{ model.length }} feet</div>
-                        </div>
-                        <div class="section">
-                            <div class="name">Fuel Type</div>
-                            <div class="value">{{ model.fuel }}</div>
-                        </div>
+                        % if model.length is not None:
+                            <div class="section">
+                                <div class="name">Length</div>
+                                <div class="value">{{ model.length }} feet</div>
+                            </div>
+                        % end
+                        % if model.fuel is not None:
+                            <div class="section">
+                                <div class="name">Fuel Type</div>
+                                <div class="value">{{ model.fuel }}</div>
+                            </div>
+                        % end
                     </div>
                 </div>
             </div>
