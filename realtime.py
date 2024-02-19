@@ -121,9 +121,8 @@ def validate(system):
         if position.trip is None:
             trip_id_sections = trip_id.split(':')
             if len(trip_id_sections) == 3:
-                trip_block_section = trip_id_sections[2]
-                other_trip_block_sections = {t.id.split(':')[2] for t in system.get_trips() if len(t.id.split(':')) == 3}
-                if trip_block_section not in other_trip_block_sections:
+                block_id = trip_id_sections[2]
+                if system.get_block(block_id) is None:
                     return False
             else:
                 return False
