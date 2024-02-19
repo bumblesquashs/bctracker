@@ -44,3 +44,19 @@ class Agency:
     
     def __lt__(self, other):
         return str(self) < str(other)
+    
+    def get_gtfs_url(self, system):
+        if self.gtfs_enabled:
+            url = self.gtfs_url
+            if system.remote_id:
+                url = url.replace('$REMOTE_ID', str(system.remote_id))
+            return url
+        return None
+    
+    def get_realtime_url(self, system):
+        if self.realtime_enabled:
+            url = self.realtime_url
+            if system.remote_id:
+                url = url.replace('$REMOTE_ID', str(system.remote_id))
+            return url
+        return None

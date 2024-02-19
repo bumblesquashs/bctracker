@@ -12,7 +12,6 @@ class System:
     
     __slots__ = (
         'id',
-        'agency',
         'region',
         'name',
         'remote_id',
@@ -37,11 +36,6 @@ class System:
         return self.last_updated_date is not None and self.last_updated_time is not None
     
     @property
-    def gtfs_enabled(self):
-        '''Checks if GTFS data is enabled for this system'''
-        return self.agency.gtfs_enabled
-    
-    @property
     def gtfs_url(self):
         '''Returns the URL to load GTFS for this system'''
         if self.gtfs_enabled:
@@ -50,11 +44,6 @@ class System:
                 url = url.replace('$REMOTE_ID', str(self.remote_id))
             return url
         return None
-    
-    @property
-    def realtime_enabled(self):
-        '''Checks if realtime data is enabled for this system'''
-        return self.agency.realtime_enabled
     
     @property
     def realtime_url(self):
@@ -71,9 +60,8 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, agency, region, name, remote_id=None, timezone='America/Vancouver', colour_routes=False):
+    def __init__(self, id, region, name, remote_id=None, timezone='America/Vancouver', colour_routes=False):
         self.id = id
-        self.agency = agency
         self.region = region
         self.name = name
         self.remote_id = remote_id

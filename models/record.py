@@ -11,9 +11,10 @@ class Record:
     
     __slots__ = (
         'id',
+        'system',
+        'agency',
         'bus',
         'date',
-        'system',
         'block_id',
         'route_numbers',
         'start_time',
@@ -27,9 +28,9 @@ class Record:
     def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
         id = row[f'{prefix}_id']
-        agency = helpers.agency.find('bc-transit')
-        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         system = helpers.system.find(row[f'{prefix}_system_id'])
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
+        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         date = Date.parse(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']
         route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]
@@ -39,7 +40,7 @@ class Record:
         end_time = Time.parse(row[f'{prefix}_end_time'], timezone, accurate_seconds)
         first_seen = Time.parse(row[f'{prefix}_first_seen'], timezone, accurate_seconds)
         last_seen = Time.parse(row[f'{prefix}_last_seen'], timezone, accurate_seconds)
-        return cls(id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
+        return cls(id, system, agency, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property
     def total_minutes(self):
@@ -71,11 +72,12 @@ class Record:
             return [self.system.get_route(number=n) for n in self.route_numbers]
         return self.route_numbers
     
-    def __init__(self, id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
+    def __init__(self, id, system, agency, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
         self.id = id
+        self.system = system
+        self.agency = agency
         self.bus = bus
         self.date = date
-        self.system = system
         self.block_id = block_id
         self.route_numbers = route_numbers
         self.start_time = start_time

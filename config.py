@@ -4,9 +4,13 @@ cron_id = None
 admin_key = None
 
 # Domain config
-all_systems_domain = None
+all_transit_domain = None
+agency_domain = None
+agency_domain_path = None
 system_domain = None
 system_domain_path = None
+system_agency_domain = None
+system_agency_domain_path = None
 cookie_domain = None
 
 # Key config
@@ -23,10 +27,14 @@ def setup(config):
     cron_id = config.get('cron_id', 'bctracker-muncher')
     admin_key = config.get('admin_key')
     
-    global all_systems_domain, system_domain, system_domain_path, cookie_domain
-    all_systems_domain = config['all_systems_domain']
+    global all_transit_domain, agency_domain, agency_domain_path, system_domain, system_domain_path, system_agency_domain, system_agency_domain_path, cookie_domain
+    all_transit_domain = config['all_transit_domain']
+    agency_domain = config['agency_domain']
+    agency_domain_path = config['agency_domain_path']
     system_domain = config['system_domain']
     system_domain_path = config['system_domain_path']
+    system_agency_domain = config['system_agency_domain']
+    system_agency_domain_path = config['system_agency_domain_path']
     cookie_domain = config.get('cookie_domain')
     
     global analytics_key

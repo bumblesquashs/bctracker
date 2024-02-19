@@ -1,6 +1,7 @@
 
 from math import sqrt
 
+import helpers.agency
 import helpers.departure
 import helpers.route
 import helpers.sheet
@@ -14,6 +15,7 @@ class Stop:
     
     __slots__ = (
         'system',
+        'agency',
         'id',
         'number',
         'name',
@@ -28,12 +30,13 @@ class Stop:
     @classmethod
     def from_db(cls, row, prefix='stop'):
         system = helpers.system.find(row[f'{prefix}_system_id'])
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
-        return cls(system, id, number, name, lat, lon)
+        return cls(system, agency, id, number, name, lat, lon)
     
     @property
     def nearby_stops(self):
@@ -56,8 +59,9 @@ class Stop:
         self.setup()
         return self._routes
     
-    def __init__(self, system, id, number, name, lat, lon):
+    def __init__(self, system, agency, id, number, name, lat, lon):
         self.system = system
+        self.agency = agency
         self.id = id
         self.number = number
         self.name = name
@@ -88,7 +92,7 @@ class Stop:
             return
         self.is_setup = True
         if departures is None:
-            departures = helpers.departure.find_all(self.system, stop=self)
+            departures = helpers.departure.find_all(self.system, self.agency, stop=self)
         services = {d.trip.service for d in departures if d.trip is not None}
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
@@ -131,7 +135,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = helpers.departure.find_all(self.system, stop=self)
+        departures = helpers.departure.find_all(self.system, self.agency, stop=self)
         if service_group is None:
             if date is None:
                 return sorted(departures)
@@ -140,4 +144,4 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return helpers.departure.find_adjacent(self.system, self)
+        return helpers.departure.find_adjacent(self.system, self.agency, self)

@@ -21,53 +21,53 @@ from models.service import Service, ServiceException
 
 import config
 
-def load(system, force_download=False, update_db=False):
+def load(system, agency, force_download=False, update_db=False):
     '''Loads the GTFS for the given system into memory'''
-    if not system.gtfs_enabled:
+    if not agency.gtfs_enabled:
         return
     if not path.exists(f'data/gtfs/{system.id}') or force_download:
-        download(system)
-        update_database(system)
+        download(system, agency)
+        update_database(system, agency)
     elif update_db:
-        update_database(system)
+        update_database(system, agency)
     
     print(f'Loading GTFS data for {system}')
     try:
-        exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
+        exceptions = read_csv(system, agency, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
         service_exceptions = {}
         for exception in exceptions:
             service_exceptions.setdefault(exception.service_id, []).append(exception)
         
         try:
-            services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
+            services = read_csv(system, agency, 'calendar', lambda r: Service.from_csv(r, system, agency, service_exceptions))
         except:
-            services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
+            services = [Service.combine(system, agency, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
         system.services = {s.id: s for s in services}
-        system.sheets = helpers.sheet.combine(system, services)
+        system.sheets = helpers.sheet.combine(system, agency, services)
         
-        stops = helpers.stop.find_all(system.id)
+        stops = helpers.stop.find_all(system, agency)
         system.stops = {s.id: s for s in stops}
         system.stops_by_number = {s.number: s for s in stops}
         
-        trips = helpers.trip.find_all(system.id)
+        trips = helpers.trip.find_all(system, agency)
         system.trips = {t.id: t for t in trips}
         
         block_trips = {}
         for trip in trips:
             block_trips.setdefault(trip.block_id, []).append(trip)
         
-        routes = helpers.route.find_all(system.id)
+        routes = helpers.route.find_all(system, agency)
         system.routes = {r.id: r for r in routes}
         system.routes_by_number = {r.number: r for r in routes}
         
-        system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
+        system.blocks = {id: Block(system, agency, id, trips) for id, trips in block_trips.items()}
     except Exception as e:
         print(f'Failed to load GTFS for {system}: {e}')
 
-def download(system):
+def download(system, agency):
     '''Downloads the GTFS for the given system'''
-    if not system.gtfs_enabled:
+    if not agency.gtfs_enabled:
         return
     data_zip_path = f'data/gtfs/{system.id}.zip'
     data_path = f'data/gtfs/{system.id}'
@@ -81,7 +81,7 @@ def download(system):
                 rename(data_zip_path, archives_path)
             else:
                 remove(data_zip_path)
-        with requests.get(system.gtfs_url, stream=True) as r:
+        with requests.get(agency.get_gtfs_url(system), stream=True) as r:
             with open(data_zip_path, 'wb') as f:
                 for chunk in r.iter_content(128):
                     f.write(chunk)
@@ -92,44 +92,44 @@ def download(system):
     except Exception as e:
         print(f'Failed to download GTFS for {system}: {e}')
 
-def update_database(system):
+def update_database(system, agency):
     '''Updates cached GTFS data for the given system'''
-    if not system.gtfs_enabled:
+    if not agency.gtfs_enabled:
         return
     print(f'Updating database with GTFS data for {system}')
     try:
-        helpers.departure.delete_all(system)
-        helpers.trip.delete_all(system)
-        helpers.stop.delete_all(system)
-        helpers.route.delete_all(system)
-        helpers.point.delete_all(system)
+        helpers.departure.delete_all(system, agency)
+        helpers.trip.delete_all(system, agency)
+        helpers.stop.delete_all(system, agency)
+        helpers.route.delete_all(system, agency)
+        helpers.point.delete_all(system, agency)
         
-        apply_csv(system, 'routes', helpers.route.create)
-        apply_csv(system, 'stops', helpers.stop.create)
-        apply_csv(system, 'trips', helpers.trip.create)
-        apply_csv(system, 'stop_times', helpers.departure.create)
-        apply_csv(system, 'shapes', helpers.point.create)
+        apply_csv(system, agency, 'routes', helpers.route.create)
+        apply_csv(system, agency, 'stops', helpers.stop.create)
+        apply_csv(system, agency, 'trips', helpers.trip.create)
+        apply_csv(system, agency, 'stop_times', helpers.departure.create)
+        apply_csv(system, agency, 'shapes', helpers.point.create)
     except Exception as e:
         print(f'Failed to update GTFS for {system}: {e}')
 
-def read_csv(system, name, initializer):
+def read_csv(system, agency, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''
     with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
         return [initializer(dict(zip(columns, row))) for row in reader]
 
-def apply_csv(system, name, function):
+def apply_csv(system, agency, name, function):
     '''Opens a CSV file and applies a function to each row'''
     with open(f'./data/gtfs/{system.id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
         for row in reader:
-            function(system, dict(zip(columns, row)))
+            function(system, agency, dict(zip(columns, row)))
 
-def validate(system):
+def validate(system, agency):
     '''Checks that the GTFS for the given system is up-to-date'''
-    if not system.gtfs_enabled:
+    if not agency.gtfs_enabled:
         return True
     end_dates = [s.schedule.date_range.end for s in system.get_services()]
     if len(end_dates) == 0:

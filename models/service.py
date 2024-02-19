@@ -43,12 +43,13 @@ class Service:
     
     __slots__ = (
         'system',
+        'agency',
         'id',
         'schedule'
     )
     
     @classmethod
-    def from_csv(cls, row, system, exceptions):
+    def from_csv(cls, row, system, agency, exceptions):
         '''Returns a service initialized from the given CSV row'''
         id = row['service_id']
         start_date = Date.parse(row['start_date'], system.timezone, '%Y%m%d')
@@ -72,18 +73,19 @@ class Service:
         dates.difference_update(removed_dates)
         
         schedule = Schedule(dates, date_range)
-        return cls(system, id, schedule)
+        return cls(system, agency, id, schedule)
     
     @classmethod
-    def combine(cls, system, id, exceptions):
+    def combine(cls, system, agency, id, exceptions):
         '''Returns a service based on a list of service exceptions'''
         dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
         date_range = DateRange(min(dates), max(dates))
         schedule = Schedule(dates, date_range)
-        return cls(system, id, schedule)
+        return cls(system, agency, id, schedule)
     
-    def __init__(self, system, id, schedule):
+    def __init__(self, system, agency, id, schedule):
         self.system = system
+        self.agency = agency
         self.id = id
         self.schedule = schedule
     

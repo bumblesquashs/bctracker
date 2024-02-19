@@ -10,6 +10,7 @@ class Transfer:
     
     __slots__ = (
         'id',
+        'agency',
         'bus',
         'date',
         'old_system',
@@ -20,15 +21,16 @@ class Transfer:
     def from_db(cls, row, prefix='transfer'):
         '''Returns a transfer initialized from the given database row'''
         id = row[f'{prefix}_id']
-        agency = helpers.agency.find('bc-transit')
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         old_system = helpers.system.find(row[f'{prefix}_old_system_id'])
         new_system = helpers.system.find(row[f'{prefix}_new_system_id'])
         date = Date.parse(row[f'{prefix}_date'], new_system.timezone)
-        return cls(id, bus, date, old_system, new_system)
+        return cls(id, agency, bus, date, old_system, new_system)
     
-    def __init__(self, id, bus, date, old_system, new_system):
+    def __init__(self, id, agency, bus, date, old_system, new_system):
         self.id = id
+        self.agency = agency
         self.bus = bus
         self.date = date
         self.old_system = old_system

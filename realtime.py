@@ -20,10 +20,10 @@ import database
 last_updated_date = None
 last_updated_time = None
 
-def update(system):
-    '''Downloads realtime data for the given system and stores it in the database'''
+def update(system, agency):
+    '''Downloads realtime data and stores it in the database'''
     global last_updated_date, last_updated_time
-    if not system.realtime_enabled:
+    if not agency.realtime_enabled:
         return
     data_path = f'data/realtime/{system.id}.bin'
     
@@ -43,22 +43,22 @@ def update(system):
                 with open(data_path, 'wb') as f:
                     f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system)
+        helpers.position.delete_all(system, agency)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
                 vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = system.agency.vehicle_name_length
+                vehicle_name_length = agency.vehicle_name_length
                 if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
                     vehicle_id = vehicle_id[-vehicle_name_length:]
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
-            helpers.position.create(system, bus_number, vehicle)
+            helpers.position.create(system, agency, bus_number, vehicle)
         last_updated_date = Date.today()
         last_updated_time = Time.now(accurate_seconds=False)
         system.last_updated_date = Date.today(system.timezone)
-        system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
+        system.last_updated_time = Time.now(system.timezone, agency.accurate_seconds)
     except Exception as e:
         print(f'Failed to update realtime for {system}: {e}')
 
@@ -68,12 +68,13 @@ def update_records():
         for position in helpers.position.find_all():
             try:
                 system = position.system
+                agency = position.agency
                 bus = position.bus
-                if bus.number < 0:
+                if not bus.is_known:
                     continue
                 date = Date.today(system.timezone)
                 time = Time.now(system.timezone)
-                overview = helpers.overview.find(bus.number)
+                overview = helpers.overview.find(agency, bus)
                 trip = position.trip
                 if trip is None:
                     record_id = None
@@ -87,9 +88,9 @@ def update_records():
                             if trip.id not in trip_ids:
                                 helpers.record.create_trip(last_record, trip)
                             continue
-                    record_id = helpers.record.create(bus, date, system, block, time, trip)
+                    record_id = helpers.record.create(system, agency, bus, date, block, time, trip)
                 if overview is None:
-                    helpers.overview.create(bus, date, system, record_id)
+                    helpers.overview.create(system, agency, bus, date, record_id)
                 else:
                     helpers.overview.update(overview, date, system, record_id)
                     if overview.last_seen_system != system:
@@ -110,11 +111,11 @@ def get_last_updated(time_format):
         return f'at {time.format_web(time_format)} {time.timezone_name}'
     return date.format_since()
 
-def validate(system):
-    '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
+def validate(system, agency):
+    '''Checks that the realtime data aligns with the current GTFS data'''
     if not system.realtime_enabled:
         return True
-    for position in helpers.position.find_all(system):
+    for position in helpers.position.find_all(system, agency):
         trip_id = position.trip_id
         if trip_id is None:
             continue

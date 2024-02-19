@@ -6,6 +6,7 @@ class Sheet:
     
     __slots__ = (
         'system',
+        'agency',
         'schedule',
         'services',
         'service_groups',
@@ -36,8 +37,9 @@ class Sheet:
         '''Checks if this sheet indicates no service'''
         return self.schedule.has_no_service
     
-    def __init__(self, system, services, date_range):
+    def __init__(self, system, agency, services, date_range):
         self.system = system
+        self.agency = agency
         self.schedule = Schedule.combine(services, date_range)
         self.services = services
         self.copies = {}
@@ -48,7 +50,7 @@ class Sheet:
             if len(service_set) == 0:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
-            service_group = ServiceGroup(system, dates, date_range, service_set)
+            service_group = ServiceGroup(system, agency, dates, date_range, service_set)
             service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
@@ -98,12 +100,14 @@ class ServiceGroup:
     
     __slots__ = (
         'system',
+        'agency',
         'schedule',
         'services'
     )
     
-    def __init__(self, system, dates, date_range, services):
+    def __init__(self, system, agency, dates, date_range, services):
         self.system = system
+        self.agency = agency
         self.schedule = Schedule(dates, date_range)
         self.services = services
     
