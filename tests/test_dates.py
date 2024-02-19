@@ -528,8 +528,15 @@ class TestFormatSince:
         assert date.format_since() == '2 years, 2 months, 2 days ago'
     
     def test_near_year(self):
-        date = self.today_diff(months=11, days=30)
-        assert date.format_since() == '11 months, 30 days ago'
+        now = datetime.now(timezone)
+        year_ago = Date(now.year - 1, now.month, now.day, timezone)
+        # Need to calculate days based on number of days in month one year ago
+        # Extra logic is needed to account for different number of days in different months
+        # Also because leaps years are a concept
+        days = calendar.monthrange(year_ago.year, year_ago.month)[1] - 1
+        date = self.today_diff(months=11, days=days)
+        
+        assert date.format_since() == f'11 months, {days} days ago'
     
     def today_diff(self, years=0, months=0, days=0):
         today = Date.today(timezone)
