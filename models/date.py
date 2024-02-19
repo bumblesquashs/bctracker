@@ -135,7 +135,10 @@ class Date:
             months = today.month - self.month
         if self.day > today.day:
             months -= 1
-            days = (today.day + calendar.monthrange(today.year, self.month)[1]) - self.day
+            if months < 0:
+                months += 12
+                years -= 1
+            days = (today.day + calendar.monthrange(self.year, self.month)[1]) - self.day
         else:
             days = today.day - self.day
         parts = []
