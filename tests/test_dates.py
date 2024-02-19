@@ -526,7 +526,11 @@ class TestFormatSince:
         date = self.today_diff(years=2, months=2, days=2)
         
         assert date.format_since() == '2 years, 2 months, 2 days ago'
-
+    
+    def test_near_year(self):
+        date = self.today_diff(months=11, days=30)
+        assert date.format_since() == '11 months, 30 days ago'
+    
     def today_diff(self, years=0, months=0, days=0):
         today = Date.today(timezone)
         year = today.year - years
