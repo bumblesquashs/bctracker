@@ -8,19 +8,19 @@ def create(system, row):
     system_id = getattr(system, 'id', system)
     try:
         pickup_type = PickupType(row['pickup_type'])
-    except:
+    except (KeyError, ValueError):
         pickup_type = PickupType.NORMAL
     try:
         dropoff_type = DropoffType(row['drop_off_type'])
-    except:
+    except (KeyError, ValueError):
         dropoff_type = DropoffType.NORMAL
     try:
         timepoint = row['timepoint'] == '1'
-    except:
+    except KeyError:
         timepoint = False
     try:
         distance = int(row['shape_dist_traveled'])
-    except:
+    except (KeyError, ValueError):
         distance = None
     database.insert('departure', {
         'system_id': system_id,

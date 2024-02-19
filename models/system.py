@@ -79,7 +79,7 @@ class System:
         self.name = name
         self.remote_id = kwargs.get('remote_id')
         self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
-        self.colour_routes = kwargs.get('colour_routes', False)
+        self.colour_routes = kwargs.get('colour_routes')
         
         self.gtfs_loaded = False
         self.validation_errors = 0
