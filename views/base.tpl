@@ -83,7 +83,7 @@
         <script>
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
-                document.getElementById("search-non-desktop").classList.add("display-none");
+                document.getElementById("search").classList.add("display-none");
             }
             
             function toggleSystemMenu() {
@@ -159,33 +159,22 @@
             
             <div class="flex-1"></div>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
-                <div class="tooltip">
-                    <div class="title">Nearby Stops</div>
-                </div>
             </a>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
-                <div class="tooltip">
-                    <div class="title">Personalize</div>
-                </div>
             </a>
             
-            <div id="search-desktop" class="desktop-only">
-                <img class="white" src="/img/white/search.png" />
-                <img class="black" src="/img/black/search.png" />
-                <input type="text" id="search-desktop-input" placeholder="Search" oninput="searchDesktop()" onfocus="searchDesktopFocus()" onblur="searchDesktopBlur()">
-                
-                <div id="search-desktop-results" class="display-none"></div>
-            </div>
-            
-            <div id="search-non-desktop-toggle" onclick="toggleSearchNonDesktop()">
-                <img class="white" src="/img/white/search.png" />
-                <img class="black" src="/img/black/search.png" />
+            <div class="navigation-icon" onclick="toggleSearch()">
+                <div>
+                    <img class="white" src="/img/white/search.png" />
+                    <img class="black" src="/img/black/search.png" />
+                </div>
+                <div class="label">Search</div>
             </div>
             
             <div id="navigation-menu-toggle" onclick="toggleNavigationMenu()">
@@ -194,7 +183,7 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div id="navigation-menu" class="menu non-desktop display-none">
+        <div id="navigation-menu" class="non-desktop display-none">
             % if system is None or system.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
                     <img class="white" src="/img/white/map.png" />
@@ -249,10 +238,6 @@
                 <img class="black" src="/img/black/personalize.png" />
                 <span>Personalize</span>
             </a>
-        </div>
-        <div id="search-non-desktop" class="menu non-desktop display-none">
-            <input type="text" id="search-non-desktop-input" placeholder="Search" oninput="searchNonDesktop()">
-            <div id="search-non-desktop-results" class="display-none"></div>
         </div>
         <div id="side-bar">
             <div id="status" class="side-bar-open-only">
@@ -324,217 +309,355 @@
             </div>
             <div id="content">{{ !base }}</div>
         </div>
+        <div id="search" class="display-none" tabindex="0">
+            <div id="search-header">
+                <div id="search-bar">
+                    <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
+                </div>
+                % if system is not None:
+                    <div id="search-filters">
+                        <div class="flex-1">Filters:</div>
+                        <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
+                            <img class="white" src="/img/white/bus.png" />
+                            <img class="black" src="/img/black/bus.png" />
+                        </div>
+                        <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
+                            <img class="white" src="/img/white/route.png" />
+                            <img class="black" src="/img/black/route.png" />
+                        </div>
+                        <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
+                            <img class="white" src="/img/white/stop.png" />
+                            <img class="black" src="/img/black/stop.png" />
+                        </div>
+                        <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
+                            <img class="white" src="/img/white/block.png" />
+                            <img class="black" src="/img/black/block.png" />
+                        </div>
+                    </div>
+                % end
+            </div>
+            <div id="search-placeholder">
+                % if system is None:
+                    Search for buses in all systems
+                % else:
+                    Search for buses, routes, stops, and blocks in {{ system }}
+                % end
+            </div>
+            <div id="search-results" class="display-none">
+                
+            </div>
+            <div id="search-paging" class="display-none">
+                <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-count" class="flex-1">
+                    
+                </div>
+                <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
+            </div>
+        </div>
     </body>
 </html>
 
 <script>
+    const resultsPerPage = 10;
+    
+    let showSearch = false;
+    
     let selectedResultIndex = 0;
     let searchResults = [];
+    let searchPage = 0;
     let loadingResults = false;
     let enterPending = false;
     
-    function searchDesktopFocus() {
-        const query = document.getElementById("search-desktop-input").value;
-        const element = document.getElementById("search-desktop-results");
-        if (query === undefined || query === null || query === "") {
-            element.classList.add("display-none");
+    let searchIncludeBuses = true;
+    let searchIncludeRoutes = true;
+    let searchIncludeStops = true;
+    let searchIncludeBlocks = true;
+    
+    function toggleSearch() {
+        const searchElement = document.getElementById("search");
+        const inputElement = document.getElementById("search-input");
+        const menuElement = document.getElementById("navigation-menu");
+        
+        showSearch = !showSearch;
+        if (showSearch) {
+            searchElement.classList.remove("display-none");
+            menuElement.classList.add("display-none");
+            inputElement.focus();
         } else {
-            element.classList.remove("display-none");
+            searchElement.classList.add("display-none");
+        }
+        if ("map" in window) {
+            map.resize();
         }
     }
     
-    function searchDesktopBlur() {
-        setTimeout(function() {
-            const element = document.getElementById("search-desktop-results");
-            element.classList.add("display-none");
-        }, 200);
-    }
-    
-    function searchDesktop() {
-        const inputElement = document.getElementById("search-desktop-input");
-        const resultsElement = document.getElementById("search-desktop-results");
-        search(inputElement, resultsElement);
-    }
-    
-    function toggleSearchNonDesktop() {
-        const element = document.getElementById("search-non-desktop");
-        element.classList.toggle("display-none");
-        if (!element.classList.contains("display-none")) {
-            document.getElementById("search-non-desktop-input").focus();
-        }
-        document.getElementById("navigation-menu").classList.add("display-none");
-    }
-    
-    function searchNonDesktop() {
-        const inputElement = document.getElementById("search-non-desktop-input");
-        const resultsElement = document.getElementById("search-non-desktop-results");
-        search(inputElement, resultsElement);
-    }
-    
-    function setSelectedEntry(newIndex) {
-        const oldElement = searchResults[selectedResultIndex].element;
-        oldElement.classList.remove("keyboard-selected");
-        
-        const newElement = searchResults[newIndex].element;
-        newElement.classList.add("keyboard-selected");
-        
-        selectedResultIndex = newIndex;
-    }
-    
-    function clearSearchHighlighting() { 
-        if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-            const element = searchResults[selectedResultIndex].element;
-            element.classList.remove("keyboard-selected"); 
-        }
-        selectedResultIndex = 0;
-        searchResults = [];
-    }
-    
-    function handleResultsDown() {
-        if (searchResults.length < 2){
-            return; // Nothing to change for 0 or 1 results
-        }
-        if (selectedResultIndex === searchResults.length - 1){
-            return; // Can't go down from the last result
-        }
-      
-        setSelectedEntry(selectedResultIndex + 1);
-    }
-
-    function handleResultsUp() {
-        if (searchResults.length < 2){
-            return; // Nothing to change for 0 or 1 results
-        }
-        if (selectedResultIndex === 0){
-            return; // Can't go up from the first result
-        }
-      
-        setSelectedEntry(selectedResultIndex - 1);
-    }
-    
-    function handleResultsEnter() {
-        if (loadingResults) {
-            enterPending = true;
-        } else if (searchResults && searchResults.length > 0 && searchResults[selectedResultIndex]) {
-            window.location = searchResults[selectedResultIndex].url;
-        }
-    }
-
-    function search(inputElement, resultsElement) {
+    function search() {
+        const inputElement = document.getElementById("search-input");
+        const placeholderElement = document.getElementById("search-placeholder");
         const query = inputElement.value;
+        
         if (query === undefined || query === null || query === "") {
-            resultsElement.classList.add("display-none");
-            resultsElement.innerHTML = "";
-            inputElement.onkeyup = function() {};
+            updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
         } else {
             loadingResults = true;
-            resultsElement.classList.remove("display-none");
-            if (resultsElement.innerHTML === "") {
-                resultsElement.innerHTML = "<div class='message'>Loading...</div>";
+            if (searchResults.length === 0) {
+                placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
             request.open("POST", "{{get_url(system, 'api/search')}}", true);
             request.responseType = "json";
             request.onload = function() {
-                const count = request.response.count;
-                if (count === 0) {
-                    resultsElement.innerHTML = "<div class='message'>No Results</div>";
-                    inputElement.onkeyup = function() {};
-                } else {
-                    const results = request.response.results;
-                    resultsElement.innerHTML = getSearchHTML(results, count);
-                    
-                    // Reset navigation
-                    clearSearchHighlighting();
-                    
-                    // Save the global array of results, including their URL and the HTML element reference for them
-                    searchResults = results.map(function(result, index) {
-                      return { 
-                        url: result.url, 
-                        element: document.getElementById("search-result-entry-" + index)
-                      }
-                    });
-                    
-                    setSelectedEntry(0);
-                    inputElement.onkeyup = function(event) {
-                        if (event.keyCode === 13) { // ENTER
-                            event.preventDefault();
-                            handleResultsEnter();
-                            return;
-                        }
-                        if (event.keyCode === 38) { // ARROW KEY UP
-                            event.preventDefault();
-                            handleResultsUp();
-                            return;
-                        }
-                        if (event.keyCode === 40) { // ARROW KEY DOWN
-                            event.preventDefault();
-                            handleResultsDown();
-                        }
-                    };
-                    inputElement.onkeydown = function(event) {
-                        // Prevent up/down presses from moving cursor
-                        if (event.keyCode === 38 || event.keyCode === 40) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    };
-                }
-                loadingResults = false;
+                const results = request.response.results;
+                const total = request.response.total;
+                
+                updateSearchView(results, total, total === 0 ? "No Results" : "Results");
+                
                 if (enterPending) {
                     enterPending = false;
                     handleResultsEnter();
                 }
             };
             request.onerror = function() {
-                resultsElement.innerHTML = "<div class='message'>Error loading search results</div>";
-                inputElement.onkeyup = function() {};
-                loadingResults = false;
+                updateSearchView([], 0, "Error loading search results");
             };
-            const data = new FormData()
-            data.set("query", query)
+            const data = new FormData();
+            data.set("query", query);
+            data.set("page", searchPage);
+            data.set("count", resultsPerPage);
+            data.set("include_buses", searchIncludeBuses ? 1 : 0);
+            data.set("include_routes", searchIncludeRoutes ? 1 : 0);
+            data.set("include_stops", searchIncludeStops ? 1 : 0);
+            data.set("include_blocks", searchIncludeBlocks ? 1 : 0);
             request.send(data);
         }
     }
     
-    function getSearchHTML(results, count) {
-        let html = "";
-        if (count === 1) {
-            html += "<div class='message smaller-font'>Showing 1 of 1 result</div>";
+    function buildSearchResultElement(index, result) {
+        const element = document.createElement("a");
+        element.id = "search-result-entry-" + index;
+        element.classList.add("result");
+        element.href = result.url;
+        
+        const lightIcon = document.createElement("img");
+        lightIcon.classList.add("white");
+        lightIcon.src = "/img/white/" + result.icon + ".png";
+        element.appendChild(lightIcon);
+        
+        const darkIcon = document.createElement("img");
+        darkIcon.classList.add("black");
+        darkIcon.src = "/img/black/" + result.icon + ".png";
+        element.appendChild(darkIcon);
+        
+        const details = document.createElement("div");
+        details.classList.add("details");
+        
+        const name = document.createElement("div");
+        name.classList.add("name")
+        name.innerHTML = result.name;
+        details.appendChild(name);
+        
+        const description = document.createElement("div");
+        description.classList.add("description");
+        description.innerHTML = result.description;
+        details.appendChild(description);
+        
+        element.appendChild(details);
+        
+        return element;
+    }
+    
+    function updateSearchView(results, total, message) {
+        const placeholderElement = document.getElementById("search-placeholder");
+        const pagingElement = document.getElementById("search-paging");
+        const countElement = document.getElementById("search-count");
+        const resultsElement = document.getElementById("search-results");
+        
+        loadingResults = false;
+        selectedResultIndex = 0;
+        
+        if (total === 0) {
+            placeholderElement.classList.remove("display-none");
+            placeholderElement.innerHTML = message;
+            pagingElement.classList.add("display-none");
+            countElement.innerHTML = "";
+            resultsElement.classList.add("display-none");
+            resultsElement.innerHTML = "";
+            
+            searchResults = [];
         } else {
-            html += "<div class='message smaller-font'>Showing " + results.length + " of " + count + " results</div>";
-        }
-        for (i = 0; i < results.length; i++) {
-            const result = results[i]
-            const icon = "<img class='white' src='/img/white/" + result.icon + ".png' /><img class='black' src='/img/black/" + result.icon + ".png' />";
-            let name = result.name;
-            switch (result.type) {
-                case "block":
-                    name = "Block " + result.name;
-                    break;
-                case "bus":
-                    name = "Bus " + result.name;
-                    break;
-                case "route":
-                    name = "Route " + result.name;
-                    break;
-                case "stop":
-                    name = "Stop " + result.name;
-                    break;
-                default:
-                    break;
+            placeholderElement.classList.add("display-none");
+            placeholderElement.innerHTML = "";
+            pagingElement.classList.remove("display-none");
+            const min = (searchPage * resultsPerPage) + 1;
+            const max = Math.min(total, min + resultsPerPage - 1);
+            if (total === 1) {
+                countElement.innerHTML = "Showing 1 of 1 result";
+            } else {
+                countElement.innerHTML = "Showing " + min + " to " + max + " of " + total + " results";
             }
-            html += "\
-                <a id='search-result-entry-" + i + "' class='result' href='" + result.url + "'>" +
-                    icon +
-                    "<div class='description'>" +
-                        name +
-                        "<br />\
-                        <span class='smaller-font lighter-text'>" + result.description + "</span>\
-                    </div>\
-                </a>";
+            resultsElement.classList.remove("display-none");
+            resultsElement.innerHTML = "";
+            for (i = 0; i < results.length; i++) {
+                resultsElement.appendChild(buildSearchResultElement(i, results[i]))
+            }
+            
+            searchResults = results.map(function(result, index) {
+                return {
+                    url: result.url,
+                    element: document.getElementById("search-result-entry-" + index)
+                }
+            });
+            setSelectedEntry(0);
         }
-        return html;
+        
+        updatePagingButtons(total);
+        updateKeyboardPressHandlers(total);
+    }
+    
+    function updatePagingButtons(total) {
+        const previousButton = document.getElementById("search-paging-previous");
+        const nextButton = document.getElementById("search-paging-next");
+        if (searchPage === 0) {
+            previousButton.classList.add("disabled");
+            previousButton.onclick = function() {};
+        } else {
+            previousButton.classList.remove("disabled");
+            previousButton.onclick = searchPreviousPage;
+        }
+        if ((searchPage * resultsPerPage) >= (total - resultsPerPage)) {
+            nextButton.classList.add("disabled");
+            nextButton.onclick = function() {};
+        } else {
+            nextButton.classList.remove("disabled");
+            nextButton.onclick = searchNextPage;
+        }
+    }
+    
+    function updateKeyboardPressHandlers(total) {
+        const searchElement = document.getElementById("search");
+        if (total == 0) {
+            searchElement.onkeyup = function() {};
+            searchElement.onkeydown = function() {};
+        } else {
+            searchElement.onkeyup = function(event) {
+                if (event.keyCode === 13) { // ENTER
+                    event.preventDefault();
+                    searchResultsEnter();
+                }
+                if (event.keyCode === 37) { // ARROW KEY LEFT
+                    event.preventDefault();
+                    searchPreviousPage();
+                }
+                if (event.keyCode === 38) { // ARROW KEY UP
+                    event.preventDefault();
+                    searchResultsUp();
+                }
+                if (event.keyCode === 39) { // ARROW KEY RIGHT
+                    event.preventDefault();
+                    if ((searchPage + 1) * resultsPerPage < total) {
+                        searchNextPage();
+                    }
+                }
+                if (event.keyCode === 40) { // ARROW KEY DOWN
+                    event.preventDefault();
+                    searchResultsDown();
+                }
+            };
+            searchElement.onkeydown = function(event) {
+                // Prevent up/down presses from moving cursor
+                if ([37, 38, 39, 40].includes(event.keyCode)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            };
+        }
+    }
+    
+    function searchResultsEnter() {
+        if (loadingResults) {
+            enterPending = true;
+        } else if (selectedResultIndex !== null) {
+            window.location = searchResults[selectedResultIndex].url;
+        }
+    }
+    
+    function searchResultsDown() {
+        if (searchResults.length < 2) {
+            return; // Nothing to change for 0 or 1 results
+        }
+        if (selectedResultIndex === searchResults.length - 1) {
+            return; // Can't go down from the last result
+        }
+        setSelectedEntry(selectedResultIndex + 1);
+    }
+    
+    function searchResultsUp() {
+        if (searchResults.length < 2) {
+            return; // Nothing to change for 0 or 1 results
+        }
+        if (selectedResultIndex === 0) {
+            return; // Can't go up from the first result
+        }
+        setSelectedEntry(selectedResultIndex - 1);
+    }
+    
+    function setSelectedEntry(index) {
+        if (selectedResultIndex < searchResults.length) {
+            searchResults[selectedResultIndex].element.classList.remove("keyboard-selected");
+        }
+        if (index < searchResults.length) {
+            searchResults[index].element.classList.add("keyboard-selected");
+        }
+        selectedResultIndex = index;
+    }
+    
+    function toggleSearchBusFilter() {
+        searchIncludeBuses = !searchIncludeBuses;
+        toggleFilter(searchIncludeBuses, "search-filter-bus");
+    }
+    
+    function toggleSearchRouteFilter() {
+        searchIncludeRoutes = !searchIncludeRoutes;
+        toggleFilter(searchIncludeRoutes, "search-filter-route");
+    }
+    
+    function toggleSearchStopFilter() {
+        searchIncludeStops = !searchIncludeStops;
+        toggleFilter(searchIncludeStops, "search-filter-stop");
+    }
+    
+    function toggleSearchBlockFilter() {
+        searchIncludeBlocks = !searchIncludeBlocks;
+        toggleFilter(searchIncludeBlocks, "search-filter-block");
+    }
+    
+    function toggleFilter(selected, id) {
+        const element = document.getElementById(id);
+        if (selected) {
+            element.classList.remove("inactive");
+        } else {
+            element.classList.add("inactive");
+        }
+        searchPage = 0;
+        search();
+    }
+    
+    function searchInputChanged() {
+        searchPage = 0;
+        search();
+    }
+    
+    function searchNextPage() {
+        searchPage += 1;
+        search();
+    }
+    
+    function searchPreviousPage() {
+        if (searchPage === 0) {
+            return;
+        }
+        searchPage -= 1;
+        search();
     }
     
     function toggleSideBar() {
@@ -546,7 +669,7 @@
         } else {
             setCookie("hide_systems", "yes");
         }
-        if (map !== undefined) {
+        if ("map" in window) {
             map.updateSize();
         }
     }

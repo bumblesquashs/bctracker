@@ -6,7 +6,7 @@
         const blackIconElement = document.getElementById("map-toggle-icon-black");
         document.getElementById("navigation-bar").classList.toggle("display-none");
         document.getElementById("navigation-menu").classList.add("display-none");
-        document.getElementById("search-non-desktop").classList.add("display-none");
+        document.getElementById("search").classList.add("display-none");
         document.getElementById("side-bar").classList.toggle("display-none");
         document.getElementById("banners").classList.toggle("display-none");
         document.getElementById("map").classList.toggle("z-override");

@@ -123,7 +123,6 @@ ul {
 
 #main {
     flex: 1;
-    overflow: auto;
     position: relative;
 }
 
@@ -191,7 +190,12 @@ ul {
 #navigation-bar .navigation-icon {
     padding: 5px;
     margin: 0px 2px;
-    border-radius: 50%;
+    border-radius: 100px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
 }
 
 #navigation-bar .navigation-icon:hover {
@@ -199,8 +203,12 @@ ul {
 }
 
 #navigation-bar .navigation-icon img {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
+}
+
+#navigation-bar .navigation-icon .label {
+    margin-right: 5px;
 }
 
 #navigation-bar .navigation-item {
@@ -268,6 +276,76 @@ ul {
 #refresh-button.disabled {
     opacity: 50%;
     cursor: default;
+}
+
+#search {
+    display: flex;
+    flex-direction: column;
+    font-family: Helvetica, sans-serif;
+}
+
+#search:focus {
+    outline-width: 0px;
+}
+
+#search-count {
+    text-align: center;
+}
+
+#search-filters {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+#search-filters .button {
+    border-radius: 50%;
+    padding: 4px;
+}
+
+#search-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#search-input {
+    width: 100%;
+}
+
+#search-paging {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+#search-placeholder {
+    text-align: center;
+}
+
+#search-results {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+    flex: 1;
+}
+
+#search-results .result {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+#search-results .result .details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 #side-bar {
@@ -399,6 +477,7 @@ ul {
     font-family: Helvetica, sans-serif;
     text-align: center;
     text-decoration: none !important;
+    user-select: none;
 }
 
 .button:hover {
