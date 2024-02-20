@@ -18,6 +18,7 @@ class System:
         'remote_id',
         'timezone',
         'colour_routes',
+        'gtfs_loaded',
         'validation_errors',
         'last_updated_date',
         'last_updated_time',
@@ -32,7 +33,7 @@ class System:
     )
     
     @property
-    def is_loaded(self):
+    def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
         return self.last_updated_date is not None and self.last_updated_time is not None
     
@@ -71,15 +72,16 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, agency, region, name, remote_id=None, timezone='America/Vancouver', colour_routes=False):
+    def __init__(self, id, agency, region, name, **kwargs):
         self.id = id
         self.agency = agency
         self.region = region
         self.name = name
-        self.remote_id = remote_id
-        self.timezone = pytz.timezone(timezone)
-        self.colour_routes = colour_routes
+        self.remote_id = kwargs.get('remote_id')
+        self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
+        self.colour_routes = kwargs.get('colour_routes')
         
+        self.gtfs_loaded = False
         self.validation_errors = 0
         self.last_updated_date = None
         self.last_updated_time = None

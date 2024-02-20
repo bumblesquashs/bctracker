@@ -7,9 +7,7 @@
 
 <div class="placeholder">
     <h3>The stop you are looking for doesn't seem to exist!</h3>
-    % if not system.is_loaded:
-        <p>System data is currently loading and will be available soon.</p>
-    % else:
+    % if system.gtfs_loaded:
         <p>There are a few reasons why that might be the case:</p>
         <ol>
             <li>It may no longer serve any bus routes and therefore be removed from the system</li>
@@ -30,5 +28,7 @@
         <p>If you believe this error is incorrect and the stop actually should exist, please email <a href="mailto:james@bctracker.ca">james@bctracker.ca</a> to let us know!</p>
         
         <button class="button" onclick="window.history.back()">Back</button>
+    % else:
+        <p>System data is currently loading and will be available soon.</p>
     % end
 </div>

@@ -62,6 +62,8 @@ def load(system, force_download=False, update_db=False):
         system.routes_by_number = {r.number: r for r in routes}
         
         system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
+        
+        system.gtfs_loaded = True
     except Exception as e:
         print(f'Failed to load GTFS for {system}: {e}')
 

@@ -28,7 +28,7 @@
             "salt-spring": {
                 "name": "Salt Spring Island",
                 "remote_id": 39,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "victoria": {
                 "name": "Victoria",
@@ -43,12 +43,12 @@
             "pemberton": {
                 "name": "Pemberton",
                 "remote_id": 50,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "powell-river": {
                 "name": "Powell River",
                 "remote_id": 29,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "squamish": {
                 "name": "Squamish",
@@ -57,7 +57,7 @@
             "sunshine-coast": {
                 "name": "Sunshine Coast",
                 "remote_id": 18,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "whistler": {
                 "name": "Whistler",
@@ -68,12 +68,12 @@
             "ashcroft-clinton": {
                 "name": "Ashcroft-Clinton",
                 "remote_id": 38,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "clearwater": {
                 "name": "Clearwater",
                 "remote_id": 35,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "creston-valley": {
                 "name": "Creston Valley",
@@ -84,7 +84,7 @@
                 "name": "East Kootenay",
                 "remote_id": 21,
                 "timezone": "America/Edmonton",
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "kamloops": {
                 "name": "Kamloops",
@@ -97,7 +97,7 @@
             "merritt": {
                 "name": "Merritt",
                 "remote_id": 37,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "north-okanagan": {
                 "name": "North Okanagan",
@@ -106,7 +106,7 @@
             "revelstoke": {
                 "name": "Revelstoke",
                 "remote_id": 36,
-                "colour_routes": true
+                "colour_routes": "004B8D"
             },
             "south-okanagan": {
                 "name": "South Okanagan",
@@ -121,12 +121,12 @@
             "100-mile-house": {
                 "name": "100 Mile House",
                 "remote_id": 34,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "bella-coola": {
                 "name": "Bella Coola",
                 "remote_id": 30,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "dawson-creek": {
                 "name": "Dawson Creek",
@@ -141,12 +141,12 @@
             "kitimat": {
                 "name": "Kitimat-Stikine",
                 "remote_id": 26,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "prince-george": {
                 "name": "Prince George",
                 "remote_id": 22,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "prince-rupert": {
                 "name": "Prince Rupert",
@@ -155,17 +155,17 @@
             "quesnel": {
                 "name": "Quesnel",
                 "remote_id": 32,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "smithers": {
                 "name": "Smithers",
                 "remote_id": 31,
-                "colour_routes": true
+                "colour_routes": "000000"
             },
             "williams-lake": {
                 "name": "Williams Lake",
                 "remote_id": 33,
-                "colour_routes": true
+                "colour_routes": "000000"
             }
         }
     }

@@ -26,20 +26,20 @@ class Order:
         '''The last bus in the order'''
         return Bus(self.high, self)
     
-    def __init__(self, agency, model, number=None, low=None, high=None, year=None, visible=True, demo=False, exceptions=None):
+    def __init__(self, agency, model, **kwargs):
         self.agency = agency
         self.model = model
-        if number is None:
-            self.low = low
-            self.high = high
+        if 'number' in kwargs:
+            self.low = kwargs['number']
+            self.high = kwargs['number']
         else:
-            self.low = number
-            self.high = number
-        self.year = year
-        self.visible = visible
-        self.demo = demo
-        if exceptions:
-            self.exceptions = set(exceptions)
+            self.low = kwargs['low']
+            self.high = kwargs['high']
+        self.year = kwargs.get('year')
+        self.visible = kwargs.get('visible', True)
+        self.demo = kwargs.get('demo', False)
+        if 'exceptions' in kwargs:
+            self.exceptions = set(kwargs['exceptions'])
         else:
             self.exceptions = set()
         

@@ -17,7 +17,7 @@
 
 % if len(route.trips) == 0:
     <div class="placeholder">
-        % if system.is_loaded:
+        % if system.gtfs_loaded:
             <h3>There are currently no trips for this route</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

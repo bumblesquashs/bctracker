@@ -7,7 +7,7 @@ class Region:
         'name'
     )
     
-    def __init__(self, id, name):
+    def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
     

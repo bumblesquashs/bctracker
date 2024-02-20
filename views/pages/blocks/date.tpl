@@ -51,7 +51,7 @@
                     % blocks = sorted([b for b in system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
                     % if len(blocks) == 0:
                         <div class="placeholder">
-                            % if system.is_loaded:
+                            % if system.gtfs_loaded:
                                 <h3>No blocks found for {{ system }} on {{ date.format_long() }}</h3>
                                 <p>There are a few reasons why that might be the case:</p>
                                 <ol>

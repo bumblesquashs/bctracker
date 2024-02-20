@@ -6,13 +6,19 @@ import database
 def create(system, row):
     '''Inserts a new route into the database'''
     system_id = getattr(system, 'id', system)
-    if 'route_color' in row and row['route_color'] != '' and (not system.colour_routes or row['route_color'] != '000000'):
+    try:
         colour = row['route_color']
-    else:
+        if colour == '':
+            raise ValueError('Colour must not be empty')
+        if colour == system.colour_routes:
+            raise ValueError('Colour must be auto-generated')
+    except (KeyError, ValueError):
         colour = None
-    if 'route_text_color' in row and row['route_text_color'] != '':
+    try:
         text_colour = row['route_text_color']
-    else:
+        if text_colour == '':
+            raise ValueError('Text colour must not be empty')
+    except (KeyError, ValueError):
         text_colour = None
     database.insert('route', {
         'system_id': system_id,

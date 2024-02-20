@@ -254,7 +254,7 @@
                         % end
                     </div>
                     <div id="last-updated">
-                        % if system is None or (system.is_loaded and system.realtime_enabled):
+                        % if system is None or (system.realtime_enabled and system.realtime_loaded):
                             Updated {{ last_updated }}
                         % end
                     </div>
@@ -275,7 +275,7 @@
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
                         <div class="header">{{ region }}</div>
-                        % for region_system in region_systems:
+                        % for region_system in sorted(region_systems):
                             % if system is not None and system == region_system:
                                 <span class="system-button current">{{ region_system }}</span>
                             % else:

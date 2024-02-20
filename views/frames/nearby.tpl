@@ -11,7 +11,7 @@
     <div class="section">
         <div class="placeholder">
             <h3>No stops nearby</h3>
-            % if system.is_loaded:
+            % if system.gtfs_loaded:
                 <p>You're gonna have to walk!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>

@@ -10,12 +10,12 @@ class Adornment:
         'enabled'
     )
     
-    def __init__(self, agency_id, bus_number, text, description=None, enabled=True):
+    def __init__(self, agency_id, bus_number, text, **kwargs):
         self.agency_id = agency_id
         self.bus_number = bus_number
         self.text = text
-        self.description = description
-        self.enabled = enabled
+        self.description = kwargs.get('description')
+        self.enabled = kwargs.get('enabled', True)
     
     def __str__(self):
         return self.text
