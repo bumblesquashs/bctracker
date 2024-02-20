@@ -30,8 +30,9 @@ class Date:
         if timezone is None:
             timezone = pytz.timezone('America/Vancouver')
         now = datetime.now(timezone)
-        date = now if now.hour >= 4 else now - timedelta(days=1)
-        return cls(date.year, date.month, date.day, timezone)
+        if now.hour < 4:
+            now = now - timedelta(days=1)
+        return cls(now.year, now.month, now.day, timezone)
     
     @property
     def is_earlier(self):
@@ -76,7 +77,7 @@ class Date:
         return hash((self.year, self.month, self.day))
     
     def __eq__(self, other):
-        return self.year == other.year and self.month == other.month and self.day == other.day
+        return self.year == other.year and self.month == other.month and self.day == other.day and self.timezone == other.timezone
     
     def __lt__(self, other):
         if self.year != other.year:
