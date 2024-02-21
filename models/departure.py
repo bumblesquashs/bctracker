@@ -16,7 +16,7 @@ class PickupType(Enum):
     
     def __str__(self):
         if self == PickupType.UNAVAILABLE:
-            return 'Drop off only'
+            return 'No pick up'
         if self == PickupType.PHONE_REQUEST:
             return 'Pick up by phone request only'
         if self == PickupType.DRIVER_REQUEST:
@@ -38,7 +38,7 @@ class DropoffType(Enum):
     
     def __str__(self):
         if self == DropoffType.UNAVAILABLE:
-            return 'Pick up only'
+            return 'No drop off'
         if self == DropoffType.PHONE_REQUEST:
             return 'Drop off by phone request only'
         if self == DropoffType.DRIVER_REQUEST:
@@ -72,7 +72,7 @@ class Departure:
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], system.timezone)
+        time = Time.parse(row[f'{prefix}_time'], system.timezone, system.agency.accurate_seconds)
         try:
             pickup_type = PickupType(row[f'{prefix}_pickup_type'])
         except:

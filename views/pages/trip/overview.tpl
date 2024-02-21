@@ -72,7 +72,7 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
-                        % km = length / 1000
+                        % km = length / trip.system.agency.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="row section">
                             <div class="name">Length</div>

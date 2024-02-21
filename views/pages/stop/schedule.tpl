@@ -13,7 +13,7 @@
 
 % if len(stop.find_departures()) == 0:
     <div class="placeholder">
-        % if stop.is_loaded:
+        % if stop.gtfs_loaded:
             <h3>There are currently no departures from this stop</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

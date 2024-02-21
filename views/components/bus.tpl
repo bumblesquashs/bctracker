@@ -4,7 +4,7 @@
     % else:
         <div>{{ bus }}</div>
     % end
-    % adornment = bus.adornment
+    % adornment = bus.find_adornment()
     % if adornment is not None and adornment.enabled:
         <div class="adornment tooltip-anchor">
             {{ adornment }}

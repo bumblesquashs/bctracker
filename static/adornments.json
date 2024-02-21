@@ -1,0 +1,37 @@
+{
+    "bc-transit": {
+        "1032": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "1154": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "4017": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "6018": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "9093": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        },
+        "9387": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus"
+        },
+        "9434": {
+            "text": "🎄",
+            "description": "Christmas Bus",
+            "enabled": false
+        }
+    }
+}

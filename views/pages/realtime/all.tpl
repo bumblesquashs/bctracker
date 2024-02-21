@@ -46,7 +46,7 @@
             <div class="non-desktop">
                 % include('components/systems')
             </div>
-        % elif not system.is_loaded:
+        % elif not system.realtime_loaded:
             <h3>Realtime information for {{ system }} is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
@@ -86,7 +86,7 @@
                 </tr>
                 <tr class="display-none"></tr>
                 % for position in unknown_positions:
-                    % include('rows/realtime', position=position)
+                    % include('rows/realtime')
                 % end
             % end
             % for order in orders:
@@ -101,7 +101,7 @@
                 </tr>
                 <tr class="display-none"></tr>
                 % for position in order_positions:
-                    % include('rows/realtime', position=position)
+                    % include('rows/realtime')
                 % end
             % end
         </tbody>

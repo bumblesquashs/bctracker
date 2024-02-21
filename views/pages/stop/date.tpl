@@ -46,7 +46,7 @@
                 % departures = stop.find_departures(date=date)
                 % if len(departures) == 0:
                     <div class="placeholder">
-                        % if system.is_loaded:
+                        % if system.gtfs_loaded:
                             <h3>No departures found on {{ date.format_long() }}</h3>
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>

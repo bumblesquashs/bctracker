@@ -29,7 +29,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 25
+VERSION = 28
 
 app = Bottle()
 running = False
@@ -54,10 +54,7 @@ def start(args):
         print('Forcing database refresh')
     
     helpers.adornment.load()
-    helpers.agency.load()
-    helpers.model.load()
     helpers.order.load()
-    helpers.region.load()
     helpers.system.load()
     helpers.theme.load()
     
@@ -249,6 +246,8 @@ def news_page(system):
 @endpoint('/map')
 def map_page(system):
     positions = helpers.position.find_all(system, has_location=True)
+    auto_refresh = query_cookie('auto_refresh', 'false') != 'false'
+    show_route_lines = query_cookie('show_route_lines', 'false') != 'false'
     show_nis = query_cookie('show_nis', 'true') != 'false'
     visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
     return page('map', system,
@@ -257,6 +256,8 @@ def map_page(system):
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
         positions=sorted(positions, key=lambda p: p.lat),
+        auto_refresh=auto_refresh,
+        show_route_lines=show_route_lines,
         show_nis=show_nis,
         visible_positions=visible_positions
     )
@@ -316,7 +317,8 @@ def realtime_speed_page(system):
 
 @endpoint('/fleet')
 def fleet_page(system):
-    orders = helpers.order.find_all()
+    agency = helpers.agency.find('bc-transit')
+    orders = helpers.order.find_all(agency)
     overviews = helpers.overview.find_all()
     return page('fleet', system,
         title='Fleet',
@@ -327,7 +329,8 @@ def fleet_page(system):
 
 @endpoint('/bus/<bus_number:int>')
 def bus_overview_page(system, bus_number):
-    bus = Bus(bus_number)
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
@@ -347,7 +350,8 @@ def bus_overview_page(system, bus_number):
 
 @endpoint('/bus/<bus_number:int>/map')
 def bus_map_page(system, bus_number):
-    bus = Bus(bus_number)
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
@@ -365,7 +369,8 @@ def bus_map_page(system, bus_number):
 
 @endpoint('/bus/<bus_number:int>/history')
 def bus_history_page(system, bus_number):
-    bus = Bus(bus_number)
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
         return error_page('invalid_bus', system,
@@ -519,7 +524,7 @@ def route_schedule_date_page(system, route_number, date_string):
             title='Unknown Route',
             route_number=route_number
         )
-    date = Date.parse_db(date_string, None)
+    date = Date.parse(date_string, system.timezone)
     return page('route/date', system,
         title=str(route),
         enable_refresh=False,
@@ -537,7 +542,10 @@ def blocks_page(system):
 
 @endpoint('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
 def blocks_schedule_date_page(system, date_string):
-    date = Date.parse_db(date_string, None)
+    if system is None:
+        date = Date.parse(date_string)
+    else:
+        date = Date.parse(date_string, system.timezone)
     return page('blocks/date', system,
         title='Blocks',
         enable_reload=False,
@@ -768,7 +776,7 @@ def stop_schedule_date_page(system, stop_number, date_string):
             title='Unknown Stop',
             stop_number=stop_number
         )
-    date = Date.parse_db(date_string, None)
+    date = Date.parse(date_string, system.timezone)
     return page('stop/date', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
@@ -876,19 +884,32 @@ def api_shape_id(system, shape_id):
 
 @endpoint('/api/search', method='POST')
 def api_search(system):
+    agency = helpers.agency.find('bc-transit')
     query = request.forms.get('query', '')
+    page = int(request.forms.get('page', 0))
+    count = int(request.forms.get('count', 10))
+    include_buses = int(request.forms.get('include_buses', 1)) == 1
+    include_routes = int(request.forms.get('include_routes', 1)) == 1
+    include_stops = int(request.forms.get('include_stops', 1)) == 1
+    include_blocks = int(request.forms.get('include_blocks', 1)) == 1
     matches = []
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
-            matches += helpers.order.find_matches(query, helpers.overview.find_bus_numbers(system))
+            if include_buses:
+                matches += helpers.order.find_matches(agency, query, helpers.overview.find_bus_numbers(system))
         if system is not None:
-            matches += system.search_blocks(query)
-            matches += system.search_routes(query)
-            matches += system.search_stops(query)
+            if include_blocks:
+                matches += system.search_blocks(query)
+            if include_routes:
+                matches += system.search_routes(query)
+            if include_stops:
+                matches += system.search_stops(query)
     matches = sorted([m for m in matches if m.value > 0])
+    min = page * count
+    max = min + count
     return {
-        'results': [m.get_json(system, get_url) for m in matches[0:10]],
-        'count': len(matches)
+        'results': [m.get_json(system, get_url) for m in matches[min:max]],
+        'total': len(matches)
     }
 
 @endpoint('/api/nearby.json', append_slash=False)
@@ -906,27 +927,18 @@ def api_nearby(system):
 
 @endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
 def api_admin_reload_adornments(system):
-    helpers.adornment.delete_all()
     helpers.adornment.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
 def api_admin_reload_orders(system):
-    helpers.model.delete_all()
-    helpers.order.delete_all()
-    helpers.model.load()
     helpers.order.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system):
     cron.stop()
-    helpers.agency.delete_all()
-    helpers.region.delete_all()
-    helpers.system.delete_all()
     helpers.position.delete_all()
-    helpers.agency.load()
-    helpers.region.load()
     helpers.system.load()
     for system in helpers.system.find_all():
         if running:
@@ -944,7 +956,6 @@ def api_admin_reload_systems(system):
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
 def api_admin_reload_themes(system):
-    helpers.theme.delete_all()
     helpers.theme.load()
     return 'Success'
 

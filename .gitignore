@@ -8,3 +8,4 @@ server.conf
 __pycache__/
 .vscode
 .idea
+.pytest_cache

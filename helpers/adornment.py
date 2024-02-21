@@ -1,27 +1,28 @@
 
-import csv
+import json
 
 from models.adornment import Adornment
 
 adornments = {}
 
 def load():
-    '''Loads adornment data from the static CSV file'''
-    with open(f'./static/adornments.csv', 'r') as file:
-        reader = csv.reader(file)
-        columns = next(reader)
-        for row in reader:
-            adornment = Adornment.from_csv(dict(zip(columns, row)))
-            adornments[adornment.bus_number] = adornment
-
-def find(bus):
-    '''Returns the adornments with the given bus number'''
-    bus_number = getattr(bus, 'number', bus)
-    if bus_number in adornments:
-        return adornments[bus_number]
-    return None
-
-def delete_all():
-    '''Deletes all adornments'''
+    '''Loads adornment data from the static JSON file'''
     global adornments
     adornments = {}
+    with open(f'./static/adornments.json', 'r') as file:
+        for (agency_id, agency_values) in json.load(file).items():
+            agency_adornments = {}
+            for (bus_number, values) in agency_values.items():
+                bus_number = int(bus_number)
+                agency_adornments[bus_number] = Adornment(agency_id, bus_number, **values)
+            adornments[agency_id] = agency_adornments
+
+def find(agency, bus):
+    '''Returns the adornments with the given bus number'''
+    agency_id = getattr(agency, 'id', agency)
+    bus_number = getattr(bus, 'number', bus)
+    if agency_id in adornments:
+        agency_adornments = adornments[agency_id]
+        if bus_number in agency_adornments:
+            return agency_adornments[bus_number]
+    return None

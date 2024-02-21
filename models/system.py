@@ -1,9 +1,9 @@
 
-import helpers.agency
+import pytz
+
 import helpers.departure
 import helpers.overview
 import helpers.position
-import helpers.region
 
 from models.schedule import Schedule
 
@@ -12,15 +12,16 @@ class System:
     
     __slots__ = (
         'id',
-        'name',
         'agency',
         'region',
-        'recolour_black',
+        'name',
         'remote_id',
+        'timezone',
+        'colour_routes',
+        'gtfs_loaded',
         'validation_errors',
         'last_updated_date',
         'last_updated_time',
-        'timezone',
         'blocks',
         'routes',
         'routes_by_number',
@@ -31,21 +32,8 @@ class System:
         'trips'
     )
     
-    @classmethod
-    def from_csv(cls, row):
-        '''Returns a system initialized from the given CSV row'''
-        id = row['system_id']
-        name = row['name']
-        agency = helpers.agency.find(row['agency_id'])
-        region = helpers.region.find(row['region_id'])
-        recolour_black = row['recolour_black'] == '1'
-        remote_id = row['remote_id']
-        if remote_id == '':
-            remote_id = None
-        return cls(id, name, agency, region, recolour_black, remote_id)
-    
     @property
-    def is_loaded(self):
+    def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
         return self.last_updated_date is not None and self.last_updated_time is not None
     
@@ -60,7 +48,7 @@ class System:
         if self.gtfs_enabled:
             url = self.agency.gtfs_url
             if self.remote_id:
-                url = url.replace('$REMOTE_ID', self.remote_id)
+                url = url.replace('$REMOTE_ID', str(self.remote_id))
             return url
         return None
     
@@ -75,7 +63,7 @@ class System:
         if self.realtime_enabled:
             url = self.agency.realtime_url
             if self.remote_id:
-                url = url.replace('$REMOTE_ID', self.remote_id)
+                url = url.replace('$REMOTE_ID', str(self.remote_id))
             return url
         return None
     
@@ -84,19 +72,19 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, name, agency, region, recolour_black, remote_id):
+    def __init__(self, id, agency, region, name, **kwargs):
         self.id = id
-        self.name = name
         self.agency = agency
         self.region = region
-        self.recolour_black = recolour_black
-        self.remote_id = remote_id
+        self.name = name
+        self.remote_id = kwargs.get('remote_id')
+        self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
+        self.colour_routes = kwargs.get('colour_routes')
         
+        self.gtfs_loaded = False
         self.validation_errors = 0
         self.last_updated_date = None
         self.last_updated_time = None
-        
-        self.timezone = None
         
         self.blocks = {}
         self.routes = {}
@@ -198,8 +186,6 @@ class System:
         if date is None or time is None:
             return 'N/A'
         if date.is_today:
-            if time.timezone is None:
-                return f'at {time.format_web(time_format)}'
             return f'at {time.format_web(time_format)} {time.timezone_name}'
         return date.format_since()
     
@@ -217,6 +203,8 @@ class System:
     
     def update_cache(self):
         '''Loads and caches data from the database'''
+        if not self.gtfs_enabled:
+            return
         print(f'Updating cached data for {self}')
         try:
             departures = helpers.departure.find_all(self)

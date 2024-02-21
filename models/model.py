@@ -27,27 +27,18 @@ class Model:
     
     __slots__ = (
         'id',
-        'manufacturer',
+        'type',
         'name',
+        'manufacturer',
         'length',
-        'fuel',
-        'type'
+        'fuel'
     )
-    
-    @classmethod
-    def from_csv(cls, row):
-        '''Returns a model initialized from the given CSV row'''
-        id = row['model_id']
-        manufacturer = row['manufacturer']
-        name = row['name']
-        length = float(row['length'])
-        fuel = row['fuel']
-        type = ModelType[row['type']]
-        return cls(id, manufacturer, name, length, fuel, type)
     
     @property
     def display_manufacturer(self):
         '''Formats the manufacturer for web display'''
+        if self.manufacturer is None:
+            return None
         return self.manufacturer.replace('/', '/<wbr />')
     
     @property
@@ -55,15 +46,17 @@ class Model:
         '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
     
-    def __init__(self, id, manufacturer, name, length, fuel, type):
+    def __init__(self, id, type, name, **kwargs):
         self.id = id
-        self.manufacturer = manufacturer
-        self.name = name
-        self.length = length
-        self.fuel = fuel
         self.type = type
+        self.name = name
+        self.manufacturer = kwargs.get('manufacturer')
+        self.length = kwargs.get('length')
+        self.fuel = kwargs.get('fuel')
     
     def __str__(self):
+        if self.manufacturer is None:
+            return self.display_name
         return f'{self.display_manufacturer} {self.display_name}'
     
     def __hash__(self):

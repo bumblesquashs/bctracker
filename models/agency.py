@@ -5,26 +5,14 @@ class Agency:
     __slots__ = (
         'id',
         'name',
+        'gtfs_url',
+        'realtime_url',
         'enabled',
         'prefix_headsigns',
-        'gtfs_url',
-        'realtime_url'
+        'accurate_seconds',
+        'vehicle_name_length',
+        'distance_scale'
     )
-    
-    @classmethod
-    def from_csv(cls, row):
-        '''Returns an agency initialized from the given CSV row'''
-        id = row['agency_id']
-        name = row['name']
-        enabled = row['enabled'] == '1'
-        prefix_headsigns = row['prefix_headsigns'] == '1'
-        gtfs_url = row['gtfs_url']
-        if gtfs_url == '':
-            gtfs_url = None
-        realtime_url = row['realtime_url']
-        if realtime_url == '':
-            realtime_url = None
-        return cls(id, name, enabled, prefix_headsigns, gtfs_url, realtime_url)
     
     @property
     def gtfs_enabled(self):
@@ -36,13 +24,16 @@ class Agency:
         '''Checks if realtime is enabled for this agency'''
         return self.enabled and self.realtime_url
     
-    def __init__(self, id, name, enabled, prefix_headsigns, gtfs_url, realtime_url):
+    def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
-        self.enabled = enabled
-        self.prefix_headsigns = prefix_headsigns
-        self.gtfs_url = gtfs_url
-        self.realtime_url = realtime_url
+        self.gtfs_url = kwargs.get('gtfs_url')
+        self.realtime_url = kwargs.get('realtime_url')
+        self.enabled = kwargs.get('enabled', True)
+        self.prefix_headsigns = kwargs.get('prefix_headsigns', False)
+        self.accurate_seconds = kwargs.get('accurate_seconds', True)
+        self.vehicle_name_length = kwargs.get('vehicle_name_length')
+        self.distance_scale = kwargs.get('distance_scale', 1)
     
     def __str__(self):
         return self.name

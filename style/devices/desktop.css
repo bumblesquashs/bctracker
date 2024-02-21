@@ -10,7 +10,7 @@ body {
     align-items: stretch;
     height: 100%;
     overflow: hidden;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
     grid-template-rows: auto 1fr;
 }
 
@@ -18,7 +18,7 @@ body.full-map #page-header {
     align-self: flex-start;
 }
 
-form input[type="text"] {
+input[type="text"] {
     font-size: 14pt;
     vertical-align: middle;
 }
@@ -35,6 +35,15 @@ table th {
     font-size: 11pt;
 }
 
+#main {
+    overflow: auto;
+}
+
+#navigation-bar {
+    grid-column-start: span 2;
+    padding-right: 20px;
+}
+
 #navigation-menu-toggle {
     display: none;
 }
@@ -48,63 +57,51 @@ table th {
     height: 28px;
 }
 
-#search-desktop {
-    padding: 0px 20px 0px 10px;
-    font-size: 14pt;
-    font-weight: normal;
-    position: relative;
-    overflow: visible !important;
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    height: 100%;
+#search {
+    width: 275px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    overflow: hidden;
 }
 
-#search-desktop img {
-    width: 28px;
-    height: 28px;
+#search-count {
+    font-size: 11pt;
 }
 
-#search-desktop input[type="text"] {
-    font-size: 14px;
-    margin: 10px 0px;
-    flex: 1;
-}
-
-#search-desktop-results {
-    position: absolute;
-    top: 100%;
-    left: 0px;
-    right: 0px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 30;
-    text-align: left;
-}
-
-#search-desktop-results .message {
-    padding: 12px;
-    text-align: center;
-}
-
-#search-desktop-results .result {
-    padding: 5px 12px;
-    text-decoration: none;
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-}
-
-#search-desktop-results .result img {
+#search-filters .button img {
     width: 24px;
     height: 24px;
 }
 
-#search-desktop-results .result .description {
-    flex: 1;
+#search-header {
+    padding: 10px;
 }
 
-#search-non-desktop-toggle {
-    display: none;
+#search-paging {
+    padding: 10px;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+#search-placeholder {
+    padding: 10px;
+}
+
+#search-results {
+    overflow: auto;
+}
+
+#search-results .result {
+    padding: 5px 10px;
+}
+
+#search-results .result img {
+    width: 24px;
+    height: 24px;
+}
+
+#search-results .result .description {
+    font-size: 11pt;
 }
 
 #side-bar {

@@ -6,24 +6,21 @@ import database
 def create(system, row):
     '''Inserts a new departure into the database'''
     system_id = getattr(system, 'id', system)
-    if 'pickup_type' in row:
+    try:
         pickup_type = PickupType(row['pickup_type'])
-    else:
+    except (KeyError, ValueError):
         pickup_type = PickupType.NORMAL
-    if 'drop_off_type' in row:
+    try:
         dropoff_type = DropoffType(row['drop_off_type'])
-    else:
+    except (KeyError, ValueError):
         dropoff_type = DropoffType.NORMAL
-    if 'timepoint' in row:
+    try:
         timepoint = row['timepoint'] == '1'
-    else:
+    except KeyError:
         timepoint = False
-    if 'shape_dist_traveled' in row:
-        try:
-            distance = int(row['shape_dist_traveled'])
-        except:
-            distance = None
-    else:
+    try:
+        distance = int(row['shape_dist_traveled'])
+    except (KeyError, ValueError):
         distance = None
     database.insert('departure', {
         'system_id': system_id,

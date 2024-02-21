@@ -43,14 +43,14 @@
                                         <td colspan="3">{{ region }}</td>
                                     </tr>
                                     <tr class="display-none"></tr>
-                                    % for region_system in region_systems:
+                                    % for region_system in sorted(region_systems):
                                         % count = len(region_system.get_stops())
                                         <tr>
                                             <td>
                                                 <div class="column">
                                                     <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                                     <span class="mobile-only smaller-font">
-                                                        % if region_system.is_loaded:
+                                                        % if region_system.gtfs_loaded:
                                                             % if count == 1:
                                                                 1 Stop
                                                             % else:
@@ -60,7 +60,7 @@
                                                     </span>
                                                 </div>
                                             </td>
-                                            % if region_system.is_loaded:
+                                            % if region_system.gtfs_loaded:
                                                 <td class="non-mobile">{{ count }}</td>
                                                 <td>
                                                     % include('components/weekdays', schedule=region_system.schedule, compact=True)

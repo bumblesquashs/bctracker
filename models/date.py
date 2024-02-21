@@ -17,26 +17,22 @@ class Date:
     )
     
     @classmethod
-    def parse_db(cls, date_string, timezone):
-        '''Returns a date parsed from the given string in YYYY-MM-DD format'''
-        date = datetime.strptime(date_string, '%Y-%m-%d')
-        return cls(date.year, date.month, date.day, timezone)
-    
-    @classmethod
-    def parse_csv(cls, date_string, timezone):
-        '''Returns a date parsed from the given string in YYYYMMDD format'''
-        date = datetime.strptime(date_string, '%Y%m%d')
+    def parse(cls, date_string, timezone=None, format='%Y-%m-%d'):
+        '''Returns a date parsed from a string in the given format'''
+        date = datetime.strptime(date_string, format)
+        if timezone is None:
+            timezone = pytz.timezone('America/Vancouver')
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
     def today(cls, timezone=None):
         '''Returns the current date'''
         if timezone is None:
-            now = datetime.now()
-        else:
-            now = datetime.now(pytz.timezone(timezone))
-        date = now if now.hour >= 4 else now - timedelta(days=1)
-        return cls(date.year, date.month, date.day, timezone)
+            timezone = pytz.timezone('America/Vancouver')
+        now = datetime.now(timezone)
+        if now.hour < 4:
+            now = now - timedelta(days=1)
+        return cls(now.year, now.month, now.day, timezone)
     
     @property
     def is_earlier(self):
@@ -61,9 +57,7 @@ class Date:
     @property
     def timezone_name(self):
         '''Returns the name of this date's timezone'''
-        if self.timezone is None:
-            return None
-        return datetime.now(pytz.timezone(self.timezone)).tzname()
+        return datetime.now(self.timezone).tzname()
     
     @property
     def weekday(self):
@@ -83,7 +77,7 @@ class Date:
         return hash((self.year, self.month, self.day))
     
     def __eq__(self, other):
-        return self.year == other.year and self.month == other.month and self.day == other.day
+        return self.year == other.year and self.month == other.month and self.day == other.day and self.timezone == other.timezone
     
     def __lt__(self, other):
         if self.year != other.year:
@@ -142,10 +136,10 @@ class Date:
             months = today.month - self.month
         if self.day > today.day:
             months -= 1
-            current_month = today.month - 1
-            if current_month == 0:
-                current_month = 12
-            days = (today.day + calendar.monthrange(today.year, current_month)[1]) - self.day
+            if months < 0:
+                months += 12
+                years -= 1
+            days = (today.day + calendar.monthrange(self.year, self.month)[1]) - self.day
         else:
             days = today.day - self.day
         parts = []

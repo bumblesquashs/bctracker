@@ -48,16 +48,17 @@ def update(system):
             vehicle = entity.vehicle
             try:
                 vehicle_id = vehicle.vehicle.id
-                if len(vehicle_id) > 4:
-                    vehicle_id = vehicle_id[-4:]
+                vehicle_name_length = system.agency.vehicle_name_length
+                if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
+                    vehicle_id = vehicle_id[-vehicle_name_length:]
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
             helpers.position.create(system, bus_number, vehicle)
-        last_updated_date = Date.today('America/Vancouver')
-        last_updated_time = Time.now('America/Vancouver', False)
+        last_updated_date = Date.today()
+        last_updated_time = Time.now(accurate_seconds=False)
         system.last_updated_date = Date.today(system.timezone)
-        system.last_updated_time = Time.now(system.timezone, False)
+        system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
     except Exception as e:
         print(f'Failed to update realtime for {system}: {e}')
 
@@ -106,8 +107,6 @@ def get_last_updated(time_format):
     if date is None or time is None:
         return 'N/A'
     if date.is_today:
-        if time.timezone is None:
-            return f'at {time.format_web(time_format)}'
         return f'at {time.format_web(time_format)} {time.timezone_name}'
     return date.format_since()
 
@@ -122,9 +121,8 @@ def validate(system):
         if position.trip is None:
             trip_id_sections = trip_id.split(':')
             if len(trip_id_sections) == 3:
-                trip_block_section = trip_id_sections[2]
-                other_trip_block_sections = {t.id.split(':')[2] for t in system.get_trips() if len(t.id.split(':')) == 3}
-                if trip_block_section not in other_trip_block_sections:
+                block_id = trip_id_sections[2]
+                if system.get_block(block_id) is None:
                     return False
             else:
                 return False

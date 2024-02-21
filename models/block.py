@@ -104,7 +104,7 @@ class Block:
             message = f'Route {routes}'
         else:
             message = f'Routes {routes}'
-        return Match('block', id, message, 'block', f'blocks/{self.id}', value)
+        return Match(f'Block {id}', message, 'block', f'blocks/{self.id}', value)
     
     def find_departures(self):
         '''Returns all departures for this block'''
