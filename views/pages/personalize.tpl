@@ -1,17 +1,17 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Personalize</h1>
+<div id="page-header">
+    <h1>Personalize</h1>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="container flex-1">
         <div class="section">
             <div class="header">
                 <h2>Theme</h2>
             </div>
-            <div class="content flex-column flex-gap-10">
+            <div class="content">
                 <p>
                     The default BCTracker theme (BC Transit) is available in both light and dark colours.
                     You can also set it to change automatically based on your system preferences.
@@ -24,7 +24,7 @@
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 
-                <div class="flex-column">
+                <div class="column">
                     <div class="radio-button-container" onclick="setTheme('automatic')">
                         <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
                         <div class="label">BC Transit (Auto)</div>
@@ -63,24 +63,20 @@
             <div class="header">
                 <h2>Time Format</h2>
             </div>
-            <div class="content flex-column flex-gap-10">
-                <p>
-                    You can choose whether times are displayed as 12hr or 30hr.
-                </p>
-                <p>
-                    Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.
-                </p>
-                <div class="flex-column">
+            <div class="content">
+                <p>You can choose whether times are displayed as 12hr or 30hr.</p>
+                <p>Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
+                <div class="column">
                     <div class="radio-button-container" onclick="setTimeFormat('12hr')">
                         <div class="radio-button {{ 'selected' if time_format == '12hr' else '' }}"></div>
-                        <div class="label flex-column">
+                        <div class="label column">
                             <p>12hr</p>
                             <p class="smaller-font lighter-text">Uses xm instead of am, so 1am is shown as 1xm</p>
                         </div>
                     </div>
                     <div class="radio-button-container" onclick="setTimeFormat('30hr')">
                         <div class="radio-button {{ 'selected' if time_format is None or time_format == '24hr' or time_format == '30hr' else '' }}"></div>
-                        <div class="label flex-column">
+                        <div class="label column">
                             <p>30hr</p>
                             <p class="smaller-font lighter-text">Continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</p>
                         </div>
@@ -94,11 +90,9 @@
             <div class="header">
                 <h2>Map Bus Icon Style</h2>
             </div>
-            <div class="content flex-column flex-gap-10">
-                <p>
-                    Choose a style for bus icons shown on the map screen.
-                </p>
-                <div class="flex-column">
+            <div class="content">
+                <p>Choose a style for bus icons shown on the map screen.</p>
+                <div class="column">
                     <div class="radio-button-container" onclick="setBusMarkerStyle('default')">
                         <div class="radio-button {{ 'selected' if bus_marker_style is None or bus_marker_style == 'default' else '' }}"></div>
                         <div class="label">Default</div>

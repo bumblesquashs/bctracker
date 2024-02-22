@@ -3,37 +3,29 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Map</h1>
+<div id="page-header">
+    <h1>Map</h1>
     % if len(visible_positions) > 0:
-        <div class="flex-column flex-gap-5">
-            <div class="checkbox" onclick="toggleAutomaticRefresh()">
-                <div class="box">
-                    <div id="refresh-image" class="{{ '' if auto_refresh else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Automatically Refresh</span>
+        <div class="checkbox-container" onclick="toggleAutomaticRefresh()">
+            <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
+                <img class="white" src="/img/white/check.png" />
+                <img class="black" src="/img/black/check.png" />
             </div>
-            <div class="checkbox" onclick="toggleRouteLines()">
-                <div class="box">
-                    <div id="checkbox-image" class="{{ '' if show_route_lines else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Show Route Lines</span>
+            <span>Automatically Refresh</span>
+        </div>
+        <div class="checkbox-container" onclick="toggleRouteLines()">
+            <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
+                <img class="white" src="/img/white/check.png" />
+                <img class="black" src="/img/black/check.png" />
             </div>
-            <div class="checkbox" onclick="toggleNISBuses()">
-                <div class="box">
-                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
-                </div>
-                <span class="checkbox-label">Show NIS Buses</span>
+            <span>Show Route Lines</span>
+        </div>
+        <div class="checkbox-container" onclick="toggleNISBuses()">
+            <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                <img class="white" src="/img/white/check.png" />
+                <img class="black" src="/img/black/check.png" />
             </div>
+            <span>Show NIS Buses</span>
         </div>
     % end
 </div>
@@ -41,14 +33,12 @@
 % if len(visible_positions) == 0:
     <div class="container">
         <div class="section">
-            <div class="checkbox" onclick="toggleNISBusesEmpty()">
-                <div class="box">
-                    <div id="nis-image" class="{{ '' if show_nis else 'hidden' }}">
-                        <img class="white" src="/img/white/check.png" />
-                        <img class="black" src="/img/black/check.png" />
-                    </div>
+            <div class="checkbox-container" onclick="toggleNISBusesEmpty()">
+                <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                    <img class="white" src="/img/white/check.png" />
+                    <img class="black" src="/img/black/check.png" />
                 </div>
-                <span class="checkbox-label">Show NIS Buses</span>
+                <div>Show NIS Buses</div>
             </div>
             <script>
                 function toggleNISBusesEmpty() {
@@ -202,9 +192,9 @@
                     headsign.className = "centred";
                     headsign.innerHTML = position.headsign;
                 } else {
-                    headsign.className = "flex-row center flex-gap-5";
+                    headsign.className = "row center gap-5";
                     const adherenceElement = document.createElement("div");
-                    adherenceElement.classList.add("adherence-indicator", "adherence", adherence.status_class);
+                    adherenceElement.classList.add("adherence", adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     
                     headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
@@ -334,8 +324,8 @@
         
         function toggleAutomaticRefresh() {
             automaticRefresh = !automaticRefresh;
-            const checkboxImage = document.getElementById("refresh-image");
-            checkboxImage.classList.toggle("hidden");
+            const checkbox = document.getElementById("auto-refresh-checkbox");
+            checkbox.classList.toggle("selected");
             setCookie("auto_refresh", automaticRefresh ? "true" : "false");
             
             if (automaticRefresh) {
@@ -345,8 +335,8 @@
         
         function toggleRouteLines() {
             showRouteLines = !showRouteLines;
-            const checkboxImage = document.getElementById("checkbox-image");
-            checkboxImage.classList.toggle("hidden");
+            const checkbox = document.getElementById("show-route-lines-checkbox");
+            checkbox.classList.toggle("selected");
             setCookie("show_route_lines", showRouteLines ? "true" : "false");
             
             for (const shapeID of currentShapeIDs) {
@@ -361,8 +351,8 @@
         
         function toggleNISBuses() {
             showNISBuses = !showNISBuses;
-            const checkboxImage = document.getElementById("nis-image");
-            checkboxImage.classList.toggle("hidden");
+            const checkbox = document.getElementById("show-nis-checkbox");
+            checkbox.classList.toggle("selected");
             setCookie("show_nis", showNISBuses ? "true" : "false");
             
             for (const element of document.getElementsByClassName("nis-bus")) {

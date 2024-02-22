@@ -3,18 +3,16 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title flex-row">
+<div id="page-header">
+    <h1 class="row">
         <span>Bus</span>
-        % include('components/bus', bus=bus, enable_link=False)
+        % include('components/bus', enable_link=False)
     </h1>
-    <h2 class="subtitle">
-        % if bus.order is None:
-            <span class="lighter-text">Unknown Year/Model</span>
-        % else:
-            {{! bus.order }}
-        % end
-    </h2>
+    % if bus.order is None:
+        <h2 class="lighter-text">Unknown Year/Model</h2>
+    % else:
+        <h2>{{! bus.order }}</h2>
+    % end
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
@@ -22,7 +20,7 @@
     </div>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     % if overview is not None:
         <div class="sidebar container flex-1">
             <div class="section">
@@ -31,17 +29,17 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        <div class="section no-flex">
-                            % include('components/events_indicator', events=events)
+                        <div class="section">
+                            % include('components/events_list', events=events)
                         </div>
                         % record_systems = {r.system for r in records}
                         % if overview is not None:
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
-                            <div class="value flex-column">
+                            <div class="value">
                                 % for record_system in sorted(record_systems):
                                     <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
                                 % end
@@ -76,14 +74,14 @@
                     </div>
                 % else:
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
-                        <p class="margin-bottom-10">
+                        <p>
                             <span>Entries with a</span>
                             <img class="middle-align white inline" src="/img/white/warning.png" />
                             <img class="middle-align black inline" src="/img/black/warning.png" />
                             <span>may be accidental logins.</span>
                         </p>
                     % end
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -101,30 +99,30 @@
                                 <tr>
                                     <td class="desktop-only">{{ record.date.format_long() }}</td>
                                     <td class="non-desktop">
-                                        <div class="flex-column">
+                                        <div class="column">
                                             {{ record.date.format_short() }}
                                             <span class="smaller-font">{{ record.system }}</span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">{{ record.system }}</td>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
+                                        <div class="column">
+                                            <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
                                                     <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end
-                                                % include('components/record_warnings_indicator', record=record)
+                                                % include('components/record_warnings')
                                             </div>
                                             <div class="non-desktop">
-                                                % include('components/routes_indicator', routes=record.routes)
+                                                % include('components/route_list', routes=record.routes)
                                             </div>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/routes_indicator', routes=record.routes)
+                                        % include('components/route_list', routes=record.routes)
                                     </td>
                                     <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
                                     <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>

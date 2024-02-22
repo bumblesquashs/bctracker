@@ -1,8 +1,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Block {{ block.id }}</h1>
+<div id="page-header">
+    <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'blocks/{block.id}/map') }}" class="tab-button">Map</a>
@@ -16,7 +16,7 @@
 % routes = block.get_routes()
 % trips = block.get_trips()
 
-<div class="flex-container">
+<div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
             <div class="header">
@@ -26,18 +26,16 @@
                 % include('components/map', map_trips=trips, map_positions=positions)
                 
                 <div class="info-box">
-                    <div class="section no-flex">
-                        % include('components/sheets_indicator', sheets=sheets)
+                    <div class="section">
+                        % include('components/sheet_list')
                     </div>
-                    <div class="section vertical">
-                        <div class="flex-column">
-                            % for route in routes:
-                                <div class="flex-row">
-                                    % include('components/route_indicator')
-                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
-                                </div>
-                            % end
-                        </div>
+                    <div class="column section">
+                        % for route in routes:
+                            <div class="row">
+                                % include('components/route')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                            </div>
+                        % end
                     </div>
                     % for sheet in sheets:
                         % service_groups = sheet.service_groups
@@ -48,16 +46,16 @@
                                 </div>
                             % end
                             % for service_group in service_groups:
-                                <div class="section no-flex">
+                                <div class="section">
                                     % if len(service_groups) > 1:
                                         <div class="lighter-text">{{ service_group }}</div>
                                     % end
-                                    % include('components/block_indicator', service_group=service_group)
+                                    % include('components/block_timeline', service_group=service_group)
                                 </div>
                             % end
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">Start time</div>
-                                <div class="value flex-column">
+                                <div class="value">
                                     % for service_group in service_groups:
                                         <div>
                                             % if len(service_groups) > 1:
@@ -68,9 +66,9 @@
                                     % end
                                 </div>
                             </div>
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">End time</div>
-                                <div class="value flex-column">
+                                <div class="value">
                                     % for service_group in service_groups:
                                         <div>
                                             % if len(service_groups) > 1:
@@ -81,9 +79,9 @@
                                     % end
                                 </div>
                             </div>
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">Duration</div>
-                                <div class="value flex-column">
+                                <div class="value">
                                     % for service_group in service_groups:
                                         <div>
                                             % if len(service_groups) > 1:
@@ -94,9 +92,9 @@
                                     % end
                                 </div>
                             </div>
-                            <div class="section">
+                            <div class="row section">
                                 <div class="name">Number of trips</div>
-                                <div class="value flex-column">
+                                <div class="value">
                                     % for service_group in service_groups:
                                         <div>
                                             % if len(service_groups) > 1:
@@ -108,9 +106,9 @@
                                 </div>
                             </div>
                             % if len([t for t in block.get_trips() if t.length is not None]) > 0:
-                                <div class="section">
+                                <div class="row section">
                                     <div class="name">Length</div>
-                                    <div class="value flex-column">
+                                    <div class="value">
                                         % for service_group in service_groups:
                                             <div>
                                                 % if len(service_groups) > 1:
@@ -136,7 +134,7 @@
                     <h2>Related Blocks</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Block</th>
@@ -148,7 +146,7 @@
                                 <tr>
                                     <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % for sheet in related_block.sheets:
                                                 <div>{{ sheet }}</div>
                                                 <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
@@ -175,7 +173,7 @@
                     % end
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
@@ -188,30 +186,29 @@
                         <tbody>
                             % for position in sorted(positions):
                                 % bus = position.bus
-                                % order = bus.order
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
-                                                % include('components/bus', bus=bus)
-                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                        <div class="column">
+                                            <div class="row">
+                                                % include('components/bus')
+                                                % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order', order=bus.order)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=order)
+                                        % include('components/order', order=bus.order)
                                     </td>
                                     <td>
-                                        <div class="flex-column">
-                                            % include('components/headsign_indicator')
+                                        <div class="column">
+                                            % include('components/headsign')
                                             <div class="mobile-only smaller-font">
                                                 Trip:
-                                                % include('components/trip_link', trip=trip, include_tooltip=False)
+                                                % include('components/trip', include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="mobile-only smaller-font">
@@ -221,7 +218,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/trip_link', trip=trip)
+                                        % include('components/trip')
                                     </td>
                                     <td class="non-mobile">
                                         % if stop is None:
@@ -263,7 +260,7 @@
                                                 </div>
                                             % end
                                             <div class="content">
-                                                <table class="striped">
+                                                <table>
                                                     <thead>
                                                         <tr>
                                                             <th>Start Time</th>
@@ -281,17 +278,17 @@
                                                                 <td class="non-mobile">{{ trip.end_time.format_web(time_format) }}</td>
                                                                 <td class="desktop-only">{{ trip.duration }}</td>
                                                                 <td class="non-mobile">
-                                                                    <div class="flex-column">
-                                                                        % include('components/headsign_indicator')
+                                                                    <div class="column">
+                                                                        % include('components/headsign')
                                                                         <span class="non-desktop smaller-font">{{ trip.direction }}</span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="desktop-only">{{ trip.direction }}</td>
                                                                 <td>
-                                                                    <div class="flex-column">
-                                                                        % include('components/trip_link', trip=trip)
+                                                                    <div class="column">
+                                                                        % include('components/trip')
                                                                         <span class="mobile-only smaller-font">
-                                                                            % include('components/headsign_indicator')
+                                                                            % include('components/headsign')
                                                                         </span>
                                                                     </div>
                                                                 </td>

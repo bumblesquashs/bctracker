@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Administration</h1>
-    <h2 class="subtitle">Tools for server and system management</h2>
+<div id="page-header">
+    <h1>Administration</h1>
+    <h2>Tools for server and system management</h2>
 </div>
 
 <div class="flex-container">

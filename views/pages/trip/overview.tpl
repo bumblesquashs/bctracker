@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Trip {{! trip.display_id }}</h1>
-    <h2 class="subtitle">{{ trip }}</h2>
+<div id="page-header">
+    <h1>Trip {{! trip.display_id }}</h1>
+    <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
@@ -15,7 +15,7 @@
 
 % departures = trip.find_departures()
 
-<div class="flex-container">
+<div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
             <div class="header">
@@ -25,21 +25,21 @@
                 % include('components/map', map_trip=trip, map_positions=positions)
                 
                 <div class="info-box">
-                    <div class="section no-flex">
-                        % include('components/sheets_indicator', sheets=trip.sheets)
+                    <div class="section">
+                        % include('components/sheet_list', sheets=trip.sheets)
                     </div>
                     <div class="section">
                         % route = trip.route
                         % if route is None:
                             <div class="lighter-text">Unknown Route</div>
                         % else:
-                            <div class="flex-row">
-                                % include('components/route_indicator')
+                            <div class="row">
+                                % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
@@ -50,23 +50,23 @@
                             % end
                         </div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Start time</div>
                         <div class="value">{{ trip.start_time.format_web(time_format) }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">End time</div>
                         <div class="value">{{ trip.end_time.format_web(time_format) }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Duration</div>
                         <div class="value">{{ trip.duration }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Number of stops</div>
                         <div class="value">{{ len(departures) }}</div>
                     </div>
-                    <div class="section">
+                    <div class="row section">
                         <div class="name">Direction</div>
                         <div class="value">{{ trip.direction }}</div>
                     </div>
@@ -74,11 +74,11 @@
                     % if length is not None:
                         % km = length / trip.system.agency.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Length</div>
                             <div class="value">{{ f'{km:.1f}' }}km</div>
                         </div>
-                        <div class="section">
+                        <div class="row section">
                             <div class="name">Average Speed</div>
                             <div class="value">{{ f'{(km / hours):.1f}' }}km/h</div>
                         </div>
@@ -94,7 +94,7 @@
                     <h2>Related Trips</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Trip</th>
@@ -107,7 +107,7 @@
                                 % block = related_trip.block
                                 <tr>
                                     <td>
-                                        % include('components/trip_link', trip=related_trip)
+                                        % include('components/trip', trip=related_trip)
                                     </td>
                                     <td class="non-mobile">
                                         % if block is None:
@@ -117,7 +117,7 @@
                                         % end
                                     </td>
                                     <td>
-                                        <div class="flex-column">
+                                        <div class="column">
                                             % for sheet in related_trip.sheets:
                                                 <div>{{ sheet }}</div>
                                                 <div class="smaller-font lighter-text">{{ sheet.schedule }}</div>
@@ -144,7 +144,7 @@
                     % end
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
@@ -155,23 +155,22 @@
                         <tbody>
                             % for position in sorted(positions):
                                 % bus = position.bus
-                                % order = bus.order
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
-                                                % include('components/bus', bus=bus)
-                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                        <div class="column">
+                                            <div class="row">
+                                                % include('components/bus')
+                                                % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="mobile-only smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order', order=bus.order)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/order', order=order)
+                                        % include('components/order', order=bus.order)
                                     </td>
                                     <td>
                                         % if stop is None:
@@ -194,11 +193,9 @@
             </div>
             <div class="content">
                 % if len([d for d in departures if d.timepoint]) > 0:
-                    <p class="margin-bottom-10">
-                        Departures in <span class="timing-point">bold</span> are timing points.
-                    </p>
+                    <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
-                <table class="striped">
+                <table>
                     <thead>
                         <tr>
                             <th>Time</th>
@@ -215,13 +212,13 @@
                                     {{ departure.time.format_web(time_format) }}
                                 </td>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                                         <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
                                     </div>
                                 </td>
                                 <td class="non-mobile">
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <span class="{{ 'timing-point' if departure.timepoint else '' }}">
                                             {{ stop }}
                                         </span>

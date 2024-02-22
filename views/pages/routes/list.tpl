@@ -1,8 +1,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Routes</h1>
+<div id="page-header">
+    <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
         <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
@@ -12,7 +12,7 @@
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see individual routes.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -24,17 +24,15 @@
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
-                        <tr class="section">
-                            <td colspan="3">
-                                {{ region }}
-                            </td>
+                        <tr class="header">
+                            <td colspan="3">{{ region }}</td>
                         </tr>
                         <tr class="display-none"></tr>
                         % for region_system in sorted(region_systems):
                             % count = len(region_system.get_routes())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.gtfs_loaded:
@@ -50,7 +48,7 @@
                                 % if region_system.gtfs_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Routes are loading...</td>
@@ -74,7 +72,7 @@
             % end
         </div>
     % else:
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>Route</th>
@@ -85,13 +83,13 @@
                 % for route in routes:
                     <tr>
                         <td>
-                            <div class="flex-row">
-                                % include('components/route_indicator')
+                            <div class="row">
+                                % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </td>
                         <td class="non-mobile">
-                            % include('components/weekdays_indicator', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
                         </td>
                     </tr>
                 % end

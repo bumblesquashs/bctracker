@@ -23,7 +23,7 @@ body.full-map #system-menu {
     overflow: auto;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     width: 100%;
 }
 
@@ -43,10 +43,6 @@ table {
     width: 100%;
     display: table;
     font-size: 13pt;
-}
-
-#content {
-    padding: 20px;
 }
 
 #last-updated {
@@ -113,6 +109,10 @@ table {
     height: 4px;
     border-radius: 2px;
     margin: 6px;
+}
+
+#page {
+    padding: 20px;
 }
 
 #quick-navigation {
@@ -189,7 +189,7 @@ table {
     display: none;
 }
 
-#status .content {
+#status .details {
     text-align: center;
 }
 
@@ -256,6 +256,11 @@ table {
 
 .non-mobile {
     display: none !important;
+}
+
+.page-container {
+    flex-direction: column;
+    gap: 20px;
 }
 
 .side-bar-closed-only {

@@ -1,12 +1,10 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">
-        <div class="flex-row">
-            % include('components/route_indicator')
-            <div class="flex-1">{{! route.display_name }}</div>
-        </div>
+<div id="page-header">
+    <h1 class="row">
+        % include('components/route')
+        {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -15,7 +13,7 @@
     </div>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     % if len(route.trips) > 0:
         <div class="sidebar container flex-1">
             <div class="section">
@@ -26,16 +24,14 @@
                     % include('components/map', map_trips=route.trips, map_positions=positions)
                     
                     <div class="info-box">
-                        <div class="section no-flex">
-                            % include('components/sheets_indicator', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
+                        <div class="section">
+                            % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
                         </div>
-                        <div class="section vertical">
+                        <div class="column section">
                             % headsigns = route.get_headsigns()
-                            <div class="flex-column">
-                                % for headsign in headsigns:
-                                    <div>{{ headsign }}</div>
-                                % end
-                            </div>
+                            % for headsign in headsigns:
+                                <div>{{ headsign }}</div>
+                            % end
                         </div>
                     </div>
                 </div>
@@ -50,7 +46,7 @@
                     <h2>Active Buses</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
@@ -64,30 +60,29 @@
                         <tbody>
                             % for position in positions:
                                 % bus = position.bus
-                                % order = bus.order
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
-                                        <div class="flex-column">
-                                            <div class="flex-row left">
-                                                % include('components/bus', bus=bus)
-                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                        <div class="column">
+                                            <div class="row">
+                                                % include('components/bus')
+                                                % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=order)
+                                                % include('components/order', order=bus.order)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=order)
+                                        % include('components/order', order=bus.order)
                                     </td>
                                     <td>
-                                        <div class="flex-column">
-                                            % include('components/headsign_indicator')
+                                        <div class="column">
+                                            % include('components/headsign')
                                             <div class="mobile-only smaller-font">
                                                 Trip:
-                                                % include('components/trip_link', trip=trip, include_tooltip=False)
+                                                % include('components/trip', include_tooltip=False)
                                             </div>
                                             % if stop is not None:
                                                 <div class="non-desktop smaller-font">
@@ -101,7 +96,7 @@
                                         <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/trip_link', trip=trip)
+                                        % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
                                         % if stop is None:
@@ -146,14 +141,14 @@
                                     </div>
                                     <div class="content">
                                         % if system is None or system.realtime_enabled:
-                                            <p class="margin-bottom-10">
+                                            <p>
                                                 <span>Buses with a</span>
                                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                                 <img class="middle-align black" src="/img/black/schedule.png" />
                                                 <span>are scheduled but may be swapped off.</span>
                                             </p>
                                         % end
-                                        <table class="striped">
+                                        <table>
                                             <thead>
                                                 <tr>
                                                     <th class="non-mobile">Start Time</th>
@@ -181,31 +176,29 @@
                                                         % if system is None or system.realtime_enabled:
                                                             % if trip.id in recorded_today:
                                                                 % bus = recorded_today[trip.id]
-                                                                % order = bus.order
                                                                 <td>
-                                                                    <div class="flex-column">
-                                                                        <div class="flex-row left">
-                                                                            % include('components/bus', bus=bus)
+                                                                    <div class="column">
+                                                                        <div class="row">
+                                                                            % include('components/bus')
                                                                             % if trip.id in trip_positions:
                                                                                 % position = trip_positions[trip.id]
-                                                                                % include('components/adherence_indicator', adherence=position.adherence)
+                                                                                % include('components/adherence', adherence=position.adherence)
                                                                             % end
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">
-                                                                            % include('components/order', order=order)
+                                                                            % include('components/order', order=bus.order)
                                                                         </span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="desktop-only">
-                                                                    % include('components/order', order=order)
+                                                                    % include('components/order', order=bus.order)
                                                                 </td>
                                                             % elif trip.block_id in scheduled_today and trip.start_time.is_later:
                                                                 % bus = scheduled_today[trip.block_id]
-                                                                % order = bus.order
                                                                 <td>
-                                                                    <div class="flex-column">
-                                                                        <div class="flex-row left">
-                                                                            % include('components/bus', bus=bus)
+                                                                    <div class="column">
+                                                                        <div class="row">
+                                                                            % include('components/bus')
                                                                             <div class="tooltip-anchor">
                                                                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                                                                 <img class="middle-align black" src="/img/black/schedule.png" />
@@ -213,12 +206,12 @@
                                                                             </div>
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">
-                                                                            % include('components/order', order=order)
+                                                                            % include('components/order', order=bus.order)
                                                                         </span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="desktop-only">
-                                                                    % include('components/order', order=order)
+                                                                    % include('components/order', order=bus.order)
                                                                 </td>
                                                             % else:
                                                                 <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
@@ -226,16 +219,16 @@
                                                             % end
                                                         % end
                                                         <td class="desktop-only">
-                                                            % include('components/headsign_indicator')
+                                                            % include('components/headsign')
                                                         </td>
                                                         <td class="non-mobile">
                                                             <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
                                                         </td>
                                                         <td>
-                                                            <div class="flex-column">
-                                                                % include('components/trip_link', trip=trip)
+                                                            <div class="column">
+                                                                % include('components/trip')
                                                                 <span class="non-desktop smaller-font">
-                                                                    % include('components/headsign_indicator')
+                                                                    % include('components/headsign')
                                                                 </span>
                                                             </div>
                                                         </td>

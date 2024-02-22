@@ -15,7 +15,7 @@ body.full-map {
     overflow: hidden;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     width: 100%;
 }
 
@@ -35,10 +35,6 @@ table {
     width: 100%;
     display: table;
     font-size: 13pt;
-}
-
-#content {
-    padding: 20px;
 }
 
 #last-updated {
@@ -112,6 +108,10 @@ table {
     margin: 6px;
 }
 
+#page {
+    padding: 20px;
+}
+
 #refresh-button img {
     width: 36px;
     height: 36px;
@@ -180,7 +180,7 @@ table {
     display: none;
 }
 
-#status .content {
+#status .details {
     text-align: center;
 }
 
@@ -251,6 +251,11 @@ table {
 
 .non-tablet {
     display: none !important;
+}
+
+.page-container {
+    flex-direction: column;
+    gap: 20px;
 }
 
 .smaller-font {

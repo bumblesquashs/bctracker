@@ -1,16 +1,16 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Welcome to BCTracker!</h1>
+<div id="page-header">
+    <h1>Welcome to BCTracker!</h1>
     % if system is None:
-        <h2 class="subtitle">BC Transit Schedules and Bus Tracking</h2>
+        <h2>BC Transit Schedules and Bus Tracking</h2>
     % else:
-        <h2 class="subtitle">{{ system }} Transit Schedules and Bus Tracking</h2>
+        <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
     % end
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
             <div class="header">
@@ -105,10 +105,8 @@
             <div class="header">
                 <h2>Community</h2>
             </div>
-            <div class="section">
-                <p class="margin-bottom-10">
-                    Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!
-                </p>
+            <div class="content">
+                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
                 <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>
@@ -122,36 +120,36 @@
             <div class="content">
                 <div id="quick-navigation">
                     <div class="item">
-                        <img class="white" src="/img/white/realtime.png" />
-                        <img class="black" src="/img/black/realtime.png" />
-                        <h3>Bus Tracking</h3>
-                        <p class="margin-bottom-10">
-                            See all buses that are currently active, including current route and location
-                        </p>
+                        <div class="column center">
+                            <img class="white" src="/img/white/realtime.png" />
+                            <img class="black" src="/img/black/realtime.png" />
+                            <h3>Bus Tracking</h3>
+                            <p>See all buses that are currently active, including current route and location</p>
+                        </div>
                         <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
                             <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
                         </div>
                     </div>
                     <div class="item">
-                        <img class="white" src="/img/white/history.png" />
-                        <img class="black" src="/img/black/history.png" />
-                        <h3>Bus History</h3>
-                        <p class="margin-bottom-10">
-                            See all buses that have been tracked, including last-seen date and transfers
-                        </p>
+                        <div class="column center">
+                            <img class="white" src="/img/white/history.png" />
+                            <img class="black" src="/img/black/history.png" />
+                            <h3>Bus History</h3>
+                            <p>See all buses that have been tracked, including last-seen date and transfers</p>
+                        </div>
                         <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'history') }}">History</a>
                             <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
                         </div>
                     </div>
                     <div class="item">
-                        <img class="white" src="/img/white/route.png" />
-                        <img class="black" src="/img/black/route.png" />
-                        <h3>Schedules and Maps</h3>
-                        <p class="margin-bottom-10">
-                            See departure times and routing details for routes, stops, blocks, and more
-                        </p>
+                        <div class="column center">
+                            <img class="white" src="/img/white/route.png" />
+                            <img class="black" src="/img/black/route.png" />
+                            <h3>Schedules and Maps</h3>
+                            <p>See departure times and routing details for routes, stops, blocks, and more</p>
+                        </div>
                         <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'routes') }}">Routes</a>
                             <a class="button" href="{{ get_url(system, 'stops') }}">Stops</a>

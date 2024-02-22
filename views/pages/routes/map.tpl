@@ -3,8 +3,8 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Routes</h1>
+<div id="page-header">
+    <h1>Routes</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
         <span class="tab-button current">Map</span>
@@ -14,7 +14,7 @@
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see individual routes.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -26,17 +26,15 @@
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
-                        <tr class="section">
-                            <td colspan="3">
-                                {{ region }}
-                            </td>
+                        <tr class="header">
+                            <td colspan="3">{{ region }}</td>
                         </tr>
                         <tr class="display-none"></tr>
                         % for region_system in sorted(region_systems):
                             % count = len(region_system.get_routes())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.gtfs_loaded:
@@ -52,7 +50,7 @@
                                 % if region_system.gtfs_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Routes are loading...</td>

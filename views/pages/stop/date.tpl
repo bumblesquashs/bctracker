@@ -1,9 +1,9 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Stop {{ stop.number }}</h1>
-    <h2 class="subtitle">{{ stop }}</h2>
+<div id="page-header">
+    <h1>Stop {{ stop.number }}</h1>
+    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
             <div class="header">
@@ -19,18 +19,18 @@
             </div>
             <div class="content">
                 <div class="info-box">
-                    <div class="section vertical-align">
+                    <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
-                        <div class="name centred">
+                        <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
                             <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">Return to week view</a>
                         </div>
                         <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
-                    <div class="section no-flex">
-                        % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
+                    <div class="section">
+                        % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                         % end
                     </div>
                 % else:
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Time</th>
@@ -82,8 +82,8 @@
                                 <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                     <td>{{ departure.time.format_web(time_format) }}</td>
                                     <td class="non-mobile">
-                                        <div class="flex-column">
-                                            % include('components/headsign_indicator')
+                                        <div class="column">
+                                            % include('components/headsign')
                                             % if not departure.pickup_type.is_normal:
                                                 <span class="smaller-font">{{ departure.pickup_type }}</span>
                                             % elif departure == trip.last_departure:
@@ -102,10 +102,10 @@
                                         % end
                                     </td>
                                     <td>
-                                        <div class="flex-column">
-                                            % include('components/trip_link', trip=trip)
+                                        <div class="column">
+                                            % include('components/trip')
                                             <span class="mobile-only smaller-font">
-                                                % include('components/headsign_indicator')
+                                                % include('components/headsign')
                                             </span>
                                             % if not departure.pickup_type.is_normal:
                                                 <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>

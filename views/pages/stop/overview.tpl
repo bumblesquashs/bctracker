@@ -5,9 +5,9 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Stop {{ stop.number }}</h1>
-    <h2 class="subtitle">{{ stop }}</h2>
+<div id="page-header">
+    <h1>Stop {{ stop.number }}</h1>
+    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
             <div class="header">
@@ -27,19 +27,17 @@
                 
                 % if len(stop_departures) > 0:
                     <div class="info-box">
-                        <div class="section no-flex">
-                            % include('components/sheets_indicator', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
+                        <div class="section">
+                            % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
                         </div>
-                        <div class="section vertical">
+                        <div class="column section">
                             % routes = stop.routes
-                            <div class="flex-column">
-                                % for route in routes:
-                                    <div class="flex-row">
-                                        % include('components/route_indicator')
-                                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
-                                    </div>
-                                % end
-                            </div>
+                            % for route in routes:
+                                <div class="row">
+                                    % include('components/route')
+                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                </div>
+                            % end
                         </div>
                     </div>
                 % end
@@ -53,7 +51,7 @@
                     <h2>Nearby Stops</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Number</th>
@@ -68,7 +66,7 @@
                                     <td class="non-mobile">{{ nearby_stop }}</td>
                                     <td>
                                         <div class="mobile-only">{{ nearby_stop }}</div>
-                                        % include('components/routes_indicator', routes=nearby_stop.routes)
+                                        % include('components/route_list', routes=nearby_stop.routes)
                                     </td>
                                 </tr>
                             % end
@@ -85,7 +83,7 @@
                     <h2>Other Systems At This Stop</h2>
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>System</th>
@@ -98,7 +96,7 @@
                                 <tr>
                                     <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
                                     <td>
-                                        % include('components/routes_indicator', routes=alt_stop.routes)
+                                        % include('components/route_list', routes=alt_stop.routes)
                                     </td>
                                 </tr>
                             % end
@@ -120,20 +118,22 @@
                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                     % if len(upcoming_departures) == 0:
                         % tomorrow = Date.today().next()
-                        <p>
-                            There are no departures for the rest of today.
-                            <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
-                        </p>
+                        <div class="placeholder">
+                            <p>
+                                There are no departures for the rest of today.
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                            </p>
+                        </div>
                     % else:
                         % if system is None or system.realtime_enabled:
-                            <p class="margin-bottom-10">
+                            <p>
                                 <span>Buses with a</span>
                                 <img class="middle-align white" src="/img/white/schedule.png" />
                                 <img class="middle-align black" src="/img/black/schedule.png" />
                                 <span>are scheduled but may be swapped off.</span>
                             </p>
                         % end
-                        <table class="striped">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Time</th>
@@ -180,14 +180,14 @@
                     </div>
                 % else:
                     % if system is None or system.realtime_enabled:
-                        <p class="margin-bottom-10">
+                        <p>
                             <span>Buses with a</span>
                             <img class="middle-align white" src="/img/white/schedule.png" />
                             <img class="middle-align black" src="/img/black/schedule.png" />
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Time</th>

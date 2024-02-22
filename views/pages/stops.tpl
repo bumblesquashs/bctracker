@@ -1,17 +1,17 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Stops</h1>
+<div id="page-header">
+    <h1>Stops</h1>
     % if search is not None:
-        <h2 class="subtitle">Search results for "{{ search }}"</h2>
+        <h2>Search results for "{{ search }}"</h2>
     % end
 </div>
 
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see individual stops.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -23,7 +23,7 @@
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
-                        <tr class="section">
+                        <tr class="header">
                             <td colspan="3">
                                 {{ region }}
                             </td>
@@ -33,7 +33,7 @@
                             % count = len(region_system.get_stops())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.gtfs_loaded:
@@ -49,7 +49,7 @@
                                 % if region_system.gtfs_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Stops are loading...</td>
@@ -101,7 +101,7 @@
                 <h3>No stops found</h3>
             </div>
         % else:
-            <table class="striped">
+            <table>
                 <thead>
                     <tr>
                         <th class="desktop-only">Stop Number</th>
@@ -113,17 +113,16 @@
                 </thead>
                 <tbody>
                     % for stop in sorted(stops):
-                        % routes = stop.routes
                         <tr>
                             <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                             <td>
                                 {{ stop }}
                                 <div class="mobile-only">
-                                    % include('components/routes_indicator', routes=routes)
+                                    % include('components/route_list', routes=stop.routes)
                                 </div>
                             </td>
                             <td class="non-mobile">
-                                % include('components/routes_indicator', routes=routes)
+                                % include('components/route_list', routes=stop.routes)
                             </td>
                         </tr>
                     % end

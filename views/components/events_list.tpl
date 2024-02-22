@@ -5,7 +5,7 @@
     % for date in dates:
         <div class="date">
             <div class="tooltip-anchor">
-                <div class="flex-row flex-gap-5">
+                <div class="row gap-5">
                     <img class="white" src="/img/white/calendar.png" />
                     <img class="black" src="/img/black/calendar.png" />
                     <div>{{ date }}</div>
@@ -18,7 +18,7 @@
                 % date_events = [e for e in events if e.date == date]
                 % for event in date_events:
                     <li class="event">
-                        <div class="flex-column flex-gap-0">
+                        <div class="column gap-0">
                             <div>{{ event.name }}</div>
                             % if event.description is not None:
                                 <div class="smaller-font lighter-text">{{ event.description }}</div>

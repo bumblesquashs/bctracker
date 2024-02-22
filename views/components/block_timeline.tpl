@@ -8,19 +8,18 @@
 % end_time = block.get_end_time(service_group=service_group, date=date)
 % total_minutes = end_time.get_minutes() - start_time.get_minutes()
 
-<div>
-    <div class="flex-row">
-        <div class="smaller-font lighter-text">{{ start_time.format_web(time_format) }}</div>
-        <div class="flex-1"></div>
-        <div class="smaller-font lighter-text">{{ end_time.format_web(time_format) }}</div>
+<div class="block-timeline">
+    <div class="row space-between smaller-font lighter-text">
+        <div>{{ start_time.format_web(time_format) }}</div>
+        <div>{{ end_time.format_web(time_format) }}</div>
     </div>
-    <div class="block-indicator">
+    <div class="timeline">
         % for trip in block.get_trips(service_group=service_group, date=date):
             % trip_minutes = trip.end_time.get_minutes() - trip.start_time.get_minutes()
             % percentage = (trip_minutes / total_minutes) * 100
             % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
             % offset_percentage = (offset_minutes / total_minutes) * 100
-            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="trip tooltip-anchor" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
+            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="section tooltip-anchor" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
                 <div class="tooltip">
                     <div class="title">{{ trip }}</div>
                     {{ trip.start_time.format_web(time_format) }} - {{ trip.end_time.format_web(time_format) }}

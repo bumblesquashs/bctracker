@@ -25,7 +25,7 @@ body {
     color: #000000;
 }
 
-body.full-map .page-header {
+body.full-map #page-header {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -39,39 +39,35 @@ input[type="text"]:focus {
     border-color: #7A0000;
 }
 
-table.striped {
+table {
     border-color: #69BB65;
 }
 
-table.striped tbody tr:hover {
+table tbody tr:hover {
     background-color: #C3E9C1;
 }
 
-table.striped tbody tr.section {
+table tbody tr.header {
     background-color: #69BB65;
     color: #FFFFFF;
 }
 
-table.striped td {
+table td {
     border-color: #69BB65;
 }
 
-table.striped th {
+table th {
     background-color: #D70000;
     color: #FFFFFF;
     border-color: #69BB65;
 }
 
-table.striped tr {
+table tr {
     background-color: #FFFFFF;
 }
 
-table.striped tr:nth-child(2n-1) {
+table tr:nth-child(2n-1) {
     background-color: #E4F6E3;
-}
-
-#content img.white {
-    display: none;
 }
 
 #map.preview {
@@ -82,8 +78,12 @@ table.striped tr:nth-child(2n-1) {
     background-color: #D70000;
 }
 
-#map-toggle-icon-black {
+#map-toggle img.black {
     display: none;
+}
+
+#map-toggle img.white {
+    display: block;
 }
 
 #navigation-bar {
@@ -142,6 +142,14 @@ table.striped tr:nth-child(2n-1) {
 #nearby-status.error {
     border-color: #FF0000;
     background-color: #FFCCCC;
+}
+
+#page img.white {
+    display: none;
+}
+
+#page-header {
+    border-bottom-color: #69BB65;
 }
 
 #quick-navigation .item {
@@ -331,14 +339,6 @@ table.striped tr:nth-child(2n-1) {
     border-bottom-color: #FD393E;
 }
 
-.block-indicator .now {
-    background-color: #D70000;
-}
-
-.block-indicator .trip:hover {
-    border-color: #69BB65;
-}
-
 .button {
     background-color: #AB0000;
     color: #FFFFFF;
@@ -376,43 +376,18 @@ table.striped tr:nth-child(2n-1) {
     display: none;
 }
 
-.checkbox .box {
+.checkbox-container .checkbox {
     border-color: #000000;
     background-color: #FFFFFF;
 }
 
-.checkbox .box img.white {
+.checkbox-container .checkbox img.white {
     display: none;
 }
 
 .code-block {
     background-color: #E4F6E3;
     border-color: #69BB65;
-}
-
-.dropdown .content {
-    background-color: #FFFFFF;
-}
-
-.dropdown .content .dropdown-button {
-    color: #000000;
-}
-
-.dropdown .content .dropdown-button:hover {
-    background-color: #E4F6E3;
-}
-
-.dropdown .content .dropdown-button.disabled {
-    color: #666666;
-}
-
-.dropdown .content .dropdown-button.disabled:hover {
-    background-color: #FFFFFF;
-}
-
-.dropdown .content .header {
-    background-color: #C3E9C1;
-    color: #000000;
 }
 
 .events .date {
@@ -449,20 +424,9 @@ table.striped tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.menu {
-    background-color: #7A0000;
-}
-
-.menu .menu-button {
-    color: #FFFFFF;
-}
-
-.menu .menu-button.disabled {
-    color: #ABABAB;
-}
-
-.menu .menu-button img.black {
-    display: none;
+.modified-service {
+    background-color: #FFA560;
+    color: #000000;
 }
 
 .negative {
@@ -480,12 +444,18 @@ table.striped tr:nth-child(2n-1) {
     border-bottom-color: #69BB65;
 }
 
-.order-indicator .content .separator {
-    color: #69BB65;
+.no-service {
+    background-color: #FF7F7F;
+    color: #000000;
 }
 
-.page-header {
-    border-bottom-color: #69BB65;
+.normal-service {
+    background-color: #7DBD88;
+    color: #000000;
+}
+
+.order-details .content .separator {
+    color: #69BB65;
 }
 
 .positive {
@@ -504,49 +474,34 @@ table.striped tr:nth-child(2n-1) {
     background-color: #D70000;
 }
 
-.route-number {
+.route {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;
 }
 
-.sheets-indicator .footer {
-    color: #666666;
+.sheet {
+    background-color: #C3E9C1;
 }
 
-.sheets-indicator .legend {
-    color: #666666;
-}
-
-.sheets-indicator a.modified-service:hover {
+.sheet a.modified-service:hover {
     background-color: #E6853A;
 }
 
-.sheets-indicator a.no-service:hover {
+.sheet a.no-service:hover {
     background-color: #DC5050;
 }
 
-.sheets-indicator a.normal-service:hover {
+.sheet a.normal-service:hover {
     background-color: #509F5E;
 }
 
-.sheets-indicator .modified-service {
-    background-color: #FFA560;
-    color: #000000;
+.sheet-list .footer {
+    color: #666666;
 }
 
-.sheets-indicator .no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.sheets-indicator .normal-service {
-    background-color: #7DBD88;
-    color: #000000;
-}
-
-.sheets-indicator .sheet {
-    background-color: #C3E9C1;
+.sheet-list .legend {
+    color: #666666;
 }
 
 .tab-button-bar {
@@ -569,6 +524,14 @@ table.striped tr:nth-child(2n-1) {
     color: #000000;
 }
 
+.timeline .now {
+    background-color: #D70000;
+}
+
+.timeline .section:hover {
+    border-color: #69BB65;
+}
+
 .tooltip-anchor .tooltip {
     background-color: #69BB65;
     color: #FFFFFF;
@@ -586,17 +549,7 @@ table.striped tr:nth-child(2n-1) {
     background-color: #509F5E;
 }
 
-.weekdays .weekday {
+.weekdays {
     background-color: #C4C4C4;
-    color: #000000;
-}
-
-.weekdays .weekday.no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.weekdays .weekday.normal-service {
-    background-color: #7DBD88;
     color: #000000;
 }

@@ -1,11 +1,11 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Nearby Stops</h1>
+<div id="page-header">
+    <h1>Nearby Stops</h1>
 </div>
 
-<div class="flex-container">
+<div class="page-container">
     <div id="current-location" class="sidebar container flex-1 display-none">
         <div class="section">
             <div class="header">
@@ -27,7 +27,7 @@
                     <div class="placeholder">
                         <h3>Choose a system to see nearby stops</h3>
                     </div>
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>System</th>
@@ -39,17 +39,15 @@
                             % for region in regions:
                                 % region_systems = [s for s in systems if s.region == region]
                                 % if len(region_systems) > 0:
-                                    <tr class="section">
-                                        <td colspan="3">
-                                            {{ region }}
-                                        </td>
+                                    <tr class="header">
+                                        <td colspan="3">{{ region }}</td>
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for region_system in sorted(region_systems):
                                         % count = len(region_system.get_stops())
                                         <tr>
                                             <td>
-                                                <div class="flex-column">
+                                                <div class="column">
                                                     <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                                     <span class="mobile-only smaller-font">
                                                         % if region_system.gtfs_loaded:
@@ -65,7 +63,7 @@
                                             % if region_system.gtfs_loaded:
                                                 <td class="non-mobile">{{ count }}</td>
                                                 <td>
-                                                    % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True)
+                                                    % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                                 </td>
                                             % else:
                                                 <td class="lighter-text" colspan="2">Stops are loading...</td>
@@ -78,7 +76,7 @@
                     </table>
                 % else:
                     <div id="result" class="container">
-                        <div id="nearby-status" class="loading flex-column">
+                        <div id="nearby-status" class="loading column">
                             <div id="status-title">Loading upcoming departures...</div>
                             <div id="status-message" class="display-none"></div>
                         </div>
@@ -192,7 +190,7 @@
                     content.classList = "content hover-only centred";
                     let routesHTML = "";
                     for (const route of stop.routes) {
-                        routesHTML += "<span class='route-number' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                        routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
                     }
                     content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
                     

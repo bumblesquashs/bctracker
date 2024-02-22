@@ -1,14 +1,14 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">Blocks</h1>
+<div id="page-header">
+    <h1>Blocks</h1>
 </div>
 
 % if system is None:
     <div class="placeholder">
         <p>Choose a system to see blocks.</p>
-        <table class="striped">
+        <table>
             <thead>
                 <tr>
                     <th>System</th>
@@ -20,17 +20,15 @@
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
-                        <tr class="section">
-                            <td colspan="3">
-                                {{ region }}
-                            </td>
+                        <tr class="header">
+                            <td colspan="3">{{ region }}</td>
                         </tr>
                         <tr class="display-none"></tr>
                         % for region_system in sorted(region_systems):
                             % count = len(region_system.get_blocks())
                             <tr>
                                 <td>
-                                    <div class="flex-column">
+                                    <div class="column">
                                         <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.gtfs_loaded:
@@ -46,7 +44,7 @@
                                 % if region_system.gtfs_loaded:
                                     <td class="non-mobile">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays_indicator', schedule=region_system.schedule, compact=True, schedule_path='blocks')
+                                        % include('components/weekdays', schedule=region_system.schedule, compact=True, schedule_path='blocks')
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Blocks are loading...</td>
@@ -71,7 +69,7 @@
         </div>
     % else:
         % sheets = system.get_sheets()
-        <div class="flex-container">
+        <div class="page-container">
             <div class="sidebar container flex-1">
                 <div class="section">
                     <div class="header">
@@ -79,8 +77,8 @@
                     </div>
                     <div class="content">
                         <div class="info-box">
-                            <div class="section no-flex">
-                                % include('components/sheets_indicator', sheets=sheets, schedule_path='blocks', date_path='blocks/schedule')
+                            <div class="section">
+                                % include('components/sheet_list', schedule_path='blocks', date_path='blocks/schedule')
                             </div>
                         </div>
                     </div>
@@ -99,12 +97,12 @@
                                     <div class="section">
                                         <div class="header">
                                             % for weekday in service_group.schedule.weekdays:
-                                                <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
+                                                <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
                                             % end
                                             <h3>{{ service_group }}</h3>
                                         </div>
                                         <div class="content">
-                                            <table class="striped">
+                                            <table>
                                                 <thead>
                                                     <tr>
                                                         <th>Block</th>
@@ -123,7 +121,7 @@
                                                         <tr>
                                                             <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
                                                             <td>
-                                                                % include('components/routes_indicator', routes=block.get_routes(service_group=service_group))
+                                                                % include('components/route_list', routes=block.get_routes(service_group=service_group))
                                                             </td>
                                                             <td class="non-mobile">{{ start_time }}</td>
                                                             <td class="non-mobile">{{ end_time }}</td>

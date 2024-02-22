@@ -245,7 +245,7 @@
                     <img class="white" src="/img/white/system.png" />
                     <img class="black" src="/img/black/system.png" />
                 </div>
-                <div class="content">
+                <div class="details">
                     <div id="system">
                         % if system is None:
                             All Transit Systems
@@ -259,7 +259,6 @@
                         % end
                     </div>
                 </div>
-                
                 <div id="refresh-button" class="disabled">
                     <img class="white" src="/img/white/refresh.png" />
                     <img class="black" src="/img/black/refresh.png" />
@@ -307,7 +306,7 @@
                     </div>
                 % end
             </div>
-            <div id="content">{{ !base }}</div>
+            <div id="page">{{ !base }}</div>
         </div>
         <div id="search" class="display-none" tabindex="0">
             <div id="search-header">

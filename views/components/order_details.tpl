@@ -1,5 +1,5 @@
 % order = bus.order
-<div class="order-indicator">
+<div class="order-details">
     <div class="title">{{! order }}</div>
     <div class="content">
         % if bus.number > order.low:
@@ -13,9 +13,7 @@
             <span class="separator">&lt;</span>
         % end
         
-        <span class="bus">
-            % include('components/bus', bus=bus, enable_link=False)
-        </span>
+        % include('components/bus', enable_link=False)
         
         % if bus.number < order.high:
             % last_bus = order.last_bus

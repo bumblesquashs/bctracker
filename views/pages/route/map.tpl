@@ -1,12 +1,10 @@
 
 % rebase('base')
 
-<div class="page-header">
-    <h1 class="title">
-        <div class="flex-row">
-            % include('components/route_indicator')
-            <div class="flex-1">{{! route.display_name }}</div>
-        </div>
+<div id="page-header">
+    <h1 class="row">
+        % include('components/route')
+        {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
