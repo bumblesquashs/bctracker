@@ -29,18 +29,18 @@ class Order:
     def __init__(self, agency, model, **kwargs):
         self.agency = agency
         self.model = model
-        if 'number' in kwargs:
+        try:
             self.low = kwargs['number']
             self.high = kwargs['number']
-        else:
+        except KeyError:
             self.low = kwargs['low']
             self.high = kwargs['high']
         self.year = kwargs.get('year')
         self.visible = kwargs.get('visible', True)
         self.demo = kwargs.get('demo', False)
-        if 'exceptions' in kwargs:
+        try:
             self.exceptions = set(kwargs['exceptions'])
-        else:
+        except KeyError:
             self.exceptions = set()
         
         self.size = (self.high - self.low) + 1 - len(self.exceptions)
@@ -48,9 +48,9 @@ class Order:
     def __str__(self):
         model = self.model
         year = self.year
-        if model is None or year is None:
-            return 'Unknown year/model'
-        return f'{year} {model}'
+        if model and year:
+            return f'{year} {model}'
+        return 'Unknown year/model'
     
     def __hash__(self):
         return hash((self.agency, self.low, self.high))

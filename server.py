@@ -93,12 +93,12 @@ def stop():
 def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
-    if system_id is None:
-        url = config.all_systems_domain.format(path).rstrip('/')
-    else:
+    if system_id:
         url = config.system_domain.format(system_id, path).rstrip('/')
+    else:
+        url = config.all_systems_domain.format(path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
-    if len(query_args) > 0:
+    if query_args:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
@@ -114,10 +114,10 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
     bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
-    if system is None:
-        last_updated = realtime.get_last_updated(time_format)
-    else:
+    if system:
         last_updated = system.get_last_updated(time_format)
+    else:
+        last_updated = realtime.get_last_updated(time_format)
     return template(f'pages/{name}',
         config=config,
         version=VERSION,
@@ -162,10 +162,10 @@ def frame(name, system, **kwargs):
 def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
     max_age = 60 * 60 * 24 * max_age_days
-    if config.cookie_domain is None:
-        response.set_cookie(key, value, max_age=max_age, path='/')
-    else:
+    if config.cookie_domain:
         response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
+    else:
+        response.set_cookie(key, value, max_age=max_age, path='/')
 
 def query_cookie(key, default_value=None, max_age_days=3650):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
@@ -199,7 +199,7 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
             if system_key in kwargs:
                 system_id = kwargs[system_key]
                 system = helpers.system.find(system_id)
-                if system is None:
+                if not system:
                     raise HTTPError(404)
                 del kwargs[system_key]
             else:
@@ -253,8 +253,8 @@ def map_page(system):
     return page('map', system,
         title='Map',
         path='map',
-        include_maps=len(visible_positions) > 0,
-        full_map=len(visible_positions) > 0,
+        include_maps=bool(visible_positions),
+        full_map=bool(visible_positions),
         positions=sorted(positions, key=lambda p: p.lat),
         auto_refresh=auto_refresh,
         show_route_lines=show_route_lines,
@@ -332,7 +332,7 @@ def bus_overview_page(system, bus_number):
     agency = helpers.agency.find('bc-transit')
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
-    if (bus.order is None and overview is None) or not bus.visible:
+    if (not bus.order and not overview) or not bus.visible:
         return error_page('invalid_bus', system,
             title='Unknown Bus',
             bus_number=bus_number
@@ -353,7 +353,7 @@ def bus_map_page(system, bus_number):
     agency = helpers.agency.find('bc-transit')
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
-    if (bus.order is None and overview is None) or not bus.visible:
+    if (not bus.order and not overview) or not bus.visible:
         return error_page('invalid_bus', system,
             title='Unknown Bus',
             bus_number=bus_number
@@ -372,7 +372,7 @@ def bus_history_page(system, bus_number):
     agency = helpers.agency.find('bc-transit')
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
-    if (bus.order is None and overview is None) or not bus.visible:
+    if (not bus.order and not overview) or not bus.visible:
         return error_page('invalid_bus', system,
             title='Unknown Bus',
             bus_number=bus_number
@@ -380,12 +380,12 @@ def bus_history_page(system, bus_number):
     records = helpers.record.find_all(bus=bus)
     transfers = helpers.transfer.find_all(bus=bus)
     events = []
-    if overview is not None:
+    if overview:
         events.append(Event(overview.first_seen_date, 'First Seen'))
-        if overview.first_record is not None:
+        if overview.first_record:
             events.append(Event(overview.first_record.date, 'First Tracked'))
         events.append(Event(overview.last_seen_date, 'Last Seen'))
-        if overview.last_record is not None:
+        if overview.last_record:
             events.append(Event(overview.last_record.date, 'Last Tracked'))
         for transfer in transfers:
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
@@ -399,7 +399,7 @@ def bus_history_page(system, bus_number):
 
 @endpoint('/history')
 def history_last_seen_page(system):
-    overviews = [o for o in helpers.overview.find_all(system) if o.last_record is not None and o.bus.visible]
+    overviews = [o for o in helpers.overview.find_all(system) if o.last_record and o.bus.visible]
     return page('history/last_seen', system,
         title='Vehicle History',
         path='history',
@@ -408,7 +408,7 @@ def history_last_seen_page(system):
 
 @endpoint('/history/first-seen')
 def history_first_seen_page(system):
-    overviews = [o for o in helpers.overview.find_all(system) if o.first_record is not None and o.bus.visible]
+    overviews = [o for o in helpers.overview.find_all(system) if o.first_record and o.bus.visible]
     return page('history/first_seen', system,
         title='Vehicle History',
         path='history/first-seen',
@@ -434,28 +434,28 @@ def routes_list_page(system):
 
 @endpoint('/routes/map')
 def routes_map_page(system):
-    if system is None:
-        routes = []
-    else:
+    try:
         routes = system.get_routes()
+    except AttributeError:
+        routes = []
     return page('routes/map', system,
         title='Routes',
         path='routes/map',
         enable_refresh=False,
-        include_maps=len(routes) > 0,
-        full_map=len(routes) > 0,
+        include_maps=bool(routes),
+        full_map=bool(routes),
         routes=routes
     )
 
 @endpoint('/routes/<route_number>')
 def route_overview_page(system, route_number):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'routes/{route_number}'
         )
     route = system.get_route(number=route_number)
-    if route is None:
+    if not route:
         return error_page('invalid_route', system,
             title='Unknown Route',
             route_number=route_number
@@ -463,7 +463,7 @@ def route_overview_page(system, route_number):
     trips = sorted(route.get_trips(date=Date.today()))
     return page('route/overview', system,
         title=str(route),
-        include_maps=len(route.trips) > 0,
+        include_maps=bool(route.trips),
         route=route,
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
@@ -473,34 +473,34 @@ def route_overview_page(system, route_number):
 
 @endpoint('/routes/<route_number>/map')
 def route_map_page(system, route_number):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'routes/{route_number}/map'
         )
     route = system.get_route(number=route_number)
-    if route is None:
+    if not route:
         return error_page('invalid_route', system,
             title='Unknown Route',
             route_number=route_number
         )
     return page('route/map', system,
         title=str(route),
-        include_maps=len(route.trips) > 0,
-        full_map=len(route.trips) > 0,
+        include_maps=bool(route.trips),
+        full_map=bool(route.trips),
         route=route,
         positions=helpers.position.find_all(system, route=route)
     )
 
 @endpoint('/routes/<route_number>/schedule')
 def route_schedule_page(system, route_number):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
-    if route is None:
+    if not route:
         return error_page('invalid_route', system,
             title='Unknown Route',
             route_number=route_number
@@ -513,13 +513,13 @@ def route_schedule_page(system, route_number):
 
 @endpoint('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
 def route_schedule_date_page(system, route_number, date_string):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'routes/{route_number}/schedule'
         )
     route = system.get_route(number=route_number)
-    if route is None:
+    if not route:
         return error_page('invalid_route', system,
             title='Unknown Route',
             route_number=route_number
@@ -542,10 +542,10 @@ def blocks_page(system):
 
 @endpoint('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
 def blocks_schedule_date_page(system, date_string):
-    if system is None:
-        date = Date.parse(date_string)
-    else:
+    try:
         date = Date.parse(date_string, system.timezone)
+    except AttributeError:
+        date = Date.parse(date_string)
     return page('blocks/date', system,
         title='Blocks',
         enable_reload=False,
@@ -555,13 +555,13 @@ def blocks_schedule_date_page(system, date_string):
 
 @endpoint('/blocks/<block_id>')
 def block_overview_page(system, block_id):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'blocks/{block_id}'
         )
     block = system.get_block(block_id)
-    if block is None:
+    if not block:
         return error_page('invalid_block', system,
             title='Unknown Block',
             block_id=block_id
@@ -575,13 +575,13 @@ def block_overview_page(system, block_id):
 
 @endpoint('/blocks/<block_id>/map')
 def block_map_page(system, block_id):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'blocks/{block_id}/map'
         )
     block = system.get_block(block_id)
-    if block is None:
+    if not block:
         return error_page('invalid_block', system,
             title='Unknown Block',
             block_id=block_id
@@ -596,22 +596,25 @@ def block_map_page(system, block_id):
 
 @endpoint('/blocks/<block_id>/history')
 def block_history_page(system, block_id):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'blocks/{block_id}/history'
         )
     block = system.get_block(block_id)
-    if block is None:
+    if not block:
         return error_page('invalid_block', system,
             title='Unknown Block',
             block_id=block_id
         )
     records = helpers.record.find_all(system, block=block)
-    events = []
-    if len(records) > 0:
-        events.append(Event(records[0].date, 'Last Tracked'))
-        events.append(Event(records[-1].date, 'First Tracked'))
+    try:
+        events = [
+            Event(records[0].date, 'Last Tracked'),
+            Event(records[-1].date, 'First Tracked')
+        ]
+    except IndexError:
+        events = []
     return page('block/history', system,
         title=f'Block {block.id}',
         block=block,
@@ -621,13 +624,13 @@ def block_history_page(system, block_id):
 
 @endpoint('/trips/<trip_id>')
 def trip_overview_page(system, trip_id):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'trips/{trip_id}'
         )
     trip = system.get_trip(trip_id)
-    if trip is None:
+    if not trip:
         return error_page('invalid_trip', system,
             title='Unknown Trip',
             trip_id=trip_id
@@ -641,13 +644,13 @@ def trip_overview_page(system, trip_id):
 
 @endpoint('/trips/<trip_id>/map')
 def trip_map_page(system, trip_id):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'trips/{trip_id}/map'
         )
     trip = system.get_trip(trip_id)
-    if trip is None:
+    if not trip:
         return error_page('invalid_trip', system,
             title='Unknown Trip',
             trip_id=trip_id
@@ -662,22 +665,25 @@ def trip_map_page(system, trip_id):
 
 @endpoint('/trips/<trip_id>/history')
 def trip_history_page(system, trip_id):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'trips/{trip_id}/history'
         )
     trip = system.get_trip(trip_id)
-    if trip is None:
+    if not trip:
         return error_page('invalid_trip', system,
             title='Unknown Trip',
             trip_id=trip_id
         )
     records = helpers.record.find_all(system, trip=trip)
-    events = []
-    if len(records) > 0:
-        events.append(Event(records[0].date, 'Last Tracked'))
-        events.append(Event(records[-1].date, 'First Tracked'))
+    try:
+        events = [
+            Event(records[0].date, 'Last Tracked'),
+            Event(records[-1].date, 'First Tracked')
+        ]
+    except IndexError:
+        events = []
     return page('trip/history', system,
         title=f'Trip {trip.id}',
         trip=trip,
@@ -689,7 +695,7 @@ def trip_history_page(system, trip_id):
 def stops_page(system):
     path = 'stops'
     search = request.query.get('search')
-    if search is not None:
+    if search:
         path += f'?search={search}'
     return page('stops', system,
         title='Stops',
@@ -700,13 +706,13 @@ def stops_page(system):
 
 @endpoint('/stops/<stop_number>')
 def stop_overview_page(system, stop_number):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'stops/{stop_number}'
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
+    if not stop:
         return error_page('invalid_stop', system,
             title='Unknown Stop',
             stop_number=stop_number
@@ -726,13 +732,13 @@ def stop_overview_page(system, stop_number):
 
 @endpoint('/stops/<stop_number>/map')
 def stop_map_page(system, stop_number):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'stops/{stop_number}/map'
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
+    if not stop:
         return error_page('invalid_stop', system,
             title='Unknown Stop',
             stop_number=stop_number
@@ -746,13 +752,13 @@ def stop_map_page(system, stop_number):
 
 @endpoint('/stops/<stop_number>/schedule')
 def stop_schedule_page(system, stop_number):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
+    if not stop:
         return error_page('invalid_stop', system,
             title='Unknown Stop',
             stop_number=stop_number
@@ -765,13 +771,13 @@ def stop_schedule_page(system, stop_number):
 
 @endpoint('/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
 def stop_schedule_date_page(system, stop_number, date_string):
-    if system is None:
+    if not system:
         return error_page('system_required', system,
             title='System Required',
             path=f'stops/{stop_number}/schedule'
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
+    if not stop:
         return error_page('invalid_stop', system,
             title='Unknown Stop',
             stop_number=stop_number
@@ -806,13 +812,13 @@ def themes_page(system):
 @endpoint('/personalize')
 def themes_page(system):
     theme_id = request.query.get('theme')
-    if theme_id is not None:
+    if theme_id:
         set_cookie('theme', theme_id)
     time_format = request.query.get('time_format')
-    if time_format is not None:
+    if time_format:
         set_cookie('time_format', time_format)
     bus_marker_style = request.query.get('bus_marker_style')
-    if bus_marker_style is not None:
+    if bus_marker_style:
         set_cookie('bus_marker_style', bus_marker_style)
     themes = helpers.theme.find_all()
     return page('personalize', system,
@@ -845,7 +851,7 @@ def admin_page(system):
 
 @endpoint('/frame/nearby', append_slash=False)
 def frame_nearby(system):
-    if system is None:
+    if not system:
         response.status = 400
         return None
     stops = sorted(system.get_stops())
@@ -866,10 +872,10 @@ def api_health_check(system):
 @endpoint('/api/map.json', append_slash=False)
 def api_map(system):
     time_format = request.get_cookie('time_format')
-    if system is None:
-        last_updated = realtime.get_last_updated(time_format)
-    else:
+    try:
         last_updated = system.get_last_updated(time_format)
+    except AttributeError:
+        last_updated = realtime.get_last_updated(time_format)
     positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
@@ -885,7 +891,7 @@ def api_shape_id(system, shape_id):
 @endpoint('/api/search', method='POST')
 def api_search(system):
     agency = helpers.agency.find('bc-transit')
-    query = request.forms.get('query', '')
+    query = request.forms.get('query')
     page = int(request.forms.get('page', 0))
     count = int(request.forms.get('count', 10))
     include_buses = int(request.forms.get('include_buses', 1)) == 1
@@ -893,11 +899,11 @@ def api_search(system):
     include_stops = int(request.forms.get('include_stops', 1)) == 1
     include_blocks = int(request.forms.get('include_blocks', 1)) == 1
     matches = []
-    if query != '':
-        if query.isnumeric() and (system is None or system.realtime_enabled):
+    if query:
+        if query.isnumeric() and (not system or system.realtime_enabled):
             if include_buses:
                 matches += helpers.order.find_matches(agency, query, helpers.overview.find_bus_numbers(system))
-        if system is not None:
+        if system:
             if include_blocks:
                 matches += system.search_blocks(query)
             if include_routes:
@@ -914,7 +920,7 @@ def api_search(system):
 
 @endpoint('/api/nearby.json', append_slash=False)
 def api_nearby(system):
-    if system is None:
+    if not system:
         return {
             'stops': []
         }
@@ -973,7 +979,7 @@ def api_admin_backup_database(system):
 @endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_gtfs(system, reload_system_id):
     system = helpers.system.find(reload_system_id)
-    if system is None:
+    if not system:
         return 'Invalid system'
     gtfs.load(system, True)
     gtfs.update_cache_in_background(system)
@@ -986,7 +992,7 @@ def api_admin_reload_gtfs(system, reload_system_id):
 @endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_realtime(system, reload_system_id):
     system = helpers.system.find(reload_system_id)
-    if system is None:
+    if not system:
         return 'Invalid system'
     realtime.update(system)
     if not realtime.validate(system):

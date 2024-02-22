@@ -21,8 +21,7 @@ def find(agency, bus):
     '''Returns the adornments with the given bus number'''
     agency_id = getattr(agency, 'id', agency)
     bus_number = getattr(bus, 'number', bus)
-    if agency_id in adornments:
-        agency_adornments = adornments[agency_id]
-        if bus_number in agency_adornments:
-            return agency_adornments[bus_number]
-    return None
+    try:
+        return adornments[agency_id][bus_number]
+    except KeyError:
+        return None

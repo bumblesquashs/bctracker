@@ -133,10 +133,10 @@ class Stop:
         '''Returns all departures from this stop'''
         departures = helpers.departure.find_all(self.system, stop=self)
         if service_group is None:
-            if date is None:
-                return sorted(departures)
-            return sorted([d for d in departures if d.trip is not None and date in d.trip.service])
-        return sorted([d for d in departures if d.trip is not None and d.trip.service in service_group])
+            return sorted([d for d in departures if d.trip and d.trip.service in service_group])
+        if date is None:
+            return sorted([d for d in departures if d.trip and date in d.trip.service])
+        return sorted(departures)
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''

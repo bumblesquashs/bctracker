@@ -15,9 +15,10 @@ def load():
 
 def find(theme_id):
     '''Returns the theme with the given ID'''
-    if theme_id is not None and theme_id in themes:
+    try:
         return themes[theme_id]
-    return None
+    except KeyError:
+        return None
 
 def find_all():
     '''Returns all themes'''

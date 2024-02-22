@@ -15,9 +15,10 @@ def load():
 
 def find(agency_id):
     '''Returns the agency with the given ID'''
-    if agency_id is not None and agency_id in agencies:
+    try:
         return agencies[agency_id]
-    return None
+    except KeyError:
+        return None
 
 def find_all():
     '''Returns all agencies'''

@@ -24,9 +24,10 @@ def load():
 
 def find(system_id):
     '''Returns the system with the given ID'''
-    if system_id is not None and system_id in systems:
+    try:
         return systems[system_id]
-    return None
+    except KeyError:
+        return None
 
 def find_all():
     '''Returns all systems'''

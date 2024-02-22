@@ -17,6 +17,7 @@ def load():
 
 def find(model_id):
     '''Returns the model with the given ID'''
-    if model_id in models:
+    try:
         return models[model_id]
-    return None
+    except KeyError:
+        return None

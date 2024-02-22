@@ -63,47 +63,50 @@ class Trip:
     @property
     def first_stop(self):
         '''Returns the first stop of this trip'''
-        departure = self.first_departure
-        if departure is None:
+        try:
+            return self.first_departure.stop
+        except AttributeError:
             return None
-        return departure.stop
     
     @property
     def last_stop(self):
         '''Returns the last stop of this trip'''
-        departure = self.last_departure
-        if departure is None:
+        try:
+            return self.last_departure.stop
+        except AttributeError:
             return None
-        return departure.stop
     
     @property
     def start_time(self):
         '''Returns the time of the first departure of this trip'''
-        departure = self.first_departure
-        if departure is None:
-            return Time.unknown()
-        return departure.time
+        try:
+            return self.first_departure.time
+        except AttributeError:
+            return Time.unknown(self.system.timezone)
     
     @property
     def end_time(self):
         '''Returns the time of the last departure of this trip'''
-        departure = self.last_departure
-        if departure is None:
-            return Time.unknown()
-        return departure.time
+        try:
+            return self.last_departure.time
+        except AttributeError:
+            return Time.unknown(self.system.timezone)
     
     @property
     def duration(self):
         '''Returns the total time of this trip'''
-        return self.start_time.format_difference(self.end_time)
+        try:
+            return self.start_time.format_difference(self.end_time)
+        except AttributeError:
+            return 0
     
     @property
     def length(self):
         '''Returns the distance travelled on this trip'''
-        departure = self.last_departure
-        if departure is None:
+        try:
+            return self.last_departure.distance
+        except:
             return None
-        return departure.distance
     
     @property
     def related_trips(self):
@@ -160,7 +163,7 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.system.agency.prefix_headsigns and self.route is not None:
+        if self.system.agency.prefix_headsigns and self.route:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -178,7 +181,7 @@ class Trip:
         self.is_setup = True
         if departures is None:
             departures = self.find_departures()
-        if len(departures) == 0:
+        if not departures:
             return
         self._first_departure = departures[0]
         self._last_departure = departures[-1]
@@ -191,12 +194,12 @@ class Trip:
             'shape_id': self.shape_id,
             'points': [p.get_json() for p in self.find_points()]
         }
-        if self.route is None:
-            json['colour'] = '666666'
-            json['text_colour'] = '000000'
-        else:
+        try:
             json['colour'] = self.route.colour
             json['text_colour'] = self.route.text_colour
+        except AttributeError:
+            json['colour'] = '666666'
+            json['text_colour'] = '000000'
         return json
     
     def find_points(self):

@@ -54,46 +54,38 @@ class Position:
     @property
     def trip(self):
         '''Returns the trip associated with this position'''
-        if self.trip_id is None:
-            return None
         return self.system.get_trip(self.trip_id)
     
     @property
     def stop(self):
         '''Returns the stop associated with this position'''
-        if self.stop_id is None:
-            return None
         return self.system.get_stop(stop_id=self.stop_id)
     
     @property
     def block(self):
         '''Returns the block associated with this position'''
-        if self.block_id is None:
-            return None
         return self.system.get_block(self.block_id)
     
     @property
     def route(self):
         '''Returns the route associated with this position'''
-        if self.route_id is None:
-            return None
         return self.system.get_route(route_id=self.route_id)
     
     @property
     def colour(self):
         '''Returns the route colour associated with this position'''
-        trip = self.trip
-        if trip is None:
+        try:
+            return self.trip.route.colour
+        except AttributeError:
             return '989898'
-        return trip.route.colour
     
     @property
     def text_colour(self):
         '''Returns the route text colour associated with this position'''
-        trip = self.trip
-        if trip is None:
+        try:
+            return self.trip.route.text_colour
+        except AttributeError:
             return 'FFFFFF'
-        return trip.route.text_colour
     
     def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
         self.system = system
@@ -138,27 +130,31 @@ class Position:
                 data['bus_icon'] = 'ghost'
         if self.lon == 0 and self.lat == 0:
             data['bus_icon'] = 'fish'
-        adornment = self.bus.find_adornment()
-        if adornment is not None and adornment.enabled:
-            data['adornment'] = str(adornment)
-        trip = self.trip
-        if trip is None:
-            data['headsign'] = 'Not In Service'
-            data['route_number'] = 'NIS'
-        else:
+        try:
+            adornment = self.bus.find_adornment()
+            if adornment.enabled:
+                data['adornment'] = str(adornment)
+        except AttributeError:
+            pass
+        try:
+            trip = self.trip
             data['headsign'] = str(trip).replace("'", '&apos;')
             data['route_number'] = trip.route.number
             data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id
+        except AttributeError:
+            data['headsign'] = 'Not In Service'
+            data['route_number'] = 'NIS'
         bearing = self.bearing
         if bearing is not None:
             data['bearing'] = bearing
         speed = self.speed
         if speed is not None:
             data['speed'] = speed
-        adherence = self.adherence
-        if adherence is not None:
-            data['adherence'] = adherence.get_json()
+        try:
+            data['adherence'] = self.adherence.get_json()
+        except AttributeError:
+            pass
         return data
     
     def find_upcoming_departures(self):

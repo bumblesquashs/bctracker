@@ -11,21 +11,21 @@ def create(system, bus, data):
     try:
         trip_id = data.trip.trip_id
         if trip_id == '':
-            trip_id = None
-    except AttributeError:
+            raise ValueError('Trip ID must not be empty')
+    except (AttributeError, ValueError):
         trip_id = None
     try:
         stop_id = data.stop_id
         if stop_id == '':
-            stop_id = None
+            raise ValueError('Stop ID must not be empty')
     except AttributeError:
         stop_id = None
     try:
         if data.HasField('current_stop_sequence'):
             sequence = int(data.current_stop_sequence)
         else:
-            sequence = None
-    except:
+            raise KeyError('Missing current_stop_sequence')
+    except (KeyError, ValueError):
         sequence = None
     try:
         lat = data.position.latitude
@@ -37,25 +37,21 @@ def create(system, bus, data):
         if data.position.HasField('bearing'):
             bearing = data.position.bearing
         else:
-            bearing = None
-    except AttributeError:
+            raise KeyError('Missing bearing')
+    except (AttributeError, KeyError):
         bearing = None
     try:
         speed = int(data.position.speed * 3.6)
-    except AttributeError:
+    except (AttributeError, ValueError):
         speed = None
     trip = system.get_trip(trip_id)
     stop = system.get_stop(stop_id=stop_id)
-    if trip is None:
-        block_id = None
-        route_id = None
-    else:
+    try:
         block_id = trip.block_id
         route_id = trip.route_id
-    if trip is None or stop is None or sequence is None or lat is None or lon is None:
-        adherence = None
-    else:
-        adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
+    except AttributeError:
+        block_id = None
+        route_id = None
     values = {
         'system_id': system_id,
         'bus_number': bus_number,
@@ -69,8 +65,10 @@ def create(system, bus, data):
         'bearing': bearing,
         'speed': speed
     }
-    if adherence is not None:
-        values['adherence'] = adherence.value
+    try:
+        values['adherence'] = Adherence.calculate(trip, stop, sequence, lat, lon)
+    except AttributeError:
+        pass
     database.insert('position', values)
 
 def find(bus):

@@ -139,9 +139,10 @@ class System:
     
     def get_service(self, service_id):
         '''Returns the service with the given ID'''
-        if service_id in self.services:
+        try:
             return self.services[service_id]
-        return None
+        except KeyError:
+            return None
     
     def get_services(self):
         '''Returns all services'''
@@ -149,9 +150,9 @@ class System:
     
     def get_sheets(self, services=None):
         '''Returns all sheets'''
-        if services is None:
-            return sorted(self.sheets)
-        return sorted([s for s in self.sheets if services in s])
+        if services:
+            return sorted([s for s in self.sheets if services in s])
+        return sorted(self.sheets)
     
     def copy_sheets(self, services):
         copies = [s.copy(services) for s in self.get_sheets()]
@@ -171,9 +172,10 @@ class System:
     
     def get_trip(self, trip_id):
         '''Returns the trip with the given ID'''
-        if trip_id in self.trips:
+        try:
             return self.trips[trip_id]
-        return None
+        except KeyError:
+            return None
     
     def get_trips(self):
         '''Returns all trips'''
@@ -183,11 +185,11 @@ class System:
         '''Returns the date/time that realtime data was last updated'''
         date = self.last_updated_date
         time = self.last_updated_time
-        if date is None or time is None:
-            return 'N/A'
-        if date.is_today:
-            return f'at {time.format_web(time_format)} {time.timezone_name}'
-        return date.format_since()
+        if date and time:
+            if date.is_today:
+                return f'at {time.format_web(time_format)} {time.timezone_name}'
+            return date.format_since()
+        return 'N/A'
     
     def search_blocks(self, query):
         '''Returns all blocks that match the given query'''
@@ -215,18 +217,18 @@ class System:
                 stop_departures.setdefault(departure.stop_id, []).append(departure)
             for trip_id, departures in trip_departures.items():
                 trip = self.get_trip(trip_id)
-                if trip is not None:
+                if trip:
                     trip.setup(departures)
             for stop_id, departures in stop_departures.items():
                 stop = self.get_stop(stop_id=stop_id)
-                if stop is not None:
+                if stop:
                     stop.setup(departures)
             route_trips = {}
             for trip in self.get_trips():
                 route_trips.setdefault(trip.route_id, []).append(trip)
             for route_id, trips in route_trips.items():
                 route = self.get_route(route_id=route_id)
-                if route is not None:
+                if route:
                     route.setup(trips)
         except Exception as e:
             print(f'Failed to update cached data for {self}: {e}')

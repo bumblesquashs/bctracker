@@ -49,7 +49,7 @@ def update(system):
             try:
                 vehicle_id = vehicle.vehicle.id
                 vehicle_name_length = system.agency.vehicle_name_length
-                if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
+                if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                     vehicle_id = vehicle_id[-vehicle_name_length:]
                 bus_number = int(vehicle_id)
             except:
@@ -69,15 +69,13 @@ def update_records():
             try:
                 system = position.system
                 bus = position.bus
-                if bus.number < 0:
+                if not bus.is_known:
                     continue
                 date = Date.today(system.timezone)
                 time = Time.now(system.timezone)
                 overview = helpers.overview.find(bus.number)
                 trip = position.trip
-                if trip is None:
-                    record_id = None
-                else:
+                if trip:
                     block = trip.block
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
@@ -88,12 +86,14 @@ def update_records():
                                 helpers.record.create_trip(last_record, trip)
                             continue
                     record_id = helpers.record.create(bus, date, system, block, time, trip)
-                if overview is None:
-                    helpers.overview.create(bus, date, system, record_id)
                 else:
+                    record_id = None
+                if overview:
                     helpers.overview.update(overview, date, system, record_id)
                     if overview.last_seen_system != system:
                         helpers.transfer.create(bus, date, overview.last_seen_system, system)
+                else:
+                    helpers.overview.create(bus, date, system, record_id)
             except Exception as e:
                 print(f'Failed to update records: {e}')
         database.commit()
@@ -104,11 +104,11 @@ def get_last_updated(time_format):
     '''Returns the date/time that realtime data was last updated'''
     date = last_updated_date
     time = last_updated_time
-    if date is None or time is None:
-        return 'N/A'
-    if date.is_today:
-        return f'at {time.format_web(time_format)} {time.timezone_name}'
-    return date.format_since()
+    if date and time:
+        if date.is_today:
+            return f'at {time.format_web(time_format)} {time.timezone_name}'
+        return date.format_since()
+    return 'N/A'
 
 def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
@@ -116,9 +116,9 @@ def validate(system):
         return True
     for position in helpers.position.find_all(system):
         trip_id = position.trip_id
-        if trip_id is None:
+        if not trip_id:
             continue
-        if position.trip is None:
+        if not position.trip:
             trip_id_sections = trip_id.split(':')
             if len(trip_id_sections) == 3:
                 block_id = trip_id_sections[2]

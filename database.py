@@ -151,14 +151,14 @@ def connect(name='bctracker', foreign_keys=True):
 def disconnect():
     '''Closes the connection to the database'''
     global connection
-    if connection is None:
+    if not connection:
         return
     connection.close()
     connection = None
 
 def backup(name='bctracker'):
     '''Copies all information from the main database to a backup database'''
-    if connection is None or not config.enable_database_backups:
+    if not connection or not config.enable_database_backups:
         return
     backup = sqlite3.connect(f'archives/{name}.db', check_same_thread=False)
     connection.backup(backup)
@@ -170,37 +170,36 @@ def archive(name='bctracker'):
 
 def commit():
     '''Saves all changes made to the database'''
-    if connection is None:
+    if not connection:
         return
     connection.commit()
 
 def execute(sql, args=None):
     '''Runs a generic SQL script with the given arguments'''
-    if connection is None:
+    if not connection:
         return
-    args = [] if args is None else args
+    args = args or []
     
     if type(args) is list:
         args = tuple(args)
-    if len(args) == 0:
-        return connection.cursor().execute(sql)
-    else:
+    if args:
         return connection.cursor().execute(sql, args)
+    return connection.cursor().execute(sql)
 
 def select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None, initializer=None):
     '''Executes a SELECT script and returns the selected rows'''
-    custom_args = [] if custom_args is None else custom_args
+    custom_args = custom_args or []
     sql, args = build_select(table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page)
     
     result = execute(sql, custom_args + args)
     if type(columns) is list:
-        if initializer is None:
-            return [dict(zip(columns, r)) for r in result]
-        return [initializer(dict(zip(columns, r))) for r in result]
+        if initializer:
+            return [initializer(dict(zip(columns, r))) for r in result]
+        return [dict(zip(columns, r)) for r in result]
     elif type(columns) is dict:
-        if initializer is None:
-            return [dict(zip(columns.values(), r)) for r in result]
-        return [initializer(dict(zip(columns.values(), r))) for r in result]
+        if initializer:
+            return [initializer(dict(zip(columns.values(), r))) for r in result]
+        return [dict(zip(columns.values(), r)) for r in result]
     return result
 
 def insert(table, values):
@@ -225,20 +224,20 @@ def update(table, values, filters=None, operation='AND'):
     columns_string = ', '.join([c + ' = ?' for c in columns])
     
     where, args = build_where(filters, operation)
-    if where is None:
-        return execute(f'UPDATE {table} SET {columns_string}', values)
-    return execute(f'UPDATE {table} SET {columns_string} WHERE {where}', values + args)
+    if where:
+        return execute(f'UPDATE {table} SET {columns_string} WHERE {where}', values + args)
+    return execute(f'UPDATE {table} SET {columns_string}', values)
 
 def delete(table, filters=None, operation='AND'):
     '''Executes a DELETE script'''
     where, args = build_where(filters, operation)
-    if where is None:
-        return execute(f'DELETE FROM {table}')
-    return execute(f'DELETE FROM {table} WHERE {where}', args)
+    if where:
+        return execute(f'DELETE FROM {table} WHERE {where}', args)
+    return execute(f'DELETE FROM {table}')
 
 def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None):
     '''Creates a SQL script for a SELECT query'''
-    custom_args = [] if custom_args is None else custom_args
+    custom_args = custom_args or []
     sql = []
     
     for cte in build_ctes(ctes):
@@ -264,7 +263,7 @@ def build_select(table, columns, distinct=False, ctes=None, join_type='', joins=
         sql.append(join_type + ' JOIN ' + join)
     
     where, args = build_where(filters, operation)
-    if where is not None:
+    if where:
         sql.append('WHERE ' + where)
     
     if type(group_by) is str:
@@ -323,7 +322,7 @@ def build_where(filters, operation):
     if type(filters) is str:
         return filters, []
     elif type(filters) is list or type(filters) is set:
-        if len(filters) > 0:
+        if filters:
             return f' {operation} '.join(filters), []
     elif type(filters) is dict:
         expressions = []
@@ -351,6 +350,6 @@ def build_where(filters, operation):
             else:
                 args.append(value)
                 expressions.append(f'{key} = ?')
-        if len(expressions) > 0:
+        if expressions:
             return f' {operation} '.join(expressions), args
     return None, []

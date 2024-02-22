@@ -15,9 +15,10 @@ def load():
 
 def find(region_id):
     '''Returns the region with the given ID'''
-    if region_id is not None and region_id in regions:
+    try:
         return regions[region_id]
-    return None
+    except KeyError:
+        return None
 
 def find_all():
     '''Returns all regions'''

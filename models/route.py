@@ -105,7 +105,7 @@ class Route:
         services = {t.service for t in trips}
         self._schedule = Schedule.combine(services)
         self._sheets = self.system.copy_sheets(services)
-        if len(trips) > 0:
+        if trips:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].find_points()
             first_point = points[0]
@@ -145,11 +145,11 @@ class Route:
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this route'''
-        if service_group is None:
-            if date is None:
-                return sorted(self.trips)
+        if service_group:
+            return sorted([t for t in self.trips if t.service in service_group])
+        if date:
             return sorted([t for t in self.trips if date in t.service])
-        return sorted([t for t in self.trips if t.service in service_group])
+        return sorted(self.trips)
     
     def get_headsigns(self, service_group=None, date=None):
         '''Returns all headsigns from this route'''
@@ -179,10 +179,10 @@ def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''
     seed(system.id)
     number_digits = ''.join([d for d in number if d.isdigit()])
-    if len(number_digits) == 0:
-        h = randint(1, 360) / 360.0
-    else:
+    if number_digits:
         h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
+    else:
+        h = randint(1, 360) / 360.0
     seed(system.id + number)
     l = randint(30, 50) / 100.0
     s = randint(50, 100) / 100.0

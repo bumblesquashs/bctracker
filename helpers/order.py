@@ -29,12 +29,15 @@ def find(agency, bus):
     '''Returns the order containing the given bus number'''
     agency_id = getattr(agency, 'id', agency)
     bus_number = getattr(bus, 'number', bus)
-    if agency_id in orders and bus_number >= 0:
+    if bus_number < 0:
+        return None
+    try:
         agency_orders = orders[agency_id]
         for order in agency_orders:
             if bus_number in order:
                 return order
-    return None
+    except KeyError:
+        return None
 
 def find_all(agency=None):
     '''Returns all orders'''

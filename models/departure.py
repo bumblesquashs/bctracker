@@ -75,11 +75,11 @@ class Departure:
         time = Time.parse(row[f'{prefix}_time'], system.timezone, system.agency.accurate_seconds)
         try:
             pickup_type = PickupType(row[f'{prefix}_pickup_type'])
-        except:
+        except ValueError:
             pickup_type = PickupType.NORMAL
         try:
             dropoff_type = DropoffType(row[f'{prefix}_dropoff_type'])
-        except:
+        except ValueError:
             dropoff_type = DropoffType.NORMAL
         timepoint = row[f'{prefix}_timepoint'] == 1
         distance = row[f'{prefix}_distance']
@@ -99,14 +99,14 @@ class Departure:
     def pickup_only(self):
         '''Checks if this departure is pickup-only'''
         if self.pickup_type.is_normal:
-            return self.trip is not None and self == self.trip.first_departure
+            return self.trip and self == self.trip.first_departure
         return False
     
     @property
     def dropoff_only(self):
         '''Checks if this departure is dropoff-only'''
         if self.dropoff_type.is_normal:
-            return self.trip is not None and self == self.trip.last_departure
+            return self.trip and self == self.trip.last_departure
         return False
     
     def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance):
@@ -132,11 +132,10 @@ class Departure:
                     return True
                 if self.pickup_only or other.dropoff_only:
                     return False
-                if self.trip is None or other.trip is None:
+                try:
+                    return self.trip.route < other.trip.route
+                except AttributeError:
                     return False
-                if self.trip.route is None or other.trip.route is None:
-                    return False
-                return self.trip.route < other.trip.route
             return self.time < other.time
     
     def get_json(self):
@@ -145,10 +144,10 @@ class Departure:
             'stop': self.stop.get_json(),
             'time': str(self.time)
         }
-        if self.trip is not None and self.trip.route is not None:
+        try:
             json['colour'] = self.trip.route.colour
             json['text_colour'] = self.trip.route.text_colour
-        else:
+        except AttributeError:
             json['colour'] = '666666'
             json['text_colour'] = 'FFFFFF'
         return json
