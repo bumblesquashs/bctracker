@@ -225,12 +225,12 @@
                                         % if not departure.pickup_type.is_normal:
                                             <span class="smaller-font">{{ departure.pickup_type }}</span>
                                         % elif departure == departures[-1]:
-                                            <span class="smaller-font">Drop off only</span>
+                                            <span class="smaller-font">No pick up</span>
                                         % end
                                         % if not departure.dropoff_type.is_normal:
                                             <span class="smaller-font">{{ departure.dropoff_type }}</span>
                                         % elif departure == departures[0]:
-                                            <span class="smaller-font">Pick up only</span>
+                                            <span class="smaller-font">No drop off</span>
                                         % end
                                     </div>
                                 </td>
