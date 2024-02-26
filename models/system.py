@@ -5,7 +5,10 @@ import helpers.departure
 import helpers.overview
 import helpers.position
 
+from models.route import RouteCache
 from models.schedule import Schedule
+from models.stop import StopCache
+from models.trip import TripCache
 
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
@@ -29,7 +32,10 @@ class System:
         'sheets',
         'stops',
         'stops_by_number',
-        'trips'
+        'trips',
+        'route_caches',
+        'stop_caches',
+        'trip_caches'
     )
     
     @property
@@ -94,6 +100,10 @@ class System:
         self.stops = {}
         self.stops_by_number = {}
         self.trips = {}
+        
+        self.route_caches = {}
+        self.stop_caches = {}
+        self.trip_caches = {}
     
     def __str__(self):
         return self.name
@@ -214,19 +224,49 @@ class System:
                 trip_departures.setdefault(departure.trip_id, []).append(departure)
                 stop_departures.setdefault(departure.stop_id, []).append(departure)
             for trip_id, departures in trip_departures.items():
-                trip = self.get_trip(trip_id)
-                if trip is not None:
-                    trip.setup(departures)
+                if trip_id not in self.trip_caches:
+                    self.trip_caches[trip_id] = TripCache(departures)
             for stop_id, departures in stop_departures.items():
-                stop = self.get_stop(stop_id=stop_id)
-                if stop is not None:
-                    stop.setup(departures)
+                if stop_id not in self.stop_caches:
+                    self.stop_caches[stop_id] = StopCache(self, departures)
             route_trips = {}
             for trip in self.get_trips():
                 route_trips.setdefault(trip.route_id, []).append(trip)
             for route_id, trips in route_trips.items():
-                route = self.get_route(route_id=route_id)
-                if route is not None:
-                    route.setup(trips)
+                if route_id not in self.route_caches:
+                    self.route_caches[route_id] = RouteCache(self, trips)
         except Exception as e:
             print(f'Failed to update cached data for {self}: {e}')
+    
+    def get_route_cache(self, route):
+        '''Returns the cache for the given route'''
+        route_id = getattr(route, 'id', route)
+        try:
+            return self.route_caches[route_id]
+        except KeyError:
+            trips = [t for t in self.get_trips() if t.route_id == route_id]
+            cache = RouteCache(self, trips)
+            self.route_caches[route_id] = cache
+            return cache
+    
+    def get_stop_cache(self, stop):
+        '''Returns the cache for the given stop'''
+        stop_id = getattr(stop, 'id', stop)
+        try:
+            return self.stop_caches[stop_id]
+        except KeyError:
+            departures = helpers.departure.find_all(self, stop=stop)
+            cache = StopCache(self, departures)
+            self.stop_caches[stop_id] = cache
+            return cache
+    
+    def get_trip_cache(self, trip):
+        '''Returns the cache for the given trip'''
+        trip_id = getattr(trip, 'id', trip)
+        try:
+            return self.trip_caches[trip_id]
+        except KeyError:
+            departures = helpers.departure.find_all(self, trip=trip)
+            cache = TripCache(departures)
+            self.trip_caches[trip_id] = cache
+            return cache

@@ -20,11 +20,6 @@ class Trip:
         'shape_id',
         'headsign',
         'sheets',
-        'is_setup',
-        '_first_departure',
-        '_last_departure',
-        '_departure_count',
-        '_direction',
         '_related_trips'
     )
     
@@ -114,24 +109,24 @@ class Trip:
         return self._related_trips
     
     @property
+    def cache(self):
+        return self.system.get_trip_cache(self)
+    
+    @property
     def first_departure(self):
-        self.setup()
-        return self._first_departure
+        return self.cache.first_departure
     
     @property
     def last_departure(self):
-        self.setup()
-        return self._last_departure
+        return self.cache.last_departure
     
     @property
     def departure_count(self):
-        self.setup()
-        return self._departure_count
+        return self.cache.departure_count
     
     @property
     def direction(self):
-        self.setup()
-        return self._direction
+        return self.cache.direction
     
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
         self.system = system
@@ -150,12 +145,6 @@ class Trip:
             self.short_id = id_parts[0]
         
         self.sheets = system.copy_sheets([self.service])
-        
-        self.is_setup = False
-        self._first_departure = None
-        self._last_departure = None
-        self._departure_count = 0
-        self._direction = Direction.UNKNOWN
         
         self._related_trips = None
     
@@ -180,10 +169,6 @@ class Trip:
             departures = self.find_departures()
         if len(departures) == 0:
             return
-        self._first_departure = departures[0]
-        self._last_departure = departures[-1]
-        self._departure_count = len(departures)
-        self._direction = Direction.calculate(self.first_stop, self.last_stop)
     
     def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
@@ -220,3 +205,18 @@ class Trip:
         if self.direction_id != other.direction_id:
             return False
         return True
+
+class TripCache:
+    
+    __slots__ = (
+        'first_departure',
+        'last_departure',
+        'departure_count',
+        'direction'
+    )
+    
+    def __init__(self, departures):
+        self.first_departure = departures[0]
+        self.last_departure = departures[-1]
+        self.departure_count = len(departures)
+        self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
