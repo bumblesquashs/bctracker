@@ -13,6 +13,7 @@ import helpers.point
 import helpers.position
 import helpers.record
 import helpers.region
+import helpers.route
 import helpers.stop
 import helpers.system
 import helpers.theme
@@ -896,14 +897,20 @@ def api_search(system):
     if query != '':
         if query.isnumeric() and (system is None or system.realtime_enabled):
             if include_buses:
-                matches += helpers.order.find_matches(agency, query, helpers.overview.find_bus_numbers(system))
-        if system is not None:
-            if include_blocks:
-                matches += system.search_blocks(query)
-            if include_routes:
-                matches += system.search_routes(query)
-            if include_stops:
-                matches += system.search_stops(query)
+                bus_numbers = helpers.overview.find_bus_numbers(system)
+                matches += helpers.order.find_matches(agency, query, bus_numbers)
+        if include_blocks:
+            if system is None:
+                blocks = [b for s in helpers.system.find_all() for b in s.get_blocks()]
+            else:
+                blocks = system.get_blocks()
+            matches += [b.get_match(system, query) for b in blocks]
+        if include_routes:
+            routes = helpers.route.find_all(system)
+            matches += [r.get_match(system, query) for r in routes]
+        if include_stops:
+            stops = helpers.stop.find_all(system)
+            matches += [s.get_match(system, query) for s in stops]
     matches = sorted([m for m in matches if m.value > 0])
     min = page * count
     max = min + count

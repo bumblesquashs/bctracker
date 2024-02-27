@@ -90,7 +90,7 @@ class Block:
             return False
         return True
     
-    def get_match(self, query):
+    def get_match(self, system, query):
         '''Returns a match for this block with the given query'''
         query = query.lower()
         id = self.id
@@ -104,7 +104,11 @@ class Block:
             message = f'Route {routes}'
         else:
             message = f'Routes {routes}'
-        return Match(f'Block {id}', message, 'block', f'blocks/{self.id}', value)
+        if system is None:
+            match_name = f'{self.system} Block {id}'
+        else:
+            match_name = f'Block {id}'
+        return Match(match_name, message, 'block', f'blocks/{self.id}', value)
     
     def find_departures(self):
         '''Returns all departures for this block'''

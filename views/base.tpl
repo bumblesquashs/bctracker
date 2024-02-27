@@ -304,31 +304,29 @@
                 <div id="search-bar">
                     <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                 </div>
-                % if system is not None:
-                    <div id="search-filters">
-                        <div class="flex-1">Filters:</div>
-                        <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
-                            <img class="white" src="/img/white/bus.png" />
-                            <img class="black" src="/img/black/bus.png" />
-                        </div>
-                        <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
-                            <img class="white" src="/img/white/route.png" />
-                            <img class="black" src="/img/black/route.png" />
-                        </div>
-                        <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
-                            <img class="white" src="/img/white/stop.png" />
-                            <img class="black" src="/img/black/stop.png" />
-                        </div>
-                        <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
-                            <img class="white" src="/img/white/block.png" />
-                            <img class="black" src="/img/black/block.png" />
-                        </div>
+                <div id="search-filters">
+                    <div class="flex-1">Filters:</div>
+                    <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
+                        <img class="white" src="/img/white/bus.png" />
+                        <img class="black" src="/img/black/bus.png" />
                     </div>
-                % end
+                    <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
+                        <img class="white" src="/img/white/route.png" />
+                        <img class="black" src="/img/black/route.png" />
+                    </div>
+                    <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
+                        <img class="white" src="/img/white/stop.png" />
+                        <img class="black" src="/img/black/stop.png" />
+                    </div>
+                    <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
+                        <img class="white" src="/img/white/block.png" />
+                        <img class="black" src="/img/black/block.png" />
+                    </div>
+                </div>
             </div>
             <div id="search-placeholder">
                 % if system is None:
-                    Search for buses in all systems
+                    Search for buses, routes, stops, and blocks in all systems
                 % else:
                     Search for buses, routes, stops, and blocks in {{ system }}
                 % end
@@ -387,7 +385,7 @@
         const query = inputElement.value;
         
         if (query === undefined || query === null || query === "") {
-            updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
+            updateSearchView([], 0, "{{ 'Search for buses, routes, stops, and blocks in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
         } else {
             loadingResults = true;
             if (searchResults.length === 0) {

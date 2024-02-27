@@ -122,7 +122,7 @@ class Route:
         '''Returns all headsigns from this route'''
         return sorted({str(t) for t in self.get_trips(service_group, date)})
     
-    def get_match(self, query):
+    def get_match(self, system, query):
         '''Returns a match for this route with the given query'''
         query = query.lower()
         number = self.number.lower()
@@ -136,7 +136,11 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.number}', value)
+        if system is None:
+            match_name = f'{self.system} Route {self.number}'
+        else:
+            match_name = f'Route {self.number}'
+        return Match(match_name, self.name, 'route', f'routes/{self.number}', value)
     
     def find_departures(self):
         '''Returns all departures for this route'''
