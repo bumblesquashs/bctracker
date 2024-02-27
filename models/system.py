@@ -217,6 +217,9 @@ class System:
             return
         print(f'Updating cached data for {self}')
         try:
+            self.route_caches = {}
+            self.stop_caches = {}
+            self.trip_caches = {}
             departures = helpers.departure.find_all(self)
             trip_departures = {}
             stop_departures = {}
