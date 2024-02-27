@@ -39,18 +39,22 @@ class Stop:
     
     @property
     def cache(self):
+        '''Returns the cache for this stop'''
         return self.system.get_stop_cache(self)
     
     @property
     def schedule(self):
+        '''Returns the schedule for this stop'''
         return self.cache.schedule
     
     @property
     def sheets(self):
+        '''Returns the sheets for this stop'''
         return self.cache.sheets
     
     @property
     def routes(self):
+        '''Returns the routes for this stop'''
         return self.cache.routes
     
     def __init__(self, system, id, number, name, lat, lon):
@@ -124,6 +128,7 @@ class Stop:
         return helpers.departure.find_adjacent(self.system, self)
 
 class StopCache:
+    '''A collection of calculated values for a single stop'''
     
     __slots__ = (
         'schedule',

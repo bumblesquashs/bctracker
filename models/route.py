@@ -46,18 +46,22 @@ class Route:
     
     @property
     def trips(self):
+        '''Returns the trips for this route'''
         return self.cache.trips
     
     @property
     def schedule(self):
+        '''Returns the schedule for this route'''
         return self.cache.schedule
     
     @property
     def sheets(self):
+        '''Returns the sheets for this route'''
         return self.cache.sheets
     
     @property
     def indicator_points(self):
+        '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
     def __init__(self, system, id, number, name, colour, text_colour):
@@ -160,6 +164,7 @@ def generate_colour(system, number):
     return f'{r:02x}{g:02x}{b:02x}'
 
 class RouteCache:
+    '''A collection of calculated values for a single route'''
     
     __slots__ = (
         'trips',

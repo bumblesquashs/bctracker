@@ -110,22 +110,27 @@ class Trip:
     
     @property
     def cache(self):
+        '''Returns the cache for this trip'''
         return self.system.get_trip_cache(self)
     
     @property
     def first_departure(self):
+        '''Returns the first departure for this trip'''
         return self.cache.first_departure
     
     @property
     def last_departure(self):
+        '''Returns the last departure for this trip'''
         return self.cache.last_departure
     
     @property
     def departure_count(self):
+        '''Returns the departure count for this trip'''
         return self.cache.departure_count
     
     @property
     def direction(self):
+        '''Returns the direction for this trip'''
         return self.cache.direction
     
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
@@ -207,6 +212,7 @@ class Trip:
         return True
 
 class TripCache:
+    '''A collection of calculated values for a single trip'''
     
     __slots__ = (
         'first_departure',
