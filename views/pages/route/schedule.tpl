@@ -10,6 +10,7 @@
         <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
         <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
+        <a href="{{ get_url(system, f'routes/{route.number}/alerts') }}" class="tab-button">Alerts</a>
     </div>
 </div>
 

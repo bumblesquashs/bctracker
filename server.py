@@ -17,11 +17,13 @@ import helpers.stop
 import helpers.system
 import helpers.theme
 import helpers.transfer
+import helpers.alert
 
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
 
+import alerts
 import config
 import cron
 import database
@@ -75,6 +77,7 @@ def start(args):
             realtime.update(system)
             if not realtime.validate(system):
                 system.validation_errors += 1
+            alerts.download(system)
     if running:
         realtime.update_records()
         
@@ -530,6 +533,26 @@ def route_schedule_date_page(system, route_number, date_string):
         enable_refresh=False,
         route=route,
         date=date
+    )
+
+@endpoint('/routes/<route_number>/alerts')
+def route_alerts_page(system, route_number):
+    if system is None:
+        return error_page('system_required', system,
+            title='System Required',
+            path=f'routes/{route_number}/schedule'
+        )
+    route = system.get_route(number=route_number)
+    if route is None:
+        return error_page('invalid_route', system,
+            title='Unknown Route',
+            route_number=route_number
+        )
+    return page('route/alerts', system,
+        title=str(route),
+        route=route,
+        alerts=helpers.alert.find_all(system, route=route),
+        targets=helpers.alert.find_all_targets(system, route=route)
     )
 
 @endpoint('/blocks')

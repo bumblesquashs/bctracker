@@ -7,6 +7,7 @@ class Agency:
         'name',
         'gtfs_url',
         'realtime_url',
+        'alerts_url',
         'enabled',
         'prefix_headsigns',
         'accurate_seconds',
@@ -24,11 +25,17 @@ class Agency:
         '''Checks if realtime is enabled for this agency'''
         return self.enabled and self.realtime_url
     
+    @property
+    def alerts_enabled(self):
+        '''Checks if alerts are enabled for this agency'''
+        return self.enabled and self.alerts_url
+    
     def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
         self.gtfs_url = kwargs.get('gtfs_url')
         self.realtime_url = kwargs.get('realtime_url')
+        self.alerts_url = kwargs.get('alerts_url')
         self.enabled = kwargs.get('enabled', True)
         self.prefix_headsigns = kwargs.get('prefix_headsigns', False)
         self.accurate_seconds = kwargs.get('accurate_seconds', True)

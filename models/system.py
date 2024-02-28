@@ -68,6 +68,21 @@ class System:
         return None
     
     @property
+    def alerts_enabled(self):
+        '''Checks if alerts are enabled for this system'''
+        return self.agency.alerts_enabled
+    
+    @property
+    def alerts_url(self):
+        '''Returns the URL to load alerts for this system'''
+        if self.alerts_enabled:
+            url = self.agency.alerts_url
+            if self.remote_id:
+                url = url.replace('$REMOTE_ID', str(self.remote_id))
+            return url
+        return None
+    
+    @property
     def schedule(self):
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())

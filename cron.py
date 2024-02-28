@@ -8,6 +8,7 @@ from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
+import alerts
 import config
 import gtfs
 import realtime
@@ -70,5 +71,6 @@ def handle_realtime(sig, frame):
                 if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
                     gtfs.load(system, True)
                     gtfs.update_cache_in_background(system)
+            alerts.download(system)
     if running:
         realtime.update_records()

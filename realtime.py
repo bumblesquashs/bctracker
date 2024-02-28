@@ -55,6 +55,7 @@ def update(system):
             except:
                 bus_number = -(index + 1)
             helpers.position.create(system, bus_number, vehicle)
+        database.commit()
         last_updated_date = Date.today()
         last_updated_time = Time.now(accurate_seconds=False)
         system.last_updated_date = Date.today(system.timezone)

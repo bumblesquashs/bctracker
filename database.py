@@ -128,6 +128,32 @@ SQL_SCRIPTS = [
             PRIMARY KEY (system_id, shape_id, sequence)
         )
     ''',
+    '''
+        CREATE TABLE IF NOT EXISTS alert (
+            system_id TEXT NOT NULL,
+            alert_id TEXT NOT NULL,
+            active_periods TEXT,
+            cause TEXT,
+            effect TEXT,
+            severity TEXT,
+            title TEXT,
+            description TEXT,
+            PRIMARY KEY (system_id, alert_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS alert_target (
+            system_id TEXT NOT NULL,
+            alert_id TEXT NOT NULL,
+            route_id TEXT,
+            stop_id TEXT,
+            trip_id TEXT,
+            PRIMARY KEY (system_id, alert_id, route_id, stop_id, trip_id),
+            FOREIGN KEY (system_id, route_id) REFERENCES route (system_id, route_id),
+            FOREIGN KEY (system_id, stop_id) REFERENCES stop (system_id, stop_id),
+            FOREIGN KEY (system_id, trip_id) REFERENCES trip (system_id, trip_id)
+        )
+    ''',
     'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
     'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
