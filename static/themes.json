@@ -1,36 +1,39 @@
 {
-    "light": {
-        "name": "BC Transit (Light)"
-    },
-    "dark": {
-        "name": "BC Transit (Dark)"
+    "bctransit": {
+        "name": "BC Transit",
+        "light": true,
+        "dark": true
     },
     "classic": {
-        "name": "BC Transit Classic"
+        "name": "BC Transit Classic",
+        "light": true
     },
     "bchydro": {
-        "name": "BC Hydro"
+        "name": "BC Hydro",
+        "light": true
     },
     "uta": {
-        "name": "Urban Transit Authority"
-    },
-    "contrast": {
-        "name": "High Contrast"
+        "name": "Urban Transit Authority",
+        "light": true
     },
     "tcomm": {
         "name": "T-Comm",
+        "light": true,
         "visible": false
     },
     "christmas": {
         "name": "Christmas",
+        "light": true,
         "visible": false
     },
     "halloween": {
         "name": "Halloween",
+        "dark": true,
         "visible": false
     },
     "ghost": {
         "name": "Ghost",
+        "light": true,
         "visible": false
     }
 }

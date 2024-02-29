@@ -110,9 +110,14 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
     '''Returns an HTML page with the given name and details'''
     is_admin = validate_admin()
     
-    theme_id = request.query.get('theme') or request.get_cookie('theme')
-    time_format = request.query.get('time_format') or request.get_cookie('time_format')
-    bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
+    theme_id = query_cookie('theme')
+    theme = helpers.theme.find(theme_id)
+    if theme is None:
+        theme = helpers.theme.find('bctransit')
+    theme_variant = query_cookie('theme_variant')
+    high_contrast = query_cookie('high_contrast') == 'enabled'
+    time_format = query_cookie('time_format')
+    bus_marker_style = query_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
     if system is None:
         last_updated = realtime.get_last_updated(time_format)
@@ -133,7 +138,9 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         system=system,
         get_url=get_url,
         last_updated=last_updated,
-        theme=helpers.theme.find(theme_id),
+        theme=theme,
+        theme_variant=theme_variant,
+        high_contrast=high_contrast,
         time_format=time_format,
         bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
@@ -805,15 +812,6 @@ def themes_page(system):
 
 @endpoint('/personalize')
 def themes_page(system):
-    theme_id = request.query.get('theme')
-    if theme_id is not None:
-        set_cookie('theme', theme_id)
-    time_format = request.query.get('time_format')
-    if time_format is not None:
-        set_cookie('time_format', time_format)
-    bus_marker_style = request.query.get('bus_marker_style')
-    if bus_marker_style is not None:
-        set_cookie('bus_marker_style', bus_marker_style)
     themes = helpers.theme.find_all()
     return page('personalize', system,
         title='Personalize',

@@ -51,9 +51,15 @@
         <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
-        % if theme is None:
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
+        % if theme.light and theme.dark:
+            % if theme_variant == 'light':
+                <link rel="stylesheet" href="/style/themes/{{ theme.id }}-light.css?version={{ version }}" />
+            % elif theme_variant == 'dark':
+                <link rel="stylesheet" href="/style/themes/{{ theme.id }}-dark.css?version={{ version }}" />
+            % else:
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/{{ theme.id }}-light.css?version={{ version }}" />
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/{{ theme.id }}-dark.css?version={{ version }}" />
+            % end
         % else:
             <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
         % end

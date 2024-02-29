@@ -13,23 +13,14 @@
             </div>
             <div class="content">
                 <p>
-                    The default BCTracker theme (BC Transit) is available in both light and dark colours.
-                    You can also set it to change automatically based on your system preferences.
+                    BC Tracker is available in a variety of themes, with the default based on modern BC Transit colours.
                     Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
-                </p>
-                <p>
-                    A high contrast option is also available to help distinguish some parts of the website better for anyone who is visually impaired.
                 </p>
                 
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 
                 <div class="column">
-                    <div class="radio-button-container" onclick="setTheme('automatic')">
-                        <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
-                        <div class="label">BC Transit (Auto)</div>
-                    </div>
-                    
                     % for visible_theme in visible_themes:
                         <div class="radio-button-container" onclick="setTheme('{{ visible_theme.id }}')">
                             <div class="radio-button {{ 'selected' if theme is not None and visible_theme == theme else '' }}"></div>
@@ -55,6 +46,57 @@
                     <!-- If you aren't sure how to actually apply secret themes, I'm afraid you'll just have to figure it out yourself. -->
                     <!-- I was generous to even give you this list in the first place! ;) -->
                 % end
+            </div>
+        </div>
+        <div class="section">
+            <div class="header">
+                <h2>Light/Dark Mode</h2>
+            </div>
+            <div class="content">
+                % if theme.light and theme.dark:
+                    <p>
+                        This theme supports light and dark modes.
+                        You can set it to change automatically based on your system preference, or choose an option manually.
+                    </p>
+                    <div class="column">
+                        <div class="radio-button-container" onclick="setThemeVariant('auto')">
+                            <div class="radio-button {{ 'selected' if theme_variant is None or theme_variant == 'auto' else '' }}"></div>
+                            <div class="label">Auto</div>
+                        </div>
+                        <div class="radio-button-container" onclick="setThemeVariant('light')">
+                            <div class="radio-button {{ 'selected' if theme_variant == 'light' else '' }}"></div>
+                            <div class="label">Light</div>
+                        </div>
+                        <div class="radio-button-container" onclick="setThemeVariant('dark')">
+                            <div class="radio-button {{ 'selected' if theme_variant == 'dark' else '' }}"></div>
+                            <div class="label">Dark</div>
+                        </div>
+                    </div>
+                % elif theme.light:
+                    <p>This theme supports light mode only.</p>
+                % elif theme.dark:
+                    <p>This theme supports dark mode only.</p>
+                % else:
+                    <p>
+                        This theme supports neither light mode nor dark mode.
+                        If you're seeing this, we must have done something very wrong.
+                    </p>
+                % end
+            </div>
+        </div>
+        <div class="section">
+            <div class="header">
+                <h2>High Contrast</h2>
+            </div>
+            <div class="content">
+                <p>A high contrast mode is available to help distinguish some parts of the website better for anyone who is visually impaired.</p>
+                <div class="checkbox-container" onclick="toggleHighContrastMode('{{ high_contrast }}' === 'True')">
+                    <div class="checkbox {{ 'selected' if high_contrast else '' }}">
+                        <img class="white" src="/img/white/check.png" />
+                        <img class="black" src="/img/black/check.png" />
+                    </div>
+                    <span>Enable High Contrast Mode</span>
+                </div>
             </div>
         </div>
     </div>
@@ -117,14 +159,26 @@
 
 <script>
     function setTheme(themeID) {
-        window.location = "?theme=" + themeID
+        window.location = "?theme=" + themeID;
+    }
+    
+    function setThemeVariant(variant) {
+        window.location = "?theme_variant=" + variant;
+    }
+    
+    function toggleHighContrastMode(enabled) {
+        if (enabled) {
+            window.location = "?high_contrast=disabled";
+        } else {
+            window.location = "?high_contrast=enabled";
+        }
     }
     
     function setTimeFormat(format) {
-        window.location = "?time_format=" + format
+        window.location = "?time_format=" + format;
     }
     
     function setBusMarkerStyle(style) {
-        window.location = "?bus_marker_style=" + style
+        window.location = "?bus_marker_style=" + style;
     }
 </script>
