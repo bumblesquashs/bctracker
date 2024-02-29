@@ -16,6 +16,11 @@
  * Other colors may also be used for specific purposes
 */
 
+:root {
+    --tooltip-background: #666666;
+    --tooltip-text: #FFFFFF;
+}
+
 a {
     color: #0040FF;
 }
@@ -88,6 +93,7 @@ table tr:nth-child(2n-1) {
 
 #navigation-bar {
     background-color: #1A671A;
+    --tooltip-background: #094409;
 }
 
 #navigation-bar .navigation-icon {
@@ -104,14 +110,6 @@ table tr:nth-child(2n-1) {
 
 #navigation-bar .navigation-icon img.black {
     display: none;
-}
-
-#navigation-bar .navigation-icon .tooltip {
-    background-color: #094409;
-}
-
-#navigation-bar .navigation-icon .tooltip::after {
-    border-color: transparent #094409 transparent transparent;
 }
 
 #navigation-bar .navigation-item {
@@ -194,6 +192,7 @@ table tr:nth-child(2n-1) {
     background-color: #48A348;
     color: #FFFFFF;
     border-color: #666666;
+    --tooltip-background: #094409;
 }
 
 #search-input {
@@ -546,15 +545,6 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #666666;
-}
-
-.tooltip-anchor .tooltip {
-    background-color: #666666;
-    color: #FFFFFF;
-}
-
-.tooltip-anchor .tooltip::after {
-    border-color: transparent #666666 transparent transparent;
 }
 
 .weekdays a.weekday.no-service:hover {

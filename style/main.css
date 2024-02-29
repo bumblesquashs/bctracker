@@ -1155,11 +1155,12 @@ table tr.header td {
 }
 
 .tooltip-anchor .tooltip {
+    background-color: var(--tooltip-background);
+    color: var(--tooltip-text);
     display: none;
     padding: 5px 10px;
     position: absolute;
     z-index: 10;
-    left: calc(100% + 10px);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     top: 50%;
     transform: translate(0px, -50%);
@@ -1172,12 +1173,32 @@ table tr.header td {
     font-weight: normal;
 }
 
-.tooltip-anchor .tooltip::after {
+.tooltip-anchor .tooltip.left {
+    right: calc(100% + 10px);
+}
+
+.tooltip-anchor .tooltip.left::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-color: transparent transparent transparent var(--tooltip-background);
+    border-width: 5px 0px 5px 5px;
+    border-style: solid;
+}
+
+.tooltip-anchor .tooltip.right {
+    left: calc(100% + 10px);
+}
+
+.tooltip-anchor .tooltip.right::after {
     content: "";
     position: absolute;
     top: 50%;
     right: 100%;
     margin-top: -5px;
+    border-color: transparent var(--tooltip-background) transparent transparent;
     border-width: 5px 5px 5px 0px;
     border-style: solid;
 }

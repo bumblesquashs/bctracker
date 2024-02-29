@@ -16,6 +16,11 @@
  * Other colors may also be used for specific purposes
 */
 
+:root {
+    --tooltip-background: #888888;
+    --tooltip-text: #FFFFFF;
+}
+
 a {
     color: #0040FF;
 }
@@ -531,15 +536,6 @@ table tr {
 
 .timeline .section:hover {
     border-color: #888888;
-}
-
-.tooltip-anchor .tooltip {
-    background-color: #888888;
-    color: #FFFFFF;
-}
-
-.tooltip-anchor .tooltip::after {
-    border-color: transparent #888888 transparent transparent;
 }
 
 .weekdays a.weekday.no-service:hover {

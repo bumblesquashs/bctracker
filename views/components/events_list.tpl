@@ -10,7 +10,7 @@
                     <img class="black" src="/img/black/calendar.png" />
                     <div>{{ date }}</div>
                 </div>
-                <div class="tooltip">{{ date.format_since() }}</div>
+                <div class="tooltip right">{{ date.format_since() }}</div>
             </div>
         </div>
         <div class="content">
