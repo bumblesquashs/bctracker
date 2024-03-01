@@ -18,11 +18,7 @@ class Stop:
         'number',
         'name',
         'lat',
-        'lon',
-        'is_setup',
-        '_schedule',
-        '_sheets',
-        '_routes'
+        'lon'
     )
     
     @classmethod
@@ -42,19 +38,24 @@ class Stop:
         return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
     
     @property
+    def cache(self):
+        '''Returns the cache for this stop'''
+        return self.system.get_stop_cache(self)
+    
+    @property
     def schedule(self):
-        self.setup()
-        return self._schedule
+        '''Returns the schedule for this stop'''
+        return self.cache.schedule
     
     @property
     def sheets(self):
-        self.setup()
-        return self._sheets
+        '''Returns the sheets for this stop'''
+        return self.cache.sheets
     
     @property
     def routes(self):
-        self.setup()
-        return self._routes
+        '''Returns the routes for this stop'''
+        return self.cache.routes
     
     def __init__(self, system, id, number, name, lat, lon):
         self.system = system
@@ -63,11 +64,6 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
-        
-        self.is_setup = False
-        self._schedule = None
-        self._sheets = []
-        self._routes = []
     
     def __str__(self):
         return self.name
@@ -82,17 +78,6 @@ class Stop:
         if self.name == other.name:
             return self.number < other.number
         return self.name < other.name
-    
-    def setup(self, departures=None):
-        if self.is_setup:
-            return
-        self.is_setup = True
-        if departures is None:
-            departures = helpers.departure.find_all(self.system, stop=self)
-        services = {d.trip.service for d in departures if d.trip is not None}
-        self._schedule = Schedule.combine(services)
-        self._sheets = self.system.copy_sheets(services)
-        self._routes = sorted({d.trip.route for d in departures if d.trip is not None and d.trip.route is not None})
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
@@ -141,3 +126,18 @@ class Stop:
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
         return helpers.departure.find_adjacent(self.system, self)
+
+class StopCache:
+    '''A collection of calculated values for a single stop'''
+    
+    __slots__ = (
+        'schedule',
+        'sheets',
+        'routes'
+    )
+    
+    def __init__(self, system, departures):
+        services = {d.trip.service for d in departures if d.trip is not None}
+        self.schedule = Schedule.combine(services)
+        self.sheets = system.copy_sheets(services)
+        self.routes = sorted({d.trip.route for d in departures if d.trip is not None and d.trip.route is not None})

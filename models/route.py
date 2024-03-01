@@ -21,12 +21,7 @@ class Route:
         'key',
         'name',
         'colour',
-        'text_colour',
-        'is_setup',
-        '_trips',
-        '_schedule',
-        '_sheets',
-        '_indicator_points'
+        'text_colour'
     )
     
     @classmethod
@@ -45,24 +40,29 @@ class Route:
         return self.name.replace('/', '/<wbr />')
     
     @property
+    def cache(self):
+        '''Returns the cache for this route'''
+        return self.system.get_route_cache(self)
+    
+    @property
     def trips(self):
-        self.setup()
-        return self._trips
+        '''Returns the trips for this route'''
+        return self.cache.trips
     
     @property
     def schedule(self):
-        self.setup()
-        return self._schedule
+        '''Returns the schedule for this route'''
+        return self.cache.schedule
     
     @property
     def sheets(self):
-        self.setup()
-        return self._sheets
+        '''Returns the sheets for this route'''
+        return self.cache.sheets
     
     @property
     def indicator_points(self):
-        self.setup()
-        return self._indicator_points
+        '''Returns the indicator points for this route'''
+        return self.cache.indicator_points
     
     def __init__(self, system, id, number, name, colour, text_colour):
         self.system = system
@@ -73,12 +73,6 @@ class Route:
         self.text_colour = text_colour
         
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
-        
-        self.is_setup = False
-        self._trips = []
-        self._schedule = None
-        self._sheets = []
-        self._indicator_points = []
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -94,29 +88,6 @@ class Route:
     
     def __gt__(self, other):
         return self.key > other.key
-    
-    def setup(self, trips=None):
-        if self.is_setup:
-            return
-        self.is_setup = True
-        if trips is None:
-            trips = [t for t in self.system.get_trips() if t.route_id == self.id]
-        self._trips = trips
-        services = {t.service for t in trips}
-        self._schedule = Schedule.combine(services)
-        self._sheets = self.system.copy_sheets(services)
-        if len(trips) > 0:
-            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
-            points = sorted_trips[0].find_points()
-            first_point = points[0]
-            last_point = points[-1]
-            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-            if distance <= 0.05:
-                count = min((len(points) // 500) + 1, 3)
-            else:
-                count = min(int(distance * 8) + 1, 4)
-            size = len(points) // count
-            self._indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
     
     def get_json(self):
         '''Returns a representation of this route in JSON-compatible format'''
@@ -191,3 +162,33 @@ def generate_colour(system, number):
     g = int(rgb[1] * 255)
     b = int(rgb[2] * 255)
     return f'{r:02x}{g:02x}{b:02x}'
+
+class RouteCache:
+    '''A collection of calculated values for a single route'''
+    
+    __slots__ = (
+        'trips',
+        'schedule',
+        'sheets',
+        'indicator_points'
+    )
+    
+    def __init__(self, system, trips):
+        self.trips = trips
+        services = {t.service for t in trips}
+        self.schedule = Schedule.combine(services)
+        self.sheets = system.copy_sheets(services)
+        try:
+            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
+            points = sorted_trips[0].find_points()
+            first_point = points[0]
+            last_point = points[-1]
+            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+            if distance <= 0.05:
+                count = min((len(points) // 500) + 1, 3)
+            else:
+                count = min(int(distance * 8) + 1, 4)
+            size = len(points) // count
+            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+        except IndexError:
+            self.indicator_points = []
