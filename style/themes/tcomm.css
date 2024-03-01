@@ -3,6 +3,11 @@
  * Based on tcomm.bustrainferry.com
 */
 
+:root {
+    --tooltip-background: #000000;
+    --tooltip-text: #FFFFFF;
+}
+
 a {
     color: #2489CE;
     text-shadow: 0 1px 0 #FFFFFF;
@@ -91,6 +96,7 @@ table tr {
     background-color: #111111;
     background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: 0 -1px 1px #000000;
+    --tooltip-background: #444444;
 }
 
 #navigation-bar .navigation-icon {
@@ -109,14 +115,6 @@ table tr {
 
 #navigation-bar .navigation-icon img.black {
     display: none;
-}
-
-#navigation-bar .navigation-icon .tooltip {
-    background-color: #444444;
-}
-
-#navigation-bar .navigation-icon .tooltip::after {
-    border-color: transparent #444444 transparent transparent;
 }
 
 #navigation-bar .navigation-item {
@@ -215,6 +213,7 @@ table tr {
     color: #FFFFFF;
     text-shadow: none;
     border-color: #000000;
+    --tooltip-background: #444444;
 }
 
 #search-input {
@@ -667,13 +666,7 @@ table tr {
 }
 
 .tooltip-anchor .tooltip {
-    background-color: #000000;
-    color: #FFFFFF;
     text-shadow: none;
-}
-
-.tooltip-anchor .tooltip::after {
-    border-color: transparent #000000 transparent transparent;
 }
 
 .weekdays .weekday {

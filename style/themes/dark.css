@@ -18,6 +18,8 @@
 
 :root {
     color-scheme: dark;
+    --tooltip-background: #2F2F2F;
+    --tooltip-text: #FFFFFF;
 }
 
 a {
@@ -100,6 +102,7 @@ table tr:nth-child(2n-1) {
 
 #navigation-bar {
     background-color: #154E15;
+    --tooltip-background: #053305;
 }
 
 #navigation-bar .navigation-icon {
@@ -116,14 +119,6 @@ table tr:nth-child(2n-1) {
 
 #navigation-bar .navigation-icon img.black {
     display: none;
-}
-
-#navigation-bar .navigation-icon .tooltip {
-    background-color: #053305;
-}
-
-#navigation-bar .navigation-icon .tooltip::after {
-    border-color: transparent #053305 transparent transparent;
 }
 
 #navigation-bar .navigation-item {
@@ -205,6 +200,7 @@ table tr:nth-child(2n-1) {
 #search-header {
     background-color: #276227;
     border-color: #565656;
+    --tooltip-background: #053305;
 }
 
 #search-input {
@@ -560,15 +556,6 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #565656;
-}
-
-.tooltip-anchor .tooltip {
-    background-color: #2F2F2F;
-    color: #FFFFFF;
-}
-
-.tooltip-anchor .tooltip::after {
-    border-color: transparent #2F2F2F transparent transparent;
 }
 
 .weekdays a.weekday.no-service:hover {

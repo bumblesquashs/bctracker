@@ -159,14 +159,20 @@
             
             <div class="flex-1"></div>
             
-            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
+                <div class="tooltip left">
+                    <div class="title">Nearby Stops</div>
+                </div>
             </a>
             
-            <a class="navigation-icon desktop-only" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
+                <div class="tooltip left">
+                    <div class="title">Personalize</div>
+                </div>
             </a>
             
             <div class="navigation-icon" onclick="toggleSearch()">
@@ -307,21 +313,25 @@
                 % if system is not None:
                     <div id="search-filters">
                         <div class="flex-1">Filters:</div>
-                        <div id="search-filter-bus" class="button" onclick="toggleSearchBusFilter()">
+                        <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
                             <img class="white" src="/img/white/bus.png" />
                             <img class="black" src="/img/black/bus.png" />
+                            <div class="tooltip left">Include Buses</div>
                         </div>
-                        <div id="search-filter-route" class="button" onclick="toggleSearchRouteFilter()">
+                        <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
                             <img class="white" src="/img/white/route.png" />
                             <img class="black" src="/img/black/route.png" />
+                            <div class="tooltip left">Include Routes</div>
                         </div>
-                        <div id="search-filter-stop" class="button" onclick="toggleSearchStopFilter()">
+                        <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
                             <img class="white" src="/img/white/stop.png" />
                             <img class="black" src="/img/black/stop.png" />
+                            <div class="tooltip left">Include Stops</div>
                         </div>
-                        <div id="search-filter-block" class="button" onclick="toggleSearchBlockFilter()">
+                        <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
                             <img class="white" src="/img/white/block.png" />
                             <img class="black" src="/img/black/block.png" />
+                            <div class="tooltip left">Include Blocks</div>
                         </div>
                     </div>
                 % end
