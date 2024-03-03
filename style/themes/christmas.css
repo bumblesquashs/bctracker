@@ -19,6 +19,11 @@
 :root {
     --tooltip-background: #69BB65;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #D70000;
+    --loading-image-black: none;
+    --loading-image-white: initial;
 }
 
 a {

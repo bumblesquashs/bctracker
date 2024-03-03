@@ -20,6 +20,11 @@
     color-scheme: dark;
     --tooltip-background: #2F2F2F;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #2F2F2F;
+    --loading-foreground: #154E15;
+    --loading-image-black: none;
+    --loading-image-white: initial;
 }
 
 a {

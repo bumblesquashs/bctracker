@@ -6,6 +6,11 @@
 :root {
     --tooltip-background: #000000;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #000000;
+    --loading-image-black: none;
+    --loading-image-white: initial;
 }
 
 a {

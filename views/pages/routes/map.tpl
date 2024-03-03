@@ -5,7 +5,7 @@
 
 <div id="page-header">
     <h1>Routes</h1>
-    <div class="column gap-10">
+    <div class="column gap-10 stretch">
         <div class="tab-button-bar">
             <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
@@ -37,7 +37,11 @@
         % end
     </div>
 % else:
-    <div id="map" class="full-screen"></div>
+    <div id="map" class="full-screen display-none"></div>
+    <div id="map-loading">
+        % include('components/loading')
+        <h2>Loading...</h2>
+    </div>
     
     <script>
         const map = new ol.Map({
@@ -136,7 +140,6 @@
         }
         
         document.body.onload = function() {
-            map.updateSize();
             const request = new XMLHttpRequest();
             request.open("GET", "{{ get_url(system, 'api/routes') }}", true);
             request.responseType = "json";
@@ -145,6 +148,8 @@
                     setTrips(request.response.trips);
                     setRouteNumbers(request.response.indicators);
                     
+                    document.getElementById("map").classList.remove("display-none");
+                    map.updateSize();
                     if (area.isValid) {
                         if (area.isPoint) {
                             map.getView().setCenter(ol.proj.fromLonLat(area.point));
@@ -152,9 +157,11 @@
                         } else {
                             map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
                                 padding: [100, 100, 100, 100]
-                            })
+                            });
                         }
                     }
+                    stopLoadingInterval();
+                    document.getElementById("map-loading").remove();
                 }
             };
             request.send();

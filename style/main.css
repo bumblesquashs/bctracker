@@ -106,6 +106,67 @@ table tr.header td {
     z-index: 20;
 }
 
+#loading {
+    position: relative;
+    width: 300px;
+    height: 36px;
+    overflow: hidden;
+}
+
+#loading:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to left, rgba(0,0,0,0), var(--loading-background) 90%);
+    width: 36px;
+    height: 36px;
+}
+
+#loading:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), var(--loading-background) 90%);
+    width: 36px;
+    height: 36px;
+}
+
+#loading-line {
+    background-color: var(--loading-foreground);
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 16px;
+    bottom: 16px;
+}
+
+#loading-stop {
+    background-color: var(--loading-foreground);
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    left: -36px;
+    border-radius: 36px;
+}
+
+#loading-stop img {
+    width: 28px;
+    height: 28px;
+    margin: 4px;
+}
+
+#loading-stop img.black {
+    display: var(--loading-image-black) !important;
+}
+
+#loading-stop img.white {
+    display: var(--loading-image-white) !important;
+}
+
 #main {
     flex: 1;
     position: relative;
@@ -146,6 +207,20 @@ table tr.header td {
 
 #map .ol-overlay-container:hover {
     z-index: 10;
+}
+
+#map-loading {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 }
 
 #map-toggle {
@@ -542,6 +617,10 @@ table tr.header td {
 
 .column.right {
     align-items: flex-end;
+}
+
+.column.stretch {
+    align-items: stretch;
 }
 
 .container {
