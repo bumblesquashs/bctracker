@@ -5,7 +5,7 @@
 
 <div id="page-header">
     <h1>Routes</h1>
-    <div class="column gap-20">
+    <div class="column gap-10">
         <div class="tab-button-bar">
             <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>

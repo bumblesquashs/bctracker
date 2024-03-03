@@ -18,6 +18,10 @@ body.full-map #page-header {
     left: -10px;
 }
 
+body.full-map .tab-button-bar {
+    margin-bottom: 0px;
+}
+
 input {
     -webkit-appearance: none;
 }

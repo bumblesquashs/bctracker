@@ -16,7 +16,7 @@ class Area {
     }
     
     get point() {
-        return [this.minLon, this.maxLon]
+        return [this.minLon, this.minLat]
     }
     
     get box() {
