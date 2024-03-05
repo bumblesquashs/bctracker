@@ -3,7 +3,7 @@
 
 <div id="page-header">
     <h1>News Archive</h1>
-    <a href="{{ get_url(system) }}">Return home</a>
+    <a href="{{ get_url(system, agency) }}">Return home</a>
 </div>
 
 <div class="container">

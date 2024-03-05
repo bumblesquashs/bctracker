@@ -220,7 +220,7 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = helpers.departure.find_all(self)
+            departures = helpers.departure.find_all(self, self.agency)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -258,7 +258,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = helpers.departure.find_all(self, stop=stop)
+            departures = helpers.departure.find_all(self, self.agency, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -269,7 +269,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = helpers.departure.find_all(self, trip=trip)
+            departures = helpers.departure.find_all(self, self.agency, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache

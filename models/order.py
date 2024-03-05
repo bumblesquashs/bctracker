@@ -19,12 +19,12 @@ class Order:
     @property
     def first_bus(self):
         '''The first bus in the order'''
-        return Bus(self.low, self)
+        return Bus(self.agency, self.low, self)
     
     @property
     def last_bus(self):
         '''The last bus in the order'''
-        return Bus(self.high, self)
+        return Bus(self.agency, self.high, self)
     
     def __init__(self, agency, model, **kwargs):
         self.agency = agency
@@ -66,7 +66,7 @@ class Order:
     def __iter__(self):
         for number in range(self.low, self.high + 1):
             if number not in self.exceptions:
-                yield Bus(number, self)
+                yield Bus(self.agency, number, self)
     
     def __contains__(self, bus_number):
         if bus_number in self.exceptions:
@@ -80,7 +80,7 @@ class Order:
         previous_bus_number = bus_number - 1
         if previous_bus_number in self.exceptions:
             return self.previous_bus(previous_bus_number)
-        return Bus(previous_bus_number, self)
+        return Bus(self.agency, previous_bus_number, self)
     
     def next_bus(self, bus_number):
         '''The next bus following the given bus number'''
@@ -89,4 +89,4 @@ class Order:
         next_bus_number = bus_number + 1
         if next_bus_number in self.exceptions:
             return self.next_bus(next_bus_number)
-        return Bus(next_bus_number, self)
+        return Bus(self.agency, next_bus_number, self)

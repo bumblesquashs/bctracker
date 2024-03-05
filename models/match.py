@@ -25,11 +25,11 @@ class Match:
             return self.name < other.name
         return self.value > other.value
     
-    def get_json(self, system, get_url):
+    def get_json(self, system, agency, get_url):
         '''Returns a representation of this match in JSON-compatible format'''
         return {
             'name': self.name,
             'description': self.description,
             'icon': self.icon,
-            'url': get_url(system, self.path)
+            'url': get_url(system, agency, self.path)
         }

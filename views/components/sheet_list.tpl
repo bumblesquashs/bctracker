@@ -51,7 +51,7 @@
                                     % if schedule_path is None:
                                         <span class="date {{ status }}">{{ date.day }}</span>
                                     % else:
-                                        <a class="date {{ status }}" href="{{ get_url(system, f'{date_path}/{date.format_db()}') }}">{{ date.day }}</a>
+                                        <a class="date {{ status }}" href="{{ get_url(system, agency, f'/{date_path}/{date.format_db()}') }}">{{ date.day }}</a>
                                     % end
                                 % end
                             </div>

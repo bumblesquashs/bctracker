@@ -4,9 +4,10 @@ from models.position import Position
 
 import database
 
-def create(system, bus, data):
+def create(system, agency, bus, data):
     '''Inserts a new position into the database'''
     system_id = getattr(system, 'id', system)
+    agency_id = getattr(agency, 'id', agency)
     bus_number = getattr(bus, 'number', bus)
     try:
         trip_id = data.trip.trip_id
@@ -58,6 +59,7 @@ def create(system, bus, data):
         adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
     values = {
         'system_id': system_id,
+        'agency_id': agency_id,
         'bus_number': bus_number,
         'trip_id': trip_id,
         'stop_id': stop_id,
@@ -73,12 +75,14 @@ def create(system, bus, data):
         values['adherence'] = adherence.value
     database.insert('position', values)
 
-def find(bus):
+def find(agency, bus):
     '''Returns the position of the given bus'''
+    agency_id = getattr(agency, 'id', agency)
     bus_number = getattr(bus, 'number', bus)
     positions = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
+            'position.agency_id': 'position_agency_id',
             'position.bus_number': 'position_bus_number',
             'position.trip_id': 'position_trip_id',
             'position.stop_id': 'position_stop_id',
@@ -92,6 +96,7 @@ def find(bus):
             'position.adherence': 'position_adherence'
         },
         filters={
+            'position.agency_id': agency_id,
             'position.bus_number': bus_number
         },
         initializer=Position.from_db
@@ -100,9 +105,10 @@ def find(bus):
         return positions[0]
     return None
 
-def find_all(system=None, trip=None, stop=None, block=None, route=None, has_location=None):
-    '''Returns all positions that match the given system, trip, stop, block, and route'''
+def find_all(system=None, agency=None, trip=None, stop=None, block=None, route=None, has_location=None):
+    '''Returns all positions that match the given trip, stop, block, and route'''
     system_id = getattr(system, 'id', system)
+    agency_id = getattr(agency, 'id', agency)
     if isinstance(trip, list):
         trip_id = [getattr(t, 'id', t) for t in trip]
     else:
@@ -121,6 +127,7 @@ def find_all(system=None, trip=None, stop=None, block=None, route=None, has_loca
         route_id = getattr(route, 'id', route)
     filters = {
         'position.system_id': system_id,
+        'position.agency_id': agency_id,
         'position.trip_id': trip_id,
         'position.stop_id': stop_id,
         'position.block_id': block_id,
@@ -144,6 +151,7 @@ def find_all(system=None, trip=None, stop=None, block=None, route=None, has_loca
     positions = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
+            'position.agency_id': 'position_agency_id',
             'position.bus_number': 'position_bus_number',
             'position.trip_id': 'position_trip_id',
             'position.stop_id': 'position_stop_id',
@@ -161,9 +169,11 @@ def find_all(system=None, trip=None, stop=None, block=None, route=None, has_loca
     )
     return [p for p in positions if p.bus.visible]
 
-def delete_all(system=None):
-    '''Deletes all positions for the given system from the database'''
+def delete_all(system=None, agency=None):
+    '''Deletes all positions from the database'''
     system_id = getattr(system, 'id', system)
+    agency_id = getattr(agency, 'id', agency)
     database.delete('position', {
-        'position.system_id': system_id
+        'position.system_id': system_id,
+        'position.agency_id': agency_id
     })

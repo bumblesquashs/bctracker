@@ -7,8 +7,8 @@
         {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, f'/routes/{route.number}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, agency, f'/routes/{route.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -24,12 +24,12 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
+                        <a class="button" href="{{ get_url(system, agency, f'/routes/{route.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
-                            <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">Return to week view</a>
+                            <a href="{{ get_url(system, agency, f'/routes/{route.number}/schedule') }}">Return to week view</a>
                         </div>
-                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
+                        <a class="button" href="{{ get_url(system, agency, f'/routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
                     </div>
                     <div class="section">
                         % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
@@ -96,7 +96,8 @@
                                                         % include('components/headsign')
                                                     </td>
                                                     <td class="non-mobile">
-                                                        <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                        % block = trip.block
+                                                        <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                                     </td>
                                                     <td>
                                                         <div class="column">
@@ -107,7 +108,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="desktop-only">
-                                                        <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                        <a href="{{ get_url(first_stop.system, first_stop.agency, f'/stops/{first_stop.number}') }}">{{ first_stop }}</a>
                                                     </td>
                                                 </tr>
                                                 % if this_hour > last_hour:

@@ -48,7 +48,7 @@
                                         <tr>
                                             <td>
                                                 <div class="column">
-                                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                                    <a href="{{ get_url(region_system, agency, path) }}">{{ region_system }}</a>
                                                     <span class="mobile-only smaller-font">
                                                         % if region_system.gtfs_loaded:
                                                             % if count == 1:
@@ -140,7 +140,7 @@
         
         if (systemSelected) {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'frame/nearby')}}?lat=" + lat + "&lon=" + lon, true);
+            request.open("GET", "{{ get_url(system, agency, '/frame/nearby') }}?lat=" + lat + "&lon=" + lon, true);
             request.onload = function() {
                 if (request.status === 200) {
                     if (request.response === null) {
@@ -164,7 +164,7 @@
     
     function loadMapMarkers(lat, lon) {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{get_url(system, 'api/nearby.json')}}?lat=" + lat + "&lon=" + lon, true);
+        request.open("GET", "{{ get_url(system, agency, '/api/nearby.json') }}?lat=" + lat + "&lon=" + lon, true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {
@@ -176,7 +176,7 @@
                     
                     const icon = document.createElement("a");
                     icon.className = "icon";
-                    icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+                    icon.href = getUrl(stop.system_id, stop.agency_id, "/stops/" + stop.number);
                     icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
                     
                     const details = document.createElement("div");

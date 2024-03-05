@@ -4,8 +4,8 @@
 <div id="page-header">
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
-        <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ get_url(system, agency, '/history') }}" class="tab-button">Last Seen</a>
+        <a href="{{ get_url(system, agency, '/history/first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
 </div>

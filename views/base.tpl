@@ -37,8 +37,8 @@
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
         % end
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(system, path) }}" />
-        <meta property="og:image" content="{{ get_url(system, 'img/meta-logo.png') }}" />
+        <meta property="og:url" content="{{ get_url(system, agency, path) }}" />
+        <meta property="og:image" content="{{ get_url(system, agency, '/img/meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -99,11 +99,14 @@
                 return a
             }
             
-            function getUrl(systemID, path) {
-                if (systemID === null || systemID === undefined) {
-                    return "{{ config.all_systems_domain }}".format(path)
+            function getUrl(systemID, agencyID, path) {
+                if (systemID !== undefined && systemID !== null) {
+                    return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID) + path
                 }
-                return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID, path)
+                if (agencyID !== undefined && agencyID !== null) {
+                    return "{{ config.agency_domain_path if system is None else config.agency_domain }}".format(agencyID) + path
+                }
+                return "{{ config.global_domain }}".format(path)
             }
             
             function setCookie(key, value) {
@@ -132,35 +135,35 @@
     </head>
     
     <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
-        <a id="title" href="{{ get_url(system) }}">
+        <a id="title" href="{{ get_url(system, agency) }}">
             <img class="white" src="/img/white/bctracker.png" />
             <img class="black" src="/img/black/bctracker.png" />
             <div class="side-bar-open-only">BCTracker</div>
         </a>
         <div id="navigation-bar">
-            <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>
+            <a class="navigation-item title non-desktop" href="{{ get_url(system, agency) }}">BCTracker</a>
             
             % if system is None or system.realtime_enabled:
-                <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
-                <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
+                <a class="navigation-item non-mobile" href="{{ get_url(system, agency, '/map') }}">Map</a>
+                <a class="navigation-item non-mobile" href="{{ get_url(system, agency, '/realtime') }}">Realtime</a>
+                <a class="navigation-item desktop-only" href="{{ get_url(system, agency, '/history') }}">History</a>
             % else:
                 <span class="navigation-item desktop-only disabled">Map</span>
                 <span class="navigation-item desktop-only disabled">Realtime</span>
                 <span class="navigation-item desktop-only disabled">History</span>
                 
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                <a class="navigation-item tablet-only" href="{{ get_url(system, agency, '/routes') }}">Routes</a>
+                <a class="navigation-item tablet-only" href="{{ get_url(system, agency, '/blocks') }}">Blocks</a>
             % end
             
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(system, agency, '/routes') }}">Routes</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(system, agency, '/blocks') }}">Blocks</a>
             
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(system, agency, '/about') }}">About</a>
             
             <div class="flex-1"></div>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, agency, '/nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
                 <div class="tooltip left">
@@ -168,7 +171,7 @@
                 </div>
             </a>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, agency, '/personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
                 <div class="tooltip left">
@@ -192,55 +195,55 @@
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
             % if system is None or system.realtime_enabled:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
+                <a class="menu-button mobile-only" href="{{ get_url(system, agency, '/map') }}">
                     <img class="white" src="/img/white/map.png" />
                     <img class="black" src="/img/black/map.png" />
                     <span>Map</span>
                 </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
+                <a class="menu-button mobile-only" href="{{ get_url(system, agency, '/realtime') }}">
                     <img class="white" src="/img/white/realtime.png" />
                     <img class="black" src="/img/black/realtime.png" />
                     <span>Realtime</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'history') }}">
+                <a class="menu-button" href="{{ get_url(system, agency, '/history') }}">
                     <img class="white" src="/img/white/history.png" />
                     <img class="black" src="/img/black/history.png" />
                     <span>History</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'routes') }}">
+                <a class="menu-button" href="{{ get_url(system, agency, '/routes') }}">
                     <img class="white" src="/img/white/route.png" />
                     <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+                <a class="menu-button" href="{{ get_url(system, agency, '/blocks') }}">
                     <img class="white" src="/img/white/block.png" />
                     <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % else:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
+                <a class="menu-button mobile-only" href="{{ get_url(system, agency, '/routes') }}">
                     <img class="white" src="/img/white/route.png" />
                     <img class="black" src="/img/black/route.png" />
                     <span>Routes</span>
                 </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
+                <a class="menu-button mobile-only" href="{{ get_url(system, agency, '/blocks') }}">
                     <img class="white" src="/img/white/block.png" />
                     <img class="black" src="/img/black/block.png" />
                     <span>Blocks</span>
                 </a>
             % end
             
-            <a class="menu-button" href="{{ get_url(system, 'about') }}">
+            <a class="menu-button" href="{{ get_url(system, agency, '/about') }}">
                 <img class="white" src="/img/white/about.png" />
                 <img class="black" src="/img/black/about.png" />
                 <span>About</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'nearby') }}">
+            <a class="menu-button" href="{{ get_url(system, agency, '/nearby') }}">
                 <img class="white" src="/img/white/location.png" />
                 <img class="black" src="/img/black/location.png" />
                 <span>Nearby</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'personalize') }}">
+            <a class="menu-button" href="{{ get_url(system, agency, '/personalize') }}">
                 <img class="white" src="/img/white/personalize.png" />
                 <img class="black" src="/img/black/personalize.png" />
                 <span>Personalize</span>
@@ -254,17 +257,19 @@
                 </div>
                 <div class="details">
                     <div id="system">
-                        % if system is None:
-                            All Transit Systems
-                        % else:
+                        % if system:
                             {{ system }}
+                        % elif agency:
+                            {{ agency }}
+                        % else:
+                            All Transit Agencies
                         % end
                     </div>
-                    <div id="last-updated">
-                        % if system is None or (system.realtime_enabled and system.realtime_loaded):
+                    % if last_updated:
+                        <div id="last-updated">
                             Updated {{ last_updated }}
-                        % end
-                    </div>
+                        </div>
+                    % end
                 </div>
                 <div id="refresh-button" class="disabled">
                     <img class="white" src="/img/white/refresh.png" />
@@ -272,20 +277,27 @@
                 </div>
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
-                % if system is None:
-                    <span class="system-button current all-systems">All Transit Systems</span>
+                % if system or agency:
+                    <a href="{{ get_url(None, None, path, **path_args) }}" class="system-button all-systems">All Transit Agencies</a>
                 % else:
-                    <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    <span class="system-button current all-systems">All Transit Agencies</span>
+                % end
+                % for list_agency in agencies:
+                    % if agency and agency == list_agency:
+                        <span class="system-button current">{{ list_agency }}</span>
+                    % else:
+                        <a href="{{ get_url(system, list_agency, path, **path_args) }}" class="system-button">{{ list_agency }}</a>
+                    % end
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if len(region_systems) > 0:
                         <div class="header">{{ region }}</div>
                         % for region_system in sorted(region_systems):
-                            % if system is not None and system == region_system:
+                            % if system and system == region_system:
                                 <span class="system-button current">{{ region_system }}</span>
                             % else:
-                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">{{ region_system }}</a>
+                                <a href="{{ get_url(region_system, agency, path, **path_args) }}" class="system-button">{{ region_system }}</a>
                             % end
                         % end
                     % end
@@ -405,7 +417,7 @@
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
-            request.open("POST", "{{get_url(system, 'api/search')}}", true);
+            request.open("POST", "{{ get_url(system, agency, '/api/search') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 const results = request.response.results;

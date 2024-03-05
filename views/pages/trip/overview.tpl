@@ -6,9 +6,9 @@
     <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, f'/trips/{trip.id}/map') }}" class="tab-button">Map</a>
         % if system.realtime_enabled:
-            <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
+            <a href="{{ get_url(system, agency, f'/trips/{trip.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -35,7 +35,7 @@
                         % else:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, route.agency, f'/routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>
@@ -46,7 +46,7 @@
                             % if block is None:
                                 <span class="lighter-text">Loading</span>
                             % else:
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                             % end
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
-                        % km = length / trip.system.agency.distance_scale
+                        % km = length / trip.agency.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="row section">
                             <div class="name">Length</div>
@@ -113,7 +113,7 @@
                                         % if block is None:
                                             <div class="lighter-text">Unknown</div>
                                         % else:
-                                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                            <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                         % end
                                     </td>
                                     <td>
@@ -176,7 +176,7 @@
                                         % if stop is None:
                                             <span class="lighter-text">Unavailable</span>
                                         % else:
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                         % end
                                     </td>
                                 </tr>
@@ -213,7 +213,7 @@
                                 </td>
                                 <td>
                                     <div class="column">
-                                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                        <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop.number }}</a>
                                         <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
                                     </div>
                                 </td>

@@ -18,7 +18,7 @@
                     It may be from a different system - the following systems have a route with that number
                     <ul>
                         % for alt_system in alt_systems:
-                            <li>{{ alt_system }}: <a href="{{ get_url(alt_system, f'routes/{route_number}') }}">{{ alt_system.get_route(number=route_number) }}</a></li>
+                            <li>{{ alt_system }}: <a href="{{ get_url(alt_system, agency, f'/routes/{route_number}') }}">{{ alt_system.get_route(number=route_number) }}</a></li>
                         % end
                     </ul>
                 </li>

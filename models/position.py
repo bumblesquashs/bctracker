@@ -11,6 +11,7 @@ class Position:
     
     __slots__ = (
         'system',
+        'agency',
         'bus',
         'trip_id',
         'stop_id',
@@ -27,8 +28,8 @@ class Position:
     @classmethod
     def from_db(cls, row, prefix='position'):
         '''Returns a position initialized from the given database row'''
-        agency = helpers.agency.find('bc-transit')
         system = helpers.system.find(row[f'{prefix}_system_id'])
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
         stop_id = row[f'{prefix}_stop_id']
@@ -44,7 +45,7 @@ class Position:
             adherence = None
         else:
             adherence = Adherence(adherence_value)
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
+        return cls(system, agency, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
     
     @property
     def has_location(self):
@@ -95,8 +96,9 @@ class Position:
             return 'FFFFFF'
         return trip.route.text_colour
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
+    def __init__(self, system, agency, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence):
         self.system = system
+        self.agency = agency
         self.bus = bus
         self.trip_id = trip_id
         self.stop_id = stop_id
@@ -118,6 +120,8 @@ class Position:
     def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
+            'system_id': self.system.id,
+            'agency_id': self.agency.id,
             'bus_number': self.bus.number,
             'bus_display': str(self.bus),
             'system': str(self.system),
@@ -165,4 +169,4 @@ class Position:
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []
-        return helpers.departure.find_upcoming(self.system, self.trip, self.sequence)
+        return helpers.departure.find_upcoming(self.system, self.agency, self.trip, self.sequence)

@@ -30,7 +30,7 @@
             % if system is not None:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only buses that have operated in {{ system }}, visit the <a href="{{ get_url(system, 'history') }}">history</a> page.
+                    To see only buses that have operated in {{ system }}, visit the <a href="{{ get_url(system, agency, '/history') }}">history</a> page.
                 </p>
             % end
         </div>

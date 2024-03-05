@@ -5,9 +5,9 @@
     <h1>Stop {{ stop.number }}</h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, agency, f'/stops/{stop.number}') }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(system, agency, f'/stops/{stop.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 

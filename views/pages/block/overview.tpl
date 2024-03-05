@@ -5,9 +5,9 @@
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'blocks/{block.id}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, f'/blocks/{block.id}/map') }}" class="tab-button">Map</a>
         % if system.realtime_enabled:
-            <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
+            <a href="{{ get_url(system, agency, f'/blocks/{block.id}/history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -33,7 +33,7 @@
                         % for route in routes:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, route.agency, f'/routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>
@@ -144,7 +144,7 @@
                         <tbody>
                             % for related_block in related_blocks:
                                 <tr>
-                                    <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
+                                    <td><a href="{{ get_url(related_block.system, related_block.agency, f'/blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
                                     <td>
                                         <div class="column">
                                             % for sheet in related_block.sheets:
@@ -212,7 +212,7 @@
                                             </div>
                                             % if stop is not None:
                                                 <div class="mobile-only smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                    Next Stop: <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                                 </div>
                                             % end
                                         </div>
@@ -224,7 +224,7 @@
                                         % if stop is None:
                                             <span class="lighter-text">Unavailable</span>
                                         % else:
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                         % end
                                     </td>
                                 </tr>

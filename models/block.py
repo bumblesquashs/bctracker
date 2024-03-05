@@ -10,6 +10,7 @@ class Block:
     
     __slots__ = (
         'system',
+        'agency',
         'id',
         'trips',
         'schedule',
@@ -25,8 +26,9 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, system, id, trips):
+    def __init__(self, system, agency, id, trips):
         self.system = system
+        self.agency = agency
         self.id = id
         self.trips = trips
         
@@ -104,8 +106,8 @@ class Block:
             message = f'Route {routes}'
         else:
             message = f'Routes {routes}'
-        return Match(f'Block {id}', message, 'block', f'blocks/{self.id}', value)
+        return Match(f'Block {id}', message, 'block', f'/blocks/{self.id}', value)
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return helpers.departure.find_all(self.system, block=self)
+        return helpers.departure.find_all(self.system, self.agency, block=self)

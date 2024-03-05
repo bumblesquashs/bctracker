@@ -34,7 +34,7 @@
                             <tr>
                                 <td>
                                     <div class="column">
-                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                        <a href="{{ get_url(region_system, agency, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.gtfs_loaded:
                                                 % if count == 1:
@@ -81,9 +81,9 @@
             function stopSearch() {
                 let value = document.getElementById('stop_id_search').value;
                 if (value.length > 0) {
-                    window.location = "{{ get_url(system) }}/stops?search=" + value;
+                    window.location = "{{ get_url(system, agency, '/stops') }}?search=" + value;
                 } else {
-                    window.location = "{{ get_url(system) }}/stops";
+                    window.location = "{{ get_url(system, agency, '/stops') }}";
                 }
             }
         </script>
@@ -114,7 +114,7 @@
                 <tbody>
                     % for stop in sorted(stops):
                         <tr>
-                            <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
+                            <td><a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop.number }}</a></td>
                             <td>
                                 {{ stop }}
                                 <div class="mobile-only">

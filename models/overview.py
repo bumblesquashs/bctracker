@@ -10,6 +10,7 @@ class Overview:
     '''An overview of a bus' history'''
     
     __slots__ = (
+        'agency',
         'bus',
         'first_seen_date',
         'first_seen_system',
@@ -22,7 +23,7 @@ class Overview:
     @classmethod
     def from_db(cls, row, prefix='overview'):
         '''Returns an overview initialized from the given database row'''
-        agency = helpers.agency.find('bc-transit')
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         first_seen_system = helpers.system.find(row[f'{prefix}_first_seen_system_id'])
         first_seen_date = Date.parse(row[f'{prefix}_first_seen_date'], first_seen_system.timezone)
@@ -36,9 +37,10 @@ class Overview:
             last_record = None
         else:
             last_record = Record.from_db(row, prefix=f'{prefix}_last_record')
-        return cls(bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record)
+        return cls(agency, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record)
     
-    def __init__(self, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record):
+    def __init__(self, agency, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record):
+        self.agency = agency
         self.bus = bus
         self.first_seen_date = first_seen_date
         self.first_seen_system = first_seen_system

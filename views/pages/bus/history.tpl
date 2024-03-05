@@ -14,8 +14,8 @@
         <h2>{{! bus.order }}</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, f'/bus/{bus.number}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, agency, f'/bus/{bus.number}/map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -41,7 +41,7 @@
                             <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
                             <div class="value">
                                 % for record_system in sorted(record_systems):
-                                    <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
+                                    <a href="{{ get_url(record_system, agency) }}">{{ record_system }}</a>
                                 % end
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

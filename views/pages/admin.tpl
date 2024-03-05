@@ -85,53 +85,54 @@
 </div>
 
 <script>
-    let systemID
+    let systemID;
+    let agencyID;
     
     function reloadAdornments() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/reload-adornments"), true);
         request.send();
     }
     
     function reloadOrders() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-orders"), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/reload-orders"), true);
         request.send();
     }
     
     function reloadSystems() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-systems"), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/reload-systems"), true);
         request.send();
     }
     
     function reloadThemes() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-themes"), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/reload-themes"), true);
         request.send();
     }
     
     function restartCron() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/restart-cron"), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/restart-cron"), true);
         request.send();
     }
     
     function backupDatabase() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/backup-database"), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/backup-database"), true);
         request.send();
     }
     
     function reloadGTFS(reloadSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-gtfs/" + reloadSystemID), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/reload-gtfs/" + reloadSystemID), true);
         request.send();
     }
     
     function reloadRealtime(reloadSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-realtime/" + reloadSystemID), true);
+        request.open("POST", getUrl(systemID, agencyID, "/api/admin/reload-realtime/" + reloadSystemID), true);
         request.send();
     }
 </script>
@@ -142,6 +143,16 @@
     </script>
 % else:
     <script>
-        systemID = "{{ system.id }}"
+        systemID = "{{ system.id }}";
+    </script>
+% end
+
+% if agency is None:
+    <script>
+        agencyID = null;
+    </script>
+% else:
+    <script>
+        agencyID = "{{ agency.id }}";
     </script>
 % end

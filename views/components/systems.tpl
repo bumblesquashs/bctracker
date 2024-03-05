@@ -16,7 +16,7 @@
 	<tbody>
 		% if system is not None:
 			<td>
-				<a href="{{ get_url(None, path) }}">All Systems</a>
+				<a href="{{ get_url(None, None, path) }}">All Systems</a>
 			</td>
 		% end
 		% for region in regions:
@@ -30,7 +30,7 @@
 					% count = len(region_system.get_routes())
 					<tr>
 						<td>
-							<a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+							<a href="{{ get_url(region_system, region_system.agency, path) }}">{{ region_system }}</a>
 						</td>
 					</tr>
 				% end

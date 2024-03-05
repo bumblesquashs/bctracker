@@ -5,11 +5,11 @@
     <h1>Realtime</h1>
     <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
+        <a href="{{ get_url(system, agency, '/realtime') }}" class="tab-button">All Buses</a>
         % if system is not None:
-            <a href="{{ get_url(system, 'realtime/routes') }}" class="tab-button">By Route</a>
+            <a href="{{ get_url(system, agency, '/realtime/routes') }}" class="tab-button">By Route</a>
         % end
-        <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(system, agency, '/realtime/models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
 </div>
@@ -115,13 +115,13 @@
                                 </div>
                                 % if stop is not None:
                                     <div class="non-desktop smaller-font">
-                                        Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        Next Stop: <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                     </div>
                                 % end
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')
@@ -130,7 +130,7 @@
                             % if stop is None:
                                 <span class="lighter-text">Unavailable</span>
                             % else:
-                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                <a href="{{ get_url(stop.system, block.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                             % end
                         </td>
                     % end
@@ -144,6 +144,6 @@
 
 <script>
     function toggleNISBuses() {
-        window.location = "{{ get_url(system, 'realtime/speed', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ get_url(system, agency, '/realtime/speed', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

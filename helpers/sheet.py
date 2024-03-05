@@ -2,7 +2,7 @@
 from models.daterange import DateRange
 from models.sheet import Sheet
 
-def combine(system, services):
+def combine(system, agency, services):
     '''Returns a list of sheets made from services with overlapping start/end dates'''
     if len(services) == 0:
         return []
@@ -22,7 +22,7 @@ def combine(system, services):
         if len(date_range_services) == 0:
             continue
         if len(sheets) == 0:
-            sheets.append(Sheet(system, date_range_services, date_range))
+            sheets.append(Sheet(system, agency, date_range_services, date_range))
         else:
             previous_sheet = sheets[-1]
             previous_services = {s for s in previous_sheet.services if not s.schedule.is_special}
@@ -30,9 +30,9 @@ def combine(system, services):
             if previous_services.issubset(current_services) or current_services.issubset(previous_services):
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
                 new_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
-                sheets[-1] = Sheet(system, new_services, date_range)
+                sheets[-1] = Sheet(system, agency, new_services, date_range)
             else:
-                sheets.append(Sheet(system, date_range_services, date_range))
+                sheets.append(Sheet(system, agency, date_range_services, date_range))
     final_sheets = []
     for sheet in sheets:
         if len(final_sheets) == 0:
@@ -42,7 +42,7 @@ def combine(system, services):
             if len(previous_sheet.schedule.date_range) <= 7 or len(sheet.schedule.date_range) <= 7:
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, sheet.schedule.date_range])
                 combined_services = previous_sheet.services.union(sheet.services)
-                final_sheets[-1] = Sheet(system, combined_services, date_range)
+                final_sheets[-1] = Sheet(system, agency, combined_services, date_range)
             else:
                 final_sheets.append(sheet)
     return final_sheets

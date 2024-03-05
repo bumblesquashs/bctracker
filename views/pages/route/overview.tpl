@@ -8,8 +8,8 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(system, agency, f'/routes/{route.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, f'/routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -86,14 +86,14 @@
                                             </div>
                                             % if stop is not None:
                                                 <div class="non-desktop smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                    Next Stop: <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                                 </div>
                                             % end
                                         </div>
                                     </td>
                                     <td class="non-mobile">
                                         % block = trip.block
-                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
@@ -102,7 +102,7 @@
                                         % if stop is None:
                                             <span class="lighter-text">Unavailable</span>
                                         % else:
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                         % end
                                     </td>
                                 </tr>
@@ -222,7 +222,8 @@
                                                             % include('components/headsign')
                                                         </td>
                                                         <td class="non-mobile">
-                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                            % block = trip.block
+                                                            <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="column">
@@ -233,7 +234,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="desktop-only">
-                                                            <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                            <a href="{{ get_url(first_stop.system, first_stop.agency, f'/stops/{first_stop.number}') }}">{{ first_stop }}</a>
                                                         </td>
                                                     </tr>
                                                     % if this_hour > last_hour:

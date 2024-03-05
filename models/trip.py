@@ -1,4 +1,5 @@
 
+import helpers.agency
 import helpers.departure
 import helpers.point
 import helpers.system
@@ -11,6 +12,7 @@ class Trip:
     
     __slots__ = (
         'system',
+        'agency',
         'id',
         'short_id',
         'route_id',
@@ -26,6 +28,7 @@ class Trip:
     @classmethod
     def from_db(cls, row, prefix='trip'):
         system = helpers.system.find(row[f'{prefix}_system_id'])
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
         service_id = row[f'{prefix}_service_id']
@@ -33,7 +36,7 @@ class Trip:
         direction_id = row[f'{prefix}_direction_id']
         shape_id = row[f'{prefix}_shape_id']
         headsign = row[f'{prefix}_headsign']
-        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+        return cls(system, agency, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property
     def display_id(self):
@@ -133,8 +136,9 @@ class Trip:
         '''Returns the direction for this trip'''
         return self.cache.direction
     
-    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
+    def __init__(self, system, agency, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
         self.system = system
+        self.agency = agency
         self.id = trip_id
         self.route_id = route_id
         self.service_id = service_id
@@ -154,7 +158,7 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.system.agency.prefix_headsigns and self.route is not None:
+        if self.agency.prefix_headsigns and self.route is not None:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -191,11 +195,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return helpers.point.find_all(self.system, self.shape_id)
+        return helpers.point.find_all(self.system, self.agency, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return helpers.departure.find_all(self.system, trip=self)
+        return helpers.departure.find_all(self.system, self.agency, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

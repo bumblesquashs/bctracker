@@ -67,5 +67,5 @@ def find_matches(agency, query, recorded_bus_numbers):
             adornment = bus.find_adornment()
             if adornment is not None and adornment.enabled:
                 bus_number_string += f' {adornment}'
-            matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.number}', value))
+            matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'/bus/{bus.number}', value))
     return matches

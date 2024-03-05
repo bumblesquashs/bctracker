@@ -68,7 +68,7 @@
         % if block is None:
             <span class="lighter-text">Loading</span>
         % else:
-            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+            <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
         % end
     </td>
     <td>

@@ -1,9 +1,9 @@
 
 from math import sqrt
 
+import helpers.agency
 import helpers.departure
 import helpers.route
-import helpers.sheet
 import helpers.system
 
 from models.match import Match
@@ -14,6 +14,7 @@ class Stop:
     
     __slots__ = (
         'system',
+        'agency',
         'id',
         'number',
         'name',
@@ -24,12 +25,13 @@ class Stop:
     @classmethod
     def from_db(cls, row, prefix='stop'):
         system = helpers.system.find(row[f'{prefix}_system_id'])
+        agency = helpers.agency.find(row[f'{prefix}_agency_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
-        return cls(system, id, number, name, lat, lon)
+        return cls(system, agency, id, number, name, lat, lon)
     
     @property
     def nearby_stops(self):
@@ -57,8 +59,9 @@ class Stop:
         '''Returns the routes for this stop'''
         return self.cache.routes
     
-    def __init__(self, system, id, number, name, lat, lon):
+    def __init__(self, system, agency, id, number, name, lat, lon):
         self.system = system
+        self.agency = agency
         self.id = id
         self.number = number
         self.name = name
@@ -83,6 +86,7 @@ class Stop:
         '''Returns a representation of this stop in JSON-compatible format'''
         return {
             'system_id': self.system.id,
+            'agency_id': self.agency.id,
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
@@ -108,7 +112,7 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.number}', value)
+        return Match(f'Stop {self.number}', self.name, 'stop', f'/stops/{self.number}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''
@@ -116,7 +120,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = helpers.departure.find_all(self.system, stop=self)
+        departures = helpers.departure.find_all(self.system, self.agency, stop=self)
         if service_group is None:
             if date is None:
                 return sorted(departures)
@@ -125,7 +129,7 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return helpers.departure.find_adjacent(self.system, self)
+        return helpers.departure.find_adjacent(self.system, self.agency, self)
 
 class StopCache:
     '''A collection of calculated values for a single stop'''

@@ -19,7 +19,7 @@
             % percentage = (trip_minutes / total_minutes) * 100
             % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
             % offset_percentage = (offset_minutes / total_minutes) * 100
-            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="section tooltip-anchor" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
+            <a href="{{ get_url(trip.system, trip.agency, f'/trips/{trip.id}') }}" class="section tooltip-anchor" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
                 <div class="tooltip right">
                     <div class="title">{{ trip }}</div>
                     {{ trip.start_time.format_web(time_format) }} - {{ trip.end_time.format_web(time_format) }}

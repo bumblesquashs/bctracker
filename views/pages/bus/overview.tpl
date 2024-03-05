@@ -20,8 +20,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(system, agency, f'/bus/{bus.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, f'/bus/{bus.number}/history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -57,7 +57,7 @@
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
+                                    <a href="{{ get_url(overview.last_seen_system, overview.agency) }}">{{ overview.last_seen_system }}</a>
                                 </div>
                             </div>
                         % end
@@ -85,7 +85,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                                <a href="{{ get_url(position.system, position.agency) }}">{{ position.system }}</a>
                             </div>
                         </div>
                         % if show_speed:
@@ -113,7 +113,7 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, route.agency, f'/routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">
@@ -122,7 +122,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                                <a href="{{ get_url(position.system, position.agency) }}">{{ position.system }}</a>
                             </div>
                         </div>
                         % if show_speed:
@@ -134,7 +134,7 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                 % date = Date.today(block.system.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)
@@ -155,7 +155,7 @@
                             <div class="row section">
                                 <div class="name">Next Stop</div>
                                 <div class="value">
-                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                    <a href="{{ get_url(stop.system, stop.system, f'/stops/{stop.number}') }}">{{ stop }}</a>
                                     % adherence = position.adherence
                                     % if adherence is not None:
                                         <span class="smaller-font">{{ adherence.description }}</span>
@@ -249,7 +249,7 @@
                                         % else:
                                             <td>
                                                 <div class="column">
-                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                                    <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">{{ stop.number }}</a>
                                                     <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                 </div>
                                             </td>
@@ -334,7 +334,7 @@
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

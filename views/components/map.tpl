@@ -233,7 +233,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+            icon.href = getUrl(stop.system_id, stop.agency_id, "/stops/" + stop.number);
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             
             const details = document.createElement("div");
@@ -294,7 +294,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+            icon.href = getUrl(stop.system_id, stop.agency_id, "/stops/" + stop.number);
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
             

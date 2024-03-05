@@ -45,10 +45,11 @@ def stop():
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
     for system in helpers.system.find_all():
+        agency = system.agency
         if running:
             date = Date.today(system.timezone)
-            if date.weekday == Weekday.MON or not gtfs.validate(system):
-                gtfs.load(system, True)
+            if date.weekday == Weekday.MON or not gtfs.validate(system, agency):
+                gtfs.load(system, agency, True)
                 gtfs.update_cache_in_background(system)
     if running:
         database.archive()
@@ -61,14 +62,15 @@ def handle_realtime(sig, frame):
     time = Time.now()
     print(f'--- {date} at {time} ---')
     for system in helpers.system.find_all():
+        agency = system.agency
         if running:
-            realtime.update(system)
-            if realtime.validate(system):
+            realtime.update(system, agency)
+            if realtime.validate(system, agency):
                 system.validation_errors = 0
             else:
                 system.validation_errors += 1
                 if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
-                    gtfs.load(system, True)
+                    gtfs.load(system, agency, True)
                     gtfs.update_cache_in_background(system)
     if running:
         realtime.update_records()

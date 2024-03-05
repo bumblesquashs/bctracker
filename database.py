@@ -8,6 +8,7 @@ SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS record (
             record_id INTEGER PRIMARY KEY ASC,
+            agency_id TEXT NOT NULL,
             bus_number INTEGER NOT NULL,
             date TEXT NOT NULL,
             system_id TEXT NOT NULL,
@@ -30,6 +31,7 @@ SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS transfer (
             transfer_id INTEGER PRIMARY KEY ASC,
+            agency_id TEXT NOT NULL,
             bus_number INTEGER NOT NULL,
             date TEXT NOT NULL,
             old_system_id TEXT NOT NULL,
@@ -38,13 +40,15 @@ SQL_SCRIPTS = [
     ''',
     '''
         CREATE TABLE IF NOT EXISTS overview (
-            bus_number INTEGER PRIMARY KEY,
+            agency_id TEXT NOT NULL,
+            bus_number INTEGER NOT NULL,
             first_seen_date TEXT NOT NULL,
             first_seen_system_id TEXT NOT NULL,
             first_record_id INTEGER,
             last_seen_date TEXT NOT NULL,
             last_seen_system_id TEXT NOT NULL,
             last_record_id INTEGER,
+            PRIMARY KEY (agency_id, bus_number),
             FOREIGN KEY (first_record_id) REFERENCES record (record_id),
             FOREIGN KEY (last_record_id) REFERENCES record (record_id)
         )
@@ -52,6 +56,7 @@ SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS position (
             system_id TEXT NOT NULL,
+            agency_id TEXT NOT NULL,
             bus_number INTEGER NOT NULL,
             trip_id TEXT,
             stop_id TEXT,
@@ -63,34 +68,37 @@ SQL_SCRIPTS = [
             bearing REAL,
             speed INTEGER,
             adherence INTEGER,
-            PRIMARY KEY (system_id, bus_number)
+            PRIMARY KEY (system_id, agency_id, bus_number)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS route (
             system_id TEXT NOT NULL,
+            agency_id TEXT NOT NULL,
             route_id TEXT NOT NULL,
             number TEXT NOT NULL,
             name TEXT NOT NULL,
             colour TEXT,
             text_colour TEXT,
-            PRIMARY KEY (system_id, route_id)
+            PRIMARY KEY (system_id, agency_id, route_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS stop (
             system_id TEXT NOT NULL,
+            agency_id TEXT NOT NULL,
             stop_id TEXT NOT NULL,
             number TEXT NOT NULL,
             name TEXT NOT NULL,
             lat REAL NOT NULL,
             lon REAL NOT NULL,
-            PRIMARY KEY (system_id, stop_id)
+            PRIMARY KEY (system_id, agency_id, stop_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS trip (
             system_id TEXT NOT NULL,
+            agency_id TEXT NOT NULL,
             trip_id TEXT NOT NULL,
             route_id TEXT NOT NULL,
             service_id TEXT NOT NULL,
@@ -98,13 +106,14 @@ SQL_SCRIPTS = [
             direction_id TEXT,
             shape_id INTEGER,
             headsign TEXT NOT NULL,
-            PRIMARY KEY (system_id, trip_id),
-            FOREIGN KEY (system_id, route_id) REFERENCES route (system_id, route_id)
+            PRIMARY KEY (system_id, agency_id, trip_id),
+            FOREIGN KEY (system_id, agency_id, route_id) REFERENCES route (system_id, agency_id, route_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS departure (
             system_id TEXT NOT NULL,
+            agency_id TEXT NOT NULL,
             trip_id TEXT NOT NULL,
             sequence INTEGER NOT NULL,
             stop_id TEXT NOT NULL,
@@ -113,19 +122,20 @@ SQL_SCRIPTS = [
             dropoff_type TEXT NOT NULL,
             timepoint INTEGER NOT NULL,
             distance REAL,
-            PRIMARY KEY (system_id, trip_id, sequence),
-            FOREIGN KEY (system_id, trip_id) REFERENCES trip (system_id, trip_id),
-            FOREIGN KEY (system_id, stop_id) REFERENCES stop (system_id, stop_id)
+            PRIMARY KEY (system_id, agency_id, trip_id, sequence),
+            FOREIGN KEY (system_id, agency_id, trip_id) REFERENCES trip (system_id, agency_id, trip_id),
+            FOREIGN KEY (system_id, agency_id, stop_id) REFERENCES stop (system_id, agency_id, stop_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS point (
             system_id TEXT NOT NULL,
+            agency_id TEXT NOT NULL,
             shape_id TEXT NOT NULL,
             sequence INTEGER NOT NULL,
             lat REAL NOT NULL,
             lon REAL NOT NULL,
-            PRIMARY KEY (system_id, shape_id, sequence)
+            PRIMARY KEY (system_id, agency_id, shape_id, sequence)
         )
     ''',
     'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',

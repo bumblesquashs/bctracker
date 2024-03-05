@@ -7,9 +7,9 @@
         {{! route.display_name }}
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, agency, f'/routes/{route.number}') }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(system, agency, f'/routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 

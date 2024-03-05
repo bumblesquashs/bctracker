@@ -16,7 +16,7 @@
         % if schedule_path is None or schedule is None or weekday not in schedule.weekdays:
             <span class="weekday {{ status }}">{{ name }}</span>
         % else:
-            <a class="weekday {{ status }}" href="{{ get_url(system, f'{schedule_path}#{weekday.short_name}{path_suffix}') }}">{{ name }}</a>
+            <a class="weekday {{ status }}" href="{{ get_url(system, agency, f'/{schedule_path}#{weekday.short_name}{path_suffix}') }}">{{ name }}</a>
         % end
     % end
 </div>

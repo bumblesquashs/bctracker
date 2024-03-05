@@ -7,7 +7,7 @@
     <h1>Routes</h1>
     <div class="column gap-10 stretch">
         <div class="tab-button-bar">
-            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+            <a href="{{ get_url(system, agency, '/routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
         % if routes:
@@ -104,7 +104,7 @@
                 
                 const icon = document.createElement("a");
                 icon.className = "icon route";
-                icon.href = getUrl(route.system_id, "routes/" + route.number);
+                icon.href = getUrl(route.system_id, route.agency_id, "/routes/" + route.number);
                 icon.style.backgroundColor = "#" + route.colour;
                 icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
                 
@@ -141,7 +141,7 @@
         
         document.body.onload = function() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(system, 'api/routes') }}", true);
+            request.open("GET", "{{ get_url(system, agency, '/api/routes') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {

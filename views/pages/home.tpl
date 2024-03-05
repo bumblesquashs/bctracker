@@ -24,7 +24,7 @@
                             if (isNaN(value)) {
                                 alert("Please enter a valid bus number")
                             } else {
-                                window.location = "{{ get_url(system) }}/bus/" + value;
+                                window.location = "{{ get_url(system, agency) }}/bus/" + value;
                             }
                         }
                     }
@@ -32,7 +32,7 @@
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system) }}/routes/" + value;
+                            window.location = "{{ get_url(system, agency) }}/routes/" + value;
                         }
                     }
                     
@@ -40,9 +40,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(system) }}/stops?search=" + value;
+                                window.location = "{{ get_url(system, agency) }}/stops?search=" + value;
                             } else {
-                                window.location = "{{ get_url(system) }}/stops/" + value;
+                                window.location = "{{ get_url(system, agency) }}/stops/" + value;
                             }
                         }
                     }
@@ -50,7 +50,7 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system) }}/blocks/" + value;
+                            window.location = "{{ get_url(system, agency) }}/blocks/" + value;
                         }
                     }
                 </script>
@@ -127,8 +127,8 @@
                             <p>See all buses that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
-                            <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
+                            <a class="button" href="{{ get_url(system, agency, '/realtime') }}">List</a>
+                            <a class="button" href="{{ get_url(system, agency, '/map') }}">Map</a>
                         </div>
                     </div>
                     <div class="item">
@@ -139,8 +139,8 @@
                             <p>See all buses that have been tracked, including last-seen date and transfers</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'history') }}">History</a>
-                            <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
+                            <a class="button" href="{{ get_url(system, agency, '/history') }}">History</a>
+                            <a class="button" href="{{ get_url(system, agency, '/history/transfers') }}">Transfers</a>
                         </div>
                     </div>
                     <div class="item">
@@ -151,9 +151,9 @@
                             <p>See departure times and routing details for routes, stops, blocks, and more</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                            <a class="button" href="{{ get_url(system, 'stops') }}">Stops</a>
-                            <a class="button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                            <a class="button" href="{{ get_url(system, agency, '/routes') }}">Routes</a>
+                            <a class="button" href="{{ get_url(system, agency, '/stops') }}">Stops</a>
+                            <a class="button" href="{{ get_url(system, agency, '/blocks') }}">Blocks</a>
                         </div>
                     </div>
                 </div>
@@ -263,7 +263,7 @@
                         </div>
                     </div>
                     <div>
-                        <a href="{{ get_url(system, 'news') }}">See older news</a>
+                        <a href="{{ get_url(system, agency, '/news') }}">See older news</a>
                     </div>
                 </div>
             </div>

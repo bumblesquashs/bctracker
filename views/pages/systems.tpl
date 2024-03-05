@@ -31,7 +31,7 @@
             % for region_system in sorted(region_systems):
                 <tr>
                     <td>
-                        <a href="{{ get_url(region_system) }}">{{ region_system }}</a>
+                        <a href="{{ get_url(region_system, agency) }}">{{ region_system }}</a>
                     </td>
                     <td class="non-desktop">
                         <div class="column">

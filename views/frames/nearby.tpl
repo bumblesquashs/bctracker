@@ -31,14 +31,14 @@
         <div class="section">
             <div class="header">
                 <h3>Stop {{ stop.number }} - {{ stop }}</h3>
-                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
+                <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}') }}">View stop schedule and details</a>
             </div>
             <div class="content">
                 % if len(upcoming_departures) == 0:
                     % tomorrow = Date.today() + timedelta(days=1)
                     <p>
                         There are no departures for the rest of today.
-                        <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                        <a href="{{ get_url(stop.system, stop.agency, f'/stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
                     </p>
                 % else:
                     % if system is None or system.realtime_enabled:

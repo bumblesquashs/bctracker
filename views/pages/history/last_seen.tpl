@@ -5,8 +5,8 @@
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
-        <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
-        <a href="{{ get_url(system, 'history/transfers') }}" class="tab-button">Transfers</a>
+        <a href="{{ get_url(system, agency, '/history/first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ get_url(system, agency, '/history/transfers') }}" class="tab-button">Transfers</a>
     </div>
 </div>
 
@@ -76,7 +76,7 @@
                             <div class="column">
                                 % if record.is_available:
                                     % block = record.block
-                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                    <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end
@@ -125,7 +125,7 @@
                             <div class="column">
                                 % if record.is_available:
                                     % block = record.block
-                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                    <a href="{{ get_url(block.system, block.agency, f'/blocks/{block.id}') }}">{{ block.id }}</a>
                                 % else:
                                     <span>{{ record.block_id }}</span>
                                 % end

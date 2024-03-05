@@ -5,7 +5,7 @@
     <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
-        <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, agency, '/routes/map') }}" class="tab-button">Map</a>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
                             <tr>
                                 <td>
                                     <div class="column">
-                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                        <a href="{{ get_url(region_system, agency, path) }}">{{ region_system }}</a>
                                         <span class="mobile-only smaller-font">
                                             % if region_system.gtfs_loaded:
                                                 % if count == 1:
@@ -85,7 +85,7 @@
                         <td>
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, route.agency, f'/routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </td>
                         <td class="non-mobile">

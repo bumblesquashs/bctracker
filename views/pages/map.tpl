@@ -42,7 +42,7 @@
             </div>
             <script>
                 function toggleNISBusesEmpty() {
-                    window.location = "{{ get_url(system, 'map', show_nis='false' if show_nis else 'true') }}"
+                    window.location = "{{ get_url(system, agency, '/map', show_nis='false' if show_nis else 'true') }}"
                 }
             </script>
         </div>
@@ -359,7 +359,7 @@
         
         function updatePositionData() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
+            request.open("GET", "{{ get_url(system, agency, '/api/map.json') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -388,7 +388,7 @@
                     continue;
                 }
                 const request = new XMLHttpRequest();
-                request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
+                request.open("GET", getUrl(position.system_id, position.agency_id, "/api/shape/" + position.shape_id + ".json"), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
@@ -444,7 +444,7 @@
                     shapes[shapeID].setVisible(true);
                 } else {
                     const request = new XMLHttpRequest();
-                    request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
+                    request.open("GET", getUrl(position.system_id, position.agency_id, "/api/shape/" + position.shape_id + ".json"), true);
                     request.responseType = "json";
                     request.onload = function() {
                         if (request.status === 200) {
