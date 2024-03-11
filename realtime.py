@@ -6,6 +6,7 @@ import requests
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
+import helpers.assignment
 import helpers.overview
 import helpers.position
 import helpers.record
@@ -79,6 +80,15 @@ def update_records():
                     record_id = None
                 else:
                     block = trip.block
+                    assignment = helpers.assignment.find(system, block)
+                    if assignment:
+                        if assignment.bus_number != bus.number:
+                            helpers.assignment.delete_all(system=system, block=block)
+                            helpers.assignment.delete_all(bus=bus)
+                            helpers.assignment.create(system, block, bus, date)
+                    else:
+                        helpers.assignment.delete_all(bus=bus)
+                        helpers.assignment.create(system, block, bus, date)
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
                         if last_record.date == date and last_record.block_id == block.id:

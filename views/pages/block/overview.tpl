@@ -233,6 +233,34 @@
                     </table>
                 </div>
             </div>
+        % elif assignment and block.start_time.is_later:
+            % bus = assignment.bus
+            <div class="section">
+                <div class="header">
+                    <h2>Scheduled Bus</h2>
+                </div>
+                <div class="content">
+                    <p>Last assigned to this block, but may be swapped out.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th>Model</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    % include('components/bus')
+                                </td>
+                                <td>
+                                    % include('components/order', order=bus.order)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         % end
         
         <div class="section">
