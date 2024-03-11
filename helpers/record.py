@@ -1,4 +1,6 @@
 
+from datetime import timedelta
+
 import helpers.agency
 
 from models.bus import Bus
@@ -151,3 +153,22 @@ def find_scheduled_today(system, trips):
     )
     agency = helpers.agency.find('bc-transit')
     return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}
+
+def delete_stale_trip_records():
+    '''Removes all old and unused trip records'''
+    date = Date.today() - timedelta(days=90)
+    database.execute('''
+        DELETE FROM trip_record
+        WHERE trip_record_id IN (
+            SELECT trip_record_id
+            FROM trip_record
+            JOIN record ON record.record_id = trip_record.record_id
+            WHERE record.date < ?
+            AND NOT EXISTS (
+                SELECT 1
+                FROM trip
+                WHERE trip.trip_id = trip_record.trip_id
+                    AND trip.system_id = record.system_id
+            )
+        )
+    ''', [date.format_db()])
