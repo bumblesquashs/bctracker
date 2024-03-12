@@ -628,6 +628,12 @@ table tr.header td {
     gap: 40px !important;
 }
 
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 5px;
+}
+
 .headsign {
     display: flex;
     flex-direction: row;

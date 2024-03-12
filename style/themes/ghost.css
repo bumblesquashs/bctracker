@@ -409,6 +409,10 @@ table tr {
     border-bottom-color: #DDDDDD;
 }
 
+.info-box .radio-button-container:hover {
+    background-color: #DDDDDD;
+}
+
 .lighter-text {
     color: #888888;
 }
@@ -473,6 +477,7 @@ table tr {
 }
 
 .radio-button-container .radio-button {
+    background-color: #FFFFFF;
     border-color: #AAAAAA;
 }
 
