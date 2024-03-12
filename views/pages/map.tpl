@@ -82,6 +82,63 @@
 % else:
     <div id="map" class="full-screen"></div>
     
+    <style>
+        #bus-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            bottom: 30px;
+            width: 350px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        #bus-preview .close-button:hover {
+            cursor: pointer;
+        }
+        
+        #bus-preview .close-button img {
+            width: 32px;
+            height: 32px;
+        }
+        
+        #bus-preview img.white {
+            display: none;
+        }
+        
+        #bus-preview-subtitle {
+            font-weight: normal;
+            color: #666666;
+        }
+        
+        #bus-preview-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+    <div id="bus-preview" class="display-none">
+        <div class="column stretch">
+            <div class="row space-between">
+                <h1 id="bus-preview-title"></h1>
+                <div class="close-button" onclick="hideBusPreview()">
+                    <img class="white" src="/img/white/close.png" />
+                    <img class="black" src="/img/black/close.png" />
+                </div>
+            </div>
+            <h3 id="bus-preview-subtitle"></h3>
+        </div>
+        <div id="bus-preview-content">
+            
+        </div>
+    </div>
+    
     <script>
         const map = new ol.Map({
             target: 'map',
@@ -240,9 +297,12 @@
                     }
                     element.appendChild(icon);
                 } else {
-                    const icon = document.createElement("a");
+                    const icon = document.createElement("div");
                     icon.className = "icon";
-                    icon.href = "/bus/" + position.bus_number;
+                    icon.onclick = function() {
+                        showBusPreview(position);
+                    }
+                    // icon.href = "/bus/" + position.bus_number;
                     if (busMarkerStyle == "route") {
                         icon.classList.add("bus_route");
                         icon.innerHTML = "<div class='link'></div>" + position.route_number;
@@ -268,9 +328,10 @@
                     icon.onmouseenter = function() {
                         setHoverPosition(position);
                     }
+                    /*
                     icon.onmouseleave = function() {
                         setHoverPosition(null);
-                    }
+                    }*/
                     element.appendChild(icon);
                 }
                 
@@ -500,6 +561,39 @@
                 }
             }, 1000 * 60);
         }, 1000 * (timeToNextUpdate + 15));
+        
+        function hideBusPreview() {
+            const previewElement = document.getElementById("bus-preview");
+            const titleElement = document.getElementById("bus-preview-title");
+            const subtitleElement = document.getElementById("bus-preview-subtitle");
+            const contentElement = document.getElementById("bus-preview-content");
+            previewElement.classList.add("display-none");
+            titleElement.innerHTML = "";
+            subtitleElement.innerHTML = "";
+            contentElement.innerHTML = "";
+        }
+        
+        function showBusPreview(position) {
+            setHoverPosition(position);
+            const previewElement = document.getElementById("bus-preview");
+            const titleElement = document.getElementById("bus-preview-title");
+            const subtitleElement = document.getElementById("bus-preview-subtitle");
+            const contentElement = document.getElementById("bus-preview-content");
+            previewElement.classList.remove("display-none");
+            titleElement.innerHTML = "Bus " + position.bus_display;
+            subtitleElement.innerHTML = position.bus_order;
+            const request = new XMLHttpRequest();
+            request.open("GET", getUrl(position.system_id, "frame/bus/" + position.bus_number), true);
+            request.onload = function() {
+                if (request.status === 200) {
+                    contentElement.innerHTML = request.response;
+                }
+            };
+            request.onerror = function() {
+                
+            };
+            request.send();
+        }
     </script>
 
     % include('components/map_toggle')

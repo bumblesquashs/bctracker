@@ -233,7 +233,7 @@
                     </table>
                 </div>
             </div>
-        % elif assignment and block.start_time.is_later:
+        % elif assignment and block.get_start_time().is_later:
             % bus = assignment.bus
             <div class="section">
                 <div class="header">

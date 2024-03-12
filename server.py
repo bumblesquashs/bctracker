@@ -858,6 +858,22 @@ def frame_nearby(system):
         stops=sorted([s for s in stops if s.is_near(lat, lon)])
     )
 
+@endpoint('/frame/bus/<bus_number:int>')
+def frame_bus(system, bus_number):
+    agency = helpers.agency.find('bc-transit')
+    bus = Bus.find(agency, bus_number)
+    overview = helpers.overview.find(bus)
+    if (bus.order is None and overview is None) or not bus.visible:
+        return frame('invalid_bus', system,
+            bus_number=bus_number
+        )
+    position = helpers.position.find(bus)
+    return frame('bus', system,
+        bus=bus,
+        position=position,
+        overview=overview
+    )
+
 # =============================================================
 # API endpoints
 # =============================================================
