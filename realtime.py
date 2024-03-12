@@ -81,12 +81,8 @@ def update_records():
                 else:
                     block = trip.block
                     assignment = helpers.assignment.find(system, block)
-                    if assignment:
-                        if assignment.bus_number != bus.number:
-                            helpers.assignment.delete_all(system=system, block=block)
-                            helpers.assignment.delete_all(bus=bus)
-                            helpers.assignment.create(system, block, bus, date)
-                    else:
+                    if not assignment or assignment.bus_number != bus.number:
+                        helpers.assignment.delete_all(system=system, block=block)
                         helpers.assignment.delete_all(bus=bus)
                         helpers.assignment.create(system, block, bus, date)
                     if overview is not None and overview.last_record is not None:

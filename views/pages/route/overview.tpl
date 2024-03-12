@@ -193,7 +193,7 @@
                                                                 <td class="desktop-only">
                                                                     % include('components/order', order=bus.order)
                                                                 </td>
-                                                            % elif (trip.system.id, trip.block_id) in assignments and trip.start_time.is_later:
+                                                            % elif (trip.system.id, trip.block_id) in assignments and trip.end_time.is_later:
                                                                 % assignment = assignments[(trip.system.id, trip.block_id)]
                                                                 % bus = assignment.bus
                                                                 <td>
