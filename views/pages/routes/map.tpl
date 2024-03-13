@@ -18,7 +18,7 @@
             <thead>
                 <tr>
                     <th>System</th>
-                    <th class="non-mobile"># Routes</th>
+                    <th class="non-mobile align-right">Routes</th>
                     <th>Service Days</th>
                 </tr>
             </thead>
@@ -48,7 +48,7 @@
                                     </div>
                                 </td>
                                 % if region_system.gtfs_loaded:
-                                    <td class="non-mobile">{{ count }}</td>
+                                    <td class="non-mobile align-right">{{ count }}</td>
                                     <td>
                                         % include('components/weekdays', schedule=region_system.schedule, compact=True)
                                     </td>

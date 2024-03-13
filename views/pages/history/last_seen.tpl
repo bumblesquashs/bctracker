@@ -69,7 +69,7 @@
                         <thead>
                             <tr>
                                 <th>Model</th>
-                                <th>Count</th>
+                                <th class="align-right">Count</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,7 +77,7 @@
                                 % type_overviews = [o for o in overviews if o.bus.model is not None and o.bus.model.type == model_type]
                                 <tr class="header">
                                     <td>{{ model_type }}</td>
-                                    <td>{{ len(type_overviews) }}</td>
+                                    <td class="align-right">{{ len(type_overviews) }}</td>
                                 </tr>
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == model_type]
@@ -85,13 +85,13 @@
                                     % model_overviews = [o for o in type_overviews if o.bus.model == model]
                                     <tr>
                                         <td>{{! model }}</td>
-                                        <td>{{ len(model_overviews) }}</td>
+                                        <td class="align-right">{{ len(model_overviews) }}</td>
                                     </tr>
                                 % end
                             % end
                             <tr class="header">
                                 <td>Total</td>
-                                <td>{{ len(overviews) }}</td>
+                                <td class="align-right">{{ len(overviews) }}</td>
                             </tr>
                         </tbody>
                     </table>
