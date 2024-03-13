@@ -5,6 +5,7 @@ from models.date import Date
 import database
 
 def create(system, block, bus, date):
+    '''Inserts a new assignment into the database'''
     system_id = getattr(system, 'id', system)
     block_id = getattr(block, 'id', block)
     bus_number = getattr(bus, 'number', bus)
@@ -16,6 +17,7 @@ def create(system, block, bus, date):
     })
 
 def find(system, block):
+    '''Returns the assignment for the given system and block'''
     system_id = getattr(system, 'id', system)
     block_id = getattr(block, 'id', block)
     try:
@@ -42,6 +44,7 @@ def find(system, block):
         return None
 
 def find_all(system=None, block=None, bus=None, trip=None, route=None, stop=None):
+    '''Returns all assignments for the given block, bus, trip, route, and stop'''
     system_id = getattr(system, 'id', system)
     block_id = getattr(block, 'id', block)
     bus_number = getattr(bus, 'number', bus)
@@ -86,6 +89,7 @@ def find_all(system=None, block=None, bus=None, trip=None, route=None, stop=None
     return {a.key: a for a in assignments}
 
 def delete_all(system=None, block=None, bus=None):
+    '''Deletes all assignments from the database'''
     system_id = getattr(system, 'id', system)
     block_id = getattr(block, 'id', block)
     bus_number = getattr(bus, 'number', bus)
