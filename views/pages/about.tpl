@@ -23,6 +23,17 @@
                 <div class="container">
                     <div class="section">
                         <div class="header">
+                            <h3>How do I use BCTracker?</h3>
+                        </div>
+                        <div class="content">
+                            <p>
+                                Check out our handy <a href="{{ get_url(system, 'guide') }}">Getting Started</a> page!
+                                If you're still not sure what's going on, feel free to send us an email or hop on our Discord to ask questions - see the Contact section for more.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="header">
                             <h3>Why is there no transit information for Vancouver?</h3>
                         </div>
                         <div class="content">
@@ -35,13 +46,13 @@
                     </div>
                     <div class="section">
                         <div class="header">
-                            <h3>Why are some transit systems missing schedules?</h3>
+                            <h3>Why are some transit systems not showing in realtime?</h3>
                         </div>
                         <div class="content">
                             <p>
-                                Unfortunately, BC Transit does not currently provide GTFS schedules for some of the smaller transit systems around the province.
-                                This data is expected to come when NextRide finishes rolling out in these systems throughout 2024.
-                                Keep an eye out for more info soon!
+                                BC Transit has been working on rolling out NextRide in many smaller systems around the province.
+                                The addition of schedule GTFS data is nearly complete, but it will still take some time before realtime data is available everywhere.
+                                Keep an eye out for more systems going online in the future!
                             </p>
                         </div>
                     </div>
@@ -66,6 +77,19 @@
                             <p>
                                 The website (both the pages and the data processing code) is written in Python using a simple web framework called Bottle.
                                 The code can be found on <a href="https://github.com/bumblesquashs/bctracker">GitHub</a> if you are interested in seeing how it works or trying to run it yourself.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="header">
+                            <h3>Will there ever be a BCTracker phone app?</h3>
+                        </div>
+                        <div class="content">
+                            <p>
+                                The navigation style of BCTracker, which can sometimes involve a lot of back and forth or circular pages, unfortunately does not typically work well with mobile apps.
+                                Web browsers are better at handling that sort of navigation, especially because it's easy to have multiple tabs at once if needed.
+                                So, we currently don't have any plans to make a BCTracker app.
+                                However, keep in mind that many phones allow links to websites to be saved directly as icons on the home screen, making them easy to access.
                             </p>
                         </div>
                     </div>

@@ -792,6 +792,14 @@ def about_page(system):
         path='about'
     )
 
+@endpoint('/guide')
+def guide_page(system):
+    return page('guide', system,
+        title='Getting Started',
+        enable_refresh=False,
+        path='guide'
+    )
+
 @endpoint('/nearby')
 def nearby_page(system):
     return page('nearby', system,

@@ -61,6 +61,10 @@ img.inline {
     width: 18px;
 }
 
+ol, ul {
+    padding-left: 30px;
+}
+
 table {
     border-collapse: collapse;
     border-spacing: 0px;
