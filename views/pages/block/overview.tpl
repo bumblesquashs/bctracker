@@ -238,7 +238,7 @@
                     </table>
                 </div>
             </div>
-        % elif assignment and block.get_end_time(date=today).is_later:
+        % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
             % bus = assignment.bus
             % position = helpers.position.find(bus)
             <div class="section">

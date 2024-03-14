@@ -187,7 +187,7 @@
                     </table>
                 </div>
             </div>
-        % elif assignment and trip.end_time.is_later:
+        % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
             % bus = assignment.bus
             % position = helpers.position.find(bus)
             <div class="section">
