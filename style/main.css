@@ -552,6 +552,12 @@ table tr.header td {
     gap: 5px;
 }
 
+.container > .section > .header {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
 .container > .section > .content {
     display: flex;
     flex-direction: column;
