@@ -244,9 +244,9 @@ table tr.header td {
 
 #quick-navigation {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
-    align-items: start;
+    align-items: stretch;
 }
 
 #quick-navigation .item {

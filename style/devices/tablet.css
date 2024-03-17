@@ -112,6 +112,11 @@ table {
     padding: 20px;
 }
 
+#quick-navigation {
+    flex-direction: row;
+    align-items: start;
+}
+
 #refresh-button img {
     width: 36px;
     height: 36px;
