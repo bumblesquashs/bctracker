@@ -37,7 +37,7 @@
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
-                        <div class="row section">
+                        <div class="row section align-start">
                             <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
                             <div class="value">
                                 % for record_system in sorted(record_systems):

@@ -1015,6 +1015,10 @@ table tr.header td {
     align-items: center;
 }
 
+.row.align-start {
+    align-items: flex-start;
+}
+
 .row.space-between {
     justify-content: space-between;
 }
