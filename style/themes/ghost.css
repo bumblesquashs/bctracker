@@ -84,7 +84,7 @@ table tr {
 }
 
 #map-toggle img.white {
-    display: block;
+    display: block !important;
 }
 
 #navigation-bar {

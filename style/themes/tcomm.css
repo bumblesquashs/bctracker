@@ -85,7 +85,7 @@ table tr {
 }
 
 #map-toggle img.black {
-    display: block;
+    display: block !important;
 }
 
 #map-toggle img.white {

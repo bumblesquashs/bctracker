@@ -14,11 +14,11 @@
 </script>
 
 <div id="map-toggle" class="mobile-only" onclick="toggleMap()">
-    <div id="open-map-toggle-icon" class="display-none">
+    <div id="open-map-toggle-icon">
         <img class="white" src="/img/white/open-fullscreen.png" />
         <img class="black" src="/img/black/open-fullscreen.png" />
     </div>
-    <div id="close-map-toggle-icon">
+    <div id="close-map-toggle-icon" class="display-none">
         <img class="white" src="/img/white/close-fullscreen.png" />
         <img class="black" src="/img/black/close-fullscreen.png" />
     </div>

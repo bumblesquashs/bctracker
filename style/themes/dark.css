@@ -97,7 +97,7 @@ table tr:nth-child(2n-1) {
 }
 
 #map-toggle img.white {
-    display: block;
+    display: block !important;
 }
 
 #navigation-bar {
