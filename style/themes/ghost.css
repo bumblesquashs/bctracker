@@ -79,18 +79,12 @@ table tr {
 
 #map-toggle {
     background-color: #365CCB;
-}
-
-#map-toggle img.black {
-    display: none;
-}
-
-#map-toggle img.white {
-    display: block !important;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar {
     background-color: #EEEEEE;
+    --image-color: #666666;
 }
 
 #navigation-bar .navigation-icon {
@@ -105,10 +99,6 @@ table tr {
     background-color: #FFFFFF !important;
 }
 
-#navigation-bar .navigation-icon img.white {
-    display: none;
-}
-
 #navigation-bar .navigation-item {
     color: #000000;
 }
@@ -121,12 +111,9 @@ table tr {
     background-color: #FFFFFF !important;
 }
 
-#navigation-bar .navigation-item img.white {
-    display: none;
-}
-
 #navigation-menu {
     background-color: #DDDDDD;
+    --image-color: #666666;
 }
 
 #navigation-menu .menu-button {
@@ -135,10 +122,6 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #888888;
-}
-
-#navigation-menu .menu-button img.white {
-    display: none;
 }
 
 #navigation-menu-toggle .line {
@@ -155,8 +138,8 @@ table tr {
     background-color: #FFCCCC;
 }
 
-#page img.white {
-    display: none;
+#page {
+    --image-color: #666666;
 }
 
 #page-header {
@@ -168,16 +151,16 @@ table tr {
     border-color: #DDDDDD;
 }
 
+#refresh-button {
+    --image-color: #666666;
+}
+
 #refresh-button:hover {
     background-color: #DDDDDD;
 }
 
 #refresh-button.disabled:hover {
     background-color: #FFFFFF;
-}
-
-#refresh-button img.white {
-    display: none;
 }
 
 #search {
@@ -206,8 +189,8 @@ table tr {
     color: #888888;
 }
 
-#search-results img.white {
-    display: none;
+#search-results {
+    --image-color: #666666;
 }
 
 #search-results .result {
@@ -267,21 +250,18 @@ table tr {
     cursor: default;
 }
 
-#system-menu-toggle img.white {
-    display: none;
+#system-menu-toggle {
+    --image-color: #666666;
 }
 
 #title {
     background-color: #EEEEEE;
     color: #000000;
+    --image-color: #666666;
 }
 
 #title:hover {
     background-color: #DDDDDD;
-}
-
-#title img.white {
-    display: none;
 }
 
 .ahead {
@@ -291,14 +271,11 @@ table tr {
 .banner {
     background-color: #FFF7ED;
     color: #000000;
+    --image-color: #000000;
 }
 
 .banner a {
     color: #000000;
-}
-
-.banner .close-button img.white {
-    display: none;
 }
 
 .behind {
@@ -308,6 +285,7 @@ table tr {
 .button {
     background-color: #AAAAAA;
     color: #FFFFFF;
+    --image-color: #666666;
 }
 
 .button:hover {
@@ -338,17 +316,10 @@ table tr {
     background-color: #AD6000;
 }
 
-.button img.black {
-    display: none;
-}
-
 .checkbox-container .checkbox {
     border-color: #000000;
     background-color: #FFFFFF;
-}
-
-.checkbox-container .checkbox img.white {
-    display: none;
+    --image-color: #000000;
 }
 
 .code-block {

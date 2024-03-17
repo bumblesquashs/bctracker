@@ -125,7 +125,7 @@
         
         const icon = document.createElement("div");
         icon.className = "icon";
-        icon.innerHTML = "<img src='/img/white/location.png' />";
+        icon.innerHTML = "{{ include('components/svg', name='location') }}";
         
         element.appendChild(icon);
         
