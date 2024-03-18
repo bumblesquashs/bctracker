@@ -1,4 +1,4 @@
 
-% with open(f'./img/{name}.svg', 'r') as file:
-    {{! file.read() }}
-% end
+% import utils
+
+{{! utils.svg_string(name) }}

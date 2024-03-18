@@ -56,9 +56,12 @@ h2 .route {
     min-width: 16px;
 }
 
-img.inline {
-    height: 18px;
-    width: 18px;
+p {
+    --image-size: 18px;
+}
+
+p > svg {
+    vertical-align: middle;
 }
 
 svg {
