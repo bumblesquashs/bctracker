@@ -367,6 +367,7 @@
     let searchPage = 0;
     let loadingResults = false;
     let enterPending = false;
+    let lastSearchTimestamp = Date.now();
     
     let searchIncludeBuses = true;
     let searchIncludeRoutes = true;
@@ -396,6 +397,9 @@
         const placeholderElement = document.getElementById("search-placeholder");
         const query = inputElement.value;
         
+        const timestamp = Date.now();
+        lastSearchTimestamp = timestamp;
+        
         if (query === undefined || query === null || query === "") {
             updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
         } else {
@@ -407,6 +411,10 @@
             request.open("POST", "{{get_url(system, 'api/search')}}", true);
             request.responseType = "json";
             request.onload = function() {
+                if (timestamp !== lastSearchTimestamp) {
+                    // Discard outdated results
+                    return;
+                }
                 const results = request.response.results;
                 const total = request.response.total;
                 
@@ -418,6 +426,10 @@
                 }
             };
             request.onerror = function() {
+                if (timestamp !== lastSearchTimestamp) {
+                    // Discard outdated results
+                    return;
+                }
                 updateSearchView([], 0, "Error loading search results");
             };
             const data = new FormData();
