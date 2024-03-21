@@ -384,7 +384,7 @@ table tr.header td {
     display: none;
 }
 
-.adherence {
+.adherence-indicator {
     padding: 2px 4px;
     border-radius: 4px;
     min-width: 14px;
@@ -395,9 +395,11 @@ table tr.header td {
     font-size: 9pt;
     line-height: 9pt;
     flex-shrink: 0;
+    background-color: var(--adherence-background);
+    color: var(--adherence-text);
 }
 
-.adherence.large {
+.adherence-indicator.large {
     font-size: 12pt;
     line-height: 12pt;
     padding: 3px 6px;
@@ -433,6 +435,10 @@ table tr.header td {
 .banner .title {
     font-weight: bold;
     font-size: 16pt;
+}
+
+.bearing.adherence {
+    border-bottom-color: var(--adherence-background);
 }
 
 .block-timeline {
@@ -742,7 +748,7 @@ table tr.header td {
     gap: 1px;
 }
 
-.marker .details .content .adherence {
+.marker .details .content .adherence-indicator {
     font-size: 8pt;
     line-height: 8pt;
     border-radius: 3px;
@@ -825,6 +831,8 @@ table tr.header td {
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
+    background-color: var(--adherence-background);
+    color: var(--adherence-text);
 }
 
 .marker .icon.route {
