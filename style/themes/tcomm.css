@@ -6,6 +6,8 @@
 :root {
     --tooltip-background: #000000;
     --tooltip-text: #FFFFFF;
+    --adherence-background: #989898;
+    --adherence-text: #FFFFFF;
 }
 
 a {
@@ -368,30 +370,12 @@ table tr {
     color: #FFFFFF;
 }
 
-.adherence {
-    background-color: #DFDFDF;
-    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+.adherence-indicator {
     text-shadow: none;
 }
 
-.adherence.ahead {
-    background-color: #F00E0E !important;
-}
-
-.adherence.behind {
-    background-color: #CC8800 !important;
-}
-
-.adherence.on-time {
-    background-color: #4EBF40 !important;
-}
-
-.adherence.very-ahead {
-    background-color: #F00E0E !important;
-}
-
-.adherence.very-behind {
-    background-color: #115EBC !important;
+.ahead {
+    --adherence-background: #F00E0E;
 }
 
 .banner {
@@ -408,29 +392,8 @@ table tr {
     display: none;
 }
 
-.bearing.adherence {
-    background-color: transparent !important;
-    border-bottom-color: #989898;
-}
-
-.bearing.adherence.ahead {
-    border-bottom-color: #F00E0E;
-}
-
-.bearing.adherence.behind {
-    border-bottom-color: #CC8800;
-}
-
-.bearing.adherence.on-time {
-    border-bottom-color: #4EBF40;
-}
-
-.bearing.adherence.very-ahead {
-    border-bottom-color: #F00E0E;
-}
-
-.bearing.adherence.very-behind {
-    border-bottom-color: #115EBC;
+.behind {
+    --adherence-background: #CC8800;
 }
 
 .button {
@@ -538,6 +501,10 @@ table tr {
     text-shadow: none;
 }
 
+.marker .icon.adherence {
+    text-shadow: none;
+}
+
 .modified-service {
     background-color: #FFA560;
     color: #000000;
@@ -570,6 +537,10 @@ table tr {
 .normal-service {
     background-color: #7DBD88;
     color: #000000;
+}
+
+.on-time {
+    --adherence-background: #4EBF40;
 }
 
 .positive {
@@ -667,6 +638,14 @@ table tr {
 
 .tooltip-anchor .tooltip {
     text-shadow: none;
+}
+
+.very-ahead {
+    --adherence-background: #F00E0E;
+}
+
+.very-behind {
+    --adherence-background: #115EBC;
 }
 
 .weekdays .weekday {

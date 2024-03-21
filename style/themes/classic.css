@@ -19,6 +19,8 @@
 :root {
     --tooltip-background: #666666;
     --tooltip-text: #FFFFFF;
+    --adherence-background: #989898;
+    --adherence-text: #FFFFFF;
 }
 
 a {
@@ -291,29 +293,8 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
-.adherence {
-    color: #FFFFFF;
-    background-color: #989898 !important;
-}
-
-.adherence.ahead {
-    background-color: #FF9A3A !important;
-}
-
-.adherence.behind {
-    background-color: #FF9A3A !important;
-}
-
-.adherence.on-time {
-    background-color: #3C5ABE !important;
-}
-
-.adherence.very-ahead {
-    background-color: #FD393E !important;
-}
-
-.adherence.very-behind {
-    background-color: #FD393E !important;
+.ahead {
+    --adherence-background: #FF9A3A;
 }
 
 .banner {
@@ -329,29 +310,8 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
-.bearing.adherence {
-    background-color: transparent !important;
-    border-bottom-color: #989898;
-}
-
-.bearing.adherence.ahead {
-    border-bottom-color: #FF9A3A;
-}
-
-.bearing.adherence.behind {
-    border-bottom-color: #FF9A3A;
-}
-
-.bearing.adherence.on-time {
-    border-bottom-color: #3C5ABE;
-}
-
-.bearing.adherence.very-ahead {
-    border-bottom-color: #FD393E;
-}
-
-.bearing.adherence.very-behind {
-    border-bottom-color: #FD393E;
+.behind {
+    --adherence-background: #FF9A3A;
 }
 
 .button {
@@ -469,6 +429,10 @@ table tr:nth-child(2n-1) {
     color: #000000;
 }
 
+.on-time {
+    --adherence-background: #3C5ABE;
+}
+
 .order-details .content .separator {
     color: #666666;
 }
@@ -545,6 +509,14 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #666666;
+}
+
+.very-ahead {
+    --adherence-background: #FD393E;
+}
+
+.very-behind {
+    --adherence-background: #FD393E;
 }
 
 .weekdays a.weekday.no-service:hover {

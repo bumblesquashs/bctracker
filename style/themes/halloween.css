@@ -20,6 +20,8 @@
     color-scheme: dark;
     --tooltip-background: #2F2F2F;
     --tooltip-text: #FFFFFF;
+    --adherence-background: #989898;
+    --adherence-text: #FFFFFF;
 }
 
 a {
@@ -299,29 +301,8 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
-.adherence {
-    color: #FFFFFF;
-    background-color: #989898 !important;
-}
-
-.adherence.ahead {
-    background-color: #FF6A00 !important;
-}
-
-.adherence.behind {
-    background-color: #FF6A00 !important;
-}
-
-.adherence.on-time {
-    background-color: #0093A8 !important;
-}
-
-.adherence.very-ahead {
-    background-color: #FF0007 !important;
-}
-
-.adherence.very-behind {
-    background-color: #FF0007 !important;
+.ahead {
+    --adherence-background: #FF6A00;
 }
 
 .banner {
@@ -337,29 +318,8 @@ table tr:nth-child(2n-1) {
     display: none;
 }
 
-.bearing.adherence {
-    background-color: transparent !important;
-    border-bottom-color: #989898;
-}
-
-.bearing.adherence.ahead {
-    border-bottom-color: #FF6A00;
-}
-
-.bearing.adherence.behind {
-    border-bottom-color: #FF6A00;
-}
-
-.bearing.adherence.on-time {
-    border-bottom-color: #0093A8;
-}
-
-.bearing.adherence.very-ahead {
-    border-bottom-color: #FF0007;
-}
-
-.bearing.adherence.very-behind {
-    border-bottom-color: #FF0007;
+.behind {
+    --adherence-background: #FF6A00;
 }
 
 .button {
@@ -481,6 +441,10 @@ table tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
+.on-time {
+    --adherence-background: #0093A8;
+}
+
 .order-details .content .separator {
     color: #565656;
 }
@@ -556,6 +520,14 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #565656;
+}
+
+.very-ahead {
+    --adherence-background: #FF0007;
+}
+
+.very-behind {
+    --adherence-background: #FF0007;
 }
 
 .weekdays a.weekday.no-service:hover {
