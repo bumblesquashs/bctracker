@@ -31,7 +31,11 @@
         % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system, trip=trips)}
         <div class="section">
             <div class="header">
-                <h3>Stop {{ stop.number }} - {{ stop }}</h3>
+                % if stop.system.has_stop_numbers:
+                    <h3>Stop {{ stop.number }} - {{ stop }}</h3>
+                % else:
+                    {{ stop }}
+                % end
                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
             </div>
             <div class="content">

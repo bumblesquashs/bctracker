@@ -149,7 +149,9 @@
                         <tbody>
                             % for related_block in related_blocks:
                                 <tr>
-                                    <td><a href="{{ get_url(related_block.system, f'blocks/{related_block.id}') }}">{{ related_block.id }}</a></td>
+                                    <td>
+                                        % include('components/block', block=related_block)
+                                    </td>
                                     <td>
                                         <div class="column">
                                             % for sheet in related_block.sheets:

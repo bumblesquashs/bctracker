@@ -45,11 +45,7 @@
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
-                            % if block is None:
-                                <span class="lighter-text">Loading</span>
-                            % else:
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                            % end
+                            % include('components/block')
                         </div>
                     </div>
                     <div class="row section">
@@ -112,11 +108,7 @@
                                         % include('components/trip', trip=related_trip)
                                     </td>
                                     <td class="non-mobile">
-                                        % if block is None:
-                                            <div class="lighter-text">Unknown</div>
-                                        % else:
-                                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-                                        % end
+                                        % include('components/block')
                                     </td>
                                     <td>
                                         <div class="column">
@@ -272,9 +264,13 @@
                     <thead>
                         <tr>
                             <th>Time</th>
-                            <th class="non-mobile">Stop Number</th>
-                            <th class="non-mobile">Stop Name</th>
-                            <th class="mobile-only">Stop</th>
+                            % if system.has_stop_numbers:
+                                <th class="non-mobile">Stop Number</th>
+                                <th class="non-mobile">Stop Name</th>
+                                <th class="mobile-only">Stop</th>
+                            % else:
+                                <th>Stop</th>
+                            % end
                         </tr>
                     </thead>
                     <tbody>
@@ -284,17 +280,21 @@
                                 <td class="{{ 'timing-point' if departure.timepoint else '' }}">
                                     {{ departure.time.format_web(time_format) }}
                                 </td>
-                                <td>
-                                    <div class="column">
-                                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                                        <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
-                                    </div>
-                                </td>
+                                % if system.has_stop_numbers:
+                                    <td>
+                                        <div class="column">
+                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                            <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
+                                        </div>
+                                    </td>
+                                % end
                                 <td class="non-mobile">
                                     <div class="column">
-                                        <span class="{{ 'timing-point' if departure.timepoint else '' }}">
-                                            {{ stop }}
-                                        </span>
+                                        % if system.has_stop_numbers:
+                                            <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                        % else:
+                                            <a class="{{ 'timing-point' if departure.timepoint else '' }}" href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % end
                                         % if not departure.pickup_type.is_normal:
                                             <span class="smaller-font">{{ departure.pickup_type }}</span>
                                         % elif departure == departures[-1]:

@@ -1,12 +1,16 @@
 
 % import calendar
 
+% from models.date import Date
+
 % schedule_path = get('schedule_path')
 % date_path = get('date_path', schedule_path)
 
 % has_normal_service = any(s.has_normal_service for s in sheets)
 % has_modified_service = any(s.has_modified_service for s in sheets)
 % has_no_service = any(s.has_no_service for s in sheets)
+
+% today = Date.today()
 
 <div class="sheet-list">
     % if has_normal_service or has_modified_service or has_no_service:
@@ -45,7 +49,11 @@
                         % for (year, month) in sorted({(d.year, d.month) for d in dates}):
                             % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
                             <div class="month {{ 'title' if schedule.is_special else '' }}">
-                                <div class="name">{{ calendar.month_name[month] }}</div>
+                                % if year == today.year:
+                                    <div class="name">{{ calendar.month_name[month] }}</div>
+                                % else:
+                                    <div class="name">{{ calendar.month_name[month] }} {{ year }}</div>
+                                % end
                                 % for date in month_dates:
                                     % status = sheet.get_date_status(date)
                                     % if schedule_path is None:

@@ -28,6 +28,8 @@ def find(system_id):
         return systems[system_id]
     return None
 
-def find_all():
+def find_all(af_2024=False):
     '''Returns all systems'''
-    return systems.values()
+    if af_2024:
+        return systems.values()
+    return [s for s in systems.values() if s.agency.id == 'bc-transit']

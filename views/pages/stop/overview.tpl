@@ -6,8 +6,12 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Stop {{ stop.number }}</h1>
-    <h2>{{ stop }}</h2>
+    % if system.has_stop_numbers:
+        <h1>Stop {{ stop.number }}</h1>
+        <h2>{{ stop }}</h2>
+    % else:
+        <h1>{{ stop }}</h1>
+    % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
@@ -54,7 +58,9 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Number</th>
+                                % if system.has_stop_numbers:
+                                    <th>Number</th>
+                                % end
                                 <th>Name</th>
                                 <th class="non-mobile">Routes</th>
                             </tr>
@@ -62,10 +68,22 @@
                         <tbody>
                             % for nearby_stop in nearby_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
-                                    <td class="non-mobile">{{ nearby_stop }}</td>
+                                    % if system.has_stop_numbers:
+                                        <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
+                                    % end
                                     <td>
-                                        <div class="mobile-only">{{ nearby_stop }}</div>
+                                        <div class="column">
+                                            % if system.has_stop_numbers:
+                                                {{ nearby_stop }}
+                                            % else:
+                                                <a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop }}</a>
+                                            % end
+                                            <div class="mobile-only">
+                                                % include('components/route_list', routes=nearby_stop.routes)
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="non-mobile">
                                         % include('components/route_list', routes=nearby_stop.routes)
                                     </td>
                                 </tr>

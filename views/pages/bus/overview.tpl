@@ -134,7 +134,7 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                % include('components/block')
                                 % date = Date.today(block.system.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)
@@ -221,9 +221,13 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    <th class="non-mobile">Stop Number</th>
-                                    <th class="non-mobile">Stop Name</th>
-                                    <th class="mobile-only">Stop</th>
+                                    % if system.has_stop_numbers:
+                                        <th class="non-mobile">Stop Number</th>
+                                        <th class="non-mobile">Stop Name</th>
+                                        <th class="mobile-only">Stop</th>
+                                    % else:
+                                        <th>Stop</th>
+                                    % end
                                 </tr>
                             </thead>
                             <tbody>
@@ -247,15 +251,21 @@
                                         % if stop is None:
                                             <td class="lighter-text" colspan="2">Unknown</td>
                                         % else:
-                                            <td>
-                                                <div class="column">
-                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                                                    <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
-                                                </div>
-                                            </td>
+                                            % if system.has_stop_numbers:
+                                                <td>
+                                                    <div class="column">
+                                                        <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
+                                                        <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    </div>
+                                                </td>
+                                            % end
                                             <td class="non-mobile">
                                                 <div class="column">
-                                                    <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    % if system.has_stop_numbers:
+                                                        <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    % else:
+                                                        <a class="{{ 'timing-point' if departure.timepoint else '' }}" href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                    % end
                                                     % if not departure.pickup_type.is_normal:
                                                         <span class="smaller-font">{{ departure.pickup_type }}</span>
                                                     % elif departure == trip.last_departure:
@@ -334,7 +344,7 @@
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                    % include('components/block')
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

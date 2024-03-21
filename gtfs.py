@@ -55,7 +55,8 @@ def load(system, force_download=False, update_db=False):
         
         block_trips = {}
         for trip in trips:
-            block_trips.setdefault(trip.block_id, []).append(trip)
+            if trip.block_id:
+                block_trips.setdefault(trip.block_id, []).append(trip)
         
         routes = helpers.route.find_all(system.id)
         system.routes = {r.id: r for r in routes}

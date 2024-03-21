@@ -67,7 +67,7 @@ def start(args):
     cp.tree.graft(log, '/')
     cp.server.start()
     
-    for system in helpers.system.find_all():
+    for system in helpers.system.find_all(True):
         if running:
             gtfs.load(system, args.reload, args.updatedb)
             if not gtfs.validate(system):
@@ -94,7 +94,7 @@ def stop():
 def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
-    if system_id is None:
+    if system_id is None or system.id == 'broome-county':
         url = config.all_systems_domain.format(path).rstrip('/')
     else:
         url = config.system_domain.format(system_id, path).rstrip('/')
@@ -119,6 +119,11 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         last_updated = realtime.get_last_updated(time_format)
     else:
         last_updated = system.get_last_updated(time_format)
+    af_2024 = check_af_2024()
+    if af_2024:
+        systems = [helpers.system.find('broome-county')]
+    else:
+        systems = helpers.system.find_all()
     return template(f'pages/{name}',
         config=config,
         version=VERSION,
@@ -129,7 +134,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         include_maps=include_maps,
         full_map=full_map,
         regions=helpers.region.find_all(),
-        systems=helpers.system.find_all(),
+        systems=systems,
         is_admin=is_admin,
         system=system,
         get_url=get_url,
@@ -139,6 +144,7 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
         show_speed=request.get_cookie('speed') == '1994',
+        af_2024=af_2024,
         **kwargs
     )
 
@@ -176,6 +182,12 @@ def query_cookie(key, default_value=None, max_age_days=3650):
         return value
     return request.get_cookie(key, default_value)
 
+def check_af_2024():
+    today = Date.today()
+    if today == Date(2024, 3, 19):
+        return query_cookie('af_2024', 'enabled', 1) == 'enabled'
+    return False
+
 def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
         if base_path == '/':
@@ -197,14 +209,19 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
         def func_wrapper(*args, **kwargs):
             if require_admin and not validate_admin():
                 raise HTTPError(403)
-            if system_key in kwargs:
-                system_id = kwargs[system_key]
-                system = helpers.system.find(system_id)
-                if system is None:
-                    raise HTTPError(404)
-                del kwargs[system_key]
+            if check_af_2024():
+                system = helpers.system.find('broome-county')
+                if system_key in kwargs:
+                    del kwargs[system_key]
             else:
-                system = None
+                if system_key in kwargs:
+                    system_id = kwargs[system_key]
+                    system = helpers.system.find(system_id)
+                    if system is None:
+                        raise HTTPError(404)
+                    del kwargs[system_key]
+                else:
+                    system = None
             return func(system=system, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
@@ -943,7 +960,7 @@ def api_admin_reload_systems(system):
     cron.stop()
     helpers.position.delete_all()
     helpers.system.load()
-    for system in helpers.system.find_all():
+    for system in helpers.system.find_all(True):
         if running:
             gtfs.load(system)
             if not gtfs.validate(system):

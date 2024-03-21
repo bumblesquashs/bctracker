@@ -30,9 +30,16 @@ class Route:
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
+        if (number is None or number == '') and system.id == 'broome-county':
+            number = name.split(' ')[0].replace('/', '-')
+            name = name.split(' ', 1)[1]
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
         return cls(system, id, number, name, colour, text_colour)
+    
+    @property
+    def display_number(self):
+        return self.number.replace('-', '/')
     
     @property
     def display_name(self):
@@ -75,7 +82,7 @@ class Route:
         self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
     
     def __str__(self):
-        return f'{self.number} {self.name}'
+        return f'{self.display_number} {self.name}'
     
     def __hash__(self):
         return hash(self.id)
@@ -94,6 +101,7 @@ class Route:
         return {
             'id': self.id,
             'number': self.number,
+            'display_number': self.display_number,
             'name': self.name.replace("'", '&apos;'),
             'colour': self.colour,
             'text_colour': self.text_colour
@@ -106,6 +114,7 @@ class Route:
             json.append({
                 'system_id': self.system.id,
                 'number': self.number,
+                'display_number': self.display_number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
                 'text_colour': self.text_colour,
@@ -140,7 +149,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.number}', value)
+        return Match(f'Route {self.display_number}', self.name, 'route', f'routes/{self.number}', value)
     
     def find_departures(self):
         '''Returns all departures for this route'''

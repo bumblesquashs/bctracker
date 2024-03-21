@@ -2,8 +2,12 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Stop {{ stop.number }}</h1>
-    <h2>{{ stop }}</h2>
+    % if system.has_stop_numbers:
+        <h1>Stop {{ stop.number }}</h1>
+        <h2>{{ stop }}</h2>
+    % else:
+        <h1>{{ stop }}</h1>
+    % end
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>

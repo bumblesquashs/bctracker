@@ -271,10 +271,12 @@
                 </div>
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
-                % if system is None:
-                    <span class="system-button current all-systems">All Transit Systems</span>
-                % else:
-                    <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                % if not af_2024:
+                    % if system is None:
+                        <span class="system-button current all-systems">All Transit Systems</span>
+                    % else:
+                        <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    % end
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
@@ -301,7 +303,17 @@
         </div>
         <div id="main">
             <div id="banners">
-                
+                % if af_2024:
+                    <div class="banner">
+                        <div class="content">
+                            <div class="title">Broome County Transit</div>
+                            <div class="description">
+                                BCTracker is moving to America.
+                                Learn more <a href="{{ get_url(system) }}#broome-county-transit">here</a>!
+                            </div>
+                        </div>
+                    </div>
+                % end
             </div>
             <div id="page">{{ !base }}</div>
         </div>

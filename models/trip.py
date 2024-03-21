@@ -48,7 +48,9 @@ class Trip:
     @property
     def block(self):
         '''Returns the block associated with this trip'''
-        return self.system.get_block(self.block_id)
+        if self.block_id:
+            return self.system.get_block(self.block_id)
+        return None
     
     @property
     def service(self):
@@ -155,7 +157,7 @@ class Trip:
     
     def __str__(self):
         if self.system.agency.prefix_headsigns and self.route is not None:
-            return f'{self.route.number} {self.headsign}'
+            return f'{self.route.display_number} {self.headsign}'
         return self.headsign
     
     def __eq__(self, other):

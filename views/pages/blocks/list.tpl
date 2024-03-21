@@ -119,7 +119,9 @@
                                                         % start_time = block.get_start_time(service_group=service_group).format_web(time_format)
                                                         % end_time = block.get_end_time(service_group=service_group).format_web(time_format)
                                                         <tr>
-                                                            <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                                            <td>
+                                                                % include('components/block')
+                                                            </td>
                                                             <td>
                                                                 % include('components/route_list', routes=block.get_routes(service_group=service_group))
                                                             </td>

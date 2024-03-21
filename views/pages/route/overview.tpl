@@ -92,8 +92,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % block = trip.block
-                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        % include('components/block', block=trip.block)
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
@@ -223,7 +222,7 @@
                                                             % include('components/headsign')
                                                         </td>
                                                         <td class="non-mobile">
-                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                            % include('components/block', block=trip.block)
                                                         </td>
                                                         <td>
                                                             <div class="column">

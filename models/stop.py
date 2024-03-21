@@ -29,6 +29,8 @@ class Stop:
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
+        if number == '' and not system.has_stop_numbers:
+            number = id
         return cls(system, id, number, name, lat, lon)
     
     @property
@@ -96,7 +98,7 @@ class Stop:
         number = self.number.lower()
         name = self.name.lower()
         value = 0
-        if query in number:
+        if query in number and self.system.has_stop_numbers:
             value += (len(query) / len(number)) * 100
             if number.startswith(query):
                 value += len(query)
@@ -108,7 +110,9 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.number}', value)
+        if self.system.has_stop_numbers:
+            return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.number}', value)
+        return Match(self.name, None, 'stop', f'stops/{self.number}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''

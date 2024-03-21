@@ -45,7 +45,7 @@ def stop():
 
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-    for system in helpers.system.find_all():
+    for system in helpers.system.find_all(True):
         if running:
             date = Date.today(system.timezone)
             if date.weekday == Weekday.MON or not gtfs.validate(system):
@@ -62,7 +62,7 @@ def handle_realtime(sig, frame):
     date = Date.today()
     time = Time.now()
     print(f'--- {date} at {time} ---')
-    for system in helpers.system.find_all():
+    for system in helpers.system.find_all(True):
         if running:
             realtime.update(system)
             if realtime.validate(system):

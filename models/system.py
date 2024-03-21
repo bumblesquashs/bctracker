@@ -21,6 +21,7 @@ class System:
         'remote_id',
         'timezone',
         'colour_routes',
+        'has_stop_numbers',
         'gtfs_loaded',
         'validation_errors',
         'last_updated_date',
@@ -86,6 +87,7 @@ class System:
         self.remote_id = kwargs.get('remote_id')
         self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
         self.colour_routes = kwargs.get('colour_routes')
+        self.has_stop_numbers = kwargs.get('has_stop_numbers', True)
         
         self.gtfs_loaded = False
         self.validation_errors = 0

@@ -104,21 +104,33 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="desktop-only">Stop Number</th>
-                        <th class="non-desktop">Number</th>
-                        <th class="desktop-only">Stop Name</th>
-                        <th class="non-desktop">Name</th>
+                        % if system.has_stop_numbers:
+                            <th class="desktop-only">Stop Number</th>
+                            <th class="non-desktop">Number</th>
+                            <th class="desktop-only">Stop Name</th>
+                            <th class="non-desktop">Name</th>
+                        % else:
+                            <th>Stop</th>
+                        % end
                         <th class="non-mobile">Routes</th>
                     </tr>
                 </thead>
                 <tbody>
                     % for stop in sorted(stops):
                         <tr>
-                            <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
+                            % if system.has_stop_numbers:
+                                <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
+                            % end
                             <td>
-                                {{ stop }}
-                                <div class="mobile-only">
-                                    % include('components/route_list', routes=stop.routes)
+                                <div class="column">
+                                    % if system.has_stop_numbers:
+                                        {{ stop }}
+                                    % else:
+                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                    % end
+                                    <div class="mobile-only">
+                                        % include('components/route_list', routes=stop.routes)
+                                    </div>
                                 </div>
                             </td>
                             <td class="non-mobile">

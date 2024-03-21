@@ -146,6 +146,7 @@ table th {
     padding-bottom: 15px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
+    align-content: flex-start;
 }
 
 #system-menu .header {

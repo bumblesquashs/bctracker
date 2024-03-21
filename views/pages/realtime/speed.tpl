@@ -121,7 +121,7 @@
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % include('components/block')
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')

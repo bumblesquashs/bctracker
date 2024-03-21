@@ -66,11 +66,7 @@
         </div>
     </td>
     <td class="desktop-only">
-        % if block is None:
-            <span class="lighter-text">Loading</span>
-        % else:
-            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
-        % end
+        % include('components/block')
     </td>
     <td>
         <div class="column">

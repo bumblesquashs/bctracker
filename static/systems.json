@@ -1,4 +1,13 @@
 {
+    "broome-county": {
+        "new-york": {
+            "broome-county": {
+                "name": "Broome County",
+                "has_stop_numbers": false,
+                "timezone": "America/New_York"
+            }
+        }
+    },
     "bc-transit": {
         "vancouver-island": {
             "campbell-river": {

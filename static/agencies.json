@@ -1,4 +1,10 @@
 {
+    
+    "broome-county": {
+        "name": "Broome County",
+        "gtfs_url": "https://gobroomecounty.com/sites/default/files/dept/transit/BCT_GTFS.zip",
+        "prefix_headsigns": true
+    },
     "bc-transit": {
         "name": "BC Transit",
         "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
