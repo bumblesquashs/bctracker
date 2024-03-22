@@ -6,8 +6,7 @@
         <div class="date">
             <div class="tooltip-anchor">
                 <div class="row gap-5">
-                    <img class="white" src="/img/white/calendar.png" />
-                    <img class="black" src="/img/black/calendar.png" />
+                    % include('components/svg', name='calendar')
                     <div>{{ date }}</div>
                 </div>
                 <div class="tooltip right">{{ date.format_since() }}</div>

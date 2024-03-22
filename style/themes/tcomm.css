@@ -84,14 +84,7 @@ table tr {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     border: 1px solid #CCCCCC;
     background-image: linear-gradient( #FFFFFF,#F1F1F1 );
-}
-
-#map-toggle img.black {
-    display: block !important;
-}
-
-#map-toggle img.white {
-    display: none;
+    --image-color: #000000;
 }
 
 #navigation-bar {
@@ -99,6 +92,7 @@ table tr {
     background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: 0 -1px 1px #000000;
     --tooltip-background: #444444;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon {
@@ -113,10 +107,6 @@ table tr {
 #navigation-bar .navigation-icon.disabled:hover {
     background-color: #111111 !important;
     background-image: linear-gradient(#3C3C3C, #111111) !important;
-}
-
-#navigation-bar .navigation-icon img.black {
-    display: none;
 }
 
 #navigation-bar .navigation-item {
@@ -134,15 +124,12 @@ table tr {
     background-image: linear-gradient(#3C3C3C, #111111) !important;
 }
 
-#navigation-bar .navigation-item img.black {
-    display: none;
-}
-
 #navigation-menu {
     background-color: #EEEEEE;
     color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
 }
 
 #navigation-menu .menu-button {
@@ -152,10 +139,6 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #666666;
-}
-
-#navigation-menu .menu-button img.white {
-    display: none;
 }
 
 #navigation-menu-toggle .line {
@@ -172,8 +155,8 @@ table tr {
     background-color: #FFCCCC;
 }
 
-#page img.white {
-    display: none;
+#page {
+    --image-color: #000000;
 }
 
 #page-header {
@@ -197,8 +180,8 @@ table tr {
     background-color: transparent;
 }
 
-#refresh-button img.black {
-    display: none;
+#refresh-button {
+    --image-color: #FFFFFF;
 }
 
 #search {
@@ -236,8 +219,8 @@ table tr {
     text-shadow: none;
 }
 
-#search-results img.white {
-    display: none;
+#search-results {
+    --image-color: #000000;
 }
 
 #search-results .result {
@@ -251,14 +234,7 @@ table tr {
     color: #FFFFFF;
     text-shadow: 0 1px 1px #3373a5;
     background-image: linear-gradient(#5393c5, #6facd5);
-}
-
-#search-results .result:hover img.black {
-    display: none;
-}
-
-#search-results .result:hover img.white {
-    display: initial;
+    --image-color: #FFFFFF;
 }
 
 #search-results .result:hover .description {
@@ -270,14 +246,7 @@ table tr {
     color: #FFFFFF;
     text-shadow: 0 1px 1px #3373a5;
     background-image: linear-gradient(#5393c5, #6facd5);
-}
-
-#search-results .result.keyboard-selected img.black {
-    display: none;
-}
-
-#search-results .result.keyboard-selected img.white {
-    display: initial;
+    --image-color: #FFFFFF;
 }
 
 #search-results .result.keyboard-selected .description {
@@ -343,8 +312,8 @@ table tr {
     color: #FFFFFF;
 }
 
-#system-menu-toggle img.black {
-    display: none;
+#system-menu-toggle {
+    --image-color: #FFFFFF;
 }
 
 #title {
@@ -352,15 +321,12 @@ table tr {
     background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: none;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #title:hover {
     background-color: #444444;
     background-image: linear-gradient(#555555, #383838);
-}
-
-#title img.black {
-    display: none;
 }
 
 #system-bar {
@@ -381,15 +347,12 @@ table tr {
 .banner {
     background-color: #FFA027;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .banner a {
     color: #FFFFFF;
     text-shadow: none;
-}
-
-.banner .close-button img.black {
-    display: none;
 }
 
 .behind {
@@ -402,6 +365,7 @@ table tr {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     border: 1px solid #CCCCCC;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
 }
 
 .button:hover {
@@ -439,17 +403,10 @@ table tr {
     background-color: #AD6000;
 }
 
-.button img.white {
-    display: none;
-}
-
 .checkbox-container .checkbox {
     border-color: #000000;
     background-color: #FFFFFF;
-}
-
-.checkbox-container .checkbox img.white {
-    display: none;
+    --image-color: #000000;
 }
 
 .code-block {

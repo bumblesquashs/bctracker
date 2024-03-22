@@ -84,19 +84,13 @@ table tr:nth-child(2n-1) {
 
 #map-toggle {
     background-color: #61C315;
-}
-
-#map-toggle img.black {
-    display: none;
-}
-
-#map-toggle img.white {
-    display: block !important;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar {
     background-color: #61C315;
     --tooltip-background: #347800;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon {
@@ -111,10 +105,6 @@ table tr:nth-child(2n-1) {
     background-color: #61C315 !important;
 }
 
-#navigation-bar .navigation-icon img.black {
-    display: none;
-}
-
 #navigation-bar .navigation-item {
     color: #FFFFFF;
 }
@@ -127,24 +117,17 @@ table tr:nth-child(2n-1) {
     background-color: #61C315 !important;
 }
 
-#navigation-bar .navigation-item img.black {
-    display: none;
-}
-
 #navigation-menu {
     background-color: #347800;
 }
 
 #navigation-menu .menu-button {
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
-}
-
-#navigation-menu .menu-button img.black {
-    display: none;
 }
 
 #navigation-menu-toggle .line {
@@ -161,8 +144,8 @@ table tr:nth-child(2n-1) {
     background-color: #FFCCCC;
 }
 
-#page img.white {
-    display: none;
+#page {
+    --image-color: #000000;
 }
 
 #page-header {
@@ -174,16 +157,16 @@ table tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
+#refresh-button {
+    --image-color: #FFFFFF;
+}
+
 #refresh-button:hover {
     background-color: #026E6E;
 }
 
 #refresh-button.disabled:hover {
     background-color: #249B9B;
-}
-
-#refresh-button img.black {
-    display: none;
 }
 
 #search {
@@ -215,8 +198,8 @@ table tr:nth-child(2n-1) {
     color: #666666;
 }
 
-#search-results img.white {
-    display: none;
+#search-results {
+    --image-color: #000000;
 }
 
 #search-results .result {
@@ -277,21 +260,18 @@ table tr:nth-child(2n-1) {
     cursor: default;
 }
 
-#system-menu-toggle img.black {
-    display: none;
+#system-menu-toggle {
+    --image-color: #FFFFFF;
 }
 
 #title {
     background-color: #61C315;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #title:hover {
     background-color: #347800;
-}
-
-#title img.black {
-    display: none;
 }
 
 .ahead {
@@ -301,14 +281,11 @@ table tr:nth-child(2n-1) {
 .banner {
     background-color: #FFA027;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .banner a {
     color: #FFFFFF;
-}
-
-.banner .close-button img.black {
-    display: none;
 }
 
 .behind {
@@ -318,6 +295,7 @@ table tr:nth-child(2n-1) {
 .button {
     background-color: #61C315;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .button:hover {
@@ -348,17 +326,10 @@ table tr:nth-child(2n-1) {
     background-color: #AD6000;
 }
 
-.button img.black {
-    display: none;
-}
-
 .checkbox-container .checkbox {
     border-color: #000000;
     background-color: #FFFFFF;
-}
-
-.checkbox-container .checkbox img.white {
-    display: none;
+    --image-color: #000000;
 }
 
 .code-block {

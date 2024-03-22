@@ -56,9 +56,14 @@ h2 .route {
     min-width: 16px;
 }
 
-img.inline {
-    height: 18px;
-    width: 18px;
+p > svg {
+    vertical-align: middle;
+}
+
+svg {
+    fill: var(--image-color);
+    width: var(--image-size);
+    height: var(--image-size);
 }
 
 table {
@@ -150,12 +155,8 @@ table tr.header td {
     border-radius: 50%;
     bottom: 30px;
     right: 15px;
-}
-
-#map-toggle img {
-    width: 28px;
-    height: 28px;
-    margin: 8px;
+    padding: 8px;
+    --image-size: 28px;
 }
 
 #navigation-bar {
@@ -174,15 +175,11 @@ table tr.header td {
     flex-direction: row;
     gap: 5px;
     align-items: center;
+    --image-size: 28px;
 }
 
 #navigation-bar .navigation-icon:hover {
     text-decoration: none;
-}
-
-#navigation-bar .navigation-icon img {
-    width: 28px;
-    height: 28px;
 }
 
 #navigation-bar .navigation-icon .label {
@@ -223,6 +220,7 @@ table tr.header td {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    --image-size: 18px;
 }
 
 #page-header {
@@ -255,11 +253,7 @@ table tr.header td {
     border-width: 1px;
     border-style: solid;
     text-align: center;
-}
-
-#quick-navigation .item img {
-    width: 48px;
-    height: 48px;
+    --image-size: 48px;
 }
 
 #refresh-button {
@@ -421,11 +415,7 @@ table tr.header td {
     position: absolute;
     right: 5px;
     top: 5px;
-}
-
-.banner .close-button img {
-    width: 24px;
-    height: 24px;
+    --image-size: 24px;
 }
 
 .banner .close-button:hover {
@@ -510,12 +500,12 @@ table tr.header td {
     height: 24px;
 }
 
-.checkbox-container .checkbox img {
+.checkbox-container .checkbox svg {
     display: none;
 }
 
-.checkbox-container .checkbox.selected img {
-    display: block;
+.checkbox-container .checkbox.selected svg {
+    display: initial;
 }
 
 .code-block {
@@ -584,11 +574,7 @@ table tr.header td {
     padding-right: 10px;
     border-right-width: 1px;
     border-right-style: solid;
-}
-
-.events .date img {
-    width: 20px;
-    height: 20px;
+    --image-size: 20px;
 }
 
 .events ul {
@@ -775,8 +761,6 @@ table tr.header td {
 
 .marker .icon {
     display: block;
-    width: 32px;
-    height: 32px;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
@@ -784,12 +768,8 @@ table tr.header td {
     margin-left: auto;
     margin-right: auto;
     z-index: 10;
-}
-
-.marker .icon img {
-    margin: 4px;
-    width: 24px;
-    height: 24px;
+    padding: 4px;
+    --image-size: 24px;
 }
 
 .marker .icon .link {
@@ -869,14 +849,10 @@ table tr.header td {
 }
 
 .marker.small .icon {
-    width: 16px !important;
-    height: 16px !important;
-}
-
-.marker.small .icon img {
-    margin: 2px;
     width: 12px;
     height: 12px;
+    padding: 2px;
+    --image-size: 12px;
 }
 
 .marker.small .details {

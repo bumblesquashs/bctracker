@@ -121,8 +121,7 @@
                 <div id="quick-navigation">
                     <div class="item">
                         <div class="column center">
-                            <img class="white" src="/img/white/realtime.png" />
-                            <img class="black" src="/img/black/realtime.png" />
+                            % include('components/svg', name='realtime')
                             <h3>Bus Tracking</h3>
                             <p>See all buses that are currently active, including current route and location</p>
                         </div>
@@ -133,8 +132,7 @@
                     </div>
                     <div class="item">
                         <div class="column center">
-                            <img class="white" src="/img/white/history.png" />
-                            <img class="black" src="/img/black/history.png" />
+                            % include('components/svg', name='history')
                             <h3>Bus History</h3>
                             <p>See all buses that have been tracked, including last-seen date and transfers</p>
                         </div>
@@ -145,8 +143,7 @@
                     </div>
                     <div class="item">
                         <div class="column center">
-                            <img class="white" src="/img/white/route.png" />
-                            <img class="black" src="/img/black/route.png" />
+                            % include('components/svg', name='route')
                             <h3>Schedules and Maps</h3>
                             <p>See departure times and routing details for routes, stops, blocks, and more</p>
                         </div>

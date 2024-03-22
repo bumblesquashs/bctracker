@@ -5,6 +5,8 @@
 
 <div id="map" class="{{ 'preview' if is_preview else 'full-screen' }}"></div>
 
+% include('components/svg_script', name='fish')
+
 <script>
     const interactive = "{{ is_preview }}" === "False";
     const map = new ol.Map({
@@ -169,7 +171,7 @@
                         icon.classList.add(adherence.status_class);
                     }
                 } else {
-                    icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                    icon.innerHTML = getSVG(position.bus_icon);
                     icon.style.backgroundColor = "#" + position.colour;
                 }
                 element.appendChild(icon);
@@ -195,7 +197,7 @@
                         icon.classList.add(adherence.status_class);
                     }
                 } else {
-                    icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
+                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
                     icon.style.backgroundColor = "#" + position.colour;
                 }
                 element.appendChild(icon);
@@ -237,7 +239,7 @@
             const icon = document.createElement("a");
             icon.className = "icon";
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
-            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
+            icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             
             const details = document.createElement("div");
             details.className = "details {{ '' if len(map_stops) == 1 else 'hover-only' }}";
@@ -300,7 +302,7 @@
             icon.className = "icon";
             icon.href = getUrl(stop.system_id, "stops/" + stop.number);
             icon.style.backgroundColor = "#" + departure.colour;
-            icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
+            icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             
             const details = document.createElement("div");
             details.className = "details {{ '' if len(map_departures) == 1 else 'hover-only' }}";
