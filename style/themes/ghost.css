@@ -84,7 +84,7 @@ table tr {
 
 #navigation-bar {
     background-color: #EEEEEE;
-    --image-color: #666666;
+    --image-color: #000000;
 }
 
 #navigation-bar .navigation-icon {
@@ -113,7 +113,7 @@ table tr {
 
 #navigation-menu {
     background-color: #DDDDDD;
-    --image-color: #666666;
+    --image-color: #000000;
 }
 
 #navigation-menu .menu-button {
@@ -257,7 +257,7 @@ table tr {
 #title {
     background-color: #EEEEEE;
     color: #000000;
-    --image-color: #666666;
+    --image-color: #000000;
 }
 
 #title:hover {

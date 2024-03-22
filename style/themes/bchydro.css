@@ -90,11 +90,11 @@ table tr:nth-child(2n-1) {
 #navigation-bar {
     background-color: #61C315;
     --tooltip-background: #347800;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon {
     color: #FFFFFF;
-    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon:hover {
@@ -107,7 +107,6 @@ table tr:nth-child(2n-1) {
 
 #navigation-bar .navigation-item {
     color: #FFFFFF;
-    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-item:hover {
