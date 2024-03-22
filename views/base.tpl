@@ -81,6 +81,25 @@
         % end
         
         <script>
+            const svgs = {};
+            
+            function getSVG(name) {
+                return svgs[name];
+            }
+        </script>
+        
+        % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='bus-artic')
+        % include('components/svg_script', name='bus-conventional')
+        % include('components/svg_script', name='bus-decker')
+        % include('components/svg_script', name='bus-midibus')
+        % include('components/svg_script', name='bus-shuttle')
+        % include('components/svg_script', name='ghost')
+        % include('components/svg_script', name='stop')
+        % include('components/svg_script', name='route')
+        % include('components/svg_script', name='block')
+        
+        <script>
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search").classList.add("display-none");
@@ -132,8 +151,7 @@
     
     <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
         <a id="title" href="{{ get_url(system) }}">
-            <img class="white" src="/img/white/bctracker.png" />
-            <img class="black" src="/img/black/bctracker.png" />
+            % include('components/svg', name='bctracker')
             <div class="side-bar-open-only">BCTracker</div>
         </a>
         <div id="navigation-bar">
@@ -160,16 +178,14 @@
             <div class="flex-1"></div>
             
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
-                <img class="white" src="/img/white/location.png" />
-                <img class="black" src="/img/black/location.png" />
+                % include('components/svg', name='location')
                 <div class="tooltip left">
                     <div class="title">Nearby Stops</div>
                 </div>
             </a>
             
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
-                <img class="white" src="/img/white/personalize.png" />
-                <img class="black" src="/img/black/personalize.png" />
+                % include('components/svg', name='personalize')
                 <div class="tooltip left">
                     <div class="title">Personalize</div>
                 </div>
@@ -177,8 +193,7 @@
             
             <div class="navigation-icon" onclick="toggleSearch()">
                 <div>
-                    <img class="white" src="/img/white/search.png" />
-                    <img class="black" src="/img/black/search.png" />
+                    % include('components/svg', name='search')
                 </div>
                 <div class="label">Search</div>
             </div>
@@ -192,64 +207,53 @@
         <div id="navigation-menu" class="non-desktop display-none">
             % if system is None or system.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
-                    <img class="white" src="/img/white/map.png" />
-                    <img class="black" src="/img/black/map.png" />
+                    % include('components/svg', name='map')
                     <span>Map</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
-                    <img class="white" src="/img/white/realtime.png" />
-                    <img class="black" src="/img/black/realtime.png" />
+                    % include('components/svg', name='realtime')
                     <span>Realtime</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'history') }}">
-                    <img class="white" src="/img/white/history.png" />
-                    <img class="black" src="/img/black/history.png" />
+                    % include('components/svg', name='history')
                     <span>History</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/route.png" />
-                    <img class="black" src="/img/black/route.png" />
+                    % include('components/svg', name='route')
                     <span>Routes</span>
                 </a>
                 <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/block.png" />
-                    <img class="black" src="/img/black/block.png" />
+                    % include('components/svg', name='block')
                     <span>Blocks</span>
                 </a>
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    <img class="white" src="/img/white/route.png" />
-                    <img class="black" src="/img/black/route.png" />
+                    % include('components/svg', name='route')
                     <span>Routes</span>
                 </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    <img class="white" src="/img/white/block.png" />
-                    <img class="black" src="/img/black/block.png" />
+                    % include('components/svg', name='block')
                     <span>Blocks</span>
                 </a>
             % end
             
             <a class="menu-button" href="{{ get_url(system, 'about') }}">
-                <img class="white" src="/img/white/about.png" />
-                <img class="black" src="/img/black/about.png" />
+                % include('components/svg', name='about')
                 <span>About</span>
             </a>
             <a class="menu-button" href="{{ get_url(system, 'nearby') }}">
-                <img class="white" src="/img/white/location.png" />
-                <img class="black" src="/img/black/location.png" />
+                % include('components/svg', name='location')
                 <span>Nearby</span>
             </a>
             <a class="menu-button" href="{{ get_url(system, 'personalize') }}">
-                <img class="white" src="/img/white/personalize.png" />
-                <img class="black" src="/img/black/personalize.png" />
+                % include('components/svg', name='personalize')
                 <span>Personalize</span>
             </a>
         </div>
         <div id="side-bar">
             <div id="status" class="side-bar-open-only">
                 <div id="system-menu-toggle" onclick="toggleSystemMenu()">
-                    <img class="white" src="/img/white/system.png" />
-                    <img class="black" src="/img/black/system.png" />
+                    % include('components/svg', name='system')
                 </div>
                 <div class="details">
                     <div id="system">
@@ -266,8 +270,7 @@
                     </div>
                 </div>
                 <div id="refresh-button" class="disabled">
-                    <img class="white" src="/img/white/refresh.png" />
-                    <img class="black" src="/img/black/refresh.png" />
+                    % include('components/svg', name='refresh')
                 </div>
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
@@ -314,23 +317,19 @@
                     <div id="search-filters">
                         <div class="flex-1">Filters:</div>
                         <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
-                            <img class="white" src="/img/white/bus.png" />
-                            <img class="black" src="/img/black/bus.png" />
+                            % include('components/svg', name='bus')
                             <div class="tooltip left">Include Buses</div>
                         </div>
                         <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
-                            <img class="white" src="/img/white/route.png" />
-                            <img class="black" src="/img/black/route.png" />
+                            % include('components/svg', name='route')
                             <div class="tooltip left">Include Routes</div>
                         </div>
                         <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
-                            <img class="white" src="/img/white/stop.png" />
-                            <img class="black" src="/img/black/stop.png" />
+                            % include('components/svg', name='stop')
                             <div class="tooltip left">Include Stops</div>
                         </div>
                         <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
-                            <img class="white" src="/img/white/block.png" />
-                            <img class="black" src="/img/black/block.png" />
+                            % include('components/svg', name='block')
                             <div class="tooltip left">Include Blocks</div>
                         </div>
                     </div>
@@ -367,6 +366,7 @@
     let searchPage = 0;
     let loadingResults = false;
     let enterPending = false;
+    let lastSearchTimestamp = Date.now();
     
     let searchIncludeBuses = true;
     let searchIncludeRoutes = true;
@@ -396,6 +396,9 @@
         const placeholderElement = document.getElementById("search-placeholder");
         const query = inputElement.value;
         
+        const timestamp = Date.now();
+        lastSearchTimestamp = timestamp;
+        
         if (query === undefined || query === null || query === "") {
             updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
         } else {
@@ -407,6 +410,10 @@
             request.open("POST", "{{get_url(system, 'api/search')}}", true);
             request.responseType = "json";
             request.onload = function() {
+                if (timestamp !== lastSearchTimestamp) {
+                    // Discard outdated results
+                    return;
+                }
                 const results = request.response.results;
                 const total = request.response.total;
                 
@@ -418,6 +425,10 @@
                 }
             };
             request.onerror = function() {
+                if (timestamp !== lastSearchTimestamp) {
+                    // Discard outdated results
+                    return;
+                }
                 updateSearchView([], 0, "Error loading search results");
             };
             const data = new FormData();
@@ -438,15 +449,9 @@
         element.classList.add("result");
         element.href = result.url;
         
-        const lightIcon = document.createElement("img");
-        lightIcon.classList.add("white");
-        lightIcon.src = "/img/white/" + result.icon + ".png";
-        element.appendChild(lightIcon);
-        
-        const darkIcon = document.createElement("img");
-        darkIcon.classList.add("black");
-        darkIcon.src = "/img/black/" + result.icon + ".png";
-        element.appendChild(darkIcon);
+        const icon = document.createElement("div");
+        icon.innerHTML = getSVG(result.icon);
+        element.appendChild(icon);
         
         const details = document.createElement("div");
         details.classList.add("details");
