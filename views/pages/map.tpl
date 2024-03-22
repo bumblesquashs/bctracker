@@ -78,6 +78,14 @@
 % else:
     <div id="map" class="full-screen"></div>
     
+    % include('components/svg_script', name='bus-artic')
+    % include('components/svg_script', name='bus-conventional')
+    % include('components/svg_script', name='bus-decker')
+    % include('components/svg_script', name='bus-midibus')
+    % include('components/svg_script', name='bus-shuttle')
+    % include('components/svg_script', name='ghost')
+    % include('components/svg_script', name='fish')
+    
     <script>
         const map = new ol.Map({
             target: 'map',
@@ -224,7 +232,7 @@
                             icon.classList.add(adherence.status_class);
                         }
                     } else {
-                        icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.innerHTML = svgs[position.bus_icon];
                         icon.style.backgroundColor = "#" + position.colour;
                     }
                     
@@ -257,7 +265,7 @@
                             icon.classList.add(adherence.status_class);
                         }
                     } else {
-                        icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.innerHTML = "<div class='link'></div>" + svgs[position.bus_icon];
                         icon.style.backgroundColor = "#" + position.colour;
                     }
                     

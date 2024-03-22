@@ -764,8 +764,6 @@ table tr.header td {
 
 .marker .icon {
     display: block;
-    width: 32px;
-    height: 32px;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
@@ -854,8 +852,8 @@ table tr.header td {
 }
 
 .marker.small .icon {
-    width: 16px !important;
-    height: 16px !important;
+    width: 12px;
+    height: 12px;
     padding: 2px;
     --image-size: 12px;
 }

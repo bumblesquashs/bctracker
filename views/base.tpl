@@ -81,6 +81,15 @@
         % end
         
         <script>
+            const svgs = {};
+        </script>
+        
+        % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='stop')
+        % include('components/svg_script', name='route')
+        % include('components/svg_script', name='block')
+        
+        <script>
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search").classList.add("display-none");
@@ -430,15 +439,9 @@
         element.classList.add("result");
         element.href = result.url;
         
-        const lightIcon = document.createElement("img");
-        lightIcon.classList.add("white");
-        lightIcon.src = "/img/white/" + result.icon + ".png";
-        element.appendChild(lightIcon);
-        
-        const darkIcon = document.createElement("img");
-        darkIcon.classList.add("black");
-        darkIcon.src = "/img/black/" + result.icon + ".png";
-        element.appendChild(darkIcon);
+        const icon = document.createElement("div");
+        icon.innerHTML = svgs[result.icon];
+        element.appendChild(icon);
         
         const details = document.createElement("div");
         details.classList.add("details");
