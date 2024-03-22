@@ -117,6 +117,19 @@ table tr:nth-child(2n-1) {
 }
 
 #navigation-menu {
+    background-color: #7A0000;
+}
+
+#navigation-menu .menu-button {
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+#navigation-menu .menu-button.disabled {
+    color: #ABABAB;
+}
+
+#navigation-menu {
     --image-color: #D70000;
 }
 

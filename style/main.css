@@ -56,10 +56,6 @@ h2 .route {
     min-width: 16px;
 }
 
-p {
-    --image-size: 18px;
-}
-
 p > svg {
     vertical-align: middle;
 }
@@ -224,6 +220,7 @@ table tr.header td {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    --image-size: 18px;
 }
 
 #page-header {

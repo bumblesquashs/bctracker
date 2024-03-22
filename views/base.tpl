@@ -82,9 +82,19 @@
         
         <script>
             const svgs = {};
+            
+            function getSVG(name) {
+                return svgs[name];
+            }
         </script>
         
         % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='bus-artic')
+        % include('components/svg_script', name='bus-conventional')
+        % include('components/svg_script', name='bus-decker')
+        % include('components/svg_script', name='bus-midibus')
+        % include('components/svg_script', name='bus-shuttle')
+        % include('components/svg_script', name='ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
         % include('components/svg_script', name='block')
@@ -440,7 +450,7 @@
         element.href = result.url;
         
         const icon = document.createElement("div");
-        icon.innerHTML = svgs[result.icon];
+        icon.innerHTML = getSVG(result.icon);
         element.appendChild(icon);
         
         const details = document.createElement("div");

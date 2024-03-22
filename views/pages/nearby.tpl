@@ -127,7 +127,7 @@
         
         const icon = document.createElement("div");
         icon.className = "icon";
-        icon.innerHTML = svgs["location"];
+        icon.innerHTML = getSVG("location");
         
         element.appendChild(icon);
         
@@ -179,7 +179,7 @@
                     const icon = document.createElement("a");
                     icon.className = "icon";
                     icon.href = getUrl(stop.system_id, "stops/" + stop.number);
-                    icon.innerHTML = "<div class='link'></div>" + svgs["stop"];
+                    icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
                     
                     const details = document.createElement("div");
                     details.className = "details";
