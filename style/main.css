@@ -770,6 +770,8 @@ table tr.header td {
     margin-right: auto;
     z-index: 10;
     padding: 4px;
+    width: 24px;
+    height: 24px;
     --image-size: 24px;
 }
 
@@ -808,7 +810,7 @@ table tr.header td {
 .marker .icon.adherence {
     font-weight: bold;
     text-align: center;
-    line-height: 32px;
+    line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
@@ -819,6 +821,7 @@ table tr.header td {
 .marker .icon.route {
     width: auto;
     height: auto;
+    padding: 0px;
     border-radius: 0px;
 }
 
@@ -843,7 +846,7 @@ table tr.header td {
 .marker .icon.bus_route {
     font-weight: bold;
     text-align: center;
-    line-height: 32px;
+    line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
