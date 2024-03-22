@@ -498,6 +498,7 @@ table tr.header td {
     border-radius: 5px;
     width: 24px;
     height: 24px;
+    --image-size: 24px;
 }
 
 .checkbox-container .checkbox svg {
