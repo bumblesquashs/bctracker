@@ -2,6 +2,7 @@ import os
 import signal
 from crontab import CronTab
 
+import helpers.record
 import helpers.system
 
 from models.date import Date
@@ -51,6 +52,7 @@ def handle_gtfs(sig, frame):
                 gtfs.load(system, True)
                 gtfs.update_cache_in_background(system)
     if running:
+        helpers.record.delete_stale_trip_records()
         database.archive()
         date = Date.today()
         backup.run(date.previous(), include_db=date.weekday == Weekday.MON)

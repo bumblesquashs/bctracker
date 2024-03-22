@@ -23,8 +23,9 @@
     
     --loading-background: #2F2F2F;
     --loading-foreground: #154E15;
-    --loading-image-black: none;
-    --loading-image-white: initial;
+    
+    --adherence-background: #989898;
+    --adherence-text: #FFFFFF;
 }
 
 a {
@@ -89,25 +90,23 @@ table tr:nth-child(2n-1) {
     background-color: #393939;
 }
 
+#loading-stop {
+    --image-color: #FFFFFF;
+}
+
 #map.preview {
     border-color: #565656;
 }
 
 #map-toggle {
     background-color: #2247B7;
-}
-
-#map-toggle img.black {
-    display: none;
-}
-
-#map-toggle img.white {
-    display: block;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar {
     background-color: #154E15;
     --tooltip-background: #053305;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon {
@@ -122,10 +121,6 @@ table tr:nth-child(2n-1) {
     background-color: #154E15 !important;
 }
 
-#navigation-bar .navigation-icon img.black {
-    display: none;
-}
-
 #navigation-bar .navigation-item {
     color: #FFFFFF;
 }
@@ -138,12 +133,9 @@ table tr:nth-child(2n-1) {
     background-color: #154E15 !important;
 }
 
-#navigation-bar .navigation-item img.black {
-    display: none;
-}
-
 #navigation-menu {
     background-color: #053305;
+    --image-color: #FFFFFF;
 }
 
 #navigation-menu .menu-button {
@@ -152,10 +144,6 @@ table tr:nth-child(2n-1) {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
-}
-
-#navigation-menu .menu-button img.black {
-    display: none;
 }
 
 #navigation-menu-toggle .line {
@@ -172,8 +160,8 @@ table tr:nth-child(2n-1) {
     background-color: #360000;
 }
 
-#page img.black {
-    display: none;
+#page {
+    --image-color: #FFFFFF;
 }
 
 #page-header {
@@ -185,16 +173,16 @@ table tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
+#refresh-button {
+    --image-color: #FFFFFF;
+}
+
 #refresh-button:hover {
     background-color: #053305;
 }
 
 #refresh-button.disabled:hover {
     background-color: #276227;
-}
-
-#refresh-button img.black {
-    display: none;
 }
 
 #search {
@@ -225,8 +213,8 @@ table tr:nth-child(2n-1) {
     color: #ABABAB;
 }
 
-#search-results img.black {
-    display: none;
+#search-results {
+    --image-color: #FFFFFF;
 }
 
 #search-results .result {
@@ -287,89 +275,42 @@ table tr:nth-child(2n-1) {
     cursor: default;
 }
 
-#system-menu-toggle img.black {
-    display: none;
+#system-menu-toggle {
+    --image-color: #FFFFFF;
 }
 
 #title {
     background-color: #154E15;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #title:hover {
     background-color: #053305;
 }
 
-#title img.black {
-    display: none;
-}
-
-.adherence {
-    color: #FFFFFF;
-    background-color: #989898 !important;
-}
-
-.adherence.ahead {
-    background-color: #FF6A00 !important;
-}
-
-.adherence.behind {
-    background-color: #FF6A00 !important;
-}
-
-.adherence.on-time {
-    background-color: #0093A8 !important;
-}
-
-.adherence.very-ahead {
-    background-color: #FF0007 !important;
-}
-
-.adherence.very-behind {
-    background-color: #FF0007 !important;
+.ahead {
+    --adherence-background: #FF6A00;
 }
 
 .banner {
     background-color: #8A4D00;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .banner a {
     color: #FFFFFF;
 }
 
-.banner .close-button img.black {
-    display: none;
-}
-
-.bearing.adherence {
-    background-color: transparent !important;
-    border-bottom-color: #989898;
-}
-
-.bearing.adherence.ahead {
-    border-bottom-color: #FF6A00;
-}
-
-.bearing.adherence.behind {
-    border-bottom-color: #FF6A00;
-}
-
-.bearing.adherence.on-time {
-    border-bottom-color: #0093A8;
-}
-
-.bearing.adherence.very-ahead {
-    border-bottom-color: #FF0007;
-}
-
-.bearing.adherence.very-behind {
-    border-bottom-color: #FF0007;
+.behind {
+    --adherence-background: #FF6A00;
 }
 
 .button {
     background-color: #2247B7;
-    color: white;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .button:hover {
@@ -400,17 +341,10 @@ table tr:nth-child(2n-1) {
     background-color: #653800;
 }
 
-.button img.black {
-    display: none;
-}
-
 .checkbox-container .checkbox {
     border-color: #FFFFFF;
     background-color: #565656;
-}
-
-.checkbox-container .checkbox img.black {
-    display: none;
+    --image-color: #FFFFFF;
 }
 
 .code-block {
@@ -484,6 +418,10 @@ table tr:nth-child(2n-1) {
 .normal-service {
     background-color: #005900;
     color: #FFFFFF;
+}
+
+.on-time {
+    --adherence-background: #0093A8;
 }
 
 .order-details .content .separator {
@@ -561,6 +499,14 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #565656;
+}
+
+.very-ahead {
+    --adherence-background: #FF0007;
+}
+
+.very-behind {
+    --adherence-background: #FF0007;
 }
 
 .weekdays a.weekday.no-service:hover {

@@ -1,8 +1,7 @@
 <div id="loading">
     <div id="loading-line"></div>
     <div id="loading-stop">
-        <img class="white" src="/img/white/stop.png">
-        <img class="black" src="/img/black/stop.png">
+        % include('components/svg', name='stop')
     </div>
     <script>
         const loadingStopElement = document.getElementById("loading-stop");

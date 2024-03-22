@@ -13,8 +13,7 @@
         % if routes:
             <div class="checkbox-container" onclick="toggleRouteNumbers()">
                 <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
-                    <img class="white" src="/img/white/check.png" />
-                    <img class="black" src="/img/black/check.png" />
+                    % include('components/svg', name='check')
                 </div>
                 <span>Show Route Numbers</span>
             </div>

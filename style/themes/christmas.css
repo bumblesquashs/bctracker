@@ -22,8 +22,9 @@
     
     --loading-background: #FFFFFF;
     --loading-foreground: #D70000;
-    --loading-image-black: none;
-    --loading-image-white: initial;
+    
+    --adherence-background: #989898;
+    --adherence-text: #FFFFFF;
 }
 
 a {
@@ -80,25 +81,23 @@ table tr:nth-child(2n-1) {
     background-color: #E4F6E3;
 }
 
+#loading-stop {
+    --image-color: #FFFFFF;
+}
+
 #map.preview {
     border-color: #69BB65;
 }
 
 #map-toggle {
     background-color: #D70000;
-}
-
-#map-toggle img.black {
-    display: none;
-}
-
-#map-toggle img.white {
-    display: block;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar {
     background-color: #AB0000;
     --tooltip-background: #7A0000;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon {
@@ -113,10 +112,6 @@ table tr:nth-child(2n-1) {
     background-color: #AB0000 !important;
 }
 
-#navigation-bar .navigation-icon img.black {
-    display: none;
-}
-
 #navigation-bar .navigation-item {
     color: #FFFFFF;
 }
@@ -129,8 +124,17 @@ table tr:nth-child(2n-1) {
     background-color: #AB0000 !important;
 }
 
-#navigation-bar .navigation-item img.black {
-    display: none;
+#navigation-menu {
+    background-color: #7A0000;
+    --image-color: #FFFFFF;
+}
+
+#navigation-menu .menu-button {
+    color: #FFFFFF;
+}
+
+#navigation-menu .menu-button.disabled {
+    color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {
@@ -147,8 +151,8 @@ table tr:nth-child(2n-1) {
     background-color: #FFCCCC;
 }
 
-#page img.white {
-    display: none;
+#page {
+    --image-color: #000000;
 }
 
 #page-header {
@@ -160,16 +164,16 @@ table tr:nth-child(2n-1) {
     border-color: #69BB65;
 }
 
+#refresh-button {
+    --image-color: #FFFFFF;
+}
+
 #refresh-button:hover {
     background-color: #7A0000;
 }
 
 #refresh-button.disabled:hover {
     background-color: #D70000;
-}
-
-#refresh-button img.black {
-    display: none;
 }
 
 #search {
@@ -201,8 +205,8 @@ table tr:nth-child(2n-1) {
     color: #666666;
 }
 
-#search-results img.white {
-    display: none;
+#search-results {
+    --image-color: #AB0000;
 }
 
 #search-results .result {
@@ -263,89 +267,42 @@ table tr:nth-child(2n-1) {
     cursor: default;
 }
 
-#system-menu-toggle img.black {
-    display: none;
+#system-menu-toggle {
+    --image-color: #FFFFFF;
 }
 
 #title {
     background-color: #AB0000;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #title:hover {
     background-color: #7A0000;
 }
 
-#title img.black {
-    display: none;
-}
-
-.adherence {
-    color: #FFFFFF;
-    background-color: #989898 !important;
-}
-
-.adherence.ahead {
-    background-color: #FF9A3A !important;
-}
-
-.adherence.behind {
-    background-color: #FF9A3A !important;
-}
-
-.adherence.on-time {
-    background-color: #3C5ABE !important;
-}
-
-.adherence.very-ahead {
-    background-color: #FD393E !important;
-}
-
-.adherence.very-behind {
-    background-color: #FD393E !important;
+.ahead {
+    --adherence-background: #FF9A3A;
 }
 
 .banner {
     background-color: #FFA027;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .banner a {
     color: #FFFFFF;
 }
 
-.banner .close-button img.black {
-    display: none;
-}
-
-.bearing.adherence {
-    background-color: transparent !important;
-    border-bottom-color: #989898;
-}
-
-.bearing.adherence.ahead {
-    border-bottom-color: #FF9A3A;
-}
-
-.bearing.adherence.behind {
-    border-bottom-color: #FF9A3A;
-}
-
-.bearing.adherence.on-time {
-    border-bottom-color: #3C5ABE;
-}
-
-.bearing.adherence.very-ahead {
-    border-bottom-color: #FD393E;
-}
-
-.bearing.adherence.very-behind {
-    border-bottom-color: #FD393E;
+.behind {
+    --adherence-background: #FF9A3A;
 }
 
 .button {
     background-color: #AB0000;
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .button:hover {
@@ -376,17 +333,10 @@ table tr:nth-child(2n-1) {
     background-color: #AD6000;
 }
 
-.button img.black {
-    display: none;
-}
-
 .checkbox-container .checkbox {
     border-color: #000000;
     background-color: #FFFFFF;
-}
-
-.checkbox-container .checkbox img.white {
-    display: none;
+    --image-color: #000000;
 }
 
 .code-block {
@@ -456,6 +406,10 @@ table tr:nth-child(2n-1) {
 .normal-service {
     background-color: #7DBD88;
     color: #000000;
+}
+
+.on-time {
+    --adherence-background: #3C5ABE;
 }
 
 .order-details .content .separator {
@@ -534,6 +488,14 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #69BB65;
+}
+
+.very-ahead {
+    --adherence-background: #FD393E;
+}
+
+.very-behind {
+    --adherence-background: #FD393E;
 }
 
 .weekdays a.weekday.no-service:hover {
