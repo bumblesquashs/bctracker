@@ -34,8 +34,7 @@
                     <div class="row">
                         % include('components/bus')
                         <div class="tooltip-anchor">
-                            <img class="middle-align white" src="/img/white/schedule.png" />
-                            <img class="middle-align black" src="/img/black/schedule.png" />
+                            % include('components/svg', name='schedule')
                             <div class="tooltip right">Bus is scheduled</div>
                         </div>
                     </div>

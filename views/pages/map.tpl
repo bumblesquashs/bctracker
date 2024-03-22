@@ -8,22 +8,19 @@
     % if len(visible_positions) > 0:
         <div class="checkbox-container" onclick="toggleAutomaticRefresh()">
             <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
-                <img class="white" src="/img/white/check.png" />
-                <img class="black" src="/img/black/check.png" />
+                % include('components/svg', name='check')
             </div>
             <span>Automatically Refresh</span>
         </div>
         <div class="checkbox-container" onclick="toggleRouteLines()">
             <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
-                <img class="white" src="/img/white/check.png" />
-                <img class="black" src="/img/black/check.png" />
+                % include('components/svg', name='check')
             </div>
             <span>Show Route Lines</span>
         </div>
         <div class="checkbox-container" onclick="toggleNISBuses()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                <img class="white" src="/img/white/check.png" />
-                <img class="black" src="/img/black/check.png" />
+                % include('components/svg', name='check')
             </div>
             <span>Show NIS Buses</span>
         </div>
@@ -35,8 +32,7 @@
         <div class="section">
             <div class="checkbox-container" onclick="toggleNISBusesEmpty()">
                 <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                    <img class="white" src="/img/white/check.png" />
-                    <img class="black" src="/img/black/check.png" />
+                    % include('components/svg', name='check')
                 </div>
                 <div>Show NIS Buses</div>
             </div>
@@ -81,6 +77,8 @@
     </div>
 % else:
     <div id="map" class="full-screen"></div>
+    
+    % include('components/svg_script', name='fish')
     
     <script>
         const map = new ol.Map({
@@ -194,7 +192,7 @@
                 } else {
                     headsign.className = "row center gap-5";
                     const adherenceElement = document.createElement("div");
-                    adherenceElement.classList.add("adherence", adherence.status_class);
+                    adherenceElement.classList.add("adherence-indicator", adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     
                     headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
@@ -228,7 +226,7 @@
                             icon.classList.add(adherence.status_class);
                         }
                     } else {
-                        icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.innerHTML = getSVG(position.bus_icon);
                         icon.style.backgroundColor = "#" + position.colour;
                     }
                     
@@ -261,7 +259,7 @@
                             icon.classList.add(adherence.status_class);
                         }
                     } else {
-                        icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
                         icon.style.backgroundColor = "#" + position.colour;
                     }
                     
