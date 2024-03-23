@@ -119,41 +119,6 @@ def find_recorded_today(system, trips):
     agency = helpers.agency.find('bc-transit')
     return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
 
-def find_scheduled_today(system, trips):
-    '''Returns all bus numbers matching the given system and trips that are scheduled to run on the current date'''
-    system_id = getattr(system, 'id', system)
-    block_ids = list({t.block_id for t in trips})
-    date = Date.today(system.timezone)
-    cte, args = database.build_select('record',
-        columns={
-            'record.bus_number': 'bus_number',
-            'record.block_id': 'block_id',
-            'record.last_seen': 'last_seen',
-            'ROW_NUMBER() OVER(PARTITION BY record.block_id ORDER BY record.record_id DESC)': 'row_number'
-        },
-        filters={
-            'record.system_id': system_id,
-            'record.date': date.format_db(),
-            'record.block_id': block_ids
-        }
-    )
-    rows = database.select('numbered_record',
-        columns={
-            'numbered_record.block_id': 'block_id',
-            'numbered_record.bus_number': 'bus_number'
-        },
-        ctes={
-            'numbered_record': cte
-        },
-        filters={
-            'numbered_record.row_number': 1
-        },
-        order_by='numbered_record.last_seen ASC',
-        custom_args=args
-    )
-    agency = helpers.agency.find('bc-transit')
-    return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}
-
 def delete_stale_trip_records():
     '''Removes all old and unused trip records'''
     date = Date.today() - timedelta(days=90)

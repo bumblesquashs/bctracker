@@ -128,6 +128,15 @@ SQL_SCRIPTS = [
             PRIMARY KEY (system_id, shape_id, sequence)
         )
     ''',
+    '''
+        CREATE TABLE IF NOT EXISTS assignment (
+            system_id TEXT NOT NULL,
+            block_id TEXT NOT NULL,
+            bus_number INTEGER NOT NULL,
+            date TEXT NOT NULL,
+            PRIMARY KEY (system_id, block_id)
+        )
+    ''',
     'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
     'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'

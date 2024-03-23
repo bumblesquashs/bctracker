@@ -17,6 +17,7 @@ import helpers.stop
 import helpers.system
 import helpers.theme
 import helpers.transfer
+import helpers.assignment
 
 from models.bus import Bus
 from models.date import Date
@@ -467,7 +468,7 @@ def route_overview_page(system, route_number):
         route=route,
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
-        scheduled_today=helpers.record.find_scheduled_today(system, trips),
+        assignments=helpers.assignment.find_all(system, route=route),
         positions=helpers.position.find_all(system, route=route)
     )
 
@@ -570,7 +571,8 @@ def block_overview_page(system, block_id):
         title=f'Block {block.id}',
         include_maps=True,
         block=block,
-        positions=helpers.position.find_all(system, block=block)
+        positions=helpers.position.find_all(system, block=block),
+        assignment=helpers.assignment.find(system, block)
     )
 
 @endpoint('/blocks/<block_id>/map')
@@ -636,7 +638,8 @@ def trip_overview_page(system, trip_id):
         title=f'Trip {trip.id}',
         include_maps=True,
         trip=trip,
-        positions=helpers.position.find_all(system, trip=trip)
+        positions=helpers.position.find_all(system, trip=trip),
+        assignment=helpers.assignment.find(system, trip.block_id)
     )
 
 @endpoint('/trips/<trip_id>/map')
@@ -720,7 +723,7 @@ def stop_overview_page(system, stop_number):
         stop=stop,
         departures=departures,
         recorded_today=helpers.record.find_recorded_today(system, trips),
-        scheduled_today=helpers.record.find_scheduled_today(system, trips),
+        assignments=helpers.assignment.find_all(system, stop=stop),
         positions={p.trip.id: p for p in positions}
     )
 
