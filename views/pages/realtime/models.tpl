@@ -71,9 +71,9 @@
                             <tr>
                                 <th>Model</th>
                                 % if show_nis:
-                                    <th class="no-wrap">In Service</th>
+                                    <th class="no-wrap align-right">In Service</th>
                                 % end
-                                <th>Total</th>
+                                <th class="align-right">Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,9 +82,9 @@
                                 <tr class="header">
                                     <td>{{ type }}</td>
                                     % if show_nis:
-                                        <td>{{ len([p for p in type_positions if p.trip is not None]) }}</td>
+                                        <td class="align-right">{{ len([p for p in type_positions if p.trip is not None]) }}</td>
                                     % end
-                                    <td>{{ len(type_positions) }}</td>
+                                    <td class="align-right">{{ len(type_positions) }}</td>
                                 </tr>
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == type]
@@ -93,18 +93,18 @@
                                     <tr>
                                         <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                         % if show_nis:
-                                            <td>{{ len([p for p in model_positions if p.trip is not None]) }}</td>
+                                            <td class="align-right">{{ len([p for p in model_positions if p.trip is not None]) }}</td>
                                         % end
-                                        <td>{{ len(model_positions) }}</td>
+                                        <td class="align-right">{{ len(model_positions) }}</td>
                                     </tr>
                                 % end
                             % end
                             <tr class="header">
                                 <td>Total</td>
                                 % if show_nis:
-                                    <td>{{ len([p for p in positions if p.trip is not None]) }}</td>
+                                    <td class="align-right">{{ len([p for p in positions if p.trip is not None]) }}</td>
                                 % end
-                                <td>{{ len(positions) }}</td>
+                                <td class="align-right">{{ len(positions) }}</td>
                             </tr>
                         </tbody>
                     </table>

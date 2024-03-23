@@ -10,13 +10,13 @@
         <tr>
             <th>System</th>
             <th class="desktop-only">Online</th>
-            <th class="desktop-only">In Service</th>
-            <th class="desktop-only">Seen</th>
-            <th class="desktop-only">Tracked</th>
-            <th class="desktop-only">Routes</th>
-            <th class="desktop-only">Stops</th>
-            <th class="desktop-only">Blocks</th>
-            <th class="desktop-only">Trips</th>
+            <th class="desktop-only align-right">In Service</th>
+            <th class="desktop-only align-right">Seen</th>
+            <th class="desktop-only align-right">Tracked</th>
+            <th class="desktop-only align-right">Routes</th>
+            <th class="desktop-only align-right">Stops</th>
+            <th class="desktop-only align-right">Blocks</th>
+            <th class="desktop-only align-right">Trips</th>
             <th class="non-desktop">Details</th>
             <th class="non-mobile">Service Days</th>
         </tr>
@@ -77,10 +77,10 @@
                     </td>
                     % if region_system.realtime_enabled:
                         % if region_system.realtime_loaded:
-                            <td class="desktop-only">{{ len(positions) }}</td>
-                            <td class="desktop-only">{{ len([p for p in positions if p.trip is not None]) }}</td>
-                            <td class="desktop-only">{{ len(overviews) }}</td>
-                            <td class="desktop-only">{{ len([o for o in overviews if o.last_record is not None]) }}</td>
+                            <td class="desktop-only align-right">{{ len(positions) }}</td>
+                            <td class="desktop-only align-right">{{ len([p for p in positions if p.trip is not None]) }}</td>
+                            <td class="desktop-only align-right">{{ len(overviews) }}</td>
+                            <td class="desktop-only align-right">{{ len([o for o in overviews if o.last_record is not None]) }}</td>
                         % else:
                             <td class="lighter-text desktop-only" colspan="4">Data is loading</td>
                         % end
@@ -89,10 +89,10 @@
                     % end
                     % if region_system.gtfs_enabled:
                         % if region_system.gtfs_enabled:
-                            <td class="desktop-only">{{ len(region_system.get_routes()) }}</td>
-                            <td class="desktop-only">{{ len(region_system.get_stops()) }}</td>
-                            <td class="desktop-only">{{ len(region_system.get_blocks()) }}</td>
-                            <td class="desktop-only">{{ len(region_system.get_trips()) }}</td>
+                            <td class="desktop-only align-right">{{ len(region_system.get_routes()) }}</td>
+                            <td class="desktop-only align-right">{{ len(region_system.get_stops()) }}</td>
+                            <td class="desktop-only align-right">{{ len(region_system.get_blocks()) }}</td>
+                            <td class="desktop-only align-right">{{ len(region_system.get_trips()) }}</td>
                             <td class="non-mobile">
                                 % include('components/weekdays', schedule=region_system.schedule, compact=True)
                             </td>
