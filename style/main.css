@@ -242,9 +242,9 @@ table tr.header td {
 
 #quick-navigation {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 20px;
-    align-items: stretch;
+    align-items: start;
 }
 
 #quick-navigation .item {

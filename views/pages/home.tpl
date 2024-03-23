@@ -103,6 +103,18 @@
         </div>
         <div class="section">
             <div class="header">
+                <h2>Community</h2>
+            </div>
+            <div class="content">
+                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
+                <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="container flex-3">
+        <div class="section">
+            <div class="header">
                 <h2>Quick Navigation</h2>
             </div>
             <div class="content">
@@ -120,7 +132,17 @@
                         <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
                             <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="column center">
+                            % include('components/svg', name='history')
+                            <h3>Bus History</h3>
+                            <p>See all buses that have been tracked, including last-seen date and transfers</p>
+                        </div>
+                        <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'history') }}">History</a>
+                            <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
                         </div>
                     </div>
                     <div class="item">
@@ -138,9 +160,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="container flex-2">
         <div class="section">
             <div class="header">
                 <h2>Latest News</h2>
@@ -150,7 +169,7 @@
                     <div class="news-post">
                         <div class="header">
                             <h3>March Update</h3>
-                            March 14, 2024
+                            March 24, 2024
                         </div>
                         <div class="content">
                             <p>It hasn't been too long since our last update, but we've already got a bunch of new things to share!</p>
@@ -201,18 +220,6 @@
                         <a href="{{ get_url(system, 'news') }}">See older news</a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container flex-1">
-        <div class="section">
-            <div class="header">
-                <h2>Community</h2>
-            </div>
-            <div class="content">
-                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
-                <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>
     </div>

@@ -237,11 +237,6 @@ table th {
 }
 
 @media screen and (min-width: 1001px) and (max-width: 1200px) {
-    #quick-navigation {
-        flex-direction: row;
-        align-items: start;
-    }
-    
     .page-container {
         flex-direction: column;
         gap: 20px;
