@@ -5,6 +5,7 @@
     <h1 class="row">
         % include('components/route')
         {{! route.display_name }}
+        % include('components/favourite', type='route')
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>

@@ -15,7 +15,7 @@ def create(system, row):
         'lon': float(row['stop_lon'])
     })
 
-def find(system, stop_id):
+def find(system, stop_id=None, number=None):
     '''Returns the stop with the given system and stop ID'''
     system_id = getattr(system, 'id', system)
     stops = database.select('stop',
@@ -29,7 +29,8 @@ def find(system, stop_id):
         },
         filters={
             'stop.system_id': system_id,
-            'stop.stop_id': stop_id
+            'stop.stop_id': stop_id,
+            'stop.number': number
         },
         limit=1,
         initializer=Stop.from_db

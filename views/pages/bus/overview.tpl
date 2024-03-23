@@ -12,6 +12,7 @@
     <h1 class="row">
         <span>Bus</span>
         % include('components/bus', enable_link=False)
+        % include('components/favourite', type='vehicle')
     </h1>
     % if bus.order is None:
         <h2 class="lighter-text">Unknown Year/Model</h2>

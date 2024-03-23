@@ -103,16 +103,49 @@
         </div>
         <div class="section">
             <div class="header">
-                <h2>Community</h2>
+                <h2>Favourites</h2>
             </div>
             <div class="content">
-                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
-                <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                <p>
+                    Add up to 10 favourites using the
+                    % include('components/svg', name='non-favourite')
+                    button on buses, routes, and stops.
+                </p>
+                % if favourites:
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Favourite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % for favourite in favourites:
+                                % value = favourite.value
+                                <tr>
+                                    <td>
+                                        <div class="column">
+                                            % if favourite.type == 'vehicle':
+                                                <a href="{{ get_url(system, f'bus/{value.number}') }}">Bus {{ value }}</a>
+                                                <div class="smaller-font">{{! value.order }}</div>
+                                            % elif favourite.type == 'route':
+                                                <a href="{{ get_url(value.system, f'routes/{value.number}') }}">{{ value.system }} Route {{ value.number }}</a>
+                                                <div class="smaller-font">{{! value.display_name }}</div>
+                                            % elif favourite.type == 'stop':
+                                                <a href="{{ get_url(value.system, f'stops/{value.number}') }}">{{ value.system }} Stop {{ value.number }}</a>
+                                                <div class="smaller-font">{{ value.name }}</div>
+                                            % end
+                                        </div>
+                                    </td>
+                                </tr>
+                            % end
+                        </tbody>
+                    </table>
+                % end
             </div>
         </div>
     </div>
     
-    <div class="container flex-3">
+    <div class="container flex-2">
         <div class="section">
             <div class="header">
                 <h2>Quick Navigation</h2>
@@ -128,17 +161,7 @@
                         <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
                             <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="column center">
-                            % include('components/svg', name='history')
-                            <h3>Bus History</h3>
-                            <p>See all buses that have been tracked, including last-seen date and transfers</p>
-                        </div>
-                        <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'history') }}">History</a>
-                            <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
                         </div>
                     </div>
                     <div class="item">
@@ -263,6 +286,18 @@
                         <a href="{{ get_url(system, 'news') }}">See older news</a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container flex-1">
+        <div class="section">
+            <div class="header">
+                <h2>Community</h2>
+            </div>
+            <div class="content">
+                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
+                <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>
     </div>

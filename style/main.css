@@ -123,7 +123,7 @@ table tr.header td {
 
 #map.preview {
     height: 300px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-width: 1px;
     border-style: solid;
 }
@@ -580,6 +580,20 @@ table tr.header td {
 .events ul {
     margin: 0px;
     padding-left: 20px;
+}
+
+.favourite {
+    padding: 2px;
+    border-radius: 50%;
+    --image-size: 30px;
+}
+
+.favourite:hover {
+    cursor: pointer;
+}
+
+.favourite.disabled:hover {
+    cursor: initial;
 }
 
 .flex-1 {

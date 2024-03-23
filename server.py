@@ -22,6 +22,7 @@ import helpers.assignment
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
+from models.favourite import FavouriteSet
 
 import config
 import cron
@@ -176,6 +177,10 @@ def query_cookie(key, default_value=None, max_age_days=3650):
         return value
     return request.get_cookie(key, default_value)
 
+def get_favourites():
+    favourites_string = request.get_cookie('favourites', '')
+    return FavouriteSet.parse(favourites_string)
+
 def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
         if base_path == '/':
@@ -233,7 +238,8 @@ def robots_text(system):
 def home_page(system):
     return page('home', system,
         title='Home',
-        enable_refresh=False
+        enable_refresh=False,
+        favourites=get_favourites()
     )
 
 @endpoint('/news')
@@ -346,7 +352,8 @@ def bus_overview_page(system, bus_number):
         bus=bus,
         position=position,
         records=records,
-        overview=overview
+        overview=overview,
+        favourites=get_favourites()
     )
 
 @endpoint('/bus/<bus_number:int>/map')
@@ -469,7 +476,8 @@ def route_overview_page(system, route_number):
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
         assignments=helpers.assignment.find_all(system, route=route),
-        positions=helpers.position.find_all(system, route=route)
+        positions=helpers.position.find_all(system, route=route),
+        favourites=get_favourites()
     )
 
 @endpoint('/routes/<route_number>/map')
@@ -724,7 +732,8 @@ def stop_overview_page(system, stop_number):
         departures=departures,
         recorded_today=helpers.record.find_recorded_today(system, trips),
         assignments=helpers.assignment.find_all(system, stop=stop),
-        positions={p.trip.id: p for p in positions}
+        positions={p.trip.id: p for p in positions},
+        favourites=get_favourites()
     )
 
 @endpoint('/stops/<stop_number>/map')
