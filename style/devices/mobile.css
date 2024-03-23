@@ -49,6 +49,10 @@ table {
     font-size: 12pt;
 }
 
+#loading {
+    width: calc(100% - 36px);
+}
+
 #main {
     order: 6;
 }

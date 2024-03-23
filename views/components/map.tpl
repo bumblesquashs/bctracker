@@ -30,8 +30,7 @@
         })
     });
     
-    const lats = [];
-    const lons = [];
+    const area = new Area();
 </script>
 
 % map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
@@ -72,8 +71,7 @@
             
             if ("{{ get('zoom_trips', True) }}" === "True") {
                 for (const point of trip.points) {
-                    lats.push(point.lat);
-                    lons.push(point.lon);
+                    area.combine(point.lat, point.lon);
                 }
             }
         }
@@ -219,8 +217,7 @@
             }));
             
             if ("{{ get('zoom_buses', True) }}" === "True" && position.lat != 0 && position.lon != 0) {
-                lats.push(position.lat);
-                lons.push(position.lon);
+                area.combine(position.lat, position.lon);
             }
         }
     </script>
@@ -270,8 +267,7 @@
             }));
             
             if ("{{ get('zoom_stops', True) }}" === "True") {
-                lats.push(stop.lat);
-                lons.push(stop.lon);
+                area.combine(stop.lat, stop.lon);
             }
         }
     </script>
@@ -333,8 +329,7 @@
             }));
             
             if ("{{ get('zoom_departures', True) }}" === "True") {
-                lats.push(stop.lat);
-                lons.push(stop.lon);
+                area.combine(stop.lat, stop.lon);
             }
         }
     </script>
@@ -343,19 +338,16 @@
 <script>
     document.body.onload = function() {
         map.updateSize();
-        if (lons.length === 1 && lats.length === 1) {
-            map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
-            map.getView().setZoom(15);
-        } else if (lons.length > 0 && lats.length > 0) {
-            const minLon = Math.min.apply(Math, lons);
-            const maxLon = Math.max.apply(Math, lons);
-            const minLat = Math.min.apply(Math, lats);
-            const maxLat = Math.max.apply(Math, lats);
-            
-            const padding = parseInt("{{ 20 if is_preview else 100 }}");
-            map.getView().fit(ol.proj.transformExtent([minLon, minLat, maxLon, maxLat], ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
-                padding: [padding, padding, padding, padding]
-            })
+        if (area.isValid) {
+            if (area.isPoint) {
+                map.getView().setCenter(ol.proj.fromLonLat(area.point));
+                map.getView().setZoom(15);
+            } else {
+                const padding = parseInt("{{ 20 if is_preview else 100 }}");
+                map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                    padding: [padding, padding, padding, padding]
+                })
+            }
         }
     }
 </script>

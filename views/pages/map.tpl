@@ -126,8 +126,7 @@
             }
             markers = [];
             
-            const lons = [];
-            const lats = [];
+            const area = new Area();
             
             for (const position of positions) {
                 if (position.shape_id !== null && position.shape_id !== undefined) {
@@ -281,8 +280,7 @@
                 element.appendChild(details);
                 
                 if (position.lat != 0 && position.lon != 0) {
-                    lons.push(position.lon);
-                    lats.push(position.lat);
+                    area.combine(position.lat, position.lon);
                 }
                 
                 const marker = new ol.Overlay({
@@ -295,17 +293,12 @@
                 markers.push(marker);
             }
             
-            if (resetCoordinates) {
-                if (lons.length === 1 && lats.length === 1) {
-                    map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
+            if (resetCoordinates && area.isValid) {
+                if (area.isPoint) {
+                    map.getView().setCenter(ol.proj.fromLonLat(area.point));
                     map.getView().setZoom(15);
-                } else if (lons.length > 0 && lats.length > 0) {
-                    const minLon = Math.min.apply(Math, lons);
-                    const maxLon = Math.max.apply(Math, lons);
-                    const minLat = Math.min.apply(Math, lats);
-                    const maxLat = Math.max.apply(Math, lats);
-                    
-                    map.getView().fit(ol.proj.transformExtent([minLon, minLat, maxLon, maxLat], ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                } else {
+                    map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
                         padding: [100, 100, 100, 100]
                     });
                 }

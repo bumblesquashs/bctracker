@@ -20,6 +20,10 @@
     color-scheme: dark;
     --tooltip-background: #2F2F2F;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #2F2F2F;
+    --loading-foreground: #154E15;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -84,6 +88,10 @@ table tr {
 
 table tr:nth-child(2n-1) {
     background-color: #393939;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {

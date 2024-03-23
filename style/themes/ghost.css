@@ -19,6 +19,10 @@
 :root {
     --tooltip-background: #888888;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #AAAAAA;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -71,6 +75,10 @@ table th {
 
 table tr {
     background-color: #FFFFFF;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
