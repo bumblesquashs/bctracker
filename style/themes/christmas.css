@@ -360,6 +360,7 @@ table tr:nth-child(2n-1) {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #D70000;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {

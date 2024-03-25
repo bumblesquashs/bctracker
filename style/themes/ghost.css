@@ -351,6 +351,7 @@ table tr {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #888888;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {

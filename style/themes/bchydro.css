@@ -361,6 +361,7 @@ table tr:nth-child(2n-1) {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #61C315;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {

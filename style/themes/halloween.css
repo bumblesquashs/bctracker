@@ -373,6 +373,7 @@ table tr:nth-child(2n-1) {
 .marker .icon {
     background-color: #FF6C00;
     border-color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {
