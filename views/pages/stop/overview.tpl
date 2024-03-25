@@ -8,7 +8,7 @@
 <div id="page-header">
     <h1 class="row">
         <span>Stop {{ stop.number }}</span>
-        % include('components/favourite', type='stop')
+        % include('components/favourite')
     </h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">

@@ -4,8 +4,8 @@
 <div id="page-header">
     <h1 class="row">
         % include('components/route')
-        {{! route.display_name }}
-        % include('components/favourite', type='route')
+        <span>{{! route.display_name }}</span>
+        % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>

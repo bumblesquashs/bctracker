@@ -1,74 +1,62 @@
 
 import helpers.agency
-import helpers.order
 import helpers.route
 import helpers.stop
 import helpers.system
 
 from models.bus import Bus
 
-import utils
-
 class Favourite:
     
     __slots__ = (
-        'source',
         'type',
-        'number',
-        'key'
+        'value'
     )
     
     @classmethod
     def parse(cls, string):
         parts = string.split(':')
-        source = parts[0]
-        type = parts[1]
-        number = parts[2]
-        return cls(source, type, number)
-    
-    @property
-    def value(self):
-        if self.type == 'vehicle':
-            return Bus.find(self.source, int(self.number))
-        if self.type == 'route':
-            return helpers.route.find(self.source, number=self.number)
-        if self.type == 'stop':
-            return helpers.stop.find(self.source, number=self.number)
+        type = parts[0]
+        if type == 'vehicle':
+            value = Bus.find(parts[1], int(parts[2]))
+        elif type == 'route':
+            value = helpers.route.find(parts[1], number=parts[2])
+        elif type == 'stop':
+            value = helpers.stop.find(parts[1], number=parts[2])
+        else:
+            value = None
+        if value:
+            return cls(type, value)
         return None
     
-    @property
-    def agency(self):
-        if self.type == 'vehicle':
-            return helpers.agency.find(self.source)
-        return None
-    
-    @property
-    def system(self):
-        if self.type == 'route' or self.type == 'stop':
-            return helpers.system.find(self.source)
-        return None
-    
-    def __init__(self, source, type, number):
-        self.source = source
+    def __init__(self, type, value):
         self.type = type
-        self.number = number
-        
-        self.key = utils.key(number)
+        self.value = value
     
     def __str__(self):
-        return ':'.join([self.source, self.type, self.number])
+        if self.type == 'vehicle':
+            source = self.value.order.agency.id
+            number = str(self.value.number)
+        elif self.type == 'route':
+            source = self.value.system.id
+            number = self.value.number
+        elif self.type == 'stop':
+            source = self.value.system.id
+            number = self.value.number
+        else:
+            source = ''
+            number = ''
+        return ':'.join([self.type, source, number])
     
     def __hash__(self):
-        return hash((self.source, self.type, self.number))
+        return hash((self.type, self.value))
     
     def __eq__(self, other):
         return hash(self) == hash(other)
     
     def __lt__(self, other):
         if self.type == other.type:
-            if self.key == other.key:
-                return self.source < other.source
-            return self.key < other.key
+            return self.value < other.value
         return self.type < other.type
 
 class FavouriteSet:
@@ -81,7 +69,7 @@ class FavouriteSet:
     def parse(cls, string):
         parts = string.split(',')
         favourites = [Favourite.parse(p) for p in parts if p != '']
-        return cls(favourites)
+        return cls([f for f in favourites if f])
     
     @property
     def is_full(self):

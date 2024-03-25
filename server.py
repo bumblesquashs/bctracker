@@ -353,7 +353,7 @@ def bus_overview_page(system, bus_number):
         position=position,
         records=records,
         overview=overview,
-        favourite=Favourite(agency.id, 'vehicle', str(bus.number)),
+        favourite=Favourite('vehicle', bus),
         favourites=get_favourites()
     )
 
@@ -373,7 +373,9 @@ def bus_map_page(system, bus_number):
         include_maps=position is not None,
         full_map=position is not None,
         bus=bus,
-        position=position
+        position=position,
+        favourite=Favourite('vehicle', bus),
+        favourites=get_favourites()
     )
 
 @endpoint('/bus/<bus_number:int>/history')
@@ -403,7 +405,9 @@ def bus_history_page(system, bus_number):
         bus=bus,
         records=records,
         overview=overview,
-        events=events
+        events=events,
+        favourite=Favourite('vehicle', bus),
+        favourites=get_favourites()
     )
 
 @endpoint('/history')
@@ -478,7 +482,7 @@ def route_overview_page(system, route_number):
         recorded_today=helpers.record.find_recorded_today(system, trips),
         assignments=helpers.assignment.find_all(system, route=route),
         positions=helpers.position.find_all(system, route=route),
-        favourite=Favourite(system.id, 'route', route.number),
+        favourite=Favourite('route', route),
         favourites=get_favourites()
     )
 
@@ -500,7 +504,9 @@ def route_map_page(system, route_number):
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
-        positions=helpers.position.find_all(system, route=route)
+        positions=helpers.position.find_all(system, route=route),
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/routes/<route_number>/schedule')
@@ -519,7 +525,9 @@ def route_schedule_page(system, route_number):
     return page('route/schedule', system,
         title=str(route),
         enable_refresh=False,
-        route=route
+        route=route,
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
@@ -540,7 +548,9 @@ def route_schedule_date_page(system, route_number, date_string):
         title=str(route),
         enable_refresh=False,
         route=route,
-        date=date
+        date=date,
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/blocks')
@@ -735,7 +745,7 @@ def stop_overview_page(system, stop_number):
         recorded_today=helpers.record.find_recorded_today(system, trips),
         assignments=helpers.assignment.find_all(system, stop=stop),
         positions={p.trip.id: p for p in positions},
-        favourite=Favourite(system.id, 'stop', stop.number),
+        favourite=Favourite('stop', stop),
         favourites=get_favourites()
     )
 
@@ -756,7 +766,9 @@ def stop_map_page(system, stop_number):
         title=f'Stop {stop.number}',
         include_maps=True,
         full_map=True,
-        stop=stop
+        stop=stop,
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/stops/<stop_number>/schedule')
@@ -775,7 +787,9 @@ def stop_schedule_page(system, stop_number):
     return page('stop/schedule', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
-        stop=stop
+        stop=stop,
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
@@ -796,7 +810,9 @@ def stop_schedule_date_page(system, stop_number, date_string):
         title=f'Stop {stop.number}',
         enable_refresh=False,
         stop=stop,
-        date=date
+        date=date,
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/about')

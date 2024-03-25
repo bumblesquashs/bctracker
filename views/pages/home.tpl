@@ -129,9 +129,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % orders = {f.value.order for f in vehicle_favourites if f.value and f.value.order}
+                                            % orders = {f.value.order for f in vehicle_favourites}
                                             % for order in sorted(orders):
-                                                % order_favourites = [f for f in vehicle_favourites if f.value and f.value.order == order]
+                                                % order_favourites = [f for f in vehicle_favourites if f.value.order == order]
                                                 <tr class="header">
                                                     <td colspan="2">{{! order }}</td>
                                                 </tr>
@@ -173,9 +173,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.system for f in route_favourites}
+                                            % favourite_systems = {f.value.system for f in route_favourites}
                                             % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.system == favourite_system]
+                                                % system_favourites = [f for f in route_favourites if f.value.system == favourite_system]
                                                 <tr class="header">
                                                     <td>{{ favourite_system }}</td>
                                                 </tr>
@@ -208,7 +208,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.system for f in stop_favourites}
+                                            % favourite_systems = {f.value.system for f in stop_favourites}
                                             % for favourite_system in sorted(favourite_systems):
                                                 % system_favourites = [f for f in stop_favourites if f.system == favourite_system]
                                                 <tr class="header">

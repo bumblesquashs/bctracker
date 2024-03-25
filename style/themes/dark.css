@@ -348,6 +348,22 @@ table tr:nth-child(2n-1) {
     border-right-color: #565656;
 }
 
+.favourite {
+    --image-color: #2247B7;
+}
+
+.favourite:hover {
+    background-color: #393939;
+}
+
+.favourite.disabled {
+    --image-color: #565656;
+}
+
+.favourite.disabled:hover {
+    background-color: initial;
+}
+
 .info-box {
     background-color: #393939;
     border-color: #565656;
