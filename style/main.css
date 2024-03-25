@@ -123,7 +123,7 @@ table tr.header td {
 
 #map.preview {
     height: 300px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }

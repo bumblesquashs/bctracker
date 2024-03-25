@@ -1,4 +1,6 @@
 
+% import helpers.position
+
 % rebase('base')
 
 <div id="page-header">
@@ -112,34 +114,123 @@
                     button on buses, routes, and stops.
                 </p>
                 % if favourites:
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Favourite</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            % for favourite in favourites:
-                                % value = favourite.value
-                                <tr>
-                                    <td>
-                                        <div class="column">
-                                            % if favourite.type == 'vehicle':
-                                                <a href="{{ get_url(system, f'bus/{value.number}') }}">Bus {{ value }}</a>
-                                                <div class="smaller-font">{{! value.order }}</div>
-                                            % elif favourite.type == 'route':
-                                                <a href="{{ get_url(value.system, f'routes/{value.number}') }}">{{ value.system }} Route {{ value.number }}</a>
-                                                <div class="smaller-font">{{! value.display_name }}</div>
-                                            % elif favourite.type == 'stop':
-                                                <a href="{{ get_url(value.system, f'stops/{value.number}') }}">{{ value.system }} Stop {{ value.number }}</a>
-                                                <div class="smaller-font">{{ value.name }}</div>
+                    % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
+                    % route_favourites = [f for f in favourites if f.type == 'route']
+                    % stop_favourites = [f for f in favourites if f.type == 'stop']
+                    <div class="container">
+                        % if vehicle_favourites:
+                            <div class="section">
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Bus</th>
+                                                <th>Headsign</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % orders = {f.value.order for f in vehicle_favourites if f.value and f.value.order}
+                                            % for order in sorted(orders):
+                                                % order_favourites = [f for f in vehicle_favourites if f.value and f.value.order == order]
+                                                <tr class="header">
+                                                    <td colspan="2">{{! order }}</td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for favourite in order_favourites:
+                                                    % value = favourite.value
+                                                    % position = helpers.position.find(value)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                % include('components/bus', bus=value)
+                                                                % if position:
+                                                                    % include('components/adherence', adherence=position.adherence)
+                                                                % end
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            % if position and position.trip:
+                                                                % include('components/headsign', trip=position.trip)
+                                                            % else:
+                                                                <div class="lighter-text">Not in service</div>
+                                                            % end
+                                                        </td>
+                                                    </tr>
+                                                % end
                                             % end
-                                        </div>
-                                    </td>
-                                </tr>
-                            % end
-                        </tbody>
-                    </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        % end
+                        % if route_favourites:
+                            <div class="section">
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Route</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % favourite_systems = {f.system for f in route_favourites}
+                                            % for favourite_system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in route_favourites if f.system == favourite_system]
+                                                <tr class="header">
+                                                    <td>{{ favourite_system }}</td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for favourite in system_favourites:
+                                                    % value = favourite.value
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                % include('components/route', route=value, include_link=False)
+                                                                <a href="{{ get_url(value.system, f'routes/{value.number}') }}">{{! value.display_name }}</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                % end
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        % end
+                        % if stop_favourites:
+                            <div class="section">
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Stop Number</th>
+                                                <th>Stop Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % favourite_systems = {f.system for f in stop_favourites}
+                                            % for favourite_system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in stop_favourites if f.system == favourite_system]
+                                                <tr class="header">
+                                                    <td colspan="2">{{ favourite_system }}</td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for favourite in system_favourites:
+                                                    % value = favourite.value
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{ get_url(value.system, f'stops/{value.number}') }}">{{ value.number }}</a>
+                                                        </td>
+                                                        <td>{{ value.name }}</td>
+                                                    </tr>
+                                                % end
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        % end
+                    </div>
                 % end
             </div>
         </div>

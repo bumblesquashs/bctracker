@@ -1,7 +1,9 @@
 
+import helpers.agency
 import helpers.order
 import helpers.route
 import helpers.stop
+import helpers.system
 
 from models.bus import Bus
 
@@ -34,6 +36,18 @@ class Favourite:
             return helpers.stop.find(self.source, number=self.number)
         return None
     
+    @property
+    def agency(self):
+        if self.type == 'vehicle':
+            return helpers.agency.find(self.source)
+        return None
+    
+    @property
+    def system(self):
+        if self.type == 'route' or self.type == 'stop':
+            return helpers.system.find(self.source)
+        return None
+    
     def __init__(self, source, type, number):
         self.source = source
         self.type = type
@@ -48,10 +62,12 @@ class Favourite:
         return hash((self.source, self.type, self.number))
     
     def __eq__(self, other):
-        return self.source == other.source and self.type == other.type and self.number == other.number
+        return hash(self) == hash(other)
     
     def __lt__(self, other):
         if self.type == other.type:
+            if self.key == other.key:
+                return self.source < other.source
             return self.key < other.key
         return self.type < other.type
 
@@ -96,5 +112,6 @@ class FavouriteSet:
     
     def removing(self, favourite):
         favourites = self.favourites.copy()
-        favourites.remove(favourite)
+        if favourite in favourites:
+            favourites.remove(favourite)
         return FavouriteSet(favourites)

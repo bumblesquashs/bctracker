@@ -22,7 +22,7 @@ import helpers.assignment
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
-from models.favourite import FavouriteSet
+from models.favourite import Favourite, FavouriteSet
 
 import config
 import cron
@@ -353,6 +353,7 @@ def bus_overview_page(system, bus_number):
         position=position,
         records=records,
         overview=overview,
+        favourite=Favourite(agency.id, 'vehicle', str(bus.number)),
         favourites=get_favourites()
     )
 
@@ -477,6 +478,7 @@ def route_overview_page(system, route_number):
         recorded_today=helpers.record.find_recorded_today(system, trips),
         assignments=helpers.assignment.find_all(system, route=route),
         positions=helpers.position.find_all(system, route=route),
+        favourite=Favourite(system.id, 'route', route.number),
         favourites=get_favourites()
     )
 
@@ -733,6 +735,7 @@ def stop_overview_page(system, stop_number):
         recorded_today=helpers.record.find_recorded_today(system, trips),
         assignments=helpers.assignment.find_all(system, stop=stop),
         positions={p.trip.id: p for p in positions},
+        favourite=Favourite(system.id, 'stop', stop.number),
         favourites=get_favourites()
     )
 
