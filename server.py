@@ -106,6 +106,7 @@ def get_url(system, path='', **kwargs):
     return url
 
 def validate_admin():
+    '''Checks if the admin key in the query/cookie matches the expected admin key'''
     return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
@@ -178,6 +179,7 @@ def query_cookie(key, default_value=None, max_age_days=3650):
     return request.get_cookie(key, default_value)
 
 def get_favourites():
+    '''Returns the current set of favourites stored in the cookie'''
     favourites_string = request.get_cookie('favourites', '')
     return FavouriteSet.parse(favourites_string)
 
