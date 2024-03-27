@@ -1,5 +1,5 @@
 
-import helpers.system
+import services.system
 
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
@@ -15,7 +15,7 @@ class Point:
     @classmethod
     def from_db(cls, row, prefix='point'):
         '''Returns a point initialized from the given database row'''
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = services.system.find(row[f'{prefix}_system_id'])
         shape_id = row[f'{prefix}_shape_id']
         sequence = row[f'{prefix}_sequence']
         lat = row[f'{prefix}_lat']

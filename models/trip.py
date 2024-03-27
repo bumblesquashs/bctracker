@@ -1,7 +1,7 @@
 
-import helpers.departure
-import helpers.point
-import helpers.system
+import services.departure
+import services.point
+import services.system
 
 from models.direction import Direction
 from models.time import Time
@@ -25,7 +25,7 @@ class Trip:
     
     @classmethod
     def from_db(cls, row, prefix='trip'):
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = services.system.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
         service_id = row[f'{prefix}_service_id']
@@ -191,11 +191,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return helpers.point.find_all(self.system, self.shape_id)
+        return services.point.find_all(self.system, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return helpers.departure.find_all(self.system, trip=self)
+        return services.departure.find_all(self.system, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

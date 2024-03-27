@@ -4,27 +4,15 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 import cherrypy as cp
 
-import helpers.adornment
-import helpers.agency
-import helpers.model
-import helpers.order
-import helpers.overview
-import helpers.point
-import helpers.position
-import helpers.record
-import helpers.region
-import helpers.stop
-import helpers.system
-import helpers.theme
-import helpers.transfer
-import helpers.assignment
+from di import di
+
+from config import Config
 
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 
-import config
 import cron
 import database
 import gtfs
@@ -33,15 +21,37 @@ import realtime
 # Increase the version to force CSS reload
 VERSION = 32
 
+class Server:
+    
+    __slots__ = (
+        'running'
+    )
+    
+    def __init__(self) -> None:
+        self.running = False
+    
+    def start(self, args) -> None:
+        self.running = True
+        
+        cp.config.update('server.conf')
+        config = di[Config]
+        config.setup(cp.config)
+        
+        if args.debug:
+            debug(True)
+        
+    
+    def stop(self) -> None:
+        self.running = False
+        
+        
+
 app = Bottle()
 running = False
 
 def start(args):
     '''Loads all required data and launches the server'''
     global running
-    
-    cp.config.update('server.conf')
-    config.setup(cp.config)
     
     running = True
     
@@ -95,19 +105,21 @@ def stop():
 def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
-    if system_id is None:
-        url = config.all_systems_domain.format(path).rstrip('/')
-    else:
+    config = di[Config]
+    if system_id:
         url = config.system_domain.format(system_id, path).rstrip('/')
+    else:
+        url = config.all_systems_domain.format(path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
-    if len(query_args) > 0:
+    if query_args:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
 def validate_admin():
     '''Checks if the admin key in the query/cookie matches the expected admin key'''
-    return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
+    config = di[Config]
+    return not config.admin_key or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -162,13 +174,13 @@ def frame(name, system, **kwargs):
         **kwargs
     )
 
-def set_cookie(key, value, max_age_days=3650):
+def set_cookie(key, value, max_age_days=3650, config=di[Config]):
     '''Creates a cookie using the given key and value'''
     max_age = 60 * 60 * 24 * max_age_days
-    if config.cookie_domain is None:
-        response.set_cookie(key, value, max_age=max_age, path='/')
-    else:
+    if config.cookie_domain:
         response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
+    else:
+        response.set_cookie(key, value, max_age=max_age, path='/')
 
 def query_cookie(key, default_value=None, max_age_days=3650):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''

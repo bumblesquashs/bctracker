@@ -1,7 +1,7 @@
 
-import helpers.agency
-import helpers.departure
-import helpers.system
+import services.agency
+import services.departure
+import services.system
 
 from models.adherence import Adherence
 from models.bus import Bus
@@ -27,8 +27,8 @@ class Position:
     @classmethod
     def from_db(cls, row, prefix='position'):
         '''Returns a position initialized from the given database row'''
-        agency = helpers.agency.find('bc-transit')
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        agency = services.agency.find('bc-transit')
+        system = services.system.find(row[f'{prefix}_system_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
         stop_id = row[f'{prefix}_stop_id']
@@ -165,4 +165,4 @@ class Position:
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []
-        return helpers.departure.find_upcoming(self.system, self.trip, self.sequence)
+        return services.departure.find_upcoming(self.system, self.trip, self.sequence)

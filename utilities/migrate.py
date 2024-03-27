@@ -7,9 +7,9 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import database
 from models.record import Record
-import helpers.system
+import services.system
 
-helpers.system.load()
+services.system.load()
 
 database.connect(foreign_keys=False)
 

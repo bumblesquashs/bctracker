@@ -7,7 +7,8 @@ from glob import glob
 from models.date import Date
 
 import config
-import database
+
+from database import Database
 
 def run(date, include_db=False, db_name='bctracker', delete_files=True):
     '''Zips all archives from the given date into a single file'''
@@ -33,6 +34,7 @@ def run(date, include_db=False, db_name='bctracker', delete_files=True):
                         os.remove(file)
 
 if __name__ == '__main__':
+    database = Database()
     database.archive()
     date = Date.today()
     run(date, include_db=True, delete_files=False)

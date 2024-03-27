@@ -1,10 +1,10 @@
 
 from math import sqrt
 
-import helpers.departure
-import helpers.route
-import helpers.sheet
-import helpers.system
+import services.departure
+import services.route
+import services.sheet
+import services.system
 
 from models.match import Match
 from models.schedule import Schedule
@@ -23,7 +23,7 @@ class Stop:
     
     @classmethod
     def from_db(cls, row, prefix='stop'):
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = services.system.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
@@ -116,7 +116,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = helpers.departure.find_all(self.system, stop=self)
+        departures = services.departure.find_all(self.system, stop=self)
         if service_group is None:
             if date is None:
                 return sorted(departures)
@@ -125,7 +125,7 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return helpers.departure.find_adjacent(self.system, self)
+        return services.departure.find_adjacent(self.system, self)
 
 class StopCache:
     '''A collection of calculated values for a single stop'''

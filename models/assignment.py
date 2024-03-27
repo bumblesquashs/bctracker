@@ -1,5 +1,5 @@
 
-import helpers.system
+import services.system
 
 from models.bus import Bus
 from models.date import Date
@@ -31,7 +31,7 @@ class Assignment:
     @property
     def bus(self):
         '''The bus for this assignment'''
-        system = helpers.system.find(self.system_id)
+        system = services.system.find(self.system_id)
         return Bus.find(system.agency, self.bus_number)
     
     def __init__(self, system_id, block_id, bus_number, date):

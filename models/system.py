@@ -1,9 +1,9 @@
 
 import pytz
 
-import helpers.departure
-import helpers.overview
-import helpers.position
+import services.departure
+import services.overview
+import services.position
 
 from models.route import RouteCache
 from models.schedule import Schedule
@@ -129,11 +129,11 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return helpers.overview.find_all(last_seen_system=self)
+        return services.overview.find_all(last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        return helpers.position.find_all(self)
+        return services.position.find_all(self)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -220,7 +220,7 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = helpers.departure.find_all(self)
+            departures = services.departure.find_all(self)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -258,7 +258,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = helpers.departure.find_all(self, stop=stop)
+            departures = services.departure.find_all(self, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -269,7 +269,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = helpers.departure.find_all(self, trip=trip)
+            departures = services.departure.find_all(self, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache

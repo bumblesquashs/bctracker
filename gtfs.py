@@ -8,12 +8,12 @@ from threading import Thread
 import csv
 import requests
 
-import helpers.departure
-import helpers.point
-import helpers.route
-import helpers.sheet
-import helpers.stop
-import helpers.trip
+import services.departure
+import services.point
+import services.route
+import services.sheet
+import services.stop
+import services.trip
 
 from models.block import Block
 from models.date import Date
@@ -44,20 +44,20 @@ def load(system, force_download=False, update_db=False):
             services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
         system.services = {s.id: s for s in services}
-        system.sheets = helpers.sheet.combine(system, services)
+        system.sheets = services.sheet.combine(system, services)
         
-        stops = helpers.stop.find_all(system.id)
+        stops = services.stop.find_all(system.id)
         system.stops = {s.id: s for s in stops}
         system.stops_by_number = {s.number: s for s in stops}
         
-        trips = helpers.trip.find_all(system.id)
+        trips = services.trip.find_all(system.id)
         system.trips = {t.id: t for t in trips}
         
         block_trips = {}
         for trip in trips:
             block_trips.setdefault(trip.block_id, []).append(trip)
         
-        routes = helpers.route.find_all(system.id)
+        routes = services.route.find_all(system.id)
         system.routes = {r.id: r for r in routes}
         system.routes_by_number = {r.number: r for r in routes}
         
@@ -100,17 +100,17 @@ def update_database(system):
         return
     print(f'Updating database with GTFS data for {system}')
     try:
-        helpers.departure.delete_all(system)
-        helpers.trip.delete_all(system)
-        helpers.stop.delete_all(system)
-        helpers.route.delete_all(system)
-        helpers.point.delete_all(system)
+        services.departure.delete_all(system)
+        services.trip.delete_all(system)
+        services.stop.delete_all(system)
+        services.route.delete_all(system)
+        services.point.delete_all(system)
         
-        apply_csv(system, 'routes', helpers.route.create)
-        apply_csv(system, 'stops', helpers.stop.create)
-        apply_csv(system, 'trips', helpers.trip.create)
-        apply_csv(system, 'stop_times', helpers.departure.create)
-        apply_csv(system, 'shapes', helpers.point.create)
+        apply_csv(system, 'routes', services.route.create)
+        apply_csv(system, 'stops', services.stop.create)
+        apply_csv(system, 'trips', services.trip.create)
+        apply_csv(system, 'stop_times', services.departure.create)
+        apply_csv(system, 'shapes', services.point.create)
     except Exception as e:
         print(f'Failed to update GTFS for {system}: {e}')
 

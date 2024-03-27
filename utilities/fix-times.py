@@ -6,16 +6,16 @@ import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import database
-import helpers.model
-import helpers.order
-import helpers.system
+import services.model
+import services.order
+import services.system
 from models.date import Date
 from models.record import Record
 from models.time import Time
 
-helpers.model.load()
-helpers.order.load()
-helpers.system.load()
+services.model.load()
+services.order.load()
+services.system.load()
 
 database.connect(foreign_keys=False)
 

@@ -1,8 +1,8 @@
 
 from enum import Enum
 
-import helpers.departure
-import helpers.system
+import services.departure
+import services.system
 
 from models.time import Time
 
@@ -68,7 +68,7 @@ class Departure:
     @classmethod
     def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = services.system.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
@@ -155,8 +155,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return helpers.departure.find(self.system, trip=self.trip, sequence=self.sequence - 1)
+        return services.departure.find(self.system, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return helpers.departure.find(self.system, trip=self.trip, sequence=self.sequence + 1)
+        return services.departure.find(self.system, trip=self.trip, sequence=self.sequence + 1)
