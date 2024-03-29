@@ -246,7 +246,11 @@
             
             const title = document.createElement("div");
             title.className = "title";
-            title.innerHTML = stop.number;
+            if (stop.system_id === "broome-county") {
+                title.innerHTML = stop.name;
+            } else {
+                title.innerHTML = stop.number;
+            }
             
             const content = document.createElement("div");
             content.classList = "content hover-only centred";
@@ -254,7 +258,11 @@
             for (const route of stop.routes) {
                 routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.display_number + "</span>";
             }
-            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+            if (stop.system_id === "broome-county") {
+                content.innerHTML = "<div>" + routesHTML + "</div>";
+            } else {
+                content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+            }
             
             details.appendChild(title);
             details.appendChild(content);
@@ -309,7 +317,11 @@
             
             const title = document.createElement("div");
             title.className = "title";
-            title.innerHTML = stop.number;
+            if (stop.system_id === "broome-county") {
+                title.innerHTML = stop.name;
+            } else {
+                title.innerHTML = stop.number;
+            }
             
             const content = document.createElement("div");
             content.classList = "content hover-only centred";
@@ -317,7 +329,11 @@
             for (const route of stop.routes) {
                 routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.display_number + "</span>";
             }
-            content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+            if (stop.system_id === "broome-county") {
+                content.innerHTML = "<div>" + routesHTML + "</div>";
+            } else {
+                content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+            }
             
             details.appendChild(title);
             details.appendChild(content);
