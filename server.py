@@ -460,7 +460,7 @@ def route_overview_page(system, route_number):
             title='Unknown Route',
             route_number=route_number
         )
-    trips = sorted(route.get_trips(date=Date.today()))
+    trips = sorted(route.get_trips(date=Date.today(system.timezone)))
     return page('route/overview', system,
         title=str(route),
         include_maps=len(route.trips) > 0,
@@ -711,7 +711,7 @@ def stop_overview_page(system, stop_number):
             title='Unknown Stop',
             stop_number=stop_number
         )
-    departures = stop.find_departures(date=Date.today())
+    departures = stop.find_departures(date=Date.today(system.timezone))
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system, trip=trips)
     return page('stop/overview', system,
