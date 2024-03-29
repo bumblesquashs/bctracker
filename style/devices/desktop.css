@@ -31,6 +31,14 @@ table th {
     white-space: nowrap;
 }
 
+#broome-county-transit .content {
+    align-items: flex-start;
+}
+
+#complaints .content {
+    align-items: flex-start;
+}
+
 #last-updated {
     font-size: 11pt;
 }
