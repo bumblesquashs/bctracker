@@ -6,6 +6,18 @@
             "length": 39,
             "fuel": "Battery Electric"
         },
+        "gillig-low-floor-40": {
+            "manufacturer": "Gillig",
+            "name": "Low Floor 40'",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "gillig-low-floor-hev-40": {
+            "manufacturer": "Gillig",
+            "name": "Low Floor HEV 40'",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
         "new-flyer-d40lf": {
             "manufacturer": "New Flyer",
             "name": "D40LF",
@@ -41,6 +53,12 @@
             "name": "LFS Suburban",
             "length": 40,
             "fuel": "Diesel"
+        },
+        "obi-orion-vii-hev": {
+            "manufacturer": "OBI",
+            "name": "Orion VII HEV",
+            "length": 40,
+            "fuel": "Hybrid"
         },
         "proterra-zx5": {
             "manufacturer": "Proterra",

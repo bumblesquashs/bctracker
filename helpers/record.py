@@ -116,7 +116,10 @@ def find_recorded_today(system, trips):
         },
         order_by='record.last_seen ASC'
     )
-    agency = helpers.agency.find('bc-transit')
+    if system:
+        agency = system.agency
+    else:
+        agency = helpers.agency.find('bc-transit')
     return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
 
 def delete_stale_trip_records():

@@ -335,7 +335,10 @@ def realtime_speed_page(system):
 
 @endpoint('/fleet')
 def fleet_page(system):
-    agency = helpers.agency.find('bc-transit')
+    if system:
+        agency = system.agency
+    else:
+        agency = helpers.agency.find('bc-transit')
     orders = helpers.order.find_all(agency)
     overviews = helpers.overview.find_all()
     return page('fleet', system,
@@ -347,7 +350,10 @@ def fleet_page(system):
 
 @endpoint('/bus/<bus_number:int>')
 def bus_overview_page(system, bus_number):
-    agency = helpers.agency.find('bc-transit')
+    if system:
+        agency = system.agency
+    else:
+        agency = helpers.agency.find('bc-transit')
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
@@ -368,7 +374,10 @@ def bus_overview_page(system, bus_number):
 
 @endpoint('/bus/<bus_number:int>/map')
 def bus_map_page(system, bus_number):
-    agency = helpers.agency.find('bc-transit')
+    if system:
+        agency = system.agency
+    else:
+        agency = helpers.agency.find('bc-transit')
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
@@ -387,7 +396,10 @@ def bus_map_page(system, bus_number):
 
 @endpoint('/bus/<bus_number:int>/history')
 def bus_history_page(system, bus_number):
-    agency = helpers.agency.find('bc-transit')
+    if system:
+        agency = system.agency
+    else:
+        agency = helpers.agency.find('bc-transit')
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
     if (bus.order is None and overview is None) or not bus.visible:
@@ -904,7 +916,10 @@ def api_shape_id(system, shape_id):
 
 @endpoint('/api/search', method='POST')
 def api_search(system):
-    agency = helpers.agency.find('bc-transit')
+    if system:
+        agency = system.agency
+    else:
+        agency = helpers.agency.find('bc-transit')
     query = request.forms.get('query', '')
     page = int(request.forms.get('page', 0))
     count = int(request.forms.get('count', 10))
