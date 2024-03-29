@@ -36,9 +36,11 @@
                 % end
             </div>
         </td>
-        <td class="non-mobile">
-            % include('components/block')
-        </td>
+        % if not af_2024:
+            <td class="non-mobile">
+                % include('components/block')
+            </td>
+        % end
         <td class="non-mobile">
             % include('components/trip')
         </td>

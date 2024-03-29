@@ -20,6 +20,20 @@ class Overview:
     )
     
     @classmethod
+    def from_json(cls, bus, json):
+        system = helpers.system.find(json['system_id'])
+        first_seen = Date.parse(json['first_seen'], system.timezone)
+        last_seen = Date.parse(json['last_seen'], system.timezone)
+        records = json['records']
+        if records:
+            first_record = Record.from_json(0, bus, system, records[0])
+            last_record = Record.from_json(len(records) - 1, bus, system, records[-1])
+        else:
+            first_record = None
+            last_record = None
+        return cls(bus, first_seen, system, first_record, last_seen, system, last_record)
+    
+    @classmethod
     def from_db(cls, row, prefix='overview'):
         '''Returns an overview initialized from the given database row'''
         agency = helpers.agency.find('bc-transit')

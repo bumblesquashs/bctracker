@@ -12,6 +12,7 @@ import helpers.departure
 import helpers.overview
 import helpers.position
 import helpers.record
+import helpers.system
 import helpers.transfer
 
 from models.adherence import Adherence
@@ -173,8 +174,53 @@ def update_records():
             except Exception as e:
                 print(f'Failed to update records: {e}')
         database.commit()
+        update_broome_county_records()
     except Exception as e:
         print(f'Failed to update records: {e}')
+
+def update_broome_county_records():
+    system = helpers.system.find('broome-county')
+    date = Date.today(system.timezone)
+    time = Time.now(system.timezone)
+    try:
+        with open(f'data/realtime/{system.id}-history.json') as f:
+            history = json.load(f)
+    except:
+        history = {}
+    positions = helpers.position.find_all(system)
+    for position in positions:
+        bus = position.bus
+        try:
+            bus_history = history[str(bus.number)]
+        except:
+            bus_history = {
+                'system_id': system.id,
+                'first_seen': date.format_db(),
+                'records': []
+            }
+        bus_history['last_seen'] = date.format_db()
+        trip = position.trip
+        if trip:
+            records = bus_history['records']
+            trip_records = [(i, r) for (i, r) in enumerate(records) if r['trip_id'] == trip.id and r['date'] == date.format_db()]
+            if trip_records:
+                (index, record) = trip_records[0]
+                record['last_seen'] = time.format_db()
+                records[index] = record
+            else:
+                record = {
+                    'trip_id': trip.id,
+                    'date': date.format_db(),
+                    'route': trip.route.number,
+                    'start_time': trip.start_time.format_db(),
+                    'end_time': trip.end_time.format_db(),
+                    'first_seen': time.format_db(),
+                    'last_seen': time.format_db()
+                }
+                records.append(record)
+        history[str(bus.number)] = bus_history
+    with open(f'data/realtime/{system.id}-history.json', 'w') as f:
+        json.dump(history, f)
 
 def get_last_updated(time_format):
     '''Returns the date/time that realtime data was last updated'''

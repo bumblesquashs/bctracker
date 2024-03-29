@@ -68,7 +68,9 @@
                     <th class="desktop-only">System</th>
                 % end
                 <th>Headsign</th>
-                <th class="non-mobile">Block</th>
+                % if not af_2024:
+                    <th class="non-mobile">Block</th>
+                % end
                 <th class="non-mobile">Trip</th>
                 <th class="desktop-only">Next Stop</th>
             </tr>

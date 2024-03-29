@@ -36,7 +36,11 @@
                 % if system is None:
                     <th class="non-mobile">System</th>
                 % end
-                <th>Block</th>
+                % if af_2024:
+                    <th>Trip</th>
+                % else:
+                    <th>Block</th>
+                % end
                 <th class="desktop-only">Routes</th>
             </tr>
         </thead>
@@ -75,7 +79,11 @@
                         <div class="column">
                             % if record.is_available:
                                 % block = record.block
-                                % include('components/block')
+                                % if af_2024:
+                                    <a href="{{ get_url(block.system, f'trips/{block.id}') }}">{{ block }}</a>
+                                % else:
+                                    % include('components/block')
+                                % end
                             % else:
                                 <span>{{ record.block_id }}</span>
                             % end

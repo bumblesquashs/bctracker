@@ -88,7 +88,9 @@
                                     <th class="desktop-only">System</th>
                                 % end
                                 <th>Headsign</th>
-                                <th class="non-mobile">Block</th>
+                                % if not af_2024:
+                                    <th class="non-mobile">Block</th>
+                                % end
                                 <th class="non-mobile">Trip</th>
                                 <th class="desktop-only">Next Stop</th>
                             </tr>
@@ -143,9 +145,11 @@
                                             % end
                                         </div>
                                     </td>
-                                    <td class="non-mobile">
-                                        % include('components/block')
-                                    </td>
+                                    % if not af_2024:
+                                        <td class="non-mobile">
+                                            % include('components/block')
+                                        </td>
+                                    % end
                                     <td class="non-mobile">
                                         % include('components/trip')
                                     </td>

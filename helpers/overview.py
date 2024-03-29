@@ -1,4 +1,7 @@
 
+import json
+
+from models.bus import Bus
 from models.overview import Overview
 
 import database
@@ -20,6 +23,15 @@ def create(bus, date, system, record):
 
 def find(bus):
     '''Returns the overview of the given bus'''
+    agency = getattr(bus, 'agency', None)
+    if agency and agency.id == 'broome-county':
+        try:
+            with open('data/realtime/broome-county-history.json') as f:
+                history = json.load(f)
+            bus_history = history[str(bus.number)]
+            return Overview.from_json(bus, bus_history)
+        except:
+            return None
     overviews = find_all(bus=bus, limit=1)
     if len(overviews) == 1:
         return overviews[0]
@@ -30,6 +42,17 @@ def find_all(system=None, last_seen_system=None, bus=None, limit=None):
     system_id = getattr(system, 'id', system)
     last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
     bus_number = getattr(bus, 'number', bus)
+    if system_id == 'broome-county' or last_seen_system_id == 'broome-county':
+        try:
+            with open('data/realtime/broome-county-history.json') as f:
+                history = json.load(f)
+            overviews = []
+            for (bus_number, bus_history) in history.items():
+                bus = Bus.find('broome-county', int(bus_number))
+                overviews.append(Overview.from_json(bus, bus_history))
+            return overviews
+        except:
+            return []
     return database.select('overview',
         columns={
             'overview.bus_number': 'overview_bus_number',

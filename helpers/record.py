@@ -1,7 +1,10 @@
 
+import json
+
 from datetime import timedelta
 
 import helpers.agency
+import helpers.system
 
 from models.bus import Bus
 from models.date import Date
@@ -55,6 +58,32 @@ def find_all(system=None, bus=None, block=None, trip=None, limit=None):
     bus_number = getattr(bus, 'number', bus)
     block_id = getattr(block, 'id', block)
     trip_id = getattr(trip, 'id', trip)
+    agency = getattr(bus, 'agency', None)
+    if system_id == 'broome_county' or (agency and agency.id == 'broome-county'):
+        try:
+            with open('data/realtime/broome-county-history.json') as f:
+                history = json.load(f)
+            if system:
+                records = []
+                for (bus_number, bus_history) in history.items():
+                    bus = Bus.find('broome-county', int(bus_number))
+                    records_json = bus_history['records']
+                    bus_records = sorted([Record.from_json(i, bus, system, r) for (i, r) in enumerate(records_json)], key=lambda r: (r.date, r.last_seen), reverse=True)
+                    records += bus_records
+            elif bus:
+                bus_history = history[str(bus_number)]
+                records_json = bus_history['records']
+                system = helpers.system.find('broome-county')
+                records = sorted([Record.from_json(i, bus, system, r) for (i, r) in enumerate(records_json)], key=lambda r: (r.date, r.last_seen), reverse=True)
+            else:
+                records = []
+            if trip_id:
+                records = [r for r in records if r.block_id == trip_id]
+            if limit:
+                return records[:limit]
+            return records
+        except:
+            return []
     joins = {}
     filters = {
         'record.system_id': system_id,

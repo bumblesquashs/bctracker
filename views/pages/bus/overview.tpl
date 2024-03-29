@@ -264,6 +264,10 @@
                                                         <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                     </div>
                                                 </td>
+                                            % else:
+                                                <td class="mobile-only">
+                                                    <a class="{{ 'timing-point' if departure.timepoint else '' }}" href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                </td>
                                             % end
                                             <td class="non-mobile">
                                                 <div class="column">
@@ -325,7 +329,11 @@
                             <tr>
                                 <th>Date</th>
                                 <th class="desktop-only">System</th>
-                                <th>Block</th>
+                                % if af_2024:
+                                    <th>Trip</th>
+                                % else:
+                                    <th>Block</th>
+                                % end
                                 <th class="desktop-only">Routes</th>
                                 <th class="desktop-only">Start Time</th>
                                 <th class="desktop-only">End Time</th>
@@ -349,7 +357,11 @@
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    % include('components/block')
+                                                    % if af_2024:
+                                                        <a href="{{ get_url(block.system, f'trips/{block.id}') }}">{{ block }}</a>
+                                                    % else:
+                                                        % include('components/block')
+                                                    % end
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

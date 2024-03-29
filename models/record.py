@@ -23,6 +23,19 @@ class Record:
     )
     
     @classmethod
+    def from_json(cls, id, bus, system, json):
+        trip_id = json['trip_id']
+        date = Date.parse(json['date'], system.timezone)
+        route_numbers = [json['route']]
+        timezone = system.timezone
+        accurate_seconds = system.agency.accurate_seconds
+        start_time = Time.parse(json['start_time'], timezone, accurate_seconds)
+        end_time = Time.parse(json['end_time'], timezone, accurate_seconds)
+        first_seen = Time.parse(json['first_seen'], timezone, accurate_seconds)
+        last_seen = Time.parse(json['last_seen'], timezone, accurate_seconds)
+        return cls(id, bus, date, system, trip_id, route_numbers, start_time, end_time, first_seen, last_seen)
+    
+    @classmethod
     def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
         id = row[f'{prefix}_id']
@@ -57,6 +70,8 @@ class Record:
     @property
     def block(self):
         '''Returns the block associated with this record'''
+        if self.system.id == 'broome-county':
+            return self.system.get_trip(self.block_id)
         return self.system.get_block(self.block_id)
     
     @property

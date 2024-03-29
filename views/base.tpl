@@ -169,11 +169,19 @@
                 <span class="navigation-item desktop-only disabled">History</span>
                 
                 <a class="navigation-item tablet-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                % if af_2024:
+                    <a class="navigation-item tablet-only" href="{{ get_url(system, 'stops') }}">Stops</a>
+                % else:
+                    <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                % end
             % end
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            % if af_2024:
+                <a class="navigation-item desktop-only" href="{{ get_url(system, 'stops') }}">Stops</a>
+            % else:
+                <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            % end
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
             
@@ -224,19 +232,33 @@
                     % include('components/svg', name='route')
                     <span>Routes</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    % include('components/svg', name='block')
-                    <span>Blocks</span>
-                </a>
+                % if af_2024:
+                    <a class="menu-button" href="{{ get_url(system, 'stops') }}">
+                        % include('components/svg', name='stop')
+                        <span>Stops</span>
+                    </a>
+                % else:
+                    <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+                        % include('components/svg', name='block')
+                        <span>Blocks</span>
+                    </a>
+                % end
             % else:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
                     % include('components/svg', name='route')
                     <span>Routes</span>
                 </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    % include('components/svg', name='block')
-                    <span>Blocks</span>
-                </a>
+                % if af_2024:
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'stops') }}">
+                        % include('components/svg', name='stop')
+                        <span>Stops</span>
+                    </a>
+                % else:
+                    <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
+                        % include('components/svg', name='block')
+                        <span>Blocks</span>
+                    </a>
+                % end
             % end
             
             <a class="menu-button" href="{{ get_url(system, 'about') }}">

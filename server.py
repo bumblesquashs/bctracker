@@ -340,7 +340,10 @@ def fleet_page(system):
     else:
         agency = helpers.agency.find('bc-transit')
     orders = helpers.order.find_all(agency)
-    overviews = helpers.overview.find_all()
+    if agency.id == 'broome-county':
+        overviews = helpers.overview.find_all(system)
+    else:
+        overviews = helpers.overview.find_all()
     return page('fleet', system,
         title='Fleet',
         path='fleet',

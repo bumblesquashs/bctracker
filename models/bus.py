@@ -37,6 +37,13 @@ class Bus:
             return None
         return order.model
     
+    @property
+    def agency(self):
+        order = self.order
+        if order:
+            return order.agency
+        return None
+    
     def __init__(self, number, order):
         self.number = number
         self.order = order
