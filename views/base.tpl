@@ -51,7 +51,9 @@
         <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
-        % if theme is None:
+        % if af_2024:
+            <link rel="stylesheet" href="/style/themes/broome-county.css?version={{ version }}" />
+        % elif theme is None:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
         % else:

@@ -41,36 +41,45 @@
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 
-                <div class="column">
-                    <div class="radio-button-container" onclick="setTheme('automatic')">
-                        <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
-                        <div class="label">BC Transit (Auto)</div>
+                % if af_2024:
+                    <div class="column">
+                        <div class="radio-button-container">
+                            <div class="radio-button selected"></div>
+                            <div class="label">Broome County</div>
+                        </div>
+                    </div>
+                % else:
+                    <div class="column">
+                        <div class="radio-button-container" onclick="setTheme('automatic')">
+                            <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
+                            <div class="label">BC Transit (Auto)</div>
+                        </div>
+                        
+                        % for visible_theme in visible_themes:
+                            <div class="radio-button-container" onclick="setTheme('{{ visible_theme.id }}')">
+                                <div class="radio-button {{ 'selected' if theme is not None and visible_theme == theme else '' }}"></div>
+                                <div class="label">{{ visible_theme }}</div>
+                            </div>
+                        % end
+                        
+                        % if theme is not None and not theme.visible:
+                            <div class="radio-button-container" onclick="setTheme('{{ theme.id }}')">
+                                <div class="radio-button selected"></div>
+                                <div class="label">{{ theme }}</div>
+                            </div>
+                        % end
                     </div>
                     
-                    % for visible_theme in visible_themes:
-                        <div class="radio-button-container" onclick="setTheme('{{ visible_theme.id }}')">
-                            <div class="radio-button {{ 'selected' if theme is not None and visible_theme == theme else '' }}"></div>
-                            <div class="label">{{ visible_theme }}</div>
-                        </div>
+                    % if len(hidden_themes) > 0:
+                        <!-- Well well well... are you really so desperate for new themes that you'll willing to dig into the source code to find more? -->
+                        <!-- I suppose you'll have to be rewarded for your efforts. Here's a list of secret themes that are available: -->
+                        % for hidden_theme in hidden_themes:
+                            <!-- {{ hidden_theme.id }} ({{ hidden_theme }}) -->
+                        % end
+                        <!-- More secret themes may be added in the future, if you ever feel the need to look at this list again someday. -->
+                        <!-- If you aren't sure how to actually apply secret themes, I'm afraid you'll just have to figure it out yourself. -->
+                        <!-- I was generous to even give you this list in the first place! ;) -->
                     % end
-                    
-                    % if theme is not None and not theme.visible:
-                        <div class="radio-button-container" onclick="setTheme('{{ theme.id }}')">
-                            <div class="radio-button selected"></div>
-                            <div class="label">{{ theme }}</div>
-                        </div>
-                    % end
-                </div>
-                
-                % if len(hidden_themes) > 0:
-                    <!-- Well well well... are you really so desperate for new themes that you'll willing to dig into the source code to find more? -->
-                    <!-- I suppose you'll have to be rewarded for your efforts. Here's a list of secret themes that are available: -->
-                    % for hidden_theme in hidden_themes:
-                        <!-- {{ hidden_theme.id }} ({{ hidden_theme }}) -->
-                    % end
-                    <!-- More secret themes may be added in the future, if you ever feel the need to look at this list again someday. -->
-                    <!-- If you aren't sure how to actually apply secret themes, I'm afraid you'll just have to figure it out yourself. -->
-                    <!-- I was generous to even give you this list in the first place! ;) -->
                 % end
             </div>
         </div>

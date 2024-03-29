@@ -32,5 +32,9 @@
     "ghost": {
         "name": "Ghost",
         "visible": false
+    },
+    "broome-county": {
+        "name": "Broome County",
+        "visible": false
     }
 }
