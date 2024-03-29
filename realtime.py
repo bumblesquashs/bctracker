@@ -3,15 +3,18 @@ from os import path, rename, remove
 from datetime import datetime
 
 import requests
+import json
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 import helpers.assignment
+import helpers.departure
 import helpers.overview
 import helpers.position
 import helpers.record
 import helpers.transfer
 
+from models.adherence import Adherence
 from models.date import Date
 from models.time import Time
 
@@ -31,35 +34,102 @@ def update(system):
     print(f'Updating realtime data for {system}')
     
     try:
-        if path.exists(data_path):
-            if config.enable_realtime_backups:
-                formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
-                archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
-                rename(data_path, archives_path)
-            else:
-                remove(data_path)
-        data = protobuf.FeedMessage()
-        with requests.get(system.realtime_url, timeout=10) as r:
-            if config.enable_realtime_backups:
-                with open(data_path, 'wb') as f:
-                    f.write(r.content)
-            data.ParseFromString(r.content)
-        helpers.position.delete_all(system)
-        for index, entity in enumerate(data.entity):
-            vehicle = entity.vehicle
-            try:
-                vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = system.agency.vehicle_name_length
-                if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:]
-                bus_number = int(vehicle_id)
-            except:
-                bus_number = -(index + 1)
-            helpers.position.create(system, bus_number, vehicle)
-        last_updated_date = Date.today()
-        last_updated_time = Time.now(accurate_seconds=False)
-        system.last_updated_date = Date.today(system.timezone)
-        system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
+        if system.id == 'broome-county':
+            position_data = {}
+            date = Date.today(system.timezone)
+            time = Time.now(system.timezone)
+            with open('broome-county-routes.json') as f:
+                routes_json = json.load(f)
+            with open('broome-county-stops.json') as f:
+                stops_json = json.load(f)
+            with requests.get(system.realtime_url, timeout=10) as r:
+                data = json.loads(r.content)
+                for bus_data in data:
+                    try:
+                        bus_number = int(bus_data["name"])
+                        lat = bus_data["lat"]
+                        lon = bus_data["lon"]
+                        raw_route_id = str(bus_data["route"])
+                        raw_last_stop_id = str(bus_data["lastStop"])
+                        try:
+                            route_id = routes_json[raw_route_id]
+                        except:
+                            route_id = None
+                        try:
+                            last_stop_id = stops_json[raw_last_stop_id]
+                        except:
+                            last_stop_id = None
+                        if last_stop_id:
+                            departures = helpers.departure.find_all(system, route=route_id, stop=last_stop_id)
+                            departures = [d for d in departures if d.trip and date in d.trip.service]
+                            departures.sort(key=lambda d: abs(time.get_minutes() - d.time.get_minutes()))
+                            if departures:
+                                departure = departures[0]
+                                trip_id = departure.trip_id
+                                sequence = departure.sequence
+                                adherence = Adherence.calculated(departure, lat, lon)
+                                if adherence:
+                                    adherence = adherence.value
+                            else:
+                                trip_id = None
+                                sequence = None
+                                adherence = None
+                        else:
+                            trip_id = None
+                            sequence = None
+                            adherence = None
+                        position_data[str(bus_number)] = {
+                            'system_id': system.id,
+                            'bus_number': bus_number,
+                            'trip_id': trip_id,
+                            'stop_id': last_stop_id,
+                            'block_id': None,
+                            'route_id': route_id,
+                            'sequence': sequence,
+                            'lat': lat,
+                            'lon': lon,
+                            'bearing': None,
+                            'speed': None,
+                            'adherence': adherence
+                        }
+                    except:
+                        pass
+            with open(f'data/realtime/{system.id}-positions.json', 'w') as f:
+                json.dump(position_data, f)
+            last_updated_date = Date.today()
+            last_updated_time = Time.now(accurate_seconds=False)
+            system.last_updated_date = Date.today(system.timezone)
+            system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
+        else:
+            if path.exists(data_path):
+                if config.enable_realtime_backups:
+                    formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
+                    archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
+                    rename(data_path, archives_path)
+                else:
+                    remove(data_path)
+            data = protobuf.FeedMessage()
+            with requests.get(system.realtime_url, timeout=10) as r:
+                if config.enable_realtime_backups:
+                    with open(data_path, 'wb') as f:
+                        f.write(r.content)
+                data.ParseFromString(r.content)
+            helpers.position.delete_all(system)
+            for index, entity in enumerate(data.entity):
+                vehicle = entity.vehicle
+                try:
+                    vehicle_id = vehicle.vehicle.id
+                    vehicle_name_length = system.agency.vehicle_name_length
+                    if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
+                        vehicle_id = vehicle_id[-vehicle_name_length:]
+                    bus_number = int(vehicle_id)
+                except:
+                    bus_number = -(index + 1)
+                helpers.position.create(system, bus_number, vehicle)
+            last_updated_date = Date.today()
+            last_updated_time = Time.now(accurate_seconds=False)
+            system.last_updated_date = Date.today(system.timezone)
+            system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
     except Exception as e:
         print(f'Failed to update realtime for {system}: {e}')
 

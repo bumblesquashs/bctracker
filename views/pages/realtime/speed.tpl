@@ -21,9 +21,14 @@
     <div>Show NIS Buses</div>
 </div>
 
-% if len(positions) == 0:
+% speedy_positions = [p for p in positions if p.speed is not None]
+
+% if len(speedy_positions) == 0:
     <div class="placeholder">
-        % if system is None:
+        % if positions and not speedy_positions:
+            <h3>Speed is not available</h3>
+            <p>Please check again later!</p>
+        % elif system is None:
             % if show_nis:
                 <h3>There are no buses out right now</h3>
                 <p>
@@ -70,7 +75,7 @@
         </thead>
         <tbody>
             % last_speed = None
-            % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
+            % for position in sorted(speedy_positions, key=lambda p: p.speed, reverse=True):
                 % bus = position.bus
                 % same_speed = last_speed is None or position.speed // 10 == last_speed
                 % last_speed = position.speed // 10

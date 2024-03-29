@@ -17,6 +17,26 @@ class Adherence:
     )
     
     @classmethod
+    def calculated(cls, departure, lat, lon):
+        if departure is None:
+            return None
+        previous_departure = departure.find_previous()
+        try:
+            expected_scheduled_mins = departure.time.get_minutes()
+            
+            if previous_departure is not None:
+                previous_departure_mins = previous_departure.time.get_minutes()
+                time_difference = expected_scheduled_mins - previous_departure_mins
+                
+                # in the case where we know a previous stop, and its a long gap, do linear interpolation
+                if time_difference >= MINIMUM_MINUTES:
+                    expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, departure.stop, time_difference)
+            
+            return cls(expected_scheduled_mins - Time.now(departure.system.timezone).get_minutes())
+        except AttributeError:
+            return None
+    
+    @classmethod
     def calculate(cls, trip, stop, sequence, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
         departure = helpers.departure.find(trip.system, trip=trip, sequence=sequence)

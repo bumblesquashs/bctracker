@@ -24,6 +24,27 @@ class Position:
     )
     
     @classmethod
+    def from_json(cls, json):
+        system = helpers.system.find(json['system_id'])
+        agency = system.agency
+        bus = Bus.find(agency, json['bus_number'])
+        trip_id = json['trip_id']
+        stop_id = json['stop_id']
+        block_id = json['block_id']
+        route_id = json['route_id']
+        sequence = json['sequence']
+        lat = json['lat']
+        lon = json['lon']
+        bearing = json['bearing']
+        speed = json['speed']
+        adherence_value = json['adherence']
+        if adherence_value is None:
+            adherence = None
+        else:
+            adherence = Adherence(adherence_value)
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
+    
+    @classmethod
     def from_db(cls, row, prefix='position'):
         '''Returns a position initialized from the given database row'''
         system = helpers.system.find(row[f'{prefix}_system_id'])

@@ -1,8 +1,8 @@
 {
-    
     "broome-county": {
         "name": "Broome County",
         "gtfs_url": "https://gobroomecounty.com/sites/default/files/dept/transit/BCT_GTFS.zip",
+        "realtime_url": "https://bctransit.doublemap.com/map/v2/buses",
         "prefix_headsigns": true
     },
     "bc-transit": {

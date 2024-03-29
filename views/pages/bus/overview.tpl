@@ -69,16 +69,18 @@
                         <div class="section">
                             <h3>Not in service</h3>
                         </div>
-                        % last_record = overview.last_record
-                        % if last_record is not None and last_record.date.is_today:
-                            % block = last_record.block
-                            % if block is not None:
-                                % date = Date.today(block.system.timezone)
-                                % end_time = block.get_end_time(date=date)
-                                % if end_time is not None and end_time.is_later:
-                                    <div class="section no-flex">
-                                        % include('components/block_timeline', date=date)
-                                    </div>
+                        % if overview:
+                            % last_record = overview.last_record
+                            % if last_record is not None and last_record.date.is_today:
+                                % block = last_record.block
+                                % if block is not None:
+                                    % date = Date.today(block.system.timezone)
+                                    % end_time = block.get_end_time(date=date)
+                                    % if end_time is not None and end_time.is_later:
+                                        <div class="section no-flex">
+                                            % include('components/block_timeline', date=date)
+                                        </div>
+                                    % end
                                 % end
                             % end
                         % end
@@ -88,7 +90,7 @@
                                 <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
                             </div>
                         </div>
-                        % if show_speed:
+                        % if show_speed and position.speed is not None:
                             <div class="row section">
                                 <div class="name">Speed</div>
                                 <div class="value">{{ position.speed }} km/h</div>
@@ -116,32 +118,36 @@
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
                         </div>
-                        <div class="section">
-                            % include('components/block_timeline', date=Date.today(block.system.timezone))
-                        </div>
+                        % if block:
+                            <div class="section">
+                                % include('components/block_timeline', date=Date.today(block.system.timezone))
+                            </div>
+                        % end
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
                                 <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
                             </div>
                         </div>
-                        % if show_speed:
+                        % if show_speed and position.speed is not None:
                             <div class="row section">
                                 <div class="name">Speed</div>
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
                         % end
-                        <div class="row section">
-                            <div class="name">Block</div>
-                            <div class="value">
-                                % include('components/block')
-                                % date = Date.today(block.system.timezone)
-                                % start_time = block.get_start_time(date=date).format_web(time_format)
-                                % end_time = block.get_end_time(date=date).format_web(time_format)
-                                % duration = block.get_duration(date=date)
-                                <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
+                        % if block:
+                            <div class="row section">
+                                <div class="name">Block</div>
+                                <div class="value">
+                                    % include('components/block')
+                                    % date = Date.today(block.system.timezone)
+                                    % start_time = block.get_start_time(date=date).format_web(time_format)
+                                    % end_time = block.get_end_time(date=date).format_web(time_format)
+                                    % duration = block.get_duration(date=date)
+                                    <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
+                                </div>
                             </div>
-                        </div>
+                        % end
                         <div class="row section">
                             <div class="name">Trip</div>
                             <div class="value">
@@ -221,7 +227,7 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    % if system.has_stop_numbers:
+                                    % if not system or system.has_stop_numbers:
                                         <th class="non-mobile">Stop Number</th>
                                         <th class="non-mobile">Stop Name</th>
                                         <th class="mobile-only">Stop</th>
@@ -251,7 +257,7 @@
                                         % if stop is None:
                                             <td class="lighter-text" colspan="2">Unknown</td>
                                         % else:
-                                            % if system.has_stop_numbers:
+                                            % if not system or system.has_stop_numbers:
                                                 <td>
                                                     <div class="column">
                                                         <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
@@ -261,7 +267,7 @@
                                             % end
                                             <td class="non-mobile">
                                                 <div class="column">
-                                                    % if system.has_stop_numbers:
+                                                    % if not system or system.has_stop_numbers:
                                                         <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                     % else:
                                                         <a class="{{ 'timing-point' if departure.timepoint else '' }}" href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>

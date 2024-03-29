@@ -1,4 +1,6 @@
 
+import json
+
 from models.adherence import Adherence
 from models.position import Position
 
@@ -76,6 +78,14 @@ def create(system, bus, data):
 def find(bus):
     '''Returns the position of the given bus'''
     bus_number = getattr(bus, 'number', bus)
+    if bus.order and bus.order.agency.id == 'broome-county':
+        try:
+            with open(f'data/realtime/broome-county-positions.json') as f:
+                position_data = json.load(f)
+            bus_data = position_data[str(bus_number)]
+            return Position.from_json(bus_data)
+        except:
+            return None
     positions = database.select('position',
         columns={
             'position.system_id': 'position_system_id',
@@ -119,6 +129,37 @@ def find_all(system=None, trip=None, stop=None, block=None, route=None, has_loca
         route_id = [getattr(r, 'id', r) for r in route]
     else:
         route_id = getattr(route, 'id', route)
+    if system_id == 'broome-county':
+        try:
+            with open(f'data/realtime/broome-county-positions.json') as f:
+                position_data = json.load(f)
+            positions = [Position.from_json(j) for j in position_data.values()]
+            positions = [p for p in positions if p.bus.visible]
+            if trip_id:
+                if isinstance(trip_id, list):
+                    positions = [p for p in positions if p.trip_id in trip_id]
+                else:
+                    positions = [p for p in positions if p.trip_id == trip_id]
+            if stop_id:
+                if isinstance(stop_id, list):
+                    positions = [p for p in positions if p.stop_id in stop_id]
+                else:
+                    positions = [p for p in positions if p.stop_id == stop_id]
+            if block_id:
+                if isinstance(block_id, list):
+                    positions = [p for p in positions if p.trip and p.trip.block_id in block_id]
+                else:
+                    positions = [p for p in positions if p.trip and p.trip.block_id == block_id]
+            if route_id:
+                if isinstance(route_id, list):
+                    positions = [p for p in positions if p.route_id in route_id]
+                else:
+                    positions = [p for p in positions if p.route_id == route_id]
+            if has_location:
+                positions = [p for p in positions if p.lat is not None and p.lon is not None]
+            return positions
+        except:
+            return []
     filters = {
         'position.system_id': system_id,
         'position.trip_id': trip_id,
