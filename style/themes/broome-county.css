@@ -278,7 +278,7 @@ table tr:nth-child(2n-1) {
 }
 
 .banner {
-    background-color: #666666;
+    background-color: #0A4499;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
@@ -292,13 +292,13 @@ table tr:nth-child(2n-1) {
 }
 
 .button {
-    background-color: #E39B35;
+    background-color: #165ABE;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #C07A16;
+    background-color: #0A4499;
 }
 
 .button.disabled {

@@ -73,7 +73,7 @@
                             % last_record = overview.last_record
                             % if last_record is not None and last_record.date.is_today:
                                 % block = last_record.block
-                                % if block is not None:
+                                % if block is not None and not af_2024:
                                     % date = Date.today(block.system.timezone)
                                     % end_time = block.get_end_time(date=date)
                                     % if end_time is not None and end_time.is_later:
