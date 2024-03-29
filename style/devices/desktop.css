@@ -52,9 +52,8 @@ table th {
     padding: 20px 40px 40px 40px;
 }
 
-#refresh-button img {
-    width: 28px;
-    height: 28px;
+#refresh-button {
+    --image-size: 28px;
 }
 
 #search {
@@ -68,9 +67,8 @@ table th {
     font-size: 11pt;
 }
 
-#search-filters .button img {
-    width: 24px;
-    height: 24px;
+#search-filters .button {
+    --image-size: 24px;
 }
 
 #search-header {
@@ -93,11 +91,7 @@ table th {
 
 #search-results .result {
     padding: 5px 10px;
-}
-
-#search-results .result img {
-    width: 24px;
-    height: 24px;
+    --image-size: 24px;
 }
 
 #search-results .result .description {
@@ -177,11 +171,7 @@ table th {
     padding: 5px 20px;
     text-decoration: none;
     gap: 10px;
-}
-
-#title img {
-    width: 24px;
-    height: 24px;
+    --image-size: 24px;
 }
 
 .banner a {

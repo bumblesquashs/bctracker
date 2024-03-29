@@ -1,7 +1,6 @@
 % if len(record.warnings) > 0:
     <div class="tooltip-anchor record-warnings">
-        <img class="white inline" src="/img/white/warning.png" />
-        <img class="black inline" src="/img/black/warning.png" />
+        % include('components/svg', name='warning')
         <div class="tooltip right">
             <div class="title">Potential accidental login</div>
             % for warning in record.warnings:

@@ -146,8 +146,7 @@
                         % if system is None or system.realtime_enabled:
                             <p>
                                 <span>Buses with a</span>
-                                <img class="middle-align white" src="/img/white/schedule.png" />
-                                <img class="middle-align black" src="/img/black/schedule.png" />
+                                % include('components/svg', name='schedule')
                                 <span>are scheduled but may be swapped off.</span>
                             </p>
                         % end
@@ -200,8 +199,7 @@
                     % if system is None or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
-                            <img class="middle-align white" src="/img/white/schedule.png" />
-                            <img class="middle-align black" src="/img/black/schedule.png" />
+                            % include('components/svg', name='schedule')
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end

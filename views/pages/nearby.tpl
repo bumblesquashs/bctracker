@@ -5,6 +5,8 @@
     <h1>Nearby Stops</h1>
 </div>
 
+% include('components/svg_script', name='location')
+
 <div class="page-container">
     <div id="current-location" class="sidebar container flex-1 display-none">
         <div class="section">
@@ -125,7 +127,7 @@
         
         const icon = document.createElement("div");
         icon.className = "icon";
-        icon.innerHTML = "<img src='/img/white/location.png' />";
+        icon.innerHTML = getSVG("location");
         
         element.appendChild(icon);
         
@@ -177,7 +179,7 @@
                     const icon = document.createElement("a");
                     icon.className = "icon";
                     icon.href = getUrl(stop.system_id, "stops/" + stop.number);
-                    icon.innerHTML = "<div class='link'></div><img src='/img/white/stop.png' />";
+                    icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
                     
                     const details = document.createElement("div");
                     details.className = "details";
