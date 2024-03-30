@@ -169,7 +169,7 @@
                     <div class="news-post">
                         <div class="header">
                             <h3>March Update</h3>
-                            March 24, 2024
+                            March 30, 2024
                         </div>
                         <div class="content">
                             <p>It hasn't been too long since our last update, but we've already got a bunch of new things to share!</p>
