@@ -19,6 +19,10 @@
 :root {
     --tooltip-background: #69BB65;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #D70000;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -75,6 +79,10 @@ table tr {
 
 table tr:nth-child(2n-1) {
     background-color: #E4F6E3;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
@@ -364,6 +372,7 @@ table tr:nth-child(2n-1) {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #D70000;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {
