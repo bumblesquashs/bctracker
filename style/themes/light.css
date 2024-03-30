@@ -19,6 +19,10 @@
 :root {
     --tooltip-background: #666666;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #48A348;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -75,6 +79,10 @@ table tr {
 
 table tr:nth-child(2n-1) {
     background-color: #E6E6E6;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
@@ -365,6 +373,10 @@ table tr:nth-child(2n-1) {
     border-bottom-color: #CBCBCB;
 }
 
+.info-box .radio-button-container:hover {
+    background-color: #CBCBCB;
+}
+
 .lighter-text {
     color: #666666;
 }
@@ -434,6 +446,7 @@ table tr:nth-child(2n-1) {
 }
 
 .radio-button-container .radio-button {
+    background-color: #FFFFFF;
     border-color: #365CCB;
 }
 

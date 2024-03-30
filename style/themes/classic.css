@@ -19,6 +19,10 @@
 :root {
     --tooltip-background: #666666;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #E20000;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -79,6 +83,10 @@ table tr:nth-child(2n-1) {
 
 #map.preview {
     border-color: #666666;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map-toggle {
@@ -365,6 +373,10 @@ table tr:nth-child(2n-1) {
     border-bottom-color: #CBCBCB;
 }
 
+.info-box .radio-button-container:hover {
+    background-color: #CBCBCB;
+}
+
 .lighter-text {
     color: #666666;
 }
@@ -376,6 +388,7 @@ table tr:nth-child(2n-1) {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #E20000;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {
@@ -433,6 +446,7 @@ table tr:nth-child(2n-1) {
 }
 
 .radio-button-container .radio-button {
+    background-color: #FFFFFF;
     border-color: #E20000;
 }
 

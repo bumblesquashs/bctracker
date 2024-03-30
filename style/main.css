@@ -18,6 +18,10 @@ body.full-map #page-header {
     left: -10px;
 }
 
+body.full-map .tab-button-bar {
+    margin-bottom: 0px;
+}
+
 input {
     -webkit-appearance: none;
 }
@@ -107,6 +111,53 @@ table tr.header td {
     z-index: 20;
 }
 
+#loading {
+    position: relative;
+    width: 300px;
+    height: 36px;
+    overflow: hidden;
+}
+
+#loading:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to left, rgba(0,0,0,0), var(--loading-background) 90%);
+    width: 36px;
+    height: 36px;
+}
+
+#loading:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), var(--loading-background) 90%);
+    width: 36px;
+    height: 36px;
+}
+
+#loading-line {
+    background-color: var(--loading-foreground);
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 16px;
+    bottom: 16px;
+}
+
+#loading-stop {
+    background-color: var(--loading-foreground);
+    position: absolute;
+    left: -36px;
+    border-radius: 36px;
+    padding: 4px;
+    --image-size: 28px;
+}
+
 #main {
     flex: 1;
     position: relative;
@@ -147,6 +198,20 @@ table tr.header td {
 
 #map .ol-overlay-container:hover {
     z-index: 10;
+}
+
+#map-loading {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 }
 
 #map-toggle {
@@ -403,6 +468,10 @@ table tr.header td {
     user-select: none;
 }
 
+.align-right {
+    text-align: right;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;
@@ -498,6 +567,7 @@ table tr.header td {
     border-radius: 5px;
     width: 24px;
     height: 24px;
+    --image-size: 24px;
 }
 
 .checkbox-container .checkbox svg {
@@ -534,6 +604,10 @@ table tr.header td {
 
 .column.right {
     align-items: flex-end;
+}
+
+.column.stretch {
+    align-items: stretch;
 }
 
 .container {
@@ -638,6 +712,12 @@ table tr.header td {
 
 .gap-40 {
     gap: 40px !important;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 5px;
 }
 
 .headsign {
@@ -783,6 +863,8 @@ table tr.header td {
     margin-right: auto;
     z-index: 10;
     padding: 4px;
+    width: 24px;
+    height: 24px;
     --image-size: 24px;
 }
 
@@ -821,7 +903,7 @@ table tr.header td {
 .marker .icon.adherence {
     font-weight: bold;
     text-align: center;
-    line-height: 32px;
+    line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
@@ -832,6 +914,7 @@ table tr.header td {
 .marker .icon.route {
     width: auto;
     height: auto;
+    padding: 0px;
     border-radius: 0px;
 }
 
@@ -856,7 +939,7 @@ table tr.header td {
 .marker .icon.bus_route {
     font-weight: bold;
     text-align: center;
-    line-height: 32px;
+    line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
