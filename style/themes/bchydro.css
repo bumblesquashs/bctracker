@@ -20,6 +20,9 @@
     --tooltip-background: #666666;
     --tooltip-text: #FFFFFF;
     
+    --loading-background: #FFFBEF;
+    --loading-foreground: #61C315;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -76,6 +79,10 @@ table tr {
 
 table tr:nth-child(2n-1) {
     background-color: #D8D8D8;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
