@@ -2,6 +2,7 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
+from datetime import timedelta
 import cherrypy as cp
 
 import helpers.adornment
@@ -405,10 +406,24 @@ def bus_history_page(system, bus_number):
 @endpoint('/history')
 def history_last_seen_page(system):
     overviews = [o for o in helpers.overview.find_all(system) if o.last_record is not None and o.bus.visible]
+    try:
+        days = int(request.query['days'])
+    except:
+        days = None
+    if days:
+        if system:
+            date = Date.today(system.timezone) - timedelta(days=days)
+        else:
+            date = Date.today() - timedelta(days=days)
+        overviews = [o for o in overviews if o.last_record.date > date]
     return page('history/last_seen', system,
         title='Vehicle History',
         path='history',
-        overviews=sorted(overviews, key=lambda o: o.bus)
+        path_args={
+            'days': days
+        },
+        overviews=sorted(overviews, key=lambda o: o.bus),
+        days=days
     )
 
 @endpoint('/history/first-seen')

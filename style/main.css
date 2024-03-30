@@ -468,6 +468,10 @@ table tr.header td {
     user-select: none;
 }
 
+.align-right {
+    text-align: right;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;
@@ -694,6 +698,12 @@ table tr.header td {
 
 .gap-40 {
     gap: 40px !important;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 5px;
 }
 
 .headsign {
