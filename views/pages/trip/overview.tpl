@@ -1,4 +1,6 @@
 
+% import helpers.position
+
 % rebase('base')
 
 <div id="page-header">
@@ -181,6 +183,77 @@
                                     </td>
                                 </tr>
                             % end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
+            % bus = assignment.bus
+            % position = helpers.position.find(bus)
+            <div class="section">
+                <div class="header">
+                    <h2>Scheduled Bus</h2>
+                </div>
+                <div class="content">
+                    <p>This bus is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th class="non-mobile">Model</th>
+                                <th>Current Headsign</th>
+                                <th class="desktop-only">Current Trip</th>
+                                <th class="non-mobile">Next Stop</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="column">
+                                        <div class="row">
+                                            % include('components/bus')
+                                            % if position:
+                                                % include('components/adherence', adherence=position.adherence)
+                                            % end
+                                        </div>
+                                        <span class="mobile-only smaller-font">
+                                            % include('components/order', order=bus.order)
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="non-mobile">
+                                    % include('components/order', order=bus.order)
+                                </td>
+                                % if position:
+                                    % stop = position.stop
+                                    <td>
+                                        <div class="column">
+                                            % include('components/headsign', trip=position.trip)
+                                            <div class="non-desktop smaller-font">
+                                                Trip:
+                                                % include('components/trip', include_tooltip=False, trip=position.trip)
+                                            </div>
+                                            % if stop:
+                                                <div class="mobile-only smaller-font">
+                                                    Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                </div>
+                                            % end
+                                        </div>
+                                    </td>
+                                    <td class="desktop-only">
+                                        % include('components/trip', include_tooltip=False, trip=position.trip)
+                                    </td>
+                                    <td class="non-mobile">
+                                        % if stop:
+                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % else:
+                                            <span class="lighter-text">Unavailable</span>
+                                        % end
+                                    </td>
+                                % else:
+                                    <td class="lighter-text" colspan="3">Not In Service</td>
+                                % end
+                            </tr>
                         </tbody>
                     </table>
                 </div>
