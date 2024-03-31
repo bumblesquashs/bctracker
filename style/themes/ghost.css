@@ -19,6 +19,10 @@
 :root {
     --tooltip-background: #888888;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #AAAAAA;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -71,6 +75,10 @@ table th {
 
 table tr {
     background-color: #FFFFFF;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
@@ -340,6 +348,10 @@ table tr {
     border-bottom-color: #DDDDDD;
 }
 
+.info-box .radio-button-container:hover {
+    background-color: #DDDDDD;
+}
+
 .lighter-text {
     color: #888888;
 }
@@ -409,6 +421,7 @@ table tr {
 }
 
 .radio-button-container .radio-button {
+    background-color: #FFFFFF;
     border-color: #AAAAAA;
 }
 

@@ -57,31 +57,31 @@
                                 <thead>
                                     <tr>
                                         <th>Model</th>
-                                        <th>Seen</th>
-                                        <th>Total</th>
+                                        <th class="align-right">Seen</th>
+                                        <th class="align-right">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     % for type in model_types:
                                         <tr class="header">
                                             <td>{{ type }}</td>
-                                            <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
-                                            <td>{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
+                                            <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
+                                            <td class="align-right">{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % type_models = [m for m in models if m.type == type]
                                         % for model in type_models:
                                             <tr>
                                                 <td><a href="#{{ model.id }}">{{! model }}</a></td>
-                                                <td>{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model == model]) }}</td>
-                                                <td>{{ sum([o.size for o in orders if o.model == model]) }}</td>
+                                                <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model == model]) }}</td>
+                                                <td class="align-right">{{ sum([o.size for o in orders if o.model == model]) }}</td>
                                             </tr>
                                         % end
                                     % end
                                     <tr class="header">
                                         <td>Total</td>
-                                        <td>{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
-                                        <td>{{ sum([o.size for o in orders]) }}</td>
+                                        <td class="align-right">{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
+                                        <td class="align-right">{{ sum([o.size for o in orders]) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
