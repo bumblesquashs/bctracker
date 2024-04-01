@@ -288,7 +288,7 @@
                                         </div>
                                     </td>
                                 % end
-                                <td class="non-mobile">
+                                <td>
                                     <div class="column">
                                         % if system.has_stop_numbers:
                                             <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
