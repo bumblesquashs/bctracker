@@ -23,11 +23,14 @@
     </thead>
     <tbody>
         % for region in regions:
+            % region_systems = sorted([s for s in systems if s.region == region])
+            % if not region_systems:
+                % continue
+            % end
             <tr class="header">
                 <td class="section" colspan="11">{{ region }}</td>
             </tr>
             <tr class="display-none"></tr>
-            % region_systems = sorted([s for s in systems if s.region == region])
             % for region_system in sorted(region_systems):
                 <tr>
                     <td>

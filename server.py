@@ -939,6 +939,8 @@ def api_shape_id(system, shape_id):
 @endpoint('/api/routes')
 def api_routes(system):
     routes = helpers.route.find_all(system)
+    if system is None:
+        routes = [r for r in routes if r.system.id != 'broome-county']
     trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
     shape_ids = set()
     shape_trips = []
