@@ -6,6 +6,10 @@
 :root {
     --tooltip-background: #000000;
     --tooltip-text: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #000000;
+    
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
 }
@@ -71,6 +75,10 @@ table tr {
     color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
@@ -435,6 +443,10 @@ table tr {
     border-bottom-color: #CBCBCB;
 }
 
+.info-box .radio-button-container:hover {
+    background-color: #CBCBCB;
+}
+
 .lighter-text {
     color: #666666;
 }
@@ -446,6 +458,7 @@ table tr {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #5393c5;
+    --image-color: #FFFFFF;
 }
 
 .marker .icon.route .number {
@@ -509,6 +522,7 @@ table tr {
 }
 
 .radio-button-container .radio-button {
+    background-color: #FFFFFF;
     border-color: #222222;
 }
 
@@ -561,7 +575,7 @@ table tr {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
     border-width: 0px;
-    margin-bottom: 0px;
+    margin-bottom: -5px;
     gap: 0px;
 }
 

@@ -168,7 +168,7 @@
                 <div class="container">
                     <div class="news-post">
                         <div class="header">
-                            <h3>March Update</h3>
+                            <h3>Spring Update</h3>
                             March 30, 2024
                         </div>
                         <div class="content">
