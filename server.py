@@ -186,7 +186,7 @@ def query_cookie(key, default_value=None, max_age_days=3650):
 
 def check_af_2024():
     today = Date.today()
-    if today == Date.parse('2024-03-29'):
+    if today == Date.parse('2024-04-01'):
         return query_cookie('af_2024', 'enabled', 1) == 'enabled'
     return False
 

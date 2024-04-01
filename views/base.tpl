@@ -339,6 +339,12 @@
                                 BCTracker is moving to America.
                                 Learn more <a href="{{ get_url(system) }}#broome-county-transit">here</a>!
                             </div>
+                            % from models.time import Time
+                            % if Time.now() > Time.parse('11:59:59'):
+                                <div class="description">
+                                    <i>Happy April Fools Day!</i>
+                                </div>
+                            % end
                         </div>
                     </div>
                 % end
