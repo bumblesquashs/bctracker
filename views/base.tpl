@@ -121,7 +121,7 @@
             }
             
             function getUrl(systemID, path) {
-                if (systemID === null || systemID === undefined) {
+                if (systemID === null || systemID === undefined || systemID === "broome-county") {
                     return "{{ config.all_systems_domain }}".format(path)
                 }
                 return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID, path)
