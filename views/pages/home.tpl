@@ -162,26 +162,29 @@
             </div>
             <div class="content">
                 <div class="container">
-                    <div class="news-post" id="broome-county-transit">
-                        <div class="header">
-                            <h3>Broome County Transit</h3>
-                            April 1, 2024
+                    % from models.date import Date
+                    % if Date.today() == Date.parse('2024-04-01'):
+                        <div class="news-post" id="broome-county-transit">
+                            <div class="header">
+                                <h3>Broome County Transit</h3>
+                                April 1, 2024
+                            </div>
+                            <div class="content">
+                                <p>Dear faithful users,</p>
+                                <p>
+                                    After doing intensive market research, we've found that operating in Canada is not a good strategic business move.
+                                    We've decided to shift our focus to America instead, so that we can become rich and powerful.
+                                </p>
+                                <p>Moving forward, rather than focusing on <a href="https://bctransit.com">BC Transit</a>, we will instead provide transit information for <a href="https://gobroomecounty.com/transit">BC Transit</a>.</p>
+                                <p>
+                                    Thank you for your understanding.
+                                    We would say sorry if this causes any inconvenience, but apologizing would make us sound too Canadian.
+                                </p>
+                                <p>If you would like to file a formal complaint about this change, please start by pressing this large button.</p>
+                                <a class="button" href="{{ get_url(system, 'personalize') }}#complaints">File a Complaint</a>
+                            </div>
                         </div>
-                        <div class="content">
-                            <p>Dear faithful users,</p>
-                            <p>
-                                After doing intensive market research, we've found that operating in Canada is not a good strategic business move.
-                                We've decided to shift our focus to America instead, so that we can become rich and powerful.
-                            </p>
-                            <p>Moving forward, rather than focusing on <a href="https://bctransit.com">BC Transit</a>, we will instead provide transit information for <a href="https://gobroomecounty.com/transit">BC Transit</a>.</p>
-                            <p>
-                                Thank you for your understanding.
-                                We would say sorry if this causes any inconvenience, but apologizing would make us sound too Canadian.
-                            </p>
-                            <p>If you would like to file a formal complaint about this change, please start by pressing this large button.</p>
-                            <a class="button" href="{{ get_url(system, 'personalize') }}#complaints">File a Complaint</a>
-                        </div>
-                    </div>
+                    % end
                     <div class="news-post">
                         <div class="header">
                             <h3>Spring Update</h3>
@@ -203,6 +206,33 @@
                                 <li>Bug fixes and performance improvements behind the scenes</li>
                             </ul>
                             <p>Thank you for continuing to support BCTracker!</p>
+                        </div>
+                    </div>
+                    <div class="news-post">
+                        <div class="header">
+                            <h3>Change to Maps</h3>
+                            January 27, 2024
+                        </div>
+                        <div class="content">
+                            <p>
+                                Hi everyone, quick announcement about some changes to the map screens.
+                                After Victoria's NextRide website was shut down last week, we've seen some big increases to how much our site is being used (which is great to see - welcome newcomers!!).
+                                The downside is the increase in site visits has put us well over the threshold for unpaid MapBox usage, and racked up some not-insignificant fees.
+                                As a one-time thing that's not a problem, but we'd rather not be paying double for maps what we pay for the rest of the website hosting every month.
+                            </p>
+                            <p>
+                                As a result, we've decided to change the provider of our maps from MapBox to OpenLayers.
+                                If you've used the T-Comm site for Vancouver before this should look familiar - it uses the same OpenStreetMaps source.
+                                Overall everything should work more or less the same, with a couple of exceptions:
+                            </p>
+                            <ul>
+                                <li>The appearance of the map is now different, no longer as minimalist and no longer light/dark mode-dependent</li>
+                                <li>The geotracker for your current location, which was built-in with MapBox, is no longer available</li>
+                            </ul>
+                            <p>
+                                Down the road as we get more used to this provider we hope to be able to undo those changes to get maps as close to how they used to be as possible.
+                                For now we thank you for your patience and understanding!
+                            </p>
                         </div>
                     </div>
                     <div>

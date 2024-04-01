@@ -5,22 +5,25 @@
     <h1>Personalize</h1>
 </div>
 
-<div class="container">
-    <div id="complaints" class="section">
-        <div class="header">
-            <h2>Complaints</h2>
-        </div>
-        <div class="content">
-            % if af_2024:
-                <p>If you are unhappy about our decision to focus BCTracker on America (see <a href="{{ get_url(system) }}#broome-county-transit">here</a> for details), please let us know by clicking this large button.</p>
-                <a class="button" href="?af_2024=disabled">TAKE ME BACK TO CANADA</a>
-            % else:
-                <p>If you are unhappy about not having unlimited freedom, please let us know by clicking this large button.</p>
-                <a class="button" href="?af_2024=enabled">TAKE ME TO AMERICA</a>
-            % end
+% from models.date import Date
+% if Date.today() == Date.parse('2024-04-01'):
+    <div class="container">
+        <div id="complaints" class="section">
+            <div class="header">
+                <h2>Complaints</h2>
+            </div>
+            <div class="content">
+                % if af_2024:
+                    <p>If you are unhappy about our decision to focus BCTracker on America (see <a href="{{ get_url(system) }}#broome-county-transit">here</a> for details), please let us know by clicking this large button.</p>
+                    <a class="button" href="?af_2024=disabled">TAKE ME BACK TO CANADA</a>
+                % else:
+                    <p>If you are unhappy about not having unlimited freedom, please let us know by clicking this large button.</p>
+                    <a class="button" href="?af_2024=enabled">TAKE ME TO AMERICA</a>
+                % end
+            </div>
         </div>
     </div>
-</div>
+% end
 
 <div class="page-container">
     <div class="container flex-1">
