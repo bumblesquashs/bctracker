@@ -1,6 +1,8 @@
 
 % import calendar
 
+% from models.date import Date
+
 % schedule_path = get('schedule_path')
 % date_path = get('date_path', schedule_path)
 
@@ -33,6 +35,7 @@
     % end
     <div class="column gap-10">
         % for (i, sheet) in enumerate(sheets):
+            % today = Date.today(sheet.system.timezone)
             % schedule = sheet.schedule
             <div class="sheet">
                 % if not schedule.is_special:
@@ -45,7 +48,11 @@
                         % for (year, month) in sorted({(d.year, d.month) for d in dates}):
                             % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
                             <div class="month {{ 'title' if schedule.is_special else '' }}">
-                                <div class="name">{{ calendar.month_name[month] }}</div>
+                                % if year == today.year:
+                                    <div class="name">{{ calendar.month_name[month] }}</div>
+                                % else:
+                                    <div class="name">{{ calendar.month_name[month] }} {{ year }}</div>
+                                % end
                                 % for date in month_dates:
                                     % status = sheet.get_date_status(date)
                                     % if schedule_path is None:

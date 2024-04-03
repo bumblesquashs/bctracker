@@ -25,17 +25,24 @@ class Bus:
     def visible(self):
         '''Checks if the bus is visible'''
         order = self.order
-        if order is None:
-            return True
-        return order.visible
+        if order:
+            return order.visible
+        return True
     
     @property
     def model(self):
         '''Returns the model of this bus'''
         order = self.order
-        if order is None:
-            return None
-        return order.model
+        if order:
+            return order.model
+        return None
+    
+    @property
+    def agency(self):
+        order = self.order
+        if order:
+            return order.agency
+        return None
     
     def __init__(self, number, order):
         self.number = number
@@ -43,9 +50,10 @@ class Bus:
     
     def __str__(self):
         if self.is_known:
-            if self.order is None or self.order.agency.vehicle_name_length is None:
-                return str(self.number)
-            return f'{self.number:0{self.order.agency.vehicle_name_length}d}'
+            agency = self.agency
+            if agency and agency.vehicle_name_length:
+                return f'{self.number:0{agency.vehicle_name_length}d}'
+            return str(self.number)
         return 'Unknown Bus'
     
     def __hash__(self):
@@ -59,6 +67,7 @@ class Bus:
     
     def find_adornment(self):
         '''Returns the adornment for this bus, if one exists'''
-        if self.order is None:
-            return None
-        return helpers.adornment.find(self.order.agency, self)
+        agency = self.agency
+        if agency:
+            return helpers.adornment.find(agency, self)
+        return None

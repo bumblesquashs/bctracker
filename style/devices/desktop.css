@@ -140,6 +140,7 @@ table th {
     padding-bottom: 15px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
+    align-content: flex-start;
 }
 
 #system-menu .header {
@@ -175,12 +176,6 @@ table th {
 
 .banner a {
     text-decoration: underline;
-}
-
-.banner .content {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 20px;
 }
 
 .button {

@@ -224,11 +224,6 @@ table {
     display: none;
 }
 
-.banner .content {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
 .button {
     font-size: 14pt;
     overflow: hidden;
