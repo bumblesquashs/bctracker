@@ -248,6 +248,10 @@ table {
     gap: 20px;
 }
 
+.selection-container {
+    padding: 5px 0px;
+}
+
 .side-bar-closed-only {
     display: none;
 }
