@@ -4,7 +4,9 @@
             { "year": 2004, "low": 9041, "high": 9049 },
             { "year": 2008, "low": 9501, "high": 9526 },
             { "year": 2007, "number": 9528 },
-            { "year": 2008, "low": 9529, "high": 9531 },
+            { "year": 2008, "low": 9529, "high": 9531 }
+        ],
+        "alexander-dennis-enviro500-superlo": [
             { "year": 2020, "low": 9532, "high": 9542 },
             { "year": 2022, "low": 9543, "high": 9550 }
         ],
@@ -55,7 +57,7 @@
             { "year": 2000, "low": 9051, "high": 9078 },
             { "year": 2001, "low": 9081, "high": 9085 }
         ],
-        "dennis-trident": [
+        "dennis-trident-3": [
             { "year": 2000, "low": 9001, "high": 9010 }
         ],
         "ford-cbb-e450-polar-v": [
@@ -121,24 +123,28 @@
             { "year": 2021, "low": 1213, "high": 1232 },
             { "year": 2022, "low": 1233, "high": 1253 }
         ],
-        "nova-bus-lfs": [
-            { "year": 2017, "low": 6000, "high": 6029 },
+        "nova-bus-lfs-2": [
             { "year": 2006, "low": 9201, "high": 9231 },
             { "year": 2007, "low": 9232, "high": 9267 },
             { "year": 2008, "low": 9268, "high": 9289 },
-            { "year": 2008, "low": 9301, "high": 9318 },
+            { "year": 2008, "low": 9301, "high": 9318 }
+        ],
+        "nova-bus-lfs-3": [
             { "year": 2009, "low": 9319, "high": 9433 },
             { "year": 2012, "number": 9434 },
             { "year": 2013, "low": 9435, "high": 9446 },
             { "year": 2015, "low": 9447, "high": 9486 }
         ],
-        "nova-bus-lfs-suburban": [
+        "nova-bus-lfs-4": [
+            { "year": 2017, "low": 6000, "high": 6029 }
+        ],
+        "nova-bus-lfs-suburban-2": [
             { "year": 2008, "low": 9290, "high": 9300 }
         ],
         "proterra-zx5": [
             { "year": 2022, "number": 9093, "demo": true }
         ],
-        "transbus-trident": [
+        "transbus-trident-3": [
             { "year": 2002, "low": 9021, "high": 9039 }
         ],
         "unknown": [

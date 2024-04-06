@@ -60,6 +60,13 @@ h2 .route {
     min-width: 16px;
 }
 
+img.photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid #666666;
+    background-color: #E6E6E6;
+}
+
 p > svg {
     vertical-align: middle;
 }
@@ -717,6 +724,30 @@ table tr.header td {
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 5px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.grid-container > .section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.grid-container > .section > .header {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.grid-container > .section > .content {
+    display: flex;
+    flex-direction: column;
     gap: 5px;
 }
 

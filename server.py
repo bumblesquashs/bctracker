@@ -331,15 +331,43 @@ def realtime_speed_page(system):
     )
 
 @endpoint('/fleet')
-def fleet_page(system):
+def fleet_all_page(system):
     agency = helpers.agency.find('bc-transit')
     orders = helpers.order.find_all(agency)
     overviews = helpers.overview.find_all()
-    return page('fleet', system,
+    return page('fleet/all', system,
         title='Fleet',
         path='fleet',
         orders=[o for o in sorted(orders) if o.visible],
         overviews={o.bus.number: o for o in overviews}
+    )
+
+@endpoint('/fleet/models')
+def fleet_models_page(system):
+    agency = helpers.agency.find('bc-transit')
+    orders = helpers.order.find_all(agency)
+    overviews = helpers.overview.find_all()
+    return page('fleet/models', system,
+        title='Fleet',
+        path='fleet/models',
+        orders=[o for o in sorted(orders) if o.visible],
+        overviews={o.bus.number: o for o in overviews}
+    )
+
+@endpoint('/fleet/models/<model_id>')
+def model_overview_page(system, model_id):
+    model = helpers.model.find(model_id)
+    if not model:
+        raise HTTPError(404)
+    agency = helpers.agency.find('bc-transit')
+    orders = helpers.order.find_all(agency)
+    overviews = helpers.overview.find_all()
+    return page('model', system,
+        title=str(model),
+        path=f'fleet/models/{model_id}',
+        model=model,
+        orders=[o for o in sorted(orders) if o.visible and o.model == model],
+        overviews={o.bus.number: o for o in overviews if o.bus.model and o.bus.model == model}
     )
 
 @endpoint('/bus/<bus_number:int>')

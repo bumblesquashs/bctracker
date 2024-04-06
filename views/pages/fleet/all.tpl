@@ -3,6 +3,10 @@
 
 <div id="page-header">
     <h1>Fleet</h1>
+    <div class="tab-button-bar">
+        <div class="tab-button current">All Buses</div>
+        <a href="{{ get_url(system, 'fleet/models') }}" class="tab-button">By Model</a>
+    </div>
 </div>
 
 % models = sorted({o.model for o in orders})
