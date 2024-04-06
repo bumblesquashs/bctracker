@@ -19,29 +19,29 @@
             <div class="content">
                 <div class="info-box">
                     <div class="grid section">
-                        <div class="radio-button-container" onclick="setDays(1)">
+                        <div class="selection-container" onclick="setDays(1)">
                             <div class="radio-button {{ 'selected' if days == 1 else '' }}"></div>
-                            <div class="label">Today</div>
+                            <div>Today</div>
                         </div>
-                        <div class="radio-button-container" onclick="setDays(7)">
+                        <div class="selection-container" onclick="setDays(7)">
                             <div class="radio-button {{ 'selected' if days == 7 else '' }}"></div>
-                            <div class="label">Last Week</div>
+                            <div>Last Week</div>
                         </div>
-                        <div class="radio-button-container" onclick="setDays(31)">
+                        <div class="selection-container" onclick="setDays(31)">
                             <div class="radio-button {{ 'selected' if days == 31 else '' }}"></div>
-                            <div class="label">Last Month</div>
+                            <div>Last Month</div>
                         </div>
-                        <div class="radio-button-container" onclick="setDays(90)">
+                        <div class="selection-container" onclick="setDays(90)">
                             <div class="radio-button {{ 'selected' if days == 90 else '' }}"></div>
-                            <div class="label">Last 3 Months</div>
+                            <div>Last 3 Months</div>
                         </div>
-                        <div class="radio-button-container" onclick="setDays(365)">
+                        <div class="selection-container" onclick="setDays(365)">
                             <div class="radio-button {{ 'selected' if days == 365 else '' }}"></div>
-                            <div class="label">Last Year</div>
+                            <div>Last Year</div>
                         </div>
-                        <div class="radio-button-container" onclick="setDays(null)">
+                        <div class="selection-container" onclick="setDays(null)">
                             <div class="radio-button {{ 'selected' if days is None else '' }}"></div>
-                            <div class="label">All Time</div>
+                            <div>All Time</div>
                         </div>
                     </div>
                 </div>

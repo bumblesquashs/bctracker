@@ -191,6 +191,10 @@ table th {
     display: none !important;
 }
 
+.selection-container:hover {
+    background-color: var(--hover-background);
+}
+
 .side-bar-open .side-bar-closed-only {
     display: none !important;
 }

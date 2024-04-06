@@ -6,19 +6,19 @@
 <div id="page-header">
     <h1>Map</h1>
     % if len(visible_positions) > 0:
-        <div class="checkbox-container" onclick="toggleAutomaticRefresh()">
+        <div class="selection-container" onclick="toggleAutomaticRefresh()">
             <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
                 % include('components/svg', name='check')
             </div>
             <span>Automatically Refresh</span>
         </div>
-        <div class="checkbox-container" onclick="toggleRouteLines()">
+        <div class="selection-container" onclick="toggleRouteLines()">
             <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
                 % include('components/svg', name='check')
             </div>
             <span>Show Route Lines</span>
         </div>
-        <div class="checkbox-container" onclick="toggleNISBuses()">
+        <div class="selection-container" onclick="toggleNISBuses()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                 % include('components/svg', name='check')
             </div>
@@ -30,7 +30,7 @@
 % if len(visible_positions) == 0:
     <div class="container">
         <div class="section">
-            <div class="checkbox-container" onclick="toggleNISBusesEmpty()">
+            <div class="selection-container" onclick="toggleNISBusesEmpty()">
                 <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                     % include('components/svg', name='check')
                 </div>

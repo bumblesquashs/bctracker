@@ -11,7 +11,7 @@
             <span class="tab-button current">Map</span>
         </div>
         % if routes:
-            <div class="checkbox-container" onclick="toggleRouteNumbers()">
+            <div class="selection-container" onclick="toggleRouteNumbers()">
                 <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
                     % include('components/svg', name='check')
                 </div>

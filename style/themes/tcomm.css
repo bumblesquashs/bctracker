@@ -12,6 +12,9 @@
     
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
+    
+    --checkbox-color: #5E87B0;
+    --radio-button-color: #5E87B0;
 }
 
 a {
@@ -27,6 +30,10 @@ body {
 
 body.full-map #page-header {
     background-color: rgba(255, 255, 255, 0.7);
+}
+
+body.full-map #page-header .selection-container {
+    --hover-background: #FFFFFF;
 }
 
 input[type="text"] {
@@ -411,12 +418,6 @@ table tr {
     background-color: #AD6000;
 }
 
-.checkbox-container .checkbox {
-    border-color: #000000;
-    background-color: #FFFFFF;
-    --image-color: #000000;
-}
-
 .code-block {
     background-color: #EEEEEE;
     color: #222222;
@@ -443,8 +444,8 @@ table tr {
     border-bottom-color: #CBCBCB;
 }
 
-.info-box .radio-button-container:hover {
-    background-color: #CBCBCB;
+.info-box .selection-container {
+    --hover-background: #CBCBCB;
 }
 
 .lighter-text {
@@ -517,25 +518,24 @@ table tr {
     color: #1A671A;
 }
 
-.radio-button-container:hover {
-    background-color: #EEEEEE;
-}
-
-.radio-button-container .radio-button {
-    background-color: #FFFFFF;
-    border-color: #222222;
-}
-
-.radio-button-container .radio-button.selected::before {
-    background-color: #222222;
-}
-
 .route {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;
     text-shadow: none;
     text-decoration: none;
+}
+
+.selection-container {
+    --hover-background: #EEEEEE;
+}
+
+.selection-container .checkbox {
+    background-color: #FFFFFF;
+}
+
+.selection-container .radio-button {
+    background-color: #FFFFFF;
 }
 
 .sheet {

@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div class="checkbox-container" onclick="toggleNISBuses()">
+<div class="selection-container" onclick="toggleNISBuses()">
     <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
         % include('components/svg', name='check')
     </div>
