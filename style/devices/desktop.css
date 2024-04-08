@@ -191,7 +191,7 @@ table th {
     display: none !important;
 }
 
-.selection-container:hover {
+.option:hover {
     background-color: var(--hover-background);
 }
 

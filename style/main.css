@@ -674,12 +674,6 @@ table tr.header td {
     gap: 40px !important;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 5px;
-}
-
 .headsign {
     display: flex;
     flex-direction: row;
@@ -1032,7 +1026,19 @@ table tr.header td {
     justify-content: space-between;
 }
 
-.selection-container {
+.options-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+}
+
+.options-container.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    column-gap: 10px;
+}
+
+.option {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -1044,7 +1050,7 @@ table tr.header td {
     border-radius: 10px;
 }
 
-.selection-container .checkbox {
+.option .checkbox {
     border: 2px solid var(--checkbox-color);
     border-radius: 5px;
     width: 18px;
@@ -1053,15 +1059,15 @@ table tr.header td {
     --image-color: var(--checkbox-color);
 }
 
-.selection-container .checkbox svg {
+.option .checkbox svg {
     display: none;
 }
 
-.selection-container .checkbox.selected svg {
+.option .checkbox.selected svg {
     display: initial;
 }
 
-.selection-container .radio-button {
+.option .radio-button {
     width: 12px;
     height: 12px;
     border: 2px solid var(--radio-button-color);
@@ -1070,7 +1076,7 @@ table tr.header td {
     flex-shrink: 0;
 }
 
-.selection-container .radio-button.selected::before {
+.option .radio-button.selected::before {
     content: '';
     display: block;
     width: 100%;

@@ -11,11 +11,13 @@
             <span class="tab-button current">Map</span>
         </div>
         % if routes:
-            <div class="selection-container" onclick="toggleRouteNumbers()">
-                <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
-                    % include('components/svg', name='check')
+            <div class="options-container">
+                <div class="option" onclick="toggleRouteNumbers()">
+                    <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
+                        % include('components/svg', name='check')
+                    </div>
+                    <span>Show Route Numbers</span>
                 </div>
-                <span>Show Route Numbers</span>
             </div>
         % end
     </div>

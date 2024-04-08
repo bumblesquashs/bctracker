@@ -32,7 +32,7 @@ body.full-map #page-header {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
-body.full-map #page-header .selection-container {
+body.full-map #page-header .option {
     --hover-background: #FFFFFF;
 }
 
@@ -444,7 +444,7 @@ table tr {
     border-bottom-color: #CBCBCB;
 }
 
-.info-box .selection-container {
+.info-box .option {
     --hover-background: #CBCBCB;
 }
 
@@ -526,15 +526,15 @@ table tr {
     text-decoration: none;
 }
 
-.selection-container {
+.option {
     --hover-background: #EEEEEE;
 }
 
-.selection-container .checkbox {
+.option .checkbox {
     background-color: #FFFFFF;
 }
 
-.selection-container .radio-button {
+.option .radio-button {
     background-color: #FFFFFF;
 }
 

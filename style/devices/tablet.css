@@ -239,7 +239,11 @@ table {
     gap: 20px;
 }
 
-.selection-container {
+.options-container {
+    row-gap: 0px;
+}
+
+.option {
     padding: 5px 0px;
 }
 

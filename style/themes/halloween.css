@@ -44,7 +44,7 @@ body.full-map #page-header {
     background-color: rgba(30, 30, 30, 0.7);
 }
 
-body.full-map #page-header .selection-container {
+body.full-map #page-header .option {
     --hover-background: #2F2F2F;
 }
 
@@ -366,7 +366,7 @@ table tr:nth-child(2n-1) {
     border-bottom-color: #565656;
 }
 
-.info-box .selection-container {
+.info-box .option {
     --hover-background: #565656;
 }
 
@@ -444,15 +444,15 @@ table tr:nth-child(2n-1) {
     background-color: #989898;
 }
 
-.selection-container {
+.option {
     --hover-background: #393939;
 }
 
-.selection-container .checkbox {
+.option .checkbox {
     background-color: #2F2F2F;
 }
 
-.selection-container .radio-button {
+.option .radio-button {
     background-color: #2F2F2F;
 }
 
