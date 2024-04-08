@@ -409,6 +409,18 @@ table tr {
     --adherence-background: #3C5ABE;
 }
 
+.option {
+    --hover-background: #EEEEEE;
+}
+
+.option .checkbox {
+    background-color: #FFFFFF;
+}
+
+.option .radio-button {
+    background-color: #FFFFFF;
+}
+
 .order-details .content .separator {
     color: #888888;
 }
@@ -421,18 +433,6 @@ table tr {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;
-}
-
-.option {
-    --hover-background: #EEEEEE;
-}
-
-.option .checkbox {
-    background-color: #FFFFFF;
-}
-
-.option .radio-button {
-    background-color: #FFFFFF;
 }
 
 .sheet {

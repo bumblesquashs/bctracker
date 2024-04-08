@@ -514,18 +514,6 @@ table tr {
     --adherence-background: #4EBF40;
 }
 
-.positive {
-    color: #1A671A;
-}
-
-.route {
-    color: #FFFFFF;
-    border-color: #FFFFFF;
-    background-color: #989898;
-    text-shadow: none;
-    text-decoration: none;
-}
-
 .option {
     --hover-background: #EEEEEE;
 }
@@ -536,6 +524,18 @@ table tr {
 
 .option .radio-button {
     background-color: #FFFFFF;
+}
+
+.positive {
+    color: #1A671A;
+}
+
+.route {
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    background-color: #989898;
+    text-shadow: none;
+    text-decoration: none;
 }
 
 .sheet {

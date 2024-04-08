@@ -430,6 +430,18 @@ table tr:nth-child(2n-1) {
     --adherence-background: #0093A8;
 }
 
+.option {
+    --hover-background: #393939;
+}
+
+.option .checkbox {
+    background-color: #2F2F2F;
+}
+
+.option .radio-button {
+    background-color: #2F2F2F;
+}
+
 .order-details .content .separator {
     color: #565656;
 }
@@ -442,18 +454,6 @@ table tr:nth-child(2n-1) {
     color: #FFFFFF;
     border-color: #393939;
     background-color: #989898;
-}
-
-.option {
-    --hover-background: #393939;
-}
-
-.option .checkbox {
-    background-color: #2F2F2F;
-}
-
-.option .radio-button {
-    background-color: #2F2F2F;
 }
 
 .sheet {
