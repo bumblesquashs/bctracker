@@ -24,23 +24,23 @@
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 
-                <div class="column">
-                    <div class="radio-button-container" onclick="setTheme('automatic')">
+                <div class="options-container">
+                    <div class="option" onclick="setTheme('automatic')">
                         <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
-                        <div class="label">BC Transit (Auto)</div>
+                        <div>BC Transit (Auto)</div>
                     </div>
                     
                     % for visible_theme in visible_themes:
-                        <div class="radio-button-container" onclick="setTheme('{{ visible_theme.id }}')">
+                        <div class="option" onclick="setTheme('{{ visible_theme.id }}')">
                             <div class="radio-button {{ 'selected' if theme is not None and visible_theme == theme else '' }}"></div>
-                            <div class="label">{{ visible_theme }}</div>
+                            <div>{{ visible_theme }}</div>
                         </div>
                     % end
                     
                     % if theme is not None and not theme.visible:
-                        <div class="radio-button-container" onclick="setTheme('{{ theme.id }}')">
+                        <div class="option" onclick="setTheme('{{ theme.id }}')">
                             <div class="radio-button selected"></div>
-                            <div class="label">{{ theme }}</div>
+                            <div>{{ theme }}</div>
                         </div>
                     % end
                 </div>
@@ -66,17 +66,17 @@
             <div class="content">
                 <p>You can choose whether times are displayed as 12hr or 30hr.</p>
                 <p>Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
-                <div class="column">
-                    <div class="radio-button-container" onclick="setTimeFormat('12hr')">
+                <div class="options-container">
+                    <div class="option" onclick="setTimeFormat('12hr')">
                         <div class="radio-button {{ 'selected' if time_format == '12hr' else '' }}"></div>
-                        <div class="label column">
+                        <div class="column">
                             <p>12hr</p>
                             <p class="smaller-font lighter-text">Uses xm instead of am, so 1am is shown as 1xm</p>
                         </div>
                     </div>
-                    <div class="radio-button-container" onclick="setTimeFormat('30hr')">
+                    <div class="option" onclick="setTimeFormat('30hr')">
                         <div class="radio-button {{ 'selected' if time_format is None or time_format == '24hr' or time_format == '30hr' else '' }}"></div>
-                        <div class="label column">
+                        <div class="column">
                             <p>30hr</p>
                             <p class="smaller-font lighter-text">Continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</p>
                         </div>
@@ -92,22 +92,22 @@
             </div>
             <div class="content">
                 <p>Choose a style for bus icons shown on the map screen.</p>
-                <div class="column">
-                    <div class="radio-button-container" onclick="setBusMarkerStyle('default')">
+                <div class="options-container">
+                    <div class="option" onclick="setBusMarkerStyle('default')">
                         <div class="radio-button {{ 'selected' if bus_marker_style is None or bus_marker_style == 'default' else '' }}"></div>
-                        <div class="label">Default</div>
+                        <div>Default</div>
                     </div>
-                    <div class="radio-button-container" onclick="setBusMarkerStyle('mini')">
+                    <div class="option" onclick="setBusMarkerStyle('mini')">
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
-                        <div class="label">Mini</div>
+                        <div>Mini</div>
                     </div>
-                    <div class="radio-button-container" onclick="setBusMarkerStyle('adherence')">
+                    <div class="option" onclick="setBusMarkerStyle('adherence')">
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
-                        <div class="label">Schedule Adherence</div>
+                        <div>Schedule Adherence</div>
                     </div>
-                    <div class="radio-button-container" onclick="setBusMarkerStyle('route')">
+                    <div class="option" onclick="setBusMarkerStyle('route')">
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
-                        <div class="label">Route Number</div>
+                        <div>Route Number</div>
                     </div>
                 </div>
             </div>
