@@ -431,6 +431,22 @@ table tr {
     border-right-color: #CBCBCB;
 }
 
+.favourite {
+    --image-color: #000000;
+}
+
+.favourite:hover {
+    background-color: #EEEEEE;
+}
+
+.favourite.disabled {
+    --image-color: #666666;
+}
+
+.favourite.disabled:hover {
+    background-color: initial;
+}
+
 .info-box {
     background-color: #EEEEEE;
     color: #222222;

@@ -630,6 +630,20 @@ table tr.header td {
     padding-left: 20px;
 }
 
+.favourite {
+    padding: 2px;
+    border-radius: 50%;
+    --image-size: 30px;
+}
+
+.favourite:hover {
+    cursor: pointer;
+}
+
+.favourite.disabled:hover {
+    cursor: initial;
+}
+
 .flex-1 {
     flex: 1;
 }

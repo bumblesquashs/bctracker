@@ -11,6 +11,8 @@ import helpers.system
 from models.match import Match
 from models.schedule import Schedule
 
+import utils
+
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
@@ -72,7 +74,7 @@ class Route:
         self.colour = colour
         self.text_colour = text_colour
         
-        self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
+        self.key = utils.key(number)
     
     def __str__(self):
         return f'{self.number} {self.name}'

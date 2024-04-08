@@ -6,7 +6,10 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Stop {{ stop.number }}</h1>
+    <h1 class="row">
+        <span>Stop {{ stop.number }}</span>
+        % include('components/favourite')
+    </h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
