@@ -8,6 +8,7 @@ from colorsys import hls_to_rgb
 import helpers.departure
 import helpers.system
 
+from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
@@ -178,8 +179,9 @@ class RouteCache:
     def __init__(self, system, trips):
         self.trips = trips
         services = {t.service for t in trips}
-        self.schedule = Schedule.combine(services)
         self.sheets = system.copy_sheets(services)
+        date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+        self.schedule = Schedule.combine(services, date_range)
         try:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].find_points()
