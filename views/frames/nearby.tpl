@@ -2,6 +2,7 @@
 % from math import floor
 % from datetime import timedelta
 
+% import helpers.assignment
 % import helpers.position
 % import helpers.record
 
@@ -26,7 +27,7 @@
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
         % trips = [d.trip for d in upcoming_departures]
         % recorded_today = helpers.record.find_recorded_today(stop.system, trips)
-        % scheduled_today = helpers.record.find_scheduled_today(stop.system, trips)
+        % assignments = helpers.assignment.find_all(stop.system, stop=stop)
         % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system, trip=trips)}
         <div class="section">
             <div class="header">
@@ -44,8 +45,7 @@
                     % if system is None or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
-                            <img class="middle-align white" src="/img/white/schedule.png" />
-                            <img class="middle-align black" src="/img/black/schedule.png" />
+                            % include('components/svg', name='schedule')
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end

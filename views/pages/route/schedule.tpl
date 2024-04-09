@@ -4,7 +4,8 @@
 <div id="page-header">
     <h1 class="row">
         % include('components/route')
-        {{! route.display_name }}
+        <span>{{! route.display_name }}</span>
+        % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
@@ -60,7 +61,7 @@
                                 <div class="section">
                                     <div class="header">
                                         % for weekday in service_group.schedule.weekdays:
-                                            <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
+                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
                                         % end
                                         <h3>{{ service_group }}</h3>
                                     </div>

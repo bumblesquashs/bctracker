@@ -2,6 +2,7 @@
 from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
+from datetime import timedelta
 import cherrypy as cp
 
 import helpers.adornment
@@ -13,14 +14,17 @@ import helpers.point
 import helpers.position
 import helpers.record
 import helpers.region
+import helpers.route
 import helpers.stop
 import helpers.system
 import helpers.theme
 import helpers.transfer
+import helpers.assignment
 
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
+from models.favourite import Favourite, FavouriteSet
 
 import config
 import cron
@@ -29,7 +33,7 @@ import gtfs
 import realtime
 
 # Increase the version to force CSS reload
-VERSION = 29
+VERSION = 36
 
 app = Bottle()
 running = False
@@ -104,6 +108,7 @@ def get_url(system, path='', **kwargs):
     return url
 
 def validate_admin():
+    '''Checks if the admin key in the query/cookie matches the expected admin key'''
     return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
@@ -182,6 +187,11 @@ def query_cookie(key, default_value=None, max_age_days=3650):
         return value
     return request.get_cookie(key, default_value)
 
+def get_favourites():
+    '''Returns the current set of favourites stored in the cookie'''
+    favourites_string = request.get_cookie('favourites', '')
+    return FavouriteSet.parse(favourites_string)
+
 def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
         if base_path == '/':
@@ -227,6 +237,10 @@ def style(system, name):
 def img(system, name):
     return static_file(name, root='./img')
 
+@endpoint('/js/<name:path>', append_slash=False)
+def img(system, name):
+    return static_file(name, root='./js')
+
 @endpoint('/robots.txt', append_slash=False)
 def robots_text(system):
     return static_file('robots.txt', root='.')
@@ -239,7 +253,8 @@ def robots_text(system):
 def home_page(system):
     return page('home', system,
         title='Home',
-        enable_refresh=False
+        enable_refresh=False,
+        favourites=get_favourites()
     )
 
 @endpoint('/news')
@@ -352,7 +367,9 @@ def bus_overview_page(system, bus_number):
         bus=bus,
         position=position,
         records=records,
-        overview=overview
+        overview=overview,
+        favourite=Favourite('vehicle', bus),
+        favourites=get_favourites()
     )
 
 @endpoint('/bus/<bus_number:int>/map')
@@ -371,7 +388,9 @@ def bus_map_page(system, bus_number):
         include_maps=position is not None,
         full_map=position is not None,
         bus=bus,
-        position=position
+        position=position,
+        favourite=Favourite('vehicle', bus),
+        favourites=get_favourites()
     )
 
 @endpoint('/bus/<bus_number:int>/history')
@@ -401,16 +420,32 @@ def bus_history_page(system, bus_number):
         bus=bus,
         records=records,
         overview=overview,
-        events=events
+        events=events,
+        favourite=Favourite('vehicle', bus),
+        favourites=get_favourites()
     )
 
 @endpoint('/history')
 def history_last_seen_page(system):
     overviews = [o for o in helpers.overview.find_all(system) if o.last_record is not None and o.bus.visible]
+    try:
+        days = int(request.query['days'])
+    except:
+        days = None
+    if days:
+        if system:
+            date = Date.today(system.timezone) - timedelta(days=days)
+        else:
+            date = Date.today() - timedelta(days=days)
+        overviews = [o for o in overviews if o.last_record.date > date]
     return page('history/last_seen', system,
         title='Vehicle History',
         path='history',
-        overviews=sorted(overviews, key=lambda o: o.bus)
+        path_args={
+            'days': days
+        },
+        overviews=sorted(overviews, key=lambda o: o.bus),
+        days=days
     )
 
 @endpoint('/history/first-seen')
@@ -441,17 +476,16 @@ def routes_list_page(system):
 
 @endpoint('/routes/map')
 def routes_map_page(system):
-    if system is None:
-        routes = []
-    else:
-        routes = system.get_routes()
+    routes = helpers.route.find_all(system)
+    show_route_numbers = query_cookie('show_route_numbers', 'true') != 'false'
     return page('routes/map', system,
         title='Routes',
         path='routes/map',
         enable_refresh=False,
         include_maps=len(routes) > 0,
         full_map=len(routes) > 0,
-        routes=routes
+        routes=routes,
+        show_route_numbers=show_route_numbers
     )
 
 @endpoint('/routes/<route_number>')
@@ -467,15 +501,17 @@ def route_overview_page(system, route_number):
             title='Unknown Route',
             route_number=route_number
         )
-    trips = sorted(route.get_trips(date=Date.today()))
+    trips = sorted(route.get_trips(date=Date.today(system.timezone)))
     return page('route/overview', system,
         title=str(route),
         include_maps=len(route.trips) > 0,
         route=route,
         trips=trips,
         recorded_today=helpers.record.find_recorded_today(system, trips),
-        scheduled_today=helpers.record.find_scheduled_today(system, trips),
-        positions=helpers.position.find_all(system, route=route)
+        assignments=helpers.assignment.find_all(system, route=route),
+        positions=helpers.position.find_all(system, route=route),
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/routes/<route_number>/map')
@@ -496,7 +532,9 @@ def route_map_page(system, route_number):
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
-        positions=helpers.position.find_all(system, route=route)
+        positions=helpers.position.find_all(system, route=route),
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/routes/<route_number>/schedule')
@@ -515,7 +553,9 @@ def route_schedule_page(system, route_number):
     return page('route/schedule', system,
         title=str(route),
         enable_refresh=False,
-        route=route
+        route=route,
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
@@ -536,7 +576,9 @@ def route_schedule_date_page(system, route_number, date_string):
         title=str(route),
         enable_refresh=False,
         route=route,
-        date=date
+        date=date,
+        favourite=Favourite('route', route),
+        favourites=get_favourites()
     )
 
 @endpoint('/blocks')
@@ -577,7 +619,8 @@ def block_overview_page(system, block_id):
         title=f'Block {block.id}',
         include_maps=True,
         block=block,
-        positions=helpers.position.find_all(system, block=block)
+        positions=helpers.position.find_all(system, block=block),
+        assignment=helpers.assignment.find(system, block)
     )
 
 @endpoint('/blocks/<block_id>/map')
@@ -643,7 +686,8 @@ def trip_overview_page(system, trip_id):
         title=f'Trip {trip.id}',
         include_maps=True,
         trip=trip,
-        positions=helpers.position.find_all(system, trip=trip)
+        positions=helpers.position.find_all(system, trip=trip),
+        assignment=helpers.assignment.find(system, trip.block_id)
     )
 
 @endpoint('/trips/<trip_id>/map')
@@ -718,7 +762,7 @@ def stop_overview_page(system, stop_number):
             title='Unknown Stop',
             stop_number=stop_number
         )
-    departures = stop.find_departures(date=Date.today())
+    departures = stop.find_departures(date=Date.today(system.timezone))
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system, trip=trips)
     return page('stop/overview', system,
@@ -727,8 +771,10 @@ def stop_overview_page(system, stop_number):
         stop=stop,
         departures=departures,
         recorded_today=helpers.record.find_recorded_today(system, trips),
-        scheduled_today=helpers.record.find_scheduled_today(system, trips),
-        positions={p.trip.id: p for p in positions}
+        assignments=helpers.assignment.find_all(system, stop=stop),
+        positions={p.trip.id: p for p in positions},
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/stops/<stop_number>/map')
@@ -748,7 +794,9 @@ def stop_map_page(system, stop_number):
         title=f'Stop {stop.number}',
         include_maps=True,
         full_map=True,
-        stop=stop
+        stop=stop,
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/stops/<stop_number>/schedule')
@@ -767,7 +815,9 @@ def stop_schedule_page(system, stop_number):
     return page('stop/schedule', system,
         title=f'Stop {stop.number}',
         enable_refresh=False,
-        stop=stop
+        stop=stop,
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
@@ -788,7 +838,9 @@ def stop_schedule_date_page(system, stop_number, date_string):
         title=f'Stop {stop.number}',
         enable_refresh=False,
         stop=stop,
-        date=date
+        date=date,
+        favourite=Favourite('stop', stop),
+        favourites=get_favourites()
     )
 
 @endpoint('/about')
@@ -878,6 +930,22 @@ def api_map(system):
 def api_shape_id(system, shape_id):
     return {
         'points': [p.get_json() for p in helpers.point.find_all(system, shape_id)]
+    }
+
+@endpoint('/api/routes')
+def api_routes(system):
+    routes = helpers.route.find_all(system)
+    trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
+    shape_ids = set()
+    shape_trips = []
+    for trip in trips:
+        if trip.shape_id not in shape_ids:
+            shape_ids.add(trip.shape_id)
+            shape_trips.append(trip.get_json())
+    indicators = [j for r in routes for j in r.get_indicator_json()]
+    return {
+        'trips': shape_trips,
+        'indicators': sorted(indicators, key=lambda j: j['lat'])
     }
 
 @endpoint('/api/search', method='POST')

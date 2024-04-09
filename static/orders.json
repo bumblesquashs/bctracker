@@ -152,6 +152,7 @@
             { "number": 1717, "visible": false },
             { "number": 7404, "visible": false },
             { "number": 7812, "visible": false },
+            { "number": 8888, "visible": false },
             { "low": 9980, "high": 9999, "visible": false }
         ],
         "vmc-classic-vi30-cng": [

@@ -4,7 +4,8 @@
 <div id="page-header">
     <h1 class="row">
         % include('components/route')
-        {{! route.display_name }}
+        <span>{{! route.display_name }}</span>
+        % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -143,8 +144,7 @@
                                         % if system is None or system.realtime_enabled:
                                             <p>
                                                 <span>Buses with a</span>
-                                                <img class="middle-align white" src="/img/white/schedule.png" />
-                                                <img class="middle-align black" src="/img/black/schedule.png" />
+                                                % include('components/svg', name='schedule')
                                                 <span>are scheduled but may be swapped off.</span>
                                             </p>
                                         % end
@@ -193,16 +193,16 @@
                                                                 <td class="desktop-only">
                                                                     % include('components/order', order=bus.order)
                                                                 </td>
-                                                            % elif trip.block_id in scheduled_today and trip.start_time.is_later:
-                                                                % bus = scheduled_today[trip.block_id]
+                                                            % elif (trip.system.id, trip.block_id) in assignments and trip.end_time.is_later:
+                                                                % assignment = assignments[(trip.system.id, trip.block_id)]
+                                                                % bus = assignment.bus
                                                                 <td>
                                                                     <div class="column">
                                                                         <div class="row">
                                                                             % include('components/bus')
                                                                             <div class="tooltip-anchor">
-                                                                                <img class="middle-align white" src="/img/white/schedule.png" />
-                                                                                <img class="middle-align black" src="/img/black/schedule.png" />
-                                                                                <div class="tooltip">Bus is scheduled</div>
+                                                                                % include('components/svg', name='schedule')
+                                                                                <div class="tooltip right">Bus is scheduled</div>
                                                                             </div>
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">

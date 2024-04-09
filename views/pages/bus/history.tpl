@@ -7,6 +7,7 @@
     <h1 class="row">
         <span>Bus</span>
         % include('components/bus', enable_link=False)
+        % include('components/favourite')
     </h1>
     % if bus.order is None:
         <h2 class="lighter-text">Unknown Year/Model</h2>
@@ -37,7 +38,7 @@
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
-                        <div class="row section">
+                        <div class="row section align-start">
                             <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
                             <div class="value">
                                 % for record_system in sorted(record_systems):
@@ -76,8 +77,7 @@
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>
                             <span>Entries with a</span>
-                            <img class="middle-align white inline" src="/img/white/warning.png" />
-                            <img class="middle-align black inline" src="/img/black/warning.png" />
+                            % include('components/svg', name='warning')
                             <span>may be accidental logins.</span>
                         </p>
                     % end

@@ -14,12 +14,10 @@
 </script>
 
 <div id="map-toggle" class="mobile-only" onclick="toggleMap()">
-    <div id="open-map-toggle-icon" class="display-none">
-        <img class="white" src="/img/white/open-fullscreen.png" />
-        <img class="black" src="/img/black/open-fullscreen.png" />
+    <div id="open-map-toggle-icon">
+        % include('components/svg', name='fullscreen-open')
     </div>
-    <div id="close-map-toggle-icon">
-        <img class="white" src="/img/white/close-fullscreen.png" />
-        <img class="black" src="/img/black/close-fullscreen.png" />
+    <div id="close-map-toggle-icon" class="display-none">
+        % include('components/svg', name='fullscreen-close')
     </div>
 </div>

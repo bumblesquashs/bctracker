@@ -2,7 +2,10 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Stop {{ stop.number }}</h1>
+    <h1 class="row">
+        <span>Stop {{ stop.number }}</span>
+        % include('components/favourite')
+    </h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
@@ -58,7 +61,7 @@
                                 <div class="section">
                                     <div class="header">
                                         % for weekday in service_group.schedule.weekdays:
-                                            <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
+                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
                                         % end
                                         <h3>{{ service_group }}</h3>
                                     </div>

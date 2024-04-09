@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th>System</th>
-                    <th class="non-mobile"># Blocks</th>
+                    <th class="non-mobile align-right">Blocks</th>
                     <th>Service Days</th>
                 </tr>
             </thead>
@@ -42,7 +42,7 @@
                                     </div>
                                 </td>
                                 % if region_system.gtfs_loaded:
-                                    <td class="non-mobile">{{ count }}</td>
+                                    <td class="non-mobile align-right">{{ count }}</td>
                                     <td>
                                         % include('components/weekdays', schedule=region_system.schedule, compact=True, schedule_path='blocks')
                                     </td>
@@ -97,7 +97,7 @@
                                     <div class="section">
                                         <div class="header">
                                             % for weekday in service_group.schedule.weekdays:
-                                                <div id="{{ weekday.short_name }}{{path_suffix}}" class="display-none"></div>
+                                                <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
                                             % end
                                             <h3>{{ service_group }}</h3>
                                         </div>

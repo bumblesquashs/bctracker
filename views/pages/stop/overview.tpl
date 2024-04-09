@@ -6,7 +6,10 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Stop {{ stop.number }}</h1>
+    <h1 class="row">
+        <span>Stop {{ stop.number }}</span>
+        % include('components/favourite')
+    </h1>
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -128,8 +131,7 @@
                         % if system is None or system.realtime_enabled:
                             <p>
                                 <span>Buses with a</span>
-                                <img class="middle-align white" src="/img/white/schedule.png" />
-                                <img class="middle-align black" src="/img/black/schedule.png" />
+                                % include('components/svg', name='schedule')
                                 <span>are scheduled but may be swapped off.</span>
                             </p>
                         % end
@@ -182,8 +184,7 @@
                     % if system is None or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
-                            <img class="middle-align white" src="/img/white/schedule.png" />
-                            <img class="middle-align black" src="/img/black/schedule.png" />
+                            % include('components/svg', name='schedule')
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end

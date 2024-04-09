@@ -9,7 +9,7 @@
         <div class="adornment tooltip-anchor">
             {{ adornment }}
             % if adornment.description is not None:
-                <div class="tooltip">{{ adornment.description }}</div>
+                <div class="tooltip right">{{ adornment.description }}</div>
             % end
         </div>
     % end

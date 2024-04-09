@@ -12,6 +12,7 @@
     <h1 class="row">
         <span>Bus</span>
         % include('components/bus', enable_link=False)
+        % include('components/favourite')
     </h1>
     % if bus.order is None:
         <h2 class="lighter-text">Unknown Year/Model</h2>
@@ -300,8 +301,7 @@
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>
                             <span>Entries with a</span>
-                            <img class="middle-align white inline" src="/img/white/warning.png" />
-                            <img class="middle-align black inline" src="/img/black/warning.png" />
+                            % include('components/svg', name='warning')
                             <span>may be accidental logins.</span>
                         </p>
                     % end

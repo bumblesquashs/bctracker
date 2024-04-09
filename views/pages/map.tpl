@@ -6,26 +6,25 @@
 <div id="page-header">
     <h1>Map</h1>
     % if len(visible_positions) > 0:
-        <div class="checkbox-container" onclick="toggleAutomaticRefresh()">
-            <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
-                <img class="white" src="/img/white/check.png" />
-                <img class="black" src="/img/black/check.png" />
+        <div class="options-container">
+            <div class="option" onclick="toggleAutomaticRefresh()">
+                <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
+                    % include('components/svg', name='check')
+                </div>
+                <span>Automatically Refresh</span>
             </div>
-            <span>Automatically Refresh</span>
-        </div>
-        <div class="checkbox-container" onclick="toggleRouteLines()">
-            <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
-                <img class="white" src="/img/white/check.png" />
-                <img class="black" src="/img/black/check.png" />
+            <div class="option" onclick="toggleRouteLines()">
+                <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
+                    % include('components/svg', name='check')
+                </div>
+                <span>Show Route Lines</span>
             </div>
-            <span>Show Route Lines</span>
-        </div>
-        <div class="checkbox-container" onclick="toggleNISBuses()">
-            <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                <img class="white" src="/img/white/check.png" />
-                <img class="black" src="/img/black/check.png" />
+            <div class="option" onclick="toggleNISBuses()">
+                <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                    % include('components/svg', name='check')
+                </div>
+                <span>Show NIS Buses</span>
             </div>
-            <span>Show NIS Buses</span>
         </div>
     % end
 </div>
@@ -33,12 +32,13 @@
 % if len(visible_positions) == 0:
     <div class="container">
         <div class="section">
-            <div class="checkbox-container" onclick="toggleNISBusesEmpty()">
-                <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                    <img class="white" src="/img/white/check.png" />
-                    <img class="black" src="/img/black/check.png" />
+            <div class="options-container">
+                <div class="option" onclick="toggleNISBusesEmpty()">
+                    <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                        % include('components/svg', name='check')
+                    </div>
+                    <div>Show NIS Buses</div>
                 </div>
-                <div>Show NIS Buses</div>
             </div>
             <script>
                 function toggleNISBusesEmpty() {
@@ -81,6 +81,8 @@
     </div>
 % else:
     <div id="map" class="full-screen"></div>
+    
+    % include('components/svg_script', name='fish')
     
     <script>
         const map = new ol.Map({
@@ -128,8 +130,7 @@
             }
             markers = [];
             
-            const lons = [];
-            const lats = [];
+            const area = new Area();
             
             for (const position of positions) {
                 if (position.shape_id !== null && position.shape_id !== undefined) {
@@ -194,7 +195,7 @@
                 } else {
                     headsign.className = "row center gap-5";
                     const adherenceElement = document.createElement("div");
-                    adherenceElement.classList.add("adherence", adherence.status_class);
+                    adherenceElement.classList.add("adherence-indicator", adherence.status_class);
                     adherenceElement.innerHTML = adherence.value;
                     
                     headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
@@ -228,7 +229,7 @@
                             icon.classList.add(adherence.status_class);
                         }
                     } else {
-                        icon.innerHTML = "<img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.innerHTML = getSVG(position.bus_icon);
                         icon.style.backgroundColor = "#" + position.colour;
                     }
                     
@@ -261,7 +262,7 @@
                             icon.classList.add(adherence.status_class);
                         }
                     } else {
-                        icon.innerHTML = "<div class='link'></div><img src='/img/white/" + position.bus_icon + ".png' />";
+                        icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
                         icon.style.backgroundColor = "#" + position.colour;
                     }
                     
@@ -283,8 +284,7 @@
                 element.appendChild(details);
                 
                 if (position.lat != 0 && position.lon != 0) {
-                    lons.push(position.lon);
-                    lats.push(position.lat);
+                    area.combine(position.lat, position.lon);
                 }
                 
                 const marker = new ol.Overlay({
@@ -297,17 +297,12 @@
                 markers.push(marker);
             }
             
-            if (resetCoordinates) {
-                if (lons.length === 1 && lats.length === 1) {
-                    map.getView().setCenter(ol.proj.fromLonLat([lons[0], lats[0]]));
+            if (resetCoordinates && area.isValid) {
+                if (area.isPoint) {
+                    map.getView().setCenter(ol.proj.fromLonLat(area.point));
                     map.getView().setZoom(15);
-                } else if (lons.length > 0 && lats.length > 0) {
-                    const minLon = Math.min.apply(Math, lons);
-                    const maxLon = Math.max.apply(Math, lons);
-                    const minLat = Math.min.apply(Math, lats);
-                    const maxLat = Math.max.apply(Math, lats);
-                    
-                    map.getView().fit(ol.proj.transformExtent([minLon, minLat, maxLon, maxLat], ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                } else {
+                    map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
                         padding: [100, 100, 100, 100]
                     });
                 }

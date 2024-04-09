@@ -18,6 +18,10 @@ body.full-map #page-header {
     left: -10px;
 }
 
+body.full-map .tab-button-bar {
+    margin-bottom: 0px;
+}
+
 input {
     -webkit-appearance: none;
 }
@@ -56,9 +60,14 @@ h2 .route {
     min-width: 16px;
 }
 
-img.inline {
-    height: 18px;
-    width: 18px;
+p > svg {
+    vertical-align: middle;
+}
+
+svg {
+    fill: var(--image-color);
+    width: var(--image-size);
+    height: var(--image-size);
 }
 
 table {
@@ -100,6 +109,53 @@ table tr.header td {
 #banners {
     position: relative;
     z-index: 20;
+}
+
+#loading {
+    position: relative;
+    width: 300px;
+    height: 36px;
+    overflow: hidden;
+}
+
+#loading:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to left, rgba(0,0,0,0), var(--loading-background) 90%);
+    width: 36px;
+    height: 36px;
+}
+
+#loading:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), var(--loading-background) 90%);
+    width: 36px;
+    height: 36px;
+}
+
+#loading-line {
+    background-color: var(--loading-foreground);
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 16px;
+    bottom: 16px;
+}
+
+#loading-stop {
+    background-color: var(--loading-foreground);
+    position: absolute;
+    left: -36px;
+    border-radius: 36px;
+    padding: 4px;
+    --image-size: 28px;
 }
 
 #main {
@@ -144,18 +200,28 @@ table tr.header td {
     z-index: 10;
 }
 
+#map-loading {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
 #map-toggle {
     position: absolute;
     z-index: 20;
     border-radius: 50%;
     bottom: 30px;
     right: 15px;
-}
-
-#map-toggle img {
-    width: 28px;
-    height: 28px;
-    margin: 8px;
+    padding: 8px;
+    --image-size: 28px;
 }
 
 #navigation-bar {
@@ -174,15 +240,11 @@ table tr.header td {
     flex-direction: row;
     gap: 5px;
     align-items: center;
+    --image-size: 28px;
 }
 
 #navigation-bar .navigation-icon:hover {
     text-decoration: none;
-}
-
-#navigation-bar .navigation-icon img {
-    width: 28px;
-    height: 28px;
 }
 
 #navigation-bar .navigation-icon .label {
@@ -223,6 +285,7 @@ table tr.header td {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    --image-size: 18px;
 }
 
 #page-header {
@@ -255,11 +318,7 @@ table tr.header td {
     border-width: 1px;
     border-style: solid;
     text-align: center;
-}
-
-#quick-navigation .item img {
-    width: 48px;
-    height: 48px;
+    --image-size: 48px;
 }
 
 #refresh-button {
@@ -384,7 +443,7 @@ table tr.header td {
     display: none;
 }
 
-.adherence {
+.adherence-indicator {
     padding: 2px 4px;
     border-radius: 4px;
     min-width: 14px;
@@ -395,9 +454,11 @@ table tr.header td {
     font-size: 9pt;
     line-height: 9pt;
     flex-shrink: 0;
+    background-color: var(--adherence-background);
+    color: var(--adherence-text);
 }
 
-.adherence.large {
+.adherence-indicator.large {
     font-size: 12pt;
     line-height: 12pt;
     padding: 3px 6px;
@@ -405,6 +466,10 @@ table tr.header td {
 
 .adornment {
     user-select: none;
+}
+
+.align-right {
+    text-align: right;
 }
 
 .banner {
@@ -419,11 +484,7 @@ table tr.header td {
     position: absolute;
     right: 5px;
     top: 5px;
-}
-
-.banner .close-button img {
-    width: 24px;
-    height: 24px;
+    --image-size: 24px;
 }
 
 .banner .close-button:hover {
@@ -433,6 +494,10 @@ table tr.header td {
 .banner .title {
     font-weight: bold;
     font-size: 16pt;
+}
+
+.bearing.adherence {
+    border-bottom-color: var(--adherence-background);
 }
 
 .block-timeline {
@@ -487,31 +552,6 @@ table tr.header td {
     text-align: center;
 }
 
-.checkbox-container {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    cursor: pointer;
-    align-self: flex-start;
-    user-select: none;
-}
-
-.checkbox-container .checkbox {
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px;
-    width: 24px;
-    height: 24px;
-}
-
-.checkbox-container .checkbox img {
-    display: none;
-}
-
-.checkbox-container .checkbox.selected img {
-    display: block;
-}
-
 .code-block {
     border-width: 1px;
     border-style: solid;
@@ -540,6 +580,10 @@ table tr.header td {
     align-items: flex-end;
 }
 
+.column.stretch {
+    align-items: stretch;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -550,6 +594,12 @@ table tr.header td {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.container > .section > .header {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
 }
 
 .container > .section > .content {
@@ -572,16 +622,26 @@ table tr.header td {
     padding-right: 10px;
     border-right-width: 1px;
     border-right-style: solid;
-}
-
-.events .date img {
-    width: 20px;
-    height: 20px;
+    --image-size: 20px;
 }
 
 .events ul {
     margin: 0px;
     padding-left: 20px;
+}
+
+.favourite {
+    padding: 2px;
+    border-radius: 50%;
+    --image-size: 30px;
+}
+
+.favourite:hover {
+    cursor: pointer;
+}
+
+.favourite.disabled:hover {
+    cursor: initial;
 }
 
 .flex-1 {
@@ -736,7 +796,7 @@ table tr.header td {
     gap: 1px;
 }
 
-.marker .details .content .adherence {
+.marker .details .content .adherence-indicator {
     font-size: 8pt;
     line-height: 8pt;
     border-radius: 3px;
@@ -763,8 +823,6 @@ table tr.header td {
 
 .marker .icon {
     display: block;
-    width: 32px;
-    height: 32px;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
@@ -772,12 +830,10 @@ table tr.header td {
     margin-left: auto;
     margin-right: auto;
     z-index: 10;
-}
-
-.marker .icon img {
-    margin: 4px;
+    padding: 4px;
     width: 24px;
     height: 24px;
+    --image-size: 24px;
 }
 
 .marker .icon .link {
@@ -815,15 +871,18 @@ table tr.header td {
 .marker .icon.adherence {
     font-weight: bold;
     text-align: center;
-    line-height: 32px;
+    line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
+    background-color: var(--adherence-background);
+    color: var(--adherence-text);
 }
 
 .marker .icon.route {
     width: auto;
     height: auto;
+    padding: 0px;
     border-radius: 0px;
 }
 
@@ -848,21 +907,17 @@ table tr.header td {
 .marker .icon.bus_route {
     font-weight: bold;
     text-align: center;
-    line-height: 32px;
+    line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
 }
 
 .marker.small .icon {
-    width: 16px !important;
-    height: 16px !important;
-}
-
-.marker.small .icon img {
-    margin: 2px;
     width: 12px;
     height: 12px;
+    padding: 2px;
+    --image-size: 12px;
 }
 
 .marker.small .details {
@@ -901,6 +956,65 @@ table tr.header td {
     white-space: nowrap;
 }
 
+.options-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+}
+
+.options-container.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    column-gap: 10px;
+}
+
+.option {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-self: flex-start;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+}
+
+.option .checkbox {
+    border: 2px solid var(--checkbox-color);
+    border-radius: 5px;
+    width: 18px;
+    height: 18px;
+    --image-size: 18px;
+    --image-color: var(--checkbox-color);
+}
+
+.option .checkbox svg {
+    display: none;
+}
+
+.option .checkbox.selected svg {
+    display: initial;
+}
+
+.option .radio-button {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--radio-button-color);
+    border-radius: 50%;
+    padding: 3px;
+    flex-shrink: 0;
+}
+
+.option .radio-button.selected::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--radio-button-color);
+}
+
 .order-details .content {
     display: flex;
     flex-direction: row;
@@ -928,38 +1042,6 @@ table tr.header td {
 
 .positive {
     font-weight: bold;
-}
-
-.radio-button-container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    cursor: pointer;
-    align-items: center;
-    padding: 5px 10px 5px 10px;
-    border-radius: 10px;
-}
-
-.radio-button-container .label {
-    user-select: none;
-}
-
-.radio-button-container .radio-button {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border-width: 2px;
-    border-style: solid;
-    padding: 3px;
-    flex-shrink: 0;
-}
-
-.radio-button-container .radio-button.selected::before {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
 }
 
 .route {
@@ -1007,6 +1089,10 @@ table tr.header td {
 
 .row.align-center {
     align-items: center;
+}
+
+.row.align-start {
+    align-items: flex-start;
 }
 
 .row.space-between {
@@ -1155,11 +1241,12 @@ table tr.header td {
 }
 
 .tooltip-anchor .tooltip {
+    background-color: var(--tooltip-background);
+    color: var(--tooltip-text);
     display: none;
     padding: 5px 10px;
     position: absolute;
     z-index: 10;
-    left: calc(100% + 10px);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     top: 50%;
     transform: translate(0px, -50%);
@@ -1172,12 +1259,32 @@ table tr.header td {
     font-weight: normal;
 }
 
-.tooltip-anchor .tooltip::after {
+.tooltip-anchor .tooltip.left {
+    right: calc(100% + 10px);
+}
+
+.tooltip-anchor .tooltip.left::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-color: transparent transparent transparent var(--tooltip-background);
+    border-width: 5px 0px 5px 5px;
+    border-style: solid;
+}
+
+.tooltip-anchor .tooltip.right {
+    left: calc(100% + 10px);
+}
+
+.tooltip-anchor .tooltip.right::after {
     content: "";
     position: absolute;
     top: 50%;
     right: 100%;
     margin-top: -5px;
+    border-color: transparent var(--tooltip-background) transparent transparent;
     border-width: 5px 5px 5px 0px;
     border-style: solid;
 }
