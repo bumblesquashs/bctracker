@@ -4,7 +4,8 @@
 <div id="page-header">
     <h1 class="row">
         % include('components/route')
-        {{! route.display_name }}
+        <span>{{! route.display_name }}</span>
+        % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>

@@ -211,11 +211,6 @@ table {
     display: none;
 }
 
-.banner .content {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
 .button {
     font-size: 14pt;
     overflow: hidden;
@@ -237,6 +232,14 @@ table {
 
 .non-tablet {
     display: none !important;
+}
+
+.options-container {
+    row-gap: 0px;
+}
+
+.option {
+    padding: 5px 0px;
 }
 
 .page-container {

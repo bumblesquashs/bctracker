@@ -8,8 +8,11 @@ from colorsys import hls_to_rgb
 import helpers.departure
 import helpers.system
 
+from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
+
+import utils
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
@@ -72,7 +75,7 @@ class Route:
         self.colour = colour
         self.text_colour = text_colour
         
-        self.key = tuple([int(s) if s.isnumeric() else s for s in re.split('([0-9]+)', number)])
+        self.key = utils.key(number)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -176,8 +179,9 @@ class RouteCache:
     def __init__(self, system, trips):
         self.trips = trips
         services = {t.service for t in trips}
-        self.schedule = Schedule.combine(services)
         self.sheets = system.copy_sheets(services)
+        date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+        self.schedule = Schedule.combine(services, date_range)
         try:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].find_points()

@@ -140,6 +140,7 @@ table th {
     padding-bottom: 15px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
+    align-content: flex-start;
 }
 
 #system-menu .header {
@@ -177,12 +178,6 @@ table th {
     text-decoration: underline;
 }
 
-.banner .content {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 20px;
-}
-
 .button {
     font-size: 12pt;
     vertical-align: middle;
@@ -194,6 +189,10 @@ table th {
 
 .non-desktop {
     display: none !important;
+}
+
+.option:hover {
+    background-color: var(--hover-background);
 }
 
 .side-bar-open .side-bar-closed-only {

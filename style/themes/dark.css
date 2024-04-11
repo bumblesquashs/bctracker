@@ -26,6 +26,9 @@
     
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
+    
+    --checkbox-color: #5CC3FF;
+    --radio-button-color: #5CC3FF;
 }
 
 a {
@@ -39,6 +42,10 @@ body {
 
 body.full-map #page-header {
     background-color: rgba(30, 30, 30, 0.7);
+}
+
+body.full-map #page-header .option {
+    --hover-background: #2F2F2F;
 }
 
 input[type="text"] {
@@ -341,12 +348,6 @@ table tr:nth-child(2n-1) {
     background-color: #653800;
 }
 
-.checkbox-container .checkbox {
-    border-color: #FFFFFF;
-    background-color: #565656;
-    --image-color: #FFFFFF;
-}
-
 .code-block {
     background-color: #393939;
     border-color: #565656;
@@ -354,6 +355,22 @@ table tr:nth-child(2n-1) {
 
 .events .date {
     border-right-color: #565656;
+}
+
+.favourite {
+    --image-color: #2247B7;
+}
+
+.favourite:hover {
+    background-color: #393939;
+}
+
+.favourite.disabled {
+    --image-color: #565656;
+}
+
+.favourite.disabled:hover {
+    background-color: initial;
 }
 
 .info-box {
@@ -365,8 +382,8 @@ table tr:nth-child(2n-1) {
     border-bottom-color: #565656;
 }
 
-.info-box .radio-button-container:hover {
-    background-color: #565656;
+.info-box .option {
+    --hover-background: #565656;
 }
 
 .lighter-text {
@@ -429,25 +446,24 @@ table tr:nth-child(2n-1) {
     --adherence-background: #0093A8;
 }
 
+.option {
+    --hover-background: #393939;
+}
+
+.option .checkbox {
+    background-color: #2F2F2F;
+}
+
+.option .radio-button {
+    background-color: #2F2F2F;
+}
+
 .order-details .content .separator {
     color: #565656;
 }
 
 .positive {
     color: #428342;
-}
-
-.radio-button-container:hover {
-    background-color: #393939;
-}
-
-.radio-button-container .radio-button {
-    background-color: #2F2F2F;
-    border-color: #2247B7;
-}
-
-.radio-button-container .radio-button.selected::before {
-    background-color: #2247B7;
 }
 
 .route {

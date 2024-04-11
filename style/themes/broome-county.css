@@ -2,36 +2,36 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #FFFFFF
- * Secondary Header: #FFFFFF
- * Menu: #094409
- * Borders: #DDDDDD
+ * Primary Header: #165ABE
+ * Secondary Header: #E39B35
+ * Menu: #07080D
+ * Borders: #666666
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
- * Links: #0040FF
- * Buttons: #365CCB
+ * Links: #165ABE
+ * Buttons: #E39B35
  * 
  * Other colors may also be used for specific purposes
 */
 
 :root {
-    --tooltip-background: #888888;
+    --tooltip-background: #666666;
     --tooltip-text: #FFFFFF;
     
     --loading-background: #FFFFFF;
-    --loading-foreground: #AAAAAA;
+    --loading-foreground: #165ABE;
     
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
     
-    --checkbox-color: #000000;
-    --radio-button-color: #000000;
+    --checkbox-color: #165ABE;
+    --radio-button-color: #165ABE;
 }
 
 a {
-    color: #0040FF;
+    color: #165ABE;
 }
 
 body {
@@ -48,104 +48,105 @@ body.full-map #page-header .option {
 }
 
 input[type="text"] {
-    border-color: #EEEEEE;
+    border-color: #000000;
     background-color: #FFFFFF;
     color: #000000;
 }
 
 input[type="text"]:focus {
-    border-color: #AAAAAA;
+    border-color: #165ABE;
 }
 
 table {
-    border-color: #FFFFFF;
+    border-color: #000000;
 }
 
 table tbody tr:hover {
-    background-color: #DDDDDD;
+    background-color: #CBCBCB;
 }
 
 table tbody tr.header {
-    background-color: #EEEEEE;
+    background-color: #07080D;
+    color: #FFFFFF;
 }
 
 table td {
-    border-color: #FFFFFF;
-    border-width: 0px;
+    border-color: #000000;
 }
 
 table th {
-    background-color: #DDDDDD;
-    border-color: #FFFFFF;
-    border-width: 0px;
+    background-color: #E39B35;
+    color: #FFFFFF;
+    border-color: #000000;
 }
 
 table tr {
     background-color: #FFFFFF;
 }
 
-#loading-stop {
-    --image-color: #FFFFFF;
+table tr:nth-child(2n-1) {
+    background-color: #E6E6E6;
 }
 
 #map.preview {
-    border-color: #EEEEEE;
+    border-color: #000000;
 }
 
 #map-toggle {
-    background-color: #365CCB;
+    background-color: #E39B35;
     --image-color: #FFFFFF;
 }
 
 #navigation-bar {
-    background-color: #EEEEEE;
-    --image-color: #000000;
+    background-color: #165ABE;
+    --tooltip-background: #07080D;
+    --image-color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon {
-    color: #000000;
+    color: #FFFFFF;
 }
 
 #navigation-bar .navigation-icon:hover {
-    background-color: #DDDDDD;
+    background-color: #0A4499;
 }
 
 #navigation-bar .navigation-icon.disabled:hover {
-    background-color: #FFFFFF !important;
+    background-color: #165ABE !important;
 }
 
 #navigation-bar .navigation-item {
-    color: #000000;
+    color: #FFFFFF;
 }
 
 #navigation-bar .navigation-item:hover {
-    background-color: #DDDDDD;
+    background-color: #0A4499;
 }
 
 #navigation-bar .navigation-item.disabled:hover {
-    background-color: #FFFFFF !important;
+    background-color: #165ABE !important;
 }
 
 #navigation-menu {
-    background-color: #DDDDDD;
-    --image-color: #000000;
+    background-color: #07080D;
 }
 
 #navigation-menu .menu-button {
-    color: #000000;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #navigation-menu .menu-button.disabled {
-    color: #888888;
+    color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {
-    background-color: #000000;
+    background-color: #FFFFFF;
 }
 
 #nearby-status.loading {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
+    background-color: #E6E6E6;
+    border-color: #000000;
 }
 
 #nearby-status.error {
@@ -154,58 +155,61 @@ table tr {
 }
 
 #page {
-    --image-color: #666666;
+    --image-color: #000000;
 }
 
 #page-header {
-    border-bottom-color: #EEEEEE;
+    border-bottom-color: #000000;
 }
 
 #quick-navigation .item {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
+    background-color: #E6E6E6;
+    border-color: #000000;
 }
 
 #refresh-button {
-    --image-color: #666666;
+    --image-color: #FFFFFF;
 }
 
 #refresh-button:hover {
-    background-color: #DDDDDD;
+    background-color: #C07A16;
 }
 
 #refresh-button.disabled:hover {
-    background-color: #FFFFFF;
+    background-color: #E39B35;
 }
 
 #search {
-    background-color: #FFFFFF;
-    border-color: #EEEEEE;
+    background-color: #E6E6E6;
+    border-color: #000000;
 }
 
 #search-header {
-    background-color: #FFFFFF;
-    border-color: #EEEEEE;
+    background-color: #E39B35;
+    color: #FFFFFF;
+    border-color: #000000;
+    --tooltip-background: #07080D;
 }
 
 #search-input {
-    border-color: #EEEEEE;
+    border-color: #FFFFFF;
 }
 
 #search-input:focus {
-    border-color: #DDDDDD;
+    border-color: #165ABE;
 }
 
 #search-paging {
-    border-color: #EEEEEE;
+    background-color: #FFFFFF;
+    border-color: #000000;
 }
 
 #search-placeholder {
-    color: #888888;
+    color: #666666;
 }
 
 #search-results {
-    --image-color: #666666;
+    --image-color: #000000;
 }
 
 #search-results .result {
@@ -213,42 +217,43 @@ table tr {
 }
 
 #search-results .result:hover {
-    background-color: #EEEEEE;
+    background-color: #CBCBCB;
 }
 
 #search-results .result.keyboard-selected {
-    background-color: #EEEEEE;
+    background-color: #CBCBCB;
 }
 
 #search-results .result .description {
-    color: #888888;
+    color: #666666;
 }
 
 #side-bar {
-    border-right-color: #EEEEEE;
+    border-right-color: #000000;
 }
 
 #side-bar-toggle {
-    background-color: #EEEEEE;
+    background-color: #E6E6E6;
 }
 
 #side-bar-toggle:hover {
-    background-color: #DDDDDD;
+    background-color: #CBCBCB;
 }
 
 #status {
-    background-color: #FFFFFF;
-    color: #000000;
-    border-bottom-color: #EEEEEE;
+    background-color: #E39B35;
+    color: #FFFFFF;
+    border-bottom-color: #000000;
 }
 
 #system-menu {
-    background-color: #FFFFFF;
-    border-bottom-color: #EEEEEE;
+    background-color: #E6E6E6;
+    border-bottom-color: #000000;
 }
 
 #system-menu .header {
-    background-color: #EEEEEE;
+    background-color: #07080D;
+    color: #FFFFFF;
 }
 
 #system-menu .system-button {
@@ -256,27 +261,27 @@ table tr {
 }
 
 #system-menu .system-button:hover {
-    background-color: #DDDDDD;
+    background-color: #CBCBCB;
 }
 
 #system-menu .system-button.current {
-    background-color: #DDDDDD;
+    background-color: #CBCBCB;
     font-weight: bold;
     cursor: default;
 }
 
 #system-menu-toggle {
-    --image-color: #666666;
+    --image-color: #FFFFFF;
 }
 
 #title {
-    background-color: #EEEEEE;
-    color: #000000;
-    --image-color: #000000;
+    background-color: #165ABE;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 #title:hover {
-    background-color: #DDDDDD;
+    background-color: #0A4499;
 }
 
 .ahead {
@@ -284,13 +289,13 @@ table tr {
 }
 
 .banner {
-    background-color: #FFF7ED;
-    color: #000000;
-    --image-color: #000000;
+    background-color: #0A4499;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .banner a {
-    color: #000000;
+    color: #FFFFFF;
 }
 
 .behind {
@@ -298,29 +303,29 @@ table tr {
 }
 
 .button {
-    background-color: #AAAAAA;
+    background-color: #165ABE;
     color: #FFFFFF;
-    --image-color: #666666;
+    --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #888888;
+    background-color: #0A4499;
 }
 
 .button.disabled {
-    background-color: #888888;
+    background-color: #666666;
 }
 
 .button.disabled:hover {
-    background-color: #888888 !important;
+    background-color: #666666 !important;
 }
 
 .button.inactive {
-    background-color: #DDDDDD;
+    background-color: #ABABAB;
 }
 
 .button.inactive:hover {
-    background-color: #AAAAAA;
+    background-color: #666666;
 }
 
 .button.survey-button {
@@ -332,45 +337,29 @@ table tr {
 }
 
 .code-block {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
+    background-color: #E6E6E6;
+    border-color: #000000;
 }
 
 .events .date {
-    border-right-color: #DDDDDD;
-}
-
-.favourite {
-    --image-color: #888888;
-}
-
-.favourite:hover {
-    background-color: #EEEEEE;
-}
-
-.favourite.disabled {
-    --image-color: #AAAAAA;
-}
-
-.favourite.disabled:hover {
-    background-color: initial;
+    border-right-color: #CBCBCB;
 }
 
 .info-box {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
+    background-color: #E6E6E6;
+    border-color: #000000;
 }
 
 .info-box .section {
-    border-bottom-color: #DDDDDD;
+    border-bottom-color: #CBCBCB;
 }
 
 .info-box .option {
-    --hover-background: #DDDDDD;
+    --hover-background: #CBCBCB;
 }
 
 .lighter-text {
-    color: #888888;
+    color: #666666;
 }
 
 .marker .details {
@@ -379,7 +368,7 @@ table tr {
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #888888;
+    background-color: #165ABE;
     --image-color: #FFFFFF;
 }
 
@@ -401,14 +390,14 @@ table tr {
 }
 
 .news-post {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
+    background-color: #E6E6E6;
+    border-color: #000000;
 }
 
 .news-post .header {
-    background-color: #DDDDDD;
-    color: #000000;
-    border-bottom-color: #DDDDDD;
+    background-color: #E39B35;
+    color: white;
+    border-bottom-color: #000000;
 }
 
 .no-service {
@@ -426,7 +415,7 @@ table tr {
 }
 
 .option {
-    --hover-background: #EEEEEE;
+    --hover-background: #E6E6E6;
 }
 
 .option .checkbox {
@@ -438,7 +427,7 @@ table tr {
 }
 
 .order-details .content .separator {
-    color: #888888;
+    color: #666666;
 }
 
 .positive {
@@ -468,30 +457,30 @@ table tr {
 }
 
 .sheet-list .footer {
-    color: #888888;
+    color: #666666;
 }
 
 .sheet-list .legend {
-    color: #888888;
+    color: #666666;
 }
 
 .tab-button-bar {
-    background: #EEEEEE;
-    border-color: #EEEEEE;
+    background: #666666;
+    border-color: #000000;
 }
 
 .tab-button {
     background-color: #FFFFFF;
-    color: #0040FF;
+    color: #165ABE;
 }
 
 .tab-button:hover {
-    background-color: #DDDDDD;
+    background-color: #E6E6E6;
     cursor: pointer;
 }
 
 .tab-button.current {
-    background-color: #EEEEEE;
+    background-color: #CBCBCB;
     color: #000000;
 }
 
@@ -500,7 +489,7 @@ table tr {
 }
 
 .timeline .section:hover {
-    border-color: #888888;
+    border-color: #000000;
 }
 
 .very-ahead {

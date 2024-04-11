@@ -29,7 +29,7 @@ def create(system, row):
         'text_colour': text_colour
     })
 
-def find(system, route_id):
+def find(system, route_id=None, number=None):
     '''Returns the route with the given system and route ID'''
     system_id = getattr(system, 'id', system)
     routes = database.select('route',
@@ -43,7 +43,8 @@ def find(system, route_id):
         },
         filters={
             'route.system_id': system_id,
-            'route.route_id': route_id
+            'route.route_id': route_id,
+            'route.number': number
         },
         limit=1,
         initializer=Route.from_db

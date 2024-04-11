@@ -1,4 +1,6 @@
 
+% import helpers.position
+
 % rebase('base')
 
 <div id="page-header">
@@ -103,16 +105,138 @@
         </div>
         <div class="section">
             <div class="header">
-                <h2>Community</h2>
+                <h2>Favourites</h2>
             </div>
             <div class="content">
-                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
-                <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                <p>
+                    Add up to 10 favourites using the
+                    % include('components/svg', name='non-favourite')
+                    button on buses, routes, and stops.
+                </p>
+                % if favourites:
+                    % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
+                    % route_favourites = [f for f in favourites if f.type == 'route']
+                    % stop_favourites = [f for f in favourites if f.type == 'stop']
+                    <div class="container">
+                        % if vehicle_favourites:
+                            <div class="section">
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Bus</th>
+                                                <th>Headsign</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % orders = {f.value.order for f in vehicle_favourites}
+                                            % for order in sorted(orders):
+                                                % order_favourites = [f for f in vehicle_favourites if f.value.order == order]
+                                                <tr class="header">
+                                                    <td colspan="2">{{! order }}</td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for favourite in order_favourites:
+                                                    % value = favourite.value
+                                                    % position = helpers.position.find(value)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                % include('components/bus', bus=value)
+                                                                % if position:
+                                                                    % include('components/adherence', adherence=position.adherence)
+                                                                % end
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            % if position and position.trip:
+                                                                % include('components/headsign', trip=position.trip)
+                                                            % else:
+                                                                <div class="lighter-text">Not in service</div>
+                                                            % end
+                                                        </td>
+                                                    </tr>
+                                                % end
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        % end
+                        % if route_favourites:
+                            <div class="section">
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Route</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % favourite_systems = {f.value.system for f in route_favourites}
+                                            % for favourite_system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in route_favourites if f.value.system == favourite_system]
+                                                <tr class="header">
+                                                    <td>{{ favourite_system }}</td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for favourite in system_favourites:
+                                                    % value = favourite.value
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                % include('components/route', route=value, include_link=False)
+                                                                <a href="{{ get_url(value.system, f'routes/{value.number}') }}">{{! value.display_name }}</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                % end
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        % end
+                        % if stop_favourites:
+                            <div class="section">
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Stop Number</th>
+                                                <th>Stop Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % favourite_systems = {f.value.system for f in stop_favourites}
+                                            % for favourite_system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in stop_favourites if f.value.system == favourite_system]
+                                                <tr class="header">
+                                                    <td colspan="2">{{ favourite_system }}</td>
+                                                </tr>
+                                                <tr class="display-none"></tr>
+                                                % for favourite in system_favourites:
+                                                    % value = favourite.value
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{ get_url(value.system, f'stops/{value.number}') }}">{{ value.number }}</a>
+                                                        </td>
+                                                        <td>{{ value.name }}</td>
+                                                    </tr>
+                                                % end
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        % end
+                    </div>
+                % end
             </div>
         </div>
     </div>
-
-    <div class="container flex-3">
+    
+    <div class="container flex-2">
         <div class="section">
             <div class="header">
                 <h2>Quick Navigation</h2>
@@ -132,17 +256,7 @@
                         <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
                             <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="column center">
-                            % include('components/svg', name='history')
-                            <h3>Bus History</h3>
-                            <p>See all buses that have been tracked, including last-seen date and transfers</p>
-                        </div>
-                        <div class="button-container">
                             <a class="button" href="{{ get_url(system, 'history') }}">History</a>
-                            <a class="button" href="{{ get_url(system, 'history/transfers') }}">Transfers</a>
                         </div>
                     </div>
                     <div class="item">
@@ -220,6 +334,18 @@
                         <a href="{{ get_url(system, 'news') }}">See older news</a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container flex-1">
+        <div class="section">
+            <div class="header">
+                <h2>Community</h2>
+            </div>
+            <div class="content">
+                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
+                <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>
     </div>

@@ -14,11 +14,13 @@
     </div>
 </div>
 
-<div class="checkbox-container" onclick="toggleNISBuses()">
-    <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-        % include('components/svg', name='check')
+<div class="options-container">
+    <div class="option" onclick="toggleNISBuses()">
+        <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+            % include('components/svg', name='check')
+        </div>
+        <div>Show NIS Buses</div>
     </div>
-    <div>Show NIS Buses</div>
 </div>
 
 % if len(positions) == 0:
