@@ -9,8 +9,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Server Management</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div class="button-container">
@@ -26,8 +27,9 @@
     </div>
     <div class="container flex-3">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>System Management</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div class="container">
@@ -35,15 +37,17 @@
                         % for region in regions:
                             % region_systems = [s for s in systems if s.region == region]
                             <div class="section">
-                                <div class="header">
+                                <div class="header" onclick="toggleSection(this)">
                                     <h3>{{ region }}</h3>
+                                    % include('components/toggle')
                                 </div>
                                 <div class="content">
                                     <div class="container inline">
                                         % for region_system in sorted(region_systems):
                                             <div class="section">
-                                                <div class="header">
+                                                <div class="header" onclick="toggleSection(this)">
                                                     <h4>{{ region_system }}</h4>
+                                                    % include('components/toggle')
                                                 </div>
                                                 <div class="content">
                                                     <div class="button-container">
@@ -63,8 +67,9 @@
                         % end
                     % else:
                         <div class="section">
-                            <div class="header">
+                            <div class="header" onclick="toggleSection(this)">
                                 <h3>{{ system }}</h3>
+                                % include('components/toggle')
                             </div>
                             <div class="content">
                                 <div class="button-container">

@@ -16,8 +16,9 @@
         % if len(records) > 0:
             <div class="sidebar container flex-1">
                 <div class="section">
-                    <div class="header">
+                    <div class="header" onclick="toggleSection(this)">
                         <h2>Overview</h2>
+                        % include('components/toggle')
                     </div>
                     <div class="content">
                         <div class="info-box">
@@ -42,8 +43,9 @@
         
         <div class="container flex-3">
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>History</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     % if len(records) == 0:

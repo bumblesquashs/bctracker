@@ -39,9 +39,10 @@
         <div class="content">
             <div class="page-container">
                 <div class="sidebar container flex-1">
-                    <div class="section">
-                        <div class="header">
+                    <div class="section closed">
+                        <div class="header" onclick="toggleSection(this)">
                             <h2>Statistics</h2>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <table>
@@ -82,8 +83,9 @@
                 <div class="container flex-3">
                     % for type in model_types:
                         <div class="section">
-                            <div class="header">
+                            <div class="header" onclick="toggleSection(this)">
                                 <h2>{{ type }}</h2>
+                                % include('components/toggle')
                             </div>
                             <div class="content">
                                 <div class="container">
@@ -91,8 +93,9 @@
                                     % for model in type_models:
                                         % model_orders = [o for o in orders if o.model == model]
                                         <div id="{{ model.id }}" class="section">
-                                            <div class="header">
+                                            <div class="header" onclick="toggleSection(this)">
                                                 <h3>{{! model }}</h3>
+                                                % include('components/toggle')
                                             </div>
                                             <div class="content">
                                                 <table>

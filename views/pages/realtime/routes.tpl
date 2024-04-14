@@ -71,16 +71,17 @@
                 % continue
             % end
             <div class="section">
-                <div class="header">
-                    <h2 class="row">
-                        % include('components/route')
-                        <div>{{! route.display_name }}</div>
-                    </h2>
+                <div class="header" onclick="toggleSection(this)">
+                    <div class="column">
+                        <h2 class="row">
+                            % include('components/route')
+                            <div>{{! route.display_name }}</div>
+                        </h2>
+                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">View schedule and details</a>
+                    </div>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
-                    <p>
-                        <a href="{{ get_url(route.system, f'routes/{route.number}') }}">View schedule and details</a>
-                    </p>
                     <table>
                         <thead>
                             <tr>
@@ -169,8 +170,9 @@
         % no_route_positions = sorted([p for p in positions if p.trip is None])
         % if len(no_route_positions) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Not In Service</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table class="striped">

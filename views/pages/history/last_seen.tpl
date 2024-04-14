@@ -12,9 +12,10 @@
 
 <div class="page-container">
     <div class="sidebar container flex-1">
-        <div class="section">
-            <div class="header">
+        <div class="section closed">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Filter by Date</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div class="info-box">
@@ -60,9 +61,10 @@
         </div>
         
         % if overviews:
-            <div class="section">
-                <div class="header">
+            <div class="section closed">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Statistics</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     % models = sorted({o.bus.model for o in overviews if o.bus.model is not None})
@@ -104,8 +106,9 @@
     
     <div class="container flex-3">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Vehicles</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(overviews) == 0:

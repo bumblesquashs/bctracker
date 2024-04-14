@@ -147,6 +147,11 @@
                 
                 document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if config.cookie_domain is None else config.cookie_domain }};path=/";
             }
+            
+            function toggleSection(header) {
+                const section = header.parentElement;
+                section.classList.toggle("closed");
+            }
         </script>
     </head>
     

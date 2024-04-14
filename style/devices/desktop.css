@@ -183,6 +183,10 @@ table th {
     vertical-align: middle;
 }
 
+.container > .section > .header > .toggle {
+    display: none;
+}
+
 .mobile-only {
     display: none !important;
 }

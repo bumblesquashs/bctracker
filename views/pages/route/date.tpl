@@ -17,8 +17,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Overview</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div class="info-box">
@@ -41,9 +42,12 @@
     </div>
     <div class="container flex-3">
         <div class="section">
-            <div class="header">
-                <h2>{{ date.format_long() }}</h2>
-                <h3>{{ date.weekday }}</h3>
+            <div class="header" onclick="toggleSection(this)">
+                <div class="column">
+                    <h2>{{ date.format_long() }}</h2>
+                    <p>{{ date.weekday }}</p>
+                </div>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % trips = route.get_trips(date=date)
@@ -68,8 +72,9 @@
                         % for direction in sorted({t.direction for t in trips}):
                             % direction_trips = [t for t in trips if t.direction == direction]
                             <div class="section">
-                                <div class="header">
-                                    <h4>{{ direction }}</h4>
+                                <div class="header" onclick="toggleSection(this)">
+                                    <h3>{{ direction }}</h3>
+                                    % include('components/toggle')
                                 </div>
                                 <div class="content">
                                     <table>

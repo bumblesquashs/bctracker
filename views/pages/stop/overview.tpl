@@ -21,8 +21,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Overview</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % stop_departures = stop.find_departures()
@@ -50,8 +51,9 @@
         % nearby_stops = sorted(stop.nearby_stops)
         % if len(nearby_stops) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Nearby Stops</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
@@ -82,8 +84,9 @@
         % alt_systems = [s for s in systems if s.get_stop(number=stop.number) is not None and s != system]
         % if len(alt_systems) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Other Systems At This Stop</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
@@ -113,8 +116,9 @@
     <div class="container flex-3">
         % if len(departures) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Upcoming Departures</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     % upcoming_count = 3 + floor(len(routes) / 3)
@@ -166,8 +170,9 @@
         % end
         
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Today's Schedule</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(departures) == 0:

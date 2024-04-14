@@ -20,8 +20,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Overview</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % include('components/map', map_trip=trip, map_positions=positions)
@@ -92,8 +93,9 @@
         % related_trips = trip.related_trips
         % if len(related_trips) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Related Trips</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
@@ -138,12 +140,13 @@
     <div class="container flex-3">
         % if len(positions) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     % if len(positions) == 1:
                         <h2>Active Bus</h2>
                     % else:
                         <h2>Active Buses</h2>
                     % end
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
@@ -191,8 +194,9 @@
             % bus = assignment.bus
             % position = helpers.position.find(bus)
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Scheduled Bus</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <p>This bus is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
@@ -261,8 +265,9 @@
         % end
         
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Stop Schedule</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len([d for d in departures if d.timepoint]) > 0:
