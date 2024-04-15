@@ -140,6 +140,9 @@ class StopCache:
     def __init__(self, system, departures):
         services = {d.trip.service for d in departures if d.trip is not None}
         self.sheets = system.copy_sheets(services)
-        date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-        self.schedule = Schedule.combine(services, date_range)
+        if self.sheets:
+            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+            self.schedule = Schedule.combine(services, date_range)
+        else:
+            self.schedule = None
         self.routes = sorted({d.trip.route for d in departures if d.trip is not None and d.trip.route is not None})
