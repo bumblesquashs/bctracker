@@ -455,6 +455,10 @@ table tr {
     background-color: #989898;
 }
 
+.scheduled {
+    --image-color: #888888;
+}
+
 .sheet {
     background-color: #DDDDDD;
 }

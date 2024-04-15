@@ -558,6 +558,10 @@ table tr {
     text-decoration: none;
 }
 
+.scheduled {
+    --image-color: #000000;
+}
+
 .sheet {
     background-color: #DFDFDF;
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
