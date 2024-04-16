@@ -102,7 +102,7 @@ def get_url(system, path='', **kwargs):
     else:
         url = config.all_systems_domain.format(path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
-    if len(query_args) > 0:
+    if query_args:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
@@ -193,18 +193,13 @@ def get_favourites():
 
 def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
+        paths = [base_path]
         if base_path == '/':
-            paths = [
-                base_path,
-                f'/<{system_key}>'
-            ]
+            paths.append(f'/<{system_key}>')
             if append_slash:
                 paths.append(f'/<{system_key}>/')
         else:
-            paths = [
-                base_path,
-                f'/<{system_key}>{base_path}'
-            ]
+            paths.append(f'/<{system_key}>{base_path}')
             if append_slash:
                 paths.append(f'{base_path}/')
                 paths.append(f'/<{system_key}>{base_path}/')
@@ -391,7 +386,7 @@ def bus_overview_page(system, agency, bus_number):
         title=f'Bus {bus}',
         system=system,
         agency=agency,
-        include_maps=position is not None,
+        include_maps=bool(position),
         bus=bus,
         position=position,
         records=records,
@@ -418,8 +413,8 @@ def bus_map_page(system, agency, bus_number):
         title=f'Bus {bus}',
         system=system,
         agency=agency,
-        include_maps=position is not None,
-        full_map=position is not None,
+        include_maps=bool(position),
+        full_map=bool(position),
         bus=bus,
         position=position,
         favourite=Favourite('vehicle', bus),
@@ -471,9 +466,9 @@ def history_last_seen_page(system, agency):
     except ValueError:
         days = None
     if days:
-        if system:
+        try:
             date = Date.today(system.timezone) - timedelta(days=days)
-        else:
+        except AttributeError:
             date = Date.today() - timedelta(days=days)
         overviews = [o for o in overviews if o.last_record.date > date]
     return page(
