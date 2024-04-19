@@ -1054,7 +1054,7 @@ def themes_page(system, agency):
     redirect(get_url(system, 'personalize'))
 
 @endpoint('/personalize')
-def themes_page(system, agency):
+def personalize_page(system, agency):
     theme_id = request.query.get('theme')
     if theme_id:
         set_cookie('theme', theme_id)
