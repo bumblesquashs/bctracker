@@ -97,9 +97,13 @@ class Time:
         return self.format_web()
     
     def __eq__(self, other):
-        return self.hour == other.hour and self.minute == other.minute and self.second == other.second
+        return other and self.hour == other.hour and self.minute == other.minute and self.second == other.second
     
     def __lt__(self, other):
+        if self.is_unknown:
+            return True
+        if not other or other.is_unknown:
+            return False
         if self.hour != other.hour:
             return self.hour < other.hour
         if self.minute != other.minute:
@@ -109,6 +113,27 @@ class Time:
         if other.second is None:
             return True
         return self.second < other.second
+    
+    def __gt__(self, other):
+        if self.is_unknown:
+            return False
+        if not other or other.is_unknown:
+            return True
+        if self.hour != other.hour:
+            return self.hour > other.hour
+        if self.minute != other.minute:
+            return self.minute > other.minute
+        if self.second is None:
+            return True
+        if other.second is None:
+            return False
+        return self.second > other.second
+    
+    def __lte__(self, other):
+        return self < other or self == other
+    
+    def __gte__(self, other):
+        return self > other or self == other
     
     def __add__(self, delta):
         time = self.datetime + delta

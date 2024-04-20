@@ -1,4 +1,5 @@
 
+% from models.date import Date
 % from models.time import Time
 
 % service_group = get('service_group')
@@ -27,8 +28,9 @@
             </a>
         % end
         
-        % if start_time.is_earlier and end_time.is_later and block.schedule.is_today:
-            % time = Time.now(block.system.timezone)
+        % date = Date.today(block.system.timezone)
+        % time = Time.now(block.system.timezone)
+        % if start_time < time and end_time > time and date in block.schedule:
             % offset_minutes = time.get_minutes() - start_time.get_minutes()
             % offset_percentage = (offset_minutes / total_minutes) * 100
             <div class="now" style="left: {{ offset_percentage }}%;">
