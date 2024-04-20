@@ -224,7 +224,7 @@
                                 <td class="non-mobile">
                                     % include('components/order', order=bus.order)
                                 </td>
-                                % if position:
+                                % if position and position.trip:
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
