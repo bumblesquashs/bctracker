@@ -463,7 +463,7 @@ def history_last_seen_page(system, agency):
     overviews = [o for o in helpers.overview.find_all(system) if o.last_record and o.bus.visible]
     try:
         days = int(request.query['days'])
-    except ValueError:
+    except (KeyError, ValueError):
         days = None
     if days:
         try:
@@ -1277,12 +1277,30 @@ def api_admin_reload_realtime(system, agency, reload_system_id):
 
 @app.error(403)
 def error_403_page(error):
-    return error_page('403', None, 'Forbidden', error=error)
+    return error_page(
+        name='403', 
+        title='Forbidden',
+        system=None,
+        agency=None,
+        error=error
+    )
 
 @app.error(404)
 def error_404_page(error):
-    return error_page('404', None, 'Not Found', error=error)
+    return error_page(
+        name='404',
+        title='Not Found',
+        system=None,
+        agency=None,
+        error=error
+    )
 
 @app.error(500)
 def error_500_page(error):
-    return error_page('500', None, 'Internal Error', error=error)
+    return error_page(
+        name='500',
+        title='Internal Error',
+        system=None,
+        agency=None,
+        error=error
+    )
