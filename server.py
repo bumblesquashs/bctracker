@@ -452,11 +452,18 @@ def history_first_seen_page(system):
 
 @endpoint('/history/transfers')
 def history_transfers_page(system):
-    transfers = helpers.transfer.find_all(system)
+    filter = request.query.get('filter')
+    if filter == 'from':
+        transfers = helpers.transfer.find_all(old_system=system)
+    elif filter == 'to':
+        transfers = helpers.transfer.find_all(new_system=system)
+    else:
+        transfers = helpers.transfer.find_all(old_system=system, new_system=system)
     return page('history/transfers', system,
         title='Vehicle History',
         path='history/transfers',
-        transfers=[t for t in transfers if t.bus.visible]
+        transfers=[t for t in transfers if t.bus.visible],
+        filter=filter
     )
 
 @endpoint('/routes')
