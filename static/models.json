@@ -80,13 +80,13 @@
             "length": 40,
             "fuel": "Hybrid"
         },
-        "dennis-trident": {
+        "dennis-trident-iii": {
             "manufacturer": "Dennis",
             "name": "Trident III",
             "length": 40,
             "fuel": "Diesel"
         },
-        "transbus-trident": {
+        "transbus-trident-iii": {
             "manufacturer": "TransBus",
             "name": "Trident III",
             "length": 40,

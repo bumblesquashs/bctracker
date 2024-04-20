@@ -57,7 +57,7 @@
             { "year": 2000, "low": 9051, "high": 9078 },
             { "year": 2001, "low": 9081, "high": 9085 }
         ],
-        "dennis-trident": [
+        "dennis-trident-iii": [
             { "year": 2000, "low": 9001, "high": 9010 }
         ],
         "ford-cbb-e450-polar-v": [
@@ -144,7 +144,7 @@
         "proterra-zx5": [
             { "year": 2022, "number": 9093, "demo": true }
         ],
-        "transbus-trident": [
+        "transbus-trident-iii": [
             { "year": 2002, "low": 9021, "high": 9039 }
         ],
         "unknown": [
