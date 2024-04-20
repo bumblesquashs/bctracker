@@ -30,15 +30,27 @@
             "length": 40,
             "fuel": "CNG"
         },
-        "nova-bus-lfs": {
+        "nova-bus-lfs-2": {
             "manufacturer": "Nova Bus",
-            "name": "LFS",
+            "name": "LFS (2nd Gen)",
             "length": 40,
             "fuel": "Diesel"
         },
-        "nova-bus-lfs-suburban": {
+        "nova-bus-lfs-3": {
             "manufacturer": "Nova Bus",
-            "name": "LFS Suburban",
+            "name": "LFS (3rd Gen)",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "nova-bus-lfs-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS (4th Gen)",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "nova-bus-lfs-suburban-2": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS Suburban (2nd Gen)",
             "length": 40,
             "fuel": "Diesel"
         },
@@ -52,26 +64,32 @@
     "decker": {
         "alexander-dennis-enviro500": {
             "manufacturer": "Alexander Dennis",
-            "name": "Enviro 500",
+            "name": "Enviro500",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "alexander-dennis-enviro500-lhd": {
+            "manufacturer": "Alexander Dennis",
+            "name": "Enviro500 LHD",
             "length": 42,
             "fuel": "Diesel"
         },
         "alexander-dennis-enviro500h": {
             "manufacturer": "Alexander Dennis",
-            "name": "Enviro 500H",
-            "length": 42,
+            "name": "Enviro500H",
+            "length": 40,
             "fuel": "Hybrid"
         },
         "dennis-trident": {
             "manufacturer": "Dennis",
-            "name": "Trident",
-            "length": 42,
+            "name": "Trident III",
+            "length": 40,
             "fuel": "Diesel"
         },
         "transbus-trident": {
             "manufacturer": "TransBus",
-            "name": "Trident",
-            "length": 42,
+            "name": "Trident III",
+            "length": 40,
             "fuel": "Diesel"
         }
     },
