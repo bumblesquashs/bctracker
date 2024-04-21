@@ -132,10 +132,10 @@
         "nova-bus-lfs-3": [
             { "year": 2009, "low": 9319, "high": 9433 },
             { "year": 2012, "number": 9434 },
-            { "year": 2013, "low": 9435, "high": 9446 },
-            { "year": 2015, "low": 9447, "high": 9486 }
+            { "year": 2013, "low": 9435, "high": 9446 }
         ],
         "nova-bus-lfs-4": [
+            { "year": 2015, "low": 9447, "high": 9486 },
             { "year": 2017, "low": 6000, "high": 6029 }
         ],
         "nova-bus-lfs-suburban-2": [
