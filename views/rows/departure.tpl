@@ -33,10 +33,7 @@
                 <div class="column">
                     <div class="row">
                         % include('components/bus')
-                        <div class="tooltip-anchor">
-                            % include('components/svg', name='schedule')
-                            <div class="tooltip right">Bus is scheduled</div>
-                        </div>
+                        % include('components/scheduled')
                     </div>
                     <span class="non-desktop smaller-font">
                         % include('components/order', order=bus.order)

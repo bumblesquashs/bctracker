@@ -29,8 +29,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Realtime Information</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if position is None:
@@ -171,10 +172,11 @@
         
         % if bus.order is not None:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Details</h2>
+                    % include('components/toggle')
                 </div>
-                <div class="section">
+                <div class="content">
                     <div class="info-box">
                         % if bus.order.size > 1:
                             <div class="section">
@@ -208,8 +210,9 @@
             % upcoming_departures = position.find_upcoming_departures()
             % if len(upcoming_departures) > 0:
                 <div class="section">
-                    <div class="header">
+                    <div class="header" onclick="toggleSection(this)">
                         <h2>Upcoming Stops</h2>
+                        % include('components/toggle')
                     </div>
                     <div class="content">
                         % if len([d for d in upcoming_departures if d.timepoint]) > 0:
@@ -279,8 +282,9 @@
             % end
         % end
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Recent History</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(records) == 0:
@@ -301,7 +305,9 @@
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>
                             <span>Entries with a</span>
-                            % include('components/svg', name='warning')
+                            <span class="record-warnings">
+                                % include('components/svg', name='warning')
+                            </span>
                             <span>may be accidental logins.</span>
                         </p>
                     % end

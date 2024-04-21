@@ -60,7 +60,7 @@ h2 .route {
     min-width: 16px;
 }
 
-p > svg {
+p svg {
     vertical-align: middle;
 }
 
@@ -598,14 +598,21 @@ table tr.header td {
 
 .container > .section > .header {
     display: flex;
-    flex-direction: column;
-    gap: 0px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
 }
 
 .container > .section > .content {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.container > .section.closed > .header > .toggle {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
 }
 
 .display-none {

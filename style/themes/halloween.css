@@ -353,6 +353,10 @@ table tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
+.container > .section > .header > .toggle {
+    --image-color: #E56100;
+}
+
 .events .date {
     border-right-color: #565656;
 }
@@ -466,10 +470,18 @@ table tr:nth-child(2n-1) {
     color: #428342;
 }
 
+.record-warnings {
+    --image-color: #FF0000;
+}
+
 .route {
     color: #FFFFFF;
     border-color: #393939;
     background-color: #989898;
+}
+
+.scheduled {
+    --image-color: #989898;
 }
 
 .sheet {

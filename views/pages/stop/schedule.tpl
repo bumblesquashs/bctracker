@@ -35,8 +35,9 @@
     <div class="page-container">
         <div class="sidebar container flex-1">
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Overview</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <div class="info-box">
@@ -51,19 +52,23 @@
             % for (i, sheet) in enumerate(sheets):
                 % path_suffix = '' if i == 0 else str(i + 1)
                 <div class="section">
-                    <div class="header">
+                    <div class="header" onclick="toggleSection(this)">
                         <h2>{{ sheet }}</h2>
+                        % include('components/toggle')
                     </div>
                     <div class="content">
                         <div class="container inline">
                             % for service_group in sheet.normal_service_groups:
                                 % departures = stop.find_departures(service_group)
                                 <div class="section">
-                                    <div class="header">
-                                        % for weekday in service_group.schedule.weekdays:
-                                            <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
-                                        % end
-                                        <h3>{{ service_group }}</h3>
+                                    <div class="header" onclick="toggleSection(this)">
+                                        <div>
+                                            % for weekday in service_group.schedule.weekdays:
+                                                <div id="{{ weekday.short_name }}{{path_suffix}}"></div>
+                                            % end
+                                            <h3>{{ service_group }}</h3>
+                                        </div>
+                                        % include('components/toggle')
                                     </div>
                                     <div class="content">
                                         <table>

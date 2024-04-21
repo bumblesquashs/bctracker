@@ -16,6 +16,7 @@ import database
 import backup
 
 running = True
+updating_realtime = False
 
 def setup():
     '''Adds signal handlers'''
@@ -59,6 +60,10 @@ def handle_gtfs(sig, frame):
 
 def handle_realtime(sig, frame):
     '''Reloads realtime data for every system, and backs up data at midnight'''
+    global updating_realtime
+    if updating_realtime:
+        return
+    updating_realtime = True
     date = Date.today()
     time = Time.now()
     print(f'--- {date} at {time} ---')
@@ -74,3 +79,4 @@ def handle_realtime(sig, frame):
                     gtfs.update_cache_in_background(system)
     if running:
         realtime.update_records()
+    updating_realtime = False

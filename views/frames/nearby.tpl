@@ -30,9 +30,12 @@
         % assignments = helpers.assignment.find_all(stop.system, stop=stop)
         % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system, trip=trips)}
         <div class="section">
-            <div class="header">
-                <h3>Stop {{ stop.number }} - {{ stop }}</h3>
-                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
+            <div class="header" onclick="toggleSection(this)">
+                <div class="column">
+                    <h3>Stop {{ stop.number }} - {{ stop }}</h3>
+                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
+                </div>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(upcoming_departures) == 0:
@@ -45,7 +48,9 @@
                     % if system is None or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
-                            % include('components/svg', name='schedule')
+                            <span class="scheduled">
+                                % include('components/svg', name='schedule')
+                            </span>
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end
