@@ -11,7 +11,7 @@ class AssignmentService:
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
-        database.insert('assignment', {
+        database.default.insert('assignment', {
             'system_id': system_id,
             'block_id': block_id,
             'bus_number': bus_number,
@@ -26,7 +26,7 @@ class AssignmentService:
             date = Date.today(system.timezone)
         except:
             date = Date.today()
-        assignments = database.select('assignment',
+        assignments = database.default.select('assignment',
             columns={
                 'assignment.system_id': 'assignment_system_id',
                 'assignment.block_id': 'assignment_block_id',
@@ -77,7 +77,7 @@ class AssignmentService:
                     'departure.trip_id': 'trip.trip_id'
                 }
                 filters['departure.stop_id'] = stop_id
-        assignments = database.select('assignment',
+        assignments = database.default.select('assignment',
             columns={
                 'assignment.system_id': 'assignment_system_id',
                 'assignment.block_id': 'assignment_block_id',
@@ -95,7 +95,7 @@ class AssignmentService:
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
-        database.delete('assignment', {
+        database.default.delete('assignment', {
             'system_id': system_id,
             'block_id': block_id,
             'bus_number': bus_number

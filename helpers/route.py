@@ -22,7 +22,7 @@ class RouteService:
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
-        database.insert('route', {
+        database.default.insert('route', {
             'system_id': system_id,
             'route_id': row['route_id'],
             'number': row['route_short_name'],
@@ -34,7 +34,7 @@ class RouteService:
     def find(self, system, route_id=None, number=None):
         '''Returns the route with the given system and route ID'''
         system_id = getattr(system, 'id', system)
-        routes = database.select('route',
+        routes = database.default.select('route',
             columns={
                 'route.system_id': 'route_system_id',
                 'route.route_id': 'route_id',
@@ -59,7 +59,7 @@ class RouteService:
     def find_all(self, system, limit=None):
         '''Returns all routes that match the given system'''
         system_id = getattr(system, 'id', system)
-        return database.select('route',
+        return database.default.select('route',
             columns={
                 'route.system_id': 'route_system_id',
                 'route.route_id': 'route_id',
@@ -78,7 +78,7 @@ class RouteService:
     def delete_all(self, system):
         '''Deletes all routes for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.delete('route', {
+        database.default.delete('route', {
             'system_id': system_id
         })
 

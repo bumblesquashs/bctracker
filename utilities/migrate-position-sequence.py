@@ -7,11 +7,11 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import database
 
-database.connect(foreign_keys=False)
+database.default.connect(foreign_keys=False)
 
-database.execute('''
+database.default.execute('''
     ALTER TABLE position ADD sequence INTEGER;
 ''')
 
-database.commit()
-database.disconnect()
+database.default.commit()
+database.default.disconnect()

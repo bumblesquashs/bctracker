@@ -11,30 +11,30 @@ import helpers.system
 
 helpers.system.default.load()
 
-database.connect(foreign_keys=False)
+database.default.connect(foreign_keys=False)
 
-database.execute('''
+database.default.execute('''
     INSERT INTO record (record_id, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen)
     SELECT record_id, bus_number, date, system_id, block_id, routes, start_time, end_time, first_seen, last_seen
     FROM records
 ''')
-database.execute('''
+database.default.execute('''
     INSERT INTO trip_record (trip_record_id, record_id, trip_id)
     SELECT trip_record_id, record_id, trip_id
     FROM trip_records
 ''')
-database.execute('''
+database.default.execute('''
     INSERT INTO transfer (transfer_id, bus_number, date, old_system_id, new_system_id)
     SELECT transfer_id, bus_number, date, old_system_id, new_system_id
     FROM transfers
 ''')
 
-database.execute('DROP TABLE records')
-database.execute('DROP TABLE trip_records')
-database.execute('DROP TABLE transfers')
+database.default.execute('DROP TABLE records')
+database.default.execute('DROP TABLE trip_records')
+database.default.execute('DROP TABLE transfers')
 
 def find_numbered(row_number_column):
-    cte, args = database.build_select('record',
+    cte, args = database.default.build_select('record',
         columns={
             'record.record_id': 'record_id',
             'record.bus_number': 'bus_number',
@@ -48,7 +48,7 @@ def find_numbered(row_number_column):
             'record.last_seen': 'last_seen',
             row_number_column: 'row_number'
         })
-    rows = database.select('numbered_record',
+    rows = database.default.select('numbered_record',
         columns={
             'numbered_record.record_id': 'record_id',
             'numbered_record.bus_number': 'record_bus_number',
@@ -79,7 +79,7 @@ last_records = {r.bus: r for r in last_records}
 for bus in first_records.keys():
     first_record = first_records[bus]
     last_record = last_records[bus]
-    database.insert('overview', {
+    database.default.insert('overview', {
         'bus_number': bus.number,
         'first_seen_date': first_record.date.format_db(),
         'first_seen_system_id': first_record.system.id,
@@ -89,5 +89,5 @@ for bus in first_records.keys():
         'last_record_id': last_record.id
     })
 
-database.commit()
-database.disconnect()
+database.default.commit()
+database.default.disconnect()

@@ -16,7 +16,7 @@ class RecordService:
         bus_number = getattr(bus, 'number', bus)
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
-        record_id = database.insert('record', {
+        record_id = database.default.insert('record', {
             'bus_number': bus_number,
             'date': date.format_db(),
             'system_id': system_id,
@@ -34,7 +34,7 @@ class RecordService:
         '''Inserts a new trip record into the database'''
         record_id = getattr(record, 'id', record)
         trip_id = getattr(trip, 'id', trip)
-        database.insert('trip_record', {
+        database.default.insert('trip_record', {
             'record_id': record_id,
             'trip_id': trip_id
         })
@@ -42,7 +42,7 @@ class RecordService:
     def update(self, record, time):
         '''Updates a record in the database'''
         record_id = getattr(record, 'id', record)
-        database.update('record',
+        database.default.update('record',
             values={
                 'last_seen': time.format_db()
             },
@@ -68,7 +68,7 @@ class RecordService:
                 'trip_record.record_id': 'record.record_id'
             }
             filters['trip_record.trip_id'] = trip_id
-        return database.select('record', 
+        return database.default.select('record', 
             columns={
                 'record.record_id': 'record_id',
                 'record.bus_number': 'record_bus_number',
@@ -94,14 +94,14 @@ class RecordService:
     def find_trip_ids(self, record):
         '''Returns all trip IDs associated with the given record'''
         record_id = getattr(record, 'id', record)
-        return database.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
+        return database.default.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
     
     def find_recorded_today(self, system, trips):
         '''Returns all bus numbers matching the given system and trips that were recorded on the current date'''
         system_id = getattr(system, 'id', system)
         trip_ids = [getattr(t, 'id', t) for t in trips]
         date = Date.today(system.timezone)
-        rows = database.select('trip_record',
+        rows = database.default.select('trip_record',
             columns={
                 'trip_record.trip_id': 'trip_id',
                 'record.bus_number': 'bus_number'
@@ -124,7 +124,7 @@ class RecordService:
     def delete_stale_trip_records(self):
         '''Removes all old and unused trip records'''
         date = Date.today() - timedelta(days=90)
-        database.execute('''
+        database.default.execute('''
             DELETE FROM trip_record
             WHERE trip_record_id IN (
                 SELECT trip_record_id

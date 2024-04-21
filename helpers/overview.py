@@ -10,7 +10,7 @@ class OverviewService:
         bus_number = getattr(bus, 'number', bus)
         system_id = getattr(system, 'id', system)
         record_id = getattr(record, 'id', record)
-        database.insert('overview', {
+        database.default.insert('overview', {
             'bus_number': bus_number,
             'first_seen_date': date.format_db(),
             'first_seen_system_id': system_id,
@@ -33,7 +33,7 @@ class OverviewService:
         system_id = getattr(system, 'id', system)
         last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
         bus_number = getattr(bus, 'number', bus)
-        return database.select('overview',
+        return database.default.select('overview',
             columns={
                 'overview.bus_number': 'overview_bus_number',
                 'overview.first_seen_date': 'overview_first_seen_date',
@@ -89,7 +89,7 @@ class OverviewService:
                 'last_record.record_id': 'overview.last_record_id'
             }
             filters['last_record.system_id'] = system_id
-        return database.select('overview',
+        return database.default.select('overview',
             columns={
                 'overview.bus_number': 'bus_number'
             },
@@ -111,7 +111,7 @@ class OverviewService:
             if not overview.first_record:
                 values['first_record_id'] = record_id
             values['last_record_id'] = record_id
-        database.update('overview', values, {
+        database.default.update('overview', values, {
             'bus_number': overview.bus.number
         })
 

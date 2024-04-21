@@ -24,7 +24,7 @@ class DepartureService:
             distance = int(row['shape_dist_traveled'])
         except (KeyError, ValueError):
             distance = None
-        database.insert('departure', {
+        database.default.insert('departure', {
             'system_id': system_id,
             'trip_id': row['trip_id'],
             'sequence': int(row['stop_sequence']),
@@ -65,7 +65,7 @@ class DepartureService:
                 'trip.system_id': 'departure.system_id',
                 'trip.trip_id': 'departure.trip_id'
             }
-        return database.select('departure',
+        return database.default.select('departure',
             columns={
                 'departure.system_id': 'departure_system_id',
                 'departure.trip_id': 'departure_trip_id',
@@ -95,7 +95,7 @@ class DepartureService:
         '''Returns all departures on a trip from the given sequence number onwards'''
         system_id = getattr(system, 'id', system)
         trip_id = getattr(trip, 'id', trip)
-        return database.select('departure',
+        return database.default.select('departure',
             columns={
                 'departure.system_id': 'departure_system_id',
                 'departure.trip_id': 'departure_trip_id',
@@ -123,7 +123,7 @@ class DepartureService:
         '''Returns all departures on trips that serve the given stop'''
         system_id = getattr(system, 'id', system)
         stop_id = getattr(stop, 'id', stop)
-        cte, args = database.build_select('departure',
+        cte, args = database.default.build_select('departure',
             columns='trip.*',
             joins={
                 'trip': {
@@ -135,7 +135,7 @@ class DepartureService:
                 'departure.system_id': system_id,
                 'departure.stop_id': stop_id
             })
-        return database.select('stop_trip',
+        return database.default.select('stop_trip',
             columns={
                 'departure.system_id': 'departure_system_id',
                 'departure.trip_id': 'departure_trip_id',
@@ -168,7 +168,7 @@ class DepartureService:
     def delete_all(self, system):
         '''Deletes all departures for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.delete('departure', {
+        database.default.delete('departure', {
             'system_id': system_id
         })
 

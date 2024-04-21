@@ -17,9 +17,9 @@ helpers.model.default.load()
 helpers.order.default.load()
 helpers.system.default.load()
 
-database.connect(foreign_keys=False)
+database.default.connect(foreign_keys=False)
 
-rows = database.select('record', 
+rows = database.default.select('record', 
     columns={
         'record.record_id': 'record_id',
         'record.bus_number': 'record_bus_number',
@@ -64,7 +64,7 @@ for record in records:
         record.first_seen = Time(time.hour + 1, time.minute, time.second, time.accurate_seconds, time.timezone)
         time = record.last_seen
         record.last_seen = Time(time.hour + 1, time.minute, time.second, time.accurate_seconds, time.timezone)
-    database.update('record',
+    database.default.update('record',
         values={
             'start_time': record.start_time.format_db(),
             'end_time': record.end_time.format_db(),
@@ -75,5 +75,5 @@ for record in records:
             'record_id': record.id
         })
 
-database.commit()
-database.disconnect()
+database.default.commit()
+database.default.disconnect()

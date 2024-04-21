@@ -26,10 +26,11 @@ from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 
 import config
-import cron
 import database
-import gtfs
-import realtime
+
+import helpers.cron
+import helpers.gtfs
+import helpers.realtime
 
 # Increase the version to force CSS reload
 VERSION = 38
@@ -42,11 +43,11 @@ def start(args):
     global running
     
     cp.config.update('server.conf')
-    config.setup(cp.config)
+    config.default.setup(cp.config)
     
     running = True
     
-    database.connect()
+    database.default.connect()
     
     if args.debug:
         print('Starting bottle in DEBUG mode')
@@ -71,25 +72,23 @@ def start(args):
     
     for system in helpers.system.default.find_all():
         if running:
-            gtfs.load(system, args.reload, args.updatedb)
-            if not gtfs.validate(system):
-                gtfs.load(system, True)
-            gtfs.update_cache_in_background(system)
-            realtime.update(system)
-            if not realtime.validate(system):
+            helpers.gtfs.default.load(system, args.reload, args.updatedb)
+            if not helpers.gtfs.default.validate(system):
+                helpers.gtfs.default.load(system, True)
+            helpers.gtfs.default.update_cache_in_background(system)
+            helpers.realtime.default.update(system)
+            if not helpers.realtime.default.validate(system):
                 system.validation_errors += 1
     if running:
-        realtime.update_records()
-        
-        cron.setup()
-        cron.start()
+        helpers.realtime.default.update_records()
+        helpers.cron.default.start()
 
 def stop():
     '''Terminates the server'''
     global running
     running = False
-    cron.stop()
-    database.disconnect()
+    helpers.cron.default.stop()
+    database.default.disconnect()
     if cp.server.running:
         cp.server.stop()
 
@@ -97,9 +96,9 @@ def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
     if system_id:
-        url = config.system_domain.format(system_id, path).rstrip('/')
+        url = config.default.system_domain.format(system_id, path).rstrip('/')
     else:
-        url = config.all_systems_domain.format(path).rstrip('/')
+        url = config.default.all_systems_domain.format(path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
     if query_args:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
@@ -108,7 +107,7 @@ def get_url(system, path='', **kwargs):
 
 def validate_admin():
     '''Checks if the admin key in the query/cookie matches the expected admin key'''
-    return not config.admin_key or query_cookie('admin_key', max_age_days=1) == config.admin_key
+    return not config.default.admin_key or query_cookie('admin_key', max_age_days=1) == config.default.admin_key
 
 def page(name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -121,9 +120,9 @@ def page(name, title, path='', path_args=None, system=None, agency=None, enable_
     try:
         last_updated = system.get_last_updated(time_format)
     except AttributeError:
-        last_updated = realtime.get_last_updated(time_format)
+        last_updated = helpers.realtime.default.get_last_updated(time_format)
     return template(f'pages/{name}',
-        config=config,
+        config=config.default,
         version=VERSION,
         title=title,
         path=path,
@@ -172,8 +171,8 @@ def frame(name, system, agency, **kwargs):
 def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
     max_age = 60 * 60 * 24 * max_age_days
-    if config.cookie_domain:
-        response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
+    if config.default.cookie_domain:
+        response.set_cookie(key, value, max_age=max_age, domain=config.default.cookie_domain, path='/')
     else:
         response.set_cookie(key, value, max_age=max_age, path='/')
 
@@ -1137,7 +1136,7 @@ def api_map(system, agency):
     try:
         last_updated = system.get_last_updated(time_format)
     except AttributeError:
-        last_updated = realtime.get_last_updated(time_format)
+        last_updated = helpers.realtime.default.get_last_updated(time_format)
     positions = sorted(helpers.position.default.find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
@@ -1220,21 +1219,21 @@ def api_admin_reload_orders(system, agency):
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system, agency):
-    cron.stop()
+    helpers.cron.default.stop()
     helpers.position.default.delete_all()
     helpers.system.default.load()
     for system in helpers.system.default.find_all():
         if running:
-            gtfs.load(system)
-            if not gtfs.validate(system):
-                gtfs.load(system, True)
-            gtfs.update_cache_in_background(system)
-            realtime.update(system)
-            if not realtime.validate(system):
+            helpers.gtfs.default.load(system)
+            if not helpers.gtfs.default.validate(system):
+                helpers.gtfs.default.load(system, True)
+            helpers.gtfs.default.update_cache_in_background(system)
+            helpers.realtime.default.update(system)
+            if not helpers.realtime.default.validate(system):
                 system.validation_errors += 1
     if running:
-        realtime.update_records()
-        cron.start()
+        helpers.realtime.default.update_records()
+        helpers.cron.default.start()
     return 'Success'
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
@@ -1244,13 +1243,13 @@ def api_admin_reload_themes(system, agency):
 
 @endpoint('/api/admin/restart-cron', method='POST', require_admin=True)
 def api_admin_restart_cron(system, agency):
-    cron.stop()
-    cron.start()
+    helpers.cron.default.stop()
+    helpers.cron.default.start()
     return 'Success'
 
 @endpoint('/api/admin/backup-database', method='POST', require_admin=True)
 def api_admin_backup_database(system, agency):
-    database.archive()
+    database.default.archive()
     return 'Success'
 
 @endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)
@@ -1258,12 +1257,12 @@ def api_admin_reload_gtfs(system, agency, reload_system_id):
     system = helpers.system.default.find(reload_system_id)
     if not system:
         return 'Invalid system'
-    gtfs.load(system, True)
-    gtfs.update_cache_in_background(system)
-    realtime.update(system)
-    if not realtime.validate(system):
+    helpers.gtfs.default.load(system, True)
+    helpers.gtfs.default.update_cache_in_background(system)
+    helpers.realtime.default.update(system)
+    if not helpers.realtime.default.validate(system):
         system.validation_errors += 1
-    realtime.update_records()
+    helpers.realtime.default.update_records()
     return 'Success'
 
 @endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True)
@@ -1271,10 +1270,10 @@ def api_admin_reload_realtime(system, agency, reload_system_id):
     system = helpers.system.default.find(reload_system_id)
     if not system:
         return 'Invalid system'
-    realtime.update(system)
-    if not realtime.validate(system):
+    helpers.realtime.default.update(system)
+    if not helpers.realtime.default.validate(system):
         system.validation_errors += 1
-    realtime.update_records()
+    helpers.realtime.default.update_records()
     return 'Success'
 
 # =============================================================

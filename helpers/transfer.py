@@ -10,7 +10,7 @@ class TransferService:
         bus_number = getattr(bus, 'number', bus)
         old_system_id = getattr(old_system, 'id', old_system)
         new_system_id = getattr(new_system, 'id', new_system)
-        database.insert('transfer', {
+        database.default.insert('transfer', {
             'bus_number': bus_number,
             'date': date.format_db(),
             'old_system_id': old_system_id,
@@ -22,7 +22,7 @@ class TransferService:
         old_system_id = getattr(old_system, 'id', old_system)
         new_system_id = getattr(new_system, 'id', new_system)
         bus_number = getattr(bus, 'number', bus)
-        return database.select('transfer',
+        return database.default.select('transfer',
             columns={
                 'transfer.transfer_id': 'transfer_id',
                 'transfer.bus_number': 'transfer_bus_number',

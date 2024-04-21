@@ -73,12 +73,12 @@ class PositionService:
         }
         if adherence is not None:
             values['adherence'] = adherence.value
-        database.insert('position', values)
+        database.default.insert('position', values)
     
     def find(self, bus):
         '''Returns the position of the given bus'''
         bus_number = getattr(bus, 'number', bus)
-        positions = database.select('position',
+        positions = database.default.select('position',
             columns={
                 'position.system_id': 'position_system_id',
                 'position.bus_number': 'position_bus_number',
@@ -144,7 +144,7 @@ class PositionService:
                 filters['position.lon'] = {
                     'IS': None
                 }
-        positions = database.select('position',
+        positions = database.default.select('position',
             columns={
                 'position.system_id': 'position_system_id',
                 'position.bus_number': 'position_bus_number',
@@ -167,7 +167,7 @@ class PositionService:
     def delete_all(self, system=None):
         '''Deletes all positions for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.delete('position', {
+        database.default.delete('position', {
             'position.system_id': system_id
         })
 
