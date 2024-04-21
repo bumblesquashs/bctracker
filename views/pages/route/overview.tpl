@@ -148,7 +148,9 @@
                                         % if system is None or system.realtime_enabled:
                                             <p>
                                                 <span>Buses with a</span>
-                                                % include('components/svg', name='schedule')
+                                                <span class="scheduled">
+                                                    % include('components/svg', name='schedule')
+                                                </span>
                                                 <span>are scheduled but may be swapped off.</span>
                                             </p>
                                         % end
@@ -204,10 +206,7 @@
                                                                     <div class="column">
                                                                         <div class="row">
                                                                             % include('components/bus')
-                                                                            <div class="tooltip-anchor">
-                                                                                % include('components/svg', name='schedule')
-                                                                                <div class="tooltip right">Bus is scheduled</div>
-                                                                            </div>
+                                                                            % include('components/scheduled')
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">
                                                                             % include('components/order', order=bus.order)

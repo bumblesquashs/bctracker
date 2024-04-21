@@ -79,7 +79,9 @@
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>
                             <span>Entries with a</span>
-                            % include('components/svg', name='warning')
+                            <span class="record-warnings">
+                                % include('components/svg', name='warning')
+                            </span>
                             <span>may be accidental logins.</span>
                         </p>
                     % end

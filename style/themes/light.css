@@ -458,10 +458,18 @@ table tr:nth-child(2n-1) {
     color: #1A671A;
 }
 
+.record-warnings {
+    --image-color: #FF0000;
+}
+
 .route {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #989898;
+}
+
+.scheduled {
+    --image-color: #666666;
 }
 
 .sheet {

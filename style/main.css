@@ -60,7 +60,7 @@ h2 .route {
     min-width: 16px;
 }
 
-p > svg {
+p svg {
     vertical-align: middle;
 }
 
