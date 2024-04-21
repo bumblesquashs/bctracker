@@ -8,8 +8,9 @@
 <div class="page-container">
     <div class="container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Theme</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>
@@ -60,8 +61,9 @@
     </div>
     <div class="container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Time Format</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>You can choose whether times are displayed as 12hr or 30hr.</p>
@@ -87,8 +89,9 @@
     </div>
     <div class="container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Map Bus Icon Style</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>Choose a style for bus icons shown on the map screen.</p>

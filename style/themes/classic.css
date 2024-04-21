@@ -345,6 +345,10 @@ table tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
+.container > .section > .header > .toggle {
+    --image-color: #E20000;
+}
+
 .events .date {
     border-right-color: #CBCBCB;
 }

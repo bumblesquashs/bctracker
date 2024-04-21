@@ -353,12 +353,16 @@ table tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
+.container > .section > .header > .toggle {
+    --image-color: #5CC3FF;
+}
+
 .events .date {
     border-right-color: #565656;
 }
 
 .favourite {
-    --image-color: #2247B7;
+    --image-color: #5CC3FF;
 }
 
 .favourite:hover {

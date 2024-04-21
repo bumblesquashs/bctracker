@@ -230,6 +230,14 @@ table {
     display: block;
 }
 
+.container > .section > .header > .toggle {
+    --image-size: 28px;
+}
+
+.container > .section.closed > .content {
+    display: none;
+}
+
 .desktop-only {
     display: none !important;
 }

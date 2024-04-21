@@ -10,8 +10,9 @@
 <div class="page-container">
     <div id="current-location" class="sidebar container flex-1 display-none">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Current Location</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div id="map" class="preview"></div>
@@ -21,8 +22,9 @@
     
     <div class="container flex-3">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Upcoming Departures</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if system is None:

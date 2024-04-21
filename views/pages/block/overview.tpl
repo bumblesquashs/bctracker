@@ -24,8 +24,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Overview</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % include('components/map', map_trips=trips, map_positions=positions)

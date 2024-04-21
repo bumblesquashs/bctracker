@@ -15,8 +15,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Quick Search</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <script type="text/javascript">
@@ -104,8 +105,9 @@
             </div>
         </div>
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Favourites</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>
@@ -238,8 +240,9 @@
     
     <div class="container flex-2">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Quick Navigation</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div id="quick-navigation">
@@ -271,8 +274,9 @@
             </div>
         </div>
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Latest News</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div class="container">
@@ -336,8 +340,9 @@
     
     <div class="container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Community</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>

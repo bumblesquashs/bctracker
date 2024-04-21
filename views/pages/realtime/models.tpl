@@ -63,9 +63,10 @@
     % model_types = sorted({m.type for m in models})
     <div class="page-container">
         <div class="sidebar container flex-1">
-            <div class="section">
-                <div class="header">
+            <div class="section closed">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Statistics</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
@@ -117,8 +118,9 @@
             % for type in model_types:
                 % type_models = [m for m in models if m.type == type]
                 <div class="section">
-                    <div class="header">
+                    <div class="header" onclick="toggleSection(this)">
                         <h2>{{ type }}</h2>
+                        % include('components/toggle')
                     </div>
                     <div class="content">
                         <div class="container">
@@ -126,8 +128,9 @@
                                 % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
                                 % model_years = sorted({p.bus.order.year for p in model_positions})
                                 <div id="{{ model.id }}" class="section">
-                                    <div class="header">
+                                    <div class="header" onclick="toggleSection(this)">
                                         <h3>{{! model }}</h3>
+                                        % include('components/toggle')
                                     </div>
                                     <div class="content">
                                         <table>
@@ -172,8 +175,9 @@
             % unknown_positions = sorted([p for p in positions if p.bus.order is None])
             % if len(unknown_positions) > 0:
                 <div class="section">
-                    <div class="header">
+                    <div class="header" onclick="toggleSection(this)">
                         <h2>Unknown Year/Model</h2>
+                        % include('components/toggle')
                     </div>
                     <div class="content">
                         <table>

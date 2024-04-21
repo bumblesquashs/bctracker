@@ -18,8 +18,9 @@
     % if len(route.trips) > 0:
         <div class="sidebar container flex-1">
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Overview</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     % include('components/map', map_trips=route.trips, map_positions=positions)
@@ -43,8 +44,9 @@
     <div class="container flex-3">
         % if len(positions) > 0:
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Active Buses</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
@@ -115,8 +117,9 @@
         % end
         
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Today's Schedule</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(trips) == 0:
@@ -137,8 +140,9 @@
                             % direction_trips = [t for t in trips if t.direction == direction]
                             % if len(direction_trips) > 0:
                                 <div class="section">
-                                    <div class="header">
+                                    <div class="header" onclick="toggleSection(this)">
                                         <h3>{{ direction }}</h3>
+                                        % include('components/toggle')
                                     </div>
                                     <div class="content">
                                         % if system is None or system.realtime_enabled:
