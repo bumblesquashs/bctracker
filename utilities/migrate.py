@@ -9,7 +9,7 @@ import database
 from models.record import Record
 import helpers.system
 
-helpers.system.load()
+helpers.system.default.load()
 
 database.connect(foreign_keys=False)
 

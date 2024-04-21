@@ -29,7 +29,7 @@ class Route:
     
     @classmethod
     def from_db(cls, row, prefix='route'):
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = helpers.system.default.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
@@ -147,7 +147,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return helpers.departure.find_all(self.system, route=self)
+        return helpers.departure.default.find_all(self.system, route=self)
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''

@@ -3,22 +3,28 @@ import json
 
 from models.theme import Theme
 
-themes = {}
+class ThemeService:
+    
+    __slots__ = (
+        'themes'
+    )
+    
+    def __init__(self):
+        self.themes = {}
+    
+    def load(self):
+        '''Loads theme data from the static JSON file'''
+        self.themes = {}
+        with open(f'./static/themes.json', 'r') as file:
+            for (id, values) in json.load(file).items():
+                self.themes[id] = Theme(id, **values)
+    
+    def find(self, theme_id):
+        '''Returns the theme with the given ID'''
+        return self.themes.get(theme_id)
+    
+    def find_all(self):
+        '''Returns all themes'''
+        return self.themes.values()
 
-def load():
-    '''Loads theme data from the static JSON file'''
-    global themes
-    themes = {}
-    with open(f'./static/themes.json', 'r') as file:
-        for (id, values) in json.load(file).items():
-            themes[id] = Theme(id, **values)
-
-def find(theme_id):
-    '''Returns the theme with the given ID'''
-    if theme_id is not None and theme_id in themes:
-        return themes[theme_id]
-    return None
-
-def find_all():
-    '''Returns all themes'''
-    return themes.values()
+default = ThemeService()

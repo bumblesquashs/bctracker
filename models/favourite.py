@@ -1,8 +1,6 @@
 
-import helpers.agency
 import helpers.route
 import helpers.stop
-import helpers.system
 
 from models.bus import Bus
 
@@ -22,9 +20,9 @@ class Favourite:
         if type == 'vehicle':
             value = Bus.find(parts[1], int(parts[2]))
         elif type == 'route':
-            value = helpers.route.find(parts[1], number=parts[2])
+            value = helpers.route.default.find(parts[1], number=parts[2])
         elif type == 'stop':
-            value = helpers.stop.find(parts[1], number=parts[2])
+            value = helpers.stop.default.find(parts[1], number=parts[2])
         else:
             value = None
         if value:

@@ -27,9 +27,9 @@ class Record:
     def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
         id = row[f'{prefix}_id']
-        agency = helpers.agency.find('bc-transit')
+        agency = helpers.agency.default.find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = helpers.system.default.find(row[f'{prefix}_system_id'])
         date = Date.parse(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']
         route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]

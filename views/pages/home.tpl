@@ -140,7 +140,7 @@
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = helpers.position.find(value)
+                                                    % position = helpers.position.default.find(value)
                                                     <tr>
                                                         <td>
                                                             <div class="row">

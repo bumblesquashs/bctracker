@@ -13,9 +13,9 @@ from models.date import Date
 from models.record import Record
 from models.time import Time
 
-helpers.model.load()
-helpers.order.load()
-helpers.system.load()
+helpers.model.default.load()
+helpers.order.default.load()
+helpers.system.default.load()
 
 database.connect(foreign_keys=False)
 

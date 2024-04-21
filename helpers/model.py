@@ -3,20 +3,26 @@ import json
 
 from models.model import Model, ModelType
 
-models = {}
+class ModelService:
+    
+    __slots__ = (
+        'models'
+    )
+    
+    def __init__(self):
+        self.models = {}
+    
+    def load(self):
+        '''Loads model data from the static JSON file'''
+        self.models = {}
+        with open(f'./static/models.json', 'r') as file:
+            for (type_id, type_values) in json.load(file).items():
+                type = ModelType[type_id]
+                for (id, values) in type_values.items():
+                    self.models[id] = Model(id, type, **values)
+    
+    def find(self, model_id):
+        '''Returns the model with the given ID'''
+        return self.models.get(model_id)
 
-def load():
-    '''Loads model data from the static JSON file'''
-    global models
-    models = {}
-    with open(f'./static/models.json', 'r') as file:
-        for (type_id, type_values) in json.load(file).items():
-            type = ModelType[type_id]
-            for (id, values) in type_values.items():
-                models[id] = Model(id, type, **values)
-
-def find(model_id):
-    '''Returns the model with the given ID'''
-    if model_id in models:
-        return models[model_id]
-    return None
+default = ModelService()

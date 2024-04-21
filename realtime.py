@@ -44,7 +44,7 @@ def update(system):
                 with open(data_path, 'wb') as f:
                     f.write(r.content)
             data.ParseFromString(r.content)
-        helpers.position.delete_all(system)
+        helpers.position.default.delete_all(system)
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -55,7 +55,7 @@ def update(system):
                 bus_number = int(vehicle_id)
             except:
                 bus_number = -(index + 1)
-            helpers.position.create(system, bus_number, vehicle)
+            helpers.position.default.create(system, bus_number, vehicle)
         last_updated_date = Date.today()
         last_updated_time = Time.now(accurate_seconds=False)
         system.last_updated_date = Date.today(system.timezone)
@@ -66,7 +66,7 @@ def update(system):
 def update_records():
     '''Updates records in the database based on the current positions in the database'''
     try:
-        for position in helpers.position.find_all():
+        for position in helpers.position.default.find_all():
             try:
                 system = position.system
                 bus = position.bus
@@ -74,32 +74,32 @@ def update_records():
                     continue
                 date = Date.today(system.timezone)
                 time = Time.now(system.timezone)
-                overview = helpers.overview.find(bus.number)
+                overview = helpers.overview.default.find(bus.number)
                 trip = position.trip
                 if trip is None:
                     record_id = None
                 else:
                     block = trip.block
-                    assignment = helpers.assignment.find(system, block)
+                    assignment = helpers.assignment.default.find(system, block)
                     if not assignment or assignment.bus_number != bus.number:
-                        helpers.assignment.delete_all(system=system, block=block)
-                        helpers.assignment.delete_all(bus=bus)
-                        helpers.assignment.create(system, block, bus, date)
+                        helpers.assignment.default.delete_all(system=system, block=block)
+                        helpers.assignment.default.delete_all(bus=bus)
+                        helpers.assignment.default.create(system, block, bus, date)
                     if overview is not None and overview.last_record is not None:
                         last_record = overview.last_record
                         if last_record.date == date and last_record.block_id == block.id:
-                            helpers.record.update(last_record, time)
-                            trip_ids = helpers.record.find_trip_ids(last_record)
+                            helpers.record.default.update(last_record, time)
+                            trip_ids = helpers.record.default.find_trip_ids(last_record)
                             if trip.id not in trip_ids:
-                                helpers.record.create_trip(last_record, trip)
+                                helpers.record.default.create_trip(last_record, trip)
                             continue
-                    record_id = helpers.record.create(bus, date, system, block, time, trip)
+                    record_id = helpers.record.default.create(bus, date, system, block, time, trip)
                 if overview is None:
-                    helpers.overview.create(bus, date, system, record_id)
+                    helpers.overview.default.create(bus, date, system, record_id)
                 else:
-                    helpers.overview.update(overview, date, system, record_id)
+                    helpers.overview.default.update(overview, date, system, record_id)
                     if overview.last_seen_system != system:
-                        helpers.transfer.create(bus, date, overview.last_seen_system, system)
+                        helpers.transfer.default.create(bus, date, overview.last_seen_system, system)
             except Exception as e:
                 print(f'Failed to update records: {e}')
         database.commit()
@@ -120,7 +120,7 @@ def validate(system):
     '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
     if not system.realtime_enabled:
         return True
-    for position in helpers.position.find_all(system):
+    for position in helpers.position.default.find_all(system):
         trip_id = position.trip_id
         if trip_id is None:
             continue

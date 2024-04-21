@@ -26,9 +26,9 @@
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
         % trips = [d.trip for d in upcoming_departures]
-        % recorded_today = helpers.record.find_recorded_today(stop.system, trips)
-        % assignments = helpers.assignment.find_all(stop.system, stop=stop)
-        % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system, trip=trips)}
+        % recorded_today = helpers.record.default.find_recorded_today(stop.system, trips)
+        % assignments = helpers.assignment.default.find_all(stop.system, stop=stop)
+        % positions = {p.trip.id: p for p in helpers.position.default.find_all(stop.system, trip=trips)}
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
                 <div class="column">

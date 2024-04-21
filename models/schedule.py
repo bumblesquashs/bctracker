@@ -43,7 +43,7 @@ class Schedule:
     @property
     def added_dates_string(self):
         '''Returns a string of all dates that are added'''
-        return helpers.date.flatten(self.added_dates)
+        return helpers.date.default.flatten(self.added_dates)
     
     @property
     def removed_dates(self):
@@ -53,7 +53,7 @@ class Schedule:
     @property
     def removed_dates_string(self):
         '''Returns a string of all dates that are removed'''
-        return helpers.date.flatten(self.removed_dates)
+        return helpers.date.default.flatten(self.removed_dates)
     
     @property
     def has_normal_service(self):

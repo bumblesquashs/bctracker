@@ -13,7 +13,7 @@ class Bus:
     @classmethod
     def find(cls, agency, number):
         '''Returns a bus for the given agency with the given number'''
-        order = helpers.order.find(agency, number)
+        order = helpers.order.default.find(agency, number)
         return cls(number, order)
     
     @property
@@ -69,5 +69,5 @@ class Bus:
         '''Returns the adornment for this bus, if one exists'''
         agency = self.agency
         if agency:
-            return helpers.adornment.find(agency, self)
+            return helpers.adornment.default.find(agency, self)
         return None

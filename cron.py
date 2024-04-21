@@ -46,14 +46,14 @@ def stop():
 
 def handle_gtfs(sig, frame):
     '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-    for system in helpers.system.find_all():
+    for system in helpers.system.default.find_all():
         if running:
             date = Date.today(system.timezone)
             if date.weekday == Weekday.MON or not gtfs.validate(system):
                 gtfs.load(system, True)
                 gtfs.update_cache_in_background(system)
     if running:
-        helpers.record.delete_stale_trip_records()
+        helpers.record.default.delete_stale_trip_records()
         database.archive()
         date = Date.today()
         backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
@@ -67,7 +67,7 @@ def handle_realtime(sig, frame):
     date = Date.today()
     time = Time.now()
     print(f'--- {date} at {time} ---')
-    for system in helpers.system.find_all():
+    for system in helpers.system.default.find_all():
         if running:
             realtime.update(system)
             if realtime.validate(system):
