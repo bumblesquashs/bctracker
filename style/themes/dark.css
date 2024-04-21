@@ -353,6 +353,10 @@ table tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
+.container > .section > .header {
+    border-bottom-color: #565656;
+}
+
 .container > .section > .header > .toggle {
     --image-color: #5CC3FF;
 }

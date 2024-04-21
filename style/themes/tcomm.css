@@ -427,6 +427,10 @@ table tr {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
 }
 
+.container > .section > .header {
+    border-bottom-color: #000000;
+}
+
 .container > .section > .header > .toggle {
     --image-color: #000000;
 }

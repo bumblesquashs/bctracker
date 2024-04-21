@@ -336,6 +336,10 @@ table tr {
     border-color: #DDDDDD;
 }
 
+.container > .section > .header {
+    border-bottom-color: #DDDDDD;
+}
+
 .container > .section > .header > .toggle {
     --image-color: #AAAAAA;
 }

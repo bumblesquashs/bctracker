@@ -13,7 +13,7 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         % if system:
-            <div class="section closed">
+            <div class="section {{ '' if filter else '' }}">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Filters</h2>
                     % include('components/toggle')

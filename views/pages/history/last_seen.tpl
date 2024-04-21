@@ -12,7 +12,7 @@
 
 <div class="page-container">
     <div class="sidebar container flex-1">
-        <div class="section closed">
+        <div class="section {{ '' if days else 'closed' }}">
             <div class="header" onclick="toggleSection(this)">
                 <h2>Filter by Date</h2>
                 % include('components/toggle')
