@@ -15,9 +15,10 @@ def create(bus, date, old_system, new_system):
         'new_system_id': new_system_id
     })
 
-def find_all(system=None, bus=None, limit=None):
+def find_all(old_system=None, new_system=None, bus=None, limit=None):
     '''Returns all transfers that match the given system'''
-    system_id = getattr(system, 'id', system)
+    old_system_id = getattr(old_system, 'id', old_system)
+    new_system_id = getattr(new_system, 'id', new_system)
     bus_number = getattr(bus, 'number', bus)
     return database.select('transfer',
         columns={
@@ -28,8 +29,8 @@ def find_all(system=None, bus=None, limit=None):
             'transfer.new_system_id': 'transfer_new_system_id'
         },
         filters={
-            'transfer.old_system_id': system_id,
-            'transfer.new_system_id': system_id,
+            'transfer.old_system_id': old_system_id,
+            'transfer.new_system_id': new_system_id,
             'transfer.bus_number': bus_number
         },
         operation='OR',
