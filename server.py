@@ -97,21 +97,21 @@ def stop():
 def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
-    if system_id is None:
-        url = config.all_systems_domain.format(path).rstrip('/')
-    else:
+    if system_id:
         url = config.system_domain.format(system_id, path).rstrip('/')
+    else:
+        url = config.all_systems_domain.format(path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
-    if len(query_args) > 0:
+    if query_args:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
 def validate_admin():
     '''Checks if the admin key in the query/cookie matches the expected admin key'''
-    return config.admin_key is None or query_cookie('admin_key', max_age_days=1) == config.admin_key
+    return not config.admin_key or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
-def page(name, system, title, path='', path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
+def page(name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
     is_admin = validate_admin()
     
@@ -119,23 +119,24 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
     bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
-    if system is None:
-        last_updated = realtime.get_last_updated(time_format)
-    else:
+    try:
         last_updated = system.get_last_updated(time_format)
+    except AttributeError:
+        last_updated = realtime.get_last_updated(time_format)
     return template(f'pages/{name}',
         config=config,
         version=VERSION,
         title=title,
         path=path,
         path_args=path_args or {},
+        system=system,
+        agency=agency,
         enable_refresh=enable_refresh,
         include_maps=include_maps,
         full_map=full_map,
         regions=helpers.region.find_all(),
         systems=helpers.system.find_all(),
         is_admin=is_admin,
-        system=system,
         get_url=get_url,
         last_updated=last_updated,
         theme=helpers.theme.find(theme_id),
@@ -146,18 +147,23 @@ def page(name, system, title, path='', path_args=None, enable_refresh=True, incl
         **kwargs
     )
 
-def error_page(name, system, title, path='', **kwargs):
+def error_page(name, title, path='', path_args=None, system=None, agency=None, **kwargs):
     '''Returns an error page with the given name and details'''
-    return page(f'errors/{name}', system,
+    return page(
+        name=f'errors/{name}',
         title=title,
         path=path,
+        path_args=path_args,
+        system=system,
+        agency=agency,
         enable_refresh=False,
         **kwargs
     )
 
-def frame(name, system, **kwargs):
+def frame(name, system, agency, **kwargs):
     return template(f'frames/{name}',
         system=system,
+        agency=agency,
         get_url=get_url,
         time_format=request.get_cookie('time_format'),
         show_speed=request.get_cookie('speed') == '1994',
@@ -167,10 +173,10 @@ def frame(name, system, **kwargs):
 def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
     max_age = 60 * 60 * 24 * max_age_days
-    if config.cookie_domain is None:
-        response.set_cookie(key, value, max_age=max_age, path='/')
-    else:
+    if config.cookie_domain:
         response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
+    else:
+        response.set_cookie(key, value, max_age=max_age, path='/')
 
 def query_cookie(key, default_value=None, max_age_days=3650):
     '''Creates a cookie if a query value exists, otherwise uses the existing cookie value'''
@@ -187,18 +193,13 @@ def get_favourites():
 
 def endpoint(base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id'):
     def endpoint_wrapper(func):
+        paths = [base_path]
         if base_path == '/':
-            paths = [
-                base_path,
-                f'/<{system_key}>'
-            ]
+            paths.append(f'/<{system_key}>')
             if append_slash:
                 paths.append(f'/<{system_key}>/')
         else:
-            paths = [
-                base_path,
-                f'/<{system_key}>{base_path}'
-            ]
+            paths.append(f'/<{system_key}>{base_path}')
             if append_slash:
                 paths.append(f'{base_path}/')
                 paths.append(f'/<{system_key}>{base_path}/')
@@ -209,12 +210,13 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
             if system_key in kwargs:
                 system_id = kwargs[system_key]
                 system = helpers.system.find(system_id)
-                if system is None:
+                if not system:
                     raise HTTPError(404)
                 del kwargs[system_key]
             else:
                 system = None
-            return func(system=system, *args, **kwargs)
+            agency = helpers.agency.find('bc-transit')
+            return func(system=system, agency=agency, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
 
@@ -223,19 +225,19 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
 # =============================================================
 
 @endpoint('/style/<name:path>', append_slash=False)
-def style(system, name):
+def style(system, agency, name):
     return static_file(name, root='./style')
 
 @endpoint('/img/<name:path>', append_slash=False)
-def img(system, name):
+def img(system, agency, name):
     return static_file(name, root='./img')
 
 @endpoint('/js/<name:path>', append_slash=False)
-def img(system, name):
+def img(system, agency, name):
     return static_file(name, root='./js')
 
 @endpoint('/robots.txt', append_slash=False)
-def robots_text(system):
+def robots_text(system, agency):
     return static_file('robots.txt', root='.')
 
 # =============================================================
@@ -243,31 +245,40 @@ def robots_text(system):
 # =============================================================
 
 @endpoint('/')
-def home_page(system):
-    return page('home', system,
+def home_page(system, agency):
+    return page(
+        name='home',
         title='Home',
+        system=system,
+        agency=agency,
         enable_refresh=False,
         favourites=get_favourites()
     )
 
 @endpoint('/news')
-def news_page(system):
-    return page('news', system,
+def news_page(system, agency):
+    return page(
+        name='news',
         title='News Archive',
         path='news',
+        system=system,
+        agency=agency,
         enable_refresh=False
     )
 
 @endpoint('/map')
-def map_page(system):
+def map_page(system, agency):
     positions = helpers.position.find_all(system, has_location=True)
     auto_refresh = query_cookie('auto_refresh', 'false') != 'false'
     show_route_lines = query_cookie('show_route_lines', 'false') != 'false'
     show_nis = query_cookie('show_nis', 'true') != 'false'
-    visible_positions = positions if show_nis else [p for p in positions if p.trip is not None]
-    return page('map', system,
+    visible_positions = positions if show_nis else [p for p in positions if p.trip]
+    return page(
+        name='map',
         title='Map',
         path='map',
+        system=system,
+        agency=agency,
         include_maps=len(visible_positions) > 0,
         full_map=len(visible_positions) > 0,
         positions=sorted(positions, key=lambda p: p.lat),
@@ -278,85 +289,104 @@ def map_page(system):
     )
 
 @endpoint('/realtime')
-def realtime_all_page(system):
+def realtime_all_page(system, agency):
     positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
-        positions = [p for p in positions if p.trip is not None]
-    return page('realtime/all', system,
+        positions = [p for p in positions if p.trip]
+    return page(
+        name='realtime/all',
         title='Realtime',
         path='realtime',
+        system=system,
+        agency=agency,
         positions=positions,
         show_nis=show_nis
     )
 
 @endpoint('/realtime/routes')
-def realtime_routes_page(system):
+def realtime_routes_page(system, agency):
     positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
-        positions = [p for p in positions if p.trip is not None]
-    return page('realtime/routes', system,
+        positions = [p for p in positions if p.trip]
+    return page(
+        name='realtime/routes',
         title='Realtime',
         path='realtime/routes',
+        system=system,
+        agency=agency,
         positions=positions,
         show_nis=show_nis
     )
 
 @endpoint('/realtime/models')
-def realtime_models_page(system):
+def realtime_models_page(system, agency):
     positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
-        positions = [p for p in positions if p.trip is not None]
-    return page('realtime/models', system,
+        positions = [p for p in positions if p.trip]
+    return page(
+        name='realtime/models',
         title='Realtime',
         path='realtime/models',
+        system=system,
+        agency=agency,
         positions=positions,
         show_nis=show_nis
     )
 
 @endpoint('/realtime/speed')
-def realtime_speed_page(system):
+def realtime_speed_page(system, agency):
     set_cookie('speed', '1994')
     positions = helpers.position.find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
-        positions = [p for p in positions if p.trip is not None]
-    return page('realtime/speed', system,
+        positions = [p for p in positions if p.trip]
+    return page(
+        name='realtime/speed',
         title='Realtime',
         path='realtime/speed',
+        system=system,
+        agency=agency,
         positions=positions,
         show_nis=show_nis
     )
 
 @endpoint('/fleet')
-def fleet_page(system):
-    agency = helpers.agency.find('bc-transit')
+def fleet_page(system, agency):
     orders = helpers.order.find_all(agency)
     overviews = helpers.overview.find_all()
-    return page('fleet', system,
+    return page(
+        name='fleet',
         title='Fleet',
         path='fleet',
+        system=system,
+        agency=agency,
         orders=[o for o in sorted(orders) if o.visible],
         overviews={o.bus.number: o for o in overviews}
     )
 
 @endpoint('/bus/<bus_number:int>')
-def bus_overview_page(system, bus_number):
-    agency = helpers.agency.find('bc-transit')
+def bus_overview_page(system, agency, bus_number):
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
-    if (bus.order is None and overview is None) or not bus.visible:
-        return error_page('invalid_bus', system,
+    if (not bus.order and not overview) or not bus.visible:
+        return error_page(
+            name='invalid_bus',
             title='Unknown Bus',
+            system=system,
+            agency=agency,
             bus_number=bus_number
         )
     position = helpers.position.find(bus)
     records = helpers.record.find_all(bus=bus, limit=20)
-    return page('bus/overview', system,
+    return page(
+        name='bus/overview',
         title=f'Bus {bus}',
-        include_maps=position is not None,
+        system=system,
+        agency=agency,
+        include_maps=bool(position),
         bus=bus,
         position=position,
         records=records,
@@ -366,20 +396,25 @@ def bus_overview_page(system, bus_number):
     )
 
 @endpoint('/bus/<bus_number:int>/map')
-def bus_map_page(system, bus_number):
-    agency = helpers.agency.find('bc-transit')
+def bus_map_page(system, agency, bus_number):
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
-    if (bus.order is None and overview is None) or not bus.visible:
-        return error_page('invalid_bus', system,
+    if (not bus.order and not overview) or not bus.visible:
+        return error_page(
+            name='invalid_bus',
             title='Unknown Bus',
+            system=system,
+            agency=agency,
             bus_number=bus_number
         )
     position = helpers.position.find(bus)
-    return page('bus/map', system,
+    return page(
+        name='bus/map',
         title=f'Bus {bus}',
-        include_maps=position is not None,
-        full_map=position is not None,
+        system=system,
+        agency=agency,
+        include_maps=bool(position),
+        full_map=bool(position),
         bus=bus,
         position=position,
         favourite=Favourite('vehicle', bus),
@@ -387,29 +422,34 @@ def bus_map_page(system, bus_number):
     )
 
 @endpoint('/bus/<bus_number:int>/history')
-def bus_history_page(system, bus_number):
-    agency = helpers.agency.find('bc-transit')
+def bus_history_page(system, agency, bus_number):
     bus = Bus.find(agency, bus_number)
     overview = helpers.overview.find(bus)
-    if (bus.order is None and overview is None) or not bus.visible:
-        return error_page('invalid_bus', system,
+    if (not bus.order and not overview) or not bus.visible:
+        return error_page(
+            name='invalid_bus',
             title='Unknown Bus',
+            system=system,
+            agency=agency,
             bus_number=bus_number
         )
     records = helpers.record.find_all(bus=bus)
     transfers = helpers.transfer.find_all(bus=bus)
     events = []
-    if overview is not None:
+    if overview:
         events.append(Event(overview.first_seen_date, 'First Seen'))
-        if overview.first_record is not None:
+        if overview.first_record:
             events.append(Event(overview.first_record.date, 'First Tracked'))
         events.append(Event(overview.last_seen_date, 'Last Seen'))
-        if overview.last_record is not None:
+        if overview.last_record:
             events.append(Event(overview.last_record.date, 'Last Tracked'))
         for transfer in transfers:
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
-    return page('bus/history', system,
+    return page(
+        name='bus/history',
         title=f'Bus {bus}',
+        system=system,
+        agency=agency,
         bus=bus,
         records=records,
         overview=overview,
@@ -419,61 +459,76 @@ def bus_history_page(system, bus_number):
     )
 
 @endpoint('/history')
-def history_last_seen_page(system):
-    overviews = [o for o in helpers.overview.find_all(system) if o.last_record is not None and o.bus.visible]
+def history_last_seen_page(system, agency):
+    overviews = [o for o in helpers.overview.find_all(system) if o.last_record and o.bus.visible]
     try:
         days = int(request.query['days'])
-    except:
+    except (KeyError, ValueError):
         days = None
     if days:
-        if system:
+        try:
             date = Date.today(system.timezone) - timedelta(days=days)
-        else:
+        except AttributeError:
             date = Date.today() - timedelta(days=days)
         overviews = [o for o in overviews if o.last_record.date > date]
-    return page('history/last_seen', system,
+    return page(
+        name='history/last_seen',
         title='Vehicle History',
         path='history',
         path_args={
             'days': days
         },
+        system=system,
+        agency=agency,
         overviews=sorted(overviews, key=lambda o: o.bus),
         days=days
     )
 
 @endpoint('/history/first-seen')
-def history_first_seen_page(system):
-    overviews = [o for o in helpers.overview.find_all(system) if o.first_record is not None and o.bus.visible]
-    return page('history/first_seen', system,
+def history_first_seen_page(system, agency):
+    overviews = [o for o in helpers.overview.find_all(system) if o.first_record and o.bus.visible]
+    return page(
+        name='history/first_seen',
         title='Vehicle History',
         path='history/first-seen',
+        system=system,
+        agency=agency,
         overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
     )
 
 @endpoint('/history/transfers')
-def history_transfers_page(system):
+def history_transfers_page(system, agency):
     transfers = helpers.transfer.find_all(system)
-    return page('history/transfers', system,
+    return page(
+        name='history/transfers',
         title='Vehicle History',
         path='history/transfers',
+        system=system,
+        agency=agency,
         transfers=[t for t in transfers if t.bus.visible]
     )
 
 @endpoint('/routes')
-def routes_list_page(system):
-    return page('routes/list', system,
+def routes_list_page(system, agency):
+    return page(
+        name='routes/list',
         title='Routes',
         path='routes',
+        system=system,
+        agency=agency,
         enable_refresh=False
     )
 
 @endpoint('/routes/map')
-def routes_map_page(system):
+def routes_map_page(system, agency):
     routes = helpers.route.find_all(system)
     show_route_numbers = query_cookie('show_route_numbers', 'true') != 'false'
-    return page('routes/map', system,
+    return page(
+        name='routes/map',
         title='Routes',
         path='routes/map',
+        system=system,
+        agency=agency,
         enable_refresh=False,
         include_maps=len(routes) > 0,
         full_map=len(routes) > 0,
@@ -482,21 +537,30 @@ def routes_map_page(system):
     )
 
 @endpoint('/routes/<route_number>')
-def route_overview_page(system, route_number):
-    if system is None:
-        return error_page('system_required', system,
+def route_overview_page(system, agency, route_number):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'routes/{route_number}'
+            path=f'routes/{route_number}',
+            system=system,
+            agency=agency
         )
     route = system.get_route(number=route_number)
-    if route is None:
-        return error_page('invalid_route', system,
+    if not route:
+        return error_page(
+            name='invalid_route',
             title='Unknown Route',
+            system=system,
+            agency=agency,
             route_number=route_number
         )
     trips = sorted(route.get_trips(date=Date.today(system.timezone)))
-    return page('route/overview', system,
+    return page(
+        name='route/overview',
         title=str(route),
+        system=system,
+        agency=agency,
         include_maps=len(route.trips) > 0,
         route=route,
         trips=trips,
@@ -508,20 +572,29 @@ def route_overview_page(system, route_number):
     )
 
 @endpoint('/routes/<route_number>/map')
-def route_map_page(system, route_number):
-    if system is None:
-        return error_page('system_required', system,
+def route_map_page(system, agency, route_number):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'routes/{route_number}/map'
+            path=f'routes/{route_number}/map',
+            system=system,
+            agency=agency
         )
     route = system.get_route(number=route_number)
-    if route is None:
-        return error_page('invalid_route', system,
+    if not route:
+        return error_page(
+            name='invalid_route',
             title='Unknown Route',
+            system=system,
+            agency=agency,
             route_number=route_number
         )
-    return page('route/map', system,
+    return page(
+        name='route/map',
         title=str(route),
+        system=system,
+        agency=agency,
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
@@ -531,20 +604,29 @@ def route_map_page(system, route_number):
     )
 
 @endpoint('/routes/<route_number>/schedule')
-def route_schedule_page(system, route_number):
-    if system is None:
-        return error_page('system_required', system,
+def route_schedule_page(system, agency, route_number):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'routes/{route_number}/schedule'
+            path=f'routes/{route_number}/schedule',
+            system=system,
+            agency=agency
         )
     route = system.get_route(number=route_number)
-    if route is None:
-        return error_page('invalid_route', system,
+    if not route:
+        return error_page(
+            name='invalid_route',
             title='Unknown Route',
+            system=system,
+            agency=agency,
             route_number=route_number
         )
-    return page('route/schedule', system,
+    return page(
+        name='route/schedule',
         title=str(route),
+        system=system,
+        agency=agency,
         enable_refresh=False,
         route=route,
         favourite=Favourite('route', route),
@@ -552,21 +634,30 @@ def route_schedule_page(system, route_number):
     )
 
 @endpoint('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
-def route_schedule_date_page(system, route_number, date_string):
-    if system is None:
-        return error_page('system_required', system,
+def route_schedule_date_page(system, agency, route_number, date_string):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'routes/{route_number}/schedule'
+            path=f'routes/{route_number}/schedule',
+            system=system,
+            agency=agency
         )
     route = system.get_route(number=route_number)
-    if route is None:
-        return error_page('invalid_route', system,
+    if not route:
+        return error_page(
+            name='invalid_route',
             title='Unknown Route',
+            system=system,
+            agency=agency,
             route_number=route_number
         )
     date = Date.parse(date_string, system.timezone)
-    return page('route/date', system,
+    return page(
+        name='route/date',
         title=str(route),
+        system=system,
+        agency=agency,
         enable_refresh=False,
         route=route,
         date=date,
@@ -575,41 +666,56 @@ def route_schedule_date_page(system, route_number, date_string):
     )
 
 @endpoint('/blocks')
-def blocks_page(system):
-    return page('blocks/list', system,
+def blocks_page(system, agency):
+    return page(
+        name='blocks/list',
         title='Blocks',
-        enable_refresh=False,
-        path='blocks'
+        path='blocks',
+        system=system,
+        agency=agency,
+        enable_refresh=False
     )
 
 @endpoint('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
-def blocks_schedule_date_page(system, date_string):
-    if system is None:
-        date = Date.parse(date_string)
-    else:
+def blocks_schedule_date_page(system, agency, date_string):
+    try:
         date = Date.parse(date_string, system.timezone)
-    return page('blocks/date', system,
+    except AttributeError:
+        date = Date.parse(date_string)
+    return page(
+        name='blocks/date',
         title='Blocks',
-        enable_reload=False,
         path=f'blocks/schedule/{date_string}',
+        system=system,
+        agency=agency,
+        enable_reload=False,
         date=date
     )
 
 @endpoint('/blocks/<block_id>')
-def block_overview_page(system, block_id):
-    if system is None:
-        return error_page('system_required', system,
+def block_overview_page(system, agency, block_id):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'blocks/{block_id}'
+            path=f'blocks/{block_id}',
+            system=system,
+            agency=agency
         )
     block = system.get_block(block_id)
-    if block is None:
-        return error_page('invalid_block', system,
+    if not block:
+        return error_page(
+            name='invalid_block',
             title='Unknown Block',
+            system=system,
+            agency=agency,
             block_id=block_id
         )
-    return page('block/overview', system,
+    return page(
+        name='block/overview',
         title=f'Block {block.id}',
+        system=system,
+        agency=agency,
         include_maps=True,
         block=block,
         positions=helpers.position.find_all(system, block=block),
@@ -617,20 +723,29 @@ def block_overview_page(system, block_id):
     )
 
 @endpoint('/blocks/<block_id>/map')
-def block_map_page(system, block_id):
-    if system is None:
-        return error_page('system_required', system,
+def block_map_page(system, agency, block_id):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'blocks/{block_id}/map'
+            path=f'blocks/{block_id}/map',
+            system=system,
+            agency=agency
         )
     block = system.get_block(block_id)
-    if block is None:
-        return error_page('invalid_block', system,
+    if not block:
+        return error_page(
+            name='invalid_block',
             title='Unknown Block',
+            system=system,
+            agency=agency,
             block_id=block_id
         )
-    return page('block/map', system,
+    return page(
+        name='block/map',
         title=f'Block {block.id}',
+        system=system,
+        agency=agency,
         include_maps=True,
         full_map=True,
         block=block,
@@ -638,45 +753,63 @@ def block_map_page(system, block_id):
     )
 
 @endpoint('/blocks/<block_id>/history')
-def block_history_page(system, block_id):
-    if system is None:
-        return error_page('system_required', system,
+def block_history_page(system, agency, block_id):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'blocks/{block_id}/history'
+            path=f'blocks/{block_id}/history',
+            system=system,
+            agency=agency
         )
     block = system.get_block(block_id)
-    if block is None:
-        return error_page('invalid_block', system,
+    if not block:
+        return error_page(
+            name='invalid_block',
             title='Unknown Block',
+            system=system,
+            agency=agency,
             block_id=block_id
         )
     records = helpers.record.find_all(system, block=block)
     events = []
-    if len(records) > 0:
+    if records:
         events.append(Event(records[0].date, 'Last Tracked'))
         events.append(Event(records[-1].date, 'First Tracked'))
-    return page('block/history', system,
+    return page(
+        name='block/history',
         title=f'Block {block.id}',
+        system=system,
+        agency=agency,
         block=block,
         records=records,
         events=events
     )
 
 @endpoint('/trips/<trip_id>')
-def trip_overview_page(system, trip_id):
-    if system is None:
-        return error_page('system_required', system,
+def trip_overview_page(system, agency, trip_id):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'trips/{trip_id}'
+            path=f'trips/{trip_id}',
+            system=system,
+            agency=agency
         )
     trip = system.get_trip(trip_id)
-    if trip is None:
-        return error_page('invalid_trip', system,
+    if not trip:
+        return error_page(
+            name='invalid_trip',
             title='Unknown Trip',
+            system=system,
+            agency=agency,
             trip_id=trip_id
         )
-    return page('trip/overview', system,
+    return page(
+        name='trip/overview',
         title=f'Trip {trip.id}',
+        system=system,
+        agency=agency,
         include_maps=True,
         trip=trip,
         positions=helpers.position.find_all(system, trip=trip),
@@ -684,20 +817,29 @@ def trip_overview_page(system, trip_id):
     )
 
 @endpoint('/trips/<trip_id>/map')
-def trip_map_page(system, trip_id):
-    if system is None:
-        return error_page('system_required', system,
+def trip_map_page(system, agency, trip_id):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'trips/{trip_id}/map'
+            path=f'trips/{trip_id}/map',
+            system=system,
+            agency=agency
         )
     trip = system.get_trip(trip_id)
-    if trip is None:
-        return error_page('invalid_trip', system,
+    if not trip:
+        return error_page(
+            name='invalid_trip',
             title='Unknown Trip',
+            system=system,
+            agency=agency,
             trip_id=trip_id
         )
-    return page('trip/map', system,
+    return page(
+        name='trip/map',
         title=f'Trip {trip.id}',
+        system=system,
+        agency=agency,
         include_maps=True,
         full_map=True,
         trip=trip,
@@ -705,16 +847,22 @@ def trip_map_page(system, trip_id):
     )
 
 @endpoint('/trips/<trip_id>/history')
-def trip_history_page(system, trip_id):
-    if system is None:
-        return error_page('system_required', system,
+def trip_history_page(system, agency, trip_id):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'trips/{trip_id}/history'
+            path=f'trips/{trip_id}/history',
+            system=system,
+            agency=agency
         )
     trip = system.get_trip(trip_id)
-    if trip is None:
-        return error_page('invalid_trip', system,
+    if not trip:
+        return error_page(
+            name='invalid_trip',
             title='Unknown Trip',
+            system=system,
+            agency=agency,
             trip_id=trip_id
         )
     records = helpers.record.find_all(system, trip=trip)
@@ -722,44 +870,60 @@ def trip_history_page(system, trip_id):
     if len(records) > 0:
         events.append(Event(records[0].date, 'Last Tracked'))
         events.append(Event(records[-1].date, 'First Tracked'))
-    return page('trip/history', system,
+    return page(
+        name='trip/history',
         title=f'Trip {trip.id}',
+        system=system,
+        agency=agency,
         trip=trip,
         records=records,
         events=events
     )
 
 @endpoint('/stops')
-def stops_page(system):
-    path = 'stops'
+def stops_page(system, agency):
+    path_args = {}
     search = request.query.get('search')
-    if search is not None:
-        path += f'?search={search}'
-    return page('stops', system,
+    if search:
+        path_args['search'] = search
+    return page(
+        name='stops',
         title='Stops',
+        path='stops',
+        path_args=path_args,
+        system=system,
+        agency=agency,
         enable_refresh=False,
-        path=path,
         search=search
     )
 
 @endpoint('/stops/<stop_number>')
-def stop_overview_page(system, stop_number):
-    if system is None:
-        return error_page('system_required', system,
+def stop_overview_page(system, agency, stop_number):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'stops/{stop_number}'
+            path=f'stops/{stop_number}',
+            system=system,
+            agency=agency
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
-        return error_page('invalid_stop', system,
+    if not stop:
+        return error_page(
+            name='invalid_stop',
             title='Unknown Stop',
+            system=system,
+            agency=agency,
             stop_number=stop_number
         )
     departures = stop.find_departures(date=Date.today(system.timezone))
     trips = [d.trip for d in departures]
     positions = helpers.position.find_all(system, trip=trips)
-    return page('stop/overview', system,
+    return page(
+        name='stop/overview',
         title=f'Stop {stop.number}',
+        system=system,
+        agency=agency,
         include_maps=True,
         stop=stop,
         departures=departures,
@@ -771,20 +935,29 @@ def stop_overview_page(system, stop_number):
     )
 
 @endpoint('/stops/<stop_number>/map')
-def stop_map_page(system, stop_number):
-    if system is None:
-        return error_page('system_required', system,
+def stop_map_page(system, agency, stop_number):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'stops/{stop_number}/map'
+            path=f'stops/{stop_number}/map',
+            system=system,
+            agency=agency
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
-        return error_page('invalid_stop', system,
+    if not stop:
+        return error_page(
+            name='invalid_stop',
             title='Unknown Stop',
+            system=system,
+            agency=agency,
             stop_number=stop_number
         )
-    return page('stop/map', system,
+    return page(
+        name='stop/map',
         title=f'Stop {stop.number}',
+        system=system,
+        agency=agency,
         include_maps=True,
         full_map=True,
         stop=stop,
@@ -793,20 +966,29 @@ def stop_map_page(system, stop_number):
     )
 
 @endpoint('/stops/<stop_number>/schedule')
-def stop_schedule_page(system, stop_number):
-    if system is None:
-        return error_page('system_required', system,
+def stop_schedule_page(system, agency, stop_number):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'stops/{stop_number}/schedule'
+            path=f'stops/{stop_number}/schedule',
+            system=system,
+            agency=agency
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
-        return error_page('invalid_stop', system,
+    if not stop:
+        return error_page(
+            name='invalid_stop',
             title='Unknown Stop',
+            system=system,
+            agency=agency,
             stop_number=stop_number
         )
-    return page('stop/schedule', system,
+    return page(
+        name='stop/schedule',
         title=f'Stop {stop.number}',
+        system=system,
+        agency=agency,
         enable_refresh=False,
         stop=stop,
         favourite=Favourite('stop', stop),
@@ -814,21 +996,30 @@ def stop_schedule_page(system, stop_number):
     )
 
 @endpoint('/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>')
-def stop_schedule_date_page(system, stop_number, date_string):
-    if system is None:
-        return error_page('system_required', system,
+def stop_schedule_date_page(system, agency, stop_number, date_string):
+    if not system:
+        return error_page(
+            name='system_required',
             title='System Required',
-            path=f'stops/{stop_number}/schedule'
+            path=f'stops/{stop_number}/schedule',
+            system=system,
+            agency=agency
         )
     stop = system.get_stop(number=stop_number)
-    if stop is None:
-        return error_page('invalid_stop', system,
+    if not stop:
+        return error_page(
+            name='invalid_stop',
             title='Unknown Stop',
+            system=system,
+            agency=agency,
             stop_number=stop_number
         )
     date = Date.parse(date_string, system.timezone)
-    return page('stop/date', system,
+    return page(
+        name='stop/date',
         title=f'Stop {stop.number}',
+        system=system,
+        agency=agency,
         enable_refresh=False,
         stop=stop,
         date=date,
@@ -837,57 +1028,73 @@ def stop_schedule_date_page(system, stop_number, date_string):
     )
 
 @endpoint('/about')
-def about_page(system):
-    return page('about', system,
+def about_page(system, agency):
+    return page(
+        name='about',
         title='About',
-        enable_refresh=False,
-        path='about'
+        path='about',
+        system=system,
+        agency=agency,
+        enable_refresh=False
     )
 
 @endpoint('/nearby')
-def nearby_page(system):
-    return page('nearby', system,
+def nearby_page(system, agency):
+    return page(
+        name='nearby',
         title='Nearby Stops',
         path='nearby',
-        include_maps=True)
+        system=system,
+        agency=agency,
+        include_maps=True
+    )
 
 @endpoint('/themes')
-def themes_page(system):
+def themes_page(system, agency):
     redirect(get_url(system, 'personalize'))
 
 @endpoint('/personalize')
-def themes_page(system):
+def personalize_page(system, agency):
     theme_id = request.query.get('theme')
-    if theme_id is not None:
+    if theme_id:
         set_cookie('theme', theme_id)
     time_format = request.query.get('time_format')
-    if time_format is not None:
+    if time_format:
         set_cookie('time_format', time_format)
     bus_marker_style = request.query.get('bus_marker_style')
-    if bus_marker_style is not None:
+    if bus_marker_style:
         set_cookie('bus_marker_style', bus_marker_style)
     themes = helpers.theme.find_all()
-    return page('personalize', system,
+    return page(
+        name='personalize',
         title='Personalize',
-        enable_refresh=False,
         path='personalize',
+        system=system,
+        agency=agency,
+        enable_refresh=False,
         themes=themes
     )
 
 @endpoint('/systems')
-def systems_page(system):
-    return page('systems', system,
+def systems_page(system, agency):
+    return page(
+        name='systems',
         title='Systems',
-        enable_refresh=False,
-        path=request.query.get('path', '')
+        path=request.query.get('path', ''),
+        system=system,
+        agency=agency,
+        enable_refresh=False
     )
 
 @endpoint('/admin', require_admin=True)
-def admin_page(system):
-    return page('admin', system,
+def admin_page(system, agency):
+    return page(
+        name='admin',
         title='Administration',
-        enable_refresh=False,
         path='admin',
+        system=system,
+        agency=agency,
+        enable_refresh=False,
         disable_indexing=True
     )
 
@@ -896,14 +1103,17 @@ def admin_page(system):
 # =============================================================
 
 @endpoint('/frame/nearby', append_slash=False)
-def frame_nearby(system):
-    if system is None:
+def frame_nearby(system, agency):
+    if not system:
         response.status = 400
         return None
     stops = sorted(system.get_stops())
     lat = float(request.query.get('lat'))
     lon = float(request.query.get('lon'))
-    return frame('nearby', system,
+    return frame(
+        name='nearby',
+        system=system,
+        agency=agency,
         stops=sorted([s for s in stops if s.is_near(lat, lon)])
     )
 
@@ -912,16 +1122,16 @@ def frame_nearby(system):
 # =============================================================
 
 @endpoint('/api/health-check', append_slash=False)
-def api_health_check(system):
+def api_health_check(system, agency):
     return 'Online'
 
 @endpoint('/api/map.json', append_slash=False)
-def api_map(system):
+def api_map(system, agency):
     time_format = request.get_cookie('time_format')
-    if system is None:
-        last_updated = realtime.get_last_updated(time_format)
-    else:
+    try:
         last_updated = system.get_last_updated(time_format)
+    except AttributeError:
+        last_updated = realtime.get_last_updated(time_format)
     positions = sorted(helpers.position.find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
@@ -929,13 +1139,13 @@ def api_map(system):
     }
 
 @endpoint('/api/shape/<shape_id>.json', append_slash=False)
-def api_shape_id(system, shape_id):
+def api_shape_id(system, agency, shape_id):
     return {
         'points': [p.get_json() for p in helpers.point.find_all(system, shape_id)]
     }
 
 @endpoint('/api/routes')
-def api_routes(system):
+def api_routes(system, agency):
     routes = helpers.route.find_all(system)
     trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
     shape_ids = set()
@@ -951,8 +1161,7 @@ def api_routes(system):
     }
 
 @endpoint('/api/search', method='POST')
-def api_search(system):
-    agency = helpers.agency.find('bc-transit')
+def api_search(system, agency):
     query = request.forms.get('query', '')
     page = int(request.forms.get('page', 0))
     count = int(request.forms.get('count', 10))
@@ -962,10 +1171,10 @@ def api_search(system):
     include_blocks = int(request.forms.get('include_blocks', 1)) == 1
     matches = []
     if query != '':
-        if query.isnumeric() and (system is None or system.realtime_enabled):
+        if query.isnumeric() and (not system or system.realtime_enabled):
             if include_buses:
                 matches += helpers.order.find_matches(agency, query, helpers.overview.find_bus_numbers(system))
-        if system is not None:
+        if system:
             if include_blocks:
                 matches += system.search_blocks(query)
             if include_routes:
@@ -981,8 +1190,8 @@ def api_search(system):
     }
 
 @endpoint('/api/nearby.json', append_slash=False)
-def api_nearby(system):
-    if system is None:
+def api_nearby(system, agency):
+    if not system:
         return {
             'stops': []
         }
@@ -994,17 +1203,17 @@ def api_nearby(system):
     }
 
 @endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
-def api_admin_reload_adornments(system):
+def api_admin_reload_adornments(system, agency):
     helpers.adornment.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
-def api_admin_reload_orders(system):
+def api_admin_reload_orders(system, agency):
     helpers.order.load()
     return 'Success'
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
-def api_admin_reload_systems(system):
+def api_admin_reload_systems(system, agency):
     cron.stop()
     helpers.position.delete_all()
     helpers.system.load()
@@ -1023,25 +1232,25 @@ def api_admin_reload_systems(system):
     return 'Success'
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
-def api_admin_reload_themes(system):
+def api_admin_reload_themes(system, agency):
     helpers.theme.load()
     return 'Success'
 
 @endpoint('/api/admin/restart-cron', method='POST', require_admin=True)
-def api_admin_restart_cron(system):
+def api_admin_restart_cron(system, agency):
     cron.stop()
     cron.start()
     return 'Success'
 
 @endpoint('/api/admin/backup-database', method='POST', require_admin=True)
-def api_admin_backup_database(system):
+def api_admin_backup_database(system, agency):
     database.archive()
     return 'Success'
 
 @endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)
-def api_admin_reload_gtfs(system, reload_system_id):
+def api_admin_reload_gtfs(system, agency, reload_system_id):
     system = helpers.system.find(reload_system_id)
-    if system is None:
+    if not system:
         return 'Invalid system'
     gtfs.load(system, True)
     gtfs.update_cache_in_background(system)
@@ -1052,9 +1261,9 @@ def api_admin_reload_gtfs(system, reload_system_id):
     return 'Success'
 
 @endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True)
-def api_admin_reload_realtime(system, reload_system_id):
+def api_admin_reload_realtime(system, agency, reload_system_id):
     system = helpers.system.find(reload_system_id)
-    if system is None:
+    if not system:
         return 'Invalid system'
     realtime.update(system)
     if not realtime.validate(system):
@@ -1068,12 +1277,30 @@ def api_admin_reload_realtime(system, reload_system_id):
 
 @app.error(403)
 def error_403_page(error):
-    return error_page('403', None, 'Forbidden', error=error)
+    return error_page(
+        name='403', 
+        title='Forbidden',
+        system=None,
+        agency=None,
+        error=error
+    )
 
 @app.error(404)
 def error_404_page(error):
-    return error_page('404', None, 'Not Found', error=error)
+    return error_page(
+        name='404',
+        title='Not Found',
+        system=None,
+        agency=None,
+        error=error
+    )
 
 @app.error(500)
 def error_500_page(error):
-    return error_page('500', None, 'Internal Error', error=error)
+    return error_page(
+        name='500',
+        title='Internal Error',
+        system=None,
+        agency=None,
+        error=error
+    )
