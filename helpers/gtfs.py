@@ -8,6 +8,8 @@ from threading import Thread
 import csv
 import requests
 
+from di import di
+
 import helpers.departure
 import helpers.point
 import helpers.route
@@ -19,9 +21,16 @@ from models.block import Block
 from models.date import Date
 from models.service import Service, ServiceException
 
-import config
+from config import Config
 
 class GTFSService:
+    
+    __slots__ = (
+        'config'
+    )
+    
+    def __init__(self, config=di[Config]):
+        self.config = config
     
     def load(self, system, force_download=False, update_db=False):
         '''Loads the GTFS for the given system into memory'''
@@ -79,7 +88,7 @@ class GTFSService:
         print(f'Downloading GTFS data for {system}')
         try:
             if path.exists(data_zip_path):
-                if config.default.enable_gtfs_backups:
+                if self.config.enable_gtfs_backups:
                     formatted_date = datetime.now().strftime('%Y-%m-%d')
                     archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
                     rename(data_zip_path, archives_path)

@@ -1,10 +1,19 @@
 
+from di import di
+
 from models.adherence import Adherence
 from models.position import Position
 
-import database
+from database import Database
 
 class PositionService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, system, bus, data):
         '''Inserts a new position into the database'''
@@ -71,14 +80,14 @@ class PositionService:
             'bearing': bearing,
             'speed': speed
         }
-        if adherence is not None:
+        if adherence:
             values['adherence'] = adherence.value
-        database.default.insert('position', values)
+        self.database.insert('position', values)
     
     def find(self, bus):
         '''Returns the position of the given bus'''
         bus_number = getattr(bus, 'number', bus)
-        positions = database.default.select('position',
+        positions = self.database.select('position',
             columns={
                 'position.system_id': 'position_system_id',
                 'position.bus_number': 'position_bus_number',
@@ -144,7 +153,7 @@ class PositionService:
                 filters['position.lon'] = {
                     'IS': None
                 }
-        positions = database.default.select('position',
+        positions = self.database.select('position',
             columns={
                 'position.system_id': 'position_system_id',
                 'position.bus_number': 'position_bus_number',
@@ -167,7 +176,7 @@ class PositionService:
     def delete_all(self, system=None):
         '''Deletes all positions for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.default.delete('position', {
+        self.database.delete('position', {
             'position.system_id': system_id
         })
 

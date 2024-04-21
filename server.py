@@ -5,6 +5,8 @@ from bottle import Bottle, HTTPError, static_file, template, request, response, 
 from datetime import timedelta
 import cherrypy as cp
 
+from di import di
+
 import helpers.adornment
 import helpers.agency
 import helpers.model
@@ -25,8 +27,8 @@ from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 
-import config
-import database
+from config import Config
+from database import Database
 
 import helpers.cron
 import helpers.gtfs
@@ -38,16 +40,16 @@ VERSION = 38
 app = Bottle()
 running = False
 
-def start(args):
+def start(args, config=di[Config]):
     '''Loads all required data and launches the server'''
     global running
     
     cp.config.update('server.conf')
-    config.default.setup(cp.config)
+    config.setup(cp.config)
     
     running = True
     
-    database.default.connect()
+    di[Database].connect()
     
     if args.debug:
         print('Starting bottle in DEBUG mode')
@@ -88,26 +90,26 @@ def stop():
     global running
     running = False
     helpers.cron.default.stop()
-    database.default.disconnect()
+    di[Database].disconnect()
     if cp.server.running:
         cp.server.stop()
 
-def get_url(system, path='', **kwargs):
+def get_url(system, path='', config=di[Config], **kwargs):
     '''Returns a URL formatted based on the given system and path'''
     system_id = getattr(system, 'id', system)
     if system_id:
-        url = config.default.system_domain.format(system_id, path).rstrip('/')
+        url = config.system_domain.format(system_id, path).rstrip('/')
     else:
-        url = config.default.all_systems_domain.format(path).rstrip('/')
+        url = config.all_systems_domain.format(path).rstrip('/')
     query_args = {k:v for k, v in kwargs.items() if v is not None}
     if query_args:
         query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
         url += f'?{query}'
     return url
 
-def validate_admin():
+def validate_admin(config=di[Config]):
     '''Checks if the admin key in the query/cookie matches the expected admin key'''
-    return not config.default.admin_key or query_cookie('admin_key', max_age_days=1) == config.default.admin_key
+    return not config.admin_key or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
     '''Returns an HTML page with the given name and details'''
@@ -122,7 +124,7 @@ def page(name, title, path='', path_args=None, system=None, agency=None, enable_
     except AttributeError:
         last_updated = helpers.realtime.default.get_last_updated(time_format)
     return template(f'pages/{name}',
-        config=config.default,
+        config=di[Config],
         version=VERSION,
         title=title,
         path=path,
@@ -168,11 +170,11 @@ def frame(name, system, agency, **kwargs):
         **kwargs
     )
 
-def set_cookie(key, value, max_age_days=3650):
+def set_cookie(key, value, max_age_days=3650, config=di[Config]):
     '''Creates a cookie using the given key and value'''
     max_age = 60 * 60 * 24 * max_age_days
-    if config.default.cookie_domain:
-        response.set_cookie(key, value, max_age=max_age, domain=config.default.cookie_domain, path='/')
+    if config.cookie_domain:
+        response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
     else:
         response.set_cookie(key, value, max_age=max_age, path='/')
 
@@ -1249,7 +1251,7 @@ def api_admin_restart_cron(system, agency):
 
 @endpoint('/api/admin/backup-database', method='POST', require_admin=True)
 def api_admin_backup_database(system, agency):
-    database.default.archive()
+    di[Database].archive()
     return 'Success'
 
 @endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)

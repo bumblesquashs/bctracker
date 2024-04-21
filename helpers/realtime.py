@@ -6,6 +6,8 @@ import requests
 
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
+from di import di
+
 import helpers.assignment
 import helpers.overview
 import helpers.position
@@ -15,17 +17,21 @@ import helpers.transfer
 from models.date import Date
 from models.time import Time
 
-import config
-import database
+from config import Config
+from database import Database
 
 class RealtimeService:
     
     __slots__ = (
+        'config',
+        'database',
         'last_updated_date',
         'last_updated_time'
     )
     
-    def __init__(self):
+    def __init__(self, config=di[Config], database=di[Database]):
+        self.config = config
+        self.database = database
         self.last_updated_date = None
         self.last_updated_time = None
     
@@ -39,7 +45,7 @@ class RealtimeService:
         
         try:
             if path.exists(data_path):
-                if config.default.enable_realtime_backups:
+                if self.config.enable_realtime_backups:
                     formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
                     archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
                     rename(data_path, archives_path)
@@ -47,7 +53,7 @@ class RealtimeService:
                     remove(data_path)
             data = protobuf.FeedMessage()
             with requests.get(system.realtime_url, timeout=10) as r:
-                if config.default.enable_realtime_backups:
+                if self.config.enable_realtime_backups:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
                 data.ParseFromString(r.content)
@@ -109,7 +115,7 @@ class RealtimeService:
                             helpers.transfer.default.create(bus, date, overview.last_seen_system, system)
                 except Exception as e:
                     print(f'Failed to update records: {e}')
-            database.default.commit()
+            self.database.commit()
         except Exception as e:
             print(f'Failed to update records: {e}')
     

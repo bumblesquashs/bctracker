@@ -1,9 +1,18 @@
 
+from di import di
+
 from models.route import Route
 
-import database
+from database import Database
 
 class RouteService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, system, row):
         '''Inserts a new route into the database'''
@@ -22,7 +31,7 @@ class RouteService:
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
-        database.default.insert('route', {
+        self.database.insert('route', {
             'system_id': system_id,
             'route_id': row['route_id'],
             'number': row['route_short_name'],
@@ -34,7 +43,7 @@ class RouteService:
     def find(self, system, route_id=None, number=None):
         '''Returns the route with the given system and route ID'''
         system_id = getattr(system, 'id', system)
-        routes = database.default.select('route',
+        routes = self.database.select('route',
             columns={
                 'route.system_id': 'route_system_id',
                 'route.route_id': 'route_id',
@@ -59,7 +68,7 @@ class RouteService:
     def find_all(self, system, limit=None):
         '''Returns all routes that match the given system'''
         system_id = getattr(system, 'id', system)
-        return database.default.select('route',
+        return self.database.select('route',
             columns={
                 'route.system_id': 'route_system_id',
                 'route.route_id': 'route_id',
@@ -78,7 +87,7 @@ class RouteService:
     def delete_all(self, system):
         '''Deletes all routes for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.default.delete('route', {
+        self.database.delete('route', {
             'system_id': system_id
         })
 

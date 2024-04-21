@@ -1,14 +1,23 @@
 
+from di import di
+
 from models.point import Point
 
-import database
+from database import Database
 
 class PointService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, system, row):
         '''Inserts a new point into the database'''
         system_id = getattr(system, 'id', system)
-        database.default.insert('point', {
+        self.database.insert('point', {
             'system_id': system_id,
             'shape_id': row['shape_id'],
             'sequence': int(row['shape_pt_sequence']),
@@ -20,7 +29,7 @@ class PointService:
         '''Returns all points that match the given system and shape'''
         system_id = getattr(system, 'id', system)
         shape_id = getattr(shape, 'id', shape)
-        return database.default.select('point',
+        return self.database.select('point',
             columns={
                 'point.system_id': 'point_system_id',
                 'point.shape_id': 'point_shape_id',
@@ -39,7 +48,7 @@ class PointService:
     def delete_all(self, system):
         '''Deletes all points for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.default.delete('point', {
+        self.database.delete('point', {
             'point.system_id': system_id
         })
 

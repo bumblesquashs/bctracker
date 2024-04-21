@@ -1,16 +1,25 @@
 
+from di import di
+
 from models.transfer import Transfer
 
-import database
+from database import Database
 
 class TransferService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, bus, date, old_system, new_system):
         '''Inserts a new transfer into the database'''
         bus_number = getattr(bus, 'number', bus)
         old_system_id = getattr(old_system, 'id', old_system)
         new_system_id = getattr(new_system, 'id', new_system)
-        database.default.insert('transfer', {
+        self.database.insert('transfer', {
             'bus_number': bus_number,
             'date': date.format_db(),
             'old_system_id': old_system_id,
@@ -22,7 +31,7 @@ class TransferService:
         old_system_id = getattr(old_system, 'id', old_system)
         new_system_id = getattr(new_system, 'id', new_system)
         bus_number = getattr(bus, 'number', bus)
-        return database.default.select('transfer',
+        return self.database.select('transfer',
             columns={
                 'transfer.transfer_id': 'transfer_id',
                 'transfer.bus_number': 'transfer_bus_number',

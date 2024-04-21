@@ -1,14 +1,23 @@
 
+from di import di
+
 from models.trip import Trip
 
-import database
+from database import Database
 
 class TripService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, system, row):
         '''Inserts a new trip into the database'''
         system_id = getattr(system, 'id', system)
-        database.default.insert('trip', {
+        self.database.insert('trip', {
             'system_id': system_id,
             'trip_id': row['trip_id'],
             'route_id': row['route_id'],
@@ -22,7 +31,7 @@ class TripService:
     def find(self, system, trip_id):
         '''Returns the trip with the given system and trip ID'''
         system_id = getattr(system, 'id', system)
-        trips = database.default.select('trip',
+        trips = self.database.select('trip',
             columns={
                 'trip.system_id': 'trip_system_id',
                 'trip.trip_id': 'trip_id',
@@ -50,7 +59,7 @@ class TripService:
         system_id = getattr(system, 'id', system)
         route_id = getattr(route, 'id', route)
         block_id = getattr(block, 'id', block)
-        return database.default.select('trip',
+        return self.database.select('trip',
             columns={
                 'trip.system_id': 'trip_system_id',
                 'trip.trip_id': 'trip_id',
@@ -73,7 +82,7 @@ class TripService:
     def delete_all(self, system):
         '''Deletes all trips for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.default.delete('trip', {
+        self.database.delete('trip', {
             'system_id': system_id
         })
 

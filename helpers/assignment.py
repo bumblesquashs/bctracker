@@ -1,17 +1,26 @@
 
+from di import di
+
 from models.assignment import Assignment
 from models.date import Date
 
-import database
+from database import Database
 
 class AssignmentService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, system, block, bus, date):
         '''Inserts a new assignment into the database'''
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
-        database.default.insert('assignment', {
+        self.database.insert('assignment', {
             'system_id': system_id,
             'block_id': block_id,
             'bus_number': bus_number,
@@ -26,7 +35,7 @@ class AssignmentService:
             date = Date.today(system.timezone)
         except:
             date = Date.today()
-        assignments = database.default.select('assignment',
+        assignments = self.database.select('assignment',
             columns={
                 'assignment.system_id': 'assignment_system_id',
                 'assignment.block_id': 'assignment_block_id',
@@ -77,7 +86,7 @@ class AssignmentService:
                     'departure.trip_id': 'trip.trip_id'
                 }
                 filters['departure.stop_id'] = stop_id
-        assignments = database.default.select('assignment',
+        assignments = self.database.select('assignment',
             columns={
                 'assignment.system_id': 'assignment_system_id',
                 'assignment.block_id': 'assignment_block_id',
@@ -95,7 +104,7 @@ class AssignmentService:
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
-        database.default.delete('assignment', {
+        self.database.delete('assignment', {
             'system_id': system_id,
             'block_id': block_id,
             'bus_number': bus_number

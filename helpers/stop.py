@@ -1,14 +1,23 @@
 
+from di import di
+
 from models.stop import Stop
 
-import database
+from database import Database
 
 class StopService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, system, row):
         '''Inserts a new stop into the database'''
         system_id = getattr(system, 'id', system)
-        database.default.insert('stop', {
+        self.database.insert('stop', {
             'system_id': system_id,
             'stop_id': row['stop_id'],
             'number': row['stop_code'],
@@ -20,7 +29,7 @@ class StopService:
     def find(self, system, stop_id=None, number=None):
         '''Returns the stop with the given system and stop ID'''
         system_id = getattr(system, 'id', system)
-        stops = database.default.select('stop',
+        stops = self.database.select('stop',
             columns={
                 'stop.system_id': 'stop_system_id',
                 'stop.stop_id': 'stop_id',
@@ -45,7 +54,7 @@ class StopService:
     def find_all(self, system, limit=None):
         '''Returns all stops that match the given system'''
         system_id = getattr(system, 'id', system)
-        return database.default.select('stop',
+        return self.database.select('stop',
             columns={
                 'stop.system_id': 'stop_system_id',
                 'stop.stop_id': 'stop_id',
@@ -64,7 +73,7 @@ class StopService:
     def delete_all(self, system):
         '''Deletes all stops for the given system from the database'''
         system_id = getattr(system, 'id', system)
-        database.default.delete('stop', {
+        self.database.delete('stop', {
             'system_id': system_id
         })
 

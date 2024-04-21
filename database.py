@@ -2,8 +2,6 @@
 import sqlite3
 import shutil
 
-import config
-
 SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS record (
@@ -173,14 +171,6 @@ class Database:
             return
         self.connection.close()
         self.connection = None
-    
-    def backup(self):
-        '''Copies all information from the main database to a backup database'''
-        if not self.connection or not config.default.enable_database_backups:
-            return
-        backup = sqlite3.connect(f'archives/{self.name}.db', check_same_thread=False)
-        self.connection.backup(backup)
-        backup.close()
     
     def archive(self):
         '''Creates a duplicate database file in the archives folder'''
@@ -372,5 +362,3 @@ class Database:
             if len(expressions) > 0:
                 return f' {operation} '.join(expressions), args
         return None, []
-
-default = Database()

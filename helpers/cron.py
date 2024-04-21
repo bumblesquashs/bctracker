@@ -2,7 +2,8 @@ import os
 import signal
 from crontab import CronTab
 
-import database
+from di import di
+
 import helpers.gtfs
 import helpers.realtime
 import helpers.record
@@ -13,16 +14,21 @@ from models.time import Time
 from models.weekday import Weekday
 
 import backup
-import config
+from config import Config
+from database import Database
 
 class CronService:
     
     __slots__ = (
+        'config',
+        'database',
         'running',
         'updating_realtime'
     )
     
-    def __init__(self):
+    def __init__(self, config=di[Config], database=di[Database]):
+        self.config = config
+        self.database = database
         self.running = True
         self.updating_realtime = False
         signal.signal(signal.SIGUSR1, lambda sig, frame: self.handle_gtfs())
@@ -33,19 +39,19 @@ class CronService:
         self.running = True
         pid = os.getpid()
         with CronTab(user=True) as cron:
-            cron.remove_all(comment=config.default.cron_id)
+            cron.remove_all(comment=self.config.cron_id)
             
-            gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=config.default.cron_id)
+            gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=self.config.cron_id)
             gtfs_job.setall('0 4 * * */1')
             
-            realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=config.default.cron_id)
+            realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=self.config.cron_id)
             realtime_job.minute.every(1)
     
     def stop(self):
         '''Removes all cron jobs'''
         self.running = False
         with CronTab(user=True) as cron:
-            cron.remove_all(comment=config.default.cron_id)
+            cron.remove_all(comment=self.config.cron_id)
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
@@ -57,7 +63,7 @@ class CronService:
                     helpers.gtfs.default.update_cache_in_background(system)
         if self.running:
             helpers.record.default.delete_stale_trip_records()
-            database.archive()
+            self.database.archive()
             date = Date.today()
             backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
     

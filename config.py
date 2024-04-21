@@ -50,5 +50,3 @@ class Config:
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'
         self.enable_database_backups = config.get('enable_database_backups', 'true') == 'true'
-
-default = Config()

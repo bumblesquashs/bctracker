@@ -1,16 +1,25 @@
 
+from di import di
+
 from models.overview import Overview
 
-import database
+from database import Database
 
 class OverviewService:
+    
+    __slots__ = (
+        'database'
+    )
+    
+    def __init__(self, database=di[Database]):
+        self.database = database
     
     def create(self, bus, date, system, record):
         '''Inserts a new overview into the database'''
         bus_number = getattr(bus, 'number', bus)
         system_id = getattr(system, 'id', system)
         record_id = getattr(record, 'id', record)
-        database.default.insert('overview', {
+        self.database.insert('overview', {
             'bus_number': bus_number,
             'first_seen_date': date.format_db(),
             'first_seen_system_id': system_id,
@@ -33,7 +42,7 @@ class OverviewService:
         system_id = getattr(system, 'id', system)
         last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
         bus_number = getattr(bus, 'number', bus)
-        return database.default.select('overview',
+        return self.database.select('overview',
             columns={
                 'overview.bus_number': 'overview_bus_number',
                 'overview.first_seen_date': 'overview_first_seen_date',
@@ -89,7 +98,7 @@ class OverviewService:
                 'last_record.record_id': 'overview.last_record_id'
             }
             filters['last_record.system_id'] = system_id
-        return database.default.select('overview',
+        return self.database.select('overview',
             columns={
                 'overview.bus_number': 'bus_number'
             },
@@ -111,7 +120,7 @@ class OverviewService:
             if not overview.first_record:
                 values['first_record_id'] = record_id
             values['last_record_id'] = record_id
-        database.default.update('overview', values, {
+        self.database.update('overview', values, {
             'bus_number': overview.bus.number
         })
 

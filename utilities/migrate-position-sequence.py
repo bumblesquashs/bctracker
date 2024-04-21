@@ -5,13 +5,14 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-import database
+from database import Database
 
-database.default.connect(foreign_keys=False)
+database = Database()
+database.connect(foreign_keys=False)
 
-database.default.execute('''
+database.execute('''
     ALTER TABLE position ADD sequence INTEGER;
 ''')
 
-database.default.commit()
-database.default.disconnect()
+database.commit()
+database.disconnect()
