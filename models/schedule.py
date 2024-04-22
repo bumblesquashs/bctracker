@@ -1,5 +1,5 @@
 
-import helpers.date
+from di import di
 
 from models.date import Date
 from models.daterange import DateRange
@@ -43,7 +43,8 @@ class Schedule:
     @property
     def added_dates_string(self):
         '''Returns a string of all dates that are added'''
-        return helpers.date.default.flatten(self.added_dates)
+        from helpers.date import DateService
+        return di[DateService].flatten(self.added_dates)
     
     @property
     def removed_dates(self):
@@ -53,7 +54,8 @@ class Schedule:
     @property
     def removed_dates_string(self):
         '''Returns a string of all dates that are removed'''
-        return helpers.date.default.flatten(self.removed_dates)
+        from helpers.date import DateService
+        return di[DateService].flatten(self.removed_dates)
     
     @property
     def has_normal_service(self):

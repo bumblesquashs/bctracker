@@ -1,6 +1,5 @@
 
-import helpers.adornment
-import helpers.order
+from di import di
 
 class Bus:
     '''A public transportation vehicle'''
@@ -13,7 +12,8 @@ class Bus:
     @classmethod
     def find(cls, agency, number):
         '''Returns a bus for the given agency with the given number'''
-        order = helpers.order.default.find(agency, number)
+        from helpers.order import OrderService
+        order = di[OrderService].find(agency, number)
         return cls(number, order)
     
     @property
@@ -69,5 +69,6 @@ class Bus:
         '''Returns the adornment for this bus, if one exists'''
         agency = self.agency
         if agency:
-            return helpers.adornment.default.find(agency, self)
+            from helpers.adornment import AdornmentService
+            return di[AdornmentService].find(agency, self)
         return None

@@ -1,32 +1,38 @@
 
 import json
 
+from di import di
+
 from models.match import Match
 from models.order import Order
 
-import helpers.agency
-import helpers.model
+from helpers.agency import AgencyService
+from helpers.model import ModelService
 
 class OrderService:
     
     __slots__ = (
+        'agency_service',
+        'model_service',
         'orders'
     )
     
-    def __init__(self):
+    def __init__(self, **kwargs):
+        self.agency_service = kwargs.get('agency_service') or di[AgencyService]
+        self.model_service = kwargs.get('model_service') or di[ModelService]
         self.orders = {}
     
     def load(self):
         '''Loads order data from the static JSON file'''
         self.orders = {}
-        helpers.agency.default.load()
-        helpers.model.default.load()
+        self.agency_service.load()
+        self.model_service.load()
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
-                agency = helpers.agency.default.find(agency_id)
+                agency = self.agency_service.find(agency_id)
                 agency_orders = []
                 for (model_id, model_values) in agency_values.items():
-                    model = helpers.model.default.find(model_id)
+                    model = self.model_service.find(model_id)
                     for values in model_values:
                         agency_orders.append(Order(agency, model, **values))
                 self.orders[agency_id] = agency_orders
@@ -79,5 +85,3 @@ class OrderService:
                     bus_number_string += f' {adornment}'
                 matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.number}', value))
         return matches
-
-default = OrderService()

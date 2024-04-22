@@ -31,5 +31,3 @@ class AdornmentService:
             return self.adornments[agency_id][bus_number]
         except KeyError:
             return None
-
-default = AdornmentService()

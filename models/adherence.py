@@ -1,7 +1,7 @@
 
 import math
 
-import helpers.departure
+from di import di
 
 from models.time import Time
 
@@ -17,9 +17,10 @@ class Adherence:
     )
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon):
+    def calculate(cls, trip, stop, sequence, lat, lon, ):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = helpers.departure.default.find(trip.system, trip=trip, sequence=sequence)
+        from helpers.departure import DepartureService
+        departure = di[DepartureService].find(trip.system, trip=trip, sequence=sequence)
         if departure is None:
             return None
         previous_departure = departure.find_previous()

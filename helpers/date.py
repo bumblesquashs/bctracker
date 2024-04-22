@@ -27,5 +27,3 @@ class DateService:
     
     def days_between(start_date, end_date):
         return (end_date.datetime - start_date.datetime).days
-
-default = DateService()

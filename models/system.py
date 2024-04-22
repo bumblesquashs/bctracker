@@ -1,9 +1,7 @@
 
 import pytz
 
-import helpers.departure
-import helpers.overview
-import helpers.position
+from di import di
 
 from models.route import RouteCache
 from models.schedule import Schedule
@@ -129,11 +127,13 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return helpers.overview.default.find_all(last_seen_system=self)
+        from helpers.overview import OverviewService
+        return di[OverviewService].find_all(last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        return helpers.position.default.find_all(self)
+        from helpers.position import PositionService
+        return di[PositionService].find_all(self)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -220,7 +220,8 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = helpers.departure.default.find_all(self)
+            from helpers.departure import DepartureService
+            departures = di[DepartureService].find_all(self)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -258,7 +259,8 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = helpers.departure.default.find_all(self, stop=stop)
+            from helpers.departure import DepartureService
+            departures = di[DepartureService].find_all(self, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -269,7 +271,8 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = helpers.departure.default.find_all(self, trip=trip)
+            from helpers.departure import DepartureService
+            departures = di[DepartureService].find_all(self, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache

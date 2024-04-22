@@ -7,20 +7,19 @@ import cherrypy as cp
 
 from di import di
 
-import helpers.adornment
-import helpers.agency
-import helpers.model
-import helpers.order
-import helpers.overview
-import helpers.point
-import helpers.position
-import helpers.record
-import helpers.region
-import helpers.route
-import helpers.system
-import helpers.theme
-import helpers.transfer
-import helpers.assignment
+from helpers.adornment import AdornmentService
+from helpers.agency import AgencyService
+from helpers.order import OrderService
+from helpers.overview import OverviewService
+from helpers.point import PointService
+from helpers.position import PositionService
+from helpers.record import RecordService
+from helpers.region import RegionService
+from helpers.route import RouteService
+from helpers.system import SystemService
+from helpers.theme import ThemeService
+from helpers.transfer import TransferService
+from helpers.assignment import AssignmentService
 
 from models.bus import Bus
 from models.date import Date
@@ -30,9 +29,9 @@ from models.favourite import Favourite, FavouriteSet
 from config import Config
 from database import Database
 
-import helpers.cron
-import helpers.gtfs
-import helpers.realtime
+from helpers.cron import CronService
+from helpers.gtfs import GTFSService
+from helpers.realtime import RealtimeService
 
 # Increase the version to force CSS reload
 VERSION = 38
@@ -40,9 +39,11 @@ VERSION = 38
 app = Bottle()
 running = False
 
-def start(args, config=di[Config]):
+def start(args):
     '''Loads all required data and launches the server'''
     global running
+    
+    config = di[Config]
     
     cp.config.update('server.conf')
     config.setup(cp.config)
@@ -59,12 +60,12 @@ def start(args, config=di[Config]):
     if args.updatedb:
         print('Forcing database refresh')
     
-    helpers.adornment.default.load()
-    helpers.order.default.load()
-    helpers.system.default.load()
-    helpers.theme.default.load()
+    di[AdornmentService].load()
+    di[OrderService].load()
+    di[SystemService].load()
+    di[ThemeService].load()
     
-    helpers.position.default.delete_all()
+    di[PositionService].delete_all()
     
     handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
     log = WSGILogger(app, [handler], ApacheFormatter())
@@ -72,30 +73,34 @@ def start(args, config=di[Config]):
     cp.tree.graft(log, '/')
     cp.server.start()
     
-    for system in helpers.system.default.find_all():
+    gtfs_service = di[GTFSService]
+    realtime_service = di[RealtimeService]
+    
+    for system in di[SystemService].find_all():
         if running:
-            helpers.gtfs.default.load(system, args.reload, args.updatedb)
-            if not helpers.gtfs.default.validate(system):
-                helpers.gtfs.default.load(system, True)
-            helpers.gtfs.default.update_cache_in_background(system)
-            helpers.realtime.default.update(system)
-            if not helpers.realtime.default.validate(system):
+            gtfs_service.load(system, args.reload, args.updatedb)
+            if not gtfs_service.validate(system):
+                gtfs_service.load(system, True)
+            gtfs_service.update_cache_in_background(system)
+            realtime_service.update(system)
+            if not realtime_service.validate(system):
                 system.validation_errors += 1
     if running:
-        helpers.realtime.default.update_records()
-        helpers.cron.default.start()
+        realtime_service.update_records()
+        di[CronService].start()
 
 def stop():
     '''Terminates the server'''
     global running
     running = False
-    helpers.cron.default.stop()
+    di[CronService].stop()
     di[Database].disconnect()
     if cp.server.running:
         cp.server.stop()
 
-def get_url(system, path='', config=di[Config], **kwargs):
+def get_url(system, path='', **kwargs):
     '''Returns a URL formatted based on the given system and path'''
+    config = di[Config]
     system_id = getattr(system, 'id', system)
     if system_id:
         url = config.system_domain.format(system_id, path).rstrip('/')
@@ -107,8 +112,9 @@ def get_url(system, path='', config=di[Config], **kwargs):
         url += f'?{query}'
     return url
 
-def validate_admin(config=di[Config]):
+def validate_admin():
     '''Checks if the admin key in the query/cookie matches the expected admin key'''
+    config = di[Config]
     return not config.admin_key or query_cookie('admin_key', max_age_days=1) == config.admin_key
 
 def page(name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
@@ -122,8 +128,9 @@ def page(name, title, path='', path_args=None, system=None, agency=None, enable_
     try:
         last_updated = system.get_last_updated(time_format)
     except AttributeError:
-        last_updated = helpers.realtime.default.get_last_updated(time_format)
+        last_updated = di[RealtimeService].get_last_updated(time_format)
     return template(f'pages/{name}',
+        di=di,
         config=di[Config],
         version=VERSION,
         title=title,
@@ -134,12 +141,12 @@ def page(name, title, path='', path_args=None, system=None, agency=None, enable_
         enable_refresh=enable_refresh,
         include_maps=include_maps,
         full_map=full_map,
-        regions=helpers.region.default.find_all(),
-        systems=helpers.system.default.find_all(),
+        regions=di[RegionService].find_all(),
+        systems=di[SystemService].find_all(),
         is_admin=is_admin,
         get_url=get_url,
         last_updated=last_updated,
-        theme=helpers.theme.default.find(theme_id),
+        theme=di[ThemeService].find(theme_id),
         time_format=time_format,
         bus_marker_style=bus_marker_style,
         hide_systems=hide_systems,
@@ -170,8 +177,9 @@ def frame(name, system, agency, **kwargs):
         **kwargs
     )
 
-def set_cookie(key, value, max_age_days=3650, config=di[Config]):
+def set_cookie(key, value, max_age_days=3650):
     '''Creates a cookie using the given key and value'''
+    config = di[Config]
     max_age = 60 * 60 * 24 * max_age_days
     if config.cookie_domain:
         response.set_cookie(key, value, max_age=max_age, domain=config.cookie_domain, path='/')
@@ -209,13 +217,13 @@ def endpoint(base_path, method='GET', append_slash=True, require_admin=False, sy
                 raise HTTPError(403)
             if system_key in kwargs:
                 system_id = kwargs[system_key]
-                system = helpers.system.default.find(system_id)
+                system = di[SystemService].find(system_id)
                 if not system:
                     raise HTTPError(404)
                 del kwargs[system_key]
             else:
                 system = None
-            agency = helpers.agency.default.find('bc-transit')
+            agency = di[AgencyService].find('bc-transit')
             return func(system=system, agency=agency, *args, **kwargs)
         return func_wrapper
     return endpoint_wrapper
@@ -268,7 +276,7 @@ def news_page(system, agency):
 
 @endpoint('/map')
 def map_page(system, agency):
-    positions = helpers.position.default.find_all(system, has_location=True)
+    positions = di[PositionService].find_all(system, has_location=True)
     auto_refresh = query_cookie('auto_refresh', 'false') != 'false'
     show_route_lines = query_cookie('show_route_lines', 'false') != 'false'
     show_nis = query_cookie('show_nis', 'true') != 'false'
@@ -290,7 +298,7 @@ def map_page(system, agency):
 
 @endpoint('/realtime')
 def realtime_all_page(system, agency):
-    positions = helpers.position.default.find_all(system)
+    positions = di[PositionService].find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip]
@@ -306,7 +314,7 @@ def realtime_all_page(system, agency):
 
 @endpoint('/realtime/routes')
 def realtime_routes_page(system, agency):
-    positions = helpers.position.default.find_all(system)
+    positions = di[PositionService].find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip]
@@ -322,7 +330,7 @@ def realtime_routes_page(system, agency):
 
 @endpoint('/realtime/models')
 def realtime_models_page(system, agency):
-    positions = helpers.position.default.find_all(system)
+    positions = di[PositionService].find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip]
@@ -339,7 +347,7 @@ def realtime_models_page(system, agency):
 @endpoint('/realtime/speed')
 def realtime_speed_page(system, agency):
     set_cookie('speed', '1994')
-    positions = helpers.position.default.find_all(system)
+    positions = di[PositionService].find_all(system)
     show_nis = query_cookie('show_nis', 'true') != 'false'
     if not show_nis:
         positions = [p for p in positions if p.trip]
@@ -355,8 +363,8 @@ def realtime_speed_page(system, agency):
 
 @endpoint('/fleet')
 def fleet_page(system, agency):
-    orders = helpers.order.default.find_all(agency)
-    overviews = helpers.overview.default.find_all()
+    orders = di[OrderService].find_all(agency)
+    overviews = di[OverviewService].find_all()
     return page(
         name='fleet',
         title='Fleet',
@@ -370,7 +378,7 @@ def fleet_page(system, agency):
 @endpoint('/bus/<bus_number:int>')
 def bus_overview_page(system, agency, bus_number):
     bus = Bus.find(agency, bus_number)
-    overview = helpers.overview.default.find(bus)
+    overview = di[OverviewService].find(bus)
     if (not bus.order and not overview) or not bus.visible:
         return error_page(
             name='invalid_bus',
@@ -379,8 +387,8 @@ def bus_overview_page(system, agency, bus_number):
             agency=agency,
             bus_number=bus_number
         )
-    position = helpers.position.default.find(bus)
-    records = helpers.record.default.find_all(bus=bus, limit=20)
+    position = di[PositionService].find(bus)
+    records = di[RecordService].find_all(bus=bus, limit=20)
     return page(
         name='bus/overview',
         title=f'Bus {bus}',
@@ -398,7 +406,7 @@ def bus_overview_page(system, agency, bus_number):
 @endpoint('/bus/<bus_number:int>/map')
 def bus_map_page(system, agency, bus_number):
     bus = Bus.find(agency, bus_number)
-    overview = helpers.overview.default.find(bus)
+    overview = di[OverviewService].find(bus)
     if (not bus.order and not overview) or not bus.visible:
         return error_page(
             name='invalid_bus',
@@ -407,7 +415,7 @@ def bus_map_page(system, agency, bus_number):
             agency=agency,
             bus_number=bus_number
         )
-    position = helpers.position.default.find(bus)
+    position = di[PositionService].find(bus)
     return page(
         name='bus/map',
         title=f'Bus {bus}',
@@ -424,7 +432,7 @@ def bus_map_page(system, agency, bus_number):
 @endpoint('/bus/<bus_number:int>/history')
 def bus_history_page(system, agency, bus_number):
     bus = Bus.find(agency, bus_number)
-    overview = helpers.overview.default.find(bus)
+    overview = di[OverviewService].find(bus)
     if (not bus.order and not overview) or not bus.visible:
         return error_page(
             name='invalid_bus',
@@ -433,8 +441,8 @@ def bus_history_page(system, agency, bus_number):
             agency=agency,
             bus_number=bus_number
         )
-    records = helpers.record.default.find_all(bus=bus)
-    transfers = helpers.transfer.default.find_all(bus=bus)
+    records = di[RecordService].find_all(bus=bus)
+    transfers = di[TransferService].find_all(bus=bus)
     events = []
     if overview:
         events.append(Event(overview.first_seen_date, 'First Seen'))
@@ -460,7 +468,7 @@ def bus_history_page(system, agency, bus_number):
 
 @endpoint('/history')
 def history_last_seen_page(system, agency):
-    overviews = [o for o in helpers.overview.default.find_all(system) if o.last_record and o.bus.visible]
+    overviews = [o for o in di[OverviewService].find_all(system) if o.last_record and o.bus.visible]
     try:
         days = int(request.query['days'])
     except (KeyError, ValueError):
@@ -486,7 +494,7 @@ def history_last_seen_page(system, agency):
 
 @endpoint('/history/first-seen')
 def history_first_seen_page(system, agency):
-    overviews = [o for o in helpers.overview.default.find_all(system) if o.first_record and o.bus.visible]
+    overviews = [o for o in di[OverviewService].find_all(system) if o.first_record and o.bus.visible]
     return page(
         name='history/first_seen',
         title='Vehicle History',
@@ -499,12 +507,13 @@ def history_first_seen_page(system, agency):
 @endpoint('/history/transfers')
 def history_transfers_page(system, agency):
     filter = request.query.get('filter')
+    transfer_service = di[TransferService]
     if filter == 'from':
-        transfers = helpers.transfer.default.find_all(old_system=system)
+        transfers = transfer_service.find_all(old_system=system)
     elif filter == 'to':
-        transfers = helpers.transfer.default.find_all(new_system=system)
+        transfers = transfer_service.find_all(new_system=system)
     else:
-        transfers = helpers.transfer.default.find_all(old_system=system, new_system=system)
+        transfers = transfer_service.find_all(old_system=system, new_system=system)
     return page(
         name='history/transfers',
         title='Vehicle History',
@@ -528,7 +537,7 @@ def routes_list_page(system, agency):
 
 @endpoint('/routes/map')
 def routes_map_page(system, agency):
-    routes = helpers.route.default.find_all(system)
+    routes = di[RouteService].find_all(system)
     show_route_numbers = query_cookie('show_route_numbers', 'true') != 'false'
     return page(
         name='routes/map',
@@ -571,9 +580,9 @@ def route_overview_page(system, agency, route_number):
         include_maps=len(route.trips) > 0,
         route=route,
         trips=trips,
-        recorded_today=helpers.record.default.find_recorded_today(system, trips),
-        assignments=helpers.assignment.default.find_all(system, route=route),
-        positions=helpers.position.default.find_all(system, route=route),
+        recorded_today=di[RecordService].find_recorded_today(system, trips),
+        assignments=di[AssignmentService].find_all(system, route=route),
+        positions=di[PositionService].find_all(system, route=route),
         favourite=Favourite('route', route),
         favourites=get_favourites()
     )
@@ -605,7 +614,7 @@ def route_map_page(system, agency, route_number):
         include_maps=len(route.trips) > 0,
         full_map=len(route.trips) > 0,
         route=route,
-        positions=helpers.position.default.find_all(system, route=route),
+        positions=di[PositionService].find_all(system, route=route),
         favourite=Favourite('route', route),
         favourites=get_favourites()
     )
@@ -725,8 +734,8 @@ def block_overview_page(system, agency, block_id):
         agency=agency,
         include_maps=True,
         block=block,
-        positions=helpers.position.default.find_all(system, block=block),
-        assignment=helpers.assignment.default.find(system, block)
+        positions=di[PositionService].find_all(system, block=block),
+        assignment=di[AssignmentService].find(system, block)
     )
 
 @endpoint('/blocks/<block_id>/map')
@@ -756,7 +765,7 @@ def block_map_page(system, agency, block_id):
         include_maps=True,
         full_map=True,
         block=block,
-        positions=helpers.position.default.find_all(system, block=block)
+        positions=di[PositionService].find_all(system, block=block)
     )
 
 @endpoint('/blocks/<block_id>/history')
@@ -778,7 +787,7 @@ def block_history_page(system, agency, block_id):
             agency=agency,
             block_id=block_id
         )
-    records = helpers.record.default.find_all(system, block=block)
+    records = di[RecordService].find_all(system, block=block)
     events = []
     if records:
         events.append(Event(records[0].date, 'Last Tracked'))
@@ -819,8 +828,8 @@ def trip_overview_page(system, agency, trip_id):
         agency=agency,
         include_maps=True,
         trip=trip,
-        positions=helpers.position.default.find_all(system, trip=trip),
-        assignment=helpers.assignment.default.find(system, trip.block_id)
+        positions=di[PositionService].find_all(system, trip=trip),
+        assignment=di[AssignmentService].find(system, trip.block_id)
     )
 
 @endpoint('/trips/<trip_id>/map')
@@ -850,7 +859,7 @@ def trip_map_page(system, agency, trip_id):
         include_maps=True,
         full_map=True,
         trip=trip,
-        positions=helpers.position.default.find_all(system, trip=trip)
+        positions=di[PositionService].find_all(system, trip=trip)
     )
 
 @endpoint('/trips/<trip_id>/history')
@@ -872,7 +881,7 @@ def trip_history_page(system, agency, trip_id):
             agency=agency,
             trip_id=trip_id
         )
-    records = helpers.record.default.find_all(system, trip=trip)
+    records = di[RecordService].find_all(system, trip=trip)
     events = []
     if len(records) > 0:
         events.append(Event(records[0].date, 'Last Tracked'))
@@ -925,7 +934,7 @@ def stop_overview_page(system, agency, stop_number):
         )
     departures = stop.find_departures(date=Date.today(system.timezone))
     trips = [d.trip for d in departures]
-    positions = helpers.position.default.find_all(system, trip=trips)
+    positions = di[PositionService].find_all(system, trip=trips)
     return page(
         name='stop/overview',
         title=f'Stop {stop.number}',
@@ -934,8 +943,8 @@ def stop_overview_page(system, agency, stop_number):
         include_maps=True,
         stop=stop,
         departures=departures,
-        recorded_today=helpers.record.default.find_recorded_today(system, trips),
-        assignments=helpers.assignment.default.find_all(system, stop=stop),
+        recorded_today=di[RecordService].find_recorded_today(system, trips),
+        assignments=di[AssignmentService].find_all(system, stop=stop),
         positions={p.trip.id: p for p in positions},
         favourite=Favourite('stop', stop),
         favourites=get_favourites()
@@ -1071,7 +1080,7 @@ def personalize_page(system, agency):
     bus_marker_style = request.query.get('bus_marker_style')
     if bus_marker_style:
         set_cookie('bus_marker_style', bus_marker_style)
-    themes = helpers.theme.default.find_all()
+    themes = di[ThemeService].find_all()
     return page(
         name='personalize',
         title='Personalize',
@@ -1138,8 +1147,8 @@ def api_map(system, agency):
     try:
         last_updated = system.get_last_updated(time_format)
     except AttributeError:
-        last_updated = helpers.realtime.default.get_last_updated(time_format)
-    positions = sorted(helpers.position.default.find_all(system, has_location=True), key=lambda p: p.lat)
+        last_updated = di[RealtimeService].get_last_updated(time_format)
+    positions = sorted(di[PositionService].find_all(system, has_location=True), key=lambda p: p.lat)
     return {
         'positions': [p.get_json() for p in positions],
         'last_updated': last_updated
@@ -1148,12 +1157,12 @@ def api_map(system, agency):
 @endpoint('/api/shape/<shape_id>.json', append_slash=False)
 def api_shape_id(system, agency, shape_id):
     return {
-        'points': [p.get_json() for p in helpers.point.default.find_all(system, shape_id)]
+        'points': [p.get_json() for p in di[PointService].find_all(system, shape_id)]
     }
 
 @endpoint('/api/routes')
 def api_routes(system, agency):
-    routes = helpers.route.default.find_all(system)
+    routes = di[RouteService].find_all(system)
     trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
     shape_ids = set()
     shape_trips = []
@@ -1180,7 +1189,7 @@ def api_search(system, agency):
     if query != '':
         if query.isnumeric() and (not system or system.realtime_enabled):
             if include_buses:
-                matches += helpers.order.default.find_matches(agency, query, helpers.overview.default.find_bus_numbers(system))
+                matches += di[OrderService].find_matches(agency, query, di[OverviewService].find_bus_numbers(system))
         if system:
             if include_blocks:
                 matches += system.search_blocks(query)
@@ -1211,42 +1220,44 @@ def api_nearby(system, agency):
 
 @endpoint('/api/admin/reload-adornments', method='POST', require_admin=True)
 def api_admin_reload_adornments(system, agency):
-    helpers.adornment.default.load()
+    di[AdornmentService].load()
     return 'Success'
 
 @endpoint('/api/admin/reload-orders', method='POST', require_admin=True)
 def api_admin_reload_orders(system, agency):
-    helpers.order.default.load()
+    di[OrderService].load()
     return 'Success'
 
 @endpoint('/api/admin/reload-systems', method='POST', require_admin=True)
 def api_admin_reload_systems(system, agency):
-    helpers.cron.default.stop()
-    helpers.position.default.delete_all()
-    helpers.system.default.load()
-    for system in helpers.system.default.find_all():
+    di[CronService].stop()
+    di[PositionService].delete_all()
+    di[SystemService].load()
+    gtfs_service = di[GTFSService]
+    realtime_service = di[RealtimeService]
+    for system in di[SystemService].find_all():
         if running:
-            helpers.gtfs.default.load(system)
-            if not helpers.gtfs.default.validate(system):
-                helpers.gtfs.default.load(system, True)
-            helpers.gtfs.default.update_cache_in_background(system)
-            helpers.realtime.default.update(system)
-            if not helpers.realtime.default.validate(system):
+            gtfs_service.load(system)
+            if not gtfs_service.validate(system):
+                gtfs_service.load(system, True)
+            gtfs_service.update_cache_in_background(system)
+            realtime_service.update(system)
+            if not realtime_service.validate(system):
                 system.validation_errors += 1
     if running:
-        helpers.realtime.default.update_records()
-        helpers.cron.default.start()
+        realtime_service.update_records()
+        di[CronService].start()
     return 'Success'
 
 @endpoint('/api/admin/reload-themes', method='POST', require_admin=True)
 def api_admin_reload_themes(system, agency):
-    helpers.theme.default.load()
+    di[ThemeService].load()
     return 'Success'
 
 @endpoint('/api/admin/restart-cron', method='POST', require_admin=True)
 def api_admin_restart_cron(system, agency):
-    helpers.cron.default.stop()
-    helpers.cron.default.start()
+    di[CronService].stop()
+    di[CronService].start()
     return 'Success'
 
 @endpoint('/api/admin/backup-database', method='POST', require_admin=True)
@@ -1256,26 +1267,29 @@ def api_admin_backup_database(system, agency):
 
 @endpoint('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_gtfs(system, agency, reload_system_id):
-    system = helpers.system.default.find(reload_system_id)
+    system = di[SystemService].find(reload_system_id)
     if not system:
         return 'Invalid system'
-    helpers.gtfs.default.load(system, True)
-    helpers.gtfs.default.update_cache_in_background(system)
-    helpers.realtime.default.update(system)
-    if not helpers.realtime.default.validate(system):
+    gtfs_service = di[GTFSService]
+    realtime_service = di[RealtimeService]
+    gtfs_service.load(system, True)
+    gtfs_service.update_cache_in_background(system)
+    realtime_service.update(system)
+    if not realtime_service.validate(system):
         system.validation_errors += 1
-    helpers.realtime.default.update_records()
+    realtime_service.update_records()
     return 'Success'
 
 @endpoint('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True)
 def api_admin_reload_realtime(system, agency, reload_system_id):
-    system = helpers.system.default.find(reload_system_id)
+    system = di[SystemService].find(reload_system_id)
     if not system:
         return 'Invalid system'
-    helpers.realtime.default.update(system)
-    if not helpers.realtime.default.validate(system):
+    realtime_service = di[RealtimeService]
+    realtime_service.update(system)
+    if not realtime_service.validate(system):
         system.validation_errors += 1
-    helpers.realtime.default.update_records()
+    realtime_service.update_records()
     return 'Success'
 
 # =============================================================

@@ -10,12 +10,12 @@ import requests
 
 from di import di
 
-import helpers.departure
-import helpers.point
-import helpers.route
-import helpers.sheet
-import helpers.stop
-import helpers.trip
+from helpers.departure import DepartureService
+from helpers.point import PointService
+from helpers.route import RouteService
+from helpers.sheet import SheetService
+from helpers.stop import StopService
+from helpers.trip import TripService
 
 from models.block import Block
 from models.date import Date
@@ -26,11 +26,23 @@ from config import Config
 class GTFSService:
     
     __slots__ = (
-        'config'
+        'config',
+        'departure_service',
+        'point_service',
+        'route_service',
+        'sheet_service',
+        'stop_service',
+        'trip_service'
     )
     
-    def __init__(self, config=di[Config]):
-        self.config = config
+    def __init__(self, **kwargs):
+        self.config = kwargs.get('config') or di[Config]
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.point_service = kwargs.get('point_service') or di[PointService]
+        self.route_service = kwargs.get('route_service') or di[RouteService]
+        self.sheet_service = kwargs.get('sheet_service') or di[SheetService]
+        self.stop_service = kwargs.get('stop_service') or di[StopService]
+        self.trip_service = kwargs.get('trip_service') or di[TripService]
     
     def load(self, system, force_download=False, update_db=False):
         '''Loads the GTFS for the given system into memory'''
@@ -55,20 +67,20 @@ class GTFSService:
                 services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
             
             system.services = {s.id: s for s in services}
-            system.sheets = helpers.sheet.default.combine(system, services)
+            system.sheets = self.sheet_service.combine(system, services)
             
-            stops = helpers.stop.default.find_all(system.id)
+            stops = self.stop_service.find_all(system.id)
             system.stops = {s.id: s for s in stops}
             system.stops_by_number = {s.number: s for s in stops}
             
-            trips = helpers.trip.default.find_all(system.id)
+            trips = self.trip_service.find_all(system.id)
             system.trips = {t.id: t for t in trips}
             
             block_trips = {}
             for trip in trips:
                 block_trips.setdefault(trip.block_id, []).append(trip)
             
-            routes = helpers.route.default.find_all(system.id)
+            routes = self.route_service.find_all(system.id)
             system.routes = {r.id: r for r in routes}
             system.routes_by_number = {r.number: r for r in routes}
             
@@ -111,17 +123,17 @@ class GTFSService:
             return
         print(f'Updating database with GTFS data for {system}')
         try:
-            helpers.departure.default.delete_all(system)
-            helpers.trip.default.delete_all(system)
-            helpers.stop.default.delete_all(system)
-            helpers.route.default.delete_all(system)
-            helpers.point.default.delete_all(system)
+            self.departure_service.delete_all(system)
+            self.trip_service.delete_all(system)
+            self.stop_service.delete_all(system)
+            self.route_service.delete_all(system)
+            self.point_service.delete_all(system)
             
-            apply_csv(system, 'routes', helpers.route.default.create)
-            apply_csv(system, 'stops', helpers.stop.default.create)
-            apply_csv(system, 'trips', helpers.trip.default.create)
-            apply_csv(system, 'stop_times', helpers.departure.default.create)
-            apply_csv(system, 'shapes', helpers.point.default.create)
+            apply_csv(system, 'routes', self.route_service.create)
+            apply_csv(system, 'stops', self.stop_service.create)
+            apply_csv(system, 'trips', self.trip_service.create)
+            apply_csv(system, 'stop_times', self.departure_service.create)
+            apply_csv(system, 'shapes', self.point_service.create)
         except Exception as e:
             print(f'Failed to update GTFS for {system}: {e}')
     
@@ -153,5 +165,3 @@ def apply_csv(system, name, function):
         columns = next(reader)
         for row in reader:
             function(system, dict(zip(columns, row)))
-
-default = GTFSService()

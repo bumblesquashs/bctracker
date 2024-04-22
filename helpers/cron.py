@@ -4,10 +4,10 @@ from crontab import CronTab
 
 from di import di
 
-import helpers.gtfs
-import helpers.realtime
-import helpers.record
-import helpers.system
+from helpers.gtfs import GTFSService
+from helpers.realtime import RealtimeService
+from helpers.record import RecordService
+from helpers.system import SystemService
 
 from models.date import Date
 from models.time import Time
@@ -22,13 +22,21 @@ class CronService:
     __slots__ = (
         'config',
         'database',
+        'gtfs_service',
+        'realtime_service',
+        'record_service',
+        'system_service',
         'running',
         'updating_realtime'
     )
     
-    def __init__(self, config=di[Config], database=di[Database]):
-        self.config = config
-        self.database = database
+    def __init__(self, **kwargs):
+        self.config = kwargs.get('config') or di[Config]
+        self.database = kwargs.get('database') or di[Database]
+        self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
+        self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
+        self.record_service = kwargs.get('record_service') or di[RecordService]
+        self.system_service = kwargs.get('system_service') or di[SystemService]
         self.running = True
         self.updating_realtime = False
         signal.signal(signal.SIGUSR1, lambda sig, frame: self.handle_gtfs())
@@ -55,14 +63,14 @@ class CronService:
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-        for system in helpers.system.default.find_all():
+        for system in self.system_service.find_all():
             if self.running:
                 date = Date.today(system.timezone)
-                if date.weekday == Weekday.MON or not helpers.gtfs.default.validate(system):
-                    helpers.gtfs.default.load(system, True)
-                    helpers.gtfs.default.update_cache_in_background(system)
+                if date.weekday == Weekday.MON or not self.gtfs_service.validate(system):
+                    self.gtfs_service.load(system, True)
+                    self.gtfs_service.update_cache_in_background(system)
         if self.running:
-            helpers.record.default.delete_stale_trip_records()
+            self.record_service.delete_stale_trip_records()
             self.database.archive()
             date = Date.today()
             backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
@@ -75,18 +83,16 @@ class CronService:
         date = Date.today()
         time = Time.now()
         print(f'--- {date} at {time} ---')
-        for system in helpers.system.default.find_all():
+        for system in self.system_service.find_all():
             if self.running:
-                helpers.realtime.default.update(system)
-                if helpers.realtime.default.validate(system):
+                self.realtime_service.update(system)
+                if self.realtime_service.validate(system):
                     system.validation_errors = 0
                 else:
                     system.validation_errors += 1
                     if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
-                        helpers.gtfs.default.load(system, True)
-                        helpers.gtfs.default.update_cache_in_background(system)
+                        self.gtfs_service.load(system, True)
+                        self.gtfs_service.update_cache_in_background(system)
         if self.running:
-            helpers.realtime.default.update_records()
+            self.realtime_service.update_records()
         self.updating_realtime = False
-
-default = CronService()

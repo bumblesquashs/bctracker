@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from di import di
 
-import helpers.agency
+from helpers.agency import AgencyService
 
 from models.bus import Bus
 from models.date import Date
@@ -14,11 +14,13 @@ from database import Database
 class RecordService:
     
     __slots__ = (
-        'database'
+        'database',
+        'agency_service'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
+        self.agency_service = kwargs.get('agency_service') or di[AgencyService]
     
     def create(self, bus, date, system, block, time, trip):
         '''Inserts a new record into the database'''
@@ -72,7 +74,7 @@ class RecordService:
             'record.bus_number': bus_number,
             'record.block_id': block_id
         }
-        if trip_id is not None:
+        if trip_id:
             joins['trip_record'] = {
                 'trip_record.record_id': 'record.record_id'
             }
@@ -127,7 +129,7 @@ class RecordService:
             },
             order_by='record.last_seen ASC'
         )
-        agency = helpers.agency.default.find('bc-transit')
+        agency = self.agency_service.find('bc-transit')
         return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
     
     def delete_stale_trip_records(self):
@@ -148,5 +150,3 @@ class RecordService:
                 )
             )
         ''', [date.format_db()])
-
-default = RecordService()

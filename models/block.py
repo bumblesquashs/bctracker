@@ -1,5 +1,5 @@
 
-import helpers.departure
+from di import di
 
 from models.match import Match
 from models.schedule import Schedule
@@ -108,4 +108,5 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return helpers.departure.default.find_all(self.system, block=self)
+        from helpers.departure import DepartureService
+        return di[DepartureService].find_all(self.system, block=self)

@@ -26,5 +26,3 @@ class AgencyService:
     def find_all(self):
         '''Returns all agencies'''
         return self.agencies.values()
-
-default = AgencyService()

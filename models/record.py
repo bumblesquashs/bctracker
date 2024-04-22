@@ -1,6 +1,5 @@
 
-import helpers.agency
-import helpers.system
+from di import di
 
 from models.bus import Bus
 from models.date import Date
@@ -26,10 +25,12 @@ class Record:
     @classmethod
     def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
+        from helpers.agency import AgencyService
+        from helpers.system import SystemService
         id = row[f'{prefix}_id']
-        agency = helpers.agency.default.find('bc-transit')
+        agency = di[AgencyService].find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        system = helpers.system.default.find(row[f'{prefix}_system_id'])
+        system = di[SystemService].find(row[f'{prefix}_system_id'])
         date = Date.parse(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']
         route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]

@@ -12,8 +12,8 @@ class PositionService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, system, bus, data):
         '''Inserts a new position into the database'''
@@ -179,5 +179,3 @@ class PositionService:
         self.database.delete('position', {
             'position.system_id': system_id
         })
-
-default = PositionService()

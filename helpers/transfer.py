@@ -11,8 +11,8 @@ class TransferService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, bus, date, old_system, new_system):
         '''Inserts a new transfer into the database'''
@@ -52,5 +52,3 @@ class TransferService:
             limit=limit,
             initializer=Transfer.from_db
         )
-
-default = TransferService()

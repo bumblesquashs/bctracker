@@ -1,6 +1,5 @@
 
-import helpers.agency
-import helpers.system
+from di import di
 
 from models.bus import Bus
 from models.date import Date
@@ -19,11 +18,13 @@ class Transfer:
     @classmethod
     def from_db(cls, row, prefix='transfer'):
         '''Returns a transfer initialized from the given database row'''
+        from helpers.agency import AgencyService
+        from helpers.system import SystemService
         id = row[f'{prefix}_id']
-        agency = helpers.agency.default.find('bc-transit')
+        agency = di[AgencyService].find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        old_system = helpers.system.default.find(row[f'{prefix}_old_system_id'])
-        new_system = helpers.system.default.find(row[f'{prefix}_new_system_id'])
+        old_system = di[SystemService].find(row[f'{prefix}_old_system_id'])
+        new_system = di[SystemService].find(row[f'{prefix}_new_system_id'])
         date = Date.parse(row[f'{prefix}_date'], new_system.timezone)
         return cls(id, bus, date, old_system, new_system)
     

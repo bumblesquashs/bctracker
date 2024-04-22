@@ -24,5 +24,3 @@ class ModelService:
     def find(self, model_id):
         '''Returns the model with the given ID'''
         return self.models.get(model_id)
-
-default = ModelService()

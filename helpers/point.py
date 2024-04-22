@@ -11,8 +11,8 @@ class PointService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, system, row):
         '''Inserts a new point into the database'''
@@ -51,5 +51,3 @@ class PointService:
         self.database.delete('point', {
             'point.system_id': system_id
         })
-
-default = PointService()

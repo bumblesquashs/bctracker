@@ -8,11 +8,11 @@ import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 from di import di
 
-import helpers.assignment
-import helpers.overview
-import helpers.position
-import helpers.record
-import helpers.transfer
+from helpers.assignment import AssignmentService
+from helpers.overview import OverviewService
+from helpers.position import PositionService
+from helpers.record import RecordService
+from helpers.transfer import TransferService
 
 from models.date import Date
 from models.time import Time
@@ -25,13 +25,23 @@ class RealtimeService:
     __slots__ = (
         'config',
         'database',
+        'assignment_service',
+        'overview_service',
+        'position_service',
+        'record_service',
+        'transfer_service',
         'last_updated_date',
         'last_updated_time'
     )
     
-    def __init__(self, config=di[Config], database=di[Database]):
-        self.config = config
-        self.database = database
+    def __init__(self, **kwargs):
+        self.config = kwargs.get('config') or di[Config]
+        self.database = kwargs.get('database') or di[Database]
+        self.assignment_service = kwargs.get('assignment_service') or di[AssignmentService]
+        self.overview_service = kwargs.get('overview_service') or di[OverviewService]
+        self.position_service = kwargs.get('position_service') or di[PositionService]
+        self.record_service = kwargs.get('record_service') or di[RecordService]
+        self.transfer_service = kwargs.get('transfer_service') or di[TransferService]
         self.last_updated_date = None
         self.last_updated_time = None
     
@@ -57,7 +67,7 @@ class RealtimeService:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
                 data.ParseFromString(r.content)
-            helpers.position.default.delete_all(system)
+            self.position_service.delete_all(system)
             for index, entity in enumerate(data.entity):
                 vehicle = entity.vehicle
                 try:
@@ -68,7 +78,7 @@ class RealtimeService:
                     bus_number = int(vehicle_id)
                 except:
                     bus_number = -(index + 1)
-                helpers.position.default.create(system, bus_number, vehicle)
+                self.position_service.create(system, bus_number, vehicle)
             self.last_updated_date = Date.today()
             self.last_updated_time = Time.now(accurate_seconds=False)
             system.last_updated_date = Date.today(system.timezone)
@@ -79,7 +89,7 @@ class RealtimeService:
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
         try:
-            for position in helpers.position.default.find_all():
+            for position in self.position_service.find_all():
                 try:
                     system = position.system
                     bus = position.bus
@@ -87,32 +97,32 @@ class RealtimeService:
                         continue
                     date = Date.today(system.timezone)
                     time = Time.now(system.timezone)
-                    overview = helpers.overview.default.find(bus.number)
+                    overview = self.overview_service.find(bus.number)
                     trip = position.trip
                     if trip is None:
                         record_id = None
                     else:
                         block = trip.block
-                        assignment = helpers.assignment.default.find(system, block)
+                        assignment = self.assignment_service.find(system, block)
                         if not assignment or assignment.bus_number != bus.number:
-                            helpers.assignment.default.delete_all(system=system, block=block)
-                            helpers.assignment.default.delete_all(bus=bus)
-                            helpers.assignment.default.create(system, block, bus, date)
+                            self.assignment_service.delete_all(system=system, block=block)
+                            self.assignment_service.delete_all(bus=bus)
+                            self.assignment_service.create(system, block, bus, date)
                         if overview is not None and overview.last_record is not None:
                             last_record = overview.last_record
                             if last_record.date == date and last_record.block_id == block.id:
-                                helpers.record.default.update(last_record, time)
-                                trip_ids = helpers.record.default.find_trip_ids(last_record)
+                                self.record_service.update(last_record, time)
+                                trip_ids = self.record_service.find_trip_ids(last_record)
                                 if trip.id not in trip_ids:
-                                    helpers.record.default.create_trip(last_record, trip)
+                                    self.record_service.create_trip(last_record, trip)
                                 continue
-                        record_id = helpers.record.default.create(bus, date, system, block, time, trip)
-                    if overview is None:
-                        helpers.overview.default.create(bus, date, system, record_id)
-                    else:
-                        helpers.overview.default.update(overview, date, system, record_id)
+                        record_id = self.record_service.create(bus, date, system, block, time, trip)
+                    if overview:
+                        self.overview_service.update(overview, date, system, record_id)
                         if overview.last_seen_system != system:
-                            helpers.transfer.default.create(bus, date, overview.last_seen_system, system)
+                            self.transfer_service.create(bus, date, overview.last_seen_system, system)
+                    else:
+                        self.overview_service.create(bus, date, system, record_id)
                 except Exception as e:
                     print(f'Failed to update records: {e}')
             self.database.commit()
@@ -133,7 +143,7 @@ class RealtimeService:
         '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
         if not system.realtime_enabled:
             return True
-        for position in helpers.position.default.find_all(system):
+        for position in self.position_service.find_all(system):
             trip_id = position.trip_id
             if trip_id is None:
                 continue
@@ -146,5 +156,3 @@ class RealtimeService:
                 else:
                     return False
         return True
-
-default = RealtimeService()

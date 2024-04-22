@@ -11,8 +11,8 @@ class TripService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, system, row):
         '''Inserts a new trip into the database'''
@@ -85,5 +85,3 @@ class TripService:
         self.database.delete('trip', {
             'system_id': system_id
         })
-
-default = TripService()

@@ -11,8 +11,8 @@ class RouteService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, system, row):
         '''Inserts a new route into the database'''
@@ -90,5 +90,3 @@ class RouteService:
         self.database.delete('route', {
             'system_id': system_id
         })
-
-default = RouteService()

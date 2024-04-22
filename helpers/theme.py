@@ -26,5 +26,3 @@ class ThemeService:
     def find_all(self):
         '''Returns all themes'''
         return self.themes.values()
-
-default = ThemeService()

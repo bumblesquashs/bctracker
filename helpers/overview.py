@@ -11,8 +11,8 @@ class OverviewService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, bus, date, system, record):
         '''Inserts a new overview into the database'''
@@ -123,5 +123,3 @@ class OverviewService:
         self.database.update('overview', values, {
             'bus_number': overview.bus.number
         })
-
-default = OverviewService()

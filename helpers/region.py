@@ -26,5 +26,3 @@ class RegionService:
     def find_all(self):
         '''Returns all regions'''
         return self.regions.values()
-
-default = RegionService()

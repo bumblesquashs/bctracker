@@ -12,8 +12,8 @@ class AssignmentService:
         'database'
     )
     
-    def __init__(self, database=di[Database]):
-        self.database = database
+    def __init__(self, **kwargs):
+        self.database = kwargs.get('database') or di[Database]
     
     def create(self, system, block, bus, date):
         '''Inserts a new assignment into the database'''
@@ -109,5 +109,3 @@ class AssignmentService:
             'block_id': block_id,
             'bus_number': bus_number
         })
-
-default = AssignmentService()

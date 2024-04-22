@@ -48,5 +48,3 @@ class SheetService:
                 else:
                     final_sheets.append(sheet)
         return final_sheets
-
-default = SheetService()
