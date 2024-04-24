@@ -9,6 +9,8 @@ from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
+from services import DepartureService, SystemService
+
 import utils
 
 class Route:
@@ -26,7 +28,6 @@ class Route:
     
     @classmethod
     def from_db(cls, row, prefix='route'):
-        from helpers.system import SystemService
         system = di[SystemService].find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
@@ -145,7 +146,6 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        from helpers.departure import DepartureService
         return di[DepartureService].find_all(self.system, route=self)
 
 def generate_colour(system, number):

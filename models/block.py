@@ -5,6 +5,8 @@ from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
+from services import DepartureService
+
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
@@ -108,5 +110,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        from helpers.departure import DepartureService
         return di[DepartureService].find_all(self.system, block=self)

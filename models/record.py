@@ -5,6 +5,8 @@ from models.bus import Bus
 from models.date import Date
 from models.time import Time
 
+from services import AgencyService, SystemService
+
 class Record:
     '''Information about a bus' history on a specific date'''
     
@@ -25,8 +27,6 @@ class Record:
     @classmethod
     def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
-        from helpers.agency import AgencyService
-        from helpers.system import SystemService
         id = row[f'{prefix}_id']
         agency = di[AgencyService].find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])

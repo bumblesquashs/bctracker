@@ -17,8 +17,5 @@ class Container:
     
     def __setitem__(self, type, dependency):
         self.dependencies[type] = dependency
-    
-    def add(self, dependency):
-        self.dependencies[type(dependency)] = dependency
 
 di = Container()

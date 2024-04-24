@@ -1,6 +1,6 @@
 
 % from models.date import Date
-% from helpers.position import PositionService
+% from services import PositionService
 
 % rebase('base')
 

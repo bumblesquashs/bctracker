@@ -8,8 +8,7 @@ from di import di
 
 from models.date import Date
 
-from config import Config
-from database import Database
+from services import Config, Database
 
 def run(date, include_db=False, db_name='bctracker', delete_files=True):
     '''Zips all archives from the given date into a single file'''

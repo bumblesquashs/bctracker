@@ -140,7 +140,7 @@ SQL_SCRIPTS = [
     'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
 ]
 
-class Database:
+class DefaultDatabase:
     
     __slots__ = (
         'name',

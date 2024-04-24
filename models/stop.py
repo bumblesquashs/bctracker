@@ -7,6 +7,8 @@ from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
+from services import DepartureService, SystemService
+
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
@@ -21,7 +23,6 @@ class Stop:
     
     @classmethod
     def from_db(cls, row, prefix='stop'):
-        from helpers.system import SystemService
         system = di[SystemService].find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
@@ -115,7 +116,6 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        from helpers.departure import DepartureService
         departures = di[DepartureService].find_all(self.system, stop=self)
         if service_group is None:
             if date is None:
@@ -125,7 +125,6 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        from helpers.departure import DepartureService
         return di[DepartureService].find_adjacent(self.system, self)
 
 class StopCache:

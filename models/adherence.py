@@ -5,6 +5,8 @@ from di import di
 
 from models.time import Time
 
+from services import DepartureService
+
 MINIMUM_MINUTES = 4
 
 class Adherence:
@@ -17,17 +19,16 @@ class Adherence:
     )
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon, ):
+    def calculate(cls, trip, stop, sequence, lat, lon):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        from helpers.departure import DepartureService
         departure = di[DepartureService].find(trip.system, trip=trip, sequence=sequence)
-        if departure is None:
+        if not departure:
             return None
         previous_departure = departure.find_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes()
             
-            if previous_departure is not None:
+            if previous_departure:
                 previous_departure_mins = previous_departure.time.get_minutes()
                 time_difference = expected_scheduled_mins - previous_departure_mins
                 

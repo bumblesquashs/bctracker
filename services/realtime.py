@@ -8,19 +8,12 @@ import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 from di import di
 
-from helpers.assignment import AssignmentService
-from helpers.overview import OverviewService
-from helpers.position import PositionService
-from helpers.record import RecordService
-from helpers.transfer import TransferService
-
 from models.date import Date
 from models.time import Time
 
-from config import Config
-from database import Database
+from services import Config, Database, AssignmentService, OverviewService, PositionService, RecordService, TransferService
 
-class RealtimeService:
+class DefaultRealtimeService:
     
     __slots__ = (
         'config',

@@ -3,7 +3,7 @@ import json
 
 from models.theme import Theme
 
-class ThemeService:
+class DefaultThemeService:
     
     __slots__ = (
         'themes'

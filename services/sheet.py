@@ -2,7 +2,7 @@
 from models.daterange import DateRange
 from models.sheet import Sheet
 
-class SheetService:
+class DefaultSheetService:
     
     def combine(self, system, services):
         '''Returns a list of sheets made from services with overlapping start/end dates'''

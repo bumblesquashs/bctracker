@@ -4,20 +4,15 @@ from crontab import CronTab
 
 from di import di
 
-from helpers.gtfs import GTFSService
-from helpers.realtime import RealtimeService
-from helpers.record import RecordService
-from helpers.system import SystemService
-
 from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
 import backup
-from config import Config
-from database import Database
 
-class CronService:
+from services import Config, Database, GTFSService, RealtimeService, RecordService, SystemService
+
+class DefaultCronService:
     
     __slots__ = (
         'config',

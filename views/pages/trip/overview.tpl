@@ -1,5 +1,5 @@
 
-% from helpers.position import PositionService
+% from services import PositionService
 
 % rebase('base')
 

@@ -4,6 +4,8 @@ from di import di
 from models.direction import Direction
 from models.time import Time
 
+from services import DepartureService, PointService, SystemService
+
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
@@ -23,7 +25,6 @@ class Trip:
     
     @classmethod
     def from_db(cls, row, prefix='trip'):
-        from helpers.system import SystemService
         system = di[SystemService].find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
@@ -190,12 +191,10 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        from helpers.point import PointService
         return di[PointService].find_all(self.system, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        from helpers.departure import DepartureService
         return di[DepartureService].find_all(self.system, trip=self)
     
     def is_related(self, other):

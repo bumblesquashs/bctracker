@@ -4,6 +4,8 @@ from di import di
 from models.bus import Bus
 from models.date import Date
 
+from services import SystemService
+
 class Assignment:
     '''An association between a block and a bus for a specific date'''
     
@@ -31,7 +33,6 @@ class Assignment:
     @property
     def bus(self):
         '''The bus for this assignment'''
-        from helpers.system import SystemService
         system = di[SystemService].find(self.system_id)
         return Bus.find(system.agency, self.bus_number)
     

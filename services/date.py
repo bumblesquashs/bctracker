@@ -1,5 +1,5 @@
 
-class DateService:
+class DefaultDateService:
     
     def flatten(dates):
         '''Stringifies a list of dates with '-' between first and last consecutive dates and ',' between non-consecutive dates'''

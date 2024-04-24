@@ -7,31 +7,12 @@ import cherrypy as cp
 
 from di import di
 
-from helpers.adornment import AdornmentService
-from helpers.agency import AgencyService
-from helpers.order import OrderService
-from helpers.overview import OverviewService
-from helpers.point import PointService
-from helpers.position import PositionService
-from helpers.record import RecordService
-from helpers.region import RegionService
-from helpers.route import RouteService
-from helpers.system import SystemService
-from helpers.theme import ThemeService
-from helpers.transfer import TransferService
-from helpers.assignment import AssignmentService
-
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 
-from config import Config
-from database import Database
-
-from helpers.cron import CronService
-from helpers.gtfs import GTFSService
-from helpers.realtime import RealtimeService
+from services import *
 
 # Increase the version to force CSS reload
 VERSION = 38

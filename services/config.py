@@ -1,5 +1,5 @@
 
-class Config:
+class DefaultConfig:
     
     __slots__ = (
         'cron_id',

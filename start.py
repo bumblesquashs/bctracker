@@ -7,33 +7,33 @@ from di import di
 
 import server
 
-from config import Config
-from database import Database
+from services import *
 
-from helpers.adornment import AdornmentService
-from helpers.agency import AgencyService
-from helpers.order import OrderService
-from helpers.overview import OverviewService
-from helpers.model import ModelService
-from helpers.region import RegionService
-from helpers.system import SystemService
-from helpers.theme import ThemeService
+from services.config import DefaultConfig
+from services.database import DefaultDatabase
 
-from helpers.assignment import AssignmentService
-from helpers.departure import DepartureService
-from helpers.point import PointService
-from helpers.position import PositionService
-from helpers.record import RecordService
-from helpers.route import RouteService
-from helpers.stop import StopService
-from helpers.transfer import TransferService
-from helpers.trip import TripService
-
-from helpers.cron import CronService
-from helpers.date import DateService
-from helpers.gtfs import GTFSService
-from helpers.realtime import RealtimeService
-from helpers.sheet import SheetService
+from services.adornment import DefaultAdornmentService
+from services.agency import DefaultAgencyService
+from services.assignment import DefaultAssignmentService
+from services.cron import DefaultCronService
+from services.date import DefaultDateService
+from services.departure import DefaultDepartureService
+from services.gtfs import DefaultGTFSService
+from services.model import DefaultModelService
+from services.order import DefaultOrderService
+from services.overview import DefaultOverviewService
+from services.point import DefaultPointService
+from services.position import DefaultPositionService
+from services.realtime import DefaultRealtimeService
+from services.record import DefaultRecordService
+from services.region import DefaultRegionService
+from services.route import DefaultRouteService
+from services.sheet import DefaultSheetService
+from services.stop import DefaultStopService
+from services.system import DefaultSystemService
+from services.theme import DefaultThemeService
+from services.transfer import DefaultTransferService
+from services.trip import DefaultTripService
 
 def exit(sig, frame):
     server.stop()
@@ -46,32 +46,32 @@ if __name__ == '__main__':
     parser.add_argument('--updatedb', '-u', action='store_true', help='Updates GTFS in the database with CSV data')
     parser.add_argument('--debug', '-d', action='store_true', help='Prevent page caching and show additional error info')
     
-    di.add(Config())
-    di.add(Database())
+    di[Config] = DefaultConfig()
+    di[Database] = DefaultDatabase()
     
-    di.add(AdornmentService())
-    di.add(AgencyService())
-    di.add(ModelService())
-    di.add(OrderService())
-    di.add(RegionService())
-    di.add(SystemService())
-    di.add(ThemeService())
+    di[AdornmentService] = DefaultAdornmentService()
+    di[AgencyService] = DefaultAgencyService()
+    di[ModelService] = DefaultModelService()
+    di[OrderService] = DefaultOrderService()
+    di[RegionService] = DefaultRegionService()
+    di[SystemService] = DefaultSystemService()
+    di[ThemeService] = DefaultThemeService()
     
-    di.add(AssignmentService())
-    di.add(DepartureService())
-    di.add(OverviewService())
-    di.add(PointService())
-    di.add(PositionService())
-    di.add(RecordService())
-    di.add(RouteService())
-    di.add(StopService())
-    di.add(TransferService())
-    di.add(TripService())
+    di[AssignmentService] = DefaultAssignmentService()
+    di[DepartureService] = DefaultDepartureService()
+    di[OverviewService] = DefaultOverviewService()
+    di[PointService] = DefaultPointService()
+    di[PositionService] = DefaultPositionService()
+    di[RecordService] = DefaultRecordService()
+    di[RouteService] = DefaultRouteService()
+    di[StopService] = DefaultStopService()
+    di[TransferService] = DefaultTransferService()
+    di[TripService] = DefaultTripService()
     
-    di.add(DateService())
-    di.add(SheetService())
-    di.add(GTFSService())
-    di.add(RealtimeService())
-    di.add(CronService())
+    di[DateService] = DefaultDateService()
+    di[SheetService] = DefaultSheetService()
+    di[GTFSService] = DefaultGTFSService()
+    di[RealtimeService] = DefaultRealtimeService()
+    di[CronService] = DefaultCronService()
     
     server.start(parser.parse_args())

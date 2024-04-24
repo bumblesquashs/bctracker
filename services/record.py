@@ -3,15 +3,15 @@ from datetime import timedelta
 
 from di import di
 
-from helpers.agency import AgencyService
-
 from models.bus import Bus
 from models.date import Date
 from models.record import Record
 
-from database import Database
+from services import AgencyService
 
-class RecordService:
+from services import Database
+
+class DefaultRecordService:
     
     __slots__ = (
         'database',

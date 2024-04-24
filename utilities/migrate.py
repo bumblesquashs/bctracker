@@ -5,22 +5,22 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from database import Database
+from services.database import DefaultDatabase
 from models.record import Record
-from helpers.agency import AgencyService
-from helpers.region import RegionService
-from helpers.system import SystemService
+from services.agency import DefaultAgencyService
+from services.region import DefaultRegionService
+from services.system import DefaultSystemService
 
-agency_service = AgencyService()
-region_service = RegionService()
-system_service = SystemService(
+agency_service = DefaultAgencyService()
+region_service = DefaultRegionService()
+system_service = DefaultSystemService(
     agency_service=agency_service,
     region_service=region_service
 )
 
 system_service.load()
 
-database = Database()
+database = DefaultDatabase()
 database.connect(foreign_keys=False)
 
 database.execute('''

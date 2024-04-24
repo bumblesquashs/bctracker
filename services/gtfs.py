@@ -10,20 +10,13 @@ import requests
 
 from di import di
 
-from helpers.departure import DepartureService
-from helpers.point import PointService
-from helpers.route import RouteService
-from helpers.sheet import SheetService
-from helpers.stop import StopService
-from helpers.trip import TripService
-
 from models.block import Block
 from models.date import Date
 from models.service import Service, ServiceException
 
-from config import Config
+from services import Config, DepartureService, PointService, RouteService, SheetService, StopService, TripService
 
-class GTFSService:
+class DefaultGTFSService:
     
     __slots__ = (
         'config',

@@ -5,6 +5,8 @@ from di import di
 
 from models.time import Time
 
+from services import DepartureService, SystemService
+
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
     
@@ -67,7 +69,6 @@ class Departure:
     @classmethod
     def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
-        from helpers.system import SystemService
         system = di[SystemService].find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
@@ -155,10 +156,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        from helpers.departure import DepartureService
         return di[DepartureService].find(self.system, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        from helpers.departure import DepartureService
         return di[DepartureService].find(self.system, trip=self.trip, sequence=self.sequence + 1)

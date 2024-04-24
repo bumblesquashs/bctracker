@@ -6,10 +6,9 @@ from di import di
 from models.match import Match
 from models.order import Order
 
-from helpers.agency import AgencyService
-from helpers.model import ModelService
+from services import AgencyService, ModelService
 
-class OrderService:
+class DefaultOrderService:
     
     __slots__ = (
         'agency_service',

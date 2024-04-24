@@ -2,9 +2,7 @@
 % from math import floor
 % from datetime import timedelta
 
-% from helpers.assignment import AssignmentService
-% from helpers.position import PositionService
-% from helpers.record import RecordService
+% from services import AssignmentService, PositionService, RecordService
 
 % from models.date import Date
 

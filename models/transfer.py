@@ -4,6 +4,8 @@ from di import di
 from models.bus import Bus
 from models.date import Date
 
+from services import AgencyService, SystemService
+
 class Transfer:
     '''Information about a bus moving from one system to another system'''
     
@@ -18,8 +20,6 @@ class Transfer:
     @classmethod
     def from_db(cls, row, prefix='transfer'):
         '''Returns a transfer initialized from the given database row'''
-        from helpers.agency import AgencyService
-        from helpers.system import SystemService
         id = row[f'{prefix}_id']
         agency = di[AgencyService].find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])

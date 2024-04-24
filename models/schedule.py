@@ -5,6 +5,8 @@ from models.date import Date
 from models.daterange import DateRange
 from models.weekday import Weekday
 
+from services import DateService
+
 class Schedule:
     '''Dates when a service is running'''
     
@@ -43,7 +45,6 @@ class Schedule:
     @property
     def added_dates_string(self):
         '''Returns a string of all dates that are added'''
-        from helpers.date import DateService
         return di[DateService].flatten(self.added_dates)
     
     @property
@@ -54,7 +55,6 @@ class Schedule:
     @property
     def removed_dates_string(self):
         '''Returns a string of all dates that are removed'''
-        from helpers.date import DateService
         return di[DateService].flatten(self.removed_dates)
     
     @property

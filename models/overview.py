@@ -5,6 +5,8 @@ from models.bus import Bus
 from models.date import Date
 from models.record import Record
 
+from services import AgencyService, SystemService
+
 class Overview:
     '''An overview of a bus' history'''
     
@@ -21,8 +23,6 @@ class Overview:
     @classmethod
     def from_db(cls, row, prefix='overview'):
         '''Returns an overview initialized from the given database row'''
-        from helpers.agency import AgencyService
-        from helpers.system import SystemService
         agency = di[AgencyService].find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         first_seen_system = di[SystemService].find(row[f'{prefix}_first_seen_system_id'])

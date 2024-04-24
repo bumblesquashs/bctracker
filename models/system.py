@@ -8,6 +8,8 @@ from models.schedule import Schedule
 from models.stop import StopCache
 from models.trip import TripCache
 
+from services import DepartureService, OverviewService, PositionService
+
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
@@ -127,12 +129,10 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        from helpers.overview import OverviewService
         return di[OverviewService].find_all(last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        from helpers.position import PositionService
         return di[PositionService].find_all(self)
     
     def get_route(self, route_id=None, number=None):
@@ -220,7 +220,6 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            from helpers.departure import DepartureService
             departures = di[DepartureService].find_all(self)
             trip_departures = {}
             stop_departures = {}
@@ -259,7 +258,6 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            from helpers.departure import DepartureService
             departures = di[DepartureService].find_all(self, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
@@ -271,7 +269,6 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            from helpers.departure import DepartureService
             departures = di[DepartureService].find_all(self, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache

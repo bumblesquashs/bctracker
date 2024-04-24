@@ -3,7 +3,7 @@ import json
 
 from models.agency import Agency
 
-class AgencyService:
+class DefaultAgencyService:
     
     __slots__ = (
         'agencies'

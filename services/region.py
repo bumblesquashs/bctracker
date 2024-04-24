@@ -3,7 +3,7 @@ import json
 
 from models.region import Region
 
-class RegionService:
+class DefaultRegionService:
     
     __slots__ = (
         'regions'

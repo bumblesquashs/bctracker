@@ -3,6 +3,8 @@ from di import di
 
 from models.bus import Bus
 
+from services import RouteService, StopService
+
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
     
@@ -19,10 +21,8 @@ class Favourite:
         if type == 'vehicle':
             value = Bus.find(parts[1], int(parts[2]))
         elif type == 'route':
-            from helpers.route import RouteService
             value = di[RouteService].find(parts[1], number=parts[2])
         elif type == 'stop':
-            from helpers.stop import StopService
             value = di[StopService].find(parts[1], number=parts[2])
         else:
             value = None

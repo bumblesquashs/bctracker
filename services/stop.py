@@ -3,9 +3,9 @@ from di import di
 
 from models.stop import Stop
 
-from database import Database
+from services import Database
 
-class StopService:
+class DefaultStopService:
     
     __slots__ = (
         'database'

@@ -4,6 +4,8 @@ from di import di
 from models.adherence import Adherence
 from models.bus import Bus
 
+from services import AgencyService, DepartureService, SystemService
+
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
@@ -25,8 +27,6 @@ class Position:
     @classmethod
     def from_db(cls, row, prefix='position'):
         '''Returns a position initialized from the given database row'''
-        from helpers.agency import AgencyService
-        from helpers.system import SystemService
         agency = di[AgencyService].find('bc-transit')
         system = di[SystemService].find(row[f'{prefix}_system_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
@@ -165,5 +165,4 @@ class Position:
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or self.trip is None:
             return []
-        from helpers.departure import DepartureService
         return di[DepartureService].find_upcoming(self.system, self.trip, self.sequence)

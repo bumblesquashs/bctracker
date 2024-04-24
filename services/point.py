@@ -3,9 +3,9 @@ from di import di
 
 from models.point import Point
 
-from database import Database
+from services import Database
 
-class PointService:
+class DefaultPointService:
     
     __slots__ = (
         'database'
