@@ -10,9 +10,9 @@ from models.weekday import Weekday
 
 import backup
 
-from services import Config, Database, GTFSService, RealtimeService, RecordService, SystemService
+from services import Config, Database, CronService, GTFSService, RealtimeService, RecordService, SystemService
 
-class DefaultCronService:
+class DefaultCronService(CronService):
     
     __slots__ = (
         'config',

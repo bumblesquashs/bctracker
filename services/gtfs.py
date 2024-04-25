@@ -14,9 +14,9 @@ from models.block import Block
 from models.date import Date
 from models.service import Service, ServiceException
 
-from services import Config, DepartureService, PointService, RouteService, SheetService, StopService, TripService
+from services import Config, DepartureService, GTFSService, PointService, RouteService, SheetService, StopService, TripService
 
-class DefaultGTFSService:
+class DefaultGTFSService(GTFSService):
     
     __slots__ = (
         'config',

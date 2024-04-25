@@ -2,6 +2,8 @@
 import sqlite3
 import shutil
 
+from services import Database
+
 SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS record (
@@ -140,7 +142,7 @@ SQL_SCRIPTS = [
     'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
 ]
 
-class DefaultDatabase:
+class DefaultDatabase(Database):
     
     __slots__ = (
         'name',

@@ -3,9 +3,9 @@ from di import di
 
 from models.route import Route
 
-from services import Database
+from services import Database, RouteService
 
-class DefaultRouteService:
+class DefaultRouteService(RouteService):
     
     __slots__ = (
         'database'

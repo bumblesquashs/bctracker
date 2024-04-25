@@ -5,9 +5,9 @@ from di import di
 
 from models.system import System
 
-from services import AgencyService, RegionService
+from services import AgencyService, RegionService, SystemService
 
-class DefaultSystemService:
+class DefaultSystemService(SystemService):
     
     __slots__ = (
         'agency_service',

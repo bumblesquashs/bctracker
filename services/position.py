@@ -4,9 +4,9 @@ from di import di
 from models.adherence import Adherence
 from models.position import Position
 
-from services import Database
+from services import Database, PositionService
 
-class DefaultPositionService:
+class DefaultPositionService(PositionService):
     
     __slots__ = (
         'database'

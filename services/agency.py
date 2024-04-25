@@ -3,7 +3,9 @@ import json
 
 from models.agency import Agency
 
-class DefaultAgencyService:
+from services import AgencyService
+
+class DefaultAgencyService(AgencyService):
     
     __slots__ = (
         'agencies'

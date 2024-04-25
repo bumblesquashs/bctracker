@@ -3,9 +3,9 @@ from di import di
 
 from models.trip import Trip
 
-from services import Database
+from services import Database, TripService
 
-class DefaultTripService:
+class DefaultTripService(TripService):
     
     __slots__ = (
         'database'

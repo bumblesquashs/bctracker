@@ -1,7 +1,9 @@
 
-class DefaultDateService:
+from services import DateService
+
+class DefaultDateService(DateService):
     
-    def flatten(dates):
+    def flatten(self, dates):
         '''Stringifies a list of dates with '-' between first and last consecutive dates and ',' between non-consecutive dates'''
         dates = sorted(dates)
         date_strings = []
@@ -25,5 +27,5 @@ class DefaultDateService:
             date_strings.append(str(start_date) + ' - ' + str(end_date))
         return ', '.join(date_strings)
     
-    def days_between(start_date, end_date):
+    def days_between(self, start_date, end_date):
         return (end_date.datetime - start_date.datetime).days

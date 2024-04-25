@@ -11,9 +11,9 @@ from di import di
 from models.date import Date
 from models.time import Time
 
-from services import Config, Database, AssignmentService, OverviewService, PositionService, RecordService, TransferService
+from services import Config, Database, AssignmentService, OverviewService, PositionService, RealtimeService, RecordService, TransferService
 
-class DefaultRealtimeService:
+class DefaultRealtimeService(RealtimeService):
     
     __slots__ = (
         'config',

@@ -9,9 +9,9 @@ from models.record import Record
 
 from services import AgencyService
 
-from services import Database
+from services import Database, RecordService
 
-class DefaultRecordService:
+class DefaultRecordService(RecordService):
     
     __slots__ = (
         'database',

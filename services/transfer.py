@@ -3,9 +3,9 @@ from di import di
 
 from models.transfer import Transfer
 
-from services import Database
+from services import Database, TransferService
 
-class DefaultTransferService:
+class DefaultTransferService(TransferService):
     
     __slots__ = (
         'database'

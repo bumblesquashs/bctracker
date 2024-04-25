@@ -3,7 +3,9 @@ import json
 
 from models.adornment import Adornment
 
-class DefaultAdornmentService:
+from services import AdornmentService
+
+class DefaultAdornmentService(AdornmentService):
     
     __slots__ = (
         'adornments'

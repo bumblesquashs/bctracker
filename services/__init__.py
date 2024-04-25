@@ -3,7 +3,7 @@ class Config:
     def setup(self, config): pass
 
 class Database:
-    def connect(self, foreign_keys=True): pass
+    def connect(self, foreign_keys): pass
     def disconnect(self): pass
     def archive(self): pass
     def commit(self): pass

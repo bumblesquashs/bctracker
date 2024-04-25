@@ -3,9 +3,9 @@ from di import di
 
 from models.departure import Departure, PickupType, DropoffType
 
-from services import Database
+from services import Database, DepartureService
 
-class DefaultDepartureService:
+class DefaultDepartureService(DepartureService):
     
     __slots__ = (
         'database'

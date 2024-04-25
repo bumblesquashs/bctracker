@@ -4,9 +4,9 @@ from di import di
 from models.assignment import Assignment
 from models.date import Date
 
-from services import Database
+from services import Database, AssignmentService
 
-class DefaultAssignmentService:
+class DefaultAssignmentService(AssignmentService):
     
     __slots__ = (
         'database'

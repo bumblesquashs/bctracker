@@ -106,9 +106,9 @@ def page(name, title, path='', path_args=None, system=None, agency=None, enable_
     time_format = request.query.get('time_format') or request.get_cookie('time_format')
     bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
     hide_systems = request.get_cookie('hide_systems') == 'yes'
-    try:
+    if system:
         last_updated = system.get_last_updated(time_format)
-    except AttributeError:
+    else:
         last_updated = di[RealtimeService].get_last_updated(time_format)
     return template(f'pages/{name}',
         di=di,

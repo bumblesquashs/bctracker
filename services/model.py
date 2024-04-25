@@ -3,7 +3,9 @@ import json
 
 from models.model import Model, ModelType
 
-class DefaultModelService:
+from services import ModelService
+
+class DefaultModelService(ModelService):
     
     __slots__ = (
         'models'

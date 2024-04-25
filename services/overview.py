@@ -3,9 +3,9 @@ from di import di
 
 from models.overview import Overview
 
-from services import Database
+from services import Database, OverviewService
 
-class DefaultOverviewService:
+class DefaultOverviewService(OverviewService):
     
     __slots__ = (
         'database'
