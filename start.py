@@ -5,8 +5,6 @@ from argparse import ArgumentParser
 
 from di import di
 
-import server
-
 from services import *
 
 from services.config import DefaultConfig
@@ -35,12 +33,9 @@ from services.theme import DefaultThemeService
 from services.transfer import DefaultTransferService
 from services.trip import DefaultTripService
 
-def exit(sig, frame):
-    server.stop()
+from server import Server
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, exit)
-    
     parser = ArgumentParser()
     parser.add_argument('--reload', '-r', action='store_true', help='Re-download all GTFS data')
     parser.add_argument('--updatedb', '-u', action='store_true', help='Updates GTFS in the database with CSV data')
@@ -73,5 +68,12 @@ if __name__ == '__main__':
     di[GTFSService] = DefaultGTFSService()
     di[RealtimeService] = DefaultRealtimeService()
     di[CronService] = DefaultCronService()
+    
+    server = Server()
+    
+    def exit(sig, frame):
+        server.stop()
+    
+    signal.signal(signal.SIGINT, exit)
     
     server.start(parser.parse_args())
