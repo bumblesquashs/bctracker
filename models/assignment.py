@@ -10,6 +10,7 @@ class Assignment:
     '''An association between a block and a bus for a specific date'''
     
     __slots__ = (
+        'system_service',
         'system_id',
         'block_id',
         'bus_number',
@@ -33,11 +34,13 @@ class Assignment:
     @property
     def bus(self):
         '''The bus for this assignment'''
-        system = di[SystemService].find(self.system_id)
+        system = self.system_service.find(self.system_id)
         return Bus.find(system.agency, self.bus_number)
     
-    def __init__(self, system_id, block_id, bus_number, date):
+    def __init__(self, system_id, block_id, bus_number, date, **kwargs):
         self.system_id = system_id
         self.block_id = block_id
         self.bus_number = bus_number
         self.date = date
+        
+        self.system_service = kwargs.get('system_service') or di[SystemService]

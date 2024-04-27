@@ -14,6 +14,9 @@ class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
     __slots__ = (
+        'departure_service',
+        'overview_service',
+        'position_service',
         'id',
         'agency',
         'region',
@@ -104,6 +107,10 @@ class System:
         self.route_caches = {}
         self.stop_caches = {}
         self.trip_caches = {}
+        
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.overview_service = kwargs.get('overview_service') or di[OverviewService]
+        self.position_service = kwargs.get('position_service') or di[PositionService]
     
     def __str__(self):
         return self.name
@@ -129,17 +136,17 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return di[OverviewService].find_all(last_seen_system=self)
+        return self.overview_service.find_all(last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        return di[PositionService].find_all(self)
+        return self.position_service.find_all(self)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
-        if route_id is not None and route_id in self.routes:
+        if route_id and route_id in self.routes:
             return self.routes[route_id]
-        if number is not None and number in self.routes_by_number:
+        if number and number in self.routes_by_number:
             return self.routes_by_number[number]
         return None
     
@@ -165,13 +172,13 @@ class System:
     
     def copy_sheets(self, services):
         copies = [s.copy(services) for s in self.get_sheets()]
-        return [s for s in copies if s is not None]
+        return [s for s in copies if s]
     
     def get_stop(self, stop_id=None, number=None):
         '''Returns the stop with the given ID or number'''
-        if stop_id is not None and stop_id in self.stops:
+        if stop_id and stop_id in self.stops:
             return self.stops[stop_id]
-        if number is not None and number in self.stops_by_number:
+        if number and number in self.stops_by_number:
             return self.stops_by_number[number]
         return None
     
@@ -193,7 +200,7 @@ class System:
         '''Returns the date/time that realtime data was last updated'''
         date = self.last_updated_date
         time = self.last_updated_time
-        if date is None or time is None:
+        if not date or not time:
             return 'N/A'
         if date.is_today:
             return f'at {time.format_web(time_format)} {time.timezone_name}'
@@ -220,7 +227,7 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = di[DepartureService].find_all(self)
+            departures = self.departure_service.find_all(self)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -258,7 +265,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = di[DepartureService].find_all(self, stop=stop)
+            departures = self.departure_service.find_all(self, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -269,7 +276,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = di[DepartureService].find_all(self, trip=trip)
+            departures = self.departure_service.find_all(self, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache

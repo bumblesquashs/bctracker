@@ -7,14 +7,16 @@ class Bus:
     '''A public transportation vehicle'''
     
     __slots__ = (
+        'adornment_service',
         'number',
         'order'
     )
     
     @classmethod
-    def find(cls, agency, number):
+    def find(cls, agency, number, **kwargs):
         '''Returns a bus for the given agency with the given number'''
-        order = di[OrderService].find(agency, number)
+        order_service = kwargs.get('order_service') or di[OrderService]
+        order = order_service.find(agency, number)
         return cls(number, order)
     
     @property
@@ -45,9 +47,11 @@ class Bus:
             return order.agency
         return None
     
-    def __init__(self, number, order):
+    def __init__(self, number, order, **kwargs):
         self.number = number
         self.order = order
+        
+        self.adornment_service = kwargs.get('adornment_service') or di[AdornmentService]
     
     def __str__(self):
         if self.is_known:
@@ -70,5 +74,5 @@ class Bus:
         '''Returns the adornment for this bus, if one exists'''
         agency = self.agency
         if agency:
-            return di[AdornmentService].find(agency, self)
+            return self.adornment_service.find(agency, self)
         return None

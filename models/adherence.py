@@ -19,9 +19,10 @@ class Adherence:
     )
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon):
+    def calculate(cls, trip, stop, sequence, lat, lon, **kwargs):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = di[DepartureService].find(trip.system, trip=trip, sequence=sequence)
+        departure_service = kwargs.get('departure_service') or di[DepartureService]
+        departure = departure_service.find(trip.system, trip=trip, sequence=sequence)
         if not departure:
             return None
         previous_departure = departure.find_previous()

@@ -18,13 +18,15 @@ class Transfer:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='transfer'):
+    def from_db(cls, row, prefix='transfer', **kwargs):
         '''Returns a transfer initialized from the given database row'''
+        agency_service = kwargs.get('agency_service') or di[AgencyService]
+        system_service = kwargs.get('system_service') or di[SystemService]
         id = row[f'{prefix}_id']
-        agency = di[AgencyService].find('bc-transit')
+        agency = agency_service.find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        old_system = di[SystemService].find(row[f'{prefix}_old_system_id'])
-        new_system = di[SystemService].find(row[f'{prefix}_new_system_id'])
+        old_system = system_service.find(row[f'{prefix}_old_system_id'])
+        new_system = system_service.find(row[f'{prefix}_new_system_id'])
         date = Date.parse(row[f'{prefix}_date'], new_system.timezone)
         return cls(id, bus, date, old_system, new_system)
     

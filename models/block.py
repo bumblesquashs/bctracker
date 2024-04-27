@@ -11,6 +11,7 @@ class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
     __slots__ = (
+        'departure_service',
         'system',
         'id',
         'trips',
@@ -27,7 +28,7 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, system, id, trips):
+    def __init__(self, system, id, trips, **kwargs):
         self.system = system
         self.id = id
         self.trips = trips
@@ -37,6 +38,8 @@ class Block:
         self.sheets = system.copy_sheets(services)
         
         self._related_blocks = None
+        
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
     
     def __eq__(self, other):
         return self.id == other.id
@@ -110,4 +113,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return di[DepartureService].find_all(self.system, block=self)
+        return self.departure_service.find_all(self.system, block=self)
