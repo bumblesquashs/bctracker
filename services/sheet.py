@@ -8,7 +8,7 @@ class DefaultSheetService(SheetService):
     
     def combine(self, system, services):
         '''Returns a list of sheets made from services with overlapping start/end dates'''
-        if len(services) == 0:
+        if not services:
             return []
         all_date_ranges = {s.schedule.date_range for s in services}
         start_dates = {r.start for r in all_date_ranges}
@@ -23,11 +23,9 @@ class DefaultSheetService(SheetService):
         for (start_date, end_date) in zip(i, i):
             date_range = DateRange(start_date, end_date)
             date_range_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
-            if len(date_range_services) == 0:
+            if not date_range_services:
                 continue
-            if len(sheets) == 0:
-                sheets.append(Sheet(system, date_range_services, date_range))
-            else:
+            if sheets:
                 previous_sheet = sheets[-1]
                 previous_services = {s for s in previous_sheet.services if not s.schedule.is_special}
                 current_services = {s for s in date_range_services if not s.schedule.is_special}
@@ -37,11 +35,11 @@ class DefaultSheetService(SheetService):
                     sheets[-1] = Sheet(system, new_services, date_range)
                 else:
                     sheets.append(Sheet(system, date_range_services, date_range))
+            else:
+                sheets.append(Sheet(system, date_range_services, date_range))
         final_sheets = []
         for sheet in sheets:
-            if len(final_sheets) == 0:
-                final_sheets.append(sheet)
-            else:
+            if final_sheets:
                 previous_sheet = final_sheets[-1]
                 if len(previous_sheet.schedule.date_range) <= 7 or len(sheet.schedule.date_range) <= 7:
                     date_range = DateRange.combine([previous_sheet.schedule.date_range, sheet.schedule.date_range])
@@ -49,4 +47,6 @@ class DefaultSheetService(SheetService):
                     final_sheets[-1] = Sheet(system, combined_services, date_range)
                 else:
                     final_sheets.append(sheet)
+            else:
+                final_sheets.append(sheet)
         return final_sheets

@@ -31,9 +31,9 @@ class DefaultAssignmentService(AssignmentService):
         '''Returns the assignment for the given system and block'''
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
-        try:
+        if system:
             date = Date.today(system.timezone)
-        except:
+        else:
             date = Date.today()
         assignments = self.database.select('assignment',
             columns={

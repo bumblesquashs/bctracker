@@ -66,7 +66,7 @@ class DefaultRealtimeService(RealtimeService):
                 try:
                     vehicle_id = vehicle.vehicle.id
                     vehicle_name_length = system.agency.vehicle_name_length
-                    if vehicle_name_length is not None and len(vehicle_id) > vehicle_name_length:
+                    if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                         vehicle_id = vehicle_id[-vehicle_name_length:]
                     bus_number = int(vehicle_id)
                 except:
@@ -92,16 +92,14 @@ class DefaultRealtimeService(RealtimeService):
                     time = Time.now(system.timezone)
                     overview = self.overview_service.find(bus.number)
                     trip = position.trip
-                    if trip is None:
-                        record_id = None
-                    else:
+                    if trip:
                         block = trip.block
                         assignment = self.assignment_service.find(system, block)
                         if not assignment or assignment.bus_number != bus.number:
                             self.assignment_service.delete_all(system=system, block=block)
                             self.assignment_service.delete_all(bus=bus)
                             self.assignment_service.create(system, block, bus, date)
-                        if overview is not None and overview.last_record is not None:
+                        if overview and overview.last_record:
                             last_record = overview.last_record
                             if last_record.date == date and last_record.block_id == block.id:
                                 self.record_service.update(last_record, time)
@@ -110,6 +108,8 @@ class DefaultRealtimeService(RealtimeService):
                                     self.record_service.create_trip(last_record, trip)
                                 continue
                         record_id = self.record_service.create(bus, date, system, block, time, trip)
+                    else:
+                        record_id = None
                     if overview:
                         self.overview_service.update(overview, date, system, record_id)
                         if overview.last_seen_system != system:
@@ -126,7 +126,7 @@ class DefaultRealtimeService(RealtimeService):
         '''Returns the date/time that realtime data was last updated'''
         date = self.last_updated_date
         time = self.last_updated_time
-        if date is None or time is None:
+        if not date or not time:
             return 'N/A'
         if date.is_today:
             return f'at {time.format_web(time_format)} {time.timezone_name}'
@@ -138,13 +138,13 @@ class DefaultRealtimeService(RealtimeService):
             return True
         for position in self.position_service.find_all(system):
             trip_id = position.trip_id
-            if trip_id is None:
+            if not trip_id:
                 continue
-            if position.trip is None:
+            if not position.trip:
                 trip_id_sections = trip_id.split(':')
                 if len(trip_id_sections) == 3:
                     block_id = trip_id_sections[2]
-                    if system.get_block(block_id) is None:
+                    if not system.get_block(block_id):
                         return False
                 else:
                     return False

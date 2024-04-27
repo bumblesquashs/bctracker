@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from sqlite3 import Cursor
     from models.adornment import Adornment
     from models.agency import Agency
     from models.assignment import Assignment
@@ -32,15 +33,15 @@ class Database:
     def disconnect(self): pass
     def archive(self): pass
     def commit(self): pass
-    def execute(self, sql, args): pass
-    def select(self, table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page, custom_args, initializer): pass
-    def insert(self, table, values): pass
-    def update(self, table, values, filters, operation): pass
-    def delete(self, table, filters, operation): pass
-    def build_select(self, table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page, custom_args): pass
-    def build_ctes(self, ctes): pass
-    def build_joins(self, joins): pass
-    def build_where(self, filters, operation): pass
+    def execute(self, sql, args) -> Cursor | None: pass
+    def select(self, table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page, custom_args, initializer) -> list: pass
+    def insert(self, table, values) -> int | None: pass
+    def update(self, table, values, filters, operation) -> Cursor | None: pass
+    def delete(self, table, filters, operation) -> Cursor | None: pass
+    def build_select(self, table, columns, distinct, ctes, join_type, joins, filters, operation, group_by, order_by, limit, page, custom_args) -> tuple[str, list]: pass
+    def build_ctes(self, ctes) -> list[str]: pass
+    def build_joins(self, joins) -> list[str]: pass
+    def build_where(self, filters, operation) -> tuple[str | None, list]: pass
 
 class AdornmentService:
     def load(self): pass

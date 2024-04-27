@@ -194,8 +194,7 @@ class DefaultDatabase(Database):
             args = tuple(args)
         if args:
             return self.connection.cursor().execute(sql, args)
-        else:
-            return self.connection.cursor().execute(sql)
+        return self.connection.cursor().execute(sql)
     
     def select(self, table, columns, distinct=False, ctes=None, join_type='', joins=None, filters=None, operation='AND', group_by=None, order_by=None, limit=None, page=None, custom_args=None, initializer=None):
         '''Executes a SELECT script and returns the selected rows'''
@@ -204,13 +203,13 @@ class DefaultDatabase(Database):
         
         result = self.execute(sql, custom_args + args)
         if type(columns) is list:
-            if initializer is None:
-                return [dict(zip(columns, r)) for r in result]
-            return [initializer(dict(zip(columns, r))) for r in result]
+            if initializer:
+                return [initializer(dict(zip(columns, r))) for r in result]
+            return [dict(zip(columns, r)) for r in result]
         elif type(columns) is dict:
-            if initializer is None:
-                return [dict(zip(columns.values(), r)) for r in result]
-            return [initializer(dict(zip(columns.values(), r))) for r in result]
+            if initializer:
+                return [initializer(dict(zip(columns.values(), r))) for r in result]
+            return [dict(zip(columns.values(), r)) for r in result]
         return result
     
     def insert(self, table, values):

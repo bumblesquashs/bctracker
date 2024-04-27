@@ -14,17 +14,17 @@ class DefaultDateService(DateService):
             if date == previous_date.next():
                 end_date = date
             else:
-                if end_date is None:
-                    date_strings.append(str(start_date))
-                else:
+                if end_date:
                     date_strings.append(str(start_date) + ' - ' + str(end_date))
+                else:
+                    date_strings.append(str(start_date))
                 start_date = date
                 end_date = None
             previous_date = date
-        if end_date is None:
-            date_strings.append(str(start_date))
-        else:
+        if end_date:
             date_strings.append(str(start_date) + ' - ' + str(end_date))
+        else:
+            date_strings.append(str(start_date))
         return ', '.join(date_strings)
     
     def days_between(self, start_date, end_date):

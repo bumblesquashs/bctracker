@@ -66,7 +66,7 @@ class DefaultOrderService(OrderService):
             if not order.visible:
                 continue
             order_string = str(order)
-            if order.model is None or order.model.type is None:
+            if not order.model or not order.model.type:
                 model_icon = 'ghost'
             else:
                 model_icon = f'bus-{order.model.type.name}'
@@ -80,7 +80,7 @@ class DefaultOrderService(OrderService):
                 if bus.number not in recorded_bus_numbers:
                     value /= 10
                 adornment = bus.find_adornment()
-                if adornment is not None and adornment.enabled:
+                if adornment and adornment.enabled:
                     bus_number_string += f' {adornment}'
                 matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.number}', value))
         return matches
