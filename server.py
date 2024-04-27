@@ -137,6 +137,7 @@ class Server(Bottle):
         self.error(500)(self.error_500)
     
     def start(self, args):
+        '''Loads all required data and launches the server'''
         self.running = True
         
         cp.config.update('server.conf')
@@ -254,6 +255,7 @@ class Server(Bottle):
         )
     
     def frame(self, name, system, agency, **kwargs):
+        '''Returns an HTML element that can be inserted into a page'''
         return template(f'frames/{name}',
             system=system,
             agency=agency,
@@ -285,6 +287,7 @@ class Server(Bottle):
         return FavouriteSet.parse(favourites_string)
     
     def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', callback=None):
+        '''Adds an endpoint to the server'''
         if not callback:
             return
         paths = [base_path]
