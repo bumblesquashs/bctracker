@@ -8,15 +8,14 @@ from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
-import backup
-
-from services import Config, Database, CronService, GTFSService, RealtimeService, RecordService, SystemService
+from services import Config, Database, BackupService, CronService, GTFSService, RealtimeService, RecordService, SystemService
 
 class DefaultCronService(CronService):
     
     __slots__ = (
         'config',
         'database',
+        'backup_service',
         'gtfs_service',
         'realtime_service',
         'record_service',
@@ -28,6 +27,7 @@ class DefaultCronService(CronService):
     def __init__(self, **kwargs):
         self.config = kwargs.get('config') or di[Config]
         self.database = kwargs.get('database') or di[Database]
+        self.backup_service = kwargs.get('backup_service') or di[BackupService]
         self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
         self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
         self.record_service = kwargs.get('record_service') or di[RecordService]
@@ -68,7 +68,7 @@ class DefaultCronService(CronService):
             self.record_service.delete_stale_trip_records()
             self.database.archive()
             date = Date.today()
-            backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
+            self.backup_service.run(date.previous(), include_db=date.weekday == Weekday.MON)
     
     def handle_realtime(self):
         '''Reloads realtime data for every system, and backs up data at midnight'''

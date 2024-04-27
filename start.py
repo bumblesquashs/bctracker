@@ -13,6 +13,7 @@ from services.database import DefaultDatabase
 from services.adornment import DefaultAdornmentService
 from services.agency import DefaultAgencyService
 from services.assignment import DefaultAssignmentService
+from services.backup import DefaultBackupService
 from services.cron import DefaultCronService
 from services.date import DefaultDateService
 from services.departure import DefaultDepartureService
@@ -63,6 +64,7 @@ if __name__ == '__main__':
     di[TransferService] = DefaultTransferService()
     di[TripService] = DefaultTripService()
     
+    di[BackupService] = DefaultBackupService()
     di[DateService] = DefaultDateService()
     di[SheetService] = DefaultSheetService()
     di[GTFSService] = DefaultGTFSService()

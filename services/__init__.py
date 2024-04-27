@@ -58,6 +58,9 @@ class AssignmentService:
     def find_all(self, system, block, bus, trip, route, stop) -> list[Assignment]: pass
     def delete_all(self, system, block, bus): pass
 
+class BackupService:
+    def run(self, date, include_db, delete_files): pass
+
 class CronService:
     def start(self): pass
     def stop(self): pass
