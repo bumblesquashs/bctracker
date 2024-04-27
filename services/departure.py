@@ -48,9 +48,10 @@ class DefaultDepartureService(DepartureService):
     def find(self, system, trip=None, sequence=None, stop=None):
         '''Returns the departure with the given system, trip, sequence, and stop'''
         departures = self.find_all(system, trip, sequence, stop)
-        if len(departures) == 1:
+        try:
             return departures[0]
-        return None
+        except IndexError:
+            return None
     
     def find_all(self, system, trip=None, sequence=None, route=None, stop=None, block=None, limit=None):
         '''Returns all departures that match the given system, trip, sequence, and stop'''
@@ -59,9 +60,9 @@ class DefaultDepartureService(DepartureService):
         route_id = getattr(route, 'id', route)
         stop_id = getattr(stop, 'id', stop)
         block_id = getattr(block, 'id', block)
-        if trip_id is not None:
+        if trip_id:
             order_by = 'departure.sequence ASC'
-        elif stop_id is not None:
+        elif stop_id:
             order_by = [
                 'departure.time ASC',
                 'departure.sequence DESC'
@@ -69,7 +70,7 @@ class DefaultDepartureService(DepartureService):
         else:
             order_by = None
         joins = {}
-        if route_id is not None or block_id is not None:
+        if route_id or block_id:
             joins['trip'] = {
                 'trip.system_id': 'departure.system_id',
                 'trip.trip_id': 'departure.trip_id'
