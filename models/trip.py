@@ -63,33 +63,33 @@ class Trip:
     def first_stop(self):
         '''Returns the first stop of this trip'''
         departure = self.first_departure
-        if departure is None:
-            return None
-        return departure.stop
+        if departure:
+            return departure.stop
+        return None
     
     @property
     def last_stop(self):
         '''Returns the last stop of this trip'''
         departure = self.last_departure
-        if departure is None:
-            return None
-        return departure.stop
+        if departure:
+            return departure.stop
+        return None
     
     @property
     def start_time(self):
         '''Returns the time of the first departure of this trip'''
         departure = self.first_departure
-        if departure is None:
-            return Time.unknown()
-        return departure.time
+        if departure:
+            return departure.time
+        return Time.unknown()
     
     @property
     def end_time(self):
         '''Returns the time of the last departure of this trip'''
         departure = self.last_departure
-        if departure is None:
-            return Time.unknown()
-        return departure.time
+        if departure:
+            return departure.time
+        return Time.unknown()
     
     @property
     def duration(self):
@@ -100,9 +100,9 @@ class Trip:
     def length(self):
         '''Returns the distance travelled on this trip'''
         departure = self.last_departure
-        if departure is None:
-            return None
-        return departure.distance
+        if departure:
+            return departure.distance
+        return None
     
     @property
     def related_trips(self):
@@ -172,15 +172,6 @@ class Trip:
         if self.start_time == other.start_time:
             return self.service < other.service
         return self.start_time < other.start_time
-    
-    def setup(self, departures=None):
-        if self.is_setup:
-            return
-        self.is_setup = True
-        if not departures:
-            departures = self.find_departures()
-        if len(departures) == 0:
-            return
     
     def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''

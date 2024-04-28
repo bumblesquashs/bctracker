@@ -102,14 +102,14 @@ class Departure:
     def pickup_only(self):
         '''Checks if this departure is pickup-only'''
         if self.pickup_type.is_normal:
-            return self.trip is not None and self == self.trip.first_departure
+            return self.trip and self == self.trip.first_departure
         return False
     
     @property
     def dropoff_only(self):
         '''Checks if this departure is dropoff-only'''
         if self.dropoff_type.is_normal:
-            return self.trip is not None and self == self.trip.last_departure
+            return self.trip and self == self.trip.last_departure
         return False
     
     def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, **kwargs):
@@ -137,9 +137,9 @@ class Departure:
                     return True
                 if self.pickup_only or other.dropoff_only:
                     return False
-                if self.trip is None or other.trip is None:
+                if not self.trip or not other.trip:
                     return False
-                if self.trip.route is None or other.trip.route is None:
+                if not self.trip.route or not other.trip.route:
                     return False
                 return self.trip.route < other.trip.route
             return self.time < other.time
@@ -150,7 +150,7 @@ class Departure:
             'stop': self.stop.get_json(),
             'time': str(self.time)
         }
-        if self.trip is not None and self.trip.route is not None:
+        if self.trip and self.trip.route:
             json['colour'] = self.trip.route.colour
             json['text_colour'] = self.trip.route.text_colour
         else:

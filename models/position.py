@@ -57,46 +57,46 @@ class Position:
     @property
     def trip(self):
         '''Returns the trip associated with this position'''
-        if not self.trip_id:
-            return None
-        return self.system.get_trip(self.trip_id)
+        if self.trip_id:
+            return self.system.get_trip(self.trip_id)
+        return None
     
     @property
     def stop(self):
         '''Returns the stop associated with this position'''
-        if not self.stop_id:
-            return None
-        return self.system.get_stop(stop_id=self.stop_id)
+        if self.stop_id:
+            return self.system.get_stop(stop_id=self.stop_id)
+        return None
     
     @property
     def block(self):
         '''Returns the block associated with this position'''
         if not self.block_id:
-            return None
-        return self.system.get_block(self.block_id)
+            return self.system.get_block(self.block_id)
+        return None
     
     @property
     def route(self):
         '''Returns the route associated with this position'''
         if not self.route_id:
-            return None
-        return self.system.get_route(route_id=self.route_id)
+            return self.system.get_route(route_id=self.route_id)
+        return None
     
     @property
     def colour(self):
         '''Returns the route colour associated with this position'''
         trip = self.trip
-        if not trip:
-            return '989898'
-        return trip.route.colour
+        if trip and trip.route:
+            return trip.route.colour
+        return '989898'
     
     @property
     def text_colour(self):
         '''Returns the route text colour associated with this position'''
         trip = self.trip
-        if not trip:
-            return 'FFFFFF'
-        return trip.route.text_colour
+        if trip and trip.route:
+            return trip.route.text_colour
+        return 'FFFFFF'
     
     def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, **kwargs):
         self.system = system
@@ -168,6 +168,6 @@ class Position:
     
     def find_upcoming_departures(self):
         '''Returns the next 5 upcoming departures'''
-        if not self.sequence or not self.trip:
+        if self.sequence is None or not self.trip:
             return []
         return self.departure_service.find_upcoming(self.system, self.trip, self.sequence)

@@ -44,7 +44,7 @@ class System:
     @property
     def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
-        return self.last_updated_date is not None and self.last_updated_time is not None
+        return self.last_updated_date and self.last_updated_time
     
     @property
     def gtfs_enabled(self):
@@ -166,9 +166,9 @@ class System:
     
     def get_sheets(self, services=None):
         '''Returns all sheets'''
-        if services is None:
-            return sorted(self.sheets)
-        return sorted([s for s in self.sheets if services in s])
+        if services:
+            return sorted([s for s in self.sheets if services in s])
+        return sorted(self.sheets)
     
     def copy_sheets(self, services):
         copies = [s.copy(services) for s in self.get_sheets()]

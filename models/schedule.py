@@ -22,9 +22,9 @@ class Schedule:
     @classmethod
     def combine(cls, services, date_range=None):
         '''Returns a schedule that combines multiple services'''
-        if len(services) == 0:
+        if not services:
             return None
-        if date_range is None:
+        if not date_range:
             date_range = DateRange.combine([s.schedule.date_range for s in services])
         dates = {d for s in services for d in s.schedule.dates if d in date_range}
         return cls(dates, date_range)
