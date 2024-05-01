@@ -458,6 +458,24 @@ table tr:nth-child(2n-1) {
     color: #666666;
 }
 
+.paging .page {
+    background-color: #E6E6E6;
+    color: #000000;
+}
+
+.paging .page:hover {
+    background-color: #CBCBCB;
+}
+
+.paging .page.current {
+    background-color: #E20000;
+    color: #FFFFFF;
+}
+
+.paging .page.current:hover {
+    background-color: #E20000;
+}
+
 .positive {
     color: #1A671A;
 }

@@ -449,6 +449,24 @@ table tr {
     color: #888888;
 }
 
+.paging .page {
+    background-color: #EEEEEE;
+    color: #000000;
+}
+
+.paging .page:hover {
+    background-color: #DDDDDD;
+}
+
+.paging .page.current {
+    background-color: #AAAAAA;
+    color: #FFFFFF;
+}
+
+.paging .page.current:hover {
+    background-color: #AAAAAA;
+}
+
 .positive {
     color: #1A671A;
 }

@@ -514,7 +514,16 @@ class Server(Bottle):
                 agency=agency,
                 bus_number=bus_number
             )
-        records = self.record_service.find_all(bus=bus)
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
+        items_per_page = 100
+        total_items = self.record_service.count(bus=bus)
+        if page < 1:
+            records = []
+        else:
+            records = self.record_service.find_all(bus=bus, limit=items_per_page, page=page)
         transfers = self.transfer_service.find_all(bus=bus)
         events = []
         if overview:
@@ -536,7 +545,10 @@ class Server(Bottle):
             overview=overview,
             events=events,
             favourite=Favourite('vehicle', bus),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            page=page,
+            items_per_page=items_per_page,
+            total_items=total_items
         )
     
     def history_last_seen(self, system, agency):

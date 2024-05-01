@@ -62,7 +62,7 @@ class DefaultRecordService(RecordService):
             }
         )
     
-    def find_all(self, system=None, bus=None, block=None, trip=None, limit=None):
+    def find_all(self, system=None, bus=None, block=None, trip=None, limit=None, page=None):
         '''Returns all records that match the given system, bus, block, and trip'''
         system_id = getattr(system, 'id', system)
         bus_number = getattr(bus, 'number', bus)
@@ -99,6 +99,7 @@ class DefaultRecordService(RecordService):
                 'record.record_id': 'DESC'
             },
             limit=limit,
+            page=page,
             initializer=Record.from_db
         )
     
@@ -131,6 +132,36 @@ class DefaultRecordService(RecordService):
         )
         agency = self.agency_service.find('bc-transit')
         return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
+    
+    def count(self, system=None, bus=None, block=None, trip=None):
+        system_id = getattr(system, 'id', system)
+        bus_number = getattr(bus, 'number', bus)
+        block_id = getattr(block, 'id', block)
+        trip_id = getattr(trip, 'id', trip)
+        joins = {}
+        filters = {
+            'record.system_id': system_id,
+            'record.bus_number': bus_number,
+            'record.block_id': block_id
+        }
+        if trip_id:
+            joins['trip_record'] = {
+                'trip_record.record_id': 'record.record_id'
+            }
+            filters['trip_record.trip_id'] = trip_id
+        counts = self.database.select(
+            table='record', 
+            columns={
+                'COUNT(record.record_id)': 'count'
+            },
+            joins=joins,
+            filters=filters,
+            initializer=lambda r: r['count']
+        )
+        try:
+            return counts[0]
+        except IndexError:
+            return 0
     
     def delete_stale_trip_records(self):
         '''Removes all old and unused trip records'''
