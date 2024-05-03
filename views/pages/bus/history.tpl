@@ -34,6 +34,10 @@
                         <div class="section">
                             % include('components/events_list', events=events)
                         </div>
+                        <div class="row section">
+                            <div class="name">Total Records</div>
+                            <div class="value">{{ total_items }}</div>
+                        </div>
                         % record_systems = {r.system for r in records}
                         % if overview is not None:
                             % record_systems.add(overview.first_seen_system)
