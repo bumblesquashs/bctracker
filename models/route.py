@@ -11,7 +11,7 @@ from models.schedule import Schedule
 
 from services import DepartureService, SystemService
 
-import utils
+import helpers
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
@@ -77,7 +77,7 @@ class Route:
         self.colour = colour
         self.text_colour = text_colour
         
-        self.key = utils.key(number)
+        self.key = helpers.key(number)
         
         self.departure_service = kwargs.get('departure_service') or di[DepartureService]
     

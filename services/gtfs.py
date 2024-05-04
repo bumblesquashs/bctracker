@@ -14,7 +14,9 @@ from models.block import Block
 from models.date import Date
 from models.service import Service, ServiceException
 
-from services import Config, DepartureService, GTFSService, PointService, RouteService, SheetService, StopService, TripService
+from services import Config, DepartureService, GTFSService, PointService, RouteService, StopService, TripService
+
+import helpers
 
 class DefaultGTFSService(GTFSService):
     
@@ -23,7 +25,6 @@ class DefaultGTFSService(GTFSService):
         'departure_service',
         'point_service',
         'route_service',
-        'sheet_service',
         'stop_service',
         'trip_service'
     )
@@ -33,7 +34,6 @@ class DefaultGTFSService(GTFSService):
         self.departure_service = kwargs.get('departure_service') or di[DepartureService]
         self.point_service = kwargs.get('point_service') or di[PointService]
         self.route_service = kwargs.get('route_service') or di[RouteService]
-        self.sheet_service = kwargs.get('sheet_service') or di[SheetService]
         self.stop_service = kwargs.get('stop_service') or di[StopService]
         self.trip_service = kwargs.get('trip_service') or di[TripService]
     
@@ -60,7 +60,7 @@ class DefaultGTFSService(GTFSService):
                 services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
             
             system.services = {s.id: s for s in services}
-            system.sheets = self.sheet_service.combine(system, services)
+            system.sheets = helpers.combine_sheets(system, services)
             
             stops = self.stop_service.find_all(system.id)
             system.stops = {s.id: s for s in stops}

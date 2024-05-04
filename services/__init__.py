@@ -67,10 +67,6 @@ class CronService:
     def handle_gtfs(self): pass
     def handle_realtime(self): pass
 
-class DateService:
-    def flatten(self, dates) -> str: pass
-    def days_between(self, start_date, end_date) -> int: pass
-
 class DepartureService:
     def create(self, system, row): pass
     def find(self, system, trip, sequence, stop) -> Departure | None: pass
@@ -139,9 +135,6 @@ class RouteService:
     def find(self, system, route_id, number) -> Route | None: pass
     def find_all(self, system, limit) -> list[Route]: pass
     def delete_all(self, system): pass
-
-class SheetService:
-    def combine(self, system, services) -> list[Sheet]: pass
 
 class StopService:
     def create(self, system, row): pass

@@ -15,7 +15,6 @@ from services.agency import DefaultAgencyService
 from services.assignment import DefaultAssignmentService
 from services.backup import DefaultBackupService
 from services.cron import DefaultCronService
-from services.date import DefaultDateService
 from services.departure import DefaultDepartureService
 from services.gtfs import DefaultGTFSService
 from services.model import DefaultModelService
@@ -27,7 +26,6 @@ from services.realtime import DefaultRealtimeService
 from services.record import DefaultRecordService
 from services.region import DefaultRegionService
 from services.route import DefaultRouteService
-from services.sheet import DefaultSheetService
 from services.stop import DefaultStopService
 from services.system import DefaultSystemService
 from services.theme import DefaultThemeService
@@ -65,8 +63,6 @@ if __name__ == '__main__':
     di[TripService] = DefaultTripService()
     
     di[BackupService] = DefaultBackupService()
-    di[DateService] = DefaultDateService()
-    di[SheetService] = DefaultSheetService()
     di[GTFSService] = DefaultGTFSService()
     di[RealtimeService] = DefaultRealtimeService()
     di[CronService] = DefaultCronService()
