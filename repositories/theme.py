@@ -3,9 +3,9 @@ import json
 
 from models.theme import Theme
 
-from services import ThemeService
+from repositories import ThemeRepository
 
-class DefaultThemeService(ThemeService):
+class DefaultThemeRepository(ThemeRepository):
     
     __slots__ = (
         'themes'

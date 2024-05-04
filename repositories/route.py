@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.route import Route
 
-from services import Database, RouteService
+from repositories import RouteRepository
 
-class DefaultRouteService(RouteService):
+class DefaultRouteRepository(RouteRepository):
     
     __slots__ = (
         'database'

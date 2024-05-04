@@ -3,9 +3,9 @@ import json
 
 from models.agency import Agency
 
-from services import AgencyService
+from repositories import AgencyRepository
 
-class DefaultAgencyService(AgencyService):
+class DefaultAgencyRepository(AgencyRepository):
     
     __slots__ = (
         'agencies'

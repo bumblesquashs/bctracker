@@ -5,32 +5,34 @@ from argparse import ArgumentParser
 
 from di import di
 
+from repositories import *
 from services import *
 
-from services.config import DefaultConfig
-from services.database import DefaultDatabase
+from config import Config
+from database import Database
 
-from services.adornment import DefaultAdornmentService
-from services.agency import DefaultAgencyService
-from services.assignment import DefaultAssignmentService
+from repositories.adornment import DefaultAdornmentRepository
+from repositories.agency import DefaultAgencyRepository
+from repositories.assignment import DefaultAssignmentRepository
+from repositories.departure import DefaultDepartureRepository
+from repositories.model import DefaultModelRepository
+from repositories.order import DefaultOrderRepository
+from repositories.overview import DefaultOverviewRepository
+from repositories.point import DefaultPointRepository
+from repositories.position import DefaultPositionRepository
+from repositories.record import DefaultRecordRepository
+from repositories.region import DefaultRegionRepository
+from repositories.route import DefaultRouteRepository
+from repositories.stop import DefaultStopRepository
+from repositories.system import DefaultSystemRepository
+from repositories.theme import DefaultThemeRepository
+from repositories.transfer import DefaultTransferRepository
+from repositories.trip import DefaultTripRepository
+
 from services.backup import DefaultBackupService
 from services.cron import DefaultCronService
-from services.departure import DefaultDepartureService
 from services.gtfs import DefaultGTFSService
-from services.model import DefaultModelService
-from services.order import DefaultOrderService
-from services.overview import DefaultOverviewService
-from services.point import DefaultPointService
-from services.position import DefaultPositionService
 from services.realtime import DefaultRealtimeService
-from services.record import DefaultRecordService
-from services.region import DefaultRegionService
-from services.route import DefaultRouteService
-from services.stop import DefaultStopService
-from services.system import DefaultSystemService
-from services.theme import DefaultThemeService
-from services.transfer import DefaultTransferService
-from services.trip import DefaultTripService
 
 from server import Server
 
@@ -40,27 +42,27 @@ if __name__ == '__main__':
     parser.add_argument('--updatedb', '-u', action='store_true', help='Updates GTFS in the database with CSV data')
     parser.add_argument('--debug', '-d', action='store_true', help='Prevent page caching and show additional error info')
     
-    di[Config] = DefaultConfig()
-    di[Database] = DefaultDatabase()
+    di[Config] = Config()
+    di[Database] = Database()
     
-    di[AdornmentService] = DefaultAdornmentService()
-    di[AgencyService] = DefaultAgencyService()
-    di[ModelService] = DefaultModelService()
-    di[OrderService] = DefaultOrderService()
-    di[RegionService] = DefaultRegionService()
-    di[SystemService] = DefaultSystemService()
-    di[ThemeService] = DefaultThemeService()
+    di[AdornmentRepository] = DefaultAdornmentRepository()
+    di[AgencyRepository] = DefaultAgencyRepository()
+    di[ModelRepository] = DefaultModelRepository()
+    di[OrderRepository] = DefaultOrderRepository()
+    di[RegionRepository] = DefaultRegionRepository()
+    di[SystemRepository] = DefaultSystemRepository()
+    di[ThemeRepository] = DefaultThemeRepository()
     
-    di[AssignmentService] = DefaultAssignmentService()
-    di[DepartureService] = DefaultDepartureService()
-    di[OverviewService] = DefaultOverviewService()
-    di[PointService] = DefaultPointService()
-    di[PositionService] = DefaultPositionService()
-    di[RecordService] = DefaultRecordService()
-    di[RouteService] = DefaultRouteService()
-    di[StopService] = DefaultStopService()
-    di[TransferService] = DefaultTransferService()
-    di[TripService] = DefaultTripService()
+    di[AssignmentRepository] = DefaultAssignmentRepository()
+    di[DepartureRepository] = DefaultDepartureRepository()
+    di[OverviewRepository] = DefaultOverviewRepository()
+    di[PointRepository] = DefaultPointRepository()
+    di[PositionRepository] = DefaultPositionRepository()
+    di[RecordRepository] = DefaultRecordRepository()
+    di[RouteRepository] = DefaultRouteRepository()
+    di[StopRepository] = DefaultStopRepository()
+    di[TransferRepository] = DefaultTransferRepository()
+    di[TripRepository] = DefaultTripRepository()
     
     di[BackupService] = DefaultBackupService()
     di[GTFSService] = DefaultGTFSService()

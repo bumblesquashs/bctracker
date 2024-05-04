@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.overview import Overview
 
-from services import Database, OverviewService
+from repositories import OverviewRepository
 
-class DefaultOverviewService(OverviewService):
+class DefaultOverviewRepository(OverviewRepository):
     
     __slots__ = (
         'database'

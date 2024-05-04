@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.stop import Stop
 
-from services import Database, StopService
+from repositories import StopRepository
 
-class DefaultStopService(StopService):
+class DefaultStopRepository(StopRepository):
     
     __slots__ = (
         'database'

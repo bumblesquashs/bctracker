@@ -7,13 +7,13 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from models.date import Date
 
-from services.config import DefaultConfig
-from services.database import DefaultDatabase
+from config import Config
+from database import Database
 from services.backup import DefaultBackupService
 
 backup_service = DefaultBackupService(
-    config=DefaultConfig(),
-    database=DefaultDatabase()
+    config=Config(),
+    database=Database()
 )
 
 date = Date.today().previous()

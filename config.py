@@ -1,7 +1,5 @@
 
-from services import Config
-
-class DefaultConfig(Config):
+class Config:
     
     __slots__ = (
         'cron_id',

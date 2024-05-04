@@ -7,22 +7,25 @@ import requests
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 from di import di
+from config import Config
+from database import Database
 
 from models.date import Date
 from models.time import Time
 
-from services import Config, Database, AssignmentService, OverviewService, PositionService, RealtimeService, RecordService, TransferService
+from repositories import AssignmentRepository, OverviewRepository, PositionRepository, RecordRepository, TransferRepository
+from services import RealtimeService
 
 class DefaultRealtimeService(RealtimeService):
     
     __slots__ = (
         'config',
         'database',
-        'assignment_service',
-        'overview_service',
-        'position_service',
-        'record_service',
-        'transfer_service',
+        'assignment_repository',
+        'overview_repository',
+        'position_repository',
+        'record_repository',
+        'transfer_repository',
         'last_updated_date',
         'last_updated_time'
     )
@@ -30,11 +33,11 @@ class DefaultRealtimeService(RealtimeService):
     def __init__(self, **kwargs):
         self.config = kwargs.get('config') or di[Config]
         self.database = kwargs.get('database') or di[Database]
-        self.assignment_service = kwargs.get('assignment_service') or di[AssignmentService]
-        self.overview_service = kwargs.get('overview_service') or di[OverviewService]
-        self.position_service = kwargs.get('position_service') or di[PositionService]
-        self.record_service = kwargs.get('record_service') or di[RecordService]
-        self.transfer_service = kwargs.get('transfer_service') or di[TransferService]
+        self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
+        self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
+        self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
+        self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
+        self.transfer_repository = kwargs.get('transfer_repository') or di[TransferRepository]
         self.last_updated_date = None
         self.last_updated_time = None
     
@@ -60,7 +63,7 @@ class DefaultRealtimeService(RealtimeService):
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
                 data.ParseFromString(r.content)
-            self.position_service.delete_all(system)
+            self.position_repository.delete_all(system)
             for index, entity in enumerate(data.entity):
                 vehicle = entity.vehicle
                 try:
@@ -71,7 +74,7 @@ class DefaultRealtimeService(RealtimeService):
                     bus_number = int(vehicle_id)
                 except:
                     bus_number = -(index + 1)
-                self.position_service.create(system, bus_number, vehicle)
+                self.position_repository.create(system, bus_number, vehicle)
             self.last_updated_date = Date.today()
             self.last_updated_time = Time.now(accurate_seconds=False)
             system.last_updated_date = Date.today(system.timezone)
@@ -82,7 +85,7 @@ class DefaultRealtimeService(RealtimeService):
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
         try:
-            for position in self.position_service.find_all():
+            for position in self.position_repository.find_all():
                 try:
                     system = position.system
                     bus = position.bus
@@ -90,32 +93,32 @@ class DefaultRealtimeService(RealtimeService):
                         continue
                     date = Date.today(system.timezone)
                     time = Time.now(system.timezone)
-                    overview = self.overview_service.find(bus.number)
+                    overview = self.overview_repository.find(bus.number)
                     trip = position.trip
                     if trip:
                         block = trip.block
-                        assignment = self.assignment_service.find(system, block)
+                        assignment = self.assignment_repository.find(system, block)
                         if not assignment or assignment.bus_number != bus.number:
-                            self.assignment_service.delete_all(system=system, block=block)
-                            self.assignment_service.delete_all(bus=bus)
-                            self.assignment_service.create(system, block, bus, date)
+                            self.assignment_repository.delete_all(system=system, block=block)
+                            self.assignment_repository.delete_all(bus=bus)
+                            self.assignment_repository.create(system, block, bus, date)
                         if overview and overview.last_record:
                             last_record = overview.last_record
                             if last_record.date == date and last_record.block_id == block.id:
-                                self.record_service.update(last_record, time)
-                                trip_ids = self.record_service.find_trip_ids(last_record)
+                                self.record_repository.update(last_record, time)
+                                trip_ids = self.record_repository.find_trip_ids(last_record)
                                 if trip.id not in trip_ids:
-                                    self.record_service.create_trip(last_record, trip)
+                                    self.record_repository.create_trip(last_record, trip)
                                 continue
-                        record_id = self.record_service.create(bus, date, system, block, time, trip)
+                        record_id = self.record_repository.create(bus, date, system, block, time, trip)
                     else:
                         record_id = None
                     if overview:
-                        self.overview_service.update(overview, date, system, record_id)
+                        self.overview_repository.update(overview, date, system, record_id)
                         if overview.last_seen_system != system:
-                            self.transfer_service.create(bus, date, overview.last_seen_system, system)
+                            self.transfer_repository.create(bus, date, overview.last_seen_system, system)
                     else:
-                        self.overview_service.create(bus, date, system, record_id)
+                        self.overview_repository.create(bus, date, system, record_id)
                 except Exception as e:
                     print(f'Failed to update records: {e}')
             self.database.commit()
@@ -136,7 +139,7 @@ class DefaultRealtimeService(RealtimeService):
         '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''
         if not system.realtime_enabled:
             return True
-        for position in self.position_service.find_all(system):
+        for position in self.position_repository.find_all(system):
             trip_id = position.trip_id
             if not trip_id:
                 continue

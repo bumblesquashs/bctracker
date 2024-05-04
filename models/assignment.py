@@ -4,13 +4,13 @@ from di import di
 from models.bus import Bus
 from models.date import Date
 
-from services import SystemService
+from repositories import SystemRepository
 
 class Assignment:
     '''An association between a block and a bus for a specific date'''
     
     __slots__ = (
-        'system_service',
+        'system_repository',
         'system_id',
         'block_id',
         'bus_number',
@@ -34,7 +34,7 @@ class Assignment:
     @property
     def bus(self):
         '''The bus for this assignment'''
-        system = self.system_service.find(self.system_id)
+        system = self.system_repository.find(self.system_id)
         return Bus.find(system.agency, self.bus_number)
     
     def __init__(self, system_id, block_id, bus_number, date, **kwargs):
@@ -43,4 +43,4 @@ class Assignment:
         self.bus_number = bus_number
         self.date = date
         
-        self.system_service = kwargs.get('system_service') or di[SystemService]
+        self.system_repository = kwargs.get('system_repository') or di[SystemRepository]

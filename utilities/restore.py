@@ -5,12 +5,12 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from services.database import DefaultDatabase
+from database import Database
 
 restore_date = '2023-11-14'
 
-db1 = DefaultDatabase()
-db2 = DefaultDatabase('restore')
+db1 = Database()
+db2 = Database(name='restore')
 
 db1.connect()
 db2.connect()

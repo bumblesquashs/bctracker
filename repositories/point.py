@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.point import Point
 
-from services import Database, PointService
+from repositories import PointRepository
 
-class DefaultPointService(PointService):
+class DefaultPointRepository(PointRepository):
     
     __slots__ = (
         'database'

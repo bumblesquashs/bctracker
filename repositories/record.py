@@ -2,25 +2,24 @@
 from datetime import timedelta
 
 from di import di
+from database import Database
 
 from models.bus import Bus
 from models.date import Date
 from models.record import Record
 
-from services import AgencyService
+from repositories import AgencyRepository, RecordRepository
 
-from services import Database, RecordService
-
-class DefaultRecordService(RecordService):
+class DefaultRecordRepository(RecordRepository):
     
     __slots__ = (
         'database',
-        'agency_service'
+        'agency_repository'
     )
     
     def __init__(self, **kwargs):
         self.database = kwargs.get('database') or di[Database]
-        self.agency_service = kwargs.get('agency_service') or di[AgencyService]
+        self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
     
     def create(self, bus, date, system, block, time, trip):
         '''Inserts a new record into the database'''
@@ -129,7 +128,7 @@ class DefaultRecordService(RecordService):
             },
             order_by='record.last_seen ASC'
         )
-        agency = self.agency_service.find('bc-transit')
+        agency = self.agency_repository.find('bc-transit')
         return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
     
     def delete_stale_trip_records(self):

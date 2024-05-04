@@ -3,9 +3,9 @@ import json
 
 from models.region import Region
 
-from services import RegionService
+from repositories import RegionRepository
 
-class DefaultRegionService(RegionService):
+class DefaultRegionRepository(RegionRepository):
     
     __slots__ = (
         'regions'

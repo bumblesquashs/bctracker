@@ -1,5 +1,5 @@
 
-% from services import PositionService
+% from repositories import PositionRepository
 
 % rebase('base')
 
@@ -192,7 +192,7 @@
             </div>
         % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
             % bus = assignment.bus
-            % position = di[PositionService].find(bus)
+            % position = di[PositionRepository].find(bus)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Scheduled Bus</h2>

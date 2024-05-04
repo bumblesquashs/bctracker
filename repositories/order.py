@@ -6,32 +6,32 @@ from di import di
 from models.match import Match
 from models.order import Order
 
-from services import AgencyService, ModelService, OrderService
+from repositories import AgencyRepository, ModelRepository, OrderRepository
 
-class DefaultOrderService(OrderService):
+class DefaultOrderRepository(OrderRepository):
     
     __slots__ = (
-        'agency_service',
-        'model_service',
+        'agency_repository',
+        'model_repository',
         'orders'
     )
     
     def __init__(self, **kwargs):
-        self.agency_service = kwargs.get('agency_service') or di[AgencyService]
-        self.model_service = kwargs.get('model_service') or di[ModelService]
+        self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+        self.model_repository = kwargs.get('model_repository') or di[ModelRepository]
         self.orders = {}
     
     def load(self):
         '''Loads order data from the static JSON file'''
         self.orders = {}
-        self.agency_service.load()
-        self.model_service.load()
+        self.agency_repository.load()
+        self.model_repository.load()
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
-                agency = self.agency_service.find(agency_id)
+                agency = self.agency_repository.find(agency_id)
                 agency_orders = []
                 for (model_id, model_values) in agency_values.items():
-                    model = self.model_service.find(model_id)
+                    model = self.model_repository.find(model_id)
                     for values in model_values:
                         agency_orders.append(Order(agency, model, **values))
                 self.orders[agency_id] = agency_orders

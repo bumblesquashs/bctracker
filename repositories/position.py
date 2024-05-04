@@ -1,12 +1,13 @@
 
 from di import di
+from database import Database
 
 from models.adherence import Adherence
 from models.position import Position
 
-from services import Database, PositionService
+from repositories import PositionRepository
 
-class DefaultPositionService(PositionService):
+class DefaultPositionRepository(PositionRepository):
     
     __slots__ = (
         'database'

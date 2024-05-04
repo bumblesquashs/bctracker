@@ -1,12 +1,13 @@
 
 from di import di
+from database import Database
 
 from models.assignment import Assignment
 from models.date import Date
 
-from services import Database, AssignmentService
+from repositories import AssignmentRepository
 
-class DefaultAssignmentService(AssignmentService):
+class DefaultAssignmentRepository(AssignmentRepository):
     
     __slots__ = (
         'database'

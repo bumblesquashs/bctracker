@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.trip import Trip
 
-from services import Database, TripService
+from repositories import TripRepository
 
-class DefaultTripService(TripService):
+class DefaultTripRepository(TripRepository):
     
     __slots__ = (
         'database'

@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.transfer import Transfer
 
-from services import Database, TransferService
+from repositories import TransferRepository
 
-class DefaultTransferService(TransferService):
+class DefaultTransferRepository(TransferRepository):
     
     __slots__ = (
         'database'

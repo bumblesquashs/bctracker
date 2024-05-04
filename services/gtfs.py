@@ -9,33 +9,35 @@ import csv
 import requests
 
 from di import di
+from config import Config
 
 from models.block import Block
 from models.date import Date
+from models.daterange import DateRange
 from models.service import Service, ServiceException
+from models.sheet import Sheet
 
-from services import Config, DepartureService, GTFSService, PointService, RouteService, StopService, TripService
-
-import helpers
+from repositories import DepartureRepository, PointRepository, RouteRepository, StopRepository, TripRepository
+from services import GTFSService
 
 class DefaultGTFSService(GTFSService):
     
     __slots__ = (
         'config',
-        'departure_service',
-        'point_service',
-        'route_service',
-        'stop_service',
-        'trip_service'
+        'departure_repository',
+        'point_repository',
+        'route_repository',
+        'stop_repository',
+        'trip_repository'
     )
     
     def __init__(self, **kwargs):
         self.config = kwargs.get('config') or di[Config]
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
-        self.point_service = kwargs.get('point_service') or di[PointService]
-        self.route_service = kwargs.get('route_service') or di[RouteService]
-        self.stop_service = kwargs.get('stop_service') or di[StopService]
-        self.trip_service = kwargs.get('trip_service') or di[TripService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
+        self.route_repository = kwargs.get('route_repository') or di[RouteRepository]
+        self.stop_repository = kwargs.get('stop_repository') or di[StopRepository]
+        self.trip_repository = kwargs.get('trip_repository') or di[TripRepository]
     
     def load(self, system, force_download=False, update_db=False):
         '''Loads the GTFS for the given system into memory'''
@@ -60,20 +62,20 @@ class DefaultGTFSService(GTFSService):
                 services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
             
             system.services = {s.id: s for s in services}
-            system.sheets = helpers.combine_sheets(system, services)
+            system.sheets = combine_sheets(system, services)
             
-            stops = self.stop_service.find_all(system.id)
+            stops = self.stop_repository.find_all(system.id)
             system.stops = {s.id: s for s in stops}
             system.stops_by_number = {s.number: s for s in stops}
             
-            trips = self.trip_service.find_all(system.id)
+            trips = self.trip_repository.find_all(system.id)
             system.trips = {t.id: t for t in trips}
             
             block_trips = {}
             for trip in trips:
                 block_trips.setdefault(trip.block_id, []).append(trip)
             
-            routes = self.route_service.find_all(system.id)
+            routes = self.route_repository.find_all(system.id)
             system.routes = {r.id: r for r in routes}
             system.routes_by_number = {r.number: r for r in routes}
             
@@ -116,17 +118,17 @@ class DefaultGTFSService(GTFSService):
             return
         print(f'Updating database with GTFS data for {system}')
         try:
-            self.departure_service.delete_all(system)
-            self.trip_service.delete_all(system)
-            self.stop_service.delete_all(system)
-            self.route_service.delete_all(system)
-            self.point_service.delete_all(system)
+            self.departure_repository.delete_all(system)
+            self.trip_repository.delete_all(system)
+            self.stop_repository.delete_all(system)
+            self.route_repository.delete_all(system)
+            self.point_repository.delete_all(system)
             
-            apply_csv(system, 'routes', self.route_service.create)
-            apply_csv(system, 'stops', self.stop_service.create)
-            apply_csv(system, 'trips', self.trip_service.create)
-            apply_csv(system, 'stop_times', self.departure_service.create)
-            apply_csv(system, 'shapes', self.point_service.create)
+            apply_csv(system, 'routes', self.route_repository.create)
+            apply_csv(system, 'stops', self.stop_repository.create)
+            apply_csv(system, 'trips', self.trip_repository.create)
+            apply_csv(system, 'stop_times', self.departure_repository.create)
+            apply_csv(system, 'shapes', self.point_repository.create)
         except Exception as e:
             print(f'Failed to update GTFS for {system}: {e}')
     
@@ -158,3 +160,48 @@ def apply_csv(system, name, function):
         columns = next(reader)
         for row in reader:
             function(system, dict(zip(columns, row)))
+
+def combine_sheets(system, services):
+    '''Returns a list of sheets made from services with overlapping start/end dates'''
+    if not services:
+        return []
+    all_date_ranges = {s.schedule.date_range for s in services}
+    start_dates = {r.start for r in all_date_ranges}
+    end_dates = {r.end for r in all_date_ranges}
+    all_start_dates = start_dates.union({d.next() for d in end_dates})
+    all_end_dates = end_dates.union({d.previous() for d in start_dates})
+    dates = list(all_start_dates) + list(all_end_dates)
+    sorted_dates = sorted(dates)[1:-1]
+    i = iter(sorted_dates)
+    
+    sheets = []
+    for (start_date, end_date) in zip(i, i):
+        date_range = DateRange(start_date, end_date)
+        date_range_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
+        if not date_range_services:
+            continue
+        if sheets:
+            previous_sheet = sheets[-1]
+            previous_services = {s for s in previous_sheet.services if not s.schedule.is_special}
+            current_services = {s for s in date_range_services if not s.schedule.is_special}
+            if previous_services.issubset(current_services) or current_services.issubset(previous_services):
+                date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
+                new_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
+                sheets[-1] = Sheet(system, new_services, date_range)
+            else:
+                sheets.append(Sheet(system, date_range_services, date_range))
+        else:
+            sheets.append(Sheet(system, date_range_services, date_range))
+    final_sheets = []
+    for sheet in sheets:
+        if final_sheets:
+            previous_sheet = final_sheets[-1]
+            if len(previous_sheet.schedule.date_range) <= 7 or len(sheet.schedule.date_range) <= 7:
+                date_range = DateRange.combine([previous_sheet.schedule.date_range, sheet.schedule.date_range])
+                combined_services = previous_sheet.services.union(sheet.services)
+                final_sheets[-1] = Sheet(system, combined_services, date_range)
+            else:
+                final_sheets.append(sheet)
+        else:
+            final_sheets.append(sheet)
+    return final_sheets

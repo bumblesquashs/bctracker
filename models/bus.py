@@ -1,13 +1,13 @@
 
 from di import di
 
-from services import AdornmentService, OrderService
+from repositories import AdornmentRepository, OrderRepository
 
 class Bus:
     '''A public transportation vehicle'''
     
     __slots__ = (
-        'adornment_service',
+        'adornment_repository',
         'number',
         'order'
     )
@@ -15,8 +15,8 @@ class Bus:
     @classmethod
     def find(cls, agency, number, **kwargs):
         '''Returns a bus for the given agency with the given number'''
-        order_service = kwargs.get('order_service') or di[OrderService]
-        order = order_service.find(agency, number)
+        order_repository = kwargs.get('order_repository') or di[OrderRepository]
+        order = order_repository.find(agency, number)
         return cls(number, order)
     
     @property
@@ -51,7 +51,7 @@ class Bus:
         self.number = number
         self.order = order
         
-        self.adornment_service = kwargs.get('adornment_service') or di[AdornmentService]
+        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
     
     def __str__(self):
         if self.is_known:
@@ -74,5 +74,5 @@ class Bus:
         '''Returns the adornment for this bus, if one exists'''
         agency = self.agency
         if agency:
-            return self.adornment_service.find(agency, self)
+            return self.adornment_repository.find(agency, self)
         return None

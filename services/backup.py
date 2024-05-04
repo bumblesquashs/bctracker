@@ -4,8 +4,10 @@ from zipfile import ZipFile
 from glob import glob
 
 from di import di
+from config import Config
+from database import Database
 
-from services import Config, Database, BackupService
+from services import BackupService
 
 class DefaultBackupService(BackupService):
     

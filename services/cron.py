@@ -3,12 +3,15 @@ import signal
 from crontab import CronTab
 
 from di import di
+from config import Config
+from database import Database
 
 from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
-from services import Config, Database, BackupService, CronService, GTFSService, RealtimeService, RecordService, SystemService
+from repositories import RecordRepository, SystemRepository
+from services import BackupService, CronService, GTFSService, RealtimeService
 
 class DefaultCronService(CronService):
     
@@ -18,8 +21,8 @@ class DefaultCronService(CronService):
         'backup_service',
         'gtfs_service',
         'realtime_service',
-        'record_service',
-        'system_service',
+        'record_repository',
+        'system_repository',
         'running',
         'updating_realtime'
     )
@@ -30,8 +33,8 @@ class DefaultCronService(CronService):
         self.backup_service = kwargs.get('backup_service') or di[BackupService]
         self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
         self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
-        self.record_service = kwargs.get('record_service') or di[RecordService]
-        self.system_service = kwargs.get('system_service') or di[SystemService]
+        self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
+        self.system_repository = kwargs.get('system_repository') or di[SystemRepository]
         self.running = True
         self.updating_realtime = False
         signal.signal(signal.SIGUSR1, lambda sig, frame: self.handle_gtfs())
@@ -58,14 +61,14 @@ class DefaultCronService(CronService):
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-        for system in self.system_service.find_all():
+        for system in self.system_repository.find_all():
             if self.running:
                 date = Date.today(system.timezone)
                 if date.weekday == Weekday.MON or not self.gtfs_service.validate(system):
                     self.gtfs_service.load(system, True)
                     self.gtfs_service.update_cache_in_background(system)
         if self.running:
-            self.record_service.delete_stale_trip_records()
+            self.record_repository.delete_stale_trip_records()
             self.database.archive()
             date = Date.today()
             self.backup_service.run(date.previous(), include_db=date.weekday == Weekday.MON)
@@ -78,7 +81,7 @@ class DefaultCronService(CronService):
         date = Date.today()
         time = Time.now()
         print(f'--- {date} at {time} ---')
-        for system in self.system_service.find_all():
+        for system in self.system_repository.find_all():
             if self.running:
                 self.realtime_service.update(system)
                 if self.realtime_service.validate(system):

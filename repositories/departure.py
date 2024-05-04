@@ -1,11 +1,12 @@
 
 from di import di
+from database import Database
 
 from models.departure import Departure, PickupType, DropoffType
 
-from services import Database, DepartureService
+from repositories import DepartureRepository
 
-class DefaultDepartureService(DepartureService):
+class DefaultDepartureRepository(DepartureRepository):
     
     __slots__ = (
         'database'

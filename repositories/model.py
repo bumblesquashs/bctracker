@@ -3,9 +3,9 @@ import json
 
 from models.model import Model, ModelType
 
-from services import ModelService
+from repositories import ModelRepository
 
-class DefaultModelService(ModelService):
+class DefaultModelRepository(ModelRepository):
     
     __slots__ = (
         'models'
