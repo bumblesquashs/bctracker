@@ -68,7 +68,7 @@ class Stop:
         self.lat = lat
         self.lon = lon
         
-        self.departure_service = di[DepartureService]
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
     
     def __str__(self):
         return self.name

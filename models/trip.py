@@ -220,7 +220,13 @@ class TripCache:
     )
     
     def __init__(self, departures):
-        self.first_departure = departures[0]
-        self.last_departure = departures[-1]
-        self.departure_count = len(departures)
-        self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+        if departures:
+            self.first_departure = departures[0]
+            self.last_departure = departures[-1]
+            self.departure_count = len(departures)
+            self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+        else:
+            self.first_departure = None
+            self.last_departure = None
+            self.departure_count = 0
+            self.direction = Direction.UNKNOWN
