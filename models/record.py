@@ -1,10 +1,11 @@
 
-import helpers.agency
-import helpers.system
+from di import di
 
 from models.bus import Bus
 from models.date import Date
 from models.time import Time
+
+from services import AgencyService, SystemService
 
 class Record:
     '''Information about a bus' history on a specific date'''
@@ -24,12 +25,14 @@ class Record:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='record'):
+    def from_db(cls, row, prefix='record', **kwargs):
         '''Returns a record initialized from the given database row'''
+        agency_service = kwargs.get('agency_service') or di[AgencyService]
+        system_service = kwargs.get('system_service') or di[SystemService]
         id = row[f'{prefix}_id']
-        agency = helpers.agency.find('bc-transit')
+        agency = agency_service.find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system = system_service.find(row[f'{prefix}_system_id'])
         date = Date.parse(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']
         route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]

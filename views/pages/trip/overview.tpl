@@ -1,5 +1,5 @@
 
-% import helpers.position
+% from services import PositionService
 
 % rebase('base')
 
@@ -192,7 +192,7 @@
             </div>
         % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
             % bus = assignment.bus
-            % position = helpers.position.find(bus)
+            % position = di[PositionService].find(bus)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Scheduled Bus</h2>

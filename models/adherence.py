@@ -1,9 +1,11 @@
 
 import math
 
-import helpers.departure
+from di import di
 
 from models.time import Time
+
+from services import DepartureService
 
 MINIMUM_MINUTES = 4
 
@@ -17,16 +19,17 @@ class Adherence:
     )
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon):
+    def calculate(cls, trip, stop, sequence, lat, lon, **kwargs):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = helpers.departure.find(trip.system, trip=trip, sequence=sequence)
-        if departure is None:
+        departure_service = kwargs.get('departure_service') or di[DepartureService]
+        departure = departure_service.find(trip.system, trip=trip, sequence=sequence)
+        if not departure:
             return None
         previous_departure = departure.find_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes()
             
-            if previous_departure is not None:
+            if previous_departure:
                 previous_departure_mins = previous_departure.time.get_minutes()
                 time_difference = expected_scheduled_mins - previous_departure_mins
                 

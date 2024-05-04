@@ -1,6 +1,6 @@
 
 % from models.date import Date
-% import helpers.position
+% from services import PositionService
 
 % rebase('base')
 
@@ -241,7 +241,7 @@
             </div>
         % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
             % bus = assignment.bus
-            % position = helpers.position.find(bus)
+            % position = di[PositionService].find(bus)
             <div class="section">
                 <div class="header">
                     <h2>Scheduled Bus</h2>

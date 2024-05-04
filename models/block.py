@@ -1,14 +1,17 @@
 
-import helpers.departure
+from di import di
 
 from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
+from services import DepartureService
+
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
     __slots__ = (
+        'departure_service',
         'system',
         'id',
         'trips',
@@ -25,7 +28,7 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, system, id, trips):
+    def __init__(self, system, id, trips, **kwargs):
         self.system = system
         self.id = id
         self.trips = trips
@@ -35,6 +38,8 @@ class Block:
         self.sheets = system.copy_sheets(services)
         
         self._related_blocks = None
+        
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
     
     def __eq__(self, other):
         return self.id == other.id
@@ -44,11 +49,11 @@ class Block:
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''
-        if service_group is None:
-            if date is None:
-                return sorted(self.trips)
+        if service_group:
+            return sorted([t for t in self.trips if t.service in service_group])
+        if date:
             return sorted([t for t in self.trips if date in t.service])
-        return sorted([t for t in self.trips if t.service in service_group])
+        return sorted(self.trips)
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this block'''
@@ -61,16 +66,18 @@ class Block:
     def get_start_time(self, service_group=None, date=None):
         '''Returns the start time of this block'''
         trips = self.get_trips(service_group, date)
-        if len(trips) == 0:
+        try:
+            return trips[0].start_time
+        except IndexError:
             return Time.unknown()
-        return trips[0].start_time
     
     def get_end_time(self, service_group=None, date=None):
         '''Returns the end time of this block'''
         trips = self.get_trips(service_group, date)
-        if len(trips) == 0:
+        try:
+            return trips[-1].end_time
+        except IndexError:
             return Time.unknown()
-        return trips[-1].end_time
     
     def get_duration(self, service_group=None, date=None):
         '''Returns the duration of this block'''
@@ -108,4 +115,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return helpers.departure.find_all(self.system, block=self)
+        return self.departure_service.find_all(self.system, block=self)

@@ -5,12 +5,22 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-import database
+from services.database import DefaultDatabase
 from models.record import Record
-import helpers.system
+from services.agency import DefaultAgencyService
+from services.region import DefaultRegionService
+from services.system import DefaultSystemService
 
-helpers.system.load()
+agency_service = DefaultAgencyService()
+region_service = DefaultRegionService()
+system_service = DefaultSystemService(
+    agency_service=agency_service,
+    region_service=region_service
+)
 
+system_service.load()
+
+database = DefaultDatabase()
 database.connect(foreign_keys=False)
 
 database.execute('''
@@ -68,7 +78,7 @@ def find_numbered(row_number_column):
             'numbered_record.row_number': 1
         },
         custom_args=args)
-    return [Record.from_db(row) for row in rows]
+    return [Record.from_db(row, agency_service=agency_service, system_service=system_service) for row in rows]
 
 first_records = find_numbered('ROW_NUMBER() OVER(PARTITION BY record.bus_number ORDER BY record.date ASC, record.record_id ASC)')
 last_records = find_numbered('ROW_NUMBER() OVER(PARTITION BY record.bus_number ORDER BY record.date DESC, record.record_id DESC)')

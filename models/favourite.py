@@ -1,10 +1,9 @@
 
-import helpers.agency
-import helpers.route
-import helpers.stop
-import helpers.system
+from di import di
 
 from models.bus import Bus
+
+from services import RouteService, StopService
 
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
@@ -15,16 +14,18 @@ class Favourite:
     )
     
     @classmethod
-    def parse(cls, string):
+    def parse(cls, string, **kwargs):
         '''Returns a favourite parsed from the given string, or None if parsing fails'''
         parts = string.split(':')
         type = parts[0]
         if type == 'vehicle':
             value = Bus.find(parts[1], int(parts[2]))
         elif type == 'route':
-            value = helpers.route.find(parts[1], number=parts[2])
+            route_service = kwargs.get('route_service') or di[RouteService]
+            value = route_service.find(parts[1], number=parts[2])
         elif type == 'stop':
-            value = helpers.stop.find(parts[1], number=parts[2])
+            stop_service = kwargs.get('stop_service') or di[StopService]
+            value = stop_service.find(parts[1], number=parts[2])
         else:
             value = None
         if value:

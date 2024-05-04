@@ -1,14 +1,17 @@
 
-import helpers.date
+from di import di
 
 from models.date import Date
 from models.daterange import DateRange
 from models.weekday import Weekday
 
+from services import DateService
+
 class Schedule:
     '''Dates when a service is running'''
     
     __slots__ = (
+        'date_service',
         'dates',
         'date_range',
         'weekdays',
@@ -19,9 +22,9 @@ class Schedule:
     @classmethod
     def combine(cls, services, date_range=None):
         '''Returns a schedule that combines multiple services'''
-        if len(services) == 0:
+        if not services:
             return None
-        if date_range is None:
+        if not date_range:
             date_range = DateRange.combine([s.schedule.date_range for s in services])
         dates = {d for s in services for d in s.schedule.dates if d in date_range}
         return cls(dates, date_range)
@@ -43,7 +46,7 @@ class Schedule:
     @property
     def added_dates_string(self):
         '''Returns a string of all dates that are added'''
-        return helpers.date.flatten(self.added_dates)
+        return self.date_service.flatten(self.added_dates)
     
     @property
     def removed_dates(self):
@@ -53,7 +56,7 @@ class Schedule:
     @property
     def removed_dates_string(self):
         '''Returns a string of all dates that are removed'''
-        return helpers.date.flatten(self.removed_dates)
+        return self.date_service.flatten(self.removed_dates)
     
     @property
     def has_normal_service(self):
@@ -65,7 +68,7 @@ class Schedule:
         '''Checks if this schedule indicates no service'''
         return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
-    def __init__(self, dates, date_range):
+    def __init__(self, dates, date_range, **kwargs):
         self.dates = dates
         self.date_range = date_range
         self.weekdays = set()
@@ -103,6 +106,8 @@ class Schedule:
             self.name = f'{list(self.weekdays)[0].name}s'
         else:
             self.name = '/'.join([w.short_name for w in sorted(self.weekdays)])
+        
+        self.date_service = kwargs.get('date_service') or di[DateService]
     
     def __str__(self):
         return self.name

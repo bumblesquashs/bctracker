@@ -20,14 +20,14 @@ class Date:
     def parse(cls, date_string, timezone=None, format='%Y-%m-%d'):
         '''Returns a date parsed from a string in the given format'''
         date = datetime.strptime(date_string, format)
-        if timezone is None:
+        if not timezone:
             timezone = pytz.timezone('America/Vancouver')
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
     def today(cls, timezone=None):
         '''Returns the current date'''
-        if timezone is None:
+        if not timezone:
             timezone = pytz.timezone('America/Vancouver')
         now = datetime.now(timezone)
         if now.hour < 4:
