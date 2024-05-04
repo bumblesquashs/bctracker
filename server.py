@@ -15,7 +15,7 @@ from models.favourite import Favourite, FavouriteSet
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 38
+VERSION = 39
 
 class Server(Bottle):
     

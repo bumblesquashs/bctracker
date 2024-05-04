@@ -134,6 +134,7 @@ class DefaultRecordService(RecordService):
         return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
     
     def count(self, system=None, bus=None, block=None, trip=None):
+        '''Returns the number of records for the given system, bus, block, and trip'''
         system_id = getattr(system, 'id', system)
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
