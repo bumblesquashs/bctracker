@@ -477,7 +477,6 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    # @endpoint('/bus/<bus_number:int>/map')
     def bus_map(self, system, agency, bus_number):
         bus = Bus.find(agency, bus_number)
         overview = self.overview_service.find(bus)
