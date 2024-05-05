@@ -1,7 +1,24 @@
 
-class GTFSService:
-    def load(self, system, force_download, update_db): pass
-    def download(self, system): pass
-    def update_database(self, system): pass
-    def validate(self, system) -> bool: pass
-    def update_cache_in_background(self, system): pass
+from abc import ABC, abstractmethod
+
+class GTFSService(ABC):
+    
+    @abstractmethod
+    def load(self, system, force_download, update_db):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def download(self, system):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def update_database(self, system):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def validate(self, system) -> bool:
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def update_cache_in_background(self, system):
+        raise NotImplementedError()

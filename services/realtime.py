@@ -1,8 +1,21 @@
 
 from __future__ import annotations
+from abc import ABC, abstractmethod
 
-class RealtimeService:
-    def update(self, system): pass
-    def update_records(self): pass
-    def get_last_updated(self, time_format) -> str | None: pass
-    def validate(self, system) -> bool: pass
+class RealtimeService(ABC):
+    
+    @abstractmethod
+    def update(self, system):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def update_records(self):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def get_last_updated(self, time_format) -> str | None:
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def validate(self, system) -> bool:
+        raise NotImplementedError()

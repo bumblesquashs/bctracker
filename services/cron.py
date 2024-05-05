@@ -1,6 +1,20 @@
 
-class CronService:
-    def start(self): pass
-    def stop(self): pass
-    def handle_gtfs(self): pass
-    def handle_realtime(self): pass
+from abc import ABC, abstractmethod
+
+class CronService(ABC):
+    
+    @abstractmethod
+    def start(self):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def stop(self):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def handle_gtfs(self):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def handle_realtime(self):
+        raise NotImplementedError()
