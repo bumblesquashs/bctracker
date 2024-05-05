@@ -1,30 +1,11 @@
 
-import json
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from models.agency import Agency
+if TYPE_CHECKING:
+    from models.agency import Agency
 
-from repositories import AgencyRepository
-
-class DefaultAgencyRepository(AgencyRepository):
-    
-    __slots__ = (
-        'agencies'
-    )
-    
-    def __init__(self):
-        self.agencies = {}
-    
-    def load(self):
-        '''Loads agency data from the static JSON file'''
-        self.agencies = {}
-        with open(f'./static/agencies.json', 'r') as file:
-            for (id, values) in json.load(file).items():
-                self.agencies[id] = Agency(id, **values)
-    
-    def find(self, agency_id):
-        '''Returns the agency with the given ID'''
-        return self.agencies.get(agency_id)
-    
-    def find_all(self):
-        '''Returns all agencies'''
-        return self.agencies.values()
+class AgencyRepository:
+    def load(self): pass
+    def find(self, agency_id) -> Agency | None: pass
+    def find_all(self) -> list[Agency]: pass

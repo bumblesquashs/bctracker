@@ -4,37 +4,16 @@ import signal
 from argparse import ArgumentParser
 
 from di import di
-
-from repositories import *
-from services import *
-
 from config import Config
 from database import Database
-
-from repositories.adornment import DefaultAdornmentRepository
-from repositories.agency import DefaultAgencyRepository
-from repositories.assignment import DefaultAssignmentRepository
-from repositories.departure import DefaultDepartureRepository
-from repositories.model import DefaultModelRepository
-from repositories.order import DefaultOrderRepository
-from repositories.overview import DefaultOverviewRepository
-from repositories.point import DefaultPointRepository
-from repositories.position import DefaultPositionRepository
-from repositories.record import DefaultRecordRepository
-from repositories.region import DefaultRegionRepository
-from repositories.route import DefaultRouteRepository
-from repositories.stop import DefaultStopRepository
-from repositories.system import DefaultSystemRepository
-from repositories.theme import DefaultThemeRepository
-from repositories.transfer import DefaultTransferRepository
-from repositories.trip import DefaultTripRepository
-
-from services.backup import DefaultBackupService
-from services.cron import DefaultCronService
-from services.gtfs import DefaultGTFSService
-from services.realtime import DefaultRealtimeService
-
 from server import Server
+
+from repositories import *
+from repositories.file import *
+from repositories.sql import *
+
+from services import *
+from services.default import *
 
 if __name__ == '__main__':
     parser = ArgumentParser()
@@ -42,34 +21,34 @@ if __name__ == '__main__':
     parser.add_argument('--updatedb', '-u', action='store_true', help='Updates GTFS in the database with CSV data')
     parser.add_argument('--debug', '-d', action='store_true', help='Prevent page caching and show additional error info')
     
-    di[Config] = Config()
-    di[Database] = Database()
+    config = Config()
+    database = Database()
     
-    di[AdornmentRepository] = DefaultAdornmentRepository()
-    di[AgencyRepository] = DefaultAgencyRepository()
-    di[ModelRepository] = DefaultModelRepository()
-    di[OrderRepository] = DefaultOrderRepository()
-    di[RegionRepository] = DefaultRegionRepository()
-    di[SystemRepository] = DefaultSystemRepository()
-    di[ThemeRepository] = DefaultThemeRepository()
+    di[AdornmentRepository] = FileAdornmentRepository()
+    di[AgencyRepository] = FileAgencyRepository()
+    di[ModelRepository] = FileModelRepository()
+    di[OrderRepository] = FileOrderRepository()
+    di[RegionRepository] = FileRegionRepository()
+    di[SystemRepository] = FileSystemRepository()
+    di[ThemeRepository] = FileThemeRepository()
     
-    di[AssignmentRepository] = DefaultAssignmentRepository()
-    di[DepartureRepository] = DefaultDepartureRepository()
-    di[OverviewRepository] = DefaultOverviewRepository()
-    di[PointRepository] = DefaultPointRepository()
-    di[PositionRepository] = DefaultPositionRepository()
-    di[RecordRepository] = DefaultRecordRepository()
-    di[RouteRepository] = DefaultRouteRepository()
-    di[StopRepository] = DefaultStopRepository()
-    di[TransferRepository] = DefaultTransferRepository()
-    di[TripRepository] = DefaultTripRepository()
+    di[AssignmentRepository] = SQLAssignmentRepository(database)
+    di[DepartureRepository] = SQLDepartureRepository(database)
+    di[OverviewRepository] = SQLOverviewRepository(database)
+    di[PointRepository] = SQLPointRepository(database)
+    di[PositionRepository] = SQLPositionRepository(database)
+    di[RecordRepository] = SQLRecordRepository(database)
+    di[RouteRepository] = SQLRouteRepository(database)
+    di[StopRepository] = SQLStopRepository(database)
+    di[TransferRepository] = SQLTransferRepository(database)
+    di[TripRepository] = SQLTripRepository(database)
     
-    di[BackupService] = DefaultBackupService()
-    di[GTFSService] = DefaultGTFSService()
-    di[RealtimeService] = DefaultRealtimeService()
-    di[CronService] = DefaultCronService()
+    di[BackupService] = DefaultBackupService(config, database)
+    di[GTFSService] = DefaultGTFSService(config)
+    di[RealtimeService] = DefaultRealtimeService(config, database)
+    di[CronService] = DefaultCronService(config, database)
     
-    server = Server()
+    server = Server(config, database)
     
     def exit(sig, frame):
         server.stop()

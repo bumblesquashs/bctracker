@@ -44,12 +44,12 @@ class Server(Bottle):
         'running'
     )
     
-    def __init__(self, **kwargs):
+    def __init__(self, config: Config, database: Database, **kwargs):
         super().__init__()
         self.running = False
         
-        self.config = kwargs.get('config') or di[Config]
-        self.database = kwargs.get('database') or di[Database]
+        self.config = config
+        self.database = database
         
         self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
         self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
