@@ -5,12 +5,13 @@
     <h1>Guide to BCTracker</h1>
 </div>
 
+<p>
+    Welcome to BCTracker!
+    This page has instructions about how to find your way around the website, along with examples.
+</p>
+
 <div class="page-container">
     <div class="container flex-3">
-        <p>
-            Welcome to BCTracker!
-            This page has instructions about how to find your way around the website, along with examples.
-        </p>
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
                 <h2>Getting Started</h2>
