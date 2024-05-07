@@ -2,93 +2,135 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Getting Started</h1>
-    <h2>A Guide to BCTracker</h2>
+    <h1>Guide to BCTracker</h1>
 </div>
 
 <div class="page-container">
-    <div class="container flex-1">
+    <div class="container flex-3">
+        <p>
+            Welcome to BCTracker!
+            This page has instructions about how to find your way around the website, along with examples.
+        </p>
         <div class="section">
-            <div class="header">
-                <h2>1. Choose a System</h2>
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Getting Started</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
-                <p>
-                    Information on BCTracker is primarily grouped by transit systems.
-                    To see schedule information such as routes and stops you'll need to choose a specific system to look at.
-                    Realtime information, like the main map, can be seen for individual systems or for the whole province at once.
-                </p>
-                <p>
-                    You can select a system using the side menu on desktop computers, or by tapping the city icon in the status bar on mobile phones and tablets.
-                    Currently you're looking at <b>{{ system if system else 'all systems' }}</b>.
-                </p>
+                <div class="container">
+                    <div class="section">
+                        <div class="header" onclick="toggleSection(this)">
+                            <h3>Choosing a System</h3>
+                            % include('components/toggle')
+                        </div>
+                        <div class="content">
+                            <p>
+                                Information on BCTracker is grouped by transit systems.
+                                To see schedule information such as routes and stops you'll need to choose a specific system to look at.
+                                Realtime information, like the main map, can be seen for individual systems or for the whole province at once.
+                            </p>
+                            <p>Currently you're looking at <b>{{ system if system else 'all systems' }}</b>.</p>
+                            <p>
+                                <b>On Desktop:</b>
+                                Select the system you want using the list on the left side of the screen.
+                            </p>
+                            <p>
+                                <b>On Mobile/Tablet:</b>
+                                Tap on the city icon in the navigation bar, then select the system you want from the list that appears.
+                                If you change your mind, you can tap on the icon again to hide the systems.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="header" onclick="toggleSection(this)">
+                            <h3>Searching</h3>
+                            % include('components/toggle')
+                        </div>
+                        <div class="content">
+                            <p>If you're looking for something specific, like the stop near your home or your local bus route, there are two ways to search.</p>
+                            <p>
+                                <b>Quick search</b> is found on the <a href="{{ get_url(system) }}">Home</a> page of BCTracker.
+                                You can enter your search and press enter to go directly to whatever it is you're looking for.
+                                If your search can't be found, you'll see an error and you'll have to go back and try again.
+                            </p>
+                            <p>
+                                <b>Site-wide search</b> is available through the search button in the navigation bar on both desktop and mobile.
+                                Results that match your search will appear as you type, sorted by how relevant they are.
+                                Click/tap on the result you want, or press enter to go to the highlighted result.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>How To...</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                <div class="container">
+                    <div class="section">
+                        <div class="header" onclick="toggleSection(this)">
+                            <h3>Find the schedule for a stop?</h3>
+                            % include('components/toggle')
+                        </div>
+                        <div class="content">
+                            <ol>
+                                <li>
+                                    Start by navigating to the page for the stop
+                                    <ul>
+                                        <li>If you know the stop number, you can search for it directly</li>
+                                        <li>If you don't know the number, you can also search for the name of the stop - usually this is an intersection (eg. Douglas St at Fort St) or an important location (eg. Lansdowne Exchange)</li>
+                                        <li>If you don't know the number or name, but you know what route it's on, navigate to the route page and go to the Map tab, then click on the stop icon</li>
+                                    </ul>
+                                </li>
+                                <li>The current schedule for the stop will be shown on the main Overview</li>
+                                <li>To see the schedule for a different day, click on the Schedule tab and select the day you want to see</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container flex-1">
+    <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
-                <h2>2. Search</h2>
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Definitions</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
-                <p>If you're looking for something specific, like the stop near your home or your local bus route, there are two ways to search.</p>
-                <h3>Quick Search</h3>
-                <p>
-                    Quick search is found on the <a href="{{ get_url(system) }}">Home</a> page of BCTracker.
-                    You can enter your search and press enter to go directly to whatever it is you're looking for.
-                    If your search can't be found, you'll see an error and you'll have to go back and try again.
-                </p>
-                <h3>Site-wide Search</h3>
-                <p>
-                    The site-wide search is available through the search button in the navigation bar on both desktop and mobile.
-                    Results that match your search will appear as you type, sorted by how relevant they are.
-                    Click/tap on the result you want, or press enter to go to the highlighted result.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="container flex-1">
-        <div class="section">
-            <div class="header">
-                <h2>3. Browse</h2>
-            </div>
-            <div class="content">
-                <p>
-                    If you aren't looking for anything specific, or you're having trouble searching for the thing you want, you can browse the schedule and realtime data instead.
-                    Numerous lists and maps are available that provide an overview of all the information found on BCTracker:
-                </p>
-                <ul>
-                    <li><a href="{{ get_url(system, 'map') }}">Map</a>: All active buses shown on a map</li>
-                    <li><a href="{{ get_url(system, 'realtime') }}">Realtime</a>: All active buses shown in a list</li>
-                    <li><a href="{{ get_url(system, 'history') }}">History</a>: All buses that have been tracked</li>
-                    <li><a href="{{ get_url(system, 'fleet') }}">Fleet</a>: All buses known about by BCTracker</li>
-                    <li><a href="{{ get_url(system, 'routes') }}">Routes List</a>: All available routes shown in a list</li>
-                    <li><a href="{{ get_url(system, 'routes/map') }}">Routes Map</a>: All available routes shown on a map</li>
-                    <li><a href="{{ get_url(system, 'stops') }}">Stops</a>: All available stops</li>
-                    <li><a href="{{ get_url(system, 'blocks') }}">Blocks</a>: All available blocks</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container flex-1">
-        <div class="section">
-            <div class="header">
-                <h2>4. Explore</h2>
-            </div>
-            <div class="content">
-                <p>
-                    Once you've found something of interest, either by searching or browsing, you can see more details about it.
-                    There are detail pages for buses, routes, stops, blocks, and trips.
-                    These pages all have similar layouts and functionality, but with different information depending on what you're looking at.
-                    You can use the tab bars at the top of each page to see additional details, such as full-screen maps, schedules for every day of the week, and comprehensive vehicle history.
-                </p>
-                <p>
-                    All detail pages contain links to many other related pages, making it easy to get to each stop that a trip passes, see the route a bus is currently assigned to, and so on.
-                    You can return to searching or browsing at any time using the links in the navigation bar/menu.
-                </p>
-                <p>
-                    Good luck and have fun!
-                </p>
+                <div class="info-box">
+                    <div class="section">
+                        <h4>Transit System</h4>
+                        <p>
+                            A city or region with a unified set of transit routes and a dedicated bus fleet.
+                            Some transit systems may provide interregional connections to other nearby systems.
+                        </p>
+                    </div>
+                    <div class="section">
+                        <h4>Block</h4>
+                        <p>
+                            A set of trips performed by one bus.
+                            Blocks may cover one route or multiple, and may be as short as one trip or cover an entire day.
+                        </p>
+                    </div>
+                    <div class="section">
+                        <h4>Transfer</h4>
+                        <p>
+                            A transfer occurs when a bus is moved from one transit system to another.
+                            This may occur because of a change in service requirements, to cover for buses undergoing maintenance, or other reasons.
+                        </p>
+                    </div>
+                    <div class="section">
+                        <h4>Special Service</h4>
+                        <p>
+                            A day or set of days when the schedule for a route or stop is different from normal.
+                            This may be due to additional, reduced, or rescheduled service.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

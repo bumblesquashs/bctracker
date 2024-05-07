@@ -1106,7 +1106,7 @@ class Server(Bottle):
     def guide(self, system, agency):
         return self.page(
             name='guide',
-            title='Getting Started',
+            title='Guide',
             path='guide',
             system=system,
             agency=agency,

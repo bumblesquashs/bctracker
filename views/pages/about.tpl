@@ -24,18 +24,6 @@
                 <div class="container">
                     <div class="section">
                         <div class="header" onclick="toggleSection(this)">
-                            <h3>How do I use BCTracker?</h3>
-                            % include('components/toggle')
-                        </div>
-                        <div class="content">
-                            <p>
-                                Check out our handy <a href="{{ get_url(system, 'guide') }}">Getting Started</a> page!
-                                If you're still not sure what's going on, feel free to send us an email or hop on our Discord to ask questions - see the Contact section for more.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="section">
-                        <div class="header" onclick="toggleSection(this)">
                             <h3>Why is there no transit information for Vancouver?</h3>
                             % include('components/toggle')
                         </div>
