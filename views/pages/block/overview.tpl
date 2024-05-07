@@ -1,6 +1,6 @@
 
 % from models.date import Date
-% import helpers.position
+% from services import PositionService
 
 % rebase('base')
 
@@ -24,8 +24,9 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Overview</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % include('components/map', map_trips=trips, map_positions=positions)
@@ -240,7 +241,7 @@
             </div>
         % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
             % bus = assignment.bus
-            % position = helpers.position.find(bus)
+            % position = di[PositionService].find(bus)
             <div class="section">
                 <div class="header">
                     <h2>Scheduled Bus</h2>
@@ -275,7 +276,7 @@
                                 <td class="non-mobile">
                                     % include('components/order', order=bus.order)
                                 </td>
-                                % if position:
+                                % if position and position.trip:
                                     % stop = position.stop
                                     <td>
                                         <div class="column">

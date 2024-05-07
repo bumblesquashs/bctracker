@@ -2,9 +2,7 @@
 % from math import floor
 % from datetime import timedelta
 
-% import helpers.assignment
-% import helpers.position
-% import helpers.record
+% from services import AssignmentService, PositionService, RecordService
 
 % from models.date import Date
 
@@ -26,13 +24,16 @@
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
         % trips = [d.trip for d in upcoming_departures]
-        % recorded_today = helpers.record.find_recorded_today(stop.system, trips)
-        % assignments = helpers.assignment.find_all(stop.system, stop=stop)
-        % positions = {p.trip.id: p for p in helpers.position.find_all(stop.system, trip=trips)}
+        % recorded_today = di[RecordService].find_recorded_today(stop.system, trips)
+        % assignments = di[AssignmentService].find_all(stop.system, stop=stop)
+        % positions = {p.trip.id: p for p in di[PositionService].find_all(stop.system, trip=trips)}
         <div class="section">
-            <div class="header">
-                <h3>Stop {{ stop.number }} - {{ stop }}</h3>
-                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
+            <div class="header" onclick="toggleSection(this)">
+                <div class="column">
+                    <h3>Stop {{ stop.number }} - {{ stop }}</h3>
+                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
+                </div>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(upcoming_departures) == 0:
@@ -45,7 +46,9 @@
                     % if system is None or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
-                            % include('components/svg', name='schedule')
+                            <span class="scheduled">
+                                % include('components/svg', name='schedule')
+                            </span>
                             <span>are scheduled but may be swapped off.</span>
                         </p>
                     % end

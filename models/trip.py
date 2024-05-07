@@ -1,15 +1,17 @@
 
-import helpers.departure
-import helpers.point
-import helpers.system
+from di import di
 
 from models.direction import Direction
 from models.time import Time
+
+from services import DepartureService, PointService, SystemService
 
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
     __slots__ = (
+        'departure_service',
+        'point_service',
         'system',
         'id',
         'short_id',
@@ -24,8 +26,10 @@ class Trip:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='trip'):
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+    def from_db(cls, row, prefix='trip', **kwargs):
+        '''Returns a trip initialized from the given database row'''
+        system_service = kwargs.get('system_service') or di[SystemService]
+        system = system_service.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
         service_id = row[f'{prefix}_service_id']
@@ -59,33 +63,33 @@ class Trip:
     def first_stop(self):
         '''Returns the first stop of this trip'''
         departure = self.first_departure
-        if departure is None:
-            return None
-        return departure.stop
+        if departure:
+            return departure.stop
+        return None
     
     @property
     def last_stop(self):
         '''Returns the last stop of this trip'''
         departure = self.last_departure
-        if departure is None:
-            return None
-        return departure.stop
+        if departure:
+            return departure.stop
+        return None
     
     @property
     def start_time(self):
         '''Returns the time of the first departure of this trip'''
         departure = self.first_departure
-        if departure is None:
-            return Time.unknown()
-        return departure.time
+        if departure:
+            return departure.time
+        return Time.unknown()
     
     @property
     def end_time(self):
         '''Returns the time of the last departure of this trip'''
         departure = self.last_departure
-        if departure is None:
-            return Time.unknown()
-        return departure.time
+        if departure:
+            return departure.time
+        return Time.unknown()
     
     @property
     def duration(self):
@@ -96,9 +100,9 @@ class Trip:
     def length(self):
         '''Returns the distance travelled on this trip'''
         departure = self.last_departure
-        if departure is None:
-            return None
-        return departure.distance
+        if departure:
+            return departure.distance
+        return None
     
     @property
     def related_trips(self):
@@ -133,7 +137,7 @@ class Trip:
         '''Returns the direction for this trip'''
         return self.cache.direction
     
-    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign):
+    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
         self.system = system
         self.id = trip_id
         self.route_id = route_id
@@ -142,6 +146,9 @@ class Trip:
         self.direction_id = direction_id
         self.shape_id = shape_id
         self.headsign = headsign
+        
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.point_service = kwargs.get('point_service') or di[PointService]
         
         id_parts = trip_id.split(':')
         if len(id_parts) == 1:
@@ -154,7 +161,7 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.system.agency.prefix_headsigns and self.route is not None:
+        if self.system.agency.prefix_headsigns and self.route:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -166,36 +173,27 @@ class Trip:
             return self.service < other.service
         return self.start_time < other.start_time
     
-    def setup(self, departures=None):
-        if self.is_setup:
-            return
-        self.is_setup = True
-        if departures is None:
-            departures = self.find_departures()
-        if len(departures) == 0:
-            return
-    
     def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
         json = {
             'shape_id': self.shape_id,
             'points': [p.get_json() for p in self.find_points()]
         }
-        if self.route is None:
-            json['colour'] = '666666'
-            json['text_colour'] = '000000'
-        else:
+        if self.route:
             json['colour'] = self.route.colour
             json['text_colour'] = self.route.text_colour
+        else:
+            json['colour'] = '666666'
+            json['text_colour'] = '000000'
         return json
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return helpers.point.find_all(self.system, self.shape_id)
+        return self.point_service.find_all(self.system, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return helpers.departure.find_all(self.system, trip=self)
+        return self.departure_service.find_all(self.system, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''
@@ -222,7 +220,13 @@ class TripCache:
     )
     
     def __init__(self, departures):
-        self.first_departure = departures[0]
-        self.last_departure = departures[-1]
-        self.departure_count = len(departures)
-        self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+        if departures:
+            self.first_departure = departures[0]
+            self.last_departure = departures[-1]
+            self.departure_count = len(departures)
+            self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+        else:
+            self.first_departure = None
+            self.last_departure = None
+            self.departure_count = 0
+            self.direction = Direction.UNKNOWN

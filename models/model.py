@@ -37,9 +37,9 @@ class Model:
     @property
     def display_manufacturer(self):
         '''Formats the manufacturer for web display'''
-        if self.manufacturer is None:
-            return None
-        return self.manufacturer.replace('/', '/<wbr />')
+        if self.manufacturer:
+            return self.manufacturer.replace('/', '/<wbr />')
+        return None
     
     @property
     def display_name(self):
@@ -55,9 +55,9 @@ class Model:
         self.fuel = kwargs.get('fuel')
     
     def __str__(self):
-        if self.manufacturer is None:
-            return self.display_name
-        return f'{self.display_manufacturer} {self.display_name}'
+        if self.manufacturer:
+            return f'{self.display_manufacturer} {self.display_name}'
+        return self.display_name
     
     def __hash__(self):
         return hash(self.id)

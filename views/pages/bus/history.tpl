@@ -25,8 +25,9 @@
     % if overview is not None:
         <div class="sidebar container flex-1">
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Overview</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <div class="info-box">
@@ -54,8 +55,9 @@
     
     <div class="container flex-3">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>History</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 % if len(records) == 0:
@@ -77,7 +79,9 @@
                     % if len([r for r in records if len(r.warnings) > 0]) > 0:
                         <p>
                             <span>Entries with a</span>
-                            % include('components/svg', name='warning')
+                            <span class="record-warnings">
+                                % include('components/svg', name='warning')
+                            </span>
                             <span>may be accidental logins.</span>
                         </p>
                     % end

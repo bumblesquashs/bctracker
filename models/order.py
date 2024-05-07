@@ -48,9 +48,9 @@ class Order:
     def __str__(self):
         model = self.model
         year = self.year
-        if model is None or year is None:
-            return 'Unknown year/model'
-        return f'{year} {model}'
+        if model and year:
+            return f'{year} {model}'
+        return 'Unknown year/model'
     
     def __hash__(self):
         return hash((self.agency, self.low, self.high))

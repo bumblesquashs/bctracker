@@ -1,16 +1,15 @@
 
-import re
-
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-import helpers.departure
-import helpers.system
+from di import di
 
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
+
+from services import DepartureService, SystemService
 
 import utils
 
@@ -18,6 +17,7 @@ class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
     __slots__ = (
+        'departure_service',
         'system',
         'id',
         'number',
@@ -28,8 +28,10 @@ class Route:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='route'):
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+    def from_db(cls, row, prefix='route', **kwargs):
+        '''Returns a route initialized from the given database row'''
+        system_service = kwargs.get('system_service') or di[SystemService]
+        system = system_service.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
@@ -67,7 +69,7 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, system, id, number, name, colour, text_colour):
+    def __init__(self, system, id, number, name, colour, text_colour, **kwargs):
         self.system = system
         self.id = id
         self.number = number
@@ -76,6 +78,8 @@ class Route:
         self.text_colour = text_colour
         
         self.key = utils.key(number)
+        
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -119,11 +123,11 @@ class Route:
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this route'''
-        if service_group is None:
-            if date is None:
-                return sorted(self.trips)
+        if service_group:
+            return sorted([t for t in self.trips if t.service in service_group])
+        if date:
             return sorted([t for t in self.trips if date in t.service])
-        return sorted([t for t in self.trips if t.service in service_group])
+        return sorted(self.trips)
     
     def get_headsigns(self, service_group=None, date=None):
         '''Returns all headsigns from this route'''
@@ -147,7 +151,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return helpers.departure.find_all(self.system, route=self)
+        return self.departure_service.find_all(self.system, route=self)
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''
@@ -180,8 +184,11 @@ class RouteCache:
         self.trips = trips
         services = {t.service for t in trips}
         self.sheets = system.copy_sheets(services)
-        date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-        self.schedule = Schedule.combine(services, date_range)
+        if self.sheets:
+            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+            self.schedule = Schedule.combine(services, date_range)
+        else:
+            self.schedule = None
         try:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].find_points()

@@ -230,6 +230,20 @@ table {
     display: block;
 }
 
+.container > .section > .header > .toggle {
+    --image-size: 28px;
+}
+
+.container > .section.closed > .header {
+    padding-bottom: 5px;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+}
+
+.container > .section.closed > .content {
+    display: none;
+}
+
 .desktop-only {
     display: none !important;
 }

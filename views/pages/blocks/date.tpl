@@ -19,8 +19,9 @@
     <div class="page-container">
         <div class="sidebar container flex-1">
             <div class="section">
-                <div class="header">
+                <div class="header" onclick="toggleSection(this)">
                     <h2>Overview</h2>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     <div class="info-box">
@@ -43,9 +44,12 @@
         </div>
         <div class="container flex-3">
             <div class="section">
-                <div class="header">
-                    <h2>{{ date.format_long() }}</h2>
-                    <h3>{{ date.weekday }}</h3>
+                <div class="header" onclick="toggleSection(this)">
+                    <div class="column">
+                        <h2>{{ date.format_long() }}</h2>
+                        <p>{{ date.weekday }}</p>
+                    </div>
+                    % include('components/toggle')
                 </div>
                 <div class="content">
                     % blocks = sorted([b for b in system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))

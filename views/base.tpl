@@ -23,7 +23,15 @@
         <link rel="icon" type="image/png" href="/img/favicon-32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="/img/favicon-48.png" sizes="48x48" />
         
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        % if system:
+            <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
+            <meta name="keywords" content="Transit, BC Transit, Bus Tracking, {{ system }}" />
+        % else:
+            <meta name="description" content="BC Transit Schedules and Bus Tracking" />
+            <meta name="keywords" content="Transit, BC Transit, Bus Tracking" />
+        % end
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="UTF-8" />
         
         % if get('disable_indexing', False):
             <meta name="robots" content="noindex">
@@ -146,6 +154,11 @@
                 now.setTime(expireTime);
                 
                 document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if config.cookie_domain is None else config.cookie_domain }};path=/";
+            }
+            
+            function toggleSection(header) {
+                const section = header.parentElement;
+                section.classList.toggle("closed");
             }
         </script>
     </head>

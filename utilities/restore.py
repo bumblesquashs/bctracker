@@ -5,13 +5,17 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-import database
+from services.database import DefaultDatabase
 
 restore_date = '2023-11-14'
 
-database.connect('bctracker')
+db1 = DefaultDatabase()
+db2 = DefaultDatabase('restore')
 
-overview_rows = database.select('overview',
+db1.connect()
+db2.connect()
+
+overview_rows = db1.select('overview',
     columns={
         'overview.bus_number': 'bus_number',
         'overview.first_seen_date': 'first_seen_date',
@@ -29,15 +33,12 @@ overview_rows = database.select('overview',
     },
     operation='OR')
 
-database.disconnect()
-database.connect('restore')
-
 print(f'Updating {len(overview_rows)} overviews')
 
 for i, row in enumerate(overview_rows):
     print(f'  Updating overview {i}')
     if row['first_seen_date'] >= restore_date:
-        database.insert('overview', {
+        db2.insert('overview', {
             'bus_number': row['bus_number'],
             'first_seen_date': row['first_seen_date'],
             'first_seen_system_id': row['first_seen_system_id'],
@@ -45,7 +46,7 @@ for i, row in enumerate(overview_rows):
             'last_seen_system_id': row['last_seen_system_id']
         })
     else:
-        database.update('overview',
+        db2.update('overview',
             values={
                 'last_seen_date': row['last_seen_date'],
                 'last_seen_system_id': row['last_seen_system_id']
@@ -54,11 +55,7 @@ for i, row in enumerate(overview_rows):
                 'bus_number': row['bus_number']
             })
 
-database.commit()
-database.disconnect()
-database.connect('bctracker')
-
-record_rows = database.select('record', 
+record_rows = db1.select('record', 
     columns={
         'record.record_id': 'id',
         'record.bus_number': 'bus_number',
@@ -81,7 +78,7 @@ print(f'Moving {len(record_rows)} records')
 
 for i, row in enumerate(record_rows):
     print(f'  Moving record {i}')
-    trip_record_rows = database.select('trip_record',
+    trip_record_rows = db1.select('trip_record',
         columns={
             'trip_record.trip_id': 'trip_id'
         },
@@ -93,23 +90,22 @@ for i, row in enumerate(record_rows):
         filters={
             'record.record_id': row['id']
         })
-    first_overview_rows = database.select('overview',
+    first_overview_rows = db1.select('overview',
         columns={
             'overview.bus_number': 'bus_number'
         },
         filters={
             'overview.first_record_id': row['id']
         })
-    last_overview_rows = database.select('overview',
+    last_overview_rows = db1.select('overview',
         columns={
             'overview.bus_number': 'bus_number'
         },
         filters={
             'overview.last_record_id': row['id']
         })
-    database.disconnect()
-    database.connect('restore')
-    new_id = database.insert('record', {
+    
+    new_id = db2.insert('record', {
         'bus_number': row['bus_number'],
         'date': row['date'],
         'system_id': row['system_id'],
@@ -124,12 +120,12 @@ for i, row in enumerate(record_rows):
     print(f'  Updating {len(first_overview_rows)} overview first records')
     print(f'  Updating {len(trip_record_rows)} overview last records')
     for trip_row in trip_record_rows:
-        database.insert('trip_record', {
+        db2.insert('trip_record', {
             'record_id': new_id,
             'trip_id': trip_row['trip_id']
         })
     for overview_row in first_overview_rows:
-        database.update('overview',
+        db2.update('overview',
             values={
                 'first_record_id': new_id
             },
@@ -137,18 +133,15 @@ for i, row in enumerate(record_rows):
                 'overview.bus_number': overview_row['bus_number']
             })
     for overview_row in last_overview_rows:
-        database.update('overview',
+        db2.update('overview',
             values={
                 'last_record_id': new_id
             },
             filters={
                 'overview.bus_number': overview_row['bus_number']
             })
-    database.commit()
-    database.disconnect()
-    database.connect('bctracker')
 
-transfer_rows = database.select('transfer',
+transfer_rows = db1.select('transfer',
     columns={
         'transfer.bus_number': 'bus_number',
         'transfer.date': 'date',
@@ -161,14 +154,14 @@ transfer_rows = database.select('transfer',
         }
     })
 
-database.disconnect()
-database.connect('restore')
-
 print(f'Moving {len(transfer_rows)} transfers')
 
 for i, row in enumerate(transfer_rows):
     print(f'  Moving transfer {i}')
-    database.insert('transfer', row)
+    db2.insert('transfer', row)
 
-database.commit()
-database.disconnect()
+db1.commit()
+db2.commit()
+
+db1.disconnect()
+db2.disconnect()

@@ -16,14 +16,16 @@
             </div>
         </div>
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Frequently Asked Questions</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <div class="container">
                     <div class="section">
-                        <div class="header">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>How do I use BCTracker?</h3>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
@@ -33,8 +35,9 @@
                         </div>
                     </div>
                     <div class="section">
-                        <div class="header">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>Why is there no transit information for Vancouver?</h3>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
@@ -45,8 +48,9 @@
                         </div>
                     </div>
                     <div class="section">
-                        <div class="header">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>Why are some transit systems not showing in realtime?</h3>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
@@ -57,8 +61,9 @@
                         </div>
                     </div>
                     <div class="section">
-                        <div class="header">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>How long has BCTracker been recording bus history?</h3>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
@@ -70,8 +75,9 @@
                         </div>
                     </div>
                     <div class="section">
-                        <div class="header">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>How is BCTracker made?</h3>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
@@ -81,8 +87,9 @@
                         </div>
                     </div>
                     <div class="section">
-                        <div class="header">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>Will there ever be a BCTracker phone app?</h3>
+                            % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
@@ -97,8 +104,9 @@
             </div>
         </div>
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>About the Developers</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>
@@ -121,8 +129,9 @@
     </div>
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header">
+            <div class="header" onclick="toggleSection(this)">
                 <h2>Contact</h2>
+                % include('components/toggle')
             </div>
             <div class="content">
                 <p>

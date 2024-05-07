@@ -1,10 +1,11 @@
 
 from enum import Enum
 
-import helpers.departure
-import helpers.system
+from di import di
 
 from models.time import Time
+
+from services import DepartureService, SystemService
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -54,6 +55,7 @@ class Departure:
     '''An association between a trip and a stop'''
     
     __slots__ = (
+        'departure_service',
         'system',
         'trip_id',
         'sequence',
@@ -66,9 +68,10 @@ class Departure:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='departure'):
+    def from_db(cls, row, prefix='departure', **kwargs):
         '''Returns a departure initialized from the given database row'''
-        system = helpers.system.find(row[f'{prefix}_system_id'])
+        system_service = kwargs.get('system_service') or di[SystemService]
+        system = system_service.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
@@ -99,17 +102,17 @@ class Departure:
     def pickup_only(self):
         '''Checks if this departure is pickup-only'''
         if self.pickup_type.is_normal:
-            return self.trip is not None and self == self.trip.first_departure
+            return self.trip and self == self.trip.first_departure
         return False
     
     @property
     def dropoff_only(self):
         '''Checks if this departure is dropoff-only'''
         if self.dropoff_type.is_normal:
-            return self.trip is not None and self == self.trip.last_departure
+            return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance):
+    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, **kwargs):
         self.system = system
         self.trip_id = trip_id
         self.sequence = sequence
@@ -119,6 +122,8 @@ class Departure:
         self.dropoff_type = dropoff_type
         self.timepoint = timepoint
         self.distance = distance
+        
+        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence
@@ -132,9 +137,9 @@ class Departure:
                     return True
                 if self.pickup_only or other.dropoff_only:
                     return False
-                if self.trip is None or other.trip is None:
+                if not self.trip or not other.trip:
                     return False
-                if self.trip.route is None or other.trip.route is None:
+                if not self.trip.route or not other.trip.route:
                     return False
                 return self.trip.route < other.trip.route
             return self.time < other.time
@@ -145,7 +150,7 @@ class Departure:
             'stop': self.stop.get_json(),
             'time': str(self.time)
         }
-        if self.trip is not None and self.trip.route is not None:
+        if self.trip and self.trip.route:
             json['colour'] = self.trip.route.colour
             json['text_colour'] = self.trip.route.text_colour
         else:
@@ -155,8 +160,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return helpers.departure.find(self.system, trip=self.trip, sequence=self.sequence - 1)
+        return self.departure_service.find(self.system, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return helpers.departure.find(self.system, trip=self.trip, sequence=self.sequence + 1)
+        return self.departure_service.find(self.system, trip=self.trip, sequence=self.sequence + 1)
