@@ -4,14 +4,14 @@ from di import di
 from models.direction import Direction
 from models.time import Time
 
-from services import DepartureService, PointService, SystemService
+from repositories import DepartureRepository, PointRepository, SystemRepository
 
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
     __slots__ = (
-        'departure_service',
-        'point_service',
+        'departure_repository',
+        'point_repository',
         'system',
         'id',
         'short_id',
@@ -28,8 +28,8 @@ class Trip:
     @classmethod
     def from_db(cls, row, prefix='trip', **kwargs):
         '''Returns a trip initialized from the given database row'''
-        system_service = kwargs.get('system_service') or di[SystemService]
-        system = system_service.find(row[f'{prefix}_system_id'])
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        system = system_repository.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
         service_id = row[f'{prefix}_service_id']
@@ -147,8 +147,8 @@ class Trip:
         self.shape_id = shape_id
         self.headsign = headsign
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
-        self.point_service = kwargs.get('point_service') or di[PointService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
         
         id_parts = trip_id.split(':')
         if len(id_parts) == 1:
@@ -189,11 +189,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return self.point_service.find_all(self.system, self.shape_id)
+        return self.point_repository.find_all(self.system, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return self.departure_service.find_all(self.system, trip=self)
+        return self.departure_repository.find_all(self.system, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

@@ -4,13 +4,13 @@ from di import di
 from models.adherence import Adherence
 from models.bus import Bus
 
-from services import AgencyService, DepartureService, SystemService
+from repositories import AgencyRepository, DepartureRepository, SystemRepository
 
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
     __slots__ = (
-        'departure_service',
+        'departure_repository',
         'system',
         'bus',
         'trip_id',
@@ -28,10 +28,10 @@ class Position:
     @classmethod
     def from_db(cls, row, prefix='position', **kwargs):
         '''Returns a position initialized from the given database row'''
-        agency_service = kwargs.get('agency_service') or di[AgencyService]
-        system_service = kwargs.get('system_service') or di[SystemService]
-        agency = agency_service.find('bc-transit')
-        system = system_service.find(row[f'{prefix}_system_id'])
+        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        agency = agency_repository.find('bc-transit')
+        system = system_repository.find(row[f'{prefix}_system_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
         stop_id = row[f'{prefix}_stop_id']
@@ -112,7 +112,7 @@ class Position:
         self.speed = speed
         self.adherence = adherence
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.bus == other.bus
@@ -170,4 +170,4 @@ class Position:
         '''Returns the next 5 upcoming departures'''
         if self.sequence is None or not self.trip:
             return []
-        return self.departure_service.find_upcoming(self.system, self.trip, self.sequence)
+        return self.departure_repository.find_upcoming(self.system, self.trip, self.sequence)

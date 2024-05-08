@@ -1,17 +1,14 @@
 
-from di import di
-
 from models.date import Date
 from models.daterange import DateRange
 from models.weekday import Weekday
 
-from services import DateService
+import helpers
 
 class Schedule:
     '''Dates when a service is running'''
     
     __slots__ = (
-        'date_service',
         'dates',
         'date_range',
         'weekdays',
@@ -46,7 +43,7 @@ class Schedule:
     @property
     def added_dates_string(self):
         '''Returns a string of all dates that are added'''
-        return self.date_service.flatten(self.added_dates)
+        return helpers.flatten_dates(self.added_dates)
     
     @property
     def removed_dates(self):
@@ -56,7 +53,7 @@ class Schedule:
     @property
     def removed_dates_string(self):
         '''Returns a string of all dates that are removed'''
-        return self.date_service.flatten(self.removed_dates)
+        return helpers.flatten_dates(self.removed_dates)
     
     @property
     def has_normal_service(self):
@@ -68,7 +65,7 @@ class Schedule:
         '''Checks if this schedule indicates no service'''
         return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
-    def __init__(self, dates, date_range, **kwargs):
+    def __init__(self, dates, date_range):
         self.dates = dates
         self.date_range = date_range
         self.weekdays = set()
@@ -106,8 +103,6 @@ class Schedule:
             self.name = f'{list(self.weekdays)[0].name}s'
         else:
             self.name = '/'.join([w.short_name for w in sorted(self.weekdays)])
-        
-        self.date_service = kwargs.get('date_service') or di[DateService]
     
     def __str__(self):
         return self.name

@@ -5,7 +5,7 @@ from di import di
 
 from models.time import Time
 
-from services import DepartureService, SystemService
+from repositories import DepartureRepository, SystemRepository
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -55,7 +55,7 @@ class Departure:
     '''An association between a trip and a stop'''
     
     __slots__ = (
-        'departure_service',
+        'departure_repository',
         'system',
         'trip_id',
         'sequence',
@@ -70,8 +70,8 @@ class Departure:
     @classmethod
     def from_db(cls, row, prefix='departure', **kwargs):
         '''Returns a departure initialized from the given database row'''
-        system_service = kwargs.get('system_service') or di[SystemService]
-        system = system_service.find(row[f'{prefix}_system_id'])
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        system = system_repository.find(row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
@@ -123,7 +123,7 @@ class Departure:
         self.timepoint = timepoint
         self.distance = distance
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence
@@ -160,8 +160,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return self.departure_service.find(self.system, trip=self.trip, sequence=self.sequence - 1)
+        return self.departure_repository.find(self.system, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return self.departure_service.find(self.system, trip=self.trip, sequence=self.sequence + 1)
+        return self.departure_repository.find(self.system, trip=self.trip, sequence=self.sequence + 1)
