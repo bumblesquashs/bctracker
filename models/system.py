@@ -8,15 +8,15 @@ from models.schedule import Schedule
 from models.stop import StopCache
 from models.trip import TripCache
 
-from services import DepartureService, OverviewService, PositionService
+from repositories import DepartureRepository, OverviewRepository, PositionRepository
 
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
     __slots__ = (
-        'departure_service',
-        'overview_service',
-        'position_service',
+        'departure_repository',
+        'overview_repository',
+        'position_repository',
         'id',
         'agency',
         'region',
@@ -108,9 +108,9 @@ class System:
         self.stop_caches = {}
         self.trip_caches = {}
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
-        self.overview_service = kwargs.get('overview_service') or di[OverviewService]
-        self.position_service = kwargs.get('position_service') or di[PositionService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
+        self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
     
     def __str__(self):
         return self.name
@@ -136,11 +136,11 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return self.overview_service.find_all(last_seen_system=self)
+        return self.overview_repository.find_all(last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        return self.position_service.find_all(self)
+        return self.position_repository.find_all(self)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -227,7 +227,7 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = self.departure_service.find_all(self)
+            departures = self.departure_repository.find_all(self)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -265,7 +265,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = self.departure_service.find_all(self, stop=stop)
+            departures = self.departure_repository.find_all(self, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -276,7 +276,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = self.departure_service.find_all(self, trip=trip)
+            departures = self.departure_repository.find_all(self, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache
