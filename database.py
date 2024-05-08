@@ -289,7 +289,7 @@ class Database:
         if type(limit) is int:
             sql.append(f'LIMIT {limit}')
             if type(page) is int:
-                offset = limit * page
+                offset = limit * (page - 1)
                 sql.append(f'OFFSET {offset}')
         
         return ' '.join(sql), custom_args + args

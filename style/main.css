@@ -1040,10 +1040,43 @@ table tr.header td {
     display: flex;
 }
 
+.paging {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    align-self: flex-start;
+    padding: 2px 0px;
+}
+
+.paging .page {
+    border-width: 0px;
+    border-radius: 5px;
+    cursor: default;
+    font-weight: bold;
+    font-family: Helvetica, sans-serif;
+    text-align: center;
+    text-decoration: none !important;
+    user-select: none;
+    font-size: 11pt;
+    padding: 2px;
+    min-width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
+
+.paging .page:hover {
+    cursor: pointer;
+}
+
+.paging .page.current:hover {
+    cursor: default;
+}
+
 .placeholder {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     align-items: flex-start;
 }
 

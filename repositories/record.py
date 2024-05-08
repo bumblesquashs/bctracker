@@ -34,5 +34,9 @@ class RecordRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
+    def count(self, system, bus, block, trip) -> int:
+        raise NotImplementedError()
+    
+    @abstractmethod
     def delete_stale_trip_records(self):
         raise NotImplementedError()
