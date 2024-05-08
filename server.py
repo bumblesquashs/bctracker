@@ -937,7 +937,7 @@ class Server(Bottle):
             )
         records = self.record_service.find_all(system, trip=trip)
         events = []
-        if len(records) > 0:
+        if records:
             events.append(Event(records[0].date, 'Last Tracked'))
             events.append(Event(records[-1].date, 'First Tracked'))
         return self.page(

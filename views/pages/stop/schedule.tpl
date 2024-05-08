@@ -14,23 +14,7 @@
     </div>
 </div>
 
-% if len(stop.find_departures()) == 0:
-    <div class="placeholder">
-        % if stop.system.gtfs_loaded:
-            <h3>There are currently no departures from this stop</h3>
-            <p>There are a few reasons why that may be the case:</p>
-            <ol>
-                <li>It may be an old stop that used to serve routes but is no longer used</li>
-                <li>It may be a new stop that will soon serve routes that haven't started yet</li>
-                <li>It may be used as an internal reference point in the GTFS that does not serve any routes</li>
-            </ol>
-            <p>Please check again later!</p>
-        % else:
-            <h3>Departures for this stop are unavailable</h3>
-            <p>System data is currently loading and will be available soon.</p>
-        % end
-    </div>
-% else:
+% if stop.find_departures():
     % sheets = stop.sheets
     <div class="page-container">
         <div class="sidebar container flex-1">
@@ -105,10 +89,10 @@
                                                             </div>
                                                         </td>
                                                         <td class="non-mobile">
-                                                            % if block is None:
-                                                                <div class="lighter-text">Unknown</div>
-                                                            % else:
+                                                            % if block:
                                                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                            % else:
+                                                                <div class="lighter-text">Unknown</div>
                                                             % end
                                                         </td>
                                                         <td>
@@ -141,6 +125,22 @@
             % end
         </div>
     </div>
-
+    
     % include('components/top_button')
+% else:
+    <div class="placeholder">
+        % if stop.system.gtfs_loaded:
+            <h3>There are currently no departures from this stop</h3>
+            <p>There are a few reasons why that may be the case:</p>
+            <ol>
+                <li>It may be an old stop that used to serve routes but is no longer used</li>
+                <li>It may be a new stop that will soon serve routes that haven't started yet</li>
+                <li>It may be used as an internal reference point in the GTFS that does not serve any routes</li>
+            </ol>
+            <p>Please check again later!</p>
+        % else:
+            <h3>Departures for this stop are unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % end
+    </div>
 % end

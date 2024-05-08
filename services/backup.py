@@ -25,7 +25,7 @@ class DefaultBackupService(BackupService):
         gtfs_files = glob(f'archives/gtfs/*_{formatted_date}.zip')
         realtime_files = glob(f'archives/realtime/*_{formatted_date}-*.bin')
         
-        if len(gtfs_files) > 0 or len(realtime_files) > 0 or include_db:
+        if gtfs_files or realtime_files or include_db:
             print(f'Creating backup for {formatted_date} ({len(gtfs_files)} GTFS, {len(realtime_files)} RT, {"DB" if include_db else "no DB"})')
             with ZipFile(f'backups/{formatted_date}.zip', 'w') as zip:
                 if self.config.enable_database_backups and include_db:

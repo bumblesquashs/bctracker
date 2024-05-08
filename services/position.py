@@ -57,16 +57,16 @@ class DefaultPositionService(PositionService):
             speed = None
         trip = system.get_trip(trip_id)
         stop = system.get_stop(stop_id=stop_id)
-        if trip is None:
-            block_id = None
-            route_id = None
-        else:
+        if trip:
             block_id = trip.block_id
             route_id = trip.route_id
-        if trip is None or stop is None or sequence is None or lat is None or lon is None:
-            adherence = None
         else:
+            block_id = None
+            route_id = None
+        if trip and stop and sequence and lat is not None and lon is not None:
             adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
+        else:
+            adherence = None
         values = {
             'system_id': system_id,
             'bus_number': bus_number,

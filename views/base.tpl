@@ -12,10 +12,10 @@
         % end
         
         <title>
-            % if system is None:
-                BCTracker | {{ title }}
-            % else:
+            % if system:
                 {{ system }} | {{ title }}
+            % else:
+                BCTracker | {{ title }}
             % end
         </title>
         
@@ -37,12 +37,12 @@
             <meta name="robots" content="noindex">
         % end
         
-        % if system is None:
-            <meta property="og:title" content="BCTracker | {{ title }}">
-            <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
-        % else:
+        % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
+        % else:
+            <meta property="og:title" content="BCTracker | {{ title }}">
+            <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
         % end
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ get_url(system, path) }}" />
@@ -59,11 +59,11 @@
         <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
-        % if theme is None:
+        % if theme:
+            <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
+        % else:
             <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
             <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
-        % else:
-            <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
         % end
         
         % if include_maps:
@@ -72,7 +72,7 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css">
         % end
         
-        % if enable_refresh and (system is None or system.realtime_enabled):
+        % if enable_refresh and (not system or system.realtime_enabled):
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();
@@ -130,7 +130,7 @@
                 if (systemID === null || systemID === undefined) {
                     return "{{ config.all_systems_domain }}".format(path)
                 }
-                return "{{ config.system_domain_path if system is None else config.system_domain }}".format(systemID, path)
+                return "{{ config.system_domain if system else config.system_domain_path }}".format(systemID, path)
             }
             
             function setCookie(key, value) {
@@ -153,7 +153,7 @@
                 const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
                 now.setTime(expireTime);
                 
-                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ '' if config.cookie_domain is None else config.cookie_domain }};path=/";
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ config.cookie_domain if config.cookie_domain else '' }};path=/";
             }
             
             function toggleSection(header) {
@@ -171,7 +171,7 @@
         <div id="navigation-bar">
             <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>
             
-            % if system is None or system.realtime_enabled:
+            % if not system or system.realtime_enabled:
                 <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
                 <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
                 <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
@@ -219,7 +219,7 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            % if system is None or system.realtime_enabled:
+            % if not system or system.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
                     % include('components/svg', name='map')
                     <span>Map</span>
@@ -271,14 +271,14 @@
                 </div>
                 <div class="details">
                     <div id="system">
-                        % if system is None:
-                            All Transit Systems
-                        % else:
+                        % if system:
                             {{ system }}
+                        % else:
+                            All Transit Systems
                         % end
                     </div>
                     <div id="last-updated">
-                        % if system is None or (system.realtime_enabled and system.realtime_loaded):
+                        % if not system or (system.realtime_enabled and system.realtime_loaded):
                             Updated {{ last_updated }}
                         % end
                     </div>
@@ -288,17 +288,17 @@
                 </div>
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
-                % if system is None:
-                    <span class="system-button current all-systems">All Transit Systems</span>
-                % else:
+                % if system:
                     <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                % else:
+                    <span class="system-button current all-systems">All Transit Systems</span>
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
-                    % if len(region_systems) > 0:
+                    % if region_systems:
                         <div class="header">{{ region }}</div>
                         % for region_system in sorted(region_systems):
-                            % if system is not None and system == region_system:
+                            % if system and system == region_system:
                                 <span class="system-button current">{{ region_system }}</span>
                             % else:
                                 <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">{{ region_system }}</a>
@@ -327,7 +327,7 @@
                 <div id="search-bar">
                     <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                 </div>
-                % if system is not None:
+                % if system:
                     <div id="search-filters">
                         <div class="flex-1">Filters:</div>
                         <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
@@ -350,10 +350,10 @@
                 % end
             </div>
             <div id="search-placeholder">
-                % if system is None:
-                    Search for buses in all systems
-                % else:
+                % if system:
                     Search for buses, routes, stops, and blocks in {{ system }}
+                % else:
+                    Search for buses in all systems
                 % end
             </div>
             <div id="search-results" class="display-none">
@@ -414,7 +414,7 @@
         lastSearchTimestamp = timestamp;
         
         if (query === undefined || query === null || query === "") {
-            updateSearchView([], 0, "{{ 'Search for buses in all systems' if system is None else f'Search for buses, routes, stops, and blocks in {system}' }}");
+            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {system}' if system else 'Search for buses in all systems' }}");
         } else {
             loadingResults = true;
             if (searchResults.length === 0) {

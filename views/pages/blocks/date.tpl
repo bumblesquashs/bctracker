@@ -5,17 +5,7 @@
     <h1>Blocks</h1>
 </div>
 
-% if system is None:
-    <div class="placeholder">
-        <p>
-            Blocks can only be viewed for individual systems.
-            Please choose a system.
-        </p>
-        <div class="non-desktop">
-            % include('components/systems')
-        </div>
-    </div>
-% else:
+% if system:
     <div class="page-container">
         <div class="sidebar container flex-1">
             <div class="section">
@@ -53,23 +43,7 @@
                 </div>
                 <div class="content">
                     % blocks = sorted([b for b in system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
-                    % if len(blocks) == 0:
-                        <div class="placeholder">
-                            % if system.gtfs_loaded:
-                                <h3>No blocks found for {{ system }} on {{ date.format_long() }}</h3>
-                                <p>There are a few reasons why that might be the case:</p>
-                                <ol>
-                                    <li>It may be a day of the week that does not normally have service</li>
-                                    <li>It may be a holiday in which all regular service is suspended</li>
-                                    <li>It may be outside of the date range for which schedules are currently available</li>
-                                </ol>
-                                <p>Please check again later!</p>
-                            % else:
-                                <h3>Block information for {{ system }} is unavailable</h3>
-                                <p>System data is currently loading and will be available soon.</p>
-                            % end
-                        </div>
-                    % else:
+                    % if blocks:
                         <table>
                             <thead>
                                 <tr>
@@ -98,9 +72,35 @@
                                 % end
                             </tbody>
                         </table>
+                    % else:
+                        <div class="placeholder">
+                            % if system.gtfs_loaded:
+                                <h3>No blocks found for {{ system }} on {{ date.format_long() }}</h3>
+                                <p>There are a few reasons why that might be the case:</p>
+                                <ol>
+                                    <li>It may be a day of the week that does not normally have service</li>
+                                    <li>It may be a holiday in which all regular service is suspended</li>
+                                    <li>It may be outside of the date range for which schedules are currently available</li>
+                                </ol>
+                                <p>Please check again later!</p>
+                            % else:
+                                <h3>Block information for {{ system }} is unavailable</h3>
+                                <p>System data is currently loading and will be available soon.</p>
+                            % end
+                        </div>
                     % end
                 </div>
             </div>
+        </div>
+    </div>
+% else:
+    <div class="placeholder">
+        <p>
+            Blocks can only be viewed for individual systems.
+            Please choose a system.
+        </p>
+        <div class="non-desktop">
+            % include('components/systems')
         </div>
     </div>
 % end

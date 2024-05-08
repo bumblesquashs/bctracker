@@ -7,10 +7,10 @@
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
-    % if bus.order is None:
-        <h2 class="lighter-text">Unknown Year/Model</h2>
-    % else:
+    % if bus.order:
         <h2>{{! bus.order }}</h2>
+    % else:
+        <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
@@ -19,17 +19,17 @@
     </div>
 </div>
 
-% if position is None:
+% if position:
+    % trip = position.trip
+    % if trip:
+        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
+    % else:
+        % include('components/map', is_preview=False, map_position=position)
+    % end
+    
+    % include('components/map_toggle')
+% else:
     <div class="placeholder">
         <h3>Not in service</h3>
     </div>
-% else:
-    % trip = position.trip
-    % if trip is None:
-        % include('components/map', is_preview=False, map_position=position)
-    % else:
-        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
-    % end
-
-    % include('components/map_toggle')
 % end

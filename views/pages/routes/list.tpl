@@ -9,7 +9,43 @@
     </div>
 </div>
 
-% if system is None:
+% if system:
+    % routes = system.get_routes()
+    % if routes:
+        <table>
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th class="non-mobile">Service Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for route in routes:
+                    <tr>
+                        <td>
+                            <div class="row">
+                                % include('components/route')
+                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                            </div>
+                        </td>
+                        <td class="non-mobile">
+                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
+                        </td>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    % else:
+        <div class="placeholder">
+            <h3>Route information for {{ system }} is unavailable</h3>
+            % if system.gtfs_loaded:
+                <p>Please check again later!</p>
+            % else:
+                <p>System data is currently loading and will be available soon.</p>
+            % end
+        </div>
+    % end
+% else:
     <div class="placeholder">
         <p>Choose a system to see individual routes.</p>
         <table>
@@ -23,7 +59,7 @@
             <tbody>
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
-                    % if len(region_systems) > 0:
+                    % if region_systems:
                         <tr class="header">
                             <td colspan="3">{{ region }}</td>
                         </tr>
@@ -60,40 +96,4 @@
             </tbody>
         </table>
     </div>
-% else:
-    % routes = system.get_routes()
-    % if len(routes) == 0:
-        <div class="placeholder">
-            <h3>Route information for {{ system }} is unavailable</h3>
-            % if system.gtfs_loaded:
-                <p>Please check again later!</p>
-            % else:
-                <p>System data is currently loading and will be available soon.</p>
-            % end
-        </div>
-    % else:
-        <table>
-            <thead>
-                <tr>
-                    <th>Route</th>
-                    <th class="non-mobile">Service Days</th>
-                </tr>
-            </thead>
-            <tbody>
-                % for route in routes:
-                    <tr>
-                        <td>
-                            <div class="row">
-                                % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
-                            </div>
-                        </td>
-                        <td class="non-mobile">
-                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
-                        </td>
-                    </tr>
-                % end
-            </tbody>
-        </table>
-    % end
 % end

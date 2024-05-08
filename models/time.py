@@ -212,6 +212,6 @@ class Time:
             parts.append(f'{hour}h')
         if minute > 0:
             parts.append(f'{minute}m')
-        if len(parts) == 0:
-            return '0h 0m'
-        return ' '.join(parts)
+        if parts:
+            return ' '.join(parts)
+        return '0h 0m'

@@ -9,10 +9,10 @@
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
-    % if bus.order is None:
-        <h2 class="lighter-text">Unknown Year/Model</h2>
-    % else:
+    % if bus.order:
         <h2>{{! bus.order }}</h2>
+    % else:
+        <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
@@ -22,7 +22,7 @@
 </div>
 
 <div class="page-container">
-    % if overview is not None:
+    % if overview:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -35,7 +35,7 @@
                             % include('components/events_list', events=events)
                         </div>
                         % record_systems = {r.system for r in records}
-                        % if overview is not None:
+                        % if overview:
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
@@ -60,23 +60,8 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len(records) == 0:
-                    <div class="placeholder">
-                        <h3>This bus doesn't have any recorded history</h3>
-                        <p>There are a few reasons why that might be the case:</p>
-                        <ol>
-                            <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording bus history</li>
-                            <li>It may not have functional NextRide equipment installed</li>
-                            % model = bus.model
-                            % if model is None or model.type == ModelType.shuttle:
-                                <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
-                            % end
-                        </ol>
-                        <p>Please check again later!</p>
-                    </div>
-                % else:
-                    % if len([r for r in records if len(r.warnings) > 0]) > 0:
+                % if records:
+                    % if [r for r in records if r.warnings]:
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
@@ -136,6 +121,21 @@
                             % end
                         </tbody>
                     </table>
+                % else:
+                    <div class="placeholder">
+                        <h3>This bus doesn't have any recorded history</h3>
+                        <p>There are a few reasons why that might be the case:</p>
+                        <ol>
+                            <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
+                            <li>It may not have been in service since BCTracker started recording bus history</li>
+                            <li>It may not have functional NextRide equipment installed</li>
+                            % model = bus.model
+                            % if model and model.type == ModelType.shuttle:
+                                <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
+                            % end
+                        </ol>
+                        <p>Please check again later!</p>
+                    </div>
                 % end
             </div>
         </div>

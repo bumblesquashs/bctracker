@@ -1,4 +1,4 @@
-% if trip is not None and trip.route is not None:
+% if trip and trip.route:
     <div class="headsign">
         <div class="route-line" style="background-color: #{{ trip.route.colour }}"></div>
         <div>{{ trip }}</div>

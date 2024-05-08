@@ -135,9 +135,9 @@ class DefaultGTFSService(GTFSService):
         if not system.gtfs_enabled:
             return True
         end_dates = [s.schedule.date_range.end for s in system.get_services()]
-        if len(end_dates) == 0:
-            return True
-        return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
+        if end_dates:
+            return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
+        return True
     
     def update_cache_in_background(self, system):
         '''Updates cached data for the given system in a background thread'''

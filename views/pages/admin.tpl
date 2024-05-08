@@ -33,7 +33,24 @@
             </div>
             <div class="content">
                 <div class="container">
-                    % if system is None:
+                    % if system:
+                        <div class="section">
+                            <div class="header" onclick="toggleSection(this)">
+                                <h3>{{ system }}</h3>
+                                % include('components/toggle')
+                            </div>
+                            <div class="content">
+                                <div class="button-container">
+                                    % if system.gtfs_enabled:
+                                        <div class="button" onclick="reloadGTFS('{{ system.id }}')">Reload GTFS</div>
+                                    % end
+                                    % if system.realtime_enabled:
+                                        <div class="button" onclick="reloadRealtime('{{ system.id }}')">Reload Realtime</div>
+                                    % end
+                                </div>
+                            </div>
+                        </div>
+                    % else:
                         % for region in regions:
                             % region_systems = [s for s in systems if s.region == region]
                             <div class="section">
@@ -65,23 +82,6 @@
                                 </div>
                             </div>
                         % end
-                    % else:
-                        <div class="section">
-                            <div class="header" onclick="toggleSection(this)">
-                                <h3>{{ system }}</h3>
-                                % include('components/toggle')
-                            </div>
-                            <div class="content">
-                                <div class="button-container">
-                                    % if system.gtfs_enabled:
-                                        <div class="button" onclick="reloadGTFS('{{ system.id }}')">Reload GTFS</div>
-                                    % end
-                                    % if system.realtime_enabled:
-                                        <div class="button" onclick="reloadRealtime('{{ system.id }}')">Reload Realtime</div>
-                                    % end
-                                </div>
-                            </div>
-                        </div>
                     % end
                 </div>
             </div>
@@ -141,12 +141,12 @@
     }
 </script>
 
-% if system is None:
+% if system:
     <script>
-        systemID = null;
+        systemID = "{{ system.id }}";
     </script>
 % else:
     <script>
-        systemID = "{{ system.id }}"
+        systemID = null;
     </script>
 % end

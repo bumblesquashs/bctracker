@@ -27,18 +27,18 @@
                 
                 <div class="options-container">
                     <div class="option" onclick="setTheme('automatic')">
-                        <div class="radio-button {{ 'selected' if theme is None else '' }}"></div>
+                        <div class="radio-button {{ '' if theme else 'selected' }}"></div>
                         <div>BC Transit (Auto)</div>
                     </div>
                     
                     % for visible_theme in visible_themes:
                         <div class="option" onclick="setTheme('{{ visible_theme.id }}')">
-                            <div class="radio-button {{ 'selected' if theme is not None and visible_theme == theme else '' }}"></div>
+                            <div class="radio-button {{ 'selected' if theme and visible_theme == theme else '' }}"></div>
                             <div>{{ visible_theme }}</div>
                         </div>
                     % end
                     
-                    % if theme is not None and not theme.visible:
+                    % if theme and not theme.visible:
                         <div class="option" onclick="setTheme('{{ theme.id }}')">
                             <div class="radio-button selected"></div>
                             <div>{{ theme }}</div>
@@ -46,7 +46,7 @@
                     % end
                 </div>
                 
-                % if len(hidden_themes) > 0:
+                % if hidden_themes:
                     <!-- Well well well... are you really so desperate for new themes that you'll willing to dig into the source code to find more? -->
                     <!-- I suppose you'll have to be rewarded for your efforts. Here's a list of secret themes that are available: -->
                     % for hidden_theme in hidden_themes:
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="option" onclick="setTimeFormat('30hr')">
-                        <div class="radio-button {{ 'selected' if time_format is None or time_format == '24hr' or time_format == '30hr' else '' }}"></div>
+                        <div class="radio-button {{ 'selected' if not time_format or time_format == '24hr' or time_format == '30hr' else '' }}"></div>
                         <div class="column">
                             <p>30hr</p>
                             <p class="smaller-font lighter-text">Continues increasing the hour beyond a normal 24 hour clock, so 1am is shown as 25:00</p>
@@ -97,7 +97,7 @@
                 <p>Choose a style for bus icons shown on the map screen.</p>
                 <div class="options-container">
                     <div class="option" onclick="setBusMarkerStyle('default')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style is None or bus_marker_style == 'default' else '' }}"></div>
+                        <div class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
                         <div>Default</div>
                     </div>
                     <div class="option" onclick="setBusMarkerStyle('mini')">

@@ -5,7 +5,7 @@
 	% available_systems = systems
 % end
 
-% available_systems = [s for s in available_systems if system is None or s != system]
+% available_systems = [s for s in available_systems if not system or s != system]
 
 <table>
 	<thead>
@@ -14,14 +14,14 @@
 		</tr>
 	</thead>
 	<tbody>
-		% if system is not None:
+		% if system:
 			<td>
 				<a href="{{ get_url(None, path) }}">All Systems</a>
 			</td>
 		% end
 		% for region in regions:
 			% region_systems = [s for s in available_systems if s.region == region]
-			% if len(region_systems) > 0:
+			% if region_systems:
 				<tr class="header">
 					<td>{{ region }}</td>
 				</tr>
