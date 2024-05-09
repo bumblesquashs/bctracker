@@ -1,4 +1,4 @@
 
-% import utils
+% import helpers
 
-{{! utils.svg_string(name) }}
+{{! helpers.svg_string(name) }}

@@ -5,7 +5,7 @@ from models.bus import Bus
 from models.date import Date
 from models.record import Record
 
-from services import AgencyService, SystemService
+from repositories import AgencyRepository, SystemRepository
 
 class Overview:
     '''An overview of a bus' history'''
@@ -23,17 +23,17 @@ class Overview:
     @classmethod
     def from_db(cls, row, prefix='overview', **kwargs):
         '''Returns an overview initialized from the given database row'''
-        agency_service = kwargs.get('agency_service') or di[AgencyService]
-        system_service = kwargs.get('system_service') or di[SystemService]
-        agency = agency_service.find('bc-transit')
+        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        agency = agency_repository.find('bc-transit')
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        first_seen_system = system_service.find(row[f'{prefix}_first_seen_system_id'])
+        first_seen_system = system_repository.find(row[f'{prefix}_first_seen_system_id'])
         first_seen_date = Date.parse(row[f'{prefix}_first_seen_date'], first_seen_system.timezone)
         if row[f'{prefix}_first_record_id'] is None:
             first_record = None
         else:
             first_record = Record.from_db(row, prefix=f'{prefix}_first_record')
-        last_seen_system = system_service.find(row[f'{prefix}_last_seen_system_id'])
+        last_seen_system = system_repository.find(row[f'{prefix}_last_seen_system_id'])
         last_seen_date = Date.parse(row[f'{prefix}_last_seen_date'], last_seen_system.timezone)
         if row[f'{prefix}_last_record_id'] is None:
             last_record = None

@@ -1,6 +1,6 @@
 
-% import utils
+% import helpers
 
 <script>
-    svgs["{{ name }}"] = "{{! utils.svg_string(name).replace('\n', '') }}";
+    svgs["{{ name }}"] = "{{! helpers.svg_string(name).replace('\n', '') }}";
 </script>

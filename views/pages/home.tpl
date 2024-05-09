@@ -1,5 +1,5 @@
 
-% from services import PositionService
+% from repositories import PositionRepository
 
 % rebase('base')
 
@@ -140,7 +140,7 @@
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = di[PositionService].find(value)
+                                                    % position = di[PositionRepository].find(value)
                                                     <tr>
                                                         <td>
                                                             <div class="row">

@@ -5,7 +5,7 @@ from di import di
 
 from models.time import Time
 
-from services import DepartureService
+from repositories import DepartureRepository
 
 MINIMUM_MINUTES = 4
 
@@ -21,8 +21,8 @@ class Adherence:
     @classmethod
     def calculate(cls, trip, stop, sequence, lat, lon, **kwargs):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure_service = kwargs.get('departure_service') or di[DepartureService]
-        departure = departure_service.find(trip.system, trip=trip, sequence=sequence)
+        departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        departure = departure_repository.find(trip.system, trip=trip, sequence=sequence)
         if not departure:
             return None
         previous_departure = departure.find_previous()

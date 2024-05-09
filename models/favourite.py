@@ -3,7 +3,7 @@ from di import di
 
 from models.bus import Bus
 
-from services import RouteService, StopService
+from repositories import RouteRepository, StopRepository
 
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
@@ -21,11 +21,11 @@ class Favourite:
         if type == 'vehicle':
             value = Bus.find(parts[1], int(parts[2]))
         elif type == 'route':
-            route_service = kwargs.get('route_service') or di[RouteService]
-            value = route_service.find(parts[1], number=parts[2])
+            route_repository = kwargs.get('route_repository') or di[RouteRepository]
+            value = route_repository.find(parts[1], number=parts[2])
         elif type == 'stop':
-            stop_service = kwargs.get('stop_service') or di[StopService]
-            value = stop_service.find(parts[1], number=parts[2])
+            stop_repository = kwargs.get('stop_repository') or di[StopRepository]
+            value = stop_repository.find(parts[1], number=parts[2])
         else:
             value = None
         if value:

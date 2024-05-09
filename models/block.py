@@ -5,13 +5,13 @@ from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
-from services import DepartureService
+from repositories import DepartureRepository
 
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
     __slots__ = (
-        'departure_service',
+        'departure_repository',
         'system',
         'id',
         'trips',
@@ -39,7 +39,7 @@ class Block:
         
         self._related_blocks = None
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.id == other.id
@@ -115,4 +115,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return self.departure_service.find_all(self.system, block=self)
+        return self.departure_repository.find_all(self.system, block=self)
