@@ -385,6 +385,8 @@ class Server(Bottle):
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
+        group_by = self.query_cookie('group_by', 'none')
+        sort_by = self.query_cookie('sort_by', 'bus_number')
         return self.page(
             name='realtime/all',
             title='Realtime',
@@ -392,7 +394,9 @@ class Server(Bottle):
             system=system,
             agency=agency,
             positions=positions,
-            show_nis=show_nis
+            show_nis=show_nis,
+            group_by=group_by,
+            sort_by=sort_by
         )
     
     def realtime_routes(self, system, agency):
