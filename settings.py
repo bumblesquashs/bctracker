@@ -1,5 +1,5 @@
 
-class Config:
+class Settings:
     
     __slots__ = (
         'cron_id',
@@ -16,25 +16,25 @@ class Config:
     )
     
     def __init__(self):
-        # Basic config
+        # Basic settings
         self.cron_id = None
         self.admin_key = None
-
-        # Domain config
+        
+        # Domain settings
         self.all_systems_domain = None
         self.system_domain = None
         self.system_domain_path = None
         self.cookie_domain = None
-
-        # Key config
+        
+        # Key settings
         self.analytics_key = None
-
-        # Functionality config
+        
+        # Functionality settings
         self.enable_analytics = True
         self.enable_gtfs_backups = True
         self.enable_realtime_backups = True
         self.enable_database_backups = True
-
+    
     def setup(self, config):
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
         self.admin_key = config.get('admin_key')

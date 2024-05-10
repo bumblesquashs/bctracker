@@ -1,13 +1,13 @@
 <html>
     <head>
-        % if config.enable_analytics:
+        % if settings.enable_analytics:
             <!-- Google tag (gtag.js) -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.analytics_key }}"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.analytics_key }}"></script>
             <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag("js", new Date());
-                gtag("config", "{{ config.analytics_key }}");
+                gtag("config", "{{ settings.analytics_key }}");
             </script>
         % end
         
@@ -128,17 +128,17 @@
             
             function getUrl(systemID, path) {
                 if (systemID === null || systemID === undefined) {
-                    return "{{ config.all_systems_domain }}".format(path)
+                    return "{{ settings.all_systems_domain }}".format(path)
                 }
-                return "{{ config.system_domain if system else config.system_domain_path }}".format(systemID, path)
+                return "{{ settings.system_domain if system else settings.system_domain_path }}".format(systemID, path)
             }
             
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
-                if ("{{ config.cookie_domain }}" == "None") {
+                if ("{{ settings.cookie_domain }}" == "None") {
                     document.cookie = key + "=" + value + "; max_age=" + max_age + "; path=/";
                 } else {
-                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ config.cookie_domain }}; path=/";
+                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ settings.cookie_domain }}; path=/";
                 }
             }
             
@@ -153,7 +153,7 @@
                 const expireTime = now.getTime() + 1000 * 60 * 60 * 24 * 60;
                 now.setTime(expireTime);
                 
-                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ config.cookie_domain if config.cookie_domain else '' }};path=/";
+                document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ settings.cookie_domain if settings.cookie_domain else '' }};path=/";
             }
             
             function toggleSection(header) {

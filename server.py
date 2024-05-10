@@ -6,8 +6,8 @@ from datetime import timedelta
 import cherrypy as cp
 
 from di import di
-from config import Config
 from database import Database
+from settings import Settings
 
 from models.bus import Bus
 from models.date import Date
@@ -23,8 +23,8 @@ VERSION = 39
 class Server(Bottle):
     
     __slots__ = (
-        'config',
         'database',
+        'settings',
         'adornment_repository',
         'agency_repository',
         'assignment_repository',
@@ -44,12 +44,12 @@ class Server(Bottle):
         'running'
     )
     
-    def __init__(self, config: Config, database: Database, **kwargs):
+    def __init__(self, database: Database, settings: Settings, **kwargs):
         super().__init__()
         self.running = False
         
-        self.config = config
         self.database = database
+        self.settings = settings
         
         self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
         self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
@@ -145,7 +145,7 @@ class Server(Bottle):
         self.running = True
         
         cp.config.update('server.conf')
-        self.config.setup(cp.config)
+        self.settings.setup(cp.config)
         
         self.database.connect()
             
@@ -195,9 +195,9 @@ class Server(Bottle):
         '''Returns a URL formatted based on the given system and path'''
         system_id = getattr(system, 'id', system)
         if system_id:
-            url = self.config.system_domain.format(system_id, path).rstrip('/')
+            url = self.settings.system_domain.format(system_id, path).rstrip('/')
         else:
-            url = self.config.all_systems_domain.format(path).rstrip('/')
+            url = self.settings.all_systems_domain.format(path).rstrip('/')
         query_args = {k:v for k, v in kwargs.items() if v is not None}
         if query_args:
             query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
@@ -206,7 +206,7 @@ class Server(Bottle):
     
     def validate_admin(self):
         '''Checks if the admin key in the query/cookie matches the expected admin key'''
-        return not self.config.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.config.admin_key
+        return not self.settings.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.settings.admin_key
     
     def page(self, name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
         '''Returns an HTML page with the given name and details'''
@@ -222,7 +222,7 @@ class Server(Bottle):
             last_updated = self.realtime_service.get_last_updated(time_format)
         return template(f'pages/{name}',
             di=di,
-            config=self.config,
+            settings=self.settings,
             version=VERSION,
             title=title,
             path=path,
@@ -272,8 +272,8 @@ class Server(Bottle):
     def set_cookie(self, key, value, max_age_days=3650):
         '''Creates a cookie using the given key and value'''
         max_age = 60 * 60 * 24 * max_age_days
-        if self.config.cookie_domain:
-            response.set_cookie(key, value, max_age=max_age, domain=self.config.cookie_domain, path='/')
+        if self.settings.cookie_domain:
+            response.set_cookie(key, value, max_age=max_age, domain=self.settings.cookie_domain, path='/')
         else:
             response.set_cookie(key, value, max_age=max_age, path='/')
     
@@ -1355,6 +1355,7 @@ class Server(Bottle):
         )
     
     def error_500(self, error):
+        print('1', flush=True)
         return self.error_page(
             name='500',
             title='Internal Error',
