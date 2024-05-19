@@ -136,9 +136,9 @@
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
                 if ("{{ settings.cookie_domain }}" == "None") {
-                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; path=/";
+                    document.cookie = key + "=" + value + "; max-age=" + max_age + "; path=/";
                 } else {
-                    document.cookie = key + "=" + value + "; max_age=" + max_age + "; domain={{ settings.cookie_domain }}; path=/";
+                    document.cookie = key + "=" + value + "; max-age=" + max_age + "; domain={{ settings.cookie_domain }}; path=/";
                 }
             }
             
