@@ -19,7 +19,7 @@
                     <li class="event">
                         <div class="column gap-0">
                             <div>{{ event.name }}</div>
-                            % if event.description is not None:
+                            % if event.description:
                                 <div class="smaller-font lighter-text">{{ event.description }}</div>
                             % end
                         </div>

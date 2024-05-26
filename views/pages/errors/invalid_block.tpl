@@ -12,8 +12,8 @@
         <ol>
             <li>It may be from an older sheet that is no longer active</li>
             <li>It may be the wrong ID - are you sure block <b>{{ block_id }}</b> is the one you want?</li>
-            % alt_systems = [s for s in systems if s.get_block(block_id) is not None]
-            % if len(alt_systems) > 0:
+            % alt_systems = [s for s in systems if s.get_block(block_id)]
+            % if alt_systems:
                 <li>
                     It may be from a different system - the following systems have a block with that ID
                     <ul>

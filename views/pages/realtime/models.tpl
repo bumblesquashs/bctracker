@@ -6,7 +6,7 @@
     <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
-        % if system is not None:
+        % if system:
             <a href="{{ get_url(system, 'realtime/routes') }}" class="tab-button">By Route</a>
         % end
         <span class="tab-button current">By Model</span>
@@ -27,39 +27,8 @@
     </div>
 </div>
 
-% if len(positions) == 0:
-    <div class="placeholder">
-        % if system is None:
-            % if show_nis:
-                <h3>There are no buses out right now</h3>
-                <p>
-                    BC Transit does not have late night service, so this should be the case overnight.
-                    If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
-                </p>
-                <p>Please check again later!</p>
-            % else:
-                <h3>There are no buses in service right now</h3>
-                <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
-            % end
-        % elif not system.realtime_enabled:
-            <h3>{{ system }} does not support realtime</h3>
-            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
-            <div class="non-desktop">
-                % include('components/systems')
-            </div>
-        % elif not system.realtime_loaded:
-            <h3>Realtime information for {{ system }} is unavailable</h3>
-            <p>System data is currently loading and will be available soon.</p>
-        % elif not show_nis:
-            <h3>There are no buses in service in {{ system }} right now</h3>
-            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
-        % else:
-            <h3>There are no buses out in {{ system }} right now</h3>
-            <p>Please check again later!</p>
-        % end
-    </div>
-% else:
-    % models = sorted({p.bus.model for p in positions if p.bus.model is not None})
+% if positions:
+    % models = sorted({p.bus.model for p in positions if p.bus.model})
     % model_types = sorted({m.type for m in models})
     <div class="page-container">
         <div class="sidebar container flex-1">
@@ -81,11 +50,11 @@
                         </thead>
                         <tbody>
                             % for type in model_types:
-                                % type_positions = [p for p in positions if p.bus.model is not None and p.bus.model.type == type]
+                                % type_positions = [p for p in positions if p.bus.model and p.bus.model.type == type]
                                 <tr class="header">
                                     <td>{{ type }}</td>
                                     % if show_nis:
-                                        <td class="align-right">{{ len([p for p in type_positions if p.trip is not None]) }}</td>
+                                        <td class="align-right">{{ len([p for p in type_positions if p.trip]) }}</td>
                                     % end
                                     <td class="align-right">{{ len(type_positions) }}</td>
                                 </tr>
@@ -96,7 +65,7 @@
                                     <tr>
                                         <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                         % if show_nis:
-                                            <td class="align-right">{{ len([p for p in model_positions if p.trip is not None]) }}</td>
+                                            <td class="align-right">{{ len([p for p in model_positions if p.trip]) }}</td>
                                         % end
                                         <td class="align-right">{{ len(model_positions) }}</td>
                                     </tr>
@@ -105,7 +74,7 @@
                             <tr class="header">
                                 <td>Total</td>
                                 % if show_nis:
-                                    <td class="align-right">{{ len([p for p in positions if p.trip is not None]) }}</td>
+                                    <td class="align-right">{{ len([p for p in positions if p.trip]) }}</td>
                                 % end
                                 <td class="align-right">{{ len(positions) }}</td>
                             </tr>
@@ -125,7 +94,7 @@
                     <div class="content">
                         <div class="container">
                             % for model in type_models:
-                                % model_positions = sorted([p for p in positions if p.bus.model is not None and p.bus.model == model])
+                                % model_positions = sorted([p for p in positions if p.bus.model and p.bus.model == model])
                                 % model_years = sorted({p.bus.order.year for p in model_positions})
                                 <div id="{{ model.id }}" class="section">
                                     <div class="header" onclick="toggleSection(this)">
@@ -137,7 +106,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Bus</th>
-                                                    % if system is None:
+                                                    % if not system:
                                                         <th class="desktop-only">System</th>
                                                     % end
                                                     <th>Headsign</th>
@@ -172,8 +141,8 @@
                 </div>
             % end
             
-            % unknown_positions = sorted([p for p in positions if p.bus.order is None])
-            % if len(unknown_positions) > 0:
+            % unknown_positions = sorted([p for p in positions if not p.bus.order])
+            % if unknown_positions:
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         <h2>Unknown Year/Model</h2>
@@ -184,7 +153,7 @@
                             <thead>
                                 <tr>
                                     <th>Bus</th>
-                                    % if system is None:
+                                    % if not system:
                                         <th class="desktop-only">System</th>
                                     % end
                                     <th>Headsign</th>
@@ -206,6 +175,37 @@
     </div>
 
     % include('components/top_button')
+% else:
+    <div class="placeholder">
+        % if not system:
+            % if show_nis:
+                <h3>There are no buses out right now</h3>
+                <p>
+                    BC Transit does not have late night service, so this should be the case overnight.
+                    If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                </p>
+                <p>Please check again later!</p>
+            % else:
+                <h3>There are no buses in service right now</h3>
+                <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+            % end
+        % elif not system.realtime_enabled:
+            <h3>{{ system }} does not support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % elif not system.realtime_loaded:
+            <h3>Realtime information for {{ system }} is unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % elif not show_nis:
+            <h3>There are no buses in service in {{ system }} right now</h3>
+            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+        % else:
+            <h3>There are no buses out in {{ system }} right now</h3>
+            <p>Please check again later!</p>
+        % end
+    </div>
 % end
 
 <script>

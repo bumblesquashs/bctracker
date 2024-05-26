@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">In Service:</span>
-                                    {{ len([p for p in positions if p.trip is not None]) }}
+                                    {{ len([p for p in positions if p.trip]) }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Seen:</span>
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Tracked:</span>
-                                    {{ len([o for o in overviews if o.last_record is not None]) }}
+                                    {{ len([o for o in overviews if o.last_record]) }}
                                 </div>
                             % end
                             % if region_system.gtfs_enabled and region_system.gtfs_loaded:
@@ -78,9 +78,9 @@
                     % if region_system.realtime_enabled:
                         % if region_system.realtime_loaded:
                             <td class="desktop-only align-right">{{ len(positions) }}</td>
-                            <td class="desktop-only align-right">{{ len([p for p in positions if p.trip is not None]) }}</td>
+                            <td class="desktop-only align-right">{{ len([p for p in positions if p.trip]) }}</td>
                             <td class="desktop-only align-right">{{ len(overviews) }}</td>
-                            <td class="desktop-only align-right">{{ len([o for o in overviews if o.last_record is not None]) }}</td>
+                            <td class="desktop-only align-right">{{ len([o for o in overviews if o.last_record]) }}</td>
                         % else:
                             <td class="lighter-text desktop-only" colspan="4">Data is loading</td>
                         % end

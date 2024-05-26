@@ -67,7 +67,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % models = sorted({o.bus.model for o in overviews if o.bus.model is not None})
+                    % models = sorted({o.bus.model for o in overviews if o.bus.model})
                     % model_types = sorted({m.type for m in models})
                     <table>
                         <thead>
@@ -78,7 +78,7 @@
                         </thead>
                         <tbody>
                             % for model_type in model_types:
-                                % type_overviews = [o for o in overviews if o.bus.model is not None and o.bus.model.type == model_type]
+                                % type_overviews = [o for o in overviews if o.bus.model and o.bus.model.type == model_type]
                                 <tr class="header">
                                     <td>{{ model_type }}</td>
                                     <td class="align-right">{{ len(type_overviews) }}</td>
@@ -111,40 +111,16 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len(overviews) == 0:
-                    <div class="placeholder">
-                        % if system is None:
-                            % if days:
-                                <h3>No vehicle history found for selected date range</h3>
-                                <p>Please choose a different date range or check again later!</p>
-                            % else:
-                                <h3>No vehicle history found</h3>
-                                <p>Something has probably gone terribly wrong if you're seeing this.</p>
-                            % end
-                        % elif not system.realtime_enabled:
-                            <h3>{{ system }} does not currently support realtime</h3>
-                            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
-                            <div class="non-desktop">
-                                % include('components/systems')
-                            </div>
-                        % elif days:
-                            <h3>No buses have been recorded in {{ system }} for the selected date range</h3>
-                            <p>Please choose a different date range or check again later!</p>
-                        % else:
-                            <h3>No buses have been recorded in {{ system }}</h3>
-                            <p>Please check again later!</p>
-                        % end
-                    </div>
-                % else:
-                    % known_overviews = [o for o in overviews if o.bus.order is not None]
-                    % unknown_overviews = [o for o in overviews if o.bus.order is None]
+                % if overviews:
+                    % known_overviews = [o for o in overviews if o.bus.order]
+                    % unknown_overviews = [o for o in overviews if not o.bus.order]
                     % orders = sorted({o.bus.order for o in known_overviews})
                     <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>
                                 <th>Last Seen</th>
-                                % if system is None:
+                                % if not system:
                                     <th class="non-mobile">System</th>
                                 % end
                                 <th>Block</th>
@@ -152,7 +128,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            % if len(unknown_overviews) > 0:
+                            % if unknown_overviews:
                                 <tr class="header">
                                     <td colspan="5">
                                         <div class="row space-between">
@@ -173,12 +149,12 @@
                                         <td class="non-desktop">
                                             <div class="column">
                                                 {{ record.date.format_short() }}
-                                                % if system is None:
+                                                % if not system:
                                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
                                                 % end
                                             </div>
                                         </td>
-                                        % if system is None:
+                                        % if not system:
                                             <td class="non-mobile">{{ record.system }}</td>
                                         % end
                                         <td>
@@ -222,12 +198,12 @@
                                         <td class="non-desktop">
                                             <div class="column">
                                                 {{ record.date.format_short() }}
-                                                % if system is None:
+                                                % if not system:
                                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
                                                 % end
                                             </div>
                                         </td>
-                                        % if system is None:
+                                        % if not system:
                                             <td class="non-mobile">{{ record.system }}</td>
                                         % end
                                         <td>
@@ -253,6 +229,30 @@
                     </table>
         
                     % include('components/top_button')
+                % else:
+                    <div class="placeholder">
+                        % if not system:
+                            % if days:
+                                <h3>No vehicle history found for selected date range</h3>
+                                <p>Please choose a different date range or check again later!</p>
+                            % else:
+                                <h3>No vehicle history found</h3>
+                                <p>Something has probably gone terribly wrong if you're seeing this.</p>
+                            % end
+                        % elif not system.realtime_enabled:
+                            <h3>{{ system }} does not currently support realtime</h3>
+                            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+                            <div class="non-desktop">
+                                % include('components/systems')
+                            </div>
+                        % elif days:
+                            <h3>No buses have been recorded in {{ system }} for the selected date range</h3>
+                            <p>Please choose a different date range or check again later!</p>
+                        % else:
+                            <h3>No buses have been recorded in {{ system }}</h3>
+                            <p>Please check again later!</p>
+                        % end
+                    </div>
                 % end
             </div>
         </div>

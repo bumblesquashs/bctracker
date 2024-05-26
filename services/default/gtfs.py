@@ -9,7 +9,7 @@ import csv
 import requests
 
 from di import di
-from config import Config
+from settings import Settings
 
 from models.block import Block
 from models.date import Date
@@ -23,7 +23,7 @@ from services import GTFSService
 class DefaultGTFSService(GTFSService):
     
     __slots__ = (
-        'config',
+        'settings',
         'departure_repository',
         'point_repository',
         'route_repository',
@@ -31,8 +31,8 @@ class DefaultGTFSService(GTFSService):
         'trip_repository'
     )
     
-    def __init__(self, config: Config, **kwargs):
-        self.config = config
+    def __init__(self, settings: Settings, **kwargs):
+        self.settings = settings
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
         self.point_repository = kwargs.get('point_repository') or di[PointRepository]
         self.route_repository = kwargs.get('route_repository') or di[RouteRepository]
@@ -95,7 +95,7 @@ class DefaultGTFSService(GTFSService):
         print(f'Downloading GTFS data for {system}')
         try:
             if path.exists(data_zip_path):
-                if self.config.enable_gtfs_backups:
+                if self.settings.enable_gtfs_backups:
                     formatted_date = datetime.now().strftime('%Y-%m-%d')
                     archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
                     rename(data_zip_path, archives_path)
@@ -137,9 +137,9 @@ class DefaultGTFSService(GTFSService):
         if not system.gtfs_enabled:
             return True
         end_dates = [s.schedule.date_range.end for s in system.get_services()]
-        if len(end_dates) == 0:
-            return True
-        return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
+        if end_dates:
+            return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
+        return True
     
     def update_cache_in_background(self, system):
         '''Updates cached data for the given system in a background thread'''

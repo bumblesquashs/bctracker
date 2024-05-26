@@ -33,8 +33,8 @@
     const area = new Area();
 </script>
 
-% map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip is not None else [])
-% map_trips = sorted([t for t in map_trips if t.route is not None], key=lambda t: t.route, reverse=True)
+% map_trips = get('map_trips', [map_trip] if defined('map_trip') and map_trip else [])
+% map_trips = sorted([t for t in map_trips if t.route], key=lambda t: t.route, reverse=True)
 % shape_ids = set()
 % shape_trips = []
 % for trip in map_trips:
@@ -43,7 +43,7 @@
         % shape_trips.append(trip)
     % end
 % end
-% if len(shape_trips) > 0:
+% if shape_trips:
     <script>
         const trips = JSON.parse('{{! json.dumps([t.get_json() for t in shape_trips]) }}');
         
@@ -78,8 +78,8 @@
     </script>
 % end
 
-% map_positions = get('map_positions', [map_position] if defined('map_position') and map_position is not None else [])
-% if len(map_positions) > 0:
+% map_positions = get('map_positions', [map_position] if defined('map_position') and map_position else [])
+% if map_positions:
     % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
@@ -223,8 +223,8 @@
     </script>
 % end
 
-% map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop is not None else [])
-% if len(map_stops) > 0:
+% map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop else [])
+% if map_stops:
     % map_stops.sort(key=lambda s: s.lat)
     <script>
         const stops = JSON.parse('{{! json.dumps([s.get_json() for s in map_stops]) }}');
@@ -273,8 +273,8 @@
     </script>
 % end
 
-% map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure is not None else [])
-% map_departures = sorted([d for d in map_departures if d.trip is not None and d.trip.route is not None], key=lambda d: d.trip.route)
+% map_departures = get('map_departures', [map_departure] if defined('map_departure') and map_departure else [])
+% map_departures = sorted([d for d in map_departures if d.trip and d.trip.route], key=lambda d: d.trip.route)
 % stop_ids = set()
 % stop_departures = []
 % for departure in map_departures:
@@ -283,7 +283,7 @@
         % stop_departures.append(departure)
     % end
 % end
-% if len(stop_departures) > 0:
+% if stop_departures:
     % stop_departures.sort(key=lambda d:d.stop.lat)
     <script>
         const departures = JSON.parse('{{! json.dumps([d.get_json() for d in stop_departures]) }}');

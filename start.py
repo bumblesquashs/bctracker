@@ -4,8 +4,8 @@ import signal
 from argparse import ArgumentParser
 
 from di import di
-from config import Config
 from database import Database
+from settings import Settings
 from server import Server
 
 from repositories import *
@@ -21,8 +21,8 @@ if __name__ == '__main__':
     parser.add_argument('--updatedb', '-u', action='store_true', help='Updates GTFS in the database with CSV data')
     parser.add_argument('--debug', '-d', action='store_true', help='Prevent page caching and show additional error info')
     
-    config = Config()
     database = Database()
+    settings = Settings()
     
     di[AdornmentRepository] = FileAdornmentRepository()
     di[AgencyRepository] = FileAgencyRepository()
@@ -43,12 +43,12 @@ if __name__ == '__main__':
     di[TransferRepository] = SQLTransferRepository(database)
     di[TripRepository] = SQLTripRepository(database)
     
-    di[BackupService] = DefaultBackupService(config, database)
-    di[GTFSService] = DefaultGTFSService(config)
-    di[RealtimeService] = DefaultRealtimeService(config, database)
-    di[CronService] = DefaultCronService(config, database)
+    di[BackupService] = DefaultBackupService(database, settings)
+    di[GTFSService] = DefaultGTFSService(settings)
+    di[RealtimeService] = DefaultRealtimeService(database, settings)
+    di[CronService] = DefaultCronService(database, settings)
     
-    server = Server(config, database)
+    server = Server(database, settings)
     
     def exit(sig, frame):
         server.stop()

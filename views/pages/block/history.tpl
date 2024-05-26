@@ -12,7 +12,7 @@
 
 % if system.realtime_enabled:
     <div class="page-container">
-        % if len(records) > 0:
+        % if records:
             <div class="sidebar container flex-1">
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
@@ -25,7 +25,7 @@
                                 % include('components/events_list', events=events)
                             </div>
                             <div class="column section">
-                                % orders = sorted({r.bus.order for r in records if r.bus.order is not None})
+                                % orders = sorted({r.bus.order for r in records if r.bus.order})
                                 % for order in orders:
                                     % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
                                     <div class="row space-between">
@@ -47,19 +47,8 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % if len(records) == 0:
-                        <div class="placeholder">
-                            <h3>This block doesn't have any recorded history</h3>
-                            <p>There are a few reasons why that might be the case:</p>
-                            <ol>
-                                <li>It may be a new block introduced in the last service change</li>
-                                <li>It may not be operating due to driver or vehicle shortages</li>
-                                <li>It may have only been done by buses without functional NextRide equipment installed</li>
-                            </ol>
-                            <p>Please check again later!</p>
-                        </div>
-                    % else:
-                        % if len([r for r in records if len(r.warnings) > 0]) > 0:
+                    % if records:
+                        % if [r for r in records if r.warnings]:
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">
@@ -104,6 +93,17 @@
                                 % end
                             </tbody>
                         </table>
+                    % else:
+                        <div class="placeholder">
+                            <h3>This block doesn't have any recorded history</h3>
+                            <p>There are a few reasons why that might be the case:</p>
+                            <ol>
+                                <li>It may be a new block introduced in the last service change</li>
+                                <li>It may not be operating due to driver or vehicle shortages</li>
+                                <li>It may have only been done by buses without functional NextRide equipment installed</li>
+                            </ol>
+                            <p>Please check again later!</p>
+                        </div>
                     % end
                 </div>
             </div>

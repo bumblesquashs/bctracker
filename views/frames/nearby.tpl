@@ -6,21 +6,10 @@
 
 % from models.date import Date
 
-% if len(stops) == 0:
-    <div class="section">
-        <div class="placeholder">
-            <h3>No stops nearby</h3>
-            % if system.gtfs_loaded:
-                <p>You're gonna have to walk!</p>
-            % else:
-                <p>System data is currently loading and will be available soon.</p>
-            % end
-        </div>
-    </div>
-% else:
+% if stops:
     % for stop in stops:
         % departures = stop.find_departures(date=Date.today())
-        % routes = {d.trip.route for d in departures if d.trip is not None and d.trip.route is not None}
+        % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
         % trips = [d.trip for d in upcoming_departures]
@@ -36,14 +25,8 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len(upcoming_departures) == 0:
-                    % tomorrow = Date.today() + timedelta(days=1)
-                    <p>
-                        There are no departures for the rest of today.
-                        <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
-                    </p>
-                % else:
-                    % if system is None or system.realtime_enabled:
+                % if upcoming_departures:
+                    % if not system or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
                             <span class="scheduled">
@@ -56,7 +39,7 @@
                         <thead>
                             <tr>
                                 <th>Time</th>
-                                % if system is None or system.realtime_enabled:
+                                % if not system or system.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
@@ -77,8 +60,25 @@
                             % end
                         </tbody>
                     </table>
+                % else:
+                    % tomorrow = Date.today() + timedelta(days=1)
+                    <p>
+                        There are no departures for the rest of today.
+                        <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                    </p>
                 % end
             </div>
         </div>
     % end
+% else:
+    <div class="section">
+        <div class="placeholder">
+            <h3>No stops nearby</h3>
+            % if system.gtfs_loaded:
+                <p>You're gonna have to walk!</p>
+            % else:
+                <p>System data is currently loading and will be available soon.</p>
+            % end
+        </div>
+    </div>
 % end

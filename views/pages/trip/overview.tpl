@@ -33,23 +33,23 @@
                     </div>
                     <div class="section">
                         % route = trip.route
-                        % if route is None:
-                            <div class="lighter-text">Unknown Route</div>
-                        % else:
+                        % if route:
                             <div class="row">
                                 % include('components/route')
                                 <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
                             </div>
+                        % else:
+                            <div class="lighter-text">Unknown Route</div>
                         % end
                     </div>
                     <div class="row section">
                         % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
-                            % if block is None:
-                                <span class="lighter-text">Loading</span>
-                            % else:
+                            % if block:
                                 <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            % else:
+                                <span class="lighter-text">Loading</span>
                             % end
                         </div>
                     </div>
@@ -91,7 +91,7 @@
         </div>
         
         % related_trips = trip.related_trips
-        % if len(related_trips) > 0:
+        % if related_trips:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Related Trips</h2>
@@ -114,10 +114,10 @@
                                         % include('components/trip', trip=related_trip)
                                     </td>
                                     <td class="non-mobile">
-                                        % if block is None:
-                                            <div class="lighter-text">Unknown</div>
-                                        % else:
+                                        % if block:
                                             <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        % else:
+                                            <div class="lighter-text">Unknown</div>
                                         % end
                                     </td>
                                     <td>
@@ -138,7 +138,7 @@
     </div>
     
     <div class="container flex-3">
-        % if len(positions) > 0:
+        % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     % if len(positions) == 1:
@@ -178,10 +178,10 @@
                                         % include('components/order', order=bus.order)
                                     </td>
                                     <td>
-                                        % if stop is None:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % else:
+                                        % if stop:
                                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % else:
+                                            <span class="lighter-text">Unavailable</span>
                                         % end
                                     </td>
                                 </tr>
@@ -270,7 +270,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len([d for d in departures if d.timepoint]) > 0:
+                % if [d for d in departures if d.timepoint]:
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 <table>

@@ -9,17 +9,15 @@
                 % include('components/bus')
                 % include('components/adherence', adherence=position.adherence)
             </div>
-            % if system is None:
+            % if not system:
                 <span class="non-desktop smaller-font">{{ position.system }}</span>
             % end
         </div>
     </td>
-    % if system is None:
+    % if not system:
         <td class="desktop-only">{{ position.system }}</td>
     % end
-    % if trip is None:
-        <td class="lighter-text" colspan="4">Not in service</td>
-    % else:
+    % if trip:
         % block = trip.block
         % stop = position.stop
         <td>
@@ -29,7 +27,7 @@
                     Trip:
                     % include('components/trip', include_tooltip=False)
                 </div>
-                % if stop is not None:
+                % if stop:
                     <div class="non-desktop smaller-font">
                         Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                     </div>
@@ -43,11 +41,13 @@
             % include('components/trip')
         </td>
         <td class="desktop-only">
-            % if stop is None:
-                <span class="lighter-text">Unavailable</span>
-            % else:
+            % if stop:
                 <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+            % else:
+                <span class="lighter-text">Unavailable</span>
             % end
         </td>
+    % else:
+        <td class="lighter-text" colspan="4">Not in service</td>
     % end
 </tr>

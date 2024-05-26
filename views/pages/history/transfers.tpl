@@ -115,7 +115,7 @@
                             % last_date = None
                             % for transfer in transfers:
                                 % bus = transfer.bus
-                                % same_date = last_date is None or transfer.date == last_date
+                                % same_date = not last_date or transfer.date == last_date
                                 % last_date = transfer.date
                                 <tr class="{{'' if same_date else 'divider'}}">
                                     <td class="desktop-only">{{ transfer.date.format_long() }}</td>
@@ -151,7 +151,7 @@
                     </table>
                 % else:
                     <div class="placeholder">
-                        % if system is None:
+                        % if not system:
                             <h3>No transfers found</h3>
                             <p>Something has probably gone terribly wrong if you're seeing this.</p>
                         % elif not system.realtime_enabled:

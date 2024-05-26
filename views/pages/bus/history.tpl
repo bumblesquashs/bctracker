@@ -9,10 +9,10 @@
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
-    % if bus.order is None:
-        <h2 class="lighter-text">Unknown Year/Model</h2>
-    % else:
+    % if bus.order:
         <h2>{{! bus.order }}</h2>
+    % else:
+        <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
         <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
@@ -22,7 +22,7 @@
 </div>
 
 <div class="page-container">
-    % if overview is not None:
+    % if overview:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -39,7 +39,7 @@
                             <div class="value">{{ total_items }}</div>
                         </div>
                         % record_systems = {r.system for r in records}
-                        % if overview is not None:
+                        % if overview:
                             % record_systems.add(overview.first_seen_system)
                             % record_systems.add(overview.last_seen_system)
                         % end
@@ -82,7 +82,7 @@
                 % else:
                     % if records:
                         % include('components/paging')
-                        % if len([r for r in records if len(r.warnings) > 0]) > 0:
+                        % if [r for r in records if r.warnings]:
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">

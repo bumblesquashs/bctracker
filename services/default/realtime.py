@@ -7,8 +7,8 @@ import requests
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 from di import di
-from config import Config
 from database import Database
+from settings import Settings
 
 from models.date import Date
 from models.time import Time
@@ -19,8 +19,8 @@ from services import RealtimeService
 class DefaultRealtimeService(RealtimeService):
     
     __slots__ = (
-        'config',
         'database',
+        'settings',
         'assignment_repository',
         'overview_repository',
         'position_repository',
@@ -30,9 +30,9 @@ class DefaultRealtimeService(RealtimeService):
         'last_updated_time'
     )
     
-    def __init__(self, config: Config, database: Database, **kwargs):
-        self.config = config
+    def __init__(self, database: Database, settings: Settings, **kwargs):
         self.database = database
+        self.settings = settings
         self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
         self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
         self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
@@ -51,7 +51,7 @@ class DefaultRealtimeService(RealtimeService):
         
         try:
             if path.exists(data_path):
-                if self.config.enable_realtime_backups:
+                if self.settings.enable_realtime_backups:
                     formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
                     archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
                     rename(data_path, archives_path)
@@ -59,7 +59,7 @@ class DefaultRealtimeService(RealtimeService):
                     remove(data_path)
             data = protobuf.FeedMessage()
             with requests.get(system.realtime_url, timeout=10) as r:
-                if self.config.enable_realtime_backups:
+                if self.settings.enable_realtime_backups:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
                 data.ParseFromString(r.content)

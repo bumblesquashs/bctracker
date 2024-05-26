@@ -14,10 +14,10 @@
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
-    % if bus.order is None:
-        <h2 class="lighter-text">Unknown Year/Model</h2>
-    % else:
+    % if bus.order:
         <h2>{{! bus.order }}</h2>
+    % else:
+        <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
@@ -34,7 +34,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if position is None:
+                % if not position:
                     <div class="info-box">
                         <div class="section">
                             <h3>Not in service</h3>
@@ -42,9 +42,7 @@
                         <div class="row section">
                             <div class="name">Last Seen</div>
                             <div class="value">
-                                % if overview is None:
-                                    <div class="lighter-text">Never</div>
-                                % else:
+                                % if overview:
                                     % last_seen = overview.last_seen_date
                                     % if last_seen.is_today:
                                         <div>Today</div>
@@ -52,10 +50,12 @@
                                         <div>{{ last_seen.format_long() }}</div>
                                         <div class="smaller-font">{{ last_seen.format_since() }}</div>
                                     % end
+                                % else:
+                                    <div class="lighter-text">Never</div>
                                 % end
                             </div>
                         </div>
-                        % if overview is not None:
+                        % if overview:
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
@@ -64,7 +64,7 @@
                             </div>
                         % end
                     </div>
-                % elif position.trip is None:
+                % elif not position.trip:
                     % include('components/map', map_position=position)
                     
                     <div class="info-box">
@@ -72,12 +72,12 @@
                             <h3>Not in service</h3>
                         </div>
                         % last_record = overview.last_record
-                        % if last_record is not None and last_record.date.is_today:
+                        % if last_record and last_record.date.is_today:
                             % block = last_record.block
-                            % if block is not None:
+                            % if block:
                                 % date = Date.today(block.system.timezone)
                                 % end_time = block.get_end_time(date=date)
-                                % if end_time is not None and end_time.is_later:
+                                % if end_time and end_time.is_later:
                                     <div class="section no-flex">
                                         % include('components/block_timeline', date=date)
                                     </div>
@@ -153,13 +153,13 @@
                                 <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
                             </div>
                         </div>
-                        % if stop is not None:
+                        % if stop:
                             <div class="row section">
                                 <div class="name">Next Stop</div>
                                 <div class="value">
                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                     % adherence = position.adherence
-                                    % if adherence is not None:
+                                    % if adherence:
                                         <span class="smaller-font">{{ adherence.description }}</span>
                                     % end
                                 </div>
@@ -170,7 +170,7 @@
             </div>
         </div>
         
-        % if bus.order is not None:
+        % if bus.order:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Details</h2>
@@ -187,13 +187,13 @@
                             <div class="name">Vehicle Type</div>
                             <div class="value">{{ model.type }}</div>
                         </div>
-                        % if model.length is not None:
+                        % if model.length:
                             <div class="row section">
                                 <div class="name">Length</div>
                                 <div class="value">{{ model.length }} feet</div>
                             </div>
                         % end
-                        % if model.fuel is not None:
+                        % if model.fuel:
                             <div class="row section">
                                 <div class="name">Fuel Type</div>
                                 <div class="value">{{ model.fuel }}</div>
@@ -206,19 +206,19 @@
     </div>
     
     <div class="container flex-3">
-        % if position is not None:
+        % if position:
             % upcoming_departures = position.find_upcoming_departures()
-            % if len(upcoming_departures) > 0:
+            % if upcoming_departures:
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         <h2>Upcoming Stops</h2>
                         % include('components/toggle')
                     </div>
                     <div class="content">
-                        % if len([d for d in upcoming_departures if d.timepoint]) > 0:
+                        % if [d for d in upcoming_departures if d.timepoint]:
                             <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                         % end
-                        % if position.adherence is not None and position.adherence.value != 0:
+                        % if position.adherence and position.adherence.value != 0:
                             <p>Times in brackets are estimates based on current location.</p>
                         % end
                         <table>
@@ -240,7 +240,7 @@
                                                 <div class="{{ 'timing-point' if departure.timepoint else '' }}">
                                                     {{ departure.time.format_web(time_format) }}
                                                 </div>
-                                                % if position.adherence is not None and position.adherence.value != 0:
+                                                % if position.adherence and position.adherence.value != 0:
                                                     % expected_time = departure.time - timedelta(minutes=position.adherence.value)
                                                     <div class="lighter-text">
                                                         ({{ expected_time.format_web(time_format) }})
@@ -248,9 +248,7 @@
                                                 % end
                                             </div>
                                         </td>
-                                        % if stop is None:
-                                            <td class="lighter-text" colspan="2">Unknown</td>
-                                        % else:
+                                        % if stop:
                                             <td>
                                                 <div class="column">
                                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
@@ -272,6 +270,8 @@
                                                     % end
                                                 </div>
                                             </td>
+                                        % else:
+                                            <td class="lighter-text" colspan="2">Unknown</td>
                                         % end
                                     </tr>
                                 % end
@@ -287,22 +287,8 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len(records) == 0:
-                    <div class="placeholder">
-                        <h3>This bus doesn't have any recorded history</h3>
-                        <p>There are a few reasons why that might be the case:</p>
-                        <ol>
-                            <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording bus history</li>
-                            <li>It may not have functional NextRide equipment installed</li>
-                            % if model is None or model.type == ModelType.shuttle:
-                                <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
-                            % end
-                        </ol>
-                        <p>Please check again later!</p>
-                    </div>
-                % else:
-                    % if len([r for r in records if len(r.warnings) > 0]) > 0:
+                % if records:
+                    % if [r for r in records if r.warnings]:
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
@@ -362,6 +348,20 @@
                             % end
                         </tbody>
                     </table>
+                % else:
+                    <div class="placeholder">
+                        <h3>This bus doesn't have any recorded history</h3>
+                        <p>There are a few reasons why that might be the case:</p>
+                        <ol>
+                            <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
+                            <li>It may not have been in service since BCTracker started recording bus history</li>
+                            <li>It may not have functional NextRide equipment installed</li>
+                            % if model and model.type == ModelType.shuttle:
+                                <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
+                            % end
+                        </ol>
+                        <p>Please check again later!</p>
+                    </div>
                 % end
             </div>
         </div>

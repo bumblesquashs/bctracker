@@ -3,8 +3,8 @@ import signal
 from crontab import CronTab
 
 from di import di
-from config import Config
 from database import Database
+from settings import Settings
 
 from models.date import Date
 from models.time import Time
@@ -16,8 +16,8 @@ from services import BackupService, CronService, GTFSService, RealtimeService
 class DefaultCronService(CronService):
     
     __slots__ = (
-        'config',
         'database',
+        'settings',
         'backup_service',
         'gtfs_service',
         'realtime_service',
@@ -27,9 +27,9 @@ class DefaultCronService(CronService):
         'updating_realtime'
     )
     
-    def __init__(self, config: Config, database: Database, **kwargs):
-        self.config = config
+    def __init__(self, database: Database, settings: Settings, **kwargs):
         self.database = database
+        self.settings = settings
         self.backup_service = kwargs.get('backup_service') or di[BackupService]
         self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
         self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
@@ -45,19 +45,19 @@ class DefaultCronService(CronService):
         self.running = True
         pid = os.getpid()
         with CronTab(user=True) as cron:
-            cron.remove_all(comment=self.config.cron_id)
+            cron.remove_all(comment=self.settings.cron_id)
             
-            gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=self.config.cron_id)
+            gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=self.settings.cron_id)
             gtfs_job.setall('0 4 * * */1')
             
-            realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=self.config.cron_id)
+            realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=self.settings.cron_id)
             realtime_job.minute.every(1)
     
     def stop(self):
         '''Removes all cron jobs'''
         self.running = False
         with CronTab(user=True) as cron:
-            cron.remove_all(comment=self.config.cron_id)
+            cron.remove_all(comment=self.settings.cron_id)
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''

@@ -27,7 +27,14 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if system is None:
+                % if system:
+                    <div id="result" class="container">
+                        <div id="nearby-status" class="loading column">
+                            <div id="status-title">Loading upcoming departures...</div>
+                            <div id="status-message" class="display-none"></div>
+                        </div>
+                    </div>
+                % else:
                     <div class="placeholder">
                         <h3>Choose a system to see nearby stops</h3>
                     </div>
@@ -42,7 +49,7 @@
                         <tbody>
                             % for region in regions:
                                 % region_systems = [s for s in systems if s.region == region]
-                                % if len(region_systems) > 0:
+                                % if region_systems:
                                     <tr class="header">
                                         <td colspan="3">{{ region }}</td>
                                     </tr>
@@ -78,13 +85,6 @@
                             % end
                         </tbody>
                     </table>
-                % else:
-                    <div id="result" class="container">
-                        <div id="nearby-status" class="loading column">
-                            <div id="status-title">Loading upcoming departures...</div>
-                            <div id="status-message" class="display-none"></div>
-                        </div>
-                    </div>
                 % end
             </div>
         </div>

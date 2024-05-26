@@ -330,7 +330,7 @@ class Database:
         if type(filters) is str:
             return filters, []
         elif type(filters) is list or type(filters) is set:
-            if len(filters) > 0:
+            if filters:
                 return f' {operation} '.join(filters), []
         elif type(filters) is dict:
             expressions = []
@@ -358,6 +358,6 @@ class Database:
                 else:
                     args.append(value)
                     expressions.append(f'{key} = ?')
-            if len(expressions) > 0:
+            if expressions:
                 return f' {operation} '.join(expressions), args
         return None, []

@@ -1,4 +1,4 @@
-% if len(record.warnings) > 0:
+% if record.warnings:
     <div class="tooltip-anchor record-warnings">
         % include('components/svg', name='warning')
         <div class="tooltip right">
