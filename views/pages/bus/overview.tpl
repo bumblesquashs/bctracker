@@ -62,6 +62,15 @@
                                     <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
                                 </div>
                             </div>
+                            % yard = overview.yard
+                            % if yard:
+                                <div class="row section">
+                                    <div class="name">Yard</div>
+                                    <div class="value">
+                                        <a href="{{ get_url(yard.system, f'stops/{yard.number}') }}">{{ yard }}</a>
+                                    </div>
+                                </div>
+                            % end
                         % end
                     </div>
                 % elif not position.trip:
@@ -90,6 +99,15 @@
                                 <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
                             </div>
                         </div>
+                        % yard = overview.yard
+                        % if yard:
+                            <div class="row section">
+                                <div class="name">Yard</div>
+                                <div class="value">
+                                    <a href="{{ get_url(yard.system, f'stops/{yard.number}') }}">{{ yard }}</a>
+                                </div>
+                            </div>
+                        % end
                         % if show_speed:
                             <div class="row section">
                                 <div class="name">Speed</div>
@@ -127,6 +145,15 @@
                                 <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
                             </div>
                         </div>
+                        % yard = overview.yard
+                        % if yard:
+                            <div class="row section">
+                                <div class="name">Yard</div>
+                                <div class="value">
+                                    <a href="{{ get_url(yard.system, f'stops/{yard.number}') }}">{{ yard }}</a>
+                                </div>
+                            </div>
+                        % end
                         % if show_speed:
                             <div class="row section">
                                 <div class="name">Speed</div>

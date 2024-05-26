@@ -114,7 +114,7 @@ class DefaultRealtimeService(RealtimeService):
                     else:
                         record_id = None
                     if overview:
-                        self.overview_repository.update(overview, date, system, record_id)
+                        self.overview_repository.update(overview, date, system, record_id, position.stop)
                         if overview.last_seen_system != system:
                             self.transfer_repository.create(bus, date, overview.last_seen_system, system)
                     else:

@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.bus import Bus
 from models.overview import Overview
 
 from repositories import OverviewRepository
@@ -49,6 +50,7 @@ class SQLOverviewRepository(OverviewRepository):
                 'overview.first_seen_system_id': 'overview_first_seen_system_id',
                 'overview.last_seen_date': 'overview_last_seen_date',
                 'overview.last_seen_system_id': 'overview_last_seen_system_id',
+                'overview.yard_number': 'overview_yard_number',
                 'first_record.record_id': 'overview_first_record_id',
                 'first_record.bus_number': 'overview_first_record_bus_number',
                 'first_record.date': 'overview_first_record_date',
@@ -108,7 +110,22 @@ class SQLOverviewRepository(OverviewRepository):
             initializer=lambda r: r['bus_number']
         )
     
-    def update(self, overview, date, system, record):
+    def find_yard_buses(self, system, stop):
+        '''Returns all buses with the given yard'''
+        system_id = getattr(system, 'id', system)
+        stop_number = getattr(stop, 'number', stop)
+        return self.database.select('overview',
+            columns={
+                'overview.bus_number': 'bus_number'
+            },
+            filters={
+                'overview.last_seen_system_id': system_id,
+                'overview.yard_number': stop_number
+            },
+            initializer=lambda r: Bus.find(system.agency, r['bus_number'])
+        )
+    
+    def update(self, overview, date, system, record, stop):
         '''Updates an overview in the database'''
         system_id = getattr(system, 'id', system)
         record_id = getattr(record, 'id', record)
@@ -120,6 +137,8 @@ class SQLOverviewRepository(OverviewRepository):
             if not overview.first_record:
                 values['first_record_id'] = record_id
             values['last_record_id'] = record_id
+        if stop and stop.is_yard:
+            values['yard_number'] = stop.number
         self.database.update('overview', values, {
             'bus_number': overview.bus.number
         })

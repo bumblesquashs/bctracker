@@ -120,7 +120,9 @@
                             <tr>
                                 <th>Bus</th>
                                 <th>Last Seen</th>
-                                % if not system:
+                                % if system:
+                                    <th class="non-mobile">Yard</th>
+                                % else:
                                     <th class="non-mobile">System</th>
                                 % end
                                 <th>Block</th>
@@ -130,7 +132,7 @@
                         <tbody>
                             % if unknown_overviews:
                                 <tr class="header">
-                                    <td colspan="5">
+                                    <td colspan="6">
                                         <div class="row space-between">
                                             <div>Unknown Year/Model</div>
                                             <div>{{ len(unknown_overviews) }}</div>
@@ -154,7 +156,16 @@
                                                 % end
                                             </div>
                                         </td>
-                                        % if not system:
+                                        % if system:
+                                            <td class="non-mobile">
+                                                % yard = overview.yard
+                                                % if yard:
+                                                    <a href="{{ get_url(yard.system, f'/stops/{yard.number}') }}">{{ yard }}</a>
+                                                % else:
+                                                    <span class="lighter-text">Unavailable</span>
+                                                % end
+                                            </td>
+                                        % else:
                                             <td class="non-mobile">{{ record.system }}</td>
                                         % end
                                         <td>
@@ -179,7 +190,7 @@
                             % for order in orders:
                                 % order_overviews = [o for o in known_overviews if o.bus.order == order]
                                 <tr class="header">
-                                    <td colspan="5">
+                                    <td colspan="6">
                                         <div class="row space-between">
                                             <div>{{! order }}</div>
                                             <div>{{ len(order_overviews) }}</div>
@@ -203,7 +214,16 @@
                                                 % end
                                             </div>
                                         </td>
-                                        % if not system:
+                                        % if system:
+                                            <td class="non-mobile">
+                                                % yard = overview.yard
+                                                % if yard:
+                                                    <a href="{{ get_url(yard.system, f'/stops/{yard.number}') }}">{{ yard }}</a>
+                                                % else:
+                                                    <span class="lighter-text">Unavailable</span>
+                                                % end
+                                            </td>
+                                        % else:
                                             <td class="non-mobile">{{ record.system }}</td>
                                         % end
                                         <td>

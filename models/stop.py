@@ -19,7 +19,8 @@ class Stop:
         'number',
         'name',
         'lat',
-        'lon'
+        'lon',
+        'is_yard'
     )
     
     @classmethod
@@ -67,6 +68,8 @@ class Stop:
         self.name = name
         self.lat = lat
         self.lon = lon
+        
+        self.is_yard = self.number in system.yards
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     

@@ -17,7 +17,8 @@ class Overview:
         'first_record',
         'last_seen_date',
         'last_seen_system',
-        'last_record'
+        'last_record',
+        'yard'
     )
     
     @classmethod
@@ -39,9 +40,14 @@ class Overview:
             last_record = None
         else:
             last_record = Record.from_db(row, prefix=f'{prefix}_last_record')
-        return cls(bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record)
+        if last_seen_system:
+            yard_number = row[f'{prefix}_yard_number']
+            yard = last_seen_system.get_stop(number=yard_number)
+        else:
+            yard = None
+        return cls(bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record, yard)
     
-    def __init__(self, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record):
+    def __init__(self, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record, yard):
         self.bus = bus
         self.first_seen_date = first_seen_date
         self.first_seen_system = first_seen_system
@@ -49,3 +55,4 @@ class Overview:
         self.last_seen_date = last_seen_date
         self.last_seen_system = last_seen_system
         self.last_record = last_record
+        self.yard = yard

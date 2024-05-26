@@ -1003,6 +1003,10 @@ class Server(Bottle):
         departures = stop.find_departures(date=Date.today(system.timezone))
         trips = [d.trip for d in departures]
         positions = self.position_repository.find_all(system, trip=trips)
+        if stop.is_yard:
+            buses = self.overview_repository.find_yard_buses(system, stop)
+        else:
+            buses = []
         return self.page(
             name='stop/overview',
             title=f'Stop {stop.number}',
@@ -1014,6 +1018,7 @@ class Server(Bottle):
             recorded_today=self.record_repository.find_recorded_today(system, trips),
             assignments=self.assignment_repository.find_all(system, stop=stop),
             positions={p.trip.id: p for p in positions},
+            buses=buses,
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
         )

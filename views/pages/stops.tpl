@@ -10,63 +10,99 @@
 
 % if system:
     % stops = system.get_stops()
+    % yards = [s for s in stops if s.is_yard]
+    % stops = [s for s in stops if not s.is_yard]
     % if stops or search:
         % if search:
             % stops = [s for s in stops if search.lower() in s.name.lower()]
         % end
-        
-        <script>
-            function stopSearch() {
-                let value = document.getElementById('stop_id_search').value;
-                if (value.length > 0) {
-                    window.location = "{{ get_url(system) }}/stops?search=" + value;
-                } else {
-                    window.location = "{{ get_url(system) }}/stops";
-                }
-            }
-        </script>
-        
-        <form onsubmit="stopSearch()" action="javascript:void(0)">
-            <label for="stop_id_search">Stop Name:</label>
-            <div class="input-container">
-                <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}" size="10">
-                <input type="submit" value="Search" class="button">
+        <div class="container">
+            <div class="section">
+                <div class="content">
+                    <script>
+                        function stopSearch() {
+                            let value = document.getElementById('stop_id_search').value;
+                            if (value.length > 0) {
+                                window.location = "{{ get_url(system) }}/stops?search=" + value;
+                            } else {
+                                window.location = "{{ get_url(system) }}/stops";
+                            }
+                        }
+                    </script>
+                    
+                    <form onsubmit="stopSearch()" action="javascript:void(0)">
+                        <label for="stop_id_search">Stop Name:</label>
+                        <div class="input-container">
+                            <input type="text" id="stop_id_search" name="stop_id" method="post" value="{{ search or '' }}" size="10">
+                            <input type="submit" value="Search" class="button">
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
-        
-        % if stops:
-            <table>
-                <thead>
-                    <tr>
-                        <th class="desktop-only">Stop Number</th>
-                        <th class="non-desktop">Number</th>
-                        <th class="desktop-only">Stop Name</th>
-                        <th class="non-desktop">Name</th>
-                        <th class="non-mobile">Routes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    % for stop in sorted(stops):
-                        <tr>
-                            <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
-                            <td>
-                                {{ stop }}
-                                <div class="mobile-only">
-                                    % include('components/route_list', routes=stop.routes)
-                                </div>
-                            </td>
-                            <td class="non-mobile">
-                                % include('components/route_list', routes=stop.routes)
-                            </td>
-                        </tr>
+            % if yards:
+                <div class="section">
+                    <div class="header">
+                        <h2>Yards</h2>
+                    </div>
+                    <div class="content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Yard</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for stop in sorted(yards):
+                                    <tr>
+                                        <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a></td>
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            % end
+            <div class="section">
+                <div class="header">
+                    <h2>Stops</h2>
+                </div>
+                <div class="content">
+                    % if stops:
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="desktop-only">Stop Number</th>
+                                    <th class="non-desktop">Number</th>
+                                    <th class="desktop-only">Stop Name</th>
+                                    <th class="non-desktop">Name</th>
+                                    <th class="non-mobile">Routes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for stop in sorted(stops):
+                                    <tr>
+                                        <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
+                                        <td>
+                                            {{ stop }}
+                                            <div class="mobile-only">
+                                                % include('components/route_list', routes=stop.routes)
+                                            </div>
+                                        </td>
+                                        <td class="non-mobile">
+                                            % include('components/route_list', routes=stop.routes)
+                                        </td>
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    % else:
+                        <div class="placeholder">
+                            <h3>No stops found</h3>
+                        </div>
                     % end
-                </tbody>
-            </table>
-        % else:
-            <div class="placeholder">
-                <h3>No stops found</h3>
+                </div>
             </div>
-        % end
+        </div>
 
         % include('components/top_button')
     % else:
