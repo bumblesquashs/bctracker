@@ -1355,7 +1355,6 @@ class Server(Bottle):
         )
     
     def error_500(self, error):
-        print('1', flush=True)
         return self.error_page(
             name='500',
             title='Internal Error',
