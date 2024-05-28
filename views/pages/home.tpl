@@ -245,6 +245,10 @@
                 % include('components/toggle')
             </div>
             <div class="content">
+                <p>
+                    New to BCTracker?
+                    Check out our <a href="{{ get_url(system, 'guide') }}">Getting Started</a> guide!
+                </p>
                 <div id="quick-navigation">
                     <div class="item">
                         <div class="column center">

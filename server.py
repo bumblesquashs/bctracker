@@ -110,6 +110,7 @@ class Server(Bottle):
         self.add('/stops/<stop_number>/schedule', callback=self.stop_schedule)
         self.add('/stops/<stop_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.stop_schedule_date)
         self.add('/about', callback=self.about)
+        self.add('/guide', callback=self.guide)
         self.add('/nearby', callback=self.nearby)
         self.add('/themes', callback=self.themes)
         self.add('/personalize', callback=self.personalize)
@@ -1118,6 +1119,16 @@ class Server(Bottle):
             enable_refresh=False
         )
     
+    def guide(self, system, agency):
+        return self.page(
+            name='guide',
+            title='Guide',
+            path='guide',
+            system=system,
+            agency=agency,
+            enable_refresh=False
+        )
+
     def nearby(self, system, agency):
         return self.page(
             name='nearby',
