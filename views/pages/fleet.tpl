@@ -27,7 +27,7 @@
                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
             </ol>
             <p>Vehicles that have been tracked before show the first and last date and system that they were seen in, even if they weren't in service.</p>
-            % if system is not None:
+            % if system:
                 <p>
                     Please note that this list includes vehicles from every system.
                     To see only buses that have operated in {{ system }}, visit the <a href="{{ get_url(system, 'history') }}">history</a> page.
@@ -57,7 +57,7 @@
                                     % for type in model_types:
                                         <tr class="header">
                                             <td>{{ type }}</td>
-                                            <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model.type == type]) }}</td>
+                                            <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model and o.bus.model.type == type]) }}</td>
                                             <td class="align-right">{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
                                         </tr>
                                         <tr class="display-none"></tr>
@@ -65,7 +65,7 @@
                                         % for model in type_models:
                                             <tr>
                                                 <td><a href="#{{ model.id }}">{{! model }}</a></td>
-                                                <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model is not None and o.bus.model == model]) }}</td>
+                                                <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model and o.bus.model == model]) }}</td>
                                                 <td class="align-right">{{ sum([o.size for o in orders if o.model == model]) }}</td>
                                             </tr>
                                         % end

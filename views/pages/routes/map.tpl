@@ -23,21 +23,7 @@
     </div>
 </div>
 
-% if len(routes) == 0:
-    <div class="placeholder">
-        % if system is None:
-            <h3>Route information is unavailable</h3>
-            <p>Please check again later!</p>
-        % else:
-            <h3>Route information for {{ system }} is unavailable</h3>
-            % if system.gtfs_loaded:
-                <p>Please check again later!</p>
-            % else:
-                <p>System data is currently loading and will be available soon.</p>
-            % end
-        % end
-    </div>
-% else:
+% if routes:
     <div id="map" class="full-screen display-none"></div>
     <div id="map-loading">
         % include('components/loading')
@@ -170,4 +156,18 @@
     </script>
 
     % include('components/map_toggle')
+% else:
+    <div class="placeholder">
+        % if not system:
+            <h3>Route information is unavailable</h3>
+            <p>Please check again later!</p>
+        % else:
+            <h3>Route information for {{ system }} is unavailable</h3>
+            % if system.gtfs_loaded:
+                <p>Please check again later!</p>
+            % else:
+                <p>System data is currently loading and will be available soon.</p>
+            % end
+        % end
+    </div>
 % end

@@ -6,7 +6,7 @@
 
 <tr class="{{'divider' if show_divider else ''}}">
     <td>{{ departure.time.format_web(time_format) }}</td>
-    % if system is None or system.realtime_enabled:
+    % if not system or system.realtime_enabled:
         % if trip.id in recorded_today:
             % bus = recorded_today[trip.id]
             <td>
@@ -62,10 +62,10 @@
         </div>
     </td>
     <td class="desktop-only">
-        % if block is None:
-            <span class="lighter-text">Loading</span>
-        % else:
+        % if block:
             <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+        % else:
+            <span class="lighter-text">Loading</span>
         % end
     </td>
     <td>

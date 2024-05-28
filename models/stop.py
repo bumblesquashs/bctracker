@@ -7,13 +7,13 @@ from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
-from services import DepartureService, SystemService
+from repositories import DepartureRepository, SystemRepository
 
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
     __slots__ = (
-        'departure_service',
+        'departure_repository',
         'system',
         'id',
         'number',
@@ -25,8 +25,8 @@ class Stop:
     @classmethod
     def from_db(cls, row, prefix='stop', **kwargs):
         '''Returns a stop initialized from the given database row'''
-        system_service = kwargs.get('system_service') or di[SystemService]
-        system = system_service.find(row[f'{prefix}_system_id'])
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        system = system_repository.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
@@ -68,7 +68,7 @@ class Stop:
         self.lat = lat
         self.lon = lon
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
         return self.name
@@ -121,7 +121,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = self.departure_service.find_all(self.system, stop=self)
+        departures = self.departure_repository.find_all(self.system, stop=self)
         if service_group:
             return sorted([d for d in departures if d.trip and d.trip.service in service_group])
         if date:
@@ -130,7 +130,7 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return self.departure_service.find_adjacent(self.system, self)
+        return self.departure_repository.find_adjacent(self.system, self)
 
 class StopCache:
     '''A collection of calculated values for a single stop'''

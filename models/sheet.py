@@ -17,9 +17,9 @@ class Sheet:
     def normal_service_groups(self):
         '''Returns service groups that are not special'''
         service_groups = [g for g in self.service_groups if not g.schedule.is_special]
-        if len(service_groups) == 0:
-            return self.service_groups
-        return service_groups
+        if service_groups:
+            return service_groups
+        return self.service_groups
     
     @property
     def has_normal_service(self):
@@ -45,7 +45,7 @@ class Sheet:
         service_groups = []
         date_services = {d:tuple({s for s in services if d in s}) for d in self.schedule.dates}
         for service_set in set(date_services.values()):
-            if len(service_set) == 0:
+            if not service_set:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
             service_group = ServiceGroup(system, dates, date_range, service_set)
@@ -77,7 +77,7 @@ class Sheet:
         key = tuple(sorted(services))
         if key in self.copies:
             return self.copies[key]
-        if len(services) == 0:
+        if not services:
             return None
         copy = Sheet(self.system, services, self.schedule.date_range)
         self.copies[key] = copy

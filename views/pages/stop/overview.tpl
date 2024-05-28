@@ -29,7 +29,7 @@
                 % stop_departures = stop.find_departures()
                 % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop_departures], zoom_trips=False)
                 
-                % if len(stop_departures) > 0:
+                % if stop_departures:
                     <div class="info-box">
                         <div class="section">
                             % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
@@ -49,7 +49,7 @@
         </div>
         
         % nearby_stops = sorted(stop.nearby_stops)
-        % if len(nearby_stops) > 0:
+        % if nearby_stops:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Nearby Stops</h2>
@@ -81,8 +81,8 @@
             </div>
         % end
         
-        % alt_systems = [s for s in systems if s.get_stop(number=stop.number) is not None and s != system]
-        % if len(alt_systems) > 0:
+        % alt_systems = [s for s in systems if s.get_stop(number=stop.number) and s != system]
+        % if alt_systems:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Other Systems At This Stop</h2>
@@ -114,7 +114,7 @@
     </div>
     
     <div class="container flex-3">
-        % if len(departures) > 0:
+        % if departures:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Upcoming Departures</h2>
@@ -123,16 +123,8 @@
                 <div class="content">
                     % upcoming_count = 3 + floor(len(routes) / 3)
                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
-                    % if len(upcoming_departures) == 0:
-                        % tomorrow = Date.today().next()
-                        <div class="placeholder">
-                            <p>
-                                There are no departures for the rest of today.
-                                <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
-                            </p>
-                        </div>
-                    % else:
-                        % if system is None or system.realtime_enabled:
+                    % if upcoming_departures:
+                        % if not system or system.realtime_enabled:
                             <p>
                                 <span>Buses with a</span>
                                 <span class="scheduled">
@@ -145,7 +137,7 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    % if system is None or system.realtime_enabled:
+                                    % if not system or system.realtime_enabled:
                                         <th>Bus</th>
                                         <th class="desktop-only">Model</th>
                                     % end
@@ -166,6 +158,14 @@
                                 % end
                             </tbody>
                         </table>
+                    % else:
+                        % tomorrow = Date.today().next()
+                        <div class="placeholder">
+                            <p>
+                                There are no departures for the rest of today.
+                                <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                            </p>
+                        </div>
                     % end
                 </div>
             </div>
@@ -177,18 +177,8 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len(departures) == 0:
-                    <div class="placeholder">
-                        % if system.gtfs_loaded:
-                            <h3>There are no departures from this stop today</h3>
-                            <p>You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.</p>
-                        % else:
-                            <h3>Departures for this stop are unavailable</h3>
-                            <p>System data is currently loading and will be available soon.</p>
-                        % end
-                    </div>
-                % else:
-                    % if system is None or system.realtime_enabled:
+                % if departures:
+                    % if not system or system.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
                             <span class="scheduled">
@@ -201,7 +191,7 @@
                         <thead>
                             <tr>
                                 <th>Time</th>
-                                % if system is None or system.realtime_enabled:
+                                % if not system or system.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
@@ -222,6 +212,16 @@
                             % end
                         </tbody>
                     </table>
+                % else:
+                    <div class="placeholder">
+                        % if system.gtfs_loaded:
+                            <h3>There are no departures from this stop today</h3>
+                            <p>You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                        % else:
+                            <h3>Departures for this stop are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
+                        % end
+                    </div>
                 % end
             </div>
         </div>

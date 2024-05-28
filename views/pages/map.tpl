@@ -5,7 +5,7 @@
 
 <div id="page-header">
     <h1>Map</h1>
-    % if len(visible_positions) > 0:
+    % if visible_positions:
         <div class="options-container">
             <div class="option" onclick="toggleAutomaticRefresh()">
                 <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
@@ -29,57 +29,7 @@
     % end
 </div>
 
-% if len(visible_positions) == 0:
-    <div class="container">
-        <div class="section">
-            <div class="options-container">
-                <div class="option" onclick="toggleNISBusesEmpty()">
-                    <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                        % include('components/svg', name='check')
-                    </div>
-                    <div>Show NIS Buses</div>
-                </div>
-            </div>
-            <script>
-                function toggleNISBusesEmpty() {
-                    window.location = "{{ get_url(system, 'map', show_nis='false' if show_nis else 'true') }}"
-                }
-            </script>
-        </div>
-        <div class="section">
-            <div class="placeholder">
-                % if system is None:
-                    % if show_nis:
-                        <h3>There are no buses out right now</h3>
-                        <p>
-                            BC Transit does not have late night service, so this should be the case overnight.
-                            If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
-                        </p>
-                        <p>Please check again later!</p>
-                    % else:
-                        <h3>There are no buses in service right now</h3>
-                        <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
-                    % end
-                % elif not system.realtime_enabled:
-                    <h3>{{ system }} does not support realtime</h3>
-                    <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
-                    <div class="non-desktop">
-                        % include('components/systems')
-                    </div>
-                % elif not system.realtime_loaded:
-                    <h3>Realtime information for {{ system }} is unavailable</h3>
-                    <p>System data is currently loading and will be available soon.</p>
-                % elif not show_nis:
-                    <h3>There are no buses in service in {{ system }} right now</h3>
-                    <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
-                % else:
-                    <h3>There are no buses out in {{ system }} right now</h3>
-                    <p>Please check again later!</p>
-                % end
-            </div>
-        </div>
-    </div>
-% else:
+% if visible_positions:
     <div id="map" class="full-screen"></div>
     
     % include('components/svg_script', name='fish')
@@ -498,4 +448,54 @@
     </script>
 
     % include('components/map_toggle')
+% else:
+    <div class="container">
+        <div class="section">
+            <div class="options-container">
+                <div class="option" onclick="toggleNISBusesEmpty()">
+                    <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                        % include('components/svg', name='check')
+                    </div>
+                    <div>Show NIS Buses</div>
+                </div>
+            </div>
+            <script>
+                function toggleNISBusesEmpty() {
+                    window.location = "{{ get_url(system, 'map', show_nis='false' if show_nis else 'true') }}"
+                }
+            </script>
+        </div>
+        <div class="section">
+            <div class="placeholder">
+                % if not system:
+                    % if show_nis:
+                        <h3>There are no buses out right now</h3>
+                        <p>
+                            BC Transit does not have late night service, so this should be the case overnight.
+                            If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                        </p>
+                        <p>Please check again later!</p>
+                    % else:
+                        <h3>There are no buses in service right now</h3>
+                        <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                    % end
+                % elif not system.realtime_enabled:
+                    <h3>{{ system }} does not support realtime</h3>
+                    <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+                    <div class="non-desktop">
+                        % include('components/systems')
+                    </div>
+                % elif not system.realtime_loaded:
+                    <h3>Realtime information for {{ system }} is unavailable</h3>
+                    <p>System data is currently loading and will be available soon.</p>
+                % elif not show_nis:
+                    <h3>There are no buses in service in {{ system }} right now</h3>
+                    <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                % else:
+                    <h3>There are no buses out in {{ system }} right now</h3>
+                    <p>Please check again later!</p>
+                % end
+            </div>
+        </div>
+    </div>
 % end

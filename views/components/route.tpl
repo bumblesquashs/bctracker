@@ -1,4 +1,4 @@
-% if route is not None:
+% if route:
     % if type(route) == str:
         <span class="route">{{ route }}</span>
     % else:

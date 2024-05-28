@@ -15,7 +15,7 @@
 </div>
 
 <div class="page-container">
-    % if len(route.trips) > 0:
+    % if route.trips:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -42,7 +42,7 @@
     % end
     
     <div class="container flex-3">
-        % if len(positions) > 0:
+        % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Active Buses</h2>
@@ -87,7 +87,7 @@
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False)
                                             </div>
-                                            % if stop is not None:
+                                            % if stop:
                                                 <div class="non-desktop smaller-font">
                                                     Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                                 </div>
@@ -102,10 +102,10 @@
                                         % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
-                                        % if stop is None:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % else:
+                                        % if stop:
                                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % else:
+                                            <span class="lighter-text">Unavailable</span>
                                         % end
                                     </td>
                                 </tr>
@@ -122,30 +122,20 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if len(trips) == 0:
-                    <div class="placeholder">
-                        % if system.gtfs_loaded:
-                            <h3>There are no trips for this route today</h3>
-                            <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
-                        % else:
-                            <h3>Trips for this route are unavailable</h3>
-                            <p>System data is currently loading and will be available soon.</p>
-                        % end
-                    </div>
-                % else:
-                    % trip_positions = {p.trip.id:p for p in positions if p.trip is not None and p.trip in trips}
+                % if trips:
+                    % trip_positions = {p.trip.id:p for p in positions if p.trip and p.trip in trips}
                     % directions = sorted({t.direction for t in trips})
                     <div class="container inline">
                         % for direction in directions:
                             % direction_trips = [t for t in trips if t.direction == direction]
-                            % if len(direction_trips) > 0:
+                            % if direction_trips:
                                 <div class="section">
                                     <div class="header" onclick="toggleSection(this)">
                                         <h3>{{ direction }}</h3>
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        % if system is None or system.realtime_enabled:
+                                        % if not system or system.realtime_enabled:
                                             <p>
                                                 <span>Buses with a</span>
                                                 <span class="scheduled">
@@ -159,7 +149,7 @@
                                                 <tr>
                                                     <th class="non-mobile">Start Time</th>
                                                     <th class="mobile-only">Start</th>
-                                                    % if system is None or system.realtime_enabled:
+                                                    % if not system or system.realtime_enabled:
                                                         <th>Bus</th>
                                                         <th class="desktop-only">Model</th>
                                                     % end
@@ -179,7 +169,7 @@
                                                     % end
                                                     <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                                         <td>{{ trip.start_time.format_web(time_format) }}</td>
-                                                        % if system is None or system.realtime_enabled:
+                                                        % if not system or system.realtime_enabled:
                                                             % if trip.id in recorded_today:
                                                                 % bus = recorded_today[trip.id]
                                                                 <td>
@@ -248,6 +238,16 @@
                                     </div>
                                 </div>
                             % end
+                        % end
+                    </div>
+                % else:
+                    <div class="placeholder">
+                        % if system.gtfs_loaded:
+                            <h3>There are no trips for this route today</h3>
+                            <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
+                        % else:
+                            <h3>Trips for this route are unavailable</h3>
+                            <p>System data is currently loading and will be available soon.</p>
                         % end
                     </div>
                 % end

@@ -6,64 +6,68 @@ from datetime import timedelta
 import cherrypy as cp
 
 from di import di
+from database import Database
+from settings import Settings
 
 from models.bus import Bus
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 
+from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 38
+VERSION = 39
 
 class Server(Bottle):
     
     __slots__ = (
-        'config',
         'database',
-        'adornment_service',
-        'agency_service',
-        'assignment_service',
+        'settings',
+        'adornment_repository',
+        'agency_repository',
+        'assignment_repository',
+        'order_repository',
+        'overview_repository',
+        'point_repository',
+        'position_repository',
+        'record_repository',
+        'region_repository',
+        'route_repository',
+        'system_repository',
+        'theme_repository',
+        'transfer_repository',
         'cron_service',
         'gtfs_service',
-        'order_service',
-        'overview_service',
-        'point_service',
-        'position_service',
         'realtime_service',
-        'record_service',
-        'region_service',
-        'route_service',
-        'system_service',
-        'theme_service',
-        'transfer_service',
         'running'
     )
     
-    def __init__(self, **kwargs):
+    def __init__(self, database: Database, settings: Settings, **kwargs):
         super().__init__()
         self.running = False
         
-        self.config = kwargs.get('config') or di[Config]
-        self.database = kwargs.get('database') or di[Database]
+        self.database = database
+        self.settings = settings
         
-        self.adornment_service = kwargs.get('adornment_service') or di[AdornmentService]
-        self.assignment_service = kwargs.get('assignment_service') or di[AssignmentService]
-        self.agency_service = kwargs.get('agency_service') or di[AgencyService]
+        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
+        self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
+        self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+        self.order_repository = kwargs.get('order_repository') or di[OrderRepository]
+        self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
+        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
+        self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
+        self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
+        self.region_repository = kwargs.get('region_repository') or di[RegionRepository]
+        self.route_repository = kwargs.get('route_repository') or di[RouteRepository]
+        self.system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        self.theme_repository = kwargs.get('theme_repository') or di[ThemeRepository]
+        self.transfer_repository = kwargs.get('transfer_repository') or di[TransferRepository]
+        
         self.cron_service = kwargs.get('cron_service') or di[CronService]
         self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
-        self.order_service = kwargs.get('order_service') or di[OrderService]
-        self.overview_service = kwargs.get('overview_service') or di[OverviewService]
-        self.point_service = kwargs.get('point_service') or di[PointService]
-        self.position_service = kwargs.get('position_service') or di[PositionService]
         self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
-        self.record_service = kwargs.get('record_service') or di[RecordService]
-        self.region_service = kwargs.get('region_service') or di[RegionService]
-        self.route_service = kwargs.get('route_service') or di[RouteService]
-        self.system_service = kwargs.get('system_service') or di[SystemService]
-        self.theme_service = kwargs.get('theme_service') or di[ThemeService]
-        self.transfer_service = kwargs.get('transfer_service') or di[TransferService]
         
         # Static files
         self.add('/style/<name:path>', append_slash=False, callback=self.style)
@@ -142,7 +146,7 @@ class Server(Bottle):
         self.running = True
         
         cp.config.update('server.conf')
-        self.config.setup(cp.config)
+        self.settings.setup(cp.config)
         
         self.database.connect()
             
@@ -154,12 +158,12 @@ class Server(Bottle):
         if args.updatedb:
             print('Forcing database refresh')
         
-        self.adornment_service.load()
-        self.order_service.load()
-        self.system_service.load()
-        self.theme_service.load()
+        self.adornment_repository.load()
+        self.order_repository.load()
+        self.system_repository.load()
+        self.theme_repository.load()
         
-        self.position_service.delete_all()
+        self.position_repository.delete_all()
         
         handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
         log = WSGILogger(self, [handler], ApacheFormatter())
@@ -167,7 +171,7 @@ class Server(Bottle):
         cp.tree.graft(log, '/')
         cp.server.start()
         
-        for system in self.system_service.find_all():
+        for system in self.system_repository.find_all():
             if self.running:
                 self.gtfs_service.load(system, args.reload, args.updatedb)
                 if not self.gtfs_service.validate(system):
@@ -192,9 +196,9 @@ class Server(Bottle):
         '''Returns a URL formatted based on the given system and path'''
         system_id = getattr(system, 'id', system)
         if system_id:
-            url = self.config.system_domain.format(system_id, path).rstrip('/')
+            url = self.settings.system_domain.format(system_id, path).rstrip('/')
         else:
-            url = self.config.all_systems_domain.format(path).rstrip('/')
+            url = self.settings.all_systems_domain.format(path).rstrip('/')
         query_args = {k:v for k, v in kwargs.items() if v is not None}
         if query_args:
             query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
@@ -203,7 +207,7 @@ class Server(Bottle):
     
     def validate_admin(self):
         '''Checks if the admin key in the query/cookie matches the expected admin key'''
-        return not self.config.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.config.admin_key
+        return not self.settings.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.settings.admin_key
     
     def page(self, name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
         '''Returns an HTML page with the given name and details'''
@@ -219,7 +223,7 @@ class Server(Bottle):
             last_updated = self.realtime_service.get_last_updated(time_format)
         return template(f'pages/{name}',
             di=di,
-            config=self.config,
+            settings=self.settings,
             version=VERSION,
             title=title,
             path=path,
@@ -229,12 +233,12 @@ class Server(Bottle):
             enable_refresh=enable_refresh,
             include_maps=include_maps,
             full_map=full_map,
-            regions=self.region_service.find_all(),
-            systems=self.system_service.find_all(),
+            regions=self.region_repository.find_all(),
+            systems=self.system_repository.find_all(),
             is_admin=is_admin,
             get_url=self.get_url,
             last_updated=last_updated,
-            theme=self.theme_service.find(theme_id),
+            theme=self.theme_repository.find(theme_id),
             time_format=time_format,
             bus_marker_style=bus_marker_style,
             hide_systems=hide_systems,
@@ -269,8 +273,8 @@ class Server(Bottle):
     def set_cookie(self, key, value, max_age_days=3650):
         '''Creates a cookie using the given key and value'''
         max_age = 60 * 60 * 24 * max_age_days
-        if self.config.cookie_domain:
-            response.set_cookie(key, value, max_age=max_age, domain=self.config.cookie_domain, path='/')
+        if self.settings.cookie_domain:
+            response.set_cookie(key, value, max_age=max_age, domain=self.settings.cookie_domain, path='/')
         else:
             response.set_cookie(key, value, max_age=max_age, path='/')
     
@@ -306,13 +310,13 @@ class Server(Bottle):
                 raise HTTPError(403)
             if system_key in kwargs:
                 system_id = kwargs[system_key]
-                system = self.system_service.find(system_id)
+                system = self.system_repository.find(system_id)
                 if not system:
                     raise HTTPError(404)
                 del kwargs[system_key]
             else:
                 system = None
-            agency = self.agency_service.find('bc-transit')
+            agency = self.agency_repository.find('bc-transit')
             return callback(system=system, agency=agency, *args, **kwargs)
         self.route(paths, method, callback=endpoint)
     
@@ -357,7 +361,7 @@ class Server(Bottle):
         )
     
     def map(self, system, agency):
-        positions = self.position_service.find_all(system, has_location=True)
+        positions = self.position_repository.find_all(system, has_location=True)
         auto_refresh = self.query_cookie('auto_refresh', 'false') != 'false'
         show_route_lines = self.query_cookie('show_route_lines', 'false') != 'false'
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
@@ -378,7 +382,7 @@ class Server(Bottle):
         )
     
     def realtime_all(self, system, agency):
-        positions = self.position_service.find_all(system)
+        positions = self.position_repository.find_all(system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -393,7 +397,7 @@ class Server(Bottle):
         )
     
     def realtime_routes(self, system, agency):
-        positions = self.position_service.find_all(system)
+        positions = self.position_repository.find_all(system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -408,7 +412,7 @@ class Server(Bottle):
         )
     
     def realtime_models(self, system, agency):
-        positions = self.position_service.find_all(system)
+        positions = self.position_repository.find_all(system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -424,7 +428,7 @@ class Server(Bottle):
     
     def realtime_speed(self, system, agency):
         self.set_cookie('speed', '1994')
-        positions = self.position_service.find_all(system)
+        positions = self.position_repository.find_all(system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -439,8 +443,8 @@ class Server(Bottle):
         )
     
     def fleet(self, system, agency):
-        orders = self.order_service.find_all(agency)
-        overviews = self.overview_service.find_all()
+        orders = self.order_repository.find_all(agency)
+        overviews = self.overview_repository.find_all()
         return self.page(
             name='fleet',
             title='Fleet',
@@ -453,7 +457,7 @@ class Server(Bottle):
     
     def bus_overview(self, system, agency, bus_number):
         bus = Bus.find(agency, bus_number)
-        overview = self.overview_service.find(bus)
+        overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 name='invalid_bus',
@@ -462,8 +466,8 @@ class Server(Bottle):
                 agency=agency,
                 bus_number=bus_number
             )
-        position = self.position_service.find(bus)
-        records = self.record_service.find_all(bus=bus, limit=20)
+        position = self.position_repository.find(bus)
+        records = self.record_repository.find_all(bus=bus, limit=20)
         return self.page(
             name='bus/overview',
             title=f'Bus {bus}',
@@ -480,7 +484,7 @@ class Server(Bottle):
     
     def bus_map(self, system, agency, bus_number):
         bus = Bus.find(agency, bus_number)
-        overview = self.overview_service.find(bus)
+        overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 name='invalid_bus',
@@ -489,7 +493,7 @@ class Server(Bottle):
                 agency=agency,
                 bus_number=bus_number
             )
-        position = self.position_service.find(bus)
+        position = self.position_repository.find(bus)
         return self.page(
             name='bus/map',
             title=f'Bus {bus}',
@@ -505,7 +509,7 @@ class Server(Bottle):
     
     def bus_history(self, system, agency, bus_number):
         bus = Bus.find(agency, bus_number)
-        overview = self.overview_service.find(bus)
+        overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 name='invalid_bus',
@@ -514,8 +518,17 @@ class Server(Bottle):
                 agency=agency,
                 bus_number=bus_number
             )
-        records = self.record_service.find_all(bus=bus)
-        transfers = self.transfer_service.find_all(bus=bus)
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
+        items_per_page = 100
+        total_items = self.record_repository.count(bus=bus)
+        if page < 1:
+            records = []
+        else:
+            records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
+        transfers = self.transfer_repository.find_all(bus=bus)
         events = []
         if overview:
             events.append(Event(overview.first_seen_date, 'First Seen'))
@@ -536,11 +549,14 @@ class Server(Bottle):
             overview=overview,
             events=events,
             favourite=Favourite('vehicle', bus),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            page=page,
+            items_per_page=items_per_page,
+            total_items=total_items
         )
     
     def history_last_seen(self, system, agency):
-        overviews = [o for o in self.overview_service.find_all(system) if o.last_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(system) if o.last_record and o.bus.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -565,7 +581,7 @@ class Server(Bottle):
         )
     
     def history_first_seen(self, system, agency):
-        overviews = [o for o in self.overview_service.find_all(system) if o.first_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(system) if o.first_record and o.bus.visible]
         return self.page(
             name='history/first_seen',
             title='Vehicle History',
@@ -578,11 +594,11 @@ class Server(Bottle):
     def history_transfers(self, system, agency):
         filter = request.query.get('filter')
         if filter == 'from':
-            transfers = self.transfer_service.find_all(old_system=system)
+            transfers = self.transfer_repository.find_all(old_system=system)
         elif filter == 'to':
-            transfers = self.transfer_service.find_all(new_system=system)
+            transfers = self.transfer_repository.find_all(new_system=system)
         else:
-            transfers = self.transfer_service.find_all(old_system=system, new_system=system)
+            transfers = self.transfer_repository.find_all(old_system=system, new_system=system)
         return self.page(
             name='history/transfers',
             title='Vehicle History',
@@ -604,7 +620,7 @@ class Server(Bottle):
         )
     
     def routes_map(self, system, agency):
-        routes = self.route_service.find_all(system)
+        routes = self.route_repository.find_all(system)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             name='routes/map',
@@ -646,9 +662,9 @@ class Server(Bottle):
             include_maps=len(route.trips) > 0,
             route=route,
             trips=trips,
-            recorded_today=self.record_service.find_recorded_today(system, trips),
-            assignments=self.assignment_service.find_all(system, route=route),
-            positions=self.position_service.find_all(system, route=route),
+            recorded_today=self.record_repository.find_recorded_today(system, trips),
+            assignments=self.assignment_repository.find_all(system, route=route),
+            positions=self.position_repository.find_all(system, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -679,7 +695,7 @@ class Server(Bottle):
             include_maps=len(route.trips) > 0,
             full_map=len(route.trips) > 0,
             route=route,
-            positions=self.position_service.find_all(system, route=route),
+            positions=self.position_repository.find_all(system, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -794,8 +810,8 @@ class Server(Bottle):
             agency=agency,
             include_maps=True,
             block=block,
-            positions=self.position_service.find_all(system, block=block),
-            assignment=self.assignment_service.find(system, block)
+            positions=self.position_repository.find_all(system, block=block),
+            assignment=self.assignment_repository.find(system, block)
         )
     
     def block_map(self, system, agency, block_id):
@@ -824,7 +840,7 @@ class Server(Bottle):
             include_maps=True,
             full_map=True,
             block=block,
-            positions=self.position_service.find_all(system, block=block)
+            positions=self.position_repository.find_all(system, block=block)
         )
     
     def block_history(self, system, agency, block_id):
@@ -845,7 +861,7 @@ class Server(Bottle):
                 agency=agency,
                 block_id=block_id
             )
-        records = self.record_service.find_all(system, block=block)
+        records = self.record_repository.find_all(system, block=block)
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -885,8 +901,8 @@ class Server(Bottle):
             agency=agency,
             include_maps=True,
             trip=trip,
-            positions=self.position_service.find_all(system, trip=trip),
-            assignment=self.assignment_service.find(system, trip.block_id)
+            positions=self.position_repository.find_all(system, trip=trip),
+            assignment=self.assignment_repository.find(system, trip.block_id)
         )
     
     def trip_map(self, system, agency, trip_id):
@@ -915,7 +931,7 @@ class Server(Bottle):
             include_maps=True,
             full_map=True,
             trip=trip,
-            positions=self.position_service.find_all(system, trip=trip)
+            positions=self.position_repository.find_all(system, trip=trip)
         )
     
     def trip_history(self, system, agency, trip_id):
@@ -936,9 +952,9 @@ class Server(Bottle):
                 agency=agency,
                 trip_id=trip_id
             )
-        records = self.record_service.find_all(system, trip=trip)
+        records = self.record_repository.find_all(system, trip=trip)
         events = []
-        if len(records) > 0:
+        if records:
             events.append(Event(records[0].date, 'Last Tracked'))
             events.append(Event(records[-1].date, 'First Tracked'))
         return self.page(
@@ -987,7 +1003,7 @@ class Server(Bottle):
             )
         departures = stop.find_departures(date=Date.today(system.timezone))
         trips = [d.trip for d in departures]
-        positions = self.position_service.find_all(system, trip=trips)
+        positions = self.position_repository.find_all(system, trip=trips)
         return self.page(
             name='stop/overview',
             title=f'Stop {stop.number}',
@@ -996,8 +1012,8 @@ class Server(Bottle):
             include_maps=True,
             stop=stop,
             departures=departures,
-            recorded_today=self.record_service.find_recorded_today(system, trips),
-            assignments=self.assignment_service.find_all(system, stop=stop),
+            recorded_today=self.record_repository.find_recorded_today(system, trips),
+            assignments=self.assignment_repository.find_all(system, stop=stop),
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
@@ -1136,7 +1152,7 @@ class Server(Bottle):
         bus_marker_style = request.query.get('bus_marker_style')
         if bus_marker_style:
             self.set_cookie('bus_marker_style', bus_marker_style)
-        themes = self.theme_service.find_all()
+        themes = self.theme_repository.find_all()
         return self.page(
             name='personalize',
             title='Personalize',
@@ -1199,7 +1215,7 @@ class Server(Bottle):
             last_updated = system.get_last_updated(time_format)
         else:
             last_updated = self.realtime_service.get_last_updated(time_format)
-        positions = sorted(self.position_service.find_all(system, has_location=True), key=lambda p: p.lat)
+        positions = sorted(self.position_repository.find_all(system, has_location=True), key=lambda p: p.lat)
         return {
             'positions': [p.get_json() for p in positions],
             'last_updated': last_updated
@@ -1207,11 +1223,11 @@ class Server(Bottle):
     
     def api_shape(self, system, agency, shape_id):
         return {
-            'points': [p.get_json() for p in self.point_service.find_all(system, shape_id)]
+            'points': [p.get_json() for p in self.point_repository.find_all(system, shape_id)]
         }
     
     def api_routes(self, system, agency):
-        routes = self.route_service.find_all(system)
+        routes = self.route_repository.find_all(system)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
         shape_ids = set()
         shape_trips = []
@@ -1237,8 +1253,8 @@ class Server(Bottle):
         if query != '':
             if query.isnumeric() and (not system or system.realtime_enabled):
                 if include_buses:
-                    bus_numbers = self.overview_service.find_bus_numbers(system)
-                    matches += self.order_service.find_matches(agency, query, bus_numbers)
+                    bus_numbers = self.overview_repository.find_bus_numbers(system)
+                    matches += self.order_repository.find_matches(agency, query, bus_numbers)
             if system:
                 if include_blocks:
                     matches += system.search_blocks(query)
@@ -1267,18 +1283,18 @@ class Server(Bottle):
         }
     
     def api_admin_reload_adornments(self, system, agency):
-        self.adornment_service.load()
+        self.adornment_repository.load()
         return 'Success'
     
     def api_admin_reload_orders(self, system, agency):
-        self.order_service.load()
+        self.order_repository.load()
         return 'Success'
     
     def api_admin_reload_systems(self, system, agency):
         self.cron_service.stop()
-        self.position_service.delete_all()
-        self.system_service.load()
-        for system in self.system_service.find_all():
+        self.position_repository.delete_all()
+        self.system_repository.load()
+        for system in self.system_repository.find_all():
             if self.running:
                 self.gtfs_service.load(system)
                 if not self.gtfs_service.validate(system):
@@ -1293,7 +1309,7 @@ class Server(Bottle):
         return 'Success'
     
     def api_admin_reload_themes(self, system, agency):
-        self.theme_service.load()
+        self.theme_repository.load()
         return 'Success'
     
     def api_admin_restart_cron(self, system, agency):
@@ -1306,7 +1322,7 @@ class Server(Bottle):
         return 'Success'
     
     def api_admin_reload_gtfs(self, system, agency, reload_system_id):
-        system = self.system_service.find(reload_system_id)
+        system = self.system_repository.find(reload_system_id)
         if not system:
             return 'Invalid system'
         self.gtfs_service.load(system, True)
@@ -1318,7 +1334,7 @@ class Server(Bottle):
         return 'Success'
     
     def api_admin_reload_realtime(self, system, agency, reload_system_id):
-        system = self.system_service.find(reload_system_id)
+        system = self.system_repository.find(reload_system_id)
         if not system:
             return 'Invalid system'
         self.realtime_service.update(system)

@@ -1,6 +1,6 @@
 
 % from models.date import Date
-% from services import PositionService
+% from repositories import PositionRepository
 
 % rebase('base')
 
@@ -45,7 +45,7 @@
                     </div>
                     % for sheet in sheets:
                         % service_groups = sheet.service_groups
-                        % if len(service_groups) > 0:
+                        % if service_groups:
                             % if len(sheets) > 1:
                                 <div class="title">
                                     <h3>{{ sheet }}</h3>
@@ -111,7 +111,7 @@
                                     % end
                                 </div>
                             </div>
-                            % if len([t for t in block.get_trips() if t.length is not None]) > 0:
+                            % if [t for t in block.get_trips() if t.length is not None]:
                                 <div class="row section">
                                     <div class="name">Length</div>
                                     <div class="value">
@@ -134,7 +134,7 @@
         </div>
         
         % related_blocks = block.related_blocks
-        % if len(related_blocks) > 0:
+        % if related_blocks:
             <div class="section">
                 <div class="header">
                     <h2>Related Blocks</h2>
@@ -169,7 +169,7 @@
     </div>
     
     <div class="container flex-3">
-        % if len(positions) > 0:
+        % if positions:
             <div class="section">
                 <div class="header">
                     % if len(positions) == 1:
@@ -216,7 +216,7 @@
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False)
                                             </div>
-                                            % if stop is not None:
+                                            % if stop:
                                                 <div class="mobile-only smaller-font">
                                                     Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                                 </div>
@@ -227,10 +227,10 @@
                                         % include('components/trip')
                                     </td>
                                     <td class="non-mobile">
-                                        % if stop is None:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % else:
+                                        % if stop:
                                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % else:
+                                            <span class="lighter-text">Unavailable</span>
                                         % end
                                     </td>
                                 </tr>
@@ -241,7 +241,7 @@
             </div>
         % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
             % bus = assignment.bus
-            % position = di[PositionService].find(bus)
+            % position = di[PositionRepository].find(bus)
             <div class="section">
                 <div class="header">
                     <h2>Scheduled Bus</h2>

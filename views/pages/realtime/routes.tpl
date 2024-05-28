@@ -25,49 +25,11 @@
     </div>
 </div>
 
-% if len(positions) == 0:
-    <div class="placeholder">
-        % if system is None:
-            % if show_nis:
-                <h3>There are no buses out right now</h3>
-                <p>
-                    BC Transit does not have late night service, so this should be the case overnight.
-                    If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
-                </p>
-                <p>Please check again later!</p>
-            % else:
-                <h3>There are no buses in service right now</h3>
-                <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
-            % end
-        % elif not system.realtime_enabled:
-            <h3>{{ system }} does not support realtime</h3>
-            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
-            <div class="non-desktop">
-                % include('components/systems')
-            </div>
-        % elif not system.realtime_loaded:
-            <h3>Realtime information for {{ system }} is unavailable</h3>
-            <p>System data is currently loading and will be available soon.</p>
-        % elif not show_nis:
-            <h3>There are no buses in service in {{ system }} right now</h3>
-            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
-        % else:
-            <h3>There are no buses out in {{ system }} right now</h3>
-            <p>Please check again later!</p>
-        % end
-    </div>
-% elif system is None:
-    <div class="placeholder">
-        <p>
-            Realtime routes can only be viewed for individual systems.
-            Please choose a system.
-        </p>
-    </div>
-% else:
+% if positions:
     <div class="container">
         % for route in system.get_routes():
-            % route_positions = [p for p in positions if p.trip is not None and p.trip.route == route]
-            % if len(route_positions) == 0:
+            % route_positions = [p for p in positions if p.trip and p.trip.route == route]
+            % if not route_positions:
                 % continue
             % end
             <div class="section">
@@ -87,7 +49,7 @@
                             <tr>
                                 <th>Bus</th>
                                 <th class="desktop-only">Model</th>
-                                % if system is None:
+                                % if not system:
                                     <th class="desktop-only">System</th>
                                 % end
                                 <th>Headsign</th>
@@ -101,11 +63,11 @@
                             % for position in sorted(route_positions):
                                 % bus = position.bus
                                 % order = bus.order
-                                % if last_bus is None:
+                                % if not last_bus:
                                     % same_order = True
-                                % elif order is None and last_bus.order is None:
+                                % elif not order and not last_bus.order:
                                     % same_order = True
-                                % elif order is None or last_bus.order is None:
+                                % elif not order or not last_bus.order:
                                     % same_order = False
                                 % else:
                                     % same_order = order == last_bus.order
@@ -126,7 +88,7 @@
                                     <td class="desktop-only">
                                         % include('components/order')
                                     </td>
-                                    % if system is None:
+                                    % if not system:
                                         <td class="desktop-only">{{ position.system }}</td>
                                     % end
                                     % trip = position.trip
@@ -139,7 +101,7 @@
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False)
                                             </div>
-                                            % if stop is not None:
+                                            % if stop:
                                                 <div class="non-desktop smaller-font">
                                                     Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
                                                 </div>
@@ -153,10 +115,10 @@
                                         % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
-                                        % if stop is None:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % else:
+                                        % if stop:
                                             <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        % else:
+                                            <span class="lighter-text">Unavailable</span>
                                         % end
                                     </td>
                                 </tr>
@@ -167,8 +129,8 @@
             </div>
         % end
         
-        % no_route_positions = sorted([p for p in positions if p.trip is None])
-        % if len(no_route_positions) > 0:
+        % no_route_positions = sorted([p for p in positions if not p.trip])
+        % if no_route_positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Not In Service</h2>
@@ -180,7 +142,7 @@
                             <tr>
                                 <th>Bus</th>
                                 <th class="desktop-only">Model</th>
-                                % if system is None:
+                                % if not system:
                                     <th>System</th>
                                 % end
                             </tr>
@@ -190,11 +152,11 @@
                             % for position in no_route_positions:
                                 % bus = position.bus
                                 % order = bus.order
-                                % if last_bus is None:
+                                % if not last_bus:
                                     % same_order = True
-                                % elif order is None and last_bus.order is None:
+                                % elif not order and not last_bus.order:
                                     % same_order = True
-                                % elif order is None or last_bus.order is None:
+                                % elif not order or not last_bus.order:
                                     % same_order = False
                                 % else:
                                     % same_order = order == last_bus.order
@@ -212,7 +174,7 @@
                                     <td class="desktop-only">
                                         % include('components/order')
                                     </td>
-                                    % if system is None:
+                                    % if not system:
                                         <td>{{ position.system }}</td>
                                     % end
                                 </tr>
@@ -225,6 +187,28 @@
     </div>
     
     % include('components/top_button')
+% else:
+    <div class="placeholder">
+        % if not system:
+            <h3>Realtime routes can only be viewed for individual systems.</h3>
+            <p>Please choose a system.</p>
+        % elif not system.realtime_enabled:
+            <h3>{{ system }} does not support realtime</h3>
+            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <div class="non-desktop">
+                % include('components/systems')
+            </div>
+        % elif not system.realtime_loaded:
+            <h3>Realtime information for {{ system }} is unavailable</h3>
+            <p>System data is currently loading and will be available soon.</p>
+        % elif not show_nis:
+            <h3>There are no buses in service in {{ system }} right now</h3>
+            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+        % else:
+            <h3>There are no buses out in {{ system }} right now</h3>
+            <p>Please check again later!</p>
+        % end
+    </div>
 % end
 
 <script>

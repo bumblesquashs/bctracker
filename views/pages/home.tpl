@@ -1,14 +1,14 @@
 
-% from services import PositionService
+% from repositories import PositionRepository
 
 % rebase('base')
 
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
-    % if system is None:
-        <h2>BC Transit Schedules and Bus Tracking</h2>
-    % else:
+    % if system:
         <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
+    % else:
+        <h2>BC Transit Schedules and Bus Tracking</h2>
     % end
 </div>
 
@@ -58,16 +58,7 @@
                     }
                 </script>
                 
-                % if system is None:
-                    <form onsubmit="busSearch()" action="javascript:void(0)">
-                        <label for="bus_search">Bus Number:</label>
-                        <div class="input-container">
-                            <input type="text" id="bus_search" name="bus_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    <p>Choose a system to search for routes and stops</p>
-                % else:
+                % if system:
                     % if system.realtime_enabled:
                         <form onsubmit="busSearch()" action="javascript:void(0)">
                             <label for="bus_search">Bus Number:</label>
@@ -101,6 +92,15 @@
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
+                % else:
+                    <form onsubmit="busSearch()" action="javascript:void(0)">
+                        <label for="bus_search">Bus Number:</label>
+                        <div class="input-container">
+                            <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                            <input type="submit" value="Search" class="button">
+                        </div>
+                    </form>
+                    <p>Choose a system to search for routes and stops</p>
                 % end
             </div>
         </div>
@@ -140,7 +140,7 @@
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = di[PositionService].find(value)
+                                                    % position = di[PositionRepository].find(value)
                                                     <tr>
                                                         <td>
                                                             <div class="row">

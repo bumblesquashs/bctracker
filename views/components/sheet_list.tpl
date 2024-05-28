@@ -43,7 +43,7 @@
                     % include('components/weekdays', path_suffix='' if i == 0 else str(i + 1))
                 % end
                 % dates = schedule.exceptions.union(sheet.modifications)
-                % if len(dates) > 0:
+                % if dates:
                     <div class="dates">
                         % for (year, month) in sorted({(d.year, d.month) for d in dates}):
                             % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
@@ -55,10 +55,10 @@
                                 % end
                                 % for date in month_dates:
                                     % status = sheet.get_date_status(date)
-                                    % if schedule_path is None:
-                                        <span class="date {{ status }}">{{ date.day }}</span>
-                                    % else:
+                                    % if schedule_path:
                                         <a class="date {{ status }}" href="{{ get_url(system, f'{date_path}/{date.format_db()}') }}">{{ date.day }}</a>
+                                    % else:
+                                        <span class="date {{ status }}">{{ date.day }}</span>
                                     % end
                                 % end
                             </div>
@@ -68,7 +68,7 @@
             </div>
         % end
     </div>
-    % if schedule_path is not None:
+    % if schedule_path:
         <div class="footer">
             Click on a weekday or date to jump to the schedule for that day
         </div>

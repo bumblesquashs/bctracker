@@ -550,6 +550,33 @@ table tr {
     background-color: #FFFFFF;
 }
 
+.paging .page {
+    background: #EEEEEE;
+    color: #222222;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    border: 1px solid #CCCCCC;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
+}
+
+.paging .page:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
+.paging .page.current {
+    background-color: #5393c5;
+    color: #FFFFFF;
+    border: 1px solid #5393c5;
+    text-shadow: 0 1px 1px #3373a5;
+    background-image: linear-gradient( #5393c5,#6facd5 );
+}
+
+.paging .page.current:hover {
+    background-color: #5393c5;
+    background-image: linear-gradient( #5393c5,#6facd5 );
+}
+
 .positive {
     color: #1A671A;
 }

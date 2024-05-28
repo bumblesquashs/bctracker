@@ -14,7 +14,14 @@
     </div>
 </div>
 
-% if len(route.trips) == 0:
+% if route.trips:
+    % trips = route.trips
+    % departures = route.find_departures()
+    
+    % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
+
+    % include('components/map_toggle')
+% else:
     <div class="placeholder">
         % if system.gtfs_loaded:
             <h3>There are currently no trips for this route</h3>
@@ -30,11 +37,4 @@
             <p>System data is currently loading and will be available soon.</p>
         % end
     </div>
-% else:
-    % trips = route.trips
-    % departures = route.find_departures()
-    
-    % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
-
-    % include('components/map_toggle')
 % end

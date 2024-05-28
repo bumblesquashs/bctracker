@@ -5,10 +5,10 @@
         <div>{{ bus }}</div>
     % end
     % adornment = bus.find_adornment()
-    % if adornment is not None and adornment.enabled:
+    % if adornment and adornment.enabled:
         <div class="adornment tooltip-anchor">
             {{ adornment }}
-            % if adornment.description is not None:
+            % if adornment.description:
                 <div class="tooltip right">{{ adornment.description }}</div>
             % end
         </div>

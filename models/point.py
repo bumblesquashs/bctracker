@@ -1,7 +1,7 @@
 
 from di import di
 
-from services import SystemService
+from repositories import SystemRepository
 
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
@@ -17,8 +17,8 @@ class Point:
     @classmethod
     def from_db(cls, row, prefix='point', **kwargs):
         '''Returns a point initialized from the given database row'''
-        system_service = kwargs.get('system_service') or di[SystemService]
-        system = system_service.find(row[f'{prefix}_system_id'])
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        system = system_repository.find(row[f'{prefix}_system_id'])
         shape_id = row[f'{prefix}_shape_id']
         sequence = row[f'{prefix}_sequence']
         lat = row[f'{prefix}_lat']

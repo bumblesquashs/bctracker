@@ -9,15 +9,15 @@ from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
-from services import DepartureService, SystemService
+from repositories import DepartureRepository, SystemRepository
 
-import utils
+import helpers
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
     __slots__ = (
-        'departure_service',
+        'departure_repository',
         'system',
         'id',
         'number',
@@ -30,8 +30,8 @@ class Route:
     @classmethod
     def from_db(cls, row, prefix='route', **kwargs):
         '''Returns a route initialized from the given database row'''
-        system_service = kwargs.get('system_service') or di[SystemService]
-        system = system_service.find(row[f'{prefix}_system_id'])
+        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        system = system_repository.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         name = row[f'{prefix}_name']
@@ -77,9 +77,9 @@ class Route:
         self.colour = colour
         self.text_colour = text_colour
         
-        self.key = utils.key(number)
+        self.key = helpers.key(number)
         
-        self.departure_service = kwargs.get('departure_service') or di[DepartureService]
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -151,7 +151,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_service.find_all(self.system, route=self)
+        return self.departure_repository.find_all(self.system, route=self)
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''
