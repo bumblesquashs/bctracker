@@ -60,6 +60,8 @@
         let showRouteLines = "{{ show_route_lines }}" !== "False";
         let showNISBuses = "{{ show_nis }}" !== "False";
         let hoverPosition = null;
+        let selectedPosition = null;
+        let selectedPositionElement = null;
         const busMarkerStyle = "{{ bus_marker_style }}";
         
         const shapes = {};
@@ -159,6 +161,18 @@
                     content.appendChild(system);
                 }
                 
+                const selectedOnly = document.createElement("div");
+                selectedOnly.className = "selected-only";
+                
+                if (position.bus_number >= 0) {
+                    const busLink = document.createElement("a");
+                    busLink.style.height = 10;
+                    busLink.href = "/bus/" + position.bus_number;
+                    selectedOnly.appendChild(busLink);
+                }
+                
+                content.appendChild(selectedOnly);
+                
                 if (position.bus_number < 0) {
                     const icon = document.createElement("div");
                     icon.className = "icon";
@@ -191,9 +205,12 @@
                     }
                     element.appendChild(icon);
                 } else {
-                    const icon = document.createElement("a");
+                    const icon = document.createElement("div");
                     icon.className = "icon";
-                    icon.href = "/bus/" + position.bus_number;
+                    icon.onclick = function() {
+                        setSelectedPosition(position, element);
+                    }
+                    // icon.href = "/bus/" + position.bus_number;
                     if (busMarkerStyle == "route") {
                         icon.classList.add("bus_route");
                         icon.innerHTML = "<div class='link'></div>" + position.route_number;
@@ -381,58 +398,96 @@
             if (showRouteLines) {
                 return
             }
-            if (hoverPosition !== null) {
-                const shapeID = hoverPosition.system_id + "_" + hoverPosition.shape_id
-                if (shapeID in shapes) {
-                    shapes[shapeID].setVisible(false);
-                }
+            if (hoverPosition !== null && hoverPosition !== selectedPosition) {
+                hideLine(hoverPosition);
             }
             if (position !== null) {
-                if (position.shape_id === null || position.shape_id === undefined) {
-                    return;
-                }
-                const shapeID = position.system_id + "_" + position.shape_id
-                if (shapeID in shapes) {
-                    shapes[shapeID].setVisible(true);
-                } else {
-                    const request = new XMLHttpRequest();
-                    request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
-                    request.responseType = "json";
-                    request.onload = function() {
-                        if (request.status === 200) {
-                            if (shapeID in shapes) {
-                                shapes[shapeID].setVisible(shapeID, hoverPosition == position);
-                            } else {
-                                const layer = new ol.layer.Vector({
-                                    source: new ol.source.Vector({
-                                        features: [
-                                            new ol.Feature({
-                                                geometry: new ol.geom.LineString(request.response.points.map(function (point) {
-                                                    return ol.proj.fromLonLat([point.lon, point.lat])
-                                                })),
-                                                name: shapeID
-                                            })
-                                        ],
-                                        wrapX: false
-                                    }),
-                                    style: new ol.style.Style({
-                                        stroke: new ol.style.Stroke({
-                                            color: "#" + position.colour,
-                                            width: 4,
-                                            lineCap: "butt"
-                                        })
-                                    }),
-                                    visible: hoverPosition == position
-                                })
-                                shapes[shapeID] = layer;
-                                map.addLayer(layer);
-                            }
-                        }
-                    };
-                    request.send();
-                }
+                showLine(position);
             }
             hoverPosition = position;
+        }
+        
+        function setSelectedPosition(position, element) {
+            if (position === selectedPosition) {
+                position = null;
+                element = null;
+            }
+            if (selectedPosition !== null && hoverPosition !== selectedPosition) {
+                hideLine(selectedPosition);
+            }
+            if (selectedPositionElement !== null) {
+                selectedPositionElement.classList.remove("selected");
+            }
+            if (position !== null) {
+                map.getView().animate({
+                    center: ol.proj.fromLonLat([position.lon, position.lat]),
+                    zoom: 15,
+                    duration: 1000
+                });
+                showLine(position);
+            }
+            if (element !== null) {
+                element.classList.add("selected");
+            }
+            selectedPosition = position;
+            selectedPositionElement = element;
+        }
+        
+        function hideLine(position) {
+            const shapeID = position.system_id + "_" + position.shape_id
+            if (shapeID in shapes) {
+                shapes[shapeID].setVisible(false);
+            }
+        }
+        
+        function showLine(position) {
+            if (position.shape_id === null || position.shape_id === undefined) {
+                return;
+            }
+            const shapeID = position.system_id + "_" + position.shape_id
+            if (shapeID in shapes) {
+                shapes[shapeID].setVisible(true);
+            } else {
+                const request = new XMLHttpRequest();
+                request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
+                request.responseType = "json";
+                request.onload = function() {
+                    if (request.status === 200) {
+                        if (shapeID in shapes) {
+                            shapes[shapeID].setVisible(shapeID, isLineVisible(position));
+                        } else {
+                            const layer = new ol.layer.Vector({
+                                source: new ol.source.Vector({
+                                    features: [
+                                        new ol.Feature({
+                                            geometry: new ol.geom.LineString(request.response.points.map(function (point) {
+                                                return ol.proj.fromLonLat([point.lon, point.lat])
+                                            })),
+                                            name: shapeID
+                                        })
+                                    ],
+                                    wrapX: false
+                                }),
+                                style: new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: "#" + position.colour,
+                                        width: 4,
+                                        lineCap: "butt"
+                                    })
+                                }),
+                                visible: isLineVisible(position)
+                            })
+                            shapes[shapeID] = layer;
+                            map.addLayer(layer);
+                        }
+                    }
+                };
+                request.send();
+            }
+        }
+        
+        function isLineVisible(position) {
+            return position == hoverPosition || position == selectedPosition || showRouteLines
         }
         
         setTimeout(function() {

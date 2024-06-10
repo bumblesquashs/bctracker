@@ -875,6 +875,26 @@ table tr.header td {
     display: inherit;
 }
 
+.marker.selected {
+    z-index: 10 !important;
+}
+
+.marker.selected .icon ~ .hover-only {
+    display: inherit;
+}
+
+.marker.selected .icon ~ * .hover-only {
+    display: inherit;
+}
+
+.marker .selected-only {
+    display: none;
+}
+
+.marker.selected .selected-only {
+    display: block;
+}
+
 .marker .icon.adherence {
     font-weight: bold;
     text-align: center;
