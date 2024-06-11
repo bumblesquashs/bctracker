@@ -219,7 +219,7 @@
     function onError(error) {
         const code = error.code;
         if (code == error.PERMISSION_DENIED) {
-            setStatus("error", "Error loading upcoming departures", "Access to location is denied, give your browser access to your devices's location to see nearby stops!");
+            setStatus("error", "Error loading upcoming departures", "Access to location is denied, give your browser access to your device's location to see nearby stops!");
         } else if (code == error.POSITION_UNAVAILABLE) {
             setStatus("error", "Error loading upcoming departures", "Location is unavailable, please try again!");
         } else if (code == error.TIMEOUT) {
