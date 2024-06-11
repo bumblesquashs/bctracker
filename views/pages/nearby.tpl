@@ -257,6 +257,7 @@
     function updateMap() {
         if (lat !== null && lon !== null) {
             document.getElementById("current-location").classList.remove("display-none");
+            map.updateSize();
             map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
             map.getView().setZoom(17);
         }
