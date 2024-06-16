@@ -1,0 +1,35 @@
+
+.modified-service {
+    background-color: #9B6B00;
+    color: #FFFFFF;
+}
+
+.no-service {
+    background-color: #A1004F;
+    color: #FFFFFF;
+}
+
+.normal-service {
+    background-color: #1658FC;
+    color: #FFFFFF;
+}
+
+.sheet a.modified-service:hover {
+    background-color: #785200;
+}
+
+.sheet a.no-service:hover {
+    background-color: #830040;
+}
+
+.sheet a.normal-service:hover {
+    background-color: #0148F8;
+}
+
+.weekdays a.weekday.no-service:hover {
+    background-color: #830040;
+}
+
+.weekdays a.weekday.normal-service:hover {
+    background-color: #0148F8;
+}
