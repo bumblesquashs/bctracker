@@ -528,8 +528,11 @@ class Server(Bottle):
         else:
             records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
         transfers = self.transfer_repository.find_all(bus=bus)
+        tracked_systems = set()
         events = []
         if overview:
+            tracked_systems.add(overview.first_seen_system)
+            tracked_systems.add(overview.last_seen_system)
             events.append(Event(overview.first_seen_date, 'First Seen'))
             if overview.first_record:
                 events.append(Event(overview.first_record.date, 'First Tracked'))
@@ -537,6 +540,8 @@ class Server(Bottle):
             if overview.last_record:
                 events.append(Event(overview.last_record.date, 'Last Tracked'))
             for transfer in transfers:
+                tracked_systems.add(transfer.old_system)
+                tracked_systems.add(transfer.new_system)
                 events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
         return self.page(
             name='bus/history',
@@ -546,6 +551,7 @@ class Server(Bottle):
             bus=bus,
             records=records,
             overview=overview,
+            tracked_systems=tracked_systems,
             events=events,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites(),
