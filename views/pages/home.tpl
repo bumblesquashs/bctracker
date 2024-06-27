@@ -298,7 +298,7 @@
                                 <li>Transfers: Now can be filtered and shows statistics</li>
                             </ul>
                             <p>As usual we've also been making small improvements to the general design of the site, as well as improvements to the server itself behind the scenes.</p>
-                            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Wiliam's Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
+                            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Williams Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
                             <p>
                                 That's all from us for now!
                                 As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
