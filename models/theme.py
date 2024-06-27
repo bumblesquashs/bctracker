@@ -5,13 +5,17 @@ class Theme:
     __slots__ = (
         'id',
         'name',
-        'visible'
+        'visible',
+        'light',
+        'dark'
     )
     
     def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
         self.visible = kwargs.get('visible', True)
+        self.light = kwargs.get('light', False)
+        self.dark = kwargs.get('dark', False)
     
     def __str__(self):
         return self.name

@@ -14,31 +14,22 @@
             </div>
             <div class="content">
                 <p>
-                    The default BCTracker theme (BC Transit) is available in both light and dark colours.
-                    You can also set it to change automatically based on your system preferences.
-                    Alternatively, you can embrace nostalgia with themes based on older BC transit agencies.
-                </p>
-                <p>
-                    A high contrast option is also available to help distinguish some parts of the website better for anyone who is visually impaired.
+                    The default BCTracker theme is based on the current BC Transit bus livery.
+                    You can also choose to embrace nostalgia with themes based on older BC transit agencies.
                 </p>
                 
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 
                 <div class="options-container">
-                    <div class="option" onclick="setTheme('automatic')">
-                        <div class="radio-button {{ '' if theme else 'selected' }}"></div>
-                        <div>BC Transit (Auto)</div>
-                    </div>
-                    
                     % for visible_theme in visible_themes:
                         <div class="option" onclick="setTheme('{{ visible_theme.id }}')">
-                            <div class="radio-button {{ 'selected' if theme and visible_theme == theme else '' }}"></div>
+                            <div class="radio-button {{ 'selected' if visible_theme == theme else '' }}"></div>
                             <div>{{ visible_theme }}</div>
                         </div>
                     % end
                     
-                    % if theme and not theme.visible:
+                    % if not theme.visible:
                         <div class="option" onclick="setTheme('{{ theme.id }}')">
                             <div class="radio-button selected"></div>
                             <div>{{ theme }}</div>
@@ -56,6 +47,56 @@
                     <!-- If you aren't sure how to actually apply secret themes, I'm afraid you'll just have to figure it out yourself. -->
                     <!-- I was generous to even give you this list in the first place! ;) -->
                 % end
+            </div>
+        </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Theme Variant</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                % if theme.light and theme.dark:
+                    <p>
+                        The selected theme is available in both light and dark variants.
+                        Choose one manually, or have it update automatically based on your system preferences.
+                    </p>
+                    
+                    <div class="options-container">
+                        <div class="option" onclick="setThemeVariant(null)">
+                            <div class="radio-button {{ 'selected' if theme_variant != 'light' and theme_variant != 'dark' else '' }}"></div>
+                            <div>Automatic</div>
+                        </div>
+                        <div class="option" onclick="setThemeVariant('light')">
+                            <div class="radio-button {{ 'selected' if theme_variant == 'light' else '' }}"></div>
+                            <div>Light</div>
+                        </div>
+                        <div class="option" onclick="setThemeVariant('dark')">
+                            <div class="radio-button {{ 'selected' if theme_variant == 'dark' else '' }}"></div>
+                            <div>Dark</div>
+                        </div>
+                    </div>
+                % elif theme.light:
+                    <p>The selected theme is only available as a light variant.</p>
+                % elif theme.dark:
+                    <p>The selected theme is only available as a dark variant.</p>
+                % end
+            </div>
+        </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>High Contrast</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                <p>High contrast mode helps distinguish some parts of the website better for anyone who is visually impaired.</p>
+                <div class="options-container">
+                    <div class="option" onclick="setHighContrast('{{ high_contrast }}' !== 'True')">
+                        <div class="checkbox {{ 'selected' if high_contrast else '' }}">
+                            % include('components/svg', name='check')
+                        </div>
+                        <div>Enable High Contrast Mode</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -120,14 +161,30 @@
 
 <script>
     function setTheme(themeID) {
-        window.location = "?theme=" + themeID
+        window.location = "?theme=" + themeID;
+    }
+    
+    function setThemeVariant(variant) {
+        if (variant === null) {
+            window.location = "?theme_variant=";
+        } else {
+            window.location = "?theme_variant=" + variant;
+        }
+    }
+    
+    function setHighContrast(enabled) {
+        if (enabled) {
+            window.location = "?high_contrast=enabled";
+        } else {
+            window.location = "?high_contrast=disabled";
+        }
     }
     
     function setTimeFormat(format) {
-        window.location = "?time_format=" + format
+        window.location = "?time_format=" + format;
     }
     
     function setBusMarkerStyle(style) {
-        window.location = "?bus_marker_style=" + style
+        window.location = "?bus_marker_style=" + style;
     }
 </script>

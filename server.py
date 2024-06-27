@@ -212,10 +212,15 @@ class Server(Bottle):
         '''Returns an HTML page with the given name and details'''
         is_admin = self.validate_admin()
         
-        theme_id = request.query.get('theme') or request.get_cookie('theme')
-        time_format = request.query.get('time_format') or request.get_cookie('time_format')
-        bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
-        hide_systems = request.get_cookie('hide_systems') == 'yes'
+        theme_id = self.query_cookie('theme')
+        theme = self.theme_repository.find(theme_id)
+        if not theme:
+            theme = self.theme_repository.find('bc-transit')
+        theme_variant = self.query_cookie('theme_variant')
+        high_contrast = self.query_cookie('high_contrast') == 'enabled'
+        time_format = self.query_cookie('time_format')
+        bus_marker_style = self.query_cookie('bus_marker_style')
+        hide_systems = self.query_cookie('hide_systems') == 'yes'
         if system:
             last_updated = system.get_last_updated(time_format)
         else:
@@ -237,7 +242,9 @@ class Server(Bottle):
             is_admin=is_admin,
             get_url=self.get_url,
             last_updated=last_updated,
-            theme=self.theme_repository.find(theme_id),
+            theme=theme,
+            theme_variant=theme_variant,
+            high_contrast=high_contrast,
             time_format=time_format,
             bus_marker_style=bus_marker_style,
             hide_systems=hide_systems,
@@ -1138,15 +1145,6 @@ class Server(Bottle):
         redirect(self.get_url(system, 'personalize'))
     
     def personalize(self, system, agency):
-        theme_id = request.query.get('theme')
-        if theme_id:
-            self.set_cookie('theme', theme_id)
-        time_format = request.query.get('time_format')
-        if time_format:
-            self.set_cookie('time_format', time_format)
-        bus_marker_style = request.query.get('bus_marker_style')
-        if bus_marker_style:
-            self.set_cookie('bus_marker_style', bus_marker_style)
         themes = self.theme_repository.find_all()
         return self.page(
             name='personalize',
