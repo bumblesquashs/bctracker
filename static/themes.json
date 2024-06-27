@@ -16,6 +16,11 @@
         "name": "Urban Transit Authority",
         "light": true
     },
+    "pride": {
+        "name": "Pride",
+        "light": true,
+        "dark": true
+    },
     "tcomm": {
         "name": "T-Comm",
         "visible": false,
