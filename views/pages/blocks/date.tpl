@@ -3,6 +3,10 @@
 
 <div id="page-header">
     <h1>Blocks</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, f'blocks') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Schedule</span>
+    </div>
 </div>
 
 % if system:

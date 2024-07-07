@@ -96,7 +96,8 @@ class Server(Bottle):
         self.add('/routes/<route_number>/map', callback=self.route_map)
         self.add('/routes/<route_number>/schedule', callback=self.route_schedule)
         self.add('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.route_schedule_date)
-        self.add('/blocks', callback=self.blocks)
+        self.add('/blocks', callback=self.blocks_overview)
+        self.add('/blocks/schedule', callback=self.blocks_schedule)
         self.add('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.blocks_schedule_date)
         self.add('/blocks/<block_id>', callback=self.block_overview)
         self.add('/blocks/<block_id>/map', callback=self.block_map)
@@ -772,11 +773,25 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def blocks(self, system, agency):
+    def blocks_overview(self, system, agency):
+        if system:
+            assignments = self.assignment_repository.find_all(system)
+        else:
+            assignments = []
         return self.page(
-            name='blocks/list',
+            name='blocks/overview',
             title='Blocks',
             path='blocks',
+            system=system,
+            agency=agency,
+            assignments=assignments
+        )
+    
+    def blocks_schedule(self, system, agency):
+        return self.page(
+            name='blocks/schedule',
+            title='Blocks',
+            path='blocks/schedule',
             system=system,
             agency=agency,
             enable_refresh=False
