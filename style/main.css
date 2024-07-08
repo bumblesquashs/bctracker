@@ -1271,6 +1271,14 @@ table tr.header td {
     z-index: 20;
 }
 
+.timeline .section.non-current {
+    opacity: 0.2;
+}
+
+.timeline .section.non-current:hover {
+    opacity: 1;
+}
+
 .timing-point {
     font-weight: bold;
 }
