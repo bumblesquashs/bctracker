@@ -152,6 +152,14 @@ class Route:
     def find_departures(self):
         '''Returns all departures for this route'''
         return self.departure_repository.find_all(self.system, route=self)
+    
+    def is_variant(self, route):
+        '''Checks if this route is a variant of another route'''
+        if self == route:
+            return False # Self is not a variant
+        self_key = tuple([k for k in self.key if type(k) == int])
+        route_key = tuple([k for k in route.key if type(k) == int])
+        return self_key and route_key and self_key == route_key
 
 def generate_colour(system, number):
     '''Generate a random colour based on system ID and route number'''
