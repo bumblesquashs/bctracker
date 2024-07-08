@@ -42,6 +42,9 @@
                             <div class="lighter-text">Unknown Route</div>
                         % end
                     </div>
+                    <div class="section">
+                        % include('components/block_timeline', block=trip.block)
+                    </div>
                     <div class="row section">
                         % block = trip.block
                         <div class="name">Block</div>
