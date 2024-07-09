@@ -132,6 +132,7 @@
                                 </span>
                                 <span>are scheduled but may be swapped off.</span>
                             </p>
+                            <p>Times in brackets are estimates based on current vehicle location.</p>
                         % end
                         <table>
                             <thead>
@@ -153,7 +154,7 @@
                                     % if last_hour == -1:
                                         % last_hour = this_hour
                                     % end
-                                    % include('rows/departure', show_divider=this_hour > last_hour)
+                                    % include('rows/departure', show_divider=this_hour > last_hour, show_time_estimate=True)
                                     % last_hour = this_hour
                                 % end
                             </tbody>
