@@ -16,6 +16,8 @@
  * Other colors may also be used for specific purposes
 */
 
+@import "../light.css";
+
 :root {
     --tooltip-background: #666666;
     --tooltip-text: #FFFFFF;
@@ -288,10 +290,6 @@ table tr:nth-child(2n-1) {
     background-color: #840000;
 }
 
-.ahead {
-    --adherence-background: #FF9A3A;
-}
-
 .banner {
     background-color: #FFA027;
     color: #FFFFFF;
@@ -300,10 +298,6 @@ table tr:nth-child(2n-1) {
 
 .banner a {
     color: #FFFFFF;
-}
-
-.behind {
-    --adherence-background: #FF9A3A;
 }
 
 .button {
@@ -408,15 +402,6 @@ table tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.modified-service {
-    background-color: #FFA560;
-    color: #000000;
-}
-
-.negative {
-    color: #FF0000;
-}
-
 .news-post {
     background-color: #E6E6E6;
     border-color: #666666;
@@ -426,20 +411,6 @@ table tr:nth-child(2n-1) {
     background-color: #023496;
     color: #FFFFFF;
     border-bottom-color: #666666;
-}
-
-.no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.normal-service {
-    background-color: #7DBD88;
-    color: #000000;
-}
-
-.on-time {
-    --adherence-background: #3C5ABE;
 }
 
 .option {
@@ -476,10 +447,6 @@ table tr:nth-child(2n-1) {
     background-color: #E20000;
 }
 
-.positive {
-    color: #1A671A;
-}
-
 .record-warnings {
     --image-color: #FF0000;
 }
@@ -496,18 +463,6 @@ table tr:nth-child(2n-1) {
 
 .sheet {
     background-color: #DDDDDD;
-}
-
-.sheet a.modified-service:hover {
-    background-color: #E6853A;
-}
-
-.sheet a.no-service:hover {
-    background-color: #DC5050;
-}
-
-.sheet a.normal-service:hover {
-    background-color: #509F5E;
 }
 
 .sheet-list .footer {
@@ -544,25 +499,4 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #666666;
-}
-
-.very-ahead {
-    --adherence-background: #FD393E;
-}
-
-.very-behind {
-    --adherence-background: #FD393E;
-}
-
-.weekdays a.weekday.no-service:hover {
-    background-color: #DC5050;
-}
-
-.weekdays a.weekday.normal-service:hover {
-    background-color: #509F5E;
-}
-
-.weekdays {
-    background-color: #C4C4C4;
-    color: #000000;
 }

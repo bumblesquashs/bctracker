@@ -1073,6 +1073,12 @@ table tr.header td {
     cursor: default;
 }
 
+.percentage {
+    cursor: default;
+    padding: 1px 4px;
+    border-radius: 4px;
+}
+
 .placeholder {
     display: flex;
     flex-direction: column;

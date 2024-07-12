@@ -3,6 +3,8 @@
  * Based on tcomm.bustrainferry.com
 */
 
+@import "../light.css";
+
 :root {
     --tooltip-background: #000000;
     --tooltip-text: #FFFFFF;
@@ -500,15 +502,6 @@ table tr {
     text-shadow: none;
 }
 
-.modified-service {
-    background-color: #FFA560;
-    color: #000000;
-}
-
-.negative {
-    color: #FF0000;
-}
-
 .news-post {
     background: #FFF9DF;
     border-color: #F7C942;
@@ -522,16 +515,6 @@ table tr {
     background-color: #FFF9DF;
     border-bottom-color: #F7C942;
     background-image: linear-gradient( #FFFADF,#FFF3A5 );
-}
-
-.no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.normal-service {
-    background-color: #7DBD88;
-    color: #000000;
 }
 
 .on-time {
@@ -577,8 +560,8 @@ table tr {
     background-image: linear-gradient( #5393c5,#6facd5 );
 }
 
-.positive {
-    color: #1A671A;
+.percentage {
+    text-shadow: none;
 }
 
 .record-warnings {
@@ -604,18 +587,6 @@ table tr {
 
 .sheet a {
     text-shadow: none;
-}
-
-.sheet a.modified-service:hover {
-    background-color: #E6853A;
-}
-
-.sheet a.no-service:hover {
-    background-color: #DC5050;
-}
-
-.sheet a.normal-service:hover {
-    background-color: #509F5E;
 }
 
 .sheet-list {
@@ -680,17 +651,4 @@ table tr {
 
 .weekdays .weekday {
     text-shadow: none;
-}
-
-.weekdays a.weekday.no-service:hover {
-    background-color: #DC5050;
-}
-
-.weekdays a.weekday.normal-service:hover {
-    background-color: #509F5E;
-}
-
-.weekdays {
-    background-color: #CBCBCB;
-    color: #000000;
 }

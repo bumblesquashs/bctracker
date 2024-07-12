@@ -1,29 +1,8 @@
 
-<style>
-    .percentage {
-        cursor: default;
-        padding: 1px 4px;
-        border-radius: 4px;
-        background-color: #ABABAB;
-    }
-    
-    .percentage.low {
-        background-color: #FF7F7F;
-    }
-    
-    .percentage.mid {
-        background-color: #FFA560;
-    }
-    
-    .percentage.high {
-        background-color: #7DBD88;
-    }
-</style>
-
 % if denominator == 0:
     <div class="percentage tooltip-anchor">
         {{ numerator }} / {{ denominator }}
-        <div class="tooltip right">???</div>
+        <div class="tooltip right">💥</div>
     </div>
 % else:
     % percentage = (numerator / denominator) * 100
