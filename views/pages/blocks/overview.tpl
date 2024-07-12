@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container inline flex-3">
+            <div class="container flex-3">
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         <h2>Today's Schedule</h2>

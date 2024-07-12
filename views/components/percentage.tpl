@@ -6,11 +6,9 @@
     </div>
 % else:
     % percentage = (numerator / denominator) * 100
-    % low_cutoff = get('low_cutoff', 25)
-    % high_cutoff = get('high_cutoff', 75)
-    % if percentage < low_cutoff:
+    % if percentage < get('low_cutoff', 25):
         % percentage_class = 'low'
-    % elif percentage >= high_cutoff:
+    % elif percentage >= get('high_cutoff', 75):
         % percentage_class = 'high'
     % else:
         % percentage_class = 'mid'
