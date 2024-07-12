@@ -34,6 +34,10 @@ class RecordRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
+    def find_recorded_today_by_block(self, system) -> dict[str, Bus]:
+        raise NotImplementedError()
+    
+    @abstractmethod
     def count(self, system, bus, block, trip) -> int:
         raise NotImplementedError()
     

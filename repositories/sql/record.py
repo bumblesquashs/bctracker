@@ -132,6 +132,24 @@ class SQLRecordRepository(RecordRepository):
         agency = self.agency_repository.find('bc-transit')
         return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
     
+    def find_recorded_today_by_block(self, system):
+        '''Returns all bus numbers matching the given system that werer ecorded on the current date'''
+        system_id = getattr(system, 'id', system)
+        date = Date.today(system.timezone)
+        rows = self.database.select('record',
+            columns={
+                'record.block_id': 'block_id',
+                'record.bus_number': 'bus_number'
+            },
+            filters={
+                'record.system_id': system_id,
+                'record.date': date.format_db()
+            },
+            order_by='record.last_seen ASC'
+        )
+        agency = self.agency_repository.find('bc-transit')
+        return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}
+    
     def count(self, system=None, bus=None, block=None, trip=None):
         '''Returns the number of records for the given system, bus, block, and trip'''
         system_id = getattr(system, 'id', system)
