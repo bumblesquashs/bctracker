@@ -30,7 +30,8 @@
         },
         "9387": {
             "text": "🏳️‍🌈",
-            "description": "Pride Bus"
+            "description": "Pride Bus",
+            "enabled": false
         },
         "9434": {
             "text": "🎄",
