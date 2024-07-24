@@ -13,12 +13,13 @@ from models.bus import Bus
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.time import Time
 
 from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 41
+VERSION = 42
 
 class Server(Bottle):
     
@@ -96,7 +97,8 @@ class Server(Bottle):
         self.add('/routes/<route_number>/map', callback=self.route_map)
         self.add('/routes/<route_number>/schedule', callback=self.route_schedule)
         self.add('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.route_schedule_date)
-        self.add('/blocks', callback=self.blocks)
+        self.add('/blocks', callback=self.blocks_overview)
+        self.add('/blocks/schedule', callback=self.blocks_schedule)
         self.add('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.blocks_schedule_date)
         self.add('/blocks/<block_id>', callback=self.block_overview)
         self.add('/blocks/<block_id>/map', callback=self.block_map)
@@ -223,8 +225,12 @@ class Server(Bottle):
         hide_systems = self.query_cookie('hide_systems') == 'yes'
         if system:
             last_updated = system.get_last_updated(time_format)
+            today = Date.today(system.timezone)
+            now = Time.now(system.timezone, False)
         else:
             last_updated = self.realtime_service.get_last_updated(time_format)
+            today = Date.today()
+            now = Time.now()
         return template(f'pages/{name}',
             di=di,
             settings=self.settings,
@@ -249,6 +255,8 @@ class Server(Bottle):
             bus_marker_style=bus_marker_style,
             hide_systems=hide_systems,
             show_speed=request.get_cookie('speed') == '1994',
+            today=today,
+            now=now,
             **kwargs
         )
     
@@ -772,11 +780,25 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def blocks(self, system, agency):
+    def blocks_overview(self, system, agency):
+        if system and system.realtime_enabled:
+            recorded_buses = self.record_repository.find_recorded_today_by_block(system)
+        else:
+            recorded_buses = {}
         return self.page(
-            name='blocks/list',
+            name='blocks/overview',
             title='Blocks',
             path='blocks',
+            system=system,
+            agency=agency,
+            recorded_buses=recorded_buses
+        )
+    
+    def blocks_schedule(self, system, agency):
+        return self.page(
+            name='blocks/schedule',
+            title='Blocks',
+            path='blocks/schedule',
             system=system,
             agency=agency,
             enable_refresh=False

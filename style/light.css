@@ -1,0 +1,84 @@
+
+.ahead {
+    --adherence-background: #FF9A3A;
+}
+
+.behind {
+    --adherence-background: #FF9A3A;
+}
+
+.modified-service {
+    background-color: #FFA560;
+    color: #000000;
+}
+
+.negative {
+    color: #FF0000;
+}
+
+.no-service {
+    background-color: #FF7F7F;
+    color: #000000;
+}
+
+.normal-service {
+    background-color: #7DBD88;
+    color: #000000;
+}
+
+.on-time {
+    --adherence-background: #3C5ABE;
+}
+
+.percentage {
+    background-color: #ABABAB;
+}
+
+.percentage.low {
+    background-color: #FF7F7F;
+}
+
+.percentage.mid {
+    background-color: #FFA560;
+}
+
+.percentage.high {
+    background-color: #7DBD88;
+}
+
+.positive {
+    color: #1A671A;
+}
+
+.sheet a.modified-service:hover {
+    background-color: #E6853A;
+}
+
+.sheet a.no-service:hover {
+    background-color: #DC5050;
+}
+
+.sheet a.normal-service:hover {
+    background-color: #509F5E;
+}
+
+.very-ahead {
+    --adherence-background: #FD393E;
+}
+
+.very-behind {
+    --adherence-background: #FD393E;
+}
+
+.weekdays a.weekday.no-service:hover {
+    background-color: #DC5050;
+}
+
+.weekdays a.weekday.normal-service:hover {
+    background-color: #509F5E;
+}
+
+.weekdays {
+    background-color: #C4C4C4;
+    color: #000000;
+}

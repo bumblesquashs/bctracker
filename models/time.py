@@ -129,10 +129,10 @@ class Time:
             return False
         return self.second > other.second
     
-    def __lte__(self, other):
+    def __le__(self, other):
         return self < other or self == other
     
-    def __gte__(self, other):
+    def __ge__(self, other):
         return self > other or self == other
     
     def __add__(self, delta):

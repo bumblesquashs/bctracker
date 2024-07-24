@@ -14,6 +14,18 @@
     color: #FFFFFF;
 }
 
+.percentage.low {
+    background-color: #A1004F;
+}
+
+.percentage.mid {
+    background-color: #9B6B00;
+}
+
+.percentage.high {
+    background-color: #1658FC;
+}
+
 .sheet a.modified-service:hover {
     background-color: #785200;
 }
