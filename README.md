@@ -8,7 +8,6 @@ Available at https://bctracker.ca
 
 - 100 Mile House
 - Ashcroft-Clinton
-- Bella Coola
 - Campbell River
 - Clearwater
 - Comox Valley
