@@ -355,7 +355,7 @@
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording bus history</li>
-                            <li>It may not have functional NextRide equipment installed</li>
+                            <li>It may not have functional tracking equipment installed</li>
                             % if model and model.type == ModelType.shuttle:
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                             % end

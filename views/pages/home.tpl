@@ -6,9 +6,9 @@
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
     % if system:
-        <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
+        <h2>Transit Schedules and Bus Tracking {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
     % else:
-        <h2>BC Transit Schedules and Bus Tracking</h2>
+        <h2>Transit Schedules and Bus Tracking in BC</h2>
     % end
 </div>
 

@@ -7,15 +7,19 @@
             },
             "comox": {
                 "name": "Comox Valley",
-                "remote_id": 45
+                "remote_id": 45,
+                "preposition": "in the"
             },
             "cowichan-valley": {
                 "name": "Cowichan Valley",
-                "remote_id": 10
+                "remote_id": 10,
+                "preposition": "in the"
             },
             "mount-waddington": {
                 "name": "Mount Waddington",
-                "remote_id": 17
+                "remote_id": 17,
+                "preposition": "in the",
+                "regional": true
             },
             "nanaimo": {
                 "name": "Nanaimo",
@@ -28,6 +32,7 @@
             "salt-spring": {
                 "name": "Salt Spring Island",
                 "remote_id": 39,
+                "preposition": "on",
                 "colour_routes": "000000"
             },
             "victoria": {
@@ -38,7 +43,8 @@
         "southern-coast": {
             "fraser-valley": {
                 "name": "Fraser Valley",
-                "remote_id": 13
+                "remote_id": 13,
+                "preposition": "in the"
             },
             "pemberton": {
                 "name": "Pemberton",
@@ -57,6 +63,7 @@
             "sunshine-coast": {
                 "name": "Sunshine Coast",
                 "remote_id": 18,
+                "preposition": "on the",
                 "colour_routes": "000000"
             },
             "whistler": {
@@ -78,12 +85,15 @@
             "creston-valley": {
                 "name": "Creston Valley",
                 "remote_id": 16,
+                "preposition": "in the",
                 "timezone": "America/Creston"
             },
             "east-kootenay": {
                 "name": "East Kootenay",
                 "remote_id": 21,
                 "timezone": "America/Edmonton",
+                "preposition": "in the",
+                "regional": true,
                 "colour_routes": "000000"
             },
             "kamloops": {
@@ -101,7 +111,9 @@
             },
             "north-okanagan": {
                 "name": "North Okanagan",
-                "remote_id": 14
+                "remote_id": 14,
+                "preposition": "in the",
+                "regional": true
             },
             "revelstoke": {
                 "name": "Revelstoke",
@@ -110,11 +122,15 @@
             },
             "south-okanagan": {
                 "name": "South Okanagan",
-                "remote_id": 15
+                "remote_id": 15,
+                "preposition": "in the",
+                "regional": true
             },
             "west-kootenay": {
                 "name": "West Kootenay",
-                "remote_id": 20
+                "remote_id": 20,
+                "preposition": "in the",
+                "regional": true
             }
         },
         "northern-bc": {
@@ -136,6 +152,8 @@
             "kitimat": {
                 "name": "Kitimat-Stikine",
                 "remote_id": 26,
+                "preposition": "in the",
+                "regional": true,
                 "colour_routes": "000000"
             },
             "prince-george": {
@@ -161,6 +179,37 @@
                 "name": "Williams Lake",
                 "remote_id": 33,
                 "colour_routes": "000000"
+            }
+        }
+    },
+    "denman-island-bus": {
+        "vancouver-island": {
+            "denman-island": {
+                "name": "Denman Island",
+                "preposition": "on"
+            }
+        }
+    },
+    "gertie": {
+        "vancouver-island": {
+            "gabriola-island": {
+                "name": "Gabriola Island",
+                "preposition": "on"
+            }
+        }
+    },
+    "hornby-island-bus": {
+        "vancouver-island": {
+            "hornby-island": {
+                "name": "Hornby Island",
+                "preposition": "on"
+            }
+        }
+    },
+    "translink": {
+        "southern-coast": {
+            "vancouver": {
+                "name": "Metro Vancouver"
             }
         }
     }

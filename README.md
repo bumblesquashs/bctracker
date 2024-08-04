@@ -1,8 +1,15 @@
 # BCTracker
 
-A GTFS schedule browser and realtime bus tracker for BC Transit.
+A GTFS schedule browser and realtime bus tracker for transit in BC.
 
 Available at https://bctracker.ca
+
+## Agencies
+
+- BC Transit
+- Denman Island Bus
+- Gertie
+- Hornby Island Bus
 
 ## Systems
 
@@ -14,9 +21,12 @@ Available at https://bctracker.ca
 - Cowichan Valley
 - Creston Valley
 - Dawson Creek
+- Denman Island
 - East Kootenay
 - Fort St. John
 - Fraser Valley
+- Gabriola Island
+- Hornby Island
 - Kamloops
 - Kelowna
 - Kitimat-Stikine

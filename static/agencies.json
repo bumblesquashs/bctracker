@@ -1,11 +1,35 @@
 {
     "bc-transit": {
         "name": "BC Transit",
+        "website": "https://bctransit.com",
         "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
         "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
         "prefix_headsigns": true,
         "accurate_seconds": false,
         "vehicle_name_length": 4,
         "distance_scale": 1000
+    },
+    "denman-island-bus": {
+        "name": "Denman Island Bus",
+        "website": "https://www.denmanislandbus.ca",
+        "gtfs_url": "https://bctracker.ca/feeds/denman/denman-feed.zip",
+        "prefix_headsigns": true
+    },
+    "gertie": {
+        "name": "Gertie",
+        "website": "https://gertie.ca",
+        "gtfs_url": "https://bctracker.ca/feeds/gabriola/gabriola-feed.zip",
+        "prefix_headsigns": true
+    },
+    "hornby-island-bus": {
+        "name": "Hornby Island Bus",
+        "website": "https://hornbybus.com",
+        "gtfs_url": "https://bctracker.ca/feeds/hornby/hornby-feed.zip",
+        "prefix_headsigns": true
+    },
+    "translink": {
+        "name": "Translink",
+        "website": "https://translink.ca",
+        "enabled": false
     }
 }

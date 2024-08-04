@@ -25,10 +25,10 @@
         
         % if system:
             <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, BC Transit, Bus Tracking, {{ system }}" />
+            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ system }}, {{ system.agency }}" />
         % else:
-            <meta name="description" content="BC Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, BC Transit, Bus Tracking" />
+            <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
+            <meta name="keywords" content="Transit, British Columbiam, Bus Tracking" />
         % end
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
@@ -322,9 +322,15 @@
                         <div class="header">{{ region }}</div>
                         % for region_system in sorted(region_systems):
                             % if system and system == region_system:
-                                <span class="system-button current">{{ region_system }}</span>
+                                <div class="system-button current">
+                                    <img src="/img/icons/{{ region_system.agency.id }}.png" />
+                                    <div>{{ region_system }}</div>
+                                </div>
                             % else:
-                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">{{ region_system }}</a>
+                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">
+                                    <img src="/img/icons/{{ region_system.agency.id }}.png" />
+                                    <div>{{ region_system }}</div>
+                                </a>
                             % end
                         % end
                     % end

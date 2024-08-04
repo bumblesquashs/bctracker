@@ -245,6 +245,7 @@ class Server(Bottle):
             full_map=full_map,
             regions=self.region_repository.find_all(),
             systems=self.system_repository.find_all(),
+            agencies=self.agency_repository.find_all(),
             is_admin=is_admin,
             get_url=self.get_url,
             last_updated=last_updated,

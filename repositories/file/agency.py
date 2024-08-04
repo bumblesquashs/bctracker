@@ -27,4 +27,4 @@ class FileAgencyRepository(AgencyRepository):
     
     def find_all(self):
         '''Returns all agencies'''
-        return self.agencies.values()
+        return sorted([a for a in self.agencies.values() if a.enabled])

@@ -436,6 +436,18 @@ table tr.header td {
     font-weight: bold;
 }
 
+#system-menu .system-button {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+#system-menu .system-button img {
+    width: 24px;
+    height: 24px;
+}
+
 #top-button {
     position: fixed;
     right: 40px;

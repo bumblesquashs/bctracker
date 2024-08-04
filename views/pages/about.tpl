@@ -10,9 +10,17 @@
         <div class="section">
             <div class="content">
                 <p>
-                    BCTracker is a browser for the <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
-                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in communities around British Columbia. 
+                    BCTracker is a browser for <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data from transit agencies around British Columbia.
+                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in BC communities.
                 </p>
+                <p>Currently, we include information from these transit agencies:</p>
+                <ul>
+                    % for agency in agencies:
+                        <li>
+                            <a href="{{ agency.website }}">{{ agency }}</a>
+                        </li>
+                    % end
+                </ul>
             </div>
         </div>
         <div class="section">

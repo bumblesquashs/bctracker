@@ -5,6 +5,7 @@ class Agency:
     __slots__ = (
         'id',
         'name',
+        'website',
         'gtfs_url',
         'realtime_url',
         'enabled',
@@ -27,6 +28,7 @@ class Agency:
     def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
+        self.website = kwargs.get('website')
         self.gtfs_url = kwargs.get('gtfs_url')
         self.realtime_url = kwargs.get('realtime_url')
         self.enabled = kwargs.get('enabled', True)
