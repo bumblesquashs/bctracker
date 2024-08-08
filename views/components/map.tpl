@@ -6,6 +6,10 @@
 <div id="map" class="{{ 'preview' if is_preview else 'full-screen' }}"></div>
 
 % include('components/svg_script', name='fish')
+% include('components/svg_script', name='no-people')
+% include('components/svg_script', name='one-person')
+% include('components/svg_script', name='two-people')
+% include('components/svg_script', name='three-people')
 
 <script>
     const interactive = "{{ is_preview }}" === "False";
@@ -101,6 +105,9 @@
                     if (adherence !== undefined && adherence !== null) {
                         bearing.classList.add(adherence.status_class)
                     }
+                } else if (busMarkerStyle === "occupancy") {
+                    bearing.classList.add("occupancy");
+                    bearing.classList.add(position.occupancy_status_class);
                 } else {
                     bearing.style.borderBottomColor = "#" + position.colour;
                 }
@@ -168,6 +175,10 @@
                         icon.innerHTML = adherence.value;
                         icon.classList.add(adherence.status_class);
                     }
+                } else if (busMarkerStyle == "occupancy") {
+                    icon.classList.add("occupancy");
+                    icon.classList.add(position.occupancy_status_class);
+                    icon.innerHTML = getSVG(position.occupancy_icon);
                 } else {
                     icon.innerHTML = getSVG(position.bus_icon);
                     icon.style.backgroundColor = "#" + position.colour;
@@ -194,6 +205,10 @@
                         icon.innerHTML = "<div class='link'></div>" + adherence.value;
                         icon.classList.add(adherence.status_class);
                     }
+                } else if (busMarkerStyle == "occupancy") {
+                    icon.classList.add("occupancy");
+                    icon.classList.add(position.occupancy_status_class);
+                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.occupancy_icon);
                 } else {
                     icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
                     icon.style.backgroundColor = "#" + position.colour;
