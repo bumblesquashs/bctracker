@@ -1,7 +1,10 @@
 
 from database import Database
 
+from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
+
 from models.adherence import Adherence
+from models.occupancy import Occupancy
 from models.position import Position
 
 from repositories import PositionRepository
@@ -67,6 +70,11 @@ class SQLPositionRepository(PositionRepository):
             adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
         else:
             adherence = None
+        try:
+            value = _VEHICLEPOSITION_OCCUPANCYSTATUS.values_by_number[data.occupancy_status]
+            occupancy = Occupancy[value.name]
+        except KeyError:
+            occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
             'system_id': system_id,
             'bus_number': bus_number,
@@ -78,7 +86,8 @@ class SQLPositionRepository(PositionRepository):
             'lat': lat,
             'lon': lon,
             'bearing': bearing,
-            'speed': speed
+            'speed': speed,
+            'occupancy': occupancy.name
         }
         if adherence:
             values['adherence'] = adherence.value
@@ -100,7 +109,8 @@ class SQLPositionRepository(PositionRepository):
                 'position.lon': 'position_lon',
                 'position.bearing': 'position_bearing',
                 'position.speed': 'position_speed',
-                'position.adherence': 'position_adherence'
+                'position.adherence': 'position_adherence',
+                'position.occupancy': 'position_occupancy'
             },
             filters={
                 'position.bus_number': bus_number
@@ -166,7 +176,8 @@ class SQLPositionRepository(PositionRepository):
                 'position.lon': 'position_lon',
                 'position.bearing': 'position_bearing',
                 'position.speed': 'position_speed',
-                'position.adherence': 'position_adherence'
+                'position.adherence': 'position_adherence',
+                'position.occupancy': 'position_occupancy'
             },
             filters=filters,
             initializer=Position.from_db

@@ -26,6 +26,41 @@
     color: #FFFFFF;
 }
 
+.occupancy-empty {
+    --occupancy-background: #003B00;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-many-seats {
+    --occupancy-background: #003B00;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-few-seats {
+    --occupancy-background: #003B00;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-standing-room {
+    --occupancy-background: #934800;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-crushed {
+    --occupancy-background: #934800;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-full {
+    --occupancy-background: #4A0000;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-unavailable {
+    --occupancy-background: #565656;
+    --occupancy-foreground: #FFFFFF;
+}
+
 .on-time {
     --adherence-background: #0093A8;
 }

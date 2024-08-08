@@ -500,6 +500,10 @@ table tr.header td {
     border-bottom-color: var(--adherence-background);
 }
 
+.bearing.occupancy {
+    border-bottom-color: var(--occupancy-background);
+}
+
 .block-timeline {
     display: flex;
     flex-direction: column;
@@ -920,6 +924,11 @@ table tr.header td {
     text-decoration: none;
 }
 
+.marker .icon.occupancy {
+    background-color: var(--occupancy-background);
+    --image-color: var(--occupancy-foreground);
+}
+
 .marker.small .icon {
     width: 12px;
     height: 12px;
@@ -961,6 +970,19 @@ table tr.header td {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.occupancy-icon {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background-color: var(--occupancy-background);
+    --image-color: var(--occupancy-foreground);
+    --image-size: 14px;
+}
+
+.occupancy-icon.large {
+    padding: 2px 4px;
+    --image-size: 18px;
 }
 
 .options-container {

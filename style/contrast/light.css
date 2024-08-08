@@ -14,6 +14,30 @@
     color: #000000;
 }
 
+.occupancy-empty {
+    --occupancy-background: #3D74FF;
+}
+
+.occupancy-many-seats {
+    --occupancy-background: #3D74FF;
+}
+
+.occupancy-few-seats {
+    --occupancy-background: #3D74FF;
+}
+
+.occupancy-standing-room {
+    --occupancy-background: #C68900;
+}
+
+.occupancy-crushed {
+    --occupancy-background: #C68900;
+}
+
+.occupancy-full {
+    --occupancy-background: #D50068;
+}
+
 .percentage.low {
     background-color: #DC267F;
 }
