@@ -90,6 +90,15 @@
                                 <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
                             </div>
                         </div>
+                        <div class="row section">
+                            <div class="name">Occupancy</div>
+                            <div class="value">
+                                <div class="row gap-5 center">
+                                    <div>{{ position.occupancy }}</div>
+                                    % include('components/occupancy', occupancy=position.occupancy, size='large')
+                                </div>
+                            </div>
+                        </div>
                         % if show_speed:
                             <div class="row section">
                                 <div class="name">Speed</div>
@@ -125,6 +134,15 @@
                             <div class="name">System</div>
                             <div class="value">
                                 <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                            </div>
+                        </div>
+                        <div class="row section">
+                            <div class="name">Occupancy</div>
+                            <div class="value">
+                                <div class="row gap-5 center">
+                                    <div>{{ position.occupancy }}</div>
+                                    % include('components/occupancy', occupancy=position.occupancy, size='large')
+                                </div>
                             </div>
                         </div>
                         % if show_speed:
