@@ -16,8 +16,6 @@
  * Other colors may also be used for specific purposes
 */
 
-@import "../light.css";
-
 :root {
     --tooltip-background: #69BB65;
     --tooltip-text: #FFFFFF;

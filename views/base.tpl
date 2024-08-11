@@ -61,16 +61,20 @@
         
         % if theme.light and theme.dark:
             % if theme_variant == 'light':
+                <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
                 <link rel="stylesheet" href="/style/themes/{{ theme.id }}.light.css?version={{ version }}" />
                 % if high_contrast:
                     <link rel="stylesheet" href="/style/contrast/light.css?version={{ version }}" />
                 % end
             % elif theme_variant == 'dark':
+                <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
                 <link rel="stylesheet" href="/style/themes/{{ theme.id }}.dark.css?version={{ version }}" />
                 % if high_contrast:
                     <link rel="stylesheet" href="/style/contrast/dark.css?version={{ version }}" />
                 % end
             % else:
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css?version={{ version }}" />
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css?version={{ version }}" />
                 <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/{{ theme.id }}.light.css?version={{ version }}" />
                 <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/{{ theme.id }}.dark.css?version={{ version }}" />
                 % if high_contrast:
@@ -79,6 +83,11 @@
                 % end
             % end
         % else:
+            % if theme.light:
+                <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
+            % elif theme.dark:
+                <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
+            % end
             <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
             % if high_contrast:
                 % if theme.light:

@@ -1,6 +1,4 @@
 
-@import "../dark.css";
-
 :root {
     color-scheme: dark;
     --tooltip-background: #000000;

@@ -3,8 +3,6 @@
  * Based on tcomm.bustrainferry.com
 */
 
-@import "../light.css";
-
 :root {
     --tooltip-background: #000000;
     --tooltip-text: #FFFFFF;
