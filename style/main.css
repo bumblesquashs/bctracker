@@ -804,7 +804,7 @@ table tr.header td {
     padding: 2px;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
 }
 
 .marker .details .content .adherence-indicator {
@@ -814,6 +814,10 @@ table tr.header td {
 }
 
 .marker .details .content .route {
+    font-size: 8pt;
+}
+
+.marker .details .content .occupancy-name {
     font-size: 8pt;
 }
 
