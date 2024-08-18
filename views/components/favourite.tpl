@@ -2,7 +2,7 @@
 % if favourites.is_full and favourite not in favourites:
     <div class="favourite disabled tooltip-anchor">
         % include('components/svg', name='non-favourite')
-        <div class="tooltip right">You can only have 10 favourites at a time</div>
+        <div class="tooltip right">You can only have 20 favourites at a time</div>
     </div>
 % else:
     <div id="remove-favourite" class="favourite tooltip-anchor {{ '' if favourite in favourites else 'display-none' }}" onclick="removeFavourite()">

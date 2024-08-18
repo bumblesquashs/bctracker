@@ -79,7 +79,7 @@ class FavouriteSet:
     @property
     def is_full(self):
         '''Checks if the set has the maximum number of favourites'''
-        return len(self.favourites) >= 10
+        return len(self.favourites) >= 20
     
     def __init__(self, favourites):
         self.favourites = favourites
