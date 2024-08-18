@@ -297,14 +297,14 @@
                                         <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                                         <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
                                         % if not departure.pickup_type.is_normal:
-                                            <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
+                                            <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
                                         % elif departure == departures[-1]:
-                                            <span class="mobile-only smaller-font">No pick up</span>
+                                            <span class="mobile-only smaller-font italics">No pick up</span>
                                         % end
                                         % if not departure.dropoff_type.is_normal:
-                                            <span class="mobile-only smaller-font">{{ departure.dropoff_type }}</span>
+                                            <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
                                         % elif departure == departures[0]:
-                                            <span class="mobile-only smaller-font">No drop off</span>
+                                            <span class="mobile-only smaller-font italics">No drop off</span>
                                         % end
                                     </div>
                                 </td>
@@ -314,14 +314,14 @@
                                             {{ stop }}
                                         </span>
                                         % if not departure.pickup_type.is_normal:
-                                            <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                            <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                         % elif departure == departures[-1]:
-                                            <span class="smaller-font">No pick up</span>
+                                            <span class="smaller-font italics">No pick up</span>
                                         % end
                                         % if not departure.dropoff_type.is_normal:
-                                            <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                            <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
                                         % elif departure == departures[0]:
-                                            <span class="smaller-font">No drop off</span>
+                                            <span class="smaller-font italics">No drop off</span>
                                         % end
                                     </div>
                                 </td>
