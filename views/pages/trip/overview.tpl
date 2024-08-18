@@ -168,8 +168,9 @@
                                 <tr>
                                     <td>
                                         <div class="column">
-                                            <div class="row">
+                                            <div class="row gap-5">
                                                 % include('components/bus')
+                                                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                 % include('components/adherence', adherence=position.adherence)
                                             </div>
                                             <span class="mobile-only smaller-font">

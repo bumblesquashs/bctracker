@@ -38,10 +38,11 @@
             % bus = recorded_today[trip.id]
             <td>
                 <div class="column">
-                    <div class="row">
+                    <div class="row gap-5">
                         % include('components/bus')
                         % if trip.id in positions:
                             % position = positions[trip.id]
+                            % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                             % include('components/adherence', adherence=position.adherence)
                         % end
                     </div>
@@ -58,7 +59,7 @@
             % bus = assignment.bus
             <td>
                 <div class="column">
-                    <div class="row">
+                    <div class="row gap-5">
                         % include('components/bus')
                         % include('components/scheduled')
                     </div>
