@@ -1,0 +1,71 @@
+
+.modified-service {
+    background-color: #9B6B00;
+    color: #FFFFFF;
+}
+
+.no-service {
+    background-color: #A1004F;
+    color: #FFFFFF;
+}
+
+.normal-service {
+    background-color: #1658FC;
+    color: #FFFFFF;
+}
+
+.occupancy-empty {
+    --occupancy-background: #0148F8;
+}
+
+.occupancy-many-seats {
+    --occupancy-background: #0148F8;
+}
+
+.occupancy-few-seats {
+    --occupancy-background: #0148F8;
+}
+
+.occupancy-standing-room {
+    --occupancy-background: #785200;
+}
+
+.occupancy-crushed {
+    --occupancy-background: #785200;
+}
+
+.occupancy-full {
+    --occupancy-background: #830040;
+}
+
+.percentage.low {
+    background-color: #A1004F;
+}
+
+.percentage.mid {
+    background-color: #9B6B00;
+}
+
+.percentage.high {
+    background-color: #1658FC;
+}
+
+.sheet a.modified-service:hover {
+    background-color: #785200;
+}
+
+.sheet a.no-service:hover {
+    background-color: #830040;
+}
+
+.sheet a.normal-service:hover {
+    background-color: #0148F8;
+}
+
+.weekdays a.weekday.no-service:hover {
+    background-color: #830040;
+}
+
+.weekdays a.weekday.normal-service:hover {
+    background-color: #0148F8;
+}

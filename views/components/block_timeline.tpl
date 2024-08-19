@@ -5,6 +5,8 @@
 % service_group = get('service_group')
 % date = get('date')
 
+% current_trip = get('trip')
+
 % start_time = block.get_start_time(service_group=service_group, date=date)
 % end_time = block.get_end_time(service_group=service_group, date=date)
 % total_minutes = end_time.get_minutes() - start_time.get_minutes()
@@ -20,7 +22,7 @@
             % percentage = (trip_minutes / total_minutes) * 100
             % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
             % offset_percentage = (offset_minutes / total_minutes) * 100
-            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="section tooltip-anchor" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
+            <a href="{{ get_url(trip.system, f'trips/{trip.id}') }}" class="section tooltip-anchor {{ 'non-current' if current_trip and trip != current_trip else '' }}" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
                 <div class="tooltip right">
                     <div class="title">{{ trip }}</div>
                     {{ trip.start_time.format_web(time_format) }} - {{ trip.end_time.format_web(time_format) }}

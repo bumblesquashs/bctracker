@@ -111,7 +111,7 @@
             </div>
             <div class="content">
                 <p>
-                    Add up to 10 favourites using the
+                    Add up to 20 favourites using the
                     % include('components/svg', name='non-favourite')
                     button on buses, routes, and stops.
                 </p>
@@ -286,6 +286,32 @@
                 <div class="container">
                     <div class="news-post">
                         <div class="header">
+                            <h3>Summer Update</h3>
+                            June 27, 2024
+                        </div>
+                        <div class="content">
+                            <p>
+                                It's summer already - time sure flies!
+                                Here's what we've been up to since the last post.
+                            </p>
+                            <ul>
+                                <li>Favourites: A quick way to get to your frequently-used pages from the home page</li>
+                                <li>Themes: A new Pride theme, and improvements for High Contrast mode</li>
+                                <li>Bus History: Now has paging to improve loading time</li>
+                                <li>Mobile Sections: Now can be toggled to make it easier to scroll down</li>
+                                <li>Transfers: Now can be filtered and shows statistics</li>
+                            </ul>
+                            <p>As usual we've also been making small improvements to the general design of the site, as well as improvements to the server itself behind the scenes.</p>
+                            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Williams Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
+                            <p>
+                                That's all from us for now!
+                                As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
+                                Have a great summer!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="news-post">
+                        <div class="header">
                             <h3>Spring Update</h3>
                             March 30, 2024
                         </div>
@@ -305,33 +331,6 @@
                                 <li>Bug fixes and performance improvements behind the scenes</li>
                             </ul>
                             <p>Thank you for continuing to support BCTracker!</p>
-                        </div>
-                    </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Change to Maps</h3>
-                            January 27, 2024
-                        </div>
-                        <div class="content">
-                            <p>
-                                Hi everyone, quick announcement about some changes to the map screens.
-                                After Victoria's NextRide website was shut down last week, we've seen some big increases to how much our site is being used (which is great to see - welcome newcomers!!).
-                                The downside is the increase in site visits has put us well over the threshold for unpaid MapBox usage, and racked up some not-insignificant fees.
-                                As a one-time thing that's not a problem, but we'd rather not be paying double for maps what we pay for the rest of the website hosting every month.
-                            </p>
-                            <p>
-                                As a result, we've decided to change the provider of our maps from MapBox to OpenLayers.
-                                If you've used the T-Comm site for Vancouver before this should look familiar - it uses the same OpenStreetMaps source.
-                                Overall everything should work more or less the same, with a couple of exceptions:
-                            </p>
-                            <ul>
-                                <li>The appearance of the map is now different, no longer as minimalist and no longer light/dark mode-dependent</li>
-                                <li>The geotracker for your current location, which was built-in with MapBox, is no longer available</li>
-                            </ul>
-                            <p>
-                                Down the road as we get more used to this provider we hope to be able to undo those changes to get maps as close to how they used to be as possible.
-                                For now we thank you for your patience and understanding!
-                            </p>
                         </div>
                     </div>
                     <div>

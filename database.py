@@ -61,6 +61,7 @@ SQL_SCRIPTS = [
             bearing REAL,
             speed INTEGER,
             adherence INTEGER,
+            occupancy TEXT,
             PRIMARY KEY (system_id, bus_number)
         )
     ''',

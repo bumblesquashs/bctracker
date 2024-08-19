@@ -5,6 +5,11 @@
             "description": "Santa Bus",
             "enabled": false
         },
+        "1086": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus",
+            "enabled": false
+        },
         "1154": {
             "text": "🎅",
             "description": "Santa Bus",
@@ -26,7 +31,8 @@
         },
         "9387": {
             "text": "🏳️‍🌈",
-            "description": "Pride Bus"
+            "description": "Pride Bus",
+            "enabled": false
         },
         "9434": {
             "text": "🎄",

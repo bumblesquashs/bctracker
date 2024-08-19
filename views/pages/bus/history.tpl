@@ -38,16 +38,11 @@
                             <div class="name">Total Records</div>
                             <div class="value">{{ total_items }}</div>
                         </div>
-                        % record_systems = {r.system for r in records}
-                        % if overview:
-                            % record_systems.add(overview.first_seen_system)
-                            % record_systems.add(overview.last_seen_system)
-                        % end
                         <div class="row section align-start">
-                            <div class="name">{{ 'System' if len(record_systems) == 1 else 'Systems' }}</div>
+                            <div class="name">{{ 'System' if len(tracked_systems) == 1 else 'Systems' }}</div>
                             <div class="value">
-                                % for record_system in sorted(record_systems):
-                                    <a href="{{ get_url(record_system) }}">{{ record_system }}</a>
+                                % for tracked_system in sorted(tracked_systems):
+                                    <a href="{{ get_url(tracked_system) }}">{{ tracked_system }}</a>
                                 % end
                             </div>
                         </div>

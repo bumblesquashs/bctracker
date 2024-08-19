@@ -35,6 +35,20 @@
                                 <div>{{ headsign }}</div>
                             % end
                         </div>
+                        % variants = [r for r in route.system.get_routes() if route.is_variant(r)]
+                        % if variants:
+                            <div class="column gap-5 section">
+                                <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
+                                <div class="column">
+                                    % for variant in variants:
+                                        <div class="row">
+                                            % include('components/route', route=variant)
+                                            <a href="{{ get_url(variant.system, f'routes/{variant.number}') }}">{{! variant.display_name }}</a>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                        % end
                     </div>
                 </div>
             </div>

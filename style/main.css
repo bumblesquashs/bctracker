@@ -504,6 +504,10 @@ table tr.header td {
     border-bottom-color: var(--adherence-background);
 }
 
+.bearing.occupancy {
+    border-bottom-color: var(--occupancy-background);
+}
+
 .block-timeline {
     display: flex;
     flex-direction: column;
@@ -804,7 +808,7 @@ table tr.header td {
     padding: 2px;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
 }
 
 .marker .details .content .adherence-indicator {
@@ -814,6 +818,10 @@ table tr.header td {
 }
 
 .marker .details .content .route {
+    font-size: 8pt;
+}
+
+.marker .details .content .occupancy-name {
     font-size: 8pt;
 }
 
@@ -924,6 +932,11 @@ table tr.header td {
     text-decoration: none;
 }
 
+.marker .icon.occupancy {
+    background-color: var(--occupancy-background);
+    --image-color: var(--occupancy-foreground);
+}
+
 .marker.small .icon {
     width: 12px;
     height: 12px;
@@ -965,6 +978,19 @@ table tr.header td {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.occupancy-icon {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background-color: var(--occupancy-background);
+    --image-color: var(--occupancy-foreground);
+    --image-size: 14px;
+}
+
+.occupancy-icon.large {
+    padding: 2px 4px;
+    --image-size: 18px;
 }
 
 .options-container {
@@ -1075,6 +1101,12 @@ table tr.header td {
 
 .paging .page.current:hover {
     cursor: default;
+}
+
+.percentage {
+    cursor: default;
+    padding: 1px 4px;
+    border-radius: 4px;
 }
 
 .placeholder {
@@ -1273,6 +1305,14 @@ table tr.header td {
     margin-top: -2px;
     margin-left: -2px;
     z-index: 20;
+}
+
+.timeline .section.non-current {
+    opacity: 0.2;
+}
+
+.timeline .section.non-current:hover {
+    opacity: 1;
 }
 
 .timing-point {

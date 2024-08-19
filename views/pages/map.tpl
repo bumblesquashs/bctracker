@@ -33,6 +33,10 @@
     <div id="map" class="full-screen"></div>
     
     % include('components/svg_script', name='fish')
+    % include('components/svg_script', name='no-people')
+    % include('components/svg_script', name='one-person')
+    % include('components/svg_script', name='two-people')
+    % include('components/svg_script', name='three-people')
     
     <script>
         const map = new ol.Map({
@@ -112,6 +116,9 @@
                         if (adherence !== undefined && adherence !== null) {
                             bearing.classList.add(adherence.status_class)
                         }
+                    } else if (busMarkerStyle === "occupancy") {
+                        bearing.classList.add("occupancy");
+                        bearing.classList.add(position.occupancy_status_class);
                     } else {
                         bearing.style.borderBottomColor = "#" + position.colour;
                     }
@@ -152,6 +159,22 @@
                 }
                 content.appendChild(headsign);
                 
+                const occupancy = document.createElement("div");
+                occupancy.className = "row center gap-5";
+                
+                const occupancyIcon = document.createElement("div");
+                occupancyIcon.className = "occupancy-icon";
+                occupancyIcon.classList.add(position.occupancy_status_class);
+                occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
+                occupancy.appendChild(occupancyIcon);
+                
+                const occupancyName = document.createElement("div");
+                occupancyName.className = "occupancy-name";
+                occupancyName.innerText = position.occupancy_name;
+                occupancy.appendChild(occupancyName);
+                
+                content.appendChild(occupancy);
+                
                 if ("{{ system is None }}" === "True") {
                     const system = document.createElement("div");
                     system.className = "lighter-text centred";
@@ -178,6 +201,10 @@
                             icon.innerHTML = adherence.value;
                             icon.classList.add(adherence.status_class);
                         }
+                    } else if (busMarkerStyle == "occupancy") {
+                        icon.classList.add("occupancy");
+                        icon.classList.add(position.occupancy_status_class);
+                        icon.innerHTML = getSVG(position.occupancy_icon);
                     } else {
                         icon.innerHTML = getSVG(position.bus_icon);
                         icon.style.backgroundColor = "#" + position.colour;
@@ -211,6 +238,10 @@
                             icon.innerHTML = "<div class='link'></div>" + adherence.value;
                             icon.classList.add(adherence.status_class);
                         }
+                    } else if (busMarkerStyle == "occupancy") {
+                        icon.classList.add("occupancy");
+                        icon.classList.add(position.occupancy_status_class);
+                        icon.innerHTML = "<div class='link'></div>" + getSVG(position.occupancy_icon);
                     } else {
                         icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
                         icon.style.backgroundColor = "#" + position.colour;

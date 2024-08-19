@@ -3,6 +3,10 @@
 
 <div id="page-header">
     <h1>Blocks</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, 'blocks') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Schedule</span>
+    </div>
 </div>
 
 % if system:
@@ -19,7 +23,7 @@
                     <div class="content">
                         <div class="info-box">
                             <div class="section">
-                                % include('components/sheet_list', schedule_path='blocks', date_path='blocks/schedule')
+                                % include('components/sheet_list', schedule_path='blocks/schedule')
                             </div>
                         </div>
                     </div>

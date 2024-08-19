@@ -3,6 +3,10 @@
 
 <div id="page-header">
     <h1>Blocks</h1>
+    <div class="tab-button-bar">
+        <a href="{{ get_url(system, 'blocks') }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Schedule</span>
+    </div>
 </div>
 
 % if system:
@@ -21,12 +25,12 @@
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">&lt;</a>
                             <div class="centred">
                                 <h3>{{ date.format_long() }}</h3>
-                                <a href="{{ get_url(system, 'blocks') }}">Go to weekly schedule</a>
+                                <a href="{{ get_url(system, 'blocks/schedule') }}">Go to weekly schedule</a>
                             </div>
                             <a class="button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">&gt;</a>
                         </div>
                         <div class="section">
-                            % include('components/sheet_list', sheets=system.get_sheets(), schedule_path='blocks', date_path='blocks/schedule')
+                            % include('components/sheet_list', sheets=system.get_sheets(), schedule_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
