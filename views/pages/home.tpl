@@ -143,11 +143,13 @@
                                                     % position = di[PositionRepository].find(value)
                                                     <tr>
                                                         <td>
-                                                            <div class="row gap-5">
+                                                            <div class="row">
                                                                 % include('components/bus', bus=value)
                                                                 % if position:
-                                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                                                                    % include('components/adherence', adherence=position.adherence)
+                                                                    <div class="row gap-5">
+                                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                        % include('components/adherence', adherence=position.adherence)
+                                                                    </div>
                                                                 % end
                                                             </div>
                                                         </td>

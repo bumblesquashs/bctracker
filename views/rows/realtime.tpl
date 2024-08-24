@@ -5,10 +5,12 @@
 <tr>
     <td>
         <div class="column">
-            <div class="row gap-5">
+            <div class="row">
                 % include('components/bus')
-                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                % include('components/adherence', adherence=position.adherence)
+                <div class="row gap-5">
+                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                    % include('components/adherence', adherence=position.adherence)
+                </div>
             </div>
             % if not system:
                 <span class="non-desktop smaller-font">{{ position.system }}</span>

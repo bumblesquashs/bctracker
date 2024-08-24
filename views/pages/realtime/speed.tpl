@@ -48,10 +48,12 @@
                 <tr class="{{'' if same_speed else 'divider'}}">
                     <td>
                         <div class="column">
-                            <div class="row gap-5">
+                            <div class="row">
                                 % include('components/bus')
-                                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                                % include('components/adherence', adherence=position.adherence)
+                                <div class="row gap-5">
+                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                    % include('components/adherence', adherence=position.adherence)
+                                </div>
                             </div>
                             <span class="non-desktop smaller-font">
                                 % include('components/order', order=bus.order)
