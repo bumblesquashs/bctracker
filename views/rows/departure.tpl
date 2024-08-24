@@ -42,7 +42,10 @@
                         % include('components/bus')
                         % if trip.id in positions:
                             % position = positions[trip.id]
-                            % include('components/adherence', adherence=position.adherence)
+                            <div class="row gap-5">
+                                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                % include('components/adherence', adherence=position.adherence)
+                            </div>
                         % end
                     </div>
                     <span class="non-desktop smaller-font">
@@ -79,12 +82,12 @@
         <div class="column">
             % include('components/headsign')
             % if not departure.pickup_type.is_normal:
-                <span class="smaller-font">{{ departure.pickup_type }}</span>
+                <span class="smaller-font italics">{{ departure.pickup_type }}</span>
             % elif departure == trip.last_departure:
-                <span class="smaller-font">No pick up</span>
+                <span class="smaller-font italics">No pick up</span>
             % end
             % if not departure.dropoff_type.is_normal:
-                <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
             % end
         </div>
     </td>
@@ -101,6 +104,14 @@
             <span class="mobile-only smaller-font">
                 % include('components/headsign')
             </span>
+            % if not departure.pickup_type.is_normal:
+                <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
+            % elif departure == trip.last_departure:
+                <span class="mobile-only smaller-font italics">No pick up</span>
+            % end
+            % if not departure.dropoff_type.is_normal:
+                <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
+            % end
         </div>
     </td>
 </tr>

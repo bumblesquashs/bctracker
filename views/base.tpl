@@ -433,7 +433,7 @@
             searchElement.classList.add("display-none");
         }
         if ("map" in window) {
-            map.resize();
+            map.updateSize();
         }
     }
     
