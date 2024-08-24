@@ -170,7 +170,10 @@
                                         <div class="column">
                                             <div class="row">
                                                 % include('components/bus')
-                                                % include('components/adherence', adherence=position.adherence)
+                                                <div class="row gap-5">
+                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % include('components/adherence', adherence=position.adherence)
+                                                </div>
                                             </div>
                                             <span class="mobile-only smaller-font">
                                                 % include('components/order', order=bus.order)

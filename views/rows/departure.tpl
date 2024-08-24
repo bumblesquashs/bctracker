@@ -42,7 +42,10 @@
                         % include('components/bus')
                         % if trip.id in positions:
                             % position = positions[trip.id]
-                            % include('components/adherence', adherence=position.adherence)
+                            <div class="row gap-5">
+                                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                % include('components/adherence', adherence=position.adherence)
+                            </div>
                         % end
                     </div>
                     <span class="non-desktop smaller-font">
