@@ -759,6 +759,10 @@ table tr.header td {
     text-align: right;
 }
 
+.italics {
+    font-style: italic;
+}
+
 .marker {
     position: relative;
     font-family: Helvetica, sans-serif;
