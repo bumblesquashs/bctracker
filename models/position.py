@@ -48,7 +48,9 @@ class Position:
         if adherence_value is None:
             adherence = None
         else:
-            adherence = Adherence(adherence_value)
+            trip = system.get_trip(trip_id)
+            layover = trip and stop_id and trip.first_stop and trip.first_stop.id == stop_id and adherence_value > 0
+            adherence = Adherence(adherence_value, layover)
         try:
             occupancy = Occupancy[row[f'{prefix}_occupancy']]
         except KeyError:

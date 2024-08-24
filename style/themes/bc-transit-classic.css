@@ -17,14 +17,8 @@
 */
 
 :root {
-    --tooltip-background: #666666;
-    --tooltip-text: #FFFFFF;
-    
     --loading-background: #FFFFFF;
     --loading-foreground: #E20000;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #E20000;
     --radio-button-color: #E20000;

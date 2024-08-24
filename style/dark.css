@@ -1,4 +1,12 @@
 
+:root {
+    --tooltip-background: #2F2F2F;
+    --tooltip-text: #FFFFFF;
+    
+    --adherence-background: #444444;
+    --adherence-text: #FFFFFF;
+}
+
 .ahead {
     --adherence-background: #FF6A00;
 }
