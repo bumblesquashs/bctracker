@@ -61,10 +61,16 @@ class Adherence:
             self.status_class = 'on-time'
         
         if value > 0:
-            if value == 1:
-                self.description = '1 minute ahead of schedule'
+            if layover:
+                if value == 1:
+                    self.description = '1 minute until scheduled departure'
+                else:
+                    self.description = f'{value} minutes until scheduled departure'
             else:
-                self.description = f'{value} minutes ahead of schedule'
+                if value == 1:
+                    self.description = '1 minute ahead of schedule'
+                else:
+                    self.description = f'{value} minutes ahead of schedule'
         elif value < 0:
             value = abs(value)
             if value == 1:

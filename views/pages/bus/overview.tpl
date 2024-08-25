@@ -179,9 +179,6 @@
                                     % adherence = position.adherence
                                     % if adherence:
                                         <span class="smaller-font">{{ adherence.description }}</span>
-                                        % if adherence.layover:
-                                            <span class="smaller-font italics">Yet to depart</span>
-                                        % end
                                     % end
                                 </div>
                             </div>
