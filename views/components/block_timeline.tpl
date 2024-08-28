@@ -1,4 +1,6 @@
 
+% from datetime import timedelta
+
 % from models.date import Date
 % from models.time import Time
 
@@ -38,6 +40,19 @@
             <div class="now" style="left: {{ offset_percentage }}%;">
                 
             </div>
+        % end
+    </div>
+    <div class="timespan">
+        % clock_time = Time(start_time.hour, 0, 0, start_time.timezone)
+        % while clock_time <= end_time:
+            % if clock_time >= start_time:
+                % offset_minutes = clock_time.get_minutes() - start_time.get_minutes()
+                % offset_percentage = (offset_minutes / total_minutes) * 100
+                <div class="time {{ 'hour' if clock_time.minute == 0 else '' }}" style="left: {{ offset_percentage }}%;">
+                    
+                </div>
+            % end
+            % clock_time += timedelta(minutes=15)
         % end
     </div>
 </div>
