@@ -29,6 +29,7 @@ class Server(Bottle):
         'adornment_repository',
         'agency_repository',
         'assignment_repository',
+        'model_repository',
         'order_repository',
         'overview_repository',
         'point_repository',
@@ -55,6 +56,7 @@ class Server(Bottle):
         self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
         self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
         self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+        self.model_repository = kwargs.get('model_repository') or di[ModelRepository]
         self.order_repository = kwargs.get('order_repository') or di[OrderRepository]
         self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
         self.point_repository = kwargs.get('point_repository') or di[PointRepository]
@@ -85,6 +87,8 @@ class Server(Bottle):
         self.add('/realtime/models', callback=self.realtime_models)
         self.add('/realtime/speed', callback=self.realtime_speed)
         self.add('/fleet', callback=self.fleet)
+        self.add('/models', callback=self.models)
+        self.add('/models/<model_id>', callback=self.model)
         self.add('/bus/<bus_number:int>', callback=self.bus_overview)
         self.add('/bus/<bus_number:int>/map', callback=self.bus_map)
         self.add('/bus/<bus_number:int>/history', callback=self.bus_history)
@@ -465,6 +469,42 @@ class Server(Bottle):
             path='fleet',
             system=system,
             agency=agency,
+            orders=[o for o in sorted(orders) if o.visible],
+            overviews={o.bus.number: o for o in overviews}
+        )
+    
+    def models(self, system, agency):
+        orders = self.order_repository.find_all(agency)
+        overviews = self.overview_repository.find_all()
+        return self.page(
+            name='models',
+            title='Models',
+            path='models',
+            system=system,
+            agency=agency,
+            orders=[o for o in sorted(orders) if o.visible],
+            overviews={o.bus.number: o for o in overviews}
+        )
+    
+    def model(self, system, agency, model_id):
+        model = self.model_repository.find(model_id)
+        if not model:
+            return self.error_page(
+                name='invalid_model',
+                title='Unknown Model',
+                system=system,
+                agency=agency,
+                model_id=model_id
+            )
+        orders = [o for o in self.order_repository.find_all(agency) if o.model and o.model == model]
+        overviews = [o for o in self.overview_repository.find_all() if o.bus.model and o.bus.model == model]
+        return self.page(
+            name='model',
+            title=str(model),
+            path=f'models/{model_id}',
+            system=system,
+            agency=agency,
+            model=model,
             orders=[o for o in sorted(orders) if o.visible],
             overviews={o.bus.number: o for o in overviews}
         )

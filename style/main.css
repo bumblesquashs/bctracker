@@ -699,6 +699,16 @@ table tr.header td {
     gap: 40px !important;
 }
 
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.grid.start {
+    align-items: start;
+}
+
 .headsign {
     display: flex;
     flex-direction: row;
