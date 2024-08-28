@@ -43,7 +43,7 @@
         % end
     </div>
     <div class="timespan">
-        % clock_time = Time(start_time.hour, 0, 0, start_time.timezone)
+        % clock_time = Time(start_time.hour, 0, None, start_time.timezone)
         % while clock_time <= end_time:
             % if clock_time >= start_time:
                 % offset_minutes = clock_time.get_minutes() - start_time.get_minutes()

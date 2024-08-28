@@ -1292,6 +1292,8 @@ table tr.header td {
     top: -2px;
     bottom: -2px;
     width: 2px;
+    z-index: 10;
+    transform: translateX(-1px);
 }
 
 .timeline .section {
