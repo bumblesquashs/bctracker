@@ -898,6 +898,10 @@ table tr.header td {
     color: var(--adherence-text);
 }
 
+.marker .icon.adherence.smaller-font {
+    font-size: 9pt;
+}
+
 .marker .icon.route {
     width: auto;
     height: auto;

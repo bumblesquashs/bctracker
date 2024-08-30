@@ -200,6 +200,10 @@
                         } else {
                             icon.innerHTML = adherence.value;
                             icon.classList.add(adherence.status_class);
+                            const adherenceValue = parseInt(adherence.value);
+                            if (adherenceValue >= 100 || adherenceValue <= -100) {
+                                icon.classList.add("smaller-font");
+                            }
                         }
                     } else if (busMarkerStyle == "occupancy") {
                         icon.classList.add("occupancy");
@@ -237,6 +241,10 @@
                         } else {
                             icon.innerHTML = "<div class='link'></div>" + adherence.value;
                             icon.classList.add(adherence.status_class);
+                            const adherenceValue = parseInt(adherence.value);
+                            if (adherenceValue >= 100 || adherenceValue <= -100) {
+                                icon.classList.add("smaller-font");
+                            }
                         }
                     } else if (busMarkerStyle == "occupancy") {
                         icon.classList.add("occupancy");
