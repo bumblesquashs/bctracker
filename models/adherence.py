@@ -19,7 +19,7 @@ class Adherence:
     )
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon, **kwargs):
+    def calculate(cls, trip, stop, sequence, lat, lon, timestamp, **kwargs):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
         departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
         departure = departure_repository.find(trip.system, trip=trip, sequence=sequence)
@@ -36,8 +36,10 @@ class Adherence:
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
                 if time_difference >= MINIMUM_MINUTES:
                     expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
-            
-            return cls(expected_scheduled_mins - Time.now(trip.system.timezone).get_minutes())
+            time = Time.timestamp(timestamp, trip.system.timezone)
+            if time.is_unknown:
+                time = Time.now(trip.system.timezone)
+            return cls(expected_scheduled_mins - time.get_minutes())
         except AttributeError:
             return None
     
