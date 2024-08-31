@@ -639,6 +639,10 @@ table tr {
     text-shadow: none;
 }
 
+.timespan .time {
+    background-color: #ABABAB;
+}
+
 .very-ahead {
     --adherence-background: #F00E0E;
 }

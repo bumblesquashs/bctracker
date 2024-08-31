@@ -498,3 +498,7 @@ table tr {
 .timeline .section:hover {
     border-color: #000000;
 }
+
+.timespan .time {
+    background-color: #989898;
+}

@@ -1296,6 +1296,8 @@ table tr.header td {
     top: -2px;
     bottom: -2px;
     width: 2px;
+    z-index: 10;
+    transform: translateX(-1px);
 }
 
 .timeline .section {
@@ -1317,6 +1319,24 @@ table tr.header td {
 
 .timeline .section.non-current:hover {
     opacity: 1;
+}
+
+.timespan {
+    position: relative;
+    height: 4px;
+}
+
+.timespan .time {
+    position: absolute;
+    top: 0px;
+    height: 2px;
+    width: 2px;
+    transform: translateX(-1px);
+}
+
+.timespan .time.hour {
+    height: 6px;
+    top: -2px;
 }
 
 .timing-point {
