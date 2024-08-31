@@ -4,6 +4,7 @@ from di import di
 from models.adherence import Adherence
 from models.bus import Bus
 from models.occupancy import Occupancy
+from models.time import Time
 
 from repositories import AgencyRepository, DepartureRepository, SystemRepository
 
@@ -24,7 +25,8 @@ class Position:
         'bearing',
         'speed',
         'adherence',
-        'occupancy'
+        'occupancy',
+        'timestamp'
     )
     
     @classmethod
@@ -53,7 +55,8 @@ class Position:
             occupancy = Occupancy[row[f'{prefix}_occupancy']]
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy)
+        timestamp = Time.timestamp(row[f'{prefix}_timestamp'], timezone=system.timezone)
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
     def has_location(self):
@@ -104,7 +107,7 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, **kwargs):
+    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
         self.system = system
         self.bus = bus
         self.trip_id = trip_id
@@ -118,6 +121,7 @@ class Position:
         self.speed = speed
         self.adherence = adherence
         self.occupancy = occupancy
+        self.timestamp = timestamp
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
@@ -139,7 +143,11 @@ class Position:
             'text_colour': self.text_colour,
             'occupancy_name': self.occupancy.value,
             'occupancy_status_class': self.occupancy.status_class,
-            'occupancy_icon': self.occupancy.icon
+            'occupancy_icon': self.occupancy.icon,
+            'timestamp': {
+                '12hr': f'{self.timestamp.format_web("12hr")} {self.timestamp.timezone_name}',
+                'default': f'{self.timestamp} {self.timestamp.timezone_name}'
+            }
         }
         order = self.bus.order
         if order:

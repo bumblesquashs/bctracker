@@ -84,6 +84,12 @@
                                 % end
                             % end
                         % end
+                        % if not position.timestamp.is_unknown:
+                            <div class="row section">
+                                <div class="name">Last Update</div>
+                                <div class="value">{{ position.timestamp.format_web(time_format) }} {{ position.timestamp.timezone_name }}</div>
+                            </div>
+                        % end
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
@@ -130,6 +136,12 @@
                         <div class="section">
                             % include('components/block_timeline', date=Date.today(block.system.timezone))
                         </div>
+                        % if not position.timestamp.is_unknown:
+                            <div class="row section">
+                                <div class="name">Last Update</div>
+                                <div class="value">{{ position.timestamp.format_web(time_format) }} {{ position.timestamp.timezone_name }}</div>
+                            </div>
+                        % end
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">

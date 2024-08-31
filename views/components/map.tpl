@@ -165,12 +165,25 @@
             
             content.appendChild(occupancy);
             
+            const footer = document.createElement("div");
+            footer.className = "lighter-text centred";
+            let footerHTML = "";
             if ("{{ system is None }}" === "True") {
-                const system = document.createElement("div");
-                system.className = "lighter-text centred";
-                system.innerHTML = position.system;
-                content.appendChild(system);
+                footerHTML += position.system;
             }
+            if (position.timestamp) {
+                if (footerHTML !== "") {
+                    footerHTML += " • ";
+                }
+                const time_format = "{{ time_format }}";
+                if (time_format === "12hr") {
+                    footerHTML += "<span class='no-wrap'>" + position.timestamp["12hr"] + "</span>";
+                } else {
+                    footerHTML += "<span class='no-wrap'>" + position.timestamp.default + "</span>";
+                }
+            }
+            footer.innerHTML = footerHTML;
+            content.appendChild(footer);
             
             if (position.bus_number < 0) {
                 const icon = document.createElement("div");

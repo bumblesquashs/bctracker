@@ -75,6 +75,10 @@ class SQLPositionRepository(PositionRepository):
             occupancy = Occupancy[value.name]
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
+        try:
+            timestamp = data.timestamp
+        except AttributeError:
+            timestamp = None
         values = {
             'system_id': system_id,
             'bus_number': bus_number,
@@ -87,7 +91,8 @@ class SQLPositionRepository(PositionRepository):
             'lon': lon,
             'bearing': bearing,
             'speed': speed,
-            'occupancy': occupancy.name
+            'occupancy': occupancy.name,
+            'timestamp': timestamp
         }
         if adherence:
             values['adherence'] = adherence.value
@@ -110,7 +115,8 @@ class SQLPositionRepository(PositionRepository):
                 'position.bearing': 'position_bearing',
                 'position.speed': 'position_speed',
                 'position.adherence': 'position_adherence',
-                'position.occupancy': 'position_occupancy'
+                'position.occupancy': 'position_occupancy',
+                'position.timestamp': 'position_timestamp'
             },
             filters={
                 'position.bus_number': bus_number
@@ -177,7 +183,8 @@ class SQLPositionRepository(PositionRepository):
                 'position.bearing': 'position_bearing',
                 'position.speed': 'position_speed',
                 'position.adherence': 'position_adherence',
-                'position.occupancy': 'position_occupancy'
+                'position.occupancy': 'position_occupancy',
+                'position.timestamp': 'position_timestamp'
             },
             filters=filters,
             initializer=Position.from_db

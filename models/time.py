@@ -30,6 +30,23 @@ class Time:
         return cls(hour, minute, second, timezone)
     
     @classmethod
+    def timestamp(cls, timestamp, timezone=None, accurate_seconds=True):
+        '''Returns a time parsed from a timestamp'''
+        if not timezone:
+            timezone = pytz.timezone('America/Vancouver')
+        if not timestamp:
+            return cls.unknown(timezone)
+        time = datetime.fromtimestamp(timestamp, timezone)
+        hour = time.hour
+        if hour < 4:
+            hour += 24
+        if accurate_seconds:
+            second = time.second
+        else:
+            second = None
+        return cls(hour, time.minute, second, timezone)
+    
+    @classmethod
     def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current time'''
         if not timezone:
