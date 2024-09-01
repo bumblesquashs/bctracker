@@ -1,13 +1,9 @@
 
 :root {
     --tooltip-background: #000000;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: rgba(0, 0, 0, 0);
     --loading-foreground: #000000;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #000000;
     --radio-button-color: #000000;

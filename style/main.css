@@ -1365,6 +1365,7 @@ table tr.header td {
     width: max-content;
     max-width: 300px;
     font-weight: normal;
+    line-height: normal;
 }
 
 .tooltip-anchor .tooltip.left {

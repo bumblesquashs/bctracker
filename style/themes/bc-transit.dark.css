@@ -18,14 +18,9 @@
 
 :root {
     color-scheme: dark;
-    --tooltip-background: #2F2F2F;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #2F2F2F;
     --loading-foreground: #154E15;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #5CC3FF;
     --radio-button-color: #5CC3FF;
