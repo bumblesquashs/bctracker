@@ -17,14 +17,8 @@
 */
 
 :root {
-    --tooltip-background: #666666;
-    --tooltip-text: #FFFFFF;
-    
     --loading-background: #FFFBEF;
     --loading-foreground: #C7743B;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #C7743B;
     --radio-button-color: #C7743B;
@@ -497,4 +491,8 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #666666;
+}
+
+.timespan .time {
+    background-color: #ABABAB;
 }
