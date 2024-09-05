@@ -4,7 +4,7 @@ from di import di
 from models.adherence import Adherence
 from models.bus import Bus
 from models.occupancy import Occupancy
-from models.time import Time
+from models.timestamp import Timestamp
 
 from repositories import AgencyRepository, DepartureRepository, SystemRepository
 
@@ -57,7 +57,7 @@ class Position:
             occupancy = Occupancy[row[f'{prefix}_occupancy']]
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
-        timestamp = Time.timestamp(row[f'{prefix}_timestamp'], timezone=system.timezone)
+        timestamp = Timestamp(row[f'{prefix}_timestamp'], timezone=system.timezone)
         return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
@@ -146,10 +146,7 @@ class Position:
             'occupancy_name': self.occupancy.value,
             'occupancy_status_class': self.occupancy.status_class,
             'occupancy_icon': self.occupancy.icon,
-            'timestamp': {
-                '12hr': f'{self.timestamp.format_web("12hr")} {self.timestamp.timezone_name}',
-                'default': f'{self.timestamp} {self.timestamp.timezone_name}'
-            }
+            'timestamp': self.timestamp.get_json()
         }
         order = self.bus.order
         if order:

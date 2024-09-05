@@ -27,12 +27,16 @@ class Date:
     @classmethod
     def today(cls, timezone=None):
         '''Returns the current date'''
+        return cls.fromdatetime(datetime.now(), timezone)
+    
+    @classmethod
+    def fromdatetime(cls, datetime, timezone=None):
+        '''Returns a date from the given datetime'''
         if not timezone:
             timezone = pytz.timezone('America/Vancouver')
-        now = datetime.now(timezone)
-        if now.hour < 4:
-            now = now - timedelta(days=1)
-        return cls(now.year, now.month, now.day, timezone)
+        if datetime.hour < 4:
+            datetime = datetime - timedelta(days=1)
+        return cls(datetime.year, datetime.month, datetime.day, timezone)
     
     @property
     def is_earlier(self):
