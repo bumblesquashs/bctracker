@@ -138,13 +138,13 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
+                                    <th class="non-mobile">Headsign</th>
+                                    <th class="desktop-only">Block</th>
+                                    <th>Trip</th>
                                     % if not system or system.realtime_enabled:
                                         <th>Bus</th>
                                         <th class="desktop-only">Model</th>
                                     % end
-                                    <th class="non-mobile">Headsign</th>
-                                    <th class="desktop-only">Block</th>
-                                    <th>Trip</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -192,13 +192,13 @@
                         <thead>
                             <tr>
                                 <th>Time</th>
+                                <th class="non-mobile">Headsign</th>
+                                <th class="desktop-only">Block</th>
+                                <th>Trip</th>
                                 % if not system or system.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
-                                <th class="non-mobile">Headsign</th>
-                                <th class="desktop-only">Block</th>
-                                <th>Trip</th>
                             </tr>
                         </thead>
                         <tbody>
