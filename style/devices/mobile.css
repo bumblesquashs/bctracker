@@ -4,7 +4,6 @@ a {
 }
 
 body {
-    font-size: 13pt;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -42,7 +41,11 @@ form label {
 table {
     width: 100%;
     display: table;
-    font-size: 13pt;
+    font-size: 11pt;
+}
+
+table th {
+    font-size: 12pt;
 }
 
 #last-updated {
@@ -54,6 +57,7 @@ table {
 }
 
 #main {
+    font-size: 12pt;
     order: 6;
 }
 
@@ -82,7 +86,7 @@ table {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
 }
 
 #navigation-menu .menu-button {
@@ -127,6 +131,10 @@ table {
     border-bottom-style: solid;
 }
 
+#search-count {
+    font-size: 13pt;
+}
+
 #search-bar input[type="text"] {
     font-size: 14pt;
 }
@@ -152,7 +160,7 @@ table {
 }
 
 #search-placeholder {
-    font-size: 15pt;
+    font-size: 14pt;
     padding: 20px;
     order: 3;
 }
@@ -163,13 +171,13 @@ table {
 
 #search-results .result {
     font-weight: normal;
-    font-size: 15pt;
+    font-size: 14pt;
     padding: 5px 20px;
     --image-size: 28px;
 }
 
 #search-results .result .description {
-    font-size: 12pt;
+    font-size: 11pt;
 }
 
 #side-bar {
@@ -181,6 +189,7 @@ table {
 }
 
 #status .details {
+    align-items: center;
     text-align: center;
 }
 
@@ -270,12 +279,32 @@ table {
     gap: 20px;
 }
 
+.sheet .dates .month .name {
+    font-size: 11pt;
+}
+
+.sheet .dates .month.title .name {
+    font-size: 12pt;
+}
+
+.sheet .dates .month .date {
+    font-size: 9pt;
+}
+
+.sheet-list .footer {
+    font-size: 9pt;
+}
+
+.sheet-list .legend {
+    font-size: 9pt;
+}
+
 .side-bar-closed-only {
     display: none;
 }
 
 .smaller-font {
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 .tab-button-bar {

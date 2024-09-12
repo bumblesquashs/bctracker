@@ -19,7 +19,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 44
+VERSION = 45
 
 class Server(Bottle):
     
