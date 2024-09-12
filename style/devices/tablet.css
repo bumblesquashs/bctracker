@@ -4,7 +4,6 @@ a {
 }
 
 body {
-    font-size: 13pt;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -42,6 +41,7 @@ table {
 }
 
 #main {
+    font-size: 13pt;
     order: 6;
 }
 
@@ -74,7 +74,7 @@ table {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     align-items: center;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
 }
 
 #navigation-menu .menu-button {
@@ -142,6 +142,7 @@ table {
 #search-placeholder {
     font-size: 15pt;
     padding: 20px;
+    order: 3;
 }
 
 #search-results {
@@ -168,6 +169,7 @@ table {
 }
 
 #status .details {
+    align-items: center;
     text-align: center;
 }
 

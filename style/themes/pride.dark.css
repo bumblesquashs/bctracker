@@ -417,8 +417,8 @@ table tr {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-.order-details .content .separator {
-    color: rgba(255, 255, 255, 0.3);
+.order-details .content {
+    --image-color: rgba(255, 255, 255, 0.3);
 }
 
 .paging .page {

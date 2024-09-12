@@ -4,7 +4,6 @@ a:hover {
 }
 
 body {
-    font-size: 14pt;
     display: grid;
     justify-items: stretch;
     align-items: stretch;
@@ -24,6 +23,7 @@ input[type="text"] {
 }
 
 table {
+    font-size: 11pt;
     align-self: flex-start;
 }
 
@@ -36,10 +36,12 @@ table th {
 }
 
 #main {
+    font-size: 13pt;
     overflow: auto;
 }
 
 #navigation-bar {
+    font-size: 14pt;
     grid-column-start: span 2;
     padding-right: 20px;
 }
@@ -83,6 +85,7 @@ table th {
 
 #search-placeholder {
     padding: 10px;
+    font-size: 13pt;
 }
 
 #search-results {
@@ -109,11 +112,13 @@ table th {
 }
 
 #side-bar-toggle {
-    padding: 2 10px;
+    padding: 6px;
     border-radius: 10px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     text-align: center;
-    font-size: 16pt;
+    --image-size: 20px;
 }
 
 #side-bar-toggle-container {
@@ -130,7 +135,7 @@ table th {
 }
 
 #system {
-    font-size: 13pt;
+    font-size: 14pt;
 }
 
 #system-menu {
@@ -163,13 +168,14 @@ table th {
 }
 
 #title {
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     font-size: 22pt;
     font-weight: bold;
     display: flex;
     align-items: center;
     padding: 5px 20px;
     text-decoration: none;
+    line-height: 1em;
     gap: 10px;
     --image-size: 24px;
 }
@@ -224,7 +230,7 @@ table th {
 }
 
 .smaller-font {
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 .tab-button {

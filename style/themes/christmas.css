@@ -419,8 +419,8 @@ table tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #69BB65;
+.order-details .content {
+    --image-color: #69BB65;
 }
 
 .paging .page {
