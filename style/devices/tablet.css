@@ -33,6 +33,10 @@ form label {
 table {
     width: 100%;
     display: table;
+    font-size: 12pt;
+}
+
+table {
     font-size: 13pt;
 }
 
