@@ -89,6 +89,8 @@
         const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
         const busMarkerStyle = "{{ bus_marker_style }}";
         
+        const updateTimestamps = [];
+        
         for (const position of positions) {
             const adherence = position.adherence;
             
@@ -165,12 +167,31 @@
             
             content.appendChild(occupancy);
             
+            const footer = document.createElement("div");
+            footer.className = "lighter-text centred";
+            let systemElement = null;
             if ("{{ system is None }}" === "True") {
-                const system = document.createElement("div");
-                system.className = "lighter-text centred";
-                system.innerHTML = position.system;
-                content.appendChild(system);
+                systemElement = document.createElement("span");
+                systemElement.innerHTML = position.system;
+                footer.appendChild(systemElement);
             }
+            if (position.timestamp) {
+                if (systemElement) {
+                    const separator = document.createElement("span")
+                    separator.innerHTML = " • ";
+                    footer.appendChild(separator);
+                }
+                const timestamp = document.createElement("span");
+                footer.appendChild(timestamp);
+                function updateTimestamp() {
+                    const currentTime = new Date().getTime();
+                    const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
+                    timestamp.innerHTML = difference;
+                }
+                updateTimestamp();
+                updateTimestamps.push(updateTimestamp);
+            }
+            content.appendChild(footer);
             
             if (position.bus_number < 0) {
                 const icon = document.createElement("div");
@@ -259,6 +280,12 @@
                 area.combine(position.lat, position.lon);
             }
         }
+        
+        setInterval(function() {
+            for (updateTimestamp of updateTimestamps) {
+                updateTimestamp();
+            }
+        }, 1000);
     </script>
 % end
 
