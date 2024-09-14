@@ -410,8 +410,8 @@ table tr {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #888888;
+.order-details .content {
+    --image-color: #888888;
 }
 
 .paging .page {

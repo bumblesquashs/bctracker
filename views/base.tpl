@@ -37,6 +37,10 @@
             <meta name="robots" content="noindex">
         % end
         
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        
         % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
@@ -342,8 +346,12 @@
             <div class="flex-1 side-bar-closed-only"></div>
             <div id="side-bar-toggle-container">
                 <div id="side-bar-toggle" onclick="toggleSideBar()">
-                    <div class="side-bar-open-only">&laquo;</div>
-                    <div class="side-bar-closed-only">&raquo;</div>
+                    <div class="side-bar-open-only">
+                        % include('components/svg', name='left-double')
+                    </div>
+                    <div class="side-bar-closed-only">
+                        % include('components/svg', name='right-double')
+                    </div>
                 </div>
                 <div class="side-bar-open-only">Hide Systems</div>
             </div>
@@ -392,11 +400,15 @@
                 
             </div>
             <div id="search-paging" class="display-none">
-                <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
+                    % include('components/svg', name='left')
+                </div>
                 <div id="search-count" class="flex-1">
                     
                 </div>
-                <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
+                <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
+                    % include('components/svg', name='right')
+                </div>
             </div>
         </div>
     </body>
