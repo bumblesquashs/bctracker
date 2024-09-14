@@ -136,10 +136,25 @@
                         <div class="section">
                             % include('components/block_timeline', date=Date.today(block.system.timezone))
                         </div>
-                        % if not position.timestamp.is_unknown:
+                        % if position.timestamp:
                             <div class="row section">
                                 <div class="name">Last Update</div>
-                                <div class="value">{{ position.timestamp.format_web(time_format) }} {{ position.timestamp.timezone_name }}</div>
+                                <div class="value">
+                                    <div id="timestamp"></div>
+                                    <script>
+                                        const originalTimestamp = parseFloat("{{ position.timestamp.value }}") * 1000;
+                                        
+                                        function updateTimestamp() {
+                                            const currentTime = new Date().getTime();
+                                            const difference = getDifference(currentTime, originalTimestamp + timestampOffset);
+                                            document.getElementById("timestamp").innerHTML = difference;
+                                        }
+                                        
+                                        updateTimestamp();
+                                        
+                                        setInterval(updateTimestamp, 1000);
+                                    </script>
+                                </div>
                             </div>
                         % end
                         <div class="row section">

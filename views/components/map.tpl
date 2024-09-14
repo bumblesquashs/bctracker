@@ -89,6 +89,8 @@
         const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
         const busMarkerStyle = "{{ bus_marker_style }}";
         
+        const updateTimestamps = [];
+        
         for (const position of positions) {
             const adherence = position.adherence;
             
@@ -167,22 +169,28 @@
             
             const footer = document.createElement("div");
             footer.className = "lighter-text centred";
-            let footerHTML = "";
+            let systemElement = null;
             if ("{{ system is None }}" === "True") {
-                footerHTML += position.system;
+                systemElement = document.createElement("span");
+                systemElement.innerHTML = position.system;
+                footer.appendChild(systemElement);
             }
             if (position.timestamp) {
-                if (footerHTML !== "") {
-                    footerHTML += " • ";
+                if (systemElement) {
+                    const separator = document.createElement("span")
+                    separator.innerHTML = " • ";
+                    footer.appendChild(separator);
                 }
-                const time_format = "{{ time_format }}";
-                if (time_format === "12hr") {
-                    footerHTML += "<span class='no-wrap'>" + position.timestamp["12hr"] + "</span>";
-                } else {
-                    footerHTML += "<span class='no-wrap'>" + position.timestamp.default + "</span>";
+                const timestamp = document.createElement("span");
+                footer.appendChild(timestamp);
+                function updateTimestamp() {
+                    const currentTime = new Date().getTime();
+                    const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
+                    timestamp.innerHTML = difference;
                 }
+                updateTimestamp();
+                updateTimestamps.push(updateTimestamp);
             }
-            footer.innerHTML = footerHTML;
             content.appendChild(footer);
             
             if (position.bus_number < 0) {
@@ -272,6 +280,12 @@
                 area.combine(position.lat, position.lon);
             }
         }
+        
+        setInterval(function() {
+            for (updateTimestamp of updateTimestamps) {
+                updateTimestamp();
+            }
+        }, 1000);
     </script>
 % end
 

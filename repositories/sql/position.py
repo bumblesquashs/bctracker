@@ -6,7 +6,7 @@ from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
 from models.adherence import Adherence
 from models.occupancy import Occupancy
 from models.position import Position
-from models.time import Time
+from models.timestamp import Timestamp
 
 from repositories import PositionRepository
 
@@ -68,7 +68,10 @@ class SQLPositionRepository(PositionRepository):
             block_id = None
             route_id = None
         try:
-            timestamp = data.timestamp
+            if data.HasField('timestamp'):
+                timestamp = Timestamp.parse(data.timestamp, system.timezone)
+            else:
+                timestamp = None
         except AttributeError:
             timestamp = None
         if trip and stop and sequence is not None and lat is not None and lon is not None:
@@ -92,11 +95,12 @@ class SQLPositionRepository(PositionRepository):
             'lon': lon,
             'bearing': bearing,
             'speed': speed,
-            'occupancy': occupancy.name,
-            'timestamp': timestamp
+            'occupancy': occupancy.name
         }
         if adherence:
             values['adherence'] = adherence.value
+        if timestamp:
+            values['timestamp'] = timestamp.value
         self.database.insert('position', values)
     
     def find(self, bus):

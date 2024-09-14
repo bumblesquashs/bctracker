@@ -57,7 +57,7 @@ class Position:
             occupancy = Occupancy[row[f'{prefix}_occupancy']]
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
-        timestamp = Timestamp(row[f'{prefix}_timestamp'], timezone=system.timezone)
+        timestamp = Timestamp.parse(row[f'{prefix}_timestamp'], timezone=system.timezone)
         return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
@@ -145,8 +145,7 @@ class Position:
             'text_colour': self.text_colour,
             'occupancy_name': self.occupancy.value,
             'occupancy_status_class': self.occupancy.status_class,
-            'occupancy_icon': self.occupancy.icon,
-            'timestamp': self.timestamp.get_json()
+            'occupancy_icon': self.occupancy.icon
         }
         order = self.bus.order
         if order:
@@ -181,6 +180,9 @@ class Position:
         adherence = self.adherence
         if adherence:
             data['adherence'] = adherence.get_json()
+        timestamp = self.timestamp
+        if timestamp:
+            data['timestamp'] = timestamp.value
         return data
     
     def find_upcoming_departures(self):

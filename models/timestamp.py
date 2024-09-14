@@ -17,6 +17,15 @@ class Timestamp:
         '''Returns the current timestamp'''
         return cls(datetime.now().timestamp(), timezone)
     
+    @classmethod
+    def parse(cls, value, timezone=None):
+        '''Returns a timestamp with the given value'''
+        if not value:
+            return None
+        if not timezone:
+            timezone = pytz.timezone('America/Vancouver')
+        return cls(value, timezone)
+    
     @property
     def datetime(self):
         '''Returns a datetime from this timestamp'''
@@ -59,10 +68,7 @@ class Timestamp:
     
     def __init__(self, value, timezone):
         self.value = value
-        if timezone:
-            self.timezone = timezone
-        else:
-            self.timezone = pytz.timezone('America/Vancouver')
+        self.timezone = timezone
     
     def __str__(self):
         date = self.date
@@ -101,10 +107,3 @@ class Timestamp:
     
     def __sub__(self, value):
         self.value -= value
-    
-    def get_json(self):
-        '''Returns a representation of this timestamp in JSON-compatible format'''
-        return {
-            '12hr': f'{self.time.format_web("12hr")} {self.timezone_name}',
-            'default': f'{self.time} {self.timezone_name}'
-        }
