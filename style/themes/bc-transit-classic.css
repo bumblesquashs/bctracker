@@ -2,36 +2,30 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #1A671A
- * Secondary Header: #48A348
- * Menu: #094409
+ * Primary Header: #E20000
+ * Secondary Header: #023496
+ * Menu: #840000
  * Borders: #666666
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
- * Links: #0040FF
- * Buttons: #365CCB
+ * Links: #023496
+ * Buttons: #E20000
  * 
  * Other colors may also be used for specific purposes
 */
 
 :root {
-    --tooltip-background: #666666;
-    --tooltip-text: #FFFFFF;
-    
     --loading-background: #FFFFFF;
-    --loading-foreground: #48A348;
+    --loading-foreground: #E20000;
     
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
-    
-    --checkbox-color: #365CCB;
-    --radio-button-color: #365CCB;
+    --checkbox-color: #E20000;
+    --radio-button-color: #E20000;
 }
 
 a {
-    color: #0040FF;
+    color: #023496;
 }
 
 body {
@@ -54,7 +48,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #094409;
+    border-color: #840000;
 }
 
 table {
@@ -75,7 +69,7 @@ table td {
 }
 
 table th {
-    background-color: #48A348;
+    background-color: #023496;
     color: #FFFFFF;
     border-color: #666666;
 }
@@ -88,22 +82,22 @@ table tr:nth-child(2n-1) {
     background-color: #E6E6E6;
 }
 
-#loading-stop {
-    --image-color: #FFFFFF;
-}
-
 #map.preview {
     border-color: #666666;
 }
 
+#loading-stop {
+    --image-color: #FFFFFF;
+}
+
 #map-toggle {
-    background-color: #365CCB;
+    background-color: #E20000;
     --image-color: #FFFFFF;
 }
 
 #navigation-bar {
-    background-color: #1A671A;
-    --tooltip-background: #094409;
+    background-color: #E20000;
+    --tooltip-background: #840000;
     --image-color: #FFFFFF;
 }
 
@@ -112,11 +106,11 @@ table tr:nth-child(2n-1) {
 }
 
 #navigation-bar .navigation-icon:hover {
-    background-color: #094409;
+    background-color: #840000;
 }
 
 #navigation-bar .navigation-icon.disabled:hover {
-    background-color: #1A671A !important;
+    background-color: #E20000 !important;
 }
 
 #navigation-bar .navigation-item {
@@ -124,15 +118,15 @@ table tr:nth-child(2n-1) {
 }
 
 #navigation-bar .navigation-item:hover {
-    background-color: #094409;
+    background-color: #840000;
 }
 
 #navigation-bar .navigation-item.disabled:hover {
-    background-color: #1A671A !important;
+    background-color: #E20000 !important;
 }
 
 #navigation-menu {
-    background-color: #094409;
+    background-color: #840000;
     --image-color: #FFFFFF;
 }
 
@@ -176,11 +170,11 @@ table tr:nth-child(2n-1) {
 }
 
 #refresh-button:hover {
-    background-color: #094409;
+    background-color: #011E58;
 }
 
 #refresh-button.disabled:hover {
-    background-color: #48A348;
+    background-color: #023496;
 }
 
 #search {
@@ -189,10 +183,10 @@ table tr:nth-child(2n-1) {
 }
 
 #search-header {
-    background-color: #48A348;
+    background-color: #023496;
     color: #FFFFFF;
     border-color: #666666;
-    --tooltip-background: #094409;
+    --tooltip-background: #840000;
 }
 
 #search-input {
@@ -200,7 +194,7 @@ table tr:nth-child(2n-1) {
 }
 
 #search-input:focus {
-    border-color: #094409;
+    border-color: #840000;
 }
 
 #search-paging {
@@ -245,7 +239,7 @@ table tr:nth-child(2n-1) {
 }
 
 #status {
-    background-color: #48A348;
+    background-color: #023496;
     color: #FFFFFF;
     border-bottom-color: #666666;
 }
@@ -279,17 +273,13 @@ table tr:nth-child(2n-1) {
 }
 
 #title {
-    background-color: #1A671A;
+    background-color: #E20000;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 #title:hover {
-    background-color: #094409;
-}
-
-.ahead {
-    --adherence-background: #FF9A3A;
+    background-color: #840000;
 }
 
 .banner {
@@ -302,18 +292,14 @@ table tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.behind {
-    --adherence-background: #FF9A3A;
-}
-
 .button {
-    background-color: #365ccb;
+    background-color: #E20000;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #1440C2;
+    background-color: #840000;
 }
 
 .button.disabled {
@@ -350,7 +336,7 @@ table tr:nth-child(2n-1) {
 }
 
 .container > .section > .header > .toggle {
-    --image-color: #365CCB;
+    --image-color: #E20000;
 }
 
 .events .date {
@@ -358,7 +344,7 @@ table tr:nth-child(2n-1) {
 }
 
 .favourite {
-    --image-color: #365CCB;
+    --image-color: #E20000;
 }
 
 .favourite:hover {
@@ -396,7 +382,7 @@ table tr:nth-child(2n-1) {
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #48A348;
+    background-color: #E20000;
     --image-color: #FFFFFF;
 }
 
@@ -408,38 +394,15 @@ table tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.modified-service {
-    background-color: #FFB000;
-    color: #000000;
-}
-
-.negative {
-    color: #FF0000;
-}
-
 .news-post {
     background-color: #E6E6E6;
     border-color: #666666;
 }
 
 .news-post .header {
-    background-color: #48A348;
-    color: white;
+    background-color: #023496;
+    color: #FFFFFF;
     border-bottom-color: #666666;
-}
-
-.no-service {
-    background-color: #DC267F;
-    color: #000000;
-}
-
-.normal-service {
-    background-color: #648FFF;
-    color: #000000;
-}
-
-.on-time {
-    --adherence-background: #3C5ABE;
 }
 
 .option {
@@ -454,8 +417,8 @@ table tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #666666;
+.order-details .content {
+    --image-color: #666666;
 }
 
 .paging .page {
@@ -468,16 +431,12 @@ table tr:nth-child(2n-1) {
 }
 
 .paging .page.current {
-    background-color: #365CCB;
+    background-color: #E20000;
     color: #FFFFFF;
 }
 
 .paging .page.current:hover {
-    background-color: #365CCB;
-}
-
-.positive {
-    color: #1A671A;
+    background-color: #E20000;
 }
 
 .record-warnings {
@@ -498,18 +457,6 @@ table tr:nth-child(2n-1) {
     background-color: #DDDDDD;
 }
 
-.sheet a.modified-service:hover {
-    background-color: #C68900;
-}
-
-.sheet a.no-service:hover {
-    background-color: #D50068;
-}
-
-.sheet a.normal-service:hover {
-    background-color: #3D74FF;
-}
-
 .sheet-list .footer {
     color: #666666;
 }
@@ -525,7 +472,7 @@ table tr:nth-child(2n-1) {
 
 .tab-button {
     background-color: #FFFFFF;
-    color: #0040FF;
+    color: #023496;
 }
 
 .tab-button:hover {
@@ -539,30 +486,13 @@ table tr:nth-child(2n-1) {
 }
 
 .timeline .now {
-    background-color: #FF0000;
+    background-color: #E20000;
 }
 
 .timeline .section:hover {
     border-color: #666666;
 }
 
-.very-ahead {
-    --adherence-background: #FD393E;
-}
-
-.very-behind {
-    --adherence-background: #FD393E;
-}
-
-.weekdays a.weekday.no-service:hover {
-    background-color: #D50068;
-}
-
-.weekdays a.weekday.normal-service:hover {
-    background-color: #3D74FF;
-}
-
-.weekdays {
-    background-color: #C4C4C4;
-    color: #000000;
+.timespan .time {
+    background-color: #ABABAB;
 }

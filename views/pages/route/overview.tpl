@@ -35,6 +35,20 @@
                                 <div>{{ headsign }}</div>
                             % end
                         </div>
+                        % variants = [r for r in route.system.get_routes() if route.is_variant(r)]
+                        % if variants:
+                            <div class="column gap-5 section">
+                                <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
+                                <div class="column">
+                                    % for variant in variants:
+                                        <div class="row">
+                                            % include('components/route', route=variant)
+                                            <a href="{{ get_url(variant.system, f'routes/{variant.number}') }}">{{! variant.display_name }}</a>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                        % end
                     </div>
                 </div>
             </div>
@@ -70,7 +84,10 @@
                                         <div class="column">
                                             <div class="row">
                                                 % include('components/bus')
-                                                % include('components/adherence', adherence=position.adherence)
+                                                <div class="row gap-5">
+                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % include('components/adherence', adherence=position.adherence)
+                                                </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
                                                 % include('components/order', order=bus.order)
@@ -149,14 +166,14 @@
                                                 <tr>
                                                     <th class="non-mobile">Start Time</th>
                                                     <th class="mobile-only">Start</th>
-                                                    % if not system or system.realtime_enabled:
-                                                        <th>Bus</th>
-                                                        <th class="desktop-only">Model</th>
-                                                    % end
                                                     <th class="desktop-only">Headsign</th>
                                                     <th class="non-mobile">Block</th>
                                                     <th>Trip</th>
                                                     <th class="desktop-only">First Stop</th>
+                                                    % if not system or system.realtime_enabled:
+                                                        <th>Bus</th>
+                                                        <th class="desktop-only">Model</th>
+                                                    % end
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -169,6 +186,23 @@
                                                     % end
                                                     <tr class="{{'divider' if this_hour > last_hour else ''}}">
                                                         <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                        <td class="desktop-only">
+                                                            % include('components/headsign')
+                                                        </td>
+                                                        <td class="non-mobile">
+                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <div class="column">
+                                                                % include('components/trip')
+                                                                <span class="non-desktop smaller-font">
+                                                                    % include('components/headsign')
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="desktop-only">
+                                                            <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                        </td>
                                                         % if not system or system.realtime_enabled:
                                                             % if trip.id in recorded_today:
                                                                 % bus = recorded_today[trip.id]
@@ -178,7 +212,10 @@
                                                                             % include('components/bus')
                                                                             % if trip.id in trip_positions:
                                                                                 % position = trip_positions[trip.id]
-                                                                                % include('components/adherence', adherence=position.adherence)
+                                                                                <div class="row gap-5">
+                                                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                                    % include('components/adherence', adherence=position.adherence)
+                                                                                </div>
                                                                             % end
                                                                         </div>
                                                                         <span class="non-desktop smaller-font">
@@ -211,23 +248,6 @@
                                                                 <td class="non-desktop lighter-text">Unavailable</td>
                                                             % end
                                                         % end
-                                                        <td class="desktop-only">
-                                                            % include('components/headsign')
-                                                        </td>
-                                                        <td class="non-mobile">
-                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <div class="column">
-                                                                % include('components/trip')
-                                                                <span class="non-desktop smaller-font">
-                                                                    % include('components/headsign')
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="desktop-only">
-                                                            <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
-                                                        </td>
                                                     </tr>
                                                     % if this_hour > last_hour:
                                                         % last_hour = this_hour

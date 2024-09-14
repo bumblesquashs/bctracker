@@ -14,6 +14,7 @@ class Adherence:
     
     __slots__ = (
         'value',
+        'layover',
         'status_class',
         'description'
     )
@@ -36,15 +37,19 @@ class Adherence:
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
                 if time_difference >= MINIMUM_MINUTES:
                     expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
-            
-            return cls(expected_scheduled_mins - Time.now(trip.system.timezone).get_minutes())
+            value = expected_scheduled_mins - Time.now(trip.system.timezone).get_minutes()
+            layover = stop and trip.first_stop and stop == trip.first_stop and value > 0
+            return cls(value, layover)
         except AttributeError:
             return None
     
-    def __init__(self, value):
+    def __init__(self, value, layover):
         self.value = value
+        self.layover = layover
         
-        if value <= -8:
+        if layover:
+            self.status_class = 'layover'
+        elif value <= -8:
             self.status_class = 'very-behind'
         elif value <= -5:
             self.status_class = 'behind'
@@ -56,10 +61,16 @@ class Adherence:
             self.status_class = 'on-time'
         
         if value > 0:
-            if value == 1:
-                self.description = '1 minute ahead of schedule'
+            if layover:
+                if value == 1:
+                    self.description = '1 minute until scheduled departure'
+                else:
+                    self.description = f'{value} minutes until scheduled departure'
             else:
-                self.description = f'{value} minutes ahead of schedule'
+                if value == 1:
+                    self.description = '1 minute ahead of schedule'
+                else:
+                    self.description = f'{value} minutes ahead of schedule'
         elif value < 0:
             value = abs(value)
             if value == 1:
@@ -78,6 +89,7 @@ class Adherence:
         '''Returns a representation of this adherence in JSON-compatible format'''
         return {
             'value': str(self),
+            'layover': self.layover,
             'status_class': self.status_class,
             'description': self.description
         }

@@ -1,40 +1,49 @@
 {
-    "light": {
-        "name": "BC Transit (Light)"
+    "bc-transit": {
+        "name": "BC Transit",
+        "light": true,
+        "dark": true
     },
-    "dark": {
-        "name": "BC Transit (Dark)"
+    "bc-transit-classic": {
+        "name": "BC Transit Classic",
+        "light": true
     },
-    "classic": {
-        "name": "BC Transit Classic"
-    },
-    "bchydro": {
-        "name": "BC Hydro"
+    "bc-hydro": {
+        "name": "BC Hydro",
+        "light": true
     },
     "uta": {
-        "name": "Urban Transit Authority"
+        "name": "Urban Transit Authority",
+        "light": true
     },
-    "contrast": {
-        "name": "High Contrast"
+    "pride": {
+        "name": "Pride",
+        "light": true,
+        "dark": true
     },
     "tcomm": {
         "name": "T-Comm",
-        "visible": false
+        "visible": false,
+        "light": true
     },
     "christmas": {
         "name": "Christmas",
-        "visible": false
+        "visible": false,
+        "light": true
     },
     "halloween": {
         "name": "Halloween",
-        "visible": false
+        "visible": false,
+        "dark": true
     },
     "ghost": {
         "name": "Ghost",
-        "visible": false
+        "visible": false,
+        "light": true
     },
     "broome-county": {
         "name": "Broome County",
-        "visible": false
+        "visible": false,
+        "light": true
     }
 }

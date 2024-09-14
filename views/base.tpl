@@ -37,6 +37,10 @@
             <meta name="robots" content="noindex">
         % end
         
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        
         % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
@@ -59,11 +63,43 @@
         <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1000px)" href="/style/devices/tablet.css?version={{ version }}" />
         <link rel="stylesheet" media="screen and (max-width: 500px)" href="/style/devices/mobile.css?version={{ version }}" />
         
-        % if theme:
-            <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
+        % if theme.light and theme.dark:
+            % if theme_variant == 'light':
+                <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
+                <link rel="stylesheet" href="/style/themes/{{ theme.id }}.light.css?version={{ version }}" />
+                % if high_contrast:
+                    <link rel="stylesheet" href="/style/contrast/light.css?version={{ version }}" />
+                % end
+            % elif theme_variant == 'dark':
+                <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
+                <link rel="stylesheet" href="/style/themes/{{ theme.id }}.dark.css?version={{ version }}" />
+                % if high_contrast:
+                    <link rel="stylesheet" href="/style/contrast/dark.css?version={{ version }}" />
+                % end
+            % else:
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css?version={{ version }}" />
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css?version={{ version }}" />
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/{{ theme.id }}.light.css?version={{ version }}" />
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/{{ theme.id }}.dark.css?version={{ version }}" />
+                % if high_contrast:
+                    <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/contrast/light.css?version={{ version }}" />
+                    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/contrast/dark.css?version={{ version }}" />
+                % end
+            % end
         % else:
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/light.css?version={{ version }}" />
-            <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/dark.css?version={{ version }}" />
+            % if theme.light:
+                <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
+            % elif theme.dark:
+                <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
+            % end
+            <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
+            % if high_contrast:
+                % if theme.light:
+                    <link rel="stylesheet" href="/style/contrast/light.css?version={{ version }}" />
+                % elif theme.dark:
+                    <link rel="stylesheet" href="/style/contrast/dark.css?version={{ version }}" />
+                % end
+            % end
         % end
         
         % if include_maps:
@@ -310,8 +346,12 @@
             <div class="flex-1 side-bar-closed-only"></div>
             <div id="side-bar-toggle-container">
                 <div id="side-bar-toggle" onclick="toggleSideBar()">
-                    <div class="side-bar-open-only">&laquo;</div>
-                    <div class="side-bar-closed-only">&raquo;</div>
+                    <div class="side-bar-open-only">
+                        % include('components/svg', name='left-double')
+                    </div>
+                    <div class="side-bar-closed-only">
+                        % include('components/svg', name='right-double')
+                    </div>
                 </div>
                 <div class="side-bar-open-only">Hide Systems</div>
             </div>
@@ -360,11 +400,15 @@
                 
             </div>
             <div id="search-paging" class="display-none">
-                <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
+                    % include('components/svg', name='left')
+                </div>
                 <div id="search-count" class="flex-1">
                     
                 </div>
-                <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
+                <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
+                    % include('components/svg', name='right')
+                </div>
             </div>
         </div>
     </body>
@@ -401,7 +445,7 @@
             searchElement.classList.add("display-none");
         }
         if ("map" in window) {
-            map.resize();
+            map.updateSize();
         }
     }
     

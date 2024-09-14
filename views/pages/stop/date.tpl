@@ -26,12 +26,16 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
+                        <a class="icon button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{previous_date.format_db()}') }}">
+                            % include('components/svg', name='left')
+                        </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
                             <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">Return to week view</a>
                         </div>
-                        <a class="button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
+                        <a class="icon button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">
+                            % include('components/svg', name='right')
+                        </a>
                     </div>
                     <div class="section">
                         % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
@@ -76,12 +80,12 @@
                                         <div class="column">
                                             % include('components/headsign')
                                             % if not departure.pickup_type.is_normal:
-                                                <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                             % elif departure == trip.last_departure:
-                                                <span class="smaller-font">No pick up</span>
+                                                <span class="smaller-font italics">No pick up</span>
                                             % end
                                             % if not departure.dropoff_type.is_normal:
-                                                <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                                <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
                                             % end
                                         </div>
                                     </td>
@@ -99,12 +103,12 @@
                                                 % include('components/headsign')
                                             </span>
                                             % if not departure.pickup_type.is_normal:
-                                                <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
+                                                <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
                                             % elif departure == trip.last_departure:
-                                                <span class="mobile-only smaller-font">No pick up</span>
+                                                <span class="mobile-only smaller-font italics">No pick up</span>
                                             % end
                                             % if not departure.dropoff_type.is_normal:
-                                                <span class="mobile-only smaller-font">{{ departure.dropoff_type }}</span>
+                                                <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
                                             % end
                                         </div>
                                     </td>

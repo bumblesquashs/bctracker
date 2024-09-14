@@ -13,12 +13,13 @@ from models.bus import Bus
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.time import Time
 
 from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 39
+VERSION = 45
 
 class Server(Bottle):
     
@@ -96,7 +97,8 @@ class Server(Bottle):
         self.add('/routes/<route_number>/map', callback=self.route_map)
         self.add('/routes/<route_number>/schedule', callback=self.route_schedule)
         self.add('/routes/<route_number>/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.route_schedule_date)
-        self.add('/blocks', callback=self.blocks)
+        self.add('/blocks', callback=self.blocks_overview)
+        self.add('/blocks/schedule', callback=self.blocks_schedule)
         self.add('/blocks/schedule/<date_string:re:\\d{4}-\\d{2}-\\d{2}>', callback=self.blocks_schedule_date)
         self.add('/blocks/<block_id>', callback=self.block_overview)
         self.add('/blocks/<block_id>/map', callback=self.block_map)
@@ -212,14 +214,23 @@ class Server(Bottle):
         '''Returns an HTML page with the given name and details'''
         is_admin = self.validate_admin()
         
-        theme_id = request.query.get('theme') or request.get_cookie('theme')
-        time_format = request.query.get('time_format') or request.get_cookie('time_format')
-        bus_marker_style = request.query.get('bus_marker_style') or request.get_cookie('bus_marker_style')
-        hide_systems = request.get_cookie('hide_systems') == 'yes'
+        theme_id = self.query_cookie('theme')
+        theme = self.theme_repository.find(theme_id)
+        if not theme:
+            theme = self.theme_repository.find('bc-transit')
+        theme_variant = self.query_cookie('theme_variant')
+        high_contrast = self.query_cookie('high_contrast') == 'enabled'
+        time_format = self.query_cookie('time_format')
+        bus_marker_style = self.query_cookie('bus_marker_style')
+        hide_systems = self.query_cookie('hide_systems') == 'yes'
         if system:
             last_updated = system.get_last_updated(time_format)
+            today = Date.today(system.timezone)
+            now = Time.now(system.timezone, False)
         else:
             last_updated = self.realtime_service.get_last_updated(time_format)
+            today = Date.today()
+            now = Time.now()
         return template(f'pages/{name}',
             di=di,
             settings=self.settings,
@@ -237,11 +248,15 @@ class Server(Bottle):
             is_admin=is_admin,
             get_url=self.get_url,
             last_updated=last_updated,
-            theme=self.theme_repository.find(theme_id),
+            theme=theme,
+            theme_variant=theme_variant,
+            high_contrast=high_contrast,
             time_format=time_format,
             bus_marker_style=bus_marker_style,
             hide_systems=hide_systems,
             show_speed=request.get_cookie('speed') == '1994',
+            today=today,
+            now=now,
             **kwargs
         )
     
@@ -528,8 +543,11 @@ class Server(Bottle):
         else:
             records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
         transfers = self.transfer_repository.find_all(bus=bus)
+        tracked_systems = set()
         events = []
         if overview:
+            tracked_systems.add(overview.first_seen_system)
+            tracked_systems.add(overview.last_seen_system)
             events.append(Event(overview.first_seen_date, 'First Seen'))
             if overview.first_record:
                 events.append(Event(overview.first_record.date, 'First Tracked'))
@@ -537,6 +555,8 @@ class Server(Bottle):
             if overview.last_record:
                 events.append(Event(overview.last_record.date, 'Last Tracked'))
             for transfer in transfers:
+                tracked_systems.add(transfer.old_system)
+                tracked_systems.add(transfer.new_system)
                 events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
         return self.page(
             name='bus/history',
@@ -546,6 +566,7 @@ class Server(Bottle):
             bus=bus,
             records=records,
             overview=overview,
+            tracked_systems=tracked_systems,
             events=events,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites(),
@@ -759,11 +780,25 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def blocks(self, system, agency):
+    def blocks_overview(self, system, agency):
+        if system and system.realtime_enabled:
+            recorded_buses = self.record_repository.find_recorded_today_by_block(system)
+        else:
+            recorded_buses = {}
         return self.page(
-            name='blocks/list',
+            name='blocks/overview',
             title='Blocks',
             path='blocks',
+            system=system,
+            agency=agency,
+            recorded_buses=recorded_buses
+        )
+    
+    def blocks_schedule(self, system, agency):
+        return self.page(
+            name='blocks/schedule',
+            title='Blocks',
+            path='blocks/schedule',
             system=system,
             agency=agency,
             enable_refresh=False
@@ -1132,15 +1167,6 @@ class Server(Bottle):
         redirect(self.get_url(system, 'personalize'))
     
     def personalize(self, system, agency):
-        theme_id = request.query.get('theme')
-        if theme_id:
-            self.set_cookie('theme', theme_id)
-        time_format = request.query.get('time_format')
-        if time_format:
-            self.set_cookie('time_format', time_format)
-        bus_marker_style = request.query.get('bus_marker_style')
-        if bus_marker_style:
-            self.set_cookie('bus_marker_style', bus_marker_style)
         themes = self.theme_repository.find_all()
         return self.page(
             name='personalize',

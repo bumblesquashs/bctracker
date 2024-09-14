@@ -18,14 +18,9 @@
 
 :root {
     color-scheme: dark;
-    --tooltip-background: #2F2F2F;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #2F2F2F;
     --loading-foreground: #154E15;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #5CC3FF;
     --radio-button-color: #5CC3FF;
@@ -296,10 +291,6 @@ table tr:nth-child(2n-1) {
     background-color: #053305;
 }
 
-.ahead {
-    --adherence-background: #FF6A00;
-}
-
 .banner {
     background-color: #8A4D00;
     color: #FFFFFF;
@@ -308,10 +299,6 @@ table tr:nth-child(2n-1) {
 
 .banner a {
     color: #FFFFFF;
-}
-
-.behind {
-    --adherence-background: #FF6A00;
 }
 
 .button {
@@ -421,15 +408,6 @@ table tr:nth-child(2n-1) {
     color: #FFFFFF;
 }
 
-.modified-service {
-    background-color: #B65901;
-    color: #FFFFFF;
-}
-
-.negative {
-    color: #FF0000;
-}
-
 .news-post {
     background-color: #393939;
     border-color: #565656;
@@ -438,20 +416,6 @@ table tr:nth-child(2n-1) {
 .news-post .header {
     background-color: #276227;
     border-bottom-color: #565656;
-}
-
-.no-service {
-    background-color: #700000;
-    color: #FFFFFF;
-}
-
-.normal-service {
-    background-color: #005900;
-    color: #FFFFFF;
-}
-
-.on-time {
-    --adherence-background: #0093A8;
 }
 
 .option {
@@ -466,8 +430,8 @@ table tr:nth-child(2n-1) {
     background-color: #2F2F2F;
 }
 
-.order-details .content .separator {
-    color: #565656;
+.order-details .content {
+    --image-color: #565656;
 }
 
 .paging .page {
@@ -488,10 +452,6 @@ table tr:nth-child(2n-1) {
     background-color: #2247B7;
 }
 
-.positive {
-    color: #428342;
-}
-
 .record-warnings {
     --image-color: #FF0000;
 }
@@ -508,18 +468,6 @@ table tr:nth-child(2n-1) {
 
 .sheet {
     background-color: #565656;
-}
-
-.sheet a.modified-service:hover {
-    background-color: #934800;
-}
-
-.sheet a.no-service:hover {
-    background-color: #4A0000;
-}
-
-.sheet a.normal-service:hover {
-    background-color: #003B00;
 }
 
 .sheet-list .footer {
@@ -557,23 +505,6 @@ table tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
-.very-ahead {
-    --adherence-background: #FF0007;
-}
-
-.very-behind {
-    --adherence-background: #FF0007;
-}
-
-.weekdays a.weekday.no-service:hover {
-    background-color: #4A0000;
-}
-
-.weekdays a.weekday.normal-service:hover {
-    background-color: #003B00;
-}
-
-.weekdays {
-    background-color: #393939;
-    color: #FFFFFF;
+.timespan .time {
+    background-color: #989898;
 }

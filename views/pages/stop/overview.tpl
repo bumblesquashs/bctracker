@@ -132,18 +132,19 @@
                                 </span>
                                 <span>are scheduled but may be swapped off.</span>
                             </p>
+                            <p>Times in brackets are estimates based on current vehicle location.</p>
                         % end
                         <table>
                             <thead>
                                 <tr>
                                     <th>Time</th>
+                                    <th class="non-mobile">Headsign</th>
+                                    <th class="desktop-only">Block</th>
+                                    <th>Trip</th>
                                     % if not system or system.realtime_enabled:
                                         <th>Bus</th>
                                         <th class="desktop-only">Model</th>
                                     % end
-                                    <th class="non-mobile">Headsign</th>
-                                    <th class="desktop-only">Block</th>
-                                    <th>Trip</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -153,7 +154,7 @@
                                     % if last_hour == -1:
                                         % last_hour = this_hour
                                     % end
-                                    % include('rows/departure', show_divider=this_hour > last_hour)
+                                    % include('rows/departure', show_divider=this_hour > last_hour, show_time_estimate=True)
                                     % last_hour = this_hour
                                 % end
                             </tbody>
@@ -191,13 +192,13 @@
                         <thead>
                             <tr>
                                 <th>Time</th>
+                                <th class="non-mobile">Headsign</th>
+                                <th class="desktop-only">Block</th>
+                                <th>Trip</th>
                                 % if not system or system.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
-                                <th class="non-mobile">Headsign</th>
-                                <th class="desktop-only">Block</th>
-                                <th>Trip</th>
                             </tr>
                         </thead>
                         <tbody>

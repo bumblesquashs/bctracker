@@ -1,6 +1,16 @@
 
+:root {
+    --serif-font: "Lora", serif;
+    --sans-serif-font: "Lato", sans-serif;
+    --mono-font: "JetBrains Mono", monospace;
+}
+
 a {
     text-decoration: none;
+}
+
+body {
+    font-family: var(--serif-font);
 }
 
 /* Get outta here with your default margins */
@@ -31,6 +41,7 @@ input[type="text"] {
     border-style: solid;
     border-radius: 5px;
     padding: 5px;
+    font-family: var(--sans-serif-font);
 }
 
 input[type="text"]:focus {
@@ -228,7 +239,7 @@ table tr.header td {
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
 }
 
 #navigation-bar .navigation-icon {
@@ -254,7 +265,6 @@ table tr.header td {
 #navigation-bar .navigation-item {
     padding: 15px;
     text-decoration: none !important;
-    font-size: 14pt;
     font-weight: normal;
 }
 
@@ -337,7 +347,8 @@ table tr.header td {
 #search {
     display: flex;
     flex-direction: column;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
+    font-size: 14pt;
 }
 
 #search:focus {
@@ -353,6 +364,7 @@ table tr.header td {
     flex-direction: row;
     gap: 5px;
     align-items: center;
+    font-size: 13pt;
 }
 
 #search-filters .button {
@@ -407,7 +419,7 @@ table tr.header td {
 #side-bar {
     display: flex;
     flex-direction: column;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
 }
 
 #status {
@@ -421,6 +433,9 @@ table tr.header td {
 
 #status .details {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
 }
 
 #system {
@@ -450,7 +465,7 @@ table tr.header td {
     text-align: center;
     user-select: none;
     font-weight: bold;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     font-size: 9pt;
     line-height: 9pt;
     flex-shrink: 0;
@@ -500,6 +515,10 @@ table tr.header td {
     border-bottom-color: var(--adherence-background);
 }
 
+.bearing.occupancy {
+    border-bottom-color: var(--occupancy-background);
+}
+
 .block-timeline {
     display: flex;
     flex-direction: column;
@@ -523,7 +542,7 @@ table tr.header td {
     padding: 10px;
     cursor: default;
     font-weight: bold;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     text-align: center;
     text-decoration: none !important;
     user-select: none;
@@ -541,6 +560,13 @@ table tr.header td {
     cursor: default;
 }
 
+.button.icon {
+    --image-size: 24px;
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+}
+
 .button-container {
     display: flex;
     flex-direction: row;
@@ -556,7 +582,7 @@ table tr.header td {
     border-width: 1px;
     border-style: solid;
     padding: 10px;
-    font-family: monospace;
+    font-family: var(--mono-font);
     font-size: 10pt;
     white-space: pre;
 }
@@ -755,9 +781,13 @@ table tr.header td {
     text-align: right;
 }
 
+.italics {
+    font-style: italic;
+}
+
 .marker {
     position: relative;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
 }
 
 .marker:hover {
@@ -800,7 +830,7 @@ table tr.header td {
     padding: 2px;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
 }
 
 .marker .details .content .adherence-indicator {
@@ -810,6 +840,10 @@ table tr.header td {
 }
 
 .marker .details .content .route {
+    font-size: 8pt;
+}
+
+.marker .details .content .occupancy-name {
     font-size: 8pt;
 }
 
@@ -906,6 +940,10 @@ table tr.header td {
     color: var(--adherence-text);
 }
 
+.marker .icon.adherence.smaller-font {
+    font-size: 9pt;
+}
+
 .marker .icon.route {
     width: auto;
     height: auto;
@@ -938,6 +976,11 @@ table tr.header td {
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
+}
+
+.marker .icon.occupancy {
+    background-color: var(--occupancy-background);
+    --image-color: var(--occupancy-foreground);
 }
 
 .marker.small .icon {
@@ -981,6 +1024,19 @@ table tr.header td {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.occupancy-icon {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background-color: var(--occupancy-background);
+    --image-color: var(--occupancy-foreground);
+    --image-size: 14px;
+}
+
+.occupancy-icon.large {
+    padding: 2px 4px;
+    --image-size: 18px;
 }
 
 .options-container {
@@ -1074,7 +1130,7 @@ table tr.header td {
     border-radius: 5px;
     cursor: default;
     font-weight: bold;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     text-align: center;
     text-decoration: none !important;
     user-select: none;
@@ -1093,6 +1149,12 @@ table tr.header td {
     cursor: default;
 }
 
+.percentage {
+    cursor: default;
+    padding: 1px 4px;
+    border-radius: 4px;
+}
+
 .placeholder {
     display: flex;
     flex-direction: column;
@@ -1107,7 +1169,7 @@ table tr.header td {
 .route {
     display: inline-block;
     padding: 1px 6px;
-    font-size: 11pt;
+    font-size: 10pt;
     font-weight: bold;
     border-width: 1px;
     border-style: solid;
@@ -1121,7 +1183,7 @@ table tr.header td {
 }
 
 .route-list .route {
-    font-size: 10pt;
+    font-size: 9pt;
 }
 
 .route-line {
@@ -1187,15 +1249,15 @@ table tr.header td {
 }
 
 .sheet .dates .month .name {
-    font-size: 13pt;
+    font-size: 12pt;
 }
 
 .sheet .dates .month.title .name {
-    font-size: 14pt;
+    font-size: 13pt;
 }
 
 .sheet .dates .month .date {
-    font-size: 11pt;
+    font-size: 10pt;
     padding: 1px 4px;
     border-radius: 4px;
     min-width: 14px;
@@ -1218,7 +1280,7 @@ table tr.header td {
 .sheet-list .footer {
     width: 75%;
     margin: 0px auto 0px auto;
-    font-size: 11pt;
+    font-size: 10pt;
     text-align: center;
 }
 
@@ -1228,7 +1290,7 @@ table tr.header td {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 .sheet-list .legend .icon {
@@ -1252,7 +1314,7 @@ table tr.header td {
     font-size: 13pt;
     font-weight: bold;
     vertical-align: middle;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     text-align: center;
     text-decoration: none !important;
 }
@@ -1276,6 +1338,8 @@ table tr.header td {
     top: -2px;
     bottom: -2px;
     width: 2px;
+    z-index: 10;
+    transform: translateX(-1px);
 }
 
 .timeline .section {
@@ -1289,6 +1353,32 @@ table tr.header td {
     margin-top: -2px;
     margin-left: -2px;
     z-index: 20;
+}
+
+.timeline .section.non-current {
+    opacity: 0.2;
+}
+
+.timeline .section.non-current:hover {
+    opacity: 1;
+}
+
+.timespan {
+    position: relative;
+    height: 4px;
+}
+
+.timespan .time {
+    position: absolute;
+    top: 0px;
+    height: 2px;
+    width: 2px;
+    transform: translateX(-1px);
+}
+
+.timespan .time.hour {
+    height: 6px;
+    top: -2px;
 }
 
 .timing-point {
@@ -1312,11 +1402,12 @@ table tr.header td {
     transform: translate(0px, -50%);
     border-radius: 5px;
     font-size: 11pt;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     text-align: left;
     width: max-content;
     max-width: 300px;
     font-weight: normal;
+    line-height: normal;
 }
 
 .tooltip-anchor .tooltip.left {
@@ -1363,7 +1454,7 @@ table tr.header td {
     display: flex;
     flex-direction: row;
     font-weight: bold;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
     overflow: hidden;
     border-radius: 5px;
 }

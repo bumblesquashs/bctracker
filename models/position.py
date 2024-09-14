@@ -3,6 +3,7 @@ from di import di
 
 from models.adherence import Adherence
 from models.bus import Bus
+from models.occupancy import Occupancy
 
 from repositories import AgencyRepository, DepartureRepository, SystemRepository
 
@@ -22,7 +23,8 @@ class Position:
         'lon',
         'bearing',
         'speed',
-        'adherence'
+        'adherence',
+        'occupancy'
     )
     
     @classmethod
@@ -46,8 +48,14 @@ class Position:
         if adherence_value is None:
             adherence = None
         else:
-            adherence = Adherence(adherence_value)
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence)
+            trip = system.get_trip(trip_id)
+            layover = trip and stop_id and trip.first_stop and trip.first_stop.id == stop_id and adherence_value > 0
+            adherence = Adherence(adherence_value, layover)
+        try:
+            occupancy = Occupancy[row[f'{prefix}_occupancy']]
+        except KeyError:
+            occupancy = Occupancy.NO_DATA_AVAILABLE
+        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy)
     
     @property
     def has_location(self):
@@ -98,7 +106,7 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, **kwargs):
+    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, **kwargs):
         self.system = system
         self.bus = bus
         self.trip_id = trip_id
@@ -111,6 +119,7 @@ class Position:
         self.bearing = bearing
         self.speed = speed
         self.adherence = adherence
+        self.occupancy = occupancy
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
@@ -129,7 +138,10 @@ class Position:
             'lon': self.lon,
             'lat': self.lat,
             'colour': self.colour,
-            'text_colour': self.text_colour
+            'text_colour': self.text_colour,
+            'occupancy_name': self.occupancy.value,
+            'occupancy_status_class': self.occupancy.status_class,
+            'occupancy_icon': self.occupancy.icon
         }
         order = self.bus.order
         if order:

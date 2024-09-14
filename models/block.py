@@ -57,7 +57,10 @@ class Block:
     
     def get_routes(self, service_group=None, date=None):
         '''Returns all routes from this block'''
-        return sorted({t.route for t in self.get_trips(service_group, date)})
+        trips = self.get_trips(service_group, date)
+        if not trips:
+            trips = self.get_trips()
+        return sorted({t.route for t in trips})
     
     def get_routes_string(self, service_group=None, date=None):
         '''Returns a string of all routes from this block'''
@@ -66,6 +69,8 @@ class Block:
     def get_start_time(self, service_group=None, date=None):
         '''Returns the start time of this block'''
         trips = self.get_trips(service_group, date)
+        if not trips:
+            trips = self.get_trips()
         try:
             return trips[0].start_time
         except IndexError:
@@ -74,6 +79,8 @@ class Block:
     def get_end_time(self, service_group=None, date=None):
         '''Returns the end time of this block'''
         trips = self.get_trips(service_group, date)
+        if not trips:
+            trips = self.get_trips()
         try:
             return trips[-1].end_time
         except IndexError:

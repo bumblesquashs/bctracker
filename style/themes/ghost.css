@@ -18,13 +18,9 @@
 
 :root {
     --tooltip-background: #888888;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #FFFFFF;
     --loading-foreground: #AAAAAA;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #000000;
     --radio-button-color: #000000;
@@ -279,10 +275,6 @@ table tr {
     background-color: #DDDDDD;
 }
 
-.ahead {
-    --adherence-background: #FF9A3A;
-}
-
 .banner {
     background-color: #FFF7ED;
     color: #000000;
@@ -291,10 +283,6 @@ table tr {
 
 .banner a {
     color: #000000;
-}
-
-.behind {
-    --adherence-background: #FF9A3A;
 }
 
 .button {
@@ -399,15 +387,6 @@ table tr {
     color: #FFFFFF;
 }
 
-.modified-service {
-    background-color: #FFA560;
-    color: #000000;
-}
-
-.negative {
-    color: #FF0000;
-}
-
 .news-post {
     background-color: #EEEEEE;
     border-color: #DDDDDD;
@@ -417,20 +396,6 @@ table tr {
     background-color: #DDDDDD;
     color: #000000;
     border-bottom-color: #DDDDDD;
-}
-
-.no-service {
-    background-color: #FF7F7F;
-    color: #000000;
-}
-
-.normal-service {
-    background-color: #7DBD88;
-    color: #000000;
-}
-
-.on-time {
-    --adherence-background: #3C5ABE;
 }
 
 .option {
@@ -445,8 +410,8 @@ table tr {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #888888;
+.order-details .content {
+    --image-color: #888888;
 }
 
 .paging .page {
@@ -467,10 +432,6 @@ table tr {
     background-color: #AAAAAA;
 }
 
-.positive {
-    color: #1A671A;
-}
-
 .record-warnings {
     --image-color: #FF0000;
 }
@@ -487,18 +448,6 @@ table tr {
 
 .sheet {
     background-color: #DDDDDD;
-}
-
-.sheet a.modified-service:hover {
-    background-color: #E6853A;
-}
-
-.sheet a.no-service:hover {
-    background-color: #DC5050;
-}
-
-.sheet a.normal-service:hover {
-    background-color: #509F5E;
 }
 
 .sheet-list .footer {
@@ -537,23 +486,6 @@ table tr {
     border-color: #888888;
 }
 
-.very-ahead {
-    --adherence-background: #FD393E;
-}
-
-.very-behind {
-    --adherence-background: #FD393E;
-}
-
-.weekdays a.weekday.no-service:hover {
-    background-color: #DC5050;
-}
-
-.weekdays a.weekday.normal-service:hover {
-    background-color: #509F5E;
-}
-
-.weekdays {
-    background-color: #C4C4C4;
-    color: #000000;
+.timespan .time {
+    background-color: #AAAAAA;
 }
