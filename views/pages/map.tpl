@@ -68,8 +68,6 @@
         
         const shapes = {};
         
-        const updateTimestamps = [];
-        
         document.body.onload = function() {
             map.updateSize();
         }
@@ -193,13 +191,10 @@
                     }
                     const timestamp = document.createElement("span");
                     footer.appendChild(timestamp);
-                    function updateTimestamp() {
-                        const currentTime = new Date().getTime();
+                    updateTimestampFunctions.push(function(currentTime) {
                         const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
                         timestamp.innerHTML = difference;
-                    }
-                    updateTimestamp();
-                    updateTimestamps.push(updateTimestamp);
+                    });
                 }
                 content.appendChild(footer);
                 
@@ -505,12 +500,6 @@
                 }
             }, 1000 * 60);
         }, 1000 * (timeToNextUpdate + 15));
-        
-        setInterval(function() {
-            for (updateTimestamp of updateTimestamps) {
-                updateTimestamp();
-            }
-        }, 1000);
     </script>
 
     % include('components/map_toggle')

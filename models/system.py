@@ -26,8 +26,7 @@ class System:
         'colour_routes',
         'gtfs_loaded',
         'validation_errors',
-        'last_updated_date',
-        'last_updated_time',
+        'last_updated',
         'blocks',
         'routes',
         'routes_by_number',
@@ -44,7 +43,7 @@ class System:
     @property
     def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
-        return self.last_updated_date and self.last_updated_time
+        return self.last_updated is not None
     
     @property
     def gtfs_enabled(self):
@@ -92,8 +91,7 @@ class System:
         
         self.gtfs_loaded = False
         self.validation_errors = 0
-        self.last_updated_date = None
-        self.last_updated_time = None
+        self.last_updated = None
         
         self.blocks = {}
         self.routes = {}
@@ -195,16 +193,6 @@ class System:
     def get_trips(self):
         '''Returns all trips'''
         return self.trips.values()
-    
-    def get_last_updated(self, time_format):
-        '''Returns the date/time that realtime data was last updated'''
-        date = self.last_updated_date
-        time = self.last_updated_time
-        if not date or not time:
-            return 'N/A'
-        if date.is_today:
-            return f'at {time.format_web(time_format)} {time.timezone_name}'
-        return date.format_since()
     
     def search_blocks(self, query):
         '''Returns all blocks that match the given query'''

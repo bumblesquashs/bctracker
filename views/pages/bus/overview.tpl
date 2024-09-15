@@ -8,6 +8,12 @@
 
 % model = bus.model
 
+% if position and position.timestamp:
+    <script>
+        const originalTimestamp = parseFloat("{{ position.timestamp.value }}") * 1000;
+    </script>
+% end
+
 <div id="page-header">
     <h1 class="row">
         <span>Bus</span>
@@ -89,17 +95,10 @@
                                 <div class="name">Last Update</div>
                                 <div id="timestamp"></div>
                                 <script>
-                                    const originalTimestamp = parseFloat("{{ position.timestamp.value }}") * 1000;
-                                    
-                                    function updateTimestamp() {
-                                        const currentTime = new Date().getTime();
+                                    updateTimestampFunctions.push(function(currentTime) {
                                         const difference = getDifference(currentTime, originalTimestamp + timestampOffset);
                                         document.getElementById("timestamp").innerHTML = difference;
-                                    }
-                                    
-                                    updateTimestamp();
-                                    
-                                    setInterval(updateTimestamp, 1000);
+                                    });
                                 </script>
                             </div>
                         % end
@@ -155,17 +154,10 @@
                                 <div class="value">
                                     <div id="timestamp"></div>
                                     <script>
-                                        const originalTimestamp = parseFloat("{{ position.timestamp.value }}") * 1000;
-                                        
-                                        function updateTimestamp() {
-                                            const currentTime = new Date().getTime();
+                                        updateTimestampFunctions.push(function(currentTime) {
                                             const difference = getDifference(currentTime, originalTimestamp + timestampOffset);
                                             document.getElementById("timestamp").innerHTML = difference;
-                                        }
-                                        
-                                        updateTimestamp();
-                                        
-                                        setInterval(updateTimestamp, 1000);
+                                        });
                                     </script>
                                 </div>
                             </div>

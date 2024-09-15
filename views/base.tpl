@@ -204,6 +204,7 @@
             }
             
             const timestampOffset = getTimestampOffset();
+            const updateTimestampFunctions = [];
             
             function getDifference(t1, t2) {
                 let difference = t1 - t2;
@@ -351,11 +352,9 @@
                             All Transit Systems
                         % end
                     </div>
-                    <div id="last-updated">
-                        % if not system or (system.realtime_enabled and system.realtime_loaded):
-                            Updated {{ last_updated }}
-                        % end
-                    </div>
+                    % if last_updated:
+                        <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
+                    % end
                 </div>
                 <div id="refresh-button" class="disabled">
                     % include('components/svg', name='refresh')
@@ -773,5 +772,17 @@
         if ("map" in window) {
             map.updateSize();
         }
+    }
+    
+    function updateAllTimestamps() {
+        const currentTime = new Date().getTime();
+        for (const func of updateTimestampFunctions) {
+            func(currentTime);
+        }
+    }
+    
+    if (updateTimestampFunctions.length > 0) {
+        updateAllTimestamps();
+        setInterval(updateAllTimestamps, 1000)
     }
 </script>

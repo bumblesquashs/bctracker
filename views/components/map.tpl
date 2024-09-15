@@ -89,8 +89,6 @@
         const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
         const busMarkerStyle = "{{ bus_marker_style }}";
         
-        const updateTimestamps = [];
-        
         for (const position of positions) {
             const adherence = position.adherence;
             
@@ -183,13 +181,10 @@
                 }
                 const timestamp = document.createElement("span");
                 footer.appendChild(timestamp);
-                function updateTimestamp() {
-                    const currentTime = new Date().getTime();
+                updateTimestampFunctions.push(function(currentTime) {
                     const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
                     timestamp.innerHTML = difference;
-                }
-                updateTimestamp();
-                updateTimestamps.push(updateTimestamp);
+                });
             }
             content.appendChild(footer);
             
@@ -280,12 +275,6 @@
                 area.combine(position.lat, position.lon);
             }
         }
-        
-        setInterval(function() {
-            for (updateTimestamp of updateTimestamps) {
-                updateTimestamp();
-            }
-        }, 1000);
     </script>
 % end
 

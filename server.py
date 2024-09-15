@@ -225,12 +225,12 @@ class Server(Bottle):
         bus_marker_style = self.query_cookie('bus_marker_style')
         hide_systems = self.query_cookie('hide_systems') == 'yes'
         if system:
-            last_updated = system.get_last_updated(time_format)
+            last_updated = system.last_updated
             today = Date.today(system.timezone)
             now = Time.now(system.timezone, False)
             timestamp = Timestamp.now(system.timezone)
         else:
-            last_updated = self.realtime_service.get_last_updated(time_format)
+            last_updated = self.realtime_service.get_last_updated()
             today = Date.today()
             now = Time.now()
             timestamp = Timestamp.now()
@@ -1229,15 +1229,19 @@ class Server(Bottle):
         return 'Online'
     
     def api_map(self, system, agency):
-        time_format = request.get_cookie('time_format')
         if system:
-            last_updated = system.get_last_updated(time_format)
+            last_updated = system.last_updated
         else:
-            last_updated = self.realtime_service.get_last_updated(time_format)
+            last_updated = self.realtime_service.get_last_updated()
+        if last_updated:
+            time_format = request.get_cookie('time_format')
+            last_updated_text = last_updated.format_web(time_format)
+        else:
+            last_updated_text = None
         positions = sorted(self.position_repository.find_all(system, has_location=True), key=lambda p: p.lat)
         return {
             'positions': [p.get_json() for p in positions],
-            'last_updated': last_updated
+            'last_updated': last_updated_text
         }
     
     def api_shape(self, system, agency, shape_id):
