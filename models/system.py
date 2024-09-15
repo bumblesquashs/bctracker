@@ -43,7 +43,7 @@ class System:
     @property
     def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
-        return self.last_updated
+        return self.last_updated is not None
     
     @property
     def gtfs_enabled(self):
