@@ -12,6 +12,7 @@ from settings import Settings
 
 from models.date import Date
 from models.time import Time
+from models.timestamp import Timestamp
 
 from repositories import AssignmentRepository, OverviewRepository, PositionRepository, RecordRepository, TransferRepository
 from services import RealtimeService
@@ -26,8 +27,7 @@ class DefaultRealtimeService(RealtimeService):
         'position_repository',
         'record_repository',
         'transfer_repository',
-        'last_updated_date',
-        'last_updated_time'
+        'last_updated'
     )
     
     def __init__(self, database: Database, settings: Settings, **kwargs):
@@ -38,8 +38,7 @@ class DefaultRealtimeService(RealtimeService):
         self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
         self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
         self.transfer_repository = kwargs.get('transfer_repository') or di[TransferRepository]
-        self.last_updated_date = None
-        self.last_updated_time = None
+        self.last_updated = None
     
     def update(self, system):
         '''Downloads realtime data for the given system and stores it in the database'''
@@ -75,10 +74,8 @@ class DefaultRealtimeService(RealtimeService):
                 except:
                     bus_number = -(index + 1)
                 self.position_repository.create(system, bus_number, vehicle)
-            self.last_updated_date = Date.today()
-            self.last_updated_time = Time.now(accurate_seconds=False)
-            system.last_updated_date = Date.today(system.timezone)
-            system.last_updated_time = Time.now(system.timezone, system.agency.accurate_seconds)
+            self.last_updated = Timestamp.now(accurate_seconds=False)
+            system.last_updated = Timestamp.now(system.timezone, system.agency.accurate_seconds)
         except Exception as e:
             print(f'Failed to update realtime for {system}: {e}')
     
@@ -125,15 +122,9 @@ class DefaultRealtimeService(RealtimeService):
         except Exception as e:
             print(f'Failed to update records: {e}')
     
-    def get_last_updated(self, time_format):
-        '''Returns the date/time that realtime data was last updated'''
-        date = self.last_updated_date
-        time = self.last_updated_time
-        if not date or not time:
-            return 'N/A'
-        if date.is_today:
-            return f'at {time.format_web(time_format)} {time.timezone_name}'
-        return date.format_since()
+    def get_last_updated(self):
+        '''Returns the timestamp that realtime data was last updated'''
+        return self.last_updated
     
     def validate(self, system):
         '''Checks that the realtime data for the given system aligns with the current GTFS for that system'''

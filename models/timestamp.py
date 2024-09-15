@@ -9,22 +9,23 @@ class Timestamp:
     
     __slots__ = (
         'value',
-        'timezone'
+        'timezone',
+        'accurate_seconds'
     )
     
     @classmethod
-    def now(cls, timezone=None):
+    def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current timestamp'''
-        return cls(datetime.now().timestamp(), timezone)
+        return cls.parse(datetime.now().timestamp(), timezone, accurate_seconds)
     
     @classmethod
-    def parse(cls, value, timezone=None):
+    def parse(cls, value, timezone=None, accurate_seconds=True):
         '''Returns a timestamp with the given value'''
         if not value:
             return None
         if not timezone:
             timezone = pytz.timezone('America/Vancouver')
-        return cls(value, timezone)
+        return cls(value, timezone, accurate_seconds)
     
     @property
     def datetime(self):
@@ -39,7 +40,7 @@ class Timestamp:
     @property
     def time(self):
         '''Returns the time of this timestamp'''
-        return Time.fromdatetime(self.datetime, self.timezone)
+        return Time.fromdatetime(self.datetime, self.timezone, self.accurate_seconds)
     
     @property
     def is_earlier(self):
@@ -66,9 +67,10 @@ class Timestamp:
         '''Returns the name of this timestamp's timezone'''
         return datetime.now(self.timezone).tzname()
     
-    def __init__(self, value, timezone):
+    def __init__(self, value, timezone, accurate_seconds):
         self.value = value
         self.timezone = timezone
+        self.accurate_seconds = accurate_seconds
     
     def __str__(self):
         date = self.date
@@ -107,3 +109,10 @@ class Timestamp:
     
     def __sub__(self, value):
         self.value -= value
+    
+    def format_web(self, time_format='30hr'):
+        '''Formats this timestamp for web display'''
+        date = self.date
+        if date.is_today:
+            return f'at {self.time.format_web(time_format)} {self.time.timezone_name}'
+        return date.format_since()
