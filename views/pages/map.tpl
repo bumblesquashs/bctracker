@@ -177,12 +177,28 @@
                 
                 content.appendChild(occupancy);
                 
+                const footer = document.createElement("div");
+                footer.className = "lighter-text centred";
+                let systemElement = null;
                 if ("{{ system is None }}" === "True") {
-                    const system = document.createElement("div");
-                    system.className = "lighter-text centred";
-                    system.innerHTML = position.system;
-                    content.appendChild(system);
+                    systemElement = document.createElement("span");
+                    systemElement.innerHTML = position.system;
+                    footer.appendChild(systemElement);
                 }
+                if (position.timestamp) {
+                    if (systemElement) {
+                        const separator = document.createElement("span")
+                        separator.innerHTML = " • ";
+                        footer.appendChild(separator);
+                    }
+                    const timestamp = document.createElement("span");
+                    footer.appendChild(timestamp);
+                    updateTimestampFunctions.push(function(currentTime) {
+                        const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
+                        timestamp.innerHTML = difference;
+                    });
+                }
+                content.appendChild(footer);
                 
                 const selectedOnly = document.createElement("div");
                 selectedOnly.className = "selected-only";

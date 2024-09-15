@@ -32,17 +32,21 @@ class Time:
     @classmethod
     def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current time'''
+        return cls.fromdatetime(datetime.now(), timezone, accurate_seconds)
+    
+    @classmethod
+    def fromdatetime(cls, datetime, timezone=None, accurate_seconds=True):
+        '''Returns a time from the given datetime'''
         if not timezone:
             timezone = pytz.timezone('America/Vancouver')
-        now = datetime.now(timezone)
-        hour = now.hour
+        hour = datetime.hour
         if hour < 4:
             hour += 24
         if accurate_seconds:
-            second = now.second
+            second = datetime.second
         else:
             second = None
-        return cls(hour, now.minute, second, timezone)
+        return cls(hour, datetime.minute, second, timezone)
     
     @classmethod
     def unknown(cls, timezone=None):
