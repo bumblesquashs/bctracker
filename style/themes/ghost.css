@@ -18,13 +18,9 @@
 
 :root {
     --tooltip-background: #888888;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #FFFFFF;
     --loading-foreground: #AAAAAA;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #000000;
     --radio-button-color: #000000;
@@ -414,8 +410,8 @@ table tr {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #888888;
+.order-details .content {
+    --image-color: #888888;
 }
 
 .paging .page {
@@ -488,4 +484,8 @@ table tr {
 
 .timeline .section:hover {
     border-color: #888888;
+}
+
+.timespan .time {
+    background-color: #AAAAAA;
 }

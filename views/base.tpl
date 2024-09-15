@@ -37,6 +37,10 @@
             <meta name="robots" content="noindex">
         % end
         
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        
         % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
@@ -192,6 +196,44 @@
                 const section = header.parentElement;
                 section.classList.toggle("closed");
             }
+            
+            function getTimestampOffset() {
+                const currentLocal = new Date().getTime();
+                const currentRemote = parseFloat("{{ timestamp.value }}") * 1000;
+                return currentLocal - currentRemote;
+            }
+            
+            const timestampOffset = getTimestampOffset();
+            
+            function getDifference(t1, t2) {
+                let difference = t1 - t2;
+                
+                const days = Math.floor(difference / 1000 / 60 / 60 / 24);
+                difference -= days * 1000* 60 * 60 * 24;
+                
+                const hours = Math.floor(difference / 1000 / 60 / 60);
+                difference -= hours * 1000 * 60 * 60;
+                
+                const minutes = Math.floor(difference / 1000 / 60);
+                difference -= minutes * 1000 * 60;
+                
+                const seconds = Math.floor(difference / 1000);
+                
+                let parts = []
+                if (days > 0) {
+                    parts.push(days + "d");
+                }
+                if (hours > 0) {
+                    parts.push(hours + "h");
+                }
+                if (minutes > 0) {
+                    parts.push(minutes + "m");
+                }
+                if (seconds > 0) {
+                    parts.push(seconds + "s");
+                }
+                return parts.join(" ") + " ago";
+            }
         </script>
     </head>
     
@@ -342,8 +384,12 @@
             <div class="flex-1 side-bar-closed-only"></div>
             <div id="side-bar-toggle-container">
                 <div id="side-bar-toggle" onclick="toggleSideBar()">
-                    <div class="side-bar-open-only">&laquo;</div>
-                    <div class="side-bar-closed-only">&raquo;</div>
+                    <div class="side-bar-open-only">
+                        % include('components/svg', name='left-double')
+                    </div>
+                    <div class="side-bar-closed-only">
+                        % include('components/svg', name='right-double')
+                    </div>
                 </div>
                 <div class="side-bar-open-only">Hide Systems</div>
             </div>
@@ -392,11 +438,15 @@
                 
             </div>
             <div id="search-paging" class="display-none">
-                <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
+                    % include('components/svg', name='left')
+                </div>
                 <div id="search-count" class="flex-1">
                     
                 </div>
-                <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
+                <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
+                    % include('components/svg', name='right')
+                </div>
             </div>
         </div>
     </body>

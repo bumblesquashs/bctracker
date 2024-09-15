@@ -18,13 +18,9 @@
 
 :root {
     --tooltip-background: #69BB65;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #FFFFFF;
     --loading-foreground: #D70000;
-    
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
     
     --checkbox-color: #D70000;
     --radio-button-color: #D70000;
@@ -423,8 +419,8 @@ table tr:nth-child(2n-1) {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #69BB65;
+.order-details .content {
+    --image-color: #69BB65;
 }
 
 .paging .page {
@@ -497,4 +493,8 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #69BB65;
+}
+
+.timespan .time {
+    background-color: #ABABAB;
 }

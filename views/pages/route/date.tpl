@@ -26,12 +26,16 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">&lt;</a>
+                        <a class="icon button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">
+                            % include('components/svg', name='left')
+                        </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
                             <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">Return to week view</a>
                         </div>
-                        <a class="button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">&gt;</a>
+                        <a class="icon button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">
+                            % include('components/svg', name='right')
+                        </a>
                     </div>
                     <div class="section">
                         % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')

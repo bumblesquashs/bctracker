@@ -62,6 +62,7 @@ SQL_SCRIPTS = [
             speed INTEGER,
             adherence INTEGER,
             occupancy TEXT,
+            timestamp REAL,
             PRIMARY KEY (system_id, bus_number)
         )
     ''',

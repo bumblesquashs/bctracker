@@ -14,12 +14,13 @@ from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.time import Time
+from models.timestamp import Timestamp
 
 from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 43
+VERSION = 45
 
 class Server(Bottle):
     
@@ -228,10 +229,12 @@ class Server(Bottle):
             last_updated = system.get_last_updated(time_format)
             today = Date.today(system.timezone)
             now = Time.now(system.timezone, False)
+            timestamp = Timestamp.now(system.timezone)
         else:
             last_updated = self.realtime_service.get_last_updated(time_format)
             today = Date.today()
             now = Time.now()
+            timestamp = Timestamp.now()
         return template(f'pages/{name}',
             di=di,
             settings=self.settings,
@@ -258,6 +261,7 @@ class Server(Bottle):
             show_speed=request.get_cookie('speed') == '1994',
             today=today,
             now=now,
+            timestamp=timestamp,
             **kwargs
         )
     
