@@ -129,25 +129,28 @@
             const content = document.createElement("div");
             content.className = "content hover-only";
             
-            const model = document.createElement("div");
-            model.className = "lighter-text centred";
-            model.innerHTML = position.bus_order;
-            content.appendChild(model);
+            const orderElement = document.createElement("div");
+            orderElement.className = "lighter-text centred";
+            orderElement.innerHTML = position.bus_order;
+            content.appendChild(orderElement);
             
-            const headsign = document.createElement("div");
-            if (position.adherence !== null && position.adherence !== undefined) {
+            const headsignElement = document.createElement("div");
+            let headsign = position.headsign;
+            if (headsign === null || headsign === undefined) {
+                headsign = "Not In Service";
+            }
+            if (adherence === null || adherence === undefined) {
+                headsign.className = "centred";
+                headsignElement.innerHTML = headsign;
+            } else {
                 headsign.className = "row center gap-5";
-                const adherence = position.adherence;
                 const adherenceElement = document.createElement("div");
                 adherenceElement.classList.add("adherence-indicator", adherence.status_class);
                 adherenceElement.innerHTML = adherence.value;
                 
-                headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
-            } else {
-                headsign.className = "centred";
-                headsign.innerHTML = position.headsign;
+                headsignElement.innerHTML = adherenceElement.outerHTML + headsign;
             }
-            content.appendChild(headsign);
+            content.appendChild(headsignElement);
             
             const occupancy = document.createElement("div");
             occupancy.className = "row center gap-5";
@@ -193,7 +196,12 @@
                 icon.className = "icon";
                 if (busMarkerStyle == "route") {
                     icon.classList.add("bus_route");
-                    icon.innerHTML = position.route_number;
+                    const routeNumber = position.route_number;
+                    if (route_number === null || route_number === undefined) {
+                        icon.innerHTML = "NIS";
+                    } else {
+                        icon.innerHTML = routeNumber;
+                    }
                     icon.style.backgroundColor = "#" + position.colour;
                 } else if (busMarkerStyle == "mini") {
                     element.classList.add("small");
@@ -226,7 +234,12 @@
                 icon.href = "/bus/" + position.bus_number;
                 if (busMarkerStyle == "route") {
                     icon.classList.add("bus_route");
-                    icon.innerHTML = "<div class='link'></div>" + position.route_number;
+                    const routeNumber = position.route_number;
+                    if (route_number === null || route_number === undefined) {
+                        icon.innerHTML = "<div class='link'></div>NIS";
+                    } else {
+                        icon.innerHTML = "<div class='link'></div>" + routeNumber;
+                    }
                     icon.style.backgroundColor = "#" + position.colour;
                 } else if (busMarkerStyle == "mini") {
                     element.classList.add("small");

@@ -168,9 +168,6 @@ class Position:
             data['route_number'] = trip.route.number
             data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id
-        else:
-            data['headsign'] = 'Not In Service'
-            data['route_number'] = 'NIS'
         bearing = self.bearing
         if bearing is not None:
             data['bearing'] = bearing
