@@ -53,7 +53,7 @@ class Occupancy(Enum):
             case Occupancy.NOT_ACCEPTING_PASSENGERS:
                 return 'no-people'
             case Occupancy.NO_DATA_AVAILABLE:
-                return 'no-people'
+                return 'one-person'
             case Occupancy.NOT_BOARDABLE:
                 return 'no-people'
     

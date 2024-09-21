@@ -79,8 +79,11 @@ class SQLPositionRepository(PositionRepository):
         else:
             adherence = None
         try:
-            value = _VEHICLEPOSITION_OCCUPANCYSTATUS.values_by_number[data.occupancy_status]
-            occupancy = Occupancy[value.name]
+            if data.HasField('occupancy_status'):
+                value = _VEHICLEPOSITION_OCCUPANCYSTATUS.values_by_number[data.occupancy_status]
+                occupancy = Occupancy[value.name]
+            else:
+                occupancy = Occupancy.NO_DATA_AVAILABLE
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
