@@ -56,6 +56,14 @@
             ])
         });
         
+        map.getViewport().style.cursor = "grab";
+        map.on('pointerdrag', function(event) {
+            map.getViewport().style.cursor = "grabbing";
+        });
+        map.on('pointerup', function(event) {
+            map.getViewport().style.cursor = "grab";
+        });
+        
         let positions = JSON.parse('{{! json.dumps([p.get_json() for p in positions]) }}');
         let currentShapeIDs = [];
         let markers = [];

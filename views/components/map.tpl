@@ -34,6 +34,16 @@
         })
     });
     
+    if (interactive) {
+        map.getViewport().style.cursor = "grab";
+        map.on('pointerdrag', function(event) {
+            map.getViewport().style.cursor = "grabbing";
+        });
+        map.on('pointerup', function(event) {
+            map.getViewport().style.cursor = "grab";
+        });
+    }
+    
     const area = new Area();
 </script>
 
