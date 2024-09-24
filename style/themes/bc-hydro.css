@@ -136,6 +136,7 @@ table tr:nth-child(2n-1) {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {

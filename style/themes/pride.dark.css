@@ -135,6 +135,7 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {

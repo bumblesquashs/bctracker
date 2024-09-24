@@ -276,15 +276,13 @@
                 <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
                 <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
             % else:
-                <span class="navigation-item desktop-only disabled">Map</span>
-                <span class="navigation-item desktop-only disabled">Realtime</span>
-                <span class="navigation-item desktop-only disabled">History</span>
-                
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                <div class="navigation-item non-mobile disabled">Map</div>
+                <div class="navigation-item non-mobile disabled">Realtime</div>
+                <div class="navigation-item desktop-only disabled">History</div>
             % end
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(system, 'stops') }}">Stops</a>
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
@@ -332,25 +330,32 @@
                     % include('components/svg', name='history')
                     <span>History</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    % include('components/svg', name='route')
-                    <span>Routes</span>
-                </a>
-                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    % include('components/svg', name='block')
-                    <span>Blocks</span>
-                </a>
             % else:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    % include('components/svg', name='route')
-                    <span>Routes</span>
-                </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    % include('components/svg', name='block')
-                    <span>Blocks</span>
-                </a>
+                <div class="menu-button mobile-only disabled">
+                    % include('components/svg', name='map')
+                    <span>Map</span>
+                </div>
+                <div class="menu-button mobile-only disabled">
+                    % include('components/svg', name='realtime')
+                    <span>Realtime</span>
+                </div>
+                <div class="menu-button disabled">
+                    % include('components/svg', name='history')
+                    <span>History</span>
+                </div>
             % end
-            
+            <a class="menu-button" href="{{ get_url(system, 'routes') }}">
+                % include('components/svg', name='route')
+                <span>Routes</span>
+            </a>
+            <a class="menu-button" href="{{ get_url(system, 'stops') }}">
+                % include('components/svg', name='stop')
+                <span>Stops</span>
+            </a>
+            <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+                % include('components/svg', name='block')
+                <span>Blocks</span>
+            </a>
             <a class="menu-button" href="{{ get_url(system, 'about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
