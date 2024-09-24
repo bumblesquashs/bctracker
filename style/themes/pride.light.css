@@ -360,7 +360,7 @@ table tr {
 }
 
 .info-box .section {
-    border-bottom-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.2);
 }
 
 .info-box .option {

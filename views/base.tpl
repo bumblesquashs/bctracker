@@ -127,11 +127,22 @@
         
         <script>
             const svgs = {};
+            let systemID;        
             
             function getSVG(name) {
                 return svgs[name];
             }
         </script>
+        
+        % if system:
+            <script>
+                systemID = "{{ system.id }}";
+            </script>
+        % else:
+            <script>
+                systemID = null;
+            </script>
+        % end
         
         % include('components/svg_script', name='bus')
         % include('components/svg_script', name='bus-artic')
@@ -162,11 +173,25 @@
                 return a
             }
             
-            function getUrl(systemID, path) {
+            function getUrl(systemID, path, params=null) {
+                let url;
                 if (systemID === null || systemID === undefined) {
-                    return "{{ settings.all_systems_domain }}".format(path)
+                    url = "{{ settings.all_systems_domain }}".format(path);
+                } else {
+                    url = "{{ settings.system_domain if system else settings.system_domain_path }}".format(systemID, path);
                 }
-                return "{{ settings.system_domain if system else settings.system_domain_path }}".format(systemID, path)
+                const query = [];
+                if (params) {
+                    for (const key in params) {
+                        if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
+                            query.push(key + "=" + params[key]);
+                        }
+                    }
+                }
+                if (query.length === 0) {
+                    return url;
+                }
+                return url + "?" + query.join("&")
             }
             
             function setCookie(key, value) {

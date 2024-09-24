@@ -30,6 +30,10 @@ button {
     width: 100%;
 }
 
+button.compact {
+    width: unset;
+}
+
 form input[type="text"] {
     font-size: 16pt;
 }

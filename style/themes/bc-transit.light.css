@@ -365,7 +365,7 @@ table tr:nth-child(2n-1) {
 }
 
 .info-box .section {
-    border-bottom-color: #CBCBCB;
+    border-color: #CBCBCB;
 }
 
 .info-box .option {
