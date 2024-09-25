@@ -1016,12 +1016,7 @@ class Server(Bottle):
         )
     
     def stops(self, system, agency):
-        sort = self.query_options('sort', ['name', 'number'])
-        sort_order = self.query_options('sort_order', ['asc', 'desc'])
-        path_args = {
-            'sort': sort,
-            'sort_order': sort_order
-        }
+        path_args = {}
         search = request.query.get('search')
         if search:
             path_args['search'] = search
@@ -1030,6 +1025,37 @@ class Server(Bottle):
             routes_filter = [r for r in routes_query.split(',') if r]
         else:
             routes_filter = []
+        sort = self.query_options('sort', ['name', 'number'])
+        if sort != 'name':
+            path_args['sort'] = sort
+        sort_order = self.query_options('sort_order', ['asc', 'desc'])
+        if sort_order != 'asc':
+            path_args['sort_order'] = sort_order
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
+        items_per_page = 100
+        if system:
+            stops = system.get_stops()
+            if search:
+                stops = [s for s in stops if search.lower() in s.name.lower()]
+            for route_number in routes_filter:
+                stops = [s for s in stops if route_number in {r.number for r in s.routes}]
+            if sort == 'number':
+                stops.sort(key=lambda s: s.number, reverse=sort_order == 'desc')
+            elif sort == 'name':
+                stops.sort(key=lambda s: s.name, reverse=sort_order == 'desc')
+            total_items = len(stops)
+            start_index = (page - 1) * items_per_page
+            end_index = page * items_per_page
+            if page < 1:
+                stops = []
+            else:
+                stops = stops[start_index:end_index]
+        else:
+            stops = []
+            total_items = 0
         return self.page(
             name='stops',
             title='Stops',
@@ -1038,10 +1064,14 @@ class Server(Bottle):
             system=system,
             agency=agency,
             enable_refresh=False,
+            stops=stops,
             search=search,
             routes_filter=routes_filter,
             sort=sort,
-            sort_order=sort_order
+            sort_order=sort_order,
+            page=page,
+            items_per_page=items_per_page,
+            total_items=total_items
         )
     
     def stop_overview(self, system, agency, stop_number):

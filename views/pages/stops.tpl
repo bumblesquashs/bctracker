@@ -6,7 +6,6 @@
 </div>
 
 % if system:
-    % stops = system.get_stops()
     <script>
         const routesFilter = new Set("{{ ','.join(routes_filter) }}".split(",").filter(function(route) {
             return route !== "";
@@ -146,18 +145,32 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % if search:
-                        % stops = [s for s in stops if search.lower() in s.name.lower()]
-                    % end
-                    % for route_number in routes_filter:
-                        % stops = [s for s in stops if route_number in {r.number for r in s.routes}]
-                    % end
-                    % if sort == 'number':
-                        % stops.sort(key=lambda s: s.number, reverse=sort_order == 'desc')
-                    % elif sort == 'name':
-                        % stops.sort(key=lambda s: s.name, reverse=sort_order == 'desc')
-                    % end
-                    % if stops:
+                    % if total_items == 0:
+                        <div class="placeholder">
+                            % if search or routes_filter:
+                                <h3>No stops found</h3>
+                                % if search and routes_filter:
+                                    <p>Please try a different search or selecting different routes!</p>
+                                % elif search:
+                                    <p>Please try a different search!</p>
+                                % else:
+                                    <p>Please try selecting different routes!</p>
+                                % end
+                            % else:
+                                <h3>Stop information for {{ system }} is unavailable</h3>
+                                % if system.gtfs_loaded:
+                                    <p>Please check again later!</p>
+                                % else:
+                                    <p>System data is currently loading and will be available soon.</p>
+                                % end
+                            % end
+                        </div>
+                    % elif stops:
+                        % paging_args = dict(path_args)
+                        % if routes_filter:
+                            % paging_args['routes'] = ','.join(sorted(routes_filter))
+                        % end
+                        % include('components/paging', use_path=True, path_args=paging_args)
                         <table>
                             <thead>
                                 <tr>
@@ -189,26 +202,27 @@
                                 % end
                             </tbody>
                         </table>
+                        % include('components/paging', use_path=True, path_args=paging_args)
                         
                         % include('components/top_button')
                     % else:
                         <div class="placeholder">
-                            % if search or routes_filter:
-                                <h3>No stops found</h3>
-                                % if search and routes_filter:
-                                    <p>Please try a different search or selecting different routes!</p>
-                                % elif search:
-                                    <p>Please try a different search!</p>
-                                % else:
-                                    <p>Please try selecting different routes!</p>
-                                % end
+                            % if page == 0:
+                                <h3>Page {{ page }} does not exist...?</h3>
+                                <p>If you're a software developer you may be thinking right now, "Hey, wait a minute, why doesn't this list start at 0?!‽"</p>
+                                <p>
+                                    Look, we agree with you, it feels weird to be showing this error message at all.
+                                    Sadly too many people are expecting page 1 to be the first because "it makes more sense" or "0 isn't a real number" or something equally silly.
+                                    But you should know that we're right and they're just mad about it.
+                                </p>
+                                <p>Unfortunately you do still need to return to a <a href="?page=1">valid page</a> but remember that one day the zero-based indexers shall rise up and claim our rightful place once and for all!</p>
                             % else:
-                                <h3>Stop information for {{ system }} is unavailable</h3>
-                                % if system.gtfs_loaded:
-                                    <p>Please check again later!</p>
-                                % else:
-                                    <p>System data is currently loading and will be available soon.</p>
-                                % end
+                                <h3>Page {{ page }} does not exist!</h3>
+                                <p>If you got to this page through <i>nefarious tomfoolery</i> or <i>skullduggery</i>, please return to a <a href="?page=1">valid page</a>, then go sit in a corner and think about what you've done.</p>
+                                <p>
+                                    If you got to this page by accident, we're very sorry.
+                                    Please email <a href="mailto:james@bctracker.ca">james@bctracker.ca</a> to let us know!
+                                </p>
                             % end
                         </div>
                     % end
