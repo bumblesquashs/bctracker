@@ -16,7 +16,9 @@ class Timestamp:
     @classmethod
     def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current timestamp'''
-        return cls.parse(datetime.now().timestamp(), timezone, accurate_seconds)
+        if not timezone:
+            timezone = pytz.timezone('America/Vancouver')
+        return cls.parse(datetime.now(timezone).timestamp(), timezone, accurate_seconds)
     
     @classmethod
     def parse(cls, value, timezone=None, accurate_seconds=True):
