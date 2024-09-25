@@ -49,6 +49,40 @@
     </script>
     <div class="page-container">
         <div class="sidebar container flex-1">
+            <div class="section {{ 'closed' if sort == 'name' and sort_order == 'asc' else '' }}">
+                <div class="header" onclick="toggleSection(this)">
+                    <h2>Sorting</h2>
+                    % include('components/toggle')
+                </div>
+                <div class="content">
+                    <div class="info-box columns">
+                        <div class="section">
+                            <div class="options-container">
+                                <div class="option" onclick="setSort('name')">
+                                    <div class="radio-button {{ 'selected' if sort == 'name' else '' }}"></div>
+                                    <div>Stop Name</div>
+                                </div>
+                                <div class="option" onclick="setSort('number')">
+                                    <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
+                                    <div>Stop Number</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <div class="options-container">
+                                <div class="option" onclick="setSortOrder('asc')">
+                                    <div class="radio-button {{ 'selected' if sort_order == 'asc' else '' }}"></div>
+                                    <div>Ascending</div>
+                                </div>
+                                <div class="option" onclick="setSortOrder('desc')">
+                                    <div class="radio-button {{ 'selected' if sort_order == 'desc' else '' }}"></div>
+                                    <div>Descending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="section {{ '' if search or routes_filter else 'closed' }}">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Filters</h2>
@@ -90,40 +124,6 @@
                                         </div>
                                     </div>
                                 % end
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section {{ 'closed' if sort == 'name' and sort_order == 'asc' else '' }}">
-                <div class="header" onclick="toggleSection(this)">
-                    <h2>Sorting</h2>
-                    % include('components/toggle')
-                </div>
-                <div class="content">
-                    <div class="info-box columns">
-                        <div class="section">
-                            <div class="options-container">
-                                <div class="option" onclick="setSort('name')">
-                                    <div class="radio-button {{ 'selected' if sort == 'name' else '' }}"></div>
-                                    <div>Stop Name</div>
-                                </div>
-                                <div class="option" onclick="setSort('number')">
-                                    <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
-                                    <div>Stop Number</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="section">
-                            <div class="options-container">
-                                <div class="option" onclick="setSortOrder('asc')">
-                                    <div class="radio-button {{ 'selected' if sort_order == 'asc' else '' }}"></div>
-                                    <div>Ascending</div>
-                                </div>
-                                <div class="option" onclick="setSortOrder('desc')">
-                                    <div class="radio-button {{ 'selected' if sort_order == 'desc' else '' }}"></div>
-                                    <div>Descending</div>
-                                </div>
                             </div>
                         </div>
                     </div>
