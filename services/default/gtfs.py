@@ -141,6 +141,7 @@ class DefaultGTFSService(GTFSService):
         return True
     
     def validate_downloaded(self, system):
+        '''Checks that the folder of GTFS files exists for the given system'''
         if not system.gtfs_enabled:
             return True
         return path.exists(f'data/gtfs/{system.id}')
