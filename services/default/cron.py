@@ -87,15 +87,17 @@ class DefaultCronService(CronService):
         for system in self.system_repository.find_all():
             if self.running:
                 try:
-                    if not self.gtfs_service.validate_downloaded(system):
+                    if not self.gtfs_service.validate_downloaded(system) and system.gtfs_download_errors <= 10:
+                        system.gtfs_download_errors += 1
                         self.gtfs_service.load(system, True)
                         self.gtfs_service.update_cache_in_background(system)
+                        system.gtfs_download_errors = 0 # Can reset if we get to this point
                     self.realtime_service.update(system)
                     if self.realtime_service.validate(system):
-                        system.validation_errors = 0
+                        system.realtime_validation_errors = 0
                     else:
-                        system.validation_errors += 1
-                        if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
+                        system.realtime_validation_errors += 1
+                        if system.realtime_validation_errors <= 10 and system.realtime_validation_errors % 2 == 0:
                             self.gtfs_service.load(system, True)
                             self.gtfs_service.update_cache_in_background(system)
                 except Exception as e:

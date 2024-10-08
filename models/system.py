@@ -25,7 +25,8 @@ class System:
         'timezone',
         'colour_routes',
         'gtfs_loaded',
-        'validation_errors',
+        'gtfs_download_errors',
+        'realtime_validation_errors',
         'last_updated',
         'blocks',
         'routes',
@@ -90,7 +91,8 @@ class System:
         self.colour_routes = kwargs.get('colour_routes')
         
         self.gtfs_loaded = False
-        self.validation_errors = 0
+        self.gtfs_download_errors = 0
+        self.realtime_validation_errors = 0
         self.last_updated = None
         
         self.blocks = {}

@@ -182,7 +182,7 @@ class Server(Bottle):
                     self.gtfs_service.update_cache_in_background(system)
                     self.realtime_service.update(system)
                     if not self.realtime_service.validate(system):
-                        system.validation_errors += 1
+                        system.realtime_validation_errors += 1
                 except Exception as e:
                     print(f'Error loading data for {system}: {e}')
         if self.running:
@@ -1332,7 +1332,7 @@ class Server(Bottle):
                     self.gtfs_service.update_cache_in_background(system)
                     self.realtime_service.update(system)
                     if not self.realtime_service.validate(system):
-                        system.validation_errors += 1
+                        system.realtime_validation_errors += 1
                 except Exception as e:
                     print(f'Error loading data for {system}: {e}')
         if self.running:
@@ -1365,7 +1365,7 @@ class Server(Bottle):
             self.gtfs_service.update_cache_in_background(system)
             self.realtime_service.update(system)
             if not self.realtime_service.validate(system):
-                system.validation_errors += 1
+                system.realtime_validation_errors += 1
             self.realtime_service.update_records()
             return 'Success'
         except Exception as e:
@@ -1379,7 +1379,7 @@ class Server(Bottle):
         try:
             self.realtime_service.update(system)
             if not self.realtime_service.validate(system):
-                system.validation_errors += 1
+                system.realtime_validation_errors += 1
             self.realtime_service.update_records()
             return 'Success'
         except Exception as e:
