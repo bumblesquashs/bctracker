@@ -48,79 +48,73 @@ class DefaultRealtimeService(RealtimeService):
         
         print(f'Updating realtime data for {system}')
         
-        try:
-            if path.exists(data_path):
-                if self.settings.enable_realtime_backups:
-                    formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
-                    archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
-                    rename(data_path, archives_path)
-                else:
-                    remove(data_path)
-            data = protobuf.FeedMessage()
-            with requests.get(system.realtime_url, timeout=10) as r:
-                if self.settings.enable_realtime_backups:
-                    with open(data_path, 'wb') as f:
-                        f.write(r.content)
-                data.ParseFromString(r.content)
-            self.position_repository.delete_all(system)
-            for index, entity in enumerate(data.entity):
-                vehicle = entity.vehicle
-                try:
-                    vehicle_id = vehicle.vehicle.id
-                    vehicle_name_length = system.agency.vehicle_name_length
-                    if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                        vehicle_id = vehicle_id[-vehicle_name_length:]
-                    bus_number = int(vehicle_id)
-                except:
-                    bus_number = -(index + 1)
-                self.position_repository.create(system, bus_number, vehicle)
-            self.last_updated = Timestamp.now(accurate_seconds=False)
-            system.last_updated = Timestamp.now(system.timezone, system.agency.accurate_seconds)
-        except Exception as e:
-            print(f'Failed to update realtime for {system}: {e}')
+        if path.exists(data_path):
+            if self.settings.enable_realtime_backups:
+                formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
+                archives_path = f'archives/realtime/{system.id}_{formatted_date}.bin'
+                rename(data_path, archives_path)
+            else:
+                remove(data_path)
+        data = protobuf.FeedMessage()
+        with requests.get(system.realtime_url, timeout=10) as r:
+            if self.settings.enable_realtime_backups:
+                with open(data_path, 'wb') as f:
+                    f.write(r.content)
+            data.ParseFromString(r.content)
+        self.position_repository.delete_all(system)
+        for index, entity in enumerate(data.entity):
+            vehicle = entity.vehicle
+            try:
+                vehicle_id = vehicle.vehicle.id
+                vehicle_name_length = system.agency.vehicle_name_length
+                if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
+                    vehicle_id = vehicle_id[-vehicle_name_length:]
+                bus_number = int(vehicle_id)
+            except:
+                bus_number = -(index + 1)
+            self.position_repository.create(system, bus_number, vehicle)
+        self.last_updated = Timestamp.now(accurate_seconds=False)
+        system.last_updated = Timestamp.now(system.timezone, system.agency.accurate_seconds)
     
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
-        try:
-            for position in self.position_repository.find_all():
-                try:
-                    system = position.system
-                    bus = position.bus
-                    if bus.number < 0:
-                        continue
-                    date = Date.today(system.timezone)
-                    time = Time.now(system.timezone)
-                    overview = self.overview_repository.find(bus.number)
-                    trip = position.trip
-                    if trip:
-                        block = trip.block
-                        assignment = self.assignment_repository.find(system, block)
-                        if not assignment or assignment.bus_number != bus.number:
-                            self.assignment_repository.delete_all(system=system, block=block)
-                            self.assignment_repository.delete_all(bus=bus)
-                            self.assignment_repository.create(system, block, bus, date)
-                        if overview and overview.last_record:
-                            last_record = overview.last_record
-                            if last_record.date == date and last_record.block_id == block.id:
-                                self.record_repository.update(last_record, time)
-                                trip_ids = self.record_repository.find_trip_ids(last_record)
-                                if trip.id not in trip_ids:
-                                    self.record_repository.create_trip(last_record, trip)
-                                continue
-                        record_id = self.record_repository.create(bus, date, system, block, time, trip)
-                    else:
-                        record_id = None
-                    if overview:
-                        self.overview_repository.update(overview, date, system, record_id)
-                        if overview.last_seen_system != system:
-                            self.transfer_repository.create(bus, date, overview.last_seen_system, system)
-                    else:
-                        self.overview_repository.create(bus, date, system, record_id)
-                except Exception as e:
-                    print(f'Failed to update records: {e}')
-            self.database.commit()
-        except Exception as e:
-            print(f'Failed to update records: {e}')
+        for position in self.position_repository.find_all():
+            try:
+                system = position.system
+                bus = position.bus
+                if bus.number < 0:
+                    continue
+                date = Date.today(system.timezone)
+                time = Time.now(system.timezone)
+                overview = self.overview_repository.find(bus.number)
+                trip = position.trip
+                if trip:
+                    block = trip.block
+                    assignment = self.assignment_repository.find(system, block)
+                    if not assignment or assignment.bus_number != bus.number:
+                        self.assignment_repository.delete_all(system=system, block=block)
+                        self.assignment_repository.delete_all(bus=bus)
+                        self.assignment_repository.create(system, block, bus, date)
+                    if overview and overview.last_record:
+                        last_record = overview.last_record
+                        if last_record.date == date and last_record.block_id == block.id:
+                            self.record_repository.update(last_record, time)
+                            trip_ids = self.record_repository.find_trip_ids(last_record)
+                            if trip.id not in trip_ids:
+                                self.record_repository.create_trip(last_record, trip)
+                            continue
+                    record_id = self.record_repository.create(bus, date, system, block, time, trip)
+                else:
+                    record_id = None
+                if overview:
+                    self.overview_repository.update(overview, date, system, record_id)
+                    if overview.last_seen_system != system:
+                        self.transfer_repository.create(bus, date, overview.last_seen_system, system)
+                else:
+                    self.overview_repository.create(bus, date, system, record_id)
+            except Exception as e:
+                print(f'Failed to update records: {e}')
+        self.database.commit()
     
     def get_last_updated(self):
         '''Returns the timestamp that realtime data was last updated'''

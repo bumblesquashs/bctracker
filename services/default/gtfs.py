@@ -9,6 +9,7 @@ import csv
 import requests
 
 from di import di
+from database import Database
 from settings import Settings
 
 from models.block import Block
@@ -23,6 +24,7 @@ from services import GTFSService
 class DefaultGTFSService(GTFSService):
     
     __slots__ = (
+        'database',
         'settings',
         'departure_repository',
         'point_repository',
@@ -31,7 +33,8 @@ class DefaultGTFSService(GTFSService):
         'trip_repository'
     )
     
-    def __init__(self, settings: Settings, **kwargs):
+    def __init__(self, database: Database, settings: Settings, **kwargs):
+        self.database = database
         self.settings = settings
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
         self.point_repository = kwargs.get('point_repository') or di[PointRepository]
@@ -43,103 +46,104 @@ class DefaultGTFSService(GTFSService):
         '''Loads the GTFS for the given system into memory'''
         if not system.gtfs_enabled:
             return
+        
         if not path.exists(f'data/gtfs/{system.id}') or force_download:
             self.download(system)
-            self.update_database(system)
-        elif update_db:
+            update_db = True
+        
+        if update_db:
             self.update_database(system)
         
         print(f'Loading GTFS data for {system}')
+        
+        exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
+        service_exceptions = {}
+        for exception in exceptions:
+            service_exceptions.setdefault(exception.service_id, []).append(exception)
+        
         try:
-            exceptions = read_csv(system, 'calendar_dates', lambda r: ServiceException.from_csv(r, system))
-            service_exceptions = {}
-            for exception in exceptions:
-                service_exceptions.setdefault(exception.service_id, []).append(exception)
-            
-            try:
-                services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
-            except:
-                services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
-            
-            system.services = {s.id: s for s in services}
-            system.sheets = combine_sheets(system, services)
-            
-            stops = self.stop_repository.find_all(system.id)
-            system.stops = {s.id: s for s in stops}
-            system.stops_by_number = {s.number: s for s in stops}
-            
-            trips = self.trip_repository.find_all(system.id)
-            system.trips = {t.id: t for t in trips}
-            
-            block_trips = {}
-            for trip in trips:
-                block_trips.setdefault(trip.block_id, []).append(trip)
-            
-            routes = self.route_repository.find_all(system.id)
-            system.routes = {r.id: r for r in routes}
-            system.routes_by_number = {r.number: r for r in routes}
-            
-            system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
-            
-            system.gtfs_loaded = True
-        except Exception as e:
-            print(f'Failed to load GTFS for {system}: {e}')
+            services = read_csv(system, 'calendar', lambda r: Service.from_csv(r, system, service_exceptions))
+        except:
+            services = [Service.combine(system, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
+        
+        system.services = {s.id: s for s in services}
+        system.sheets = combine_sheets(system, services)
+        
+        stops = self.stop_repository.find_all(system.id)
+        system.stops = {s.id: s for s in stops}
+        system.stops_by_number = {s.number: s for s in stops}
+        
+        trips = self.trip_repository.find_all(system.id)
+        system.trips = {t.id: t for t in trips}
+        
+        block_trips = {}
+        for trip in trips:
+            block_trips.setdefault(trip.block_id, []).append(trip)
+        
+        routes = self.route_repository.find_all(system.id)
+        system.routes = {r.id: r for r in routes}
+        system.routes_by_number = {r.number: r for r in routes}
+        
+        system.blocks = {id: Block(system, id, trips) for id, trips in block_trips.items()}
+        
+        system.gtfs_loaded = True
     
     def download(self, system):
         '''Downloads the GTFS for the given system'''
-        if not system.gtfs_enabled:
-            return
+        print(f'Downloading GTFS data for {system}')
+        
         data_zip_path = f'data/gtfs/{system.id}.zip'
         data_path = f'data/gtfs/{system.id}'
         
-        print(f'Downloading GTFS data for {system}')
-        try:
-            if path.exists(data_zip_path):
-                if self.settings.enable_gtfs_backups:
-                    formatted_date = datetime.now().strftime('%Y-%m-%d')
-                    archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
-                    rename(data_zip_path, archives_path)
-                else:
-                    remove(data_zip_path)
-            with requests.get(system.gtfs_url, stream=True) as r:
-                with open(data_zip_path, 'wb') as f:
-                    for chunk in r.iter_content(128):
-                        f.write(chunk)
-            if path.exists(data_path):
-                rmtree(data_path)
-            with ZipFile(data_zip_path) as zip:
-                zip.extractall(data_path)
-        except Exception as e:
-            print(f'Failed to download GTFS for {system}: {e}')
+        if path.exists(data_zip_path):
+            if self.settings.enable_gtfs_backups:
+                formatted_date = datetime.now().strftime('%Y-%m-%d')
+                archives_path = f'archives/gtfs/{system.id}_{formatted_date}.zip'
+                rename(data_zip_path, archives_path)
+            else:
+                remove(data_zip_path)
+        with requests.get(system.gtfs_url, stream=True) as r:
+            with open(data_zip_path, 'wb') as f:
+                for chunk in r.iter_content(128):
+                    f.write(chunk)
+        if path.exists(data_path):
+            rmtree(data_path)
+        with ZipFile(data_zip_path) as zip:
+            zip.extractall(data_path)
     
     def update_database(self, system):
         '''Updates cached GTFS data for the given system'''
-        if not system.gtfs_enabled:
-            return
         print(f'Updating database with GTFS data for {system}')
-        try:
-            self.departure_repository.delete_all(system)
-            self.trip_repository.delete_all(system)
-            self.stop_repository.delete_all(system)
-            self.route_repository.delete_all(system)
-            self.point_repository.delete_all(system)
-            
-            apply_csv(system, 'routes', self.route_repository.create)
-            apply_csv(system, 'stops', self.stop_repository.create)
-            apply_csv(system, 'trips', self.trip_repository.create)
-            apply_csv(system, 'stop_times', self.departure_repository.create)
-            apply_csv(system, 'shapes', self.point_repository.create)
-        except Exception as e:
-            print(f'Failed to update GTFS for {system}: {e}')
+        
+        self.departure_repository.delete_all(system)
+        self.trip_repository.delete_all(system)
+        self.stop_repository.delete_all(system)
+        self.route_repository.delete_all(system)
+        self.point_repository.delete_all(system)
+        
+        apply_csv(system, 'routes', self.route_repository.create)
+        apply_csv(system, 'stops', self.stop_repository.create)
+        apply_csv(system, 'trips', self.trip_repository.create)
+        apply_csv(system, 'stop_times', self.departure_repository.create)
+        apply_csv(system, 'shapes', self.point_repository.create)
+        
+        self.database.commit()
     
     def validate(self, system):
         '''Checks that the GTFS for the given system is up-to-date'''
         if not system.gtfs_enabled:
             return True
+        if not self.validate_downloaded(system):
+            return False
         end_dates = [s.schedule.date_range.end for s in system.get_services()]
         if end_dates:
             return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
         return True
+    
+    def validate_downloaded(self, system):
+        if not system.gtfs_enabled:
+            return True
+        return path.exists(f'data/gtfs/{system.id}')
     
     def update_cache_in_background(self, system):
         '''Updates cached data for the given system in a background thread'''
