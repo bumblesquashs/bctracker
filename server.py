@@ -181,10 +181,10 @@ class Server(Bottle):
                         self.gtfs_service.load(system, True)
                     self.gtfs_service.update_cache_in_background(system)
                     self.realtime_service.update(system)
-                    if not self.realtime_service.validate(system):
-                        system.realtime_validation_errors += 1
                 except Exception as e:
                     print(f'Error loading data for {system}: {e}')
+                if not self.gtfs_service.validate_downloaded(system) or not self.realtime_service.validate(system):
+                    system.reload_backoff.increase_value()
         if self.running:
             try:
                 self.realtime_service.update_records()
@@ -1331,10 +1331,10 @@ class Server(Bottle):
                         self.gtfs_service.load(system, True)
                     self.gtfs_service.update_cache_in_background(system)
                     self.realtime_service.update(system)
-                    if not self.realtime_service.validate(system):
-                        system.realtime_validation_errors += 1
                 except Exception as e:
                     print(f'Error loading data for {system}: {e}')
+                if not self.gtfs_service.validate_downloaded(system) or not self.realtime_service.validate(system):
+                    system.reload_backoff.increase_value()
         if self.running:
             try:
                 self.realtime_service.update_records()
@@ -1364,9 +1364,9 @@ class Server(Bottle):
             self.gtfs_service.load(system, True)
             self.gtfs_service.update_cache_in_background(system)
             self.realtime_service.update(system)
-            if not self.realtime_service.validate(system):
-                system.realtime_validation_errors += 1
             self.realtime_service.update_records()
+            if not self.gtfs_service.validate_downloaded(system) or not self.realtime_service.validate(system):
+                system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
             print(f'Error loading GTFS data for {system}: {e}')
@@ -1378,9 +1378,9 @@ class Server(Bottle):
             return 'Invalid system'
         try:
             self.realtime_service.update(system)
-            if not self.realtime_service.validate(system):
-                system.realtime_validation_errors += 1
             self.realtime_service.update_records()
+            if not self.realtime_service.validate(system):
+                system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
             print(f'Error loading realtime data for {system}: {e}')

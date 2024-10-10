@@ -3,6 +3,7 @@ import pytz
 
 from di import di
 
+from models.backoff import Backoff
 from models.route import RouteCache
 from models.schedule import Schedule
 from models.stop import StopCache
@@ -25,8 +26,7 @@ class System:
         'timezone',
         'colour_routes',
         'gtfs_loaded',
-        'gtfs_download_errors',
-        'realtime_validation_errors',
+        'reload_backoff',
         'last_updated',
         'blocks',
         'routes',
@@ -91,8 +91,7 @@ class System:
         self.colour_routes = kwargs.get('colour_routes')
         
         self.gtfs_loaded = False
-        self.gtfs_download_errors = 0
-        self.realtime_validation_errors = 0
+        self.reload_backoff = Backoff()
         self.last_updated = None
         
         self.blocks = {}
