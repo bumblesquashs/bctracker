@@ -20,7 +20,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 45
+VERSION = 46
 
 class Server(Bottle):
     
@@ -308,6 +308,16 @@ class Server(Bottle):
         '''Returns the current set of favourites stored in the cookie'''
         favourites_string = request.get_cookie('favourites', '')
         return FavouriteSet.parse(favourites_string)
+    
+    def query_options(self, key, options):
+        '''
+        Returns the value of the given key from the query and validates that it's in the given options.
+        If no value exists or it isn't in the options list, the first option is returned.
+        '''
+        value = request.query.get(key)
+        if value and value in options:
+            return value
+        return options[0]
     
     def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', callback=None):
         '''Adds an endpoint to the server'''
@@ -1010,6 +1020,42 @@ class Server(Bottle):
         search = request.query.get('search')
         if search:
             path_args['search'] = search
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = [r for r in routes_query.split(',') if r]
+        else:
+            routes_filter = []
+        sort = self.query_options('sort', ['name', 'number'])
+        if sort != 'name':
+            path_args['sort'] = sort
+        sort_order = self.query_options('sort_order', ['asc', 'desc'])
+        if sort_order != 'asc':
+            path_args['sort_order'] = sort_order
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
+        items_per_page = 100
+        if system:
+            stops = system.get_stops()
+            if search:
+                stops = [s for s in stops if search.lower() in s.name.lower()]
+            for route_number in routes_filter:
+                stops = [s for s in stops if route_number in {r.number for r in s.routes}]
+            if sort == 'number':
+                stops.sort(key=lambda s: s.number, reverse=sort_order == 'desc')
+            elif sort == 'name':
+                stops.sort(key=lambda s: s.name, reverse=sort_order == 'desc')
+            total_items = len(stops)
+            start_index = (page - 1) * items_per_page
+            end_index = page * items_per_page
+            if page < 1:
+                stops = []
+            else:
+                stops = stops[start_index:end_index]
+        else:
+            stops = []
+            total_items = 0
         return self.page(
             name='stops',
             title='Stops',
@@ -1018,7 +1064,14 @@ class Server(Bottle):
             system=system,
             agency=agency,
             enable_refresh=False,
-            search=search
+            stops=stops,
+            search=search,
+            routes_filter=routes_filter,
+            sort=sort,
+            sort_order=sort_order,
+            page=page,
+            items_per_page=items_per_page,
+            total_items=total_items
         )
     
     def stop_overview(self, system, agency, stop_number):

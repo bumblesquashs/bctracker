@@ -223,6 +223,10 @@ table {
     display: block;
 }
 
+button.compact {
+    width: unset;
+}
+
 .container > .section > .header > .toggle {
     --image-size: 28px;
 }

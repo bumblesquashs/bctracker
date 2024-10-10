@@ -90,8 +90,6 @@
 </div>
 
 <script>
-    let systemID
-    
     function reloadAdornments() {
         const request = new XMLHttpRequest();
         request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
@@ -140,13 +138,3 @@
         request.send();
     }
 </script>
-
-% if system:
-    <script>
-        systemID = "{{ system.id }}";
-    </script>
-% else:
-    <script>
-        systemID = null;
-    </script>
-% end
