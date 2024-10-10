@@ -94,7 +94,7 @@ class DefaultCronService(CronService):
                     self.realtime_service.update(system)
                 except Exception as e:
                     print(f'Error loading data for {system}: {e}')
-                if self.gtfs_service.validate_downloaded(system) and self.realtime_service.validate(system):
+                if system.gtfs_downloaded and self.realtime_service.validate(system):
                     system.reload_backoff.reset()
                 else:
                     system.reload_backoff.increase_value()

@@ -47,7 +47,8 @@ class DefaultGTFSService(GTFSService):
         if not system.gtfs_enabled:
             return
         
-        if not path.exists(f'data/gtfs/{system.id}') or force_download:
+        system.gtfs_downloaded = path.exists(f'data/gtfs/{system.id}')
+        if not system.gtfs_downloaded or force_download:
             self.download(system)
             update_db = True
         
@@ -102,6 +103,7 @@ class DefaultGTFSService(GTFSService):
                 rename(data_zip_path, archives_path)
             else:
                 remove(data_zip_path)
+            system.gtfs_downloaded = False
         with requests.get(system.gtfs_url, stream=True) as r:
             with open(data_zip_path, 'wb') as f:
                 for chunk in r.iter_content(128):
@@ -110,6 +112,7 @@ class DefaultGTFSService(GTFSService):
             rmtree(data_path)
         with ZipFile(data_zip_path) as zip:
             zip.extractall(data_path)
+        system.gtfs_downloaded = True
     
     def update_database(self, system):
         '''Updates cached GTFS data for the given system'''
@@ -133,18 +136,12 @@ class DefaultGTFSService(GTFSService):
         '''Checks that the GTFS for the given system is up-to-date'''
         if not system.gtfs_enabled:
             return True
-        if not self.validate_downloaded(system):
+        if not system.gtfs_downloaded:
             return False
         end_dates = [s.schedule.date_range.end for s in system.get_services()]
         if end_dates:
             return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
         return True
-    
-    def validate_downloaded(self, system):
-        '''Checks that the folder of GTFS files exists for the given system'''
-        if not system.gtfs_enabled:
-            return True
-        return path.exists(f'data/gtfs/{system.id}')
     
     def update_cache_in_background(self, system):
         '''Updates cached data for the given system in a background thread'''

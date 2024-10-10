@@ -25,6 +25,7 @@ class System:
         'remote_id',
         'timezone',
         'colour_routes',
+        'gtfs_downloaded',
         'gtfs_loaded',
         'reload_backoff',
         'last_updated',
@@ -90,6 +91,7 @@ class System:
         self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
         self.colour_routes = kwargs.get('colour_routes')
         
+        self.gtfs_downloaded = None
         self.gtfs_loaded = False
         self.reload_backoff = Backoff()
         self.last_updated = None

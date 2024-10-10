@@ -12,9 +12,5 @@ class GTFSService(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def validate_downloaded(self, system) -> bool:
-        raise NotImplementedError()
-    
-    @abstractmethod
     def update_cache_in_background(self, system):
         raise NotImplementedError()
