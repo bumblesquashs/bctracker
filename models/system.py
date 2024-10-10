@@ -93,7 +93,7 @@ class System:
         
         self.gtfs_downloaded = None
         self.gtfs_loaded = False
-        self.reload_backoff = Backoff()
+        self.reload_backoff = Backoff(max_target=2**8)
         self.last_updated = None
         
         self.blocks = {}
