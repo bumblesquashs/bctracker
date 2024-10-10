@@ -177,14 +177,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                % last_hour = -1
+                                                % last_start_time = None
                                                 % for trip in direction_trips:
                                                     % first_stop = trip.first_stop
-                                                    % this_hour = trip.start_time.hour
-                                                    % if last_hour == -1:
-                                                        % last_hour = this_hour
+                                                    % start_time = trip.start_time
+                                                    % if not start_time.is_unknown and not last_start_time:
+                                                        % last_start_time = start_time
                                                     % end
-                                                    <tr class="{{'divider' if this_hour > last_hour else ''}}">
+                                                    <tr class="{{'divider' if start_time.hour > last_start_time.hour else ''}}">
                                                         <td>{{ trip.start_time.format_web(time_format) }}</td>
                                                         <td class="desktop-only">
                                                             % include('components/headsign')
@@ -249,9 +249,7 @@
                                                             % end
                                                         % end
                                                     </tr>
-                                                    % if this_hour > last_hour:
-                                                        % last_hour = this_hour
-                                                    % end
+                                                    % last_start_time = start_time
                                                 % end
                                             </tbody>
                                         </table>

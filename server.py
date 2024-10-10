@@ -175,15 +175,21 @@ class Server(Bottle):
         
         for system in self.system_repository.find_all():
             if self.running:
-                self.gtfs_service.load(system, args.reload, args.updatedb)
-                if not self.gtfs_service.validate(system):
-                    self.gtfs_service.load(system, True)
-                self.gtfs_service.update_cache_in_background(system)
-                self.realtime_service.update(system)
-                if not self.realtime_service.validate(system):
-                    system.validation_errors += 1
+                try:
+                    self.gtfs_service.load(system, args.reload, args.updatedb)
+                    if not self.gtfs_service.validate(system):
+                        self.gtfs_service.load(system, True)
+                    self.gtfs_service.update_cache_in_background(system)
+                    self.realtime_service.update(system)
+                except Exception as e:
+                    print(f'Error loading data for {system}: {e}')
+                if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                    system.reload_backoff.increase_value()
         if self.running:
-            self.realtime_service.update_records()
+            try:
+                self.realtime_service.update_records()
+            except Exception as e:
+                print(f'Error updating records: {e}')
             self.cron_service.start()
     
     def stop(self):
@@ -1372,15 +1378,21 @@ class Server(Bottle):
         self.system_repository.load()
         for system in self.system_repository.find_all():
             if self.running:
-                self.gtfs_service.load(system)
-                if not self.gtfs_service.validate(system):
-                    self.gtfs_service.load(system, True)
-                self.gtfs_service.update_cache_in_background(system)
-                self.realtime_service.update(system)
-                if not self.realtime_service.validate(system):
-                    system.validation_errors += 1
+                try:
+                    self.gtfs_service.load(system)
+                    if not self.gtfs_service.validate(system):
+                        self.gtfs_service.load(system, True)
+                    self.gtfs_service.update_cache_in_background(system)
+                    self.realtime_service.update(system)
+                except Exception as e:
+                    print(f'Error loading data for {system}: {e}')
+                if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                    system.reload_backoff.increase_value()
         if self.running:
-            self.realtime_service.update_records()
+            try:
+                self.realtime_service.update_records()
+            except Exception as e:
+                print(f'Error updating records: {e}')
             self.cron_service.start()
         return 'Success'
     
@@ -1401,23 +1413,31 @@ class Server(Bottle):
         system = self.system_repository.find(reload_system_id)
         if not system:
             return 'Invalid system'
-        self.gtfs_service.load(system, True)
-        self.gtfs_service.update_cache_in_background(system)
-        self.realtime_service.update(system)
-        if not self.realtime_service.validate(system):
-            system.validation_errors += 1
-        self.realtime_service.update_records()
-        return 'Success'
+        try:
+            self.gtfs_service.load(system, True)
+            self.gtfs_service.update_cache_in_background(system)
+            self.realtime_service.update(system)
+            self.realtime_service.update_records()
+            if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                system.reload_backoff.increase_value()
+            return 'Success'
+        except Exception as e:
+            print(f'Error loading GTFS data for {system}: {e}')
+            return str(e)
     
     def api_admin_reload_realtime(self, system, agency, reload_system_id):
         system = self.system_repository.find(reload_system_id)
         if not system:
             return 'Invalid system'
-        self.realtime_service.update(system)
-        if not self.realtime_service.validate(system):
-            system.validation_errors += 1
-        self.realtime_service.update_records()
-        return 'Success'
+        try:
+            self.realtime_service.update(system)
+            self.realtime_service.update_records()
+            if not self.realtime_service.validate(system):
+                system.reload_backoff.increase_value()
+            return 'Success'
+        except Exception as e:
+            print(f'Error loading realtime data for {system}: {e}')
+            return str(e)
     
     # =============================================================
     # Errors

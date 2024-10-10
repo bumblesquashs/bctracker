@@ -8,14 +8,6 @@ class GTFSService(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def download(self, system):
-        raise NotImplementedError()
-    
-    @abstractmethod
-    def update_database(self, system):
-        raise NotImplementedError()
-    
-    @abstractmethod
     def validate(self, system) -> bool:
         raise NotImplementedError()
     
