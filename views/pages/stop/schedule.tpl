@@ -65,15 +65,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                % last_hour = -1
+                                                % last_time = None
                                                 % for departure in departures:
                                                     % trip = departure.trip
                                                     % block = trip.block
-                                                    % this_hour = departure.time.hour
-                                                    % if last_hour == -1:
-                                                        % last_hour = this_hour
+                                                    % if not last_time:
+                                                        % last_time = departure.time
                                                     % end
-                                                    <tr class="{{'divider' if this_hour > last_hour else ''}}">
+                                                    <tr class="{{'divider' if departure.time.hour > last_time.hour else ''}}">
                                                         <td>{{ departure.time.format_web(time_format) }}</td>
                                                         <td class="non-mobile">
                                                             <div class="column">
@@ -112,7 +111,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    % last_hour = this_hour
+                                                    % last_time = departure.time
                                                 % end
                                             </tbody>
                                         </table>

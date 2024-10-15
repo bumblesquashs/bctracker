@@ -735,9 +735,16 @@ table tr.header td {
 }
 
 .info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     padding: 10px;
     border-width: 1px;
     border-style: solid;
+}
+
+.info-box.columns {
+    flex-direction: row;
 }
 
 .info-box > .title {
@@ -749,16 +756,27 @@ table tr.header td {
 }
 
 .info-box > .section {
+    border-width: 0px;
     border-bottom-width: 1px;
-    border-bottom-style: solid;
+    border-style: solid;
     padding-bottom: 10px;
-    margin-bottom: 10px;
 }
 
 .info-box > .section:last-child {
     border-bottom-width: 0px;
     padding-bottom: 0px;
-    margin-bottom: 0px;
+}
+
+.info-box.columns > .section {
+    border-bottom-width: 0px;
+    border-right-width: 1px;
+    padding-bottom: 0px;
+    padding-right: 10px;
+}
+
+.info-box.columns > .section:last-child {
+    border-right-width: 0px;
+    padding-right: 0px;
 }
 
 .info-box > .section.column {
@@ -1063,6 +1081,11 @@ table tr.header td {
     border-radius: 10px;
 }
 
+.option.space-between {
+    align-self: stretch;
+    justify-content: space-between;
+}
+
 .option .checkbox {
     border: 2px solid var(--checkbox-color);
     border-radius: 5px;
@@ -1073,11 +1096,11 @@ table tr.header td {
 }
 
 .option .checkbox svg {
-    display: none;
+    opacity: 0;
 }
 
 .option .checkbox.selected svg {
-    display: initial;
+    opacity: 1;
 }
 
 .option .radio-button {

@@ -157,8 +157,6 @@ class Position:
         else:
             data['bus_order'] = 'Unknown Year/Model'
             data['bus_icon'] = 'ghost'
-        if self.lon == 0 and self.lat == 0:
-            data['bus_icon'] = 'fish'
         adornment = self.bus.find_adornment()
         if adornment and adornment.enabled:
             data['adornment'] = str(adornment)

@@ -27,7 +27,9 @@ class Date:
     @classmethod
     def today(cls, timezone=None):
         '''Returns the current date'''
-        return cls.fromdatetime(datetime.now(), timezone)
+        if not timezone:
+            timezone = pytz.timezone('America/Vancouver')
+        return cls.fromdatetime(datetime.now(timezone), timezone)
     
     @classmethod
     def fromdatetime(cls, datetime, timezone=None):

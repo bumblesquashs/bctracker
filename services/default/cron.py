@@ -63,10 +63,13 @@ class DefaultCronService(CronService):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
         for system in self.system_repository.find_all():
             if self.running:
-                date = Date.today(system.timezone)
-                if date.weekday == Weekday.MON or not self.gtfs_service.validate(system):
-                    self.gtfs_service.load(system, True)
-                    self.gtfs_service.update_cache_in_background(system)
+                try:
+                    date = Date.today(system.timezone)
+                    if date.weekday == Weekday.MON or not self.gtfs_service.validate(system):
+                        self.gtfs_service.load(system, True)
+                        self.gtfs_service.update_cache_in_background(system)
+                except Exception as e:
+                    print(f'Error loading GTFS data for {system}: {e}')
         if self.running:
             self.record_repository.delete_stale_trip_records()
             self.database.archive()
@@ -83,14 +86,21 @@ class DefaultCronService(CronService):
         print(f'--- {date} at {time} ---')
         for system in self.system_repository.find_all():
             if self.running:
-                self.realtime_service.update(system)
-                if self.realtime_service.validate(system):
-                    system.validation_errors = 0
-                else:
-                    system.validation_errors += 1
-                    if system.validation_errors <= 10 and system.validation_errors % 2 == 0:
+                try:
+                    if system.reload_backoff.check():
+                        system.reload_backoff.increase_target()
                         self.gtfs_service.load(system, True)
                         self.gtfs_service.update_cache_in_background(system)
+                    self.realtime_service.update(system)
+                except Exception as e:
+                    print(f'Error loading data for {system}: {e}')
+                if system.gtfs_downloaded and self.realtime_service.validate(system):
+                    system.reload_backoff.reset()
+                else:
+                    system.reload_backoff.increase_value()
         if self.running:
-            self.realtime_service.update_records()
+            try:
+                self.realtime_service.update_records()
+            except Exception as e:
+                print(f'Error updating records: {e}')
         self.updating_realtime = False

@@ -135,6 +135,7 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {
@@ -361,7 +362,7 @@ table tr {
 }
 
 .info-box .section {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .info-box .option {

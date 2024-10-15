@@ -88,6 +88,18 @@
                             <div class="name">Average Speed</div>
                             <div class="value">{{ f'{(km / hours):.1f}' }}km/h</div>
                         </div>
+                        <div class="row section">
+                            <div class="name">Stop Density</div>
+                            <div class="value">
+                                % density = len(departures) / km
+                                {{ f'{density:.2f}' }}
+                                % if density == 1:
+                                    stop/km
+                                % else:
+                                    stops/km
+                                % end
+                            </div>
+                        </div>
                     % end
                 </div>
             </div>

@@ -34,6 +34,16 @@
         })
     });
     
+    if (interactive) {
+        map.getViewport().style.cursor = "grab";
+        map.on('pointerdrag', function(event) {
+            map.getViewport().style.cursor = "grabbing";
+        });
+        map.on('pointerup', function(event) {
+            map.getViewport().style.cursor = "grab";
+        });
+    }
+    
     const area = new Area();
 </script>
 
@@ -119,15 +129,86 @@
                 element.appendChild(bearing)
             }
             
+            let icon;
+            if (position.bus_number < 0) {
+                icon = document.createElement("div");
+            } else {
+                icon = document.createElement("a");
+                icon.href = "/bus/" + position.bus_number;
+                icon.innerHTML = "<div class='link'></div>";
+            }
+            icon.className = "icon";
+            element.appendChild(icon);
+            
+            if (busMarkerStyle === "route") {
+                icon.classList.add("bus_route");
+                if (position.lat === 0 && position.lon === 0) {
+                    icon.innerHTML += getSVG("fish");
+                } else {
+                    const routeNumber = position.route_number;
+                    if (route_number === null || route_number === undefined) {
+                        icon.innerHTML += "NIS";
+                    } else {
+                        icon.innerHTML += routeNumber;
+                    }
+                }
+                icon.style.backgroundColor = "#" + position.colour;
+            } else if (busMarkerStyle === "mini") {
+                element.classList.add("small");
+                icon.classList.add("mini");
+                icon.style.backgroundColor = "#" + position.colour;
+            } else if (busMarkerStyle === "adherence") {
+                icon.classList.add("adherence");
+                if (adherence === undefined || adherence === null) {
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        icon.innerHTML += "N/A";
+                    }
+                } else {
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        icon.innerHTML += adherence.value;
+                    }
+                    icon.classList.add(adherence.status_class);
+                    const adherenceValue = parseInt(adherence.value);
+                    if (adherenceValue >= 100 || adherenceValue <= -100) {
+                        icon.classList.add("smaller-font");
+                    }
+                }
+            } else if (busMarkerStyle === "occupancy") {
+                icon.classList.add("occupancy");
+                icon.classList.add(position.occupancy_status_class);
+                if (position.lat === 0 && position.lon === 0) {
+                    icon.innerHTML += getSVG("fish");
+                } else {
+                    icon.innerHTML += getSVG(position.occupancy_icon);
+                }
+            } else {
+                if (position.lat === 0 && position.lon === 0) {
+                    icon.innerHTML += getSVG("fish");
+                } else {
+                    icon.innerHTML += getSVG(position.bus_icon);
+                }
+                icon.style.backgroundColor = "#" + position.colour;
+            }
+            
             const details = document.createElement("div");
             details.className = "details";
+            element.appendChild(details);
             
             const title = document.createElement("div");
             title.className = "title";
             title.innerHTML = position.bus_display;
+            if (position.adornment != null) {
+                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            }
+            details.appendChild(title);
             
             const content = document.createElement("div");
             content.className = "content hover-only";
+            details.appendChild(content);
             
             const orderElement = document.createElement("div");
             orderElement.className = "lighter-text centred";
@@ -190,92 +271,6 @@
                 });
             }
             content.appendChild(footer);
-            
-            if (position.bus_number < 0) {
-                const icon = document.createElement("div");
-                icon.className = "icon";
-                if (busMarkerStyle == "route") {
-                    icon.classList.add("bus_route");
-                    const routeNumber = position.route_number;
-                    if (route_number === null || route_number === undefined) {
-                        icon.innerHTML = "NIS";
-                    } else {
-                        icon.innerHTML = routeNumber;
-                    }
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "mini") {
-                    element.classList.add("small");
-                    icon.classList.add("mini");
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "adherence") {
-                    icon.classList.add("adherence");
-                    if (adherence === undefined || adherence === null) {
-                        icon.innerHTML = "N/A";
-                    } else {
-                        icon.innerHTML = adherence.value;
-                        icon.classList.add(adherence.status_class);
-                        const adherenceValue = parseInt(adherence.value);
-                        if (adherenceValue >= 100 || adherenceValue <= -100) {
-                            icon.classList.add("smaller-font");
-                        }
-                    }
-                } else if (busMarkerStyle == "occupancy") {
-                    icon.classList.add("occupancy");
-                    icon.classList.add(position.occupancy_status_class);
-                    icon.innerHTML = getSVG(position.occupancy_icon);
-                } else {
-                    icon.innerHTML = getSVG(position.bus_icon);
-                    icon.style.backgroundColor = "#" + position.colour;
-                }
-                element.appendChild(icon);
-            } else {
-                const icon = document.createElement("a");
-                icon.className = "icon";
-                icon.href = "/bus/" + position.bus_number;
-                if (busMarkerStyle == "route") {
-                    icon.classList.add("bus_route");
-                    const routeNumber = position.route_number;
-                    if (route_number === null || route_number === undefined) {
-                        icon.innerHTML = "<div class='link'></div>NIS";
-                    } else {
-                        icon.innerHTML = "<div class='link'></div>" + routeNumber;
-                    }
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "mini") {
-                    element.classList.add("small");
-                    icon.classList.add("mini");
-                    icon.innerHTML = "<div class='link'></div>";
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "adherence") {
-                    icon.classList.add("adherence");
-                    if (adherence === undefined || adherence === null) {
-                        icon.innerHTML = "<div class='link'></div>N/A";
-                    } else {
-                        icon.innerHTML = "<div class='link'></div>" + adherence.value;
-                        icon.classList.add(adherence.status_class);
-                        const adherenceValue = parseInt(adherence.value);
-                        if (adherenceValue >= 100 || adherenceValue <= -100) {
-                            icon.classList.add("smaller-font");
-                        }
-                    }
-                } else if (busMarkerStyle == "occupancy") {
-                    icon.classList.add("occupancy");
-                    icon.classList.add(position.occupancy_status_class);
-                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.occupancy_icon);
-                } else {
-                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
-                    icon.style.backgroundColor = "#" + position.colour;
-                }
-                element.appendChild(icon);
-            }
-            
-            if (position.adornment != null) {
-                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
-            }
-            
-            details.appendChild(title);
-            details.appendChild(content);
-            element.appendChild(details);
             
             map.addOverlay(new ol.Overlay({
                 position: ol.proj.fromLonLat([position.lon, position.lat]),

@@ -98,6 +98,14 @@
             ])
         });
         
+        map.getViewport().style.cursor = "grab";
+        map.on('pointerdrag', function(event) {
+            map.getViewport().style.cursor = "grabbing";
+        });
+        map.on('pointerup', function(event) {
+            map.getViewport().style.cursor = "grab";
+        });
+        
         let positions = JSON.parse('{{! json.dumps([p.get_json() for p in positions]) }}');
         let currentShapeIDs = [];
         let markers = [];
@@ -178,15 +186,88 @@
                     element.appendChild(bearing)
                 }
                 
+                const icon = document.createElement("div");
+                icon.className = "icon";
+                icon.onclick = function() {
+                    setSelectedPosition(position, element);
+                }
+                icon.onmouseenter = function() {
+                    setHoverPosition(position);
+                }
+                icon.onmouseleave = function() {
+                    setHoverPosition(null);
+                }
+                element.appendChild(icon);
+                
+                if (busMarkerStyle === "route") {
+                    icon.classList.add("bus_route");
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        const routeNumber = position.route_number;
+                        if (route_number === null || route_number === undefined) {
+                            icon.innerHTML += "NIS";
+                        } else {
+                            icon.innerHTML += routeNumber;
+                        }
+                    }
+                    icon.style.backgroundColor = "#" + position.colour;
+                } else if (busMarkerStyle === "mini") {
+                    element.classList.add("small");
+                    icon.classList.add("mini");
+                    icon.style.backgroundColor = "#" + position.colour;
+                } else if (busMarkerStyle === "adherence") {
+                    icon.classList.add("adherence");
+                    if (adherence === undefined || adherence === null) {
+                        if (position.lat === 0 && position.lon === 0) {
+                            icon.innerHTML += getSVG("fish");
+                        } else {
+                            icon.innerHTML += "N/A";
+                        }
+                    } else {
+                        if (position.lat === 0 && position.lon === 0) {
+                            icon.innerHTML += getSVG("fish");
+                        } else {
+                            icon.innerHTML += adherence.value;
+                        }
+                        icon.classList.add(adherence.status_class);
+                        const adherenceValue = parseInt(adherence.value);
+                        if (adherenceValue >= 100 || adherenceValue <= -100) {
+                            icon.classList.add("smaller-font");
+                        }
+                    }
+                } else if (busMarkerStyle === "occupancy") {
+                    icon.classList.add("occupancy");
+                    icon.classList.add(position.occupancy_status_class);
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        icon.innerHTML += getSVG(position.occupancy_icon);
+                    }
+                } else {
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        icon.innerHTML += getSVG(position.bus_icon);
+                    }
+                    icon.style.backgroundColor = "#" + position.colour;
+                }
+                
                 const details = document.createElement("div");
                 details.className = "details";
+                element.appendChild(details);
                 
                 const title = document.createElement("div");
                 title.className = "title";
                 title.innerHTML = position.bus_display;
+                if (position.adornment != null) {
+                    title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+                }
+                details.appendChild(title);
                 
                 const content = document.createElement("div");
                 content.className = "content hover-only";
+                details.appendChild(content);
                 
                 const orderElement = document.createElement("div");
                 orderElement.className = "lighter-text centred";
@@ -249,62 +330,6 @@
                     });
                 }
                 content.appendChild(footer);
-                
-                const icon = document.createElement("div");
-                icon.className = "icon";
-                icon.onclick = function() {
-                    setSelectedPosition(position, element);
-                }
-                if (busMarkerStyle == "route") {
-                    icon.classList.add("bus_route");
-                    const routeNumber = position.route_number;
-                    if (route_number === null || route_number === undefined) {
-                        icon.innerHTML = "<div class='link'></div>NIS";
-                    } else {
-                        icon.innerHTML = "<div class='link'></div>" + routeNumber;
-                    }
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "mini") {
-                    element.classList.add("small");
-                    icon.classList.add("mini");
-                    icon.innerHTML = "<div class='link'></div>";
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "adherence") {
-                    icon.classList.add("adherence");
-                    if (adherence === undefined || adherence === null) {
-                        icon.innerHTML = "<div class='link'></div>N/A";
-                    } else {
-                        icon.innerHTML = "<div class='link'></div>" + adherence.value;
-                        icon.classList.add(adherence.status_class);
-                        const adherenceValue = parseInt(adherence.value);
-                        if (adherenceValue >= 100 || adherenceValue <= -100) {
-                            icon.classList.add("smaller-font");
-                        }
-                    }
-                } else if (busMarkerStyle == "occupancy") {
-                    icon.classList.add("occupancy");
-                    icon.classList.add(position.occupancy_status_class);
-                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.occupancy_icon);
-                } else {
-                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
-                    icon.style.backgroundColor = "#" + position.colour;
-                }
-                
-                icon.onmouseenter = function() {
-                    setHoverPosition(position);
-                }
-                icon.onmouseleave = function() {
-                    setHoverPosition(null);
-                }
-                element.appendChild(icon);
-                
-                if (position.adornment != null) {
-                    title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
-                }
-                
-                details.appendChild(title);
-                details.appendChild(content);
-                element.appendChild(details);
                 
                 if (position.lat != 0 && position.lon != 0) {
                     area.combine(position.lat, position.lon);

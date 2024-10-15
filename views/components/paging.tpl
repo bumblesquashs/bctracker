@@ -29,7 +29,11 @@
             % if page_number == page:
                 <div class="page current flex-1">{{ page_number }}</div>
             % else:
-                <a class="page flex-1" href="?page={{ page_number }}">{{ page_number }}</a>
+                % if get('use_path', False):
+                    <a class="page flex-1" href="{{ get_url(system, path, page=page_number, **path_args) }}">{{ page_number }}</a>
+                % else:
+                    <a class="page flex-1" href="?page={{ page_number }}">{{ page_number }}</a>
+                % end
             % end
             % previous_page = page_number
         % end
