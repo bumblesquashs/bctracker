@@ -161,11 +161,14 @@ class Time:
             second = None
         return Time(hour, time.minute, second, self.timezone)
     
-    def get_minutes(self):
+    def get_minutes(self, round_seconds=False):
         '''Returns the total number of minutes in this time'''
         if self.is_unknown:
             return 0
-        return (self.hour * 60) + self.minute
+        minutes = (self.hour * 60) + self.minute
+        if round_seconds and self.second is not None and self.second >= 30:
+            minutes += 1
+        return minutes
     
     def format_db(self):
         '''Returns a string of this time formatted as HH:MM:SS'''
