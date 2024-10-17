@@ -7,14 +7,7 @@
     <div class="row">
         <h1 class="flex-1">Routes</h1>
         % if routes:
-            <div class="non-desktop toggle-button" onclick="toggleSettings()">
-                % include('components/svg', name='settings')
-            </div>
-            <script>
-                function toggleSettings() {
-                    document.getElementById("settings").classList.toggle("collapsed");
-                }
-            </script>
+            % include('components/settings_toggle')
         % end
     </div>
     <div class="column gap-10 stretch">
