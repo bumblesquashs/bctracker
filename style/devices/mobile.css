@@ -184,6 +184,10 @@ table th {
     font-size: 11pt;
 }
 
+#settings.collapsed {
+    display: none !important;
+}
+
 #side-bar {
     order: 5;
 }

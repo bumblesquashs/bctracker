@@ -4,9 +4,14 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Map</h1>
+    <div class="row">
+        <h1 class="flex-1">Map</h1>
+        % if visible_positions:
+            % include('components/settings_toggle')
+        % end
+    </div>
     % if visible_positions:
-        <div class="options-container">
+        <div id="settings" class="options-container collapsed">
             <div class="option" onclick="toggleAutomaticRefresh()">
                 <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
                     % include('components/svg', name='check')
