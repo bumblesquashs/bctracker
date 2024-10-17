@@ -28,10 +28,10 @@ class Adherence:
             return None
         previous_departure = departure.find_previous()
         try:
-            expected_scheduled_mins = departure.time.get_minutes()
+            expected_scheduled_mins = departure.time.get_minutes(round_seconds=True)
             
             if previous_departure:
-                previous_departure_mins = previous_departure.time.get_minutes()
+                previous_departure_mins = previous_departure.time.get_minutes(round_seconds=True)
                 time_difference = expected_scheduled_mins - previous_departure_mins
                 
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
@@ -39,7 +39,7 @@ class Adherence:
                     expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
             if not timestamp:
                 timestamp = Timestamp.now(trip.system.timezone)
-            value = expected_scheduled_mins - timestamp.time.get_minutes()
+            value = expected_scheduled_mins - timestamp.time.get_minutes(round_seconds=True)
             layover = stop and trip.first_stop and stop == trip.first_stop and value > 0
             return cls(value, layover)
         except AttributeError:
