@@ -1388,6 +1388,11 @@ table tr.header td {
     font-weight: bold;
 }
 
+.toggle-button {
+    --image-color: var(--toggle-button-color);
+    --image-size: 30px;
+}
+
 .tooltip-anchor {
     display: inline-block;
     position: relative;

@@ -4,14 +4,26 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Routes</h1>
+    <div class="row">
+        <h1 class="flex-1">Routes</h1>
+        % if routes:
+            <div class="non-desktop toggle-button" onclick="toggleSettings()">
+                % include('components/svg', name='settings')
+            </div>
+            <script>
+                function toggleSettings() {
+                    document.getElementById("settings").classList.toggle("collapsed");
+                }
+            </script>
+        % end
+    </div>
     <div class="column gap-10 stretch">
         <div class="tab-button-bar">
             <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
         % if routes:
-            <div class="options-container">
+            <div id="settings" class="options-container collapsed">
                 <div class="option" onclick="toggleRouteNumbers()">
                     <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
                         % include('components/svg', name='check')
