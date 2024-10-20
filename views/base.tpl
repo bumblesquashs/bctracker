@@ -289,6 +289,15 @@
             
             <div class="flex-1"></div>
             
+            % if show_random:
+                <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'random') }}">
+                    % include('components/svg', name='random')
+                    <div class="tooltip left">
+                        <div class="title">Random Page</div>
+                    </div>
+                </a>
+            % end
+            
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
                 % include('components/svg', name='location')
                 <div class="tooltip left">
@@ -368,6 +377,12 @@
                 % include('components/svg', name='personalize')
                 <span>Personalize</span>
             </a>
+            % if show_random:
+                <a class="menu-button" href="{{ get_url(system, 'random') }}">
+                    % include('components/svg', name='random')
+                    <span>Random Page</span>
+                </a>
+            % end
         </div>
         <div id="side-bar">
             <div id="status" class="side-bar-open-only">

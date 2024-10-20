@@ -4,6 +4,7 @@ from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
 import cherrypy as cp
+import random
 
 from di import di
 from database import Database
@@ -117,6 +118,7 @@ class Server(Bottle):
         self.add('/themes', callback=self.themes)
         self.add('/personalize', callback=self.personalize)
         self.add('/systems', callback=self.systems)
+        self.add('/random', callback=self.random)
         self.add('/admin', require_admin=True, callback=self.admin)
         
         # Frames
@@ -264,6 +266,7 @@ class Server(Bottle):
             bus_marker_style=bus_marker_style,
             hide_systems=hide_systems,
             show_speed=request.get_cookie('speed') == '1994',
+            show_random=request.get_cookie('random') == 'kumquat',
             today=today,
             now=now,
             timestamp=timestamp,
@@ -1250,6 +1253,43 @@ class Server(Bottle):
             agency=agency,
             enable_refresh=False
         )
+    
+    def random(self, system, agency):
+        self.set_cookie('random', 'kumquat')
+        systems = list(self.system_repository.find_all())
+        system = random.choice(systems)
+        selection = random.choice(['bus', 'route', 'stop', 'block', 'trip'])
+        match selection:
+            case 'bus':
+                overviews = system.get_overviews()
+                if not overviews:
+                    redirect(self.get_url(system))
+                overview = random.choice(overviews)
+                redirect(self.get_url(system, f'bus/{overview.bus.number}'))
+            case 'route':
+                routes = system.get_routes()
+                if not routes:
+                    redirect(self.get_url(system))
+                route = random.choice(routes)
+                redirect(self.get_url(system, f'routes/{route.number}'))
+            case 'stop':
+                stops = system.get_stops()
+                if not stops:
+                    redirect(self.get_url(system))
+                stop = random.choice(stops)
+                redirect(self.get_url(system, f'stops/{stop.number}'))
+            case 'block':
+                blocks = system.get_blocks()
+                if not blocks:
+                    redirect(self.get_url(system))
+                block = random.choice(blocks)
+                redirect(self.get_url(system, f'blocks/{block.id}'))
+            case 'trip':
+                trips = list(system.get_trips())
+                if not trips:
+                    redirect(self.get_url(system))
+                trip = random.choice(trips)
+                redirect(self.get_url(system, f'trips/{trip.id}'))
     
     def admin(self, system, agency):
         return self.page(
