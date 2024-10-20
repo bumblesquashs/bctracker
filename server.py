@@ -3,8 +3,8 @@ from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
+from random import Random
 import cherrypy as cp
-import random
 
 from di import di
 from database import Database
@@ -22,6 +22,8 @@ from services import *
 
 # Increase the version to force CSS reload
 VERSION = 47
+
+random = Random()
 
 class Server(Bottle):
     
