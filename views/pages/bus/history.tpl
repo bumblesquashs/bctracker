@@ -95,18 +95,25 @@
                                     <th class="desktop-only">Routes</th>
                                     <th class="desktop-only">Start Time</th>
                                     <th class="desktop-only">End Time</th>
-                                    <th class="non-mobile">First Seen</th>
+                                    <th class="no-wrap non-mobile">First Seen</th>
                                     <th class="no-wrap">Last Seen</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                % last_date = None
                                 % for record in records:
+                                    % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                                        <tr class="header">
+                                            <td colspan="8">{{ record.date.format_month() }}</td>
+                                            <tr class="display-none"></tr>
+                                        </tr>
+                                    % end
+                                    % last_date = record.date
                                     <tr>
-                                        <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                        <td class="non-desktop">
+                                        <td>
                                             <div class="column">
-                                                {{ record.date.format_short() }}
-                                                <span class="smaller-font">{{ record.system }}</span>
+                                                {{ record.date.format_day() }}
+                                                <span class="non-desktop smaller-font">{{ record.system }}</span>
                                             </div>
                                         </td>
                                         <td class="desktop-only">{{ record.system }}</td>

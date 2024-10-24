@@ -129,6 +129,16 @@ class Date:
             return self.datetime.strftime("%b %-d")
         return self.datetime.strftime("%b %-d, %Y")
     
+    def format_month(self):
+        '''Returns a string of this date formatted as MMMM YYYY'''
+        return self.datetime.strftime("%B %Y")
+    
+    def format_day(self):
+        '''Returns a string of this date formatted as DD{ordinal}'''
+        day = self.day
+        ordinal = "th" if 4 <= day % 100 <= 20 else {1:"st",2:"nd",3:"rd"}.get(day % 10, "th")
+        return f'{day}{ordinal}'
+    
     def format_since(self):
         '''Returns a string of the number of days, months, and years since this date'''
         if self.is_today:
