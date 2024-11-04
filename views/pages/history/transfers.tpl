@@ -115,11 +115,15 @@
                             % last_date = None
                             % for transfer in transfers:
                                 % bus = transfer.bus
-                                % same_date = not last_date or transfer.date == last_date
+                                % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
+                                    <tr class="header">
+                                        <td colspan="6">{{ transfer.date.format_month() }}</td>
+                                        <tr class="display-none"></tr>
+                                    </tr>
+                                % end
                                 % last_date = transfer.date
-                                <tr class="{{'' if same_date else 'divider'}}">
-                                    <td class="desktop-only">{{ transfer.date.format_long() }}</td>
-                                    <td class="non-desktop">{{ transfer.date.format_short() }}</td>
+                                <tr>
+                                    <td>{{ transfer.date.format_day() }}</td>
                                     <td>
                                         <div class="column">
                                             % include('components/bus')

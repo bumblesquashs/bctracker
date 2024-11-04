@@ -14,7 +14,7 @@
     <table>
         <thead>
             <tr>
-                <th>First Seen</th>
+                <th>Date</th>
                 <th>Bus</th>
                 <th class="desktop-only">Model</th>
                 % if not system:
@@ -29,13 +29,17 @@
             % for overview in overviews:
                 % record = overview.first_record
                 % bus = record.bus
-                % same_date = not last_date or record.date == last_date
+                % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                    <tr class="header">
+                        <td colspan="6">{{ record.date.format_month() }}</td>
+                        <tr class="display-none"></tr>
+                    </tr>
+                % end
                 % last_date = record.date
-                <tr class="{{'' if same_date else 'divider'}}">
-                    <td class="desktop-only">{{ record.date.format_long() }}</td>
-                    <td class="non-desktop">
+                <tr>
+                    <td>
                         <div class="column">
-                            {{ record.date.format_short() }}
+                            {{ record.date.format_day() }}
                             % if not system:
                                 <span class="mobile-only smaller-font">{{ record.system }}</span>
                             % end

@@ -122,6 +122,8 @@ class TestWeekday:
     def test_default(self):
         date = Date.today()
         now = datetime.now(timezone)
+        if now.hour < 4:
+            now = now - timedelta(days=1)
         weekday = Weekday(now.weekday())
         
         assert date.weekday == weekday
@@ -405,6 +407,8 @@ class TestFormatLong:
     
     def test_current_year(self):
         now = datetime.now(timezone)
+        if now.hour < 4:
+            now = now - timedelta(days=1)
         date = Date(now.year, 1, 1, timezone)
         
         assert date.format_long() == 'January 1'
@@ -417,6 +421,8 @@ class TestFormatShort:
     
     def test_current_year(self):
         now = datetime.now(timezone)
+        if now.hour < 4:
+            now = now - timedelta(days=1)
         date = Date(now.year, 1, 1, timezone)
         
         assert date.format_short() == 'Jan 1'
@@ -529,6 +535,8 @@ class TestFormatSince:
     
     def test_near_year(self):
         now = datetime.now(timezone)
+        if now.hour < 4:
+            now = now - timedelta(days=1)
         year_ago = Date(now.year - 1, now.month, now.day, timezone)
         # Need to calculate days based on number of days in month one year ago
         # Extra logic is needed to account for different number of days in different months
