@@ -3,20 +3,15 @@
  * Based on tcomm.bustrainferry.com
 */
 
-@import "../light.css";
-
 :root {
     --tooltip-background: #000000;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #FFFFFF;
     --loading-foreground: #000000;
     
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
-    
     --checkbox-color: #5E87B0;
     --radio-button-color: #5E87B0;
+    --toggle-button-color: #5E87B0;
 }
 
 a {
@@ -156,6 +151,7 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #666666;
+    --image-color: #666666;
 }
 
 #navigation-menu-toggle .line {
@@ -467,7 +463,7 @@ table tr {
 }
 
 .info-box .section {
-    border-bottom-color: #CBCBCB;
+    border-color: #CBCBCB;
 }
 
 .info-box .option {
@@ -639,6 +635,10 @@ table tr {
 
 .tooltip-anchor .tooltip {
     text-shadow: none;
+}
+
+.timespan .time {
+    background-color: #ABABAB;
 }
 
 .very-ahead {

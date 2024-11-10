@@ -37,6 +37,10 @@
             <meta name="robots" content="noindex">
         % end
         
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        
         % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
             <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
@@ -61,16 +65,20 @@
         
         % if theme.light and theme.dark:
             % if theme_variant == 'light':
+                <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
                 <link rel="stylesheet" href="/style/themes/{{ theme.id }}.light.css?version={{ version }}" />
                 % if high_contrast:
                     <link rel="stylesheet" href="/style/contrast/light.css?version={{ version }}" />
                 % end
             % elif theme_variant == 'dark':
+                <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
                 <link rel="stylesheet" href="/style/themes/{{ theme.id }}.dark.css?version={{ version }}" />
                 % if high_contrast:
                     <link rel="stylesheet" href="/style/contrast/dark.css?version={{ version }}" />
                 % end
             % else:
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/light.css?version={{ version }}" />
+                <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/dark.css?version={{ version }}" />
                 <link rel="stylesheet" media="screen and (prefers-color-scheme: light)" href="/style/themes/{{ theme.id }}.light.css?version={{ version }}" />
                 <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)" href="/style/themes/{{ theme.id }}.dark.css?version={{ version }}" />
                 % if high_contrast:
@@ -79,6 +87,11 @@
                 % end
             % end
         % else:
+            % if theme.light:
+                <link rel="stylesheet" href="/style/light.css?version={{ version }}" />
+            % elif theme.dark:
+                <link rel="stylesheet" href="/style/dark.css?version={{ version }}" />
+            % end
             <link rel="stylesheet" href="/style/themes/{{ theme.id }}.css?version={{ version }}" />
             % if high_contrast:
                 % if theme.light:
@@ -114,11 +127,22 @@
         
         <script>
             const svgs = {};
+            let systemID;        
             
             function getSVG(name) {
                 return svgs[name];
             }
         </script>
+        
+        % if system:
+            <script>
+                systemID = "{{ system.id }}";
+            </script>
+        % else:
+            <script>
+                systemID = null;
+            </script>
+        % end
         
         % include('components/svg_script', name='bus')
         % include('components/svg_script', name='bus-artic')
@@ -149,11 +173,25 @@
                 return a
             }
             
-            function getUrl(systemID, path) {
+            function getUrl(systemID, path, params=null) {
+                let url;
                 if (systemID === null || systemID === undefined) {
-                    return "{{ settings.all_systems_domain }}".format(path)
+                    url = "{{ settings.all_systems_domain }}".format(path);
+                } else {
+                    url = "{{ settings.system_domain if system else settings.system_domain_path }}".format(systemID, path);
                 }
-                return "{{ settings.system_domain if system else settings.system_domain_path }}".format(systemID, path)
+                const query = [];
+                if (params) {
+                    for (const key in params) {
+                        if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
+                            query.push(key + "=" + params[key]);
+                        }
+                    }
+                }
+                if (query.length === 0) {
+                    return url;
+                }
+                return url + "?" + query.join("&")
             }
             
             function setCookie(key, value) {
@@ -183,6 +221,45 @@
                 const section = header.parentElement;
                 section.classList.toggle("closed");
             }
+            
+            function getTimestampOffset() {
+                const currentLocal = new Date().getTime();
+                const currentRemote = parseFloat("{{ timestamp.value }}") * 1000;
+                return currentLocal - currentRemote;
+            }
+            
+            const timestampOffset = getTimestampOffset();
+            const updateTimestampFunctions = [];
+            
+            function getDifference(t1, t2) {
+                let difference = t1 - t2;
+                
+                const days = Math.floor(difference / 1000 / 60 / 60 / 24);
+                difference -= days * 1000* 60 * 60 * 24;
+                
+                const hours = Math.floor(difference / 1000 / 60 / 60);
+                difference -= hours * 1000 * 60 * 60;
+                
+                const minutes = Math.floor(difference / 1000 / 60);
+                difference -= minutes * 1000 * 60;
+                
+                const seconds = Math.floor(difference / 1000);
+                
+                let parts = []
+                if (days > 0) {
+                    parts.push(days + "d");
+                }
+                if (hours > 0) {
+                    parts.push(hours + "h");
+                }
+                if (minutes > 0) {
+                    parts.push(minutes + "m");
+                }
+                if (seconds > 0) {
+                    parts.push(seconds + "s");
+                }
+                return parts.join(" ") + " ago";
+            }
         </script>
     </head>
     
@@ -199,20 +276,27 @@
                 <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
                 <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
             % else:
-                <span class="navigation-item desktop-only disabled">Map</span>
-                <span class="navigation-item desktop-only disabled">Realtime</span>
-                <span class="navigation-item desktop-only disabled">History</span>
-                
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-                <a class="navigation-item tablet-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                <div class="navigation-item non-mobile disabled">Map</div>
+                <div class="navigation-item non-mobile disabled">Realtime</div>
+                <div class="navigation-item desktop-only disabled">History</div>
             % end
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(system, 'stops') }}">Stops</a>
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
             
             <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
             
             <div class="flex-1"></div>
+            
+            % if show_random:
+                <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'random') }}">
+                    % include('components/svg', name='random')
+                    <div class="tooltip left">
+                        <div class="title">Random Page</div>
+                    </div>
+                </a>
+            % end
             
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
                 % include('components/svg', name='location')
@@ -255,25 +339,32 @@
                     % include('components/svg', name='history')
                     <span>History</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'routes') }}">
-                    % include('components/svg', name='route')
-                    <span>Routes</span>
-                </a>
-                <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
-                    % include('components/svg', name='block')
-                    <span>Blocks</span>
-                </a>
             % else:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'routes') }}">
-                    % include('components/svg', name='route')
-                    <span>Routes</span>
-                </a>
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'blocks') }}">
-                    % include('components/svg', name='block')
-                    <span>Blocks</span>
-                </a>
+                <div class="menu-button mobile-only disabled">
+                    % include('components/svg', name='map')
+                    <span>Map</span>
+                </div>
+                <div class="menu-button mobile-only disabled">
+                    % include('components/svg', name='realtime')
+                    <span>Realtime</span>
+                </div>
+                <div class="menu-button disabled">
+                    % include('components/svg', name='history')
+                    <span>History</span>
+                </div>
             % end
-            
+            <a class="menu-button" href="{{ get_url(system, 'routes') }}">
+                % include('components/svg', name='route')
+                <span>Routes</span>
+            </a>
+            <a class="menu-button" href="{{ get_url(system, 'stops') }}">
+                % include('components/svg', name='stop')
+                <span>Stops</span>
+            </a>
+            <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+                % include('components/svg', name='block')
+                <span>Blocks</span>
+            </a>
             <a class="menu-button" href="{{ get_url(system, 'about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
@@ -286,6 +377,12 @@
                 % include('components/svg', name='personalize')
                 <span>Personalize</span>
             </a>
+            % if show_random:
+                <a class="menu-button" href="{{ get_url(system, 'random') }}">
+                    % include('components/svg', name='random')
+                    <span>Random Page</span>
+                </a>
+            % end
         </div>
         <div id="side-bar">
             <div id="status" class="side-bar-open-only">
@@ -300,11 +397,9 @@
                             All Transit Systems
                         % end
                     </div>
-                    <div id="last-updated">
-                        % if not system or (system.realtime_enabled and system.realtime_loaded):
-                            Updated {{ last_updated }}
-                        % end
-                    </div>
+                    % if last_updated:
+                        <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
+                    % end
                 </div>
                 <div id="refresh-button" class="disabled">
                     % include('components/svg', name='refresh')
@@ -339,8 +434,12 @@
             <div class="flex-1 side-bar-closed-only"></div>
             <div id="side-bar-toggle-container">
                 <div id="side-bar-toggle" onclick="toggleSideBar()">
-                    <div class="side-bar-open-only">&laquo;</div>
-                    <div class="side-bar-closed-only">&raquo;</div>
+                    <div class="side-bar-open-only">
+                        % include('components/svg', name='left-double')
+                    </div>
+                    <div class="side-bar-closed-only">
+                        % include('components/svg', name='right-double')
+                    </div>
                 </div>
                 <div class="side-bar-open-only">Hide Systems</div>
             </div>
@@ -389,11 +488,15 @@
                 
             </div>
             <div id="search-paging" class="display-none">
-                <div id="search-paging-previous" class="button" onclick="searchPreviousPage()">&lt;</div>
+                <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
+                    % include('components/svg', name='left')
+                </div>
                 <div id="search-count" class="flex-1">
                     
                 </div>
-                <div id="search-paging-next" class="button" onclick="searchNextPage()">&gt;</div>
+                <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
+                    % include('components/svg', name='right')
+                </div>
             </div>
         </div>
     </body>
@@ -430,7 +533,7 @@
             searchElement.classList.add("display-none");
         }
         if ("map" in window) {
-            map.resize();
+            map.updateSize();
         }
     }
     
@@ -720,5 +823,17 @@
         if ("map" in window) {
             map.updateSize();
         }
+    }
+    
+    function updateAllTimestamps() {
+        const currentTime = new Date().getTime();
+        for (const func of updateTimestampFunctions) {
+            func(currentTime);
+        }
+    }
+    
+    if (updateTimestampFunctions.length > 0) {
+        updateAllTimestamps();
+        setInterval(updateAllTimestamps, 1000)
     }
 </script>

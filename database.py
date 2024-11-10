@@ -61,6 +61,8 @@ SQL_SCRIPTS = [
             bearing REAL,
             speed INTEGER,
             adherence INTEGER,
+            occupancy TEXT,
+            timestamp REAL,
             PRIMARY KEY (system_id, bus_number)
         )
     ''',
@@ -137,7 +139,9 @@ SQL_SCRIPTS = [
     ''',
     'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
-    'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)'
+    'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)',
+    'CREATE INDEX IF NOT EXISTS departure_trip_id ON departure (trip_id)',
+    'CREATE INDEX IF NOT EXISTS departure_stop_id ON departure (stop_id)'
 ]
 
 class Database:

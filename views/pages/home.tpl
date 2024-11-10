@@ -111,7 +111,7 @@
             </div>
             <div class="content">
                 <p>
-                    Add up to 10 favourites using the
+                    Add up to 20 favourites using the
                     % include('components/svg', name='non-favourite')
                     button on buses, routes, and stops.
                 </p>
@@ -146,7 +146,10 @@
                                                             <div class="row">
                                                                 % include('components/bus', bus=value)
                                                                 % if position:
-                                                                    % include('components/adherence', adherence=position.adherence)
+                                                                    <div class="row gap-5">
+                                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                        % include('components/adherence', adherence=position.adherence)
+                                                                    </div>
                                                                 % end
                                                             </div>
                                                         </td>

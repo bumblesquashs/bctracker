@@ -3,6 +3,7 @@ import pytz
 
 from di import di
 
+from models.backoff import Backoff
 from models.route import RouteCache
 from models.schedule import Schedule
 from models.stop import StopCache
@@ -27,10 +28,10 @@ class System:
         'preposition',
         'regional',
         'colour_routes',
+        'gtfs_downloaded',
         'gtfs_loaded',
-        'validation_errors',
-        'last_updated_date',
-        'last_updated_time',
+        'reload_backoff',
+        'last_updated',
         'blocks',
         'routes',
         'routes_by_number',
@@ -47,7 +48,7 @@ class System:
     @property
     def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
-        return self.last_updated_date and self.last_updated_time
+        return self.last_updated is not None
     
     @property
     def gtfs_enabled(self):
@@ -96,10 +97,10 @@ class System:
         self.regional = kwargs.get('regional', False)
         self.colour_routes = kwargs.get('colour_routes')
         
+        self.gtfs_downloaded = None
         self.gtfs_loaded = False
-        self.validation_errors = 0
-        self.last_updated_date = None
-        self.last_updated_time = None
+        self.reload_backoff = Backoff(max_target=2**8)
+        self.last_updated = None
         
         self.blocks = {}
         self.routes = {}
@@ -201,16 +202,6 @@ class System:
     def get_trips(self):
         '''Returns all trips'''
         return self.trips.values()
-    
-    def get_last_updated(self, time_format):
-        '''Returns the date/time that realtime data was last updated'''
-        date = self.last_updated_date
-        time = self.last_updated_time
-        if not date or not time:
-            return 'N/A'
-        if date.is_today:
-            return f'at {time.format_web(time_format)} {time.timezone_name}'
-        return date.format_since()
     
     def search_blocks(self, query):
         '''Returns all blocks that match the given query'''

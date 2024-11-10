@@ -1,4 +1,6 @@
 
+% from di import di
+
 % from math import floor
 % from datetime import timedelta
 
@@ -39,24 +41,23 @@
                         <thead>
                             <tr>
                                 <th>Time</th>
+                                <th class="non-mobile">Headsign</th>
+                                <th class="desktop-only">Block</th>
+                                <th>Trip</th>
                                 % if not system or system.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
-                                <th class="non-mobile">Headsign</th>
-                                <th class="desktop-only">Block</th>
-                                <th>Trip</th>
                             </tr>
                         </thead>
                         <tbody>
-                            % last_hour = -1
+                            % last_time = None
                             % for departure in upcoming_departures:
-                                % this_hour = departure.time.hour
-                                % if last_hour == -1:
-                                    % last_hour = this_hour
+                                % if not last_time:
+                                    % last_time = departure.time
                                 % end
-                                % include('rows/departure', show_divider=this_hour > last_hour)
-                                % last_hour = this_hour
+                                % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                % last_time = departure.time
                             % end
                         </tbody>
                     </table>

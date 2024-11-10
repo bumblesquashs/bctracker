@@ -6,6 +6,10 @@
 <div id="map" class="{{ 'preview' if is_preview else 'full-screen' }}"></div>
 
 % include('components/svg_script', name='fish')
+% include('components/svg_script', name='no-people')
+% include('components/svg_script', name='one-person')
+% include('components/svg_script', name='two-people')
+% include('components/svg_script', name='three-people')
 
 <script>
     const interactive = "{{ is_preview }}" === "False";
@@ -29,6 +33,16 @@
             rotate: interactive
         })
     });
+    
+    if (interactive) {
+        map.getViewport().style.cursor = "grab";
+        map.on('pointerdrag', function(event) {
+            map.getViewport().style.cursor = "grabbing";
+        });
+        map.on('pointerup', function(event) {
+            map.getViewport().style.cursor = "grab";
+        });
+    }
     
     const area = new Area();
 </script>
@@ -101,6 +115,9 @@
                     if (adherence !== undefined && adherence !== null) {
                         bearing.classList.add(adherence.status_class)
                     }
+                } else if (busMarkerStyle === "occupancy") {
+                    bearing.classList.add("occupancy");
+                    bearing.classList.add(position.occupancy_status_class);
                 } else {
                     bearing.style.borderBottomColor = "#" + position.colour;
                 }
@@ -112,15 +129,81 @@
                 element.appendChild(bearing)
             }
             
+            let icon;
+            if (position.bus_number < 0) {
+                icon = document.createElement("div");
+            } else {
+                icon = document.createElement("a");
+                icon.href = "/bus/" + position.bus_number;
+                icon.innerHTML = "<div class='link'></div>";
+            }
+            icon.className = "icon";
+            element.appendChild(icon);
+            
+            if (busMarkerStyle === "route") {
+                icon.classList.add("bus_route");
+                if (position.lat === 0 && position.lon === 0) {
+                    icon.innerHTML += getSVG("fish");
+                } else {
+                    icon.innerHTML += position.route_number;
+                }
+                icon.style.backgroundColor = "#" + position.colour;
+            } else if (busMarkerStyle === "mini") {
+                element.classList.add("small");
+                icon.classList.add("mini");
+                icon.style.backgroundColor = "#" + position.colour;
+            } else if (busMarkerStyle === "adherence") {
+                icon.classList.add("adherence");
+                if (adherence === undefined || adherence === null) {
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        icon.innerHTML += "N/A";
+                    }
+                } else {
+                    if (position.lat === 0 && position.lon === 0) {
+                        icon.innerHTML += getSVG("fish");
+                    } else {
+                        icon.innerHTML += adherence.value;
+                    }
+                    icon.classList.add(adherence.status_class);
+                    const adherenceValue = parseInt(adherence.value);
+                    if (adherenceValue >= 100 || adherenceValue <= -100) {
+                        icon.classList.add("smaller-font");
+                    }
+                }
+            } else if (busMarkerStyle === "occupancy") {
+                icon.classList.add("occupancy");
+                icon.classList.add(position.occupancy_status_class);
+                if (position.lat === 0 && position.lon === 0) {
+                    icon.innerHTML += getSVG("fish");
+                } else {
+                    icon.innerHTML += getSVG(position.occupancy_icon);
+                }
+            } else {
+                if (position.lat === 0 && position.lon === 0) {
+                    icon.innerHTML += getSVG("fish");
+                } else {
+                    icon.innerHTML += getSVG(position.bus_icon);
+                }
+                icon.style.backgroundColor = "#" + position.colour;
+            }
+            
             const details = document.createElement("div");
             details.className = "details";
+            element.appendChild(details);
             
             const title = document.createElement("div");
             title.className = "title";
             title.innerHTML = position.bus_display;
+            if (position.adornment != null) {
+                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            }
+            details.appendChild(title);
             
             const content = document.createElement("div");
             content.className = "content hover-only";
+            details.appendChild(content);
             
             const model = document.createElement("div");
             model.className = "lighter-text centred";
@@ -142,72 +225,44 @@
             }
             content.appendChild(headsign);
             
+            const occupancy = document.createElement("div");
+            occupancy.className = "row center gap-5";
+            
+            const occupancyIcon = document.createElement("div");
+            occupancyIcon.className = "occupancy-icon";
+            occupancyIcon.classList.add(position.occupancy_status_class);
+            occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
+            occupancy.appendChild(occupancyIcon);
+            
+            const occupancyName = document.createElement("div");
+            occupancyName.className = "occupancy-name";
+            occupancyName.innerText = position.occupancy_name;
+            occupancy.appendChild(occupancyName);
+            
+            content.appendChild(occupancy);
+            
+            const footer = document.createElement("div");
+            footer.className = "lighter-text centred";
+            let systemElement = null;
             if ("{{ system is None }}" === "True") {
-                const system = document.createElement("div");
-                system.className = "lighter-text centred";
-                system.innerHTML = position.system;
-                content.appendChild(system);
+                systemElement = document.createElement("span");
+                systemElement.innerHTML = position.system;
+                footer.appendChild(systemElement);
             }
-            
-            if (position.bus_number < 0) {
-                const icon = document.createElement("div");
-                icon.className = "icon";
-                if (busMarkerStyle == "route") {
-                    icon.classList.add("bus_route");
-                    icon.innerHTML = position.route_number;
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "mini") {
-                    element.classList.add("small");
-                    icon.classList.add("mini");
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "adherence") {
-                    icon.classList.add("adherence");
-                    if (adherence === undefined || adherence === null) {
-                        icon.innerHTML = "N/A";
-                    } else {
-                        icon.innerHTML = adherence.value;
-                        icon.classList.add(adherence.status_class);
-                    }
-                } else {
-                    icon.innerHTML = getSVG(position.bus_icon);
-                    icon.style.backgroundColor = "#" + position.colour;
+            if (position.timestamp) {
+                if (systemElement) {
+                    const separator = document.createElement("span")
+                    separator.innerHTML = " • ";
+                    footer.appendChild(separator);
                 }
-                element.appendChild(icon);
-            } else {
-                const icon = document.createElement("a");
-                icon.className = "icon";
-                icon.href = "/bus/" + position.bus_number;
-                if (busMarkerStyle == "route") {
-                    icon.classList.add("bus_route");
-                    icon.innerHTML = "<div class='link'></div>" + position.route_number;
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "mini") {
-                    element.classList.add("small");
-                    icon.classList.add("mini");
-                    icon.innerHTML = "<div class='link'></div>";
-                    icon.style.backgroundColor = "#" + position.colour;
-                } else if (busMarkerStyle == "adherence") {
-                    icon.classList.add("adherence");
-                    if (adherence === undefined || adherence === null) {
-                        icon.innerHTML = "<div class='link'></div>N/A";
-                    } else {
-                        icon.innerHTML = "<div class='link'></div>" + adherence.value;
-                        icon.classList.add(adherence.status_class);
-                    }
-                } else {
-                    icon.innerHTML = "<div class='link'></div>" + getSVG(position.bus_icon);
-                    icon.style.backgroundColor = "#" + position.colour;
-                }
-                element.appendChild(icon);
+                const timestamp = document.createElement("span");
+                footer.appendChild(timestamp);
+                updateTimestampFunctions.push(function(currentTime) {
+                    const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
+                    timestamp.innerHTML = difference;
+                });
             }
-            
-            if (position.adornment != null) {
-                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
-            }
-            
-            details.appendChild(title);
-            details.appendChild(content);
-            element.appendChild(details);
+            content.appendChild(footer);
             
             map.addOverlay(new ol.Overlay({
                 position: ol.proj.fromLonLat([position.lon, position.lat]),

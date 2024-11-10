@@ -16,20 +16,15 @@
  * Other colors may also be used for specific purposes
 */
 
-@import "../light.css";
-
 :root {
     --tooltip-background: #888888;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #FFFFFF;
     --loading-foreground: #AAAAAA;
     
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
-    
     --checkbox-color: #000000;
     --radio-button-color: #000000;
+    --toggle-button-color: #000000;
 }
 
 a {
@@ -139,6 +134,7 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #888888;
+    --image-color: #888888;
 }
 
 #navigation-menu-toggle .line {
@@ -364,7 +360,7 @@ table tr {
 }
 
 .info-box .section {
-    border-bottom-color: #DDDDDD;
+    border-color: #DDDDDD;
 }
 
 .info-box .option {
@@ -416,8 +412,8 @@ table tr {
     background-color: #FFFFFF;
 }
 
-.order-details .content .separator {
-    color: #888888;
+.order-details .content {
+    --image-color: #888888;
 }
 
 .paging .page {
@@ -490,4 +486,8 @@ table tr {
 
 .timeline .section:hover {
     border-color: #888888;
+}
+
+.timespan .time {
+    background-color: #AAAAAA;
 }

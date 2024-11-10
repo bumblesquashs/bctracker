@@ -1,4 +1,12 @@
 
+:root {
+    --tooltip-background: #2F2F2F;
+    --tooltip-text: #FFFFFF;
+    
+    --adherence-background: #444444;
+    --adherence-text: #FFFFFF;
+}
+
 .ahead {
     --adherence-background: #FF6A00;
 }
@@ -24,6 +32,41 @@
 .normal-service {
     background-color: #005900;
     color: #FFFFFF;
+}
+
+.occupancy-empty {
+    --occupancy-background: #003B00;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-many-seats {
+    --occupancy-background: #003B00;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-few-seats {
+    --occupancy-background: #003B00;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-standing-room {
+    --occupancy-background: #934800;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-crushed {
+    --occupancy-background: #934800;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-full {
+    --occupancy-background: #4A0000;
+    --occupancy-foreground: #FFFFFF;
+}
+
+.occupancy-unavailable {
+    --occupancy-background: #565656;
+    --occupancy-foreground: #FFFFFF;
 }
 
 .on-time {

@@ -1,19 +1,14 @@
 
-@import "../dark.css";
-
 :root {
     color-scheme: dark;
     --tooltip-background: #000000;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: rgba(0, 0, 0, 0);
     --loading-foreground: #000000;
     
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
-    
     --checkbox-color: #FFFFFF;
     --radio-button-color: #FFFFFF;
+    --toggle-button-color: #FFFFFF;
 }
 
 a {
@@ -141,6 +136,7 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {
@@ -367,7 +363,7 @@ table tr {
 }
 
 .info-box .section {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .info-box .option {
@@ -423,8 +419,8 @@ table tr {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-.order-details .content .separator {
-    color: rgba(255, 255, 255, 0.3);
+.order-details .content {
+    --image-color: rgba(255, 255, 255, 0.3);
 }
 
 .paging .page {
@@ -499,4 +495,8 @@ table tr {
 
 .timeline .section:hover {
     border-color: #000000;
+}
+
+.timespan .time {
+    background-color: #989898;
 }

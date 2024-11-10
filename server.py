@@ -3,6 +3,7 @@ from logging.handlers import TimedRotatingFileHandler
 from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
+from random import Random
 import cherrypy as cp
 
 from di import di
@@ -14,12 +15,15 @@ from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.time import Time
+from models.timestamp import Timestamp
 
 from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 42
+VERSION = 47
+
+random = Random()
 
 class Server(Bottle):
     
@@ -116,6 +120,7 @@ class Server(Bottle):
         self.add('/themes', callback=self.themes)
         self.add('/personalize', callback=self.personalize)
         self.add('/systems', callback=self.systems)
+        self.add('/random', callback=self.random)
         self.add('/admin', require_admin=True, callback=self.admin)
         
         # Frames
@@ -174,15 +179,21 @@ class Server(Bottle):
         
         for system in self.system_repository.find_all():
             if self.running:
-                self.gtfs_service.load(system, args.reload, args.updatedb)
-                if not self.gtfs_service.validate(system):
-                    self.gtfs_service.load(system, True)
-                self.gtfs_service.update_cache_in_background(system)
-                self.realtime_service.update(system)
-                if not self.realtime_service.validate(system):
-                    system.validation_errors += 1
+                try:
+                    self.gtfs_service.load(system, args.reload, args.updatedb)
+                    if not self.gtfs_service.validate(system):
+                        self.gtfs_service.load(system, True)
+                    self.gtfs_service.update_cache_in_background(system)
+                    self.realtime_service.update(system)
+                except Exception as e:
+                    print(f'Error loading data for {system}: {e}')
+                if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                    system.reload_backoff.increase_value()
         if self.running:
-            self.realtime_service.update_records()
+            try:
+                self.realtime_service.update_records()
+            except Exception as e:
+                print(f'Error updating records: {e}')
             self.cron_service.start()
     
     def stop(self):
@@ -224,13 +235,15 @@ class Server(Bottle):
         bus_marker_style = self.query_cookie('bus_marker_style')
         hide_systems = self.query_cookie('hide_systems') == 'yes'
         if system:
-            last_updated = system.get_last_updated(time_format)
+            last_updated = system.last_updated
             today = Date.today(system.timezone)
             now = Time.now(system.timezone, False)
+            timestamp = Timestamp.now(system.timezone)
         else:
-            last_updated = self.realtime_service.get_last_updated(time_format)
+            last_updated = self.realtime_service.get_last_updated()
             today = Date.today()
             now = Time.now()
+            timestamp = Timestamp.now()
         return template(f'pages/{name}',
             di=di,
             settings=self.settings,
@@ -256,8 +269,10 @@ class Server(Bottle):
             bus_marker_style=bus_marker_style,
             hide_systems=hide_systems,
             show_speed=request.get_cookie('speed') == '1994',
+            show_random=request.get_cookie('random') == 'kumquat',
             today=today,
             now=now,
+            timestamp=timestamp,
             **kwargs
         )
     
@@ -305,6 +320,16 @@ class Server(Bottle):
         '''Returns the current set of favourites stored in the cookie'''
         favourites_string = request.get_cookie('favourites', '')
         return FavouriteSet.parse(favourites_string)
+    
+    def query_options(self, key, options):
+        '''
+        Returns the value of the given key from the query and validates that it's in the given options.
+        If no value exists or it isn't in the options list, the first option is returned.
+        '''
+        value = request.query.get(key)
+        if value and value in options:
+            return value
+        return options[0]
     
     def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', callback=None):
         '''Adds an endpoint to the server'''
@@ -1007,6 +1032,42 @@ class Server(Bottle):
         search = request.query.get('search')
         if search:
             path_args['search'] = search
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = [r for r in routes_query.split(',') if r]
+        else:
+            routes_filter = []
+        sort = self.query_options('sort', ['name', 'number'])
+        if sort != 'name':
+            path_args['sort'] = sort
+        sort_order = self.query_options('sort_order', ['asc', 'desc'])
+        if sort_order != 'asc':
+            path_args['sort_order'] = sort_order
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
+        items_per_page = 100
+        if system:
+            stops = system.get_stops()
+            if search:
+                stops = [s for s in stops if search.lower() in s.name.lower()]
+            for route_number in routes_filter:
+                stops = [s for s in stops if route_number in {r.number for r in s.routes}]
+            if sort == 'number':
+                stops.sort(key=lambda s: s.number, reverse=sort_order == 'desc')
+            elif sort == 'name':
+                stops.sort(key=lambda s: s.name, reverse=sort_order == 'desc')
+            total_items = len(stops)
+            start_index = (page - 1) * items_per_page
+            end_index = page * items_per_page
+            if page < 1:
+                stops = []
+            else:
+                stops = stops[start_index:end_index]
+        else:
+            stops = []
+            total_items = 0
         return self.page(
             name='stops',
             title='Stops',
@@ -1015,7 +1076,14 @@ class Server(Bottle):
             system=system,
             agency=agency,
             enable_refresh=False,
-            search=search
+            stops=stops,
+            search=search,
+            routes_filter=routes_filter,
+            sort=sort,
+            sort_order=sort_order,
+            page=page,
+            items_per_page=items_per_page,
+            total_items=total_items
         )
     
     def stop_overview(self, system, agency, stop_number):
@@ -1189,6 +1257,43 @@ class Server(Bottle):
             enable_refresh=False
         )
     
+    def random(self, system, agency):
+        self.set_cookie('random', 'kumquat')
+        systems = list(self.system_repository.find_all())
+        system = random.choice(systems)
+        selection = random.choice(['bus', 'route', 'stop', 'block', 'trip'])
+        match selection:
+            case 'bus':
+                overviews = system.get_overviews()
+                if not overviews:
+                    redirect(self.get_url(system))
+                overview = random.choice(overviews)
+                redirect(self.get_url(system, f'bus/{overview.bus.number}'))
+            case 'route':
+                routes = system.get_routes()
+                if not routes:
+                    redirect(self.get_url(system))
+                route = random.choice(routes)
+                redirect(self.get_url(system, f'routes/{route.number}'))
+            case 'stop':
+                stops = system.get_stops()
+                if not stops:
+                    redirect(self.get_url(system))
+                stop = random.choice(stops)
+                redirect(self.get_url(system, f'stops/{stop.number}'))
+            case 'block':
+                blocks = system.get_blocks()
+                if not blocks:
+                    redirect(self.get_url(system))
+                block = random.choice(blocks)
+                redirect(self.get_url(system, f'blocks/{block.id}'))
+            case 'trip':
+                trips = list(system.get_trips())
+                if not trips:
+                    redirect(self.get_url(system))
+                trip = random.choice(trips)
+                redirect(self.get_url(system, f'trips/{trip.id}'))
+    
     def admin(self, system, agency):
         return self.page(
             name='admin',
@@ -1226,15 +1331,19 @@ class Server(Bottle):
         return 'Online'
     
     def api_map(self, system, agency):
-        time_format = request.get_cookie('time_format')
         if system:
-            last_updated = system.get_last_updated(time_format)
+            last_updated = system.last_updated
         else:
-            last_updated = self.realtime_service.get_last_updated(time_format)
+            last_updated = self.realtime_service.get_last_updated()
+        if last_updated:
+            time_format = request.get_cookie('time_format')
+            last_updated_text = last_updated.format_web(time_format)
+        else:
+            last_updated_text = None
         positions = sorted(self.position_repository.find_all(system, has_location=True), key=lambda p: p.lat)
         return {
             'positions': [p.get_json() for p in positions],
-            'last_updated': last_updated
+            'last_updated': last_updated_text
         }
     
     def api_shape(self, system, agency, shape_id):
@@ -1312,15 +1421,21 @@ class Server(Bottle):
         self.system_repository.load()
         for system in self.system_repository.find_all():
             if self.running:
-                self.gtfs_service.load(system)
-                if not self.gtfs_service.validate(system):
-                    self.gtfs_service.load(system, True)
-                self.gtfs_service.update_cache_in_background(system)
-                self.realtime_service.update(system)
-                if not self.realtime_service.validate(system):
-                    system.validation_errors += 1
+                try:
+                    self.gtfs_service.load(system)
+                    if not self.gtfs_service.validate(system):
+                        self.gtfs_service.load(system, True)
+                    self.gtfs_service.update_cache_in_background(system)
+                    self.realtime_service.update(system)
+                except Exception as e:
+                    print(f'Error loading data for {system}: {e}')
+                if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                    system.reload_backoff.increase_value()
         if self.running:
-            self.realtime_service.update_records()
+            try:
+                self.realtime_service.update_records()
+            except Exception as e:
+                print(f'Error updating records: {e}')
             self.cron_service.start()
         return 'Success'
     
@@ -1341,23 +1456,31 @@ class Server(Bottle):
         system = self.system_repository.find(reload_system_id)
         if not system:
             return 'Invalid system'
-        self.gtfs_service.load(system, True)
-        self.gtfs_service.update_cache_in_background(system)
-        self.realtime_service.update(system)
-        if not self.realtime_service.validate(system):
-            system.validation_errors += 1
-        self.realtime_service.update_records()
-        return 'Success'
+        try:
+            self.gtfs_service.load(system, True)
+            self.gtfs_service.update_cache_in_background(system)
+            self.realtime_service.update(system)
+            self.realtime_service.update_records()
+            if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                system.reload_backoff.increase_value()
+            return 'Success'
+        except Exception as e:
+            print(f'Error loading GTFS data for {system}: {e}')
+            return str(e)
     
     def api_admin_reload_realtime(self, system, agency, reload_system_id):
         system = self.system_repository.find(reload_system_id)
         if not system:
             return 'Invalid system'
-        self.realtime_service.update(system)
-        if not self.realtime_service.validate(system):
-            system.validation_errors += 1
-        self.realtime_service.update_records()
-        return 'Success'
+        try:
+            self.realtime_service.update(system)
+            self.realtime_service.update_records()
+            if not self.realtime_service.validate(system):
+                system.reload_backoff.increase_value()
+            return 'Success'
+        except Exception as e:
+            print(f'Error loading realtime data for {system}: {e}')
+            return str(e)
     
     # =============================================================
     # Errors

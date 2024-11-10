@@ -8,6 +8,12 @@
 
 % model = bus.model
 
+% if position and position.timestamp:
+    <script>
+        const originalTimestamp = parseFloat("{{ position.timestamp.value }}") * 1000;
+    </script>
+% end
+
 <div id="page-header">
     <h1 class="row">
         <span>Bus</span>
@@ -84,10 +90,31 @@
                                 % end
                             % end
                         % end
+                        % if position.timestamp:
+                            <div class="row section">
+                                <div class="name">Last Update</div>
+                                <div id="timestamp"></div>
+                                <script>
+                                    updateTimestampFunctions.push(function(currentTime) {
+                                        const difference = getDifference(currentTime, originalTimestamp + timestampOffset);
+                                        document.getElementById("timestamp").innerHTML = difference;
+                                    });
+                                </script>
+                            </div>
+                        % end
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
                                 <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                            </div>
+                        </div>
+                        <div class="row section">
+                            <div class="name">Occupancy</div>
+                            <div class="value">
+                                <div class="row gap-5 center">
+                                    <div>{{ position.occupancy }}</div>
+                                    % include('components/occupancy', occupancy=position.occupancy, size='large')
+                                </div>
                             </div>
                         </div>
                         % if show_speed:
@@ -121,10 +148,33 @@
                         <div class="section">
                             % include('components/block_timeline', date=Date.today(block.system.timezone))
                         </div>
+                        % if position.timestamp:
+                            <div class="row section">
+                                <div class="name">Last Update</div>
+                                <div class="value">
+                                    <div id="timestamp"></div>
+                                    <script>
+                                        updateTimestampFunctions.push(function(currentTime) {
+                                            const difference = getDifference(currentTime, originalTimestamp + timestampOffset);
+                                            document.getElementById("timestamp").innerHTML = difference;
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        % end
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
                                 <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                            </div>
+                        </div>
+                        <div class="row section">
+                            <div class="name">Occupancy</div>
+                            <div class="value">
+                                <div class="row gap-5 center">
+                                    <div>{{ position.occupancy }}</div>
+                                    % include('components/occupancy', occupancy=position.occupancy, size='large')
+                                </div>
                             </div>
                         </div>
                         % if show_speed:
@@ -253,20 +303,30 @@
                                                 <div class="column">
                                                     <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
                                                     <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    % if not departure.pickup_type.is_normal:
+                                                        <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
+                                                    % elif departure == trip.last_departure:
+                                                        <span class="mobile-only smaller-font italics">No pick up</span>
+                                                    % end
+                                                    % if not departure.dropoff_type.is_normal:
+                                                        <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
+                                                    % elif departure == trip.first_departure:
+                                                        <span class="mobile-only smaller-font italics">No drop off</span>
+                                                    % end
                                                 </div>
                                             </td>
                                             <td class="non-mobile">
                                                 <div class="column">
                                                     <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
                                                     % if not departure.pickup_type.is_normal:
-                                                        <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                        <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                                     % elif departure == trip.last_departure:
-                                                        <span class="smaller-font">No pick up</span>
+                                                        <span class="smaller-font italics">No pick up</span>
                                                     % end
                                                     % if not departure.dropoff_type.is_normal:
-                                                        <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                                        <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
                                                     % elif departure == trip.first_departure:
-                                                        <span class="smaller-font">No drop off</span>
+                                                        <span class="smaller-font italics">No drop off</span>
                                                     % end
                                                 </div>
                                             </td>
@@ -306,18 +366,25 @@
                                 <th class="desktop-only">Routes</th>
                                 <th class="desktop-only">Start Time</th>
                                 <th class="desktop-only">End Time</th>
-                                <th class="non-mobile">First Seen</th>
+                                <th class="no-wrap non-mobile">First Seen</th>
                                 <th class="no-wrap">Last Seen</th>
                             </tr>
                         </thead>
                         <tbody>
+                            % last_date = None
                             % for record in records:
+                                % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                                    <tr class="header">
+                                        <td colspan="8">{{ record.date.format_month() }}</td>
+                                        <tr class="display-none"></tr>
+                                    </tr>
+                                % end
+                                % last_date = record.date
                                 <tr>
-                                    <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                    <td class="non-desktop">
+                                    <td>
                                         <div class="column">
-                                            {{ record.date.format_short() }}
-                                            <span class="smaller-font">{{ record.system }}</span>
+                                            {{ record.date.format_day() }}
+                                            <span class="non-desktop smaller-font">{{ record.system }}</span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">{{ record.system }}</td>

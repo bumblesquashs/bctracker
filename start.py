@@ -44,7 +44,7 @@ if __name__ == '__main__':
     di[TripRepository] = SQLTripRepository(database)
     
     di[BackupService] = DefaultBackupService(database, settings)
-    di[GTFSService] = DefaultGTFSService(settings)
+    di[GTFSService] = DefaultGTFSService(database, settings)
     di[RealtimeService] = DefaultRealtimeService(database, settings)
     di[CronService] = DefaultCronService(database, settings)
     

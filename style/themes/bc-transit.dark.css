@@ -16,21 +16,15 @@
  * Other colors may also be used for specific purposes
 */
 
-@import "../dark.css";
-
 :root {
     color-scheme: dark;
-    --tooltip-background: #2F2F2F;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: #2F2F2F;
     --loading-foreground: #154E15;
     
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
-    
     --checkbox-color: #5CC3FF;
     --radio-button-color: #5CC3FF;
+    --toggle-button-color: #5CC3FF;
 }
 
 a {
@@ -153,6 +147,7 @@ table tr:nth-child(2n-1) {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {
@@ -381,7 +376,7 @@ table tr:nth-child(2n-1) {
 }
 
 .info-box .section {
-    border-bottom-color: #565656;
+    border-color: #565656;
 }
 
 .info-box .option {
@@ -437,8 +432,8 @@ table tr:nth-child(2n-1) {
     background-color: #2F2F2F;
 }
 
-.order-details .content .separator {
-    color: #565656;
+.order-details .content {
+    --image-color: #565656;
 }
 
 .paging .page {
@@ -510,4 +505,8 @@ table tr:nth-child(2n-1) {
 
 .timeline .section:hover {
     border-color: #565656;
+}
+
+.timespan .time {
+    background-color: #989898;
 }

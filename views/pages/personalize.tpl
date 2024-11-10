@@ -145,13 +145,17 @@
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
                         <div>Mini</div>
                     </div>
+                    <div class="option" onclick="setBusMarkerStyle('route')">
+                        <div class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
+                        <div>Route Number</div>
+                    </div>
                     <div class="option" onclick="setBusMarkerStyle('adherence')">
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
                         <div>Schedule Adherence</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('route')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
-                        <div>Route Number</div>
+                    <div class="option" onclick="setBusMarkerStyle('occupancy')">
+                        <div class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
+                        <div>Occupancy</div>
                     </div>
                 </div>
             </div>

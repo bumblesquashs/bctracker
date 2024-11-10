@@ -65,26 +65,25 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                % last_hour = -1
+                                                % last_time = None
                                                 % for departure in departures:
                                                     % trip = departure.trip
                                                     % block = trip.block
-                                                    % this_hour = departure.time.hour
-                                                    % if last_hour == -1:
-                                                        % last_hour = this_hour
+                                                    % if not last_time:
+                                                        % last_time = departure.time
                                                     % end
-                                                    <tr class="{{'divider' if this_hour > last_hour else ''}}">
+                                                    <tr class="{{'divider' if departure.time.hour > last_time.hour else ''}}">
                                                         <td>{{ departure.time.format_web(time_format) }}</td>
                                                         <td class="non-mobile">
                                                             <div class="column">
                                                                 % include('components/headsign')
                                                                 % if not departure.pickup_type.is_normal:
-                                                                    <span class="smaller-font">{{ departure.pickup_type }}</span>
+                                                                    <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                                                 % elif departure == trip.last_departure:
-                                                                    <span class="smaller-font">No pick up</span>
+                                                                    <span class="smaller-font italics">No pick up</span>
                                                                 % end
                                                                 % if not departure.dropoff_type.is_normal:
-                                                                    <span class="smaller-font">{{ departure.dropoff_type }}</span>
+                                                                    <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
                                                                 % end
                                                             </div>
                                                         </td>
@@ -102,17 +101,17 @@
                                                                     % include('components/headsign')
                                                                 </span>
                                                                 % if not departure.pickup_type.is_normal:
-                                                                    <span class="mobile-only smaller-font">{{ departure.pickup_type }}</span>
+                                                                    <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
                                                                 % elif departure == trip.last_departure:
-                                                                    <span class="mobile-only smaller-font">No pick up</span>
+                                                                    <span class="mobile-only smaller-font italics">No pick up</span>
                                                                 % end
                                                                 % if not departure.dropoff_type.is_normal:
-                                                                    <span class="mobile-only smaller-font">{{ departure.dropoff_type }}</span>
+                                                                    <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
                                                                 % end
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    % last_hour = this_hour
+                                                    % last_time = departure.time
                                                 % end
                                             </tbody>
                                         </table>

@@ -45,19 +45,6 @@
                     </div>
                     <div class="section">
                         <div class="header" onclick="toggleSection(this)">
-                            <h3>Why are some transit systems not showing in realtime?</h3>
-                            % include('components/toggle')
-                        </div>
-                        <div class="content">
-                            <p>
-                                BC Transit has been working on rolling out NextRide in many smaller systems around the province.
-                                The addition of schedule GTFS data is nearly complete, but it will still take some time before realtime data is available everywhere.
-                                Keep an eye out for more systems going online in the future!
-                            </p>
-                        </div>
-                    </div>
-                    <div class="section">
-                        <div class="header" onclick="toggleSection(this)">
                             <h3>How long has BCTracker been recording bus history?</h3>
                             % include('components/toggle')
                         </div>

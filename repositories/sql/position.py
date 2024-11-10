@@ -1,8 +1,12 @@
 
 from database import Database
 
+from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
+
 from models.adherence import Adherence
+from models.occupancy import Occupancy
 from models.position import Position
+from models.timestamp import Timestamp
 
 from repositories import PositionRepository
 
@@ -63,10 +67,25 @@ class SQLPositionRepository(PositionRepository):
         else:
             block_id = None
             route_id = None
+        try:
+            if data.HasField('timestamp'):
+                timestamp = Timestamp.parse(data.timestamp, system.timezone)
+            else:
+                timestamp = None
+        except AttributeError:
+            timestamp = None
         if trip and stop and sequence is not None and lat is not None and lon is not None:
-            adherence = Adherence.calculate(trip, stop, sequence, lat, lon)
+            adherence = Adherence.calculate(trip, stop, sequence, lat, lon, timestamp)
         else:
             adherence = None
+        try:
+            if data.HasField('occupancy_status'):
+                value = _VEHICLEPOSITION_OCCUPANCYSTATUS.values_by_number[data.occupancy_status]
+                occupancy = Occupancy[value.name]
+            else:
+                occupancy = Occupancy.NO_DATA_AVAILABLE
+        except KeyError:
+            occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
             'system_id': system_id,
             'bus_number': bus_number,
@@ -78,10 +97,13 @@ class SQLPositionRepository(PositionRepository):
             'lat': lat,
             'lon': lon,
             'bearing': bearing,
-            'speed': speed
+            'speed': speed,
+            'occupancy': occupancy.name
         }
         if adherence:
             values['adherence'] = adherence.value
+        if timestamp:
+            values['timestamp'] = timestamp.value
         self.database.insert('position', values)
     
     def find(self, bus):
@@ -100,7 +122,9 @@ class SQLPositionRepository(PositionRepository):
                 'position.lon': 'position_lon',
                 'position.bearing': 'position_bearing',
                 'position.speed': 'position_speed',
-                'position.adherence': 'position_adherence'
+                'position.adherence': 'position_adherence',
+                'position.occupancy': 'position_occupancy',
+                'position.timestamp': 'position_timestamp'
             },
             filters={
                 'position.bus_number': bus_number
@@ -166,7 +190,9 @@ class SQLPositionRepository(PositionRepository):
                 'position.lon': 'position_lon',
                 'position.bearing': 'position_bearing',
                 'position.speed': 'position_speed',
-                'position.adherence': 'position_adherence'
+                'position.adherence': 'position_adherence',
+                'position.occupancy': 'position_occupancy',
+                'position.timestamp': 'position_timestamp'
             },
             filters=filters,
             initializer=Position.from_db

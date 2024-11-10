@@ -4,7 +4,6 @@ a {
 }
 
 body {
-    font-size: 13pt;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -34,6 +33,10 @@ form label {
 table {
     width: 100%;
     display: table;
+    font-size: 12pt;
+}
+
+table {
     font-size: 13pt;
 }
 
@@ -42,6 +45,7 @@ table {
 }
 
 #main {
+    font-size: 13pt;
     order: 6;
 }
 
@@ -74,7 +78,7 @@ table {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     align-items: center;
-    font-family: Helvetica, sans-serif;
+    font-family: var(--sans-serif-font);
 }
 
 #navigation-menu .menu-button {
@@ -142,6 +146,7 @@ table {
 #search-placeholder {
     font-size: 15pt;
     padding: 20px;
+    order: 3;
 }
 
 #search-results {
@@ -159,6 +164,10 @@ table {
     font-size: 12pt;
 }
 
+#settings.collapsed {
+    display: none !important;
+}
+
 #side-bar {
     order: 5;
 }
@@ -168,6 +177,7 @@ table {
 }
 
 #status .details {
+    align-items: center;
     text-align: center;
 }
 
@@ -215,6 +225,10 @@ table {
     font-size: 14pt;
     overflow: hidden;
     display: block;
+}
+
+button.compact {
+    width: unset;
 }
 
 .container > .section > .header > .toggle {

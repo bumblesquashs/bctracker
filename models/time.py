@@ -34,15 +34,21 @@ class Time:
         '''Returns the current time'''
         if not timezone:
             timezone = pytz.timezone('America/Vancouver')
-        now = datetime.now(timezone)
-        hour = now.hour
+        return cls.fromdatetime(datetime.now(timezone), timezone, accurate_seconds)
+    
+    @classmethod
+    def fromdatetime(cls, datetime, timezone=None, accurate_seconds=True):
+        '''Returns a time from the given datetime'''
+        if not timezone:
+            timezone = pytz.timezone('America/Vancouver')
+        hour = datetime.hour
         if hour < 4:
             hour += 24
         if accurate_seconds:
-            second = now.second
+            second = datetime.second
         else:
             second = None
-        return cls(hour, now.minute, second, timezone)
+        return cls(hour, datetime.minute, second, timezone)
     
     @classmethod
     def unknown(cls, timezone=None):
@@ -155,11 +161,14 @@ class Time:
             second = None
         return Time(hour, time.minute, second, self.timezone)
     
-    def get_minutes(self):
+    def get_minutes(self, round_seconds=False):
         '''Returns the total number of minutes in this time'''
         if self.is_unknown:
             return 0
-        return (self.hour * 60) + self.minute
+        minutes = (self.hour * 60) + self.minute
+        if round_seconds and self.second is not None and self.second >= 30:
+            minutes += 1
+        return minutes
     
     def format_db(self):
         '''Returns a string of this time formatted as HH:MM:SS'''

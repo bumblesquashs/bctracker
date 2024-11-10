@@ -29,10 +29,16 @@ class Date:
         '''Returns the current date'''
         if not timezone:
             timezone = pytz.timezone('America/Vancouver')
-        now = datetime.now(timezone)
-        if now.hour < 4:
-            now = now - timedelta(days=1)
-        return cls(now.year, now.month, now.day, timezone)
+        return cls.fromdatetime(datetime.now(timezone), timezone)
+    
+    @classmethod
+    def fromdatetime(cls, datetime, timezone=None):
+        '''Returns a date from the given datetime'''
+        if not timezone:
+            timezone = pytz.timezone('America/Vancouver')
+        if datetime.hour < 4:
+            datetime = datetime - timedelta(days=1)
+        return cls(datetime.year, datetime.month, datetime.day, timezone)
     
     @property
     def is_earlier(self):
@@ -122,6 +128,16 @@ class Date:
         if self.year == datetime.now().year:
             return self.datetime.strftime("%b %-d")
         return self.datetime.strftime("%b %-d, %Y")
+    
+    def format_month(self):
+        '''Returns a string of this date formatted as MMMM YYYY'''
+        return self.datetime.strftime("%B %Y")
+    
+    def format_day(self):
+        '''Returns a string of this date formatted as DD{ordinal}'''
+        day = self.day
+        ordinal = "th" if 4 <= day % 100 <= 20 else {1:"st",2:"nd",3:"rd"}.get(day % 10, "th")
+        return f'{day}{ordinal}'
     
     def format_since(self):
         '''Returns a string of the number of days, months, and years since this date'''

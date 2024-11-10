@@ -1,18 +1,13 @@
 
-@import "../light.css";
-
 :root {
     --tooltip-background: #000000;
-    --tooltip-text: #FFFFFF;
     
     --loading-background: rgba(0, 0, 0, 0);
     --loading-foreground: #000000;
     
-    --adherence-background: #989898;
-    --adherence-text: #FFFFFF;
-    
     --checkbox-color: #000000;
     --radio-button-color: #000000;
+    --toggle-button-color: #000000;
 }
 
 a {
@@ -140,6 +135,7 @@ table tr {
 
 #navigation-menu .menu-button.disabled {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 #navigation-menu-toggle .line {
@@ -366,7 +362,7 @@ table tr {
 }
 
 .info-box .section {
-    border-bottom-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.2);
 }
 
 .info-box .option {
@@ -417,8 +413,8 @@ table tr {
     background-color: rgba(255, 255, 255, 0.6);
 }
 
-.order-details .content .separator {
-    color: rgba(0, 0, 0, 0.5);
+.order-details .content {
+    --image-color: rgba(0, 0, 0, 0.5);
 }
 
 .paging .page {
@@ -493,4 +489,8 @@ table tr {
 
 .timeline .section:hover {
     border-color: #000000;
+}
+
+.timespan .time {
+    background-color: #ABABAB;
 }

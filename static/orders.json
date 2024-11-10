@@ -19,7 +19,8 @@
         "chevrolet-arboc-4500-sof-27": [
             { "year": 2020, "low": 2723, "high": 2756 },
             { "year": 2022, "low": 2802, "high": 2860 },
-            { "year": 2023, "low": 2861, "high": 2895 }
+            { "year": 2023, "low": 2861, "high": 2895 },
+            { "year": 2024, "low": 2896, "high": 2976 }
         ],
         "chevrolet-arboc-4500-som-28": [
             { "year": 2017, "low": 2641, "high": 2662 },
@@ -121,7 +122,8 @@
             { "year": 2019, "low": 1148, "high": 1185 },
             { "year": 2020, "low": 1186, "high": 1212 },
             { "year": 2021, "low": 1213, "high": 1232 },
-            { "year": 2022, "low": 1233, "high": 1253 }
+            { "year": 2022, "low": 1233, "high": 1253 },
+            { "year": 2024, "low": 1254, "high": 1261 }
         ],
         "nova-bus-lfs-2": [
             { "year": 2006, "low": 9201, "high": 9231 },
