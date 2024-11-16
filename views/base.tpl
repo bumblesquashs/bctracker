@@ -418,12 +418,12 @@
                         % for region_system in sorted(region_systems):
                             % if system and system == region_system:
                                 <div class="system-button current">
-                                    <img src="/img/icons/{{ region_system.agency.id }}.png" />
+                                    % include('components/agency_logo', agency=region_system.agency)
                                     <div>{{ region_system }}</div>
                                 </div>
                             % else:
                                 <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">
-                                    <img src="/img/icons/{{ region_system.agency.id }}.png" />
+                                    % include('components/agency_logo', agency=region_system.agency)
                                     <div>{{ region_system }}</div>
                                 </a>
                             % end

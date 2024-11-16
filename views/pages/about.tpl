@@ -123,6 +123,6 @@
                 </p>
                 <i> - James & Perrin, 2024 </i> 
             </div>  
-        </div>     
+        </div>
     </div>
 </div>

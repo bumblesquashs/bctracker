@@ -208,7 +208,6 @@ table th {
 #system-menu {
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    text-align: center;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
@@ -220,6 +219,7 @@ table th {
 #system-menu .header {
     grid-column-end: span 2;
     font-size: 15pt;
+    text-align: center;
 }
 
 #system-menu .system-button {

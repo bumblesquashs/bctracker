@@ -37,6 +37,8 @@ class Route:
         name = row[f'{prefix}_name']
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
+        if system.agency.prefer_route_id:
+            number = id
         return cls(system, id, number, name, colour, text_colour)
     
     @property

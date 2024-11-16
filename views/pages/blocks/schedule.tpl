@@ -124,17 +124,20 @@
                             % count = len(region_system.get_blocks())
                             <tr>
                                 <td>
-                                    <div class="column">
-                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                        <span class="mobile-only smaller-font">
-                                            % if region_system.gtfs_loaded:
-                                                % if count == 1:
-                                                    1 Block
-                                                % else:
-                                                    {{ count }} Blocks
+                                    <div class="row">
+                                        % include('components/agency_logo', agency=region_system.agency)
+                                        <div class="column">
+                                            <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
+                                            <span class="mobile-only smaller-font">
+                                                % if region_system.gtfs_loaded:
+                                                    % if count == 1:
+                                                        1 Block
+                                                    % else:
+                                                        {{ count }} Blocks
+                                                    % end
                                                 % end
-                                            % end
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
                                 % if region_system.gtfs_loaded:

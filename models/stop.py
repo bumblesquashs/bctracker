@@ -9,6 +9,8 @@ from models.schedule import Schedule
 
 from repositories import DepartureRepository, SystemRepository
 
+import helpers
+
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
@@ -17,6 +19,7 @@ class Stop:
         'system',
         'id',
         'number',
+        'key',
         'name',
         'lat',
         'lon'
@@ -32,6 +35,8 @@ class Stop:
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
+        if system.agency.prefer_stop_id:
+            number = id
         return cls(system, id, number, name, lat, lon)
     
     @property
@@ -68,6 +73,8 @@ class Stop:
         self.lat = lat
         self.lon = lon
         
+        self.key = helpers.key(number)
+        
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
@@ -81,7 +88,7 @@ class Stop:
     
     def __lt__(self, other):
         if self.name == other.name:
-            return self.number < other.number
+            return self.key < other.key
         return self.name < other.name
     
     def get_json(self):

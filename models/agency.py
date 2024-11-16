@@ -11,6 +11,8 @@ class Agency:
         'enabled',
         'prefix_headsigns',
         'accurate_seconds',
+        'prefer_route_id',
+        'prefer_stop_id',
         'vehicle_name_length',
         'distance_scale'
     )
@@ -34,6 +36,8 @@ class Agency:
         self.enabled = kwargs.get('enabled', True)
         self.prefix_headsigns = kwargs.get('prefix_headsigns', False)
         self.accurate_seconds = kwargs.get('accurate_seconds', True)
+        self.prefer_route_id = kwargs.get('prefer_route_id', False)
+        self.prefer_stop_id = kwargs.get('prefer_stop_id', False)
         self.vehicle_name_length = kwargs.get('vehicle_name_length')
         self.distance_scale = kwargs.get('distance_scale', 1)
     

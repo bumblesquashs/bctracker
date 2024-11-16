@@ -21,7 +21,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 47
+VERSION = 48
 
 random = Random()
 
@@ -1055,7 +1055,7 @@ class Server(Bottle):
             for route_number in routes_filter:
                 stops = [s for s in stops if route_number in {r.number for r in s.routes}]
             if sort == 'number':
-                stops.sort(key=lambda s: s.number, reverse=sort_order == 'desc')
+                stops.sort(key=lambda s: s.key, reverse=sort_order == 'desc')
             elif sort == 'name':
                 stops.sort(key=lambda s: s.name, reverse=sort_order == 'desc')
             total_items = len(stops)
@@ -1261,7 +1261,10 @@ class Server(Bottle):
         self.set_cookie('random', 'kumquat')
         systems = list(self.system_repository.find_all())
         system = random.choice(systems)
-        selection = random.choice(['bus', 'route', 'stop', 'block', 'trip'])
+        options = ['route', 'stop', 'block', 'trip']
+        if system.agency.realtime_enabled:
+            options.append('bus')
+        selection = random.choice(options)
         match selection:
             case 'bus':
                 overviews = system.get_overviews()

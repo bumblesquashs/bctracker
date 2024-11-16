@@ -31,7 +31,10 @@
             % for region_system in sorted(region_systems):
                 <tr>
                     <td>
-                        <a href="{{ get_url(region_system) }}">{{ region_system }}</a>
+                        <div class="row">
+                            % include('components/agency_logo', agency=region_system.agency)
+                            <a href="{{ get_url(region_system) }}">{{ region_system }}</a>
+                        </div>
                     </td>
                     <td class="non-desktop">
                         <div class="column">

@@ -81,7 +81,7 @@
             </div>
         % end
         
-        % alt_systems = [s for s in systems if s.get_stop(number=stop.number) and s != system]
+        % alt_systems = [s for s in systems if s.get_stop(number=stop.number) and s != system and s.agency == system.agency]
         % if alt_systems:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
