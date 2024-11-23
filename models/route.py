@@ -42,6 +42,11 @@ class Route:
         return cls(system, id, number, name, colour, text_colour)
     
     @property
+    def url_id(self):
+        '''The ID to use when making route URLs'''
+        return self.number
+    
+    @property
     def display_name(self):
         '''Formats the route name for web display'''
         return self.name.replace('/', '/<wbr />')

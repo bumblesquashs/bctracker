@@ -8,8 +8,8 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'routes', route) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'routes', route, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -26,14 +26,14 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="icon button" href="{{ get_url(system, f'routes/{route.number}/schedule/{previous_date.format_db()}') }}">
+                        <a class="icon button" href="{{ get_url(system, 'routes', 'route, 'schedule', previous_date) }}">
                             % include('components/svg', name='left')
                         </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
-                            <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">Return to week view</a>
+                            <a href="{{ get_url(system, 'routes', route, 'schedule') }}">Return to week view</a>
                         </div>
-                        <a class="icon button" href="{{ get_url(system, f'routes/{route.number}/schedule/{next_date.format_db()}') }}">
+                        <a class="icon button" href="{{ get_url(system, 'routes', route, 'schedule', next_date) }}">
                             % include('components/svg', name='right')
                         </a>
                     </div>
@@ -90,7 +90,8 @@
                                                         % include('components/headsign')
                                                     </td>
                                                     <td class="non-mobile">
-                                                        <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                        % block = trip.block
+                                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                                     </td>
                                                     <td>
                                                         <div class="column">
@@ -101,7 +102,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="desktop-only">
-                                                        <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                        <a href="{{ get_url(first_stop.system, 'stops', first_stop) }}">{{ first_stop }}</a>
                                                     </td>
                                                 </tr>
                                                 % last_start_time = start_time

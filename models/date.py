@@ -41,6 +41,11 @@ class Date:
         return cls(datetime.year, datetime.month, datetime.day, timezone)
     
     @property
+    def url_id(self):
+        '''The ID to use when making date URLs'''
+        return self.format_db()
+    
+    @property
     def is_earlier(self):
         '''Checks if this date is before the current date'''
         return self < Date.today(self.timezone)

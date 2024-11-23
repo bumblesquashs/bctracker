@@ -40,6 +40,11 @@ class Stop:
         return cls(system, id, number, name, lat, lon)
     
     @property
+    def url_id(self):
+        '''The ID to use when making stop URLs'''
+        return self.number
+    
+    @property
     def nearby_stops(self):
         '''Returns all stops with coordinates close to this stop'''
         stops = self.system.get_stops()

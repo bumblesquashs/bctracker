@@ -20,6 +20,11 @@ class Bus:
         return cls(number, order)
     
     @property
+    def url_id(self):
+        '''The ID to use when making bus URLs'''
+        return self.number
+    
+    @property
     def is_known(self):
         '''Checks if the bus number is known'''
         return self.number >= 0

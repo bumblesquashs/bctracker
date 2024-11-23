@@ -5,10 +5,10 @@
     <h1>Trip {{! trip.display_id }}</h1>
     <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'trips', trip) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
         % if system.realtime_enabled:
-            <a href="{{ get_url(system, f'trips/{trip.id}/history') }}" class="tab-button">History</a>
+            <a href="{{ get_url(system, 'trips', trip, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>

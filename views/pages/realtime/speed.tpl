@@ -7,9 +7,9 @@
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
         % if system:
-            <a href="{{ get_url(system, 'realtime/routes') }}" class="tab-button">By Route</a>
+            <a href="{{ get_url(system, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
-        <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(system, 'realtime', 'models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
 </div>
@@ -81,20 +81,20 @@
                                 </div>
                                 % if stop:
                                     <div class="non-desktop smaller-font">
-                                        Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
                                     </div>
                                 % end
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')
                         </td>
                         <td class="desktop-only">
                             % if stop:
-                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
                             % else:
                                 <span class="lighter-text">Unavailable</span>
                             % end
@@ -144,6 +144,6 @@
 
 <script>
     function toggleNISBuses() {
-        window.location = "{{ get_url(system, 'realtime/speed', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ get_url(system, 'realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

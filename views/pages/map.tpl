@@ -361,7 +361,7 @@
         
         function updatePositionData() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
+            request.open("GET", "{{get_url(system, 'api', 'map.json')}}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {

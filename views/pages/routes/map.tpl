@@ -141,7 +141,7 @@
         
         document.body.onload = function() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(system, 'api/routes') }}", true);
+            request.open("GET", "{{ get_url(system, 'api', 'routes') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {

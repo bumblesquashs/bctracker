@@ -7,9 +7,9 @@
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
         <span class="tab-button current">By Route</span>
-        <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(system, 'realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
-            <a href="{{ get_url(system, 'realtime/speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ get_url(system, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Dennis Hopper and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
@@ -106,20 +106,20 @@
                                             </div>
                                             % if stop:
                                                 <div class="non-desktop smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                    Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
                                                 </div>
                                             % end
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
                                         % if stop:
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                            <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
                                         % else:
                                             <span class="lighter-text">Unavailable</span>
                                         % end
@@ -216,6 +216,6 @@
 
 <script>
     function toggleNISBuses() {
-        window.location = "{{ get_url(system, 'realtime/routes', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ get_url(system, 'realtime', 'routes', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

@@ -7,11 +7,11 @@
     <div class="tab-button-bar">
         <span class="tab-button current">All Buses</span>
         % if system:
-            <a href="{{ get_url(system, 'realtime/routes') }}" class="tab-button">By Route</a>
+            <a href="{{ get_url(system, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
-        <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(system, 'realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
-            <a href="{{ get_url(system, 'realtime/speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ get_url(system, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Sandra Bullock and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end

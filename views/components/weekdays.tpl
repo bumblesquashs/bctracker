@@ -14,7 +14,7 @@
             % status = ''
         % end
         % if schedule_path and schedule and weekday in schedule.weekdays:
-            <a class="weekday {{ status }}" href="{{ get_url(system, f'{schedule_path}#{weekday.short_name}{path_suffix}') }}">{{ name }}</a>
+            <a class="weekday {{ status }}" href="{{ get_url(system, schedule_path, f'#{weekday.short_name}{path_suffix}') }}">{{ name }}</a>
         % else:
             <span class="weekday {{ status }}">{{ name }}</span>
         % end

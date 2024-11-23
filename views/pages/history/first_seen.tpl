@@ -6,7 +6,7 @@
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
         <span class="tab-button current">First Seen</span>
-        <a href="{{ get_url(system, 'history/transfers') }}" class="tab-button">Transfers</a>
+        <a href="{{ get_url(system, 'history', 'transfers') }}" class="tab-button">Transfers</a>
     </div>
 </div>
 
@@ -63,7 +63,7 @@
                         <div class="column">
                             % if record.is_available:
                                 % block = record.block
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                             % else:
                                 <span>{{ record.block_id }}</span>
                             % end

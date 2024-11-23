@@ -32,20 +32,20 @@
                 </div>
                 % if stop:
                     <div class="non-desktop smaller-font">
-                        Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                        Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
                     </div>
                 % end
             </div>
         </td>
         <td class="non-mobile">
-            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
         </td>
         <td class="non-mobile">
             % include('components/trip')
         </td>
         <td class="desktop-only">
             % if stop:
-                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
             % else:
                 <span class="lighter-text">Unavailable</span>
             % end

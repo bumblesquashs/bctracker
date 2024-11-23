@@ -5,7 +5,7 @@
     <h1>Blocks</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'blocks/schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(system, 'blocks', 'schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -91,7 +91,7 @@
                                         <tr>
                                             <td>
                                                 <div class="column">
-                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                                     <div class="mobile-only smaller-font">{{ start_time }} - {{ end_time }}</div>
                                                 </div>
                                             </td>
@@ -128,7 +128,7 @@
                             <div class="placeholder">
                                 % if system.gtfs_loaded:
                                     <h3>There are no blocks today</h3>
-                                    <p>You can check the <a href="{{ get_url(system, 'blocks/schedule') }}">full schedule</a> for more information about when this system operates.</p>
+                                    <p>You can check the <a href="{{ get_url(system, 'blocks', 'schedule') }}">full schedule</a> for more information about when this system operates.</p>
                                 % else:
                                     <h3>Blocks are unavailable</h3>
                                     <p>System data is currently loading and will be available soon.</p>

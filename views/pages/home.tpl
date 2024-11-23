@@ -27,7 +27,7 @@
                             if (isNaN(value)) {
                                 alert("Please enter a valid bus number")
                             } else {
-                                window.location = "{{ get_url(system) }}/bus/" + value;
+                                window.location = "{{ get_url(system, 'bus') }}/" + value;
                             }
                         }
                     }
@@ -35,7 +35,7 @@
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system) }}/routes/" + value;
+                            window.location = "{{ get_url(system, 'routes') }}/" + value;
                         }
                     }
                     
@@ -43,9 +43,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(system) }}/stops?search=" + value;
+                                window.location = "{{ get_url(system, 'stops') }}?search=" + value;
                             } else {
-                                window.location = "{{ get_url(system) }}/stops/" + value;
+                                window.location = "{{ get_url(system, 'stops') }}/" + value;
                             }
                         }
                     }
@@ -53,7 +53,7 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system) }}/blocks/" + value;
+                            window.location = "{{ get_url(system, 'blocks') }}/" + value;
                         }
                     }
                 </script>
@@ -191,7 +191,7 @@
                                                         <td>
                                                             <div class="row">
                                                                 % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.system, f'routes/{value.number}') }}">{{! value.display_name }}</a>
+                                                                <a href="{{ get_url(value.system, 'routes', value) }}">{{! value.display_name }}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -224,7 +224,7 @@
                                                     % value = favourite.value
                                                     <tr>
                                                         <td>
-                                                            <a href="{{ get_url(value.system, f'stops/{value.number}') }}">{{ value.number }}</a>
+                                                            <a href="{{ get_url(value.system, 'stops', value) }}">{{ value.number }}</a>
                                                         </td>
                                                         <td>{{ value.name }}</td>
                                                     </tr>

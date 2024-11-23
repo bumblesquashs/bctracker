@@ -13,8 +13,8 @@
     <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -39,7 +39,7 @@
                             % for route in routes:
                                 <div class="row">
                                     % include('components/route')
-                                    <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                    <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
                                 </div>
                             % end
                         </div>
@@ -67,7 +67,7 @@
                         <tbody>
                             % for nearby_stop in nearby_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(nearby_stop.system, f'stops/{nearby_stop.number}') }}">{{ nearby_stop.number }}</a></td>
+                                    <td><a href="{{ get_url(nearby_stop.system, 'stops', nearby_stop) }}">{{ nearby_stop.number }}</a></td>
                                     <td class="non-mobile">{{ nearby_stop }}</td>
                                     <td>
                                         <div class="mobile-only">{{ nearby_stop }}</div>
@@ -100,7 +100,7 @@
                             % for alt_system in alt_systems:
                                 % alt_stop = alt_system.get_stop(number=stop.number)
                                 <tr>
-                                    <td><a href="{{ get_url(alt_system, f'stops/{stop.number}') }}">{{ alt_system }}</a></td>
+                                    <td><a href="{{ get_url(alt_system, 'stops', stop) }}">{{ alt_system }}</a></td>
                                     <td>
                                         % include('components/route_list', routes=alt_stop.routes)
                                     </td>
@@ -163,7 +163,7 @@
                         <div class="placeholder">
                             <p>
                                 There are no departures for the rest of today.
-                                <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                                <a href="{{ get_url(stop.system, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                             </p>
                         </div>
                     % end
@@ -215,7 +215,7 @@
                     <div class="placeholder">
                         % if system.gtfs_loaded:
                             <h3>There are no departures from this stop today</h3>
-                            <p>You can check the <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                            <p>You can check the <a href="{{ get_url(system, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                         % else:
                             <h3>Departures for this stop are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>

@@ -204,8 +204,15 @@ class Server(Bottle):
         if cp.server.running:
             cp.server.stop()
     
-    def get_url(self, system, path='', **kwargs):
+    def get_url(self, system, *args, **kwargs):
         '''Returns a URL formatted based on the given system and path'''
+        components = []
+        for arg in args:
+            try:
+                components.append(str(arg.url_id))
+            except AttributeError:
+                components.append(str(arg))
+        path = '/'.join(components)
         system_id = getattr(system, 'id', system)
         if system_id:
             url = self.settings.system_domain.format(system_id, path).rstrip('/')
@@ -1271,31 +1278,31 @@ class Server(Bottle):
                 if not overviews:
                     redirect(self.get_url(system))
                 overview = random.choice(overviews)
-                redirect(self.get_url(system, f'bus/{overview.bus.number}'))
+                redirect(self.get_url(system, 'bus', overview.bus))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
                     redirect(self.get_url(system))
                 route = random.choice(routes)
-                redirect(self.get_url(system, f'routes/{route.number}'))
+                redirect(self.get_url(system, 'routes', route))
             case 'stop':
                 stops = system.get_stops()
                 if not stops:
                     redirect(self.get_url(system))
                 stop = random.choice(stops)
-                redirect(self.get_url(system, f'stops/{stop.number}'))
+                redirect(self.get_url(system, 'stops', stop))
             case 'block':
                 blocks = system.get_blocks()
                 if not blocks:
                     redirect(self.get_url(system))
                 block = random.choice(blocks)
-                redirect(self.get_url(system, f'blocks/{block.id}'))
+                redirect(self.get_url(system, 'blocks', block))
             case 'trip':
                 trips = list(system.get_trips())
                 if not trips:
                     redirect(self.get_url(system))
                 trip = random.choice(trips)
-                redirect(self.get_url(system, f'trips/{trip.id}'))
+                redirect(self.get_url(system, 'trips', trip))
     
     def admin(self, system, agency):
         return self.page(

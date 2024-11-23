@@ -185,7 +185,7 @@
                             <tbody>
                                 % for stop in stops:
                                     <tr>
-                                        <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
+                                        <td><a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop.number }}</a></td>
                                         <td>
                                             {{ stop }}
                                             <div class="mobile-only">

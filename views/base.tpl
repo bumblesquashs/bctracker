@@ -50,7 +50,7 @@
         % end
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ get_url(system, path) }}" />
-        <meta property="og:image" content="{{ get_url(system, 'img/meta-logo.png') }}" />
+        <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -553,7 +553,7 @@
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
-            request.open("POST", "{{get_url(system, 'api/search')}}", true);
+            request.open("POST", "{{get_url(system, 'api', 'search')}}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (timestamp !== lastSearchTimestamp) {

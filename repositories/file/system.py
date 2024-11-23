@@ -39,4 +39,4 @@ class FileSystemRepository(SystemRepository):
     
     def find_all(self):
         '''Returns all systems'''
-        return sorted([s for s in self.systems.values() if s.enabled])
+        return [s for s in self.systems.values() if s.enabled]

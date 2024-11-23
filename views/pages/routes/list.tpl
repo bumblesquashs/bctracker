@@ -5,7 +5,7 @@
     <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
-        <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'routes', 'map') }}" class="tab-button">Map</a>
     </div>
 </div>
 
@@ -25,7 +25,7 @@
                         <td>
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </td>
                         <td class="non-mobile">

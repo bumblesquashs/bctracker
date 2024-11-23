@@ -56,7 +56,7 @@
                                 % for date in month_dates:
                                     % status = sheet.get_date_status(date)
                                     % if schedule_path:
-                                        <a class="date {{ status }}" href="{{ get_url(system, f'{date_path}/{date.format_db()}') }}">{{ date.day }}</a>
+                                        <a class="date {{ status }}" href="{{ get_url(system, date_path, date) }}">{{ date.day }}</a>
                                     % else:
                                         <span class="date {{ status }}">{{ date.day }}</span>
                                     % end

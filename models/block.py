@@ -21,6 +21,11 @@ class Block:
     )
     
     @property
+    def url_id(self):
+        '''The ID to use when making block URLs'''
+        return self.id
+    
+    @property
     def related_blocks(self):
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         if self._related_blocks is None:

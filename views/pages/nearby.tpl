@@ -147,7 +147,7 @@
         
         if (systemSelected) {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'frame/nearby')}}?lat=" + lat + "&lon=" + lon, true);
+            request.open("GET", "{{get_url(system, 'frame', 'nearby')}}?lat=" + lat + "&lon=" + lon, true);
             request.onload = function() {
                 if (request.status === 200) {
                     if (request.response === null) {
@@ -171,7 +171,7 @@
     
     function loadMapMarkers(lat, lon) {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{get_url(system, 'api/nearby.json')}}?lat=" + lat + "&lon=" + lon, true);
+        request.open("GET", "{{get_url(system, 'api', 'nearby.json')}}?lat=" + lat + "&lon=" + lon, true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {
