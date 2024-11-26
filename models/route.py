@@ -37,13 +37,13 @@ class Route:
         name = row[f'{prefix}_name']
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
-        if system.agency.prefer_route_id:
-            number = id
         return cls(system, id, number, name, colour, text_colour)
     
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
+        if self.system.agency.prefer_route_id:
+            return self.id
         return self.number
     
     @property

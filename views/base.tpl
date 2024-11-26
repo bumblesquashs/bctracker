@@ -49,7 +49,7 @@
             <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
         % end
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(system, path) }}" />
+        <meta property="og:url" content="{{ get_url(system, *path) }}" />
         <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
@@ -407,7 +407,7 @@
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
                 % if system:
-                    <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % end
@@ -422,7 +422,7 @@
                                     <div>{{ region_system }}</div>
                                 </div>
                             % else:
-                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">
+                                <a href="{{ get_url(region_system, *path, **path_args) }}" class="system-button">
                                     % include('components/agency_logo', agency=region_system.agency)
                                     <div>{{ region_system }}</div>
                                 </a>

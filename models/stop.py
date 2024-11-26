@@ -35,13 +35,13 @@ class Stop:
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
-        if system.agency.prefer_stop_id:
-            number = id
         return cls(system, id, number, name, lat, lon)
     
     @property
     def url_id(self):
         '''The ID to use when making stop URLs'''
+        if self.system.agency.prefer_stop_id:
+            return self.id
         return self.number
     
     @property
