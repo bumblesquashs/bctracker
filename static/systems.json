@@ -92,7 +92,8 @@
             },
             "kelowna": {
                 "name": "Kelowna",
-                "remote_id": 47
+                "remote_id": 47,
+                "colour_routes": "000000"
             },
             "merritt": {
                 "name": "Merritt",
@@ -114,7 +115,8 @@
             },
             "west-kootenay": {
                 "name": "West Kootenay",
-                "remote_id": 20
+                "remote_id": 20,
+                "colour_routes": "000000"
             }
         },
         "northern-bc": {
