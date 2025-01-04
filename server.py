@@ -232,12 +232,6 @@ class Server(Bottle):
         '''Returns an HTML page with the given name and details'''
         is_admin = self.validate_admin()
         
-        theme_id = self.query_cookie('theme')
-        theme = self.theme_repository.find(theme_id)
-        if not theme:
-            theme = self.theme_repository.find('bc-transit')
-        theme_variant = self.query_cookie('theme_variant')
-        high_contrast = self.query_cookie('high_contrast') == 'enabled'
         time_format = self.query_cookie('time_format')
         bus_marker_style = self.query_cookie('bus_marker_style')
         hide_systems = self.query_cookie('hide_systems') == 'yes'
@@ -251,6 +245,17 @@ class Server(Bottle):
             today = Date.today()
             now = Time.now()
             timestamp = Timestamp.now()
+        theme_id = self.query_cookie('theme')
+        theme = self.theme_repository.find(theme_id)
+        if not theme:
+            if today.month == 10 and today.day == 31:
+                theme = self.theme_repository.find('halloween')
+            elif today.month == 12 and today.day == 25:
+                theme = self.theme_repository.find('christmas')
+            else:
+                theme = self.theme_repository.find('bc-transit')
+        theme_variant = self.query_cookie('theme_variant')
+        high_contrast = self.query_cookie('high_contrast') == 'enabled'
         return template(f'pages/{name}',
             di=di,
             settings=self.settings,
