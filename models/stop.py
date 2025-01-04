@@ -104,7 +104,8 @@ class Stop:
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.get_json() for r in self.routes]
+            'routes': [r.get_json() for r in self.routes],
+            'url_id': self.url_id
         }
     
     def get_match(self, query):

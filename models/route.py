@@ -110,7 +110,8 @@ class Route:
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'colour': self.colour,
-            'text_colour': self.text_colour
+            'text_colour': self.text_colour,
+            'url_id': self.url_id
         }
     
     def get_indicator_json(self):
@@ -124,7 +125,8 @@ class Route:
                 'colour': self.colour,
                 'text_colour': self.text_colour,
                 'lat': point.lat,
-                'lon': point.lon
+                'lon': point.lon,
+                'url_id': self.url_id
             })
         return json
     

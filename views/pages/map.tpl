@@ -148,7 +148,7 @@
                     icon = document.createElement("div");
                 } else {
                     icon = document.createElement("a");
-                    icon.href = "/bus/" + position.bus_number;
+                    icon.href = getUrl(systemID, "bus/" + position.bus_url_id);
                     icon.innerHTML = "<div class='link'></div>"
                 }
                 icon.className = "icon";

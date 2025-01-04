@@ -134,7 +134,7 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                icon.href = "/bus/" + position.bus_number;
+                icon.href = getUrl(systemID, "bus/" + position.bus_url_id);
                 icon.innerHTML = "<div class='link'></div>";
             }
             icon.className = "icon";
@@ -290,7 +290,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             
             const details = document.createElement("div");
@@ -351,7 +351,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             

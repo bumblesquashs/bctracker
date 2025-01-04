@@ -138,6 +138,7 @@ class Position:
         data = {
             'bus_number': self.bus.number,
             'bus_display': str(self.bus),
+            'bus_url_id': str(self.bus.url_id),
             'system': str(self.system),
             'lon': self.lon,
             'lat': self.lat,

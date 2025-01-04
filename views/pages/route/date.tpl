@@ -26,7 +26,7 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="icon button" href="{{ get_url(system, 'routes', 'route, 'schedule', previous_date) }}">
+                        <a class="icon button" href="{{ get_url(system, 'routes', route, 'schedule', previous_date) }}">
                             % include('components/svg', name='left')
                         </a>
                         <div class="centred">
