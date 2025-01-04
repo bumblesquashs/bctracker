@@ -82,5 +82,5 @@ class FileOrderRepository(OrderRepository):
                 adornment = bus.find_adornment()
                 if adornment and adornment.enabled:
                     bus_number_string += f' {adornment}'
-                matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.number}', value))
+                matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.url_id}', value))
         return matches

@@ -34,6 +34,8 @@ class Route:
         system = system_repository.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
+        if not number:
+            number = id
         name = row[f'{prefix}_name']
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'

@@ -196,7 +196,7 @@
                                             % include('components/route_list', routes=stop.routes)
                                         </td>
                                         <td class="desktop-only">
-                                            % include('components/weekdays', schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.number}/schedule')
+                                            % include('components/weekdays', schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.url_id}/schedule')
                                         </td>
                                     </tr>
                                 % end

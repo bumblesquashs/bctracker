@@ -26,7 +26,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheet_list', sheets=sheets, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheet_list', sheets=sheets, schedule_path=f'routes/{route.url_id}/schedule')
                         </div>
                     </div>
                 </div>

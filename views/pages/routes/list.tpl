@@ -29,7 +29,7 @@
                             </div>
                         </td>
                         <td class="non-mobile">
-                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
                         </td>
                     </tr>
                 % end

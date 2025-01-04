@@ -38,7 +38,7 @@
                         </a>
                     </div>
                     <div class="section">
-                        % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
+                        % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.url_id}/schedule')
                     </div>
                 </div>
             </div>

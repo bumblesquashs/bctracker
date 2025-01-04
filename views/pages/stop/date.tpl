@@ -38,7 +38,7 @@
                         </a>
                     </div>
                     <div class="section">
-                        % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
+                        % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.url_id}/schedule')
                     </div>
                 </div>
             </div>
