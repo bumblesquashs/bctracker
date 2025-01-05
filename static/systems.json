@@ -75,6 +75,8 @@
             "ashcroft-clinton": {
                 "name": "Ashcroft-Clinton",
                 "remote_id": 38,
+                "preposition":"in the",
+                "regional": true,
                 "colour_routes": "000000"
             },
             "clearwater": {

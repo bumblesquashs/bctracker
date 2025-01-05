@@ -17,10 +17,14 @@ class SQLStopRepository(StopRepository):
     def create(self, system, row):
         '''Inserts a new stop into the database'''
         system_id = getattr(system, 'id', system)
+        stop_id = row['stop_id']
+        number = row['stop_code']
+        if not number:
+            number = stop_id
         self.database.insert('stop', {
             'system_id': system_id,
-            'stop_id': row['stop_id'],
-            'number': row['stop_code'],
+            'stop_id': stop_id,
+            'number': number,
             'name': row['stop_name'],
             'lat': float(row['stop_lat']),
             'lon': float(row['stop_lon'])

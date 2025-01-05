@@ -3,7 +3,7 @@ from di import di
 
 from models.bus import Bus
 
-from repositories import RouteRepository, StopRepository
+from repositories import RouteRepository, StopRepository, SystemRepository
 
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
@@ -21,11 +21,21 @@ class Favourite:
         if type == 'vehicle':
             value = Bus.find(parts[1], int(parts[2]))
         elif type == 'route':
+            system_repository = kwargs.get('system_repository') or di[SystemRepository]
             route_repository = kwargs.get('route_repository') or di[RouteRepository]
-            value = route_repository.find(parts[1], number=parts[2])
+            system = system_repository.find(parts[1])
+            if system.agency.prefer_route_id:
+                value = route_repository.find(system, route_id=parts[2])
+            else:
+                value = route_repository.find(system, number=parts[2])
         elif type == 'stop':
+            system_repository = kwargs.get('system_repository') or di[SystemRepository]
             stop_repository = kwargs.get('stop_repository') or di[StopRepository]
-            value = stop_repository.find(parts[1], number=parts[2])
+            system = system_repository.find(parts[1])
+            if system.agency.prefer_stop_id:
+                value = stop_repository.find(system, stop_id=parts[2])
+            else:
+                value = stop_repository.find(system, number=parts[2])
         else:
             value = None
         if value:
@@ -42,10 +52,16 @@ class Favourite:
             number = str(self.value.number)
         elif self.type == 'route':
             source = self.value.system.id
-            number = self.value.number
+            if self.value.system.agency.prefer_route_id:
+                number = self.value.id
+            else:
+                number = self.value.number
         elif self.type == 'stop':
             source = self.value.system.id
-            number = self.value.number
+            if self.value.system.agency.prefer_stop_id:
+                number = self.value.id
+            else:
+                number = self.value.number
         else:
             source = ''
             number = ''

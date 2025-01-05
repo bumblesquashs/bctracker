@@ -158,7 +158,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.number}', value)
+        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
     def find_departures(self):
         '''Returns all departures for this route'''

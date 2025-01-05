@@ -128,7 +128,7 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.number}', value)
+        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''

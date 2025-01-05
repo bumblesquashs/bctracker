@@ -39,7 +39,7 @@
                             % include('components/route')
                             <div>{{! route.display_name }}</div>
                         </h2>
-                        <a href="{{ get_url(route.system, f'routes/{route.url_id}') }}">View schedule and details</a>
+                        <a href="{{ get_url(route.system, 'routes', route) }}">View schedule and details</a>
                     </div>
                     % include('components/toggle')
                 </div>
