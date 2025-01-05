@@ -1079,8 +1079,8 @@ class Server(Bottle):
             stops = system.get_stops()
             if search:
                 stops = [s for s in stops if search.lower() in s.name.lower()]
-            for route_number in routes_filter:
-                stops = [s for s in stops if route_number in {r.number for r in s.routes}]
+            for route_url_id in routes_filter:
+                stops = [s for s in stops if route_url_id in {r.url_id for r in s.routes}]
             if sort == 'number':
                 stops.sort(key=lambda s: s.key, reverse=sort_order == 'desc')
             elif sort == 'name':

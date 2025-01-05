@@ -37,7 +37,6 @@
                         </div>
                         <div class="content">
                             <p>
-                                Transit in Vancouver is operated by <a href="https://www.translink.ca/">Translink</a> rather than BC Transit, making it harder to integrate smoothly.
                                 There are numerous websites providing transit schedules and realtime information for Vancouver, including <a href="https://tcomm.bustrainferry.com/">T-Comm</a> and <a href="https://sorrybusfull.com/">Sorry Bus Full</a>.
                                 BCTracker was created specifically because there were no equivalent websites for the rest of the province.
                             </p>

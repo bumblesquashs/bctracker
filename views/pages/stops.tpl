@@ -114,12 +114,12 @@
                         <div class="section">
                             <div class="options-container">
                                 % for route in system.get_routes():
-                                    <div class="option space-between" onclick="toggleRouteFilter('{{ route.number }}')">
+                                    <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
                                         <div class="row">
                                             % include('components/route')
                                             {{! route.display_name }}
                                         </div>
-                                        <div class="checkbox {{ 'selected' if route.number in routes_filter else '' }}">
+                                        <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
                                             % include('components/svg', name='check')
                                         </div>
                                     </div>

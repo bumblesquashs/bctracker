@@ -28,7 +28,7 @@
             <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ system }}, {{ system.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
-            <meta name="keywords" content="Transit, British Columbiam, Bus Tracking" />
+            <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
         % end
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
