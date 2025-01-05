@@ -196,11 +196,7 @@
                                         % include('components/order', order=bus.order)
                                     </td>
                                     <td>
-                                        % if stop:
-                                            <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
-                                        % else:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % end
+                                        % include('components/stop')
                                     </td>
                                 </tr>
                             % end
@@ -257,7 +253,8 @@
                                             </div>
                                             % if stop:
                                                 <div class="mobile-only smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
                                                 </div>
                                             % end
                                         </div>
@@ -266,11 +263,7 @@
                                         % include('components/trip', include_tooltip=False, trip=position.trip)
                                     </td>
                                     <td class="non-mobile">
-                                        % if stop:
-                                            <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
-                                        % else:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % end
+                                        % include('components/stop')
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="3">Not In Service</td>
@@ -295,9 +288,7 @@
                     <thead>
                         <tr>
                             <th>Time</th>
-                            <th class="non-mobile">Stop Number</th>
-                            <th class="non-mobile">Stop Name</th>
-                            <th class="mobile-only">Stop</th>
+                            <th>Stop</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -309,25 +300,7 @@
                                 </td>
                                 <td>
                                     <div class="column">
-                                        <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop.number }}</a>
-                                        <span class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</span>
-                                        % if not departure.pickup_type.is_normal:
-                                            <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
-                                        % elif departure == departures[-1]:
-                                            <span class="mobile-only smaller-font italics">No pick up</span>
-                                        % end
-                                        % if not departure.dropoff_type.is_normal:
-                                            <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
-                                        % elif departure == departures[0]:
-                                            <span class="mobile-only smaller-font italics">No drop off</span>
-                                        % end
-                                    </div>
-                                </td>
-                                <td class="non-mobile">
-                                    <div class="column">
-                                        <span class="{{ 'timing-point' if departure.timepoint else '' }}">
-                                            {{ stop }}
-                                        </span>
+                                        % include('components/stop', timepoint=departure.timepoint)
                                         % if not departure.pickup_type.is_normal:
                                             <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                         % elif departure == departures[-1]:

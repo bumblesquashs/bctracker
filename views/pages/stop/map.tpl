@@ -3,10 +3,9 @@
 
 <div id="page-header">
     <h1 class="row">
-        <span>Stop {{ stop.number }}</span>
+        % include('components/stop', include_link=False)
         % include('components/favourite')
     </h1>
-    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'stops', stop) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>

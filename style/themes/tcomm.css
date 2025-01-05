@@ -12,6 +12,10 @@
     --checkbox-color: #5E87B0;
     --radio-button-color: #5E87B0;
     --toggle-button-color: #5E87B0;
+    
+    --stop-number-background: #FFFFFF;
+    --stop-number-text: #000000;
+    --stop-number-border: #000000;
 }
 
 a {

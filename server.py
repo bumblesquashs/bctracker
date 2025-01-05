@@ -1065,6 +1065,8 @@ class Server(Bottle):
         else:
             routes_filter = []
         sort = self.query_options('sort', ['name', 'number'])
+        if sort == 'number' and not agency.show_stop_number:
+            sort = 'name'
         if sort != 'name':
             path_args['sort'] = sort
         sort_order = self.query_options('sort_order', ['asc', 'desc'])
@@ -1139,7 +1141,7 @@ class Server(Bottle):
         positions = self.position_repository.find_all(system, trip=trips)
         return self.page(
             name='stop/overview',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             include_maps=True,
@@ -1175,7 +1177,7 @@ class Server(Bottle):
             )
         return self.page(
             name='stop/map',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             include_maps=True,
@@ -1208,7 +1210,7 @@ class Server(Bottle):
             )
         return self.page(
             name='stop/schedule',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             enable_refresh=False,
@@ -1241,7 +1243,7 @@ class Server(Bottle):
         date = Date.parse(date_string, system.timezone)
         return self.page(
             name='stop/date',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             enable_refresh=False,

@@ -62,10 +62,12 @@
                                     <div class="radio-button {{ 'selected' if sort == 'name' else '' }}"></div>
                                     <div>Stop Name</div>
                                 </div>
-                                <div class="option" onclick="setSort('number')">
-                                    <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
-                                    <div>Stop Number</div>
-                                </div>
+                                % if agency.show_stop_number:
+                                    <div class="option" onclick="setSort('number')">
+                                        <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
+                                        <div>Stop Number</div>
+                                    </div>
+                                % end
                             </div>
                         </div>
                         <div class="section">
@@ -174,28 +176,26 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="desktop-only">Stop Number</th>
-                                    <th class="non-desktop">Number</th>
-                                    <th class="desktop-only">Stop Name</th>
-                                    <th class="non-desktop">Name</th>
+                                    <th>Stop</th>
                                     <th class="non-mobile">Routes</th>
-                                    <th class="desktop-only">Service Days</th>
+                                    <th>Service Days</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 % for stop in stops:
                                     <tr>
-                                        <td><a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop.number }}</a></td>
                                         <td>
-                                            {{ stop }}
-                                            <div class="mobile-only">
-                                                % include('components/route_list', routes=stop.routes)
+                                            <div class="column">
+                                                % include('components/stop')
+                                                <div class="mobile-only">
+                                                    % include('components/route_list', routes=stop.routes)
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="non-mobile">
                                             % include('components/route_list', routes=stop.routes)
                                         </td>
-                                        <td class="desktop-only">
+                                        <td>
                                             % include('components/weekdays', schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.url_id}/schedule')
                                         </td>
                                     </tr>

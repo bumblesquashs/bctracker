@@ -106,7 +106,8 @@
                                             </div>
                                             % if stop:
                                                 <div class="non-desktop smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
                                                 </div>
                                             % end
                                         </div>
@@ -119,11 +120,7 @@
                                         % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
-                                        % if stop:
-                                            <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
-                                        % else:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % end
+                                        % include('components/stop')
                                     </td>
                                 </tr>
                             % end
@@ -202,7 +199,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="desktop-only">
-                                                            <a href="{{ get_url(first_stop.system, 'stops', first_stop) }}">{{ first_stop }}</a>
+                                                            % include('components/stop', stop=first_stop)
                                                         </td>
                                                         % if not system or system.realtime_enabled:
                                                             % if trip.id in recorded_today:

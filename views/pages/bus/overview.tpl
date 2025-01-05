@@ -207,7 +207,7 @@
                             <div class="row section">
                                 <div class="name">Next Stop</div>
                                 <div class="value">
-                                    <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
+                                    % include('components/stop', show_number=False)
                                     % adherence = position.adherence
                                     % if adherence:
                                         <span class="smaller-font">{{ adherence.description }}</span>
@@ -275,9 +275,7 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    <th class="non-mobile">Stop Number</th>
-                                    <th class="non-mobile">Stop Name</th>
-                                    <th class="mobile-only">Stop</th>
+                                    <th>Stop</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -301,23 +299,7 @@
                                         % if stop:
                                             <td>
                                                 <div class="column">
-                                                    <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop.number }}</a>
-                                                    <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
-                                                    % if not departure.pickup_type.is_normal:
-                                                        <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
-                                                    % elif departure == trip.last_departure:
-                                                        <span class="mobile-only smaller-font italics">No pick up</span>
-                                                    % end
-                                                    % if not departure.dropoff_type.is_normal:
-                                                        <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
-                                                    % elif departure == trip.first_departure:
-                                                        <span class="mobile-only smaller-font italics">No drop off</span>
-                                                    % end
-                                                </div>
-                                            </td>
-                                            <td class="non-mobile">
-                                                <div class="column">
-                                                    <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    % include('components/stop', timepoint=departure.timepoint)
                                                     % if not departure.pickup_type.is_normal:
                                                         <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                                     % elif departure == trip.last_departure:
@@ -331,7 +313,7 @@
                                                 </div>
                                             </td>
                                         % else:
-                                            <td class="lighter-text" colspan="2">Unknown</td>
+                                            <td class="lighter-text">Unknown</td>
                                         % end
                                     </tr>
                                 % end

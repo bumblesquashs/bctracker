@@ -18,7 +18,10 @@
                     It may be from a different system - the following systems have a stop with that number
                     <ul>
                         % for stop in alt_stops:
-                            <li>{{ stop.system }}: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a></li>
+                            <li>
+                                {{ stop.system }}:
+                                % include('components/stop', show_number=False)
+                            </li>
                         % end
                     </ul>
                 </li>

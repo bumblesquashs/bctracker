@@ -132,6 +132,8 @@
             function getSVG(name) {
                 return svgs[name];
             }
+            
+            const showStopNumbers = "{{ agency and agency.show_stop_number }}" == "True";
         </script>
         
         % if system:

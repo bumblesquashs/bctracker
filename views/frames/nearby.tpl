@@ -21,7 +21,9 @@
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
                 <div class="column">
-                    <h3>Stop {{ stop.number }} - {{ stop }}</h3>
+                    <h3>
+                        % include('components/stop', include_link=False)
+                    </h3>
                     <a href="{{ get_url(stop.system, 'stops', stop) }}">View stop schedule and details</a>
                 </div>
                 % include('components/toggle')

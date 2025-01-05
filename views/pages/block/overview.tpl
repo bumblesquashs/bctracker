@@ -221,7 +221,8 @@
                                             </div>
                                             % if stop:
                                                 <div class="mobile-only smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
                                                 </div>
                                             % end
                                         </div>
@@ -230,11 +231,7 @@
                                         % include('components/trip')
                                     </td>
                                     <td class="non-mobile">
-                                        % if stop:
-                                            <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
-                                        % else:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % end
+                                        % include('components/stop')
                                     </td>
                                 </tr>
                             % end
@@ -290,7 +287,8 @@
                                             </div>
                                             % if stop:
                                                 <div class="mobile-only smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
                                                 </div>
                                             % end
                                         </div>
@@ -299,11 +297,7 @@
                                         % include('components/trip', include_tooltip=False, trip=position.trip)
                                     </td>
                                     <td class="non-mobile">
-                                        % if stop:
-                                            <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
-                                        % else:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % end
+                                        % include('components/stop')
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="3">Not In Service</td>

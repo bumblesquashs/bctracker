@@ -102,7 +102,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="desktop-only">
-                                                        <a href="{{ get_url(first_stop.system, 'stops', first_stop) }}">{{ first_stop }}</a>
+                                                        % include('components/stop', stop=first_stop)
                                                     </td>
                                                 </tr>
                                                 % last_start_time = start_time

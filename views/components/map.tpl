@@ -294,11 +294,17 @@
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             
             const details = document.createElement("div");
-            details.className = "details {{ '' if len(map_stops) == 1 else 'hover-only' }}";
+            details.className = "details";
+            if (!showStopNumbers) {
+                details.classList.add("hover-only");
+            }
             
-            const title = document.createElement("div");
-            title.className = "title";
-            title.innerHTML = stop.number;
+            if (showStopNumbers) {
+                const title = document.createElement("div");
+                title.className = "title";
+                title.innerHTML = stop.number;
+                details.appendChild(title);
+            }
             
             const content = document.createElement("div");
             content.classList = "content hover-only centred";
@@ -308,7 +314,6 @@
             }
             content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
-            details.appendChild(title);
             details.appendChild(content);
             
             element.appendChild(icon);
@@ -358,9 +363,12 @@
             const details = document.createElement("div");
             details.className = "details {{ '' if len(map_departures) == 1 else 'hover-only' }}";
             
-            const title = document.createElement("div");
-            title.className = "title";
-            title.innerHTML = stop.number;
+            if (showStopNumbers) {
+                const title = document.createElement("div");
+                title.className = "title";
+                title.innerHTML = stop.number;
+                details.appendChild(title);
+            }
             
             const content = document.createElement("div");
             content.classList = "content hover-only centred";
@@ -370,7 +378,6 @@
             }
             content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
             
-            details.appendChild(title);
             details.appendChild(content);
             
             element.appendChild(icon);

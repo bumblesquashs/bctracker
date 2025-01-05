@@ -14,7 +14,8 @@
         "website": "https://www.denmanislandbus.ca",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/DENMAN_feed/feed-Denman.zip",
         "prefix_headsigns": true,
-        "prefer_stop_id": true
+        "prefer_stop_id": true,
+        "show_stop_number": false
     },
     "gertie": {
         "name": "Gertie",
@@ -22,14 +23,16 @@
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/GABRIOLA_feed/feed-GERTIE.zip",
         "prefix_headsigns": true,
         "prefer_route_id": true,
-        "prefer_stop_id": true
+        "prefer_stop_id": true,
+        "show_stop_number": false
     },
     "hornby-bus": {
         "name": "Hornby Bus",
         "website": "https://hornbybus.com",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/HORNBY_feed/feed-hornby.zip",
         "prefer_route_id": true,
-        "prefer_stop_id": true
+        "prefer_stop_id": true,
+        "show_stop_number": false
     },
     "translink": {
         "name": "Translink",

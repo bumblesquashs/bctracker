@@ -23,6 +23,10 @@
     --checkbox-color: #C7743B;
     --radio-button-color: #C7743B;
     --toggle-button-color: #C7743B;
+    
+    --stop-number-background: #FFFFFF;
+    --stop-number-text: #000000;
+    --stop-number-border: #CBCBCB;
 }
 
 a {

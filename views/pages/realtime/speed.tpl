@@ -81,7 +81,8 @@
                                 </div>
                                 % if stop:
                                     <div class="non-desktop smaller-font">
-                                        Next Stop: <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
+                                        <span class="align-middle">Next Stop:</span>
+                                        % include('components/stop')
                                     </div>
                                 % end
                             </div>
@@ -93,11 +94,7 @@
                             % include('components/trip')
                         </td>
                         <td class="desktop-only">
-                            % if stop:
-                                <a href="{{ get_url(stop.system, 'stops', stop) }}">{{ stop }}</a>
-                            % else:
-                                <span class="lighter-text">Unavailable</span>
-                            % end
+                            % include('components/stop')
                         </td>
                     % else:
                         <td colspan="4">

@@ -7,10 +7,9 @@
 
 <div id="page-header">
     <h1 class="row">
-        <span>Stop {{ stop.number }}</span>
+        % include('components/stop', include_link=False)
         % include('components/favourite')
     </h1>
-    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
@@ -59,18 +58,17 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Number</th>
-                                <th>Name</th>
-                                <th class="non-mobile">Routes</th>
+                                <th>Stop</th>
+                                <th>Routes</th>
                             </tr>
                         </thead>
                         <tbody>
                             % for nearby_stop in nearby_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(nearby_stop.system, 'stops', nearby_stop) }}">{{ nearby_stop.number }}</a></td>
-                                    <td class="non-mobile">{{ nearby_stop }}</td>
                                     <td>
-                                        <div class="mobile-only">{{ nearby_stop }}</div>
+                                        % include('components/stop', stop=nearby_stop)
+                                    </td>
+                                    <td>
                                         % include('components/route_list', routes=nearby_stop.routes)
                                     </td>
                                 </tr>
@@ -81,8 +79,8 @@
             </div>
         % end
         
-        % alt_systems = [s for s in systems if s.get_stop(number=stop.number) and s != system and s.agency == system.agency]
-        % if alt_systems:
+        % alt_stops = [s.get_stop(number=stop.number) for s in systems if s.get_stop(number=stop.number) and s != system and s.agency == system.agency]
+        % if alt_stops:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Other Systems At This Stop</h2>
@@ -97,10 +95,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            % for alt_system in alt_systems:
-                                % alt_stop = alt_system.get_stop(number=stop.number)
+                            % for alt_stop in alt_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(alt_system, 'stops', stop) }}">{{ alt_system }}</a></td>
+                                    <td><a href="{{ get_url(alt_stop.system, 'stops', alt_stop) }}">{{ alt_stop.system }}</a></td>
                                     <td>
                                         % include('components/route_list', routes=alt_stop.routes)
                                     </td>
