@@ -5,8 +5,8 @@
     <h1>Trip {{! trip.display_id }}</h1>
     <h2>{{ trip }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'trips/{trip.id}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'trips/{trip.id}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'trips', trip) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'trips', trip, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -108,7 +108,7 @@
                             <ol>
                                 <li>It may be a new trip introduced in the last service change</li>
                                 <li>It may not be operating due to driver or vehicle shortages</li>
-                                <li>It may have only been done by buses without functional NextRide equipment installed</li>
+                                <li>It may have only been done by buses without functional tracking equipment installed</li>
                             </ol>
                             <p>Please check again later!</p>
                         </div>

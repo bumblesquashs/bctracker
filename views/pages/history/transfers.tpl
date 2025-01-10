@@ -5,7 +5,7 @@
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
-        <a href="{{ get_url(system, 'history/first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ get_url(system, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
 </div>
@@ -40,9 +40,9 @@
                     <script>
                         function setFilter(filter) {
                             if (filter === null) {
-                                window.location = "{{ get_url(system, 'history/transfers') }}";
+                                window.location = "{{ get_url(system, 'history', 'transfers') }}";
                             } else {
-                                window.location = "{{ get_url(system, 'history/transfers') }}?filter=" + filter;
+                                window.location = "{{ get_url(system, 'history', 'transfers') }}?filter=" + filter;
                             }
                         }
                     </script>

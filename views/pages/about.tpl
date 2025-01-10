@@ -10,9 +10,17 @@
         <div class="section">
             <div class="content">
                 <p>
-                    BCTracker is a browser for the <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data provided by <a href="https://bctransit.com">BC Transit</a>.
-                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in communities around British Columbia. 
+                    BCTracker is a browser for <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data from transit agencies around British Columbia.
+                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in BC communities.
                 </p>
+                <p>Currently, we include information from these transit agencies:</p>
+                <ul>
+                    % for agency in agencies:
+                        <li>
+                            <a href="{{ agency.website }}">{{ agency }}</a>
+                        </li>
+                    % end
+                </ul>
             </div>
         </div>
         <div class="section">
@@ -29,7 +37,6 @@
                         </div>
                         <div class="content">
                             <p>
-                                Transit in Vancouver is operated by <a href="https://www.translink.ca/">Translink</a> rather than BC Transit, making it harder to integrate smoothly.
                                 There are numerous websites providing transit schedules and realtime information for Vancouver, including <a href="https://tcomm.bustrainferry.com/">T-Comm</a> and <a href="https://sorrybusfull.com/">Sorry Bus Full</a>.
                                 BCTracker was created specifically because there were no equivalent websites for the rest of the province.
                             </p>
@@ -113,8 +120,8 @@
                     If you are curious about BCTracker, have questions, or something seems broken, you can contact us directly by emailing <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
                     You can also chat with us more casually on the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a> where we talk about transit in BC and occasionally discuss upcoming features for the website.
                 </p>
-                <i> - James & Perrin, 2024 </i> 
+                <i> - James & Perrin, 2025 </i> 
             </div>  
-        </div>     
+        </div>
     </div>
 </div>

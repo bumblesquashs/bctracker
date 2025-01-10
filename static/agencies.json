@@ -1,11 +1,42 @@
 {
     "bc-transit": {
         "name": "BC Transit",
+        "website": "https://bctransit.com",
         "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
         "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
         "prefix_headsigns": true,
         "accurate_seconds": false,
         "vehicle_name_length": 4,
         "distance_scale": 1000
+    },
+    "denman-island-bus": {
+        "name": "Denman Island Bus",
+        "website": "https://www.denmanislandbus.ca",
+        "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/DENMAN_feed/feed-Denman.zip",
+        "prefix_headsigns": true,
+        "prefer_stop_id": true,
+        "show_stop_number": false
+    },
+    "gertie": {
+        "name": "GERTIE",
+        "website": "https://gertie.ca",
+        "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/GABRIOLA_feed/feed-GERTIE.zip",
+        "prefix_headsigns": true,
+        "prefer_route_id": true,
+        "prefer_stop_id": true,
+        "show_stop_number": false
+    },
+    "hornby-bus": {
+        "name": "Hornby Bus",
+        "website": "https://hornbybus.com",
+        "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/HORNBY_feed/feed-hornby.zip",
+        "prefer_route_id": true,
+        "prefer_stop_id": true,
+        "show_stop_number": false
+    },
+    "translink": {
+        "name": "Translink",
+        "website": "https://translink.ca",
+        "enabled": false
     }
 }

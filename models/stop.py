@@ -9,6 +9,8 @@ from models.schedule import Schedule
 
 from repositories import DepartureRepository, SystemRepository
 
+import helpers
+
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
@@ -17,6 +19,7 @@ class Stop:
         'system',
         'id',
         'number',
+        'key',
         'name',
         'lat',
         'lon'
@@ -29,10 +32,19 @@ class Stop:
         system = system_repository.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
+        if not number:
+            number = id
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
         return cls(system, id, number, name, lat, lon)
+    
+    @property
+    def url_id(self):
+        '''The ID to use when making stop URLs'''
+        if self.system.agency.prefer_stop_id:
+            return self.id
+        return self.number
     
     @property
     def nearby_stops(self):
@@ -68,6 +80,8 @@ class Stop:
         self.lat = lat
         self.lon = lon
         
+        self.key = helpers.key(number)
+        
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
@@ -81,7 +95,7 @@ class Stop:
     
     def __lt__(self, other):
         if self.name == other.name:
-            return self.number < other.number
+            return self.key < other.key
         return self.name < other.name
     
     def get_json(self):
@@ -92,7 +106,8 @@ class Stop:
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
-            'routes': [r.get_json() for r in self.routes]
+            'routes': [r.get_json() for r in self.routes],
+            'url_id': self.url_id
         }
     
     def get_match(self, query):
@@ -113,7 +128,7 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.number}', value)
+        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''

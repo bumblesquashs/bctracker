@@ -8,6 +8,10 @@
     --checkbox-color: #000000;
     --radio-button-color: #000000;
     --toggle-button-color: #000000;
+    
+    --stop-number-background: rgba(255, 255, 255, 0.7);
+    --stop-number-text: #000000;
+    --stop-number-border: rgba(0, 0, 0, 0.5);
 }
 
 a {

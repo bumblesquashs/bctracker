@@ -34,10 +34,19 @@ class Route:
         system = system_repository.find(row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
+        if not number:
+            number = id
         name = row[f'{prefix}_name']
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
         return cls(system, id, number, name, colour, text_colour)
+    
+    @property
+    def url_id(self):
+        '''The ID to use when making route URLs'''
+        if self.system.agency.prefer_route_id:
+            return self.id
+        return self.number
     
     @property
     def display_name(self):
@@ -103,7 +112,8 @@ class Route:
             'number': self.number,
             'name': self.name.replace("'", '&apos;'),
             'colour': self.colour,
-            'text_colour': self.text_colour
+            'text_colour': self.text_colour,
+            'url_id': self.url_id
         }
     
     def get_indicator_json(self):
@@ -117,7 +127,8 @@ class Route:
                 'colour': self.colour,
                 'text_colour': self.text_colour,
                 'lat': point.lat,
-                'lon': point.lon
+                'lon': point.lon,
+                'url_id': self.url_id
             })
         return json
     
@@ -147,7 +158,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.number}', value)
+        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
     def find_departures(self):
         '''Returns all departures for this route'''

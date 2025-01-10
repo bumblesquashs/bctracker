@@ -66,9 +66,21 @@ h1 .route {
     min-width: 20px;
 }
 
+h1 .stop .stop-number {
+    font-size: 20pt;
+}
+
 h2 .route {
     font-size: 16pt;
     min-width: 16px;
+}
+
+h2 .stop .stop-number {
+    font-size: 16pt;
+}
+
+h3 .stop .stop-number {
+    font-size: 14pt;
 }
 
 p svg {
@@ -451,6 +463,13 @@ table tr.header td {
     font-weight: bold;
 }
 
+#system-menu .system-button {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
 #top-button {
     position: fixed;
     right: 40px;
@@ -481,6 +500,15 @@ table tr.header td {
 
 .adornment {
     user-select: none;
+}
+
+.agency-logo {
+    width: 24px;
+    height: 24px;
+}
+
+.align-middle {
+    vertical-align: middle;
 }
 
 .align-right {
@@ -1300,6 +1328,27 @@ table tr.header td {
     width: 10px;
     height: 10px;
     border-radius: 2px;
+}
+
+.stop {
+    display: inline-block;
+}
+
+.stop .stop-name {
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.stop .stop-number {
+    display: inline-block;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 10pt;
+    vertical-align: middle;
+    background-color: var(--stop-number-background);
+    color: var(--stop-number-text);
+    border: 1px solid var(--stop-number-border);
 }
 
 .tab-button-bar {

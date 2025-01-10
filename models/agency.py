@@ -5,11 +5,15 @@ class Agency:
     __slots__ = (
         'id',
         'name',
+        'website',
         'gtfs_url',
         'realtime_url',
         'enabled',
         'prefix_headsigns',
         'accurate_seconds',
+        'prefer_route_id',
+        'prefer_stop_id',
+        'show_stop_number',
         'vehicle_name_length',
         'distance_scale'
     )
@@ -27,11 +31,15 @@ class Agency:
     def __init__(self, id, name, **kwargs):
         self.id = id
         self.name = name
+        self.website = kwargs.get('website')
         self.gtfs_url = kwargs.get('gtfs_url')
         self.realtime_url = kwargs.get('realtime_url')
         self.enabled = kwargs.get('enabled', True)
         self.prefix_headsigns = kwargs.get('prefix_headsigns', False)
         self.accurate_seconds = kwargs.get('accurate_seconds', True)
+        self.prefer_route_id = kwargs.get('prefer_route_id', False)
+        self.prefer_stop_id = kwargs.get('prefer_stop_id', False)
+        self.show_stop_number = kwargs.get('show_stop_number', True)
         self.vehicle_name_length = kwargs.get('vehicle_name_length')
         self.distance_scale = kwargs.get('distance_scale', 1)
     

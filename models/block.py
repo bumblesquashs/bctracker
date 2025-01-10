@@ -21,6 +21,11 @@ class Block:
     )
     
     @property
+    def url_id(self):
+        '''The ID to use when making block URLs'''
+        return self.id
+    
+    @property
     def related_blocks(self):
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         if self._related_blocks is None:
@@ -118,7 +123,7 @@ class Block:
             message = f'Route {routes}'
         else:
             message = f'Routes {routes}'
-        return Match(f'Block {id}', message, 'block', f'blocks/{self.id}', value)
+        return Match(f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)
     
     def find_departures(self):
         '''Returns all departures for this block'''

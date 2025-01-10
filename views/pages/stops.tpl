@@ -62,10 +62,12 @@
                                     <div class="radio-button {{ 'selected' if sort == 'name' else '' }}"></div>
                                     <div>Stop Name</div>
                                 </div>
-                                <div class="option" onclick="setSort('number')">
-                                    <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
-                                    <div>Stop Number</div>
-                                </div>
+                                % if agency.show_stop_number:
+                                    <div class="option" onclick="setSort('number')">
+                                        <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
+                                        <div>Stop Number</div>
+                                    </div>
+                                % end
                             </div>
                         </div>
                         <div class="section">
@@ -114,12 +116,12 @@
                         <div class="section">
                             <div class="options-container">
                                 % for route in system.get_routes():
-                                    <div class="option space-between" onclick="toggleRouteFilter('{{ route.number }}')">
+                                    <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
                                         <div class="row">
                                             % include('components/route')
                                             {{! route.display_name }}
                                         </div>
-                                        <div class="checkbox {{ 'selected' if route.number in routes_filter else '' }}">
+                                        <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
                                             % include('components/svg', name='check')
                                         </div>
                                     </div>
@@ -174,29 +176,27 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="desktop-only">Stop Number</th>
-                                    <th class="non-desktop">Number</th>
-                                    <th class="desktop-only">Stop Name</th>
-                                    <th class="non-desktop">Name</th>
+                                    <th>Stop</th>
                                     <th class="non-mobile">Routes</th>
-                                    <th class="desktop-only">Service Days</th>
+                                    <th>Service Days</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 % for stop in stops:
                                     <tr>
-                                        <td><a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a></td>
                                         <td>
-                                            {{ stop }}
-                                            <div class="mobile-only">
-                                                % include('components/route_list', routes=stop.routes)
+                                            <div class="column">
+                                                % include('components/stop')
+                                                <div class="mobile-only">
+                                                    % include('components/route_list', routes=stop.routes)
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="non-mobile">
                                             % include('components/route_list', routes=stop.routes)
                                         </td>
-                                        <td class="desktop-only">
-                                            % include('components/weekdays', schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.number}/schedule')
+                                        <td>
+                                            % include('components/weekdays', schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.url_id}/schedule')
                                         </td>
                                     </tr>
                                 % end
@@ -255,17 +255,20 @@
                             % count = len(region_system.get_stops())
                             <tr>
                                 <td>
-                                    <div class="column">
-                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                        <span class="mobile-only smaller-font">
-                                            % if region_system.gtfs_loaded:
-                                                % if count == 1:
-                                                    1 Stop
-                                                % else:
-                                                    {{ count }} Stops
+                                    <div class="row">
+                                        % include('components/agency_logo', agency=region_system.agency)
+                                        <div class="column">
+                                            <a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+                                            <span class="mobile-only smaller-font">
+                                                % if region_system.gtfs_loaded:
+                                                    % if count == 1:
+                                                        1 Stop
+                                                    % else:
+                                                        {{ count }} Stops
+                                                    % end
                                                 % end
-                                            % end
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
                                 % if region_system.gtfs_loaded:

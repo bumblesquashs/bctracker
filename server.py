@@ -21,7 +21,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 47
+VERSION = 48
 
 random = Random()
 
@@ -204,8 +204,15 @@ class Server(Bottle):
         if cp.server.running:
             cp.server.stop()
     
-    def get_url(self, system, path='', **kwargs):
+    def get_url(self, system, *args, **kwargs):
         '''Returns a URL formatted based on the given system and path'''
+        components = []
+        for arg in args:
+            try:
+                components.append(str(arg.url_id))
+            except AttributeError:
+                components.append(str(arg))
+        path = '/'.join(components)
         system_id = getattr(system, 'id', system)
         if system_id:
             url = self.settings.system_domain.format(system_id, path).rstrip('/')
@@ -221,7 +228,7 @@ class Server(Bottle):
         '''Checks if the admin key in the query/cookie matches the expected admin key'''
         return not self.settings.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.settings.admin_key
     
-    def page(self, name, title, path='', path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
+    def page(self, name, title, path=None, path_args=None, system=None, agency=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
         '''Returns an HTML page with the given name and details'''
         is_admin = self.validate_admin()
         
@@ -254,7 +261,7 @@ class Server(Bottle):
             settings=self.settings,
             version=VERSION,
             title=title,
-            path=path,
+            path=path or [],
             path_args=path_args or {},
             system=system,
             agency=agency,
@@ -263,6 +270,7 @@ class Server(Bottle):
             full_map=full_map,
             regions=self.region_repository.find_all(),
             systems=self.system_repository.find_all(),
+            agencies=self.agency_repository.find_all(),
             is_admin=is_admin,
             get_url=self.get_url,
             last_updated=last_updated,
@@ -280,13 +288,13 @@ class Server(Bottle):
             **kwargs
         )
     
-    def error_page(self, name, title, path='', path_args=None, system=None, agency=None, **kwargs):
+    def error_page(self, name, title, path=None, path_args=None, system=None, agency=None, **kwargs):
         '''Returns an error page with the given name and details'''
         return self.page(
             name=f'errors/{name}',
             title=title,
-            path=path,
-            path_args=path_args,
+            path=path or [],
+            path_args=path_args or {},
             system=system,
             agency=agency,
             enable_refresh=False,
@@ -360,7 +368,10 @@ class Server(Bottle):
                 del kwargs[system_key]
             else:
                 system = None
-            agency = self.agency_repository.find('bc-transit')
+            if system:
+                agency = system.agency
+            else:
+                agency = self.agency_repository.find('bc-transit')
             return callback(system=system, agency=agency, *args, **kwargs)
         self.route(paths, method, callback=endpoint)
     
@@ -398,7 +409,7 @@ class Server(Bottle):
         return self.page(
             name='news',
             title='News Archive',
-            path='news',
+            path=['news'],
             system=system,
             agency=agency,
             enable_refresh=False
@@ -413,7 +424,7 @@ class Server(Bottle):
         return self.page(
             name='map',
             title='Map',
-            path='map',
+            path=['map'],
             system=system,
             agency=agency,
             include_maps=len(visible_positions) > 0,
@@ -433,7 +444,7 @@ class Server(Bottle):
         return self.page(
             name='realtime/all',
             title='Realtime',
-            path='realtime',
+            path=['realtime'],
             system=system,
             agency=agency,
             positions=positions,
@@ -448,7 +459,7 @@ class Server(Bottle):
         return self.page(
             name='realtime/routes',
             title='Realtime',
-            path='realtime/routes',
+            path=['realtime', 'routes'],
             system=system,
             agency=agency,
             positions=positions,
@@ -463,7 +474,7 @@ class Server(Bottle):
         return self.page(
             name='realtime/models',
             title='Realtime',
-            path='realtime/models',
+            path=['realtime', 'models'],
             system=system,
             agency=agency,
             positions=positions,
@@ -479,7 +490,7 @@ class Server(Bottle):
         return self.page(
             name='realtime/speed',
             title='Realtime',
-            path='realtime/speed',
+            path=['realtime', 'speed'],
             system=system,
             agency=agency,
             positions=positions,
@@ -492,7 +503,7 @@ class Server(Bottle):
         return self.page(
             name='fleet',
             title='Fleet',
-            path='fleet',
+            path=['fleet'],
             system=system,
             agency=agency,
             orders=[o for o in sorted(orders) if o.visible],
@@ -620,7 +631,7 @@ class Server(Bottle):
         return self.page(
             name='history/last_seen',
             title='Vehicle History',
-            path='history',
+            path=['history'],
             path_args={
                 'days': days
             },
@@ -635,7 +646,7 @@ class Server(Bottle):
         return self.page(
             name='history/first_seen',
             title='Vehicle History',
-            path='history/first-seen',
+            path=['history', 'first-seen'],
             system=system,
             agency=agency,
             overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
@@ -652,7 +663,7 @@ class Server(Bottle):
         return self.page(
             name='history/transfers',
             title='Vehicle History',
-            path='history/transfers',
+            path=['history', 'transfers'],
             system=system,
             agency=agency,
             transfers=[t for t in transfers if t.bus.visible],
@@ -663,7 +674,7 @@ class Server(Bottle):
         return self.page(
             name='routes/list',
             title='Routes',
-            path='routes',
+            path=['routes'],
             system=system,
             agency=agency,
             enable_refresh=False
@@ -675,7 +686,7 @@ class Server(Bottle):
         return self.page(
             name='routes/map',
             title='Routes',
-            path='routes/map',
+            path=['routes', 'map'],
             system=system,
             agency=agency,
             enable_refresh=False,
@@ -690,11 +701,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'routes/{route_number}',
+                path=['routes', route_number],
                 system=system,
                 agency=agency
             )
-        route = system.get_route(number=route_number)
+        if agency.prefer_route_id:
+            route = system.get_route(route_id=route_number)
+        else:
+            route = system.get_route(number=route_number)
         if not route:
             return self.error_page(
                 name='invalid_route',
@@ -724,11 +738,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'routes/{route_number}/map',
+                path=['routes', route_number, 'map'],
                 system=system,
                 agency=agency
             )
-        route = system.get_route(number=route_number)
+        if agency.prefer_route_id:
+            route = system.get_route(route_id=route_number)
+        else:
+            route = system.get_route(number=route_number)
         if not route:
             return self.error_page(
                 name='invalid_route',
@@ -755,11 +772,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'routes/{route_number}/schedule',
+                path=['routes', route_number, 'schedule'],
                 system=system,
                 agency=agency
             )
-        route = system.get_route(number=route_number)
+        if agency.prefer_route_id:
+            route = system.get_route(route_id=route_number)
+        else:
+            route = system.get_route(number=route_number)
         if not route:
             return self.error_page(
                 name='invalid_route',
@@ -784,11 +804,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'routes/{route_number}/schedule',
+                path=['routes', route_number, 'schedule'],
                 system=system,
                 agency=agency
             )
-        route = system.get_route(number=route_number)
+        if agency.prefer_route_id:
+            route = system.get_route(route_id=route_number)
+        else:
+            route = system.get_route(number=route_number)
         if not route:
             return self.error_page(
                 name='invalid_route',
@@ -818,7 +841,7 @@ class Server(Bottle):
         return self.page(
             name='blocks/overview',
             title='Blocks',
-            path='blocks',
+            path=['blocks'],
             system=system,
             agency=agency,
             recorded_buses=recorded_buses
@@ -828,7 +851,7 @@ class Server(Bottle):
         return self.page(
             name='blocks/schedule',
             title='Blocks',
-            path='blocks/schedule',
+            path=['blocks', 'schedule'],
             system=system,
             agency=agency,
             enable_refresh=False
@@ -842,7 +865,7 @@ class Server(Bottle):
         return self.page(
             name='blocks/date',
             title='Blocks',
-            path=f'blocks/schedule/{date_string}',
+            path=[f'blocks', 'schedule', date_string],
             system=system,
             agency=agency,
             enable_reload=False,
@@ -854,7 +877,7 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'blocks/{block_id}',
+                path=['blocks', block_id],
                 system=system,
                 agency=agency
             )
@@ -883,7 +906,7 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'blocks/{block_id}/map',
+                path=['blocks', block_id, 'map'],
                 system=system,
                 agency=agency
             )
@@ -912,7 +935,7 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'blocks/{block_id}/history',
+                path=['blocks', block_id, 'history'],
                 system=system,
                 agency=agency
             )
@@ -945,7 +968,7 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'trips/{trip_id}',
+                path=['trips', trip_id],
                 system=system,
                 agency=agency
             )
@@ -974,7 +997,7 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'trips/{trip_id}/map',
+                path=['trips', trip_id, 'map'],
                 system=system,
                 agency=agency
             )
@@ -1003,7 +1026,7 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'trips/{trip_id}/history',
+                path=['trips', trip_id, 'history'],
                 system=system,
                 agency=agency
             )
@@ -1042,6 +1065,8 @@ class Server(Bottle):
         else:
             routes_filter = []
         sort = self.query_options('sort', ['name', 'number'])
+        if sort == 'number' and not agency.show_stop_number:
+            sort = 'name'
         if sort != 'name':
             path_args['sort'] = sort
         sort_order = self.query_options('sort_order', ['asc', 'desc'])
@@ -1056,10 +1081,10 @@ class Server(Bottle):
             stops = system.get_stops()
             if search:
                 stops = [s for s in stops if search.lower() in s.name.lower()]
-            for route_number in routes_filter:
-                stops = [s for s in stops if route_number in {r.number for r in s.routes}]
+            for route_url_id in routes_filter:
+                stops = [s for s in stops if route_url_id in {r.url_id for r in s.routes}]
             if sort == 'number':
-                stops.sort(key=lambda s: s.number, reverse=sort_order == 'desc')
+                stops.sort(key=lambda s: s.key, reverse=sort_order == 'desc')
             elif sort == 'name':
                 stops.sort(key=lambda s: s.name, reverse=sort_order == 'desc')
             total_items = len(stops)
@@ -1075,7 +1100,7 @@ class Server(Bottle):
         return self.page(
             name='stops',
             title='Stops',
-            path='stops',
+            path=['stops'],
             path_args=path_args,
             system=system,
             agency=agency,
@@ -1095,11 +1120,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'stops/{stop_number}',
+                path=['stops', stop_number],
                 system=system,
                 agency=agency
             )
-        stop = system.get_stop(number=stop_number)
+        if agency.prefer_stop_id:
+            stop = system.get_stop(stop_id=stop_number)
+        else:
+            stop = system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
                 name='invalid_stop',
@@ -1113,7 +1141,7 @@ class Server(Bottle):
         positions = self.position_repository.find_all(system, trip=trips)
         return self.page(
             name='stop/overview',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             include_maps=True,
@@ -1131,11 +1159,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'stops/{stop_number}/map',
+                path=['stops', stop_number, 'map'],
                 system=system,
                 agency=agency
             )
-        stop = system.get_stop(number=stop_number)
+        if agency.prefer_stop_id:
+            stop = system.get_stop(stop_id=stop_number)
+        else:
+            stop = system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
                 name='invalid_stop',
@@ -1146,7 +1177,7 @@ class Server(Bottle):
             )
         return self.page(
             name='stop/map',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             include_maps=True,
@@ -1161,11 +1192,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'stops/{stop_number}/schedule',
+                path=['stops', stop_number, 'schedule'],
                 system=system,
                 agency=agency
             )
-        stop = system.get_stop(number=stop_number)
+        if agency.prefer_stop_id:
+            stop = system.get_stop(stop_id=stop_number)
+        else:
+            stop = system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
                 name='invalid_stop',
@@ -1176,7 +1210,7 @@ class Server(Bottle):
             )
         return self.page(
             name='stop/schedule',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             enable_refresh=False,
@@ -1190,11 +1224,14 @@ class Server(Bottle):
             return self.error_page(
                 name='system_required',
                 title='System Required',
-                path=f'stops/{stop_number}/schedule',
+                path=['stops', stop_number, 'schedule'],
                 system=system,
                 agency=agency
             )
-        stop = system.get_stop(number=stop_number)
+        if agency.prefer_stop_id:
+            stop = system.get_stop(stop_id=stop_number)
+        else:
+            stop = system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
                 name='invalid_stop',
@@ -1206,7 +1243,7 @@ class Server(Bottle):
         date = Date.parse(date_string, system.timezone)
         return self.page(
             name='stop/date',
-            title=f'Stop {stop.number}',
+            title=str(stop),
             system=system,
             agency=agency,
             enable_refresh=False,
@@ -1220,7 +1257,7 @@ class Server(Bottle):
         return self.page(
             name='about',
             title='About',
-            path='about',
+            path=['about'],
             system=system,
             agency=agency,
             enable_refresh=False
@@ -1230,7 +1267,7 @@ class Server(Bottle):
         return self.page(
             name='nearby',
             title='Nearby Stops',
-            path='nearby',
+            path=['nearby'],
             system=system,
             agency=agency,
             include_maps=True
@@ -1244,7 +1281,7 @@ class Server(Bottle):
         return self.page(
             name='personalize',
             title='Personalize',
-            path='personalize',
+            path=['personalize'],
             system=system,
             agency=agency,
             enable_refresh=False,
@@ -1255,7 +1292,7 @@ class Server(Bottle):
         return self.page(
             name='systems',
             title='Systems',
-            path=request.query.get('path', ''),
+            path=['systems'],
             system=system,
             agency=agency,
             enable_refresh=False
@@ -1265,44 +1302,47 @@ class Server(Bottle):
         self.set_cookie('random', 'kumquat')
         systems = list(self.system_repository.find_all())
         system = random.choice(systems)
-        selection = random.choice(['bus', 'route', 'stop', 'block', 'trip'])
+        options = ['route', 'stop', 'block', 'trip']
+        if agency.realtime_enabled:
+            options.append('bus')
+        selection = random.choice(options)
         match selection:
             case 'bus':
                 overviews = system.get_overviews()
                 if not overviews:
                     redirect(self.get_url(system))
                 overview = random.choice(overviews)
-                redirect(self.get_url(system, f'bus/{overview.bus.number}'))
+                redirect(self.get_url(system, 'bus', overview.bus))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
                     redirect(self.get_url(system))
                 route = random.choice(routes)
-                redirect(self.get_url(system, f'routes/{route.number}'))
+                redirect(self.get_url(system, 'routes', route))
             case 'stop':
                 stops = system.get_stops()
                 if not stops:
                     redirect(self.get_url(system))
                 stop = random.choice(stops)
-                redirect(self.get_url(system, f'stops/{stop.number}'))
+                redirect(self.get_url(system, 'stops', stop))
             case 'block':
                 blocks = system.get_blocks()
                 if not blocks:
                     redirect(self.get_url(system))
                 block = random.choice(blocks)
-                redirect(self.get_url(system, f'blocks/{block.id}'))
+                redirect(self.get_url(system, 'blocks', block))
             case 'trip':
                 trips = list(system.get_trips())
                 if not trips:
                     redirect(self.get_url(system))
                 trip = random.choice(trips)
-                redirect(self.get_url(system, f'trips/{trip.id}'))
+                redirect(self.get_url(system, 'trips', trip))
     
     def admin(self, system, agency):
         return self.page(
             name='admin',
             title='Administration',
-            path='admin',
+            path=['admin'],
             system=system,
             agency=agency,
             enable_refresh=False,

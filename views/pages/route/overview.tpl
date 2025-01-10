@@ -9,8 +9,8 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(system, 'routes', route, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'routes', route, 'schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -27,7 +27,7 @@
                     
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.url_id}/schedule')
                         </div>
                         <div class="column section">
                             % headsigns = route.get_headsigns()
@@ -43,7 +43,7 @@
                                     % for variant in variants:
                                         <div class="row">
                                             % include('components/route', route=variant)
-                                            <a href="{{ get_url(variant.system, f'routes/{variant.number}') }}">{{! variant.display_name }}</a>
+                                            <a href="{{ get_url(variant.system, 'routes', variant) }}">{{! variant.display_name }}</a>
                                         </div>
                                     % end
                                 </div>
@@ -106,24 +106,21 @@
                                             </div>
                                             % if stop:
                                                 <div class="non-desktop smaller-font">
-                                                    Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
                                                 </div>
                                             % end
                                         </div>
                                     </td>
                                     <td class="non-mobile">
                                         % block = trip.block
-                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
                                     </td>
                                     <td class="desktop-only">
-                                        % if stop:
-                                            <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                                        % else:
-                                            <span class="lighter-text">Unavailable</span>
-                                        % end
+                                        % include('components/stop')
                                     </td>
                                 </tr>
                             % end
@@ -190,7 +187,8 @@
                                                             % include('components/headsign')
                                                         </td>
                                                         <td class="non-mobile">
-                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                            % block = trip.block
+                                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="column">
@@ -201,7 +199,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="desktop-only">
-                                                            <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                            % include('components/stop', stop=first_stop)
                                                         </td>
                                                         % if not system or system.realtime_enabled:
                                                             % if trip.id in recorded_today:
@@ -262,7 +260,7 @@
                     <div class="placeholder">
                         % if system.gtfs_loaded:
                             <h3>There are no trips for this route today</h3>
-                            <p>You can check the <a href="{{ get_url(system, f'routes/{route.number}/schedule') }}">full schedule</a> for more information about when this route runs.</p>
+                            <p>You can check the <a href="{{ get_url(system, 'routes', route, 'schedule') }}">full schedule</a> for more information about when this route runs.</p>
                         % else:
                             <h3>Trips for this route are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>

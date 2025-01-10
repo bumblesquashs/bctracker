@@ -4,10 +4,10 @@
 <div id="page-header">
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'blocks/{block.id}') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'blocks', block) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
         % if system.realtime_enabled:
-            <a href="{{ get_url(system, f'blocks/{block.id}/history') }}" class="tab-button">History</a>
+            <a href="{{ get_url(system, 'blocks', block, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>

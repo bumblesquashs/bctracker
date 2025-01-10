@@ -7,11 +7,11 @@
     <div class="tab-button-bar">
         <span class="tab-button current">All Buses</span>
         % if system:
-            <a href="{{ get_url(system, 'realtime/routes') }}" class="tab-button">By Route</a>
+            <a href="{{ get_url(system, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
-        <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(system, 'realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
-            <a href="{{ get_url(system, 'realtime/speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ get_url(system, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Sandra Bullock and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
@@ -76,7 +76,7 @@
             % end
         </tbody>
     </table>
-        
+    
     % include('components/top_button')
 % else:
     <div class="placeholder">
@@ -84,7 +84,7 @@
             % if show_nis:
                 <h3>There are no buses out right now</h3>
                 <p>
-                    BC Transit does not have late night service, so this should be the case overnight.
+                    None of our current agencies operate late night service, so this should be the case overnight.
                     If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                 </p>
                 <p>Please check again later!</p>

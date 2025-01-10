@@ -68,7 +68,7 @@
                                                         % start_time = block.get_start_time(service_group=service_group).format_web(time_format)
                                                         % end_time = block.get_end_time(service_group=service_group).format_web(time_format)
                                                         <tr>
-                                                            <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                                            <td><a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a></td>
                                                             <td>
                                                                 % include('components/route_list', routes=block.get_routes(service_group=service_group))
                                                             </td>
@@ -124,17 +124,20 @@
                             % count = len(region_system.get_blocks())
                             <tr>
                                 <td>
-                                    <div class="column">
-                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                        <span class="mobile-only smaller-font">
-                                            % if region_system.gtfs_loaded:
-                                                % if count == 1:
-                                                    1 Block
-                                                % else:
-                                                    {{ count }} Blocks
+                                    <div class="row">
+                                        % include('components/agency_logo', agency=region_system.agency)
+                                        <div class="column">
+                                            <a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+                                            <span class="mobile-only smaller-font">
+                                                % if region_system.gtfs_loaded:
+                                                    % if count == 1:
+                                                        1 Block
+                                                    % else:
+                                                        {{ count }} Blocks
+                                                    % end
                                                 % end
-                                            % end
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
                                 % if region_system.gtfs_loaded:

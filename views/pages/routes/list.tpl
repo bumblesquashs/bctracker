@@ -5,7 +5,7 @@
     <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
-        <a href="{{ get_url(system, 'routes/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'routes', 'map') }}" class="tab-button">Map</a>
     </div>
 </div>
 
@@ -25,11 +25,11 @@
                         <td>
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </td>
                         <td class="non-mobile">
-                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
                         </td>
                     </tr>
                 % end
@@ -68,17 +68,20 @@
                             % count = len(region_system.get_routes())
                             <tr>
                                 <td>
-                                    <div class="column">
-                                        <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                        <span class="mobile-only smaller-font">
-                                            % if region_system.gtfs_loaded:
-                                                % if count == 1:
-                                                    1 Route
-                                                % else:
-                                                    {{ count }} Routes
+                                    <div class="row">
+                                        % include('components/agency_logo', agency=region_system.agency)
+                                        <div class="column">
+                                            <a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+                                            <span class="mobile-only smaller-font">
+                                                % if region_system.gtfs_loaded:
+                                                    % if count == 1:
+                                                        1 Route
+                                                    % else:
+                                                        {{ count }} Routes
+                                                    % end
                                                 % end
-                                            % end
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
                                 % if region_system.gtfs_loaded:

@@ -12,13 +12,16 @@
         <ol>
             <li>It may no longer serve any bus routes and therefore be removed from the system</li>
             <li>It may be the wrong number - are you sure stop <b>{{ stop_number }}</b> is the one you want?</li>
-            % alt_systems = [s for s in systems if s.get_stop(number=stop_number)]
-            % if alt_systems:
+            % alt_stops = [s.get_stop(number=stop_number) for s in systems if s.get_stop(number=stop_number)]
+            % if alt_stops:
                 <li>
                     It may be from a different system - the following systems have a stop with that number
                     <ul>
-                        % for alt_system in alt_systems:
-                            <li>{{ alt_system }}: <a href="{{ get_url(alt_system, f'stops/{stop_number}') }}">{{ alt_system.get_stop(number=stop_number) }}</a></li>
+                        % for stop in alt_stops:
+                            <li>
+                                {{ stop.system }}:
+                                % include('components/stop', show_number=False)
+                            </li>
                         % end
                     </ul>
                 </li>

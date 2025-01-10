@@ -148,7 +148,7 @@
                     icon = document.createElement("div");
                 } else {
                     icon = document.createElement("a");
-                    icon.href = "/bus/" + position.bus_number;
+                    icon.href = getUrl(systemID, "bus/" + position.bus_url_id);
                     icon.innerHTML = "<div class='link'></div>"
                 }
                 icon.className = "icon";
@@ -361,7 +361,7 @@
         
         function updatePositionData() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'api/map.json')}}", true);
+            request.open("GET", "{{get_url(system, 'api', 'map.json')}}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -521,7 +521,7 @@
                     % if show_nis:
                         <h3>There are no buses out right now</h3>
                         <p>
-                            BC Transit does not have late night service, so this should be the case overnight.
+                            None of our current agencies operate late night service, so this should be the case overnight.
                             If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                         </p>
                         <p>Please check again later!</p>

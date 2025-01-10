@@ -27,8 +27,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, f'bus/{bus.number}/history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -142,7 +142,7 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, f'routes/{route.number}') }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">
@@ -186,7 +186,7 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                 % date = Date.today(block.system.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)
@@ -207,7 +207,7 @@
                             <div class="row section">
                                 <div class="name">Next Stop</div>
                                 <div class="value">
-                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                    % include('components/stop', show_number=False)
                                     % adherence = position.adherence
                                     % if adherence:
                                         <span class="smaller-font">{{ adherence.description }}</span>
@@ -275,9 +275,7 @@
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    <th class="non-mobile">Stop Number</th>
-                                    <th class="non-mobile">Stop Name</th>
-                                    <th class="mobile-only">Stop</th>
+                                    <th>Stop</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -301,23 +299,7 @@
                                         % if stop:
                                             <td>
                                                 <div class="column">
-                                                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop.number }}</a>
-                                                    <div class="mobile-only smaller-font {{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
-                                                    % if not departure.pickup_type.is_normal:
-                                                        <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
-                                                    % elif departure == trip.last_departure:
-                                                        <span class="mobile-only smaller-font italics">No pick up</span>
-                                                    % end
-                                                    % if not departure.dropoff_type.is_normal:
-                                                        <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
-                                                    % elif departure == trip.first_departure:
-                                                        <span class="mobile-only smaller-font italics">No drop off</span>
-                                                    % end
-                                                </div>
-                                            </td>
-                                            <td class="non-mobile">
-                                                <div class="column">
-                                                    <div class="{{ 'timing-point' if departure.timepoint else '' }}">{{ stop }}</div>
+                                                    % include('components/stop', timepoint=departure.timepoint)
                                                     % if not departure.pickup_type.is_normal:
                                                         <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                                     % elif departure == trip.last_departure:
@@ -331,7 +313,7 @@
                                                 </div>
                                             </td>
                                         % else:
-                                            <td class="lighter-text" colspan="2">Unknown</td>
+                                            <td class="lighter-text">Unknown</td>
                                         % end
                                     </tr>
                                 % end
@@ -393,7 +375,7 @@
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end
@@ -422,7 +404,7 @@
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording bus history</li>
-                            <li>It may not have functional NextRide equipment installed</li>
+                            <li>It may not have functional tracking equipment installed</li>
                             % if model and model.type == ModelType.shuttle:
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                             % end

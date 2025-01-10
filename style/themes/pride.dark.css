@@ -9,6 +9,10 @@
     --checkbox-color: #FFFFFF;
     --radio-button-color: #FFFFFF;
     --toggle-button-color: #FFFFFF;
+    
+    --stop-number-background: rgba(0, 0, 0, 0.6);
+    --stop-number-text: #FFFFFF;
+    --stop-number-border: rgba(255, 255, 255, 0.3);
 }
 
 a {

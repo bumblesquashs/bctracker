@@ -3,13 +3,12 @@
 
 <div id="page-header">
     <h1 class="row">
-        <span>Stop {{ stop.number }}</span>
+        % include('components/stop', include_link=False)
         % include('components/favourite')
     </h1>
-    <h2>{{ stop }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'stops/{stop.number}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'stops/{stop.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'stops', stop) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -26,19 +25,19 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="icon button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{previous_date.format_db()}') }}">
+                        <a class="icon button" href="{{ get_url(system, 'stops', stop, 'schedule', previous_date) }}">
                             % include('components/svg', name='left')
                         </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
-                            <a href="{{ get_url(system, f'stops/{stop.number}/schedule') }}">Return to week view</a>
+                            <a href="{{ get_url(system, 'stops', stop, 'schedule') }}">Return to week view</a>
                         </div>
-                        <a class="icon button" href="{{ get_url(system, f'stops/{stop.number}/schedule/{next_date.format_db()}') }}">
+                        <a class="icon button" href="{{ get_url(system, 'stops', stop, 'schedule', next_date) }}">
                             % include('components/svg', name='right')
                         </a>
                     </div>
                     <div class="section">
-                        % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.number}/schedule')
+                        % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.url_id}/schedule')
                     </div>
                 </div>
             </div>
@@ -90,7 +89,7 @@
                                     </td>
                                     <td class="non-mobile">
                                         % if block:
-                                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                         % else:
                                             <div class="lighter-text">Unknown</div>
                                         % end

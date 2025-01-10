@@ -6,9 +6,13 @@
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
     % if system:
-        <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
+        % if agency.realtime_enabled:
+            <h2>Transit Schedules and Bus Tracking {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
+        % else:
+            <h2>Transit Schedules {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
+        % end
     % else:
-        <h2>BC Transit Schedules and Bus Tracking</h2>
+        <h2>Transit Schedules and Bus Tracking for British Columbia</h2>
     % end
 </div>
 
@@ -27,7 +31,7 @@
                             if (isNaN(value)) {
                                 alert("Please enter a valid bus number")
                             } else {
-                                window.location = "{{ get_url(system) }}/bus/" + value;
+                                window.location = "{{ get_url(system, 'bus') }}/" + value;
                             }
                         }
                     }
@@ -35,7 +39,7 @@
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system) }}/routes/" + value;
+                            window.location = "{{ get_url(system, 'routes') }}/" + value;
                         }
                     }
                     
@@ -43,9 +47,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(system) }}/stops?search=" + value;
+                                window.location = "{{ get_url(system, 'stops') }}?search=" + value;
                             } else {
-                                window.location = "{{ get_url(system) }}/stops/" + value;
+                                window.location = "{{ get_url(system, 'stops') }}/" + value;
                             }
                         }
                     }
@@ -53,7 +57,7 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system) }}/blocks/" + value;
+                            window.location = "{{ get_url(system, 'blocks') }}/" + value;
                         }
                     }
                 </script>
@@ -191,7 +195,7 @@
                                                         <td>
                                                             <div class="row">
                                                                 % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.system, f'routes/{value.number}') }}">{{! value.display_name }}</a>
+                                                                <a href="{{ get_url(value.system, 'routes', value) }}">{{! value.display_name }}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -224,7 +228,7 @@
                                                     % value = favourite.value
                                                     <tr>
                                                         <td>
-                                                            <a href="{{ get_url(value.system, f'stops/{value.number}') }}">{{ value.number }}</a>
+                                                            <a href="{{ get_url(value.system, 'stops', value) }}">{{ value.number }}</a>
                                                         </td>
                                                         <td>{{ value.name }}</td>
                                                     </tr>
@@ -285,6 +289,38 @@
                 <div class="container">
                     <div class="news-post">
                         <div class="header">
+                            <h3>Winter Update</h3>
+                            January 10th, 2025
+                        </div>
+                        <div class="content">
+                            <p>
+                                Happy new year!
+                                We're kicking things off with a very exciting announcement: BCTracker is adding support for more transit agencies in BC!
+                            </p>
+                            <p>
+                                We imagine that the first question coming to many minds is "Do you now support TransLink"?
+                                The answer is <i>not yet</i>, but hopefully we can get there in the future.
+                                For now we're starting with a few small agencies without realtime tracking, to ease ourselves in and have time to iron out any issues before taking on something bigger.
+                                The initial new systems/agencies are:
+                            </p>
+                            <ul>
+                                <li><b>Denman Island</b> - operated by <a href="https://www.denmanislandbus.ca">Denman Island Bus</a></li>
+                                <li><b>Gabriola Island</b> - operated by <a href="https://gertie.ca">GERTIE</a></li>
+                                <li><b>Hornby Island</b> - operated by <a href="https://hornbybus.com">Hornby Bus</a></li>
+                            </ul>
+                            <p>If you happen to live in or visit one of these places, we hope you find BCTracker useful!</p>
+                            <p>In other news, plenty of other improvements have been made since our previous post, including:</p>
+                            <ul>
+                                <li>Bus occupancy status</li>
+                                <li>Time since each bus position was last updated</li>
+                                <li>Stop list filtering and sorting</li>
+                                <li>Various layout and style updates</li>
+                            </ul>
+                            <p>Enjoy, stay safe, and have a great year!</p>
+                        </div>
+                    </div>
+                    <div class="news-post">
+                        <div class="header">
                             <h3>Summer Update</h3>
                             June 27, 2024
                         </div>
@@ -307,29 +343,6 @@
                                 As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
                                 Have a great summer!
                             </p>
-                        </div>
-                    </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Spring Update</h3>
-                            March 30, 2024
-                        </div>
-                        <div class="content">
-                            <p>It hasn't been too long since our last update, but we've already got a bunch of new things to share!</p>
-                            <p>
-                                BC Transit has started releasing GTFS for many of the new systems we've added over the last year.
-                                Unfortunately, they also changed how buses are included in the data feed, so the NIS buses from those systems have disappeared.
-                                Luckily, realtime is starting to go live as well - buses from Smithers and other systems are already online, and more should be coming soon!
-                            </p>
-                            <p>We've also made some big changes and improvements to the website, some of which you may have encountered already, and some of which are getting released along with this news post!</p>
-                            <ul>
-                                <li>Redesigned and improved the site-wide search bar and results</li>
-                                <li>Added support for seeing all systems at once on the routes map page</li>
-                                <li>Added date filters and statistics on the vehicle history page</li>
-                                <li>Added scheduled bus info to trip pages before they've run</li>
-                                <li>Bug fixes and performance improvements behind the scenes</li>
-                            </ul>
-                            <p>Thank you for continuing to support BCTracker!</p>
                         </div>
                     </div>
                     <div>

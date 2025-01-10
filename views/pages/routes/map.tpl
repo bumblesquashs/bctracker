@@ -104,7 +104,7 @@
                 
                 const icon = document.createElement("a");
                 icon.className = "icon route";
-                icon.href = getUrl(route.system_id, "routes/" + route.number);
+                icon.href = getUrl(route.system_id, "routes/" + route.url_id);
                 icon.style.backgroundColor = "#" + route.colour;
                 icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
                 
@@ -141,7 +141,7 @@
         
         document.body.onload = function() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(system, 'api/routes') }}", true);
+            request.open("GET", "{{ get_url(system, 'api', 'routes') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {

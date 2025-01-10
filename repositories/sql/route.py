@@ -31,10 +31,14 @@ class SQLRouteRepository(RouteRepository):
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
+        route_id = row['route_id']
+        number = row['route_short_name']
+        if not number:
+            number = route_id
         self.database.insert('route', {
             'system_id': system_id,
-            'route_id': row['route_id'],
-            'number': row['route_short_name'],
+            'route_id': route_id,
+            'number': number,
             'name': row['route_long_name'],
             'colour': colour,
             'text_colour': text_colour

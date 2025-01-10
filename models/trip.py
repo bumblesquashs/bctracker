@@ -40,6 +40,11 @@ class Trip:
         return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property
+    def url_id(self):
+        '''The ID to use when making trip URLs'''
+        return self.id
+    
+    @property
     def display_id(self):
         '''Formats the trip ID for web display'''
         return self.id.replace(':', ':<wbr />')

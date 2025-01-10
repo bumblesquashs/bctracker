@@ -22,14 +22,14 @@
                         <div class="row section align-center">
                             % previous_date = date.previous()
                             % next_date = date.next()
-                            <a class="icon button" href="{{ get_url(system, f'blocks/schedule/{previous_date.format_db()}') }}">
+                            <a class="icon button" href="{{ get_url(system, 'blocks', 'schedule', previous_date) }}">
                                 % include('components/svg', name='left')
                             </a>
                             <div class="centred">
                                 <h3>{{ date.format_long() }}</h3>
-                                <a href="{{ get_url(system, 'blocks/schedule') }}">Go to weekly schedule</a>
+                                <a href="{{ get_url(system, 'blocks', 'schedule') }}">Go to weekly schedule</a>
                             </div>
-                            <a class="icon button" href="{{ get_url(system, f'blocks/schedule/{next_date.format_db()}') }}">
+                            <a class="icon button" href="{{ get_url(system, 'blocks', 'schedule', next_date) }}">
                                 % include('components/svg', name='right')
                             </a>
                         </div>
@@ -68,7 +68,7 @@
                                     % start_time = block.get_start_time(date=date).format_web(time_format)
                                     % end_time = block.get_end_time(date=date).format_web(time_format)
                                     <tr>
-                                        <td><a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a></td>
+                                        <td><a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a></td>
                                         <td>
                                             % include('components/route_list', routes=block.get_routes(date=date))
                                         </td>

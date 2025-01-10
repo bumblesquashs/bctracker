@@ -7,9 +7,9 @@
     <div class="tab-button-bar">
         <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
         % if system:
-            <a href="{{ get_url(system, 'realtime/routes') }}" class="tab-button">By Route</a>
+            <a href="{{ get_url(system, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
-        <a href="{{ get_url(system, 'realtime/models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(system, 'realtime', 'models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
 </div>
@@ -81,23 +81,20 @@
                                 </div>
                                 % if stop:
                                     <div class="non-desktop smaller-font">
-                                        Next Stop: <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
+                                        <span class="align-middle">Next Stop:</span>
+                                        % include('components/stop')
                                     </div>
                                 % end
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')
                         </td>
                         <td class="desktop-only">
-                            % if stop:
-                                <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">{{ stop }}</a>
-                            % else:
-                                <span class="lighter-text">Unavailable</span>
-                            % end
+                            % include('components/stop')
                         </td>
                     % else:
                         <td colspan="4">
@@ -119,7 +116,7 @@
             % if show_nis:
                 <h3>There are no buses out right now</h3>
                 <p>
-                    BC Transit does not have late night service, so this should be the case overnight.
+                    None of our current agencies operate late night service, so this should be the case overnight.
                     If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                 </p>
                 <p>Please check again later!</p>
@@ -148,6 +145,6 @@
 
 <script>
     function toggleNISBuses() {
-        window.location = "{{ get_url(system, 'realtime/speed', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ get_url(system, 'realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

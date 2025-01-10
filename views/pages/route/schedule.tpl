@@ -8,8 +8,8 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'routes/{route.number}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'routes/{route.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'routes', route) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'routes', route, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -26,7 +26,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheet_list', sheets=sheets, schedule_path=f'routes/{route.number}/schedule')
+                            % include('components/sheet_list', sheets=sheets, schedule_path=f'routes/{route.url_id}/schedule')
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,8 @@
                                                                             % include('components/headsign')
                                                                         </td>
                                                                         <td class="non-mobile">
-                                                                            <a href="{{ get_url(trip.block.system, f'blocks/{trip.block.id}') }}">{{ trip.block.id }}</a>
+                                                                            % block = trip.block
+                                                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                                                         </td>
                                                                         <td>
                                                                             <div class="column">
@@ -100,7 +101,7 @@
                                                                             </div>
                                                                         </td>
                                                                         <td class="desktop-only">
-                                                                            <a href="{{ get_url(first_stop.system, f'stops/{first_stop.number}') }}">{{ first_stop }}</a>
+                                                                            % include('components/stop', stop=first_stop)
                                                                         </td>
                                                                     </tr>
                                                                     % last_start_time = start_time

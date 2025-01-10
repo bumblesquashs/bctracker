@@ -15,8 +15,8 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, f'bus/{bus.number}') }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, f'bus/{bus.number}/map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'bus', bus) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -66,7 +66,7 @@
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording bus history</li>
-                            <li>It may not have functional NextRide equipment installed</li>
+                            <li>It may not have functional tracking equipment installed</li>
                             % model = bus.model
                             % if model is None or model.type == ModelType.shuttle:
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
@@ -122,7 +122,7 @@
                                                 <div class="row">
                                                     % if record.is_available:
                                                         % block = record.block
-                                                        <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+                                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
                                                     % else:
                                                         <span>{{ record.block_id }}</span>
                                                     % end

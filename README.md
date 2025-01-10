@@ -1,8 +1,15 @@
 # BCTracker
 
-A GTFS schedule browser and realtime bus tracker for BC Transit.
+A GTFS schedule browser and realtime bus tracker for transit in BC.
 
 Available at https://bctracker.ca
+
+## Agencies
+
+- BC Transit
+- Denman Island Bus
+- Gertie
+- Hornby Bus
 
 ## Systems
 
@@ -14,9 +21,12 @@ Available at https://bctracker.ca
 - Cowichan Valley
 - Creston Valley
 - Dawson Creek
+- Denman Island
 - East Kootenay
 - Fort St. John
 - Fraser Valley
+- Gabriola Island
+- Hornby Island
 - Kamloops
 - Kelowna
 - Kitimat-Stikine
@@ -46,7 +56,7 @@ Available at https://bctracker.ca
 Server developed and deployed on Linux (Runs fine on Ubuntu 18+, Mint).
 Also has been tested and confirmed to work on macOS.
 Not tested on Windows.
-Requires roughly Python 3.7 or higher, and pip.
+Requires roughly Python 3.11 or higher, and pip.
 
 Uses the [Bottle](https://bottlepy.org) framework for web stuff and templates, and maps are done with [OpenLayers](https://openlayers.org).
 

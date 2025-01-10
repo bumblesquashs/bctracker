@@ -48,7 +48,7 @@
     </td>
     <td class="desktop-only">
         % if block:
-            <a href="{{ get_url(block.system, f'blocks/{block.id}') }}">{{ block.id }}</a>
+            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
         % else:
             <span class="lighter-text">Loading</span>
         % end

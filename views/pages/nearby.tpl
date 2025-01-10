@@ -58,17 +58,20 @@
                                         % count = len(region_system.get_stops())
                                         <tr>
                                             <td>
-                                                <div class="column">
-                                                    <a href="{{ get_url(region_system, path) }}">{{ region_system }}</a>
-                                                    <span class="mobile-only smaller-font">
-                                                        % if region_system.gtfs_loaded:
-                                                            % if count == 1:
-                                                                1 Stop
-                                                            % else:
-                                                                {{ count }} Stops
+                                                <div class="row">
+                                                    % include('components/agency_logo', agency=region_system.agency)
+                                                    <div class="column">
+                                                        <a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+                                                        <span class="mobile-only smaller-font">
+                                                            % if region_system.gtfs_loaded:
+                                                                % if count == 1:
+                                                                    1 Stop
+                                                                % else:
+                                                                    {{ count }} Stops
+                                                                % end
                                                             % end
-                                                        % end
-                                                    </span>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </td>
                                             % if region_system.gtfs_loaded:
@@ -144,7 +147,7 @@
         
         if (systemSelected) {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'frame/nearby')}}?lat=" + lat + "&lon=" + lon, true);
+            request.open("GET", "{{get_url(system, 'frame', 'nearby')}}?lat=" + lat + "&lon=" + lon, true);
             request.onload = function() {
                 if (request.status === 200) {
                     if (request.response === null) {
@@ -168,7 +171,7 @@
     
     function loadMapMarkers(lat, lon) {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{get_url(system, 'api/nearby.json')}}?lat=" + lat + "&lon=" + lon, true);
+        request.open("GET", "{{get_url(system, 'api', 'nearby.json')}}?lat=" + lat + "&lon=" + lon, true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {
@@ -180,15 +183,21 @@
                     
                     const icon = document.createElement("a");
                     icon.className = "icon";
-                    icon.href = getUrl(stop.system_id, "stops/" + stop.number);
+                    icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
                     icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
                     
                     const details = document.createElement("div");
                     details.className = "details";
+                    if (!showStopNumbers) {
+                        details.classList.add("hover-only");
+                    }
                     
-                    const title = document.createElement("div");
-                    title.className = "title";
-                    title.innerHTML = stop.number;
+                    if (showStopNumbers) {
+                        const title = document.createElement("div");
+                        title.className = "title";
+                        title.innerHTML = stop.number;
+                        details.appendChild(title);
+                    }
                     
                     const content = document.createElement("div");
                     content.classList = "content hover-only centred";
@@ -198,7 +207,6 @@
                     }
                     content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
                     
-                    details.appendChild(title);
                     details.appendChild(content);
                     
                     element.appendChild(icon);

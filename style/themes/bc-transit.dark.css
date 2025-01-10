@@ -25,6 +25,10 @@
     --checkbox-color: #5CC3FF;
     --radio-button-color: #5CC3FF;
     --toggle-button-color: #5CC3FF;
+    
+    --stop-number-background: #2F2F2F;
+    --stop-number-text: #FFFFFF;
+    --stop-number-border: #565656;
 }
 
 a {
@@ -42,6 +46,10 @@ body.full-map #page-header {
 
 body.full-map #page-header .option {
     --hover-background: #2F2F2F;
+}
+
+h1, h2, h3 {
+    --stop-number-background: #393939;
 }
 
 input[type="text"] {

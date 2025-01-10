@@ -25,10 +25,10 @@
         
         % if system:
             <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, BC Transit, Bus Tracking, {{ system }}" />
+            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ system }}, {{ system.agency }}" />
         % else:
-            <meta name="description" content="BC Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, BC Transit, Bus Tracking" />
+            <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
+            <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
         % end
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
@@ -49,8 +49,8 @@
             <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
         % end
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(system, path) }}" />
-        <meta property="og:image" content="{{ get_url(system, 'img/meta-logo.png') }}" />
+        <meta property="og:url" content="{{ get_url(system, *path) }}" />
+        <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -132,6 +132,8 @@
             function getSVG(name) {
                 return svgs[name];
             }
+            
+            const showStopNumbers = "{{ agency and agency.show_stop_number }}" == "True";
         </script>
         
         % if system:
@@ -407,7 +409,7 @@
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
                 % if system:
-                    <a href="{{ get_url(None, path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % end
@@ -417,9 +419,15 @@
                         <div class="header">{{ region }}</div>
                         % for region_system in sorted(region_systems):
                             % if system and system == region_system:
-                                <span class="system-button current">{{ region_system }}</span>
+                                <div class="system-button current">
+                                    % include('components/agency_logo', agency=region_system.agency)
+                                    <div>{{ region_system }}</div>
+                                </div>
                             % else:
-                                <a href="{{ get_url(region_system, path, **path_args) }}" class="system-button">{{ region_system }}</a>
+                                <a href="{{ get_url(region_system, *path, **path_args) }}" class="system-button">
+                                    % include('components/agency_logo', agency=region_system.agency)
+                                    <div>{{ region_system }}</div>
+                                </a>
                             % end
                         % end
                     % end
@@ -547,7 +555,7 @@
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
-            request.open("POST", "{{get_url(system, 'api/search')}}", true);
+            request.open("POST", "{{get_url(system, 'api', 'search')}}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (timestamp !== lastSearchTimestamp) {

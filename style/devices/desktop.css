@@ -157,6 +157,7 @@ table th {
     text-decoration: none !important;
     padding: 5px 20px;
     font-size: 12pt;
+    text-wrap: nowrap;
 }
 
 #system-menu .system-button.current {

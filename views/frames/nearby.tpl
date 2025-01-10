@@ -21,8 +21,10 @@
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
                 <div class="column">
-                    <h3>Stop {{ stop.number }} - {{ stop }}</h3>
-                    <a href="{{ get_url(stop.system, f'stops/{stop.number}') }}">View stop schedule and details</a>
+                    <h3>
+                        % include('components/stop', include_link=False)
+                    </h3>
+                    <a href="{{ get_url(stop.system, 'stops', stop) }}">View stop schedule and details</a>
                 </div>
                 % include('components/toggle')
             </div>
@@ -65,7 +67,7 @@
                     % tomorrow = Date.today() + timedelta(days=1)
                     <p>
                         There are no departures for the rest of today.
-                        <a href="{{ get_url(stop.system, f'stops/{stop.number}/schedule/{tomorrow.format_db()}') }}">Check tomorrow's schedule.</a>
+                        <a href="{{ get_url(stop.system, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                     </p>
                 % end
             </div>
