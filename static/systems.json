@@ -8,17 +8,17 @@
             "comox": {
                 "name": "Comox Valley",
                 "remote_id": 45,
-                "preposition": "in the"
+                "preposition": "for the"
             },
             "cowichan-valley": {
                 "name": "Cowichan Valley",
                 "remote_id": 10,
-                "preposition": "in the"
+                "preposition": "for the"
             },
             "mount-waddington": {
                 "name": "Mount Waddington",
                 "remote_id": 17,
-                "preposition": "in the",
+                "preposition": "for the",
                 "regional": true
             },
             "nanaimo": {
@@ -32,7 +32,6 @@
             "salt-spring": {
                 "name": "Salt Spring Island",
                 "remote_id": 39,
-                "preposition": "on",
                 "colour_routes": "000000"
             },
             "victoria": {
@@ -44,7 +43,7 @@
             "fraser-valley": {
                 "name": "Fraser Valley",
                 "remote_id": 13,
-                "preposition": "in the"
+                "preposition": "for the"
             },
             "pemberton": {
                 "name": "Pemberton",
@@ -63,7 +62,7 @@
             "sunshine-coast": {
                 "name": "Sunshine Coast",
                 "remote_id": 18,
-                "preposition": "on the",
+                "preposition": "for the",
                 "colour_routes": "000000"
             },
             "whistler": {
@@ -75,7 +74,7 @@
             "ashcroft-clinton": {
                 "name": "Ashcroft-Clinton",
                 "remote_id": 38,
-                "preposition":"in the",
+                "preposition":"for the",
                 "regional": true,
                 "colour_routes": "000000"
             },
@@ -87,14 +86,14 @@
             "creston-valley": {
                 "name": "Creston Valley",
                 "remote_id": 16,
-                "preposition": "in the",
+                "preposition": "for the",
                 "timezone": "America/Creston"
             },
             "east-kootenay": {
                 "name": "East Kootenay",
                 "remote_id": 21,
                 "timezone": "America/Edmonton",
-                "preposition": "in the",
+                "preposition": "for the",
                 "regional": true,
                 "colour_routes": "000000"
             },
@@ -115,7 +114,7 @@
             "north-okanagan": {
                 "name": "North Okanagan",
                 "remote_id": 14,
-                "preposition": "in the",
+                "preposition": "for the",
                 "regional": true
             },
             "revelstoke": {
@@ -126,13 +125,13 @@
             "south-okanagan": {
                 "name": "South Okanagan",
                 "remote_id": 15,
-                "preposition": "in the",
+                "preposition": "for the",
                 "regional": true
             },
             "west-kootenay": {
                 "name": "West Kootenay",
                 "remote_id": 20,
-                "preposition": "in the",
+                "preposition": "for the",
                 "regional": true,
                 "colour_routes": "000000"
             }
@@ -156,7 +155,7 @@
             "kitimat": {
                 "name": "Kitimat-Stikine",
                 "remote_id": 26,
-                "preposition": "in the",
+                "preposition": "for the",
                 "regional": true,
                 "colour_routes": "000000"
             },
@@ -189,24 +188,21 @@
     "denman-island-bus": {
         "vancouver-island": {
             "denman-island": {
-                "name": "Denman Island",
-                "preposition": "on"
+                "name": "Denman Island"
             }
         }
     },
     "gertie": {
         "vancouver-island": {
             "gabriola-island": {
-                "name": "Gabriola Island",
-                "preposition": "on"
+                "name": "Gabriola Island"
             }
         }
     },
     "hornby-bus": {
         "vancouver-island": {
             "hornby-island": {
-                "name": "Hornby Island",
-                "preposition": "on"
+                "name": "Hornby Island"
             }
         }
     },

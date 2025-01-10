@@ -18,7 +18,7 @@
         "show_stop_number": false
     },
     "gertie": {
-        "name": "Gertie",
+        "name": "GERTIE",
         "website": "https://gertie.ca",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/GABRIOLA_feed/feed-GERTIE.zip",
         "prefix_headsigns": true,

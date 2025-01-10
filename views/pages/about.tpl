@@ -120,7 +120,7 @@
                     If you are curious about BCTracker, have questions, or something seems broken, you can contact us directly by emailing <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
                     You can also chat with us more casually on the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a> where we talk about transit in BC and occasionally discuss upcoming features for the website.
                 </p>
-                <i> - James & Perrin, 2024 </i> 
+                <i> - James & Perrin, 2025 </i> 
             </div>  
         </div>
     </div>

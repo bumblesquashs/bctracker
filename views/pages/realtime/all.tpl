@@ -83,6 +83,10 @@
         % if not system:
             % if show_nis:
                 <h3>There are no buses out right now</h3>
+                <p>
+                    None of our current agencies operate late night service, so this should be the case overnight.
+                    If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                </p>
                 <p>Please check again later!</p>
             % else:
                 <h3>There are no buses in service right now</h3>

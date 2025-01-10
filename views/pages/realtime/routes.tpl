@@ -191,6 +191,10 @@
     <div class="placeholder">
         % if not system:
             <h3>Realtime routes can only be viewed for individual systems.</h3>
+            <p>
+                None of our current agencies operate late night service, so this should be the case overnight.
+                If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+            </p>
             <p>Please choose a system.</p>
         % elif not system.realtime_enabled:
             <h3>{{ system }} does not support realtime</h3>
