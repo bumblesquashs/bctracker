@@ -17,5 +17,5 @@ class AgencyRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self) -> list[Agency]:
+    def find_all(self, enabled_only: bool = True) -> list[Agency]:
         raise NotImplementedError()

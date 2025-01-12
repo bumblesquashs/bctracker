@@ -17,5 +17,5 @@ class SystemRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self) -> list[System]:
+    def find_all(self, enabled_only: bool = True) -> list[System]:
         raise NotImplementedError()

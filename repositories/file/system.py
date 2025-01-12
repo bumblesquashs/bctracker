@@ -37,6 +37,8 @@ class FileSystemRepository(SystemRepository):
         '''Returns the system with the given ID'''
         return self.systems.get(system_id)
     
-    def find_all(self):
+    def find_all(self, enabled_only: bool = True):
         '''Returns all systems'''
-        return [s for s in self.systems.values() if s.enabled]
+        if enabled_only:
+            return [s for s in self.systems.values() if s.enabled]
+        return self.systems.values()
