@@ -41,7 +41,7 @@
                         <thead>
                             <tr>
                                 <th>System</th>
-                                <th>Enabled</th>
+                                <th class="non-mobile">Enabled</th>
                                 <th>GTFS</th>
                                 <th>Realtime</th>
                             </tr>
@@ -59,10 +59,15 @@
                                             <td>
                                                 <div class="row">
                                                     % include('components/agency_logo', agency=region_system.agency)
-                                                    {{ region_system }}
+                                                    <div class="column">
+                                                        {{ region_system }}
+                                                        <div class="mobile-only smaller-font {{ 'positive' if region_system.enabled else 'negative' }}">
+                                                            {{ 'Enabled' if region_system.enabled else 'Disabled' }}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
-                                            <td class="{{ 'positive' if region_system.enabled else 'negative' }}">
+                                            <td class="non-mobile {{ 'positive' if region_system.enabled else 'negative' }}">
                                                 % if region_system.enabled:
                                                     % include('components/svg', name='check-circle')
                                                 % else:
