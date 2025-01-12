@@ -209,46 +209,30 @@
             model.className = "lighter-text centred";
             model.innerHTML = position.bus_order;
             content.appendChild(model);
-            
-            const headsign = document.createElement("div");
-            if (position.adherence !== null && position.adherence !== undefined) {
-                headsign.className = "row center gap-5";
-                const adherence = position.adherence;
-                const adherenceElement = document.createElement("div");
-                adherenceElement.classList.add("adherence-indicator", adherence.status_class);
-                adherenceElement.innerHTML = adherence.value;
                 
-                headsign.innerHTML = adherenceElement.outerHTML + position.headsign;
-            } else {
+            const headsign = document.createElement("div");
+            if (position.headsign === "Not In Service") {
                 headsign.className = "centred";
                 headsign.innerHTML = position.headsign;
+            } else {
+                headsign.className = "headsign";
+            
+                const routeLine = document.createElement("div");
+                routeLine.className = "route-line";
+                routeLine.style.backgroundColor = "#" + position.colour;
+                
+                headsign.innerHTML = routeLine.outerHTML + position.headsign;
             }
             content.appendChild(headsign);
             
-            const occupancy = document.createElement("div");
-            occupancy.className = "row center gap-5";
-            
-            const occupancyIcon = document.createElement("div");
-            occupancyIcon.className = "occupancy-icon";
-            occupancyIcon.classList.add(position.occupancy_status_class);
-            occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
-            occupancy.appendChild(occupancyIcon);
-            
-            const occupancyName = document.createElement("div");
-            occupancyName.className = "occupancy-name";
-            occupancyName.innerText = position.occupancy_name;
-            occupancy.appendChild(occupancyName);
-            
-            content.appendChild(occupancy);
-            
             const footer = document.createElement("div");
             footer.className = "lighter-text centred";
-            let systemElement = null;
-            if ("{{ system is None }}" === "True") {
-                systemElement = document.createElement("span");
-                systemElement.innerHTML = position.system;
-                footer.appendChild(systemElement);
-            }
+            content.appendChild(footer);
+            
+            const systemElement = document.createElement("span");
+            systemElement.innerHTML = position.system;
+            footer.appendChild(systemElement);
+            
             if (position.timestamp) {
                 if (systemElement) {
                     const separator = document.createElement("span")
@@ -262,7 +246,31 @@
                     timestamp.innerHTML = difference;
                 });
             }
-            content.appendChild(footer);
+            
+            const iconsRow = document.createElement("div");
+            iconsRow.className = "row center gap-5";
+            content.appendChild(iconsRow);
+            
+            if (adherence !== null && adherence !== undefined) {
+                const adherenceElement = document.createElement("div");
+                adherenceElement.classList.add("adherence-indicator", adherence.status_class);
+                adherenceElement.innerHTML = adherence.value;
+                iconsRow.appendChild(adherenceElement);
+            }
+            
+            const occupancyIcon = document.createElement("div");
+            occupancyIcon.className = "occupancy-icon";
+            occupancyIcon.classList.add(position.occupancy_status_class);
+            occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
+            iconsRow.appendChild(occupancyIcon);
+            
+            const agencyLogo = document.createElement("img");
+            agencyLogo.className = "agency-logo";
+            agencyLogo.src = "/img/icons/" + position.agency_id + ".png";
+            agencyLogo.onerror = function() {
+                agencyLogo.style.visibility = 'hidden';
+            };
+            iconsRow.appendChild(agencyLogo);
             
             map.addOverlay(new ol.Overlay({
                 position: ol.proj.fromLonLat([position.lon, position.lat]),

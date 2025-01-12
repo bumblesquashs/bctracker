@@ -110,7 +110,23 @@
                 
                 const details = document.createElement("div");
                 details.className = "details hover-only";
-                details.innerHTML = "<div class='title'>" + route.name + "</div>";
+                
+                const title = document.createElement("div");
+                title.className = "title";
+                title.innerHTML = route.name;
+                details.appendChild(title);
+                
+                const agencyLogo = document.createElement("img");
+                agencyLogo.className = "agency-logo";
+                agencyLogo.src = "/img/icons/" + route.agency_id + ".png";
+                agencyLogo.onerror = function() {
+                    agencyLogo.style.visibility = 'hidden';
+                };
+                
+                const content = document.createElement("div");
+                content.classList = "content";
+                content.innerHTML = "<div class='row gap-5'>" + agencyLogo.outerHTML + route.system_name + "</div>";
+                details.appendChild(content);
                 
                 element.appendChild(icon);
                 element.appendChild(details);
