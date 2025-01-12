@@ -22,6 +22,7 @@
 
 .negative {
     color: #FF0000;
+    --image-color: #FF0000;
 }
 
 .no-service {
@@ -91,6 +92,7 @@
 
 .positive {
     color: #1A671A;
+    --image-color: #1A671A;
 }
 
 .sheet a.modified-service:hover {

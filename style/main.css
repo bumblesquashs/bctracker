@@ -1024,10 +1024,6 @@ table tr.header td {
     vertical-align: middle;
 }
 
-.negative {
-    font-weight: bold;
-}
-
 .news-post {
     border-width: 1px;
     border-style: solid;
@@ -1191,10 +1187,6 @@ table tr.header td {
     flex-direction: column;
     gap: 5px;
     align-items: flex-start;
-}
-
-.positive {
-    font-weight: bold;
 }
 
 .route {
