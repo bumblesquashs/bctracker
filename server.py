@@ -834,6 +834,18 @@ class Server(Bottle):
         )
     
     def blocks_overview(self, system, agency):
+        path_args = {}
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = [r for r in routes_query.split(',') if r]
+        else:
+            routes_filter = []
+        sort = self.query_options('sort', ['start-time', 'end-time', 'id'])
+        if sort != 'start-time':
+            path_args['sort'] = sort
+        sort_order = self.query_options('sort_order', ['asc', 'desc'])
+        if sort_order != 'asc':
+            path_args['sort_order'] = sort_order
         if system and system.realtime_enabled:
             recorded_buses = self.record_repository.find_recorded_today_by_block(system)
         else:
@@ -842,9 +854,13 @@ class Server(Bottle):
             name='blocks/overview',
             title='Blocks',
             path=['blocks'],
+            path_args=path_args,
             system=system,
             agency=agency,
-            recorded_buses=recorded_buses
+            recorded_buses=recorded_buses,
+            routes_filter=routes_filter,
+            sort=sort,
+            sort_order=sort_order
         )
     
     def blocks_schedule(self, system, agency):

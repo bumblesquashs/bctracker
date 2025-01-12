@@ -12,7 +12,58 @@
 % if system:
     % blocks = system.get_blocks()
     % if blocks:
-        % today_blocks = sorted([b for b in blocks if today in b.schedule], key=lambda b: (b.get_start_time(date=today), b.get_end_time(date=today)))
+        <script>
+            const routesFilter = new Set("{{ ','.join(routes_filter) }}".split(",").filter(function(route) {
+                return route !== "";
+            }));
+            let sort = "{{ sort }}";
+            let sortOrder = "{{ sort_order }}";
+            
+            function toggleRouteFilter(number) {
+                if (routesFilter.has(number)) {
+                    routesFilter.delete(number);
+                } else {
+                    routesFilter.add(number);
+                }
+                updateFilters();
+            }
+            
+            function resetRoutesFilter() {
+                routesFilter.clear();
+                updateFilters();
+            }
+            
+            function setSort(newSort) {
+                sort = newSort;
+                updateFilters();
+            }
+            
+            function setSortOrder(newSortOrder) {
+                sortOrder = newSortOrder;
+                updateFilters();
+            }
+            
+            function updateFilters() {
+                window.location = getUrl(systemID, "blocks", {
+                    "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
+                    "sort": sort === "start-time" ? null : sort,
+                    "sort_order": sortOrder === "asc" ? null : sortOrder
+                })
+            }
+        </script>
+        % def sort_key(block):
+            % if sort == 'id':
+                % return block.id
+            % elif sort == 'end-time':
+                % return (block.get_end_time(date=today), block.get_start_time(date=today))
+            % else:
+                % return (block.get_start_time(date=today), block.get_end_time(date=today))
+            % end
+        % end
+        % today_blocks = sorted([b for b in blocks if today in b.schedule], key=sort_key, reverse=sort_order == 'desc')
+        % for route_url_id in routes_filter:
+            % today_blocks = [b for b in today_blocks if route_url_id in {r.url_id for r in b.get_routes(date=today)}]
+        % end
         % blocks_so_far = [b for b in today_blocks if b.get_start_time(date=today) <= now]
         <div class="page-container">
             <div class="sidebar container flex-1">
@@ -58,6 +109,83 @@
                                     </div>
                                 % end
                             % end
+                        </div>
+                    </div>
+                </div>
+                <div class="section {{ 'closed' if sort == 'name' and sort_order == 'asc' else '' }}">
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>Sorting</h2>
+                        % include('components/toggle')
+                    </div>
+                    <div class="content">
+                        <div class="info-box columns">
+                            <div class="section">
+                                <div class="options-container">
+                                    <div class="option" onclick="setSort('id')">
+                                        <div class="radio-button {{ 'selected' if sort == 'id' else '' }}"></div>
+                                        <div>Block ID</div>
+                                    </div>
+                                    <div class="option" onclick="setSort('start-time')">
+                                        <div class="radio-button {{ 'selected' if sort == 'start-time' else '' }}"></div>
+                                        <div>Start Time</div>
+                                    </div>
+                                    <div class="option" onclick="setSort('end-time')">
+                                        <div class="radio-button {{ 'selected' if sort == 'end-time' else '' }}"></div>
+                                        <div>End Time</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <div class="options-container">
+                                    <div class="option" onclick="setSortOrder('asc')">
+                                        <div class="radio-button {{ 'selected' if sort_order == 'asc' else '' }}"></div>
+                                        <div>Ascending</div>
+                                    </div>
+                                    <div class="option" onclick="setSortOrder('desc')">
+                                        <div class="radio-button {{ 'selected' if sort_order == 'desc' else '' }}"></div>
+                                        <div>Descending</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section {{ '' if routes_filter else 'closed' }}">
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>Filters</h2>
+                        % include('components/toggle')
+                    </div>
+                    <div class="content">
+                        <div class="info-box">
+                            <div class="row section">
+                                <div class="lighter-text">
+                                    % if routes_filter:
+                                        % if len(routes_filter) == 1:
+                                            1 route selected
+                                        % else:
+                                            {{ len(routes_filter) }} routes selected
+                                        % end
+                                    % else:
+                                        No routes selected
+                                    % end
+                                </div>
+                                <button class="button compact" onclick="resetRoutesFilter()">Reset</button>
+                            </div>
+                            <div class="section">
+                                <div class="options-container">
+                                    % for route in system.get_routes():
+                                        <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
+                                            <div class="row">
+                                                % include('components/route')
+                                                {{! route.display_name }}
+                                            </div>
+                                            <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
+                                                % include('components/svg', name='check')
+                                            </div>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
