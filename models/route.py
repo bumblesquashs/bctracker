@@ -122,6 +122,8 @@ class Route:
         for point in self.indicator_points:
             json.append({
                 'system_id': self.system.id,
+                'system_name': str(self.system),
+                'agency_id': self.system.agency.id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,

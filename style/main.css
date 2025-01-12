@@ -872,7 +872,6 @@ table tr.header td {
     overflow: visible;
     line-height: 10pt;
     width: max-content;
-    max-width: 150px;
     padding: 2px;
     display: flex;
     flex-direction: column;
@@ -883,6 +882,15 @@ table tr.header td {
     font-size: 8pt;
     line-height: 8pt;
     border-radius: 3px;
+}
+
+.marker .details .content .agency-logo {
+    width: 16px;
+    height: 16px;
+}
+
+.marker .details .content .headsign {
+    justify-content: center;
 }
 
 .marker .details .content .route {
@@ -903,7 +911,6 @@ table tr.header td {
     font-weight: bold;
     line-height: 10pt;
     width: max-content;
-    max-width: 150px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -948,11 +955,11 @@ table tr.header td {
 }
 
 .marker .icon:hover ~ .hover-only {
-    display: inherit;
+    display: flex;
 }
 
 .marker .icon:hover ~ * .hover-only {
-    display: inherit;
+    display: flex;
 }
 
 .marker .icon.adherence {
