@@ -110,7 +110,47 @@
                 
                 const details = document.createElement("div");
                 details.className = "details hover-only";
-                details.innerHTML = "<div class='title'>" + route.name + "</div>";
+                
+                const title = document.createElement("div");
+                title.className = "title";
+                title.innerHTML = route.name;
+                details.appendChild(title);
+                
+                const agencyLogo = document.createElement("img");
+                agencyLogo.className = "agency-logo";
+                agencyLogo.src = "/img/icons/" + route.agency_id + ".png";
+                agencyLogo.onerror = function() {
+                    agencyLogo.style.visibility = 'hidden';
+                };
+                
+                const content = document.createElement("div");
+                content.className = "content";
+                details.appendChild(content);
+                
+                const headsignSection = document.createElement("div");
+                headsignSection.className = "column";
+                headsignSection.style.width = "fit-content";
+                content.appendChild(headsignSection);
+                
+                for (headsign of route.headsigns.slice(0, 4)) {
+                    const headsignRow = document.createElement("div");
+                    headsignRow.className = "headsign";
+                
+                    const routeLine = document.createElement("div");
+                    routeLine.className = "route-line";
+                    routeLine.style.backgroundColor = "#" + route.colour;
+                    
+                    headsignRow.innerHTML = routeLine.outerHTML + headsign;
+                    
+                    headsignSection.appendChild(headsignRow);
+                }
+                if (route.headsigns.length == 5) {
+                    headsignSection.innerHTML += "<i class='lighter-text'>And 1 other</i>";
+                } else if (route.headsigns.length > 5) {
+                    headsignSection.innerHTML += "<i class='lighter-text'>And " + (route.headsigns.length - 4) + " others</i>";
+                }
+                
+                content.innerHTML += "<div class='row gap-5'>" + agencyLogo.outerHTML + route.system_name + "</div>";
                 
                 element.appendChild(icon);
                 element.appendChild(details);
