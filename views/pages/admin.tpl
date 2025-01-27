@@ -1,4 +1,8 @@
 
+% from repositories import SystemRepository
+
+% system_repository = di[SystemRepository]
+
 % rebase('base')
 
 <div id="page-header">
@@ -33,56 +37,81 @@
             </div>
             <div class="content">
                 <div class="container">
-                    % if system:
-                        <div class="section">
-                            <div class="header" onclick="toggleSection(this)">
-                                <h3>{{ system }}</h3>
-                                % include('components/toggle')
-                            </div>
-                            <div class="content">
-                                <div class="button-container">
-                                    % if system.gtfs_enabled:
-                                        <div class="button" onclick="reloadGTFS('{{ system.id }}')">Reload GTFS</div>
-                                    % end
-                                    % if system.realtime_enabled:
-                                        <div class="button" onclick="reloadRealtime('{{ system.id }}')">Reload Realtime</div>
-                                    % end
-                                </div>
-                            </div>
-                        </div>
-                    % else:
-                        % for region in regions:
-                            % region_systems = [s for s in systems if s.region == region]
-                            <div class="section">
-                                <div class="header" onclick="toggleSection(this)">
-                                    <h3>{{ region }}</h3>
-                                    % include('components/toggle')
-                                </div>
-                                <div class="content">
-                                    <div class="container inline">
-                                        % for region_system in sorted(region_systems):
-                                            <div class="section">
-                                                <div class="header" onclick="toggleSection(this)">
-                                                    <h4>{{ region_system }}</h4>
-                                                    % include('components/toggle')
-                                                </div>
-                                                <div class="content">
-                                                    <div class="button-container">
-                                                        % if region_system.gtfs_enabled:
-                                                            <div class="button" onclick="reloadGTFS('{{ region_system.id }}')">Reload GTFS</div>
-                                                        % end
-                                                        % if region_system.realtime_enabled:
-                                                            <div class="button" onclick="reloadRealtime('{{ region_system.id }}')">Reload Realtime</div>
-                                                        % end
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>System</th>
+                                <th class="non-mobile">Enabled</th>
+                                <th>GTFS</th>
+                                <th>Realtime</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % for region in regions:
+                                % region_systems = [s for s in system_repository.find_all(enabled_only=False) if s.region == region]
+                                % if region_systems:
+                                    <tr class="header">
+                                        <td class="section" colspan="11">{{ region }}</td>
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                    % for region_system in sorted(region_systems):
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    % include('components/agency_logo', agency=region_system.agency)
+                                                    <div class="column">
+                                                        {{ region_system }}
+                                                        <div class="mobile-only smaller-font {{ 'positive' if region_system.enabled else 'negative' }}">
+                                                            {{ 'Enabled' if region_system.enabled else 'Disabled' }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        % end
-                                    </div>
-                                </div>
-                            </div>
-                        % end
-                    % end
+                                            </td>
+                                            <td class="non-mobile {{ 'positive' if region_system.enabled else 'negative' }}">
+                                                % if region_system.enabled:
+                                                    % include('components/svg', name='check-circle')
+                                                % else:
+                                                    % include('components/svg', name='close-circle')
+                                                % end
+                                            </td>
+                                            <td>
+                                                % if region_system.gtfs_enabled:
+                                                    <div class="row">
+                                                        <div class="positive">
+                                                            % include('components/svg', name='check-circle')
+                                                        </div>
+                                                        <div class="button icon" onclick="reloadGTFS('{{ region_system.id }}')">
+                                                            % include('components/svg', name='refresh')
+                                                        </div>
+                                                    </div>
+                                                % else:
+                                                    <div class="negative">
+                                                        % include('components/svg', name='close-circle')
+                                                    </div>
+                                                % end
+                                            </td>
+                                            <td>
+                                                % if region_system.realtime_enabled:
+                                                    <div class="row">
+                                                        <div class="positive">
+                                                            % include('components/svg', name='check-circle')
+                                                        </div>
+                                                        <div class="button icon" onclick="reloadRealtime('{{ region_system.id }}')">
+                                                            % include('components/svg', name='refresh')
+                                                        </div>
+                                                    </div>
+                                                % else:
+                                                    <div class="negative">
+                                                        % include('components/svg', name='close-circle')
+                                                    </div>
+                                                % end
+                                            </td>
+                                        </tr>
+                                    % end
+                                % end
+                            % end
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
