@@ -124,9 +124,33 @@
                 };
                 
                 const content = document.createElement("div");
-                content.classList = "content";
-                content.innerHTML = "<div class='row gap-5'>" + agencyLogo.outerHTML + route.system_name + "</div>";
+                content.className = "content";
                 details.appendChild(content);
+                
+                const headsignSection = document.createElement("div");
+                headsignSection.className = "column";
+                headsignSection.style.width = "fit-content";
+                content.appendChild(headsignSection);
+                
+                for (headsign of route.headsigns.slice(0, 4)) {
+                    const headsignRow = document.createElement("div");
+                    headsignRow.className = "headsign";
+                
+                    const routeLine = document.createElement("div");
+                    routeLine.className = "route-line";
+                    routeLine.style.backgroundColor = "#" + route.colour;
+                    
+                    headsignRow.innerHTML = routeLine.outerHTML + headsign;
+                    
+                    headsignSection.appendChild(headsignRow);
+                }
+                if (route.headsigns.length == 5) {
+                    headsignSection.innerHTML += "<i class='lighter-text'>And 1 other</i>";
+                } else if (route.headsigns.length > 5) {
+                    headsignSection.innerHTML += "<i class='lighter-text'>And " + (route.headsigns.length - 4) + " others</i>";
+                }
+                
+                content.innerHTML += "<div class='row gap-5'>" + agencyLogo.outerHTML + route.system_name + "</div>";
                 
                 element.appendChild(icon);
                 element.appendChild(details);

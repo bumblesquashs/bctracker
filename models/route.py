@@ -130,7 +130,8 @@ class Route:
                 'text_colour': self.text_colour,
                 'lat': point.lat,
                 'lon': point.lon,
-                'url_id': self.url_id
+                'url_id': self.url_id,
+                'headsigns': self.get_headsigns()
             })
         return json
     
