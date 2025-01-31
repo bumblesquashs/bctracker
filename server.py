@@ -21,7 +21,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 49
+VERSION = 50
 
 random = Random()
 
@@ -266,7 +266,7 @@ class Server(Bottle):
             system=system,
             agency=agency,
             enable_refresh=enable_refresh,
-            include_maps=include_maps,
+            include_maps=include_maps or full_map,
             full_map=full_map,
             regions=self.region_repository.find_all(),
             systems=self.system_repository.find_all(),
@@ -427,7 +427,6 @@ class Server(Bottle):
             path=['map'],
             system=system,
             agency=agency,
-            include_maps=len(visible_positions) > 0,
             full_map=len(visible_positions) > 0,
             positions=sorted(positions, key=lambda p: p.lat),
             auto_refresh=auto_refresh,
@@ -554,7 +553,6 @@ class Server(Bottle):
             title=f'Bus {bus}',
             system=system,
             agency=agency,
-            include_maps=bool(position),
             full_map=bool(position),
             bus=bus,
             position=position,
@@ -690,7 +688,6 @@ class Server(Bottle):
             system=system,
             agency=agency,
             enable_refresh=False,
-            include_maps=len(routes) > 0,
             full_map=len(routes) > 0,
             routes=routes,
             show_route_numbers=show_route_numbers
@@ -759,7 +756,6 @@ class Server(Bottle):
             title=str(route),
             system=system,
             agency=agency,
-            include_maps=len(route.trips) > 0,
             full_map=len(route.trips) > 0,
             route=route,
             positions=self.position_repository.find_all(system, route=route),
@@ -924,7 +920,6 @@ class Server(Bottle):
             title=f'Block {block.id}',
             system=system,
             agency=agency,
-            include_maps=True,
             full_map=True,
             block=block,
             positions=self.position_repository.find_all(system, block=block)
@@ -1015,7 +1010,6 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             system=system,
             agency=agency,
-            include_maps=True,
             full_map=True,
             trip=trip,
             positions=self.position_repository.find_all(system, trip=trip)
@@ -1180,7 +1174,6 @@ class Server(Bottle):
             title=str(stop),
             system=system,
             agency=agency,
-            include_maps=True,
             full_map=True,
             stop=stop,
             favourite=Favourite('stop', stop),

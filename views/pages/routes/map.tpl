@@ -29,13 +29,14 @@
 </div>
 
 % if routes:
-    <div id="map" class="full-screen display-none"></div>
     <div id="map-loading">
         % include('components/loading')
         <h2>Loading...</h2>
     </div>
     
     <script>
+        document.getElementById("map").classList.add("display-none");
+        
         const map = new ol.Map({
             target: 'map',
             layers: [
@@ -207,8 +208,6 @@
             request.send();
         }
     </script>
-
-    % include('components/map_toggle')
 % else:
     <div class="placeholder">
         % if not system:

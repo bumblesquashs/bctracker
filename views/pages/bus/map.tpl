@@ -26,8 +26,6 @@
     % else:
         % include('components/map', is_preview=False, map_position=position)
     % end
-    
-    % include('components/map_toggle')
 % else:
     <div class="placeholder">
         <h3>Not in service</h3>

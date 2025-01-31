@@ -18,14 +18,15 @@ body, ol, ul, p, h1, h2, h3, h4, form {
     margin: 0px;
 }
 
-body.full-map #page-header {
+body.full-map #page {
     position: relative;
     z-index: 20;
-    border-bottom-width: 0px;
-    padding: 10px;
     border-radius: 10px;
-    top: -10px;
-    left: -10px;
+    margin: 10px 20px;
+}
+
+body.full-map #page-header {
+    border-bottom-width: 0px;
 }
 
 body.full-map .tab-button-bar {

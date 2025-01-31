@@ -29,11 +29,11 @@ body {
     color: #000000;
 }
 
-body.full-map #page-header {
+body.full-map #page {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
-body.full-map #page-header .option {
+body.full-map #page .option {
     --hover-background: #FFFFFF;
 }
 
