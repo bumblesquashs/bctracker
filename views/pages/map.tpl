@@ -214,8 +214,10 @@
                     if (adherence === undefined || adherence === null) {
                         if (position.lat === 0 && position.lon === 0) {
                             icon.innerHTML += getSVG("fish");
-                        } else {
+                        } else if (position.route_number === "NIS") {
                             icon.innerHTML += "NIS";
+                        } else {
+                            icon.innerHTML += "N/A"
                         }
                     } else {
                         if (position.lat === 0 && position.lon === 0) {
