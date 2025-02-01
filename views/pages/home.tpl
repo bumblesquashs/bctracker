@@ -212,8 +212,8 @@
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Stop Number</th>
-                                                <th>Stop Name</th>
+                                                <th>Stop</th>
+                                                <th>Routes</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -228,9 +228,11 @@
                                                     % value = favourite.value
                                                     <tr>
                                                         <td>
-                                                            <a href="{{ get_url(value.system, 'stops', value) }}">{{ value.number }}</a>
+                                                            % include('components/stop', stop=value)
                                                         </td>
-                                                        <td>{{ value.name }}</td>
+                                                        <td>
+                                                            % include('components/route_list', routes=value.routes)
+                                                        </td>
                                                     </tr>
                                                 % end
                                             % end
