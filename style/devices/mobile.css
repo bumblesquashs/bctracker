@@ -10,16 +10,16 @@ body.full-map {
     overflow: hidden;
 }
 
+body.full-map #page {
+    padding: 10px 20px 10px 20px;
+}
+
 body.full-map #side-bar {
     overflow: hidden;
 }
 
 body.full-map #system-menu {
     overflow: auto;
-}
-
-body.full-map #page-header {
-    width: 100%;
 }
 
 button {

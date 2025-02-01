@@ -17,5 +17,3 @@
 % departures = stop.find_adjacent_departures()
 
 % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
-
-% include('components/map_toggle')

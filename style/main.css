@@ -18,14 +18,15 @@ body, ol, ul, p, h1, h2, h3, h4, form {
     margin: 0px;
 }
 
-body.full-map #page-header {
+body.full-map #page {
     position: relative;
     z-index: 20;
-    border-bottom-width: 0px;
-    padding: 10px;
     border-radius: 10px;
-    top: -10px;
-    left: -10px;
+    margin: 10px 20px;
+}
+
+body.full-map #page-header {
+    border-bottom-width: 0px;
 }
 
 body.full-map .tab-button-bar {
@@ -163,6 +164,20 @@ table tr.header td {
     height: 36px;
 }
 
+#loading-container {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
 #loading-line {
     background-color: var(--loading-foreground);
     position: absolute;
@@ -221,20 +236,6 @@ table tr.header td {
 
 #map .ol-overlay-container:hover {
     z-index: 10;
-}
-
-#map-loading {
-    position: absolute;
-    z-index: 0;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
 }
 
 #map-toggle {

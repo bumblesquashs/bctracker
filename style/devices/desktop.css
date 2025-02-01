@@ -13,8 +13,9 @@ body {
     grid-template-rows: auto 1fr;
 }
 
-body.full-map #page-header {
-    align-self: flex-start;
+body.full-map #page {
+    padding: 10px 20px 10px 20px;
+    width: fit-content;
 }
 
 input[type="text"] {

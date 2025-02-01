@@ -40,11 +40,11 @@ body {
     color: #FFFFFF;
 }
 
-body.full-map #page-header {
+body.full-map #page {
     background-color: rgba(30, 30, 30, 0.7);
 }
 
-body.full-map #page-header .option {
+body.full-map #page .option {
     --hover-background: #2F2F2F;
 }
 

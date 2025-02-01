@@ -15,27 +15,21 @@
             <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
-        % if routes:
-            <div id="settings" class="options-container collapsed">
-                <div class="option" onclick="toggleRouteNumbers()">
-                    <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
-                        % include('components/svg', name='check')
-                    </div>
-                    <span>Show Route Numbers</span>
-                </div>
-            </div>
-        % end
     </div>
 </div>
 
 % if routes:
-    <div id="map" class="full-screen display-none"></div>
-    <div id="map-loading">
-        % include('components/loading')
-        <h2>Loading...</h2>
+    <div id="settings" class="options-container collapsed">
+        <div class="option" onclick="toggleRouteNumbers()">
+            <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
+                % include('components/svg', name='check')
+            </div>
+            <span>Show Route Numbers</span>
+        </div>
     </div>
-    
     <script>
+        document.getElementById("map").classList.add("display-none");
+        
         const map = new ol.Map({
             target: 'map',
             layers: [
@@ -180,6 +174,7 @@
         }
         
         document.body.onload = function() {
+            startLoading();
             const request = new XMLHttpRequest();
             request.open("GET", "{{ get_url(system, 'api', 'routes') }}", true);
             request.responseType = "json";
@@ -200,15 +195,12 @@
                             });
                         }
                     }
-                    stopLoadingInterval();
-                    document.getElementById("map-loading").remove();
+                    stopLoading();
                 }
             };
             request.send();
         }
     </script>
-
-    % include('components/map_toggle')
 % else:
     <div class="placeholder">
         % if not system:
