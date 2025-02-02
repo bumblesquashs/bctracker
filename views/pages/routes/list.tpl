@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th>Route</th>
+                    <th>Service Level</th>
                     <th class="non-mobile">Service Days</th>
                 </tr>
             </thead>
@@ -28,6 +29,7 @@
                                 <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </td>
+                        <td>{{ route.service_level }}</td>
                         <td class="non-mobile">
                             % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
                         </td>

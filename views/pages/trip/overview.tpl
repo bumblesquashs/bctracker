@@ -78,26 +78,36 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
-                        % km = length / trip.system.agency.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="row section">
                             <div class="name">Length</div>
-                            <div class="value">{{ f'{km:.1f}' }}km</div>
+                            <div class="value">{{ f'{length:.1f}' }}km</div>
                         </div>
                         <div class="row section">
                             <div class="name">Average Speed</div>
-                            <div class="value">{{ f'{(km / hours):.1f}' }}km/h</div>
+                            <div class="value">{{ f'{(length / hours):.1f}' }}km/h</div>
                         </div>
                         <div class="row section">
                             <div class="name">Stop Density</div>
-                            <div class="value">
-                                % density = len(departures) / km
-                                {{ f'{density:.2f}' }}
-                                % if density == 1:
-                                    stop/km
-                                % else:
-                                    stops/km
-                                % end
+                            <div class="value column">
+                                <div>
+                                    % density = len(departures) / length
+                                    {{ f'{density:.2f}' }}
+                                    % if density == 1:
+                                        stop/km
+                                    % else:
+                                        stops/km
+                                    % end
+                                </div>
+                                <div>
+                                    % density = len(departures) / (hours * 60)
+                                    {{ f'{density:.2f}' }}
+                                    % if density == 1:
+                                        stop/minute
+                                    % else:
+                                        stops/minute
+                                    % end
+                                </div>
                             </div>
                         </div>
                     % end

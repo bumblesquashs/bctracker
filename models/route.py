@@ -8,6 +8,7 @@ from di import di
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
+from models.service_level import ServiceLevel
 
 from repositories import DepartureRepository, SystemRepository
 
@@ -77,6 +78,11 @@ class Route:
     def indicator_points(self):
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
+    
+    @property
+    def service_level(self):
+        '''Returns the service level for this route'''
+        return self.cache.service_level
     
     def __init__(self, system, id, number, name, colour, text_colour, **kwargs):
         self.system = system
@@ -199,7 +205,8 @@ class RouteCache:
         'trips',
         'schedule',
         'sheets',
-        'indicator_points'
+        'indicator_points',
+        'service_level'
     )
     
     def __init__(self, system, trips):
@@ -225,3 +232,4 @@ class RouteCache:
             self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
         except IndexError:
             self.indicator_points = []
+        self.service_level = ServiceLevel.calculate(system, self.schedule, trips)

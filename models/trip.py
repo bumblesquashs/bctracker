@@ -105,8 +105,8 @@ class Trip:
     def length(self):
         '''Returns the distance travelled on this trip'''
         departure = self.last_departure
-        if departure:
-            return departure.distance
+        if departure and departure.distance:
+            return departure.distance / self.system.agency.distance_scale
         return None
     
     @property
