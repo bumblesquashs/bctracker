@@ -32,6 +32,12 @@
                         </div>
                         <span>Show Route Lines</span>
                     </div>
+                    <div class="option" onclick="toggleStops()">
+                        <div id="show-stops-checkbox" class="checkbox {{ 'selected' if show_stops else '' }}">
+                            % include('components/svg', name='check')
+                        </div>
+                        <span>Show Stops</span>
+                    </div>
                     <div class="option" onclick="toggleNISBuses()">
                         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                             % include('components/svg', name='check')
@@ -105,18 +111,30 @@
         map.on('pointerup', function(event) {
             map.getViewport().style.cursor = "grab";
         });
+        map.on('moveend', function(event) {
+            const zoom = map.getView().getZoom();
+            const extent = map.getView().calculateExtent(map.getSize());
+            const box = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+            updateStops(zoom, box);
+        });
         
         let positions = JSON.parse('{{! json.dumps([p.get_json() for p in positions]) }}');
         let currentShapeIDs = [];
-        let markers = [];
         let routeLayers = {};
         let automaticRefresh = "{{ auto_refresh }}" !== "False";
         let showRouteLines = "{{ show_route_lines }}" !== "False";
+        let showStops = "{{ show_stops }}" !== "False";
         let showNISBuses = "{{ show_nis }}" !== "False";
         let busMarkerStyle = "{{ bus_marker_style }}";
         let hoverPosition = null;
         
+        let busMarkers = [];
+        
         const shapes = {};
+        
+        const cachedStops = {};
+        const stopMarkers = {};
+        let currentStopKeys = new Set();
         
         document.body.onload = function() {
             map.updateSize();
@@ -129,10 +147,10 @@
         
         function updateMap(resetCoordinates) {
             currentShapeIDs = [];
-            for (const marker of markers) {
+            for (const marker of busMarkers) {
                 map.removeOverlay(marker);
             }
-            markers = [];
+            busMarkers = [];
             
             const area = new Area();
             
@@ -265,13 +283,12 @@
                 details.appendChild(content);
                 
                 const model = document.createElement("div");
-                model.className = "lighter-text centred";
+                model.className = "lighter-text";
                 model.innerHTML = position.bus_order;
                 content.appendChild(model);
                 
                 const headsign = document.createElement("div");
                 if (position.headsign === "Not In Service") {
-                    headsign.className = "centred";
                     headsign.innerHTML = position.headsign;
                 } else {
                     headsign.className = "headsign";
@@ -285,7 +302,7 @@
                 content.appendChild(headsign);
             
                 const footer = document.createElement("div");
-                footer.className = "lighter-text centred";
+                footer.className = "lighter-text";
                 content.appendChild(footer);
                 
                 const systemElement = document.createElement("span");
@@ -342,7 +359,7 @@
                     stopEvent: false,
                 });
                 map.addOverlay(marker);
-                markers.push(marker);
+                busMarkers.push(marker);
             }
             
             if (resetCoordinates && area.isValid) {
@@ -350,8 +367,10 @@
                     map.getView().setCenter(ol.proj.fromLonLat(area.point));
                     map.getView().setZoom(15);
                 } else {
+                    const topPadding = window.screen.width > 1000 ? 100 : 200;
+                    const leftPadding = window.screen.width > 1000 ? 400 : 100;
                     map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
-                        padding: [100, 100, 100, 100]
+                        padding: [topPadding, 100, 100, leftPadding]
                     });
                 }
             }
@@ -392,6 +411,24 @@
             }
         }
         
+        function toggleStops() {
+            showStops = !showStops;
+            const checkbox = document.getElementById("show-stops-checkbox");
+            checkbox.classList.toggle("selected");
+            setCookie("show_stops", showStops ? "true" : "false");
+            
+            if (showStops) {
+                const zoom = map.getView().getZoom();
+                const extent = map.getView().calculateExtent(map.getSize());
+                const box = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+                updateStops(zoom, box);
+            } else {
+                for (key in stopMarkers) {
+                    removeStopMarkers(key);
+                }
+            }
+        }
+        
         function toggleNISBuses() {
             showNISBuses = !showNISBuses;
             const checkbox = document.getElementById("show-nis-checkbox");
@@ -417,7 +454,7 @@
         
         function updatePositionData() {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'api', 'map.json')}}", true);
+            request.open("GET", "{{ get_url(system, 'api', 'positions') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -446,7 +483,7 @@
                     continue;
                 }
                 const request = new XMLHttpRequest();
-                request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
+                request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
@@ -502,7 +539,7 @@
                     shapes[shapeID].setVisible(true);
                 } else {
                     const request = new XMLHttpRequest();
-                    request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id + ".json"), true);
+                    request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id), true);
                     request.responseType = "json";
                     request.onload = function() {
                         if (request.status === 200) {
@@ -539,6 +576,143 @@
                 }
             }
             hoverPosition = position;
+        }
+        
+        function updateStops(zoom, box) {
+            if (!showStops) {
+                return
+            }
+            if (zoom >= 14.5) {
+                const minLat = box[1];
+                const maxLat = box[3];
+                const latPadding = (maxLat - minLat);
+                
+                const minLon = box[0];
+                const maxLon = box[2];
+                const lonPadding = (maxLon - minLon);
+                
+                const firstLat = Math.round((minLat - latPadding) * 100) / 100;
+                const firstLon = Math.round((minLon - lonPadding) * 100) / 100;
+                const lastLat = Math.round((maxLat + latPadding) * 100) / 100;
+                const lastLon = Math.round((maxLon + lonPadding) * 100) / 100;
+                
+                const size = 0.01;
+                
+                let newStopKeys = new Set();
+                for (let lat = firstLat; lat <= lastLat; lat += size) {
+                    for (let lon = firstLon; lon <= lastLon; lon += size) {
+                        const roundedLat = Math.round(lat * 100) / 100;
+                        const roundedLon = Math.round(lon * 100) / 100;
+                        const key = roundedLat + ":" + roundedLon;
+                        newStopKeys.add(key);
+                        loadStops(key, roundedLat, roundedLon, size);
+                    }
+                }
+                for (const key of currentStopKeys.difference(newStopKeys)) {
+                    removeStopMarkers(key);
+                }
+                currentStopKeys = newStopKeys;
+            } else {
+                for (const key in stopMarkers) {
+                    removeStopMarkers(key);
+                }
+            }
+        }
+        
+        function removeStopMarkers(key) {
+            if (key in stopMarkers) {
+                for (const marker of stopMarkers[key]) {
+                    map.removeOverlay(marker);
+                }
+                stopMarkers[key] = [];
+            }
+        }
+        
+        function loadStops(key, lat, lon, size) {
+            if (key in cachedStops) {
+                updateStopMarkers(key);
+            } else {
+                const url = getUrl(systemID, "api/stops", {
+                    "lat": lat,
+                    "lon": lon,
+                    "size": size
+                });
+                const request = new XMLHttpRequest();
+                request.open("GET", url, true);
+                request.responseType = "json";
+                request.onload = function() {
+                    if (request.status === 200) {
+                        cachedStops[key] = request.response.stops;
+                        updateStopMarkers(key);
+                    }
+                };
+                request.send();
+            }
+        }
+        
+        function updateStopMarkers(key) {
+            if (key in stopMarkers && stopMarkers[key].length > 0) {
+                return
+            }
+            let markers = [];
+            for (const stop of cachedStops[key]) {
+                const element = document.createElement("div");
+                element.className = "marker small";
+                
+                const icon = document.createElement("a");
+                icon.className = "icon";
+                icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
+                icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
+                if (stop.routes.length > 0) {
+                    icon.style.backgroundColor = "#" + stop.routes[0].colour;
+                } else {
+                    icon.style.backgroundColor = "#666666";
+                }
+                
+                const details = document.createElement("div");
+                details.className = "details hover-only";
+                
+                if (stop.number !== null && stop.number !== undefined) {
+                    const title = document.createElement("div");
+                    title.className = "title";
+                    title.innerHTML = stop.number;
+                    details.appendChild(title);
+                }
+                
+                const content = document.createElement("div");
+                content.className = "content";
+                content.innerHTML = stop.name
+                
+                const routeList = document.createElement("div");
+                routeList.className = "route-list";
+                for (const route of stop.routes) {
+                    routeList.innerHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                }
+                content.appendChild(routeList);
+                
+                const agencyLogo = document.createElement("img");
+                agencyLogo.className = "agency-logo";
+                agencyLogo.src = "/img/icons/" + stop.agency_id + ".png";
+                agencyLogo.onerror = function() {
+                    agencyLogo.style.visibility = 'hidden';
+                };
+                content.innerHTML += "<div class='row gap-5'>" + agencyLogo.outerHTML + stop.system_name + "</div>";
+                
+                details.appendChild(content);
+                
+                element.appendChild(icon);
+                element.appendChild(details);
+                
+                const marker = new ol.Overlay({
+                    position: ol.proj.fromLonLat([stop.lon, stop.lat]),
+                    positioning: "center-center",
+                    element: element,
+                    stopEvent: false
+                })
+                map.addOverlay(marker);
+                markers.push(marker);
+            }
+            stopMarkers[key] = markers;
         }
         
         setTimeout(function() {

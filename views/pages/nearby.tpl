@@ -188,11 +188,11 @@
                     
                     const details = document.createElement("div");
                     details.className = "details";
-                    if (!showStopNumbers) {
+                    if (stop.number === null || stop.number === undefined) {
                         details.classList.add("hover-only");
                     }
                     
-                    if (showStopNumbers) {
+                    if (stop.number !== null && stop.number !== undefined) {
                         const title = document.createElement("div");
                         title.className = "title";
                         title.innerHTML = stop.number;
@@ -200,12 +200,15 @@
                     }
                     
                     const content = document.createElement("div");
-                    content.classList = "content hover-only centred";
-                    let routesHTML = "";
+                    content.classList = "content hover-only";
+                    content.innerHTML = stop.name
+                    
+                    const routeList = document.createElement("div");
+                    routeList.className = "route-list";
                     for (const route of stop.routes) {
-                        routesHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
+                        routeList.innerHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
                     }
-                    content.innerHTML = stop.name + "<div>" + routesHTML + "</div>";
+                    content.appendChild(routeList);
                     
                     details.appendChild(content);
                     

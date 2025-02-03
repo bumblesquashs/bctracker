@@ -55,9 +55,21 @@ class SQLStopRepository(StopRepository):
         except IndexError:
             return None
     
-    def find_all(self, system, limit=None):
+    def find_all(self, system, limit=None, lat=None, lon=None, size=0.01):
         '''Returns all stops that match the given system'''
         system_id = getattr(system, 'id', system)
+        filters = {
+            'stop.system_id': system_id
+        }
+        if (lat is not None and lon is not None):
+            filters['lat'] = {
+                '>=': lat,
+                '<=': lat + size
+            }
+            filters['lon'] = {
+                '>=': lon,
+                '<=': lon + size
+            }
         return self.database.select('stop',
             columns={
                 'stop.system_id': 'stop_system_id',
@@ -67,9 +79,7 @@ class SQLStopRepository(StopRepository):
                 'stop.lat': 'stop_lat',
                 'stop.lon': 'stop_lon'
             },
-            filters={
-                'stop.system_id': system_id
-            },
+            filters=filters,
             limit=limit,
             initializer=Stop.from_db
         )
