@@ -591,12 +591,12 @@
                 const maxLon = box[2];
                 const lonPadding = (maxLon - minLon);
                 
-                const firstLat = Math.round((minLat - latPadding) * 100) / 100;
-                const firstLon = Math.round((minLon - lonPadding) * 100) / 100;
-                const lastLat = Math.round((maxLat + latPadding) * 100) / 100;
-                const lastLon = Math.round((maxLon + lonPadding) * 100) / 100;
-                
                 const size = 0.01;
+                
+                const firstLat = Math.round((minLat - latPadding - size) * 100) / 100;
+                const firstLon = Math.round((minLon - lonPadding - size) * 100) / 100;
+                const lastLat = Math.round((maxLat + latPadding + size) * 100) / 100;
+                const lastLon = Math.round((maxLon + lonPadding + size) * 100) / 100;
                 
                 let newStopKeys = new Set();
                 for (let lat = firstLat; lat <= lastLat; lat += size) {
