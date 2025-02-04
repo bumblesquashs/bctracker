@@ -125,7 +125,7 @@
         let showRouteLines = "{{ show_route_lines }}" !== "False";
         let showStops = "{{ show_stops }}" !== "False";
         let showNISBuses = "{{ show_nis }}" !== "False";
-        let busMarkerStyle = "{{ bus_marker_style }}";
+        let busMarkerStyle = "{{ bus_marker_style or 'default' }}";
         let hoverPosition = null;
         
         let busMarkers = [];
