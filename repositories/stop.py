@@ -17,7 +17,7 @@ class StopRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, limit) -> list[Stop]:
+    def find_all(self, system, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
         raise NotImplementedError()
     
     @abstractmethod

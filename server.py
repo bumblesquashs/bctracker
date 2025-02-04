@@ -40,6 +40,7 @@ class Server(Bottle):
         'record_repository',
         'region_repository',
         'route_repository',
+        'stop_repository',
         'system_repository',
         'theme_repository',
         'transfer_repository',
@@ -66,6 +67,7 @@ class Server(Bottle):
         self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
         self.region_repository = kwargs.get('region_repository') or di[RegionRepository]
         self.route_repository = kwargs.get('route_repository') or di[RouteRepository]
+        self.stop_repository = kwargs.get('stop_repository') or di[StopRepository]
         self.system_repository = kwargs.get('system_repository') or di[SystemRepository]
         self.theme_repository = kwargs.get('theme_repository') or di[ThemeRepository]
         self.transfer_repository = kwargs.get('transfer_repository') or di[TransferRepository]
@@ -128,8 +130,9 @@ class Server(Bottle):
         
         # API endpoints
         self.add('/api/health-check', append_slash=False, callback=self.api_health_check)
-        self.add('/api/map.json', append_slash=False, callback=self.api_map)
-        self.add('/api/shape/<shape_id>.json', append_slash=False, callback=self.api_shape)
+        self.add('/api/positions', append_slash=False, callback=self.api_positions)
+        self.add('/api/shape/<shape_id>', append_slash=False, callback=self.api_shape)
+        self.add('/api/stops', append_slash=False, callback=self.api_stops)
         self.add('/api/routes', append_slash=False, callback=self.api_routes)
         self.add('/api/search', method='POST', callback=self.api_search)
         self.add('/api/nearby.json', append_slash=False, callback=self.api_nearby)
@@ -419,6 +422,7 @@ class Server(Bottle):
         positions = self.position_repository.find_all(system, has_location=True)
         auto_refresh = self.query_cookie('auto_refresh', 'false') != 'false'
         show_route_lines = self.query_cookie('show_route_lines', 'false') != 'false'
+        show_stops = self.query_cookie('show_stops', 'true') != 'false'
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         visible_positions = positions if show_nis else [p for p in positions if p.trip]
         return self.page(
@@ -431,6 +435,7 @@ class Server(Bottle):
             positions=sorted(positions, key=lambda p: p.lat),
             auto_refresh=auto_refresh,
             show_route_lines=show_route_lines,
+            show_stops=show_stops,
             show_nis=show_nis,
             visible_positions=visible_positions
         )
@@ -1367,7 +1372,7 @@ class Server(Bottle):
     def api_health_check(self, system, agency):
         return 'Online'
     
-    def api_map(self, system, agency):
+    def api_positions(self, system, agency):
         if system:
             last_updated = system.last_updated
         else:
@@ -1386,6 +1391,15 @@ class Server(Bottle):
     def api_shape(self, system, agency, shape_id):
         return {
             'points': [p.get_json() for p in self.point_repository.find_all(system, shape_id)]
+        }
+    
+    def api_stops(self, system, agency):
+        lat = float(request.query['lat'])
+        lon = float(request.query['lon'])
+        size = float(request.query.get('size', 0.01))
+        stops = self.stop_repository.find_all(system, lat=lat, lon=lon, size=size)
+        return {
+            'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
     
     def api_routes(self, system, agency):

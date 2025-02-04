@@ -876,6 +876,7 @@ table tr.header td {
     padding: 2px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2px;
 }
 
@@ -890,20 +891,17 @@ table tr.header td {
     height: 16px;
 }
 
-.marker .details .content .headsign {
-    justify-content: center;
-}
-
-.marker .details .content .route {
-    font-size: 8pt;
-}
-
 .marker .details .content .occupancy-name {
     font-size: 8pt;
 }
 
-.marker .details .content .row {
+.marker .details .route-list {
     justify-content: center;
+    max-width: 150px;
+}
+
+.marker .details .route-list .route {
+    font-size: 8pt;
 }
 
 .marker .details .title {

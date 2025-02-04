@@ -100,9 +100,12 @@ class Stop:
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
+        number = self.number if self.system.agency.show_stop_number else None
         return {
             'system_id': self.system.id,
-            'number': self.number,
+            'system_name': str(self.system),
+            'agency_id': self.system.agency.id,
+            'number': number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
