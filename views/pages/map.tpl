@@ -10,33 +10,70 @@
             % include('components/settings_toggle')
         % end
     </div>
-    % if visible_positions:
-        <div id="settings" class="options-container collapsed">
-            <div class="option" onclick="toggleAutomaticRefresh()">
-                <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
-                    % include('components/svg', name='check')
-                </div>
-                <span>Automatically Refresh</span>
-            </div>
-            <div class="option" onclick="toggleRouteLines()">
-                <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
-                    % include('components/svg', name='check')
-                </div>
-                <span>Show Route Lines</span>
-            </div>
-            <div class="option" onclick="toggleNISBuses()">
-                <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                    % include('components/svg', name='check')
-                </div>
-                <span>Show NIS Buses</span>
-            </div>
-        </div>
-    % end
 </div>
 
 % if visible_positions:
-    <div id="map" class="full-screen"></div>
-    
+    <div id="settings" class="container collapsed">
+        <div class="section">
+            <div class="header">
+                <h3>Options</h3>
+            </div>
+            <div class="content">
+                <div class="options-container">
+                    <div class="option" onclick="toggleAutomaticRefresh()">
+                        <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
+                            % include('components/svg', name='check')
+                        </div>
+                        <span>Automatically Refresh</span>
+                    </div>
+                    <div class="option" onclick="toggleRouteLines()">
+                        <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
+                            % include('components/svg', name='check')
+                        </div>
+                        <span>Show Route Lines</span>
+                    </div>
+                    <div class="option" onclick="toggleNISBuses()">
+                        <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                            % include('components/svg', name='check')
+                        </div>
+                        <span>Show NIS Buses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="header">
+                <h3>Icon Style</h3>
+            </div>
+            <div class="content">
+                <div class="options-container">
+                    <div class="option" onclick="setBusMarkerStyle('default')">
+                        <div id="bus-marker-style-default" class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
+                        <div>Bus Type</div>
+                    </div>
+                    <div class="option" onclick="setBusMarkerStyle('mini')">
+                        <div id="bus-marker-style-mini" class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
+                        <div>Mini</div>
+                    </div>
+                    <div class="option" onclick="setBusMarkerStyle('route')">
+                        <div id="bus-marker-style-route" class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
+                        <div>Route Number</div>
+                    </div>
+                    <div class="option" onclick="setBusMarkerStyle('adherence')">
+                        <div id="bus-marker-style-adherence" class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
+                        <div>Schedule Adherence</div>
+                    </div>
+                    <div class="option" onclick="setBusMarkerStyle('occupancy')">
+                        <div id="bus-marker-style-occupancy" class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
+                        <div>Occupancy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+% end
+
+% if visible_positions:
     % include('components/svg_script', name='fish')
     % include('components/svg_script', name='no-people')
     % include('components/svg_script', name='one-person')
@@ -76,8 +113,8 @@
         let automaticRefresh = "{{ auto_refresh }}" !== "False";
         let showRouteLines = "{{ show_route_lines }}" !== "False";
         let showNISBuses = "{{ show_nis }}" !== "False";
+        let busMarkerStyle = "{{ bus_marker_style }}";
         let hoverPosition = null;
-        const busMarkerStyle = "{{ bus_marker_style }}";
         
         const shapes = {};
         
@@ -177,8 +214,10 @@
                     if (adherence === undefined || adherence === null) {
                         if (position.lat === 0 && position.lon === 0) {
                             icon.innerHTML += getSVG("fish");
+                        } else if (position.route_number === "NIS") {
+                            icon.innerHTML += "NIS";
                         } else {
-                            icon.innerHTML += "N/A";
+                            icon.innerHTML += "N/A"
                         }
                     } else {
                         if (position.lat === 0 && position.lon === 0) {
@@ -368,6 +407,14 @@
             }
         }
         
+        function setBusMarkerStyle(style) {
+            document.getElementById("bus-marker-style-" + busMarkerStyle).classList.remove("selected");
+            busMarkerStyle = style;
+            document.getElementById("bus-marker-style-" + style).classList.add("selected");
+            setCookie("bus_marker_style", style);
+            updateMap(false);
+        }
+        
         function updatePositionData() {
             const request = new XMLHttpRequest();
             request.open("GET", "{{get_url(system, 'api', 'map.json')}}", true);
@@ -505,8 +552,6 @@
             }, 1000 * 60);
         }, 1000 * (timeToNextUpdate + 15));
     </script>
-
-    % include('components/map_toggle')
 % else:
     <div class="container">
         <div class="section">

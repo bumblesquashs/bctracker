@@ -3,7 +3,9 @@
 
 % is_preview = get('is_preview', True)
 
-<div id="map" class="{{ 'preview' if is_preview else 'full-screen' }}"></div>
+% if is_preview:
+    <div id="map" class="preview"></div>
+% end
 
 % include('components/svg_script', name='fish')
 % include('components/svg_script', name='no-people')
@@ -157,8 +159,10 @@
                 if (adherence === undefined || adherence === null) {
                     if (position.lat === 0 && position.lon === 0) {
                         icon.innerHTML += getSVG("fish");
+                    } else if (position.route_number === "NIS") {
+                        icon.innerHTML += "NIS";
                     } else {
-                        icon.innerHTML += "N/A";
+                        icon.innerHTML += "N/A"
                     }
                 } else {
                     if (position.lat === 0 && position.lon === 0) {

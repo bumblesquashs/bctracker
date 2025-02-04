@@ -10,8 +10,8 @@ body.full-map {
     overflow: hidden;
 }
 
-body.full-map #page-header {
-    width: 100%;
+body.full-map #page {
+    padding: 10px 20px 10px 20px;
 }
 
 button {

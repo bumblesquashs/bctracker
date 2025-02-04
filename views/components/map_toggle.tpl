@@ -8,7 +8,7 @@
         document.getElementById("search").classList.add("display-none");
         document.getElementById("side-bar").classList.toggle("display-none");
         document.getElementById("banners").classList.toggle("display-none");
-        document.getElementById("page-header").classList.toggle("display-none");
+        document.getElementById("page").classList.toggle("display-none");
         map.updateSize();
     }
 </script>

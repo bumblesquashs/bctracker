@@ -139,7 +139,7 @@
                 <div class="options-container">
                     <div class="option" onclick="setBusMarkerStyle('default')">
                         <div class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
-                        <div>Default</div>
+                        <div>Bus Type</div>
                     </div>
                     <div class="option" onclick="setBusMarkerStyle('mini')">
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>

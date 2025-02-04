@@ -450,6 +450,11 @@
             <div id="banners">
                 
             </div>
+            % if full_map:
+                <div id="map" class="full-screen"></div>
+                % include('components/loading')
+                % include('components/map_toggle')
+            % end
             <div id="page">{{ !base }}</div>
         </div>
         <div id="search" class="display-none" tabindex="0">
