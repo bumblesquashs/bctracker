@@ -582,14 +582,15 @@
             if (!showStops) {
                 return
             }
-            if (zoom >= 14.5) {
+            const minZoom = window.screen.width > 1000 ? 14.5 : 14;
+            if (zoom >= minZoom) {
                 const minLat = box[1];
                 const maxLat = box[3];
-                const latPadding = (maxLat - minLat);
+                const latPadding = (maxLat - minLat) / 2;
                 
                 const minLon = box[0];
                 const maxLon = box[2];
-                const lonPadding = (maxLon - minLon);
+                const lonPadding = (maxLon - minLon) / 2;
                 
                 const size = 0.01;
                 
