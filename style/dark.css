@@ -7,6 +7,10 @@
     --adherence-text: #FFFFFF;
 }
 
+#map-controls .control.error {
+    --map-control-icon: #FF0000;
+}
+
 .ahead {
     --adherence-background: #FF6A00;
 }

@@ -13,6 +13,10 @@
     --stop-number-background: rgba(0, 0, 0, 0.6);
     --stop-number-text: #FFFFFF;
     --stop-number-border: rgba(255, 255, 255, 0.3);
+    
+    --map-control-background: rgba(30, 30, 30, 0.7);
+    --map-control-background-hover: #000000;
+    --map-control-icon: #FFFFFF;
 }
 
 a {
@@ -92,9 +96,8 @@ table tr {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-#map-toggle {
-    background-color: rgba(0, 0, 0, 0.6);
-    --image-color: #FFFFFF;
+#map-controls .control.active {
+    --map-control-icon: #5CC3FF;
 }
 
 #navigation-bar {
@@ -238,6 +241,7 @@ table tr {
 
 #side-bar-toggle {
     background-color: rgba(0, 0, 0, 0.4);
+    --image-color: #FFFFFF;
 }
 
 #side-bar-toggle:hover {

@@ -5,7 +5,7 @@
     <h1>Nearby Stops</h1>
 </div>
 
-% include('components/svg_script', name='location')
+% include('components/svg_script', name='nearby')
 
 <div class="page-container">
     <div id="current-location" class="sidebar container flex-1 display-none">
@@ -132,7 +132,7 @@
         
         const icon = document.createElement("div");
         icon.className = "icon";
-        icon.innerHTML = getSVG("location");
+        icon.innerHTML = getSVG("nearby");
         
         element.appendChild(icon);
         

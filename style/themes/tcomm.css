@@ -16,6 +16,10 @@
     --stop-number-background: #FFFFFF;
     --stop-number-text: #000000;
     --stop-number-border: #000000;
+    
+    --map-control-background: rgba(255, 255, 255, 0.7);
+    --map-control-background-hover: #FFFFFF;
+    --map-control-icon: #000000;
 }
 
 a {
@@ -94,13 +98,8 @@ table tr {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
 }
 
-#map-toggle {
-    background: #EEEEEE;
-    color: #222222;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
-    border: 1px solid #CCCCCC;
-    background-image: linear-gradient( #FFFFFF,#F1F1F1 );
-    --image-color: #000000;
+#map-controls .control.active {
+    --map-control-icon: #365CCB;
 }
 
 #navigation-bar {

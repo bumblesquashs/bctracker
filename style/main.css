@@ -238,14 +238,32 @@ table tr.header td {
     z-index: 10;
 }
 
-#map-toggle {
+#map-controls {
     position: absolute;
     z-index: 20;
-    border-radius: 50%;
-    bottom: 30px;
-    right: 15px;
-    padding: 8px;
-    --image-size: 28px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    background-color: var(--map-control-background);
+    overflow: hidden;
+    user-select: none;
+}
+
+#map-controls .control {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    --image-size: 18px;
+    --image-color: var(--map-control-icon);
+}
+
+#map-controls .control.disabled {
+    opacity: 0.3;
+}
+
+#map-controls .control.disabled:hover {
+    cursor: default;
+    background-color: unset;
 }
 
 #navigation-bar {

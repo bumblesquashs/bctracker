@@ -61,6 +61,18 @@ table th {
     order: 6;
 }
 
+#map-controls {
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+    right: 20px;
+}
+
+#map-controls .control {
+    flex: 1;
+    --image-size: 24px;
+}
+
 #navigation-bar {
     order: 2;
     padding: 0px 5px;

@@ -29,6 +29,10 @@
     --stop-number-background: #FFFFFF;
     --stop-number-text: #000000;
     --stop-number-border: #69BB65;
+    
+    --map-control-background: rgba(255, 255, 255, 0.7);
+    --map-control-background-hover: #FFFFFF;
+    --map-control-icon: #000000;
 }
 
 a {
@@ -101,9 +105,8 @@ table tr:nth-child(2n-1) {
     border-color: #69BB65;
 }
 
-#map-toggle {
-    background-color: #D70000;
-    --image-color: #FFFFFF;
+#map-controls .control.active {
+    --map-control-icon: #D70000;
 }
 
 #navigation-bar {

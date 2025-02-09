@@ -79,7 +79,8 @@
                             width: 4,
                             lineCap: "butt"
                         })
-                    })
+                    }),
+                    zIndex: 1
                 }));
                 
                 for (const point of trip.points) {

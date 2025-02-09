@@ -301,7 +301,7 @@
             % end
             
             <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
-                % include('components/svg', name='location')
+                % include('components/svg', name='nearby')
                 <div class="tooltip left">
                     <div class="title">Nearby Stops</div>
                 </div>
@@ -372,7 +372,7 @@
                 <span>About</span>
             </a>
             <a class="menu-button" href="{{ get_url(system, 'nearby') }}">
-                % include('components/svg', name='location')
+                % include('components/svg', name='nearby')
                 <span>Nearby</span>
             </a>
             <a class="menu-button" href="{{ get_url(system, 'personalize') }}">
@@ -452,8 +452,39 @@
             </div>
             % if full_map:
                 <div id="map" class="full-screen"></div>
+                <script>
+                    const map = new ol.Map({
+                        target: 'map',
+                        controls: ol.control.defaults.defaults({
+                            zoom: false,
+                            rotate: false
+                        }),
+                        layers: [
+                            new ol.layer.Tile({
+                                source: new ol.source.OSM()
+                            })
+                        ],
+                        view: new ol.View({
+                            center: [0, 0],
+                            zoom: 3,
+                            maxZoom: 22,
+                            minZoom: 3
+                        }),
+                        interactions: ol.interaction.defaults.defaults().extend([
+                            new ol.interaction.DblClickDragZoom()
+                        ])
+                    });
+                    map.getViewport().style.cursor = "grab";
+                    map.on('pointerdrag', function(event) {
+                        map.getViewport().style.cursor = "grabbing";
+                    });
+                    map.on('pointerup', function(event) {
+                        map.getViewport().style.cursor = "grab";
+                    });
+                </script>
+                
                 % include('components/loading')
-                % include('components/map_toggle')
+                % include('components/map_controls')
             % end
             <div id="page">{{ !base }}</div>
         </div>

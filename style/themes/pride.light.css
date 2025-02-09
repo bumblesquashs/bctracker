@@ -12,6 +12,10 @@
     --stop-number-background: rgba(255, 255, 255, 0.7);
     --stop-number-text: #000000;
     --stop-number-border: rgba(0, 0, 0, 0.5);
+    
+    --map-control-background: rgba(255, 255, 255, 0.7);
+    --map-control-background-hover: #FFFFFF;
+    --map-control-icon: #000000;
 }
 
 a {
@@ -91,9 +95,8 @@ table tr {
     border-color: rgba(0, 0, 0, 0.5);
 }
 
-#map-toggle {
-    background-color: rgba(255, 255, 255, 0.6);
-    --image-color: #000000;
+#map-controls .control.active {
+    --map-control-icon: #365CCB;
 }
 
 #navigation-bar {
