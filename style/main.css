@@ -217,27 +217,6 @@ table tr.header td {
     border-style: solid;
 }
 
-
-#map .ol-zoom {
-    top: unset;
-    bottom: 0.5em;
-}
-
-#map .ol-rotate {
-    top: unset;
-    right: unset;
-    left: 0.5em;
-    bottom: 4em;
-}
-
-#map .ol-touch .ol-rotate {
-    bottom: 5em;
-}
-
-#map .ol-overlay-container:hover {
-    z-index: 10;
-}
-
 #map-controls {
     position: absolute;
     z-index: 20;
