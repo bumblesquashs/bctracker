@@ -10,6 +10,10 @@ body.full-map {
     overflow: hidden;
 }
 
+body.full-map #main {
+    overflow: hidden;
+}
+
 body.full-map #page {
     padding: 10px 20px 10px 20px;
 }
@@ -158,10 +162,6 @@ table {
 
 #search-results .result .description {
     font-size: 12pt;
-}
-
-#settings.collapsed {
-    display: none !important;
 }
 
 #side-bar {
