@@ -29,7 +29,7 @@
     --stop-number-border: #CBCBCB;
     
     --map-control-background: rgba(255, 255, 255, 0.7);
-    --map-control-background-hover: #FFFFFF;
+    --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
 }
 

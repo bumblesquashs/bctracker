@@ -15,7 +15,7 @@
     --stop-number-border: rgba(255, 255, 255, 0.3);
     
     --map-control-background: rgba(30, 30, 30, 0.7);
-    --map-control-background-hover: #000000;
+    --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
 }
 
