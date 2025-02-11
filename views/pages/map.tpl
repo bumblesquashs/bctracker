@@ -467,6 +467,7 @@
                             shapes[shapeID].setVisible(showRouteLines);
                         } else {
                             const layer = new ol.layer.Vector({
+                                className: "ol-layer route-layer",
                                 source: new ol.source.Vector({
                                     features: [
                                         new ol.Feature({
@@ -524,6 +525,7 @@
                                 shapes[shapeID].setVisible(shapeID, hoverPosition == position);
                             } else {
                                 const layer = new ol.layer.Vector({
+                                    className: "ol-layer route-layer",
                                     source: new ol.source.Vector({
                                         features: [
                                             new ol.Feature({

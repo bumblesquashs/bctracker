@@ -7,6 +7,14 @@
     --adherence-text: #FFFFFF;
 }
 
+#map .route-layer {
+    filter: brightness(80%);
+}
+
+#map .tile-layer {
+    filter: invert(100%) hue-rotate(180deg) saturate(42.069%);
+}
+
 #map-controls .control.error {
     --map-control-icon: #FF0000;
 }
@@ -17,6 +25,22 @@
 
 .behind {
     --adherence-background: #FF6A00;
+}
+
+.marker .bearing {
+    filter: brightness(80%);
+}
+
+.marker .icon {
+    filter: brightness(80%);
+}
+
+.marker .icon.adherence {
+    filter: unset;
+}
+
+.marker .icon.occupancy {
+    filter: unset;
 }
 
 .modified-service {

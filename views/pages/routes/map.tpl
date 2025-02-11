@@ -37,6 +37,7 @@
         function setTrips(trips) {
             for (const trip of trips) {
                 map.addLayer(new ol.layer.Vector({
+                    className: "ol-layer route-layer",
                     source: new ol.source.Vector({
                         features: [
                             new ol.Feature({

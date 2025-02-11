@@ -400,17 +400,13 @@ table tr:nth-child(2n-1) {
 }
 
 .marker .details {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #000000;
-}
-
-.marker .details .lighter-text {
-    color: #666666;
+    background-color: rgba(30, 30, 30, 0.7);
+    color: #FFFFFF;
 }
 
 .marker .icon {
     background-color: #FF6C00;
-    border-color: #FFFFFF;
+    border-color: #2F2F2F;
     --image-color: #FFFFFF;
 }
 

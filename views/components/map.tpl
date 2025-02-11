@@ -19,7 +19,8 @@
             target: 'map',
             layers: [
                 new ol.layer.Tile({
-                    source: new ol.source.OSM()
+                    source: new ol.source.OSM(),
+                    className: "ol-layer tile-layer"
                 })
             ],
             view: new ol.View({
@@ -57,6 +58,7 @@
         
         for (const trip of trips) {
             map.addLayer(new ol.layer.Vector({
+                className: "ol-layer route-layer",
                 source: new ol.source.Vector({
                     features: [
                         new ol.Feature({
