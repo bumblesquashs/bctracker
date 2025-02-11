@@ -30,31 +30,6 @@
     <script>
         document.getElementById("map").classList.add("display-none");
         
-        const map = new ol.Map({
-            target: 'map',
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM(),
-                }),
-            ],
-            view: new ol.View({
-                center: [0, 0],
-                zoom: 1,
-                maxZoom: 22
-            }),
-            interactions: ol.interaction.defaults.defaults().extend([
-                new ol.interaction.DblClickDragZoom()
-            ])
-        });
-        
-        map.getViewport().style.cursor = "grab";
-        map.on('pointerdrag', function(event) {
-            map.getViewport().style.cursor = "grabbing";
-        });
-        map.on('pointerup', function(event) {
-            map.getViewport().style.cursor = "grab";
-        });
-        
         const area = new Area();
         
         let showRouteNumbers = "{{ show_route_numbers }}" !== "False";
