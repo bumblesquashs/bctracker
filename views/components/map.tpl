@@ -13,39 +13,32 @@
 % include('components/svg_script', name='two-people')
 % include('components/svg_script', name='three-people')
 
-<script>
-    const interactive = "{{ is_preview }}" === "False";
-    const map = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM()
+% if is_preview:
+    <script>
+        const map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                    className: "ol-layer tile-layer"
+                })
+            ],
+            view: new ol.View({
+                center: [0, 0],
+                zoom: 3,
+                maxZoom: 22,
+                minZoom: 3
             }),
-        ],
-        view: new ol.View({
-            center: [0, 0],
-            zoom: 1,
-            maxZoom: 22
-        }),
-        interactions: interactive ? ol.interaction.defaults.defaults().extend([
-            new ol.interaction.DblClickDragZoom()
-        ]) : [],
-        controls: ol.control.defaults.defaults({
-            zoom: interactive,
-            rotate: interactive
-        })
-    });
-    
-    if (interactive) {
-        map.getViewport().style.cursor = "grab";
-        map.on('pointerdrag', function(event) {
-            map.getViewport().style.cursor = "grabbing";
+            interactions: [],
+            controls: ol.control.defaults.defaults({
+                zoom: false,
+                rotate: false
+            })
         });
-        map.on('pointerup', function(event) {
-            map.getViewport().style.cursor = "grab";
-        });
-    }
-    
+    </script>
+% end
+
+<script>
     const area = new Area();
 </script>
 
@@ -65,6 +58,7 @@
         
         for (const trip of trips) {
             map.addLayer(new ol.layer.Vector({
+                className: "ol-layer route-layer",
                 source: new ol.source.Vector({
                     features: [
                         new ol.Feature({
@@ -82,7 +76,8 @@
                         width: 4,
                         lineCap: "butt"
                     })
-                })
+                }),
+                zIndex: 1
             }));
             
             if ("{{ get('zoom_trips', True) }}" === "True") {

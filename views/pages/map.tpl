@@ -87,30 +87,6 @@
     % include('components/svg_script', name='three-people')
     
     <script>
-        const map = new ol.Map({
-            target: 'map',
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM(),
-                }),
-            ],
-            view: new ol.View({
-                center: [0, 0],
-                zoom: 1,
-                maxZoom: 22
-            }),
-            interactions: ol.interaction.defaults.defaults().extend([
-                new ol.interaction.DblClickDragZoom()
-            ])
-        });
-        
-        map.getViewport().style.cursor = "grab";
-        map.on('pointerdrag', function(event) {
-            map.getViewport().style.cursor = "grabbing";
-        });
-        map.on('pointerup', function(event) {
-            map.getViewport().style.cursor = "grab";
-        });
         map.on('moveend', function(event) {
             const zoom = map.getView().getZoom();
             const extent = map.getView().calculateExtent(map.getSize());
@@ -491,6 +467,7 @@
                             shapes[shapeID].setVisible(showRouteLines);
                         } else {
                             const layer = new ol.layer.Vector({
+                                className: "ol-layer route-layer",
                                 source: new ol.source.Vector({
                                     features: [
                                         new ol.Feature({
@@ -509,8 +486,9 @@
                                         lineCap: "butt"
                                     })
                                 }),
-                                visible: showRouteLines
-                            })
+                                visible: showRouteLines,
+                                zIndex: 1
+                            });
                             shapes[shapeID] = layer;
                             map.addLayer(layer);
                         }
@@ -547,6 +525,7 @@
                                 shapes[shapeID].setVisible(shapeID, hoverPosition == position);
                             } else {
                                 const layer = new ol.layer.Vector({
+                                    className: "ol-layer route-layer",
                                     source: new ol.source.Vector({
                                         features: [
                                             new ol.Feature({
@@ -565,7 +544,8 @@
                                             lineCap: "butt"
                                         })
                                     }),
-                                    visible: hoverPosition == position
+                                    visible: hoverPosition == position,
+                                    zIndex: 1
                                 })
                                 shapes[shapeID] = layer;
                                 map.addLayer(layer);

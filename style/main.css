@@ -219,34 +219,36 @@ table tr.header td {
     border-style: solid;
 }
 
-#map .ol-zoom {
-    top: unset;
-    bottom: 0.5em;
-}
-
-#map .ol-rotate {
-    top: unset;
-    right: unset;
-    left: 0.5em;
-    bottom: 4em;
-}
-
-#map .ol-touch .ol-rotate {
-    bottom: 5em;
-}
-
 #map .ol-overlay-container:hover {
     z-index: 10;
 }
 
-#map-toggle {
+#map-controls {
     position: absolute;
     z-index: 20;
-    border-radius: 50%;
-    bottom: 30px;
-    right: 15px;
-    padding: 8px;
-    --image-size: 28px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    background-color: var(--map-control-background);
+    overflow: hidden;
+    user-select: none;
+}
+
+#map-controls .control {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    --image-size: 18px;
+    --image-color: var(--map-control-icon);
+}
+
+#map-controls .control.disabled {
+    opacity: 0.3;
+}
+
+#map-controls .control.disabled:hover {
+    cursor: default;
+    background-color: unset;
 }
 
 #navigation-bar {

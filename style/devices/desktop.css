@@ -43,6 +43,15 @@ table th {
     overflow: auto;
 }
 
+#map-controls {
+    left: 15px;
+    bottom: 15px;
+}
+
+#map-controls .control:hover {
+    background-color: var(--map-control-background-hover);
+}
+
 #navigation-bar {
     font-size: 14pt;
     grid-column-start: span 2;

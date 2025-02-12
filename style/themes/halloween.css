@@ -29,6 +29,10 @@
     --stop-number-background: #2F2F2F;
     --stop-number-text: #FFFFFF;
     --stop-number-border: #565656;
+    
+    --map-control-background: rgba(30, 30, 30, 0.7);
+    --map-control-background-hover: rgba(30, 30, 30, 0.7);
+    --map-control-icon: #FFFFFF;
 }
 
 a {
@@ -109,9 +113,8 @@ table tr:nth-child(2n-1) {
     border-color: #565656;
 }
 
-#map-toggle {
-    background-color: #FF6C00;
-    --image-color: #FFFFFF;
+#map-controls .control.active {
+    --map-control-icon: #FF6C00;
 }
 
 #navigation-bar {
@@ -251,6 +254,7 @@ table tr:nth-child(2n-1) {
 
 #side-bar-toggle {
     background-color: #393939;
+    --image-color: #FFFFFF;
 }
 
 #side-bar-toggle:hover {
@@ -396,17 +400,13 @@ table tr:nth-child(2n-1) {
 }
 
 .marker .details {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #000000;
-}
-
-.marker .details .lighter-text {
-    color: #666666;
+    background-color: rgba(30, 30, 30, 0.7);
+    color: #FFFFFF;
 }
 
 .marker .icon {
     background-color: #FF6C00;
-    border-color: #FFFFFF;
+    border-color: #2F2F2F;
     --image-color: #FFFFFF;
 }
 

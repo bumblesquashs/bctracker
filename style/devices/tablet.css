@@ -49,6 +49,11 @@ table {
     order: 6;
 }
 
+#map-controls {
+    left: 15px;
+    bottom: 15px;
+}
+
 #navigation-bar {
     order: 2;
     padding: 0px 5px;
