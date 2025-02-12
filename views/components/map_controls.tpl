@@ -7,7 +7,7 @@
     </div>
     <div id="rotation-control" class="control disabled">
         <div id="rotation-control-arrow">
-            % include('components/svg', name='arrow')
+            % include('components/svg', name='navigation')
         </div>
     </div>
     <div id="geolocation-control" class="control" onclick="toggleGeolocation()">
