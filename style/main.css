@@ -23,6 +23,8 @@ body.full-map #page {
     z-index: 20;
     border-radius: 10px;
     margin: 10px 20px;
+    overflow: auto;
+    max-height: calc(100% - 120px);
 }
 
 body.full-map #page-header {
@@ -428,6 +430,10 @@ table tr.header td {
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+#settings.collapsed {
+    display: none !important;
 }
 
 #side-bar {
@@ -1439,6 +1445,10 @@ table tr.header td {
 .toggle-button {
     --image-color: var(--toggle-button-color);
     --image-size: 30px;
+}
+
+.toggle-button:hover {
+    cursor: pointer;
 }
 
 .tooltip-anchor {

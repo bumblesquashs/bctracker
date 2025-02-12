@@ -1,4 +1,4 @@
-<div class="non-desktop toggle-button" onclick="toggleSettings()">
+<div class="toggle-button" onclick="toggleSettings()">
     % include('components/svg', name='settings')
 </div>
 <script>
