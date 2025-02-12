@@ -12,7 +12,7 @@
 }
 
 #map .tile-layer {
-    filter: invert(100%) hue-rotate(180deg) saturate(42.069%);
+    filter: invert(100%) hue-rotate(180deg) saturate(42.069%); /* Nice! */
 }
 
 #map-controls .control.error {
