@@ -30,6 +30,7 @@
 
 <script>
     let geolocationEnabled = false;
+    let geolocationError = null;
     let followGeolocation = false;
     let setFollowZoom = false;
         
@@ -41,6 +42,7 @@
     });
     
     geolocation.on('error', function (error) {
+        geolocationError = error;
         const control = document.getElementById("geolocation-control");
         const trackingIcon = document.getElementById("geolocation-tracking-icon");
         const enabledIcon = document.getElementById("geolocation-enabled-icon");
@@ -124,6 +126,9 @@
     });
     
     map.on('pointermove', function(event) {
+        if (geolocationError !== null) {
+            return
+        }
         if (event.dragging && followGeolocation) {
             followGeolocation = false;
             setFollowZoom = false;
