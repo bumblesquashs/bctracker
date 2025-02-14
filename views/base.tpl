@@ -448,7 +448,15 @@
         </div>
         <div id="main">
             <div id="banners">
-                
+                % if system is not None and (system.id == 'cowichan-valley'):
+                    <div class="banner">
+                        <div class="content">
+                            <span class="title">Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</span>
+                            <br />
+                            <span class="description">For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</span>
+                        </div>
+                    </div>
+                % end
             </div>
             % if full_map:
                 <div id="map" class="full-screen"></div>
