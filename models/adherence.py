@@ -40,7 +40,7 @@ class Adherence:
             if not timestamp:
                 timestamp = Timestamp.now(trip.system.timezone)
             value = expected_scheduled_mins - timestamp.time.get_minutes(round_seconds=True)
-            layover = stop and trip.first_stop and stop == trip.first_stop and value > 0
+            layover = trip.first_departure and sequence == trip.first_departure.sequence and value > 0
             return cls(value, layover)
         except AttributeError:
             return None
