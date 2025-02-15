@@ -12,29 +12,43 @@
 % if system:
     % routes = system.get_routes()
     % if routes:
-        <table>
-            <thead>
-                <tr>
-                    <th>Route</th>
-                    <th class="non-mobile">Service Days</th>
-                </tr>
-            </thead>
-            <tbody>
-                % for route in routes:
-                    <tr>
-                        <td>
-                            <div class="row">
-                                % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
-                            </div>
-                        </td>
-                        <td class="non-mobile">
-                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
-                        </td>
-                    </tr>
-                % end
-            </tbody>
-        </table>
+        % route_types = {r.type for r in routes}
+        <div class="container">
+            % for route_type in route_types:
+                % type_routes = [r for r in routes if r.type == route_type]
+                <div class="section">
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>{{ route_type }}s</h2>
+                        % include('components/toggle')
+                    </div>
+                    <div class="content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Route</th>
+                                    <th class="non-mobile">Service Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for route in type_routes:
+                                    <tr>
+                                        <td>
+                                            <div class="row">
+                                                % include('components/route')
+                                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                            </div>
+                                        </td>
+                                        <td class="non-mobile">
+                                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
+                                        </td>
+                                    </tr>
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            % end
+        </div>
     % else:
         <div class="placeholder">
             <h3>Route information for {{ system }} is unavailable</h3>

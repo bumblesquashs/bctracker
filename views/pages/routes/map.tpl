@@ -84,19 +84,17 @@
                 
                 const title = document.createElement("div");
                 title.className = "title";
-                title.innerHTML = route.name;
+                title.innerHTML = route.number + " " + route.name;
                 details.appendChild(title);
-                
-                const agencyLogo = document.createElement("img");
-                agencyLogo.className = "agency-logo";
-                agencyLogo.src = "/img/icons/" + route.agency_id + ".png";
-                agencyLogo.onerror = function() {
-                    agencyLogo.style.visibility = 'hidden';
-                };
                 
                 const content = document.createElement("div");
                 content.className = "content";
                 details.appendChild(content);
+                
+                const routeType = document.createElement("div");
+                routeType.className = "lighter-text";
+                routeType.innerHTML = route.type;
+                content.appendChild(routeType);
                 
                 const headsignSection = document.createElement("div");
                 headsignSection.className = "column";
@@ -120,6 +118,13 @@
                 } else if (route.headsigns.length > 5) {
                     headsignSection.innerHTML += "<i class='lighter-text'>And " + (route.headsigns.length - 4) + " others</i>";
                 }
+                
+                const agencyLogo = document.createElement("img");
+                agencyLogo.className = "agency-logo";
+                agencyLogo.src = "/img/icons/" + route.agency_id + ".png";
+                agencyLogo.onerror = function() {
+                    agencyLogo.style.visibility = 'hidden';
+                };
                 
                 content.innerHTML += "<div class='row gap-5'>" + agencyLogo.outerHTML + route.system_name + "</div>";
                 

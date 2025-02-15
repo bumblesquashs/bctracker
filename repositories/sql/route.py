@@ -31,6 +31,7 @@ class SQLRouteRepository(RouteRepository):
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
+        type = int(row['route_type'])
         route_id = row['route_id']
         number = row['route_short_name']
         if not number:
@@ -41,7 +42,8 @@ class SQLRouteRepository(RouteRepository):
             'number': number,
             'name': row['route_long_name'],
             'colour': colour,
-            'text_colour': text_colour
+            'text_colour': text_colour,
+            'type': type
         })
     
     def find(self, system, route_id=None, number=None):
@@ -54,7 +56,8 @@ class SQLRouteRepository(RouteRepository):
                 'route.number': 'route_number',
                 'route.name': 'route_name',
                 'route.colour': 'route_colour',
-                'route.text_colour': 'route_text_colour'
+                'route.text_colour': 'route_text_colour',
+                'route.type': 'route_type'
             },
             filters={
                 'route.system_id': system_id,
@@ -69,7 +72,7 @@ class SQLRouteRepository(RouteRepository):
         except IndexError:
             return None
     
-    def find_all(self, system, limit=None):
+    def find_all(self, system, type=None, limit=None):
         '''Returns all routes that match the given system'''
         system_id = getattr(system, 'id', system)
         return self.database.select('route',
@@ -79,10 +82,12 @@ class SQLRouteRepository(RouteRepository):
                 'route.number': 'route_number',
                 'route.name': 'route_name',
                 'route.colour': 'route_colour',
-                'route.text_colour': 'route_text_colour'
+                'route.text_colour': 'route_text_colour',
+                'route.type': 'route_type'
             },
             filters={
-                'route.system_id': system_id
+                'route.system_id': system_id,
+                'route.type': type
             },
             limit=limit,
             initializer=Route.from_db
