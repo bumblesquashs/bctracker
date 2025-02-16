@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
+    from models.area import Area
     from models.stop import Stop
 
 class StopRepository(ABC):
@@ -18,6 +19,10 @@ class StopRepository(ABC):
     
     @abstractmethod
     def find_all(self, system, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def find_area(self, system) -> Area:
         raise NotImplementedError()
     
     @abstractmethod

@@ -273,12 +273,11 @@
         <div id="navigation-bar">
             <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>
             
+            <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
             % if not system or system.realtime_enabled:
-                <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
                 <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
                 <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
             % else:
-                <div class="navigation-item non-mobile disabled">Map</div>
                 <div class="navigation-item non-mobile disabled">Realtime</div>
                 <div class="navigation-item desktop-only disabled">History</div>
             % end
@@ -328,11 +327,11 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
+            <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
+                % include('components/svg', name='map')
+                <span>Map</span>
+            </a>
             % if not system or system.realtime_enabled:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
-                    % include('components/svg', name='map')
-                    <span>Map</span>
-                </a>
                 <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
@@ -342,10 +341,6 @@
                     <span>History</span>
                 </a>
             % else:
-                <div class="menu-button mobile-only disabled">
-                    % include('components/svg', name='map')
-                    <span>Map</span>
-                </div>
                 <div class="menu-button mobile-only disabled">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
