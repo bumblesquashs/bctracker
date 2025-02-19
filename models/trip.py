@@ -181,6 +181,7 @@ class Trip:
     def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
         json = {
+            'system_id': self.system.id,
             'shape_id': self.shape_id,
             'points': [p.get_json() for p in self.find_points()]
         }

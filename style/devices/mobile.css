@@ -56,10 +56,6 @@ table th {
     font-size: 12pt;
 }
 
-#loading {
-    width: calc(100% - 36px);
-}
-
 #main {
     font-size: 12pt;
     order: 6;
@@ -286,7 +282,7 @@ table th {
     row-gap: 0px;
 }
 
-.option {
+.options-container .option {
     padding: 5px 0px;
 }
 

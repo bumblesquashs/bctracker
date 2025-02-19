@@ -115,10 +115,6 @@
     const stopMarkers = {};
     let currentStopKeys = new Set();
     
-    document.body.onload = function() {
-        map.updateSize();
-    }
-    
     updateMap(true);
     if (showRouteLines) {
         updateRouteData();

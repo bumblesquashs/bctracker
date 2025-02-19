@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.area import Area
 from models.point import Point
 
 from repositories import PointRepository
@@ -44,6 +45,26 @@ class SQLPointRepository(PointRepository):
             order_by='point.sequence ASC',
             initializer=Point.from_db
         )
+    
+    def find_area(self, system):
+        system_id = getattr(system, 'id', system)
+        areas = self.database.select(
+            table='point',
+            columns={
+                'MIN(point.lat)': 'min_lat',
+                'MAX(point.lat)': 'max_lat',
+                'MIN(point.lon)': 'min_lon',
+                'MAX(point.lon)': 'max_lon'
+            },
+            filters={
+                'point.system_id': system_id
+            },
+            initializer=Area.from_db
+        )
+        try:
+            return areas[0]
+        except IndexError:
+            return None
     
     def delete_all(self, system):
         '''Deletes all points for the given system from the database'''

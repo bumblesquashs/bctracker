@@ -485,6 +485,9 @@
                     map.on('pointerup', function(event) {
                         map.getViewport().style.cursor = "grab";
                     });
+                    document.body.onload = function() {
+                        map.updateSize();
+                    }
                 </script>
                 
                 % include('components/loading')

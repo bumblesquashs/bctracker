@@ -34,24 +34,25 @@
         
         let showRouteNumbers = "{{ show_route_numbers }}" !== "False";
         
-        function setTrips(trips) {
-            for (const trip of trips) {
+        function setShapes(shapes) {
+            for (const shape of shapes) {
+                const shapeID = shape.system_id + "_" + shape.shape_id;
                 map.addLayer(new ol.layer.Vector({
                     className: "ol-layer route-layer",
                     source: new ol.source.Vector({
                         features: [
                             new ol.Feature({
-                                geometry: new ol.geom.LineString(trip.points.map(function (point) {
+                                geometry: new ol.geom.LineString(shape.points.map(function (point) {
                                     return ol.proj.fromLonLat([point.lon, point.lat])
                                 })),
-                                name: String(trip.shape_id)
+                                name: shapeID
                             })
                         ],
                         wrapX: false
                     }),
                     style: new ol.style.Style({
                         stroke: new ol.style.Stroke({
-                            color: "#" + trip.colour,
+                            color: "#" + shape.colour,
                             width: 4,
                             lineCap: "butt"
                         })
@@ -59,7 +60,7 @@
                     zIndex: 1
                 }));
                 
-                for (const point of trip.points) {
+                for (const point of shape.points) {
                     area.combine(point.lat, point.lon);
                 }
             }
@@ -157,7 +158,7 @@
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
-                    setTrips(request.response.trips);
+                    setShapes(request.response.shapes);
                     setRouteNumbers(request.response.indicators);
                     
                     document.getElementById("map").classList.remove("display-none");

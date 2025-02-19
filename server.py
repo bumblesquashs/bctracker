@@ -85,6 +85,7 @@ class Server(Bottle):
         # Pages
         self.add('/', callback=self.home)
         self.add('/news', callback=self.news)
+        self.add('/explore', callback=self.explore)
         self.add('/map', callback=self.map)
         self.add('/realtime', callback=self.realtime_all)
         self.add('/realtime/routes', callback=self.realtime_routes)
@@ -416,6 +417,37 @@ class Server(Bottle):
             system=system,
             agency=agency,
             enable_refresh=False
+        )
+    
+    def explore(self, system, agency):
+        positions = self.position_repository.find_all(system, has_location=True)
+        mode = self.query_cookie('map_mode', 'all')
+        if mode not in {'buses', 'routes', 'all'}:
+            mode = 'all'
+        auto_refresh = self.query_cookie('auto_refresh', 'false') != 'false'
+        show_nis = self.query_cookie('show_nis', 'true') != 'false'
+        show_route_numbers = self.query_cookie('show_route_numbers', 'false') != 'false'
+        show_stops = self.query_cookie('show_stops', 'true') != 'false'
+        if mode == 'routes':
+            area = self.point_repository.find_area(system)
+        elif positions:
+            area = self.position_repository.find_area(system)
+        else:
+            area = self.stop_repository.find_area(system)
+        return self.page(
+            name='explore',
+            title='Explore',
+            path=['explore'],
+            system=system,
+            agency=agency,
+            full_map=True,
+            positions=sorted(positions, key=lambda p: p.lat),
+            mode=mode,
+            auto_refresh=auto_refresh,
+            show_nis=show_nis,
+            show_route_numbers=show_route_numbers,
+            show_stops=show_stops,
+            area=area
         )
     
     def map(self, system, agency):
@@ -1413,7 +1445,7 @@ class Server(Bottle):
                 shape_trips.append(trip.get_json())
         indicators = [j for r in routes for j in r.get_indicator_json()]
         return {
-            'trips': shape_trips,
+            'shapes': shape_trips,
             'indicators': sorted(indicators, key=lambda j: j['lat'])
         }
     

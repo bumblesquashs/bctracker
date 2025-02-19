@@ -1,11 +1,13 @@
 <div id="loading-container" class="display-none">
-    <div id="loading">
-        <div id="loading-line"></div>
-        <div id="loading-stop">
-            % include('components/svg', name='stop')
+    <div id="loading-indicator">
+        <div id="loading">
+            <div id="loading-line"></div>
+            <div id="loading-stop">
+                % include('components/svg', name='stop')
+            </div>
         </div>
+        <h2>Loading...</h2>
     </div>
-    <h2>Loading...</h2>
     <script>
         const loadingStopElement = document.getElementById("loading-stop");
         let loadingStopPosition = -36;

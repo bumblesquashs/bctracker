@@ -344,6 +344,22 @@ table tr:nth-child(2n-1) {
     border-color: #666666;
 }
 
+.compact-options-container {
+    background-color: #E6E6E6BB;
+    color: #000000;
+    --image-color: #000000;
+}
+
+.compact-options-container .option:hover {
+    background-color: #FFFFFF;
+}
+
+.compact-options-container .option.selected {
+    background-color: #FFFFFF;
+    color: #365CCB;
+    --image-color: #365CCB;
+}
+
 .container > .section > .header {
     border-bottom-color: #666666;
 }

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
+    from models.area import Area
     from models.point import Point
 
 class PointRepository(ABC):
@@ -14,6 +15,10 @@ class PointRepository(ABC):
     
     @abstractmethod
     def find_all(self, system, shape) -> list[Point]:
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def find_area(self, system) -> Area:
         raise NotImplementedError()
     
     @abstractmethod

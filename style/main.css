@@ -18,6 +18,12 @@ body, ol, ul, p, h1, h2, h3, h4, form {
     margin: 0px;
 }
 
+body.full-map #loading-indicator {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
 body.full-map #page {
     position: relative;
     z-index: 20;
@@ -25,6 +31,7 @@ body.full-map #page {
     margin: 10px 20px;
     overflow: auto;
     max-height: calc(100% - 120px);
+    gap: 5px;
 }
 
 body.full-map #page-header {
@@ -138,32 +145,11 @@ table tr.header td {
 }
 
 #loading {
+    margin: 0px -10px;
     position: relative;
     width: 300px;
     height: 36px;
     overflow: hidden;
-}
-
-#loading:before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    pointer-events: none;
-    background-image: linear-gradient(to left, rgba(0,0,0,0), var(--loading-background) 90%);
-    width: 36px;
-    height: 36px;
-}
-
-#loading:after {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    right: 0;
-    pointer-events: none;
-    background-image: linear-gradient(to right, rgba(0,0,0,0), var(--loading-background) 90%);
-    width: 36px;
-    height: 36px;
 }
 
 #loading-container {
@@ -177,7 +163,13 @@ table tr.header td {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+}
+
+#loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #loading-line {
@@ -646,6 +638,25 @@ table tr.header td {
     align-items: stretch;
 }
 
+.compact-options-container {
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.compact-options-container .option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 9pt;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    --image-size: 20px;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -768,6 +779,10 @@ table tr.header td {
 
 .hidden {
     opacity: 0 !important;
+}
+
+.indent-1 {
+    margin-left: 15px;
 }
 
 .info-box {
@@ -1086,7 +1101,7 @@ table tr.header td {
     column-gap: 10px;
 }
 
-.option {
+.options-container .option {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -1098,12 +1113,12 @@ table tr.header td {
     border-radius: 10px;
 }
 
-.option.space-between {
+.options-container .option.space-between {
     align-self: stretch;
     justify-content: space-between;
 }
 
-.option .checkbox {
+.options-container .option .checkbox {
     border: 2px solid var(--checkbox-color);
     border-radius: 5px;
     width: 18px;
@@ -1112,15 +1127,15 @@ table tr.header td {
     --image-color: var(--checkbox-color);
 }
 
-.option .checkbox svg {
+.options-container .option .checkbox svg {
     opacity: 0;
 }
 
-.option .checkbox.selected svg {
+.options-container .option .checkbox.selected svg {
     opacity: 1;
 }
 
-.option .radio-button {
+.options-container .option .radio-button {
     width: 12px;
     height: 12px;
     border: 2px solid var(--radio-button-color);
@@ -1129,7 +1144,7 @@ table tr.header td {
     flex-shrink: 0;
 }
 
-.option .radio-button.selected::before {
+.options-container .option .radio-button.selected::before {
     content: '';
     display: block;
     width: 100%;

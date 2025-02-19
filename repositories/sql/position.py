@@ -4,6 +4,7 @@ from database import Database
 from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
 
 from models.adherence import Adherence
+from models.area import Area
 from models.occupancy import Occupancy
 from models.position import Position
 from models.timestamp import Timestamp
@@ -198,6 +199,34 @@ class SQLPositionRepository(PositionRepository):
             initializer=Position.from_db
         )
         return [p for p in positions if p.bus.visible]
+    
+    def find_area(self, system):
+        system_id = getattr(system, 'id', system)
+        areas = self.database.select(
+            table='position',
+            columns={
+                'MIN(position.lat)': 'min_lat',
+                'MAX(position.lat)': 'max_lat',
+                'MIN(position.lon)': 'min_lon',
+                'MAX(position.lon)': 'max_lon'
+            },
+            filters={
+                'position.system_id': system_id,
+                'position.lat': {
+                    'IS NOT': None,
+                    '!=': 0
+                },
+                'position.lon': {
+                    'IS NOT': None,
+                    '!=': 0
+                }
+            },
+            initializer=Area.from_db
+        )
+        try:
+            return areas[0]
+        except IndexError:
+            return None
     
     def delete_all(self, system=None):
         '''Deletes all positions for the given system from the database'''

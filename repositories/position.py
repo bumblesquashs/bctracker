@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
+    from models.area import Area
     from models.position import Position
 
 class PositionRepository(ABC):
@@ -18,6 +19,10 @@ class PositionRepository(ABC):
     
     @abstractmethod
     def find_all(self, system, trip, stop, block, route, has_location) -> list[Position]:
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def find_area(self, system) -> Area:
         raise NotImplementedError()
     
     @abstractmethod
