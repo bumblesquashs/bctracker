@@ -25,8 +25,6 @@ class System:
         'remote_id',
         'enabled',
         'timezone',
-        'preposition',
-        'regional',
         'colour_routes',
         'gtfs_downloaded',
         'gtfs_loaded',
@@ -93,8 +91,6 @@ class System:
         self.remote_id = kwargs.get('remote_id')
         self.enabled = kwargs.get('enabled', True) and agency.enabled
         self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
-        self.preposition = kwargs.get('preposition', 'for')
-        self.regional = kwargs.get('regional', False)
         self.colour_routes = kwargs.get('colour_routes')
         
         self.gtfs_downloaded = None

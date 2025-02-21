@@ -43,11 +43,10 @@
         
         % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
-            <meta property="og:description" content="Transit schedules and bus tracking for {{ system }}, BC" />
         % else:
             <meta property="og:title" content="BCTracker | {{ title }}">
-            <meta property="og:description" content="Transit schedules and bus tracking for BC, Canada" />
         % end
+        <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ get_url(system, *path) }}" />
         <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
@@ -448,12 +447,19 @@
         </div>
         <div id="main">
             <div id="banners">
-                % if system is not None and (system.id == 'cowichan-valley'):
+                % if system is not None and system.id == 'cowichan-valley':
                     <div class="banner">
                         <div class="content">
-                            <span class="title">Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</span>
-                            <br />
-                            <span class="description">For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</span>
+                            <h1>Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</h1>
+                            <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
+                        </div>
+                    </div>
+                % end
+                % from models.date import Date
+                % if system is not None and system.id == 'west-coast' and today < Date(2025, 3, 1, system.timezone):
+                    <div class="banner">
+                        <div class="content">
+                            <h1>BC Transit will begin operating between Tofino and Ucluelet on March 1st, 2025</h1>
                         </div>
                     </div>
                 % end
@@ -526,7 +532,7 @@
             </div>
             <div id="search-placeholder">
                 % if system:
-                    Search for buses, routes, stops, and blocks in {{ system }}
+                    Search for {{ system }} buses, routes, stops, and blocks
                 % else:
                     Search for buses in all systems
                 % end

@@ -542,8 +542,13 @@ table tr.header td {
     cursor: pointer;
 }
 
-.banner .title {
-    font-weight: bold;
+.banner .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.banner h1 {
     font-size: 16pt;
 }
 

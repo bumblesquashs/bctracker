@@ -184,7 +184,7 @@
             <h3>Route information is unavailable</h3>
             <p>Please check again later!</p>
         % else:
-            <h3>Route information for {{ system }} is unavailable</h3>
+            <h3>{{ system }} route information is unavailable</h3>
             % if system.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:

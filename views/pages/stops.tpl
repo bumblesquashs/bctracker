@@ -159,7 +159,7 @@
                                     <p>Please try selecting different routes!</p>
                                 % end
                             % else:
-                                <h3>Stop information for {{ system }} is unavailable</h3>
+                                <h3>{{ system }} stop information is unavailable</h3>
                                 % if system.gtfs_loaded:
                                     <p>Please check again later!</p>
                                 % else:
