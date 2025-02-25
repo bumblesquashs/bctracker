@@ -424,20 +424,20 @@ class Server(Bottle):
         show_route_lines = self.query_cookie('show_route_lines', 'false') != 'false'
         show_stops = self.query_cookie('show_stops', 'true') != 'false'
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
-        visible_positions = positions if show_nis else [p for p in positions if p.trip]
+        stop_area = self.stop_repository.find_area(system)
         return self.page(
             name='map',
             title='Map',
             path=['map'],
             system=system,
             agency=agency,
-            full_map=len(visible_positions) > 0,
+            full_map=True,
             positions=sorted(positions, key=lambda p: p.lat),
             auto_refresh=auto_refresh,
             show_route_lines=show_route_lines,
             show_stops=show_stops,
             show_nis=show_nis,
-            visible_positions=visible_positions
+            stop_area=stop_area
         )
     
     def realtime_all(self, system, agency):

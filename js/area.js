@@ -1,10 +1,10 @@
 
 class Area {
-    constructor() {
-        this.minLat = null;
-        this.maxLat = null;
-        this.minLon = null;
-        this.maxLon = null;
+    constructor(minLat = null, maxLat = null, minLon = null, maxLon = null) {
+        this.minLat = minLat === null ? null : parseFloat(minLat);
+        this.maxLat = maxLat === null ? null : parseFloat(maxLat);
+        this.minLon = minLon === null ? null : parseFloat(minLon);
+        this.maxLon = maxLon === null ? null : parseFloat(maxLon);
     }
     
     get isValid() {

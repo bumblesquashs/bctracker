@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.area import Area
 from models.stop import Stop
 
 from repositories import StopRepository
@@ -83,6 +84,32 @@ class SQLStopRepository(StopRepository):
             limit=limit,
             initializer=Stop.from_db
         )
+    
+    def find_area(self, system):
+        system_id = getattr(system, 'id', system)
+        areas = self.database.select(
+            table='stop',
+            columns={
+                'MIN(stop.lat)': 'min_lat',
+                'MAX(stop.lat)': 'max_lat',
+                'MIN(stop.lon)': 'min_lon',
+                'MAX(stop.lon)': 'max_lon'
+            },
+            filters={
+                'stop.system_id': system_id,
+                'stop.lat': {
+                    '!=': 0
+                },
+                'stop.lon': {
+                    '!=': 0
+                }
+            },
+            initializer=Area.from_db
+        )
+        try:
+            return areas[0]
+        except IndexError:
+            return None
     
     def delete_all(self, system):
         '''Deletes all stops for the given system from the database'''
