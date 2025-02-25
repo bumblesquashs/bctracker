@@ -7,12 +7,12 @@
     <h1>Welcome to BCTracker!</h1>
     % if system:
         % if agency.realtime_enabled:
-            <h2>Transit Schedules and Bus Tracking {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
+            <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
         % else:
-            <h2>Transit Schedules {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
+            <h2>{{ system }} Transit Schedules</h2>
         % end
     % else:
-        <h2>Transit Schedules and Bus Tracking for British Columbia</h2>
+        <h2>British Columbia Transit Schedules and Bus Tracking</h2>
     % end
 </div>
 

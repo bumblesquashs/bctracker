@@ -121,7 +121,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        <h3>{{ system }} does not currently support realtime</h3>
-        <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+        <h3>{{ system }} realtime information is not supported</h3>
+        <p>You can browse schedule data using the links above, or choose a different system.</p>
     </div>
 % end
