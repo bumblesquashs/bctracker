@@ -21,7 +21,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 51
+VERSION = 52
 
 random = Random()
 
@@ -77,10 +77,10 @@ class Server(Bottle):
         self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
         
         # Static files
-        self.add('/style/<name:path>', append_slash=False, callback=self.style)
-        self.add('/img/<name:path>', append_slash=False, callback=self.img)
-        self.add('/js/<name:path>', append_slash=False, callback=self.js)
-        self.add('/robots.txt', append_slash=False, callback=self.robots_text)
+        self.add('/style/<name:path>', append_slash=False, validate_system=False, callback=self.style)
+        self.add('/img/<name:path>', append_slash=False, validate_system=False, callback=self.img)
+        self.add('/js/<name:path>', append_slash=False, validate_system=False, callback=self.js)
+        self.add('/robots.txt', append_slash=False, validate_system=False, callback=self.robots_text)
         
         # Pages
         self.add('/', callback=self.home)
@@ -346,7 +346,7 @@ class Server(Bottle):
             return value
         return options[0]
     
-    def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', callback=None):
+    def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', validate_system=True, callback=None):
         '''Adds an endpoint to the server'''
         if not callback:
             return
@@ -366,7 +366,7 @@ class Server(Bottle):
             if system_key in kwargs:
                 system_id = kwargs[system_key]
                 system = self.system_repository.find(system_id)
-                if not system:
+                if validate_system and not system:
                     raise HTTPError(404)
                 del kwargs[system_key]
             else:

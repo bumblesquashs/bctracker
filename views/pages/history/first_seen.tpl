@@ -85,13 +85,13 @@
             <h3>No vehicle history found</h3>
             <p>Something has probably gone terribly wrong if you're seeing this.</p>
         % elif not system.realtime_enabled:
-            <h3>{{ system }} does not currently support realtime</h3>
-            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+            <h3>{{ system }} realtime information is not supported</h3>
+            <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
         % else:
-            <h3>No buses have been recorded in {{ system }}</h3>
+            <h3>No {{ system }} buses have been recorded</h3>
             <p>Please check again later!</p>
         % end
     </div>

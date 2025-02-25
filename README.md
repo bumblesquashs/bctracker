@@ -47,6 +47,7 @@ Available at https://bctracker.ca
 - Squamish
 - Sunshine Coast
 - Victoria
+- West Coast
 - West Kootenay
 - Whistler
 - Williams Lake

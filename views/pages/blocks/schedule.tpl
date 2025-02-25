@@ -93,7 +93,7 @@
         % include('components/top_button')
     % else:
         <div class="placeholder">
-            <h3>Block information for {{ system }} is unavailable</h3>
+            <h3>{{ system }} block information is unavailable</h3>
             % if system.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
