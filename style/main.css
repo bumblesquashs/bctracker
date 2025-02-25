@@ -25,6 +25,7 @@ body.full-map #page {
     margin: 10px 20px;
     overflow: auto;
     max-height: calc(100% - 120px);
+    gap: 5px;
 }
 
 body.full-map #page-header {

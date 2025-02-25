@@ -18,6 +18,16 @@
     </div>
 </div>
 
+<div id="no-buses-message" class="{{ 'display-none' if positions else '' }}">
+    % if system and not system.realtime_enabled:
+        <i>{{ system }} realtime information is not supported</i>
+    % elif system:
+        <i>There are no {{ system }} buses out right now</i>
+    % else:
+        <i>There are no buses out right now</i>
+    % end
+</div>
+
 % if not system or system.realtime_enabled:
     <div id="settings" class="container collapsed">
         <div class="section">
@@ -139,6 +149,12 @@
         busMarkers = [];
         
         const area = new Area();
+        
+        if (positions.length === 0) {
+            document.getElementById("no-buses-message").classList.remove("display-none");
+        } else {
+            document.getElementById("no-buses-message").classList.add("display-none");
+        }
         
         for (const position of positions) {
             if (position.shape_id !== null && position.shape_id !== undefined) {

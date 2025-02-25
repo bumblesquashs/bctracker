@@ -96,7 +96,13 @@ class SQLStopRepository(StopRepository):
                 'MAX(stop.lon)': 'max_lon'
             },
             filters={
-                'stop.system_id': system_id
+                'stop.system_id': system_id,
+                'stop.lat': {
+                    '!=': 0
+                },
+                'stop.lon': {
+                    '!=': 0
+                }
             },
             initializer=Area.from_db
         )
