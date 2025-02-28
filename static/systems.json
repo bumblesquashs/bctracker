@@ -7,19 +7,15 @@
             },
             "comox": {
                 "name": "Comox Valley",
-                "remote_id": 45,
-                "preposition": "for the"
+                "remote_id": 45
             },
             "cowichan-valley": {
                 "name": "Cowichan Valley",
-                "remote_id": 10,
-                "preposition": "for the"
+                "remote_id": 10
             },
             "mount-waddington": {
                 "name": "Mount Waddington",
-                "remote_id": 17,
-                "preposition": "for the",
-                "regional": true
+                "remote_id": 17
             },
             "nanaimo": {
                 "name": "Nanaimo",
@@ -31,19 +27,22 @@
             },
             "salt-spring": {
                 "name": "Salt Spring Island",
-                "remote_id": 39,
-                "colour_routes": "000000"
+                "remote_id": 39
             },
             "victoria": {
                 "name": "Victoria",
                 "remote_id": 48
+            },
+            "west-coast": {
+                "name": "West Coast",
+                "remote_id": 51,
+                "colour_routes": "000000"
             }
         },
         "southern-coast": {
             "fraser-valley": {
                 "name": "Fraser Valley",
-                "remote_id": 13,
-                "preposition": "for the"
+                "remote_id": 13
             },
             "pemberton": {
                 "name": "Pemberton",
@@ -62,7 +61,6 @@
             "sunshine-coast": {
                 "name": "Sunshine Coast",
                 "remote_id": 18,
-                "preposition": "for the",
                 "colour_routes": "000000"
             },
             "whistler": {
@@ -74,8 +72,6 @@
             "ashcroft-clinton": {
                 "name": "Ashcroft-Clinton",
                 "remote_id": 38,
-                "preposition":"for the",
-                "regional": true,
                 "colour_routes": "000000"
             },
             "clearwater": {
@@ -86,15 +82,12 @@
             "creston-valley": {
                 "name": "Creston Valley",
                 "remote_id": 16,
-                "preposition": "for the",
                 "timezone": "America/Creston"
             },
             "east-kootenay": {
                 "name": "East Kootenay",
                 "remote_id": 21,
                 "timezone": "America/Edmonton",
-                "preposition": "for the",
-                "regional": true,
                 "colour_routes": "000000"
             },
             "kamloops": {
@@ -113,9 +106,7 @@
             },
             "north-okanagan": {
                 "name": "North Okanagan",
-                "remote_id": 14,
-                "preposition": "for the",
-                "regional": true
+                "remote_id": 14
             },
             "revelstoke": {
                 "name": "Revelstoke",
@@ -124,16 +115,11 @@
             },
             "south-okanagan": {
                 "name": "South Okanagan",
-                "remote_id": 15,
-                "preposition": "for the",
-                "regional": true
+                "remote_id": 15
             },
             "west-kootenay": {
                 "name": "West Kootenay",
-                "remote_id": 20,
-                "preposition": "for the",
-                "regional": true,
-                "colour_routes": "000000"
+                "remote_id": 20
             }
         },
         "northern-bc": {
@@ -155,8 +141,6 @@
             "kitimat": {
                 "name": "Kitimat-Stikine",
                 "remote_id": 26,
-                "preposition": "for the",
-                "regional": true,
                 "colour_routes": "000000"
             },
             "prince-george": {
@@ -180,8 +164,7 @@
             },
             "williams-lake": {
                 "name": "Williams Lake",
-                "remote_id": 33,
-                "colour_routes": "000000"
+                "remote_id": 33
             }
         }
     },
