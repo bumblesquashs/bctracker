@@ -279,48 +279,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                % for departure in upcoming_departures:
-                                    % trip = departure.trip
-                                    % stop = departure.stop
-                                    <tr>
-                                        <td>
-                                            <div class="row">
-                                                <div class="{{ 'timing-point' if departure.timepoint else '' }}">
-                                                    {{ departure.time.format_web(time_format) }}
-                                                </div>
-                                                % if position.adherence and position.adherence.value != 0:
-                                                    % expected_time = departure.time - timedelta(minutes=position.adherence.value)
-                                                    <div class="lighter-text">
-                                                        ({{ expected_time.format_web(time_format) }})
-                                                    </div>
-                                                % end
+                                % for departure in upcoming_departures[:5]:
+                                    % include('rows/upcoming_departure')
+                                % end
+                                % if len(upcoming_departures) > 5:
+                                    <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
+                                        <td colspan="2">
+                                            <div class="row justify-center">
+                                                % include('components/svg', name='down')
+                                                Show Full Schedule
                                             </div>
                                         </td>
-                                        % if stop:
-                                            <td>
-                                                <div class="column">
-                                                    % include('components/stop', timepoint=departure.timepoint)
-                                                    % if not departure.pickup_type.is_normal:
-                                                        <span class="smaller-font italics">{{ departure.pickup_type }}</span>
-                                                    % elif departure == trip.last_departure:
-                                                        <span class="smaller-font italics">No pick up</span>
-                                                    % end
-                                                    % if not departure.dropoff_type.is_normal:
-                                                        <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
-                                                    % elif departure == trip.first_departure:
-                                                        <span class="smaller-font italics">No drop off</span>
-                                                    % end
-                                                </div>
-                                            </td>
-                                        % else:
-                                            <td class="lighter-text">Unknown</td>
-                                        % end
                                     </tr>
+                                    <tr class="display-none"></tr>
+                                    % for departure in upcoming_departures[5:]:
+                                        % include('rows/upcoming_departure', hidden=True)
+                                    % end
                                 % end
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <script>
+                    function showAllUpcomingStops() {
+                        document.getElementById("show-all-upcoming-stops-button").classList.add("display-none");
+                        for (const element of document.getElementsByClassName("table-button-target")) {
+                            element.classList.remove("display-none");
+                        }
+                    }
+                </script>
             % end
         % end
         <div class="section">

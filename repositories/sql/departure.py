@@ -101,7 +101,7 @@ class SQLDepartureRepository(DepartureRepository):
             initializer=Departure.from_db
         )
     
-    def find_upcoming(self, system, trip, sequence, limit=5):
+    def find_upcoming(self, system, trip, sequence, limit=None):
         '''Returns all departures on a trip from the given sequence number onwards'''
         system_id = getattr(system, 'id', system)
         trip_id = getattr(trip, 'id', trip)

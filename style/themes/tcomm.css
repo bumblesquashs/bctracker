@@ -89,6 +89,18 @@ table tr {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
+table tr.table-button {
+    background: #EEEEEE;
+    color: #222222;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #222222;
+}
+
+table tr.table-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }

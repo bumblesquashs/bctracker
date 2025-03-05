@@ -105,6 +105,16 @@ table tr:nth-child(2n-1) {
     background-color: #393939;
 }
 
+table tr.table-button {
+    background-color: #2247B7;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: #10308F;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }

@@ -84,6 +84,16 @@ table tr {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
+table tr.table-button {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }

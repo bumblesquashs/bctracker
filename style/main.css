@@ -133,6 +133,13 @@ table tr.header td {
     font-weight: bold;
 }
 
+table tr.table-button {
+    cursor: pointer;
+    font-size: 13pt;
+    font-family: var(--sans-serif-font);
+    --image-size: 20px;
+}
+
 #banners {
     position: relative;
     z-index: 20;

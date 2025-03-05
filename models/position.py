@@ -186,7 +186,7 @@ class Position:
         return data
     
     def find_upcoming_departures(self):
-        '''Returns the next 5 upcoming departures'''
+        '''Returns the trip's upcoming departures'''
         if self.sequence is None or not self.trip:
             return []
         return self.departure_repository.find_upcoming(self.system, self.trip, self.sequence)
