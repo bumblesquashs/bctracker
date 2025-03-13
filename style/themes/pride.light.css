@@ -83,6 +83,16 @@ table tr {
     background-color: rgba(255, 255, 255, 0.6);
 }
 
+table tr.table-button {
+    background-color: rgba(255, 255, 255, 0.6);
+    color: #000000;
+    --image-color: #000000;
+}
+
+table tr.table-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
@@ -240,6 +250,7 @@ table tr {
 
 #side-bar-toggle {
     background-color: rgba(0, 0, 0, 0.4);
+    --image-color: #FFFFFF;
 }
 
 #side-bar-toggle:hover {
