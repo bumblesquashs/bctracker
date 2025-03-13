@@ -39,12 +39,12 @@
         
         function updateFilters() {
             const search = document.getElementById('stop_id_search').value;
-            window.location = getUrl(systemID, "stops", {
+            window.location = getUrl(systemID, "stops", true, {
                 "search": search.length === 0 ? null : search,
                 "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
                 "sort": sort === "name" ? null : sort,
                 "sort_order": sortOrder === "asc" ? null : sortOrder
-            }, useSubdomain=true)
+            })
         }
     </script>
     <div class="page-container">

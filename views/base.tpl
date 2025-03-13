@@ -174,7 +174,7 @@
                 return a
             }
             
-            function getUrl(systemID, path, params=null, useSubdomain=false) {
+            function getUrl(systemID, path, useSubdomain=false, params=null) {
                 let url;
                 if (systemID === null || systemID === undefined) {
                     url = "{{ settings.all_systems_domain }}".format(path);
