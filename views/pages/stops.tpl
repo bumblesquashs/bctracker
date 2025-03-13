@@ -44,7 +44,7 @@
                 "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
                 "sort": sort === "name" ? null : sort,
                 "sort_order": sortOrder === "asc" ? null : sortOrder
-            })
+            }, useSubdomain=true)
         }
     </script>
     <div class="page-container">

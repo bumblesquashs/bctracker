@@ -174,12 +174,14 @@
                 return a
             }
             
-            function getUrl(systemID, path, params=null) {
+            function getUrl(systemID, path, params=null, useSubdomain=false) {
                 let url;
                 if (systemID === null || systemID === undefined) {
                     url = "{{ settings.all_systems_domain }}".format(path);
+                } else if (useSubdomain) {
+                    url = "{{ settings.system_domain }}".format(systemID, path);
                 } else {
-                    url = "{{ settings.system_domain if system else settings.system_domain_path }}".format(systemID, path);
+                    url = "{{ settings.system_domain_path }}".format(systemID, path);
                 }
                 const query = [];
                 if (params) {
