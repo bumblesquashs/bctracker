@@ -14,9 +14,9 @@
     </h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'trips', trip, 'map') }}" class="tab-button">Map</a>
-        % if system.realtime_enabled:
-            <a href="{{ get_url(system, 'trips', trip, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        % if context.realtime_enabled:
+            <a href="{{ get_url(context, 'trips', trip, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>

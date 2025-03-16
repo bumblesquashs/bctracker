@@ -11,13 +11,13 @@
         % end
     </h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'trips', trip) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'trips', trip) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
 
-% if system.realtime_enabled:
+% if context.realtime_enabled:
     <div class="page-container">
         % if records:
             <div class="sidebar container flex-1">
@@ -127,7 +127,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        <h3>{{ system }} realtime information is not supported</h3>
+        <h3>{{ context.system }} realtime information is not supported</h3>
         <p>You can browse schedule data using the links above, or choose a different system.</p>
     </div>
 % end

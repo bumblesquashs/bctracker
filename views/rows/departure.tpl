@@ -69,7 +69,7 @@
             % end
         </div>
     </td>
-    % if not system or system.realtime_enabled:
+    % if context.realtime_enabled:
         % if trip.id in recorded_today:
             % bus = recorded_today[trip.id]
             <td>

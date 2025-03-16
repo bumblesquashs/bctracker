@@ -5,13 +5,13 @@
     <h1>Realtime</h1>
     <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
-        % if system:
-            <a href="{{ get_url(system, 'realtime', 'routes') }}" class="tab-button">By Route</a>
+        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All Buses</a>
+        % if context.system:
+            <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
         <span class="tab-button current">By Model</span>
         % if show_speed:
-            <a href="{{ get_url(system, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ get_url(context, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Keanu Reeves and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
@@ -106,7 +106,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Bus</th>
-                                                    % if not system:
+                                                    % if not context.system:
                                                         <th class="desktop-only">System</th>
                                                     % end
                                                     <th>Headsign</th>
@@ -153,7 +153,7 @@
                             <thead>
                                 <tr>
                                     <th>Bus</th>
-                                    % if not system:
+                                    % if not context.system:
                                         <th class="desktop-only">System</th>
                                     % end
                                     <th>Headsign</th>
@@ -177,7 +177,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        % if not system:
+        % if not context.system:
             % if show_nis:
                 <h3>There are no buses out right now</h3>
                 <p>
@@ -189,20 +189,20 @@
                 <h3>There are no buses in service right now</h3>
                 <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
             % end
-        % elif not system.realtime_enabled:
-            <h3>{{ system }} realtime information is not supported</h3>
+        % elif not context.realtime_enabled:
+            <h3>{{ context.system }} realtime information is not supported</h3>
             <p>You can browse schedule data for using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
-        % elif not system.realtime_loaded:
-            <h3>{{ system }} realtime information is unavailable</h3>
+        % elif not context.system.realtime_loaded:
+            <h3>{{ context.system }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no {{ system }} buses in service right now</h3>
+            <h3>There are no {{ context.system }} buses in service right now</h3>
             <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
         % else:
-            <h3>There are no {{ system }} buses out right now</h3>
+            <h3>There are no {{ context.system }} buses out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>
@@ -210,6 +210,6 @@
 
 <script>
     function toggleNISBuses() {
-        window.location = "{{ get_url(system, 'realtime', 'models', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ get_url(context, 'realtime', 'models', show_nis='false' if show_nis else 'true') }}"
     }
 </script>
