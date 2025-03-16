@@ -4,9 +4,9 @@
 <div id="page-header">
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
+        <a href="{{ get_url(context, 'history') }}" class="tab-button">Last Seen</a>
         <span class="tab-button current">First Seen</span>
-        <a href="{{ get_url(system, 'history', 'transfers') }}" class="tab-button">Transfers</a>
+        <a href="{{ get_url(context, 'history', 'transfers') }}" class="tab-button">Transfers</a>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
                 <th>Date</th>
                 <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                % if not system:
+                % if not context.system:
                     <th class="non-mobile">System</th>
                 % end
                 <th>Block</th>
@@ -40,7 +40,7 @@
                     <td>
                         <div class="column">
                             {{ record.date.format_day() }}
-                            % if not system:
+                            % if not context.system:
                                 <span class="mobile-only smaller-font">{{ record.system }}</span>
                             % end
                         </div>
@@ -56,7 +56,7 @@
                     <td class="desktop-only">
                         % include('components/order', order=bus.order)
                     </td>
-                    % if not system:
+                    % if not context.system:
                         <td class="non-mobile">{{ record.system }}</td>
                     % end
                     <td>
@@ -81,17 +81,17 @@
     </table>
 % else:
     <div class="placeholder">
-        % if not system:
+        % if not context.system:
             <h3>No vehicle history found</h3>
             <p>Something has probably gone terribly wrong if you're seeing this.</p>
-        % elif not system.realtime_enabled:
-            <h3>{{ system }} realtime information is not supported</h3>
+        % elif not context.realtime_enabled:
+            <h3>{{ context.system }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
         % else:
-            <h3>No {{ system }} buses have been recorded</h3>
+            <h3>No {{ context.system }} buses have been recorded</h3>
             <p>Please check again later!</p>
         % end
     </div>

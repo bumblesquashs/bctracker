@@ -12,12 +12,12 @@
                     % include('components/adherence', adherence=position.adherence)
                 </div>
             </div>
-            % if not system:
+            % if not context.system:
                 <span class="non-desktop smaller-font">{{ position.system }}</span>
             % end
         </div>
     </td>
-    % if not system:
+    % if not context.system:
         <td class="desktop-only">{{ position.system }}</td>
     % end
     % if trip:

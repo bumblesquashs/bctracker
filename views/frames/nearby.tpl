@@ -30,7 +30,7 @@
             </div>
             <div class="content">
                 % if upcoming_departures:
-                    % if not system or system.realtime_enabled:
+                    % if context.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
                             <span class="scheduled">
@@ -46,7 +46,7 @@
                                 <th class="non-mobile">Headsign</th>
                                 <th class="desktop-only">Block</th>
                                 <th>Trip</th>
-                                % if not system or system.realtime_enabled:
+                                % if context.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
@@ -77,7 +77,7 @@
     <div class="section">
         <div class="placeholder">
             <h3>No stops nearby</h3>
-            % if system.gtfs_loaded:
+            % if context.system.gtfs_loaded:
                 <p>You're gonna have to walk!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>

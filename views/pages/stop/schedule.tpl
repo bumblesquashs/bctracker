@@ -7,8 +7,8 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'stops', stop) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'stops', stop) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'stops', stop, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>

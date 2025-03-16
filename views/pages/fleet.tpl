@@ -27,10 +27,10 @@
                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
             </ol>
             <p>Vehicles that have been tracked before show the first and last date and system that they were seen in, even if they weren't in service.</p>
-            % if system:
+            % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ system }} buses, visit the <a href="{{ get_url(system, 'history') }}">history</a> page.
+                    To see only {{ context.system }} buses, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
                 </p>
             % end
         </div>

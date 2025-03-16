@@ -5,7 +5,7 @@
 	% available_systems = systems
 % end
 
-% available_systems = [s for s in available_systems if not system or s != system]
+% available_systems = [s for s in available_systems if not context.system or s != context.system]
 
 <table>
 	<thead>
@@ -14,7 +14,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		% if system:
+		% if context.system:
 			<td>
 				<a href="{{ get_url(None, *path) }}">All Systems</a>
 			</td>
@@ -26,13 +26,13 @@
 					<td>{{ region }}</td>
 				</tr>
 				<tr class="display-none"></tr>
-				% for region_system in sorted(region_systems):
-					% count = len(region_system.get_routes())
+				% for system in sorted(region_systems):
+					% count = len(system.get_routes())
 					<tr>
 						<td>
 							<div class="row">
-								% include('components/agency_logo', agency=region_system.agency)
-								<a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+								% include('components/agency_logo', agency=system.agency)
+								<a href="{{ get_url(system, *path) }}">{{ system }}</a>
 							</div>
 						</td>
 					</tr>

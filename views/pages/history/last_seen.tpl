@@ -5,8 +5,8 @@
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
-        <a href="{{ get_url(system, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
-        <a href="{{ get_url(system, 'history', 'transfers') }}" class="tab-button">Transfers</a>
+        <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ get_url(context, 'history', 'transfers') }}" class="tab-button">Transfers</a>
     </div>
 </div>
 
@@ -51,9 +51,9 @@
                 <script>
                     function setDays(days) {
                         if (days === null) {
-                            window.location = "{{ get_url(system, 'history') }}";
+                            window.location = "{{ get_url(context, 'history') }}";
                         } else {
-                            window.location = "{{ get_url(system, 'history') }}?days=" + days;
+                            window.location = "{{ get_url(context, 'history') }}?days=" + days;
                         }
                     }
                 </script>
@@ -120,7 +120,7 @@
                             <tr>
                                 <th>Bus</th>
                                 <th>Last Seen</th>
-                                % if not system:
+                                % if not context.system:
                                     <th class="non-mobile">System</th>
                                 % end
                                 <th>Block</th>
@@ -149,12 +149,12 @@
                                         <td class="non-desktop">
                                             <div class="column">
                                                 {{ record.date.format_short() }}
-                                                % if not system:
+                                                % if not context.system:
                                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
                                                 % end
                                             </div>
                                         </td>
-                                        % if not system:
+                                        % if not context.system:
                                             <td class="non-mobile">{{ record.system }}</td>
                                         % end
                                         <td>
@@ -198,12 +198,12 @@
                                         <td class="non-desktop">
                                             <div class="column">
                                                 {{ record.date.format_short() }}
-                                                % if not system:
+                                                % if not context.system:
                                                     <span class="mobile-only smaller-font">{{ record.system }}</span>
                                                 % end
                                             </div>
                                         </td>
-                                        % if not system:
+                                        % if not context.system:
                                             <td class="non-mobile">{{ record.system }}</td>
                                         % end
                                         <td>
@@ -231,7 +231,7 @@
                     % include('components/top_button')
                 % else:
                     <div class="placeholder">
-                        % if not system:
+                        % if not context.system:
                             % if days:
                                 <h3>No vehicle history found for selected date range</h3>
                                 <p>Please choose a different date range or check again later!</p>
@@ -239,17 +239,17 @@
                                 <h3>No vehicle history found</h3>
                                 <p>Something has probably gone terribly wrong if you're seeing this.</p>
                             % end
-                        % elif not system.realtime_enabled:
-                            <h3>{{ system }} realtime information is not supported</h3>
+                        % elif not context.realtime_enabled:
+                            <h3>{{ context.system }} realtime information is not supported</h3>
                             <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">
                                 % include('components/systems')
                             </div>
                         % elif days:
-                            <h3>No {{ system }} buses have been recorded for the selected date range</h3>
+                            <h3>No {{ context.system }} buses have been recorded for the selected date range</h3>
                             <p>Please choose a different date range or check again later!</p>
                         % else:
-                            <h3>No {{ system }} buses have been recorded</h3>
+                            <h3>No {{ context.system }} buses have been recorded</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

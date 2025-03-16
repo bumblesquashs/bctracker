@@ -8,9 +8,9 @@
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'blocks', block, 'map') }}" class="tab-button">Map</a>
-        % if system.realtime_enabled:
-            <a href="{{ get_url(system, 'blocks', block, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'blocks', block, 'map') }}" class="tab-button">Map</a>
+        % if context.realtime_enabled:
+            <a href="{{ get_url(context, 'blocks', block, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>

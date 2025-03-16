@@ -12,8 +12,8 @@
         % end
         
         <title>
-            % if system:
-                {{ system }} | {{ title }}
+            % if context.system:
+                {{ context.system }} | {{ title }}
             % else:
                 BCTracker | {{ title }}
             % end
@@ -23,9 +23,9 @@
         <link rel="icon" type="image/png" href="/img/favicon-32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="/img/favicon-48.png" sizes="48x48" />
         
-        % if system:
-            <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ system }}, {{ system.agency }}" />
+        % if context.system:
+            <meta name="description" content="{{ context.system }} Transit Schedules and Bus Tracking" />
+            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ context.system }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
             <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
@@ -41,15 +41,15 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
         
-        % if system:
-            <meta property="og:title" content="{{ system }} | {{ title }}">
+        % if context.system:
+            <meta property="og:title" content="{{ context.system }} | {{ title }}">
         % else:
             <meta property="og:title" content="BCTracker | {{ title }}">
         % end
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(system, *path) }}" />
-        <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
+        <meta property="og:url" content="{{ get_url(context.system, *path) }}" />
+        <meta property="og:image" content="{{ get_url(context.system, 'img', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -107,7 +107,7 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css">
         % end
         
-        % if enable_refresh and (not system or system.realtime_enabled):
+        % if enable_refresh and context.realtime_enabled:
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();
@@ -132,12 +132,12 @@
                 return svgs[name];
             }
             
-            const showStopNumbers = "{{ agency and agency.show_stop_number }}" == "True";
+            const showStopNumbers = "{{ context.show_stop_number }}" == "True";
         </script>
         
-        % if system:
+        % if context.system:
             <script>
-                systemID = "{{ system.id }}";
+                systemID = "{{ context.system.id }}";
             </script>
         % else:
             <script>
@@ -267,32 +267,32 @@
     </head>
     
     <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
-        <a id="title" href="{{ get_url(system) }}">
+        <a id="title" href="{{ get_url(context) }}">
             % include('components/svg', name='bctracker')
             <div class="side-bar-open-only">BCTracker</div>
         </a>
         <div id="navigation-bar">
-            <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>
+            <a class="navigation-item title non-desktop" href="{{ get_url(context) }}">BCTracker</a>
             
-            <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
-            % if not system or system.realtime_enabled:
-                <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
+            <a class="navigation-item non-mobile" href="{{ get_url(context, 'map') }}">Map</a>
+            % if context.realtime_enabled:
+                <a class="navigation-item non-mobile" href="{{ get_url(context, 'realtime') }}">Realtime</a>
+                <a class="navigation-item desktop-only" href="{{ get_url(context, 'history') }}">History</a>
             % else:
                 <div class="navigation-item non-mobile disabled">Realtime</div>
                 <div class="navigation-item desktop-only disabled">History</div>
             % end
             
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'stops') }}">Stops</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(context, 'routes') }}">Routes</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(context, 'stops') }}">Stops</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(context, 'blocks') }}">Blocks</a>
             
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
+            <a class="navigation-item desktop-only" href="{{ get_url(context, 'about') }}">About</a>
             
             <div class="flex-1"></div>
             
             % if show_random:
-                <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'random') }}">
+                <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(context, 'random') }}">
                     % include('components/svg', name='random')
                     <div class="tooltip left">
                         <div class="title">Random Page</div>
@@ -300,14 +300,14 @@
                 </a>
             % end
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(context, 'nearby') }}">
                 % include('components/svg', name='nearby')
                 <div class="tooltip left">
                     <div class="title">Nearby Stops</div>
                 </div>
             </a>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(context, 'personalize') }}">
                 % include('components/svg', name='personalize')
                 <div class="tooltip left">
                     <div class="title">Personalize</div>
@@ -328,16 +328,16 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            <a class="menu-button mobile-only" href="{{ get_url(system, 'map') }}">
+            <a class="menu-button mobile-only" href="{{ get_url(context, 'map') }}">
                 % include('components/svg', name='map')
                 <span>Map</span>
             </a>
-            % if not system or system.realtime_enabled:
-                <a class="menu-button mobile-only" href="{{ get_url(system, 'realtime') }}">
+            % if context.realtime_enabled:
+                <a class="menu-button mobile-only" href="{{ get_url(context, 'realtime') }}">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(system, 'history') }}">
+                <a class="menu-button" href="{{ get_url(context, 'history') }}">
                     % include('components/svg', name='history')
                     <span>History</span>
                 </a>
@@ -351,32 +351,32 @@
                     <span>History</span>
                 </div>
             % end
-            <a class="menu-button" href="{{ get_url(system, 'routes') }}">
+            <a class="menu-button" href="{{ get_url(context, 'routes') }}">
                 % include('components/svg', name='route')
                 <span>Routes</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'stops') }}">
+            <a class="menu-button" href="{{ get_url(context, 'stops') }}">
                 % include('components/svg', name='stop')
                 <span>Stops</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'blocks') }}">
+            <a class="menu-button" href="{{ get_url(context, 'blocks') }}">
                 % include('components/svg', name='block')
                 <span>Blocks</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'about') }}">
+            <a class="menu-button" href="{{ get_url(context, 'about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'nearby') }}">
+            <a class="menu-button" href="{{ get_url(context, 'nearby') }}">
                 % include('components/svg', name='nearby')
                 <span>Nearby</span>
             </a>
-            <a class="menu-button" href="{{ get_url(system, 'personalize') }}">
+            <a class="menu-button" href="{{ get_url(context, 'personalize') }}">
                 % include('components/svg', name='personalize')
                 <span>Personalize</span>
             </a>
             % if show_random:
-                <a class="menu-button" href="{{ get_url(system, 'random') }}">
+                <a class="menu-button" href="{{ get_url(context, 'random') }}">
                     % include('components/svg', name='random')
                     <span>Random Page</span>
                 </a>
@@ -389,11 +389,7 @@
                 </div>
                 <div class="details">
                     <div id="system">
-                        % if system:
-                            {{ system }}
-                        % else:
-                            All Transit Systems
-                        % end
+                        {{ context }}
                     </div>
                     % if last_updated:
                         <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
@@ -404,7 +400,7 @@
                 </div>
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
-                % if system:
+                % if context.system:
                     <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
@@ -413,16 +409,16 @@
                     % region_systems = [s for s in systems if s.region == region]
                     % if region_systems:
                         <div class="header">{{ region }}</div>
-                        % for region_system in sorted(region_systems):
-                            % if system and system == region_system:
+                        % for system in sorted(region_systems):
+                            % if context.system == system:
                                 <div class="system-button current">
-                                    % include('components/agency_logo', agency=region_system.agency)
-                                    <div>{{ region_system }}</div>
+                                    % include('components/agency_logo', agency=system.agency)
+                                    <div>{{ system }}</div>
                                 </div>
                             % else:
-                                <a href="{{ get_url(region_system, *path, **path_args) }}" class="system-button">
-                                    % include('components/agency_logo', agency=region_system.agency)
-                                    <div>{{ region_system }}</div>
+                                <a href="{{ get_url(system, *path, **path_args) }}" class="system-button">
+                                    % include('components/agency_logo', agency=system.agency)
+                                    <div>{{ system }}</div>
                                 </a>
                             % end
                         % end
@@ -444,19 +440,11 @@
         </div>
         <div id="main">
             <div id="banners">
-                % if system is not None and system.id == 'cowichan-valley':
+                % if context.system_id == 'cowichan-valley':
                     <div class="banner">
                         <div class="content">
                             <h1>Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</h1>
                             <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
-                        </div>
-                    </div>
-                % end
-                % from models.date import Date
-                % if system is not None and system.id == 'west-coast' and today < Date(2025, 3, 1, system.timezone):
-                    <div class="banner">
-                        <div class="content">
-                            <h1>BC Transit will begin operating between Tofino and Ucluelet on March 1st, 2025</h1>
                         </div>
                     </div>
                 % end
@@ -505,7 +493,7 @@
                 <div id="search-bar">
                     <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                 </div>
-                % if system:
+                % if context.system:
                     <div id="search-filters">
                         <div class="flex-1">Filters:</div>
                         <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
@@ -528,8 +516,8 @@
                 % end
             </div>
             <div id="search-placeholder">
-                % if system:
-                    Search for {{ system }} buses, routes, stops, and blocks
+                % if context.system:
+                    Search for {{ context.system }} buses, routes, stops, and blocks
                 % else:
                     Search for buses in all systems
                 % end
@@ -596,14 +584,14 @@
         lastSearchTimestamp = timestamp;
         
         if (query === undefined || query === null || query === "") {
-            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {system}' if system else 'Search for buses in all systems' }}");
+            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {context.system}' if context.system else 'Search for buses in all systems' }}");
         } else {
             loadingResults = true;
             if (searchResults.length === 0) {
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
-            request.open("POST", "{{get_url(system, 'api', 'search')}}", true);
+            request.open("POST", "{{ get_url(context, 'api', 'search') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (timestamp !== lastSearchTimestamp) {

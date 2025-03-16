@@ -27,7 +27,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if system:
+                % if context.system:
                     <div id="result" class="container">
                         <div id="nearby-status" class="loading column">
                             <div id="status-title">Loading upcoming departures...</div>
@@ -54,16 +54,16 @@
                                         <td colspan="3">{{ region }}</td>
                                     </tr>
                                     <tr class="display-none"></tr>
-                                    % for region_system in sorted(region_systems):
-                                        % count = len(region_system.get_stops())
+                                    % for system in sorted(region_systems):
+                                        % count = len(system.get_stops())
                                         <tr>
                                             <td>
                                                 <div class="row">
-                                                    % include('components/agency_logo', agency=region_system.agency)
+                                                    % include('components/agency_logo', agency=system.agency)
                                                     <div class="column">
-                                                        <a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+                                                        <a href="{{ get_url(system, *path) }}">{{ system }}</a>
                                                         <span class="mobile-only smaller-font">
-                                                            % if region_system.gtfs_loaded:
+                                                            % if system.gtfs_loaded:
                                                                 % if count == 1:
                                                                     1 Stop
                                                                 % else:
@@ -74,10 +74,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            % if region_system.gtfs_loaded:
+                                            % if system.gtfs_loaded:
                                                 <td class="non-mobile align-right">{{ count }}</td>
                                                 <td>
-                                                    % include('components/weekdays', schedule=region_system.schedule, compact=True)
+                                                    % include('components/weekdays', schedule=system.schedule, compact=True)
                                                 </td>
                                             % else:
                                                 <td class="lighter-text" colspan="2">Stops are loading...</td>
@@ -115,7 +115,7 @@
         })
     });
     
-    const systemSelected = "{{ system is not None }}" == "True";
+    const systemSelected = "{{ context.system is not None }}" == "True";
     
     const statusElement = document.getElementById("nearby-status");
     const statusTitleElement = document.getElementById("status-title");
@@ -148,7 +148,7 @@
         
         if (systemSelected) {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{get_url(system, 'frame', 'nearby')}}?lat=" + lat + "&lon=" + lon, true);
+            request.open("GET", "{{ get_url(context, 'frame', 'nearby') }}?lat=" + lat + "&lon=" + lon, true);
             request.onload = function() {
                 if (request.status === 200) {
                     if (request.response === null) {
@@ -172,7 +172,7 @@
     
     function loadMapMarkers(lat, lon) {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{get_url(system, 'api', 'nearby.json')}}?lat=" + lat + "&lon=" + lon, true);
+        request.open("GET", "{{ get_url(context, 'api', 'nearby.json') }}?lat=" + lat + "&lon=" + lon, true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {

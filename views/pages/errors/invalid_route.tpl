@@ -7,7 +7,7 @@
 
 <div class="placeholder">
     <h3>The route you are looking for doesn't seem to exist!</h3>
-    % if system.gtfs_loaded:
+    % if context.system.gtfs_loaded:
         <p>There are a few reasons why that might be the case:</p>
         <ol>
             <li>It may be from an older sheet that is no longer active</li>

@@ -12,8 +12,8 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(context, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -79,7 +79,7 @@
             </div>
         % end
         
-        % alt_stops = [s.get_stop(number=stop.number) for s in systems if s.get_stop(number=stop.number) and s != system and s.agency == system.agency]
+        % alt_stops = [s.get_stop(number=stop.number) for s in systems if s.get_stop(number=stop.number) and s != context.system and s.agency == context.agency]
         % if alt_stops:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -121,7 +121,7 @@
                     % upcoming_count = 3 + floor(len(routes) / 3)
                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                     % if upcoming_departures:
-                        % if not system or system.realtime_enabled:
+                        % if context.realtime_enabled:
                             <p>
                                 <span>Buses with a</span>
                                 <span class="scheduled">
@@ -138,7 +138,7 @@
                                     <th class="non-mobile">Headsign</th>
                                     <th class="desktop-only">Block</th>
                                     <th>Trip</th>
-                                    % if not system or system.realtime_enabled:
+                                    % if context.realtime_enabled:
                                         <th>Bus</th>
                                         <th class="desktop-only">Model</th>
                                     % end
@@ -175,7 +175,7 @@
             </div>
             <div class="content">
                 % if departures:
-                    % if not system or system.realtime_enabled:
+                    % if context.realtime_enabled:
                         <p>
                             <span>Buses with a</span>
                             <span class="scheduled">
@@ -191,7 +191,7 @@
                                 <th class="non-mobile">Headsign</th>
                                 <th class="desktop-only">Block</th>
                                 <th>Trip</th>
-                                % if not system or system.realtime_enabled:
+                                % if context.realtime_enabled:
                                     <th>Bus</th>
                                     <th class="desktop-only">Model</th>
                                 % end
@@ -210,9 +210,9 @@
                     </table>
                 % else:
                     <div class="placeholder">
-                        % if system.gtfs_loaded:
+                        % if context.system.gtfs_loaded:
                             <h3>There are no departures from this stop today</h3>
-                            <p>You can check the <a href="{{ get_url(system, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                            <p>You can check the <a href="{{ get_url(stop.system, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                         % else:
                             <h3>Departures for this stop are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>
