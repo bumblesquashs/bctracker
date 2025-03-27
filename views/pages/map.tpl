@@ -205,7 +205,7 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                icon.href = getUrl(systemID, "bus/" + position.bus_url_id, true);
+                icon.href = getUrl(currentSystemID, "bus/" + position.bus_url_id);
                 icon.innerHTML = "<div class='link'></div>"
             }
             icon.className = "icon";
@@ -639,7 +639,7 @@
         if (key in cachedStops) {
             updateStopMarkers(key);
         } else {
-            const url = getUrl(systemID, "api/stops", false, {
+            const url = getUrl(currentSystemID, "api/stops", {
                 "lat": lat,
                 "lon": lon,
                 "size": size
@@ -668,7 +668,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id, true);
+            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             if (stop.routes.length > 0) {
                 icon.style.backgroundColor = "#" + stop.routes[0].colour;
