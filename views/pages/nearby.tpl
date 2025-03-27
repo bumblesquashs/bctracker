@@ -184,7 +184,7 @@
                     
                     const icon = document.createElement("a");
                     icon.className = "icon";
-                    icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
+                    icon.href = getUrl(stop.system_id, "stops/" + stop.url_id, true);
                     icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
                     
                     const details = document.createElement("div");

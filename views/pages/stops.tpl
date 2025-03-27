@@ -39,7 +39,7 @@
         
         function updateFilters() {
             const search = document.getElementById('stop_id_search').value;
-            window.location = getUrl(currentSystemID, "stops", {
+            window.location = getUrl(currentSystemID, "stops", true, {
                 "search": search.length === 0 ? null : search,
                 "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
                 "sort": sort === "name" ? null : sort,
