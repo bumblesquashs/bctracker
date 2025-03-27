@@ -179,10 +179,8 @@
                 if (systemID === null || systemID === undefined) {
                     url = "{{ settings.all_systems_domain }}".format(path);
                 } else if (currentSystemID === null) {
-                    console.log("PATH")
                     url = "{{ settings.system_domain_path }}".format(systemID, path);
                 } else {
-                    console.log("SUBDOMAIN")
                     url = "{{ settings.system_domain }}".format(systemID, path);
                 }
                 const query = [];
