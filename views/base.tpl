@@ -452,6 +452,19 @@
                         </div>
                     </div>
                 % end
+                <div class="banner">
+                    <div class="content">
+                        <h1>Introducing <a href="http://abtracker.ca">ABTracker</a></h1>
+                        <p>Check out the <a href="{{ get_url(system) }}#abtracker">news post</a> for more info!</p>
+                        % from models.date import Date
+                        % from models.time import Time
+                        % if today == Date(2025, 4, 1, None) and now >= Time(12, 0, 0, None):
+                            <p>
+                                <i>... Happy April Fools Day!</i>
+                            </p>
+                        % end
+                    </div>
+                </div>
             </div>
             % if full_map:
                 <div id="map" class="full-screen"></div>

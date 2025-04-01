@@ -289,6 +289,42 @@
             </div>
             <div class="content">
                 <div class="container">
+                    <div class="news-post" id="abtracker">
+                        <div class="header">
+                            <h3>Introducing ABTracker</h3>
+                            April 1, 2025
+                        </div>
+                        <div class="content">
+                            <p>
+                                Following the great success of BCTracker, we've decided it's time to expand to new territory.
+                                The most obvious choice of course is our neighbours to the east, so without further ado we're very pleased to announce the launch of <b><a href="http://abtracker.ca">ABTracker</a></b>!
+                            </p>
+                            <p>
+                                Like BCTracker, ABTracker pulls together transit data from a bunch of larger communities in Alberta into one place, making it easy to see buses running all over the province.
+                                The following agencies/systems are supported as of this initial launch:
+                            </p>
+                            <ul>
+                                <li>Calgary Transit (Calgary)</li>
+                                <li>Edmonton Transit Service (Edmonton)</li>
+                                <li>Grande Prairie Transit (Grande Prairie)</li>
+                                <li>Lethbridge Transit (Lethbridge) <i>(no realtime)</i></li>
+                                <li>Medicine Hat Transit (Medicine Hat)</li>
+                                <li>Red Deer Transit (Red Deer) <i>(no realtime)</i></li>
+                                <li>Roam (Banff)</li>
+                                <li>Woosh (Fort McMurray)</li>
+                            </ul>
+                            <p>
+                                We hope you find ABTracker useful as we all inevitably move to Alberta for cheaper housing!
+                            </p>
+                            % from models.date import Date
+                            % from models.time import Time
+                            % if today == Date(2025, 4, 1, None) and now >= Time(12, 0, 0, None):
+                                <p>
+                                    <i>... Happy April Fools Day!</i>
+                                </p>
+                            % end
+                        </div>
+                    </div>
                     <div class="news-post">
                         <div class="header">
                             <h3>Winter Update</h3>
@@ -319,32 +355,6 @@
                                 <li>Various layout and style updates</li>
                             </ul>
                             <p>Enjoy, stay safe, and have a great year!</p>
-                        </div>
-                    </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Summer Update</h3>
-                            June 27, 2024
-                        </div>
-                        <div class="content">
-                            <p>
-                                It's summer already - time sure flies!
-                                Here's what we've been up to since the last post.
-                            </p>
-                            <ul>
-                                <li>Favourites: A quick way to get to your frequently-used pages from the home page</li>
-                                <li>Themes: A new Pride theme, and improvements for High Contrast mode</li>
-                                <li>Bus History: Now has paging to improve loading time</li>
-                                <li>Mobile Sections: Now can be toggled to make it easier to scroll down</li>
-                                <li>Transfers: Now can be filtered and shows statistics</li>
-                            </ul>
-                            <p>As usual we've also been making small improvements to the general design of the site, as well as improvements to the server itself behind the scenes.</p>
-                            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Williams Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
-                            <p>
-                                That's all from us for now!
-                                As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
-                                Have a great summer!
-                            </p>
                         </div>
                     </div>
                     <div>
