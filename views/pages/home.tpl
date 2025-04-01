@@ -289,27 +289,24 @@
             </div>
             <div class="content">
                 <div class="container">
-                    % from models.date import Date
-                    % from models.time import Time
-                    % import pytz
-                    % if today == Date(2025, 4, 1, None) and now >= Time(12, 0, 0, pytz.timezone('America/Vancouver')):
-                        <div class="news-post" id="af-2025">
-                            <div class="header">
-                                <h3>Happy April Fools Day!</h3>
-                                April 1st, 2025
-                            </div>
-                            <div class="content">
-                                <p>
-                                    Unfortunately today will be the only day ABTracker is running.
-                                    Yes, we put in a rather ridiculous amount of work into making a joke website that's only around for one day.
-                                    But the good news is we've learned a lot about the amount of work needed to support multiple agencies with realtime data, which brings us one step closer to making that a reality on BCTracker!
-                                </p>
-                                <p>
-                                    Perhaps, someday, we will consider revisiting the concept of ABTracker for real...
-                                </p>
-                            </div>
+                    <div class="news-post" id="af-2025">
+                        <div class="header">
+                            <h3>Happy April Fools Day!</h3>
+                            April 1st, 2025
                         </div>
-                    % end
+                        <div class="content">
+                            <p>
+                                Unfortunately today will be the only day ABTracker is running.
+                                Yes, we put in a rather ridiculous amount of work into making a joke website that's only around for one day.
+                                But the good news is we've learned a lot about the amount of work needed to support multiple agencies with realtime data, which brings us one step closer to making that a reality on BCTracker!
+                            </p>
+                            <p>
+                                Since there has been quite a lot of interest in making this website permanent, we'll definitely explore some options to make that happen.
+                                Right now quite a lot of the code changes were designed as temporary adjustments and we aren't confident that everything would work long-term.
+                                It may take some time to get it fully functional, but we'll do our best!
+                            </p>
+                        </div>
+                    </div>
                     <div class="news-post">
                         <div class="header">
                             <h3>Welcome to ABTracker!</h3>
