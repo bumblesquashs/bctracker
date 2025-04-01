@@ -126,7 +126,7 @@
         
         <script>
             const svgs = {};
-            let systemID;        
+            let currentSystemID;        
             
             function getSVG(name) {
                 return svgs[name];
@@ -137,11 +137,11 @@
         
         % if system:
             <script>
-                systemID = "{{ system.id }}";
+                currentSystemID = "{{ system.id }}";
             </script>
         % else:
             <script>
-                systemID = null;
+                currentSystemID = null;
             </script>
         % end
         
@@ -175,11 +175,11 @@
                 return a
             }
             
-            function getUrl(systemID, path, useSubdomain=false, params=null) {
+            function getUrl(systemID, path, forceSubdomain=false, params=null) {
                 let url;
                 if (systemID === null || systemID === undefined) {
                     url = "{{ settings.all_systems_domain }}".format(path);
-                } else if (useSubdomain) {
+                } else if (currentSystemID !== null || forceSubdomain) {
                     url = "{{ settings.system_domain }}".format(systemID, path);
                 } else {
                     url = "{{ settings.system_domain_path }}".format(systemID, path);

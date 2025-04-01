@@ -205,10 +205,10 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                if (systemID === null) {
-                    icon.href = getUrl(systemID, "bus/" + position.agency_id + "/" + position.bus_url_id, true);
+                if (currentSystemID === null) {
+                    icon.href = getUrl(currentSystemID, "bus/" + position.agency_id + "/" + position.bus_url_id, true);
                 } else {
-                    icon.href = getUrl(systemID, "bus/" + position.bus_url_id, true);
+                    icon.href = getUrl(currentSystemID, "bus/" + position.bus_url_id, true);
                 }
                 icon.innerHTML = "<div class='link'></div>"
             }
@@ -643,7 +643,7 @@
         if (key in cachedStops) {
             updateStopMarkers(key);
         } else {
-            const url = getUrl(systemID, "api/stops", false, {
+            const url = getUrl(currentSystemID, "api/stops", false, {
                 "lat": lat,
                 "lon": lon,
                 "size": size
