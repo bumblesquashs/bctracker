@@ -17,13 +17,19 @@ class SQLTripRepository(TripRepository):
     def create(self, system, row):
         '''Inserts a new trip into the database'''
         system_id = getattr(system, 'id', system)
+        trip_id = row['trip_id']
+        block_id = row.get('block_id', trip_id)
+        if 'direction_id' in row:
+            direction_id = int(row['direction_id'])
+        else:
+            direction_id = 0
         self.database.insert('trip', {
             'system_id': system_id,
-            'trip_id': row['trip_id'],
+            'trip_id': trip_id,
             'route_id': row['route_id'],
             'service_id': row['service_id'],
-            'block_id': row['block_id'],
-            'direction_id': int(row['direction_id']),
+            'block_id': block_id,
+            'direction_id': direction_id,
             'shape_id': row['shape_id'],
             'headsign': row['trip_headsign']
         })

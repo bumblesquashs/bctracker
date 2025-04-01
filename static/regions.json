@@ -1,14 +1,8 @@
 {
-    "vancouver-island": {
-        "name": "Vancouver Island"
+    "northern-alberta": {
+        "name": "Northern Alberta"
     },
-    "southern-coast": {
-        "name": "Southern Coast"
-    },
-    "southern-interior": {
-        "name": "Southern Interior"
-    },
-    "northern-bc": {
-        "name": "Northern BC"
+    "southern-alberta": {
+        "name": "Southern Alberta"
     }
 }

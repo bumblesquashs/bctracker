@@ -1,4 +1,5 @@
 
+from enum import Enum
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
@@ -13,6 +14,46 @@ from repositories import DepartureRepository, SystemRepository
 
 import helpers
 
+class RouteType(Enum):
+    '''Options for route types'''
+    
+    UNKNOWN = ''
+    LIGHT_RAIL = '0'
+    METRO = '1'
+    RAIL = '2'
+    BUS = '3'
+    FERRY = '4'
+    CABLE_CAR = '5'
+    AERIAL_LIFT = '6'
+    FUNICULAR = '7'
+    TROLLEY_BUS = '11'
+    MONORAIL = '12'
+    
+    def __str__(self):
+        match self:
+            case RouteType.UNKNOWN:
+                return 'Unknown Route'
+            case RouteType.LIGHT_RAIL:
+                return 'Light Rail Line'
+            case RouteType.METRO:
+                return 'Metro Line'
+            case RouteType.RAIL:
+                return 'Rail Line'
+            case RouteType.BUS:
+                return 'Bus Route'
+            case RouteType.FERRY:
+                return 'Ferry Route'
+            case RouteType.CABLE_CAR:
+                return 'Cable Car Route'
+            case RouteType.AERIAL_LIFT:
+                return 'Gondola Route'
+            case RouteType.FUNICULAR:
+                return 'Funicular Route'
+            case RouteType.TROLLEY_BUS:
+                return 'Trolley Bus Route'
+            case RouteType.MONORAIL:
+                return 'Monorail Line'
+
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
@@ -24,7 +65,8 @@ class Route:
         'key',
         'name',
         'colour',
-        'text_colour'
+        'text_colour',
+        'type'
     )
     
     @classmethod
@@ -39,7 +81,11 @@ class Route:
         name = row[f'{prefix}_name']
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
-        return cls(system, id, number, name, colour, text_colour)
+        try:
+            type = RouteType(row[f'{prefix}_type'])
+        except ValueError:
+            type = RouteType.UNKNOWN
+        return cls(system, id, number, name, colour, text_colour, type)
     
     @property
     def url_id(self):
@@ -78,13 +124,14 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, system, id, number, name, colour, text_colour, **kwargs):
+    def __init__(self, system, id, number, name, colour, text_colour, type, **kwargs):
         self.system = system
         self.id = id
         self.number = number
         self.name = name
         self.colour = colour
         self.text_colour = text_colour
+        self.type = type
         
         self.key = helpers.key(number)
         
@@ -113,6 +160,7 @@ class Route:
             'name': self.name.replace("'", '&apos;'),
             'colour': self.colour,
             'text_colour': self.text_colour,
+            'type': str(self.type),
             'url_id': self.url_id
         }
     
@@ -128,6 +176,7 @@ class Route:
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
                 'text_colour': self.text_colour,
+                'type': str(self.type),
                 'lat': point.lat,
                 'lon': point.lon,
                 'url_id': self.url_id,

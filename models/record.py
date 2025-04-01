@@ -12,6 +12,7 @@ class Record:
     
     __slots__ = (
         'id',
+        'agency',
         'bus',
         'date',
         'system',
@@ -30,7 +31,7 @@ class Record:
         agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
         system_repository = kwargs.get('system_repository') or di[SystemRepository]
         id = row[f'{prefix}_id']
-        agency = agency_repository.find('bc-transit')
+        agency = agency_repository.find(row[f'{prefix}_agency_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         system = system_repository.find(row[f'{prefix}_system_id'])
         date = Date.parse(row[f'{prefix}_date'], system.timezone)
@@ -42,7 +43,7 @@ class Record:
         end_time = Time.parse(row[f'{prefix}_end_time'], timezone, accurate_seconds)
         first_seen = Time.parse(row[f'{prefix}_first_seen'], timezone, accurate_seconds)
         last_seen = Time.parse(row[f'{prefix}_last_seen'], timezone, accurate_seconds)
-        return cls(id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
+        return cls(id, agency, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property
     def total_minutes(self):
@@ -74,8 +75,9 @@ class Record:
             return [self.system.get_route(number=n) for n in self.route_numbers]
         return self.route_numbers
     
-    def __init__(self, id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
+    def __init__(self, id, agency, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
         self.id = id
+        self.agency = agency
         self.bus = bus
         self.date = date
         self.system = system

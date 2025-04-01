@@ -3,7 +3,7 @@ from di import di
 
 from models.bus import Bus
 
-from repositories import RouteRepository, StopRepository, SystemRepository
+from repositories import AgencyRepository, RouteRepository, StopRepository, SystemRepository
 
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
@@ -19,12 +19,14 @@ class Favourite:
         parts = string.split(':')
         type = parts[0]
         if type == 'vehicle':
-            value = Bus.find(parts[1], int(parts[2]))
+            agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+            agency = agency_repository.find(parts[1])
+            value = Bus.find(agency, parts[2])
         elif type == 'route':
             system_repository = kwargs.get('system_repository') or di[SystemRepository]
             route_repository = kwargs.get('route_repository') or di[RouteRepository]
             system = system_repository.find(parts[1])
-            if system.agency.prefer_route_id:
+            if system and system.agency.prefer_route_id:
                 value = route_repository.find(system, route_id=parts[2])
             else:
                 value = route_repository.find(system, number=parts[2])
@@ -32,7 +34,7 @@ class Favourite:
             system_repository = kwargs.get('system_repository') or di[SystemRepository]
             stop_repository = kwargs.get('stop_repository') or di[StopRepository]
             system = system_repository.find(parts[1])
-            if system.agency.prefer_stop_id:
+            if system and system.agency.prefer_stop_id:
                 value = stop_repository.find(system, stop_id=parts[2])
             else:
                 value = stop_repository.find(system, number=parts[2])
@@ -48,7 +50,7 @@ class Favourite:
     
     def __str__(self):
         if self.type == 'vehicle':
-            source = self.value.order.agency.id
+            source = self.value.agency.id
             number = str(self.value.number)
         elif self.type == 'route':
             source = self.value.system.id

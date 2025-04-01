@@ -1,10 +1,38 @@
 {
+    "artic": {
+        "new-flyer-d60lf": {
+            "manufacturer": "New Flyer",
+            "name": "D60LF",
+            "length": 60,
+            "fuel": "Diesel"
+        },
+        "new-flyer-d60lfr": {
+            "manufacturer": "New Flyer",
+            "name": "D60LFR",
+            "length": 60,
+            "fuel": "Diesel"
+        },
+        "new-flyer-xd60": {
+            "manufacturer": "New Flyer",
+            "name": "XD60",
+            "length": 60,
+            "fuel": "Diesel"
+        }
+    },
+    "coach": {
+        "mci-d45-crt-le": {
+            "manufacturer": "MCI",
+            "name": "D45 CRT LE",
+            "length": 45,
+            "fuel": "Diesel"
+        }
+    },
     "conventional": {
-        "byd-k9": {
-            "manufacturer": "BYD",
-            "name": "K9",
-            "length": 39,
-            "fuel": "Battery Electric"
+        "new-flyer-c40lfr": {
+            "manufacturer": "New Flyer",
+            "name": "C40LFR",
+            "length": 40,
+            "fuel": "CNG"
         },
         "new-flyer-d40lf": {
             "manufacturer": "New Flyer",
@@ -12,15 +40,27 @@
             "length": 40,
             "fuel": "Diesel"
         },
-        "new-flyer-de40lf": {
+        "new-flyer-d40lfr": {
             "manufacturer": "New Flyer",
-            "name": "DE40LF",
+            "name": "D40LFR",
             "length": 40,
             "fuel": "Diesel"
         },
-        "new-flyer-h40lfr": {
+        "new-flyer-de40lfr": {
             "manufacturer": "New Flyer",
-            "name": "H40LFR",
+            "name": "DE40LFR",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
+        "new-flyer-xd40": {
+            "manufacturer": "New Flyer",
+            "name": "XD40",
+            "length": 40,
+            "fuel": "CNG"
+        },
+        "new-flyer-xhe40": {
+            "manufacturer": "New Flyer",
+            "name": "XHE40",
             "length": 40,
             "fuel": "Hydrogen Fuel Cell"
         },
@@ -48,15 +88,45 @@
             "length": 40,
             "fuel": "Diesel"
         },
+        "nova-bus-lfs-cng": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS CNG",
+            "length": 40,
+            "fuel": "CNG"
+        },
+        "nova-bus-lfs-hev-2": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS HEV (2nd Gen)",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
+        "nova-bus-lfs-hev-3": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS HEV (3rd Gen)",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
         "nova-bus-lfs-suburban-2": {
             "manufacturer": "Nova Bus",
             "name": "LFS Suburban (2nd Gen)",
             "length": 40,
             "fuel": "Diesel"
         },
+        "proterra-catalyst-be40": {
+            "manufacturer": "Proterra",
+            "name": "Catalyst BE40",
+            "length": 40,
+            "fuel": "Battery Electric"
+        },
         "proterra-zx5": {
             "manufacturer": "Proterra",
             "name": "ZX5",
+            "length": 40,
+            "fuel": "Battery Electric"
+        },
+        "proterra-zx5max": {
+            "manufacturer": "Proterra",
+            "name": "ZX5MAX",
             "length": 40,
             "fuel": "Battery Electric"
         }
@@ -67,49 +137,25 @@
             "name": "Enviro500",
             "length": 40,
             "fuel": "Diesel"
-        },
-        "alexander-dennis-enviro500-lhd": {
-            "manufacturer": "Alexander Dennis",
-            "name": "Enviro500 LHD",
-            "length": 42,
-            "fuel": "Diesel"
-        },
-        "alexander-dennis-enviro500h": {
-            "manufacturer": "Alexander Dennis",
-            "name": "Enviro500H",
-            "length": 40,
-            "fuel": "Hybrid"
-        },
-        "dennis-trident-iii": {
-            "manufacturer": "Dennis",
-            "name": "Trident III",
-            "length": 40,
-            "fuel": "Diesel"
-        },
-        "transbus-trident-iii": {
-            "manufacturer": "TransBus",
-            "name": "Trident III",
-            "length": 40,
-            "fuel": "Diesel"
         }
     },
     "midibus": {
-        "dennis-dart-slf-30": {
-            "manufacturer": "Dennis",
-            "name": "Dart SLF (30')",
+        "byd-k7m": {
+            "manufacturer": "BYD",
+            "name": "K7M",
             "length": 30,
-            "fuel": "Diesel"
+            "fuel": "Battery Electric"
         },
-        "dennis-dart-slf-35": {
-            "manufacturer": "Dennis",
-            "name": "Dart SLF (35')",
+        "byd-k9s": {
+            "manufacturer": "BYD",
+            "name": "K9S",
             "length": 35,
-            "fuel": "Diesel"
+            "fuel": "Battery Electric"
         },
-        "grande-west-vicinity-27": {
-            "manufacturer": "Grande West",
-            "name": "Vicinity (27.5')",
-            "length": 27.5,
+        "eldorado-national-e-z-rider-ii-max-32": {
+            "manufacturer": "ElDorado National",
+            "name": "E-Z Rider II MAX",
+            "length": 32,
             "fuel": "Diesel"
         },
         "grande-west-vicinity-30": {
@@ -124,17 +170,17 @@
             "length": 30,
             "fuel": "CNG"
         },
-        "grande-west-vicinity-35": {
-            "manufacturer": "Grande West",
-            "name": "Vicinity (35')",
+        "new-flyer-md35": {
+            "manufacturer": "New Flyer",
+            "name": "MD35",
             "length": 35,
             "fuel": "Diesel"
         },
-        "vmc-classic-vi30-cng": {
-            "manufacturer": "VMC",
-            "name": "Classic Vi30 CNG",
-            "length": 30,
-            "fuel": "CNG"
+        "new-flyer-xd35": {
+            "manufacturer": "New Flyer",
+            "name": "XD35",
+            "length": 35,
+            "fuel": "Diesel"
         }
     },
     "shuttle": {
@@ -144,10 +190,16 @@
             "length": 27,
             "fuel": "Gasoline"
         },
-        "chevrolet-arboc-4500-som-28": {
+        "chevrolet-arboc-4500-sof27d": {
             "manufacturer": "Chevrolet/ARBOC",
-            "name": "4500/SOM 28",
-            "length": 28,
+            "name": "4500/SOF27D",
+            "length": 27,
+            "fuel": "Diesel"
+        },
+        "chevrolet-arboc-4500-sof27g": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOF27G",
+            "length": 27,
             "fuel": "Gasoline"
         },
         "chevrolet-arboc-4500-som23d": {
@@ -162,47 +214,32 @@
             "length": 28,
             "fuel": "Diesel"
         },
-        "chevrolet-arboc-4500-som28g": {
-            "manufacturer": "Chevrolet/ARBOC",
-            "name": "4500/SOM28G",
-            "length": 28,
-            "fuel": "Gasoline"
+        "dodge-grand-caravan": {
+            "manufacturer": "Dodge",
+            "name": "Grand Caravan"
         },
-        "chevrolet-girardin-4500-g5": {
-            "manufacturer": "Chevrolet/Girardin",
-            "name": "4500/G5",
-            "length": 28,
-            "fuel": "Gasoline"
+        "ford-champion-e-450-challenger": {
+            "manufacturer": "Ford/Champion",
+            "name": "E-450/Challenger"
         },
-        "ford-cbb-e450-polar-v": {
-            "manufacturer": "Ford/CBB",
-            "name": "E-450/Polar V",
-            "length": 24,
+        "ford-girardin-e-450-mbc-iv": {
+            "manufacturer": "Ford/Girardin",
+            "name": "E-450/MBC-IV",
             "fuel": "Diesel"
         },
-        "ford-girardin-t350-mbii": {
-            "manufacturer": "Ford/Girardin",
-            "name": "T-350/MB-II",
+        "ford-glaval-e-450-universal": {
+            "manufacturer": "Ford/Glaval",
+            "name": "E-450/Universal"
+        },
+        "gmc-glaval-4500-titan-ii": {
+            "manufacturer": "GMC/Glaval",
+            "name": "4500/Titan II"
+        },
+        "ram-trucks-new-england-wheels-promaster-frontrunner": {
+            "manufacturer": "Ram Trucks/New England Wheels",
+            "name": "ProMaster/Frontrunner",
             "length": 23,
             "fuel": "Gasoline"
-        },
-        "international-eldorado-3200-advantage": {
-            "manufacturer": "International/ElDorado",
-            "name": "3200/Advantage",
-            "length": 32,
-            "fuel": "Diesel"
-        },
-        "international-eldorado-3200-aero-elite": {
-            "manufacturer": "International/ElDorado",
-            "name": "3200/Aero Elite",
-            "length": 32,
-            "fuel": "Diesel"
-        },
-        "mercedes-benz-sprinter-minibus": {
-            "manufacturer": "Mercedes-Benz",
-            "name": "Sprinter Minibus",
-            "length": 24,
-            "fuel": "Diesel"
         }
     }
 }

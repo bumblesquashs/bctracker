@@ -27,8 +27,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(system, 'bus', bus.agency, bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(system, 'bus', bus.agency, bus, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 

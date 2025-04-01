@@ -19,8 +19,11 @@ class SQLStopRepository(StopRepository):
         '''Inserts a new stop into the database'''
         system_id = getattr(system, 'id', system)
         stop_id = row['stop_id']
-        number = row['stop_code']
-        if not number:
+        if 'stop_code' in row:
+            number = row['stop_code']
+            if not number:
+                number = stop_id
+        else:
             number = stop_id
         self.database.insert('stop', {
             'system_id': system_id,

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class RecordRepository(ABC):
     
     @abstractmethod
-    def create(self, bus, date, system, block, time, trip) -> int:
+    def create(self, agency, bus, date, system, block, time, trip) -> int:
         raise NotImplementedError()
     
     @abstractmethod
@@ -22,7 +22,7 @@ class RecordRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, bus, block, trip, limit) -> list[Record]:
+    def find_all(self, system, agency, bus, block, trip, limit) -> list[Record]:
         raise NotImplementedError()
     
     @abstractmethod
@@ -38,7 +38,7 @@ class RecordRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def count(self, system, bus, block, trip) -> int:
+    def count(self, system, agency, bus, block, trip) -> int:
         raise NotImplementedError()
     
     @abstractmethod

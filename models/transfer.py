@@ -11,6 +11,7 @@ class Transfer:
     
     __slots__ = (
         'id',
+        'agency',
         'bus',
         'date',
         'old_system',
@@ -23,15 +24,16 @@ class Transfer:
         agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
         system_repository = kwargs.get('system_repository') or di[SystemRepository]
         id = row[f'{prefix}_id']
-        agency = agency_repository.find('bc-transit')
+        agency = agency_repository.find(row[f'{prefix}_agency_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         old_system = system_repository.find(row[f'{prefix}_old_system_id'])
         new_system = system_repository.find(row[f'{prefix}_new_system_id'])
         date = Date.parse(row[f'{prefix}_date'], new_system.timezone)
-        return cls(id, bus, date, old_system, new_system)
+        return cls(id, agency, bus, date, old_system, new_system)
     
-    def __init__(self, id, bus, date, old_system, new_system):
+    def __init__(self, id, agency, bus, date, old_system, new_system):
         self.id = id
+        self.agency = agency
         self.bus = bus
         self.date = date
         self.old_system = old_system

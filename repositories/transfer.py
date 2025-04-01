@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 class TransferRepository(ABC):
     
     @abstractmethod
-    def create(self, bus, date, old_system, new_system):
+    def create(self, agency, bus, date, old_system, new_system):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, old_system, new_system, bus, limit) -> list[Transfer]:
+    def find_all(self, old_system, new_system, agency, bus, limit) -> list[Transfer]:
         raise NotImplementedError()

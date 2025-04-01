@@ -14,6 +14,7 @@ class Position:
     __slots__ = (
         'departure_repository',
         'system',
+        'agency',
         'bus',
         'trip_id',
         'stop_id',
@@ -34,7 +35,7 @@ class Position:
         '''Returns a position initialized from the given database row'''
         agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
         system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        agency = agency_repository.find('bc-transit')
+        agency = agency_repository.find(row[f'{prefix}_agency_id'])
         system = system_repository.find(row[f'{prefix}_system_id'])
         bus = Bus.find(agency, row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
@@ -58,7 +59,7 @@ class Position:
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
         timestamp = Timestamp.parse(row[f'{prefix}_timestamp'], timezone=system.timezone)
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+        return cls(system, agency, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
     def has_location(self):
@@ -109,8 +110,9 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
+    def __init__(self, system, agency, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
         self.system = system
+        self.agency = agency
         self.bus = bus
         self.trip_id = trip_id
         self.stop_id = stop_id

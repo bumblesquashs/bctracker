@@ -21,7 +21,6 @@ class FileAdornmentRepository(AdornmentRepository):
             for (agency_id, agency_values) in json.load(file).items():
                 agency_adornments = {}
                 for (bus_number, values) in agency_values.items():
-                    bus_number = int(bus_number)
                     agency_adornments[bus_number] = Adornment(agency_id, bus_number, **values)
                 self.adornments[agency_id] = agency_adornments
     

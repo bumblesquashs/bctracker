@@ -65,14 +65,17 @@ class DefaultRealtimeService(RealtimeService):
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
-                vehicle_id = vehicle.vehicle.id
+                if vehicle.vehicle.HasField('label'):
+                    vehicle_id = vehicle.vehicle.label
+                else:
+                    vehicle_id = vehicle.vehicle.id
                 vehicle_name_length = system.agency.vehicle_name_length
                 if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                     vehicle_id = vehicle_id[-vehicle_name_length:]
-                bus_number = int(vehicle_id)
+                bus_number = str(vehicle_id)
             except:
-                bus_number = -(index + 1)
-            self.position_repository.create(system, bus_number, vehicle)
+                bus_number = str(-(index + 1))
+            self.position_repository.create(system, system.agency, bus_number, vehicle)
         self.last_updated = Timestamp.now(accurate_seconds=False)
         system.last_updated = Timestamp.now(system.timezone, system.agency.accurate_seconds)
     
@@ -82,11 +85,11 @@ class DefaultRealtimeService(RealtimeService):
             try:
                 system = position.system
                 bus = position.bus
-                if bus.number < 0:
+                if not bus.is_known:
                     continue
                 date = Date.today(system.timezone)
                 time = Time.now(system.timezone)
-                overview = self.overview_repository.find(bus.number)
+                overview = self.overview_repository.find(system.agency, bus.number)
                 trip = position.trip
                 if trip:
                     block = trip.block
@@ -103,15 +106,15 @@ class DefaultRealtimeService(RealtimeService):
                             if trip.id not in trip_ids:
                                 self.record_repository.create_trip(last_record, trip)
                             continue
-                    record_id = self.record_repository.create(bus, date, system, block, time, trip)
+                    record_id = self.record_repository.create(system.agency, bus, date, system, block, time, trip)
                 else:
                     record_id = None
                 if overview:
                     self.overview_repository.update(overview, date, system, record_id)
                     if overview.last_seen_system != system:
-                        self.transfer_repository.create(bus, date, overview.last_seen_system, system)
+                        self.transfer_repository.create(system.agency, bus, date, overview.last_seen_system, system)
                 else:
-                    self.overview_repository.create(bus, date, system, record_id)
+                    self.overview_repository.create(system.agency, bus, date, system, record_id)
             except Exception as e:
                 print(f'Failed to update records: {e}')
         self.database.commit()

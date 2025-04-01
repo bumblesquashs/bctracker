@@ -9,11 +9,11 @@ if TYPE_CHECKING:
 class OverviewRepository(ABC):
     
     @abstractmethod
-    def create(self, bus, date, system, record):
+    def create(self, agency, bus, date, system, record):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, bus) -> Overview | None:
+    def find(self, agency, bus) -> Overview | None:
         raise NotImplementedError()
     
     @abstractmethod

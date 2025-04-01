@@ -6,7 +6,7 @@
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
     % if system:
-        % if agency.realtime_enabled:
+        % if system.agency.realtime_enabled:
             <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
         % else:
             <h2>{{ system }} Transit Schedules</h2>

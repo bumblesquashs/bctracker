@@ -8,6 +8,7 @@ class Bus:
     
     __slots__ = (
         'adornment_repository',
+        'agency',
         'number',
         'order'
     )
@@ -17,7 +18,7 @@ class Bus:
         '''Returns a bus for the given agency with the given number'''
         order_repository = kwargs.get('order_repository') or di[OrderRepository]
         order = order_repository.find(agency, number)
-        return cls(number, order)
+        return cls(agency, number, order)
     
     @property
     def url_id(self):
@@ -27,7 +28,7 @@ class Bus:
     @property
     def is_known(self):
         '''Checks if the bus number is known'''
-        return self.number >= 0
+        return not self.number.startswith('-')
     
     @property
     def visible(self):
@@ -45,14 +46,8 @@ class Bus:
             return order.model
         return None
     
-    @property
-    def agency(self):
-        order = self.order
-        if order:
-            return order.agency
-        return None
-    
-    def __init__(self, number, order, **kwargs):
+    def __init__(self, agency, number, order, **kwargs):
+        self.agency = agency
         self.number = number
         self.order = order
         
@@ -60,10 +55,7 @@ class Bus:
     
     def __str__(self):
         if self.is_known:
-            agency = self.agency
-            if agency and agency.vehicle_name_length:
-                return f'{self.number:0{agency.vehicle_name_length}d}'
-            return str(self.number)
+            return self.number
         return 'Unknown Bus'
     
     def __hash__(self):
@@ -77,7 +69,4 @@ class Bus:
     
     def find_adornment(self):
         '''Returns the adornment for this bus, if one exists'''
-        agency = self.agency
-        if agency:
-            return self.adornment_repository.find(agency, self)
-        return None
+        return self.adornment_repository.find(self.agency, self)

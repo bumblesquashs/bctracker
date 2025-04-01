@@ -90,7 +90,7 @@ class System:
         self.name = name
         self.remote_id = kwargs.get('remote_id')
         self.enabled = kwargs.get('enabled', True) and agency.enabled
-        self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
+        self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Edmonton'))
         self.colour_routes = kwargs.get('colour_routes')
         
         self.gtfs_downloaded = None
@@ -143,7 +143,7 @@ class System:
     
     def get_positions(self):
         '''Returns all positions'''
-        return self.position_repository.find_all(self)
+        return self.position_repository.find_all(self.agency, self)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''

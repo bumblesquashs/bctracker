@@ -9,15 +9,15 @@ if TYPE_CHECKING:
 class PositionRepository(ABC):
     
     @abstractmethod
-    def create(self, system, bus, data):
+    def create(self, system, agency, bus, data):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, bus) -> Position | None:
+    def find(self, agency, bus) -> Position | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, trip, stop, block, route, has_location) -> list[Position]:
+    def find_all(self, agency, system, trip, stop, block, route, has_location) -> list[Position]:
         raise NotImplementedError()
     
     @abstractmethod

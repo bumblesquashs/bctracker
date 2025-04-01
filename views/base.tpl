@@ -15,7 +15,7 @@
             % if system:
                 {{ system }} | {{ title }}
             % else:
-                BCTracker | {{ title }}
+                ABTracker | {{ title }}
             % end
         </title>
         
@@ -25,10 +25,10 @@
         
         % if system:
             <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ system }}, {{ system.agency }}" />
+            <meta name="keywords" content="Transit, Alberta, Bus Tracking, {{ system }}, {{ system.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
+            <meta name="keywords" content="Transit, Alberta, Bus Tracking" />
         % end
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
@@ -44,7 +44,7 @@
         % if system:
             <meta property="og:title" content="{{ system }} | {{ title }}">
         % else:
-            <meta property="og:title" content="BCTracker | {{ title }}">
+            <meta property="og:title" content="ABTracker | {{ title }}">
         % end
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
@@ -53,8 +53,8 @@
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="BCTracker Logo" />
-        <meta property="og:site_name" content="BCTracker" />
+        <meta property="og:image:alt" content="ABTracker Logo" />
+        <meta property="og:site_name" content="ABTracker" />
         
         <link rel="stylesheet" href="/style/main.css?version={{ version }}" />
         
@@ -147,6 +147,7 @@
         
         % include('components/svg_script', name='bus')
         % include('components/svg_script', name='bus-artic')
+        % include('components/svg_script', name='bus-coach')
         % include('components/svg_script', name='bus-conventional')
         % include('components/svg_script', name='bus-decker')
         % include('components/svg_script', name='bus-midibus')
@@ -268,11 +269,11 @@
     
     <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
         <a id="title" href="{{ get_url(system) }}">
-            % include('components/svg', name='bctracker')
-            <div class="side-bar-open-only">BCTracker</div>
+            % include('components/svg', name='abtracker')
+            <div class="side-bar-open-only">ABTracker</div>
         </a>
         <div id="navigation-bar">
-            <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">BCTracker</a>
+            <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">ABTracker</a>
             
             <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
             % if not system or system.realtime_enabled:
@@ -392,7 +393,7 @@
                         % if system:
                             {{ system }}
                         % else:
-                            All Transit Systems
+                            All Transit Agencies
                         % end
                     </div>
                     % if last_updated:
@@ -405,9 +406,9 @@
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
                 % if system:
-                    <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Agencies</a>
                 % else:
-                    <span class="system-button current all-systems">All Transit Systems</span>
+                    <span class="system-button current all-systems">All Transit Agencies</span>
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
@@ -439,7 +440,7 @@
                         % include('components/svg', name='right-double')
                     </div>
                 </div>
-                <div class="side-bar-open-only">Hide Systems</div>
+                <div class="side-bar-open-only">Hide Agencies</div>
             </div>
         </div>
         <div id="main">

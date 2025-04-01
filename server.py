@@ -91,9 +91,12 @@ class Server(Bottle):
         self.add('/realtime/models', callback=self.realtime_models)
         self.add('/realtime/speed', callback=self.realtime_speed)
         self.add('/fleet', callback=self.fleet)
-        self.add('/bus/<bus_number:int>', callback=self.bus_overview)
-        self.add('/bus/<bus_number:int>/map', callback=self.bus_map)
-        self.add('/bus/<bus_number:int>/history', callback=self.bus_history)
+        self.add('/bus/<bus_number>', callback=self.bus_overview)
+        self.add('/bus/<bus_number>/map', callback=self.bus_map)
+        self.add('/bus/<bus_number>/history', callback=self.bus_history)
+        self.add('/bus/<bus_agency>/<bus_number>', callback=self.bus_overview)
+        self.add('/bus/<bus_agency>/<bus_number>/map', callback=self.bus_map)
+        self.add('/bus/<bus_agency>/<bus_number>/history', callback=self.bus_history)
         self.add('/history', callback=self.history_last_seen)
         self.add('/history/first-seen', callback=self.history_first_seen)
         self.add('/history/transfers', callback=self.history_transfers)
@@ -374,7 +377,7 @@ class Server(Bottle):
             if system:
                 agency = system.agency
             else:
-                agency = self.agency_repository.find('bc-transit')
+                agency = None
             return callback(system=system, agency=agency, *args, **kwargs)
         self.route(paths, method, callback=endpoint)
     
@@ -419,7 +422,7 @@ class Server(Bottle):
         )
     
     def map(self, system, agency):
-        positions = self.position_repository.find_all(system, has_location=True)
+        positions = self.position_repository.find_all(agency, system, has_location=True)
         auto_refresh = self.query_cookie('auto_refresh', 'false') != 'false'
         show_route_lines = self.query_cookie('show_route_lines', 'false') != 'false'
         show_stops = self.query_cookie('show_stops', 'true') != 'false'
@@ -441,7 +444,7 @@ class Server(Bottle):
         )
     
     def realtime_all(self, system, agency):
-        positions = self.position_repository.find_all(system)
+        positions = self.position_repository.find_all(agency, system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -456,7 +459,7 @@ class Server(Bottle):
         )
     
     def realtime_routes(self, system, agency):
-        positions = self.position_repository.find_all(system)
+        positions = self.position_repository.find_all(agency, system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -471,7 +474,7 @@ class Server(Bottle):
         )
     
     def realtime_models(self, system, agency):
-        positions = self.position_repository.find_all(system)
+        positions = self.position_repository.find_all(agency, system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -487,7 +490,7 @@ class Server(Bottle):
     
     def realtime_speed(self, system, agency):
         self.set_cookie('speed', '1994')
-        positions = self.position_repository.find_all(system)
+        positions = self.position_repository.find_all(agency, system)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -514,9 +517,26 @@ class Server(Bottle):
             overviews={o.bus.number: o for o in overviews}
         )
     
-    def bus_overview(self, system, agency, bus_number):
-        bus = Bus.find(agency, bus_number)
-        overview = self.overview_repository.find(bus)
+    def bus_overview(self, system, agency, bus_number, bus_agency=None):
+        if bus_agency:
+            bus_agency = self.agency_repository.find(bus_agency)
+            if not bus_agency:
+                raise HTTPError(404)
+        else:
+            if agency:
+                bus_agency = agency
+            else:
+                return self.error_page(
+                    name='agency_required',
+                    title='Select an Agency',
+                    system=system,
+                    agency=agency,
+                    bus_number=bus_number
+                )
+        if not agency:
+            agency = bus_agency
+        bus = Bus.find(bus_agency, bus_number)
+        overview = self.overview_repository.find(agency, bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 name='invalid_bus',
@@ -525,8 +545,8 @@ class Server(Bottle):
                 agency=agency,
                 bus_number=bus_number
             )
-        position = self.position_repository.find(bus)
-        records = self.record_repository.find_all(bus=bus, limit=20)
+        position = self.position_repository.find(agency, bus)
+        records = self.record_repository.find_all(agency=agency, bus=bus, limit=20)
         return self.page(
             name='bus/overview',
             title=f'Bus {bus}',
@@ -541,9 +561,26 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def bus_map(self, system, agency, bus_number):
-        bus = Bus.find(agency, bus_number)
-        overview = self.overview_repository.find(bus)
+    def bus_map(self, system, agency, bus_number, bus_agency=None):
+        if bus_agency:
+            bus_agency = self.agency_repository.find(bus_agency)
+            if not bus_agency:
+                raise HTTPError(404)
+        else:
+            if agency:
+                bus_agency = agency
+            else:
+                return self.error_page(
+                    name='agency_required',
+                    title='Select an Agency',
+                    system=system,
+                    agency=agency,
+                    bus_number=bus_number
+                )
+        if not agency:
+            agency = bus_agency
+        bus = Bus.find(bus_agency, bus_number)
+        overview = self.overview_repository.find(agency, bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 name='invalid_bus',
@@ -552,7 +589,7 @@ class Server(Bottle):
                 agency=agency,
                 bus_number=bus_number
             )
-        position = self.position_repository.find(bus)
+        position = self.position_repository.find(agency, bus)
         return self.page(
             name='bus/map',
             title=f'Bus {bus}',
@@ -565,9 +602,26 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def bus_history(self, system, agency, bus_number):
-        bus = Bus.find(agency, bus_number)
-        overview = self.overview_repository.find(bus)
+    def bus_history(self, system, agency, bus_number, bus_agency=None):
+        if bus_agency:
+            bus_agency = self.agency_repository.find(bus_agency)
+            if not bus_agency:
+                raise HTTPError(404)
+        else:
+            if agency:
+                bus_agency = agency
+            else:
+                return self.error_page(
+                    name='agency_required',
+                    title='Select an Agency',
+                    system=system,
+                    agency=agency,
+                    bus_number=bus_number
+                )
+        if not agency:
+            agency = bus_agency
+        bus = Bus.find(bus_agency, bus_number)
+        overview = self.overview_repository.find(agency, bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 name='invalid_bus',
@@ -581,12 +635,12 @@ class Server(Bottle):
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = self.record_repository.count(bus=bus)
+        total_items = self.record_repository.count(agency=agency, bus=bus)
         if page < 1:
             records = []
         else:
-            records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
-        transfers = self.transfer_repository.find_all(bus=bus)
+            records = self.record_repository.find_all(agency=agency, bus=bus, limit=items_per_page, page=page)
+        transfers = self.transfer_repository.find_all(agency=agency, bus=bus)
         tracked_systems = set()
         events = []
         if overview:
@@ -730,7 +784,7 @@ class Server(Bottle):
             trips=trips,
             recorded_today=self.record_repository.find_recorded_today(system, trips),
             assignments=self.assignment_repository.find_all(system, route=route),
-            positions=self.position_repository.find_all(system, route=route),
+            positions=self.position_repository.find_all(agency, system, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -763,7 +817,7 @@ class Server(Bottle):
             agency=agency,
             full_map=len(route.trips) > 0,
             route=route,
-            positions=self.position_repository.find_all(system, route=route),
+            positions=self.position_repository.find_all(agency, system, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -898,7 +952,7 @@ class Server(Bottle):
             agency=agency,
             include_maps=True,
             block=block,
-            positions=self.position_repository.find_all(system, block=block),
+            positions=self.position_repository.find_all(agency, system, block=block),
             assignment=self.assignment_repository.find(system, block)
         )
     
@@ -927,7 +981,7 @@ class Server(Bottle):
             agency=agency,
             full_map=True,
             block=block,
-            positions=self.position_repository.find_all(system, block=block)
+            positions=self.position_repository.find_all(agency, system, block=block)
         )
     
     def block_history(self, system, agency, block_id):
@@ -988,7 +1042,7 @@ class Server(Bottle):
             agency=agency,
             include_maps=True,
             trip=trip,
-            positions=self.position_repository.find_all(system, trip=trip),
+            positions=self.position_repository.find_all(agency, system, trip=trip),
             assignment=self.assignment_repository.find(system, trip.block_id)
         )
     
@@ -1017,7 +1071,7 @@ class Server(Bottle):
             agency=agency,
             full_map=True,
             trip=trip,
-            positions=self.position_repository.find_all(system, trip=trip)
+            positions=self.position_repository.find_all(agency, system, trip=trip)
         )
     
     def trip_history(self, system, agency, trip_id):
@@ -1137,7 +1191,7 @@ class Server(Bottle):
             )
         departures = stop.find_departures(date=Date.today(system.timezone))
         trips = [d.trip for d in departures]
-        positions = self.position_repository.find_all(system, trip=trips)
+        positions = self.position_repository.find_all(agency, system, trip=trips)
         return self.page(
             name='stop/overview',
             title=str(stop),
@@ -1310,7 +1364,7 @@ class Server(Bottle):
                 if not overviews:
                     redirect(self.get_url(system))
                 overview = random.choice(overviews)
-                redirect(self.get_url(system, 'bus', overview.bus))
+                redirect(self.get_url(system, 'bus', overview.agency, overview.bus))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
@@ -1382,7 +1436,7 @@ class Server(Bottle):
             last_updated_text = last_updated.format_web(time_format)
         else:
             last_updated_text = None
-        positions = sorted(self.position_repository.find_all(system, has_location=True), key=lambda p: p.lat)
+        positions = sorted(self.position_repository.find_all(agency, system, has_location=True), key=lambda p: p.lat)
         return {
             'positions': [p.get_json() for p in positions],
             'last_updated': last_updated_text

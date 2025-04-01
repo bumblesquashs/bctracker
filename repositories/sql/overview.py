@@ -14,12 +14,14 @@ class SQLOverviewRepository(OverviewRepository):
     def __init__(self, database: Database):
         self.database = database
         
-    def create(self, bus, date, system, record):
+    def create(self, agency, bus, date, system, record):
         '''Inserts a new overview into the database'''
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         system_id = getattr(system, 'id', system)
         record_id = getattr(record, 'id', record)
         self.database.insert('overview', {
+            'agency_id': agency_id,
             'bus_number': bus_number,
             'first_seen_date': date.format_db(),
             'first_seen_system_id': system_id,
@@ -29,27 +31,30 @@ class SQLOverviewRepository(OverviewRepository):
             'last_record_id': record_id
         })
     
-    def find(self, bus):
+    def find(self, agency, bus):
         '''Returns the overview of the given bus'''
-        overviews = self.find_all(bus=bus, limit=1)
+        overviews = self.find_all(agency=agency, bus=bus, limit=1)
         try:
             return overviews[0]
         except IndexError:
             return None
     
-    def find_all(self, system=None, last_seen_system=None, bus=None, limit=None):
+    def find_all(self, system=None, last_seen_system=None, agency=None, bus=None, limit=None):
         '''Returns all overviews that match the given system and bus'''
         system_id = getattr(system, 'id', system)
         last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('overview',
             columns={
+                'overview.agency_id': 'overview_agency_id',
                 'overview.bus_number': 'overview_bus_number',
                 'overview.first_seen_date': 'overview_first_seen_date',
                 'overview.first_seen_system_id': 'overview_first_seen_system_id',
                 'overview.last_seen_date': 'overview_last_seen_date',
                 'overview.last_seen_system_id': 'overview_last_seen_system_id',
                 'first_record.record_id': 'overview_first_record_id',
+                'first_record.agency_id': 'overview_first_record_agency_id',
                 'first_record.bus_number': 'overview_first_record_bus_number',
                 'first_record.date': 'overview_first_record_date',
                 'first_record.system_id': 'overview_first_record_system_id',
@@ -60,6 +65,7 @@ class SQLOverviewRepository(OverviewRepository):
                 'first_record.first_seen': 'overview_first_record_first_seen',
                 'first_record.last_seen': 'overview_first_record_last_seen',
                 'last_record.record_id': 'overview_last_record_id',
+                'last_record.agency_id': 'overview_last_record_agency_id',
                 'last_record.bus_number': 'overview_last_record_bus_number',
                 'last_record.date': 'overview_last_record_date',
                 'last_record.system_id': 'overview_last_record_system_id',
@@ -80,6 +86,7 @@ class SQLOverviewRepository(OverviewRepository):
                 }
             },
             filters={
+                'overview.agency_id': agency_id,
                 'overview.bus_number': bus_number,
                 'last_record.system_id': system_id,
                 'overview.last_seen_system_id': last_seen_system_id
@@ -121,5 +128,6 @@ class SQLOverviewRepository(OverviewRepository):
                 values['first_record_id'] = record_id
             values['last_record_id'] = record_id
         self.database.update('overview', values, {
+            'agency_id': overview.agency.id,
             'bus_number': overview.bus.number
         })

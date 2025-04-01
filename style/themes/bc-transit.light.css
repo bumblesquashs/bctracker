@@ -2,27 +2,27 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #1A671A
- * Secondary Header: #48A348
- * Menu: #094409
+ * Primary Header: #CF0000
+ * Secondary Header: #FF0808
+ * Menu: #A30000
  * Borders: #666666
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
- * Links: #0040FF
- * Buttons: #365CCB
+ * Links: #A30000
+ * Buttons: #FF0808
  * 
  * Other colors may also be used for specific purposes
 */
 
 :root {
     --loading-background: #FFFFFF;
-    --loading-foreground: #48A348;
+    --loading-foreground: #FF0808;
     
-    --checkbox-color: #365CCB;
-    --radio-button-color: #365CCB;
-    --toggle-button-color: #365CCB;
+    --checkbox-color: #FF0808;
+    --radio-button-color: #FF0808;
+    --toggle-button-color: #FF0808;
     
     --stop-number-background: #FFFFFF;
     --stop-number-text: #000000;
@@ -34,7 +34,7 @@
 }
 
 a {
-    color: #0040FF;
+    color: #A30000;
 }
 
 body {
@@ -61,7 +61,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #094409;
+    border-color: #A30000;
 }
 
 table {
@@ -82,7 +82,7 @@ table td {
 }
 
 table th {
-    background-color: #48A348;
+    background-color: #FF0808;
     color: #FFFFFF;
     border-color: #666666;
 }
@@ -96,13 +96,13 @@ table tr:nth-child(2n-1) {
 }
 
 table tr.table-button {
-    background-color: #365CCB;
+    background-color: #FF0808;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 table tr.table-button:hover {
-    background-color: #1440C2;
+    background-color: #CF0000;
 }
 
 #loading-stop {
@@ -114,12 +114,12 @@ table tr.table-button:hover {
 }
 
 #map-controls .control.active {
-    --map-control-icon: #365CCB;
+    --map-control-icon: #FF0808;
 }
 
 #navigation-bar {
-    background-color: #1A671A;
-    --tooltip-background: #094409;
+    background-color: #CF0000;
+    --tooltip-background: #A30000;
     --image-color: #FFFFFF;
 }
 
@@ -128,11 +128,11 @@ table tr.table-button:hover {
 }
 
 #navigation-bar .navigation-icon:hover {
-    background-color: #094409;
+    background-color: #A30000;
 }
 
 #navigation-bar .navigation-icon.disabled:hover {
-    background-color: #1A671A !important;
+    background-color: #CF0000 !important;
 }
 
 #navigation-bar .navigation-item {
@@ -140,15 +140,15 @@ table tr.table-button:hover {
 }
 
 #navigation-bar .navigation-item:hover {
-    background-color: #094409;
+    background-color: #A30000;
 }
 
 #navigation-bar .navigation-item.disabled:hover {
-    background-color: #1A671A !important;
+    background-color: #CF0000 !important;
 }
 
 #navigation-menu {
-    background-color: #094409;
+    background-color: #A30000;
 }
 
 #navigation-menu .menu-button {
@@ -193,11 +193,11 @@ table tr.table-button:hover {
 }
 
 #refresh-button:hover {
-    background-color: #094409;
+    background-color: #A30000;
 }
 
 #refresh-button.disabled:hover {
-    background-color: #48A348;
+    background-color: #FF0808;
 }
 
 #search {
@@ -206,10 +206,10 @@ table tr.table-button:hover {
 }
 
 #search-header {
-    background-color: #48A348;
+    background-color: #FF0808;
     color: #FFFFFF;
     border-color: #666666;
-    --tooltip-background: #094409;
+    --tooltip-background: #A30000;
 }
 
 #search-input {
@@ -217,7 +217,7 @@ table tr.table-button:hover {
 }
 
 #search-input:focus {
-    border-color: #094409;
+    border-color: #A30000;
 }
 
 #search-paging {
@@ -262,7 +262,7 @@ table tr.table-button:hover {
 }
 
 #status {
-    background-color: #48A348;
+    background-color: #FF0808;
     color: #FFFFFF;
     border-bottom-color: #666666;
 }
@@ -296,13 +296,13 @@ table tr.table-button:hover {
 }
 
 #title {
-    background-color: #1A671A;
+    background-color: #CF0000;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 #title:hover {
-    background-color: #094409;
+    background-color: #A30000;
 }
 
 .banner {
@@ -316,13 +316,13 @@ table tr.table-button:hover {
 }
 
 .button {
-    background-color: #365CCB;
+    background-color: #FF0808;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #1440C2;
+    background-color: #CF0000;
 }
 
 .button.disabled {
@@ -359,7 +359,7 @@ table tr.table-button:hover {
 }
 
 .container > .section > .header > .toggle {
-    --image-color: #365CCB;
+    --image-color: #FF0808;
 }
 
 .events .date {
@@ -367,7 +367,7 @@ table tr.table-button:hover {
 }
 
 .favourite {
-    --image-color: #365CCB;
+    --image-color: #FF0808;
 }
 
 .favourite:hover {
@@ -405,7 +405,7 @@ table tr.table-button:hover {
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #48A348;
+    background-color: #FF0808;
     --image-color: #FFFFFF;
 }
 
@@ -423,7 +423,7 @@ table tr.table-button:hover {
 }
 
 .news-post .header {
-    background-color: #48A348;
+    background-color: #FF0808;
     color: white;
     border-bottom-color: #666666;
 }
@@ -454,12 +454,12 @@ table tr.table-button:hover {
 }
 
 .paging .page.current {
-    background-color: #365CCB;
+    background-color: #FF0808;
     color: #FFFFFF;
 }
 
 .paging .page.current:hover {
-    background-color: #365CCB;
+    background-color: #FF0808;
 }
 
 .record-warnings {
@@ -495,7 +495,7 @@ table tr.table-button:hover {
 
 .tab-button {
     background-color: #FFFFFF;
-    color: #0040FF;
+    color: #A30000;
 }
 
 .tab-button:hover {

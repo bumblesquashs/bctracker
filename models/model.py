@@ -5,6 +5,7 @@ class ModelType(Enum):
     '''A type of vehicle model'''
     
     artic = "Articulated"
+    coach = "Coach"
     conventional = "Conventional"
     decker = "Double Decker"
     midibus = "Midibus"

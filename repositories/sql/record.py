@@ -21,12 +21,14 @@ class SQLRecordRepository(RecordRepository):
         self.database = database
         self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
     
-    def create(self, bus, date, system, block, time, trip):
+    def create(self, agency, bus, date, system, block, time, trip):
         '''Inserts a new record into the database'''
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         record_id = self.database.insert('record', {
+            'agency_id': agency_id,
             'bus_number': bus_number,
             'date': date.format_db(),
             'system_id': system_id,
@@ -61,15 +63,17 @@ class SQLRecordRepository(RecordRepository):
             }
         )
     
-    def find_all(self, system=None, bus=None, block=None, trip=None, limit=None, page=None):
+    def find_all(self, system=None, agency=None, bus=None, block=None, trip=None, limit=None, page=None):
         '''Returns all records that match the given system, bus, block, and trip'''
         system_id = getattr(system, 'id', system)
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
         trip_id = getattr(trip, 'id', trip)
         joins = {}
         filters = {
             'record.system_id': system_id,
+            'record.agency_id': agency_id,
             'record.bus_number': bus_number,
             'record.block_id': block_id
         }
@@ -81,6 +85,7 @@ class SQLRecordRepository(RecordRepository):
         return self.database.select('record', 
             columns={
                 'record.record_id': 'record_id',
+                'record.agency_id': 'record_agency_id',
                 'record.bus_number': 'record_bus_number',
                 'record.date': 'record_date',
                 'record.system_id': 'record_system_id',
@@ -115,6 +120,7 @@ class SQLRecordRepository(RecordRepository):
         rows = self.database.select('trip_record',
             columns={
                 'trip_record.trip_id': 'trip_id',
+                'record.agency_id': 'agency_id',
                 'record.bus_number': 'bus_number'
             },
             joins={
@@ -129,8 +135,7 @@ class SQLRecordRepository(RecordRepository):
             },
             order_by='record.last_seen ASC'
         )
-        agency = self.agency_repository.find('bc-transit')
-        return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
+        return {row['trip_id']: Bus.find(self.agency_repository.find(row['agency_id']), row['bus_number']) for row in rows}
     
     def find_recorded_today_by_block(self, system):
         '''Returns all bus numbers matching the given system that werer ecorded on the current date'''
@@ -150,15 +155,17 @@ class SQLRecordRepository(RecordRepository):
         agency = self.agency_repository.find('bc-transit')
         return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}
     
-    def count(self, system=None, bus=None, block=None, trip=None):
+    def count(self, system=None, agency=None, bus=None, block=None, trip=None):
         '''Returns the number of records for the given system, bus, block, and trip'''
         system_id = getattr(system, 'id', system)
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
         trip_id = getattr(trip, 'id', trip)
         joins = {}
         filters = {
             'record.system_id': system_id,
+            'record.agency_id': agency_id,
             'record.bus_number': bus_number,
             'record.block_id': block_id
         }

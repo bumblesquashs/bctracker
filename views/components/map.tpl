@@ -131,7 +131,11 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                icon.href = getUrl(systemID, "bus/" + position.bus_url_id, true);
+                if (systemID === null) {
+                    icon.href = getUrl(systemID, "bus/" + position.agency_id + "/" + position.bus_url_id, true);
+                } else {
+                    icon.href = getUrl(systemID, "bus/" + position.bus_url_id, true);
+                }
                 icon.innerHTML = "<div class='link'></div>";
             }
             icon.className = "icon";

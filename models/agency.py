@@ -19,6 +19,11 @@ class Agency:
     )
     
     @property
+    def url_id(self):
+        '''The ID to use when making bus URLs'''
+        return self.id
+    
+    @property
     def gtfs_enabled(self):
         '''Checks if GTFS is enabled for this agency'''
         return self.enabled and self.gtfs_url

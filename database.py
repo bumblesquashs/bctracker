@@ -6,7 +6,8 @@ SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS record (
             record_id INTEGER PRIMARY KEY ASC,
-            bus_number INTEGER NOT NULL,
+            agency_id TEXT NOT NULL,
+            bus_number TEXT NOT NULL,
             date TEXT NOT NULL,
             system_id TEXT NOT NULL,
             block_id TEXT NOT NULL,
@@ -28,7 +29,8 @@ SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS transfer (
             transfer_id INTEGER PRIMARY KEY ASC,
-            bus_number INTEGER NOT NULL,
+            agency_id TEXT NOT NULL,
+            bus_number TEXT NOT NULL,
             date TEXT NOT NULL,
             old_system_id TEXT NOT NULL,
             new_system_id TEXT NOT NULL
@@ -36,13 +38,15 @@ SQL_SCRIPTS = [
     ''',
     '''
         CREATE TABLE IF NOT EXISTS overview (
-            bus_number INTEGER PRIMARY KEY,
+            agency_id TEXT NOT NULL,
+            bus_number TEXT NOT NULL,
             first_seen_date TEXT NOT NULL,
             first_seen_system_id TEXT NOT NULL,
             first_record_id INTEGER,
             last_seen_date TEXT NOT NULL,
             last_seen_system_id TEXT NOT NULL,
             last_record_id INTEGER,
+            PRIMARY KEY (agency_id, bus_number),
             FOREIGN KEY (first_record_id) REFERENCES record (record_id),
             FOREIGN KEY (last_record_id) REFERENCES record (record_id)
         )
@@ -50,7 +54,8 @@ SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS position (
             system_id TEXT NOT NULL,
-            bus_number INTEGER NOT NULL,
+            agency_id TEXT NOT NULL,
+            bus_number TEXT NOT NULL,
             trip_id TEXT,
             stop_id TEXT,
             block_id TEXT,
@@ -63,7 +68,7 @@ SQL_SCRIPTS = [
             adherence INTEGER,
             occupancy TEXT,
             timestamp REAL,
-            PRIMARY KEY (system_id, bus_number)
+            PRIMARY KEY (system_id, agency_id, bus_number)
         )
     ''',
     '''
@@ -74,6 +79,7 @@ SQL_SCRIPTS = [
             name TEXT NOT NULL,
             colour TEXT,
             text_colour TEXT,
+            type TEXT,
             PRIMARY KEY (system_id, route_id)
         )
     ''',
@@ -132,7 +138,7 @@ SQL_SCRIPTS = [
         CREATE TABLE IF NOT EXISTS assignment (
             system_id TEXT NOT NULL,
             block_id TEXT NOT NULL,
-            bus_number INTEGER NOT NULL,
+            bus_number TEXT NOT NULL,
             date TEXT NOT NULL,
             PRIMARY KEY (system_id, block_id)
         )
@@ -151,7 +157,7 @@ class Database:
         'connection'
     )
     
-    def __init__(self, name='bctracker'):
+    def __init__(self, name='abtracker'):
         self.name = name
         self.connection = None
     

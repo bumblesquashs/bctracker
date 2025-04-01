@@ -19,9 +19,10 @@ class SQLPositionRepository(PositionRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, system, bus, data):
+    def create(self, system, agency, bus, data):
         '''Inserts a new position into the database'''
         system_id = getattr(system, 'id', system)
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         try:
             trip_id = data.trip.trip_id
@@ -88,6 +89,7 @@ class SQLPositionRepository(PositionRepository):
             occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
             'system_id': system_id,
+            'agency_id': agency_id,
             'bus_number': bus_number,
             'trip_id': trip_id,
             'stop_id': stop_id,
@@ -106,12 +108,14 @@ class SQLPositionRepository(PositionRepository):
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
     
-    def find(self, bus):
+    def find(self, agency, bus):
         '''Returns the position of the given bus'''
+        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         positions = self.database.select('position',
             columns={
                 'position.system_id': 'position_system_id',
+                'position.agency_id': 'position_agency_id',
                 'position.bus_number': 'position_bus_number',
                 'position.trip_id': 'position_trip_id',
                 'position.stop_id': 'position_stop_id',
@@ -127,6 +131,7 @@ class SQLPositionRepository(PositionRepository):
                 'position.timestamp': 'position_timestamp'
             },
             filters={
+                'position.agency_id': agency_id,
                 'position.bus_number': bus_number
             },
             initializer=Position.from_db
@@ -136,8 +141,9 @@ class SQLPositionRepository(PositionRepository):
         except IndexError:
             return None
     
-    def find_all(self, system=None, trip=None, stop=None, block=None, route=None, has_location=None):
+    def find_all(self, agency=None, system=None, trip=None, stop=None, block=None, route=None, has_location=None):
         '''Returns all positions that match the given system, trip, stop, block, and route'''
+        agency_id = getattr(agency, 'id', agency)
         system_id = getattr(system, 'id', system)
         if isinstance(trip, list):
             trip_id = [getattr(t, 'id', t) for t in trip]
@@ -156,6 +162,7 @@ class SQLPositionRepository(PositionRepository):
         else:
             route_id = getattr(route, 'id', route)
         filters = {
+            'position.agency_id': agency_id,
             'position.system_id': system_id,
             'position.trip_id': trip_id,
             'position.stop_id': stop_id,
@@ -180,6 +187,7 @@ class SQLPositionRepository(PositionRepository):
         positions = self.database.select('position',
             columns={
                 'position.system_id': 'position_system_id',
+                'position.agency_id': 'position_agency_id',
                 'position.bus_number': 'position_bus_number',
                 'position.trip_id': 'position_trip_id',
                 'position.stop_id': 'position_stop_id',
