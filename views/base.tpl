@@ -445,9 +445,10 @@
         </div>
         <div id="main">
             <div id="banners">
+                % from models.date import Date
                 % from models.time import Time
                 % import pytz
-                % if now >= Time(12, 0, 0, pytz.timezone('America/Vancouver')):
+                % if today == Date(2025, 4, 1, None) and now >= Time(12, 0, 0, pytz.timezone('America/Vancouver')):
                     <div class="banner">
                         <div class="content">
                             <h1>Happy April Fools Day!</h1>
