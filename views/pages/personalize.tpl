@@ -13,11 +13,6 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>
-                    The default BCTracker theme is based on the current BC Transit bus livery.
-                    You can also choose to embrace nostalgia with themes based on older BC transit agencies.
-                </p>
-                
                 % visible_themes = [t for t in themes if t.visible]
                 % hidden_themes = [t for t in themes if not t.visible]
                 

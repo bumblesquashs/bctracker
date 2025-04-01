@@ -2,16 +2,16 @@
  * 
  * Primary Background: #2F2F2F
  * Secondary Background: #393939
- * Primary Header: #154E15
- * Secondary Header: #276227
- * Menu: #053305
+ * Primary Header: #530200
+ * Secondary Header: #860300
+ * Menu: #330100
  * Borders: #565656
  * Selection: #565656
  * 
  * Primary Text: #FFFFFF
  * Secondary Text: #ABABAB
- * Links: #5CC3FF
- * Buttons: #2247B7
+ * Links: #CD1510
+ * Buttons: #860300
  * 
  * Other colors may also be used for specific purposes
 */
@@ -20,11 +20,11 @@
     color-scheme: dark;
     
     --loading-background: #2F2F2F;
-    --loading-foreground: #154E15;
+    --loading-foreground: #530200;
     
-    --checkbox-color: #5CC3FF;
-    --radio-button-color: #5CC3FF;
-    --toggle-button-color: #5CC3FF;
+    --checkbox-color: #CD1510;
+    --radio-button-color: #CD1510;
+    --toggle-button-color: #CD1510;
     
     --stop-number-background: #2F2F2F;
     --stop-number-text: #FFFFFF;
@@ -36,7 +36,7 @@
 }
 
 a {
-    color: #5CC3FF;
+    color: #CD1510;
 }
 
 body {
@@ -63,7 +63,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #053305;
+    border-color: #330100;
 }
 
 input[type="text"]::placeholder {
@@ -92,7 +92,7 @@ table td {
 }
 
 table th {
-    background-color: #276227;
+    background-color: #860300;
     color: #FFFFFF;
     border-color: #565656;
 }
@@ -106,13 +106,13 @@ table tr:nth-child(2n-1) {
 }
 
 table tr.table-button {
-    background-color: #2247B7;
+    background-color: #860300;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 table tr.table-button:hover {
-    background-color: #10308F;
+    background-color: #530200;
 }
 
 #loading-stop {
@@ -124,12 +124,12 @@ table tr.table-button:hover {
 }
 
 #map-controls .control.active {
-    --map-control-icon: #5CC3FF;
+    --map-control-icon: #CD1510;
 }
 
 #navigation-bar {
-    background-color: #154E15;
-    --tooltip-background: #053305;
+    background-color: #530200;
+    --tooltip-background: #330100;
     --image-color: #FFFFFF;
 }
 
@@ -138,11 +138,11 @@ table tr.table-button:hover {
 }
 
 #navigation-bar .navigation-icon:hover {
-    background-color: #053305;
+    background-color: #330100;
 }
 
 #navigation-bar .navigation-icon.disabled:hover {
-    background-color: #154E15 !important;
+    background-color: #530200 !important;
 }
 
 #navigation-bar .navigation-item {
@@ -150,15 +150,15 @@ table tr.table-button:hover {
 }
 
 #navigation-bar .navigation-item:hover {
-    background-color: #053305;
+    background-color: #330100;
 }
 
 #navigation-bar .navigation-item.disabled:hover {
-    background-color: #154E15 !important;
+    background-color: #530200 !important;
 }
 
 #navigation-menu {
-    background-color: #053305;
+    background-color: #330100;
     --image-color: #FFFFFF;
 }
 
@@ -203,11 +203,11 @@ table tr.table-button:hover {
 }
 
 #refresh-button:hover {
-    background-color: #053305;
+    background-color: #330100;
 }
 
 #refresh-button.disabled:hover {
-    background-color: #276227;
+    background-color: #860300;
 }
 
 #search {
@@ -216,9 +216,9 @@ table tr.table-button:hover {
 }
 
 #search-header {
-    background-color: #276227;
+    background-color: #860300;
     border-color: #565656;
-    --tooltip-background: #053305;
+    --tooltip-background: #330100;
 }
 
 #search-input {
@@ -226,7 +226,7 @@ table tr.table-button:hover {
 }
 
 #search-input:focus {
-    border-color: #053305;
+    border-color: #330100;
 }
 
 #search-paging {
@@ -272,7 +272,7 @@ table tr.table-button:hover {
 }
 
 #status {
-    background-color: #276227;
+    background-color: #860300;
     color: #FFFFFF;
     border-bottom-color: #565656;
 }
@@ -306,13 +306,13 @@ table tr.table-button:hover {
 }
 
 #title {
-    background-color: #154E15;
+    background-color: #530200;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 #title:hover {
-    background-color: #053305;
+    background-color: #330100;
 }
 
 .banner {
@@ -326,13 +326,13 @@ table tr.table-button:hover {
 }
 
 .button {
-    background-color: #2247B7;
+    background-color: #860300;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #10308F;
+    background-color: #530200;
 }
 
 .button.disabled {
@@ -369,7 +369,7 @@ table tr.table-button:hover {
 }
 
 .container > .section > .header > .toggle {
-    --image-color: #5CC3FF;
+    --image-color: #CD1510;
 }
 
 .events .date {
@@ -377,7 +377,7 @@ table tr.table-button:hover {
 }
 
 .favourite {
-    --image-color: #5CC3FF;
+    --image-color: #CD1510;
 }
 
 .favourite:hover {
@@ -415,7 +415,7 @@ table tr.table-button:hover {
 }
 
 .marker .icon {
-    background-color: #276227;
+    background-color: #860300;
     border-color: #2F2F2F;
     --image-color: #FFFFFF;
 }
@@ -434,7 +434,7 @@ table tr.table-button:hover {
 }
 
 .news-post .header {
-    background-color: #276227;
+    background-color: #860300;
     border-bottom-color: #565656;
 }
 
@@ -464,12 +464,12 @@ table tr.table-button:hover {
 }
 
 .paging .page.current {
-    background-color: #2247B7;
+    background-color: #860300;
     color: #FFFFFF;
 }
 
 .paging .page.current:hover {
-    background-color: #2247B7;
+    background-color: #530200;
 }
 
 .record-warnings {
@@ -505,7 +505,7 @@ table tr.table-button:hover {
 
 .tab-button {
     background-color: #2F2F2F;
-    color: #5CC3FF;
+    color: #CD1510;
 }
 
 .tab-button:hover {

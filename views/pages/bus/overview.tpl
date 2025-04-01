@@ -26,9 +26,15 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'bus', bus.agency, bus, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, 'bus', bus.agency, bus, 'history') }}" class="tab-button">History</a>
+        % if system:
+            <span class="tab-button current">Overview</span>
+            <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+            <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        % else:
+            <span class="tab-button current">Overview</span>
+            <a href="{{ get_url(system, 'bus', bus.agency, bus, 'map') }}" class="tab-button">Map</a>
+            <a href="{{ get_url(system, 'bus', bus.agency, bus, 'history') }}" class="tab-button">History</a>
+        % end
     </div>
 </div>
 
@@ -390,7 +396,7 @@
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording bus history</li>
+                            <li>It may not have been in service since ABTracker started recording bus history</li>
                             <li>It may not have functional tracking equipment installed</li>
                             % if model and model.type == ModelType.shuttle:
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>

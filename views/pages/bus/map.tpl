@@ -13,9 +13,15 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'bus', bus.agency, bus) }}" class="tab-button">Overview</a>
-        <span class="tab-button current">Map</span>
-        <a href="{{ get_url(system, 'bus', bus.agency, bus, 'history') }}" class="tab-button">History</a>
+        % if system:
+            <a href="{{ get_url(system, 'bus', bus) }}" class="tab-button">Overview</a>
+            <span class="tab-button current">Map</span>
+            <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        % else:
+            <a href="{{ get_url(system, 'bus', bus.agency, bus) }}" class="tab-button">Overview</a>
+            <span class="tab-button current">Map</span>
+            <a href="{{ get_url(system, 'bus', bus.agency, bus, 'history') }}" class="tab-button">History</a>
+        % end
     </div>
 </div>
 

@@ -15,9 +15,15 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'bus', bus.agency, bus) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'bus', bus.agency, bus, 'map') }}" class="tab-button">Map</a>
-        <span class="tab-button current">History</span>
+        % if system:
+            <a href="{{ get_url(system, 'bus', bus) }}" class="tab-button">Overview</a>
+            <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+            <span class="tab-button current">History</span>
+        % else:
+            <a href="{{ get_url(system, 'bus', bus.agency, bus) }}" class="tab-button">Overview</a>
+            <a href="{{ get_url(system, 'bus', bus.agency, bus, 'map') }}" class="tab-button">Map</a>
+            <span class="tab-button current">History</span>
+        % end
     </div>
 </div>
 
@@ -65,7 +71,7 @@
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording bus history</li>
+                            <li>It may not have been in service since ABTracker started recording bus history</li>
                             <li>It may not have functional tracking equipment installed</li>
                             % model = bus.model
                             % if model is None or model.type == ModelType.shuttle:

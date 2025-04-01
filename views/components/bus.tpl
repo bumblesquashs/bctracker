@@ -1,6 +1,10 @@
 <div class="bus">
     % if bus.is_known and get('enable_link', True):
-        <a href="{{ get_url(system, 'bus', bus.agency, bus) }}">{{ bus }}</a>
+        % if system:
+            <a href="{{ get_url(system, 'bus', bus) }}">{{ bus }}</a>
+        % else:
+            <a href="{{ get_url(system, 'bus', bus.agency, bus) }}">{{ bus }}</a>
+        % end
     % else:
         <div>{{ bus }}</div>
     % end

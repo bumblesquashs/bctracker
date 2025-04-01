@@ -1,49 +1,12 @@
 {
-    "bc-transit": {
-        "name": "BC Transit",
+    "calgary-transit": {
+        "name": "Calgary Transit",
         "light": true,
         "dark": true
     },
-    "bc-transit-classic": {
-        "name": "BC Transit Classic",
-        "light": true
-    },
-    "bc-hydro": {
-        "name": "BC Hydro",
-        "light": true
-    },
-    "uta": {
-        "name": "Urban Transit Authority",
-        "light": true
-    },
-    "pride": {
-        "name": "Pride",
+    "edmonton-transit": {
+        "name": "Edmonton Transit Service",
         "light": true,
         "dark": true
-    },
-    "tcomm": {
-        "name": "T-Comm",
-        "visible": false,
-        "light": true
-    },
-    "christmas": {
-        "name": "Christmas",
-        "visible": false,
-        "light": true
-    },
-    "halloween": {
-        "name": "Halloween",
-        "visible": false,
-        "dark": true
-    },
-    "ghost": {
-        "name": "Ghost",
-        "visible": false,
-        "light": true
-    },
-    "broome-county": {
-        "name": "Broome County",
-        "visible": false,
-        "light": true
     }
 }

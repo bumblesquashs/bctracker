@@ -4,7 +4,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Welcome to BCTracker!</h1>
+    <h1>Welcome to ABTracker!</h1>
     % if system:
         % if system.agency.realtime_enabled:
             <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
@@ -12,7 +12,7 @@
             <h2>{{ system }} Transit Schedules</h2>
         % end
     % else:
-        <h2>British Columbia Transit Schedules and Bus Tracking</h2>
+        <h2>Alberta Transit Schedules and Bus Tracking</h2>
     % end
 </div>
 
@@ -104,7 +104,7 @@
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
-                    <p>Choose a system to search for routes and stops</p>
+                    <p>Choose an agency to search for routes and stops</p>
                 % end
             </div>
         </div>
@@ -291,64 +291,22 @@
                 <div class="container">
                     <div class="news-post">
                         <div class="header">
-                            <h3>Winter Update</h3>
-                            January 10th, 2025
+                            <h3>Welcome to ABTracker!</h3>
+                            April 1st, 2025
                         </div>
                         <div class="content">
                             <p>
-                                Happy new year!
-                                We're kicking things off with a very exciting announcement: BCTracker is adding support for more transit agencies in BC!
+                                ABTracker is a new spinoff from <a href="https://bctracker.ca">BCTracker</a> for folks living in Alberta!
+                                We hope you find it useful for tracking down your buses.
+                                Then again Alberta is so flat that you can probably just see your bus from wherever you happen to be standing.
                             </p>
                             <p>
-                                We imagine that the first question coming to many minds is "Do you now support TransLink"?
-                                The answer is <i>not yet</i>, but hopefully we can get there in the future.
-                                For now we're starting with a few small agencies without realtime tracking, to ease ourselves in and have time to iron out any issues before taking on something bigger.
-                                The initial new systems/agencies are:
+                                In a pinch this website can also be used as part of your workout routine as you work towards that 6-pack you've always dreamed of.
                             </p>
-                            <ul>
-                                <li><b>Denman Island</b> - operated by <a href="https://www.denmanislandbus.ca">Denman Island Bus</a></li>
-                                <li><b>Gabriola Island</b> - operated by <a href="https://gertie.ca">GERTIE</a></li>
-                                <li><b>Hornby Island</b> - operated by <a href="https://hornbybus.com">Hornby Bus</a></li>
-                            </ul>
-                            <p>If you happen to live in or visit one of these places, we hope you find BCTracker useful!</p>
-                            <p>In other news, plenty of other improvements have been made since our previous post, including:</p>
-                            <ul>
-                                <li>Bus occupancy status</li>
-                                <li>Time since each bus position was last updated</li>
-                                <li>Stop list filtering and sorting</li>
-                                <li>Various layout and style updates</li>
-                            </ul>
-                            <p>Enjoy, stay safe, and have a great year!</p>
-                        </div>
-                    </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Summer Update</h3>
-                            June 27, 2024
-                        </div>
-                        <div class="content">
                             <p>
-                                It's summer already - time sure flies!
-                                Here's what we've been up to since the last post.
-                            </p>
-                            <ul>
-                                <li>Favourites: A quick way to get to your frequently-used pages from the home page</li>
-                                <li>Themes: A new Pride theme, and improvements for High Contrast mode</li>
-                                <li>Bus History: Now has paging to improve loading time</li>
-                                <li>Mobile Sections: Now can be toggled to make it easier to scroll down</li>
-                                <li>Transfers: Now can be filtered and shows statistics</li>
-                            </ul>
-                            <p>As usual we've also been making small improvements to the general design of the site, as well as improvements to the server itself behind the scenes.</p>
-                            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Williams Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
-                            <p>
-                                That's all from us for now!
-                                As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
-                                Have a great summer!
+                                Enjoy!
                             </p>
                         </div>
-                    </div>
-                    <div>
-                        <a href="{{ get_url(system, 'news') }}">See older news</a>
                     </div>
                 </div>
             </div>
@@ -362,7 +320,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
+                <p>Join the ABTracker Discord server - a home for transit riders and enthusiasts from around Alberta!</p>
                 <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>

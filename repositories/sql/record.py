@@ -152,8 +152,7 @@ class SQLRecordRepository(RecordRepository):
             },
             order_by='record.last_seen ASC'
         )
-        agency = self.agency_repository.find('bc-transit')
-        return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}
+        return {row['block_id']: Bus.find(system.agency, row['bus_number']) for row in rows}
     
     def count(self, system=None, agency=None, bus=None, block=None, trip=None):
         '''Returns the number of records for the given system, bus, block, and trip'''

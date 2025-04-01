@@ -2,27 +2,27 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #165ABE
- * Secondary Header: #E39B35
- * Menu: #07080D
+ * Primary Header: #005087
+ * Secondary Header: #2886B9
+ * Menu: #193A5A
  * Borders: #666666
  * Selection: #CBCBCB
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
- * Links: #165ABE
- * Buttons: #E39B35
+ * Links: #193A5A
+ * Buttons: #2886B9
  * 
  * Other colors may also be used for specific purposes
 */
 
 :root {
     --loading-background: #FFFFFF;
-    --loading-foreground: #165ABE;
+    --loading-foreground: #2886B9;
     
-    --checkbox-color: #165ABE;
-    --radio-button-color: #165ABE;
-    --toggle-button-color: #165ABE;
+    --checkbox-color: #2886B9;
+    --radio-button-color: #2886B9;
+    --toggle-button-color: #2886B9;
     
     --stop-number-background: #FFFFFF;
     --stop-number-text: #000000;
@@ -34,7 +34,7 @@
 }
 
 a {
-    color: #165ABE;
+    color: #193A5A;
 }
 
 body {
@@ -55,17 +55,17 @@ h1, h2, h3 {
 }
 
 input[type="text"] {
-    border-color: #000000;
+    border-color: #666666;
     background-color: #FFFFFF;
     color: #000000;
 }
 
 input[type="text"]:focus {
-    border-color: #165ABE;
+    border-color: #193A5A;
 }
 
 table {
-    border-color: #000000;
+    border-color: #666666;
 }
 
 table tbody tr:hover {
@@ -73,18 +73,18 @@ table tbody tr:hover {
 }
 
 table tbody tr.header {
-    background-color: #07080D;
+    background-color: #666666;
     color: #FFFFFF;
 }
 
 table td {
-    border-color: #000000;
+    border-color: #666666;
 }
 
 table th {
-    background-color: #E39B35;
+    background-color: #2886B9;
     color: #FFFFFF;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 table tr {
@@ -96,26 +96,30 @@ table tr:nth-child(2n-1) {
 }
 
 table tr.table-button {
-    background-color: #165ABE;
+    background-color: #2886B9;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 table tr.table-button:hover {
-    background-color: #0A4499;
+    background-color: #005087;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
 }
 
 #map.preview {
-    border-color: #000000;
+    border-color: #666666;
 }
 
 #map-controls .control.active {
-    --map-control-icon: #E39B35;
+    --map-control-icon: #2886B9;
 }
 
 #navigation-bar {
-    background-color: #165ABE;
-    --tooltip-background: #07080D;
+    background-color: #005087;
+    --tooltip-background: #193A5A;
     --image-color: #FFFFFF;
 }
 
@@ -124,11 +128,11 @@ table tr.table-button:hover {
 }
 
 #navigation-bar .navigation-icon:hover {
-    background-color: #0A4499;
+    background-color: #193A5A;
 }
 
 #navigation-bar .navigation-icon.disabled:hover {
-    background-color: #165ABE !important;
+    background-color: #005087 !important;
 }
 
 #navigation-bar .navigation-item {
@@ -136,15 +140,15 @@ table tr.table-button:hover {
 }
 
 #navigation-bar .navigation-item:hover {
-    background-color: #0A4499;
+    background-color: #193A5A;
 }
 
 #navigation-bar .navigation-item.disabled:hover {
-    background-color: #165ABE !important;
+    background-color: #005087 !important;
 }
 
 #navigation-menu {
-    background-color: #07080D;
+    background-color: #193A5A;
 }
 
 #navigation-menu .menu-button {
@@ -163,7 +167,7 @@ table tr.table-button:hover {
 
 #nearby-status.loading {
     background-color: #E6E6E6;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 #nearby-status.error {
@@ -176,12 +180,12 @@ table tr.table-button:hover {
 }
 
 #page-header {
-    border-bottom-color: #000000;
+    border-bottom-color: #666666;
 }
 
 #quick-navigation .item {
     background-color: #E6E6E6;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 #refresh-button {
@@ -189,23 +193,23 @@ table tr.table-button:hover {
 }
 
 #refresh-button:hover {
-    background-color: #C07A16;
+    background-color: #193A5A;
 }
 
 #refresh-button.disabled:hover {
-    background-color: #E39B35;
+    background-color: #2886B9;
 }
 
 #search {
     background-color: #E6E6E6;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 #search-header {
-    background-color: #E39B35;
+    background-color: #2886B9;
     color: #FFFFFF;
-    border-color: #000000;
-    --tooltip-background: #07080D;
+    border-color: #666666;
+    --tooltip-background: #193A5A;
 }
 
 #search-input {
@@ -213,12 +217,12 @@ table tr.table-button:hover {
 }
 
 #search-input:focus {
-    border-color: #165ABE;
+    border-color: #193A5A;
 }
 
 #search-paging {
     background-color: #FFFFFF;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 #search-placeholder {
@@ -246,7 +250,7 @@ table tr.table-button:hover {
 }
 
 #side-bar {
-    border-right-color: #000000;
+    border-right-color: #666666;
 }
 
 #side-bar-toggle {
@@ -258,18 +262,18 @@ table tr.table-button:hover {
 }
 
 #status {
-    background-color: #E39B35;
+    background-color: #2886B9;
     color: #FFFFFF;
-    border-bottom-color: #000000;
+    border-bottom-color: #666666;
 }
 
 #system-menu {
     background-color: #E6E6E6;
-    border-bottom-color: #000000;
+    border-bottom-color: #666666;
 }
 
 #system-menu .header {
-    background-color: #07080D;
+    background-color: #666666;
     color: #FFFFFF;
 }
 
@@ -292,17 +296,17 @@ table tr.table-button:hover {
 }
 
 #title {
-    background-color: #165ABE;
+    background-color: #005087;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 #title:hover {
-    background-color: #0A4499;
+    background-color: #193A5A;
 }
 
 .banner {
-    background-color: #0A4499;
+    background-color: #FFA027;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
@@ -312,13 +316,13 @@ table tr.table-button:hover {
 }
 
 .button {
-    background-color: #165ABE;
+    background-color: #2886B9;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: #0A4499;
+    background-color: #005087;
 }
 
 .button.disabled {
@@ -347,24 +351,40 @@ table tr.table-button:hover {
 
 .code-block {
     background-color: #E6E6E6;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 .container > .section > .header {
-    border-bottom-color: #000000;
+    border-bottom-color: #666666;
 }
 
 .container > .section > .header > .toggle {
-    --image-color: #165ABE;
+    --image-color: #2886B9;
 }
 
 .events .date {
     border-right-color: #CBCBCB;
 }
 
+.favourite {
+    --image-color: #2886B9;
+}
+
+.favourite:hover {
+    background-color: #E6E6E6;
+}
+
+.favourite.disabled {
+    --image-color: #666666;
+}
+
+.favourite.disabled:hover {
+    background-color: initial;
+}
+
 .info-box {
     background-color: #E6E6E6;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 .info-box .section {
@@ -385,7 +405,7 @@ table tr.table-button:hover {
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #165ABE;
+    background-color: #2886B9;
     --image-color: #FFFFFF;
 }
 
@@ -399,13 +419,13 @@ table tr.table-button:hover {
 
 .news-post {
     background-color: #E6E6E6;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 .news-post .header {
-    background-color: #E39B35;
+    background-color: #2886B9;
     color: white;
-    border-bottom-color: #000000;
+    border-bottom-color: #666666;
 }
 
 .option {
@@ -434,12 +454,12 @@ table tr.table-button:hover {
 }
 
 .paging .page.current {
-    background-color: #165ABE;
+    background-color: #2886B9;
     color: #FFFFFF;
 }
 
 .paging .page.current:hover {
-    background-color: #165ABE;
+    background-color: #2886B9;
 }
 
 .record-warnings {
@@ -453,7 +473,7 @@ table tr.table-button:hover {
 }
 
 .scheduled {
-    --image-color: #000000;
+    --image-color: #666666;
 }
 
 .sheet {
@@ -470,12 +490,12 @@ table tr.table-button:hover {
 
 .tab-button-bar {
     background: #666666;
-    border-color: #000000;
+    border-color: #666666;
 }
 
 .tab-button {
     background-color: #FFFFFF;
-    color: #165ABE;
+    color: #193A5A;
 }
 
 .tab-button:hover {
@@ -493,7 +513,7 @@ table tr.table-button:hover {
 }
 
 .timeline .section:hover {
-    border-color: #000000;
+    border-color: #666666;
 }
 
 .timespan .time {

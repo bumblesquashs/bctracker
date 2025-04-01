@@ -259,7 +259,7 @@ class Server(Bottle):
             elif today.month == 12 and today.day == 25:
                 theme = self.theme_repository.find('christmas')
             else:
-                theme = self.theme_repository.find('bc-transit')
+                theme = self.theme_repository.find('calgary-transit')
         theme_variant = self.query_cookie('theme_variant')
         high_contrast = self.query_cookie('high_contrast') == 'enabled'
         return template(f'pages/{name}',
@@ -1364,7 +1364,10 @@ class Server(Bottle):
                 if not overviews:
                     redirect(self.get_url(system))
                 overview = random.choice(overviews)
-                redirect(self.get_url(system, 'bus', overview.agency, overview.bus))
+                if system:
+                    redirect(self.get_url(system, 'bus', overview.bus))
+                else:
+                    redirect(self.get_url(system, 'bus', overview.agency, overview.bus))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
