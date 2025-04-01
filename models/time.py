@@ -16,7 +16,7 @@ class Time:
     def parse(cls, time_string, timezone=None, accurate_seconds=False):
         '''Returns a time parsed from the given string in HH:MM:SS format'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         if not time_string:
             return cls.unknown(timezone)
         time_parts = time_string.split(':')
@@ -33,14 +33,14 @@ class Time:
     def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current time'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         return cls.fromdatetime(datetime.now(timezone), timezone, accurate_seconds)
     
     @classmethod
     def fromdatetime(cls, datetime, timezone=None, accurate_seconds=True):
         '''Returns a time from the given datetime'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         hour = datetime.hour
         if hour < 4:
             hour += 24
@@ -54,7 +54,7 @@ class Time:
     def unknown(cls, timezone=None):
         '''Returns an unknown time'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         return cls(None, None, None, timezone)
     
     @property

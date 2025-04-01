@@ -445,19 +445,13 @@
         </div>
         <div id="main">
             <div id="banners">
-                % if system is not None and system.id == 'cowichan-valley':
+                % from models.time import Time
+                % import pytz
+                % if now >= Time(12, 0, 0, pytz.timezone('America/Vancouver')):
                     <div class="banner">
                         <div class="content">
-                            <h1>Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</h1>
-                            <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
-                        </div>
-                    </div>
-                % end
-                % from models.date import Date
-                % if system is not None and system.id == 'west-coast' and today < Date(2025, 3, 1, system.timezone):
-                    <div class="banner">
-                        <div class="content">
-                            <h1>BC Transit will begin operating between Tofino and Ucluelet on March 1st, 2025</h1>
+                            <h1>Happy April Fools Day!</h1>
+                            <p>See the <a href="{{ get_url(system) }}#af-2025">news post</a> for more info.</p>
                         </div>
                     </div>
                 % end

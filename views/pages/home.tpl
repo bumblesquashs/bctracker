@@ -289,6 +289,26 @@
             </div>
             <div class="content">
                 <div class="container">
+                    % from models.time import Time
+                    % import pytz
+                    % if now >= Time(12, 0, 0, pytz.timezone('America/Vancouver')):
+                        <div class="news-post" id="af-2025">
+                            <div class="header">
+                                <h3>Happy April Fools Day!</h3>
+                                April 1st, 2025
+                            </div>
+                            <div class="content">
+                                <p>
+                                    Unfortunately today will be the only day ABTracker is running.
+                                    Yes, we put in a rather ridiculous amount of work into making a joke website that's only around for one day.
+                                    But the good news is we've learned a lot about the amount of work needed to support multiple agencies with realtime data, which brings us one step closer to making that a reality on BCTracker!
+                                </p>
+                                <p>
+                                    Perhaps, someday, we will consider revisiting the concept of ABTracker for real...
+                                </p>
+                            </div>
+                        </div>
+                    % end
                     <div class="news-post">
                         <div class="header">
                             <h3>Welcome to ABTracker!</h3>

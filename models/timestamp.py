@@ -17,7 +17,7 @@ class Timestamp:
     def now(cls, timezone=None, accurate_seconds=True):
         '''Returns the current timestamp'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         return cls.parse(datetime.now(timezone).timestamp(), timezone, accurate_seconds)
     
     @classmethod
@@ -26,7 +26,7 @@ class Timestamp:
         if not value:
             return None
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         return cls(value, timezone, accurate_seconds)
     
     @property

@@ -21,21 +21,21 @@ class Date:
         '''Returns a date parsed from a string in the given format'''
         date = datetime.strptime(date_string, format)
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
     def today(cls, timezone=None):
         '''Returns the current date'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         return cls.fromdatetime(datetime.now(timezone), timezone)
     
     @classmethod
     def fromdatetime(cls, datetime, timezone=None):
         '''Returns a date from the given datetime'''
         if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
+            timezone = pytz.timezone('America/Edmonton')
         if datetime.hour < 4:
             datetime = datetime - timedelta(days=1)
         return cls(datetime.year, datetime.month, datetime.day, timezone)
