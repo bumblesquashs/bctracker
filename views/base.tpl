@@ -452,14 +452,6 @@
                         </div>
                     </div>
                 % end
-                % from models.date import Date
-                % if system is not None and system.id == 'west-coast' and today < Date(2025, 3, 1, system.timezone):
-                    <div class="banner">
-                        <div class="content">
-                            <h1>BC Transit will begin operating between Tofino and Ucluelet on March 1st, 2025</h1>
-                        </div>
-                    </div>
-                % end
             </div>
             % if full_map:
                 <div id="map" class="full-screen"></div>
