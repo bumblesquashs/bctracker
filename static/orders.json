@@ -231,7 +231,8 @@
             { "year": 2018, "number": 1021 }
         ],
         "mci-d45-crt-le": [
-            { "year": 2019, "low": 1026, "high": 1029 }
+            { "year": 2019, "low": 1026, "high": 1029 },
+            { "year": 2024, "low": 1042, "high": 1045 }
         ],
         "nova-bus-lfs-3": [
             { "year": 2012, "low": 1005, "high": 1006 }
