@@ -340,7 +340,7 @@
                     Please, only donate if you can afford to!
                     There is no obligation to do so, and our website will continue to be free to use for all who find it useful or interesting.
                 </p>
-                <a class="button" href="https://ko-fi.com/bctracker">Donate</a>
+                <a class="button" target="_blank" href="https://ko-fi.com/bctracker">Donate ❤️</a>
             </div>
         </div>
     </div>
