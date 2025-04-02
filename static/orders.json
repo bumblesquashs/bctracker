@@ -269,7 +269,9 @@
             { "year": 2016, "low": 122, "high": 126, "prefix": "19-" }
         ],
         "new-flyer-d40lf": [
-            { "year": 2009, "low": 1950, "high": 1961 },
+            { "year": 2009, "low": 1950, "high": 1961 }
+        ],
+        "new-flyer-d40lfr": [
             { "year": 2010, "low": 1962, "high": 1975 }
         ],
         "new-flyer-md35": [
