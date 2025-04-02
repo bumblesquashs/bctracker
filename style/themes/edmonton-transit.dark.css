@@ -33,6 +33,9 @@
     --map-control-background: rgba(30, 30, 30, 0.7);
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
+    
+    --beta-tag-background: #012031;
+    --beta-tag-text: #FFFFFF;
 }
 
 a {

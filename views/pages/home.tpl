@@ -289,24 +289,6 @@
             </div>
             <div class="content">
                 <div class="container">
-                    <div class="news-post" id="af-2025">
-                        <div class="header">
-                            <h3>Happy April Fools Day!</h3>
-                            April 1st, 2025
-                        </div>
-                        <div class="content">
-                            <p>
-                                Unfortunately today will be the only day ABTracker is running.
-                                Yes, we put in a rather ridiculous amount of work into making a joke website that's only around for one day.
-                                But the good news is we've learned a lot about the amount of work needed to support multiple agencies with realtime data, which brings us one step closer to making that a reality on BCTracker!
-                            </p>
-                            <p>
-                                Since there has been quite a lot of interest in making this website permanent, we'll definitely explore some options to make that happen.
-                                Right now quite a lot of the code changes were designed as temporary adjustments and we aren't confident that everything would work long-term.
-                                It may take some time to get it fully functional, but we'll do our best!
-                            </p>
-                        </div>
-                    </div>
                     <div class="news-post">
                         <div class="header">
                             <h3>Welcome to ABTracker!</h3>
@@ -319,7 +301,12 @@
                                 Then again Alberta is so flat that you can probably just see your bus from wherever you happen to be standing.
                             </p>
                             <p>
-                                In a pinch this website can also be used as part of your workout routine as you work towards that 6-pack you've always dreamed of.
+                                Originally this website was meant to be a one-day April Fools joke, but there was so much interest in it that we're going to try keeping it around for longer!
+                                It turns out we were the fools all along for not anticipating this...
+                            </p>
+                            <p>
+                                For now the website is going to be in <b>beta</b>, which means that some stuff could still break or get changed at any time.
+                                Please see the <a href="{{ get_url(system, 'about') }}#beta-testing">about page</a> for more info.
                             </p>
                             <p>
                                 Enjoy!
@@ -338,8 +325,22 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>Join the ABTracker Discord server - a home for transit riders and enthusiasts from around Alberta!</p>
+                <p>Join the BCTracker Discord server - it's mainly folks in British Columbia but you're welcome too!</p>
                 <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Support</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                <p>We would be incredibly grateful to anyone willing to chip in a little bit to help cover our server and website hosting costs.</p>
+                <p>
+                    Please, only donate if you can afford to!
+                    There is no obligation to do so, and our website will continue to be free to use for all who find it useful or interesting.
+                </p>
+                <a class="button" href="https://ko-fi.com/bctracker">Donate</a>
             </div>
         </div>
     </div>

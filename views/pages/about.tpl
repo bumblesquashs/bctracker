@@ -32,23 +32,39 @@
                 <div class="container">
                     <div class="section">
                         <div class="header" onclick="toggleSection(this)">
-                            <h3>Why is there no transit information for Vancouver?</h3>
+                            <h3>Is ABTracker related to <a href="https://bctracker.ca">BCTracker</a>?</h3>
                             % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
-                                Because Vancouver isn't in Alberta, silly!
+                                Yes! BCTracker was our initial project which launched in 2020 to provide transit information to people living in British Columbia.
                             </p>
                         </div>
                     </div>
-                    <div class="section">
+                    <div id="beta-testing" class="section">
                         <div class="header" onclick="toggleSection(this)">
-                            <h3>How long has ABTracker been recording bus history?</h3>
+                            <h3>What does it mean for ABTracker to be in beta?</h3>
                             % include('components/toggle')
                         </div>
                         <div class="content">
                             <p>
-                                ABTracker has been tracking buses since April 1st, 2025
+                                ABTracker started as an April Fools joke, but there was so much interest in it that we've ended up keeping it around.
+                                However, it technically wasn't designed to exist as a permanent website, so there are plenty of things that may be broken.
+                                We're marking the website as being in beta to make sure everyone using it is aware that it isn't perfect and problems may occur.
+                            </p>
+                            <p>While the site is in beta, here's what you can expect:</p>
+                            <ul>
+                                <li>There's a possibility that bus history may get reset at any time</li>
+                                <li>Some information may appear incorrectly</li>
+                                <li>Some pages may not load at all</li>
+                                <li>The website may be completely unavailable at times</li>
+                                <li>Features that are added to BCTracker may not get added here right away</li>
+                            </ul>
+                            <p>
+                                Although we'll do our best to keep this website functional, please be mindful that it currently isn't our top priority.
+                                If you notice any issues let us know, but it may take some time for them to be addressed.
+                                We currently don't have a timeline set for how long the website will be in beta, so this notice is applicable for the foreseeable future.
+                                Thanks for your understanding!
                             </p>
                         </div>
                     </div>
@@ -60,18 +76,7 @@
                         <div class="content">
                             <p>
                                 The website (both the pages and the data processing code) is written in Python using a simple web framework called Bottle.
-                                The code can be found on <a href="https://github.com/bumblesquashs/bctracker/tree/af-2025-abtracker">GitHub</a> if you are interested in seeing how it works or trying to run it yourself.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="section">
-                        <div class="header" onclick="toggleSection(this)">
-                            <h3>Will there ever be an ABTracker phone app?</h3>
-                            % include('components/toggle')
-                        </div>
-                        <div class="content">
-                            <p>
-                                No.
+                                The code can be found on <a href="https://github.com/bumblesquashs/bctracker/tree/abtracker">GitHub</a> if you are interested in seeing how it works or trying to run it yourself.
                             </p>
                         </div>
                     </div>
@@ -109,7 +114,7 @@
             <div class="content">
                 <p>
                     If you are curious about ABTracker, have questions, or something seems broken, you can contact us directly by emailing <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
-                    You can also chat with us more casually on the <a href="https://discord.gg/uMbxREE5b7">ABTracker Discord server</a> where we talk about transit in Alberta and occasionally discuss upcoming features for the website.
+                    You can also chat with us more casually on the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a> where we talk about transit in BC and occasionally discuss upcoming features for the website.
                 </p>
                 <i> - James & Perrin, 2025 </i> 
             </div>  

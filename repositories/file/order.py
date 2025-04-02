@@ -58,7 +58,7 @@ class FileOrderRepository(OrderRepository):
                 return []
         return [o for a in self.orders.values() for o in a]
     
-    def find_matches(self, agency, query, recorded_bus_numbers):
+    def find_matches(self, system, agency, query, recorded_bus_numbers):
         '''Returns matching buses for a given query'''
         matches = []
         orders = self.find_all(agency)
@@ -82,5 +82,9 @@ class FileOrderRepository(OrderRepository):
                 adornment = bus.find_adornment()
                 if adornment and adornment.enabled:
                     bus_number_string += f' {adornment}'
-                matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.url_id}', value))
+                if system:
+                    path = f'bus/{bus.url_id}'
+                else:
+                    path = f'bus/{bus.agency.url_id}/{bus.url_id}'
+                matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, path, value))
         return matches

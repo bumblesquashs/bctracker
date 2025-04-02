@@ -10,7 +10,7 @@
  * 
  * Primary Text: #000000
  * Secondary Text: #666666
- * Links: #193A5A
+ * Links: #2886B9
  * Buttons: #2886B9
  * 
  * Other colors may also be used for specific purposes
@@ -31,10 +31,13 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --beta-tag-background: #193A5A;
+    --beta-tag-text: #FFFFFF;
 }
 
 a {
-    color: #193A5A;
+    color: #2886B9;
 }
 
 body {
@@ -495,7 +498,7 @@ table tr.table-button:hover {
 
 .tab-button {
     background-color: #FFFFFF;
-    color: #193A5A;
+    color: #2886B9;
 }
 
 .tab-button:hover {

@@ -271,9 +271,13 @@
         <a id="title" href="{{ get_url(system) }}">
             % include('components/svg', name='abtracker')
             <div class="side-bar-open-only">ABTracker</div>
+            <div class="beta-tag">BETA</div>
         </a>
         <div id="navigation-bar">
-            <a class="navigation-item title non-desktop" href="{{ get_url(system) }}">ABTracker</a>
+            <a class="navigation-item title non-desktop row" href="{{ get_url(system) }}">
+                ABTracker
+                <div class="beta-tag">BETA</div>
+            </a>
             
             <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
             % if not system or system.realtime_enabled:
@@ -445,17 +449,7 @@
         </div>
         <div id="main">
             <div id="banners">
-                % from models.date import Date
-                % from models.time import Time
-                % import pytz
-                % if today == Date(2025, 4, 1, None) and now >= Time(12, 0, 0, pytz.timezone('America/Vancouver')):
-                    <div class="banner">
-                        <div class="content">
-                            <h1>Happy April Fools Day!</h1>
-                            <p>See the <a href="{{ get_url(system) }}#af-2025">news post</a> for more info.</p>
-                        </div>
-                    </div>
-                % end
+                <!-- No banners right now -->
             </div>
             % if full_map:
                 <div id="map" class="full-screen"></div>

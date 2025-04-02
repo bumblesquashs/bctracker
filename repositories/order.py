@@ -22,5 +22,5 @@ class OrderRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_matches(self, agency, query, recorded_bus_numbers) -> list[Match]:
+    def find_matches(self, system, agency, query, recorded_bus_numbers) -> list[Match]:
         raise NotImplementedError()

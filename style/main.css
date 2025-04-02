@@ -568,6 +568,15 @@ table tr.table-button {
     border-bottom-color: var(--occupancy-background);
 }
 
+.beta-tag {
+    font-size: 12pt;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--beta-tag-background);
+    color: var(--beta-tag-text);
+    line-height: 12pt;
+}
+
 .block-timeline {
     display: flex;
     flex-direction: column;

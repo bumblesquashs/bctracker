@@ -1487,7 +1487,7 @@ class Server(Bottle):
             if query.isnumeric() and (not system or system.realtime_enabled):
                 if include_buses:
                     bus_numbers = self.overview_repository.find_bus_numbers(system)
-                    matches += self.order_repository.find_matches(agency, query, bus_numbers)
+                    matches += self.order_repository.find_matches(system, agency, query, bus_numbers)
             if system:
                 if include_blocks:
                     matches += system.search_blocks(query)
