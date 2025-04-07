@@ -26,14 +26,14 @@
                         % previous_date = date.previous()
                         % next_date = date.next()
                         <a class="icon button" href="{{ get_url(system, 'stops', stop, 'schedule', previous_date) }}">
-                            % include('components/svg', name='left')
+                            % include('components/svg', name='paging/left')
                         </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
                             <a href="{{ get_url(system, 'stops', stop, 'schedule') }}">Return to week view</a>
                         </div>
                         <a class="icon button" href="{{ get_url(system, 'stops', stop, 'schedule', next_date) }}">
-                            % include('components/svg', name='right')
+                            % include('components/svg', name='paging/right')
                         </a>
                     </div>
                     <div class="section">

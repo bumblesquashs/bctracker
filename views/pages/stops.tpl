@@ -122,7 +122,7 @@
                                             {{! route.display_name }}
                                         </div>
                                         <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
-                                            % include('components/svg', name='check')
+                                            % include('components/svg', name='status/check')
                                         </div>
                                     </div>
                                 % end

@@ -53,7 +53,7 @@
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">
-                                    % include('components/svg', name='warning')
+                                    % include('components/svg', name='status/warning')
                                 </span>
                                 <span>may be accidental logins.</span>
                             </p>

@@ -4,10 +4,10 @@
 % rebase('base')
 
 % include('components/svg_script', name='fish')
-% include('components/svg_script', name='no-people')
-% include('components/svg_script', name='one-person')
-% include('components/svg_script', name='two-people')
-% include('components/svg_script', name='three-people')
+% include('components/svg_script', name='occupancy/no-people')
+% include('components/svg_script', name='occupancy/one-person')
+% include('components/svg_script', name='occupancy/two-people')
+% include('components/svg_script', name='occupancy/three-people')
 
 <div id="page-header">
     <div class="row">
@@ -38,25 +38,25 @@
                 <div class="options-container">
                     <div class="option" onclick="toggleAutomaticRefresh()">
                         <div id="auto-refresh-checkbox" class="checkbox {{ 'selected' if auto_refresh else '' }}">
-                            % include('components/svg', name='check')
+                            % include('components/svg', name='status/check')
                         </div>
                         <span>Automatically Refresh</span>
                     </div>
                     <div class="option" onclick="toggleRouteLines()">
                         <div id="show-route-lines-checkbox" class="checkbox {{ 'selected' if show_route_lines else '' }}">
-                            % include('components/svg', name='check')
+                            % include('components/svg', name='status/check')
                         </div>
                         <span>Show Route Lines</span>
                     </div>
                     <div class="option" onclick="toggleStops()">
                         <div id="show-stops-checkbox" class="checkbox {{ 'selected' if show_stops else '' }}">
-                            % include('components/svg', name='check')
+                            % include('components/svg', name='status/check')
                         </div>
                         <span>Show Stops</span>
                     </div>
                     <div class="option" onclick="toggleNISBuses()">
                         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-                            % include('components/svg', name='check')
+                            % include('components/svg', name='status/check')
                         </div>
                         <span>Show NIS Buses</span>
                     </div>
@@ -344,7 +344,7 @@
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";
-            agencyLogo.src = "/img/icons/" + position.agency_id + ".png";
+            agencyLogo.src = "/img/agencies/" + position.agency_id + ".png";
             agencyLogo.onerror = function() {
                 agencyLogo.style.visibility = 'hidden';
             };
@@ -699,7 +699,7 @@
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";
-            agencyLogo.src = "/img/icons/" + stop.agency_id + ".png";
+            agencyLogo.src = "/img/agencies/" + stop.agency_id + ".png";
             agencyLogo.onerror = function() {
                 agencyLogo.style.visibility = 'hidden';
             };

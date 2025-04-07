@@ -19,9 +19,9 @@
             % end
         </title>
         
-        <link rel="icon" type="image/png" href="/img/favicon-16.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="/img/favicon-32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/img/favicon-48.png" sizes="48x48" />
+        <link rel="icon" type="image/png" href="/img/bctracker/favicon-16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/img/bctracker/favicon-32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
         
         % if system:
             <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
@@ -49,7 +49,7 @@
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ get_url(system, *path) }}" />
-        <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
+        <meta property="og:image" content="{{ get_url(system, 'img', 'bctracker', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -146,11 +146,11 @@
         % end
         
         % include('components/svg_script', name='bus')
-        % include('components/svg_script', name='bus-artic')
-        % include('components/svg_script', name='bus-conventional')
-        % include('components/svg_script', name='bus-decker')
-        % include('components/svg_script', name='bus-midibus')
-        % include('components/svg_script', name='bus-shuttle')
+        % include('components/svg_script', name='model/type/bus-artic')
+        % include('components/svg_script', name='model/type/bus-conventional')
+        % include('components/svg_script', name='model/type/bus-decker')
+        % include('components/svg_script', name='model/type/bus-midibus')
+        % include('components/svg_script', name='model/type/bus-shuttle')
         % include('components/svg_script', name='ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
@@ -268,7 +268,7 @@
     
     <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
         <a id="title" href="{{ get_url(system) }}">
-            % include('components/svg', name='bctracker')
+            % include('components/svg', name='bctracker/bctracker')
             <div class="side-bar-open-only">BCTracker</div>
         </a>
         <div id="navigation-bar">
@@ -316,7 +316,7 @@
             
             <div class="navigation-icon" onclick="toggleSearch()">
                 <div>
-                    % include('components/svg', name='search')
+                    % include('components/svg', name='action/search')
                 </div>
                 <div class="label">Search</div>
             </div>
@@ -400,7 +400,7 @@
                     % end
                 </div>
                 <div id="refresh-button" class="disabled">
-                    % include('components/svg', name='refresh')
+                    % include('components/svg', name='action/refresh')
                 </div>
             </div>
             <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
@@ -433,10 +433,10 @@
             <div id="side-bar-toggle-container">
                 <div id="side-bar-toggle" onclick="toggleSideBar()">
                     <div class="side-bar-open-only">
-                        % include('components/svg', name='left-double')
+                        % include('components/svg', name='paging/left-double')
                     </div>
                     <div class="side-bar-closed-only">
-                        % include('components/svg', name='right-double')
+                        % include('components/svg', name='paging/right-double')
                     </div>
                 </div>
                 <div class="side-bar-open-only">Hide Systems</div>
@@ -531,13 +531,13 @@
             </div>
             <div id="search-paging" class="display-none">
                 <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
-                    % include('components/svg', name='left')
+                    % include('components/svg', name='paging/left')
                 </div>
                 <div id="search-count" class="flex-1">
                     
                 </div>
                 <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
-                    % include('components/svg', name='right')
+                    % include('components/svg', name='paging/right')
                 </div>
             </div>
         </div>

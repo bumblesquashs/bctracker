@@ -8,10 +8,10 @@
 % end
 
 % include('components/svg_script', name='fish')
-% include('components/svg_script', name='no-people')
-% include('components/svg_script', name='one-person')
-% include('components/svg_script', name='two-people')
-% include('components/svg_script', name='three-people')
+% include('components/svg_script', name='occupancy/no-people')
+% include('components/svg_script', name='occupancy/one-person')
+% include('components/svg_script', name='occupancy/two-people')
+% include('components/svg_script', name='occupancy/three-people')
 
 % if is_preview:
     <script>
@@ -264,7 +264,7 @@
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";
-            agencyLogo.src = "/img/icons/" + position.agency_id + ".png";
+            agencyLogo.src = "/img/agencies/" + position.agency_id + ".png";
             agencyLogo.onerror = function() {
                 agencyLogo.style.visibility = 'hidden';
             };
