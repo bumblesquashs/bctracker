@@ -75,9 +75,9 @@
                                             </td>
                                             <td class="non-mobile {{ 'positive' if region_system.enabled else 'negative' }}">
                                                 % if region_system.enabled:
-                                                    % include('components/svg', name='status/check-circle')
+                                                    % include('components/svg', name='status/enabled')
                                                 % else:
-                                                    % include('components/svg', name='status/close-circle')
+                                                    % include('components/svg', name='status/disabled')
                                                 % end
                                             </td>
                                             <td class="non-mobile {{ 'positive' if total and progress == total else 'negative' }}">
@@ -87,7 +87,7 @@
                                                 % if region_system.gtfs_enabled:
                                                     <div class="row">
                                                         <div class="positive">
-                                                            % include('components/svg', name='status/check-circle')
+                                                            % include('components/svg', name='status/enabled')
                                                         </div>
                                                         <div class="button icon" onclick="reloadGTFS('{{ region_system.id }}')">
                                                             % include('components/svg', name='action/refresh')
@@ -95,7 +95,7 @@
                                                     </div>
                                                 % else:
                                                     <div class="negative">
-                                                        % include('components/svg', name='status/close-circle')
+                                                        % include('components/svg', name='status/disabled')
                                                     </div>
                                                 % end
                                             </td>
@@ -103,7 +103,7 @@
                                                 % if region_system.realtime_enabled:
                                                     <div class="row">
                                                         <div class="positive">
-                                                            % include('components/svg', name='status/check-circle')
+                                                            % include('components/svg', name='status/enabled')
                                                         </div>
                                                         <div class="button icon" onclick="reloadRealtime('{{ region_system.id }}')">
                                                             % include('components/svg', name='action/refresh')
@@ -111,7 +111,7 @@
                                                     </div>
                                                 % else:
                                                     <div class="negative">
-                                                        % include('components/svg', name='status/close-circle')
+                                                        % include('components/svg', name='status/disabled')
                                                     </div>
                                                 % end
                                             </td>
