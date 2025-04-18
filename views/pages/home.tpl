@@ -116,7 +116,7 @@
             <div class="content">
                 <p>
                     Add up to 20 favourites using the
-                    % include('components/svg', name='non-favourite')
+                    % include('components/svg', name='action/non-favourite')
                     button on buses, routes, and stops.
                 </p>
                 % if favourites:
