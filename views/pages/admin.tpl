@@ -42,6 +42,7 @@
                             <tr>
                                 <th>System</th>
                                 <th class="non-mobile">Enabled</th>
+                                <th class="non-mobile">Cache</th>
                                 <th>GTFS</th>
                                 <th>Realtime</th>
                             </tr>
@@ -55,6 +56,8 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for region_system in sorted(region_systems):
+                                        % total = len(region_system.routes) + len(region_system.stops) + len(region_system.trips)
+                                        % progress = len(region_system.route_caches) + len(region_system.stop_caches) + len(region_system.trip_caches)
                                         <tr>
                                             <td>
                                                 <div class="row">
@@ -63,6 +66,9 @@
                                                         {{ region_system }}
                                                         <div class="mobile-only smaller-font {{ 'positive' if region_system.enabled else 'negative' }}">
                                                             {{ 'Enabled' if region_system.enabled else 'Disabled' }}
+                                                        </div>
+                                                        <div class="mobile-only smaller-font {{ 'positive' if total and progress == total else 'negative' }}">
+                                                            {{ progress }} / {{ total }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -73,6 +79,9 @@
                                                 % else:
                                                     % include('components/svg', name='status/close-circle')
                                                 % end
+                                            </td>
+                                            <td class="non-mobile {{ 'positive' if total and progress == total else 'negative' }}">
+                                                {{ progress }} / {{ total }}
                                             </td>
                                             <td>
                                                 % if region_system.gtfs_enabled:
