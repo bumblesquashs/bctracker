@@ -21,7 +21,7 @@ from repositories import *
 from services import *
 
 # Increase the version to force CSS reload
-VERSION = 53
+VERSION = 54
 
 random = Random()
 
@@ -237,7 +237,7 @@ class Server(Bottle):
         
         time_format = self.query_cookie('time_format')
         bus_marker_style = self.query_cookie('bus_marker_style')
-        hide_systems = self.query_cookie('hide_systems') == 'yes'
+        hide_systems = self.query_cookie('hide_systems') != 'no'
         if system:
             last_updated = system.last_updated
             today = Date.today(system.timezone)

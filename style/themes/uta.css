@@ -17,6 +17,17 @@
 */
 
 :root {
+    --navigation-bar-background: #C7743B;
+    --navigation-bar-hover: #7E3704;
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: #7E3704;
+    --navigation-menu-foreground: #FFFFFF;
+    
+    --status-bar-background: #DC9B41;
+    --status-bar-hover: #985C0A;
+    --status-bar-foreground: #FFFFFF;
+    
     --loading-background: #FFFBEF;
     --loading-foreground: #C7743B;
     
@@ -114,51 +125,7 @@ table tr.table-button:hover {
 }
 
 #navigation-bar {
-    background-color: #C7743B;
     --tooltip-background: #7E3704;
-    --image-color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon:hover {
-    background-color: #7E3704;
-}
-
-#navigation-bar .navigation-icon.disabled:hover {
-    background-color: #C7743B !important;
-}
-
-#navigation-bar .navigation-item {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-item:hover {
-    background-color: #7E3704;
-}
-
-#navigation-bar .navigation-item.disabled:hover {
-    background-color: #C7743B !important;
-}
-
-#navigation-menu {
-    background-color: #7E3704;
-    --image-color: #FFFFFF;
-}
-
-#navigation-menu .menu-button {
-    color: #FFFFFF;
-}
-
-#navigation-menu .menu-button.disabled {
-    color: #ABABAB;
-    --image-color: #ABABAB;
-}
-
-#navigation-menu-toggle .line {
-    background-color: #FFFFFF;
 }
 
 #nearby-status.loading {
@@ -182,18 +149,6 @@ table tr.table-button:hover {
 #quick-navigation .item {
     background-color: #E6E6E6;
     border-color: #666666;
-}
-
-#refresh-button {
-    --image-color: #FFFFFF;
-}
-
-#refresh-button:hover {
-    background-color: #985C0A;
-}
-
-#refresh-button.disabled:hover {
-    background-color: #DC9B41;
 }
 
 #search {
@@ -245,27 +200,9 @@ table tr.table-button:hover {
     color: #666666;
 }
 
-#side-bar {
-    border-right-color: #666666;
-}
-
-#side-bar-toggle {
-    background-color: #E6E6E6;
-}
-
-#side-bar-toggle:hover {
-    background-color: #CBCBCB;
-}
-
-#status {
-    background-color: #DC9B41;
-    color: #FFFFFF;
-    border-bottom-color: #666666;
-}
-
 #system-menu {
     background-color: #E6E6E6;
-    border-bottom-color: #666666;
+    border-color: #666666;
 }
 
 #system-menu .header {
@@ -283,22 +220,6 @@ table tr.table-button:hover {
 
 #system-menu .system-button.current {
     background-color: #CBCBCB;
-    font-weight: bold;
-    cursor: default;
-}
-
-#system-menu-toggle {
-    --image-color: #FFFFFF;
-}
-
-#title {
-    background-color: #C7743B;
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-#title:hover {
-    background-color: #7E3704;
 }
 
 .banner {
