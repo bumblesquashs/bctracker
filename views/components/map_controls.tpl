@@ -1,29 +1,29 @@
 <div id="map-controls">
     <div id="zoom-in-control" class="control" onclick="zoomIn()">
-        % include('components/svg', name='plus')
+        % include('components/svg', name='map/zoom-in')
     </div>
     <div id="zoom-out-control" class="control" onclick="zoomOut()">
-        % include('components/svg', name='minus')
+        % include('components/svg', name='map/zoom-out')
     </div>
     <div id="rotation-control" class="control disabled">
         <div id="rotation-control-arrow">
-            % include('components/svg', name='navigation')
+            % include('components/svg', name='map/navigation')
         </div>
     </div>
     <div id="geolocation-control" class="control" onclick="toggleGeolocation()">
         <div id="geolocation-tracking-icon">
-            % include('components/svg', name='geolocation-tracking')
+            % include('components/svg', name='map/geolocation-tracking')
         </div>
         <div id="geolocation-enabled-icon" class="display-none">
-            % include('components/svg', name='geolocation-enabled')
+            % include('components/svg', name='map/geolocation-enabled')
         </div>
     </div>
     <div class="control mobile-only" onclick="toggleFullscreen()">
         <div id="open-fullscreen-icon">
-            % include('components/svg', name='fullscreen-open')
+            % include('components/svg', name='map/fullscreen-open')
         </div>
         <div id="close-fullscreen-icon" class="display-none">
-            % include('components/svg', name='fullscreen-close')
+            % include('components/svg', name='map/fullscreen-close')
         </div>
     </div>
 </div>

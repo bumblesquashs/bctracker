@@ -69,7 +69,7 @@ class FileOrderRepository(OrderRepository):
             if not order.model or not order.model.type:
                 model_icon = 'ghost'
             else:
-                model_icon = f'bus-{order.model.type.name}'
+                model_icon = f'model/type/bus-{order.model.type.name}'
             for bus in order:
                 bus_number_string = str(bus)
                 value = 0

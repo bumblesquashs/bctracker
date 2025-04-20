@@ -9,6 +9,55 @@
 <div class="container">
     <div class="news-post">
         <div class="header">
+            <h3>Summer Update</h3>
+            June 27, 2024
+        </div>
+        <div class="content">
+            <p>
+                It's summer already - time sure flies!
+                Here's what we've been up to since the last post.
+            </p>
+            <ul>
+                <li>Favourites: A quick way to get to your frequently-used pages from the home page</li>
+                <li>Themes: A new Pride theme, and improvements for High Contrast mode</li>
+                <li>Bus History: Now has paging to improve loading time</li>
+                <li>Mobile Sections: Now can be toggled to make it easier to scroll down</li>
+                <li>Transfers: Now can be filtered and shows statistics</li>
+            </ul>
+            <p>As usual we've also been making small improvements to the general design of the site, as well as improvements to the server itself behind the scenes.</p>
+            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Williams Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
+            <p>
+                That's all from us for now!
+                As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
+                Have a great summer!
+            </p>
+        </div>
+    </div>
+    <div class="news-post">
+        <div class="header">
+            <h3>Broome County Transit</h3>
+            April 1, 2024
+        </div>
+        <div class="content">
+            <p>Dear faithful users,</p>
+            <p>
+                After doing intensive market research, we've found that operating in Canada is not a good strategic business move.
+                We've decided to shift our focus to America instead, so that we can become rich and powerful.
+            </p>
+            <p>Moving forward, rather than focusing on <a href="https://bctransit.com">BC Transit</a>, we will instead provide transit information for <a href="https://gobroomecounty.com/transit">BC Transit</a>.</p>
+            <p>
+                Thank you for your understanding.
+                We would say sorry if this causes any inconvenience, but apologizing would make us sound too Canadian.
+            </p>
+            <p>If you would like to file a formal complaint about this change, please start by pressing this large button.</p>
+            <a class="button" href="{{ get_url(system, 'personalize') }}#complaints">File a Complaint</a>
+            <p>
+                <i>... Happy April Fools Day!</i>
+            </p>
+        </div>
+    </div>
+    <div class="news-post">
+        <div class="header">
             <h3>Spring Update</h3>
             March 30, 2024
         </div>
@@ -181,6 +230,27 @@
             <p>
                 And finally, we've been fixing a bunch of bugs and making some big changes behind the scenes that will let us keep adding fun and helpful new features.
                 Stay tuned for more coming soon, and have a great rest of the summer!
+            </p>
+        </div>
+    </div>
+    <div class="news-post">
+        <div class="header">
+            <h3>BCTracker Monetization</h3>
+            April 1, 2023
+        </div>
+        <div class="content">
+            <p>
+                Dear faithful users,
+            </p>
+            <p>
+                Due to financial pressures from inflation and our reckless investments in commodities like NFTs, FBTs, and BCTs, we regret that we are no longer able to pay for the servers hosting BCTracker out of pocket.
+                To keep everything running, we have unfortunately been forced to include advertisements around the website.
+            </p>
+            <p>
+                Thank you for your understanding.
+            </p>
+            <p>
+                <i>... Happy April Fools Day!</i>
             </p>
         </div>
     </div>

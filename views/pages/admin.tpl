@@ -42,6 +42,7 @@
                             <tr>
                                 <th>System</th>
                                 <th class="non-mobile">Enabled</th>
+                                <th class="non-mobile">Cache</th>
                                 <th>GTFS</th>
                                 <th>Realtime</th>
                             </tr>
@@ -55,6 +56,8 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for system in sorted(region_systems):
+                                        % total = len(system.routes) + len(system.stops) + len(system.trips)
+                                        % progress = len(system.route_caches) + len(system.stop_caches) + len(system.trip_caches)
                                         <tr>
                                             <td>
                                                 <div class="row">
@@ -64,29 +67,35 @@
                                                         <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
                                                             {{ 'Enabled' if system.enabled else 'Disabled' }}
                                                         </div>
+                                                        <div class="mobile-only smaller-font {{ 'positive' if total and progress == total else 'negative' }}">
+                                                            {{ progress }} / {{ total }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="non-mobile {{ 'positive' if system.enabled else 'negative' }}">
                                                 % if system.enabled:
-                                                    % include('components/svg', name='check-circle')
+                                                    % include('components/svg', name='status/enabled')
                                                 % else:
-                                                    % include('components/svg', name='close-circle')
+                                                    % include('components/svg', name='status/disabled')
                                                 % end
+                                            </td>
+                                            <td class="non-mobile {{ 'positive' if total and progress == total else 'negative' }}">
+                                                {{ progress }} / {{ total }}
                                             </td>
                                             <td>
                                                 % if system.gtfs_enabled:
                                                     <div class="row">
                                                         <div class="positive">
-                                                            % include('components/svg', name='check-circle')
+                                                            % include('components/svg', name='status/enabled')
                                                         </div>
                                                         <div class="button icon" onclick="reloadGTFS('{{ system.id }}')">
-                                                            % include('components/svg', name='refresh')
+                                                            % include('components/svg', name='action/refresh')
                                                         </div>
                                                     </div>
                                                 % else:
                                                     <div class="negative">
-                                                        % include('components/svg', name='close-circle')
+                                                        % include('components/svg', name='status/disabled')
                                                     </div>
                                                 % end
                                             </td>
@@ -94,15 +103,15 @@
                                                 % if system.realtime_enabled:
                                                     <div class="row">
                                                         <div class="positive">
-                                                            % include('components/svg', name='check-circle')
+                                                            % include('components/svg', name='status/enabled')
                                                         </div>
                                                         <div class="button icon" onclick="reloadRealtime('{{ system.id }}')">
-                                                            % include('components/svg', name='refresh')
+                                                            % include('components/svg', name='action/refresh')
                                                         </div>
                                                     </div>
                                                 % else:
                                                     <div class="negative">
-                                                        % include('components/svg', name='close-circle')
+                                                        % include('components/svg', name='status/disabled')
                                                     </div>
                                                 % end
                                             </td>
@@ -121,49 +130,49 @@
 <script>
     function reloadAdornments() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-adornments"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-adornments"), true);
         request.send();
     }
     
     function reloadOrders() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-orders"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-orders"), true);
         request.send();
     }
     
     function reloadSystems() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-systems"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-systems"), true);
         request.send();
     }
     
     function reloadThemes() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-themes"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-themes"), true);
         request.send();
     }
     
     function restartCron() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/restart-cron"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/restart-cron"), true);
         request.send();
     }
     
     function backupDatabase() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/backup-database"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/backup-database"), true);
         request.send();
     }
     
     function reloadGTFS(reloadSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-gtfs/" + reloadSystemID), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-gtfs/" + reloadSystemID), true);
         request.send();
     }
     
     function reloadRealtime(reloadSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(systemID, "api/admin/reload-realtime/" + reloadSystemID), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-realtime/" + reloadSystemID), true);
         request.send();
     }
 </script>

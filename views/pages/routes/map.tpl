@@ -22,7 +22,7 @@
     <div id="settings" class="options-container collapsed">
         <div class="option" onclick="toggleRouteNumbers()">
             <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
-                % include('components/svg', name='check')
+                % include('components/svg', name='status/check')
             </div>
             <span>Show Route Numbers</span>
         </div>
@@ -89,7 +89,7 @@
                 
                 const agencyLogo = document.createElement("img");
                 agencyLogo.className = "agency-logo";
-                agencyLogo.src = "/img/icons/" + route.agency_id + ".png";
+                agencyLogo.src = "/img/agencies/" + route.agency_id + ".png";
                 agencyLogo.onerror = function() {
                     agencyLogo.style.visibility = 'hidden';
                 };

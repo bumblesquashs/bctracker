@@ -286,7 +286,7 @@
                                     <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
                                         <td colspan="2">
                                             <div class="row justify-center">
-                                                % include('components/svg', name='down')
+                                                % include('components/svg', name='action/open')
                                                 Show Full Schedule
                                             </div>
                                         </td>
@@ -321,7 +321,7 @@
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
-                                % include('components/svg', name='warning')
+                                % include('components/svg', name='status/warning')
                             </span>
                             <span>may be accidental logins.</span>
                         </p>

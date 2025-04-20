@@ -1,3 +1,3 @@
 <div class="toggle">
-    % include('components/svg', name='dropdown')
+    % include('components/svg', name='action/dropdown')
 </div>

@@ -12,5 +12,5 @@ class GTFSService(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def update_cache_in_background(self, system):
+    def update_cache(self, system):
         raise NotImplementedError()

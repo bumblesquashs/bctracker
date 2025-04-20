@@ -67,7 +67,7 @@ class DefaultCronService(CronService):
                     date = Date.today(system.timezone)
                     if date.weekday == Weekday.MON or not self.gtfs_service.validate(system):
                         self.gtfs_service.load(system, True)
-                        self.gtfs_service.update_cache_in_background(system)
+                        self.gtfs_service.update_cache(system)
                 except Exception as e:
                     print(f'Error loading GTFS data for {system}: {e}')
         if self.running:
@@ -90,7 +90,7 @@ class DefaultCronService(CronService):
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
                         self.gtfs_service.load(system, True)
-                        self.gtfs_service.update_cache_in_background(system)
+                        self.gtfs_service.update_cache(system)
                     self.realtime_service.update(system)
                 except Exception as e:
                     print(f'Error loading data for {system}: {e}')

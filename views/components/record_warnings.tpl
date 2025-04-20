@@ -1,6 +1,6 @@
 % if record.warnings:
     <div class="tooltip-anchor record-warnings">
-        % include('components/svg', name='warning')
+        % include('components/svg', name='status/warning')
         <div class="tooltip right">
             <div class="title">Potential accidental login</div>
             % for warning in record.warnings:

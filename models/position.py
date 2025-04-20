@@ -153,7 +153,7 @@ class Position:
         if order:
             data['bus_order'] = str(order).replace("'", '&apos;')
             if order.model and order.model.type:
-                data['bus_icon'] = f'bus-{order.model.type.name}'
+                data['bus_icon'] = f'model/type/bus-{order.model.type.name}'
             else:
                 data['bus_icon'] = 'ghost'
         else:

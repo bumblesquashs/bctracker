@@ -39,23 +39,23 @@ class Occupancy(Enum):
     def icon(self):
         match self:
             case Occupancy.EMPTY:
-                return 'no-people'
+                return 'occupancy/no-people'
             case Occupancy.MANY_SEATS_AVAILABLE:
-                return 'one-person'
+                return 'occupancy/one-person'
             case Occupancy.FEW_SEATS_AVAILABLE:
-                return 'two-people'
+                return 'occupancy/two-people'
             case Occupancy.STANDING_ROOM_ONLY:
-                return 'two-people'
+                return 'occupancy/two-people'
             case Occupancy.CRUSHED_STANDING_ROOM_ONLY:
-                return 'three-people'
+                return 'occupancy/three-people'
             case Occupancy.FULL:
-                return 'three-people'
+                return 'occupancy/three-people'
             case Occupancy.NOT_ACCEPTING_PASSENGERS:
-                return 'no-people'
+                return 'occupancy/no-people'
             case Occupancy.NO_DATA_AVAILABLE:
-                return 'one-person'
+                return 'occupancy/one-person'
             case Occupancy.NOT_BOARDABLE:
-                return 'no-people'
+                return 'occupancy/no-people'
     
     def __str__(self):
         return self.value

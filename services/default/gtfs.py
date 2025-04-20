@@ -143,10 +143,13 @@ class DefaultGTFSService(GTFSService):
             return Date.today(system.timezone) < max(end_dates) - timedelta(days=7)
         return True
     
-    def update_cache_in_background(self, system):
-        '''Updates cached data for the given system in a background thread'''
-        thread = Thread(target=system.update_cache)
-        thread.start()
+    def update_cache(self, system):
+        '''Updates cached data for the given system'''
+        if self.settings.update_cache_in_background:
+            thread = Thread(target=system.update_cache)
+            thread.start()
+        else:
+            system.update_cache()
 
 def read_csv(system, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''
