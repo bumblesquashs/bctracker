@@ -19,7 +19,7 @@
 % routes = block.get_routes()
 % trips = block.get_trips()
 
-% today = Date.today(block.system.timezone)
+% today = Date.today(block.context.timezone)
 
 <div class="page-container">
     <div class="sidebar container flex-1">
@@ -39,7 +39,7 @@
                         % for route in routes:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>

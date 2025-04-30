@@ -28,7 +28,7 @@
     % end
 </div>
 
-% if not context.system or context.system.realtime_enabled:
+% if context.realtime_enabled:
     <div id="settings" class="container collapsed">
         <div class="section">
             <div class="header">

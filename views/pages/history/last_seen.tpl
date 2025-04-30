@@ -161,7 +161,7 @@
                                             <div class="column">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end
@@ -210,7 +210,7 @@
                                             <div class="column">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

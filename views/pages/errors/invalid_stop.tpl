@@ -19,7 +19,7 @@
                     <ul>
                         % for stop in alt_stops:
                             <li>
-                                {{ stop.system }}:
+                                {{ stop.context.system }}:
                                 % include('components/stop', show_number=False)
                             </li>
                         % end

@@ -1,7 +1,7 @@
 
-from di import di
 from database import Database
 
+from models.context import Context
 from models.transfer import Transfer
 
 from repositories import TransferRepository
@@ -15,16 +15,15 @@ class SQLTransferRepository(TransferRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, bus, date, old_system, new_system):
+    def create(self, context: Context, bus, date, old_system):
         '''Inserts a new transfer into the database'''
         bus_number = getattr(bus, 'number', bus)
         old_system_id = getattr(old_system, 'id', old_system)
-        new_system_id = getattr(new_system, 'id', new_system)
         self.database.insert('transfer', {
             'bus_number': bus_number,
             'date': date.format_db(),
             'old_system_id': old_system_id,
-            'new_system_id': new_system_id
+            'new_system_id': context.system_id
         })
     
     def find_all(self, old_system=None, new_system=None, bus=None, limit=None):

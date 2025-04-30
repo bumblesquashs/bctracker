@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class TransferRepository(ABC):
     
     @abstractmethod
-    def create(self, bus, date, old_system, new_system):
+    def create(self, context, bus, date, old_system):
         raise NotImplementedError()
     
     @abstractmethod

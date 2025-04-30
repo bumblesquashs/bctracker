@@ -4,7 +4,7 @@
     % else:
         <span class="tooltip-anchor">
             % if get('include_link', False):
-                <a class="route" style="background-color: #{{ route.colour }};" href="{{ get_url(route.system, 'routes', route) }}">{{ route.number }}</a>
+                <a class="route" style="background-color: #{{ route.colour }};" href="{{ get_url(route.context, 'routes', route) }}">{{ route.number }}</a>
             % else:
                 <span class="route" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
             % end

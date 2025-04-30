@@ -64,7 +64,7 @@
                         % include('components/order', order=bus.order)
                     </td>
                     % if not context.system:
-                        <td class="desktop-only">{{ position.system }}</td>
+                        <td class="desktop-only">{{ position.context.system }}</td>
                     % end
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                     % if position.trip:
@@ -88,7 +88,7 @@
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')

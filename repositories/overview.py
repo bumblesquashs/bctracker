@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class OverviewRepository(ABC):
     
     @abstractmethod
-    def create(self, bus, date, system, record):
+    def create(self, context, bus, date, record):
         raise NotImplementedError()
     
     @abstractmethod
@@ -17,13 +17,13 @@ class OverviewRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, last_seen_system, bus, limit) -> list[Overview]:
+    def find_all(self, context, last_seen_system, bus, limit) -> list[Overview]:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_bus_numbers(self, system) -> list[int]:
+    def find_bus_numbers(self, context) -> list[int]:
         raise NotImplementedError()
     
     @abstractmethod
-    def update(self, overview, date, system, record):
+    def update(self, context, overview, date, record):
         raise NotImplementedError()

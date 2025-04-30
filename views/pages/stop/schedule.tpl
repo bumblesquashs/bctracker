@@ -88,7 +88,7 @@
                                                         </td>
                                                         <td class="non-mobile">
                                                             % if block:
-                                                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                             % else:
                                                                 <div class="lighter-text">Unknown</div>
                                                             % end
@@ -127,7 +127,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        % if stop.system.gtfs_loaded:
+        % if stop.context.system.gtfs_loaded:
             <h3>There are currently no departures from this stop</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

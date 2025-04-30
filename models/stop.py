@@ -3,6 +3,7 @@ from math import sqrt
 
 from di import di
 
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
@@ -16,7 +17,7 @@ class Stop:
     
     __slots__ = (
         'departure_repository',
-        'system',
+        'context',
         'id',
         'number',
         'key',
@@ -30,6 +31,7 @@ class Stop:
         '''Returns a stop initialized from the given database row'''
         system_repository = kwargs.get('system_repository') or di[SystemRepository]
         system = system_repository.find(row[f'{prefix}_system_id'])
+        context = Context(system=system)
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         if not number:
@@ -37,25 +39,25 @@ class Stop:
         name = row[f'{prefix}_name']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
-        return cls(system, id, number, name, lat, lon)
+        return cls(context, id, number, name, lat, lon)
     
     @property
     def url_id(self):
         '''The ID to use when making stop URLs'''
-        if self.system.agency.prefer_stop_id:
+        if self.context.agency.prefer_stop_id:
             return self.id
         return self.number
     
     @property
     def nearby_stops(self):
         '''Returns all stops with coordinates close to this stop'''
-        stops = self.system.get_stops()
+        stops = self.context.system.get_stops()
         return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
     
     @property
     def cache(self):
         '''Returns the cache for this stop'''
-        return self.system.get_stop_cache(self)
+        return self.context.system.get_stop_cache(self)
     
     @property
     def schedule(self):
@@ -72,8 +74,8 @@ class Stop:
         '''Returns the routes for this stop'''
         return self.cache.routes
     
-    def __init__(self, system, id, number, name, lat, lon, **kwargs):
-        self.system = system
+    def __init__(self, context: Context, id, number, name, lat, lon, **kwargs):
+        self.context = context
         self.id = id
         self.number = number
         self.name = name
@@ -100,11 +102,11 @@ class Stop:
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
-        number = self.number if self.system.agency.show_stop_number else None
+        number = self.number if self.context.agency.show_stop_number else None
         return {
-            'system_id': self.system.id,
-            'system_name': str(self.system),
-            'agency_id': self.system.agency.id,
+            'system_id': self.context.system.id,
+            'system_name': str(self.context.system),
+            'agency_id': self.context.agency.id,
             'number': number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
@@ -139,7 +141,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = self.departure_repository.find_all(self.system, stop=self)
+        departures = self.departure_repository.find_all(self.context, stop=self)
         if service_group:
             return sorted([d for d in departures if d.trip and d.trip.service in service_group])
         if date:
@@ -148,7 +150,7 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return self.departure_repository.find_adjacent(self.system, self)
+        return self.departure_repository.find_adjacent(self.context, self)
 
 class StopCache:
     '''A collection of calculated values for a single stop'''

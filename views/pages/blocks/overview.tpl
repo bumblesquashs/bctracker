@@ -91,7 +91,7 @@
                                         <tr>
                                             <td>
                                                 <div class="column">
-                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                     <div class="mobile-only smaller-font">{{ start_time }} - {{ end_time }}</div>
                                                 </div>
                                             </td>

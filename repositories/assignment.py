@@ -9,17 +9,17 @@ if TYPE_CHECKING:
 class AssignmentRepository(ABC):
     
     @abstractmethod
-    def create(self, system, block, bus, date):
+    def create(self, context, block, bus, date):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, system, block) -> Assignment | None:
+    def find(self, context, block) -> Assignment | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, block, bus, trip, route, stop) -> list[Assignment]:
+    def find_all(self, context, block, bus, trip, route, stop) -> list[Assignment]:
         raise NotImplementedError()
     
     @abstractmethod
-    def delete_all(self, system, block, bus):
+    def delete_all(self, context, block, bus):
         raise NotImplementedError()

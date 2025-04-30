@@ -90,7 +90,7 @@
                                                                         </td>
                                                                         <td class="non-mobile">
                                                                             % block = trip.block
-                                                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                                         </td>
                                                                         <td>
                                                                             <div class="column">
