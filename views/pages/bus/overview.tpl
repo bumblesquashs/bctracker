@@ -81,7 +81,7 @@
                         % if last_record and last_record.date.is_today:
                             % block = last_record.block
                             % if block:
-                                % date = Date.today(block.system.timezone)
+                                % date = Date.today(block.context.timezone)
                                 % end_time = block.get_end_time(date=date)
                                 % if end_time and end_time.is_later:
                                     <div class="section no-flex">
@@ -105,7 +105,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                                <a href="{{ get_url(position.context.system) }}">{{ position.context.system }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -147,11 +147,11 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">
-                            % include('components/block_timeline', date=Date.today(block.system.timezone))
+                            % include('components/block_timeline', date=Date.today(block.context.timezone))
                         </div>
                         % if position.timestamp:
                             <div class="row section">
@@ -170,7 +170,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                                <a href="{{ get_url(trip.context.system) }}">{{ trip.context.system }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -191,8 +191,8 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
-                                % date = Date.today(block.system.timezone)
+                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                % date = Date.today(block.context.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)
                                 % duration = block.get_duration(date=date)
@@ -367,7 +367,7 @@
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

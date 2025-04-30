@@ -39,7 +39,7 @@
                             % include('components/route')
                             <div>{{! route.display_name }}</div>
                         </h2>
-                        <a href="{{ get_url(route.system, 'routes', route) }}">View schedule and details</a>
+                        <a href="{{ get_url(route.context, 'routes', route) }}">View schedule and details</a>
                     </div>
                     % include('components/toggle')
                 </div>
@@ -92,7 +92,7 @@
                                         % include('components/order')
                                     </td>
                                     % if not context.system:
-                                        <td class="desktop-only">{{ position.system }}</td>
+                                        <td class="desktop-only">{{ position.context.system }}</td>
                                     % end
                                     % trip = position.trip
                                     % block = trip.block
@@ -113,7 +113,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
@@ -175,7 +175,7 @@
                                         % include('components/order')
                                     </td>
                                     % if not context.system:
-                                        <td>{{ position.system }}</td>
+                                        <td>{{ position.context.system }}</td>
                                     % end
                                 </tr>
                             % end

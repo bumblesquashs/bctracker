@@ -4,6 +4,7 @@ import pytz
 from di import di
 
 from models.backoff import Backoff
+from models.context import Context
 from models.route import RouteCache
 from models.schedule import Schedule
 from models.stop import StopCache
@@ -141,11 +142,12 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return self.overview_repository.find_all(last_seen_system=self)
+        return self.overview_repository.find_all(Context(), last_seen_system=self)
     
     def get_positions(self):
         '''Returns all positions'''
-        return self.position_repository.find_all(self)
+        context = Context(system=self)
+        return self.position_repository.find_all(context)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -218,11 +220,12 @@ class System:
         if not self.gtfs_enabled:
             return
         print(f'Updating cached data for {self}')
+        context = Context(system=self)
         try:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = self.departure_repository.find_all(self)
+            departures = self.departure_repository.find_all(context)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -269,7 +272,8 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = self.departure_repository.find_all(self, stop=stop)
+            context = Context(system=self)
+            departures = self.departure_repository.find_all(context, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -280,7 +284,8 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = self.departure_repository.find_all(self, trip=trip)
+            context = Context(system=self)
+            departures = self.departure_repository.find_all(context, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache

@@ -48,6 +48,12 @@ class Context:
             return self.agency.show_stop_number
         return False
     
+    @property
+    def timezone(self):
+        if self.system:
+            return self.system.timezone
+        return None
+    
     def __init__(self, agency: Agency = None, system: System = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')
@@ -62,6 +68,9 @@ class Context:
         if self.agency:
             return str(self.agency)
         return 'All Transit Systems'
+    
+    def __hash__(self):
+        return hash((self.agency, self.system))
     
     def __eq__(self, other):
         return self.agency == other.agency and self.system == other.system

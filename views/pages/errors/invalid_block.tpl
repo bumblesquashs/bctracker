@@ -18,7 +18,7 @@
                     It may be from a different system - the following systems have a block with that ID
                     <ul>
                         % for block in alt_blocks:
-                            <li>{{ block.system }}: <a href="{{ get_url(block.system, 'blocks', block) }}">Block {{ block.id }}</a></li>
+                            <li>{{ block.context.system }}: <a href="{{ get_url(block.context, 'blocks', block) }}">Block {{ block.id }}</a></li>
                         % end
                     </ul>
                 </li>

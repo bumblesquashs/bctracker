@@ -13,12 +13,12 @@
                 </div>
             </div>
             % if not context.system:
-                <span class="non-desktop smaller-font">{{ position.system }}</span>
+                <span class="non-desktop smaller-font">{{ position.context.system }}</span>
             % end
         </div>
     </td>
     % if not context.system:
-        <td class="desktop-only">{{ position.system }}</td>
+        <td class="desktop-only">{{ position.context.system }}</td>
     % end
     % if trip:
         % block = trip.block
@@ -39,7 +39,7 @@
             </div>
         </td>
         <td class="non-mobile">
-            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
         </td>
         <td class="non-mobile">
             % include('components/trip')

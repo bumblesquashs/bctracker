@@ -5,6 +5,7 @@ from colorsys import hls_to_rgb
 
 from di import di
 
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
@@ -18,7 +19,7 @@ class Route:
     
     __slots__ = (
         'departure_repository',
-        'system',
+        'context',
         'id',
         'number',
         'key',
@@ -32,6 +33,7 @@ class Route:
         '''Returns a route initialized from the given database row'''
         system_repository = kwargs.get('system_repository') or di[SystemRepository]
         system = system_repository.find(row[f'{prefix}_system_id'])
+        context = Context(system=system)
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         if not number:
@@ -39,12 +41,12 @@ class Route:
         name = row[f'{prefix}_name']
         colour = row[f'{prefix}_colour'] or generate_colour(system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
-        return cls(system, id, number, name, colour, text_colour)
+        return cls(context, id, number, name, colour, text_colour)
     
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
-        if self.system.agency.prefer_route_id:
+        if self.context.agency.prefer_route_id:
             return self.id
         return self.number
     
@@ -56,7 +58,7 @@ class Route:
     @property
     def cache(self):
         '''Returns the cache for this route'''
-        return self.system.get_route_cache(self)
+        return self.context.system.get_route_cache(self)
     
     @property
     def trips(self):
@@ -78,8 +80,8 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, system, id, number, name, colour, text_colour, **kwargs):
-        self.system = system
+    def __init__(self, context: Context, id, number, name, colour, text_colour, **kwargs):
+        self.context = context
         self.id = id
         self.number = number
         self.name = name
@@ -121,9 +123,9 @@ class Route:
         json = []
         for point in self.indicator_points:
             json.append({
-                'system_id': self.system.id,
-                'system_name': str(self.system),
-                'agency_id': self.system.agency.id,
+                'system_id': self.context.system_id,
+                'system_name': str(self.context.system),
+                'agency_id': self.context.agency_id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
@@ -170,7 +172,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_repository.find_all(self.system, route=self)
+        return self.departure_repository.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

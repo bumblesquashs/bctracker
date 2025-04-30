@@ -1,6 +1,7 @@
 
 from di import di
 
+from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
@@ -12,7 +13,7 @@ class Block:
     
     __slots__ = (
         'departure_repository',
-        'system',
+        'context',
         'id',
         'trips',
         'schedule',
@@ -29,18 +30,18 @@ class Block:
     def related_blocks(self):
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         if self._related_blocks is None:
-            related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
+            related_blocks = [b for b in self.context.system.get_blocks() if self.is_related(b)]
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, system, id, trips, **kwargs):
-        self.system = system
+    def __init__(self, context: Context, id, trips, **kwargs):
+        self.context = context
         self.id = id
         self.trips = trips
         
         services = {t.service for t in trips}
         self.schedule = Schedule.combine(services)
-        self.sheets = system.copy_sheets(services)
+        self.sheets = context.system.copy_sheets(services)
         
         self._related_blocks = None
         
@@ -127,4 +128,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return self.departure_repository.find_all(self.system, block=self)
+        return self.departure_repository.find_all(self.context, block=self)

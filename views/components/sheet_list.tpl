@@ -35,7 +35,7 @@
     % end
     <div class="column gap-10">
         % for (i, sheet) in enumerate(sheets):
-            % today = Date.today(sheet.system.timezone)
+            % today = Date.today(sheet.context.timezone)
             % schedule = sheet.schedule
             <div class="sheet">
                 % if not schedule.is_special:

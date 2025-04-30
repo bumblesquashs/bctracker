@@ -15,16 +15,16 @@
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
         % trips = [d.trip for d in upcoming_departures]
-        % recorded_today = di[RecordRepository].find_recorded_today(stop.system, trips)
-        % assignments = di[AssignmentRepository].find_all(stop.system, stop=stop)
-        % positions = {p.trip.id: p for p in di[PositionRepository].find_all(stop.system, trip=trips)}
+        % recorded_today = di[RecordRepository].find_recorded_today(stop.context, trips)
+        % assignments = di[AssignmentRepository].find_all(stop.context, stop=stop)
+        % positions = {p.trip.id: p for p in di[PositionRepository].find_all(stop.context, trip=trips)}
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
                 <div class="column">
                     <h3>
                         % include('components/stop', include_link=False)
                     </h3>
-                    <a href="{{ get_url(stop.system, 'stops', stop) }}">View stop schedule and details</a>
+                    <a href="{{ get_url(stop.context, 'stops', stop) }}">View stop schedule and details</a>
                 </div>
                 % include('components/toggle')
             </div>
@@ -67,7 +67,7 @@
                     % tomorrow = Date.today() + timedelta(days=1)
                     <p>
                         There are no departures for the rest of today.
-                        <a href="{{ get_url(stop.system, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                        <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                     </p>
                 % end
             </div>
@@ -77,7 +77,7 @@
     <div class="section">
         <div class="placeholder">
             <h3>No stops nearby</h3>
-            % if context.system.gtfs_loaded:
+            % if context.gtfs_loaded:
                 <p>You're gonna have to walk!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>

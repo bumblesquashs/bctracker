@@ -48,8 +48,8 @@
         % end
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(context.system, *path) }}" />
-        <meta property="og:image" content="{{ get_url(context.system, 'img', 'bctracker', 'meta-logo.png') }}" />
+        <meta property="og:url" content="{{ get_url(context, *path) }}" />
+        <meta property="og:image" content="{{ get_url(context, 'img', 'bctracker', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -138,7 +138,7 @@
         
         % if context.system:
             <script>
-                currentSystemID = "{{ context.system.id }}";
+                currentSystemID = "{{ context.system_id }}";
             </script>
         % else:
             <script>

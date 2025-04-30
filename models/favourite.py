@@ -2,6 +2,7 @@
 from di import di
 
 from models.bus import Bus
+from models.context import Context
 
 from repositories import RouteRepository, StopRepository, SystemRepository
 
@@ -24,18 +25,20 @@ class Favourite:
             system_repository = kwargs.get('system_repository') or di[SystemRepository]
             route_repository = kwargs.get('route_repository') or di[RouteRepository]
             system = system_repository.find(parts[1])
-            if system.agency.prefer_route_id:
-                value = route_repository.find(system, route_id=parts[2])
+            context = Context(system=system)
+            if context.agency.prefer_route_id:
+                value = route_repository.find(context, route_id=parts[2])
             else:
-                value = route_repository.find(system, number=parts[2])
+                value = route_repository.find(context, number=parts[2])
         elif type == 'stop':
             system_repository = kwargs.get('system_repository') or di[SystemRepository]
             stop_repository = kwargs.get('stop_repository') or di[StopRepository]
             system = system_repository.find(parts[1])
-            if system.agency.prefer_stop_id:
-                value = stop_repository.find(system, stop_id=parts[2])
+            context = Context(system=system)
+            if context.agency.prefer_stop_id:
+                value = stop_repository.find(context, stop_id=parts[2])
             else:
-                value = stop_repository.find(system, number=parts[2])
+                value = stop_repository.find(context, number=parts[2])
         else:
             value = None
         if value:

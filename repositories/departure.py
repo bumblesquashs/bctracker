@@ -9,25 +9,25 @@ if TYPE_CHECKING:
 class DepartureRepository(ABC):
     
     @abstractmethod
-    def create(self, system, row):
+    def create(self, context, row):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, system, trip, sequence, stop) -> Departure | None:
+    def find(self, context, trip, sequence, stop) -> Departure | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, trip, sequence, route, stop, block, limit) -> list[Departure]:
+    def find_all(self, context, trip, sequence, route, stop, block, limit) -> list[Departure]:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_upcoming(self, system, trip, sequence, limit) -> list[Departure]:
+    def find_upcoming(self, context, trip, sequence, limit) -> list[Departure]:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_adjacent(self, system, stop) -> list[Departure]:
+    def find_adjacent(self, context, stop) -> list[Departure]:
         raise NotImplementedError()
     
     @abstractmethod
-    def delete_all(self, system):
+    def delete_all(self, context):
         raise NotImplementedError()

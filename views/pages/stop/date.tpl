@@ -25,14 +25,14 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="icon button" href="{{ get_url(context, 'stops', stop, 'schedule', previous_date) }}">
+                        <a class="icon button" href="{{ get_url(stop.context, 'stops', stop, 'schedule', previous_date) }}">
                             % include('components/svg', name='paging/left')
                         </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
-                            <a href="{{ get_url(stop.system, 'stops', stop, 'schedule') }}">Return to week view</a>
+                            <a href="{{ get_url(stop.context, 'stops', stop, 'schedule') }}">Return to week view</a>
                         </div>
-                        <a class="icon button" href="{{ get_url(context, 'stops', stop, 'schedule', next_date) }}">
+                        <a class="icon button" href="{{ get_url(stop.context, 'stops', stop, 'schedule', next_date) }}">
                             % include('components/svg', name='paging/right')
                         </a>
                     </div>
@@ -89,7 +89,7 @@
                                     </td>
                                     <td class="non-mobile">
                                         % if block:
-                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                         % else:
                                             <div class="lighter-text">Unknown</div>
                                         % end

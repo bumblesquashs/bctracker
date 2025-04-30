@@ -35,7 +35,7 @@
                                 <div>{{ headsign }}</div>
                             % end
                         </div>
-                        % variants = [r for r in route.system.get_routes() if route.is_variant(r)]
+                        % variants = [r for r in route.context.system.get_routes() if route.is_variant(r)]
                         % if variants:
                             <div class="column gap-5 section">
                                 <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
@@ -114,7 +114,7 @@
                                     </td>
                                     <td class="non-mobile">
                                         % block = trip.block
-                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
@@ -188,7 +188,7 @@
                                                         </td>
                                                         <td class="non-mobile">
                                                             % block = trip.block
-                                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="column">
@@ -224,8 +224,8 @@
                                                                 <td class="desktop-only">
                                                                     % include('components/order', order=bus.order)
                                                                 </td>
-                                                            % elif (trip.system.id, trip.block_id) in assignments and trip.end_time.is_later:
-                                                                % assignment = assignments[(trip.system.id, trip.block_id)]
+                                                            % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
+                                                                % assignment = assignments[(trip.context.system_id, trip.block_id)]
                                                                 % bus = assignment.bus
                                                                 <td>
                                                                     <div class="column">

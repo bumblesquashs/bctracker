@@ -173,7 +173,7 @@ class Server(Bottle):
         self.system_repository.load()
         self.theme_repository.load()
         
-        self.position_repository.delete_all()
+        self.position_repository.delete_all(Context())
         
         handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
         log = WSGILogger(self, [handler], ApacheFormatter())
@@ -182,16 +182,17 @@ class Server(Bottle):
         cp.server.start()
         
         for system in self.system_repository.find_all():
+            context = Context(system=system)
             if self.running:
                 try:
-                    self.gtfs_service.load(system, args.reload, args.updatedb)
-                    if not self.gtfs_service.validate(system):
-                        self.gtfs_service.load(system, True)
-                    self.gtfs_service.update_cache(system)
-                    self.realtime_service.update(system)
+                    self.gtfs_service.load(context, args.reload, args.updatedb)
+                    if not self.gtfs_service.validate(context):
+                        self.gtfs_service.load(context, True)
+                    self.gtfs_service.update_cache(context)
+                    self.realtime_service.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {system}: {e}')
-                if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                    print(f'Error loading data for {context}: {e}')
+                if not system.gtfs_downloaded or not self.realtime_service.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
@@ -235,7 +236,7 @@ class Server(Bottle):
         '''Checks if the admin key in the query/cookie matches the expected admin key'''
         return not self.settings.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.settings.admin_key
     
-    def page(self, name, title, path=None, path_args=None, context: Context = None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
+    def page(self, context: Context, name, title, path=None, path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
         '''Returns an HTML page with the given name and details'''
         is_admin = self.validate_admin()
         
@@ -244,9 +245,9 @@ class Server(Bottle):
         hide_systems = self.query_cookie('hide_systems') != 'no'
         if context.system:
             last_updated = context.system.last_updated
-            today = Date.today(context.system.timezone)
-            now = Time.now(context.system.timezone, False)
-            timestamp = Timestamp.now(context.system.timezone)
+            today = Date.today(context.timezone)
+            now = Time.now(context.timezone, False)
+            timestamp = Timestamp.now(context.timezone)
         else:
             last_updated = self.realtime_service.get_last_updated()
             today = Date.today()
@@ -294,19 +295,19 @@ class Server(Bottle):
             **kwargs
         )
     
-    def error_page(self, name, title, path=None, path_args=None, context=None, **kwargs):
+    def error_page(self, context: Context, name, title, path=None, path_args=None, **kwargs):
         '''Returns an error page with the given name and details'''
         return self.page(
+            context=context,
             name=f'errors/{name}',
             title=title,
             path=path or [],
             path_args=path_args or {},
-            context=context,
             enable_refresh=False,
             **kwargs
         )
     
-    def frame(self, name, context=None, **kwargs):
+    def frame(self, name, context: Context, **kwargs):
         '''Returns an HTML element that can be inserted into a page'''
         return template(f'frames/{name}',
             context=context,
@@ -402,34 +403,34 @@ class Server(Bottle):
     
     def home(self, context: Context):
         return self.page(
+            context=context,
             name='home',
             title='Home',
-            context=context,
             enable_refresh=False,
             favourites=self.get_favourites()
         )
     
     def news(self, context: Context):
         return self.page(
+            context=context,
             name='news',
             title='News Archive',
             path=['news'],
-            context=context,
             enable_refresh=False
         )
     
     def map(self, context: Context):
-        positions = self.position_repository.find_all(context.system, has_location=True)
+        positions = self.position_repository.find_all(context, has_location=True)
         auto_refresh = self.query_cookie('auto_refresh', 'false') != 'false'
         show_route_lines = self.query_cookie('show_route_lines', 'false') != 'false'
         show_stops = self.query_cookie('show_stops', 'true') != 'false'
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
-        stop_area = self.stop_repository.find_area(context.system)
+        stop_area = self.stop_repository.find_area(context)
         return self.page(
+            context=context,
             name='map',
             title='Map',
             path=['map'],
-            context=context,
             full_map=True,
             positions=sorted(positions, key=lambda p: p.lat),
             auto_refresh=auto_refresh,
@@ -440,70 +441,70 @@ class Server(Bottle):
         )
     
     def realtime_all(self, context: Context):
-        positions = self.position_repository.find_all(context.system)
+        positions = self.position_repository.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
         return self.page(
+            context=context,
             name='realtime/all',
             title='Realtime',
             path=['realtime'],
-            context=context,
             positions=positions,
             show_nis=show_nis
         )
     
     def realtime_routes(self, context: Context):
-        positions = self.position_repository.find_all(context.system)
+        positions = self.position_repository.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
         return self.page(
+            context=context,
             name='realtime/routes',
             title='Realtime',
             path=['realtime', 'routes'],
-            context=context,
             positions=positions,
             show_nis=show_nis
         )
     
     def realtime_models(self, context: Context):
-        positions = self.position_repository.find_all(context.system)
+        positions = self.position_repository.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
         return self.page(
+            context=context,
             name='realtime/models',
             title='Realtime',
             path=['realtime', 'models'],
-            context=context,
             positions=positions,
             show_nis=show_nis
         )
     
     def realtime_speed(self, context: Context):
         self.set_cookie('speed', '1994')
-        positions = self.position_repository.find_all(context.system)
+        positions = self.position_repository.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
         return self.page(
+            context=context,
             name='realtime/speed',
             title='Realtime',
             path=['realtime', 'speed'],
-            context=context,
             positions=positions,
             show_nis=show_nis
         )
     
     def fleet(self, context: Context):
         orders = self.order_repository.find_all(context.agency)
-        overviews = self.overview_repository.find_all()
+        overviews = self.overview_repository.find_all(Context())
         return self.page(
+            context=context,
             name='fleet',
             title='Fleet',
             path=['fleet'],
-            context=context,
             orders=[o for o in sorted(orders) if o.visible],
             overviews={o.bus.number: o for o in overviews}
         )
@@ -513,17 +514,17 @@ class Server(Bottle):
         overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
+                context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
-                context=context,
                 bus_number=bus_number
             )
         position = self.position_repository.find(bus)
-        records = self.record_repository.find_all(bus=bus, limit=20)
+        records = self.record_repository.find_all(Context(), bus=bus, limit=20)
         return self.page(
+            context=context,
             name='bus/overview',
             title=f'Bus {bus}',
-            context=context,
             include_maps=bool(position),
             bus=bus,
             position=position,
@@ -538,16 +539,16 @@ class Server(Bottle):
         overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
+                context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
-                context=context,
                 bus_number=bus_number
             )
         position = self.position_repository.find(bus)
         return self.page(
+            context=context,
             name='bus/map',
             title=f'Bus {bus}',
-            context=context,
             full_map=bool(position),
             bus=bus,
             position=position,
@@ -560,9 +561,9 @@ class Server(Bottle):
         overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
+                context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
-                context=context,
                 bus_number=bus_number
             )
         try:
@@ -570,11 +571,11 @@ class Server(Bottle):
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = self.record_repository.count(bus=bus)
+        total_items = self.record_repository.count(Context(), bus=bus)
         if page < 1:
             records = []
         else:
-            records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
+            records = self.record_repository.find_all(Context(), bus=bus, limit=items_per_page, page=page)
         transfers = self.transfer_repository.find_all(bus=bus)
         tracked_systems = set()
         events = []
@@ -592,9 +593,9 @@ class Server(Bottle):
                 tracked_systems.add(transfer.new_system)
                 events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
         return self.page(
+            context=context,
             name='bus/history',
             title=f'Bus {bus}',
-            context=context,
             bus=bus,
             records=records,
             overview=overview,
@@ -608,36 +609,33 @@ class Server(Bottle):
         )
     
     def history_last_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context.system) if o.last_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(context) if o.last_record and o.bus.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
             days = None
         if days:
-            try:
-                date = Date.today(context.system.timezone) - timedelta(days=days)
-            except AttributeError:
-                date = Date.today() - timedelta(days=days)
+            date = Date.today(context.timezone) - timedelta(days=days)
             overviews = [o for o in overviews if o.last_record.date > date]
         return self.page(
+            context=context,
             name='history/last_seen',
             title='Vehicle History',
             path=['history'],
             path_args={
                 'days': days
             },
-            context=context,
             overviews=sorted(overviews, key=lambda o: o.bus),
             days=days
         )
     
     def history_first_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context.system) if o.first_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(context) if o.first_record and o.bus.visible]
         return self.page(
+            context=context,
             name='history/first_seen',
             title='Vehicle History',
             path=['history', 'first-seen'],
-            context=context,
             overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
         )
     
@@ -650,31 +648,31 @@ class Server(Bottle):
         else:
             transfers = self.transfer_repository.find_all(old_system=context.system, new_system=context.system)
         return self.page(
+            context=context,
             name='history/transfers',
             title='Vehicle History',
             path=['history', 'transfers'],
-            context=context,
             transfers=[t for t in transfers if t.bus.visible],
             filter=filter
         )
     
     def routes_list(self, context: Context):
         return self.page(
+            context=context,
             name='routes/list',
             title='Routes',
             path=['routes'],
-            context=context,
             enable_refresh=False
         )
     
     def routes_map(self, context: Context):
-        routes = self.route_repository.find_all(context.system)
+        routes = self.route_repository.find_all(context)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
+            context=context,
             name='routes/map',
             title='Routes',
             path=['routes', 'map'],
-            context=context,
             enable_refresh=False,
             full_map=len(routes) > 0,
             routes=routes,
@@ -684,10 +682,10 @@ class Server(Bottle):
     def route_overview(self, context: Context, route_number):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['routes', route_number],
-                context=context
+                path=['routes', route_number]
             )
         if context.agency.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
@@ -695,22 +693,22 @@ class Server(Bottle):
             route = context.system.get_route(number=route_number)
         if not route:
             return self.error_page(
+                context=context,
                 name='invalid_route',
                 title='Unknown Route',
-                context=context,
                 route_number=route_number
             )
-        trips = sorted(route.get_trips(date=Date.today(context.system.timezone)))
+        trips = sorted(route.get_trips(date=Date.today(context.timezone)))
         return self.page(
+            context=context,
             name='route/overview',
             title=str(route),
-            context=context,
             include_maps=len(route.trips) > 0,
             route=route,
             trips=trips,
-            recorded_today=self.record_repository.find_recorded_today(context.system, trips),
-            assignments=self.assignment_repository.find_all(context.system, route=route),
-            positions=self.position_repository.find_all(context.system, route=route),
+            recorded_today=self.record_repository.find_recorded_today(context, trips),
+            assignments=self.assignment_repository.find_all(context, route=route),
+            positions=self.position_repository.find_all(context, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -718,10 +716,10 @@ class Server(Bottle):
     def route_map(self, context: Context, route_number):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['routes', route_number, 'map'],
-                context=context
+                path=['routes', route_number, 'map']
             )
         if context.agency.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
@@ -729,18 +727,18 @@ class Server(Bottle):
             route = context.system.get_route(number=route_number)
         if not route:
             return self.error_page(
+                context=context,
                 name='invalid_route',
                 title='Unknown Route',
-                context=context,
                 route_number=route_number
             )
         return self.page(
+            context=context,
             name='route/map',
             title=str(route),
-            context=context,
             full_map=len(route.trips) > 0,
             route=route,
-            positions=self.position_repository.find_all(context.system, route=route),
+            positions=self.position_repository.find_all(context, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -748,10 +746,10 @@ class Server(Bottle):
     def route_schedule(self, context: Context, route_number):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['routes', route_number, 'schedule'],
-                context=context
+                path=['routes', route_number, 'schedule']
             )
         if context.agency.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
@@ -765,9 +763,9 @@ class Server(Bottle):
                 route_number=route_number
             )
         return self.page(
+            context=context,
             name='route/schedule',
             title=str(route),
-            context=context,
             enable_refresh=False,
             route=route,
             favourite=Favourite('route', route),
@@ -777,10 +775,10 @@ class Server(Bottle):
     def route_schedule_date(self, context: Context, route_number, date_string):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['routes', route_number, 'schedule'],
-                context=context
+                path=['routes', route_number, 'schedule']
             )
         if context.agency.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
@@ -788,16 +786,16 @@ class Server(Bottle):
             route = context.system.get_route(number=route_number)
         if not route:
             return self.error_page(
+                context=context,
                 name='invalid_route',
                 title='Unknown Route',
-                context=context,
                 route_number=route_number
             )
-        date = Date.parse(date_string, context.system.timezone)
+        date = Date.parse(date_string, context.timezone)
         return self.page(
+            context=context,
             name='route/date',
             title=str(route),
-            context=context,
             enable_refresh=False,
             route=route,
             date=date,
@@ -807,36 +805,36 @@ class Server(Bottle):
     
     def blocks_overview(self, context: Context):
         if context.system and context.system.realtime_enabled:
-            recorded_buses = self.record_repository.find_recorded_today_by_block(context.system)
+            recorded_buses = self.record_repository.find_recorded_today_by_block(context)
         else:
             recorded_buses = {}
         return self.page(
+            context=context,
             name='blocks/overview',
             title='Blocks',
             path=['blocks'],
-            context=context,
             recorded_buses=recorded_buses
         )
     
     def blocks_schedule(self, context: Context):
         return self.page(
+            context=context,
             name='blocks/schedule',
             title='Blocks',
             path=['blocks', 'schedule'],
-            context=context,
             enable_refresh=False
         )
     
     def blocks_schedule_date(self, context: Context, date_string):
         try:
-            date = Date.parse(date_string, context.system.timezone)
+            date = Date.parse(date_string, context.timezone)
         except AttributeError:
             date = Date.parse(date_string)
         return self.page(
+            context=context,
             name='blocks/date',
             title='Blocks',
             path=[f'blocks', 'schedule', date_string],
-            context=context,
             enable_reload=False,
             date=date
         )
@@ -844,79 +842,79 @@ class Server(Bottle):
     def block_overview(self, context: Context, block_id):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['blocks', block_id],
-                context=context
+                path=['blocks', block_id]
             )
         block = context.system.get_block(block_id)
         if not block:
             return self.error_page(
+                context=context,
                 name='invalid_block',
                 title='Unknown Block',
-                context=context,
                 block_id=block_id
             )
         return self.page(
+            context=context,
             name='block/overview',
             title=f'Block {block.id}',
-            context=context,
             include_maps=True,
             block=block,
-            positions=self.position_repository.find_all(context.system, block=block),
-            assignment=self.assignment_repository.find(context.system, block)
+            positions=self.position_repository.find_all(context, block=block),
+            assignment=self.assignment_repository.find(context, block)
         )
     
     def block_map(self, context: Context, block_id):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['blocks', block_id, 'map'],
-                context=context
+                path=['blocks', block_id, 'map']
             )
         block = context.system.get_block(block_id)
         if not block:
             return self.error_page(
+                context=context,
                 name='invalid_block',
                 title='Unknown Block',
-                context=context,
                 block_id=block_id
             )
         return self.page(
+            context=context,
             name='block/map',
             title=f'Block {block.id}',
-            context=context,
             full_map=True,
             block=block,
-            positions=self.position_repository.find_all(context.system, block=block)
+            positions=self.position_repository.find_all(context, block=block)
         )
     
     def block_history(self, context: Context, block_id):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['blocks', block_id, 'history'],
-                context=context
+                path=['blocks', block_id, 'history']
             )
         block = context.system.get_block(block_id)
         if not block:
             return self.error_page(
+                context=context,
                 name='invalid_block',
                 title='Unknown Block',
-                context=context,
                 block_id=block_id
             )
-        records = self.record_repository.find_all(context.system, block=block)
+        records = self.record_repository.find_all(context, block=block)
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
             events.append(Event(records[-1].date, 'First Tracked'))
         return self.page(
+            context=context,
             name='block/history',
             title=f'Block {block.id}',
-            context=context,
             block=block,
             records=records,
             events=events
@@ -925,79 +923,79 @@ class Server(Bottle):
     def trip_overview(self, context: Context, trip_id):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['trips', trip_id],
-                context=context
+                path=['trips', trip_id]
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
             return self.error_page(
+                context=context,
                 name='invalid_trip',
                 title='Unknown Trip',
-                context=context,
                 trip_id=trip_id
             )
         return self.page(
+            context=context,
             name='trip/overview',
             title=f'Trip {trip.id}',
-            context=context,
             include_maps=True,
             trip=trip,
-            positions=self.position_repository.find_all(context.system, trip=trip),
-            assignment=self.assignment_repository.find(context.system, trip.block_id)
+            positions=self.position_repository.find_all(context, trip=trip),
+            assignment=self.assignment_repository.find(context, trip.block_id)
         )
     
     def trip_map(self, context: Context, trip_id):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['trips', trip_id, 'map'],
-                context=context
+                path=['trips', trip_id, 'map']
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
             return self.error_page(
+                context=context,
                 name='invalid_trip',
                 title='Unknown Trip',
-                context=context,
                 trip_id=trip_id
             )
         return self.page(
+            context=context,
             name='trip/map',
             title=f'Trip {trip.id}',
-            context=context,
             full_map=True,
             trip=trip,
-            positions=self.position_repository.find_all(context.system, trip=trip)
+            positions=self.position_repository.find_all(context, trip=trip)
         )
     
     def trip_history(self, context: Context, trip_id):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['trips', trip_id, 'history'],
-                context=context
+                path=['trips', trip_id, 'history']
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
             return self.error_page(
+                context=context,
                 name='invalid_trip',
                 title='Unknown Trip',
-                context=context,
                 trip_id=trip_id
             )
-        records = self.record_repository.find_all(context.system, trip=trip)
+        records = self.record_repository.find_all(context, trip=trip)
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
             events.append(Event(records[-1].date, 'First Tracked'))
         return self.page(
+            context=context,
             name='trip/history',
             title=f'Trip {trip.id}',
-            context=context,
             trip=trip,
             records=records,
             events=events
@@ -1047,11 +1045,11 @@ class Server(Bottle):
             stops = []
             total_items = 0
         return self.page(
+            context=context,
             name='stops',
             title='Stops',
             path=['stops'],
             path_args=path_args,
-            context=context,
             enable_refresh=False,
             stops=stops,
             search=search,
@@ -1066,10 +1064,10 @@ class Server(Bottle):
     def stop_overview(self, context: Context, stop_number):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['stops', stop_number],
-                context=context
+                path=['stops', stop_number]
             )
         if context.agency.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
@@ -1077,23 +1075,23 @@ class Server(Bottle):
             stop = context.system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
+                context=context,
                 name='invalid_stop',
                 title='Unknown Stop',
-                context=context,
                 stop_number=stop_number
             )
-        departures = stop.find_departures(date=Date.today(context.system.timezone))
+        departures = stop.find_departures(date=Date.today(context.timezone))
         trips = [d.trip for d in departures]
-        positions = self.position_repository.find_all(context.system, trip=trips)
+        positions = self.position_repository.find_all(context, trip=trips)
         return self.page(
+            context=context,
             name='stop/overview',
             title=str(stop),
-            context=context,
             include_maps=True,
             stop=stop,
             departures=departures,
-            recorded_today=self.record_repository.find_recorded_today(context.system, trips),
-            assignments=self.assignment_repository.find_all(context.system, stop=stop),
+            recorded_today=self.record_repository.find_recorded_today(context, trips),
+            assignments=self.assignment_repository.find_all(context, stop=stop),
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
@@ -1131,10 +1129,10 @@ class Server(Bottle):
     def stop_schedule(self, context: Context, stop_number):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['stops', stop_number, 'schedule'],
-                context=context
+                path=['stops', stop_number, 'schedule']
             )
         if context.agency.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
@@ -1142,15 +1140,15 @@ class Server(Bottle):
             stop = context.system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
+                context=context,
                 name='invalid_stop',
                 title='Unknown Stop',
-                context=context,
                 stop_number=stop_number
             )
         return self.page(
+            context=context,
             name='stop/schedule',
             title=str(stop),
-            context=context,
             enable_refresh=False,
             stop=stop,
             favourite=Favourite('stop', stop),
@@ -1160,10 +1158,10 @@ class Server(Bottle):
     def stop_schedule_date(self, context: Context, stop_number, date_string):
         if not context.system:
             return self.error_page(
+                context=context,
                 name='system_required',
                 title='System Required',
-                path=['stops', stop_number, 'schedule'],
-                context=context
+                path=['stops', stop_number, 'schedule']
             )
         if context.agency.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
@@ -1171,16 +1169,16 @@ class Server(Bottle):
             stop = context.system.get_stop(number=stop_number)
         if not stop:
             return self.error_page(
+                context=context,
                 name='invalid_stop',
                 title='Unknown Stop',
-                context=context,
                 stop_number=stop_number
             )
-        date = Date.parse(date_string, context.system.timezone)
+        date = Date.parse(date_string, context.timezone)
         return self.page(
+            context=context,
             name='stop/date',
             title=str(stop),
-            context=context,
             enable_refresh=False,
             stop=stop,
             date=date,
@@ -1190,19 +1188,19 @@ class Server(Bottle):
     
     def about(self, context: Context):
         return self.page(
+            context=context,
             name='about',
             title='About',
             path=['about'],
-            context=context,
             enable_refresh=False
         )
     
     def nearby(self, context: Context):
         return self.page(
+            context=context,
             name='nearby',
             title='Nearby Stops',
             path=['nearby'],
-            context=context,
             include_maps=True
         )
     
@@ -1212,20 +1210,20 @@ class Server(Bottle):
     def personalize(self, context: Context):
         themes = self.theme_repository.find_all()
         return self.page(
+            context=context,
             name='personalize',
             title='Personalize',
             path=['personalize'],
-            context=context,
             enable_refresh=False,
             themes=themes
         )
     
     def systems(self, context: Context):
         return self.page(
+            context=context,
             name='systems',
             title='Systems',
             path=['systems'],
-            context=context,
             enable_refresh=False
         )
     
@@ -1271,10 +1269,10 @@ class Server(Bottle):
     
     def admin(self, context: Context):
         return self.page(
+            context=context,
             name='admin',
             title='Administration',
             path=['admin'],
-            context=context,
             enable_refresh=False,
             disable_indexing=True
         )
@@ -1291,8 +1289,8 @@ class Server(Bottle):
         lat = float(request.query.get('lat'))
         lon = float(request.query.get('lon'))
         return self.frame(
-            name='nearby',
             context=context,
+            name='nearby',
             stops=sorted([s for s in stops if s.is_near(lat, lon)])
         )
     
@@ -1313,7 +1311,7 @@ class Server(Bottle):
             last_updated_text = last_updated.format_web(time_format)
         else:
             last_updated_text = None
-        positions = sorted(self.position_repository.find_all(context.system, has_location=True), key=lambda p: p.lat)
+        positions = sorted(self.position_repository.find_all(context, has_location=True), key=lambda p: p.lat)
         return {
             'positions': [p.get_json() for p in positions],
             'last_updated': last_updated_text
@@ -1321,20 +1319,20 @@ class Server(Bottle):
     
     def api_shape(self, context: Context, shape_id):
         return {
-            'points': [p.get_json() for p in self.point_repository.find_all(context.system, shape_id)]
+            'points': [p.get_json() for p in self.point_repository.find_all(context, shape_id)]
         }
     
     def api_stops(self, context: Context):
         lat = float(request.query['lat'])
         lon = float(request.query['lon'])
         size = float(request.query.get('size', 0.01))
-        stops = self.stop_repository.find_all(context.system, lat=lat, lon=lon, size=size)
+        stops = self.stop_repository.find_all(context, lat=lat, lon=lon, size=size)
         return {
             'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
     
     def api_routes(self, context: Context):
-        routes = self.route_repository.find_all(context.system)
+        routes = self.route_repository.find_all(context)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
         shape_ids = set()
         shape_trips = []
@@ -1360,7 +1358,7 @@ class Server(Bottle):
         if query != '':
             if query.isnumeric() and (not context.system or context.system.realtime_enabled):
                 if include_buses:
-                    bus_numbers = self.overview_repository.find_bus_numbers(context.system)
+                    bus_numbers = self.overview_repository.find_bus_numbers(context)
                     matches += self.order_repository.find_matches(context.agency, query, bus_numbers)
             if context.system:
                 if include_blocks:
@@ -1373,7 +1371,7 @@ class Server(Bottle):
         min = page * count
         max = min + count
         return {
-            'results': [m.get_json(context.system, self.get_url) for m in matches[min:max]],
+            'results': [m.get_json(context, self.get_url) for m in matches[min:max]],
             'total': len(matches)
         }
     
@@ -1399,7 +1397,7 @@ class Server(Bottle):
     
     def api_admin_reload_systems(self, context: Context):
         self.cron_service.stop()
-        self.position_repository.delete_all()
+        self.position_repository.delete_all(Context())
         self.system_repository.load()
         for system in self.system_repository.find_all():
             if self.running:
@@ -1470,6 +1468,7 @@ class Server(Bottle):
     
     def error_403(self, error):
         return self.error_page(
+            context=Context(),
             name='403', 
             title='Forbidden',
             error=error
@@ -1477,6 +1476,7 @@ class Server(Bottle):
     
     def error_404(self, error):
         return self.error_page(
+            context=Context(),
             name='404',
             title='Not Found',
             error=error
@@ -1484,6 +1484,7 @@ class Server(Bottle):
     
     def error_500(self, error):
         return self.error_page(
+            context=Context(),
             name='500',
             title='Internal Error',
             error=error

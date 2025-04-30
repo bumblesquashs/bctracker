@@ -38,7 +38,7 @@
                             % for route in routes:
                                 <div class="row">
                                     % include('components/route')
-                                    <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                                 </div>
                             % end
                         </div>
@@ -160,7 +160,7 @@
                         <div class="placeholder">
                             <p>
                                 There are no departures for the rest of today.
-                                <a href="{{ get_url(stop.system, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                             </p>
                         </div>
                     % end
@@ -212,7 +212,7 @@
                     <div class="placeholder">
                         % if context.system.gtfs_loaded:
                             <h3>There are no departures from this stop today</h3>
-                            <p>You can check the <a href="{{ get_url(stop.system, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                            <p>You can check the <a href="{{ get_url(stop.context, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                         % else:
                             <h3>Departures for this stop are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>

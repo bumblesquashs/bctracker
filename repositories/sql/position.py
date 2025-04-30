@@ -4,6 +4,7 @@ from database import Database
 from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
 
 from models.adherence import Adherence
+from models.context import Context
 from models.occupancy import Occupancy
 from models.position import Position
 from models.timestamp import Timestamp
@@ -19,9 +20,8 @@ class SQLPositionRepository(PositionRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, system, bus, data):
+    def create(self, context: Context, bus, data):
         '''Inserts a new position into the database'''
-        system_id = getattr(system, 'id', system)
         bus_number = getattr(bus, 'number', bus)
         try:
             trip_id = data.trip.trip_id
@@ -59,8 +59,8 @@ class SQLPositionRepository(PositionRepository):
             speed = int(data.position.speed * 3.6)
         except AttributeError:
             speed = None
-        trip = system.get_trip(trip_id)
-        stop = system.get_stop(stop_id=stop_id)
+        trip = context.system.get_trip(trip_id)
+        stop = context.system.get_stop(stop_id=stop_id)
         if trip:
             block_id = trip.block_id
             route_id = trip.route_id
@@ -69,7 +69,7 @@ class SQLPositionRepository(PositionRepository):
             route_id = None
         try:
             if data.HasField('timestamp'):
-                timestamp = Timestamp.parse(data.timestamp, system.timezone)
+                timestamp = Timestamp.parse(data.timestamp, context.timezone)
             else:
                 timestamp = None
         except AttributeError:
@@ -87,7 +87,7 @@ class SQLPositionRepository(PositionRepository):
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
-            'system_id': system_id,
+            'system_id': context.system_id,
             'bus_number': bus_number,
             'trip_id': trip_id,
             'stop_id': stop_id,
@@ -136,9 +136,8 @@ class SQLPositionRepository(PositionRepository):
         except IndexError:
             return None
     
-    def find_all(self, system=None, trip=None, stop=None, block=None, route=None, has_location=None):
+    def find_all(self, context: Context = None, trip=None, stop=None, block=None, route=None, has_location=None):
         '''Returns all positions that match the given system, trip, stop, block, and route'''
-        system_id = getattr(system, 'id', system)
         if isinstance(trip, list):
             trip_id = [getattr(t, 'id', t) for t in trip]
         else:
@@ -156,7 +155,7 @@ class SQLPositionRepository(PositionRepository):
         else:
             route_id = getattr(route, 'id', route)
         filters = {
-            'position.system_id': system_id,
+            'position.system_id': context.system_id,
             'position.trip_id': trip_id,
             'position.stop_id': stop_id,
             'position.block_id': block_id,
@@ -199,9 +198,8 @@ class SQLPositionRepository(PositionRepository):
         )
         return [p for p in positions if p.bus.visible]
     
-    def delete_all(self, system=None):
+    def delete_all(self, context: Context):
         '''Deletes all positions for the given system from the database'''
-        system_id = getattr(system, 'id', system)
         self.database.delete('position', {
-            'position.system_id': system_id
+            'position.system_id': context.system_id
         })

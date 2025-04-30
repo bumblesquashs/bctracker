@@ -25,7 +25,7 @@
                         <td>
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </td>
                         <td class="non-mobile">
