@@ -1,7 +1,6 @@
 
 from datetime import timedelta
 
-from di import di
 from database import Database
 
 from models.bus import Bus
@@ -9,18 +8,16 @@ from models.context import Context
 from models.date import Date
 from models.record import Record
 
-from repositories import AgencyRepository, RecordRepository
+from repositories import RecordRepository
 
 class SQLRecordRepository(RecordRepository):
     
     __slots__ = (
-        'database',
-        'agency_repository'
+        'database'
     )
     
-    def __init__(self, database: Database, **kwargs):
+    def __init__(self, database: Database):
         self.database = database
-        self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
     
     def create(self, context: Context, bus, date, block, time, trip):
         '''Inserts a new record into the database'''
@@ -127,8 +124,7 @@ class SQLRecordRepository(RecordRepository):
             },
             order_by='record.last_seen ASC'
         )
-        agency = self.agency_repository.find('bc-transit')
-        return {row['trip_id']: Bus.find(agency, row['bus_number']) for row in rows}
+        return {row['trip_id']: Bus.find(context, row['bus_number']) for row in rows}
     
     def find_recorded_today_by_block(self, context: Context):
         '''Returns all bus numbers matching the given context that werer ecorded on the current date'''
@@ -144,8 +140,7 @@ class SQLRecordRepository(RecordRepository):
             },
             order_by='record.last_seen ASC'
         )
-        agency = self.agency_repository.find('bc-transit')
-        return {row['block_id']: Bus.find(agency, row['bus_number']) for row in rows}
+        return {row['block_id']: Bus.find(context, row['bus_number']) for row in rows}
     
     def count(self, context: Context, bus=None, block=None, trip=None):
         '''Returns the number of records for the given system, bus, block, and trip'''

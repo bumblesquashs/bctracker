@@ -10,7 +10,7 @@ from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
-from repositories import DepartureRepository, SystemRepository
+from repositories import DepartureRepository
 
 import helpers
 
@@ -29,17 +29,15 @@ class Route:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='route', **kwargs):
+    def from_db(cls, row, prefix='route'):
         '''Returns a route initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        context = Context(system=system)
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         if not number:
             number = id
         name = row[f'{prefix}_name']
-        colour = row[f'{prefix}_colour'] or generate_colour(system, number)
+        colour = row[f'{prefix}_colour'] or generate_colour(context.system, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
         return cls(context, id, number, name, colour, text_colour)
     

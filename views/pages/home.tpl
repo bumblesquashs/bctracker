@@ -182,9 +182,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.value.system for f in route_favourites}
+                                            % favourite_systems = {f.value.context.system for f in route_favourites}
                                             % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.value.system == favourite_system]
+                                                % system_favourites = [f for f in route_favourites if f.value.context.system == favourite_system]
                                                 <tr class="header">
                                                     <td>{{ favourite_system }}</td>
                                                 </tr>
@@ -195,7 +195,7 @@
                                                         <td>
                                                             <div class="row">
                                                                 % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.system, 'routes', value) }}">{{! value.display_name }}</a>
+                                                                <a href="{{ get_url(value.context, 'routes', value) }}">{{! value.display_name }}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -217,9 +217,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.value.system for f in stop_favourites}
+                                            % favourite_systems = {f.value.context.system for f in stop_favourites}
                                             % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in stop_favourites if f.value.system == favourite_system]
+                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == favourite_system]
                                                 <tr class="header">
                                                     <td colspan="2">{{ favourite_system }}</td>
                                                 </tr>

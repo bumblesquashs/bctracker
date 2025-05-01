@@ -14,13 +14,13 @@ class OrderRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, agency, bus) -> Order | None:
+    def find(self, context, bus) -> Order | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, agency) -> list[Order]:
+    def find_all(self, context) -> list[Order]:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_matches(self, agency, query, recorded_bus_numbers) -> list[Match]:
+    def find_matches(self, context, query, recorded_bus_numbers) -> list[Match]:
         raise NotImplementedError()

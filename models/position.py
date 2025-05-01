@@ -7,7 +7,7 @@ from models.context import Context
 from models.occupancy import Occupancy
 from models.timestamp import Timestamp
 
-from repositories import DepartureRepository, SystemRepository
+from repositories import DepartureRepository
 
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
@@ -31,12 +31,10 @@ class Position:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='position', **kwargs):
+    def from_db(cls, row, prefix='position'):
         '''Returns a position initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        context = Context(system=system)
-        bus = Bus.find(context.agency, row[f'{prefix}_bus_number'])
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
+        bus = Bus.find(context, row[f'{prefix}_bus_number'])
         trip_id = row[f'{prefix}_trip_id']
         stop_id = row[f'{prefix}_stop_id']
         block_id = row[f'{prefix}_block_id']
@@ -50,14 +48,14 @@ class Position:
         if adherence_value is None:
             adherence = None
         else:
-            trip = system.get_trip(trip_id)
+            trip = context.system.get_trip(trip_id)
             layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
         try:
             occupancy = Occupancy[row[f'{prefix}_occupancy']]
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
-        timestamp = Timestamp.parse(row[f'{prefix}_timestamp'], timezone=system.timezone)
+        timestamp = Timestamp.parse(row[f'{prefix}_timestamp'], timezone=context.timezone)
         return cls(context, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property

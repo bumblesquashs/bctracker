@@ -150,7 +150,7 @@
                         <tbody>
                             % for related_block in related_blocks:
                                 <tr>
-                                    <td><a href="{{ get_url(related_block.system, 'blocks', related_block) }}">{{ related_block.id }}</a></td>
+                                    <td><a href="{{ get_url(related_block.context, 'blocks', related_block) }}">{{ related_block.id }}</a></td>
                                     <td>
                                         <div class="column">
                                             % for sheet in related_block.sheets:

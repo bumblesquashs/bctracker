@@ -723,7 +723,7 @@
     }
 </script>
 
-% if not context.system or context.system.realtime_enabled:
+% if context.realtime_enabled:
     <script>
         setTimeout(function() {
             if (automaticRefresh) {

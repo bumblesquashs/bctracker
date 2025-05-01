@@ -5,7 +5,7 @@ from models.context import Context
 from models.direction import Direction
 from models.time import Time
 
-from repositories import DepartureRepository, PointRepository, SystemRepository
+from repositories import DepartureRepository, PointRepository
 
 class Trip:
     '''A list of departures for a specific route and a specific service'''
@@ -27,11 +27,9 @@ class Trip:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='trip', **kwargs):
+    def from_db(cls, row, prefix='trip'):
         '''Returns a trip initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        context = Context(system=system)
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
         service_id = row[f'{prefix}_service_id']

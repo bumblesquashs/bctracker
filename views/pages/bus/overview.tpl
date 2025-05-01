@@ -105,7 +105,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.context.system) }}">{{ position.context.system }}</a>
+                                <a href="{{ get_url(position.context) }}">{{ position.context.system }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -170,7 +170,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(trip.context.system) }}">{{ trip.context.system }}</a>
+                                <a href="{{ get_url(trip.context) }}">{{ trip.context.system }}</a>
                             </div>
                         </div>
                         <div class="row section">

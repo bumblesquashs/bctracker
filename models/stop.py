@@ -8,7 +8,7 @@ from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
-from repositories import DepartureRepository, SystemRepository
+from repositories import DepartureRepository
 
 import helpers
 
@@ -27,11 +27,9 @@ class Stop:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='stop', **kwargs):
+    def from_db(cls, row, prefix='stop'):
         '''Returns a stop initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        context = Context(system=system)
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         if not number:

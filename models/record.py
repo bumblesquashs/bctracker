@@ -2,10 +2,11 @@
 from di import di
 
 from models.bus import Bus
+from models.context import Context
 from models.date import Date
 from models.time import Time
 
-from repositories import AgencyRepository, SystemRepository
+from repositories import SystemRepository
 
 class Record:
     '''Information about a bus' history on a specific date'''
@@ -27,11 +28,10 @@ class Record:
     @classmethod
     def from_db(cls, row, prefix='record', **kwargs):
         '''Returns a record initialized from the given database row'''
-        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
         system_repository = kwargs.get('system_repository') or di[SystemRepository]
         id = row[f'{prefix}_id']
-        agency = agency_repository.find('bc-transit')
-        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
+        context = Context.find(agency_id='bc-transit')
+        bus = Bus.find(context, row[f'{prefix}_bus_number'])
         system = system_repository.find(row[f'{prefix}_system_id'])
         date = Date.parse(row[f'{prefix}_date'], system.timezone)
         block_id = row[f'{prefix}_block_id']

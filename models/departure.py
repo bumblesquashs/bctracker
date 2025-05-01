@@ -6,7 +6,7 @@ from di import di
 from models.context import Context
 from models.time import Time
 
-from repositories import DepartureRepository, SystemRepository
+from repositories import DepartureRepository
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -72,13 +72,11 @@ class Departure:
     @classmethod
     def from_db(cls, row, prefix='departure', **kwargs):
         '''Returns a departure initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        context = Context(system=system)
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], system.timezone, system.agency.accurate_seconds)
+        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.agency.accurate_seconds)
         try:
             pickup_type = PickupType(row[f'{prefix}_pickup_type'])
         except:

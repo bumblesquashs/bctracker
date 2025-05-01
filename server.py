@@ -498,7 +498,7 @@ class Server(Bottle):
         )
     
     def fleet(self, context: Context):
-        orders = self.order_repository.find_all(context.agency)
+        orders = self.order_repository.find_all(context)
         overviews = self.overview_repository.find_all(Context())
         return self.page(
             context=context,
@@ -510,7 +510,7 @@ class Server(Bottle):
         )
     
     def bus_overview(self, context: Context, bus_number):
-        bus = Bus.find(context.agency, bus_number)
+        bus = Bus.find(context, bus_number)
         overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
@@ -535,7 +535,7 @@ class Server(Bottle):
         )
     
     def bus_map(self, context: Context, bus_number):
-        bus = Bus.find(context.agency, bus_number)
+        bus = Bus.find(context, bus_number)
         overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
@@ -557,7 +557,7 @@ class Server(Bottle):
         )
     
     def bus_history(self, context: Context, bus_number):
-        bus = Bus.find(context.agency, bus_number)
+        bus = Bus.find(context, bus_number)
         overview = self.overview_repository.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
@@ -804,7 +804,7 @@ class Server(Bottle):
         )
     
     def blocks_overview(self, context: Context):
-        if context.system and context.system.realtime_enabled:
+        if context.system and context.realtime_enabled:
             recorded_buses = self.record_repository.find_recorded_today_by_block(context)
         else:
             recorded_buses = {}
@@ -826,10 +826,7 @@ class Server(Bottle):
         )
     
     def blocks_schedule_date(self, context: Context, date_string):
-        try:
-            date = Date.parse(date_string, context.timezone)
-        except AttributeError:
-            date = Date.parse(date_string)
+        date = Date.parse(date_string, context.timezone)
         return self.page(
             context=context,
             name='blocks/date',
@@ -1232,7 +1229,7 @@ class Server(Bottle):
         systems = list(self.system_repository.find_all())
         system = random.choice(systems)
         options = ['route', 'stop', 'block', 'trip']
-        if context.agency.realtime_enabled:
+        if system.realtime_enabled:
             options.append('bus')
         selection = random.choice(options)
         match selection:
@@ -1356,10 +1353,10 @@ class Server(Bottle):
         include_blocks = int(request.forms.get('include_blocks', 1)) == 1
         matches = []
         if query != '':
-            if query.isnumeric() and (not context.system or context.system.realtime_enabled):
+            if query.isnumeric() and context.realtime_enabled:
                 if include_buses:
                     bus_numbers = self.overview_repository.find_bus_numbers(context)
-                    matches += self.order_repository.find_matches(context.agency, query, bus_numbers)
+                    matches += self.order_repository.find_matches(context, query, bus_numbers)
             if context.system:
                 if include_blocks:
                     matches += context.system.search_blocks(query)

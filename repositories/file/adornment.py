@@ -2,6 +2,7 @@
 import json
 
 from models.adornment import Adornment
+from models.context import Context
 
 from repositories import AdornmentRepository
 
@@ -25,11 +26,9 @@ class FileAdornmentRepository(AdornmentRepository):
                     agency_adornments[bus_number] = Adornment(agency_id, bus_number, **values)
                 self.adornments[agency_id] = agency_adornments
     
-    def find(self, agency, bus):
+    def find(self, bus):
         '''Returns the adornments with the given bus number'''
-        agency_id = getattr(agency, 'id', agency)
-        bus_number = getattr(bus, 'number', bus)
         try:
-            return self.adornments[agency_id][bus_number]
+            return self.adornments[bus.context.agency_id][bus.number]
         except KeyError:
             return None
