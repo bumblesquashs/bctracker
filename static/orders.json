@@ -113,6 +113,9 @@
         "new-flyer-h40lfr": [
             { "year": 2009, "low": 1000, "high": 1019 }
         ],
+        "new-flyer-xe40": [
+            { "year": 2025, "low": 7500, "high": 7524 }
+        ],
         "new-flyer-xn40": [
             { "year": 2013, "low": 1020, "high": 1044 },
             { "year": 2015, "low": 1045, "high": 1069 },
