@@ -1,9 +1,5 @@
 
-from di import di
-
 from models.context import Context
-
-from repositories import SystemRepository
 
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
@@ -17,11 +13,9 @@ class Point:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='point', **kwargs):
+    def from_db(cls, row, prefix='point'):
         '''Returns a point initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        context = Context(system=system)
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         shape_id = row[f'{prefix}_shape_id']
         sequence = row[f'{prefix}_sequence']
         lat = row[f'{prefix}_lat']

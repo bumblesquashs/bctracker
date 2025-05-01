@@ -97,7 +97,7 @@
                         <tbody>
                             % for alt_stop in alt_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(alt_stop.system, 'stops', alt_stop) }}">{{ alt_stop.system }}</a></td>
+                                    <td><a href="{{ get_url(alt_stop.context, 'stops', alt_stop) }}">{{ alt_stop.context.system }}</a></td>
                                     <td>
                                         % include('components/route_list', routes=alt_stop.routes)
                                     </td>

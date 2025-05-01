@@ -6,6 +6,10 @@ if TYPE_CHECKING:
     from models.agency import Agency
     from models.system import System
 
+from di import di
+
+from repositories import AgencyRepository, SystemRepository
+
 class Context:
     '''A context representing an agency and system'''
     
@@ -13,6 +17,20 @@ class Context:
         'agency',
         'system'
     )
+    
+    @classmethod
+    def find(cls, agency_id=None, system_id=None, **kwargs):
+        if agency_id:
+            agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
+            agency = agency_repository.find(agency_id)
+        else:
+            agency = None
+        if system_id:
+            system_repository = kwargs.get('system_repository') or di[SystemRepository]
+            system = system_repository.find(system_id)
+        else:
+            system = None
+        return cls(agency, system)
     
     @property
     def agency_id(self):
@@ -74,3 +92,16 @@ class Context:
     
     def __eq__(self, other):
         return self.agency == other.agency and self.system == other.system
+    
+    def __lt__(self, other):
+        if self.agency == other.agency:
+            if not self.system:
+                return True
+            if not other.system:
+                return False
+            return self.system < other.system
+        if not self.agency:
+            return True
+        if not other.agency:
+            return False
+        return self.agency < other.agency
