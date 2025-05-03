@@ -32,7 +32,7 @@ class Assignment:
         '''The bus for this assignment'''
         return Bus.find(self.context, self.bus_number)
     
-    def __init__(self, context: Context, block_id, bus_number, date):
+    def __init__(self, context: Context, block_id: str, bus_number: str, date: Date):
         self.context = context
         self.block_id = block_id
         self.bus_number = bus_number

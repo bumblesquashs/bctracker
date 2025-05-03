@@ -107,7 +107,7 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
-    def __init__(self, context: Context, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
+    def __init__(self, context: Context, bus: Bus, trip_id: str, stop_id: str, block_id: str, route_id: str, sequence: int, lat: float, lon: float, bearing: float, speed: float, adherence: float, occupancy: Occupancy, timestamp: Timestamp, **kwargs):
         self.context = context
         self.bus = bus
         self.trip_id = trip_id

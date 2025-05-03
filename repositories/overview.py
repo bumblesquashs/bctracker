@@ -17,7 +17,7 @@ class OverviewRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, context, last_seen_system, bus, limit) -> list[Overview]:
+    def find_all(self, context, last_seen_context, bus, limit) -> list[Overview]:
         raise NotImplementedError()
     
     @abstractmethod

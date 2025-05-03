@@ -499,7 +499,7 @@ class Server(Bottle):
     
     def fleet(self, context: Context):
         orders = self.order_repository.find_all(context)
-        overviews = self.overview_repository.find_all(Context())
+        overviews = self.overview_repository.find_all(Context(), Context())
         return self.page(
             context=context,
             name='fleet',
@@ -576,12 +576,12 @@ class Server(Bottle):
             records = []
         else:
             records = self.record_repository.find_all(Context(), bus=bus, limit=items_per_page, page=page)
-        transfers = self.transfer_repository.find_all(bus=bus)
+        transfers = self.transfer_repository.find_all(Context(), Context(), bus=bus)
         tracked_systems = set()
         events = []
         if overview:
-            tracked_systems.add(overview.first_seen_system)
-            tracked_systems.add(overview.last_seen_system)
+            tracked_systems.add(overview.first_seen_context.system)
+            tracked_systems.add(overview.last_seen_context.system)
             events.append(Event(overview.first_seen_date, 'First Seen'))
             if overview.first_record:
                 events.append(Event(overview.first_record.date, 'First Tracked'))
@@ -589,9 +589,9 @@ class Server(Bottle):
             if overview.last_record:
                 events.append(Event(overview.last_record.date, 'Last Tracked'))
             for transfer in transfers:
-                tracked_systems.add(transfer.old_system)
-                tracked_systems.add(transfer.new_system)
-                events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_system} to {transfer.new_system}'))
+                tracked_systems.add(transfer.old_context.system)
+                tracked_systems.add(transfer.new_context.system)
+                events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
         return self.page(
             context=context,
             name='bus/history',
@@ -609,7 +609,7 @@ class Server(Bottle):
         )
     
     def history_last_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context) if o.last_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(context, Context()) if o.last_record and o.bus.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -630,7 +630,7 @@ class Server(Bottle):
         )
     
     def history_first_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context) if o.first_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(context, Context()) if o.first_record and o.bus.visible]
         return self.page(
             context=context,
             name='history/first_seen',
@@ -642,11 +642,11 @@ class Server(Bottle):
     def history_transfers(self, context: Context):
         filter = request.query.get('filter')
         if filter == 'from':
-            transfers = self.transfer_repository.find_all(old_system=context.system)
+            transfers = self.transfer_repository.find_all(context, Context())
         elif filter == 'to':
-            transfers = self.transfer_repository.find_all(new_system=context.system)
+            transfers = self.transfer_repository.find_all(Context(), context)
         else:
-            transfers = self.transfer_repository.find_all(old_system=context.system, new_system=context.system)
+            transfers = self.transfer_repository.find_all(context, context)
         return self.page(
             context=context,
             name='history/transfers',

@@ -34,7 +34,7 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, context: Context, id, trips, **kwargs):
+    def __init__(self, context: Context, id: str, trips, **kwargs):
         self.context = context
         self.id = id
         self.trips = trips

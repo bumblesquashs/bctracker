@@ -10,12 +10,12 @@ class Theme:
         'dark'
     )
     
-    def __init__(self, id, name, **kwargs):
+    def __init__(self, id: str, name: str, **kwargs):
         self.id = id
         self.name = name
-        self.visible = kwargs.get('visible', True)
-        self.light = kwargs.get('light', False)
-        self.dark = kwargs.get('dark', False)
+        self.visible: bool = kwargs.get('visible', True)
+        self.light: bool = kwargs.get('light', False)
+        self.dark: bool = kwargs.get('dark', False)
     
     def __str__(self):
         return self.name

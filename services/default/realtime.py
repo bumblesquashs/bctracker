@@ -67,7 +67,7 @@ class DefaultRealtimeService(RealtimeService):
             vehicle = entity.vehicle
             try:
                 vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = context.agency.vehicle_name_length
+                vehicle_name_length = context.vehicle_name_length
                 if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                     vehicle_id = vehicle_id[-vehicle_name_length:]
                 bus_number = int(vehicle_id)
@@ -75,7 +75,7 @@ class DefaultRealtimeService(RealtimeService):
                 bus_number = -(index + 1)
             self.position_repository.create(context, bus_number, vehicle)
         self.last_updated = Timestamp.now(accurate_seconds=False)
-        context.system.last_updated = Timestamp.now(context.timezone, context.agency.accurate_seconds)
+        context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
     
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
@@ -109,8 +109,8 @@ class DefaultRealtimeService(RealtimeService):
                     record_id = None
                 if overview:
                     self.overview_repository.update(context, overview, date, record_id)
-                    if overview.last_seen_system != context.system:
-                        self.transfer_repository.create(context, bus, date, overview.last_seen_system)
+                    if overview.last_seen_context != context:
+                        self.transfer_repository.create(bus, date, overview.last_seen_context, context)
                 else:
                     self.overview_repository.create(context, bus, date, record_id)
             except Exception as e:

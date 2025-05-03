@@ -72,6 +72,24 @@ class Context:
             return self.system.timezone
         return None
     
+    @property
+    def accurate_seconds(self):
+        if self.agency:
+            return self.agency.accurate_seconds
+        return False
+    
+    @property
+    def vehicle_name_length(self):
+        if self.agency:
+            return self.agency.vehicle_name_length
+        return None
+    
+    @property
+    def prefix_headsigns(self):
+        if self.agency:
+            return self.agency.prefix_headsigns
+        return False
+    
     def __init__(self, agency: Agency = None, system: System = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')

@@ -48,7 +48,7 @@ class Bus:
             return order.model
         return None
     
-    def __init__(self, context: Context, number, order, **kwargs):
+    def __init__(self, context: Context, number: int, order, **kwargs):
         self.context = context
         self.number = number
         self.order = order
@@ -57,8 +57,8 @@ class Bus:
     
     def __str__(self):
         if self.is_known:
-            if self.context.agency.vehicle_name_length:
-                return f'{self.number:0{self.context.agency.vehicle_name_length}d}'
+            if self.context.vehicle_name_length:
+                return f'{self.number:0{self.context.vehicle_name_length}d}'
             return str(self.number)
         return 'Unknown Bus'
     

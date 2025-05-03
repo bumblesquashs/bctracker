@@ -78,7 +78,7 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, context: Context, id, number, name, colour, text_colour, **kwargs):
+    def __init__(self, context: Context, id: str, number: str, name: str, colour: str, text_colour: str, **kwargs):
         self.context = context
         self.id = id
         self.number = number

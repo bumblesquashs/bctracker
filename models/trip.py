@@ -142,7 +142,7 @@ class Trip:
         '''Returns the direction for this trip'''
         return self.cache.direction
     
-    def __init__(self, context: Context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
+    def __init__(self, context: Context, trip_id: str, route_id: str, service_id: str, block_id: str, direction_id: int, shape_id: str, headsign: str, **kwargs):
         self.context = context
         self.id = trip_id
         self.route_id = route_id
@@ -166,7 +166,7 @@ class Trip:
         self._related_trips = None
     
     def __str__(self):
-        if self.context.agency.prefix_headsigns and self.route:
+        if self.context.prefix_headsigns and self.route:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     

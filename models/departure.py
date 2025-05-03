@@ -75,7 +75,7 @@ class Departure:
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.agency.accurate_seconds)
+        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.accurate_seconds)
         try:
             pickup_type = PickupType(row[f'{prefix}_pickup_type'])
         except:
@@ -112,7 +112,7 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, context: Context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, **kwargs):
+    def __init__(self, context: Context, trip_id: str, sequence: int, stop_id: str, time: Time, pickup_type: PickupType, dropoff_type: DropoffType, timepoint: bool, distance: float, **kwargs):
         self.context = context
         self.trip_id = trip_id
         self.sequence = sequence

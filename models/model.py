@@ -46,13 +46,13 @@ class Model:
         '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
     
-    def __init__(self, id, type, name, **kwargs):
+    def __init__(self, id: str, type: str, name: str, **kwargs):
         self.id = id
         self.type = type
         self.name = name
-        self.manufacturer = kwargs.get('manufacturer')
-        self.length = kwargs.get('length')
-        self.fuel = kwargs.get('fuel')
+        self.manufacturer: str = kwargs.get('manufacturer')
+        self.length: int = kwargs.get('length')
+        self.fuel: str = kwargs.get('fuel')
     
     def __str__(self):
         if self.manufacturer:

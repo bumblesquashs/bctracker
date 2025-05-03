@@ -72,7 +72,7 @@ class Stop:
         '''Returns the routes for this stop'''
         return self.cache.routes
     
-    def __init__(self, context: Context, id, number, name, lat, lon, **kwargs):
+    def __init__(self, context: Context, id: str, number: str, name: str, lat: float, lon: float, **kwargs):
         self.context = context
         self.id = id
         self.number = number

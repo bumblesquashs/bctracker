@@ -130,18 +130,18 @@
                                                                         <td class="non-desktop">
                                                                             <div class="column">
                                                                                 {{ overview.first_seen_date.format_short() }}
-                                                                                <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
+                                                                                <span class="mobile-only smaller-font">{{ overview.first_seen_context }}</span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="non-mobile">{{ overview.first_seen_system }}</td>
+                                                                        <td class="non-mobile">{{ overview.first_seen_context }}</td>
                                                                         <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
                                                                             <div class="column">
                                                                                 {{ overview.last_seen_date.format_short() }}
-                                                                                <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
+                                                                                <span class="mobile-only smaller-font">{{ overview.last_seen_context }}</span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="non-mobile">{{ overview.last_seen_system }}</td>
+                                                                        <td class="non-mobile">{{ overview.last_seen_context }}</td>
                                                                     </tr>
                                                                 % else:
                                                                     <tr>

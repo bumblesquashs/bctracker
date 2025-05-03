@@ -142,7 +142,8 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return self.overview_repository.find_all(Context(), last_seen_system=self)
+        context = Context(system=self)
+        return self.overview_repository.find_all(Context(), context)
     
     def get_positions(self):
         '''Returns all positions'''

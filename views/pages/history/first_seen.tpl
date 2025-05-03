@@ -41,7 +41,7 @@
                         <div class="column">
                             {{ record.date.format_day() }}
                             % if not context.system:
-                                <span class="mobile-only smaller-font">{{ record.system }}</span>
+                                <span class="mobile-only smaller-font">{{ record.context }}</span>
                             % end
                         </div>
                     </td>
@@ -57,7 +57,7 @@
                         % include('components/order', order=bus.order)
                     </td>
                     % if not context.system:
-                        <td class="non-mobile">{{ record.system }}</td>
+                        <td class="non-mobile">{{ record.context }}</td>
                     % end
                     <td>
                         <div class="column">
