@@ -65,7 +65,7 @@
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
+                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
                                 </div>
                             </div>
                         % end
@@ -358,10 +358,10 @@
                                     <td>
                                         <div class="column">
                                             {{ record.date.format_day() }}
-                                            <span class="non-desktop smaller-font">{{ record.system }}</span>
+                                            <span class="non-desktop smaller-font">{{ record.context }}</span>
                                         </div>
                                     </td>
-                                    <td class="desktop-only">{{ record.system }}</td>
+                                    <td class="desktop-only">{{ record.context }}</td>
                                     <td>
                                         <div class="column">
                                             <div class="row">

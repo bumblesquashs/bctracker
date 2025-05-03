@@ -1,21 +1,17 @@
 
-from di import di
-
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.time import Time
 
-from repositories import SystemRepository
-
 class Record:
     '''Information about a bus' history on a specific date'''
     
     __slots__ = (
+        'context',
         'id',
         'bus',
         'date',
-        'system',
         'block_id',
         'route_numbers',
         'start_time',
@@ -26,23 +22,19 @@ class Record:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='record', **kwargs):
+    def from_db(cls, row, prefix='record'):
         '''Returns a record initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
-        context = Context.find(agency_id='bc-transit')
         bus = Bus.find(context, row[f'{prefix}_bus_number'])
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        date = Date.parse(row[f'{prefix}_date'], system.timezone)
+        date = Date.parse(row[f'{prefix}_date'], context.timezone)
         block_id = row[f'{prefix}_block_id']
         route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]
-        timezone = system.timezone
-        accurate_seconds = system.agency.accurate_seconds
-        start_time = Time.parse(row[f'{prefix}_start_time'], timezone, accurate_seconds)
-        end_time = Time.parse(row[f'{prefix}_end_time'], timezone, accurate_seconds)
-        first_seen = Time.parse(row[f'{prefix}_first_seen'], timezone, accurate_seconds)
-        last_seen = Time.parse(row[f'{prefix}_last_seen'], timezone, accurate_seconds)
-        return cls(id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
+        start_time = Time.parse(row[f'{prefix}_start_time'], context.timezone, context.accurate_seconds)
+        end_time = Time.parse(row[f'{prefix}_end_time'], context.timezone, context.accurate_seconds)
+        first_seen = Time.parse(row[f'{prefix}_first_seen'], context.timezone, context.accurate_seconds)
+        last_seen = Time.parse(row[f'{prefix}_last_seen'], context.timezone, context.accurate_seconds)
+        return cls(context, id, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property
     def total_minutes(self):
@@ -61,7 +53,7 @@ class Record:
     @property
     def block(self):
         '''Returns the block associated with this record'''
-        return self.system.get_block(self.block_id)
+        return self.context.system.get_block(self.block_id)
     
     @property
     def is_available(self):
@@ -71,14 +63,14 @@ class Record:
     @property
     def routes(self):
         if self.is_available:
-            return [self.system.get_route(number=n) for n in self.route_numbers]
+            return [self.context.system.get_route(number=n) for n in self.route_numbers]
         return self.route_numbers
     
-    def __init__(self, id, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
+    def __init__(self, context: Context, id, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
+        self.context = context
         self.id = id
         self.bus = bus
         self.date = date
-        self.system = system
         self.block_id = block_id
         self.route_numbers = route_numbers
         self.start_time = start_time

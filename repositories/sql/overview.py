@@ -31,15 +31,14 @@ class SQLOverviewRepository(OverviewRepository):
     
     def find(self, bus):
         '''Returns the overview of the given bus'''
-        overviews = self.find_all(Context(), bus=bus, limit=1)
+        overviews = self.find_all(Context(), Context(), bus=bus, limit=1)
         try:
             return overviews[0]
         except IndexError:
             return None
     
-    def find_all(self, context: Context, last_seen_system=None, bus=None, limit=None):
+    def find_all(self, context: Context, last_seen_context: Context, bus=None, limit=None):
         '''Returns all overviews that match the given context and bus'''
-        last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('overview',
             columns={
@@ -81,7 +80,7 @@ class SQLOverviewRepository(OverviewRepository):
             filters={
                 'overview.bus_number': bus_number,
                 'last_record.system_id': context.system_id,
-                'overview.last_seen_system_id': last_seen_system_id
+                'overview.last_seen_system_id': last_seen_context.system_id
             },
             limit=limit,
             initializer=Overview.from_db

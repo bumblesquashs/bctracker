@@ -76,7 +76,7 @@ class Departure:
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.agency.accurate_seconds)
+        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.accurate_seconds)
         try:
             pickup_type = PickupType(row[f'{prefix}_pickup_type'])
         except:

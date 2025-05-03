@@ -57,8 +57,8 @@ class Bus:
     
     def __str__(self):
         if self.is_known:
-            if self.context.agency.vehicle_name_length:
-                return f'{self.number:0{self.context.agency.vehicle_name_length}d}'
+            if self.context.vehicle_name_length:
+                return f'{self.number:0{self.context.vehicle_name_length}d}'
             return str(self.number)
         return 'Unknown Bus'
     

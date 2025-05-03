@@ -113,10 +113,10 @@
                                         <td>
                                             <div class="column">
                                                 {{ record.date.format_day() }}
-                                                <span class="non-desktop smaller-font">{{ record.system }}</span>
+                                                <span class="non-desktop smaller-font">{{ record.context }}</span>
                                             </div>
                                         </td>
-                                        <td class="desktop-only">{{ record.system }}</td>
+                                        <td class="desktop-only">{{ record.context }}</td>
                                         <td>
                                             <div class="column">
                                                 <div class="row">

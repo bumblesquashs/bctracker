@@ -135,17 +135,17 @@
                                     <td class="desktop-only">
                                         % include('components/order', order=bus.order)
                                     </td>
-                                    <td class="non-mobile">{{ transfer.old_system }}</td>
-                                    <td class="non-mobile">{{ transfer.new_system }}</td>
+                                    <td class="non-mobile">{{ transfer.old_context }}</td>
+                                    <td class="non-mobile">{{ transfer.new_context }}</td>
                                     <td class="mobile-only">
                                         <div class="column">
                                             <div>
                                                 <div class="smaller-font">From:</div>
-                                                {{ transfer.old_system }}
+                                                {{ transfer.old_context }}
                                             </div>
                                             <div>
                                                 <div class="smaller-font">To:</div>
-                                                {{ transfer.new_system }}
+                                                {{ transfer.new_context }}
                                             </div>
                                         </div>
                                     </td>

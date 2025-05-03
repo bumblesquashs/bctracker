@@ -22,7 +22,7 @@ class Point:
         lon = row[f'{prefix}_lon']
         return cls(context, shape_id, sequence, lat, lon)
     
-    def __init__(self, context, shape_id, sequence, lat, lon):
+    def __init__(self, context: Context, shape_id, sequence, lat, lon):
         self.context = context
         self.shape_id = shape_id
         self.sequence = sequence
