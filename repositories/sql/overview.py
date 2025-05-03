@@ -1,9 +1,7 @@
 
 from database import Database
-
 from models.context import Context
 from models.overview import Overview
-
 from repositories import OverviewRepository
 
 class SQLOverviewRepository(OverviewRepository):

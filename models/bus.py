@@ -1,25 +1,21 @@
 
-from di import di
+import repositories
 
 from models.context import Context
-
-from repositories import AdornmentRepository, OrderRepository
 
 class Bus:
     '''A public transportation vehicle'''
     
     __slots__ = (
-        'adornment_repository',
         'context',
         'number',
         'order'
     )
     
     @classmethod
-    def find(cls, context: Context, number, **kwargs):
+    def find(cls, context: Context, number):
         '''Returns a bus for the given context with the given number'''
-        order_repository = kwargs.get('order_repository') or di[OrderRepository]
-        order = order_repository.find(context, number)
+        order = repositories.order.find(context, number)
         return cls(context, number, order)
     
     @property
@@ -48,12 +44,10 @@ class Bus:
             return order.model
         return None
     
-    def __init__(self, context: Context, number: int, order, **kwargs):
+    def __init__(self, context: Context, number: int, order):
         self.context = context
         self.number = number
         self.order = order
-        
-        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
     
     def __str__(self):
         if self.is_known:
@@ -73,4 +67,4 @@ class Bus:
     
     def find_adornment(self):
         '''Returns the adornment for this bus, if one exists'''
-        return self.adornment_repository.find(self)
+        return repositories.adornment.find(self)

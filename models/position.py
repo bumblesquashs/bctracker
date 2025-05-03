@@ -1,5 +1,5 @@
 
-from di import di
+import repositories
 
 from models.adherence import Adherence
 from models.bus import Bus
@@ -7,13 +7,10 @@ from models.context import Context
 from models.occupancy import Occupancy
 from models.timestamp import Timestamp
 
-from repositories import DepartureRepository
-
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
     __slots__ = (
-        'departure_repository',
         'context',
         'bus',
         'trip_id',
@@ -107,7 +104,7 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
-    def __init__(self, context: Context, bus: Bus, trip_id: str, stop_id: str, block_id: str, route_id: str, sequence: int, lat: float, lon: float, bearing: float, speed: float, adherence: float, occupancy: Occupancy, timestamp: Timestamp, **kwargs):
+    def __init__(self, context: Context, bus: Bus, trip_id: str, stop_id: str, block_id: str, route_id: str, sequence: int, lat: float, lon: float, bearing: float, speed: float, adherence: float, occupancy: Occupancy, timestamp: Timestamp):
         self.context = context
         self.bus = bus
         self.trip_id = trip_id
@@ -122,8 +119,6 @@ class Position:
         self.adherence = adherence
         self.occupancy = occupancy
         self.timestamp = timestamp
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.bus == other.bus
@@ -187,4 +182,4 @@ class Position:
         '''Returns the trip's upcoming departures'''
         if self.sequence is None or not self.trip:
             return []
-        return self.departure_repository.find_upcoming(self.context, self.trip, self.sequence)
+        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)

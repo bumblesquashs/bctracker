@@ -1,6 +1,5 @@
 
 from enum import IntEnum
-
 from models.context import Context
 from models.date import Date
 from models.daterange import DateRange

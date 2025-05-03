@@ -2,7 +2,6 @@
 import json
 
 from models.agency import Agency
-
 from repositories import AgencyRepository
 
 class FileAgencyRepository(AgencyRepository):

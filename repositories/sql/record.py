@@ -1,13 +1,10 @@
 
-from datetime import timedelta
-
 from database import Database
-
+from datetime import timedelta
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.record import Record
-
 from repositories import RecordRepository
 
 class SQLRecordRepository(RecordRepository):

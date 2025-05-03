@@ -1,21 +1,21 @@
 
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models.region import Region
+    from models.point import Point
 
-class RegionRepository(ABC):
+class PointRepository(ABC):
     
     @abstractmethod
-    def load(self):
+    def create(self, context, row):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, region_id) -> Region | None:
+    def find_all(self, context, shape) -> list[Point]:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self) -> list[Region]:
+    def delete_all(self, context):
         raise NotImplementedError()

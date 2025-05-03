@@ -1,9 +1,7 @@
 
 from database import Database
-
 from models.context import Context
 from models.point import Point
-
 from repositories import PointRepository
 
 class SQLPointRepository(PointRepository):

@@ -1,18 +1,15 @@
 
-from di import di
+import repositories
 
 from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
-from repositories import DepartureRepository
-
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
     __slots__ = (
-        'departure_repository',
         'context',
         'id',
         'trips',
@@ -34,7 +31,7 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, context: Context, id: str, trips, **kwargs):
+    def __init__(self, context: Context, id: str, trips):
         self.context = context
         self.id = id
         self.trips = trips
@@ -44,8 +41,6 @@ class Block:
         self.sheets = context.system.copy_sheets(services)
         
         self._related_blocks = None
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.id == other.id
@@ -128,4 +123,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return self.departure_repository.find_all(self.context, block=self)
+        return repositories.departure.find_all(self.context, block=self)

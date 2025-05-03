@@ -1,12 +1,9 @@
 
+import repositories
+
 from enum import Enum
-
-from di import di
-
 from models.context import Context
 from models.time import Time
-
-from repositories import DepartureRepository
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -56,7 +53,6 @@ class Departure:
     '''An association between a trip and a stop'''
     
     __slots__ = (
-        'departure_repository',
         'context',
         'trip_id',
         'sequence',
@@ -69,7 +65,7 @@ class Departure:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='departure', **kwargs):
+    def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
         context = Context.find(system_id=row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
@@ -112,7 +108,7 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, context: Context, trip_id: str, sequence: int, stop_id: str, time: Time, pickup_type: PickupType, dropoff_type: DropoffType, timepoint: bool, distance: float, **kwargs):
+    def __init__(self, context: Context, trip_id: str, sequence: int, stop_id: str, time: Time, pickup_type: PickupType, dropoff_type: DropoffType, timepoint: bool, distance: float):
         self.context = context
         self.trip_id = trip_id
         self.sequence = sequence
@@ -122,8 +118,6 @@ class Departure:
         self.dropoff_type = dropoff_type
         self.timepoint = timepoint
         self.distance = distance
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence
@@ -160,8 +154,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return self.departure_repository.find(self.context, trip=self.trip, sequence=self.sequence - 1)
+        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return self.departure_repository.find(self.context, trip=self.trip, sequence=self.sequence + 1)
+        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence + 1)

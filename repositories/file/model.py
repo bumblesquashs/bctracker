@@ -2,7 +2,6 @@
 import json
 
 from models.model import Model, ModelType
-
 from repositories import ModelRepository
 
 class FileModelRepository(ModelRepository):

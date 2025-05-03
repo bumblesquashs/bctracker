@@ -1,9 +1,9 @@
 
+import helpers
+
 from models.date import Date
 from models.daterange import DateRange
 from models.weekday import Weekday
-
-import helpers
 
 class Schedule:
     '''Dates when a service is running'''

@@ -1,24 +1,19 @@
 
-from random import randint, seed
-from math import sqrt
+import helpers
+import repositories
+
 from colorsys import hls_to_rgb
-
-from di import di
-
+from math import sqrt
 from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
-
-from repositories import DepartureRepository
-
-import helpers
+from random import randint, seed
 
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
     __slots__ = (
-        'departure_repository',
         'context',
         'id',
         'number',
@@ -78,7 +73,7 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, context: Context, id: str, number: str, name: str, colour: str, text_colour: str, **kwargs):
+    def __init__(self, context: Context, id: str, number: str, name: str, colour: str, text_colour: str):
         self.context = context
         self.id = id
         self.number = number
@@ -87,8 +82,6 @@ class Route:
         self.text_colour = text_colour
         
         self.key = helpers.key(number)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -165,7 +158,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_repository.find_all(self.context, route=self)
+        return repositories.departure.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

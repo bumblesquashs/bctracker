@@ -1,10 +1,8 @@
 
 from database import Database
-
 from models.assignment import Assignment
 from models.context import Context
 from models.date import Date
-
 from repositories import AssignmentRepository
 
 class SQLAssignmentRepository(AssignmentRepository):

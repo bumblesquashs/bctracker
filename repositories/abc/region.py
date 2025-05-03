@@ -1,21 +1,21 @@
 
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models.system import System
+    from models.region import Region
 
-class SystemRepository(ABC):
+class RegionRepository(ABC):
     
     @abstractmethod
     def load(self):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, system_id) -> System | None:
+    def find(self, region_id) -> Region | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, enabled_only: bool = True) -> list[System]:
+    def find_all(self) -> list[Region]:
         raise NotImplementedError()

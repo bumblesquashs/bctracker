@@ -1,6 +1,7 @@
 
 % from models.date import Date
-% from repositories import PositionRepository
+
+% import repositories
 
 % rebase('base')
 
@@ -241,7 +242,7 @@
             </div>
         % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
             % bus = assignment.bus
-            % position = di[PositionRepository].find(bus)
+            % position = repositories.position.find(bus)
             <div class="section">
                 <div class="header">
                     <h2>Scheduled Bus</h2>

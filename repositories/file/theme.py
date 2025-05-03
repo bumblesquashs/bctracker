@@ -2,7 +2,6 @@
 import json
 
 from models.theme import Theme
-
 from repositories import ThemeRepository
 
 class FileThemeRepository(ThemeRepository):

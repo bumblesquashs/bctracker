@@ -1,9 +1,7 @@
 
 from database import Database
-
 from models.context import Context
 from models.trip import Trip
-
 from repositories import TripRepository
 
 class SQLTripRepository(TripRepository):

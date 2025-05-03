@@ -1,10 +1,8 @@
 
 from database import Database
-
 from models.area import Area
 from models.context import Context
 from models.stop import Stop
-
 from repositories import StopRepository
 
 class SQLStopRepository(StopRepository):

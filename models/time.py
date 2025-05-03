@@ -1,6 +1,7 @@
 
-from datetime import datetime
 import pytz
+
+from datetime import datetime
 
 class Time:
     '''A specific hour, minute, and second'''

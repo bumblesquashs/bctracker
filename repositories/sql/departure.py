@@ -1,9 +1,7 @@
 
 from database import Database
-
 from models.context import Context
 from models.departure import Departure, PickupType, DropoffType
-
 from repositories import DepartureRepository
 
 class SQLDepartureRepository(DepartureRepository):

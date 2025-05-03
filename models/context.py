@@ -1,14 +1,12 @@
 
+import repositories
+
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.agency import Agency
     from models.system import System
-
-from di import di
-
-from repositories import AgencyRepository, SystemRepository
 
 class Context:
     '''A context representing an agency and system'''
@@ -19,15 +17,13 @@ class Context:
     )
     
     @classmethod
-    def find(cls, agency_id=None, system_id=None, **kwargs):
+    def find(cls, agency_id=None, system_id=None):
         if agency_id:
-            agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-            agency = agency_repository.find(agency_id)
+            agency = repositories.agency.find(agency_id)
         else:
             agency = None
         if system_id:
-            system_repository = kwargs.get('system_repository') or di[SystemRepository]
-            system = system_repository.find(system_id)
+            system = repositories.system.find(system_id)
         else:
             system = None
         return cls(agency, system)

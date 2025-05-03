@@ -1,9 +1,7 @@
 
 from database import Database
-
 from models.context import Context
 from models.transfer import Transfer
-
 from repositories import TransferRepository
 
 class SQLTransferRepository(TransferRepository):

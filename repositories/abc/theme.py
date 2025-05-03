@@ -1,21 +1,21 @@
 
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models.point import Point
+    from models.theme import Theme
 
-class PointRepository(ABC):
+class ThemeRepository(ABC):
     
     @abstractmethod
-    def create(self, context, row):
+    def load(self):
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, context, shape) -> list[Point]:
+    def find(self, theme_id) -> Theme | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def delete_all(self, context):
+    def find_all(self) -> list[Theme]:
         raise NotImplementedError()

@@ -1,21 +1,21 @@
 
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models.theme import Theme
+    from models.system import System
 
-class ThemeRepository(ABC):
+class SystemRepository(ABC):
     
     @abstractmethod
     def load(self):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, theme_id) -> Theme | None:
+    def find(self, system_id) -> System | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self) -> list[Theme]:
+    def find_all(self, enabled_only: bool = True) -> list[System]:
         raise NotImplementedError()

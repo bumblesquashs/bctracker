@@ -1,14 +1,11 @@
 
 from database import Database
-
-from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
-
 from models.adherence import Adherence
 from models.context import Context
 from models.occupancy import Occupancy
 from models.position import Position
 from models.timestamp import Timestamp
-
+from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
 from repositories import PositionRepository
 
 class SQLPositionRepository(PositionRepository):

@@ -1,9 +1,8 @@
 
-from datetime import datetime, timedelta
-
 import calendar
 import pytz
 
+from datetime import datetime, timedelta
 from models.weekday import Weekday
 
 class Date:

@@ -1,18 +1,14 @@
 
-from di import di
+import repositories
 
 from models.context import Context
 from models.direction import Direction
 from models.time import Time
 
-from repositories import DepartureRepository, PointRepository
-
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
     __slots__ = (
-        'departure_repository',
-        'point_repository',
         'context',
         'id',
         'short_id',
@@ -142,7 +138,7 @@ class Trip:
         '''Returns the direction for this trip'''
         return self.cache.direction
     
-    def __init__(self, context: Context, trip_id: str, route_id: str, service_id: str, block_id: str, direction_id: int, shape_id: str, headsign: str, **kwargs):
+    def __init__(self, context: Context, trip_id: str, route_id: str, service_id: str, block_id: str, direction_id: int, shape_id: str, headsign: str):
         self.context = context
         self.id = trip_id
         self.route_id = route_id
@@ -151,9 +147,6 @@ class Trip:
         self.direction_id = direction_id
         self.shape_id = shape_id
         self.headsign = headsign
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
         
         id_parts = trip_id.split(':')
         if len(id_parts) == 1:
@@ -194,11 +187,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return self.point_repository.find_all(self.context, self.shape_id)
+        return repositories.point.find_all(self.context, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return self.departure_repository.find_all(self.context, trip=self)
+        return repositories.departure.find_all(self.context, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

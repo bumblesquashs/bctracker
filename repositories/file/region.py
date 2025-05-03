@@ -2,7 +2,6 @@
 import json
 
 from models.region import Region
-
 from repositories import RegionRepository
 
 class FileRegionRepository(RegionRepository):

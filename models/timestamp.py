@@ -1,7 +1,7 @@
 
-from datetime import datetime
 import pytz
 
+from datetime import datetime
 from models.date import Date
 from models.time import Time
 

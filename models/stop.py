@@ -1,22 +1,17 @@
 
+import helpers
+import repositories
+
 from math import sqrt
-
-from di import di
-
 from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
-from repositories import DepartureRepository
-
-import helpers
-
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
     __slots__ = (
-        'departure_repository',
         'context',
         'id',
         'number',
@@ -72,7 +67,7 @@ class Stop:
         '''Returns the routes for this stop'''
         return self.cache.routes
     
-    def __init__(self, context: Context, id: str, number: str, name: str, lat: float, lon: float, **kwargs):
+    def __init__(self, context: Context, id: str, number: str, name: str, lat: float, lon: float):
         self.context = context
         self.id = id
         self.number = number
@@ -81,8 +76,6 @@ class Stop:
         self.lon = lon
         
         self.key = helpers.key(number)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
         return self.name
@@ -139,7 +132,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = self.departure_repository.find_all(self.context, stop=self)
+        departures = repositories.departure.find_all(self.context, stop=self)
         if service_group:
             return sorted([d for d in departures if d.trip and d.trip.service in service_group])
         if date:
@@ -148,7 +141,7 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return self.departure_repository.find_adjacent(self.context, self)
+        return repositories.departure.find_adjacent(self.context, self)
 
 class StopCache:
     '''A collection of calculated values for a single stop'''

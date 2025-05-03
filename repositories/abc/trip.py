@@ -1,28 +1,23 @@
 
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models.area import Area
-    from models.stop import Stop
+    from models.trip import Trip
 
-class StopRepository(ABC):
+class TripRepository(ABC):
     
     @abstractmethod
     def create(self, context, row):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, context, stop_id, number) -> Stop | None:
+    def find(self, context, trip_id) -> Trip | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, context, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
-        raise NotImplementedError()
-    
-    @abstractmethod
-    def find_area(self, context) -> Area:
+    def find_all(self, context, route, block, limit) -> list[Trip]:
         raise NotImplementedError()
     
     @abstractmethod
