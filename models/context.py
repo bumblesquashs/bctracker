@@ -1,7 +1,8 @@
 
+from __future__ import annotations
+
 import repositories
 
-from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
