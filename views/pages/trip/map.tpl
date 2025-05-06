@@ -3,7 +3,7 @@
 
 <div id="page-header">
     <h1>Trip {{! trip.display_id }}</h1>
-    <h2 class="headsigns">
+    <h2>
         % if trip.custom_headsigns:
             % include('components/custom_headsigns', custom_headsigns=trip.custom_headsigns)
         % else:
