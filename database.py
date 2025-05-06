@@ -113,6 +113,7 @@ SQL_SCRIPTS = [
             dropoff_type TEXT NOT NULL,
             timepoint INTEGER NOT NULL,
             distance REAL,
+            headsign TEXT,
             PRIMARY KEY (system_id, trip_id, sequence),
             FOREIGN KEY (system_id, trip_id) REFERENCES trip (system_id, trip_id),
             FOREIGN KEY (system_id, stop_id) REFERENCES stop (system_id, stop_id)

@@ -64,7 +64,8 @@ class Departure:
         'pickup_type',
         'dropoff_type',
         'timepoint',
-        'distance'
+        'distance',
+        'headsign'
     )
     
     @classmethod
@@ -86,7 +87,8 @@ class Departure:
             dropoff_type = DropoffType.NORMAL
         timepoint = row[f'{prefix}_timepoint'] == 1
         distance = row[f'{prefix}_distance']
-        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance)
+        headsign = row[f'{prefix}_headsign']
+        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
     
     @property
     def stop(self):
@@ -112,7 +114,7 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, **kwargs):
+    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign, **kwargs):
         self.system = system
         self.trip_id = trip_id
         self.sequence = sequence
@@ -122,8 +124,16 @@ class Departure:
         self.dropoff_type = dropoff_type
         self.timepoint = timepoint
         self.distance = distance
+        self.headsign = headsign
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+    
+    def __str__(self):
+        if self.headsign:
+            if self.system.agency.prefix_headsigns and self.trip.route:
+                return f'{self.trip.route.number} {self.headsign}'
+            return self.headsign
+        return str(self.trip)
     
     def __eq__(self, other):
         return self.trip_id == other.trip_id and self.sequence == other.sequence

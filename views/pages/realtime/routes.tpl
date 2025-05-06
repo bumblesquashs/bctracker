@@ -99,7 +99,7 @@
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign')
+                                            % include('components/headsign', departure=position.departure)
                                             <div class="mobile-only smaller-font">
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False)

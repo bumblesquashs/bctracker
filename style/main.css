@@ -74,6 +74,10 @@ h1 .stop .stop-number {
     font-size: 20pt;
 }
 
+h2 .custom-headsigns {
+    --image-size: 24px;
+}
+
 h2 .route {
     font-size: 16pt;
     min-width: 16px;
@@ -688,6 +692,15 @@ table tr.table-button {
 .container > .section.closed > .header > .toggle {
     -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
+}
+
+.custom-headsigns div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.custom-headsigns svg {
+    vertical-align: middle;
 }
 
 .display-none {

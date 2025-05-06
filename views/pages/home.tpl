@@ -159,7 +159,7 @@
                                                         </td>
                                                         <td>
                                                             % if position and position.trip:
-                                                                % include('components/headsign', trip=position.trip)
+                                                                % include('components/headsign', departure=position.departure, trip=position.trip)
                                                             % else:
                                                                 <div class="lighter-text">Not in service</div>
                                                             % end
