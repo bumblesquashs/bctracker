@@ -109,6 +109,11 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
+    @property
+    def departure(self):
+        '''Returns the departure associated with this position'''
+        return self.departure_repository.find(self.system, self.trip_id, self.sequence)
+    
     def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
         self.system = system
         self.bus = bus
@@ -164,7 +169,11 @@ class Position:
             data['adornment'] = str(adornment)
         trip = self.trip
         if trip:
-            data['headsign'] = str(trip).replace("'", '&apos;')
+            departure = self.departure
+            if departure and departure.headsign:
+                data['headsign'] = str(departure).replace("'", '&apos;')
+            else:
+                data['headsign'] = str(trip).replace("'", '&apos;')
             data['route_number'] = trip.route.number
             data['system_id'] = trip.system.id
             data['shape_id'] = trip.shape_id

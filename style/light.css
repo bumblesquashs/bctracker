@@ -19,6 +19,10 @@
     --adherence-background: #FF9A3A;
 }
 
+.custom-headsigns {
+    --image-color: #666666;
+}
+
 .modified-service {
     background-color: #FFA560;
     color: #000000;

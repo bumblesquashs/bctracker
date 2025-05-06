@@ -73,7 +73,7 @@
                         % stop = position.stop
                         <td>
                             <div class="column">
-                                % include('components/headsign')
+                                % include('components/headsign', departure=position.departure)
                                 <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
                                 <div class="mobile-only smaller-font">
                                     Trip:

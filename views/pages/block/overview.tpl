@@ -214,7 +214,7 @@
                                     </td>
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign')
+                                            % include('components/headsign', departure=position.departure)
                                             <div class="mobile-only smaller-font">
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False)
@@ -280,7 +280,7 @@
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign', trip=position.trip)
+                                            % include('components/headsign', departure=position.departure, trip=position.trip)
                                             <div class="non-desktop smaller-font">
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False, trip=position.trip)

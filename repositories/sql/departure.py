@@ -33,6 +33,10 @@ class SQLDepartureRepository(DepartureRepository):
             distance = int(row['shape_dist_traveled'])
         except (KeyError, ValueError):
             distance = None
+        try:
+            headsign = row['stop_headsign']
+        except KeyError:
+            headsign = None
         self.database.insert('departure', {
             'system_id': system_id,
             'trip_id': row['trip_id'],
@@ -42,7 +46,8 @@ class SQLDepartureRepository(DepartureRepository):
             'pickup_type': pickup_type.value,
             'dropoff_type': dropoff_type.value,
             'timepoint': 1 if timepoint else 0,
-            'distance': distance
+            'distance': distance,
+            'headsign': headsign
         })
     
     def find(self, system, trip=None, sequence=None, stop=None):
@@ -85,7 +90,8 @@ class SQLDepartureRepository(DepartureRepository):
                 'departure.pickup_type': 'departure_pickup_type',
                 'departure.dropoff_type': 'departure_dropoff_type',
                 'departure.timepoint': 'departure_timepoint',
-                'departure.distance': 'departure_distance'
+                'departure.distance': 'departure_distance',
+                'departure.headsign': 'departure_headsign'
             },
             joins=joins,
             filters={
@@ -115,7 +121,8 @@ class SQLDepartureRepository(DepartureRepository):
                 'departure.pickup_type': 'departure_pickup_type',
                 'departure.dropoff_type': 'departure_dropoff_type',
                 'departure.timepoint': 'departure_timepoint',
-                'departure.distance': 'departure_distance'
+                'departure.distance': 'departure_distance',
+                'departure.headsign': 'departure_headsign'
             },
             filters={
                 'departure.system_id': system_id,
@@ -155,7 +162,8 @@ class SQLDepartureRepository(DepartureRepository):
                 'departure.pickup_type': 'departure_pickup_type',
                 'departure.dropoff_type': 'departure_dropoff_type',
                 'departure.timepoint': 'departure_timepoint',
-                'departure.distance': 'departure_distance'
+                'departure.distance': 'departure_distance',
+                'departure.headsign': 'departure_headsign'
             },
             ctes={
                 'stop_trip': cte
