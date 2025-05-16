@@ -1,5 +1,16 @@
 
 :root {
+    --navigation-bar-background: rgba(0, 0, 0, 0.2);
+    --navigation-bar-hover: rgba(0, 0, 0, 0.6);
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: rgba(0, 0, 0, 0.2);
+    --navigation-menu-foreground: #FFFFFF;
+    
+    --status-bar-background: rgba(0, 0, 0, 0.2);
+    --status-bar-hover: rgba(0, 0, 0, 0.6);
+    --status-bar-foreground: #FFFFFF;
+    
     --tooltip-background: #000000;
     
     --loading-background: rgba(0, 0, 0, 0);
@@ -110,53 +121,12 @@ table tr.table-button:hover {
 }
 
 #navigation-bar {
-    background-color: rgba(0, 0, 0, 0.2);
     --tooltip-background: #000000;
-    --image-color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-#navigation-bar .navigation-icon.disabled:hover {
-    background-color: rgba(0, 0, 0, 0) !important;
-}
-
-#navigation-bar .navigation-item {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-item:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-#navigation-bar .navigation-item.disabled:hover {
-    background-color: rgba(0, 0, 0, 0) !important;
 }
 
 #navigation-menu {
-    background-color: rgba(0, 0, 0, 0.2);
     border-top: 1px solid rgba(255, 255, 255, 0.3);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-#navigation-menu .menu-button {
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-#navigation-menu .menu-button.disabled {
-    color: #ABABAB;
-    --image-color: #ABABAB;
-}
-
-#navigation-menu-toggle .line {
-    background-color: #FFFFFF;
 }
 
 #nearby-status.loading {
@@ -180,18 +150,6 @@ table tr.table-button:hover {
 #quick-navigation .item {
     background-color: rgba(255, 255, 255, 0.6);
     border-color: rgba(0, 0, 0, 0.5);
-}
-
-#refresh-button {
-    --image-color: #FFFFFF;
-}
-
-#refresh-button:hover {
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-#refresh-button.disabled:hover {
-    background-color: rgba(0, 0, 0, 0);
 }
 
 #search {
@@ -242,31 +200,18 @@ table tr.table-button:hover {
     color: #E6E6E6;
 }
 
-#side-bar {
-    background-color: rgba(0, 0, 0, 0.2);
-    color: #FFFFFF;
-    border-right-color: rgba(255, 255, 255, 0.3);
-}
-
-#side-bar-toggle {
-    background-color: rgba(0, 0, 0, 0.4);
-    --image-color: #FFFFFF;
-}
-
-#side-bar-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-#status {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
+#status-bar {
+    --tooltip-background: #000000;
 }
 
 #system-menu {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 #system-menu .header {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
 }
 
 #system-menu .system-button {
@@ -278,22 +223,6 @@ table tr.table-button:hover {
 }
 
 #system-menu .system-button.current {
-    background-color: rgba(0, 0, 0, 0.4);
-    font-weight: bold;
-    cursor: default;
-}
-
-#system-menu-toggle {
-    --image-color: #FFFFFF;
-}
-
-#title {
-    background-color: rgba(0, 0, 0, 0.2);
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-#title:hover {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
