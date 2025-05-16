@@ -213,6 +213,10 @@ table tr.table-button:hover {
     color: #ABABAB;
 }
 
+#status-bar {
+    --tooltip-background: #B24C00;
+}
+
 #system-menu {
     background-color: #393939;
     border-color: #565656;

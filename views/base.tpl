@@ -115,6 +115,7 @@
                 setTimeout(function() {
                     const element = document.getElementById("refresh-button")
                     element.classList.remove("disabled");
+                    element.innerHTML += "<div class='tooltip right'>Refresh Page</div>";
                     element.onclick = refresh
                 }, 1000 * (timeToNextUpdate + 15));
                 
@@ -382,18 +383,19 @@
                 % include('components/svg', name='system')
             </div>
             <div class="details">
-                <div id="system" onclick="toggleSystemMenuDesktop()">
+                <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
                     % if system:
                         {{ system }}
                     % else:
                         All Transit Systems
                     % end
+                    <div class="tooltip right">Toggle Systems List</div>
                 </div>
                 % if last_updated:
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
                 % end
             </div>
-            <div id="refresh-button" class="disabled">
+            <div id="refresh-button" class="disabled tooltip-anchor">
                 % include('components/svg', name='action/refresh')
             </div>
         </div>

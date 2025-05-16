@@ -202,6 +202,10 @@ table tr.table-button:hover {
     color: #ABABAB;
 }
 
+#status-bar {
+    --tooltip-background: #000000;
+}
+
 #system-menu {
     background-color: rgba(0, 0, 0, 0.6);
     border-color: rgba(255, 255, 255, 0.3);
