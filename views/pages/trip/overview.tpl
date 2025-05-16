@@ -5,7 +5,13 @@
 
 <div id="page-header">
     <h1>Trip {{! trip.display_id }}</h1>
-    <h2>{{ trip }}</h2>
+    <h2>
+        % if trip.custom_headsigns:
+            % include('components/custom_headsigns', custom_headsigns=trip.custom_headsigns)
+        % else:
+            {{ trip }}
+        % end
+    </h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ get_url(system, 'trips', trip, 'map') }}" class="tab-button">Map</a>
@@ -246,7 +252,7 @@
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign', trip=position.trip)
+                                            % include('components/headsign', departure=position.departure, trip=position.trip)
                                             <div class="non-desktop smaller-font">
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False, trip=position.trip)
@@ -284,6 +290,7 @@
                 % if [d for d in departures if d.timepoint]:
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
+                % last_headsign = None
                 <table>
                     <thead>
                         <tr>
@@ -294,6 +301,15 @@
                     <tbody>
                         % for departure in departures:
                             % stop = departure.stop
+                            % if trip.custom_headsigns:
+                                % if departure.headsign != last_headsign:
+                                    <tr class="header">
+                                        <td colspan="2">{{ departure }}</td>
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                % end
+                                % last_headsign = departure.headsign
+                            % end
                             <tr>
                                 <td class="{{ 'timing-point' if departure.timepoint else '' }}">
                                     {{ departure.time.format_web(time_format) }}

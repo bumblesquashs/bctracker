@@ -136,7 +136,12 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/adherence', adherence=position.adherence, size='large')
-                                <h3>{{ trip }}</h3>
+                                % departure = position.departure
+                                % if departure and departure.headsign:
+                                    <h3>{{ departure }}</h3>
+                                % else:
+                                    <h3>{{ trip }}</h3>
+                                % end
                             </div>
                         </div>
                         <div class="section">

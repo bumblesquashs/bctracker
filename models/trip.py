@@ -142,6 +142,11 @@ class Trip:
         '''Returns the direction for this trip'''
         return self.cache.direction
     
+    @property
+    def custom_headsigns(self):
+        '''Returns the custom headsigns for this trip'''
+        return self.cache.custom_headsigns
+    
     def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
         self.system = system
         self.id = trip_id
@@ -221,7 +226,8 @@ class TripCache:
         'first_departure',
         'last_departure',
         'departure_count',
-        'direction'
+        'direction',
+        'custom_headsigns'
     )
     
     def __init__(self, departures):
@@ -230,8 +236,16 @@ class TripCache:
             self.last_departure = departures[-1]
             self.departure_count = len(departures)
             self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+            headsigns = [str(d) for d in departures if d.headsign]
+            previous_headsign = None
+            self.custom_headsigns = []
+            for headsign in headsigns:
+                if headsign != previous_headsign:
+                    self.custom_headsigns.append(headsign)
+                previous_headsign = headsign
         else:
             self.first_departure = None
             self.last_departure = None
             self.departure_count = 0
             self.direction = Direction.UNKNOWN
+            self.custom_headsigns = []
