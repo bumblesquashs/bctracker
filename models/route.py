@@ -194,7 +194,12 @@ class Route:
     
     def get_headsigns(self, service_group=None, date=None):
         '''Returns all headsigns from this route'''
-        return sorted({str(t) for t in self.get_trips(service_group, date)})
+        headsigns = set()
+        for trip in self.get_trips(service_group, date):
+            headsigns.add(str(trip))
+            for headsign in trip.custom_headsigns:
+                headsigns.add(headsign)
+        return sorted(headsigns)
     
     def get_match(self, query):
         '''Returns a match for this route with the given query'''

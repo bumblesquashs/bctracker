@@ -238,6 +238,15 @@ class System:
             for route_id, trips in route_trips.items():
                 if route_id not in self.route_caches:
                     self.route_caches[route_id] = RouteCache(self, trips)
+            for trip_id in self.trips.keys():
+                if trip_id not in self.trip_caches:
+                    self.trip_caches[trip_id] = TripCache([])
+            for stop_id in self.stops.keys():
+                if stop_id not in self.stop_caches:
+                    self.stop_caches[stop_id] = StopCache(self, [])
+            for route_id in self.routes.keys():
+                if route_id not in self.route_caches:
+                    self.route_caches[route_id] = RouteCache(self, [])
         except Exception as e:
             print(f'Failed to update cached data for {self}: {e}')
     

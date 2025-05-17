@@ -142,7 +142,12 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/adherence', adherence=position.adherence, size='large')
-                                <h3>{{ trip }}</h3>
+                                % departure = position.departure
+                                % if departure and departure.headsign:
+                                    <h3>{{ departure }}</h3>
+                                % else:
+                                    <h3>{{ trip }}</h3>
+                                % end
                             </div>
                         </div>
                         <div class="section">
@@ -292,7 +297,7 @@
                                     <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
                                         <td colspan="2">
                                             <div class="row justify-center">
-                                                % include('components/svg', name='down')
+                                                % include('components/svg', name='action/open')
                                                 Show Full Schedule
                                             </div>
                                         </td>
@@ -327,7 +332,7 @@
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
-                                % include('components/svg', name='warning')
+                                % include('components/svg', name='status/warning')
                             </span>
                             <span>may be accidental logins.</span>
                         </p>

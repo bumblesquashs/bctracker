@@ -12,7 +12,8 @@ class Settings:
         'enable_analytics',
         'enable_gtfs_backups',
         'enable_realtime_backups',
-        'enable_database_backups'
+        'enable_database_backups',
+        'update_cache_in_background'
     )
     
     def __init__(self):
@@ -34,6 +35,7 @@ class Settings:
         self.enable_gtfs_backups = True
         self.enable_realtime_backups = True
         self.enable_database_backups = True
+        self.update_cache_in_background = True
     
     def setup(self, config):
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
@@ -50,3 +52,4 @@ class Settings:
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'
         self.enable_database_backups = config.get('enable_database_backups', 'true') == 'true'
+        self.update_cache_in_background = config.get('update_cache_in_background', 'true') == 'true'

@@ -36,6 +36,9 @@
             { "year": 2014, "low": 6074, "high": 6093 },
             { "year": 2014, "number": 6094 }
         ],
+        "new-flyer-xe40": [
+            { "year": 2025, "low": 7500, "high": 7524 }
+        ],
         "new-flyer-xn40": [
             { "year": 2012, "low": 8201, "high": 8202 }
         ],

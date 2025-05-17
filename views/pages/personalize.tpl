@@ -87,7 +87,7 @@
                 <div class="options-container">
                     <div class="option" onclick="setHighContrast('{{ high_contrast }}' !== 'True')">
                         <div class="checkbox {{ 'selected' if high_contrast else '' }}">
-                            % include('components/svg', name='check')
+                            % include('components/svg', name='status/check')
                         </div>
                         <div>Enable High Contrast Mode</div>
                     </div>

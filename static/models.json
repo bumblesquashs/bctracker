@@ -64,6 +64,12 @@
             "length": 40,
             "fuel": "Hydrogen Fuel Cell"
         },
+        "new-flyer-xe40": {
+            "manufacturer": "New Flyer",
+            "name": "XE40",
+            "length": 40,
+            "fuel": "Battery Electric"
+        },
         "new-flyer-xn40": {
             "manufacturer": "New Flyer",
             "name": "XN40",

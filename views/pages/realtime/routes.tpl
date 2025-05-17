@@ -19,7 +19,7 @@
 <div class="options-container">
     <div class="option" onclick="toggleNISBuses()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-            % include('components/svg', name='check')
+            % include('components/svg', name='status/check')
         </div>
         <div>Show NIS Buses</div>
     </div>
@@ -99,7 +99,7 @@
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign')
+                                            % include('components/headsign', departure=position.departure)
                                             <div class="mobile-only smaller-font">
                                                 Trip:
                                                 % include('components/trip', include_tooltip=False)

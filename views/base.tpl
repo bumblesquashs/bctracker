@@ -19,9 +19,9 @@
             % end
         </title>
         
-        <link rel="icon" type="image/png" href="/img/favicon-16.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="/img/favicon-32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/img/favicon-48.png" sizes="48x48" />
+        <link rel="icon" type="image/png" href="/img/abtracker/favicon-16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/img/abtracker/favicon-32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/abtracker/favicon-48.png" sizes="48x48" />
         
         % if system:
             <meta name="description" content="{{ system }} Transit Schedules and Bus Tracking" />
@@ -49,7 +49,7 @@
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ get_url(system, *path) }}" />
-        <meta property="og:image" content="{{ get_url(system, 'img', 'meta-logo.png') }}" />
+        <meta property="og:image" content="{{ get_url(system, 'img', 'abtracker', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -115,6 +115,7 @@
                 setTimeout(function() {
                     const element = document.getElementById("refresh-button")
                     element.classList.remove("disabled");
+                    element.innerHTML += "<div class='tooltip right'>Refresh Page</div>";
                     element.onclick = refresh
                 }, 1000 * (timeToNextUpdate + 15));
                 
@@ -146,12 +147,12 @@
         % end
         
         % include('components/svg_script', name='bus')
-        % include('components/svg_script', name='bus-artic')
-        % include('components/svg_script', name='bus-coach')
-        % include('components/svg_script', name='bus-conventional')
-        % include('components/svg_script', name='bus-decker')
-        % include('components/svg_script', name='bus-midibus')
-        % include('components/svg_script', name='bus-shuttle')
+        % include('components/svg_script', name='model/type/bus-artic')
+        % include('components/svg_script', name='model/type/bus-coach')
+        % include('components/svg_script', name='model/type/bus-conventional')
+        % include('components/svg_script', name='model/type/bus-decker')
+        % include('components/svg_script', name='model/type/bus-midibus')
+        % include('components/svg_script', name='model/type/bus-shuttle')
         % include('components/svg_script', name='ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
@@ -161,10 +162,6 @@
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search").classList.add("display-none");
-            }
-            
-            function toggleSystemMenu() {
-                document.getElementById("system-menu").classList.toggle("collapse-non-desktop");
             }
             
             String.prototype.format = function() {
@@ -267,37 +264,33 @@
         </script>
     </head>
     
-    <body class="{{ 'full-map' if full_map else '' }} {{ 'side-bar-closed' if hide_systems else 'side-bar-open' }}">
-        <a id="title" href="{{ get_url(system) }}">
-            % include('components/svg', name='abtracker')
-            <div class="side-bar-open-only">ABTracker</div>
-            <div class="beta-tag">BETA</div>
-        </a>
+    <body class="{{ 'full-map' if full_map else '' }}">
         <div id="navigation-bar">
-            <a class="navigation-item title non-desktop row" href="{{ get_url(system) }}">
-                ABTracker
+            <a id="title" href="{{ get_url(system) }}">
+                % include('components/svg', name='abtracker/abtracker')
+                <div>ABTracker</div>
                 <div class="beta-tag">BETA</div>
             </a>
             
-            <a class="navigation-item non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
+            <a class="navigation-button non-mobile" href="{{ get_url(system, 'map') }}">Map</a>
             % if not system or system.realtime_enabled:
-                <a class="navigation-item non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
-                <a class="navigation-item desktop-only" href="{{ get_url(system, 'history') }}">History</a>
+                <a class="navigation-button non-mobile" href="{{ get_url(system, 'realtime') }}">Realtime</a>
+                <a class="navigation-button desktop-only" href="{{ get_url(system, 'history') }}">History</a>
             % else:
-                <div class="navigation-item non-mobile disabled">Realtime</div>
-                <div class="navigation-item desktop-only disabled">History</div>
+                <div class="navigation-button non-mobile disabled">Realtime</div>
+                <div class="navigation-button desktop-only disabled">History</div>
             % end
             
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'stops') }}">Stops</a>
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+            <a class="navigation-button desktop-only" href="{{ get_url(system, 'routes') }}">Routes</a>
+            <a class="navigation-button desktop-only" href="{{ get_url(system, 'stops') }}">Stops</a>
+            <a class="navigation-button desktop-only" href="{{ get_url(system, 'blocks') }}">Blocks</a>
             
-            <a class="navigation-item desktop-only" href="{{ get_url(system, 'about') }}">About</a>
+            <a class="navigation-button desktop-only" href="{{ get_url(system, 'about') }}">About</a>
             
             <div class="flex-1"></div>
             
             % if show_random:
-                <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'random') }}">
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(system, 'random') }}">
                     % include('components/svg', name='random')
                     <div class="tooltip left">
                         <div class="title">Random Page</div>
@@ -305,23 +298,23 @@
                 </a>
             % end
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(system, 'nearby') }}">
                 % include('components/svg', name='nearby')
                 <div class="tooltip left">
                     <div class="title">Nearby Stops</div>
                 </div>
             </a>
             
-            <a class="navigation-icon desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(system, 'personalize') }}">
                 % include('components/svg', name='personalize')
                 <div class="tooltip left">
                     <div class="title">Personalize</div>
                 </div>
             </a>
             
-            <div class="navigation-icon" onclick="toggleSearch()">
+            <div class="navigation-button compact" onclick="toggleSearch()">
                 <div>
-                    % include('components/svg', name='search')
+                    % include('components/svg', name='action/search')
                 </div>
                 <div class="label">Search</div>
             </div>
@@ -387,28 +380,29 @@
                 </a>
             % end
         </div>
-        <div id="side-bar">
-            <div id="status" class="side-bar-open-only">
-                <div id="system-menu-toggle" onclick="toggleSystemMenu()">
-                    % include('components/svg', name='system')
-                </div>
-                <div class="details">
-                    <div id="system">
-                        % if system:
-                            {{ system }}
-                        % else:
-                            All Transit Agencies
-                        % end
-                    </div>
-                    % if last_updated:
-                        <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
-                    % end
-                </div>
-                <div id="refresh-button" class="disabled">
-                    % include('components/svg', name='refresh')
-                </div>
+        <div id="status-bar">
+            <div id="system-menu-toggle" onclick="toggleSystemMenuMobile()">
+                % include('components/svg', name='system')
             </div>
-            <div id="system-menu" class="collapse-non-desktop side-bar-open-only">
+            <div class="details">
+                <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
+                    % if system:
+                        {{ system }}
+                    % else:
+                        All Transit Agencies
+                    % end
+                    <div class="tooltip right">Toggle Agencies List</div>
+                </div>
+                % if last_updated:
+                    <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
+                % end
+            </div>
+            <div id="refresh-button" class="disabled tooltip-anchor">
+                % include('components/svg', name='action/refresh')
+            </div>
+        </div>
+        <div id="content">
+            <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
                 % if system:
                     <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Agencies</a>
                 % else:
@@ -434,108 +428,103 @@
                     % end
                 % end
             </div>
-            <div class="flex-1 side-bar-closed-only"></div>
-            <div id="side-bar-toggle-container">
-                <div id="side-bar-toggle" onclick="toggleSideBar()">
-                    <div class="side-bar-open-only">
-                        % include('components/svg', name='left-double')
-                    </div>
-                    <div class="side-bar-closed-only">
-                        % include('components/svg', name='right-double')
-                    </div>
+            <div id="main">
+                <div id="banners">
+                    % if system is not None and system.id == 'cowichan-valley':
+                        <div class="banner">
+                            <div class="content">
+                                <h1>Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</h1>
+                                <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
+                            </div>
+                        </div>
+                    % end
                 </div>
-                <div class="side-bar-open-only">Hide Agencies</div>
-            </div>
-        </div>
-        <div id="main">
-            <div id="banners">
-                <!-- No banners right now -->
-            </div>
-            % if full_map:
-                <div id="map" class="full-screen"></div>
-                <script>
-                    const map = new ol.Map({
-                        target: 'map',
-                        controls: ol.control.defaults.defaults({
-                            zoom: false,
-                            rotate: false
-                        }),
-                        layers: [
-                            new ol.layer.Tile({
-                                source: new ol.source.OSM(),
-                                className: "ol-layer tile-layer"
-                            })
-                        ],
-                        view: new ol.View({
-                            center: [0, 0],
-                            zoom: 3,
-                            maxZoom: 22,
-                            minZoom: 3
-                        }),
-                        interactions: ol.interaction.defaults.defaults().extend([
-                            new ol.interaction.DblClickDragZoom()
-                        ])
-                    });
-                    map.getViewport().style.cursor = "grab";
-                    map.on('pointerdrag', function(event) {
-                        map.getViewport().style.cursor = "grabbing";
-                    });
-                    map.on('pointerup', function(event) {
+                % if full_map:
+                    <div id="map" class="full-screen"></div>
+                    <script>
+                        const map = new ol.Map({
+                            target: 'map',
+                            controls: ol.control.defaults.defaults({
+                                zoom: false,
+                                rotate: false
+                            }),
+                            layers: [
+                                new ol.layer.Tile({
+                                    source: new ol.source.OSM(),
+                                    className: "ol-layer tile-layer"
+                                })
+                            ],
+                            view: new ol.View({
+                                center: [0, 0],
+                                zoom: 3,
+                                maxZoom: 22,
+                                minZoom: 3
+                            }),
+                            interactions: ol.interaction.defaults.defaults().extend([
+                                new ol.interaction.DblClickDragZoom()
+                            ])
+                        });
                         map.getViewport().style.cursor = "grab";
-                    });
-                </script>
-                
-                % include('components/loading')
-                % include('components/map_controls')
-            % end
-            <div id="page">{{ !base }}</div>
-        </div>
-        <div id="search" class="display-none" tabindex="0">
-            <div id="search-header">
-                <div id="search-bar">
-                    <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
-                </div>
-                % if system:
-                    <div id="search-filters">
-                        <div class="flex-1">Filters:</div>
-                        <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
-                            % include('components/svg', name='bus')
-                            <div class="tooltip left">Include Buses</div>
-                        </div>
-                        <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
-                            % include('components/svg', name='route')
-                            <div class="tooltip left">Include Routes</div>
-                        </div>
-                        <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
-                            % include('components/svg', name='stop')
-                            <div class="tooltip left">Include Stops</div>
-                        </div>
-                        <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
-                            % include('components/svg', name='block')
-                            <div class="tooltip left">Include Blocks</div>
-                        </div>
+                        map.on('pointerdrag', function(event) {
+                            map.getViewport().style.cursor = "grabbing";
+                        });
+                        map.on('pointerup', function(event) {
+                            map.getViewport().style.cursor = "grab";
+                        });
+                    </script>
+                    
+                    % include('components/loading')
+                    % include('components/map_controls')
+                % end
+                <div id="page">{{ !base }}</div>
+            </div>
+            <div id="search" class="display-none" tabindex="0">
+                <div id="search-header">
+                    <div id="search-bar">
+                        <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                     </div>
-                % end
-            </div>
-            <div id="search-placeholder">
-                % if system:
-                    Search for {{ system }} buses, routes, stops, and blocks
-                % else:
-                    Search for buses in all systems
-                % end
-            </div>
-            <div id="search-results" class="display-none">
-                
-            </div>
-            <div id="search-paging" class="display-none">
-                <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
-                    % include('components/svg', name='left')
+                    % if system:
+                        <div id="search-filters">
+                            <div class="flex-1">Filters:</div>
+                            <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
+                                % include('components/svg', name='bus')
+                                <div class="tooltip left">Include Buses</div>
+                            </div>
+                            <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
+                                % include('components/svg', name='route')
+                                <div class="tooltip left">Include Routes</div>
+                            </div>
+                            <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
+                                % include('components/svg', name='stop')
+                                <div class="tooltip left">Include Stops</div>
+                            </div>
+                            <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
+                                % include('components/svg', name='block')
+                                <div class="tooltip left">Include Blocks</div>
+                            </div>
+                        </div>
+                    % end
                 </div>
-                <div id="search-count" class="flex-1">
+                <div id="search-placeholder">
+                    % if system:
+                        Search for {{ system }} buses, routes, stops, and blocks
+                    % else:
+                        Search for buses in all systems
+                    % end
+                </div>
+                <div id="search-results" class="display-none">
                     
                 </div>
-                <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
-                    % include('components/svg', name='right')
+                <div id="search-paging" class="display-none">
+                    <div id="search-paging-previous" class="icon button" onclick="searchPreviousPage()">
+                        % include('components/svg', name='paging/left')
+                    </div>
+                    <div id="search-count" class="flex-1">
+                        
+                    </div>
+                    <div id="search-paging-next" class="icon button" onclick="searchNextPage()">
+                        % include('components/svg', name='paging/right')
+                    </div>
                 </div>
             </div>
         </div>
@@ -851,14 +840,17 @@
         search();
     }
     
-    function toggleSideBar() {
-        const element = document.getElementsByTagName("body")[0];
-        element.classList.toggle("side-bar-open");
-        element.classList.toggle("side-bar-closed");
-        if (element.classList.contains("side-bar-open")) {
-            setCookie("hide_systems", "no");
-        } else {
+    function toggleSystemMenuMobile() {
+        document.getElementById("system-menu").classList.toggle("collapse-non-desktop");
+    }
+    
+    function toggleSystemMenuDesktop() {
+        const element = document.getElementById("system-menu");
+        element.classList.toggle("collapse-desktop");
+        if (element.classList.contains("collapse-desktop")) {
             setCookie("hide_systems", "yes");
+        } else {
+            setCookie("hide_systems", "no");
         }
         if ("map" in window) {
             map.updateSize();
