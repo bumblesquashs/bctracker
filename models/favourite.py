@@ -4,7 +4,7 @@ from di import di
 from models.bus import Bus
 from models.context import Context
 
-from repositories import RouteRepository, StopRepository, SystemRepository
+from repositories import RouteRepository, StopRepository
 
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''

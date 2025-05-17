@@ -70,7 +70,7 @@ class Departure:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='departure', **kwargs):
+    def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
         context = Context.find(system_id=row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
