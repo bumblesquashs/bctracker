@@ -249,6 +249,12 @@
         "nova-bus-lfs-hev-2": [
             { "year": 2008, "low": 1001, "high": 1004 }
         ],
+        "nova-bus-lfs-hev-4": [
+            { "year": 2025, "low": 1049, "high": 1051 }
+        ],
+        "nova-bus-lfse+": [
+            { "year": 2025, "low": 1046, "high": 1048 }
+        ],
         "proterra-catalyst-be40": [
             { "year": 2019, "number": 1034 }
         ],

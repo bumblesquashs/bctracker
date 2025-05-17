@@ -112,11 +112,23 @@
             "length": 40,
             "fuel": "Hybrid"
         },
+        "nova-bus-lfs-hev-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS HEV (4th Gen)",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
         "nova-bus-lfs-suburban-2": {
             "manufacturer": "Nova Bus",
             "name": "LFS Suburban (2nd Gen)",
             "length": 40,
             "fuel": "Diesel"
+        },
+        "nova-bus-lfse+": {
+            "manufacturer": "Nova Bus",
+            "name": "LFSe+",
+            "length": 40,
+            "fuel": "Battery Electric"
         },
         "proterra-catalyst-be40": {
             "manufacturer": "Proterra",
