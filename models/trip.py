@@ -1,14 +1,12 @@
 
 from dataclasses import dataclass, field
 
-from di import di
-
 from models.context import Context
 from models.departure import Departure
 from models.direction import Direction
 from models.time import Time
 
-from repositories import DepartureRepository, PointRepository
+import repositories
 
 @dataclass(slots=True)
 class Trip:
@@ -27,9 +25,6 @@ class Trip:
     sheets: list = field(init=False)
     
     _related_trips: list | None = field(default=None, init=False)
-    
-    departure_repository: DepartureRepository = field(init=False)
-    point_repository: PointRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='trip'):
@@ -152,7 +147,7 @@ class Trip:
         '''Returns the custom headsigns for this trip'''
         return self.cache.custom_headsigns
     
-    def __post_init__(self, **kwargs):
+    def __post_init__(self):
         id_parts = self.id.split(':')
         if len(id_parts) == 1:
             self.short_id = self.id
@@ -160,9 +155,6 @@ class Trip:
             self.short_id = id_parts[0]
         
         self.sheets = self.context.system.copy_sheets([self.service])
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
     
     def __str__(self):
         if self.context.prefix_headsigns and self.route:
@@ -193,11 +185,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return self.point_repository.find_all(self.context, self.shape_id)
+        return repositories.point.find_all(self.context, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return self.departure_repository.find_all(self.context, trip=self)
+        return repositories.departure.find_all(self.context, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

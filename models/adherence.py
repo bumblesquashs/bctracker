@@ -2,11 +2,9 @@
 import math
 from dataclasses import dataclass, field
 
-from di import di
-
 from models.timestamp import Timestamp
 
-from repositories import DepartureRepository
+import repositories
 
 MINIMUM_MINUTES = 4
 
@@ -21,10 +19,9 @@ class Adherence:
     description: str = field(init=False)
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon, timestamp, **kwargs):
+    def calculate(cls, trip, stop, sequence, lat, lon, timestamp):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        departure = departure_repository.find(trip.context, trip=trip, sequence=sequence)
+        departure = repositories.departure.find(trip.context, trip=trip, sequence=sequence)
         if not departure:
             return None
         previous_departure = departure.find_previous()

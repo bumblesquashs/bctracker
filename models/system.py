@@ -2,8 +2,6 @@
 from dataclasses import dataclass, field
 import pytz
 
-from di import di
-
 from models.agency import Agency
 from models.backoff import Backoff
 from models.context import Context
@@ -14,7 +12,7 @@ from models.schedule import Schedule
 from models.stop import StopCache
 from models.trip import TripCache
 
-from repositories import DepartureRepository, OverviewRepository, PositionRepository
+import repositories
 
 from constants import DEFAULT_TIMEZONE
 
@@ -49,10 +47,6 @@ class System:
     route_caches: dict = field(default_factory=dict, init=False)
     stop_caches: dict = field(default_factory=dict, init=False)
     trip_caches: dict = field(default_factory=dict, init=False)
-    
-    departure_repository: DepartureRepository = field(init=False)
-    overview_repository: OverviewRepository = field(init=False)
-    position_repository: PositionRepository = field(init=False)
     
     @property
     def context(self):
@@ -98,12 +92,8 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __post_init__(self, **kwargs):
+    def __post_init__(self):
         self.reload_backoff = Backoff(max_target=2**8)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
-        self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
     
     def __str__(self):
         return self.name
@@ -131,11 +121,11 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return self.overview_repository.find_all(last_seen_context=self.context)
+        return repositories.overview.find_all(last_seen_context=self.context)
     
     def get_positions(self):
         '''Returns all positions'''
-        return self.position_repository.find_all(self.context)
+        return repositories.position.find_all(self.context)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -212,7 +202,7 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = self.departure_repository.find_all(self.context)
+            departures = repositories.departure.find_all(self.context)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -259,7 +249,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = self.departure_repository.find_all(self.context, stop=stop)
+            departures = repositories.departure.find_all(self.context, stop=stop)
             cache = StopCache.build(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -270,7 +260,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = self.departure_repository.find_all(self.context, trip=trip)
+            departures = repositories.departure.find_all(self.context, trip=trip)
             cache = TripCache.build(departures)
             self.trip_caches[trip_id] = cache
             return cache

@@ -1,39 +1,34 @@
 
 import json
 
-from di import di
-
 from models.context import Context
 from models.match import Match
 from models.order import Order
 
-from repositories import AgencyRepository, ModelRepository, OrderRepository
+import repositories
+from repositories import OrderRepository
 
 class FileOrderRepository(OrderRepository):
     
     __slots__ = (
-        'agency_repository',
-        'model_repository',
         'orders'
     )
     
-    def __init__(self, **kwargs):
-        self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-        self.model_repository = kwargs.get('model_repository') or di[ModelRepository]
+    def __init__(self):
         self.orders = {}
     
     def load(self):
         '''Loads order data from the static JSON file'''
         self.orders = {}
-        self.agency_repository.load()
-        self.model_repository.load()
+        repositories.agency.load()
+        repositories.model.load()
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
-                agency = self.agency_repository.find(agency_id)
+                agency = repositories.agency.find(agency_id)
                 context = Context(agency=agency)
                 agency_orders = []
                 for (model_id, model_values) in agency_values.items():
-                    model = self.model_repository.find(model_id)
+                    model = repositories.model.find(model_id)
                     for values in model_values:
                         if 'number' in values:
                             values['low'] = values['number']

@@ -1,14 +1,12 @@
 
 from dataclasses import dataclass, field
 
-from di import di
-
 from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
-from repositories import DepartureRepository
+import repositories
 
 @dataclass(slots=True)
 class Block:
@@ -23,8 +21,6 @@ class Block:
     
     _related_blocks: list | None = field(default=None, init=False)
     
-    departure_repository: DepartureRepository = field(init=False)
-    
     @property
     def url_id(self):
         '''The ID to use when making block URLs'''
@@ -38,12 +34,10 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __post_init__(self, **kwargs):
+    def __post_init__(self):
         services = {t.service for t in self.trips}
         self.schedule = Schedule.combine(services)
         self.sheets = self.context.system.copy_sheets(services)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):
         return self.id == other.id
@@ -126,4 +120,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return self.departure_repository.find_all(self.context, block=self)
+        return repositories.departure.find_all(self.context, block=self)

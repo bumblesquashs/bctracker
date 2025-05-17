@@ -10,9 +10,7 @@ from dataclasses import dataclass
 
 from constants import *
 
-from di import di
-
-from repositories import AgencyRepository, SystemRepository
+import repositories
 
 @dataclass(init=False, slots=True)
 class Context:
@@ -24,13 +22,11 @@ class Context:
     @classmethod
     def find(cls, agency_id=None, system_id=None, **kwargs):
         if agency_id:
-            agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-            agency = agency_repository.find(agency_id)
+            agency = repositories.agency.find(agency_id)
         else:
             agency = None
         if system_id:
-            system_repository = kwargs.get('system_repository') or di[SystemRepository]
-            system = system_repository.find(system_id)
+            system = repositories.system.find(system_id)
         else:
             system = None
         return cls(agency, system)

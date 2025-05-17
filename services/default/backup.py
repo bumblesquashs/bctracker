@@ -6,7 +6,7 @@ from glob import glob
 from database import Database
 from settings import Settings
 
-from services import BackupService
+from services.abc import BackupService
 
 class DefaultBackupService(BackupService):
     

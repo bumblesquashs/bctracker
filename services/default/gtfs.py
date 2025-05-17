@@ -8,7 +8,6 @@ from threading import Thread
 import csv
 import requests
 
-from di import di
 from database import Database
 from settings import Settings
 
@@ -19,29 +18,19 @@ from models.daterange import DateRange
 from models.service import Service, ServiceException
 from models.sheet import Sheet
 
-from repositories import DepartureRepository, PointRepository, RouteRepository, StopRepository, TripRepository
+import repositories
 from services import GTFSService
 
 class DefaultGTFSService(GTFSService):
     
     __slots__ = (
         'database',
-        'settings',
-        'departure_repository',
-        'point_repository',
-        'route_repository',
-        'stop_repository',
-        'trip_repository'
+        'settings'
     )
     
-    def __init__(self, database: Database, settings: Settings, **kwargs):
+    def __init__(self, database: Database, settings: Settings):
         self.database = database
         self.settings = settings
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
-        self.route_repository = kwargs.get('route_repository') or di[RouteRepository]
-        self.stop_repository = kwargs.get('stop_repository') or di[StopRepository]
-        self.trip_repository = kwargs.get('trip_repository') or di[TripRepository]
     
     def load(self, context: Context, force_download=False, update_db=False):
         '''Loads the GTFS for the given context into memory'''
@@ -71,18 +60,18 @@ class DefaultGTFSService(GTFSService):
         context.system.services = {s.id: s for s in services}
         context.system.sheets = combine_sheets(context, services)
         
-        stops = self.stop_repository.find_all(context)
+        stops = repositories.stop.find_all(context)
         context.system.stops = {s.id: s for s in stops}
         context.system.stops_by_number = {s.number: s for s in stops}
         
-        trips = self.trip_repository.find_all(context)
+        trips = repositories.trip.find_all(context)
         context.system.trips = {t.id: t for t in trips}
         
         block_trips = {}
         for trip in trips:
             block_trips.setdefault(trip.block_id, []).append(trip)
         
-        routes = self.route_repository.find_all(context)
+        routes = repositories.route.find_all(context)
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
@@ -119,17 +108,17 @@ class DefaultGTFSService(GTFSService):
         '''Updates cached GTFS data for the given system'''
         print(f'Updating database with GTFS data for {context}')
         
-        self.departure_repository.delete_all(context)
-        self.trip_repository.delete_all(context)
-        self.stop_repository.delete_all(context)
-        self.route_repository.delete_all(context)
-        self.point_repository.delete_all(context)
+        repositories.departure.delete_all(context)
+        repositories.trip.delete_all(context)
+        repositories.stop.delete_all(context)
+        repositories.route.delete_all(context)
+        repositories.point.delete_all(context)
         
-        apply_csv(context, 'routes', self.route_repository.create)
-        apply_csv(context, 'stops', self.stop_repository.create)
-        apply_csv(context, 'trips', self.trip_repository.create)
-        apply_csv(context, 'stop_times', self.departure_repository.create)
-        apply_csv(context, 'shapes', self.point_repository.create)
+        apply_csv(context, 'routes', repositories.route.create)
+        apply_csv(context, 'stops', repositories.stop.create)
+        apply_csv(context, 'trips', repositories.trip.create)
+        apply_csv(context, 'stop_times', repositories.departure.create)
+        apply_csv(context, 'shapes', repositories.point.create)
         
         self.database.commit()
     

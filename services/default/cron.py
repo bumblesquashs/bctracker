@@ -2,7 +2,6 @@ import os
 import signal
 from crontab import CronTab
 
-from di import di
 from database import Database
 from settings import Settings
 
@@ -10,31 +9,23 @@ from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
 
-from repositories import RecordRepository, SystemRepository
-from services import BackupService, CronService, GTFSService, RealtimeService
+import repositories
+import services
+
+from services.abc import CronService
 
 class DefaultCronService(CronService):
     
     __slots__ = (
         'database',
         'settings',
-        'backup_service',
-        'gtfs_service',
-        'realtime_service',
-        'record_repository',
-        'system_repository',
         'running',
         'updating_realtime'
     )
     
-    def __init__(self, database: Database, settings: Settings, **kwargs):
+    def __init__(self, database: Database, settings: Settings):
         self.database = database
         self.settings = settings
-        self.backup_service = kwargs.get('backup_service') or di[BackupService]
-        self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
-        self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
-        self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
-        self.system_repository = kwargs.get('system_repository') or di[SystemRepository]
         self.running = True
         self.updating_realtime = False
         signal.signal(signal.SIGUSR1, lambda sig, frame: self.handle_gtfs())
@@ -61,21 +52,21 @@ class DefaultCronService(CronService):
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-        for system in self.system_repository.find_all():
+        for system in repositories.system.find_all():
             context = system.context
             if self.running:
                 try:
                     date = Date.today(context.timezone)
-                    if date.weekday == Weekday.MON or not self.gtfs_service.validate(context):
-                        self.gtfs_service.load(context, True)
-                        self.gtfs_service.update_cache(context)
+                    if date.weekday == Weekday.MON or not services.gtfs.validate(context):
+                        services.gtfs.load(context, True)
+                        services.gtfs.update_cache(context)
                 except Exception as e:
                     print(f'Error loading GTFS data for {context}: {e}')
         if self.running:
-            self.record_repository.delete_stale_trip_records()
+            repositories.record.delete_stale_trip_records()
             self.database.archive()
             date = Date.today()
-            self.backup_service.run(date.previous(), include_db=date.weekday == Weekday.MON)
+            services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
     
     def handle_realtime(self):
         '''Reloads realtime data for every system, and backs up data at midnight'''
@@ -85,24 +76,24 @@ class DefaultCronService(CronService):
         date = Date.today()
         time = Time.now()
         print(f'--- {date} at {time} ---')
-        for system in self.system_repository.find_all():
+        for system in repositories.system.find_all():
             context = system.context
             if self.running:
                 try:
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
-                        self.gtfs_service.load(context, True)
-                        self.gtfs_service.update_cache(context)
-                    self.realtime_service.update(context)
+                        services.gtfs.load(context, True)
+                        services.gtfs.update_cache(context)
+                    services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
-                if system.gtfs_downloaded and self.realtime_service.validate(context):
+                if system.gtfs_downloaded and services.realtime.validate(context):
                     system.reload_backoff.reset()
                 else:
                     system.reload_backoff.increase_value()
         if self.running:
             try:
-                self.realtime_service.update_records()
+                services.realtime.update_records()
             except Exception as e:
                 print(f'Error updating records: {e}')
         self.updating_realtime = False

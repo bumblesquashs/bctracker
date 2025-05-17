@@ -7,11 +7,9 @@ if TYPE_CHECKING:
 
 from dataclasses import dataclass, field
 
-from di import di
-
 from models.context import Context
 
-from repositories import AdornmentRepository, OrderRepository
+import repositories
 
 @dataclass(slots=True)
 class Bus:
@@ -21,13 +19,10 @@ class Bus:
     number: int
     order: Order
     
-    adornment_repository: AdornmentRepository = field(init=False)
-    
     @classmethod
     def find(cls, context: Context, number, **kwargs):
         '''Returns a bus for the given context with the given number'''
-        order_repository = kwargs.get('order_repository') or di[OrderRepository]
-        order = order_repository.find(context, number)
+        order = repositories.order.find(context, number)
         return cls(context, number, order)
     
     @property
@@ -56,9 +51,6 @@ class Bus:
             return order.model
         return None
     
-    def __post_init__(self, **kwargs):
-        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
-    
     def __str__(self):
         if self.is_known:
             if self.context.vehicle_name_length:
@@ -77,4 +69,4 @@ class Bus:
     
     def find_adornment(self):
         '''Returns the adornment for this bus, if one exists'''
-        return self.adornment_repository.find(self)
+        return repositories.adornment.find(self)
