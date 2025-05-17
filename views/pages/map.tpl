@@ -20,9 +20,9 @@
 
 <div id="no-buses-message" class="{{ 'display-none' if positions else '' }}">
     % if not context.realtime_enabled:
-        <i>{{ context.system }} realtime information is not supported</i>
+        <i>{{ context }} realtime information is not supported</i>
     % elif context.system:
-        <i>There are no {{ context.system }} buses out right now</i>
+        <i>There are no {{ context }} buses out right now</i>
     % else:
         <i>There are no buses out right now</i>
     % end

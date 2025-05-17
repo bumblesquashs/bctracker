@@ -7,7 +7,7 @@
 
 <div class="placeholder">
     <h3>The route you are looking for doesn't seem to exist!</h3>
-    % if context.system.gtfs_loaded:
+    % if context.gtfs_loaded:
         <p>There are a few reasons why that might be the case:</p>
         <ol>
             <li>It may be from an older sheet that is no longer active</li>
@@ -18,7 +18,7 @@
                     It may be from a different system - the following systems have a route with that number
                     <ul>
                         % for route in alt_routes:
-                            <li>{{ route.context.system }}: <a href="{{ get_url(route.context, 'routes', route) }}">{{ route }}</a></li>
+                            <li>{{ route.context }}: <a href="{{ get_url(route.context, 'routes', route) }}">{{ route }}</a></li>
                         % end
                     </ul>
                 </li>

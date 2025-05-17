@@ -173,7 +173,7 @@ class Server(Bottle):
         self.system_repository.load()
         self.theme_repository.load()
         
-        self.position_repository.delete_all(Context())
+        self.position_repository.delete_all()
         
         handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
         log = WSGILogger(self, [handler], ApacheFormatter())
@@ -499,7 +499,7 @@ class Server(Bottle):
     
     def fleet(self, context: Context):
         orders = self.order_repository.find_all(context)
-        overviews = self.overview_repository.find_all(Context(), Context())
+        overviews = self.overview_repository.find_all()
         return self.page(
             context=context,
             name='fleet',
@@ -520,7 +520,7 @@ class Server(Bottle):
                 bus_number=bus_number
             )
         position = self.position_repository.find(bus)
-        records = self.record_repository.find_all(Context(), bus=bus, limit=20)
+        records = self.record_repository.find_all(bus=bus, limit=20)
         return self.page(
             context=context,
             name='bus/overview',
@@ -571,12 +571,12 @@ class Server(Bottle):
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = self.record_repository.count(Context(), bus=bus)
+        total_items = self.record_repository.count(bus=bus)
         if page < 1:
             records = []
         else:
-            records = self.record_repository.find_all(Context(), bus=bus, limit=items_per_page, page=page)
-        transfers = self.transfer_repository.find_all(Context(), Context(), bus=bus)
+            records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
+        transfers = self.transfer_repository.find_all(bus=bus)
         tracked_systems = set()
         events = []
         if overview:
@@ -609,7 +609,7 @@ class Server(Bottle):
         )
     
     def history_last_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context, Context()) if o.last_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(context=context) if o.last_record and o.bus.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -630,7 +630,7 @@ class Server(Bottle):
         )
     
     def history_first_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context, Context()) if o.first_record and o.bus.visible]
+        overviews = [o for o in self.overview_repository.find_all(context=context) if o.first_record and o.bus.visible]
         return self.page(
             context=context,
             name='history/first_seen',
@@ -642,11 +642,11 @@ class Server(Bottle):
     def history_transfers(self, context: Context):
         filter = request.query.get('filter')
         if filter == 'from':
-            transfers = self.transfer_repository.find_all(context, Context())
+            transfers = self.transfer_repository.find_all(old_context=context)
         elif filter == 'to':
-            transfers = self.transfer_repository.find_all(Context(), context)
+            transfers = self.transfer_repository.find_all(new_context=context)
         else:
-            transfers = self.transfer_repository.find_all(context, context)
+            transfers = self.transfer_repository.find_all(old_context=context,new_context=context)
         return self.page(
             context=context,
             name='history/transfers',
@@ -687,7 +687,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['routes', route_number]
             )
-        if context.agency.prefer_route_id:
+        if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -721,7 +721,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['routes', route_number, 'map']
             )
-        if context.agency.prefer_route_id:
+        if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -751,7 +751,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['routes', route_number, 'schedule']
             )
-        if context.agency.prefer_route_id:
+        if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -780,7 +780,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['routes', route_number, 'schedule']
             )
-        if context.agency.prefer_route_id:
+        if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -1009,7 +1009,7 @@ class Server(Bottle):
         else:
             routes_filter = []
         sort = self.query_options('sort', ['name', 'number'])
-        if sort == 'number' and not context.agency.show_stop_number:
+        if sort == 'number' and not context.show_stop_number:
             sort = 'name'
         if sort != 'name':
             path_args['sort'] = sort
@@ -1066,7 +1066,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['stops', stop_number]
             )
-        if context.agency.prefer_stop_id:
+        if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1102,7 +1102,7 @@ class Server(Bottle):
                 path=['stops', stop_number, 'map'],
                 context=context
             )
-        if context.agency.prefer_stop_id:
+        if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1131,7 +1131,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['stops', stop_number, 'schedule']
             )
-        if context.agency.prefer_stop_id:
+        if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1160,7 +1160,7 @@ class Server(Bottle):
                 title='System Required',
                 path=['stops', stop_number, 'schedule']
             )
-        if context.agency.prefer_stop_id:
+        if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1228,6 +1228,7 @@ class Server(Bottle):
         self.set_cookie('random', 'kumquat')
         systems = list(self.system_repository.find_all())
         system = random.choice(systems)
+        context = system.context
         options = ['route', 'stop', 'block', 'trip']
         if system.realtime_enabled:
             options.append('bus')
@@ -1236,33 +1237,33 @@ class Server(Bottle):
             case 'bus':
                 overviews = system.get_overviews()
                 if not overviews:
-                    redirect(self.get_url(system))
+                    redirect(self.get_url(context))
                 overview = random.choice(overviews)
-                redirect(self.get_url(system, 'bus', overview.bus))
+                redirect(self.get_url(context, 'bus', overview.bus))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
-                    redirect(self.get_url(system))
+                    redirect(self.get_url(context))
                 route = random.choice(routes)
-                redirect(self.get_url(system, 'routes', route))
+                redirect(self.get_url(context, 'routes', route))
             case 'stop':
                 stops = system.get_stops()
                 if not stops:
-                    redirect(self.get_url(system))
+                    redirect(self.get_url(context))
                 stop = random.choice(stops)
-                redirect(self.get_url(system, 'stops', stop))
+                redirect(self.get_url(context, 'stops', stop))
             case 'block':
                 blocks = system.get_blocks()
                 if not blocks:
-                    redirect(self.get_url(system))
+                    redirect(self.get_url(context))
                 block = random.choice(blocks)
-                redirect(self.get_url(system, 'blocks', block))
+                redirect(self.get_url(context, 'blocks', block))
             case 'trip':
                 trips = list(system.get_trips())
                 if not trips:
-                    redirect(self.get_url(system))
+                    redirect(self.get_url(context))
                 trip = random.choice(trips)
-                redirect(self.get_url(system, 'trips', trip))
+                redirect(self.get_url(context, 'trips', trip))
     
     def admin(self, context: Context):
         return self.page(
@@ -1394,7 +1395,7 @@ class Server(Bottle):
     
     def api_admin_reload_systems(self, context: Context):
         self.cron_service.stop()
-        self.position_repository.delete_all(Context())
+        self.position_repository.delete_all()
         self.system_repository.load()
         for system in self.system_repository.find_all():
             if self.running:

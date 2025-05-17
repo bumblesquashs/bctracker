@@ -37,14 +37,14 @@ class Route:
         if not number:
             number = id
         name = row[f'{prefix}_name']
-        colour = row[f'{prefix}_colour'] or generate_colour(context.system, number)
+        colour = row[f'{prefix}_colour'] or generate_colour(context, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
         return cls(context, id, number, name, colour, text_colour)
     
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
-        if self.context.agency.prefer_route_id:
+        if self.context.prefer_route_id:
             return self.id
         return self.number
     
@@ -180,15 +180,15 @@ class Route:
         route_key = tuple([k for k in route.key if type(k) == int])
         return self_key and route_key and self_key == route_key
 
-def generate_colour(system, number):
-    '''Generate a random colour based on system ID and route number'''
-    seed(system.id)
+def generate_colour(context: Context, number):
+    '''Generate a random colour based on context and route number'''
+    seed(context.system_id)
     number_digits = ''.join([d for d in number if d.isdigit()])
     if len(number_digits) == 0:
         h = randint(1, 360) / 360.0
     else:
         h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-    seed(system.id + number)
+    seed(context.system_id + number)
     l = randint(30, 50) / 100.0
     s = randint(50, 100) / 100.0
     rgb = hls_to_rgb(h, l, s)

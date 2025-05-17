@@ -97,7 +97,7 @@
                         <tbody>
                             % for alt_stop in alt_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(alt_stop.context, 'stops', alt_stop) }}">{{ alt_stop.context.system }}</a></td>
+                                    <td><a href="{{ get_url(alt_stop.context, 'stops', alt_stop) }}">{{ alt_stop.context }}</a></td>
                                     <td>
                                         % include('components/route_list', routes=alt_stop.routes)
                                     </td>
@@ -210,7 +210,7 @@
                     </table>
                 % else:
                     <div class="placeholder">
-                        % if context.system.gtfs_loaded:
+                        % if context.gtfs_loaded:
                             <h3>There are no departures from this stop today</h3>
                             <p>You can check the <a href="{{ get_url(stop.context, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                         % else:

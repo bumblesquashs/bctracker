@@ -13,7 +13,7 @@
         
         <title>
             % if context.system:
-                {{ context.system }} | {{ title }}
+                {{ context }} | {{ title }}
             % else:
                 BCTracker | {{ title }}
             % end
@@ -24,8 +24,8 @@
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
         
         % if context.system:
-            <meta name="description" content="{{ context.system }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ context.system }}, {{ context.agency }}" />
+            <meta name="description" content="{{ context }} Transit Schedules and Bus Tracking" />
+            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ context }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
             <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
         
         % if context.system:
-            <meta property="og:title" content="{{ context.system }} | {{ title }}">
+            <meta property="og:title" content="{{ context }} | {{ title }}">
         % else:
             <meta property="og:title" content="BCTracker | {{ title }}">
         % end
@@ -384,7 +384,7 @@
             </div>
             <div class="details">
                 <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
-                    % if system:
+                    % if context.system:
                         {{ context }}
                     % else:
                         All Transit Systems
@@ -417,7 +417,7 @@
                                     <div>{{ system }}</div>
                                 </div>
                             % else:
-                                <a href="{{ get_url(system, *path, **path_args) }}" class="system-button">
+                                <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
                                     % include('components/agency_logo', agency=system.agency)
                                     <div>{{ system }}</div>
                                 </a>
@@ -428,7 +428,7 @@
             </div>
             <div id="main">
                 <div id="banners">
-                    % if system is not None and system.id == 'cowichan-valley':
+                    % if context.system_id == 'cowichan-valley':
                         <div class="banner">
                             <div class="content">
                                 <h1>Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</h1>
@@ -573,7 +573,7 @@
         lastSearchTimestamp = timestamp;
         
         if (query === undefined || query === null || query === "") {
-            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {context.system}' if context.system else 'Search for buses in all systems' }}");
+            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {context}' if context.system else 'Search for buses in all systems' }}");
         } else {
             loadingResults = true;
             if (searchResults.length === 0) {

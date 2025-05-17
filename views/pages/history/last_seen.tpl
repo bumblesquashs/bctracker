@@ -240,16 +240,16 @@
                                 <p>Something has probably gone terribly wrong if you're seeing this.</p>
                             % end
                         % elif not context.realtime_enabled:
-                            <h3>{{ context.system }} realtime information is not supported</h3>
+                            <h3>{{ context }} realtime information is not supported</h3>
                             <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">
                                 % include('components/systems')
                             </div>
                         % elif days:
-                            <h3>No {{ context.system }} buses have been recorded for the selected date range</h3>
+                            <h3>No {{ context }} buses have been recorded for the selected date range</h3>
                             <p>Please choose a different date range or check again later!</p>
                         % else:
-                            <h3>No {{ context.system }} buses have been recorded</h3>
+                            <h3>No {{ context }} buses have been recorded</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

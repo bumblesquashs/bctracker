@@ -82,8 +82,8 @@
                         </table>
                     % else:
                         <div class="placeholder">
-                            % if context.system.gtfs_loaded:
-                                <h3>No {{ context.system }} blocks found on {{ date.format_long() }}</h3>
+                            % if context.gtfs_loaded:
+                                <h3>No {{ context }} blocks found on {{ date.format_long() }}</h3>
                                 <p>There are a few reasons why that might be the case:</p>
                                 <ol>
                                     <li>It may be a day of the week that does not normally have service</li>
@@ -92,7 +92,7 @@
                                 </ol>
                                 <p>Please check again later!</p>
                             % else:
-                                <h3>{{ context.system }} block information is unavailable</h3>
+                                <h3>{{ context }} block information is unavailable</h3>
                                 <p>System data is currently loading and will be available soon.</p>
                             % end
                         </div>

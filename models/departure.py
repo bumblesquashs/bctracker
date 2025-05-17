@@ -130,7 +130,7 @@ class Departure:
     
     def __str__(self):
         if self.headsign:
-            if self.system.agency.prefix_headsigns and self.trip.route:
+            if self.context.prefix_headsigns and self.trip.route:
                 return f'{self.trip.route.number} {self.headsign}'
             return self.headsign
         return str(self.trip)

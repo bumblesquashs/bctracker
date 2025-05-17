@@ -61,7 +61,7 @@
                                                 <div class="row">
                                                     % include('components/agency_logo', agency=system.agency)
                                                     <div class="column">
-                                                        <a href="{{ get_url(system, *path) }}">{{ system }}</a>
+                                                        <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
                                                         <span class="mobile-only smaller-font">
                                                             % if system.gtfs_loaded:
                                                                 % if count == 1:
@@ -115,8 +115,6 @@
         })
     });
     
-    const systemSelected = "{{ context.system is not None }}" == "True";
-    
     const statusElement = document.getElementById("nearby-status");
     const statusTitleElement = document.getElementById("status-title");
     const statusMessageElement = document.getElementById("status-message");
@@ -146,7 +144,7 @@
         
         updateMap();
         
-        if (systemSelected) {
+        if (currentSystemID !== null) {
             const request = new XMLHttpRequest();
             request.open("GET", "{{ get_url(context, 'frame', 'nearby') }}?lat=" + lat + "&lon=" + lon, true);
             request.onload = function() {

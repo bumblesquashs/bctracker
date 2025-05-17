@@ -258,7 +258,7 @@
                     </div>
                 % else:
                     <div class="placeholder">
-                        % if context.system.gtfs_loaded:
+                        % if context.gtfs_loaded:
                             <h3>There are no trips for this route today</h3>
                             <p>You can check the <a href="{{ get_url(context, 'routes', route, 'schedule') }}">full schedule</a> for more information about when this route runs.</p>
                         % else:

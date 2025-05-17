@@ -127,7 +127,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        % if stop.context.system.gtfs_loaded:
+        % if stop.context.gtfs_loaded:
             <h3>There are currently no departures from this stop</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

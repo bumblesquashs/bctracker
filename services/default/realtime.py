@@ -79,7 +79,7 @@ class DefaultRealtimeService(RealtimeService):
     
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
-        for position in self.position_repository.find_all(Context()):
+        for position in self.position_repository.find_all():
             try:
                 context = position.context
                 bus = position.bus

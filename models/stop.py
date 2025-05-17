@@ -42,7 +42,7 @@ class Stop:
     @property
     def url_id(self):
         '''The ID to use when making stop URLs'''
-        if self.context.agency.prefer_stop_id:
+        if self.context.prefer_stop_id:
             return self.id
         return self.number
     
@@ -100,11 +100,11 @@ class Stop:
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
-        number = self.number if self.context.agency.show_stop_number else None
+        number = self.number if self.context.show_stop_number else None
         return {
-            'system_id': self.context.system.id,
+            'system_id': self.context.system_id,
             'system_name': str(self.context.system),
-            'agency_id': self.context.agency.id,
+            'agency_id': self.context.agency_id,
             'number': number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,

@@ -6,6 +6,8 @@ if TYPE_CHECKING:
     from models.agency import Agency
     from models.system import System
 
+from constants import *
+
 from di import di
 
 from repositories import AgencyRepository, SystemRepository
@@ -61,9 +63,15 @@ class Context:
         return True
     
     @property
-    def show_stop_number(self):
-        if self.agency:
-            return self.agency.show_stop_number
+    def gtfs_loaded(self):
+        if self.system:
+            return self.system.gtfs_loaded
+        return False
+    
+    @property
+    def realtime_loaded(self):
+        if self.system:
+            return self.system.realtime_loaded
         return False
     
     @property
@@ -73,22 +81,46 @@ class Context:
         return None
     
     @property
+    def prefix_headsigns(self):
+        if self.agency:
+            return self.agency.prefix_headsigns
+        return DEFAULT_PREFIX_HEADSIGNS
+    
+    @property
     def accurate_seconds(self):
         if self.agency:
             return self.agency.accurate_seconds
-        return False
+        return DEFAULT_ACCURATE_SECONDS
+    
+    @property
+    def prefer_route_id(self):
+        if self.agency:
+            return self.agency.prefer_route_id
+        return DEFAULT_PREFER_ROUTE_ID
+    
+    @property
+    def prefer_stop_id(self):
+        if self.agency:
+            return self.agency.prefer_stop_id
+        return DEFAULT_PREFER_STOP_ID
+    
+    @property
+    def show_stop_number(self):
+        if self.agency:
+            return self.agency.show_stop_number
+        return DEFAULT_SHOW_STOP_NUMBER
     
     @property
     def vehicle_name_length(self):
         if self.agency:
             return self.agency.vehicle_name_length
-        return None
+        return DEFAULT_VEHICLE_NAME_LENGTH
     
     @property
-    def prefix_headsigns(self):
+    def distance_scale(self):
         if self.agency:
-            return self.agency.prefix_headsigns
-        return False
+            return self.agency.distance_scale
+        return DEFAULT_DISTANCE_SCALE
     
     def __init__(self, agency: Agency = None, system: System = None):
         if agency and system and agency != system.agency:

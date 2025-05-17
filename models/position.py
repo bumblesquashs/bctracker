@@ -143,7 +143,7 @@ class Position:
             'bus_display': str(self.bus),
             'bus_url_id': str(self.bus.url_id),
             'system': str(self.context.system),
-            'agency_id': self.context.agency.id,
+            'agency_id': self.context.agency_id,
             'lon': self.lon,
             'lat': self.lat,
             'colour': self.colour,

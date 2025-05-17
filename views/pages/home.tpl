@@ -7,9 +7,9 @@
     <h1>Welcome to BCTracker!</h1>
     % if context.system:
         % if context.realtime_enabled:
-            <h2>{{ context.system }} Transit Schedules and Bus Tracking</h2>
+            <h2>{{ context }} Transit Schedules and Bus Tracking</h2>
         % else:
-            <h2>{{ context.system }} Transit Schedules</h2>
+            <h2>{{ context }} Transit Schedules</h2>
         % end
     % else:
         <h2>British Columbia Transit Schedules and Bus Tracking</h2>
@@ -183,10 +183,10 @@
                                         </thead>
                                         <tbody>
                                             % favourite_systems = {f.value.context.system for f in route_favourites}
-                                            % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.value.context.system == favourite_system]
+                                            % for system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in route_favourites if f.value.context.system == system]
                                                 <tr class="header">
-                                                    <td>{{ favourite_system }}</td>
+                                                    <td>{{ system }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in system_favourites:
@@ -218,10 +218,10 @@
                                         </thead>
                                         <tbody>
                                             % favourite_systems = {f.value.context.system for f in stop_favourites}
-                                            % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == favourite_system]
+                                            % for system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == system]
                                                 <tr class="header">
-                                                    <td colspan="2">{{ favourite_system }}</td>
+                                                    <td colspan="2">{{ system }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in system_favourites:

@@ -21,7 +21,7 @@
     % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 % else:
     <div class="placeholder">
-        % if context.system.gtfs_loaded:
+        % if context.gtfs_loaded:
             <h3>There are currently no trips for this route</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

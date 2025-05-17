@@ -115,7 +115,7 @@
                     </div>
                 % else:
                     <div class="placeholder">
-                        % if context.system.gtfs_loaded:
+                        % if context.gtfs_loaded:
                             <h3>No trips found on {{ date.format_long() }}</h3>
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>

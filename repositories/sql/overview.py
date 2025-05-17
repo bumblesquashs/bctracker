@@ -31,13 +31,13 @@ class SQLOverviewRepository(OverviewRepository):
     
     def find(self, bus):
         '''Returns the overview of the given bus'''
-        overviews = self.find_all(Context(), Context(), bus=bus, limit=1)
+        overviews = self.find_all(bus=bus, limit=1)
         try:
             return overviews[0]
         except IndexError:
             return None
     
-    def find_all(self, context: Context, last_seen_context: Context, bus=None, limit=None):
+    def find_all(self, context: Context = Context(), last_seen_context: Context = Context(), bus=None, limit=None):
         '''Returns all overviews that match the given context and bus'''
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('overview',

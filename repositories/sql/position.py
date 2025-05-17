@@ -136,7 +136,7 @@ class SQLPositionRepository(PositionRepository):
         except IndexError:
             return None
     
-    def find_all(self, context: Context = None, trip=None, stop=None, block=None, route=None, has_location=None):
+    def find_all(self, context: Context = Context(), trip=None, stop=None, block=None, route=None, has_location=None):
         '''Returns all positions that match the given system, trip, stop, block, and route'''
         if isinstance(trip, list):
             trip_id = [getattr(t, 'id', t) for t in trip]
@@ -198,7 +198,7 @@ class SQLPositionRepository(PositionRepository):
         )
         return [p for p in positions if p.bus.visible]
     
-    def delete_all(self, context: Context):
+    def delete_all(self, context: Context = Context()):
         '''Deletes all positions for the given system from the database'''
         self.database.delete('position', {
             'position.system_id': context.system_id

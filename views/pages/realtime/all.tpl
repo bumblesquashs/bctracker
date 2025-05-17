@@ -93,19 +93,19 @@
                 <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
             % end
         % elif not context.realtime_enabled:
-            <h3>{{ context.system }} realtime information is not supported</h3>
+            <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data for using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
-        % elif not context.system.realtime_loaded:
-            <h3>{{ context.system }} realtime information is unavailable</h3>
+        % elif not context.realtime_loaded:
+            <h3>{{ context }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no {{ context.system }} buses in service right now</h3>
+            <h3>There are no {{ context }} buses in service right now</h3>
             <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
         % else:
-            <h3>There are no {{ context.system }} buses out right now</h3>
+            <h3>There are no {{ context }} buses out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>

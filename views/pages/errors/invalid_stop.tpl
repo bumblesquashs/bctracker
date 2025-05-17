@@ -7,7 +7,7 @@
 
 <div class="placeholder">
     <h3>The stop you are looking for doesn't seem to exist!</h3>
-    % if context.system.gtfs_loaded:
+    % if context.gtfs_loaded:
         <p>There are a few reasons why that might be the case:</p>
         <ol>
             <li>It may no longer serve any bus routes and therefore be removed from the system</li>
@@ -19,7 +19,7 @@
                     <ul>
                         % for stop in alt_stops:
                             <li>
-                                {{ stop.context.system }}:
+                                {{ stop.context }}:
                                 % include('components/stop', show_number=False)
                             </li>
                         % end

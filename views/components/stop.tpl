@@ -7,7 +7,7 @@
                 <span class="stop-name {{ 'timing-point' if get('timepoint', False) else '' }}">{{ stop }}</span>
             % end
         % end
-        % if get('show_number', True) and stop.context.agency.show_stop_number:
+        % if get('show_number', True) and stop.context.show_stop_number:
             <div class="stop-number tooltip-anchor">
                 {{ stop.number }}
                 <div class="tooltip right">Stop code</div>

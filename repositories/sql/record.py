@@ -58,7 +58,7 @@ class SQLRecordRepository(RecordRepository):
             }
         )
     
-    def find_all(self, context: Context, bus=None, block=None, trip=None, limit=None, page=None):
+    def find_all(self, context: Context = Context(), bus=None, block=None, trip=None, limit=None, page=None):
         '''Returns all records that match the given context, bus, block, and trip'''
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
@@ -142,7 +142,7 @@ class SQLRecordRepository(RecordRepository):
         )
         return {row['block_id']: Bus.find(context, row['bus_number']) for row in rows}
     
-    def count(self, context: Context, bus=None, block=None, trip=None):
+    def count(self, context: Context = Context(), bus=None, block=None, trip=None):
         '''Returns the number of records for the given system, bus, block, and trip'''
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)

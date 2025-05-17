@@ -2,7 +2,6 @@
 import json
 
 from models.adornment import Adornment
-from models.context import Context
 
 from repositories import AdornmentRepository
 

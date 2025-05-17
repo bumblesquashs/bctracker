@@ -25,7 +25,7 @@ class SQLTransferRepository(TransferRepository):
             'new_system_id': new_context.system_id
         })
     
-    def find_all(self, old_context: Context, new_context: Context, bus=None, limit=None):
+    def find_all(self, old_context: Context = Context(), new_context: Context = Context(), bus=None, limit=None):
         '''Returns all transfers that match the given system'''
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('transfer',

@@ -30,7 +30,7 @@
             % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ context.system }} buses, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
+                    To see only {{ context }} buses, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
                 </p>
             % end
         </div>

@@ -13,12 +13,12 @@
                 </div>
             </div>
             % if not context.system:
-                <span class="non-desktop smaller-font">{{ position.context.system }}</span>
+                <span class="non-desktop smaller-font">{{ position.context }}</span>
             % end
         </div>
     </td>
     % if not context.system:
-        <td class="desktop-only">{{ position.context.system }}</td>
+        <td class="desktop-only">{{ position.context }}</td>
     % end
     % if trip:
         % block = trip.block

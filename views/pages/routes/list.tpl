@@ -37,8 +37,8 @@
         </table>
     % else:
         <div class="placeholder">
-            <h3>{{ context.system }} route information is unavailable</h3>
-            % if context.system.gtfs_loaded:
+            <h3>{{ context }} route information is unavailable</h3>
+            % if context.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>
@@ -71,7 +71,7 @@
                                     <div class="row">
                                         % include('components/agency_logo', agency=system.agency)
                                         <div class="column">
-                                            <a href="{{ get_url(system, *path) }}">{{ system }}</a>
+                                            <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
                                             <span class="mobile-only smaller-font">
                                                 % if system.gtfs_loaded:
                                                     % if count == 1:

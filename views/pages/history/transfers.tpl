@@ -28,11 +28,11 @@
                                 </div>
                                 <div class="option" onclick="setFilter('from')">
                                     <div class="radio-button {{ 'selected' if filter == 'from' else '' }}"></div>
-                                    <div>From {{ context.system }}</div>
+                                    <div>From {{ context }}</div>
                                 </div>
                                 <div class="option" onclick="setFilter('to')">
                                     <div class="radio-button {{ 'selected' if filter == 'to' else '' }}"></div>
-                                    <div>To {{ context.system }}</div>
+                                    <div>To {{ context }}</div>
                                 </div>
                             </div>
                         </div>
@@ -159,19 +159,19 @@
                             <h3>No transfers found</h3>
                             <p>Something has probably gone terribly wrong if you're seeing this.</p>
                         % elif not context.realtime_enabled:
-                            <h3>{{ context.system }} realtime information is not supported</h3>
+                            <h3>{{ context }} realtime information is not supported</h3>
                             <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">
                                 % include('components/systems')
                             </div>
                         % elif filter == 'from':
-                            <h3>No buses have been transferred from {{ context.system }}</h3>
+                            <h3>No buses have been transferred from {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % elif filter == 'to':
-                            <h3>No buses have been transferred to {{ context.system }}</h3>
+                            <h3>No buses have been transferred to {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % else:
-                            <h3>No buses have been transferred to or from {{ context.system }}</h3>
+                            <h3>No buses have been transferred to or from {{ context }}</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

@@ -127,7 +127,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        <h3>{{ context.system }} realtime information is not supported</h3>
+        <h3>{{ context }} realtime information is not supported</h3>
         <p>You can browse schedule data using the links above, or choose a different system.</p>
     </div>
 % end

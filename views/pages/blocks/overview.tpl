@@ -126,7 +126,7 @@
                             </table>
                         % else:
                             <div class="placeholder">
-                                % if context.system.gtfs_loaded:
+                                % if context.gtfs_loaded:
                                     <h3>There are no blocks today</h3>
                                     <p>You can check the <a href="{{ get_url(context, 'blocks', 'schedule') }}">full schedule</a> for more information about when this system operates.</p>
                                 % else:
@@ -143,8 +143,8 @@
         % include('components/top_button')
     % else:
         <div class="placeholder">
-            <h3>{{ context.system }} block information is unavailable</h3>
-            % if context.system.gtfs_loaded:
+            <h3>{{ context }} block information is unavailable</h3>
+            % if context.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>
@@ -177,7 +177,7 @@
                                     <div class="row">
                                         % include('components/agency_logo', agency=system.agency)
                                         <div class="column">
-                                            <a href="{{ get_url(system, *path) }}">{{ system }}</a>
+                                            <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
                                             <span class="mobile-only smaller-font">
                                                 % if system.gtfs_loaded:
                                                     % if count == 1:

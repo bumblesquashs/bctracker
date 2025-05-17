@@ -45,6 +45,10 @@ class System:
     )
     
     @property
+    def context(self):
+        return Context(system=self)
+    
+    @property
     def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
         return self.last_updated is not None
@@ -142,13 +146,11 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        context = Context(system=self)
-        return self.overview_repository.find_all(Context(), context)
+        return self.overview_repository.find_all(last_seen_context=self.context)
     
     def get_positions(self):
         '''Returns all positions'''
-        context = Context(system=self)
-        return self.position_repository.find_all(context)
+        return self.position_repository.find_all(self.context)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -221,12 +223,11 @@ class System:
         if not self.gtfs_enabled:
             return
         print(f'Updating cached data for {self}')
-        context = Context(system=self)
         try:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = self.departure_repository.find_all(context)
+            departures = self.departure_repository.find_all(self.context)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -273,8 +274,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            context = Context(system=self)
-            departures = self.departure_repository.find_all(context, stop=stop)
+            departures = self.departure_repository.find_all(self.context, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -285,8 +285,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            context = Context(system=self)
-            departures = self.departure_repository.find_all(context, trip=trip)
+            departures = self.departure_repository.find_all(self.context, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache
