@@ -6,7 +6,6 @@ from di import di
 from database import Database
 from settings import Settings
 
-from models.context import Context
 from models.date import Date
 from models.time import Time
 from models.weekday import Weekday
@@ -63,7 +62,7 @@ class DefaultCronService(CronService):
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
         for system in self.system_repository.find_all():
-            context = Context(system=system)
+            context = system.context
             if self.running:
                 try:
                     date = Date.today(context.timezone)
@@ -87,7 +86,7 @@ class DefaultCronService(CronService):
         time = Time.now()
         print(f'--- {date} at {time} ---')
         for system in self.system_repository.find_all():
-            context = Context(system=system)
+            context = system.context
             if self.running:
                 try:
                     if system.reload_backoff.check():

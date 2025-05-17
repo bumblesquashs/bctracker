@@ -1,3 +1,6 @@
+
+% from models.context import Context
+
 <html>
     <head>
         % if settings.enable_analytics:
@@ -402,7 +405,7 @@
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
                 % if context.system:
-                    <a href="{{ get_url(None, *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ get_url(Context(), *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % end

@@ -1,4 +1,6 @@
 
+% from models.context import Context
+
 % if get('realtime_only', False):
 	% available_systems = [s for s in systems if s.realtime_enabled]
 % else:
@@ -16,7 +18,7 @@
 	<tbody>
 		% if context.system:
 			<td>
-				<a href="{{ get_url(None, *path) }}">All Systems</a>
+				<a href="{{ get_url(Context(), *path) }}">All Systems</a>
 			</td>
 		% end
 		% for region in regions:

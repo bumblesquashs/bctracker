@@ -182,7 +182,7 @@ class Server(Bottle):
         cp.server.start()
         
         for system in self.system_repository.find_all():
-            context = Context(system=system)
+            context = system.context
             if self.running:
                 try:
                     self.gtfs_service.load(context, args.reload, args.updatedb)
@@ -209,7 +209,7 @@ class Server(Bottle):
         if cp.server.running:
             cp.server.stop()
     
-    def get_url(self, context, *args, **kwargs):
+    def get_url(self, context: Context, *args, **kwargs):
         '''Returns a URL formatted based on the given context and path'''
         components = []
         for arg in args:
@@ -218,10 +218,7 @@ class Server(Bottle):
             except AttributeError:
                 components.append(str(arg))
         path = '/'.join(components)
-        if type(context) is Context:
-            system_id = context.system_id
-        else:
-            system_id = getattr(context, 'id', context)
+        system_id = context.system_id
         if system_id:
             url = self.settings.system_domain.format(system_id, path).rstrip('/')
         else:
@@ -307,7 +304,7 @@ class Server(Bottle):
             **kwargs
         )
     
-    def frame(self, name, context: Context, **kwargs):
+    def frame(self, context: Context, name, **kwargs):
         '''Returns an HTML element that can be inserted into a page'''
         return template(f'frames/{name}',
             context=context,
