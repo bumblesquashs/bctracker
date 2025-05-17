@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from di import di
 
 from models.context import Context
+from models.departure import Departure
 from models.direction import Direction
 from models.time import Time
 
@@ -212,33 +213,34 @@ class Trip:
             return False
         return True
 
+@dataclass(slots=True)
 class TripCache:
     '''A collection of calculated values for a single trip'''
     
-    __slots__ = (
-        'first_departure',
-        'last_departure',
-        'departure_count',
-        'direction',
-        'custom_headsigns'
-    )
+    first_departure: Departure | None
+    last_departure: Departure | None
+    departure_count: int
+    direction: Direction
+    custom_headsigns: list[str]
     
-    def __init__(self, departures):
+    @classmethod
+    def build(cls, departures):
         if departures:
-            self.first_departure = departures[0]
-            self.last_departure = departures[-1]
-            self.departure_count = len(departures)
-            self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+            first_departure = departures[0]
+            last_departure = departures[-1]
+            departure_count = len(departures)
+            direction = Direction.calculate(departures[0].stop, departures[-1].stop)
             headsigns = [str(d) for d in departures if d.headsign]
             previous_headsign = None
-            self.custom_headsigns = []
+            custom_headsigns = []
             for headsign in headsigns:
                 if headsign != previous_headsign:
-                    self.custom_headsigns.append(headsign)
+                    custom_headsigns.append(headsign)
                 previous_headsign = headsign
         else:
-            self.first_departure = None
-            self.last_departure = None
-            self.departure_count = 0
-            self.direction = Direction.UNKNOWN
-            self.custom_headsigns = []
+            first_departure = None
+            last_departure = None
+            departure_count = 0
+            direction = Direction.UNKNOWN
+            custom_headsigns = []
+        return cls(first_departure, last_departure, departure_count, direction, custom_headsigns)

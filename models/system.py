@@ -1,10 +1,14 @@
 
+from dataclasses import dataclass, field
 import pytz
 
 from di import di
 
+from models.agency import Agency
 from models.backoff import Backoff
 from models.context import Context
+from models.date import Date
+from models.region import Region
 from models.route import RouteCache
 from models.schedule import Schedule
 from models.stop import StopCache
@@ -12,37 +16,43 @@ from models.trip import TripCache
 
 from repositories import DepartureRepository, OverviewRepository, PositionRepository
 
+from constants import DEFAULT_TIMEZONE
+
+@dataclass(slots=True)
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
     
-    __slots__ = (
-        'departure_repository',
-        'overview_repository',
-        'position_repository',
-        'id',
-        'agency',
-        'region',
-        'name',
-        'remote_id',
-        'enabled',
-        'timezone',
-        'colour_routes',
-        'gtfs_downloaded',
-        'gtfs_loaded',
-        'reload_backoff',
-        'last_updated',
-        'blocks',
-        'routes',
-        'routes_by_number',
-        'services',
-        'sheets',
-        'stops',
-        'stops_by_number',
-        'trips',
-        'route_caches',
-        'stop_caches',
-        'trip_caches'
-    )
+    id: str
+    agency: Agency
+    region: Region
+    name: str
+    
+    remote_id: int | None = None
+    enabled: bool = True
+    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
+    colour_routes: str | None = None
+    
+    gtfs_downloaded: bool | None = field(default=None, init=False)
+    gtfs_loaded: bool = field(default=False, init=False)
+    reload_backoff: bool = field(init=False)
+    last_updated: Date | None = field(default=None, init=False)
+    
+    blocks: dict = field(default_factory=dict, init=False)
+    routes: dict = field(default_factory=dict, init=False)
+    routes_by_number: dict = field(default_factory=dict, init=False)
+    services: dict = field(default_factory=dict, init=False)
+    sheets: list = field(default_factory=list, init=False)
+    stops: dict = field(default_factory=dict, init=False)
+    stops_by_number: dict = field(default_factory=dict, init=False)
+    trips: dict = field(default_factory=dict, init=False)
+    
+    route_caches: dict = field(default_factory=dict, init=False)
+    stop_caches: dict = field(default_factory=dict, init=False)
+    trip_caches: dict = field(default_factory=dict, init=False)
+    
+    departure_repository: DepartureRepository = field(init=False)
+    overview_repository: OverviewRepository = field(init=False)
+    position_repository: PositionRepository = field(init=False)
     
     @property
     def context(self):
@@ -88,33 +98,8 @@ class System:
         '''The overall service schedule for this system'''
         return Schedule.combine(self.get_services())
     
-    def __init__(self, id, agency, region, name, **kwargs):
-        self.id = id
-        self.agency = agency
-        self.region = region
-        self.name = name
-        self.remote_id = kwargs.get('remote_id')
-        self.enabled = kwargs.get('enabled', True) and agency.enabled
-        self.timezone = pytz.timezone(kwargs.get('timezone', 'America/Vancouver'))
-        self.colour_routes = kwargs.get('colour_routes')
-        
-        self.gtfs_downloaded = None
-        self.gtfs_loaded = False
+    def __post_init__(self, **kwargs):
         self.reload_backoff = Backoff(max_target=2**8)
-        self.last_updated = None
-        
-        self.blocks = {}
-        self.routes = {}
-        self.routes_by_number = {}
-        self.services = {}
-        self.sheets = []
-        self.stops = {}
-        self.stops_by_number = {}
-        self.trips = {}
-        
-        self.route_caches = {}
-        self.stop_caches = {}
-        self.trip_caches = {}
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
         self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
@@ -235,25 +220,25 @@ class System:
                 stop_departures.setdefault(departure.stop_id, []).append(departure)
             for trip_id, departures in trip_departures.items():
                 if trip_id not in self.trip_caches:
-                    self.trip_caches[trip_id] = TripCache(departures)
+                    self.trip_caches[trip_id] = TripCache.build(departures)
             for stop_id, departures in stop_departures.items():
                 if stop_id not in self.stop_caches:
-                    self.stop_caches[stop_id] = StopCache(self, departures)
+                    self.stop_caches[stop_id] = StopCache.build(self, departures)
             route_trips = {}
             for trip in self.get_trips():
                 route_trips.setdefault(trip.route_id, []).append(trip)
             for route_id, trips in route_trips.items():
                 if route_id not in self.route_caches:
-                    self.route_caches[route_id] = RouteCache(self, trips)
+                    self.route_caches[route_id] = RouteCache.build(self, trips)
             for trip_id in self.trips.keys():
                 if trip_id not in self.trip_caches:
-                    self.trip_caches[trip_id] = TripCache([])
+                    self.trip_caches[trip_id] = TripCache.build([])
             for stop_id in self.stops.keys():
                 if stop_id not in self.stop_caches:
-                    self.stop_caches[stop_id] = StopCache(self, [])
+                    self.stop_caches[stop_id] = StopCache.build(self, [])
             for route_id in self.routes.keys():
                 if route_id not in self.route_caches:
-                    self.route_caches[route_id] = RouteCache(self, [])
+                    self.route_caches[route_id] = RouteCache.build(self, [])
         except Exception as e:
             print(f'Failed to update cached data for {self}: {e}')
     
@@ -264,7 +249,7 @@ class System:
             return self.route_caches[route_id]
         except KeyError:
             trips = [t for t in self.get_trips() if t.route_id == route_id]
-            cache = RouteCache(self, trips)
+            cache = RouteCache.build(self, trips)
             self.route_caches[route_id] = cache
             return cache
     
@@ -275,7 +260,7 @@ class System:
             return self.stop_caches[stop_id]
         except KeyError:
             departures = self.departure_repository.find_all(self.context, stop=stop)
-            cache = StopCache(self, departures)
+            cache = StopCache.build(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
     
@@ -286,6 +271,6 @@ class System:
             return self.trip_caches[trip_id]
         except KeyError:
             departures = self.departure_repository.find_all(self.context, trip=trip)
-            cache = TripCache(departures)
+            cache = TripCache.build(departures)
             self.trip_caches[trip_id] = cache
             return cache

@@ -145,21 +145,22 @@ class Stop:
         '''Returns all departures on trips that serve this stop'''
         return self.departure_repository.find_adjacent(self.context, self)
 
+@dataclass(slots=True)
 class StopCache:
     '''A collection of calculated values for a single stop'''
     
-    __slots__ = (
-        'schedule',
-        'sheets',
-        'routes'
-    )
+    schedule: Schedule
+    sheets: list
+    routes: list
     
-    def __init__(self, system, departures):
+    @classmethod
+    def build(cls, system, departures):
         services = {d.trip.service for d in departures if d.trip}
-        self.sheets = system.copy_sheets(services)
-        if self.sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-            self.schedule = Schedule.combine(services, date_range)
+        sheets = system.copy_sheets(services)
+        if sheets:
+            date_range = DateRange.combine([s.schedule.date_range for s in sheets])
+            schedule = Schedule.combine(services, date_range)
         else:
-            self.schedule = None
-        self.routes = sorted({d.trip.route for d in departures if d.trip and d.trip.route})
+            schedule = None
+        routes = sorted({d.trip.route for d in departures if d.trip and d.trip.route})
+        return cls(schedule, sheets, routes)

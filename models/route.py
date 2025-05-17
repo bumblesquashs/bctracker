@@ -192,25 +192,24 @@ def generate_colour(context: Context, number):
     b = int(rgb[2] * 255)
     return f'{r:02x}{g:02x}{b:02x}'
 
+@dataclass(slots=True)
 class RouteCache:
     '''A collection of calculated values for a single route'''
     
-    __slots__ = (
-        'trips',
-        'schedule',
-        'sheets',
-        'indicator_points'
-    )
+    trips: list
+    schedule: Schedule | None
+    sheets: list
+    indicator_points: list
     
-    def __init__(self, system, trips):
-        self.trips = trips
+    @classmethod
+    def build(cls, system, trips):
         services = {t.service for t in trips}
-        self.sheets = system.copy_sheets(services)
-        if self.sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-            self.schedule = Schedule.combine(services, date_range)
+        sheets = system.copy_sheets(services)
+        if sheets:
+            date_range = DateRange.combine([s.schedule.date_range for s in sheets])
+            schedule = Schedule.combine(services, date_range)
         else:
-            self.schedule = None
+            schedule = None
         try:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].find_points()
@@ -222,6 +221,7 @@ class RouteCache:
             else:
                 count = min(int(distance * 8) + 1, 4)
             size = len(points) // count
-            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+            indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
         except IndexError:
-            self.indicator_points = []
+            indicator_points = []
+        return cls(trips, schedule, sheets, indicator_points)
