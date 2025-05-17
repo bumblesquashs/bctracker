@@ -9,17 +9,17 @@ if TYPE_CHECKING:
 class RouteRepository(ABC):
     
     @abstractmethod
-    def create(self, system, row):
+    def create(self, context, row):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, system, route_id, number) -> Route | None:
+    def find(self, context, route_id, number) -> Route | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, limit) -> list[Route]:
+    def find_all(self, context, limit) -> list[Route]:
         raise NotImplementedError()
     
     @abstractmethod
-    def delete_all(self, system):
+    def delete_all(self, context):
         raise NotImplementedError()

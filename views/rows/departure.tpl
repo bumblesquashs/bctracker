@@ -48,7 +48,7 @@
     </td>
     <td class="desktop-only">
         % if block:
-            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
         % else:
             <span class="lighter-text">Loading</span>
         % end
@@ -69,7 +69,7 @@
             % end
         </div>
     </td>
-    % if not system or system.realtime_enabled:
+    % if context.realtime_enabled:
         % if trip.id in recorded_today:
             % bus = recorded_today[trip.id]
             <td>
@@ -92,8 +92,8 @@
             <td class="desktop-only">
                 % include('components/order', order=bus.order)
             </td>
-        % elif (trip.system.id, trip.block_id) in assignments and trip.end_time.is_later:
-            % assignment = assignments[(trip.system.id, trip.block_id)]
+        % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
+            % assignment = assignments[(trip.context.system_id, trip.block_id)]
             % bus = assignment.bus
             <td>
                 <div class="column">

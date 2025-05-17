@@ -11,10 +11,10 @@
         % end
     </h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'trips', trip) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'trips', trip) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        % if system.realtime_enabled:
-            <a href="{{ get_url(system, 'trips', trip, 'history') }}" class="tab-button">History</a>
+        % if context.realtime_enabled:
+            <a href="{{ get_url(context, 'trips', trip, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>

@@ -27,8 +27,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'bus', bus, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -65,7 +65,7 @@
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
+                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
                                 </div>
                             </div>
                         % end
@@ -81,7 +81,7 @@
                         % if last_record and last_record.date.is_today:
                             % block = last_record.block
                             % if block:
-                                % date = Date.today(block.system.timezone)
+                                % date = Date.today(block.context.timezone)
                                 % end_time = block.get_end_time(date=date)
                                 % if end_time and end_time.is_later:
                                     <div class="section no-flex">
@@ -105,7 +105,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -147,11 +147,11 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">
-                            % include('components/block_timeline', date=Date.today(block.system.timezone))
+                            % include('components/block_timeline', date=Date.today(block.context.timezone))
                         </div>
                         % if position.timestamp:
                             <div class="row section">
@@ -170,7 +170,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -191,8 +191,8 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
-                                % date = Date.today(block.system.timezone)
+                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                % date = Date.today(block.context.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)
                                 % duration = block.get_duration(date=date)
@@ -358,16 +358,16 @@
                                     <td>
                                         <div class="column">
                                             {{ record.date.format_day() }}
-                                            <span class="non-desktop smaller-font">{{ record.system }}</span>
+                                            <span class="non-desktop smaller-font">{{ record.context }}</span>
                                         </div>
                                     </td>
-                                    <td class="desktop-only">{{ record.system }}</td>
+                                    <td class="desktop-only">{{ record.context }}</td>
                                     <td>
                                         <div class="column">
                                             <div class="row">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

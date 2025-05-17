@@ -1,13 +1,11 @@
 
-from di import di
-
-from repositories import SystemRepository
+from models.context import Context
 
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
     
     __slots__ = (
-        'system',
+        'context',
         'shape_id',
         'sequence',
         'lat',
@@ -15,18 +13,17 @@ class Point:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='point', **kwargs):
+    def from_db(cls, row, prefix='point'):
         '''Returns a point initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         shape_id = row[f'{prefix}_shape_id']
         sequence = row[f'{prefix}_sequence']
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
-        return cls(system, shape_id, sequence, lat, lon)
+        return cls(context, shape_id, sequence, lat, lon)
     
-    def __init__(self, system, shape_id, sequence, lat, lon):
-        self.system = system
+    def __init__(self, context: Context, shape_id, sequence, lat, lon):
+        self.context = context
         self.shape_id = shape_id
         self.sequence = sequence
         self.lat = lat

@@ -3,6 +3,7 @@ import json
 
 from di import di
 
+from models.context import Context
 from models.match import Match
 from models.order import Order
 
@@ -29,39 +30,38 @@ class FileOrderRepository(OrderRepository):
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency = self.agency_repository.find(agency_id)
+                context = Context(agency=agency)
                 agency_orders = []
                 for (model_id, model_values) in agency_values.items():
                     model = self.model_repository.find(model_id)
                     for values in model_values:
-                        agency_orders.append(Order(agency, model, **values))
+                        agency_orders.append(Order(context, model, **values))
                 self.orders[agency_id] = agency_orders
     
-    def find(self, agency, bus):
+    def find(self, context: Context, bus):
         '''Returns the order containing the given bus number'''
-        agency_id = getattr(agency, 'id', agency)
         bus_number = getattr(bus, 'number', bus)
         try:
-            agency_orders = self.orders[agency_id]
+            agency_orders = self.orders[context.agency_id]
             for order in agency_orders:
                 if bus_number in order:
                     return order
         except KeyError:
             return None
     
-    def find_all(self, agency=None):
+    def find_all(self, context: Context):
         '''Returns all orders'''
-        agency_id = getattr(agency, 'id', agency)
-        if agency_id:
+        if context.agency:
             try:
-                return self.orders[agency_id]
+                return self.orders[context.agency_id]
             except KeyError:
                 return []
         return [o for a in self.orders.values() for o in a]
     
-    def find_matches(self, agency, query, recorded_bus_numbers):
+    def find_matches(self, context: Context, query, recorded_bus_numbers):
         '''Returns matching buses for a given query'''
         matches = []
-        orders = self.find_all(agency)
+        orders = self.find_all(context)
         for order in orders:
             if not order.visible:
                 continue

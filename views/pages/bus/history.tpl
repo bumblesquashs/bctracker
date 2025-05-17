@@ -15,8 +15,8 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'bus', bus) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'bus', bus) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'bus', bus, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -113,16 +113,16 @@
                                         <td>
                                             <div class="column">
                                                 {{ record.date.format_day() }}
-                                                <span class="non-desktop smaller-font">{{ record.system }}</span>
+                                                <span class="non-desktop smaller-font">{{ record.context }}</span>
                                             </div>
                                         </td>
-                                        <td class="desktop-only">{{ record.system }}</td>
+                                        <td class="desktop-only">{{ record.context }}</td>
                                         <td>
                                             <div class="column">
                                                 <div class="row">
                                                     % if record.is_available:
                                                         % block = record.block
-                                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                     % else:
                                                         <span>{{ record.block_id }}</span>
                                                     % end
