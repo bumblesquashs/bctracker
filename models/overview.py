@@ -1,21 +1,22 @@
 
+from dataclasses import dataclass
+
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.record import Record
 
+@dataclass(slots=True)
 class Overview:
     '''An overview of a bus' history'''
     
-    __slots__ = (
-        'bus',
-        'first_seen_date',
-        'first_seen_context',
-        'first_record',
-        'last_seen_date',
-        'last_seen_context',
-        'last_record'
-    )
+    bus: Bus
+    first_seen_date: Date
+    first_seen_context: Context
+    first_record: Record | None
+    last_seen_date: Date
+    last_seen_context: Context
+    last_record: Record | None
     
     @classmethod
     def from_db(cls, row, prefix='overview'):
@@ -35,12 +36,3 @@ class Overview:
         else:
             last_record = Record.from_db(row, prefix=f'{prefix}_last_record')
         return cls(bus, first_seen_date, first_seen_context, first_record, last_seen_date, last_seen_context, last_record)
-    
-    def __init__(self, bus, first_seen_date, first_seen_context: Context, first_record, last_seen_date, last_seen_context: Context, last_record):
-        self.bus = bus
-        self.first_seen_date = first_seen_date
-        self.first_seen_context = first_seen_context
-        self.first_record = first_record
-        self.last_seen_date = last_seen_date
-        self.last_seen_context = last_seen_context
-        self.last_record = last_record

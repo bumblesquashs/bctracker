@@ -1,20 +1,14 @@
 
+from dataclasses import dataclass
+
+@dataclass(slots=True)
 class Backoff:
     
-    __slots__ = (
-        'value',
-        'target',
-        'scale',
-        'initial_target',
-        'max_target'
-    )
-    
-    def __init__(self, scale=2, initial_target=1, max_target=None):
-        self.value = 0
-        self.target = 1
-        self.scale = scale
-        self.initial_target = initial_target
-        self.max_target = max_target
+    value: int = 0
+    target: int = 1
+    scale: int = 2
+    initial_target: int = 1
+    max_target: int | None = None
     
     def check(self):
         '''Checks if the value has reached the target'''

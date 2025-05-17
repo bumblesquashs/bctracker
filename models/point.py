@@ -1,16 +1,17 @@
 
+from dataclasses import dataclass
+
 from models.context import Context
 
+@dataclass(slots=True)
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
     
-    __slots__ = (
-        'context',
-        'shape_id',
-        'sequence',
-        'lat',
-        'lon'
-    )
+    context: Context
+    shape_id: str
+    sequence: int
+    lat: float
+    lon: float
     
     @classmethod
     def from_db(cls, row, prefix='point'):
@@ -21,13 +22,6 @@ class Point:
         lat = row[f'{prefix}_lat']
         lon = row[f'{prefix}_lon']
         return cls(context, shape_id, sequence, lat, lon)
-    
-    def __init__(self, context: Context, shape_id, sequence, lat, lon):
-        self.context = context
-        self.shape_id = shape_id
-        self.sequence = sequence
-        self.lat = lat
-        self.lon = lon
     
     def __eq__(self, other):
         return self.sequence == other.sequence

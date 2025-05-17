@@ -6,19 +6,20 @@ if TYPE_CHECKING:
     from models.agency import Agency
     from models.system import System
 
+from dataclasses import dataclass
+
 from constants import *
 
 from di import di
 
 from repositories import AgencyRepository, SystemRepository
 
+@dataclass(init=False, slots=True)
 class Context:
     '''A context representing an agency and system'''
     
-    __slots__ = (
-        'agency',
-        'system'
-    )
+    agency: Agency | None
+    system: System | None
     
     @classmethod
     def find(cls, agency_id=None, system_id=None, **kwargs):
@@ -122,7 +123,7 @@ class Context:
             return self.agency.distance_scale
         return DEFAULT_DISTANCE_SCALE
     
-    def __init__(self, agency: Agency = None, system: System = None):
+    def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')
         if system and not agency:
