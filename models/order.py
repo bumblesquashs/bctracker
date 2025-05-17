@@ -1,21 +1,24 @@
 
+from dataclasses import dataclass, field
+
 from models.bus import Bus
 from models.context import Context
+from models.model import Model
 
+@dataclass(slots=True)
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
     
-    __slots__ = (
-        'context',
-        'model',
-        'low',
-        'high',
-        'year',
-        'visible',
-        'demo',
-        'exceptions',
-        'size'
-    )
+    context: Context
+    model: Model
+    low: int
+    high: int
+    year: int | None = None
+    visible: bool = True
+    demo: bool = False
+    exceptions: set[int] = field(default_factory=set)
+    
+    size: int = field(init=False)
     
     @property
     def first_bus(self):
@@ -27,23 +30,7 @@ class Order:
         '''The last bus in the order'''
         return Bus(self.context, self.high, self)
     
-    def __init__(self, context: Context, model, **kwargs):
-        self.context = context
-        self.model = model
-        if 'number' in kwargs:
-            self.low = kwargs['number']
-            self.high = kwargs['number']
-        else:
-            self.low = kwargs['low']
-            self.high = kwargs['high']
-        self.year = kwargs.get('year')
-        self.visible = kwargs.get('visible', True)
-        self.demo = kwargs.get('demo', False)
-        if 'exceptions' in kwargs:
-            self.exceptions = set(kwargs['exceptions'])
-        else:
-            self.exceptions = set()
-        
+    def __post_init__(self):
         self.size = (self.high - self.low) + 1 - len(self.exceptions)
     
     def __str__(self):

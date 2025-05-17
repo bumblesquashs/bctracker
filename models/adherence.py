@@ -1,5 +1,6 @@
 
 import math
+from dataclasses import dataclass, field
 
 from di import di
 
@@ -9,15 +10,15 @@ from repositories import DepartureRepository
 
 MINIMUM_MINUTES = 4
 
+@dataclass(slots=True)
 class Adherence:
     '''Indicates how far ahead or behind a bus is compared to its trip's schedule'''
     
-    __slots__ = (
-        'value',
-        'layover',
-        'status_class',
-        'description'
-    )
+    value: int
+    layover: bool
+    
+    status_class: str = field(init=False)
+    description: str = field(init=False)
     
     @classmethod
     def calculate(cls, trip, stop, sequence, lat, lon, timestamp, **kwargs):
@@ -45,9 +46,9 @@ class Adherence:
         except AttributeError:
             return None
     
-    def __init__(self, value, layover):
-        self.value = value
-        self.layover = layover
+    def __post_init__(self):
+        value = self.value
+        layover = self.layover
         
         if layover:
             self.status_class = 'layover'

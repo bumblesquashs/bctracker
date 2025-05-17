@@ -1,4 +1,6 @@
 
+from dataclasses import dataclass, field
+
 from di import di
 
 from models.context import Context
@@ -7,24 +9,26 @@ from models.time import Time
 
 from repositories import DepartureRepository, PointRepository
 
+@dataclass(slots=True)
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = (
-        'departure_repository',
-        'point_repository',
-        'context',
-        'id',
-        'short_id',
-        'route_id',
-        'service_id',
-        'block_id',
-        'direction_id',
-        'shape_id',
-        'headsign',
-        'sheets',
-        '_related_trips'
-    )
+    context: Context
+    id: str
+    route_id: str
+    service_id: str
+    block_id: str
+    direction_id: int
+    shape_id: str
+    headsign: str
+    
+    short_id: str = field(init=False)
+    sheets: list = field(init=False)
+    
+    _related_trips: list | None = field(default=None, init=False)
+    
+    departure_repository: DepartureRepository = field(init=False)
+    point_repository: PointRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='trip'):
@@ -147,28 +151,17 @@ class Trip:
         '''Returns the custom headsigns for this trip'''
         return self.cache.custom_headsigns
     
-    def __init__(self, context: Context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
-        self.context = context
-        self.id = trip_id
-        self.route_id = route_id
-        self.service_id = service_id
-        self.block_id = block_id
-        self.direction_id = direction_id
-        self.shape_id = shape_id
-        self.headsign = headsign
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
-        
-        id_parts = trip_id.split(':')
+    def __post_init__(self, **kwargs):
+        id_parts = self.id.split(':')
         if len(id_parts) == 1:
-            self.short_id = trip_id
+            self.short_id = self.id
         else:
             self.short_id = id_parts[0]
         
-        self.sheets = context.system.copy_sheets([self.service])
+        self.sheets = self.context.system.copy_sheets([self.service])
         
-        self._related_trips = None
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
     
     def __str__(self):
         if self.context.prefix_headsigns and self.route:

@@ -1,4 +1,6 @@
 
+from dataclasses import dataclass, field
+
 from di import di
 
 from models.context import Context
@@ -8,18 +10,20 @@ from models.time import Time
 
 from repositories import DepartureRepository
 
+@dataclass(slots=True)
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = (
-        'departure_repository',
-        'context',
-        'id',
-        'trips',
-        'schedule',
-        'sheets',
-        '_related_blocks'
-    )
+    context: Context
+    id: str
+    trips: list
+    
+    schedule: Schedule = field(init=False)
+    sheets: list = field(init=False)
+    
+    _related_blocks: list | None = field(default=None, init=False)
+    
+    departure_repository: DepartureRepository = field(init=False)
     
     @property
     def url_id(self):
@@ -34,16 +38,10 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, context: Context, id, trips, **kwargs):
-        self.context = context
-        self.id = id
-        self.trips = trips
-        
-        services = {t.service for t in trips}
+    def __post_init__(self, **kwargs):
+        services = {t.service for t in self.trips}
         self.schedule = Schedule.combine(services)
-        self.sheets = context.system.copy_sheets(services)
-        
-        self._related_blocks = None
+        self.sheets = self.context.system.copy_sheets(services)
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     

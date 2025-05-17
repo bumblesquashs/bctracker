@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass, field
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
@@ -14,19 +15,20 @@ from repositories import DepartureRepository
 
 import helpers
 
+@dataclass(slots=True)
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = (
-        'departure_repository',
-        'context',
-        'id',
-        'number',
-        'key',
-        'name',
-        'colour',
-        'text_colour'
-    )
+    context: Context
+    id: str
+    number: str
+    name: str
+    colour: str
+    text_colour: str
+    
+    key: str = field(init=False)
+    
+    departure_repository: DepartureRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='route'):
@@ -78,15 +80,8 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, context: Context, id, number, name, colour, text_colour, **kwargs):
-        self.context = context
-        self.id = id
-        self.number = number
-        self.name = name
-        self.colour = colour
-        self.text_colour = text_colour
-        
-        self.key = helpers.key(number)
+    def __post_init__(self, **kwargs):
+        self.key = helpers.key(self.number)
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     

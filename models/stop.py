@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass, field
 from math import sqrt
 
 from di import di
@@ -12,19 +13,20 @@ from repositories import DepartureRepository
 
 import helpers
 
+@dataclass(slots=True)
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = (
-        'departure_repository',
-        'context',
-        'id',
-        'number',
-        'key',
-        'name',
-        'lat',
-        'lon'
-    )
+    context: Context
+    id: str
+    number: str
+    name: str
+    lat: float
+    lon: float
+    
+    key: str = field(init=False)
+    
+    departure_repository: DepartureRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='stop'):
@@ -72,15 +74,8 @@ class Stop:
         '''Returns the routes for this stop'''
         return self.cache.routes
     
-    def __init__(self, context: Context, id, number, name, lat, lon, **kwargs):
-        self.context = context
-        self.id = id
-        self.number = number
-        self.name = name
-        self.lat = lat
-        self.lon = lon
-        
-        self.key = helpers.key(number)
+    def __post_init__(self, **kwargs):
+        self.key = helpers.key(self.number)
         
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
