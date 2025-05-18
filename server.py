@@ -1395,16 +1395,17 @@ class Server(Bottle):
         self.position_repository.delete_all()
         self.system_repository.load()
         for system in self.system_repository.find_all():
+            context = system.context
             if self.running:
                 try:
-                    self.gtfs_service.load(system)
-                    if not self.gtfs_service.validate(system):
-                        self.gtfs_service.load(system, True)
-                    self.gtfs_service.update_cache(system)
-                    self.realtime_service.update(system)
+                    self.gtfs_service.load(context)
+                    if not self.gtfs_service.validate(context):
+                        self.gtfs_service.load(context, True)
+                    self.gtfs_service.update_cache(context)
+                    self.realtime_service.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {system}: {e}')
-                if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+                    print(f'Error loading data for {context}: {e}')
+                if not system.gtfs_downloaded or not self.realtime_service.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
