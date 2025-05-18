@@ -8,13 +8,11 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from database import Database
 from models.record import Record
 import repositories
-from repositories.agency import DefaultAgencyRepository
-from repositories.region import DefaultRegionRepository
-from repositories.system import DefaultSystemRepository
+from repositories.impl import AgencyRepository, RegionRepository, SystemRepository
 
-repositories.agency = DefaultAgencyRepository()
-repositories.region = DefaultRegionRepository()
-repositories.system = DefaultSystemRepository()
+repositories.agency = AgencyRepository()
+repositories.region = RegionRepository()
+repositories.system = SystemRepository()
 
 repositories.system.load()
 
