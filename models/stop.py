@@ -7,7 +7,9 @@ from di import di
 from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
+from models.route import Route
 from models.schedule import Schedule
+from models.sheet import Sheet
 
 from repositories import DepartureRepository
 
@@ -150,8 +152,8 @@ class StopCache:
     '''A collection of calculated values for a single stop'''
     
     schedule: Schedule
-    sheets: list
-    routes: list
+    sheets: list[Sheet]
+    routes: list[Route]
     
     @classmethod
     def build(cls, system, departures):
