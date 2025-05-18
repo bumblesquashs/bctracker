@@ -34,7 +34,7 @@ class System:
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)
-    reload_backoff: bool = field(init=False)
+    reload_backoff: Backoff = field(init=False)
     last_updated: Date | None = field(default=None, init=False)
     
     blocks: dict = field(default_factory=dict, init=False)
