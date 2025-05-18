@@ -1,4 +1,6 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
@@ -9,14 +11,10 @@ from models.occupancy import Occupancy
 from models.position import Position
 from models.timestamp import Timestamp
 
+@dataclass(slots=True)
 class PositionRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, bus, data):
         '''Inserts a new position into the database'''
@@ -104,7 +102,7 @@ class PositionRepository:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
     
-    def find(self, bus):
+    def find(self, bus) -> Position | None:
         '''Returns the position of the given bus'''
         bus_number = getattr(bus, 'number', bus)
         positions = self.database.select('position',
@@ -134,7 +132,7 @@ class PositionRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context = Context(), trip=None, stop=None, block=None, route=None, has_location=None):
+    def find_all(self, context: Context = Context(), trip=None, stop=None, block=None, route=None, has_location=None) -> list[Position]:
         '''Returns all positions that match the given system, trip, stop, block, and route'''
         if isinstance(trip, list):
             trip_id = [getattr(t, 'id', t) for t in trip]

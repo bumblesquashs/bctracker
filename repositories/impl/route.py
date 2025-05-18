@@ -1,17 +1,15 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.context import Context
 from models.route import Route
 
+@dataclass(slots=True)
 class RouteRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, row):
         '''Inserts a new route into the database'''
@@ -42,7 +40,7 @@ class RouteRepository:
             'text_colour': text_colour
         })
     
-    def find(self, context: Context, route_id=None, number=None):
+    def find(self, context: Context, route_id=None, number=None) -> Route | None:
         '''Returns the route with the given context and route ID'''
         routes = self.database.select('route',
             columns={
@@ -66,7 +64,7 @@ class RouteRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None):
+    def find_all(self, context: Context, limit=None) -> list[Route]:
         '''Returns all routes that match the given context'''
         return self.database.select('route',
             columns={

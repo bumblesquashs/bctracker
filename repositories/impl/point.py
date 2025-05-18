@@ -1,17 +1,15 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.context import Context
 from models.point import Point
 
+@dataclass(slots=True)
 class PointRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, row):
         '''Inserts a new point into the database'''
@@ -23,7 +21,7 @@ class PointRepository:
             'lon': float(row['shape_pt_lon'])
         })
     
-    def find_all(self, context: Context, shape=None):
+    def find_all(self, context: Context, shape=None) -> list[Point]:
         '''Returns all points that match the given context and shape'''
         shape_id = getattr(shape, 'id', shape)
         return self.database.select('point',

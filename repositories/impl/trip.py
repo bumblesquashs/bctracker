@@ -1,17 +1,15 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.context import Context
 from models.trip import Trip
 
+@dataclass(slots=True)
 class TripRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, row):
         '''Inserts a new trip into the database'''
@@ -26,7 +24,7 @@ class TripRepository:
             'headsign': row['trip_headsign']
         })
     
-    def find(self, context: Context, trip_id):
+    def find(self, context: Context, trip_id) -> Trip | None:
         '''Returns the trip with the given context and trip ID'''
         trips = self.database.select('trip',
             columns={
@@ -51,7 +49,7 @@ class TripRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, route=None, block=None, limit=None):
+    def find_all(self, context: Context, route=None, block=None, limit=None) -> list[Trip]:
         '''Returns all trips that match the given context, route, and block'''
         route_id = getattr(route, 'id', route)
         block_id = getattr(block, 'id', block)

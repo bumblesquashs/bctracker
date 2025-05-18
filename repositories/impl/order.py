@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass, field
 import json
 
 from models.context import Context
@@ -7,14 +8,10 @@ from models.order import Order
 
 import repositories
 
+@dataclass(slots=True)
 class OrderRepository:
     
-    __slots__ = (
-        'orders'
-    )
-    
-    def __init__(self):
-        self.orders = {}
+    orders: dict[str, list[Order]] = field(default_factory=dict)
     
     def load(self):
         '''Loads order data from the static JSON file'''
@@ -38,7 +35,7 @@ class OrderRepository:
                         agency_orders.append(Order(context, model, **values))
                 self.orders[agency_id] = agency_orders
     
-    def find(self, context: Context, bus):
+    def find(self, context: Context, bus) -> Order | None:
         '''Returns the order containing the given bus number'''
         bus_number = getattr(bus, 'number', bus)
         try:
@@ -49,7 +46,7 @@ class OrderRepository:
         except KeyError:
             return None
     
-    def find_all(self, context: Context):
+    def find_all(self, context: Context) -> list[Order]:
         '''Returns all orders'''
         if context.agency:
             try:
@@ -58,7 +55,7 @@ class OrderRepository:
                 return []
         return [o for a in self.orders.values() for o in a]
     
-    def find_matches(self, context: Context, query, recorded_bus_numbers):
+    def find_matches(self, context: Context, query, recorded_bus_numbers) -> list[Match]:
         '''Returns matching buses for a given query'''
         matches = []
         orders = self.find_all(context)

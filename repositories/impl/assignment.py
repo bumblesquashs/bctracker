@@ -1,18 +1,16 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.assignment import Assignment
 from models.context import Context
 from models.date import Date
 
+@dataclass(slots=True)
 class AssignmentRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, block, bus, date):
         '''Inserts a new assignment into the database'''
@@ -25,7 +23,7 @@ class AssignmentRepository:
             'date': date.format_db()
         })
     
-    def find(self, context: Context, block):
+    def find(self, context: Context, block) -> Assignment | None:
         '''Returns the assignment for the given context and block'''
         block_id = getattr(block, 'id', block)
         date = Date.today(context.timezone)
@@ -48,7 +46,7 @@ class AssignmentRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, block=None, bus=None, trip=None, route=None, stop=None):
+    def find_all(self, context: Context, block=None, bus=None, trip=None, route=None, stop=None) -> list[Assignment]:
         '''Returns all assignments for the given block, bus, trip, route, and stop'''
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)

@@ -1,17 +1,15 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.context import Context
 from models.overview import Overview
 
+@dataclass(slots=True)
 class OverviewRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, bus, date, record):
         '''Inserts a new overview into the database'''
@@ -27,7 +25,7 @@ class OverviewRepository:
             'last_record_id': record_id
         })
     
-    def find(self, bus):
+    def find(self, bus) -> Overview | None:
         '''Returns the overview of the given bus'''
         overviews = self.find_all(bus=bus, limit=1)
         try:
@@ -35,7 +33,7 @@ class OverviewRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context = Context(), last_seen_context: Context = Context(), bus=None, limit=None):
+    def find_all(self, context: Context = Context(), last_seen_context: Context = Context(), bus=None, limit=None) -> list[Overview]:
         '''Returns all overviews that match the given context and bus'''
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('overview',
@@ -84,7 +82,7 @@ class OverviewRepository:
             initializer=Overview.from_db
         )
     
-    def find_bus_numbers(self, context: Context):
+    def find_bus_numbers(self, context: Context) -> list[int]:
         '''Returns all bus numbers that have been seen'''
         joins = {}
         filters = {}

@@ -1,16 +1,13 @@
 
+from dataclasses import dataclass, field
 import json
 
 from models.adornment import Adornment
 
+@dataclass(slots=True)
 class AdornmentRepository:
     
-    __slots__ = (
-        'adornments'
-    )
-    
-    def __init__(self):
-        self.adornments = {}
+    adornments: dict[str, dict[int, Adornment]] = field(default_factory=dict)
     
     def load(self):
         '''Loads adornment data from the static JSON file'''
@@ -23,7 +20,7 @@ class AdornmentRepository:
                     agency_adornments[bus_number] = Adornment(agency_id, bus_number, **values)
                 self.adornments[agency_id] = agency_adornments
     
-    def find(self, bus):
+    def find(self, bus) -> Adornment | None:
         '''Returns the adornments with the given bus number'''
         try:
             return self.adornments[bus.context.agency_id][bus.number]

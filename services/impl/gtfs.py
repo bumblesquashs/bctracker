@@ -1,5 +1,6 @@
 
 from os import path, rename, remove
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
@@ -20,16 +21,11 @@ from models.sheet import Sheet
 
 import repositories
 
+@dataclass(slots=True)
 class GTFSService:
     
-    __slots__ = (
-        'database',
-        'settings'
-    )
-    
-    def __init__(self, database: Database, settings: Settings):
-        self.database = database
-        self.settings = settings
+    database: Database
+    settings: Settings
     
     def load(self, context: Context, force_download=False, update_db=False):
         '''Loads the GTFS for the given context into memory'''

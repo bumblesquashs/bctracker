@@ -1,5 +1,7 @@
+
 import os
 import signal
+from dataclasses import dataclass, field
 from crontab import CronTab
 
 from database import Database
@@ -12,20 +14,15 @@ from models.weekday import Weekday
 import repositories
 import services
 
+@dataclass(slots=True)
 class CronService:
     
-    __slots__ = (
-        'database',
-        'settings',
-        'running',
-        'updating_realtime'
-    )
+    database: Database
+    settings: Settings
+    running: bool = field(default=True, init=False)
+    updating_realtime: bool = field(default=False, init=False)
     
-    def __init__(self, database: Database, settings: Settings):
-        self.database = database
-        self.settings = settings
-        self.running = True
-        self.updating_realtime = False
+    def __post_init__(self):
         signal.signal(signal.SIGUSR1, lambda sig, frame: self.handle_gtfs())
         signal.signal(signal.SIGUSR2, lambda sig, frame: self.handle_realtime())
     

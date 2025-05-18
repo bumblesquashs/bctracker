@@ -1,18 +1,16 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.area import Area
 from models.context import Context
 from models.stop import Stop
 
+@dataclass(slots=True)
 class StopRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, row):
         '''Inserts a new stop into the database'''
@@ -29,7 +27,7 @@ class StopRepository:
             'lon': float(row['stop_lon'])
         })
     
-    def find(self, context: Context, stop_id=None, number=None):
+    def find(self, context: Context, stop_id=None, number=None) -> Stop | None:
         '''Returns the stop with the given context and stop ID'''
         stops = self.database.select('stop',
             columns={
@@ -53,7 +51,7 @@ class StopRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None, lat=None, lon=None, size=0.01):
+    def find_all(self, context: Context, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
         '''Returns all stops that match the given context'''
         filters = {
             'stop.system_id': context.system_id
@@ -81,7 +79,7 @@ class StopRepository:
             initializer=Stop.from_db
         )
     
-    def find_area(self, context: Context):
+    def find_area(self, context: Context) -> Area | None:
         '''Returns the area of all stops for the given context'''
         areas = self.database.select(
             table='stop',

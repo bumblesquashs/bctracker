@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass, field
 import json
 import pytz
 
@@ -6,14 +7,10 @@ from models.system import System
 
 import repositories
 
+@dataclass(slots=True)
 class SystemRepository:
     
-    __slots__ = (
-        'systems'
-    )
-    
-    def __init__(self, **kwargs):
-        self.systems = {}
+    systems: dict[str, System] = field(default_factory=dict)
     
     def load(self):
         '''Loads system data from the static JSON file'''
@@ -32,11 +29,11 @@ class SystemRepository:
                             values['timezone'] = pytz.timezone(values['timezone'])
                         self.systems[id] = System(id, agency, region, **values)
     
-    def find(self, system_id):
+    def find(self, system_id) -> System | None:
         '''Returns the system with the given ID'''
         return self.systems.get(system_id)
     
-    def find_all(self, enabled_only: bool = True):
+    def find_all(self, enabled_only: bool = True) -> list[System]:
         '''Returns all systems'''
         if enabled_only:
             return [s for s in self.systems.values() if s.enabled]

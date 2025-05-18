@@ -1,5 +1,6 @@
 
 from os import path, rename, remove
+from dataclasses import dataclass
 from datetime import datetime
 
 import requests
@@ -16,18 +17,12 @@ from models.timestamp import Timestamp
 
 import repositories
 
+@dataclass(slots=True)
 class RealtimeService:
     
-    __slots__ = (
-        'database',
-        'settings',
-        'last_updated'
-    )
-    
-    def __init__(self, database: Database, settings: Settings):
-        self.database = database
-        self.settings = settings
-        self.last_updated = None
+    database: Database
+    settings: Settings
+    last_updated: Date | None = None
     
     def update(self, context: Context):
         '''Downloads realtime data for the given context and stores it in the database'''

@@ -1,17 +1,15 @@
 
+from dataclasses import dataclass
+
 from database import Database
 
 from models.context import Context
 from models.departure import Departure, PickupType, DropoffType
 
+@dataclass(slots=True)
 class DepartureRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, row):
         '''Inserts a new departure into the database'''
@@ -48,7 +46,7 @@ class DepartureRepository:
             'headsign': headsign
         })
     
-    def find(self, context: Context, trip=None, sequence=None, stop=None):
+    def find(self, context: Context, trip=None, sequence=None, stop=None) -> Departure:
         '''Returns the departure with the given context, trip, sequence, and stop'''
         departures = self.find_all(context, trip, sequence, stop)
         try:
@@ -56,7 +54,7 @@ class DepartureRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, trip=None, sequence=None, route=None, stop=None, block=None, limit=None):
+    def find_all(self, context: Context, trip=None, sequence=None, route=None, stop=None, block=None, limit=None) -> list[Departure]:
         '''Returns all departures that match the given context, trip, sequence, and stop'''
         trip_id = getattr(trip, 'id', trip)
         route_id = getattr(route, 'id', route)
@@ -104,7 +102,7 @@ class DepartureRepository:
             initializer=Departure.from_db
         )
     
-    def find_upcoming(self, context: Context, trip, sequence, limit=None):
+    def find_upcoming(self, context: Context, trip, sequence, limit=None) -> list[Departure]:
         '''Returns all departures on a trip from the given sequence number onwards'''
         trip_id = getattr(trip, 'id', trip)
         return self.database.select('departure',
@@ -132,7 +130,7 @@ class DepartureRepository:
             initializer=Departure.from_db
         )
     
-    def find_adjacent(self, context: Context, stop):
+    def find_adjacent(self, context: Context, stop) -> list[Departure]:
         '''Returns all departures on trips that serve the given stop'''
         stop_id = getattr(stop, 'id', stop)
         cte, args = self.database.build_select('departure',

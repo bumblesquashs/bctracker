@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass
 from datetime import timedelta
 
 from database import Database
@@ -8,14 +9,10 @@ from models.context import Context
 from models.date import Date
 from models.record import Record
 
+@dataclass(slots=True)
 class RecordRepository:
     
-    __slots__ = (
-        'database'
-    )
-    
-    def __init__(self, database: Database):
-        self.database = database
+    database: Database
     
     def create(self, context: Context, bus, date, block, time, trip):
         '''Inserts a new record into the database'''
@@ -56,7 +53,7 @@ class RecordRepository:
             }
         )
     
-    def find_all(self, context: Context = Context(), bus=None, block=None, trip=None, limit=None, page=None):
+    def find_all(self, context: Context = Context(), bus=None, block=None, trip=None, limit=None, page=None) -> list[Record]:
         '''Returns all records that match the given context, bus, block, and trip'''
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
@@ -96,12 +93,12 @@ class RecordRepository:
             initializer=Record.from_db
         )
     
-    def find_trip_ids(self, record):
+    def find_trip_ids(self, record) -> list[str]:
         '''Returns all trip IDs associated with the given record'''
         record_id = getattr(record, 'id', record)
         return self.database.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
     
-    def find_recorded_today(self, context: Context, trips):
+    def find_recorded_today(self, context: Context, trips) -> dict[str: Bus]:
         '''Returns all bus numbers matching the given context and trips that were recorded on the current date'''
         trip_ids = [getattr(t, 'id', t) for t in trips]
         date = Date.today(context.timezone)
@@ -124,7 +121,7 @@ class RecordRepository:
         )
         return {row['trip_id']: Bus.find(context, row['bus_number']) for row in rows}
     
-    def find_recorded_today_by_block(self, context: Context):
+    def find_recorded_today_by_block(self, context: Context) -> dict[str, Bus]:
         '''Returns all bus numbers matching the given context that werer ecorded on the current date'''
         date = Date.today(context.timezone)
         rows = self.database.select('record',
@@ -140,7 +137,7 @@ class RecordRepository:
         )
         return {row['block_id']: Bus.find(context, row['bus_number']) for row in rows}
     
-    def count(self, context: Context = Context(), bus=None, block=None, trip=None):
+    def count(self, context: Context = Context(), bus=None, block=None, trip=None) -> int:
         '''Returns the number of records for the given system, bus, block, and trip'''
         bus_number = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)

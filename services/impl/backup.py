@@ -1,21 +1,17 @@
 
 import os
+from dataclasses import dataclass
 from zipfile import ZipFile
 from glob import glob
 
 from database import Database
 from settings import Settings
 
+@dataclass(slots=True)
 class BackupService:
     
-    __slots__ = (
-        'database',
-        'settings'
-    )
-    
-    def __init__(self, database: Database, settings: Settings):
-        self.database = database
-        self.settings = settings
+    database: Database
+    settings: Settings
     
     def run(self, date, include_db=False, delete_files=True):
         '''Zips all archives from the given date into a single file'''
