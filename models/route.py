@@ -5,11 +5,12 @@ from colorsys import hls_to_rgb
 
 from di import di
 
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.schedule import Schedule
 
-from repositories import DepartureRepository, SystemRepository
+from repositories import DepartureRepository
 
 import helpers
 
@@ -18,7 +19,7 @@ class Route:
     
     __slots__ = (
         'departure_repository',
-        'system',
+        'context',
         'id',
         'number',
         'key',
@@ -28,23 +29,22 @@ class Route:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='route', **kwargs):
+    def from_db(cls, row, prefix='route'):
         '''Returns a route initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         id = row[f'{prefix}_id']
         number = row[f'{prefix}_number']
         if not number:
             number = id
         name = row[f'{prefix}_name']
-        colour = row[f'{prefix}_colour'] or generate_colour(system, number)
+        colour = row[f'{prefix}_colour'] or generate_colour(context, number)
         text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
-        return cls(system, id, number, name, colour, text_colour)
+        return cls(context, id, number, name, colour, text_colour)
     
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
-        if self.system.agency.prefer_route_id:
+        if self.context.prefer_route_id:
             return self.id
         return self.number
     
@@ -56,7 +56,7 @@ class Route:
     @property
     def cache(self):
         '''Returns the cache for this route'''
-        return self.system.get_route_cache(self)
+        return self.context.system.get_route_cache(self)
     
     @property
     def trips(self):
@@ -78,8 +78,8 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, system, id, number, name, colour, text_colour, **kwargs):
-        self.system = system
+    def __init__(self, context: Context, id, number, name, colour, text_colour, **kwargs):
+        self.context = context
         self.id = id
         self.number = number
         self.name = name
@@ -121,9 +121,9 @@ class Route:
         json = []
         for point in self.indicator_points:
             json.append({
-                'system_id': self.system.id,
-                'system_name': str(self.system),
-                'agency_id': self.system.agency.id,
+                'system_id': self.context.system_id,
+                'system_name': str(self.context.system),
+                'agency_id': self.context.agency_id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
@@ -170,7 +170,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_repository.find_all(self.system, route=self)
+        return self.departure_repository.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
@@ -180,15 +180,15 @@ class Route:
         route_key = tuple([k for k in route.key if type(k) == int])
         return self_key and route_key and self_key == route_key
 
-def generate_colour(system, number):
-    '''Generate a random colour based on system ID and route number'''
-    seed(system.id)
+def generate_colour(context: Context, number):
+    '''Generate a random colour based on context and route number'''
+    seed(context.system_id)
     number_digits = ''.join([d for d in number if d.isdigit()])
     if len(number_digits) == 0:
         h = randint(1, 360) / 360.0
     else:
         h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-    seed(system.id + number)
+    seed(context.system_id + number)
     l = randint(30, 50) / 100.0
     s = randint(50, 100) / 100.0
     rgb = hls_to_rgb(h, l, s)

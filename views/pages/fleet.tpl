@@ -27,10 +27,10 @@
                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
             </ol>
             <p>Vehicles that have been tracked before show the first and last date and system that they were seen in, even if they weren't in service.</p>
-            % if system:
+            % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ system }} buses, visit the <a href="{{ get_url(system, 'history') }}">history</a> page.
+                    To see only {{ context }} buses, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
                 </p>
             % end
         </div>
@@ -130,18 +130,18 @@
                                                                         <td class="non-desktop">
                                                                             <div class="column">
                                                                                 {{ overview.first_seen_date.format_short() }}
-                                                                                <span class="mobile-only smaller-font">{{ overview.first_seen_system }}</span>
+                                                                                <span class="mobile-only smaller-font">{{ overview.first_seen_context }}</span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="non-mobile">{{ overview.first_seen_system }}</td>
+                                                                        <td class="non-mobile">{{ overview.first_seen_context }}</td>
                                                                         <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
                                                                         <td class="non-desktop">
                                                                             <div class="column">
                                                                                 {{ overview.last_seen_date.format_short() }}
-                                                                                <span class="mobile-only smaller-font">{{ overview.last_seen_system }}</span>
+                                                                                <span class="mobile-only smaller-font">{{ overview.last_seen_context }}</span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="non-mobile">{{ overview.last_seen_system }}</td>
+                                                                        <td class="non-mobile">{{ overview.last_seen_context }}</td>
                                                                     </tr>
                                                                 % else:
                                                                     <tr>

@@ -1,10 +1,11 @@
 
 from di import di
 
+from models.context import Context
 from models.direction import Direction
 from models.time import Time
 
-from repositories import DepartureRepository, PointRepository, SystemRepository
+from repositories import DepartureRepository, PointRepository
 
 class Trip:
     '''A list of departures for a specific route and a specific service'''
@@ -12,7 +13,7 @@ class Trip:
     __slots__ = (
         'departure_repository',
         'point_repository',
-        'system',
+        'context',
         'id',
         'short_id',
         'route_id',
@@ -26,10 +27,9 @@ class Trip:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='trip', **kwargs):
+    def from_db(cls, row, prefix='trip'):
         '''Returns a trip initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_id']
         route_id = row[f'{prefix}_route_id']
         service_id = row[f'{prefix}_service_id']
@@ -37,7 +37,7 @@ class Trip:
         direction_id = row[f'{prefix}_direction_id']
         shape_id = row[f'{prefix}_shape_id']
         headsign = row[f'{prefix}_headsign']
-        return cls(system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+        return cls(context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property
     def url_id(self):
@@ -52,17 +52,17 @@ class Trip:
     @property
     def route(self):
         '''Returns the route associated with this trip'''
-        return self.system.get_route(route_id=self.route_id)
+        return self.context.system.get_route(route_id=self.route_id)
     
     @property
     def block(self):
         '''Returns the block associated with this trip'''
-        return self.system.get_block(self.block_id)
+        return self.context.system.get_block(self.block_id)
     
     @property
     def service(self):
         '''Returns the service associated with this trip'''
-        return self.system.get_service(self.service_id)
+        return self.context.system.get_service(self.service_id)
     
     @property
     def first_stop(self):
@@ -113,14 +113,14 @@ class Trip:
     def related_trips(self):
         '''Returns all trips with the same route, direction, start time, and end time as this trip'''
         if self._related_trips is None:
-            self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
+            self._related_trips = [t for t in self.context.system.get_trips() if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
     @property
     def cache(self):
         '''Returns the cache for this trip'''
-        return self.system.get_trip_cache(self)
+        return self.context.system.get_trip_cache(self)
     
     @property
     def first_departure(self):
@@ -147,8 +147,8 @@ class Trip:
         '''Returns the custom headsigns for this trip'''
         return self.cache.custom_headsigns
     
-    def __init__(self, system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
-        self.system = system
+    def __init__(self, context: Context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
+        self.context = context
         self.id = trip_id
         self.route_id = route_id
         self.service_id = service_id
@@ -166,12 +166,12 @@ class Trip:
         else:
             self.short_id = id_parts[0]
         
-        self.sheets = system.copy_sheets([self.service])
+        self.sheets = context.system.copy_sheets([self.service])
         
         self._related_trips = None
     
     def __str__(self):
-        if self.system.agency.prefix_headsigns and self.route:
+        if self.context.prefix_headsigns and self.route:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     
@@ -199,11 +199,11 @@ class Trip:
     
     def find_points(self):
         '''Returns all points associated with this trip'''
-        return self.point_repository.find_all(self.system, self.shape_id)
+        return self.point_repository.find_all(self.context, self.shape_id)
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return self.departure_repository.find_all(self.system, trip=self)
+        return self.departure_repository.find_all(self.context, trip=self)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

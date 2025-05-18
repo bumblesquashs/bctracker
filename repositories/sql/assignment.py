@@ -2,6 +2,7 @@
 from database import Database
 
 from models.assignment import Assignment
+from models.context import Context
 from models.date import Date
 
 from repositories import AssignmentRepository
@@ -15,26 +16,21 @@ class SQLAssignmentRepository(AssignmentRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, system, block, bus, date):
+    def create(self, context: Context, block, bus, date):
         '''Inserts a new assignment into the database'''
-        system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
         self.database.insert('assignment', {
-            'system_id': system_id,
+            'system_id': context.system_id,
             'block_id': block_id,
             'bus_number': bus_number,
             'date': date.format_db()
         })
     
-    def find(self, system, block):
-        '''Returns the assignment for the given system and block'''
-        system_id = getattr(system, 'id', system)
+    def find(self, context: Context, block):
+        '''Returns the assignment for the given context and block'''
         block_id = getattr(block, 'id', block)
-        if system:
-            date = Date.today(system.timezone)
-        else:
-            date = Date.today()
+        date = Date.today(context.timezone)
         assignments = self.database.select('assignment',
             columns={
                 'assignment.system_id': 'assignment_system_id',
@@ -43,7 +39,7 @@ class SQLAssignmentRepository(AssignmentRepository):
                 'assignment.date': 'assignment_date'
             },
             filters={
-                'assignment.system_id': system_id,
+                'assignment.system_id': context.system_id,
                 'assignment.block_id': block_id,
                 'assignment.date': date.format_db()
             },
@@ -54,21 +50,17 @@ class SQLAssignmentRepository(AssignmentRepository):
         except IndexError:
             return None
     
-    def find_all(self, system=None, block=None, bus=None, trip=None, route=None, stop=None):
+    def find_all(self, context: Context, block=None, bus=None, trip=None, route=None, stop=None):
         '''Returns all assignments for the given block, bus, trip, route, and stop'''
-        system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
         trip_id = getattr(trip, 'id', trip)
         route_id = getattr(route, 'id', route)
         stop_id = getattr(stop, 'id', stop)
-        try:
-            date = Date.today(system.timezone)
-        except AttributeError:
-            date = Date.today()
+        date = Date.today(context.timezone)
         joins = {}
         filters = {
-            'assignment.system_id': system_id,
+            'assignment.system_id': context.system_id,
             'assignment.block_id': block_id,
             'assignment.bus_number': bus_number,
             'assignment.date': date.format_db()
@@ -99,13 +91,12 @@ class SQLAssignmentRepository(AssignmentRepository):
         )
         return {a.key: a for a in assignments}
     
-    def delete_all(self, system=None, block=None, bus=None):
+    def delete_all(self, context: Context, block=None, bus=None):
         '''Deletes all assignments from the database'''
-        system_id = getattr(system, 'id', system)
         block_id = getattr(block, 'id', block)
         bus_number = getattr(bus, 'number', bus)
         self.database.delete('assignment', {
-            'system_id': system_id,
+            'system_id': context.system_id,
             'block_id': block_id,
             'bus_number': bus_number
         })

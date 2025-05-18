@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.context import Context
 from models.trip import Trip
 
 from repositories import TripRepository
@@ -14,11 +15,10 @@ class SQLTripRepository(TripRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, system, row):
+    def create(self, context: Context, row):
         '''Inserts a new trip into the database'''
-        system_id = getattr(system, 'id', system)
         self.database.insert('trip', {
-            'system_id': system_id,
+            'system_id': context.system_id,
             'trip_id': row['trip_id'],
             'route_id': row['route_id'],
             'service_id': row['service_id'],
@@ -28,9 +28,8 @@ class SQLTripRepository(TripRepository):
             'headsign': row['trip_headsign']
         })
     
-    def find(self, system, trip_id):
-        '''Returns the trip with the given system and trip ID'''
-        system_id = getattr(system, 'id', system)
+    def find(self, context: Context, trip_id):
+        '''Returns the trip with the given context and trip ID'''
         trips = self.database.select('trip',
             columns={
                 'trip.system_id': 'trip_system_id',
@@ -43,7 +42,7 @@ class SQLTripRepository(TripRepository):
                 'trip.headsign': 'trip_headsign'
             },
             filters={
-                'trip.system_id': system_id,
+                'trip.system_id': context.system_id,
                 'trip.trip_id': trip_id
             },
             limit=1,
@@ -54,9 +53,8 @@ class SQLTripRepository(TripRepository):
         except IndexError:
             return None
     
-    def find_all(self, system, route=None, block=None, limit=None):
-        '''Returns all trips that match the given system, route, and block'''
-        system_id = getattr(system, 'id', system)
+    def find_all(self, context: Context, route=None, block=None, limit=None):
+        '''Returns all trips that match the given context, route, and block'''
         route_id = getattr(route, 'id', route)
         block_id = getattr(block, 'id', block)
         return self.database.select('trip',
@@ -71,7 +69,7 @@ class SQLTripRepository(TripRepository):
                 'trip.headsign': 'trip_headsign'
             },
             filters={
-                'trip.system_id': system_id,
+                'trip.system_id': context.system_id,
                 'trip.route_id': route_id,
                 'trip.block_id': block_id
             },
@@ -79,9 +77,8 @@ class SQLTripRepository(TripRepository):
             initializer=Trip.from_db
         )
     
-    def delete_all(self, system):
-        '''Deletes all trips for the given system from the database'''
-        system_id = getattr(system, 'id', system)
+    def delete_all(self, context: Context):
+        '''Deletes all trips for the given context from the database'''
         self.database.delete('trip', {
-            'system_id': system_id
+            'system_id': context.system_id
         })

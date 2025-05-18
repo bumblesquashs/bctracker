@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.context import Context
 from models.departure import Departure, PickupType, DropoffType
 
 from repositories import DepartureRepository
@@ -14,9 +15,8 @@ class SQLDepartureRepository(DepartureRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, system, row):
+    def create(self, context: Context, row):
         '''Inserts a new departure into the database'''
-        system_id = getattr(system, 'id', system)
         try:
             pickup_type = PickupType(row['pickup_type'])
         except (KeyError, ValueError):
@@ -38,7 +38,7 @@ class SQLDepartureRepository(DepartureRepository):
         except KeyError:
             headsign = None
         self.database.insert('departure', {
-            'system_id': system_id,
+            'system_id': context.system_id,
             'trip_id': row['trip_id'],
             'sequence': int(row['stop_sequence']),
             'stop_id': row['stop_id'],
@@ -50,17 +50,16 @@ class SQLDepartureRepository(DepartureRepository):
             'headsign': headsign
         })
     
-    def find(self, system, trip=None, sequence=None, stop=None):
-        '''Returns the departure with the given system, trip, sequence, and stop'''
-        departures = self.find_all(system, trip, sequence, stop)
+    def find(self, context: Context, trip=None, sequence=None, stop=None):
+        '''Returns the departure with the given context, trip, sequence, and stop'''
+        departures = self.find_all(context, trip, sequence, stop)
         try:
             return departures[0]
         except IndexError:
             return None
     
-    def find_all(self, system, trip=None, sequence=None, route=None, stop=None, block=None, limit=None):
-        '''Returns all departures that match the given system, trip, sequence, and stop'''
-        system_id = getattr(system, 'id', system)
+    def find_all(self, context: Context, trip=None, sequence=None, route=None, stop=None, block=None, limit=None):
+        '''Returns all departures that match the given context, trip, sequence, and stop'''
         trip_id = getattr(trip, 'id', trip)
         route_id = getattr(route, 'id', route)
         stop_id = getattr(stop, 'id', stop)
@@ -95,7 +94,7 @@ class SQLDepartureRepository(DepartureRepository):
             },
             joins=joins,
             filters={
-                'departure.system_id': system_id,
+                'departure.system_id': context.system_id,
                 'departure.trip_id': trip_id,
                 'departure.sequence': sequence,
                 'departure.stop_id': stop_id,
@@ -107,9 +106,8 @@ class SQLDepartureRepository(DepartureRepository):
             initializer=Departure.from_db
         )
     
-    def find_upcoming(self, system, trip, sequence, limit=None):
+    def find_upcoming(self, context: Context, trip, sequence, limit=None):
         '''Returns all departures on a trip from the given sequence number onwards'''
-        system_id = getattr(system, 'id', system)
         trip_id = getattr(trip, 'id', trip)
         return self.database.select('departure',
             columns={
@@ -125,7 +123,7 @@ class SQLDepartureRepository(DepartureRepository):
                 'departure.headsign': 'departure_headsign'
             },
             filters={
-                'departure.system_id': system_id,
+                'departure.system_id': context.system_id,
                 'departure.trip_id': trip_id,
                 'departure.sequence': {
                     '>=': sequence
@@ -136,9 +134,8 @@ class SQLDepartureRepository(DepartureRepository):
             initializer=Departure.from_db
         )
     
-    def find_adjacent(self, system, stop):
+    def find_adjacent(self, context: Context, stop):
         '''Returns all departures on trips that serve the given stop'''
-        system_id = getattr(system, 'id', system)
         stop_id = getattr(stop, 'id', stop)
         cte, args = self.database.build_select('departure',
             columns='trip.*',
@@ -149,7 +146,7 @@ class SQLDepartureRepository(DepartureRepository):
                 }
             },
             filters={
-                'departure.system_id': system_id,
+                'departure.system_id': context.system_id,
                 'departure.stop_id': stop_id
             })
         return self.database.select('stop_trip',
@@ -183,9 +180,8 @@ class SQLDepartureRepository(DepartureRepository):
             initializer=Departure.from_db
         )
     
-    def delete_all(self, system):
-        '''Deletes all departures for the given system from the database'''
-        system_id = getattr(system, 'id', system)
+    def delete_all(self, context: Context):
+        '''Deletes all departures for the given context from the database'''
         self.database.delete('departure', {
-            'system_id': system_id
+            'system_id': context.system_id
         })

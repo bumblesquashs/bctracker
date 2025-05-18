@@ -2,8 +2,9 @@
 from di import di
 
 from models.bus import Bus
+from models.context import Context
 
-from repositories import RouteRepository, StopRepository, SystemRepository
+from repositories import RouteRepository, StopRepository
 
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
@@ -19,23 +20,22 @@ class Favourite:
         parts = string.split(':')
         type = parts[0]
         if type == 'vehicle':
-            value = Bus.find(parts[1], int(parts[2]))
+            context = Context.find(agency_id=parts[1])
+            value = Bus.find(context, int(parts[2]))
         elif type == 'route':
-            system_repository = kwargs.get('system_repository') or di[SystemRepository]
             route_repository = kwargs.get('route_repository') or di[RouteRepository]
-            system = system_repository.find(parts[1])
-            if system.agency.prefer_route_id:
-                value = route_repository.find(system, route_id=parts[2])
+            context = Context.find(system_id=parts[1])
+            if context.prefer_route_id:
+                value = route_repository.find(context, route_id=parts[2])
             else:
-                value = route_repository.find(system, number=parts[2])
+                value = route_repository.find(context, number=parts[2])
         elif type == 'stop':
-            system_repository = kwargs.get('system_repository') or di[SystemRepository]
             stop_repository = kwargs.get('stop_repository') or di[StopRepository]
-            system = system_repository.find(parts[1])
-            if system.agency.prefer_stop_id:
-                value = stop_repository.find(system, stop_id=parts[2])
+            context = Context.find(system_id=parts[1])
+            if context.prefer_stop_id:
+                value = stop_repository.find(context, stop_id=parts[2])
             else:
-                value = stop_repository.find(system, number=parts[2])
+                value = stop_repository.find(context, number=parts[2])
         else:
             value = None
         if value:
@@ -48,17 +48,17 @@ class Favourite:
     
     def __str__(self):
         if self.type == 'vehicle':
-            source = self.value.order.agency.id
+            source = self.value.context.agency_id
             number = str(self.value.number)
         elif self.type == 'route':
-            source = self.value.system.id
-            if self.value.system.agency.prefer_route_id:
+            source = self.value.context.system_id
+            if self.value.context.prefer_route_id:
                 number = self.value.id
             else:
                 number = self.value.number
         elif self.type == 'stop':
-            source = self.value.system.id
-            if self.value.system.agency.prefer_stop_id:
+            source = self.value.context.system_id
+            if self.value.context.prefer_stop_id:
                 number = self.value.id
             else:
                 number = self.value.number

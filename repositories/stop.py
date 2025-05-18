@@ -10,21 +10,21 @@ if TYPE_CHECKING:
 class StopRepository(ABC):
     
     @abstractmethod
-    def create(self, system, row):
+    def create(self, context, row):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, system, stop_id, number) -> Stop | None:
+    def find(self, context, stop_id, number) -> Stop | None:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_all(self, system, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
+    def find_all(self, context, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
         raise NotImplementedError()
     
     @abstractmethod
-    def find_area(self, system) -> Area:
+    def find_area(self, context) -> Area:
         raise NotImplementedError()
     
     @abstractmethod
-    def delete_all(self, system):
+    def delete_all(self, context):
         raise NotImplementedError()
