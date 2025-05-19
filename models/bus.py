@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.order import Order
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from models.context import Context
 
@@ -20,7 +20,7 @@ class Bus:
     order: Order
     
     @classmethod
-    def find(cls, context: Context, number, **kwargs):
+    def find(cls, context: Context, number):
         '''Returns a bus for the given context with the given number'''
         order = repositories.order.find(context, number)
         return cls(context, number, order)
@@ -67,6 +67,6 @@ class Bus:
     def __lt__(self, other):
         return self.number < other.number
     
-    def find_adornment(self):
-        '''Returns the adornment for this bus, if one exists'''
-        return repositories.adornment.find(self)
+    def find_decoration(self):
+        '''Returns the decoration for this bus, if one exists'''
+        return repositories.decoration.find(self)

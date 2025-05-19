@@ -195,8 +195,8 @@
             const title = document.createElement("div");
             title.className = "title";
             title.innerHTML = position.bus_display;
-            if (position.adornment != null) {
-                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            if (position.decoration != null) {
+                title.innerHTML += " <span class='decoration'>" + position.decoration + "</span>";
             }
             details.appendChild(title);
             

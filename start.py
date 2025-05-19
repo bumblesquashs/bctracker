@@ -22,8 +22,8 @@ if __name__ == '__main__':
     database = Database()
     settings = Settings()
     
-    repositories.adornment = AdornmentRepository()
     repositories.agency = AgencyRepository()
+    repositories.decoration = DecorationRepository()
     repositories.model = ModelRepository()
     repositories.order = OrderRepository()
     repositories.region = RegionRepository()

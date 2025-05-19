@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .impl.adornment import AdornmentRepository
     from .impl.agency import AgencyRepository
     from .impl.assignment import AssignmentRepository
+    from .impl.decoration import DecorationRepository
     from .impl.departure import DepartureRepository
     from .impl.model import ModelRepository
     from .impl.order import OrderRepository
@@ -21,9 +21,9 @@ if TYPE_CHECKING:
     from .impl.transfer import TransferRepository
     from .impl.trip import TripRepository
 
-adornment: AdornmentRepository
 agency: AgencyRepository
 assignment: AssignmentRepository
+decoration: DecorationRepository
 departure: DepartureRepository
 model: ModelRepository
 order: OrderRepository

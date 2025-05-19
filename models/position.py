@@ -142,9 +142,9 @@ class Position:
         else:
             data['bus_order'] = 'Unknown Year/Model'
             data['bus_icon'] = 'ghost'
-        adornment = self.bus.find_adornment()
-        if adornment and adornment.enabled:
-            data['adornment'] = str(adornment)
+        decoration = self.bus.find_decoration()
+        if decoration and decoration.enabled:
+            data['decoration'] = str(decoration)
         trip = self.trip
         if trip:
             departure = self.departure
