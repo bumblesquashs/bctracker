@@ -2,7 +2,8 @@
     "calgary-transit": {
         "chevrolet-arboc-4500-sof-27": [
             { "year": 2017, "low": 1200, "high": 1336 },
-            { "year": 2023, "low": 1337, "high": 1356 }
+            { "year": 2023, "low": 1337, "high": 1356 },
+            { "year": 2024, "low": 1357, "high": 1516 }
         ],
         "chevrolet-arboc-4500-sof27d": [
             { "year": 2013, "low": 1824, "high": 1834 },
