@@ -1,5 +1,6 @@
 
 import json
+import pytz
 
 from di import di
 
@@ -31,6 +32,10 @@ class FileSystemRepository(SystemRepository):
                 for (region_id, region_values) in agency_values.items():
                     region = self.region_repository.find(region_id)
                     for (id, values) in region_values.items():
+                        if not agency.enabled:
+                            values['enabled'] = False
+                        if 'timezone' in values:
+                            values['timezone'] = pytz.timezone(values['timezone'])
                         self.systems[id] = System(id, agency, region, **values)
     
     def find(self, system_id):

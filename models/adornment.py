@@ -1,21 +1,15 @@
 
+from dataclasses import dataclass
+
+@dataclass(slots=True)
 class Adornment:
     '''Text placed after a bus number'''
     
-    __slots__ = (
-        'agency_id',
-        'bus_number',
-        'text',
-        'description',
-        'enabled'
-    )
-    
-    def __init__(self, agency_id, bus_number, text, **kwargs):
-        self.agency_id = agency_id
-        self.bus_number = bus_number
-        self.text = text
-        self.description = kwargs.get('description')
-        self.enabled = kwargs.get('enabled', True)
+    agency_id: str
+    bus_number: int
+    text: str
+    description: str | None = None
+    enabled: bool = True
     
     def __str__(self):
         return self.text

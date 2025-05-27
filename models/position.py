@@ -1,4 +1,6 @@
 
+from dataclasses import dataclass, field
+
 from di import di
 
 from models.adherence import Adherence
@@ -9,26 +11,26 @@ from models.timestamp import Timestamp
 
 from repositories import DepartureRepository
 
+@dataclass(slots=True)
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = (
-        'departure_repository',
-        'context',
-        'bus',
-        'trip_id',
-        'stop_id',
-        'block_id',
-        'route_id',
-        'sequence',
-        'lat',
-        'lon',
-        'bearing',
-        'speed',
-        'adherence',
-        'occupancy',
-        'timestamp'
-    )
+    context: Context
+    bus: Bus
+    trip_id: str | None
+    stop_id: str | None
+    block_id: str | None
+    route_id: str | None
+    sequence: int | None
+    lat: float | None
+    lon: float | None
+    bearing: float | None
+    speed: float | None
+    adherence: Adherence | None
+    occupancy: Occupancy | None
+    timestamp: Timestamp
+    
+    departure_repository: DepartureRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='position'):
@@ -112,22 +114,7 @@ class Position:
         '''Returns the departure associated with this position'''
         return self.departure_repository.find(self.context, self.trip_id, self.sequence)
     
-    def __init__(self, context: Context, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
-        self.context = context
-        self.bus = bus
-        self.trip_id = trip_id
-        self.stop_id = stop_id
-        self.block_id = block_id
-        self.route_id = route_id
-        self.sequence = sequence
-        self.lat = lat
-        self.lon = lon
-        self.bearing = bearing
-        self.speed = speed
-        self.adherence = adherence
-        self.occupancy = occupancy
-        self.timestamp = timestamp
-        
+    def __post_init__(self, **kwargs):
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __eq__(self, other):

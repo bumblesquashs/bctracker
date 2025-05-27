@@ -1,25 +1,27 @@
 
+from dataclasses import dataclass, field
+
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.time import Time
 
+@dataclass(slots=True)
 class Record:
     '''Information about a bus' history on a specific date'''
     
-    __slots__ = (
-        'context',
-        'id',
-        'bus',
-        'date',
-        'block_id',
-        'route_numbers',
-        'start_time',
-        'end_time',
-        'first_seen',
-        'last_seen',
-        'warnings'
-    )
+    context: Context
+    id: int
+    bus: Bus
+    date: Date
+    block_id: str
+    route_numbers: list[str]
+    start_time: Time
+    end_time: Time
+    first_seen: Time
+    last_seen: Time
+    
+    warnings: list[str] = field(default_factory=list, init=False)
     
     @classmethod
     def from_db(cls, row, prefix='record'):
@@ -66,28 +68,16 @@ class Record:
             return [self.context.system.get_route(number=n) for n in self.route_numbers]
         return self.route_numbers
     
-    def __init__(self, context: Context, id, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
-        self.context = context
-        self.id = id
-        self.bus = bus
-        self.date = date
-        self.block_id = block_id
-        self.route_numbers = route_numbers
-        self.start_time = start_time
-        self.end_time = end_time
-        self.first_seen = first_seen
-        self.last_seen = last_seen
-        self.warnings = []
-        
+    def __post_init__(self):
         total_minutes = self.total_minutes
         total_seen_minutes = self.total_seen_minutes
         if total_minutes is not None and total_seen_minutes is not None:
-            if not date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
+            if not self.date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
                 if total_seen_minutes == 1:
                     self.warnings.append('Bus was logged in for only 1 minute')
                 else:
                     self.warnings.append(f'Bus was logged in for only {total_seen_minutes} minutes')
-            if (start_time.get_minutes() - last_seen.get_minutes()) > 30:
+            if (self.start_time.get_minutes() - self.last_seen.get_minutes()) > 30:
                 self.warnings.append('Bus was logged in before block started')
-            if (first_seen.get_minutes() - end_time.get_minutes()) > 30:
+            if (self.first_seen.get_minutes() - self.end_time.get_minutes()) > 30:
                 self.warnings.append('Bus was logged in after block ended')

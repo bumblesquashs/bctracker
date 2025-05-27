@@ -1,20 +1,22 @@
 
+from dataclasses import dataclass, field
+
 from models.date import Date
 from models.daterange import DateRange
 from models.weekday import Weekday
 
 import helpers
 
+@dataclass(slots=True)
 class Schedule:
     '''Dates when a service is running'''
     
-    __slots__ = (
-        'dates',
-        'date_range',
-        'weekdays',
-        'exceptions',
-        'name'
-    )
+    dates: set[Date]
+    date_range: DateRange
+    
+    weekdays: set[Weekday] = field(default_factory=set, init=False)
+    exceptions: set[Date] = field(default_factory=set, init=False)
+    name: str = field(init=False)
     
     @classmethod
     def combine(cls, services, date_range=None):
@@ -65,17 +67,13 @@ class Schedule:
         '''Checks if this schedule indicates no service'''
         return 0 < len(self.weekdays) < 7 or len(self.removed_dates) > 0
     
-    def __init__(self, dates, date_range):
-        self.dates = dates
-        self.date_range = date_range
-        self.weekdays = set()
-        if len(date_range) <= 7:
-            self.exceptions = dates
+    def __post_init__(self):
+        if len(self.date_range) <= 7:
+            self.exceptions = self.dates
         else:
-            self.exceptions = set()
-            explicit_weekdays = {d.weekday for d in dates}
+            explicit_weekdays = {d.weekday for d in self.dates}
             for weekday in Weekday:
-                included_dates = {d for d in dates if d.weekday == weekday}
+                included_dates = {d for d in self.dates if d.weekday == weekday}
                 excluded_dates = {d for d in self.date_range if d.weekday == weekday and d not in included_dates}
                 if len(included_dates) == 0 and len(excluded_dates) == 0:
                     continue

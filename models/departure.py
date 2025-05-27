@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass, field
 from enum import Enum
 
 from di import di
@@ -52,22 +53,22 @@ class DropoffType(Enum):
         '''Checks if this is a normal dropoff'''
         return self == DropoffType.NORMAL
 
+@dataclass(slots=True)
 class Departure:
     '''An association between a trip and a stop'''
     
-    __slots__ = (
-        'departure_repository',
-        'context',
-        'trip_id',
-        'sequence',
-        'stop_id',
-        'time',
-        'pickup_type',
-        'dropoff_type',
-        'timepoint',
-        'distance',
-        'headsign'
-    )
+    context: Context
+    trip_id: str
+    sequence: int
+    stop_id: str
+    time: Time
+    pickup_type: PickupType
+    dropoff_type: DropoffType
+    timepoint: bool
+    distance: float | None
+    headsign: str | None
+    
+    departure_repository: DepartureRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='departure'):
@@ -114,18 +115,7 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, context: Context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign, **kwargs):
-        self.context = context
-        self.trip_id = trip_id
-        self.sequence = sequence
-        self.stop_id = stop_id
-        self.time = time
-        self.pickup_type = pickup_type
-        self.dropoff_type = dropoff_type
-        self.timepoint = timepoint
-        self.distance = distance
-        self.headsign = headsign
-        
+    def __post_init__(self, **kwargs):
         self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):

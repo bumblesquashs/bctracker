@@ -1,13 +1,14 @@
 
+from dataclasses import dataclass
+
+@dataclass(slots=True)
 class Area:
     '''A geographic area defined by min/max latitudes and longitudes'''
     
-    __slots__ = (
-        'min_lat',
-        'max_lat',
-        'min_lon',
-        'max_lon'
-    )
+    min_lat: float
+    max_lat: float
+    min_lon: float
+    max_lon: float
     
     @classmethod
     def from_db(cls, row):
@@ -18,15 +19,6 @@ class Area:
         return area
     
     @classmethod
-    def calculate(cls, lats, lons):
+    def calculate(cls, lats: list[float], lons: list[float]):
         '''Returns the area of the given lats and lons'''
         return cls(min(lats), max(lats), min(lons), max(lons))
-    
-    def __init__(self, min_lat, max_lat, min_lon, max_lon):
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        self.min_lon = min_lon
-        self.max_lon = max_lon
-    
-    def __eq__(self, other):
-        return self.min_lat == other.min_lat and self.max_lat == other.max_lat and self.min_lon == other.min_lon and self.max_lon == other.max_lon

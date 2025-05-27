@@ -35,6 +35,12 @@ class FileOrderRepository(OrderRepository):
                 for (model_id, model_values) in agency_values.items():
                     model = self.model_repository.find(model_id)
                     for values in model_values:
+                        if 'number' in values:
+                            values['low'] = values['number']
+                            values['high'] = values['number']
+                            del values['number']
+                        if 'exceptions' in values:
+                            values['exceptions'] = set(values['exceptions'])
                         agency_orders.append(Order(context, model, **values))
                 self.orders[agency_id] = agency_orders
     

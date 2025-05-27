@@ -1,21 +1,15 @@
 
+from dataclasses import dataclass
+
+@dataclass(slots=True)
 class Match:
     '''A search result with a value indicating how closely it matches the query'''
     
-    __slots__ = (
-        'name',
-        'description',
-        'icon',
-        'path',
-        'value'
-    )
-    
-    def __init__(self, name, description, icon, path, value):
-        self.name = name
-        self.description = description
-        self.icon = icon
-        self.path = path
-        self.value = value
+    name: str
+    description: str
+    icon: str
+    path: str
+    value: int
     
     def __eq__(self, other):
         return self.value == other.value

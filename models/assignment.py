@@ -1,17 +1,18 @@
 
+from dataclasses import dataclass
+
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 
+@dataclass(slots=True)
 class Assignment:
     '''An association between a block and a bus for a specific date'''
     
-    __slots__ = (
-        'context',
-        'block_id',
-        'bus_number',
-        'date'
-    )
+    context: Context
+    block_id: str
+    bus_number: int
+    date: Date
     
     @classmethod
     def from_db(cls, row, prefix='assignment'):
@@ -31,9 +32,3 @@ class Assignment:
     def bus(self):
         '''The bus for this assignment'''
         return Bus.find(self.context, self.bus_number)
-    
-    def __init__(self, context: Context, block_id, bus_number, date):
-        self.context = context
-        self.block_id = block_id
-        self.bus_number = bus_number
-        self.date = date

@@ -1,18 +1,21 @@
 
+from dataclasses import dataclass
+
 from di import di
 
 from models.bus import Bus
 from models.context import Context
+from models.route import Route
+from models.stop import Stop
 
 from repositories import RouteRepository, StopRepository
 
+@dataclass(slots=True)
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
     
-    __slots__ = (
-        'type',
-        'value'
-    )
+    type: str
+    value: Bus | Route | Stop
     
     @classmethod
     def parse(cls, string, **kwargs):
@@ -41,10 +44,6 @@ class Favourite:
         if value:
             return cls(type, value)
         return None
-    
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value
     
     def __str__(self):
         if self.type == 'vehicle':
@@ -78,12 +77,11 @@ class Favourite:
             return self.value < other.value
         return self.type < other.type
 
+@dataclass(slots=True)
 class FavouriteSet:
     '''A set of favourites selected by a user'''
     
-    __slots__ = (
-        'favourites'
-    )
+    favourites: set[Favourite]
     
     @classmethod
     def parse(cls, string):
@@ -96,9 +94,6 @@ class FavouriteSet:
     def is_full(self):
         '''Checks if the set has the maximum number of favourites'''
         return len(self.favourites) >= 20
-    
-    def __init__(self, favourites):
-        self.favourites = favourites
     
     def __str__(self):
         return ','.join([str(f) for f in self.favourites])

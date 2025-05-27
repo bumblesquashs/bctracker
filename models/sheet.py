@@ -1,18 +1,45 @@
 
-from models.context import Context
-from models.schedule import Schedule
+from dataclasses import dataclass
+from typing import Self
 
+from models.context import Context
+from models.date import Date
+from models.schedule import Schedule
+from models.service import Service
+
+@dataclass(slots=True)
+class ServiceGroup:
+    '''A collection of services represented as a single schedule'''
+    
+    context: Context
+    schedule: Schedule
+    services: tuple
+    
+    def __str__(self):
+        return str(self.schedule)
+    
+    def __hash__(self):
+        return hash(self.schedule)
+    
+    def __eq__(self, other):
+        return self.schedule == other.schedule
+    
+    def __lt__(self, other):
+        return self.schedule < other.schedule
+    
+    def __contains__(self, service):
+        return service in self.services
+
+@dataclass(init=False, slots=True)
 class Sheet:
     '''A collection of overlapping services'''
     
-    __slots__ = (
-        'context',
-        'schedule',
-        'services',
-        'service_groups',
-        'modifications',
-        'copies'
-    )
+    context: Context
+    schedule: Schedule
+    services: list[Service]
+    service_groups: list[ServiceGroup]
+    modifications: set[Date]
+    copies: dict[tuple, Self]
     
     @property
     def normal_service_groups(self):
@@ -49,7 +76,8 @@ class Sheet:
             if not service_set:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
-            service_group = ServiceGroup(context, dates, date_range, service_set)
+            schedule = Schedule(dates, date_range)
+            service_group = ServiceGroup(context, schedule, service_set)
             service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
@@ -93,32 +121,3 @@ class Sheet:
         if date in self.modifications:
             return 'modified-service'
         return self.schedule.get_date_status(date)
-
-class ServiceGroup:
-    '''A collection of services represented as a single schedule'''
-    
-    __slots__ = (
-        'context',
-        'schedule',
-        'services'
-    )
-    
-    def __init__(self, context: Context, dates, date_range, services):
-        self.context = context
-        self.schedule = Schedule(dates, date_range)
-        self.services = services
-    
-    def __str__(self):
-        return str(self.schedule)
-    
-    def __hash__(self):
-        return hash(self.schedule)
-    
-    def __eq__(self, other):
-        return self.schedule == other.schedule
-    
-    def __lt__(self, other):
-        return self.schedule < other.schedule
-    
-    def __contains__(self, service):
-        return service in self.services

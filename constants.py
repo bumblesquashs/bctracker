@@ -1,3 +1,6 @@
+
+import pytz
+
 # Agency config
 DEFAULT_PREFIX_HEADSIGNS = False
 DEFAULT_ACCURATE_SECONDS = True
@@ -6,3 +9,6 @@ DEFAULT_PREFER_STOP_ID = False
 DEFAULT_SHOW_STOP_NUMBER = True
 DEFAULT_VEHICLE_NAME_LENGTH = None
 DEFAULT_DISTANCE_SCALE = 1
+
+# Date/time config
+DEFAULT_TIMEZONE = pytz.timezone('America/Vancouver')
