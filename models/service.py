@@ -1,6 +1,7 @@
 
 from enum import IntEnum
 
+from models.context import Context
 from models.date import Date
 from models.daterange import DateRange
 from models.schedule import Schedule
@@ -20,10 +21,10 @@ class ServiceException:
     )
     
     @classmethod
-    def from_csv(cls, row, system):
+    def from_csv(cls, row, context: Context):
         '''Returns a service exception initialized from the given CSV row'''
         service_id = row['service_id']
-        date = Date.parse(row['date'], system.timezone, '%Y%m%d')
+        date = Date.parse(row['date'], context.timezone, '%Y%m%d')
         type = ServiceExceptionType(int(row['exception_type']))
         return cls(service_id, date, type)
     
@@ -42,17 +43,17 @@ class Service:
     '''A set of dates when a transit service is operating'''
     
     __slots__ = (
-        'system',
+        'context',
         'id',
         'schedule'
     )
     
     @classmethod
-    def from_csv(cls, row, system, exceptions):
+    def from_csv(cls, row, context: Context, exceptions):
         '''Returns a service initialized from the given CSV row'''
         id = row['service_id']
-        start_date = Date.parse(row['start_date'], system.timezone, '%Y%m%d')
-        end_date = Date.parse(row['end_date'], system.timezone, '%Y%m%d')
+        start_date = Date.parse(row['start_date'], context.timezone, '%Y%m%d')
+        end_date = Date.parse(row['end_date'], context.timezone, '%Y%m%d')
         date_range = DateRange(start_date, end_date)
         mon = row['monday'] == '1'
         tue = row['tuesday'] == '1'
@@ -72,18 +73,18 @@ class Service:
         dates.difference_update(removed_dates)
         
         schedule = Schedule(dates, date_range)
-        return cls(system, id, schedule)
+        return cls(context, id, schedule)
     
     @classmethod
-    def combine(cls, system, id, exceptions):
+    def combine(cls, context: Context, id, exceptions):
         '''Returns a service based on a list of service exceptions'''
         dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
         date_range = DateRange(min(dates), max(dates))
         schedule = Schedule(dates, date_range)
-        return cls(system, id, schedule)
+        return cls(context, id, schedule)
     
-    def __init__(self, system, id, schedule):
-        self.system = system
+    def __init__(self, context: Context, id, schedule):
+        self.context = context
         self.id = id
         self.schedule = schedule
     

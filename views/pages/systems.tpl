@@ -28,19 +28,19 @@
             </tr>
             <tr class="display-none"></tr>
             % region_systems = sorted([s for s in systems if s.region == region])
-            % for region_system in sorted(region_systems):
+            % for system in sorted(region_systems):
                 <tr>
                     <td>
                         <div class="row">
-                            % include('components/agency_logo', agency=region_system.agency)
-                            <a href="{{ get_url(region_system) }}">{{ region_system }}</a>
+                            % include('components/agency_logo', agency=system.agency)
+                            <a href="{{ get_url(system.context) }}">{{ system }}</a>
                         </div>
                     </td>
                     <td class="non-desktop">
                         <div class="column">
-                            % if region_system.realtime_enabled and region_system.realtime_loaded:
-                                % positions = region_system.get_positions()
-                                % overviews = region_system.get_overviews()
+                            % if system.realtime_enabled and system.realtime_loaded:
+                                % positions = system.get_positions()
+                                % overviews = system.get_overviews()
                                 <div class="row gap-5">
                                     <span class="bold">Online:</span>
                                     {{ len(positions) }}
@@ -58,28 +58,28 @@
                                     {{ len([o for o in overviews if o.last_record]) }}
                                 </div>
                             % end
-                            % if region_system.gtfs_enabled and region_system.gtfs_loaded:
+                            % if system.gtfs_enabled and system.gtfs_loaded:
                                 <div class="row gap-5">
                                     <span class="bold">Routes:</span>
-                                    {{ len(region_system.get_routes()) }}
+                                    {{ len(system.get_routes()) }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Stops:</span>
-                                    {{ len(region_system.get_stops()) }}
+                                    {{ len(system.get_stops()) }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Blocks:</span>
-                                    {{ len(region_system.get_blocks()) }}
+                                    {{ len(system.get_blocks()) }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Trips:</span>
-                                    {{ len(region_system.get_trips()) }}
+                                    {{ len(system.get_trips()) }}
                                 </div>
                             % end
                         </div>
                     </td>
-                    % if region_system.realtime_enabled:
-                        % if region_system.realtime_loaded:
+                    % if system.realtime_enabled:
+                        % if system.realtime_loaded:
                             <td class="desktop-only align-right">{{ len(positions) }}</td>
                             <td class="desktop-only align-right">{{ len([p for p in positions if p.trip]) }}</td>
                             <td class="desktop-only align-right">{{ len(overviews) }}</td>
@@ -90,14 +90,14 @@
                     % else:
                         <td class="lighter-text desktop-only" colspan="4">Unavailable</td>
                     % end
-                    % if region_system.gtfs_enabled:
-                        % if region_system.gtfs_enabled:
-                            <td class="desktop-only align-right">{{ len(region_system.get_routes()) }}</td>
-                            <td class="desktop-only align-right">{{ len(region_system.get_stops()) }}</td>
-                            <td class="desktop-only align-right">{{ len(region_system.get_blocks()) }}</td>
-                            <td class="desktop-only align-right">{{ len(region_system.get_trips()) }}</td>
+                    % if system.gtfs_enabled:
+                        % if system.gtfs_enabled:
+                            <td class="desktop-only align-right">{{ len(system.get_routes()) }}</td>
+                            <td class="desktop-only align-right">{{ len(system.get_stops()) }}</td>
+                            <td class="desktop-only align-right">{{ len(system.get_blocks()) }}</td>
+                            <td class="desktop-only align-right">{{ len(system.get_trips()) }}</td>
                             <td class="non-mobile">
-                                % include('components/weekdays', schedule=region_system.schedule, compact=True)
+                                % include('components/weekdays', schedule=system.schedule, compact=True)
                             </td>
                         % else:
                             <td class="lighter-text non-mobile" colspan="5">Data is loading</td>

@@ -3,9 +3,10 @@ from enum import Enum
 
 from di import di
 
+from models.context import Context
 from models.time import Time
 
-from repositories import DepartureRepository, SystemRepository
+from repositories import DepartureRepository
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -56,7 +57,7 @@ class Departure:
     
     __slots__ = (
         'departure_repository',
-        'system',
+        'context',
         'trip_id',
         'sequence',
         'stop_id',
@@ -69,14 +70,13 @@ class Departure:
     )
     
     @classmethod
-    def from_db(cls, row, prefix='departure', **kwargs):
+    def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
+        context = Context.find(system_id=row[f'{prefix}_system_id'])
         trip_id = row[f'{prefix}_trip_id']
         sequence = row[f'{prefix}_sequence']
         stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], system.timezone, system.agency.accurate_seconds)
+        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.accurate_seconds)
         try:
             pickup_type = PickupType(row[f'{prefix}_pickup_type'])
         except:
@@ -88,17 +88,17 @@ class Departure:
         timepoint = row[f'{prefix}_timepoint'] == 1
         distance = row[f'{prefix}_distance']
         headsign = row[f'{prefix}_headsign']
-        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
+        return cls(context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
     
     @property
     def stop(self):
         '''Returns the stop associated with this departure'''
-        return self.system.get_stop(stop_id=self.stop_id)
+        return self.context.system.get_stop(stop_id=self.stop_id)
     
     @property
     def trip(self):
         '''Returns the trip associated with this departure'''
-        return self.system.get_trip(self.trip_id)
+        return self.context.system.get_trip(self.trip_id)
     
     @property
     def pickup_only(self):
@@ -114,8 +114,8 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign, **kwargs):
-        self.system = system
+    def __init__(self, context: Context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign, **kwargs):
+        self.context = context
         self.trip_id = trip_id
         self.sequence = sequence
         self.stop_id = stop_id
@@ -130,7 +130,7 @@ class Departure:
     
     def __str__(self):
         if self.headsign:
-            if self.system.agency.prefix_headsigns and self.trip.route:
+            if self.context.prefix_headsigns and self.trip.route:
                 return f'{self.trip.route.number} {self.headsign}'
             return self.headsign
         return str(self.trip)
@@ -170,8 +170,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return self.departure_repository.find(self.system, trip=self.trip, sequence=self.sequence - 1)
+        return self.departure_repository.find(self.context, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return self.departure_repository.find(self.system, trip=self.trip, sequence=self.sequence + 1)
+        return self.departure_repository.find(self.context, trip=self.trip, sequence=self.sequence + 1)

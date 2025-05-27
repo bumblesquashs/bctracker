@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.context import Context
 from models.point import Point
 
 from repositories import PointRepository
@@ -14,20 +15,18 @@ class SQLPointRepository(PointRepository):
     def __init__(self, database: Database):
         self.database = database
     
-    def create(self, system, row):
+    def create(self, context: Context, row):
         '''Inserts a new point into the database'''
-        system_id = getattr(system, 'id', system)
         self.database.insert('point', {
-            'system_id': system_id,
+            'system_id': context.system_id,
             'shape_id': row['shape_id'],
             'sequence': int(row['shape_pt_sequence']),
             'lat': float(row['shape_pt_lat']),
             'lon': float(row['shape_pt_lon'])
         })
     
-    def find_all(self, system, shape=None):
-        '''Returns all points that match the given system and shape'''
-        system_id = getattr(system, 'id', system)
+    def find_all(self, context: Context, shape=None):
+        '''Returns all points that match the given context and shape'''
         shape_id = getattr(shape, 'id', shape)
         return self.database.select('point',
             columns={
@@ -38,16 +37,15 @@ class SQLPointRepository(PointRepository):
                 'point.lon': 'point_lon'
             },
             filters={
-                'point.system_id': system_id,
+                'point.system_id': context.system_id,
                 'point.shape_id': shape_id
             },
             order_by='point.sequence ASC',
             initializer=Point.from_db
         )
     
-    def delete_all(self, system):
-        '''Deletes all points for the given system from the database'''
-        system_id = getattr(system, 'id', system)
+    def delete_all(self, context: Context):
+        '''Deletes all points for the given context from the database'''
         self.database.delete('point', {
-            'point.system_id': system_id
+            'point.system_id': context.system_id
         })

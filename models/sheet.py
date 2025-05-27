@@ -1,11 +1,12 @@
 
+from models.context import Context
 from models.schedule import Schedule
 
 class Sheet:
     '''A collection of overlapping services'''
     
     __slots__ = (
-        'system',
+        'context',
         'schedule',
         'services',
         'service_groups',
@@ -36,8 +37,8 @@ class Sheet:
         '''Checks if this sheet indicates no service'''
         return self.schedule.has_no_service
     
-    def __init__(self, system, services, date_range):
-        self.system = system
+    def __init__(self, context: Context, services, date_range):
+        self.context = context
         self.schedule = Schedule.combine(services, date_range)
         self.services = services
         self.copies = {}
@@ -48,7 +49,7 @@ class Sheet:
             if not service_set:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
-            service_group = ServiceGroup(system, dates, date_range, service_set)
+            service_group = ServiceGroup(context, dates, date_range, service_set)
             service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
@@ -79,7 +80,7 @@ class Sheet:
             return self.copies[key]
         if not services:
             return None
-        copy = Sheet(self.system, services, self.schedule.date_range)
+        copy = Sheet(self.context, services, self.schedule.date_range)
         self.copies[key] = copy
         return copy
     
@@ -97,13 +98,13 @@ class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
     __slots__ = (
-        'system',
+        'context',
         'schedule',
         'services'
     )
     
-    def __init__(self, system, dates, date_range, services):
-        self.system = system
+    def __init__(self, context: Context, dates, date_range, services):
+        self.context = context
         self.schedule = Schedule(dates, date_range)
         self.services = services
     

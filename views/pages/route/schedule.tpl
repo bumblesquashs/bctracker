@@ -8,8 +8,8 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'routes', route) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'routes', route, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'routes', route) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'routes', route, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -90,7 +90,7 @@
                                                                         </td>
                                                                         <td class="non-mobile">
                                                                             % block = trip.block
-                                                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                                         </td>
                                                                         <td>
                                                                             <div class="column">
@@ -121,11 +121,11 @@
             % end
         </div>
     </div>
-
+    
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        % if system.gtfs_loaded:
+        % if context.gtfs_loaded:
             <h3>There are currently no trips for this route</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

@@ -1,6 +1,7 @@
 
 from database import Database
 
+from models.context import Context
 from models.overview import Overview
 
 from repositories import OverviewRepository
@@ -13,19 +14,18 @@ class SQLOverviewRepository(OverviewRepository):
     
     def __init__(self, database: Database):
         self.database = database
-        
-    def create(self, bus, date, system, record):
+    
+    def create(self, context: Context, bus, date, record):
         '''Inserts a new overview into the database'''
         bus_number = getattr(bus, 'number', bus)
-        system_id = getattr(system, 'id', system)
         record_id = getattr(record, 'id', record)
         self.database.insert('overview', {
             'bus_number': bus_number,
             'first_seen_date': date.format_db(),
-            'first_seen_system_id': system_id,
+            'first_seen_system_id': context.system_id,
             'first_record_id': record_id,
             'last_seen_date': date.format_db(),
-            'last_seen_system_id': system_id,
+            'last_seen_system_id': context.system_id,
             'last_record_id': record_id
         })
     
@@ -37,10 +37,8 @@ class SQLOverviewRepository(OverviewRepository):
         except IndexError:
             return None
     
-    def find_all(self, system=None, last_seen_system=None, bus=None, limit=None):
-        '''Returns all overviews that match the given system and bus'''
-        system_id = getattr(system, 'id', system)
-        last_seen_system_id = getattr(last_seen_system, 'id', last_seen_system)
+    def find_all(self, context: Context = Context(), last_seen_context: Context = Context(), bus=None, limit=None):
+        '''Returns all overviews that match the given context and bus'''
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('overview',
             columns={
@@ -81,23 +79,22 @@ class SQLOverviewRepository(OverviewRepository):
             },
             filters={
                 'overview.bus_number': bus_number,
-                'last_record.system_id': system_id,
-                'overview.last_seen_system_id': last_seen_system_id
+                'last_record.system_id': context.system_id,
+                'overview.last_seen_system_id': last_seen_context.system_id
             },
             limit=limit,
             initializer=Overview.from_db
         )
     
-    def find_bus_numbers(self, system=None):
+    def find_bus_numbers(self, context: Context):
         '''Returns all bus numbers that have been seen'''
-        system_id = getattr(system, 'id', system)
         joins = {}
         filters = {}
-        if system_id:
+        if context.system:
             joins['record last_record'] = {
                 'last_record.record_id': 'overview.last_record_id'
             }
-            filters['last_record.system_id'] = system_id
+            filters['last_record.system_id'] = context.system_id
         return self.database.select('overview',
             columns={
                 'overview.bus_number': 'bus_number'
@@ -108,13 +105,12 @@ class SQLOverviewRepository(OverviewRepository):
             initializer=lambda r: r['bus_number']
         )
     
-    def update(self, overview, date, system, record):
+    def update(self, context: Context, overview, date, record):
         '''Updates an overview in the database'''
-        system_id = getattr(system, 'id', system)
         record_id = getattr(record, 'id', record)
         values = {
             'last_seen_date': date.format_db(),
-            'last_seen_system_id': system_id
+            'last_seen_system_id': context.system_id
         }
         if record_id:
             if not overview.first_record:

@@ -4,6 +4,7 @@ import pytz
 from di import di
 
 from models.backoff import Backoff
+from models.context import Context
 from models.route import RouteCache
 from models.schedule import Schedule
 from models.stop import StopCache
@@ -42,6 +43,10 @@ class System:
         'stop_caches',
         'trip_caches'
     )
+    
+    @property
+    def context(self):
+        return Context(system=self)
     
     @property
     def realtime_loaded(self):
@@ -122,6 +127,8 @@ class System:
         return hash(self.id)
     
     def __eq__(self, other):
+        if other is None:
+            return False
         return self.id == other.id
     
     def __lt__(self, other):
@@ -139,11 +146,11 @@ class System:
     
     def get_overviews(self):
         '''Returns all overviews'''
-        return self.overview_repository.find_all(last_seen_system=self)
+        return self.overview_repository.find_all(last_seen_context=self.context)
     
     def get_positions(self):
         '''Returns all positions'''
-        return self.position_repository.find_all(self)
+        return self.position_repository.find_all(self.context)
     
     def get_route(self, route_id=None, number=None):
         '''Returns the route with the given ID or number'''
@@ -220,7 +227,7 @@ class System:
             self.route_caches = {}
             self.stop_caches = {}
             self.trip_caches = {}
-            departures = self.departure_repository.find_all(self)
+            departures = self.departure_repository.find_all(self.context)
             trip_departures = {}
             stop_departures = {}
             for departure in departures:
@@ -267,7 +274,7 @@ class System:
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = self.departure_repository.find_all(self, stop=stop)
+            departures = self.departure_repository.find_all(self.context, stop=stop)
             cache = StopCache(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
@@ -278,7 +285,7 @@ class System:
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = self.departure_repository.find_all(self, trip=trip)
+            departures = self.departure_repository.find_all(self.context, trip=trip)
             cache = TripCache(departures)
             self.trip_caches[trip_id] = cache
             return cache

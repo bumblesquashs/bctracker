@@ -13,5 +13,5 @@ class AdornmentRepository(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def find(self, agency, bus) -> Adornment | None:
+    def find(self, bus) -> Adornment | None:
         raise NotImplementedError()

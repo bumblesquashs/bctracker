@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class RealtimeService(ABC):
     
     @abstractmethod
-    def update(self, system):
+    def update(self, context):
         raise NotImplementedError()
     
     @abstractmethod
@@ -21,5 +21,5 @@ class RealtimeService(ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def validate(self, system) -> bool:
+    def validate(self, context) -> bool:
         raise NotImplementedError()

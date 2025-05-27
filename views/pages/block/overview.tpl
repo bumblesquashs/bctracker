@@ -8,9 +8,9 @@
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'blocks', block, 'map') }}" class="tab-button">Map</a>
-        % if system.realtime_enabled:
-            <a href="{{ get_url(system, 'blocks', block, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'blocks', block, 'map') }}" class="tab-button">Map</a>
+        % if context.realtime_enabled:
+            <a href="{{ get_url(context, 'blocks', block, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -19,7 +19,7 @@
 % routes = block.get_routes()
 % trips = block.get_trips()
 
-% today = Date.today(block.system.timezone)
+% today = Date.today(block.context.timezone)
 
 <div class="page-container">
     <div class="sidebar container flex-1">
@@ -39,7 +39,7 @@
                         % for route in routes:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>
@@ -150,7 +150,7 @@
                         <tbody>
                             % for related_block in related_blocks:
                                 <tr>
-                                    <td><a href="{{ get_url(related_block.system, 'blocks', related_block) }}">{{ related_block.id }}</a></td>
+                                    <td><a href="{{ get_url(related_block.context, 'blocks', related_block) }}">{{ related_block.id }}</a></td>
                                     <td>
                                         <div class="column">
                                             % for sheet in related_block.sheets:
