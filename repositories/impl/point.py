@@ -26,11 +26,11 @@ class PointRepository:
         shape_id = getattr(shape, 'id', shape)
         return self.database.select('point',
             columns={
-                'point.system_id': 'point_system_id',
-                'point.shape_id': 'point_shape_id',
-                'point.sequence': 'point_sequence',
-                'point.lat': 'point_lat',
-                'point.lon': 'point_lon'
+                'point.system_id': 'system_id',
+                'point.shape_id': 'shape_id',
+                'point.sequence': 'sequence',
+                'point.lat': 'lat',
+                'point.lon': 'lon'
             },
             filters={
                 'point.system_id': context.system_id,

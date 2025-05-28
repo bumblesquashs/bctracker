@@ -5,6 +5,7 @@ from models.adherence import Adherence
 from models.bus import Bus
 from models.context import Context
 from models.occupancy import Occupancy
+from models.row import Row
 from models.timestamp import Timestamp
 
 import repositories
@@ -29,31 +30,28 @@ class Position:
     timestamp: Timestamp
     
     @classmethod
-    def from_db(cls, row, prefix='position'):
+    def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        bus = Bus.find(context, row[f'{prefix}_bus_number'])
-        trip_id = row[f'{prefix}_trip_id']
-        stop_id = row[f'{prefix}_stop_id']
-        block_id = row[f'{prefix}_block_id']
-        route_id = row[f'{prefix}_route_id']
-        sequence = row[f'{prefix}_sequence']
-        lat = row[f'{prefix}_lat']
-        lon = row[f'{prefix}_lon']
-        bearing = row[f'{prefix}_bearing']
-        speed = row[f'{prefix}_speed']
-        adherence_value = row[f'{prefix}_adherence']
+        context = row.context()
+        bus = Bus.find(context, row['bus_number'])
+        trip_id = row['trip_id']
+        stop_id = row['stop_id']
+        block_id = row['block_id']
+        route_id = row['route_id']
+        sequence = row['sequence']
+        lat = row['lat']
+        lon = row['lon']
+        bearing = row['bearing']
+        speed = row['speed']
+        adherence_value = row['adherence']
         if adherence_value is None:
             adherence = None
         else:
             trip = context.system.get_trip(trip_id)
             layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
-        try:
-            occupancy = Occupancy[row[f'{prefix}_occupancy']]
-        except KeyError:
-            occupancy = Occupancy.NO_DATA_AVAILABLE
-        timestamp = Timestamp.parse(row[f'{prefix}_timestamp'], timezone=context.timezone)
+        occupancy = Occupancy.from_db(row['occupancy'])
+        timestamp = Timestamp.parse(row['timestamp'], context.timezone)
         return cls(context, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
