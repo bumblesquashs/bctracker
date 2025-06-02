@@ -14,10 +14,7 @@
     </div>
 </div>
 
-% if route.trips:
-    % trips = route.trips
-    % departures = route.find_departures()
-    
+% if trips:
     % include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
 % else:
     <div class="placeholder">

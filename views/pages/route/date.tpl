@@ -54,7 +54,6 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % trips = route.get_trips(date=date)
                 % if trips:
                     <div class="container inline">
                         % for direction in sorted({t.direction for t in trips}):

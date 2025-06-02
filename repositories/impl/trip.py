@@ -49,7 +49,7 @@ class TripRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, route=None, block=None, limit=None) -> list[Trip]:
+    def find_all(self, context: Context, trip_id=None, route=None, block=None, limit=None) -> list[Trip]:
         '''Returns all trips that match the given context, route, and block'''
         route_id = getattr(route, 'id', route)
         block_id = getattr(block, 'id', block)
@@ -66,12 +66,48 @@ class TripRepository:
             },
             filters={
                 'trip.system_id': context.system_id,
+                'trip.trip_id': trip_id,
                 'trip.route_id': route_id,
                 'trip.block_id': block_id
             },
             limit=limit,
             initializer=Trip.from_db
         )
+    
+    def find_all_block_ids(self, context: Context) -> list[str]:
+        return self.database.select(
+            table='trip',
+            columns={
+                'block_id': 'block_id'
+            },
+            distinct=True,
+            filters={
+                'system_id': context.system_id
+            },
+            initializer=lambda r: r['block_id']
+        )
+    
+    def count(self) -> dict[str, int]:
+        rows = self.database.select(
+            table='trip',
+            columns={
+                'system_id': 'system_id',
+                'COUNT(trip_id)': 'count'
+            },
+            group_by='system_id'
+        )
+        return { r['system_id']: r['count'] for r in rows }
+    
+    def block_count(self) -> dict[str, int]:
+        rows = self.database.select(
+            table='trip',
+            columns={
+                'system_id': 'system_id',
+                'COUNT(DISTINCT block_id)': 'count'
+            },
+            group_by='system_id'
+        )
+        return { r['system_id']: r['count'] for r in rows }
     
     def delete_all(self, context: Context):
         '''Deletes all trips for the given context from the database'''

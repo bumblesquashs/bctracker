@@ -10,7 +10,6 @@
 </div>
 
 % if context.system:
-    % blocks = context.system.get_blocks()
     % if blocks:
         % sheets = context.system.get_sheets()
         <div class="page-container">
@@ -121,7 +120,7 @@
                         </tr>
                         <tr class="display-none"></tr>
                         % for system in sorted(region_systems):
-                            % count = len(system.get_blocks())
+                            % count = counts[system.id]
                             <tr>
                                 <td>
                                     <div class="row">

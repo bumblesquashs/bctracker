@@ -1,4 +1,12 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.departure import Departure
+    from models.route import Route
+    from models.sheet import Sheet
+
 from dataclasses import dataclass, field
 from math import sqrt
 
@@ -24,6 +32,11 @@ class Stop:
     
     key: str = field(init=False)
     
+    _departures: list[Departure] | None = field(default=None, init=False)
+    _routes: list[Route] | None = field(default=None, init=False)
+    _schedule: Schedule | None = field(default=None, init=False)
+    _sheets: list[Sheet] | None = field(default=None, init=False)
+    
     @classmethod
     def from_db(cls, row: Row):
         '''Returns a stop initialized from the given database row'''
@@ -43,30 +56,37 @@ class Stop:
         return self.number
     
     @property
-    def nearby_stops(self):
-        '''Returns all stops with coordinates close to this stop'''
-        stops = self.context.system.get_stops()
-        return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
-    
-    @property
-    def cache(self):
-        '''Returns the cache for this stop'''
-        return self.context.system.get_stop_cache(self)
-    
-    @property
-    def schedule(self):
-        '''Returns the schedule for this stop'''
-        return self.cache.schedule
-    
-    @property
-    def sheets(self):
-        '''Returns the sheets for this stop'''
-        return self.cache.sheets
+    def departures(self):
+        '''Returns the departures for this stop'''
+        if self._departures is None:
+            self._departures = repositories.departure.find_all(self.context, stop=self)
+        return self._departures
     
     @property
     def routes(self):
         '''Returns the routes for this stop'''
-        return self.cache.routes
+        if self._routes is None:
+            self._routes = repositories.route.find_all(self.context, stop=self)
+        return self._routes
+    
+    @property
+    def schedule(self):
+        '''Returns the schedule for this stop'''
+        if self.sheets:
+            if self._schedule is None:
+                services = {d.trip.service for d in self.departures if d.trip}
+                date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+                self._schedule = Schedule.combine(services, date_range)
+            return self._schedule
+        return None
+    
+    @property
+    def sheets(self):
+        '''Returns the sheets for this stop'''
+        if self._sheets is None:
+            services = {d.trip.service for d in self.departures if d.trip}
+            self._sheets = self.context.system.copy_sheets(services)
+        return self._sheets
     
     def __post_init__(self):
         self.key = helpers.key(self.number)
@@ -126,33 +146,8 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = repositories.departure.find_all(self.context, stop=self)
         if service_group:
-            return sorted([d for d in departures if d.trip and d.trip.service in service_group])
+            return sorted([d for d in self.departures if d.trip and d.trip.service in service_group])
         if date:
-            return sorted([d for d in departures if d.trip and date in d.trip.service])
-        return sorted(departures)
-    
-    def find_adjacent_departures(self):
-        '''Returns all departures on trips that serve this stop'''
-        return repositories.departure.find_adjacent(self.context, self)
-
-@dataclass(slots=True)
-class StopCache:
-    '''A collection of calculated values for a single stop'''
-    
-    schedule: Schedule
-    sheets: list
-    routes: list
-    
-    @classmethod
-    def build(cls, system, departures):
-        services = {d.trip.service for d in departures if d.trip}
-        sheets = system.copy_sheets(services)
-        if sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in sheets])
-            schedule = Schedule.combine(services, date_range)
-        else:
-            schedule = None
-        routes = sorted({d.trip.route for d in departures if d.trip and d.trip.route})
-        return cls(schedule, sheets, routes)
+            return sorted([d for d in self.departures if d.trip and date in d.trip.service])
+        return sorted(self.departures)

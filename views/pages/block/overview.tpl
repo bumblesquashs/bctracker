@@ -133,7 +133,6 @@
             </div>
         </div>
         
-        % related_blocks = block.related_blocks
         % if related_blocks:
             <div class="section">
                 <div class="header">

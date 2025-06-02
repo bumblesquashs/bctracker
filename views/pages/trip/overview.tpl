@@ -21,7 +21,7 @@
     </div>
 </div>
 
-% departures = trip.find_departures()
+% departures = trip.departures
 
 <div class="page-container">
     <div class="sidebar container flex-1">
@@ -111,7 +111,6 @@
             </div>
         </div>
         
-        % related_trips = trip.related_trips
         % if related_trips:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">

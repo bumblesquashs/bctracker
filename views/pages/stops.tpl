@@ -115,7 +115,7 @@
                         </div>
                         <div class="section">
                             <div class="options-container">
-                                % for route in context.system.get_routes():
+                                % for route in routes:
                                     <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
                                         <div class="row">
                                             % include('components/route')
@@ -252,7 +252,7 @@
                         </tr>
                         <tr class="display-none"></tr>
                         % for system in sorted(region_systems):
-                            % count = len(system.get_stops())
+                            % count = counts[system.id]
                             <tr>
                                 <td>
                                     <div class="row">

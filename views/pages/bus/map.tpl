@@ -22,7 +22,7 @@
 % if position:
     % trip = position.trip
     % if trip:
-        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
+        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
     % else:
         % include('components/map', is_preview=False, map_position=position)
     % end

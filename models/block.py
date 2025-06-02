@@ -19,20 +19,10 @@ class Block:
     schedule: Schedule = field(init=False)
     sheets: list = field(init=False)
     
-    _related_blocks: list | None = field(default=None, init=False)
-    
     @property
     def url_id(self):
         '''The ID to use when making block URLs'''
         return self.id
-    
-    @property
-    def related_blocks(self):
-        '''Returns all blocks that have the same start time, end time, and routes as this block'''
-        if self._related_blocks is None:
-            related_blocks = [b for b in self.context.system.get_blocks() if self.is_related(b)]
-            self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
-        return self._related_blocks
     
     def __post_init__(self):
         services = {t.service for t in self.trips}

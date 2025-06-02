@@ -1,7 +1,16 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.route import Route
+    from models.stop import Stop
+    from models.trip import Trip
+
 from dataclasses import dataclass, field
 
 from models.adherence import Adherence
+from models.block import Block
 from models.bus import Bus
 from models.context import Context
 from models.occupancy import Occupancy
@@ -29,6 +38,11 @@ class Position:
     occupancy: Occupancy | None
     timestamp: Timestamp
     
+    _block: Block | None = field(default=None, init=False)
+    _route: Route | None = field(default=None, init=False)
+    _stop: Stop | None = field(default=None, init=False)
+    _trip: Trip | None = field(default=None, init=False)
+    
     @classmethod
     def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
@@ -47,7 +61,7 @@ class Position:
         if adherence_value is None:
             adherence = None
         else:
-            trip = context.system.get_trip(trip_id)
+            trip = repositories.trip.find(context, trip_id)
             layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
@@ -63,29 +77,36 @@ class Position:
     def trip(self):
         '''Returns the trip associated with this position'''
         if self.trip_id:
-            return self.context.system.get_trip(self.trip_id)
+            if self._trip is None:
+                self._trip = repositories.trip.find(self.context, self.trip_id)
+            return self._trip
         return None
     
     @property
     def stop(self):
         '''Returns the stop associated with this position'''
         if self.stop_id:
-            return self.context.system.get_stop(stop_id=self.stop_id)
+            if self._stop is None:
+                self._stop = repositories.stop.find(self.context, stop_id=self.stop_id)
+            return self._stop
         return None
     
     @property
     def block(self):
         '''Returns the block associated with this position'''
-        if not self.block_id:
-            return self.context.system.get_block(self.block_id)
+        if self.block_id:
+            if self._block is None:
+                trips = repositories.trip.find_all(self.context, block=self.block_id)
+                self._block = Block(self.context, self.block_id, trips)
+            return self._block
         return None
     
     @property
     def route(self):
         '''Returns the route associated with this position'''
-        if not self.route_id:
-            return self.context.system.get_route(route_id=self.route_id)
-        return None
+        if self._route is None:
+            self._route = repositories.route.find(self.context, route_id=self.route_id)
+        return self._route
     
     @property
     def colour(self):

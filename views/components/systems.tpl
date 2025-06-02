@@ -29,7 +29,6 @@
 				</tr>
 				<tr class="display-none"></tr>
 				% for system in sorted(region_systems):
-					% count = len(system.get_routes())
 					<tr>
 						<td>
 							<div class="row">

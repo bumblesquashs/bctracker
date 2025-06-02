@@ -55,23 +55,6 @@ class GTFSService:
         context.system.services = {s.id: s for s in services}
         context.system.sheets = combine_sheets(context, services)
         
-        stops = repositories.stop.find_all(context)
-        context.system.stops = {s.id: s for s in stops}
-        context.system.stops_by_number = {s.number: s for s in stops}
-        
-        trips = repositories.trip.find_all(context)
-        context.system.trips = {t.id: t for t in trips}
-        
-        block_trips = {}
-        for trip in trips:
-            block_trips.setdefault(trip.block_id, []).append(trip)
-        
-        routes = repositories.route.find_all(context)
-        context.system.routes = {r.id: r for r in routes}
-        context.system.routes_by_number = {r.number: r for r in routes}
-        
-        context.system.blocks = {id: Block(context, id, trips) for id, trips in block_trips.items()}
-        
         context.system.gtfs_loaded = True
     
     def download(self, context: Context):
@@ -127,14 +110,6 @@ class GTFSService:
         if end_dates:
             return Date.today(context.timezone) < max(end_dates) - timedelta(days=7)
         return True
-    
-    def update_cache(self, context: Context):
-        '''Updates cached data for the given context'''
-        if self.settings.update_cache_in_background:
-            thread = Thread(target=context.system.update_cache)
-            thread.start()
-        else:
-            context.system.update_cache()
 
 def read_csv(context: Context, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''

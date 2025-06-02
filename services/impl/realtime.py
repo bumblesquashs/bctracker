@@ -108,6 +108,7 @@ class RealtimeService:
         '''Checks that the realtime data for the given context aligns with the current GTFS for that system'''
         if not context.realtime_enabled:
             return True
+        block_ids = repositories.trip.find_all_block_ids(context)
         for position in repositories.position.find_all(context):
             trip_id = position.trip_id
             if not trip_id:
@@ -116,7 +117,7 @@ class RealtimeService:
                 trip_id_sections = trip_id.split(':')
                 if len(trip_id_sections) == 3:
                     block_id = trip_id_sections[2]
-                    if not context.system.get_block(block_id):
+                    if block_id not in block_ids:
                         return False
                 else:
                     return False

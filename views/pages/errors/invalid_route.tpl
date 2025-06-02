@@ -12,7 +12,6 @@
         <ol>
             <li>It may be from an older sheet that is no longer active</li>
             <li>It may be the wrong number - are you sure route <b>{{ route_number }}</b> is the one you want?</li>
-            % alt_routes = [s.get_route(number=route_number) for s in systems if s.get_route(number=route_number)]
             % if alt_routes:
                 <li>
                     It may be from a different system - the following systems have a route with that number

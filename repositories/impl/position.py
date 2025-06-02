@@ -11,6 +11,8 @@ from models.occupancy import Occupancy
 from models.position import Position
 from models.timestamp import Timestamp
 
+import repositories
+
 @dataclass(slots=True)
 class PositionRepository:
     
@@ -55,8 +57,8 @@ class PositionRepository:
             speed = int(data.position.speed * 3.6)
         except AttributeError:
             speed = None
-        trip = context.system.get_trip(trip_id)
-        stop = context.system.get_stop(stop_id=stop_id)
+        trip = repositories.trip.find(context, trip_id)
+        stop = repositories.stop.find(context, stop_id=stop_id)
         if trip:
             block_id = trip.block_id
             route_id = trip.route_id

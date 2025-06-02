@@ -25,7 +25,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % stop_departures = stop.find_departures()
+                % stop_departures = stop.departures
                 % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop_departures], zoom_trips=False)
                 
                 % if stop_departures:
@@ -47,7 +47,6 @@
             </div>
         </div>
         
-        % nearby_stops = sorted(stop.nearby_stops)
         % if nearby_stops:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -79,7 +78,6 @@
             </div>
         % end
         
-        % alt_stops = [s.get_stop(number=stop.number) for s in systems if s.get_stop(number=stop.number) and s != context.system and s.agency == context.agency]
         % if alt_stops:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">

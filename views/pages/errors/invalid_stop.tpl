@@ -12,7 +12,6 @@
         <ol>
             <li>It may no longer serve any bus routes and therefore be removed from the system</li>
             <li>It may be the wrong number - are you sure stop <b>{{ stop_number }}</b> is the one you want?</li>
-            % alt_stops = [s.get_stop(number=stop_number) for s in systems if s.get_stop(number=stop_number)]
             % if alt_stops:
                 <li>
                     It may be from a different system - the following systems have a stop with that number

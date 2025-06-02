@@ -50,7 +50,6 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % blocks = sorted([b for b in context.system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
                     % if blocks:
                         <table>
                             <thead>

@@ -10,7 +10,6 @@
 </div>
 
 % if context.system:
-    % routes = context.system.get_routes()
     % if routes:
         <table>
             <thead>
@@ -65,7 +64,7 @@
                         </tr>
                         <tr class="display-none"></tr>
                         % for system in sorted(region_systems):
-                            % count = len(system.get_routes())
+                            % count = counts[system.id]
                             <tr>
                                 <td>
                                     <div class="row">

@@ -1,4 +1,12 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.point import Point
+    from models.sheet import Sheet
+    from models.trip import Trip
+
 from dataclasses import dataclass, field
 from random import randint, seed
 from math import sqrt
@@ -26,6 +34,12 @@ class Route:
     
     key: str = field(init=False)
     
+    _trips: list[Trip] | None = field(default=None, init=False)
+    _headsigns: list[str] | None = field(default=None, init=False)
+    _schedule: Schedule | None = field(default=None, init=False)
+    _sheets: list[Sheet] | None = field(default=None, init=False)
+    _indicator_points: list[Point] | None = field(default=None, init=False)
+    
     @classmethod
     def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
@@ -50,29 +64,61 @@ class Route:
         return self.name.replace('/', '/<wbr />')
     
     @property
-    def cache(self):
-        '''Returns the cache for this route'''
-        return self.context.system.get_route_cache(self)
-    
-    @property
     def trips(self):
         '''Returns the trips for this route'''
-        return self.cache.trips
+        if self._trips is None:
+            self._trips = repositories.trip.find_all(self.context, route=self)
+        return self._trips
+    
+    @property
+    def headsigns(self):
+        if self._headsigns is None:
+            headsigns = set()
+            for trip in self.trips:
+                headsigns.add(str(trip))
+                for headsign in trip.custom_headsigns:
+                    headsigns.add(headsign)
+            self._headsigns = sorted(headsigns)
+        return self._headsigns
     
     @property
     def schedule(self):
         '''Returns the schedule for this route'''
-        return self.cache.schedule
+        if self.sheets:
+            if self._schedule is None:
+                services = {t.service for t in self.trips}
+                date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+                self._schedule = Schedule.combine(services, date_range)
+            return self._schedule
+        return None
     
     @property
     def sheets(self):
         '''Returns the sheets for this route'''
-        return self.cache.sheets
+        if self._sheets is None:
+            services = {t.service for t in self.trips}
+            self._sheets = self.context.system.copy_sheets(services)
+        return self._sheets
     
     @property
     def indicator_points(self):
         '''Returns the indicator points for this route'''
-        return self.cache.indicator_points
+        if self._indicator_points is None:
+            try:
+                sorted_trips = sorted(self.trips, key=lambda t: len(t.departures), reverse=True)
+                points = sorted_trips[0].find_points()
+                first_point = points[0]
+                last_point = points[-1]
+                distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+                if distance <= 0.05:
+                    count = min((len(points) // 500) + 1, 3)
+                else:
+                    count = min(int(distance * 8) + 1, 4)
+                size = len(points) // count
+                self._indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+            except IndexError:
+                self._indicator_points = []
+        return self._indicator_points
     
     def __post_init__(self):
         self.key = helpers.key(self.number)
@@ -118,26 +164,9 @@ class Route:
                 'lat': point.lat,
                 'lon': point.lon,
                 'url_id': self.url_id,
-                'headsigns': self.get_headsigns()
+                'headsigns': self.headsigns
             })
         return json
-    
-    def get_trips(self, service_group=None, date=None):
-        '''Returns all trips from this route'''
-        if service_group:
-            return sorted([t for t in self.trips if t.service in service_group])
-        if date:
-            return sorted([t for t in self.trips if date in t.service])
-        return sorted(self.trips)
-    
-    def get_headsigns(self, service_group=None, date=None):
-        '''Returns all headsigns from this route'''
-        headsigns = set()
-        for trip in self.get_trips(service_group, date):
-            headsigns.add(str(trip))
-            for headsign in trip.custom_headsigns:
-                headsigns.add(headsign)
-        return sorted(headsigns)
     
     def get_match(self, query):
         '''Returns a match for this route with the given query'''
@@ -183,37 +212,3 @@ def generate_colour(context: Context, number):
     g = int(rgb[1] * 255)
     b = int(rgb[2] * 255)
     return f'{r:02x}{g:02x}{b:02x}'
-
-@dataclass(slots=True)
-class RouteCache:
-    '''A collection of calculated values for a single route'''
-    
-    trips: list
-    schedule: Schedule | None
-    sheets: list
-    indicator_points: list
-    
-    @classmethod
-    def build(cls, system, trips):
-        services = {t.service for t in trips}
-        sheets = system.copy_sheets(services)
-        if sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in sheets])
-            schedule = Schedule.combine(services, date_range)
-        else:
-            schedule = None
-        try:
-            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
-            points = sorted_trips[0].find_points()
-            first_point = points[0]
-            last_point = points[-1]
-            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-            if distance <= 0.05:
-                count = min((len(points) // 500) + 1, 3)
-            else:
-                count = min(int(distance * 8) + 1, 4)
-            size = len(points) // count
-            indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
-        except IndexError:
-            indicator_points = []
-        return cls(trips, schedule, sheets, indicator_points)

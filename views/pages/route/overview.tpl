@@ -15,7 +15,7 @@
 </div>
 
 <div class="page-container">
-    % if route.trips:
+    % if trips:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -23,19 +23,17 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % include('components/map', map_trips=route.trips, map_positions=positions)
+                    % include('components/map', map_trips=trips, map_positions=positions)
                     
                     <div class="info-box">
                         <div class="section">
                             % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.url_id}/schedule')
                         </div>
                         <div class="column section">
-                            % headsigns = route.get_headsigns()
-                            % for headsign in headsigns:
+                            % for headsign in route.headsigns:
                                 <div>{{ headsign }}</div>
                             % end
                         </div>
-                        % variants = [r for r in route.context.system.get_routes() if route.is_variant(r)]
                         % if variants:
                             <div class="column gap-5 section">
                                 <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
@@ -136,12 +134,12 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if trips:
-                    % trip_positions = {p.trip.id:p for p in positions if p.trip and p.trip in trips}
-                    % directions = sorted({t.direction for t in trips})
+                % if today_trips:
+                    % trip_positions = {p.trip.id:p for p in positions if p.trip and p.trip in today_trips}
+                    % directions = sorted({t.direction for t in today_trips})
                     <div class="container inline">
                         % for direction in directions:
-                            % direction_trips = [t for t in trips if t.direction == direction]
+                            % direction_trips = [t for t in today_trips if t.direction == direction]
                             % if direction_trips:
                                 <div class="section">
                                     <div class="header" onclick="toggleSection(this)">

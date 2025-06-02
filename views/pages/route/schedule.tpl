@@ -14,7 +14,7 @@
     </div>
 </div>
 
-% if route.trips:
+% if trips:
     % sheets = route.sheets
     <div class="page-container">
         <div class="sidebar container flex-1">
@@ -43,7 +43,7 @@
                     <div class="content">
                         <div class="container inline">
                             % for service_group in sheet.normal_service_groups:
-                                % service_group_trips = route.get_trips(service_group=service_group)
+                                % service_group_trips = [t for t in trips if t.service in service_group]
                                 <div class="section">
                                     <div class="header" onclick="toggleSection(this)">
                                         <div>

@@ -13,7 +13,7 @@
     </div>
 </div>
 
-% if stop.find_departures():
+% if stop.departures:
     % sheets = stop.sheets
     <div class="page-container">
         <div class="sidebar container flex-1">

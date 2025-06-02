@@ -130,7 +130,7 @@
                     % block = trip.block
                     % route = trip.route
                     
-                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
+                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
                     
                     <div class="info-box">
                         <div class="section">

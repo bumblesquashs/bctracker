@@ -55,7 +55,7 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for system in sorted(region_systems):
-                                        % count = len(system.get_stops())
+                                        % count = counts[system.id]
                                         <tr>
                                             <td>
                                                 <div class="row">

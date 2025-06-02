@@ -64,8 +64,19 @@ class RouteRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None) -> list[Route]:
+    def find_all(self, context: Context, number=None, stop=None, limit=None) -> list[Route]:
         '''Returns all routes that match the given context'''
+        stop_id = getattr(stop, 'id', stop)
+        joins = {}
+        group_by = None
+        if stop_id:
+            joins['trip'] = {
+                'trip.route_id': 'route.route_id'
+            }
+            joins['departure'] = {
+                'departure.trip_id': 'trip.trip_id'
+            }
+            group_by = 'route.route_id'
         return self.database.select('route',
             columns={
                 'route.system_id': 'system_id',
@@ -76,11 +87,38 @@ class RouteRepository:
                 'route.text_colour': 'text_colour'
             },
             filters={
-                'route.system_id': context.system_id
+                'route.system_id': context.system_id,
+                'route.number': number,
+                'departure.stop_id': stop_id
             },
+            joins=joins,
+            group_by=group_by,
             limit=limit,
             initializer=Route.from_db
         )
+    
+    def find_all_ids(self, context: Context) -> list[str]:
+        return self.database.select(
+            table='route',
+            columns={
+                'route_id': 'id'
+            },
+            filters={
+                'system_id': context.system_id
+            },
+            initializer=lambda r: r['id']
+        )
+    
+    def count(self) -> dict[str, int]:
+        rows = self.database.select(
+            table='route',
+            columns={
+                'system_id': 'system_id',
+                'COUNT(route_id)': 'count'
+            },
+            group_by='system_id'
+        )
+        return { r['system_id']: r['count'] for r in rows }
     
     def delete_all(self, context: Context):
         '''Deletes all routes for the given context from the database'''

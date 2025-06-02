@@ -51,10 +51,11 @@ class StopRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
+    def find_all(self, context: Context, number=None, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
         '''Returns all stops that match the given context'''
         filters = {
-            'stop.system_id': context.system_id
+            'stop.system_id': context.system_id,
+            'stop.number': number
         }
         if (lat is not None and lon is not None):
             filters['lat'] = {
@@ -77,6 +78,18 @@ class StopRepository:
             filters=filters,
             limit=limit,
             initializer=Stop.from_db
+        )
+    
+    def find_all_ids(self, context: Context) -> list[str]:
+        return self.database.select(
+            table='stop',
+            columns={
+                'stop_id': 'id'
+            },
+            filters={
+                'system_id': context.system_id
+            },
+            initializer=lambda r: r['id']
         )
     
     def find_area(self, context: Context) -> Area | None:
@@ -104,6 +117,17 @@ class StopRepository:
             return areas[0]
         except IndexError:
             return None
+    
+    def count(self) -> dict[str, int]:
+        rows = self.database.select(
+            table='stop',
+            columns={
+                'system_id': 'system_id',
+                'COUNT(stop_id)': 'count'
+            },
+            group_by='system_id'
+        )
+        return { r['system_id']: r['count'] for r in rows }
     
     def delete_all(self, context: Context):
         '''Deletes all stops for the given context from the database'''

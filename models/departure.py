@@ -1,4 +1,11 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.stop import Stop
+    from models.trip import Trip
+
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -81,6 +88,9 @@ class Departure:
     distance: float | None
     headsign: str | None
     
+    _stop: Stop | None = field(default=None, init=False)
+    _trip: Trip | None = field(default=None, init=False)
+    
     @classmethod
     def from_db(cls, row: Row):
         '''Returns a departure initialized from the given database row'''
@@ -99,12 +109,16 @@ class Departure:
     @property
     def stop(self):
         '''Returns the stop associated with this departure'''
-        return self.context.system.get_stop(stop_id=self.stop_id)
+        if self._stop is None:
+            self._stop = repositories.stop.find(self.context, stop_id=self.stop_id)
+        return self._stop
     
     @property
     def trip(self):
         '''Returns the trip associated with this departure'''
-        return self.context.system.get_trip(self.trip_id)
+        if self._trip is None:
+            self._trip = repositories.trip.find(self.context, self.trip_id)
+        return self._trip
     
     @property
     def pickup_only(self):

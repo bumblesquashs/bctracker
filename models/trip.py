@@ -1,6 +1,14 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.departure import Departure
+    from models.route import Route
+
 from dataclasses import dataclass, field
 
+from models.block import Block
 from models.context import Context
 from models.departure import Departure
 from models.direction import Direction
@@ -25,7 +33,11 @@ class Trip:
     short_id: str = field(init=False)
     sheets: list = field(init=False)
     
-    _related_trips: list | None = field(default=None, init=False)
+    _departures: list[Departure] | None = field(default=None, init=False)
+    _block: Block | None = field(default=None, init=False)
+    _route: Route | None = field(default=None, init=False)
+    _direction: Direction | None = field(default=None, init=False)
+    _custom_headsigns: list[str] | None = field(default=None, init=False)
     
     @classmethod
     def from_db(cls, row: Row):
@@ -53,12 +65,17 @@ class Trip:
     @property
     def route(self):
         '''Returns the route associated with this trip'''
-        return self.context.system.get_route(route_id=self.route_id)
+        if self._route is None:
+            self._route = repositories.route.find(self.context, route_id=self.route_id)
+        return self._route
     
     @property
     def block(self):
         '''Returns the block associated with this trip'''
-        return self.context.system.get_block(self.block_id)
+        if self._block is None:
+            trips = repositories.trip.find_all(self.context, block=self.block_id)
+            self._block = Block(self.context, self.block_id, trips)
+        return self._block
     
     @property
     def service(self):
@@ -111,42 +128,52 @@ class Trip:
         return None
     
     @property
-    def related_trips(self):
-        '''Returns all trips with the same route, direction, start time, and end time as this trip'''
-        if self._related_trips is None:
-            self._related_trips = [t for t in self.context.system.get_trips() if self.is_related(t)]
-            self._related_trips.sort(key=lambda t: t.service)
-        return self._related_trips
-    
-    @property
-    def cache(self):
-        '''Returns the cache for this trip'''
-        return self.context.system.get_trip_cache(self)
+    def departures(self):
+        '''Returns the departures for this trip'''
+        if self._departures is None:
+            self._departures = repositories.departure.find_all(self.context, trip=self)
+        return self._departures
     
     @property
     def first_departure(self):
         '''Returns the first departure for this trip'''
-        return self.cache.first_departure
+        try:
+            return self.departures[0]
+        except IndexError:
+            return None
     
     @property
     def last_departure(self):
         '''Returns the last departure for this trip'''
-        return self.cache.last_departure
-    
-    @property
-    def departure_count(self):
-        '''Returns the departure count for this trip'''
-        return self.cache.departure_count
+        try:
+            return self.departures[-1]
+        except IndexError:
+            return None
     
     @property
     def direction(self):
         '''Returns the direction for this trip'''
-        return self.cache.direction
+        if self._direction is None:
+            departures = self.departures
+            if departures:
+                self._direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+            else:
+                self._direction = Direction.UNKNOWN
+        return self._direction
     
     @property
     def custom_headsigns(self):
         '''Returns the custom headsigns for this trip'''
-        return self.cache.custom_headsigns
+        if self._custom_headsigns is None:
+            headsigns = [str(d) for d in self.departures if d.headsign]
+            previous_headsign = None
+            custom_headsigns = []
+            for headsign in headsigns:
+                if headsign != previous_headsign:
+                    custom_headsigns.append(headsign)
+                previous_headsign = headsign
+            self._custom_headsigns = custom_headsigns
+        return self._custom_headsigns
     
     def __post_init__(self):
         id_parts = self.id.split(':')
@@ -188,10 +215,6 @@ class Trip:
         '''Returns all points associated with this trip'''
         return repositories.point.find_all(self.context, self.shape_id)
     
-    def find_departures(self):
-        '''Returns all departures associated with this trip'''
-        return repositories.departure.find_all(self.context, trip=self)
-    
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''
         if self.id == other.id:
@@ -205,35 +228,3 @@ class Trip:
         if self.direction_id != other.direction_id:
             return False
         return True
-
-@dataclass(slots=True)
-class TripCache:
-    '''A collection of calculated values for a single trip'''
-    
-    first_departure: Departure | None
-    last_departure: Departure | None
-    departure_count: int
-    direction: Direction
-    custom_headsigns: list[str]
-    
-    @classmethod
-    def build(cls, departures):
-        if departures:
-            first_departure = departures[0]
-            last_departure = departures[-1]
-            departure_count = len(departures)
-            direction = Direction.calculate(departures[0].stop, departures[-1].stop)
-            headsigns = [str(d) for d in departures if d.headsign]
-            previous_headsign = None
-            custom_headsigns = []
-            for headsign in headsigns:
-                if headsign != previous_headsign:
-                    custom_headsigns.append(headsign)
-                previous_headsign = headsign
-        else:
-            first_departure = None
-            last_departure = None
-            departure_count = 0
-            direction = Direction.UNKNOWN
-            custom_headsigns = []
-        return cls(first_departure, last_departure, departure_count, direction, custom_headsigns)

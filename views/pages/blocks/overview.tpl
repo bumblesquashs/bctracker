@@ -10,10 +10,8 @@
 </div>
 
 % if context.system:
-    % blocks = context.system.get_blocks()
     % if blocks:
-        % today_blocks = sorted([b for b in blocks if today in b.schedule], key=lambda b: (b.get_start_time(date=today), b.get_end_time(date=today)))
-        % blocks_so_far = [b for b in today_blocks if b.get_start_time(date=today) <= now]
+        % blocks_so_far = [b for b in blocks if b.get_start_time(date=today) <= now]
         <div class="page-container">
             <div class="sidebar container flex-1">
                 <div class="section">
@@ -26,25 +24,25 @@
                             <div class="section">
                                 % include('components/sheet_list', sheets=context.system.get_sheets(), schedule_path='blocks/schedule')
                             </div>
-                            % if today_blocks:
+                            % if blocks:
                                 <h3 class="title">Today</h3>
                                 <div class="section row">
                                     <div class="name">Service Starts</div>
                                     <div class="value">
-                                        % start_times = [b.get_start_time(date=today) for b in today_blocks]
+                                        % start_times = [b.get_start_time(date=today) for b in blocks]
                                         {{ min(start_times).format_web(time_format) }}
                                     </div>
                                 </div>
                                 <div class="section row">
                                     <div class="name">Service Ends</div>
                                     <div class="value">
-                                        % end_times = [b.get_end_time(date=today) for b in today_blocks]
+                                        % end_times = [b.get_end_time(date=today) for b in blocks]
                                         {{ max(end_times).format_web(time_format) }}
                                     </div>
                                 </div>
                                 <div class="section row">
                                     <div class="name">Total Blocks</div>
-                                    <div class="value">{{ len(today_blocks) }}</div>
+                                    <div class="value">{{ len(blocks) }}</div>
                                 </div>
                                 % if context.realtime_enabled:
                                     <div class="section row">
@@ -69,7 +67,7 @@
                         % include('components/toggle')
                     </div>
                     <div class="content">
-                        % if today_blocks:
+                        % if blocks:
                             <table>
                                 <thead>
                                     <tr>
@@ -85,7 +83,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    % for block in today_blocks:
+                                    % for block in blocks:
                                         % start_time = block.get_start_time(date=today).format_web(time_format)
                                         % end_time = block.get_end_time(date=today).format_web(time_format)
                                         <tr>
@@ -171,7 +169,7 @@
                         </tr>
                         <tr class="display-none"></tr>
                         % for system in sorted(region_systems):
-                            % count = len(system.get_blocks())
+                            % count = counts[system.id]
                             <tr>
                                 <td>
                                     <div class="row">

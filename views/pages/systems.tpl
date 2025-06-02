@@ -61,19 +61,19 @@
                             % if system.gtfs_enabled and system.gtfs_loaded:
                                 <div class="row gap-5">
                                     <span class="bold">Routes:</span>
-                                    {{ len(system.get_routes()) }}
+                                    {{ route_counts[system.id] }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Stops:</span>
-                                    {{ len(system.get_stops()) }}
+                                    {{ stop_counts[system.id] }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Blocks:</span>
-                                    {{ len(system.get_blocks()) }}
+                                    {{ block_counts[system.id] }}
                                 </div>
                                 <div class="row gap-5">
                                     <span class="bold">Trips:</span>
-                                    {{ len(system.get_trips()) }}
+                                    {{ trip_counts[system.id] }}
                                 </div>
                             % end
                         </div>
@@ -92,10 +92,10 @@
                     % end
                     % if system.gtfs_enabled:
                         % if system.gtfs_enabled:
-                            <td class="desktop-only align-right">{{ len(system.get_routes()) }}</td>
-                            <td class="desktop-only align-right">{{ len(system.get_stops()) }}</td>
-                            <td class="desktop-only align-right">{{ len(system.get_blocks()) }}</td>
-                            <td class="desktop-only align-right">{{ len(system.get_trips()) }}</td>
+                            <td class="desktop-only align-right">{{ route_counts[system.id] }}</td>
+                            <td class="desktop-only align-right">{{ stop_counts[system.id] }}</td>
+                            <td class="desktop-only align-right">{{ block_counts[system.id] }}</td>
+                            <td class="desktop-only align-right">{{ trip_counts[system.id] }}</td>
                             <td class="non-mobile">
                                 % include('components/weekdays', schedule=system.schedule, compact=True)
                             </td>
