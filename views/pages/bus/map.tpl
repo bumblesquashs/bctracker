@@ -13,14 +13,14 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        % if system:
-            <a href="{{ get_url(system, 'bus', bus) }}" class="tab-button">Overview</a>
+        % if context.system:
+            <a href="{{ get_url(context, 'bus', bus) }}" class="tab-button">Overview</a>
             <span class="tab-button current">Map</span>
-            <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
+            <a href="{{ get_url(context, 'bus', bus, 'history') }}" class="tab-button">History</a>
         % else:
-            <a href="{{ get_url(system, 'bus', bus.agency, bus) }}" class="tab-button">Overview</a>
+            <a href="{{ get_url(context, 'bus', bus.context.agency, bus) }}" class="tab-button">Overview</a>
             <span class="tab-button current">Map</span>
-            <a href="{{ get_url(system, 'bus', bus.agency, bus, 'history') }}" class="tab-button">History</a>
+            <a href="{{ get_url(context, 'bus', bus.context.agency, bus, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -28,7 +28,7 @@
 % if position:
     % trip = position.trip
     % if trip:
-        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
+        % include('components/map', is_preview=False, map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
     % else:
         % include('components/map', is_preview=False, map_position=position)
     % end

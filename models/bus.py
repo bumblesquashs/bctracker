@@ -1,24 +1,29 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from repositories import AdornmentRepository, OrderRepository
+if TYPE_CHECKING:
+    from models.order import Order
 
+from dataclasses import dataclass
+
+from models.context import Context
+
+import repositories
+
+@dataclass(slots=True)
 class Bus:
     '''A public transportation vehicle'''
     
-    __slots__ = (
-        'adornment_repository',
-        'agency',
-        'number',
-        'order'
-    )
+    context: Context
+    number: str
+    order: Order
     
     @classmethod
-    def find(cls, agency, number, **kwargs):
-        '''Returns a bus for the given agency with the given number'''
-        order_repository = kwargs.get('order_repository') or di[OrderRepository]
-        order = order_repository.find(agency, number)
-        return cls(agency, number, order)
+    def find(cls, context: Context, number):
+        '''Returns a bus for the given context with the given number'''
+        order = repositories.order.find(context, number)
+        return cls(context, number, order)
     
     @property
     def url_id(self):
@@ -46,13 +51,6 @@ class Bus:
             return order.model
         return None
     
-    def __init__(self, agency, number, order, **kwargs):
-        self.agency = agency
-        self.number = number
-        self.order = order
-        
-        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
-    
     def __str__(self):
         if self.is_known:
             return self.number
@@ -67,6 +65,6 @@ class Bus:
     def __lt__(self, other):
         return self.number < other.number
     
-    def find_adornment(self):
-        '''Returns the adornment for this bus, if one exists'''
-        return self.adornment_repository.find(self.agency, self)
+    def find_decoration(self):
+        '''Returns the decoration for this bus, if one exists'''
+        return repositories.decoration.find(self)

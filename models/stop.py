@@ -1,88 +1,95 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.departure import Departure
+    from models.route import Route
+    from models.sheet import Sheet
+
+from dataclasses import dataclass, field
 from math import sqrt
 
-from di import di
-
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
+from models.row import Row
 from models.schedule import Schedule
 
-from repositories import DepartureRepository, SystemRepository
-
 import helpers
+import repositories
 
+@dataclass(slots=True)
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'id',
-        'number',
-        'key',
-        'name',
-        'lat',
-        'lon'
-    )
+    context: Context
+    id: str
+    number: str
+    name: str
+    lat: float
+    lon: float
+    
+    key: str = field(init=False)
+    
+    _departures: list[Departure] | None = field(default=None, init=False)
+    _routes: list[Route] | None = field(default=None, init=False)
+    _schedule: Schedule | None = field(default=None, init=False)
+    _sheets: list[Sheet] | None = field(default=None, init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='stop', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a stop initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        id = row[f'{prefix}_id']
-        number = row[f'{prefix}_number']
-        if not number:
-            number = id
-        name = row[f'{prefix}_name']
-        lat = row[f'{prefix}_lat']
-        lon = row[f'{prefix}_lon']
-        return cls(system, id, number, name, lat, lon)
+        context = row.context()
+        id = row['id']
+        number = row['number'] or id
+        name = row['name']
+        lat = row['lat']
+        lon = row['lon']
+        return cls(context, id, number, name, lat, lon)
     
     @property
     def url_id(self):
         '''The ID to use when making stop URLs'''
-        if self.system.agency.prefer_stop_id:
+        if self.context.prefer_stop_id:
             return self.id
         return self.number
     
     @property
-    def nearby_stops(self):
-        '''Returns all stops with coordinates close to this stop'''
-        stops = self.system.get_stops()
-        return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
-    
-    @property
-    def cache(self):
-        '''Returns the cache for this stop'''
-        return self.system.get_stop_cache(self)
-    
-    @property
-    def schedule(self):
-        '''Returns the schedule for this stop'''
-        return self.cache.schedule
-    
-    @property
-    def sheets(self):
-        '''Returns the sheets for this stop'''
-        return self.cache.sheets
+    def departures(self):
+        '''Returns the departures for this stop'''
+        if self._departures is None:
+            self._departures = repositories.departure.find_all(self.context, stop=self)
+        return self._departures
     
     @property
     def routes(self):
         '''Returns the routes for this stop'''
-        return self.cache.routes
+        if self._routes is None:
+            self._routes = repositories.route.find_all(self.context, stop=self)
+        return self._routes
     
-    def __init__(self, system, id, number, name, lat, lon, **kwargs):
-        self.system = system
-        self.id = id
-        self.number = number
-        self.name = name
-        self.lat = lat
-        self.lon = lon
-        
-        self.key = helpers.key(number)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+    @property
+    def schedule(self):
+        '''Returns the schedule for this stop'''
+        if self.sheets:
+            if self._schedule is None:
+                services = {d.trip.service for d in self.departures if d.trip}
+                date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+                self._schedule = Schedule.combine(services, date_range)
+            return self._schedule
+        return None
+    
+    @property
+    def sheets(self):
+        '''Returns the sheets for this stop'''
+        if self._sheets is None:
+            services = {d.trip.service for d in self.departures if d.trip}
+            self._sheets = self.context.system.copy_sheets(services)
+        return self._sheets
+    
+    def __post_init__(self):
+        self.key = helpers.key(self.number)
     
     def __str__(self):
         return self.name
@@ -100,11 +107,11 @@ class Stop:
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
-        number = self.number if self.system.agency.show_stop_number else None
+        number = self.number if self.context.show_stop_number else None
         return {
-            'system_id': self.system.id,
-            'system_name': str(self.system),
-            'agency_id': self.system.agency.id,
+            'system_id': self.context.system_id,
+            'system_name': str(self.context.system),
+            'agency_id': self.context.agency_id,
             'number': number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
@@ -139,32 +146,8 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = self.departure_repository.find_all(self.system, stop=self)
         if service_group:
-            return sorted([d for d in departures if d.trip and d.trip.service in service_group])
+            return sorted([d for d in self.departures if d.trip and d.trip.service in service_group])
         if date:
-            return sorted([d for d in departures if d.trip and date in d.trip.service])
-        return sorted(departures)
-    
-    def find_adjacent_departures(self):
-        '''Returns all departures on trips that serve this stop'''
-        return self.departure_repository.find_adjacent(self.system, self)
-
-class StopCache:
-    '''A collection of calculated values for a single stop'''
-    
-    __slots__ = (
-        'schedule',
-        'sheets',
-        'routes'
-    )
-    
-    def __init__(self, system, departures):
-        services = {d.trip.service for d in departures if d.trip}
-        self.sheets = system.copy_sheets(services)
-        if self.sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-            self.schedule = Schedule.combine(services, date_range)
-        else:
-            self.schedule = None
-        self.routes = sorted({d.trip.route for d in departures if d.trip and d.trip.route})
+            return sorted([d for d in self.departures if d.trip and date in d.trip.service])
+        return sorted(self.departures)

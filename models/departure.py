@@ -1,11 +1,19 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.stop import Stop
+    from models.trip import Trip
+
+from dataclasses import dataclass, field
 from enum import Enum
 
-from di import di
-
+from models.context import Context
+from models.row import Row
 from models.time import Time
 
-from repositories import DepartureRepository, SystemRepository
+import repositories
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -14,6 +22,13 @@ class PickupType(Enum):
     UNAVAILABLE = '1'
     PHONE_REQUEST = '2'
     DRIVER_REQUEST = '3'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.NORMAL
     
     def __str__(self):
         if self == PickupType.UNAVAILABLE:
@@ -37,6 +52,13 @@ class DropoffType(Enum):
     PHONE_REQUEST = '2'
     DRIVER_REQUEST = '3'
     
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.NORMAL
+    
     def __str__(self):
         if self == DropoffType.UNAVAILABLE:
             return 'No drop off'
@@ -51,54 +73,52 @@ class DropoffType(Enum):
         '''Checks if this is a normal dropoff'''
         return self == DropoffType.NORMAL
 
+@dataclass(slots=True)
 class Departure:
     '''An association between a trip and a stop'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'trip_id',
-        'sequence',
-        'stop_id',
-        'time',
-        'pickup_type',
-        'dropoff_type',
-        'timepoint',
-        'distance',
-        'headsign'
-    )
+    context: Context
+    trip_id: str
+    sequence: int
+    stop_id: str
+    time: Time
+    pickup_type: PickupType
+    dropoff_type: DropoffType
+    timepoint: bool
+    distance: float | None
+    headsign: str | None
+    
+    _stop: Stop | None = field(default=None, init=False)
+    _trip: Trip | None = field(default=None, init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='departure', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a departure initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        trip_id = row[f'{prefix}_trip_id']
-        sequence = row[f'{prefix}_sequence']
-        stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], system.timezone, system.agency.accurate_seconds)
-        try:
-            pickup_type = PickupType(row[f'{prefix}_pickup_type'])
-        except:
-            pickup_type = PickupType.NORMAL
-        try:
-            dropoff_type = DropoffType(row[f'{prefix}_dropoff_type'])
-        except:
-            dropoff_type = DropoffType.NORMAL
-        timepoint = row[f'{prefix}_timepoint'] == 1
-        distance = row[f'{prefix}_distance']
-        headsign = row[f'{prefix}_headsign']
-        return cls(system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
+        context = row.context()
+        trip_id = row['trip_id']
+        sequence = row['sequence']
+        stop_id = row['stop_id']
+        time = Time.parse(row['time'], context.timezone, context.accurate_seconds)
+        pickup_type = PickupType.from_db(row['pickup_type'])
+        dropoff_type = DropoffType.from_db(row['dropoff_type'])
+        timepoint = row['timepoint'] == 1
+        distance = row['distance']
+        headsign = row['headsign']
+        return cls(context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
     
     @property
     def stop(self):
         '''Returns the stop associated with this departure'''
-        return self.system.get_stop(stop_id=self.stop_id)
+        if self._stop is None:
+            self._stop = repositories.stop.find(self.context, stop_id=self.stop_id)
+        return self._stop
     
     @property
     def trip(self):
         '''Returns the trip associated with this departure'''
-        return self.system.get_trip(self.trip_id)
+        if self._trip is None:
+            self._trip = repositories.trip.find(self.context, self.trip_id)
+        return self._trip
     
     @property
     def pickup_only(self):
@@ -114,23 +134,9 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __init__(self, system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign, **kwargs):
-        self.system = system
-        self.trip_id = trip_id
-        self.sequence = sequence
-        self.stop_id = stop_id
-        self.time = time
-        self.pickup_type = pickup_type
-        self.dropoff_type = dropoff_type
-        self.timepoint = timepoint
-        self.distance = distance
-        self.headsign = headsign
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-    
     def __str__(self):
         if self.headsign:
-            if self.system.agency.prefix_headsigns and self.trip.route:
+            if self.context.prefix_headsigns and self.trip.route:
                 return f'{self.trip.route.number} {self.headsign}'
             return self.headsign
         return str(self.trip)
@@ -170,8 +176,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return self.departure_repository.find(self.system, trip=self.trip, sequence=self.sequence - 1)
+        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return self.departure_repository.find(self.system, trip=self.trip, sequence=self.sequence + 1)
+        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence + 1)

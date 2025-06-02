@@ -1,46 +1,35 @@
 
-from di import di
+from dataclasses import dataclass
 
 from models.bus import Bus
+from models.context import Context
 from models.date import Date
+from models.row import Row
 
-from repositories import SystemRepository
-
+@dataclass(slots=True)
 class Assignment:
     '''An association between a block and a bus for a specific date'''
     
-    __slots__ = (
-        'system_repository',
-        'system_id',
-        'block_id',
-        'bus_number',
-        'date'
-    )
+    context: Context
+    block_id: str
+    bus_number: str
+    date: Date
     
     @classmethod
-    def from_db(cls, row, prefix='assignment'):
+    def from_db(cls, row: Row):
         '''Returns an assignment initialized from the given database row'''
-        system_id = row[f'{prefix}_system_id']
-        block_id = row[f'{prefix}_block_id']
-        bus_number = row[f'{prefix}_bus_number']
-        date = Date.parse(row[f'{prefix}_date'])
-        return cls(system_id, block_id, bus_number, date)
+        context = row.context()
+        block_id = row['block_id']
+        bus_number = row['bus_number']
+        date = Date.parse(row['date'], context.timezone)
+        return cls(context, block_id, bus_number, date)
     
     @property
     def key(self):
         '''The unique identifier for this assignment'''
-        return (self.system_id, self.block_id)
+        return (self.context.system_id, self.block_id)
     
     @property
     def bus(self):
         '''The bus for this assignment'''
-        system = self.system_repository.find(self.system_id)
-        return Bus.find(system.agency, self.bus_number)
-    
-    def __init__(self, system_id, block_id, bus_number, date, **kwargs):
-        self.system_id = system_id
-        self.block_id = block_id
-        self.bus_number = bus_number
-        self.date = date
-        
-        self.system_repository = kwargs.get('system_repository') or di[SystemRepository]
+        return Bus.find(self.context, self.bus_number)

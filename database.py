@@ -2,6 +2,8 @@
 import sqlite3
 import shutil
 
+from models.row import Row
+
 SQL_SCRIPTS = [
     '''
         CREATE TABLE IF NOT EXISTS record (
@@ -213,12 +215,12 @@ class Database:
         result = self.execute(sql, custom_args + args)
         if type(columns) is list:
             if initializer:
-                return [initializer(dict(zip(columns, r))) for r in result]
-            return [dict(zip(columns, r)) for r in result]
+                return [initializer(Row(dict(zip(columns, r)))) for r in result]
+            return [Row(dict(zip(columns, r))) for r in result]
         elif type(columns) is dict:
             if initializer:
-                return [initializer(dict(zip(columns.values(), r))) for r in result]
-            return [dict(zip(columns.values(), r)) for r in result]
+                return [initializer(Row(dict(zip(columns.values(), r)))) for r in result]
+            return [Row(dict(zip(columns.values(), r))) for r in result]
         return result
     
     def insert(self, table, values):

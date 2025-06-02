@@ -14,12 +14,12 @@
             </tr>
         </thead>
         <tbody>
-            % for a in agencies:
+            % for agency in agencies:
                 <tr>
                     <td>
                         <div class="row">
-                            % include('components/agency_logo', agency=a)
-                            <a href="{{ get_url(system, 'bus', a, bus_number) }}">{{ a }}</a>
+                            % include('components/agency_logo', agency=agency)
+                            <a href="{{ get_url(context, 'bus', agency, bus_number) }}">{{ a }}</a>
                         </div>
                     </td>
                 </tr>

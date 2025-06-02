@@ -35,7 +35,7 @@
     % end
     <div class="column gap-10">
         % for (i, sheet) in enumerate(sheets):
-            % today = Date.today(sheet.system.timezone)
+            % today = Date.today(sheet.context.timezone)
             % schedule = sheet.schedule
             <div class="sheet">
                 % if not schedule.is_special:
@@ -56,7 +56,7 @@
                                 % for date in month_dates:
                                     % status = sheet.get_date_status(date)
                                     % if schedule_path:
-                                        <a class="date {{ status }}" href="{{ get_url(system, date_path, date) }}">{{ date.day }}</a>
+                                        <a class="date {{ status }}" href="{{ get_url(context, date_path, date) }}">{{ date.day }}</a>
                                     % else:
                                         <span class="date {{ status }}">{{ date.day }}</span>
                                     % end

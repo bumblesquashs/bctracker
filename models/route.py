@@ -1,18 +1,26 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.point import Point
+    from models.sheet import Sheet
+    from models.trip import Trip
+
+from dataclasses import dataclass, field
 from enum import Enum
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-from di import di
-
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
+from models.row import Row
 from models.schedule import Schedule
 
-from repositories import DepartureRepository, SystemRepository
-
 import helpers
+import repositories
 
 class RouteType(Enum):
     '''Options for route types'''
@@ -28,6 +36,13 @@ class RouteType(Enum):
     FUNICULAR = '7'
     TROLLEY_BUS = '11'
     MONORAIL = '12'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.UNKNOWN
     
     def __str__(self):
         match self:
@@ -54,43 +69,42 @@ class RouteType(Enum):
             case RouteType.MONORAIL:
                 return 'Monorail Line'
 
+@dataclass(slots=True)
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'id',
-        'number',
-        'key',
-        'name',
-        'colour',
-        'text_colour',
-        'type'
-    )
+    context: Context
+    id: str
+    number: str
+    name: str
+    colour: str
+    text_colour: str
+    type: RouteType
+    
+    key: str = field(init=False)
+    
+    _trips: list[Trip] | None = field(default=None, init=False)
+    _headsigns: list[str] | None = field(default=None, init=False)
+    _schedule: Schedule | None = field(default=None, init=False)
+    _sheets: list[Sheet] | None = field(default=None, init=False)
+    _indicator_points: list[Point] | None = field(default=None, init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='route', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        id = row[f'{prefix}_id']
-        number = row[f'{prefix}_number']
-        if not number:
-            number = id
-        name = row[f'{prefix}_name']
-        colour = row[f'{prefix}_colour'] or generate_colour(system, number)
-        text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
-        try:
-            type = RouteType(row[f'{prefix}_type'])
-        except ValueError:
-            type = RouteType.UNKNOWN
-        return cls(system, id, number, name, colour, text_colour, type)
+        context = row.context()
+        id = row['id']
+        number = row['number'] or id
+        name = row['name']
+        colour = row['colour'] or generate_colour(context, number)
+        text_colour = row['text_colour'] or 'FFFFFF'
+        type = RouteType.from_db(row['type'])
+        return cls(context, id, number, name, colour, text_colour, type)
     
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
-        if self.system.agency.prefer_route_id:
+        if self.context.prefer_route_id:
             return self.id
         return self.number
     
@@ -100,42 +114,64 @@ class Route:
         return self.name.replace('/', '/<wbr />')
     
     @property
-    def cache(self):
-        '''Returns the cache for this route'''
-        return self.system.get_route_cache(self)
-    
-    @property
     def trips(self):
         '''Returns the trips for this route'''
-        return self.cache.trips
+        if self._trips is None:
+            self._trips = repositories.trip.find_all(self.context, route=self)
+        return self._trips
+    
+    @property
+    def headsigns(self):
+        if self._headsigns is None:
+            headsigns = set()
+            for trip in self.trips:
+                headsigns.add(str(trip))
+                for headsign in trip.custom_headsigns:
+                    headsigns.add(headsign)
+            self._headsigns = sorted(headsigns)
+        return self._headsigns
     
     @property
     def schedule(self):
         '''Returns the schedule for this route'''
-        return self.cache.schedule
+        if self.sheets:
+            if self._schedule is None:
+                services = {t.service for t in self.trips}
+                date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
+                self._schedule = Schedule.combine(services, date_range)
+            return self._schedule
+        return None
     
     @property
     def sheets(self):
         '''Returns the sheets for this route'''
-        return self.cache.sheets
+        if self._sheets is None:
+            services = {t.service for t in self.trips}
+            self._sheets = self.context.system.copy_sheets(services)
+        return self._sheets
     
     @property
     def indicator_points(self):
         '''Returns the indicator points for this route'''
-        return self.cache.indicator_points
+        if self._indicator_points is None:
+            try:
+                sorted_trips = sorted(self.trips, key=lambda t: len(t.departures), reverse=True)
+                points = sorted_trips[0].find_points()
+                first_point = points[0]
+                last_point = points[-1]
+                distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+                if distance <= 0.05:
+                    count = min((len(points) // 500) + 1, 3)
+                else:
+                    count = min(int(distance * 8) + 1, 4)
+                size = len(points) // count
+                self._indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+            except IndexError:
+                self._indicator_points = []
+        return self._indicator_points
     
-    def __init__(self, system, id, number, name, colour, text_colour, type, **kwargs):
-        self.system = system
-        self.id = id
-        self.number = number
-        self.name = name
-        self.colour = colour
-        self.text_colour = text_colour
-        self.type = type
-        
-        self.key = helpers.key(number)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+    def __post_init__(self):
+        self.key = helpers.key(self.number)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -169,9 +205,9 @@ class Route:
         json = []
         for point in self.indicator_points:
             json.append({
-                'system_id': self.system.id,
-                'system_name': str(self.system),
-                'agency_id': self.system.agency.id,
+                'system_id': self.context.system_id,
+                'system_name': str(self.context.system),
+                'agency_id': self.context.agency_id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
@@ -180,26 +216,9 @@ class Route:
                 'lat': point.lat,
                 'lon': point.lon,
                 'url_id': self.url_id,
-                'headsigns': self.get_headsigns()
+                'headsigns': self.headsigns
             })
         return json
-    
-    def get_trips(self, service_group=None, date=None):
-        '''Returns all trips from this route'''
-        if service_group:
-            return sorted([t for t in self.trips if t.service in service_group])
-        if date:
-            return sorted([t for t in self.trips if date in t.service])
-        return sorted(self.trips)
-    
-    def get_headsigns(self, service_group=None, date=None):
-        '''Returns all headsigns from this route'''
-        headsigns = set()
-        for trip in self.get_trips(service_group, date):
-            headsigns.add(str(trip))
-            for headsign in trip.custom_headsigns:
-                headsigns.add(headsign)
-        return sorted(headsigns)
     
     def get_match(self, query):
         '''Returns a match for this route with the given query'''
@@ -219,7 +238,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_repository.find_all(self.system, route=self)
+        return repositories.departure.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
@@ -229,15 +248,15 @@ class Route:
         route_key = tuple([k for k in route.key if type(k) == int])
         return self_key and route_key and self_key == route_key
 
-def generate_colour(system, number):
-    '''Generate a random colour based on system ID and route number'''
-    seed(system.id)
+def generate_colour(context: Context, number):
+    '''Generate a random colour based on context and route number'''
+    seed(context.system_id)
     number_digits = ''.join([d for d in number if d.isdigit()])
     if len(number_digits) == 0:
         h = randint(1, 360) / 360.0
     else:
         h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-    seed(system.id + number)
+    seed(context.system_id + number)
     l = randint(30, 50) / 100.0
     s = randint(50, 100) / 100.0
     rgb = hls_to_rgb(h, l, s)
@@ -245,37 +264,3 @@ def generate_colour(system, number):
     g = int(rgb[1] * 255)
     b = int(rgb[2] * 255)
     return f'{r:02x}{g:02x}{b:02x}'
-
-class RouteCache:
-    '''A collection of calculated values for a single route'''
-    
-    __slots__ = (
-        'trips',
-        'schedule',
-        'sheets',
-        'indicator_points'
-    )
-    
-    def __init__(self, system, trips):
-        self.trips = trips
-        services = {t.service for t in trips}
-        self.sheets = system.copy_sheets(services)
-        if self.sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-            self.schedule = Schedule.combine(services, date_range)
-        else:
-            self.schedule = None
-        try:
-            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
-            points = sorted_trips[0].find_points()
-            first_point = points[0]
-            last_point = points[-1]
-            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-            if distance <= 0.05:
-                count = min((len(points) // 500) + 1, 3)
-            else:
-                count = min(int(distance * 8) + 1, 4)
-            size = len(points) // count
-            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
-        except IndexError:
-            self.indicator_points = []

@@ -9,13 +9,13 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'routes', route, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, 'routes', route, 'schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ get_url(context, 'routes', route, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'routes', route, 'schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
 <div class="page-container">
-    % if route.trips:
+    % if trips:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -23,7 +23,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % include('components/map', map_trips=route.trips, map_positions=positions)
+                    % include('components/map', map_trips=trips, map_positions=positions)
                     
                     <div class="info-box">
                         <div class="section">
@@ -34,12 +34,10 @@
                             <div class="value">{{ route.type }}</div>
                         </div>
                         <div class="column section">
-                            % headsigns = route.get_headsigns()
-                            % for headsign in headsigns:
+                            % for headsign in route.headsigns:
                                 <div>{{ headsign }}</div>
                             % end
                         </div>
-                        % variants = [r for r in route.system.get_routes() if route.is_variant(r)]
                         % if variants:
                             <div class="column gap-5 section">
                                 <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
@@ -47,7 +45,7 @@
                                     % for variant in variants:
                                         <div class="row">
                                             % include('components/route', route=variant)
-                                            <a href="{{ get_url(variant.system, 'routes', variant) }}">{{! variant.display_name }}</a>
+                                            <a href="{{ get_url(variant.context, 'routes', variant) }}">{{! variant.display_name }}</a>
                                         </div>
                                     % end
                                 </div>
@@ -118,7 +116,7 @@
                                     </td>
                                     <td class="non-mobile">
                                         % block = trip.block
-                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
@@ -140,12 +138,12 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if trips:
-                    % trip_positions = {p.trip.id:p for p in positions if p.trip and p.trip in trips}
-                    % directions = sorted({t.direction for t in trips})
+                % if today_trips:
+                    % trip_positions = {p.trip.id:p for p in positions if p.trip and p.trip in today_trips}
+                    % directions = sorted({t.direction for t in today_trips})
                     <div class="container inline">
                         % for direction in directions:
-                            % direction_trips = [t for t in trips if t.direction == direction]
+                            % direction_trips = [t for t in today_trips if t.direction == direction]
                             % if direction_trips:
                                 <div class="section">
                                     <div class="header" onclick="toggleSection(this)">
@@ -153,7 +151,7 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        % if not system or system.realtime_enabled:
+                                        % if context.realtime_enabled:
                                             <p>
                                                 <span>Buses with a</span>
                                                 <span class="scheduled">
@@ -171,7 +169,7 @@
                                                     <th class="non-mobile">Block</th>
                                                     <th>Trip</th>
                                                     <th class="desktop-only">First Stop</th>
-                                                    % if not system or system.realtime_enabled:
+                                                    % if context.realtime_enabled:
                                                         <th>Bus</th>
                                                         <th class="desktop-only">Model</th>
                                                     % end
@@ -192,7 +190,7 @@
                                                         </td>
                                                         <td class="non-mobile">
                                                             % block = trip.block
-                                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="column">
@@ -205,7 +203,7 @@
                                                         <td class="desktop-only">
                                                             % include('components/stop', stop=first_stop)
                                                         </td>
-                                                        % if not system or system.realtime_enabled:
+                                                        % if context.realtime_enabled:
                                                             % if trip.id in recorded_today:
                                                                 % bus = recorded_today[trip.id]
                                                                 <td>
@@ -228,8 +226,8 @@
                                                                 <td class="desktop-only">
                                                                     % include('components/order', order=bus.order)
                                                                 </td>
-                                                            % elif (trip.system.id, trip.block_id) in assignments and trip.end_time.is_later:
-                                                                % assignment = assignments[(trip.system.id, trip.block_id)]
+                                                            % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
+                                                                % assignment = assignments[(trip.context.system_id, trip.block_id)]
                                                                 % bus = assignment.bus
                                                                 <td>
                                                                     <div class="column">
@@ -262,9 +260,9 @@
                     </div>
                 % else:
                     <div class="placeholder">
-                        % if system.gtfs_loaded:
+                        % if context.gtfs_loaded:
                             <h3>There are no trips for this route today</h3>
-                            <p>You can check the <a href="{{ get_url(system, 'routes', route, 'schedule') }}">full schedule</a> for more information about when this route runs.</p>
+                            <p>You can check the <a href="{{ get_url(context, 'routes', route, 'schedule') }}">full schedule</a> for more information about when this route runs.</p>
                         % else:
                             <h3>Trips for this route are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>

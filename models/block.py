@@ -1,50 +1,33 @@
 
-from di import di
+from dataclasses import dataclass, field
 
+from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
-from repositories import DepartureRepository
+import repositories
 
+@dataclass(slots=True)
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'id',
-        'trips',
-        'schedule',
-        'sheets',
-        '_related_blocks'
-    )
+    context: Context
+    id: str
+    trips: list
+    
+    schedule: Schedule = field(init=False)
+    sheets: list = field(init=False)
     
     @property
     def url_id(self):
         '''The ID to use when making block URLs'''
         return self.id
     
-    @property
-    def related_blocks(self):
-        '''Returns all blocks that have the same start time, end time, and routes as this block'''
-        if self._related_blocks is None:
-            related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
-            self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
-        return self._related_blocks
-    
-    def __init__(self, system, id, trips, **kwargs):
-        self.system = system
-        self.id = id
-        self.trips = trips
-        
-        services = {t.service for t in trips}
+    def __post_init__(self):
+        services = {t.service for t in self.trips}
         self.schedule = Schedule.combine(services)
-        self.sheets = system.copy_sheets(services)
-        
-        self._related_blocks = None
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.sheets = self.context.system.copy_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -127,4 +110,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return self.departure_repository.find_all(self.system, block=self)
+        return repositories.departure.find_all(self.context, block=self)

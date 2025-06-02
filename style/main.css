@@ -564,10 +564,6 @@ table tr.table-button {
     padding: 3px 6px;
 }
 
-.adornment {
-    user-select: none;
-}
-
 .agency-logo {
     width: 24px;
     height: 24px;
@@ -756,6 +752,10 @@ table tr.table-button {
 
 .custom-headsigns svg {
     vertical-align: middle;
+}
+
+.decoration {
+    user-select: none;
 }
 
 .display-none {

@@ -12,7 +12,7 @@
     </div>
     <div class="column gap-10 stretch">
         <div class="tab-button-bar">
-            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+            <a href="{{ get_url(context, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
     </div>
@@ -158,7 +158,7 @@
         document.body.onload = function() {
             startLoading();
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(system, 'api', 'routes') }}", true);
+            request.open("GET", "{{ get_url(context, 'api', 'routes') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -185,12 +185,12 @@
     </script>
 % else:
     <div class="placeholder">
-        % if not system:
+        % if not context.system:
             <h3>Route information is unavailable</h3>
             <p>Please check again later!</p>
         % else:
-            <h3>{{ system }} route information is unavailable</h3>
-            % if system.gtfs_loaded:
+            <h3>{{ context }} route information is unavailable</h3>
+            % if context.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>

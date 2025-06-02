@@ -1,66 +1,59 @@
 
-from di import di
+from dataclasses import dataclass
 
 from models.bus import Bus
+from models.context import Context
+from models.route import Route
+from models.stop import Stop
 
-from repositories import AgencyRepository, RouteRepository, StopRepository, SystemRepository
+import repositories
 
+@dataclass(slots=True)
 class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
     
-    __slots__ = (
-        'type',
-        'value'
-    )
+    type: str
+    value: Bus | Route | Stop
     
     @classmethod
-    def parse(cls, string, **kwargs):
+    def parse(cls, string):
         '''Returns a favourite parsed from the given string, or None if parsing fails'''
         parts = string.split(':')
         type = parts[0]
         if type == 'vehicle':
-            agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-            agency = agency_repository.find(parts[1])
-            value = Bus.find(agency, parts[2])
+            context = Context.find(agency_id=parts[1])
+            value = Bus.find(context, parts[2])
         elif type == 'route':
-            system_repository = kwargs.get('system_repository') or di[SystemRepository]
-            route_repository = kwargs.get('route_repository') or di[RouteRepository]
-            system = system_repository.find(parts[1])
-            if system and system.agency.prefer_route_id:
-                value = route_repository.find(system, route_id=parts[2])
+            context = Context.find(system_id=parts[1])
+            if context.prefer_route_id:
+                value = repositories.route.find(context, route_id=parts[2])
             else:
-                value = route_repository.find(system, number=parts[2])
+                value = repositories.route.find(context, number=parts[2])
         elif type == 'stop':
-            system_repository = kwargs.get('system_repository') or di[SystemRepository]
-            stop_repository = kwargs.get('stop_repository') or di[StopRepository]
-            system = system_repository.find(parts[1])
-            if system and system.agency.prefer_stop_id:
-                value = stop_repository.find(system, stop_id=parts[2])
+            context = Context.find(system_id=parts[1])
+            if context.prefer_stop_id:
+                value = repositories.stop.find(context, stop_id=parts[2])
             else:
-                value = stop_repository.find(system, number=parts[2])
+                value = repositories.stop.find(context, number=parts[2])
         else:
             value = None
         if value:
             return cls(type, value)
         return None
     
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value
-    
     def __str__(self):
         if self.type == 'vehicle':
-            source = self.value.agency.id
-            number = str(self.value.number)
+            source = self.value.context.agency_id
+            number = self.value.number
         elif self.type == 'route':
-            source = self.value.system.id
-            if self.value.system.agency.prefer_route_id:
+            source = self.value.context.system_id
+            if self.value.context.prefer_route_id:
                 number = self.value.id
             else:
                 number = self.value.number
         elif self.type == 'stop':
-            source = self.value.system.id
-            if self.value.system.agency.prefer_stop_id:
+            source = self.value.context.system_id
+            if self.value.context.prefer_stop_id:
                 number = self.value.id
             else:
                 number = self.value.number
@@ -80,12 +73,11 @@ class Favourite:
             return self.value < other.value
         return self.type < other.type
 
+@dataclass(slots=True)
 class FavouriteSet:
     '''A set of favourites selected by a user'''
     
-    __slots__ = (
-        'favourites'
-    )
+    favourites: set[Favourite]
     
     @classmethod
     def parse(cls, string):
@@ -98,9 +90,6 @@ class FavouriteSet:
     def is_full(self):
         '''Checks if the set has the maximum number of favourites'''
         return len(self.favourites) >= 20
-    
-    def __init__(self, favourites):
-        self.favourites = favourites
     
     def __str__(self):
         return ','.join([str(f) for f in self.favourites])

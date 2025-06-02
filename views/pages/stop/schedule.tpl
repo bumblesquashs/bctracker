@@ -7,13 +7,13 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'stops', stop) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'stops', stop) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'stops', stop, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
 
-% if stop.find_departures():
+% if stop.departures:
     % sheets = stop.sheets
     <div class="page-container">
         <div class="sidebar container flex-1">
@@ -88,7 +88,7 @@
                                                         </td>
                                                         <td class="non-mobile">
                                                             % if block:
-                                                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                             % else:
                                                                 <div class="lighter-text">Unknown</div>
                                                             % end
@@ -127,7 +127,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        % if stop.system.gtfs_loaded:
+        % if stop.context.gtfs_loaded:
             <h3>There are currently no departures from this stop</h3>
             <p>There are a few reasons why that may be the case:</p>
             <ol>

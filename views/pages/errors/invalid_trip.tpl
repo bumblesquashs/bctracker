@@ -7,18 +7,17 @@
 
 <div class="placeholder">
     <h3>The trip you are looking for doesn't seem to exist!</h3>
-    % if system.gtfs_loaded:
+    % if context.gtfs_loaded:
         <p>There are a few reasons why that might be the case:</p>
         <ol>
             <li>It may be from an older sheet that is no longer active</li>
             <li>It may be the wrong ID - are you sure trip <b>{{ trip_id }}</b> is the one you want?</li>
-            % alt_trips = [s.get_trip(trip_id) for s in systems if s.get_trip(trip_id)]
             % if alt_trips:
                 <li>
                     It may be from a different system - the following systems have a trip with that ID
                     <ul>
                         % for trip in alt_trips:
-                            <li>{{ trip.system }}: <a href="{{ get_url(trip.system, 'trips', trip) }}">Trip {{ trip }}</a></li>
+                            <li>{{ trip.context }}: <a href="{{ get_url(trip.context, 'trips', trip) }}">Trip {{ trip }}</a></li>
                         % end
                     </ul>
                 </li>

@@ -1,15 +1,15 @@
 
-% from repositories import PositionRepository
+% import repositories
 
 % rebase('base')
 
 <div id="page-header">
     <h1>Welcome to ABTracker!</h1>
-    % if system:
-        % if system.agency.realtime_enabled:
-            <h2>{{ system }} Transit Schedules and Bus Tracking</h2>
+    % if context.system:
+        % if context.realtime_enabled:
+            <h2>{{ context }} Transit Schedules and Bus Tracking</h2>
         % else:
-            <h2>{{ system }} Transit Schedules</h2>
+            <h2>{{ context }} Transit Schedules</h2>
         % end
     % else:
         <h2>Alberta Transit Schedules and Bus Tracking</h2>
@@ -31,7 +31,7 @@
                             if (isNaN(value)) {
                                 alert("Please enter a valid bus number")
                             } else {
-                                window.location = "{{ get_url(system, 'bus') }}/" + value;
+                                window.location = "{{ get_url(context, 'bus') }}/" + value;
                             }
                         }
                     }
@@ -39,7 +39,7 @@
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system, 'routes') }}/" + value;
+                            window.location = "{{ get_url(context, 'routes') }}/" + value;
                         }
                     }
                     
@@ -47,9 +47,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(system, 'stops') }}?search=" + value;
+                                window.location = "{{ get_url(context, 'stops') }}?search=" + value;
                             } else {
-                                window.location = "{{ get_url(system, 'stops') }}/" + value;
+                                window.location = "{{ get_url(context, 'stops') }}/" + value;
                             }
                         }
                     }
@@ -57,13 +57,13 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system, 'blocks') }}/" + value;
+                            window.location = "{{ get_url(context, 'blocks') }}/" + value;
                         }
                     }
                 </script>
                 
-                % if system:
-                    % if system.realtime_enabled:
+                % if context.system:
+                    % if context.realtime_enabled:
                         <form onsubmit="busSearch()" action="javascript:void(0)">
                             <label for="bus_search">Bus Number:</label>
                             <div class="input-container">
@@ -144,7 +144,7 @@
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = di[PositionRepository].find(value.agency, value)
+                                                    % position = repositories.position.find(value)
                                                     <tr>
                                                         <td>
                                                             <div class="row">
@@ -182,11 +182,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.value.system for f in route_favourites}
-                                            % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.value.system == favourite_system]
+                                            % favourite_systems = {f.value.context.system for f in route_favourites}
+                                            % for system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in route_favourites if f.value.context.system == system]
                                                 <tr class="header">
-                                                    <td>{{ favourite_system }}</td>
+                                                    <td>{{ system }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in system_favourites:
@@ -195,7 +195,7 @@
                                                         <td>
                                                             <div class="row">
                                                                 % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.system, 'routes', value) }}">{{! value.display_name }}</a>
+                                                                <a href="{{ get_url(value.context, 'routes', value) }}">{{! value.display_name }}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -217,11 +217,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.value.system for f in stop_favourites}
-                                            % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in stop_favourites if f.value.system == favourite_system]
+                                            % favourite_systems = {f.value.context.system for f in stop_favourites}
+                                            % for system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == system]
                                                 <tr class="header">
-                                                    <td colspan="2">{{ favourite_system }}</td>
+                                                    <td colspan="2">{{ system }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in system_favourites:
@@ -262,9 +262,9 @@
                             <p>See all buses that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
-                            <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
-                            <a class="button" href="{{ get_url(system, 'history') }}">History</a>
+                            <a class="button" href="{{ get_url(context, 'realtime') }}">List</a>
+                            <a class="button" href="{{ get_url(context, 'map') }}">Map</a>
+                            <a class="button" href="{{ get_url(context, 'history') }}">History</a>
                         </div>
                     </div>
                     <div class="item">
@@ -274,9 +274,9 @@
                             <p>See departure times and routing details for routes, stops, blocks, and more</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                            <a class="button" href="{{ get_url(system, 'stops') }}">Stops</a>
-                            <a class="button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                            <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
+                            <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
+                            <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
                         </div>
                     </div>
                 </div>
@@ -344,7 +344,7 @@
                             </p>
                             <p>
                                 For now the website is going to be in <b>beta</b>, which means that some stuff could still break or get changed at any time.
-                                Please see the <a href="{{ get_url(system, 'about') }}#beta-testing">about page</a> for more info.
+                                Please see the <a href="{{ get_url(context, 'about') }}#beta-testing">about page</a> for more info.
                             </p>
                             <p>
                                 Enjoy!
