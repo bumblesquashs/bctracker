@@ -113,7 +113,9 @@ class RealtimeService:
         if not context.realtime_enabled:
             return True
         block_ids = repositories.trip.find_all_block_ids(context)
-        for position in repositories.position.find_all(context):
+        invalid_count = 0
+        positions = repositories.position.find_all(context)
+        for position in positions:
             trip_id = position.trip_id
             if not trip_id:
                 continue
@@ -122,7 +124,7 @@ class RealtimeService:
                 if len(trip_id_sections) == 3:
                     block_id = trip_id_sections[2]
                     if block_id not in block_ids:
-                        return False
+                        invalid_count += 1
                 else:
-                    return False
-        return True
+                    invalid_count += 1
+        return invalid_count < len(positions) / 4
