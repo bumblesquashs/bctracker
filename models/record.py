@@ -1,20 +1,11 @@
 
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from models.route import Route
-
 from dataclasses import dataclass, field
 
-from models.block import Block
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.row import Row
 from models.time import Time
-
-import repositories
 
 @dataclass(slots=True)
 class Record:
@@ -32,9 +23,6 @@ class Record:
     last_seen: Time
     
     warnings: list[str] = field(default_factory=list, init=False)
-    
-    _block: Block | None = field(default=None, init=False)
-    _routes: list[Route] | None = field(default=None, init=False)
     
     @classmethod
     def from_db(cls, row: Row):
@@ -64,27 +52,6 @@ class Record:
         if self.first_seen.is_unknown or self.last_seen.is_unknown:
             return None
         return (self.last_seen.get_minutes() - self.first_seen.get_minutes()) + 1
-    
-    @property
-    def block(self):
-        '''Returns the block associated with this record'''
-        if self._block is None:
-            trips = repositories.trip.find_all(self.context, block=self.block_id)
-            self._block = Block(self.context, self.block_id, trips)
-        return self._block
-    
-    @property
-    def is_available(self):
-        '''Checks if this record has an associated block'''
-        return self.block is not None
-    
-    @property
-    def routes(self):
-        if self.is_available:
-            if self._routes is None:
-                self._routes = repositories.route.find_all(self.context, number=self.route_numbers)
-            return self._routes
-        return self.route_numbers
     
     def __post_init__(self):
         total_minutes = self.total_minutes

@@ -36,6 +36,12 @@
                     </tr>
                 % end
                 % last_date = record.date
+                % is_available = record.block_id in block_ids
+                % if is_available:
+                    % record_routes = [r for r in routes if r.context == record.context and r.number in record.route_numbers]
+                % else:
+                    % record_routes = record.route_numbers
+                % end
                 <tr>
                     <td>
                         <div class="column">
@@ -61,19 +67,18 @@
                     % end
                     <td>
                         <div class="column">
-                            % if record.is_available:
-                                % block = record.block
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                            % if is_available:
+                                <a href="{{ get_url(record.context, 'blocks', record.block_id) }}">{{ record.block_id }}</a>
                             % else:
                                 <span>{{ record.block_id }}</span>
                             % end
                             <div class="non-desktop">
-                                % include('components/route_list', routes=record.routes)
+                                % include('components/route_list', routes=record_routes)
                             </div>
                         </div>
                     </td>
                     <td class="desktop-only">
-                        % include('components/route_list', routes=record.routes)
+                        % include('components/route_list', routes=record_routes)
                     </td>
                 </tr>
             % end
