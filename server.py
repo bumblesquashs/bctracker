@@ -498,6 +498,8 @@ class Server(Bottle):
             )
         position = repositories.position.find(bus)
         records = repositories.record.find_all(bus=bus, limit=20)
+        routes = repositories.route.find_all(context)
+        block_ids = repositories.trip.find_all_block_ids(context)
         return self.page(
             context=context,
             name='bus/overview',
@@ -506,6 +508,8 @@ class Server(Bottle):
             bus=bus,
             position=position,
             records=records,
+            routes=routes,
+            block_ids=block_ids,
             overview=overview,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites()
@@ -571,6 +575,8 @@ class Server(Bottle):
             records = []
         else:
             records = repositories.record.find_all(bus=bus, limit=items_per_page, page=page)
+        routes = repositories.route.find_all(context)
+        block_ids = repositories.trip.find_all_block_ids(context)
         transfers = repositories.transfer.find_all(bus=bus)
         tracked_systems = set()
         events = []
@@ -593,6 +599,8 @@ class Server(Bottle):
             title=f'Bus {bus}',
             bus=bus,
             records=records,
+            routes=routes,
+            block_ids=block_ids,
             overview=overview,
             tracked_systems=tracked_systems,
             events=events,
@@ -605,6 +613,8 @@ class Server(Bottle):
     
     def history_last_seen(self, context: Context):
         overviews = [o for o in repositories.overview.find_all(context=context, last_record_context=context) if o.last_record and o.bus.visible]
+        routes = repositories.route.find_all(context)
+        block_ids = repositories.trip.find_all_block_ids(context)
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -621,17 +631,23 @@ class Server(Bottle):
                 'days': days
             },
             overviews=sorted(overviews, key=lambda o: o.bus),
+            routes=routes,
+            block_ids=block_ids,
             days=days
         )
     
     def history_first_seen(self, context: Context):
         overviews = [o for o in repositories.overview.find_all(context=context, last_record_context=context) if o.first_record and o.bus.visible]
+        routes = repositories.route.find_all(context)
+        block_ids = repositories.trip.find_all_block_ids(context)
         return self.page(
             context=context,
             name='history/first_seen',
             title='Vehicle History',
             path=['history', 'first-seen'],
-            overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
+            overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True),
+            routes=routes,
+            block_ids=block_ids
         )
     
     def history_transfers(self, context: Context):
