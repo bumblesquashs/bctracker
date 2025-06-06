@@ -32,6 +32,9 @@ class RealtimeService:
         
         print(f'Updating realtime data for {context}')
         
+        trips = {t.id: t for t in repositories.trip.find_all(context)}
+        stops = {s.id: s for s in repositories.stop.find_all(context)}
+        
         if path.exists(data_path):
             if self.settings.enable_realtime_backups:
                 formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
@@ -59,7 +62,7 @@ class RealtimeService:
                 bus_number = str(vehicle_id)
             except:
                 bus_number = str(-(index + 1))
-            repositories.position.create(context, bus_number, vehicle)
+            repositories.position.create(context, bus_number, vehicle, trips, stops)
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
     
