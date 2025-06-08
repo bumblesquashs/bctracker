@@ -16,7 +16,7 @@ class PositionRepository:
     
     database: Database
     
-    def create(self, context: Context, bus, data, trips, stops):
+    def create(self, context: Context, bus, data, trips, stops) -> Position:
         '''Inserts a new position into the database'''
         bus_number = getattr(bus, 'number', bus)
         try:
@@ -71,7 +71,7 @@ class PositionRepository:
         except AttributeError:
             timestamp = None
         if trip and stop and sequence is not None and lat is not None and lon is not None:
-            adherence = Adherence.calculate(trip, stop, sequence, lat, lon, timestamp)
+            adherence = Adherence.calculate(trip, stop, sequence, lat, lon, timestamp, stops)
         else:
             adherence = None
         try:
@@ -98,9 +98,11 @@ class PositionRepository:
         }
         if adherence:
             values['adherence'] = adherence.value
+            values['layover'] = 1 if adherence.layover else 0
         if timestamp:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
+        return Position(context, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     def find(self, bus) -> Position | None:
         '''Returns the position of the given bus'''
@@ -119,6 +121,7 @@ class PositionRepository:
                 'position.bearing': 'bearing',
                 'position.speed': 'speed',
                 'position.adherence': 'adherence',
+                'position.layover': 'layover',
                 'position.occupancy': 'occupancy',
                 'position.timestamp': 'timestamp'
             },
@@ -132,7 +135,7 @@ class PositionRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context = Context(), trip=None, stop=None, block=None, route=None, has_location=None) -> list[Position]:
+    def find_all(self, context: Context, trip=None, stop=None, block=None, route=None, has_location=None) -> list[Position]:
         '''Returns all positions that match the given system, trip, stop, block, and route'''
         if isinstance(trip, list):
             trip_id = [getattr(t, 'id', t) for t in trip]
@@ -186,6 +189,7 @@ class PositionRepository:
                 'position.bearing': 'bearing',
                 'position.speed': 'speed',
                 'position.adherence': 'adherence',
+                'position.layover': 'layover',
                 'position.occupancy': 'occupancy',
                 'position.timestamp': 'timestamp'
             },

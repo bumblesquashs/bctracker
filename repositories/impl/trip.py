@@ -74,8 +74,20 @@ class TripRepository:
             initializer=Trip.from_db
         )
     
-    def find_all_block_ids(self, context: Context) -> list[str]:
-        return self.database.select(
+    def find_all_ids(self, context: Context) -> set[str]:
+        return set(self.database.select(
+            table='trip',
+            columns=[
+                'trip_id'
+            ],
+            filters={
+                'system_id': context.system_id
+            },
+            initializer=lambda r: r['trip_id']
+        ))
+    
+    def find_all_block_ids(self, context: Context) -> set[str]:
+        return set(self.database.select(
             table='trip',
             columns={
                 'block_id': 'block_id'
@@ -85,7 +97,7 @@ class TripRepository:
                 'system_id': context.system_id
             },
             initializer=lambda r: r['block_id']
-        )
+        ))
     
     def count(self) -> dict[str, int]:
         rows = self.database.select(

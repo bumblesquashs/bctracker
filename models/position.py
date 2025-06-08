@@ -58,11 +58,10 @@ class Position:
         bearing = row['bearing']
         speed = row['speed']
         adherence_value = row['adherence']
+        layover = row['layover'] == 1
         if adherence_value is None:
             adherence = None
         else:
-            trip = repositories.trip.find(context, trip_id)
-            layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)

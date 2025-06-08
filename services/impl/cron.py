@@ -77,16 +77,12 @@ class CronService:
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
                         services.gtfs.load(context, True)
-                    services.realtime.update(context)
+                    realtime_valid = services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
-                if system.gtfs_downloaded and services.realtime.validate(context):
+                    realtime_valid = True
+                if system.gtfs_downloaded and realtime_valid:
                     system.reload_backoff.reset()
                 else:
                     system.reload_backoff.increase_value()
-        if self.running:
-            try:
-                services.realtime.update_records()
-            except Exception as e:
-                print(f'Error updating records: {e}')
         self.updating_realtime = False

@@ -173,11 +173,3 @@ class Departure:
             json['colour'] = '666666'
             json['text_colour'] = 'FFFFFF'
         return json
-    
-    def find_previous(self):
-        '''Returns the previous departure for the trip'''
-        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence - 1)
-    
-    def find_next(self):
-        '''Returns the next departure for the trip'''
-        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence + 1)

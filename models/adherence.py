@@ -19,12 +19,11 @@ class Adherence:
     description: str = field(init=False)
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon, timestamp):
+    def calculate(cls, trip, stop, sequence, lat, lon, timestamp, stops):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = repositories.departure.find(trip.context, trip=trip, sequence=sequence)
+        (departure, previous_departure) = repositories.departure.find_with_previous(trip.context, trip, sequence)
         if not departure:
             return None
-        previous_departure = departure.find_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes(round_seconds=True)
             
@@ -34,7 +33,8 @@ class Adherence:
                 
                 # in the case where we know a previous stop, and its a long gap, do linear interpolation
                 if time_difference >= MINIMUM_MINUTES:
-                    expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
+                    previous_stop = stops.get(previous_departure.stop_id)
+                    expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_stop, stop, time_difference)
             if not timestamp:
                 timestamp = Timestamp.now(trip.context.timezone)
             value = expected_scheduled_mins - timestamp.time.get_minutes(round_seconds=True)

@@ -152,16 +152,13 @@ class Server(Bottle):
                     services.gtfs.load(context, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
                         services.gtfs.load(context, True)
-                    services.realtime.update(context)
+                    realtime_valid = services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
-                if not system.gtfs_downloaded or not services.realtime.validate(context):
+                    realtime_valid = True
+                if not system.gtfs_downloaded or not realtime_valid:
                     system.reload_backoff.increase_value()
         if self.running:
-            try:
-                services.realtime.update_records()
-            except Exception as e:
-                print(f'Error updating records: {e}')
             services.cron.start()
     
     def stop(self):
@@ -1499,21 +1496,19 @@ class Server(Bottle):
         repositories.position.delete_all()
         repositories.system.load()
         for system in repositories.system.find_all():
+            context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(system)
-                    if not services.gtfs.validate(system):
-                        services.gtfs.load(system, True)
-                    services.realtime.update(system)
+                    services.gtfs.load(context)
+                    if not services.gtfs.validate(context):
+                        services.gtfs.load(context, True)
+                    realtime_valid = services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {system}: {e}')
-                if not system.gtfs_downloaded or not services.realtime.validate(system):
+                    print(f'Error loading data for {context}: {e}')
+                    realtime_valid = True
+                if not system.gtfs_downloaded or not realtime_valid:
                     system.reload_backoff.increase_value()
         if self.running:
-            try:
-                services.realtime.update_records()
-            except Exception as e:
-                print(f'Error updating records: {e}')
             services.cron.start()
         return 'Success'
     
@@ -1534,29 +1529,29 @@ class Server(Bottle):
         system = repositories.system.find(reload_system_id)
         if not system:
             return 'Invalid system'
+        context = system.context
         try:
-            services.gtfs.load(system, True)
-            services.realtime.update(system)
-            services.realtime.update_records()
-            if not system.gtfs_downloaded or not services.realtime.validate(system):
+            services.gtfs.load(context, True)
+            realtime_valid = services.realtime.update(context)
+            if not system.gtfs_downloaded or not realtime_valid:
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading GTFS data for {system}: {e}')
+            print(f'Error loading GTFS data for {context}: {e}')
             return str(e)
     
     def api_admin_reload_realtime(self, context: Context, reload_system_id):
         system = repositories.system.find(reload_system_id)
         if not system:
             return 'Invalid system'
+        context = system.context
         try:
-            services.realtime.update(system)
-            services.realtime.update_records()
-            if not services.realtime.validate(system):
+            realtime_valid = services.realtime.update(context)
+            if not realtime_valid:
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading realtime data for {system}: {e}')
+            print(f'Error loading realtime data for {context}: {e}')
             return str(e)
     
     # =============================================================

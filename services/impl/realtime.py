@@ -10,8 +10,10 @@ import protobuf.data.gtfs_realtime_pb2 as protobuf
 from database import Database
 from settings import Settings
 
+from models.bus import Bus
 from models.context import Context
 from models.date import Date
+from models.position import Position
 from models.time import Time
 from models.timestamp import Timestamp
 
@@ -24,16 +26,19 @@ class RealtimeService:
     settings: Settings
     last_updated: Date | None = None
     
-    def update(self, context: Context):
+    def update(self, context: Context) -> bool:
         '''Downloads realtime data for the given context and stores it in the database'''
         if not context.realtime_enabled:
-            return
+            return True
         data_path = f'data/realtime/{context.system_id}.bin'
         
         print(f'Updating realtime data for {context}')
         
-        trips = {t.id: t for t in repositories.trip.find_all(context)}
-        stops = {s.id: s for s in repositories.stop.find_all(context)}
+        invalid_positions = 0
+        total_positions = 0
+        
+        date = Date.today(context.timezone)
+        time = Time.now(context.timezone)
         
         if path.exists(data_path):
             if self.settings.enable_realtime_backups:
@@ -49,79 +54,68 @@ class RealtimeService:
                     f.write(r.content)
             data.ParseFromString(r.content)
         repositories.position.delete_all(context)
-        for index, entity in enumerate(data.entity):
-            vehicle = entity.vehicle
-            try:
-                vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = context.vehicle_name_length
-                if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:]
-                bus_number = int(vehicle_id)
-            except:
-                bus_number = -(index + 1)
-            repositories.position.create(context, bus_number, vehicle, trips, stops)
+        if data.entity:
+            trips = {t.id: t for t in repositories.trip.find_all(context)}
+            stops = {s.id: s for s in repositories.stop.find_all(context)}
+            block_ids = repositories.trip.find_all_block_ids(context)
+            for index, entity in enumerate(data.entity):
+                vehicle = entity.vehicle
+                try:
+                    vehicle_id = vehicle.vehicle.id
+                    vehicle_name_length = context.vehicle_name_length
+                    if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
+                        vehicle_id = vehicle_id[-vehicle_name_length:]
+                    bus_number = int(vehicle_id)
+                except:
+                    bus_number = -(index + 1)
+                bus = Bus.find(context, bus_number)
+                position = repositories.position.create(context, bus, vehicle, trips, stops)
+                self.update_record(position, date, time, trips)
+                total_positions += 1
+                if position.trip_id and position.trip_id not in trips:
+                    trip_id_sections = position.trip_id.split(':')
+                    if len(trip_id_sections) == 3:
+                        block_id = trip_id_sections[2]
+                        if block_id not in block_ids:
+                            invalid_positions += 1
+                    else:
+                        invalid_positions += 1
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
-    
-    def update_records(self):
-        '''Updates records in the database based on the current positions in the database'''
-        for position in repositories.position.find_all():
-            try:
-                context = position.context
-                bus = position.bus
-                if bus.number < 0:
-                    continue
-                date = Date.today(context.timezone)
-                time = Time.now(context.timezone)
-                overview = repositories.overview.find(bus.number)
-                trip = position.trip
-                if trip:
-                    block = trip.block
-                    assignment = repositories.assignment.find(context, block)
-                    if not assignment or assignment.bus_number != bus.number:
-                        repositories.assignment.delete_all(context, block=block)
-                        repositories.assignment.delete_all(Context(), bus=bus)
-                        repositories.assignment.create(context, block, bus, date)
-                    if overview and overview.last_record:
-                        last_record = overview.last_record
-                        if last_record.date == date and last_record.block_id == block.id:
-                            repositories.record.update(last_record, time)
-                            trip_ids = repositories.record.find_trip_ids(last_record)
-                            if trip.id not in trip_ids:
-                                repositories.record.create_trip(last_record, trip)
-                            continue
-                    record_id = repositories.record.create(context, bus, date, block, time, trip)
-                else:
-                    record_id = None
-                if overview:
-                    repositories.overview.update(context, overview, date, record_id)
-                    if overview.last_seen_context != context:
-                        repositories.transfer.create(bus, date, overview.last_seen_context, context)
-                else:
-                    repositories.overview.create(context, bus, date, record_id)
-            except Exception as e:
-                print(f'Failed to update records: {e}')
         self.database.commit()
+        if total_positions == 0:
+            return True
+        return invalid_positions <= total_positions / 4
+    
+    def update_record(self, position: Position, date, time, trips):
+        bus = position.bus
+        if bus.number < 0:
+            return
+        overview = repositories.overview.find(bus.number)
+        if position.trip_id in trips:
+            assignment = repositories.assignment.find(position.context, position.block_id)
+            if not assignment or assignment.bus_number != bus.number:
+                repositories.assignment.delete_all(position.context, block=position.block_id)
+                repositories.assignment.delete_all(Context(), bus=bus)
+                repositories.assignment.create(position.context, position.block_id, bus, date)
+            if overview and overview.last_record:
+                last_record = overview.last_record
+                if last_record.date == date and last_record.block_id == position.block_id:
+                    repositories.record.update(last_record, time)
+                    recorded_trip_ids = repositories.record.find_trip_ids(last_record)
+                    if position.trip_id not in recorded_trip_ids:
+                        repositories.record.create_trip(last_record, position.trip_id)
+                    return
+            record_id = repositories.record.create(position.context, bus, date, position.block, time, position.trip_id)
+        else:
+            record_id = None
+        if overview:
+            repositories.overview.update(position.context, overview, date, record_id)
+            if overview.last_seen_context != position.context:
+                repositories.transfer.create(bus, date, overview.last_seen_context, position.context)
+        else:
+            repositories.overview.create(position.context, bus, date, record_id)
     
     def get_last_updated(self):
         '''Returns the timestamp that realtime data was last updated'''
         return self.last_updated
-    
-    def validate(self, context: Context):
-        '''Checks that the realtime data for the given context aligns with the current GTFS for that system'''
-        if not context.realtime_enabled:
-            return True
-        block_ids = repositories.trip.find_all_block_ids(context)
-        for position in repositories.position.find_all(context):
-            trip_id = position.trip_id
-            if not trip_id:
-                continue
-            if not position.trip:
-                trip_id_sections = trip_id.split(':')
-                if len(trip_id_sections) == 3:
-                    block_id = trip_id_sections[2]
-                    if block_id not in block_ids:
-                        return False
-                else:
-                    return False
-        return True

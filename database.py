@@ -63,6 +63,7 @@ SQL_SCRIPTS = [
             bearing REAL,
             speed INTEGER,
             adherence INTEGER,
+            layover INTEGER,
             occupancy TEXT,
             timestamp REAL,
             PRIMARY KEY (system_id, bus_number)
