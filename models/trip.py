@@ -1,30 +1,37 @@
 
+from dataclasses import dataclass, field
+from typing import Self
+
 from di import di
 
 from models.context import Context
+from models.departure import Departure
 from models.direction import Direction
+from models.sheet import Sheet
 from models.time import Time
 
 from repositories import DepartureRepository, PointRepository
 
+@dataclass(slots=True)
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    __slots__ = (
-        'departure_repository',
-        'point_repository',
-        'context',
-        'id',
-        'short_id',
-        'route_id',
-        'service_id',
-        'block_id',
-        'direction_id',
-        'shape_id',
-        'headsign',
-        'sheets',
-        '_related_trips'
-    )
+    context: Context
+    id: str
+    route_id: str
+    service_id: str
+    block_id: str
+    direction_id: int
+    shape_id: str
+    headsign: str
+    
+    short_id: str = field(init=False)
+    sheets: list[Sheet] = field(init=False)
+    
+    _related_trips: list[Self] | None = field(default=None, init=False)
+    
+    departure_repository: DepartureRepository = field(init=False)
+    point_repository: PointRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='trip'):
@@ -147,28 +154,17 @@ class Trip:
         '''Returns the custom headsigns for this trip'''
         return self.cache.custom_headsigns
     
-    def __init__(self, context: Context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign, **kwargs):
-        self.context = context
-        self.id = trip_id
-        self.route_id = route_id
-        self.service_id = service_id
-        self.block_id = block_id
-        self.direction_id = direction_id
-        self.shape_id = shape_id
-        self.headsign = headsign
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
-        
-        id_parts = trip_id.split(':')
+    def __post_init__(self, **kwargs):
+        id_parts = self.id.split(':')
         if len(id_parts) == 1:
-            self.short_id = trip_id
+            self.short_id = self.id
         else:
             self.short_id = id_parts[0]
         
-        self.sheets = context.system.copy_sheets([self.service])
+        self.sheets = self.context.system.copy_sheets([self.service])
         
-        self._related_trips = None
+        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
     
     def __str__(self):
         if self.context.prefix_headsigns and self.route:
@@ -219,33 +215,34 @@ class Trip:
             return False
         return True
 
+@dataclass(slots=True)
 class TripCache:
     '''A collection of calculated values for a single trip'''
     
-    __slots__ = (
-        'first_departure',
-        'last_departure',
-        'departure_count',
-        'direction',
-        'custom_headsigns'
-    )
+    first_departure: Departure | None
+    last_departure: Departure | None
+    departure_count: int
+    direction: Direction
+    custom_headsigns: list[str]
     
-    def __init__(self, departures):
+    @classmethod
+    def build(cls, departures):
         if departures:
-            self.first_departure = departures[0]
-            self.last_departure = departures[-1]
-            self.departure_count = len(departures)
-            self.direction = Direction.calculate(departures[0].stop, departures[-1].stop)
+            first_departure = departures[0]
+            last_departure = departures[-1]
+            departure_count = len(departures)
+            direction = Direction.calculate(departures[0].stop, departures[-1].stop)
             headsigns = [str(d) for d in departures if d.headsign]
             previous_headsign = None
-            self.custom_headsigns = []
+            custom_headsigns = []
             for headsign in headsigns:
                 if headsign != previous_headsign:
-                    self.custom_headsigns.append(headsign)
+                    custom_headsigns.append(headsign)
                 previous_headsign = headsign
         else:
-            self.first_departure = None
-            self.last_departure = None
-            self.departure_count = 0
-            self.direction = Direction.UNKNOWN
-            self.custom_headsigns = []
+            first_departure = None
+            last_departure = None
+            departure_count = 0
+            direction = Direction.UNKNOWN
+            custom_headsigns = []
+        return cls(first_departure, last_departure, departure_count, direction, custom_headsigns)

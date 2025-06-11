@@ -1,19 +1,27 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.order import Order
+
+from dataclasses import dataclass, field
+
 from di import di
 
 from models.context import Context
 
 from repositories import AdornmentRepository, OrderRepository
 
+@dataclass(slots=True)
 class Bus:
     '''A public transportation vehicle'''
     
-    __slots__ = (
-        'adornment_repository',
-        'context',
-        'number',
-        'order'
-    )
+    context: Context
+    number: int
+    order: Order
+    
+    adornment_repository: AdornmentRepository = field(init=False)
     
     @classmethod
     def find(cls, context: Context, number, **kwargs):
@@ -48,11 +56,7 @@ class Bus:
             return order.model
         return None
     
-    def __init__(self, context: Context, number, order, **kwargs):
-        self.context = context
-        self.number = number
-        self.order = order
-        
+    def __post_init__(self, **kwargs):
         self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
     
     def __str__(self):

@@ -1,32 +1,30 @@
 
+from dataclasses import dataclass
 from datetime import datetime
 import pytz
 
 from models.date import Date
 from models.time import Time
 
+from constants import DEFAULT_TIMEZONE
+
+@dataclass(slots=True)
 class Timestamp:
     
-    __slots__ = (
-        'value',
-        'timezone',
-        'accurate_seconds'
-    )
+    value: float
+    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
+    accurate_seconds: bool = True
     
     @classmethod
-    def now(cls, timezone=None, accurate_seconds=True):
+    def now(cls, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
         '''Returns the current timestamp'''
-        if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
         return cls.parse(datetime.now(timezone).timestamp(), timezone, accurate_seconds)
     
     @classmethod
-    def parse(cls, value, timezone=None, accurate_seconds=True):
+    def parse(cls, value, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
         '''Returns a timestamp with the given value'''
         if not value:
             return None
-        if not timezone:
-            timezone = pytz.timezone('America/Vancouver')
         return cls(value, timezone, accurate_seconds)
     
     @property
@@ -68,11 +66,6 @@ class Timestamp:
     def timezone_name(self):
         '''Returns the name of this timestamp's timezone'''
         return datetime.now(self.timezone).tzname()
-    
-    def __init__(self, value, timezone, accurate_seconds):
-        self.value = value
-        self.timezone = timezone
-        self.accurate_seconds = accurate_seconds
     
     def __str__(self):
         date = self.date

@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass
 from enum import IntEnum
 
 from models.context import Context
@@ -11,14 +12,13 @@ class ServiceExceptionType(IntEnum):
     INCLUDED = 1
     EXCLUDED = 2
 
+@dataclass(slots=True)
 class ServiceException:
     '''A date that is explicitly included or excluded from a service'''
     
-    __slots__ = (
-        'service_id',
-        'date',
-        'type'
-    )
+    service_id: str
+    date: Date
+    type: ServiceExceptionType
     
     @classmethod
     def from_csv(cls, row, context: Context):
@@ -28,25 +28,19 @@ class ServiceException:
         type = ServiceExceptionType(int(row['exception_type']))
         return cls(service_id, date, type)
     
-    def __init__(self, service_id, date, type):
-        self.service_id = service_id
-        self.date = date
-        self.type = type
-    
     def __hash__(self):
         return hash((self.service_id, self.date))
     
     def __eq__(self, other):
         return self.service_id == other.service_id and self.date == other.date
 
+@dataclass(slots=True)
 class Service:
     '''A set of dates when a transit service is operating'''
     
-    __slots__ = (
-        'context',
-        'id',
-        'schedule'
-    )
+    context: Context
+    id: int
+    schedule: Schedule
     
     @classmethod
     def from_csv(cls, row, context: Context, exceptions):
@@ -82,11 +76,6 @@ class Service:
         date_range = DateRange(min(dates), max(dates))
         schedule = Schedule(dates, date_range)
         return cls(context, id, schedule)
-    
-    def __init__(self, context: Context, id, schedule):
-        self.context = context
-        self.id = id
-        self.schedule = schedule
     
     def __hash__(self):
         return hash(self.id)
