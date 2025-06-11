@@ -1,14 +1,12 @@
 
 from dataclasses import dataclass
 
-from di import di
-
 from models.bus import Bus
 from models.context import Context
 from models.route import Route
 from models.stop import Stop
 
-from repositories import RouteRepository, StopRepository
+import repositories
 
 @dataclass(slots=True)
 class Favourite:
@@ -18,7 +16,7 @@ class Favourite:
     value: Bus | Route | Stop
     
     @classmethod
-    def parse(cls, string, **kwargs):
+    def parse(cls, string):
         '''Returns a favourite parsed from the given string, or None if parsing fails'''
         parts = string.split(':')
         type = parts[0]
@@ -26,19 +24,17 @@ class Favourite:
             context = Context.find(agency_id=parts[1])
             value = Bus.find(context, int(parts[2]))
         elif type == 'route':
-            route_repository = kwargs.get('route_repository') or di[RouteRepository]
             context = Context.find(system_id=parts[1])
             if context.prefer_route_id:
-                value = route_repository.find(context, route_id=parts[2])
+                value = repositories.route.find(context, route_id=parts[2])
             else:
-                value = route_repository.find(context, number=parts[2])
+                value = repositories.route.find(context, number=parts[2])
         elif type == 'stop':
-            stop_repository = kwargs.get('stop_repository') or di[StopRepository]
             context = Context.find(system_id=parts[1])
             if context.prefer_stop_id:
-                value = stop_repository.find(context, stop_id=parts[2])
+                value = repositories.stop.find(context, stop_id=parts[2])
             else:
-                value = stop_repository.find(context, number=parts[2])
+                value = repositories.stop.find(context, number=parts[2])
         else:
             value = None
         if value:

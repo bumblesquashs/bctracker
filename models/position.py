@@ -1,7 +1,5 @@
 
-from dataclasses import dataclass, field
-
-from di import di
+from dataclasses import dataclass
 
 from models.adherence import Adherence
 from models.bus import Bus
@@ -9,7 +7,7 @@ from models.context import Context
 from models.occupancy import Occupancy
 from models.timestamp import Timestamp
 
-from repositories import DepartureRepository
+import repositories
 
 @dataclass(slots=True)
 class Position:
@@ -29,8 +27,6 @@ class Position:
     adherence: Adherence | None
     occupancy: Occupancy | None
     timestamp: Timestamp
-    
-    departure_repository: DepartureRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='position'):
@@ -112,10 +108,7 @@ class Position:
     @property
     def departure(self):
         '''Returns the departure associated with this position'''
-        return self.departure_repository.find(self.context, self.trip_id, self.sequence)
-    
-    def __post_init__(self, **kwargs):
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        return repositories.departure.find(self.context, self.trip_id, self.sequence)
     
     def __eq__(self, other):
         return self.bus == other.bus
@@ -183,4 +176,4 @@ class Position:
         '''Returns the trip's upcoming departures'''
         if self.sequence is None or not self.trip:
             return []
-        return self.departure_repository.find_upcoming(self.context, self.trip, self.sequence)
+        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)

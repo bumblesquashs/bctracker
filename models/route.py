@@ -4,8 +4,6 @@ from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-from di import di
-
 from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
@@ -14,9 +12,8 @@ from models.schedule import Schedule
 from models.sheet import Sheet
 from models.trip import Trip
 
-from repositories import DepartureRepository
-
 import helpers
+import repositories
 
 @dataclass(slots=True)
 class Route:
@@ -30,8 +27,6 @@ class Route:
     text_colour: str
     
     key: str = field(init=False)
-    
-    departure_repository: DepartureRepository = field(init=False)
     
     @classmethod
     def from_db(cls, row, prefix='route'):
@@ -83,10 +78,8 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __post_init__(self, **kwargs):
+    def __post_init__(self):
         self.key = helpers.key(self.number)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -168,7 +161,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_repository.find_all(self.context, route=self)
+        return repositories.departure.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

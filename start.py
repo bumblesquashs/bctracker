@@ -3,17 +3,15 @@
 import signal
 from argparse import ArgumentParser
 
-from di import di
 from database import Database
 from settings import Settings
 from server import Server
 
-from repositories import *
-from repositories.file import *
-from repositories.sql import *
+import repositories
+import services
 
-from services import *
-from services.default import *
+from repositories.impl import *
+from services.impl import *
 
 if __name__ == '__main__':
     parser = ArgumentParser()
@@ -24,29 +22,29 @@ if __name__ == '__main__':
     database = Database()
     settings = Settings()
     
-    di[AdornmentRepository] = FileAdornmentRepository()
-    di[AgencyRepository] = FileAgencyRepository()
-    di[ModelRepository] = FileModelRepository()
-    di[OrderRepository] = FileOrderRepository()
-    di[RegionRepository] = FileRegionRepository()
-    di[SystemRepository] = FileSystemRepository()
-    di[ThemeRepository] = FileThemeRepository()
+    repositories.adornment = AdornmentRepository()
+    repositories.agency = AgencyRepository()
+    repositories.model = ModelRepository()
+    repositories.order = OrderRepository()
+    repositories.region = RegionRepository()
+    repositories.system = SystemRepository()
+    repositories.theme = ThemeRepository()
     
-    di[AssignmentRepository] = SQLAssignmentRepository(database)
-    di[DepartureRepository] = SQLDepartureRepository(database)
-    di[OverviewRepository] = SQLOverviewRepository(database)
-    di[PointRepository] = SQLPointRepository(database)
-    di[PositionRepository] = SQLPositionRepository(database)
-    di[RecordRepository] = SQLRecordRepository(database)
-    di[RouteRepository] = SQLRouteRepository(database)
-    di[StopRepository] = SQLStopRepository(database)
-    di[TransferRepository] = SQLTransferRepository(database)
-    di[TripRepository] = SQLTripRepository(database)
+    repositories.assignment = AssignmentRepository(database)
+    repositories.departure = DepartureRepository(database)
+    repositories.overview = OverviewRepository(database)
+    repositories.point = PointRepository(database)
+    repositories.position = PositionRepository(database)
+    repositories.record = RecordRepository(database)
+    repositories.route = RouteRepository(database)
+    repositories.stop = StopRepository(database)
+    repositories.transfer = TransferRepository(database)
+    repositories.trip = TripRepository(database)
     
-    di[BackupService] = DefaultBackupService(database, settings)
-    di[GTFSService] = DefaultGTFSService(database, settings)
-    di[RealtimeService] = DefaultRealtimeService(database, settings)
-    di[CronService] = DefaultCronService(database, settings)
+    services.backup = BackupService(database, settings)
+    services.gtfs = GTFSService(database, settings)
+    services.realtime = RealtimeService(database, settings)
+    services.cron = CronService(database, settings)
     
     server = Server(database, settings)
     

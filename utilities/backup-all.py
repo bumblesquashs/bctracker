@@ -9,9 +9,9 @@ from models.date import Date
 
 from database import Database
 from settings import Settings
-from services.default import DefaultBackupService
+from services.impl import BackupService
 
-backup_service = DefaultBackupService(
+backup_service = BackupService(
     database=Database(),
     settings=Settings()
 )

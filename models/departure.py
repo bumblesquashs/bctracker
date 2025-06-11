@@ -1,13 +1,11 @@
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-
-from di import di
 
 from models.context import Context
 from models.time import Time
 
-from repositories import DepartureRepository
+import repositories
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -68,8 +66,6 @@ class Departure:
     distance: float | None
     headsign: str | None
     
-    departure_repository: DepartureRepository = field(init=False)
-    
     @classmethod
     def from_db(cls, row, prefix='departure'):
         '''Returns a departure initialized from the given database row'''
@@ -115,9 +111,6 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
-    def __post_init__(self, **kwargs):
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-    
     def __str__(self):
         if self.headsign:
             if self.context.prefix_headsigns and self.trip.route:
@@ -160,8 +153,8 @@ class Departure:
     
     def find_previous(self):
         '''Returns the previous departure for the trip'''
-        return self.departure_repository.find(self.context, trip=self.trip, sequence=self.sequence - 1)
+        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence - 1)
     
     def find_next(self):
         '''Returns the next departure for the trip'''
-        return self.departure_repository.find(self.context, trip=self.trip, sequence=self.sequence + 1)
+        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence + 1)
