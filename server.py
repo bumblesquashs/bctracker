@@ -484,6 +484,10 @@ class Server(Bottle):
         records = repositories.record.find_all(bus=bus, limit=20)
         routes = repositories.route.find_all(context)
         block_ids = repositories.trip.find_all_block_ids(context)
+        if position and position.trip and position.sequence is not None:
+            upcoming_departures = repositories.departure.find_upcoming(context, position.trip_id, position.sequence)
+        else:
+            upcoming_departures = []
         return self.page(
             context=context,
             name='bus/overview',
@@ -494,6 +498,7 @@ class Server(Bottle):
             records=records,
             routes=routes,
             block_ids=block_ids,
+            upcoming_departures=upcoming_departures,
             overview=overview,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites()
@@ -933,12 +938,14 @@ class Server(Bottle):
                 block_id=block_id
             )
         block = Block(context, block_id, trips)
+        departures = repositories.departure.find_all(context, block=block_id)
         return self.page(
             context=context,
             name='block/map',
             title=f'Block {block.id}',
             full_map=True,
             block=block,
+            departures=departures,
             positions=repositories.position.find_all(context, block=block)
         )
     
@@ -1333,7 +1340,7 @@ class Server(Bottle):
         selection = random.choice(options)
         match selection:
             case 'bus':
-                overviews = system.get_overviews()
+                overviews = repositories.overview.find_all(last_seen_context=context)
                 if not overviews:
                     redirect(self.get_url(context))
                 overview = random.choice(overviews)

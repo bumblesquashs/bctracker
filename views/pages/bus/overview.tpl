@@ -262,7 +262,6 @@
     
     <div class="container flex-3">
         % if position:
-            % upcoming_departures = position.find_upcoming_departures()
             % if upcoming_departures:
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">

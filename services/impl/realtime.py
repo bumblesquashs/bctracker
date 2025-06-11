@@ -10,6 +10,7 @@ import protobuf.data.gtfs_realtime_pb2 as protobuf
 from database import Database
 from settings import Settings
 
+from models.block import Block
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
@@ -106,7 +107,9 @@ class RealtimeService:
                     if position.trip_id not in recorded_trip_ids:
                         repositories.record.create_trip(last_record, position.trip_id)
                     return
-            record_id = repositories.record.create(position.context, bus, date, position.block, time, position.trip_id)
+            block_trips = [t for t in trips.values() if t.block_id == position.block_id]
+            block = Block(position.context, position.block_id, block_trips)
+            record_id = repositories.record.create(position.context, bus, date, block, time, position.trip_id)
         else:
             record_id = None
         if overview:

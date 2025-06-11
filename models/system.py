@@ -97,14 +97,6 @@ class System:
     def __lt__(self, other):
         return str(self) < str(other)
     
-    def get_overviews(self):
-        '''Returns all overviews'''
-        return repositories.overview.find_all(last_seen_context=self.context)
-    
-    def get_positions(self):
-        '''Returns all positions'''
-        return repositories.position.find_all(self.context)
-    
     def get_service(self, service_id):
         '''Returns the service with the given ID'''
         if service_id in self.services:

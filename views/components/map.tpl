@@ -348,7 +348,7 @@
 % stop_departures = []
 % for departure in map_departures:
     % if departure.stop_id not in stop_ids:
-        % stop_ids.add(departure.stop.id)
+        % stop_ids.add(departure.stop_id)
         % stop_departures.append(departure)
     % end
 % end

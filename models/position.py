@@ -10,7 +10,6 @@ if TYPE_CHECKING:
 from dataclasses import dataclass, field
 
 from models.adherence import Adherence
-from models.block import Block
 from models.bus import Bus
 from models.context import Context
 from models.occupancy import Occupancy
@@ -38,8 +37,6 @@ class Position:
     occupancy: Occupancy | None
     timestamp: Timestamp
     
-    _block: Block | None = field(default=None, init=False)
-    _route: Route | None = field(default=None, init=False)
     _stop: Stop | None = field(default=None, init=False)
     _trip: Trip | None = field(default=None, init=False)
     
@@ -89,23 +86,6 @@ class Position:
                 self._stop = repositories.stop.find(self.context, stop_id=self.stop_id)
             return self._stop
         return None
-    
-    @property
-    def block(self):
-        '''Returns the block associated with this position'''
-        if self.block_id:
-            if self._block is None:
-                trips = repositories.trip.find_all(self.context, block=self.block_id)
-                self._block = Block(self.context, self.block_id, trips)
-            return self._block
-        return None
-    
-    @property
-    def route(self):
-        '''Returns the route associated with this position'''
-        if self._route is None:
-            self._route = repositories.route.find(self.context, route_id=self.route_id)
-        return self._route
     
     @property
     def colour(self):
@@ -189,9 +169,3 @@ class Position:
         if timestamp:
             data['timestamp'] = timestamp.value
         return data
-    
-    def find_upcoming_departures(self):
-        '''Returns the trip's upcoming departures'''
-        if self.sequence is None or not self.trip:
-            return []
-        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)

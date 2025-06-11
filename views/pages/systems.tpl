@@ -1,4 +1,6 @@
 
+% import repositories
+
 % rebase('base')
 
 <div id="page-header">
@@ -39,8 +41,8 @@
                     <td class="non-desktop">
                         <div class="column">
                             % if system.realtime_enabled and system.realtime_loaded:
-                                % positions = system.get_positions()
-                                % overviews = system.get_overviews()
+                                % positions = repositories.position.find_all(system.context)
+                                % overviews = repositories.overview.find_all(last_seen_context=system.context)
                                 <div class="row gap-5">
                                     <span class="bold">Online:</span>
                                     {{ len(positions) }}

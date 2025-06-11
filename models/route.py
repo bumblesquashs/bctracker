@@ -184,10 +184,6 @@ class Route:
                 value += len(query)
         return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
-    def find_departures(self):
-        '''Returns all departures for this route'''
-        return repositories.departure.find_all(self.context, route=self)
-    
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
         if self == route:

@@ -6,8 +6,6 @@ from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
-import repositories
-
 @dataclass(slots=True)
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
@@ -107,7 +105,3 @@ class Block:
         else:
             message = f'Routes {routes}'
         return Match(f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)
-    
-    def find_departures(self):
-        '''Returns all departures for this block'''
-        return repositories.departure.find_all(self.context, block=self)
