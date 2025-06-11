@@ -1,8 +1,34 @@
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import Self
 
 from models.context import Context
+from models.date import Date
 from models.schedule import Schedule
+from models.service import Service
+
+@dataclass(slots=True)
+class ServiceGroup:
+    '''A collection of services represented as a single schedule'''
+    
+    context: Context
+    schedule: Schedule
+    services: tuple
+    
+    def __str__(self):
+        return str(self.schedule)
+    
+    def __hash__(self):
+        return hash(self.schedule)
+    
+    def __eq__(self, other):
+        return self.schedule == other.schedule
+    
+    def __lt__(self, other):
+        return self.schedule < other.schedule
+    
+    def __contains__(self, service):
+        return service in self.services
 
 @dataclass(init=False, slots=True)
 class Sheet:
@@ -10,10 +36,10 @@ class Sheet:
     
     context: Context
     schedule: Schedule
-    services: list
-    service_groups: list
-    modifications: set
-    copies: dict
+    services: list[Service]
+    service_groups: list[ServiceGroup]
+    modifications: set[Date]
+    copies: dict[tuple, Self]
     
     @property
     def normal_service_groups(self):
@@ -95,26 +121,3 @@ class Sheet:
         if date in self.modifications:
             return 'modified-service'
         return self.schedule.get_date_status(date)
-
-@dataclass(slots=True)
-class ServiceGroup:
-    '''A collection of services represented as a single schedule'''
-    
-    context: Context
-    schedule: Schedule
-    services: tuple
-    
-    def __str__(self):
-        return str(self.schedule)
-    
-    def __hash__(self):
-        return hash(self.schedule)
-    
-    def __eq__(self, other):
-        return self.schedule == other.schedule
-    
-    def __lt__(self, other):
-        return self.schedule < other.schedule
-    
-    def __contains__(self, service):
-        return service in self.services
