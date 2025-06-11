@@ -20,7 +20,7 @@ class Bus:
     order: Order
     
     @classmethod
-    def find(cls, context: Context, number, **kwargs):
+    def find(cls, context: Context, number):
         '''Returns a bus for the given context with the given number'''
         order = repositories.order.find(context, number)
         return cls(context, number, order)
