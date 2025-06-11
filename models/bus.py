@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.order import Order
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from models.context import Context
 
