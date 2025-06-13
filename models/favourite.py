@@ -48,7 +48,10 @@ class Favourite:
     
     def __str__(self):
         if self.type == 'vehicle':
-            source = self.value.order.agency.id
+            if self.value.order:
+                source = self.value.order.agency.id
+            else:
+                source = 'bc-transit'
             number = str(self.value.number)
         elif self.type == 'route':
             source = self.value.system.id
