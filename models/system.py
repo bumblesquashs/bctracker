@@ -4,13 +4,10 @@ import pytz
 
 from models.agency import Agency
 from models.backoff import Backoff
-from models.block import Block
 from models.context import Context
 from models.date import Date
 from models.region import Region
 from models.schedule import Schedule
-
-import repositories
 
 from constants import DEFAULT_TIMEZONE
 
@@ -116,24 +113,3 @@ class System:
     def copy_sheets(self, services):
         copies = [s.copy(services) for s in self.get_sheets()]
         return [s for s in copies if s]
-    
-    def search_blocks(self, query):
-        '''Returns all blocks that match the given query'''
-        context = self.context
-        blocks = []
-        block_trips = {}
-        for trip in repositories.trip.find_all(context):
-            block_trips.setdefault(trip.block_id, []).append(trip)
-        for block_id, trips in block_trips.items():
-            blocks.append(Block(context, block_id, trips))
-        return [b.get_match(query) for b in blocks]
-    
-    def search_routes(self, query):
-        '''Returns all routes that match the given query'''
-        routes = repositories.route.find_all(self.context)
-        return [r.get_match(query) for r in routes]
-    
-    def search_stops(self, query):
-        '''Returns all stops that match the given query'''
-        stops = repositories.stop.find_all(self.context)
-        return [s.get_match(query) for s in stops]

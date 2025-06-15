@@ -12,7 +12,6 @@ from math import sqrt
 
 from models.context import Context
 from models.daterange import DateRange
-from models.match import Match
 from models.row import Row
 from models.schedule import Schedule
 
@@ -119,26 +118,6 @@ class Stop:
             'routes': [r.get_json() for r in self.routes],
             'url_id': self.url_id
         }
-    
-    def get_match(self, query):
-        '''Returns a match for this stop with the given query'''
-        query = query.lower()
-        number = self.number.lower()
-        name = self.name.lower()
-        value = 0
-        if query in number:
-            value += (len(query) / len(number)) * 100
-            if number.startswith(query):
-                value += len(query)
-        elif query in name:
-            value += (len(query) / len(name)) * 100
-            if name.startswith(query):
-                value += len(query)
-            if value > 20:
-                value -= 20
-            else:
-                value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''

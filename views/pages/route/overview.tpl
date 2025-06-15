@@ -111,8 +111,7 @@
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % block = trip.block
-                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                        <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
                                     </td>
                                     <td class="non-mobile">
                                         % include('components/trip')
@@ -185,8 +184,7 @@
                                                             % include('components/headsign')
                                                         </td>
                                                         <td class="non-mobile">
-                                                            % block = trip.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="column">

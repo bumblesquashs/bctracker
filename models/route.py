@@ -14,7 +14,6 @@ from colorsys import hls_to_rgb
 
 from models.context import Context
 from models.daterange import DateRange
-from models.match import Match
 from models.row import Row
 from models.schedule import Schedule
 
@@ -167,22 +166,6 @@ class Route:
                 'headsigns': self.headsigns
             })
         return json
-    
-    def get_match(self, query):
-        '''Returns a match for this route with the given query'''
-        query = query.lower()
-        number = self.number.lower()
-        name = str(self).lower()
-        value = 0
-        if query in number:
-            value += (len(query) / len(number)) * 100
-            if number.startswith(query):
-                value += len(query)
-        elif query in name:
-            value += (len(query) / len(name)) * 100
-            if name.startswith(query):
-                value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

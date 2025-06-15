@@ -2,7 +2,6 @@
 % from datetime import timedelta
 
 % trip = departure.trip
-% block = trip.block
 
 % show_divider = get('show_divider', False)
 % show_time_estimate = get('show_time_estimate', False)
@@ -47,11 +46,7 @@
         </div>
     </td>
     <td class="desktop-only">
-        % if block:
-            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-        % else:
-            <span class="lighter-text">Loading</span>
-        % end
+        <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
     </td>
     <td>
         <div class="column">

@@ -49,17 +49,12 @@
                         % end
                     </div>
                     <div class="section">
-                        % include('components/block_timeline', block=trip.block)
+                        % include('components/block_timeline')
                     </div>
                     <div class="row section">
-                        % block = trip.block
                         <div class="name">Block</div>
                         <div class="value">
-                            % if block:
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                            % else:
-                                <span class="lighter-text">Loading</span>
-                            % end
+                            <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
                         </div>
                     </div>
                     <div class="row section">
@@ -128,17 +123,12 @@
                         </thead>
                         <tbody>
                             % for related_trip in related_trips:
-                                % block = related_trip.block
                                 <tr>
                                     <td>
                                         % include('components/trip', trip=related_trip)
                                     </td>
                                     <td class="non-mobile">
-                                        % if block:
-                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                        % else:
-                                            <div class="lighter-text">Unknown</div>
-                                        % end
+                                        <a href="{{ get_url(related_trip.context, 'blocks', related_trip.block_id) }}">{{ related_trip.block_id }}</a>
                                     </td>
                                     <td>
                                         <div class="column">

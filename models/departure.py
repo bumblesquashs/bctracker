@@ -120,20 +120,6 @@ class Departure:
             self._trip = repositories.trip.find(self.context, self.trip_id)
         return self._trip
     
-    @property
-    def pickup_only(self):
-        '''Checks if this departure is pickup-only'''
-        if self.pickup_type.is_normal:
-            return self.trip and self == self.trip.first_departure
-        return False
-    
-    @property
-    def dropoff_only(self):
-        '''Checks if this departure is dropoff-only'''
-        if self.dropoff_type.is_normal:
-            return self.trip and self == self.trip.last_departure
-        return False
-    
     def __str__(self):
         if self.headsign:
             if self.context.prefix_headsigns and self.trip.route:
@@ -149,14 +135,12 @@ class Departure:
             return self.sequence < other.sequence
         else:
             if self.time == other.time:
-                if self.dropoff_only or other.pickup_only:
-                    return True
-                if self.pickup_only or other.dropoff_only:
-                    return False
                 if not self.trip or not other.trip:
                     return False
-                if not self.trip.route or not other.trip.route:
+                if not self.trip.route_id or not other.trip.route_id:
                     return False
+                if self.trip.route_id == other.trip.route_id:
+                    return self.sequence > other.sequence
                 return self.trip.route < other.trip.route
             return self.time < other.time
     

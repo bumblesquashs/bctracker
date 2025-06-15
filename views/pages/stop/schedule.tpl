@@ -67,7 +67,6 @@
                                                 % last_time = None
                                                 % for departure in departures:
                                                     % trip = departure.trip
-                                                    % block = trip.block
                                                     % if not last_time:
                                                         % last_time = departure.time
                                                     % end
@@ -87,11 +86,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="non-mobile">
-                                                            % if block:
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                            % else:
-                                                                <div class="lighter-text">Unknown</div>
-                                                            % end
+                                                            <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
                                                         </td>
                                                         <td>
                                                             <div class="column">

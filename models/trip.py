@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 
 from dataclasses import dataclass, field
 
-from models.block import Block
 from models.context import Context
 from models.departure import Departure
 from models.direction import Direction
@@ -34,7 +33,6 @@ class Trip:
     sheets: list = field(init=False)
     
     _departures: list[Departure] | None = field(default=None, init=False)
-    _block: Block | None = field(default=None, init=False)
     _route: Route | None = field(default=None, init=False)
     _direction: Direction | None = field(default=None, init=False)
     _custom_headsigns: list[str] | None = field(default=None, init=False)
@@ -68,14 +66,6 @@ class Trip:
         if self._route is None:
             self._route = repositories.route.find(self.context, route_id=self.route_id)
         return self._route
-    
-    @property
-    def block(self):
-        '''Returns the block associated with this trip'''
-        if self._block is None:
-            trips = repositories.trip.find_all(self.context, block=self.block_id)
-            self._block = Block(self.context, self.block_id, trips)
-        return self._block
     
     @property
     def service(self):

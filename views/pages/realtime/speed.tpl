@@ -69,7 +69,6 @@
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                     % if position.trip:
                         % trip = position.trip
-                        % block = trip.block
                         % stop = position.stop
                         <td>
                             <div class="column">
@@ -88,7 +87,7 @@
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                            <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')

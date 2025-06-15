@@ -15,6 +15,7 @@ from models.context import Context
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.match import Match
 from models.time import Time
 from models.timestamp import Timestamp
 
@@ -331,7 +332,7 @@ class Server(Bottle):
                 system = None
             if system:
                 agency = system.agency
-            else:                
+            else:
                 agency = repositories.agency.find('bc-transit')
             context = Context(agency, system)
             return callback(context=context, *args, **kwargs)
@@ -484,10 +485,23 @@ class Server(Bottle):
         records = repositories.record.find_all(bus=bus, limit=20)
         routes = repositories.route.find_all(context)
         block_ids = repositories.trip.find_all_block_ids(context)
-        if position and position.trip and position.sequence is not None:
+        if position and position.trip_id and position.sequence is not None:
             upcoming_departures = repositories.departure.find_upcoming(context, position.trip_id, position.sequence)
+            if upcoming_departures:
+                departure = upcoming_departures[0]
+            else:
+                departure = None
         else:
             upcoming_departures = []
+            departure = None
+        if position and position.block_id:
+            block_trips = repositories.trip.find_all(context, block=position.block_id)
+            block = Block(position.context, position.block_id, block_trips)
+        elif overview.last_record and overview.last_record.date.is_today:
+            block_trips = repositories.trip.find_all(context, block=overview.last_record.block_id)
+            block = Block(overview.last_record.context, overview.last_record.block_id, block_trips)
+        else:
+            block = None
         return self.page(
             context=context,
             name='bus/overview',
@@ -495,12 +509,14 @@ class Server(Bottle):
             include_maps=bool(position),
             bus=bus,
             position=position,
+            block=block,
             records=records,
             routes=routes,
             block_ids=block_ids,
             upcoming_departures=upcoming_departures,
+            departure=departure,
             overview=overview,
-            favourite=Favourite('vehicle', bus),
+            favourite=Favourite.from_value('vehicle', bus),
             favourites=self.get_favourites()
         )
     
@@ -522,7 +538,7 @@ class Server(Bottle):
             full_map=bool(position),
             bus=bus,
             position=position,
-            favourite=Favourite('vehicle', bus),
+            favourite=Favourite.from_value('vehicle', bus),
             favourites=self.get_favourites()
         )
     
@@ -575,7 +591,7 @@ class Server(Bottle):
             overview=overview,
             tracked_systems=tracked_systems,
             events=events,
-            favourite=Favourite('vehicle', bus),
+            favourite=Favourite.from_value('vehicle', bus),
             favourites=self.get_favourites(),
             page=page,
             items_per_page=items_per_page,
@@ -706,7 +722,7 @@ class Server(Bottle):
             recorded_today=repositories.record.find_recorded_today(context, trips),
             assignments=repositories.assignment.find_all(context, route=route),
             positions=repositories.position.find_all(context, route=route),
-            favourite=Favourite('route', route),
+            favourite=Favourite.from_value('route', route),
             favourites=self.get_favourites()
         )
     
@@ -742,7 +758,7 @@ class Server(Bottle):
             trips=trips,
             departures=departures,
             positions=repositories.position.find_all(context, route=route),
-            favourite=Favourite('route', route),
+            favourite=Favourite.from_value('route', route),
             favourites=self.get_favourites()
         )
     
@@ -775,7 +791,7 @@ class Server(Bottle):
             enable_refresh=False,
             route=route,
             trips=trips,
-            favourite=Favourite('route', route),
+            favourite=Favourite.from_value('route', route),
             favourites=self.get_favourites()
         )
     
@@ -810,7 +826,7 @@ class Server(Bottle):
             route=route,
             trips=trips,
             date=date,
-            favourite=Favourite('route', route),
+            favourite=Favourite.from_value('route', route),
             favourites=self.get_favourites()
         )
     
@@ -998,6 +1014,8 @@ class Server(Bottle):
                 trip_id=trip_id,
                 alt_trips=alt_trips
             )
+        block_trips = repositories.trip.find_all(context, block=trip.block_id)
+        block = Block(context, trip.block_id, block_trips)
         related_trips = [t for t in repositories.trip.find_all(context) if trip.is_related(t)]
         related_trips.sort(key=lambda t: t.service)
         return self.page(
@@ -1006,6 +1024,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             include_maps=True,
             trip=trip,
+            block=block,
             related_trips=related_trips,
             positions=repositories.position.find_all(context, trip=trip),
             assignment=repositories.assignment.find(context, trip.block_id)
@@ -1174,7 +1193,7 @@ class Server(Bottle):
             positions={p.trip.id: p for p in positions},
             nearby_stops=nearby_stops,
             alt_stops=alt_stops,
-            favourite=Favourite('stop', stop),
+            favourite=Favourite.from_value('stop', stop),
             favourites=self.get_favourites()
         )
     
@@ -1207,7 +1226,7 @@ class Server(Bottle):
             full_map=True,
             stop=stop,
             adjacent_departures=adjacent_departures,
-            favourite=Favourite('stop', stop),
+            favourite=Favourite.from_value('stop', stop),
             favourites=self.get_favourites()
         )
     
@@ -1238,7 +1257,7 @@ class Server(Bottle):
             title=str(stop),
             enable_refresh=False,
             stop=stop,
-            favourite=Favourite('stop', stop),
+            favourite=Favourite.from_value('stop', stop),
             favourites=self.get_favourites()
         )
     
@@ -1271,7 +1290,7 @@ class Server(Bottle):
             enable_refresh=False,
             stop=stop,
             date=date,
-            favourite=Favourite('stop', stop),
+            favourite=Favourite.from_value('stop', stop),
             favourites=self.get_favourites()
         )
     
@@ -1464,12 +1483,21 @@ class Server(Bottle):
                     bus_numbers = repositories.overview.find_bus_numbers(context)
                     matches += repositories.order.find_matches(context, query, bus_numbers)
             if context.system:
+                query = query.lower()
                 if include_blocks:
-                    matches += context.system.search_blocks(query)
+                    blocks = []
+                    block_trips = {}
+                    for trip in repositories.trip.find_all(context):
+                        block_trips.setdefault(trip.block_id, []).append(trip)
+                    for block_id, trips in block_trips.items():
+                        blocks.append(Block(context, block_id, trips))
+                    matches += [Match.block(b, query) for b in blocks]
                 if include_routes:
-                    matches += context.system.search_routes(query)
+                    routes = repositories.route.find_all(context)
+                    matches += [Match.route(r, query) for r in routes]
                 if include_stops:
-                    matches += context.system.search_stops(query)
+                    stops = repositories.stop.find_all(context)
+                    matches += [Match.stop(s, query) for s in stops]
         matches = sorted([m for m in matches if m.value > 0])
         min = page * count
         max = min + count

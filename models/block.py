@@ -2,7 +2,6 @@
 from dataclasses import dataclass, field
 
 from models.context import Context
-from models.match import Match
 from models.schedule import Schedule
 from models.time import Time
 
@@ -89,19 +88,3 @@ class Block:
         if self.get_end_time() != other.get_end_time():
             return False
         return True
-    
-    def get_match(self, query):
-        '''Returns a match for this block with the given query'''
-        query = query.lower()
-        id = self.id
-        value = 0
-        if query in id:
-            value += (len(query) / len(id)) * 100
-            if id.startswith(query):
-                value += len(query)
-        routes = self.get_routes_string()
-        if routes.count(',') == 0:
-            message = f'Route {routes}'
-        else:
-            message = f'Routes {routes}'
-        return Match(f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)

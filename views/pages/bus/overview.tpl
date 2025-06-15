@@ -77,17 +77,13 @@
                         <div class="section">
                             <h3>Not in service</h3>
                         </div>
-                        % last_record = overview.last_record
-                        % if last_record and last_record.date.is_today:
-                            % block = last_record.block
-                            % if block:
-                                % date = Date.today(block.context.timezone)
-                                % end_time = block.get_end_time(date=date)
-                                % if end_time and end_time.is_later:
-                                    <div class="section no-flex">
-                                        % include('components/block_timeline', date=date)
-                                    </div>
-                                % end
+                        % if block:
+                            % date = Date.today(block.context.timezone)
+                            % end_time = block.get_end_time(date=date)
+                            % if end_time and end_time.is_later:
+                                <div class="section no-flex">
+                                    % include('components/block_timeline', date=date)
+                                </div>
                             % end
                         % end
                         % if position.timestamp:
@@ -127,7 +123,6 @@
                 % else:
                     % trip = position.trip
                     % stop = position.stop
-                    % block = trip.block
                     % route = trip.route
                     
                     % include('components/map', map_position=position, map_trip=trip, map_departures=trip.departures, zoom_trips=False, zoom_departures=False)
@@ -136,7 +131,6 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/adherence', adherence=position.adherence, size='large')
-                                % departure = position.departure
                                 % if departure and departure.headsign:
                                     <h3>{{ departure }}</h3>
                                 % else:
@@ -191,7 +185,7 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                <a href="{{ get_url(trip.context, 'blocks', trip.block_id) }}">{{ trip.block_id }}</a>
                                 % date = Date.today(block.context.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)

@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
-from threading import Thread
 
 import csv
 import requests
@@ -12,7 +11,6 @@ import requests
 from database import Database
 from settings import Settings
 
-from models.block import Block
 from models.context import Context
 from models.date import Date
 from models.daterange import DateRange

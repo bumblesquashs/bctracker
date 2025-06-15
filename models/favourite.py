@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from models.bus import Bus
 from models.context import Context
@@ -13,7 +13,10 @@ class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
     
     type: str
-    value: Bus | Route | Stop
+    context: Context
+    value_id: str | int
+    
+    _value: Bus | Route | Stop | None = field(default=None, init=False)
     
     @classmethod
     def parse(cls, string):
@@ -22,48 +25,65 @@ class Favourite:
         type = parts[0]
         if type == 'vehicle':
             context = Context.find(agency_id=parts[1])
-            value = Bus.find(context, int(parts[2]))
+            value_id = int(parts[2])
         elif type == 'route':
             context = Context.find(system_id=parts[1])
-            if context.prefer_route_id:
-                value = repositories.route.find(context, route_id=parts[2])
-            else:
-                value = repositories.route.find(context, number=parts[2])
+            value_id = parts[2]
         elif type == 'stop':
             context = Context.find(system_id=parts[1])
-            if context.prefer_stop_id:
-                value = repositories.stop.find(context, stop_id=parts[2])
-            else:
-                value = repositories.stop.find(context, number=parts[2])
+            value_id = parts[2]
         else:
-            value = None
-        if value:
-            return cls(type, value)
-        return None
+            return None
+        return cls(type, context, value_id)
+    
+    @classmethod
+    def from_value(cls, type, value):
+        if type == 'vehicle':
+            value_id = value.number
+        elif type == 'route':
+            if value.context.prefer_route_id:
+                value_id = value.id
+            else:
+                value_id = value.number
+        elif type == 'stop':
+            if value.context.prefer_stop_id:
+                value_id = value.id
+            else:
+                value_id = value.number
+        favourite = cls(type, value.context, value_id)
+        favourite._value = value
+        return favourite
+    
+    @property
+    def value(self):
+        if self._value is None:
+            if self.type == 'vehicle':
+                self._value = Bus.find(self.context, self.value_id)
+            elif self.type == 'route':
+                if self.context.prefer_route_id:
+                    self._value = repositories.route.find(self.context, route_id=self.value_id)
+                else:
+                    self._value = repositories.route.find(self.context, number=self.value_id)
+            elif self.type == 'stop':
+                if self.context.prefer_stop_id:
+                    self._value = repositories.stop.find(self.context, stop_id=self.value_id)
+                else:
+                    self._value = repositories.stop.find(self.context, number=self.value_id)
+        return self._value
     
     def __str__(self):
         if self.type == 'vehicle':
-            source = self.value.context.agency_id
-            number = str(self.value.number)
+            source = self.context.agency_id
         elif self.type == 'route':
-            source = self.value.context.system_id
-            if self.value.context.prefer_route_id:
-                number = self.value.id
-            else:
-                number = self.value.number
+            source = self.context.system_id
         elif self.type == 'stop':
-            source = self.value.context.system_id
-            if self.value.context.prefer_stop_id:
-                number = self.value.id
-            else:
-                number = self.value.number
+            source = self.context.system_id
         else:
             source = ''
-            number = ''
-        return ':'.join([self.type, source, number])
+        return ':'.join([self.type, source, str(self.value_id)])
     
     def __hash__(self):
-        return hash((self.type, self.value))
+        return hash((self.type, self.context, self.value_id))
     
     def __eq__(self, other):
         return hash(self) == hash(other)
