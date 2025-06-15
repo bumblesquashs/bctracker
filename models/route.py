@@ -7,7 +7,10 @@ from colorsys import hls_to_rgb
 from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
+from models.point import Point
 from models.schedule import Schedule
+from models.sheet import Sheet
+from models.trip import Trip
 
 import helpers
 import repositories
@@ -189,10 +192,10 @@ def generate_colour(context: Context, number):
 class RouteCache:
     '''A collection of calculated values for a single route'''
     
-    trips: list
+    trips: list[Trip]
     schedule: Schedule | None
-    sheets: list
-    indicator_points: list
+    sheets: list[Sheet]
+    indicator_points: list[Point]
     
     @classmethod
     def build(cls, system, trips):

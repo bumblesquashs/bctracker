@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from models.adherence import Adherence
 from models.bus import Bus

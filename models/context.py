@@ -20,7 +20,7 @@ class Context:
     system: System | None
     
     @classmethod
-    def find(cls, agency_id=None, system_id=None, **kwargs):
+    def find(cls, agency_id=None, system_id=None):
         if agency_id:
             agency = repositories.agency.find(agency_id)
         else:
