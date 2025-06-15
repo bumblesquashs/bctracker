@@ -1,7 +1,5 @@
 
-% from repositories import SystemRepository
-
-% system_repository = di[SystemRepository]
+% import repositories
 
 % rebase('base')
 
@@ -49,7 +47,7 @@
                         </thead>
                         <tbody>
                             % for region in regions:
-                                % region_systems = [s for s in system_repository.find_all(enabled_only=False) if s.region == region]
+                                % region_systems = [s for s in repositories.system.find_all(enabled_only=False) if s.region == region]
                                 % if region_systems:
                                     <tr class="header">
                                         <td class="section" colspan="11">{{ region }}</td>

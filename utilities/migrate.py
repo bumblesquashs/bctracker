@@ -7,18 +7,14 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from database import Database
 from models.record import Record
-from repositories.agency import DefaultAgencyRepository
-from repositories.region import DefaultRegionRepository
-from repositories.system import DefaultSystemRepository
+import repositories
+from repositories.impl import AgencyRepository, RegionRepository, SystemRepository
 
-agency_repository = DefaultAgencyRepository()
-region_repository = DefaultRegionRepository()
-system_repository = DefaultSystemRepository(
-    agency_service=agency_repository,
-    region_service=region_repository
-)
+repositories.agency = AgencyRepository()
+repositories.region = RegionRepository()
+repositories.system = SystemRepository()
 
-system_repository.load()
+repositories.system.load()
 
 database = Database()
 database.connect(foreign_keys=False)
@@ -78,7 +74,7 @@ def find_numbered(row_number_column):
             'numbered_record.row_number': 1
         },
         custom_args=args)
-    return [Record.from_db(row, agency_repository=agency_repository, system_repository=system_repository) for row in rows]
+    return [Record.from_db(row) for row in rows]
 
 first_records = find_numbered('ROW_NUMBER() OVER(PARTITION BY record.bus_number ORDER BY record.date ASC, record.record_id ASC)')
 last_records = find_numbered('ROW_NUMBER() OVER(PARTITION BY record.bus_number ORDER BY record.date DESC, record.record_id DESC)')

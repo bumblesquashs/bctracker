@@ -6,7 +6,6 @@ from datetime import timedelta
 from random import Random
 import cherrypy as cp
 
-from di import di
 from database import Database
 from settings import Settings
 
@@ -18,8 +17,8 @@ from models.favourite import Favourite, FavouriteSet
 from models.time import Time
 from models.timestamp import Timestamp
 
-from repositories import *
-from services import *
+import repositories
+import services
 
 # Increase the version to force CSS reload
 VERSION = 54
@@ -31,51 +30,15 @@ class Server(Bottle):
     __slots__ = (
         'database',
         'settings',
-        'adornment_repository',
-        'agency_repository',
-        'assignment_repository',
-        'order_repository',
-        'overview_repository',
-        'point_repository',
-        'position_repository',
-        'record_repository',
-        'region_repository',
-        'route_repository',
-        'stop_repository',
-        'system_repository',
-        'theme_repository',
-        'transfer_repository',
-        'cron_service',
-        'gtfs_service',
-        'realtime_service',
         'running'
     )
     
-    def __init__(self, database: Database, settings: Settings, **kwargs):
+    def __init__(self, database: Database, settings: Settings):
         super().__init__()
         self.running = False
         
         self.database = database
         self.settings = settings
-        
-        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
-        self.assignment_repository = kwargs.get('assignment_repository') or di[AssignmentRepository]
-        self.agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-        self.order_repository = kwargs.get('order_repository') or di[OrderRepository]
-        self.overview_repository = kwargs.get('overview_repository') or di[OverviewRepository]
-        self.point_repository = kwargs.get('point_repository') or di[PointRepository]
-        self.position_repository = kwargs.get('position_repository') or di[PositionRepository]
-        self.record_repository = kwargs.get('record_repository') or di[RecordRepository]
-        self.region_repository = kwargs.get('region_repository') or di[RegionRepository]
-        self.route_repository = kwargs.get('route_repository') or di[RouteRepository]
-        self.stop_repository = kwargs.get('stop_repository') or di[StopRepository]
-        self.system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        self.theme_repository = kwargs.get('theme_repository') or di[ThemeRepository]
-        self.transfer_repository = kwargs.get('transfer_repository') or di[TransferRepository]
-        
-        self.cron_service = kwargs.get('cron_service') or di[CronService]
-        self.gtfs_service = kwargs.get('gtfs_service') or di[GTFSService]
-        self.realtime_service = kwargs.get('realtime_service') or di[RealtimeService]
         
         # Static files
         self.add('/style/<name:path>', append_slash=False, validate_system=False, callback=self.style)
@@ -168,12 +131,12 @@ class Server(Bottle):
         if args.updatedb:
             print('Forcing database refresh')
         
-        self.adornment_repository.load()
-        self.order_repository.load()
-        self.system_repository.load()
-        self.theme_repository.load()
+        repositories.adornment.load()
+        repositories.order.load()
+        repositories.system.load()
+        repositories.theme.load()
         
-        self.position_repository.delete_all()
+        repositories.position.delete_all()
         
         handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
         log = WSGILogger(self, [handler], ApacheFormatter())
@@ -181,30 +144,30 @@ class Server(Bottle):
         cp.tree.graft(log, '/')
         cp.server.start()
         
-        for system in self.system_repository.find_all():
+        for system in repositories.system.find_all():
             context = system.context
             if self.running:
                 try:
-                    self.gtfs_service.load(context, args.reload, args.updatedb)
-                    if not self.gtfs_service.validate(context):
-                        self.gtfs_service.load(context, True)
-                    self.gtfs_service.update_cache(context)
-                    self.realtime_service.update(context)
+                    services.gtfs.load(context, args.reload, args.updatedb)
+                    if not services.gtfs.validate(context):
+                        services.gtfs.load(context, True)
+                    services.gtfs.update_cache(context)
+                    services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
-                if not system.gtfs_downloaded or not self.realtime_service.validate(context):
+                if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
-                self.realtime_service.update_records()
+                services.realtime.update_records()
             except Exception as e:
                 print(f'Error updating records: {e}')
-            self.cron_service.start()
+            services.cron.start()
     
     def stop(self):
         '''Terminates the server'''
         self.running = False
-        self.cron_service.stop()
+        services.cron.stop()
         self.database.disconnect()
         if cp.server.running:
             cp.server.stop()
@@ -246,23 +209,22 @@ class Server(Bottle):
             now = Time.now(context.timezone, False)
             timestamp = Timestamp.now(context.timezone)
         else:
-            last_updated = self.realtime_service.get_last_updated()
+            last_updated = services.realtime.get_last_updated()
             today = Date.today()
             now = Time.now()
             timestamp = Timestamp.now()
         theme_id = self.query_cookie('theme')
-        theme = self.theme_repository.find(theme_id)
+        theme = repositories.theme.find(theme_id)
         if not theme:
             if today.month == 10 and today.day == 31:
-                theme = self.theme_repository.find('halloween')
+                theme = repositories.theme.find('halloween')
             elif today.month == 12 and today.day == 25:
-                theme = self.theme_repository.find('christmas')
+                theme = repositories.theme.find('christmas')
             else:
-                theme = self.theme_repository.find('bc-transit')
+                theme = repositories.theme.find('bc-transit')
         theme_variant = self.query_cookie('theme_variant')
         high_contrast = self.query_cookie('high_contrast') == 'enabled'
         return template(f'pages/{name}',
-            di=di,
             settings=self.settings,
             version=VERSION,
             title=title,
@@ -272,9 +234,9 @@ class Server(Bottle):
             enable_refresh=enable_refresh,
             include_maps=include_maps or full_map,
             full_map=full_map,
-            regions=self.region_repository.find_all(),
-            systems=self.system_repository.find_all(),
-            agencies=self.agency_repository.find_all(),
+            regions=repositories.region.find_all(),
+            systems=repositories.system.find_all(),
+            agencies=repositories.agency.find_all(),
             is_admin=is_admin,
             get_url=self.get_url,
             last_updated=last_updated,
@@ -364,7 +326,7 @@ class Server(Bottle):
                 raise HTTPError(403)
             if system_key in kwargs:
                 system_id = kwargs[system_key]
-                system = self.system_repository.find(system_id)
+                system = repositories.system.find(system_id)
                 if validate_system and not system:
                     raise HTTPError(404)
                 del kwargs[system_key]
@@ -373,7 +335,7 @@ class Server(Bottle):
             if system:
                 agency = system.agency
             else:                
-                agency = self.agency_repository.find('bc-transit')
+                agency = repositories.agency.find('bc-transit')
             context = Context(agency, system)
             return callback(context=context, *args, **kwargs)
         self.route(paths, method, callback=endpoint)
@@ -417,12 +379,12 @@ class Server(Bottle):
         )
     
     def map(self, context: Context):
-        positions = self.position_repository.find_all(context, has_location=True)
+        positions = repositories.position.find_all(context, has_location=True)
         auto_refresh = self.query_cookie('auto_refresh', 'false') != 'false'
         show_route_lines = self.query_cookie('show_route_lines', 'false') != 'false'
         show_stops = self.query_cookie('show_stops', 'true') != 'false'
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
-        stop_area = self.stop_repository.find_area(context)
+        stop_area = repositories.stop.find_area(context)
         return self.page(
             context=context,
             name='map',
@@ -438,7 +400,7 @@ class Server(Bottle):
         )
     
     def realtime_all(self, context: Context):
-        positions = self.position_repository.find_all(context)
+        positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -452,7 +414,7 @@ class Server(Bottle):
         )
     
     def realtime_routes(self, context: Context):
-        positions = self.position_repository.find_all(context)
+        positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -466,7 +428,7 @@ class Server(Bottle):
         )
     
     def realtime_models(self, context: Context):
-        positions = self.position_repository.find_all(context)
+        positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -481,7 +443,7 @@ class Server(Bottle):
     
     def realtime_speed(self, context: Context):
         self.set_cookie('speed', '1994')
-        positions = self.position_repository.find_all(context)
+        positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
@@ -495,8 +457,8 @@ class Server(Bottle):
         )
     
     def fleet(self, context: Context):
-        orders = self.order_repository.find_all(context)
-        overviews = self.overview_repository.find_all()
+        orders = repositories.order.find_all(context)
+        overviews = repositories.overview.find_all()
         return self.page(
             context=context,
             name='fleet',
@@ -508,7 +470,7 @@ class Server(Bottle):
     
     def bus_overview(self, context: Context, bus_number):
         bus = Bus.find(context, bus_number)
-        overview = self.overview_repository.find(bus)
+        overview = repositories.overview.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
@@ -516,8 +478,8 @@ class Server(Bottle):
                 title='Unknown Bus',
                 bus_number=bus_number
             )
-        position = self.position_repository.find(bus)
-        records = self.record_repository.find_all(bus=bus, limit=20)
+        position = repositories.position.find(bus)
+        records = repositories.record.find_all(bus=bus, limit=20)
         return self.page(
             context=context,
             name='bus/overview',
@@ -533,7 +495,7 @@ class Server(Bottle):
     
     def bus_map(self, context: Context, bus_number):
         bus = Bus.find(context, bus_number)
-        overview = self.overview_repository.find(bus)
+        overview = repositories.overview.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
@@ -541,7 +503,7 @@ class Server(Bottle):
                 title='Unknown Bus',
                 bus_number=bus_number
             )
-        position = self.position_repository.find(bus)
+        position = repositories.position.find(bus)
         return self.page(
             context=context,
             name='bus/map',
@@ -555,7 +517,7 @@ class Server(Bottle):
     
     def bus_history(self, context: Context, bus_number):
         bus = Bus.find(context, bus_number)
-        overview = self.overview_repository.find(bus)
+        overview = repositories.overview.find(bus)
         if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
@@ -568,12 +530,12 @@ class Server(Bottle):
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = self.record_repository.count(bus=bus)
+        total_items = repositories.record.count(bus=bus)
         if page < 1:
             records = []
         else:
-            records = self.record_repository.find_all(bus=bus, limit=items_per_page, page=page)
-        transfers = self.transfer_repository.find_all(bus=bus)
+            records = repositories.record.find_all(bus=bus, limit=items_per_page, page=page)
+        transfers = repositories.transfer.find_all(bus=bus)
         tracked_systems = set()
         events = []
         if overview:
@@ -606,7 +568,7 @@ class Server(Bottle):
         )
     
     def history_last_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context=context) if o.last_record and o.bus.visible]
+        overviews = [o for o in repositories.overview.find_all(context=context) if o.last_record and o.bus.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -627,7 +589,7 @@ class Server(Bottle):
         )
     
     def history_first_seen(self, context: Context):
-        overviews = [o for o in self.overview_repository.find_all(context=context) if o.first_record and o.bus.visible]
+        overviews = [o for o in repositories.overview.find_all(context=context) if o.first_record and o.bus.visible]
         return self.page(
             context=context,
             name='history/first_seen',
@@ -639,11 +601,11 @@ class Server(Bottle):
     def history_transfers(self, context: Context):
         filter = request.query.get('filter')
         if filter == 'from':
-            transfers = self.transfer_repository.find_all(old_context=context)
+            transfers = repositories.transfer.find_all(old_context=context)
         elif filter == 'to':
-            transfers = self.transfer_repository.find_all(new_context=context)
+            transfers = repositories.transfer.find_all(new_context=context)
         else:
-            transfers = self.transfer_repository.find_all(old_context=context,new_context=context)
+            transfers = repositories.transfer.find_all(old_context=context,new_context=context)
         return self.page(
             context=context,
             name='history/transfers',
@@ -663,7 +625,7 @@ class Server(Bottle):
         )
     
     def routes_map(self, context: Context):
-        routes = self.route_repository.find_all(context)
+        routes = repositories.route.find_all(context)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             context=context,
@@ -703,9 +665,9 @@ class Server(Bottle):
             include_maps=len(route.trips) > 0,
             route=route,
             trips=trips,
-            recorded_today=self.record_repository.find_recorded_today(context, trips),
-            assignments=self.assignment_repository.find_all(context, route=route),
-            positions=self.position_repository.find_all(context, route=route),
+            recorded_today=repositories.record.find_recorded_today(context, trips),
+            assignments=repositories.assignment.find_all(context, route=route),
+            positions=repositories.position.find_all(context, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -735,7 +697,7 @@ class Server(Bottle):
             title=str(route),
             full_map=len(route.trips) > 0,
             route=route,
-            positions=self.position_repository.find_all(context, route=route),
+            positions=repositories.position.find_all(context, route=route),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -802,7 +764,7 @@ class Server(Bottle):
     
     def blocks_overview(self, context: Context):
         if context.system and context.realtime_enabled:
-            recorded_buses = self.record_repository.find_recorded_today_by_block(context)
+            recorded_buses = repositories.record.find_recorded_today_by_block(context)
         else:
             recorded_buses = {}
         return self.page(
@@ -855,8 +817,8 @@ class Server(Bottle):
             title=f'Block {block.id}',
             include_maps=True,
             block=block,
-            positions=self.position_repository.find_all(context, block=block),
-            assignment=self.assignment_repository.find(context, block)
+            positions=repositories.position.find_all(context, block=block),
+            assignment=repositories.assignment.find(context, block)
         )
     
     def block_map(self, context: Context, block_id):
@@ -881,7 +843,7 @@ class Server(Bottle):
             title=f'Block {block.id}',
             full_map=True,
             block=block,
-            positions=self.position_repository.find_all(context, block=block)
+            positions=repositories.position.find_all(context, block=block)
         )
     
     def block_history(self, context: Context, block_id):
@@ -900,7 +862,7 @@ class Server(Bottle):
                 title='Unknown Block',
                 block_id=block_id
             )
-        records = self.record_repository.find_all(context, block=block)
+        records = repositories.record.find_all(context, block=block)
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -936,8 +898,8 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             include_maps=True,
             trip=trip,
-            positions=self.position_repository.find_all(context, trip=trip),
-            assignment=self.assignment_repository.find(context, trip.block_id)
+            positions=repositories.position.find_all(context, trip=trip),
+            assignment=repositories.assignment.find(context, trip.block_id)
         )
     
     def trip_map(self, context: Context, trip_id):
@@ -962,7 +924,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             full_map=True,
             trip=trip,
-            positions=self.position_repository.find_all(context, trip=trip)
+            positions=repositories.position.find_all(context, trip=trip)
         )
     
     def trip_history(self, context: Context, trip_id):
@@ -981,7 +943,7 @@ class Server(Bottle):
                 title='Unknown Trip',
                 trip_id=trip_id
             )
-        records = self.record_repository.find_all(context, trip=trip)
+        records = repositories.record.find_all(context, trip=trip)
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -1076,7 +1038,7 @@ class Server(Bottle):
             )
         departures = stop.find_departures(date=Date.today(context.timezone))
         trips = [d.trip for d in departures]
-        positions = self.position_repository.find_all(context, trip=trips)
+        positions = repositories.position.find_all(context, trip=trips)
         return self.page(
             context=context,
             name='stop/overview',
@@ -1084,8 +1046,8 @@ class Server(Bottle):
             include_maps=True,
             stop=stop,
             departures=departures,
-            recorded_today=self.record_repository.find_recorded_today(context, trips),
-            assignments=self.assignment_repository.find_all(context, stop=stop),
+            recorded_today=repositories.record.find_recorded_today(context, trips),
+            assignments=repositories.assignment.find_all(context, stop=stop),
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
@@ -1202,7 +1164,7 @@ class Server(Bottle):
         redirect(self.get_url(context, 'personalize'))
     
     def personalize(self, context: Context):
-        themes = self.theme_repository.find_all()
+        themes = repositories.theme.find_all()
         return self.page(
             context=context,
             name='personalize',
@@ -1223,7 +1185,7 @@ class Server(Bottle):
     
     def random(self, context: Context):
         self.set_cookie('random', 'kumquat')
-        systems = list(self.system_repository.find_all())
+        systems = list(repositories.system.find_all())
         system = random.choice(systems)
         context = system.context
         options = ['route', 'stop', 'block', 'trip']
@@ -1300,13 +1262,13 @@ class Server(Bottle):
         if context.system:
             last_updated = context.system.last_updated
         else:
-            last_updated = self.realtime_service.get_last_updated()
+            last_updated = services.realtime.get_last_updated()
         if last_updated:
             time_format = request.get_cookie('time_format')
             last_updated_text = last_updated.format_web(time_format)
         else:
             last_updated_text = None
-        positions = sorted(self.position_repository.find_all(context, has_location=True), key=lambda p: p.lat)
+        positions = sorted(repositories.position.find_all(context, has_location=True), key=lambda p: p.lat)
         return {
             'positions': [p.get_json() for p in positions],
             'last_updated': last_updated_text
@@ -1314,20 +1276,20 @@ class Server(Bottle):
     
     def api_shape(self, context: Context, shape_id):
         return {
-            'points': [p.get_json() for p in self.point_repository.find_all(context, shape_id)]
+            'points': [p.get_json() for p in repositories.point.find_all(context, shape_id)]
         }
     
     def api_stops(self, context: Context):
         lat = float(request.query['lat'])
         lon = float(request.query['lon'])
         size = float(request.query.get('size', 0.01))
-        stops = self.stop_repository.find_all(context, lat=lat, lon=lon, size=size)
+        stops = repositories.stop.find_all(context, lat=lat, lon=lon, size=size)
         return {
             'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
     
     def api_routes(self, context: Context):
-        routes = self.route_repository.find_all(context)
+        routes = repositories.route.find_all(context)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
         shape_ids = set()
         shape_trips = []
@@ -1353,8 +1315,8 @@ class Server(Bottle):
         if query != '':
             if query.isnumeric() and context.realtime_enabled:
                 if include_buses:
-                    bus_numbers = self.overview_repository.find_bus_numbers(context)
-                    matches += self.order_repository.find_matches(context, query, bus_numbers)
+                    bus_numbers = repositories.overview.find_bus_numbers(context)
+                    matches += repositories.order.find_matches(context, query, bus_numbers)
             if context.system:
                 if include_blocks:
                     matches += context.system.search_blocks(query)
@@ -1383,45 +1345,45 @@ class Server(Bottle):
         }
     
     def api_admin_reload_adornments(self, context: Context):
-        self.adornment_repository.load()
+        repositories.adornment.load()
         return 'Success'
     
     def api_admin_reload_orders(self, context: Context):
-        self.order_repository.load()
+        repositories.order.load()
         return 'Success'
     
     def api_admin_reload_systems(self, context: Context):
-        self.cron_service.stop()
-        self.position_repository.delete_all()
-        self.system_repository.load()
-        for system in self.system_repository.find_all():
+        services.cron.stop()
+        repositories.position.delete_all()
+        repositories.system.load()
+        for system in repositories.system.find_all():
             context = system.context
             if self.running:
                 try:
-                    self.gtfs_service.load(context)
-                    if not self.gtfs_service.validate(context):
-                        self.gtfs_service.load(context, True)
-                    self.gtfs_service.update_cache(context)
-                    self.realtime_service.update(context)
+                    services.gtfs.load(context)
+                    if not services.gtfs.validate(context):
+                        services.gtfs.load(context, True)
+                    services.gtfs.update_cache(context)
+                    services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
-                if not system.gtfs_downloaded or not self.realtime_service.validate(context):
+                if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
-                self.realtime_service.update_records()
+                services.realtime.update_records()
             except Exception as e:
                 print(f'Error updating records: {e}')
-            self.cron_service.start()
+            services.cron.start()
         return 'Success'
     
     def api_admin_reload_themes(self, context: Context):
-        self.theme_repository.load()
+        repositories.theme.load()
         return 'Success'
     
     def api_admin_restart_cron(self, context: Context):
-        self.cron_service.stop()
-        self.cron_service.start()
+        services.cron.stop()
+        services.cron.start()
         return 'Success'
     
     def api_admin_backup_database(self, context: Context):
@@ -1429,33 +1391,35 @@ class Server(Bottle):
         return 'Success'
     
     def api_admin_reload_gtfs(self, context: Context, reload_system_id):
-        system = self.system_repository.find(reload_system_id)
+        system = repositories.system.find(reload_system_id)
         if not system:
             return 'Invalid system'
+        context = system.context
         try:
-            self.gtfs_service.load(system, True)
-            self.gtfs_service.update_cache(system)
-            self.realtime_service.update(system)
-            self.realtime_service.update_records()
-            if not system.gtfs_downloaded or not self.realtime_service.validate(system):
+            services.gtfs.load(context, True)
+            services.gtfs.update_cache(context)
+            services.realtime.update(context)
+            services.realtime.update_records()
+            if not system.gtfs_downloaded or not services.realtime.validate(context):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading GTFS data for {system}: {e}')
+            print(f'Error loading GTFS data for {context}: {e}')
             return str(e)
     
     def api_admin_reload_realtime(self, context: Context, reload_system_id):
-        system = self.system_repository.find(reload_system_id)
+        system = repositories.system.find(reload_system_id)
         if not system:
             return 'Invalid system'
+        context = system.context
         try:
-            self.realtime_service.update(system)
-            self.realtime_service.update_records()
-            if not self.realtime_service.validate(system):
+            services.realtime.update(context)
+            services.realtime.update_records()
+            if not services.realtime.validate(context):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading realtime data for {system}: {e}')
+            print(f'Error loading realtime data for {context}: {e}')
             return str(e)
     
     # =============================================================
