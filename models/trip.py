@@ -1,10 +1,12 @@
 
 from dataclasses import dataclass, field
+from typing import Self
 
 from models.context import Context
 from models.departure import Departure
 from models.direction import Direction
 from models.row import Row
+from models.sheet import Sheet
 from models.time import Time
 
 import repositories
@@ -23,9 +25,9 @@ class Trip:
     headsign: str
     
     short_id: str = field(init=False)
-    sheets: list = field(init=False)
+    sheets: list[Sheet] = field(init=False)
     
-    _related_trips: list | None = field(default=None, init=False)
+    _related_trips: list[Self] | None = field(default=None, init=False)
     
     @classmethod
     def from_db(cls, row: Row):

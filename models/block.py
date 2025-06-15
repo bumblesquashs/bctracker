@@ -1,10 +1,13 @@
 
 from dataclasses import dataclass, field
+from typing import Self
 
 from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
+from models.sheet import Sheet
 from models.time import Time
+from models.trip import Trip
 
 import repositories
 
@@ -14,12 +17,12 @@ class Block:
     
     context: Context
     id: str
-    trips: list
+    trips: list[Trip]
     
     schedule: Schedule = field(init=False)
-    sheets: list = field(init=False)
+    sheets: list[Sheet] = field(init=False)
     
-    _related_blocks: list | None = field(default=None, init=False)
+    _related_blocks: list[Self] | None = field(default=None, init=False)
     
     @property
     def url_id(self):

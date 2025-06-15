@@ -5,8 +5,10 @@ from math import sqrt
 from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
+from models.route import Route
 from models.row import Row
 from models.schedule import Schedule
+from models.sheet import Sheet
 
 import helpers
 import repositories
@@ -142,8 +144,8 @@ class StopCache:
     '''A collection of calculated values for a single stop'''
     
     schedule: Schedule
-    sheets: list
-    routes: list
+    sheets: list[Sheet]
+    routes: list[Route]
     
     @classmethod
     def build(cls, system, departures):

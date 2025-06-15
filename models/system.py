@@ -4,13 +4,16 @@ import pytz
 
 from models.agency import Agency
 from models.backoff import Backoff
+from models.block import Block
 from models.context import Context
 from models.date import Date
 from models.region import Region
-from models.route import RouteCache
+from models.route import Route, RouteCache
 from models.schedule import Schedule
-from models.stop import StopCache
-from models.trip import TripCache
+from models.service import Service
+from models.sheet import Sheet
+from models.stop import Stop, StopCache
+from models.trip import Trip, TripCache
 
 import repositories
 
@@ -32,21 +35,21 @@ class System:
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)
-    reload_backoff: bool = field(init=False)
+    reload_backoff: Backoff = field(init=False)
     last_updated: Date | None = field(default=None, init=False)
     
-    blocks: dict = field(default_factory=dict, init=False)
-    routes: dict = field(default_factory=dict, init=False)
-    routes_by_number: dict = field(default_factory=dict, init=False)
-    services: dict = field(default_factory=dict, init=False)
-    sheets: list = field(default_factory=list, init=False)
-    stops: dict = field(default_factory=dict, init=False)
-    stops_by_number: dict = field(default_factory=dict, init=False)
-    trips: dict = field(default_factory=dict, init=False)
+    blocks: dict[str, Block] = field(default_factory=dict, init=False)
+    routes: dict[str, Route] = field(default_factory=dict, init=False)
+    routes_by_number: dict[str, Route] = field(default_factory=dict, init=False)
+    services: dict[str, Service] = field(default_factory=dict, init=False)
+    sheets: list[Sheet] = field(default_factory=list, init=False)
+    stops: dict[str, Stop] = field(default_factory=dict, init=False)
+    stops_by_number: dict[str, Stop] = field(default_factory=dict, init=False)
+    trips: dict[str, Trip] = field(default_factory=dict, init=False)
     
-    route_caches: dict = field(default_factory=dict, init=False)
-    stop_caches: dict = field(default_factory=dict, init=False)
-    trip_caches: dict = field(default_factory=dict, init=False)
+    route_caches: dict[str, RouteCache] = field(default_factory=dict, init=False)
+    stop_caches: dict[str, StopCache] = field(default_factory=dict, init=False)
+    trip_caches: dict[str, TripCache] = field(default_factory=dict, init=False)
     
     @property
     def context(self):

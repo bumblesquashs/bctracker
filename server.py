@@ -1357,16 +1357,17 @@ class Server(Bottle):
         repositories.position.delete_all()
         repositories.system.load()
         for system in repositories.system.find_all():
+            context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(system)
-                    if not services.gtfs.validate(system):
-                        services.gtfs.load(system, True)
-                    services.gtfs.update_cache(system)
-                    services.realtime.update(system)
+                    services.gtfs.load(context)
+                    if not services.gtfs.validate(context):
+                        services.gtfs.load(context, True)
+                    services.gtfs.update_cache(context)
+                    services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {system}: {e}')
-                if not system.gtfs_downloaded or not services.realtime.validate(system):
+                    print(f'Error loading data for {context}: {e}')
+                if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
@@ -1393,30 +1394,32 @@ class Server(Bottle):
         system = repositories.system.find(reload_system_id)
         if not system:
             return 'Invalid system'
+        context = system.context
         try:
-            services.gtfs.load(system, True)
-            services.gtfs.update_cache(system)
-            services.realtime.update(system)
+            services.gtfs.load(context, True)
+            services.gtfs.update_cache(context)
+            services.realtime.update(context)
             services.realtime.update_records()
-            if not system.gtfs_downloaded or not services.realtime.validate(system):
+            if not system.gtfs_downloaded or not services.realtime.validate(context):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading GTFS data for {system}: {e}')
+            print(f'Error loading GTFS data for {context}: {e}')
             return str(e)
     
     def api_admin_reload_realtime(self, context: Context, reload_system_id):
         system = repositories.system.find(reload_system_id)
         if not system:
             return 'Invalid system'
+        context = system.context
         try:
-            services.realtime.update(system)
+            services.realtime.update(context)
             services.realtime.update_records()
-            if not services.realtime.validate(system):
+            if not services.realtime.validate(context):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading realtime data for {system}: {e}')
+            print(f'Error loading realtime data for {context}: {e}')
             return str(e)
     
     # =============================================================
