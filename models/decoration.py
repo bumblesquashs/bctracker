@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 
 @dataclass(slots=True)
-class Adornment:
+class Decoration:
     '''Text placed after a bus number'''
     
     agency_id: str

@@ -100,7 +100,7 @@ class Server(Bottle):
         self.add('/api/routes', append_slash=False, callback=self.api_routes)
         self.add('/api/search', method='POST', callback=self.api_search)
         self.add('/api/nearby.json', append_slash=False, callback=self.api_nearby)
-        self.add('/api/admin/reload-adornments', method='POST', require_admin=True, callback=self.api_admin_reload_adornments)
+        self.add('/api/admin/reload-decorations', method='POST', require_admin=True, callback=self.api_admin_reload_decorations)
         self.add('/api/admin/reload-orders', method='POST', require_admin=True, callback=self.api_admin_reload_orders)
         self.add('/api/admin/reload-systems', method='POST', require_admin=True, callback=self.api_admin_reload_systems)
         self.add('/api/admin/reload-themes', method='POST', require_admin=True, callback=self.api_admin_reload_themes)
@@ -131,7 +131,7 @@ class Server(Bottle):
         if args.updatedb:
             print('Forcing database refresh')
         
-        repositories.adornment.load()
+        repositories.decoration.load()
         repositories.order.load()
         repositories.system.load()
         repositories.theme.load()
@@ -1344,8 +1344,8 @@ class Server(Bottle):
             'stops': [s.get_json() for s in stops]
         }
     
-    def api_admin_reload_adornments(self, context: Context):
-        repositories.adornment.load()
+    def api_admin_reload_decorations(self, context: Context):
+        repositories.decoration.load()
         return 'Success'
     
     def api_admin_reload_orders(self, context: Context):

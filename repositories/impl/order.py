@@ -76,8 +76,8 @@ class OrderRepository:
                         value += len(query)
                 if bus.number not in recorded_bus_numbers:
                     value /= 10
-                adornment = bus.find_adornment()
-                if adornment and adornment.enabled:
-                    bus_number_string += f' {adornment}'
+                decoration = bus.find_decoration()
+                if decoration and decoration.enabled:
+                    bus_number_string += f' {decoration}'
                 matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.url_id}', value))
         return matches

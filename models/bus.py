@@ -67,6 +67,6 @@ class Bus:
     def __lt__(self, other):
         return self.number < other.number
     
-    def find_adornment(self):
-        '''Returns the adornment for this bus, if one exists'''
-        return repositories.adornment.find(self)
+    def find_decoration(self):
+        '''Returns the decoration for this bus, if one exists'''
+        return repositories.decoration.find(self)

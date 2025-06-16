@@ -1,7 +1,7 @@
 
-from .adornment import AdornmentRepository
 from .agency import AgencyRepository
 from .assignment import AssignmentRepository
+from .decoration import DecorationRepository
 from .departure import DepartureRepository
 from .model import ModelRepository
 from .order import OrderRepository
