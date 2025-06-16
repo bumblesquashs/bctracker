@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 
 from models.context import Context
+from models.row import Row
 
 @dataclass(slots=True)
 class Point:
@@ -14,13 +15,13 @@ class Point:
     lon: float
     
     @classmethod
-    def from_db(cls, row, prefix='point'):
+    def from_db(cls, row: Row):
         '''Returns a point initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        shape_id = row[f'{prefix}_shape_id']
-        sequence = row[f'{prefix}_sequence']
-        lat = row[f'{prefix}_lat']
-        lon = row[f'{prefix}_lon']
+        context = row.context()
+        shape_id = row['shape_id']
+        sequence = row['sequence']
+        lat = row['lat']
+        lon = row['lon']
         return cls(context, shape_id, sequence, lat, lon)
     
     def __eq__(self, other):

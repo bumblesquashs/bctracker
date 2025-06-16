@@ -8,6 +8,7 @@ from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.point import Point
+from models.row import Row
 from models.schedule import Schedule
 from models.sheet import Sheet
 from models.trip import Trip
@@ -29,16 +30,14 @@ class Route:
     key: str = field(init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='route'):
+    def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        id = row[f'{prefix}_id']
-        number = row[f'{prefix}_number']
-        if not number:
-            number = id
-        name = row[f'{prefix}_name']
-        colour = row[f'{prefix}_colour'] or generate_colour(context, number)
-        text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
+        context = row.context()
+        id = row['id']
+        number = row['number'] or id
+        name = row['name']
+        colour = row['colour'] or generate_colour(context, number)
+        text_colour = row['text_colour'] or 'FFFFFF'
         return cls(context, id, number, name, colour, text_colour)
     
     @property

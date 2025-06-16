@@ -29,10 +29,10 @@ class AssignmentRepository:
         date = Date.today(context.timezone)
         assignments = self.database.select('assignment',
             columns={
-                'assignment.system_id': 'assignment_system_id',
-                'assignment.block_id': 'assignment_block_id',
-                'assignment.bus_number': 'assignment_bus_number',
-                'assignment.date': 'assignment_date'
+                'assignment.system_id': 'system_id',
+                'assignment.block_id': 'block_id',
+                'assignment.bus_number': 'bus_number',
+                'assignment.date': 'date'
             },
             filters={
                 'assignment.system_id': context.system_id,
@@ -76,10 +76,10 @@ class AssignmentRepository:
                 filters['departure.stop_id'] = stop_id
         assignments = self.database.select('assignment',
             columns={
-                'assignment.system_id': 'assignment_system_id',
-                'assignment.block_id': 'assignment_block_id',
-                'assignment.bus_number': 'assignment_bus_number',
-                'assignment.date': 'assignment_date'
+                'assignment.system_id': 'system_id',
+                'assignment.block_id': 'block_id',
+                'assignment.bus_number': 'bus_number',
+                'assignment.date': 'date'
             },
             joins=joins,
             filters=filters,

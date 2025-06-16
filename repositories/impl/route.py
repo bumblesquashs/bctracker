@@ -44,12 +44,12 @@ class RouteRepository:
         '''Returns the route with the given context and route ID'''
         routes = self.database.select('route',
             columns={
-                'route.system_id': 'route_system_id',
-                'route.route_id': 'route_id',
-                'route.number': 'route_number',
-                'route.name': 'route_name',
-                'route.colour': 'route_colour',
-                'route.text_colour': 'route_text_colour'
+                'route.system_id': 'system_id',
+                'route.route_id': 'id',
+                'route.number': 'number',
+                'route.name': 'name',
+                'route.colour': 'colour',
+                'route.text_colour': 'text_colour'
             },
             filters={
                 'route.system_id': context.system_id,
@@ -68,12 +68,12 @@ class RouteRepository:
         '''Returns all routes that match the given context'''
         return self.database.select('route',
             columns={
-                'route.system_id': 'route_system_id',
-                'route.route_id': 'route_id',
-                'route.number': 'route_number',
-                'route.name': 'route_name',
-                'route.colour': 'route_colour',
-                'route.text_colour': 'route_text_colour'
+                'route.system_id': 'system_id',
+                'route.route_id': 'id',
+                'route.number': 'number',
+                'route.name': 'name',
+                'route.colour': 'colour',
+                'route.text_colour': 'text_colour'
             },
             filters={
                 'route.system_id': context.system_id

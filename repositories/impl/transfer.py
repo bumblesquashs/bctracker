@@ -26,11 +26,11 @@ class TransferRepository:
         bus_number = getattr(bus, 'number', bus)
         return self.database.select('transfer',
             columns={
-                'transfer.transfer_id': 'transfer_id',
-                'transfer.bus_number': 'transfer_bus_number',
-                'transfer.date': 'transfer_date',
-                'transfer.old_system_id': 'transfer_old_system_id',
-                'transfer.new_system_id': 'transfer_new_system_id'
+                'transfer.transfer_id': 'id',
+                'transfer.bus_number': 'bus_number',
+                'transfer.date': 'date',
+                'transfer.old_system_id': 'old_system_id',
+                'transfer.new_system_id': 'new_system_id'
             },
             filters={
                 'transfer.old_system_id': old_context.system_id,

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
+from models.row import Row
 
 @dataclass(slots=True)
 class Assignment:
@@ -15,12 +16,12 @@ class Assignment:
     date: Date
     
     @classmethod
-    def from_db(cls, row, prefix='assignment'):
+    def from_db(cls, row: Row):
         '''Returns an assignment initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        block_id = row[f'{prefix}_block_id']
-        bus_number = row[f'{prefix}_bus_number']
-        date = Date.parse(row[f'{prefix}_date'], context.timezone)
+        context = row.context()
+        block_id = row['block_id']
+        bus_number = row['bus_number']
+        date = Date.parse(row['date'], context.timezone)
         return cls(context, block_id, bus_number, date)
     
     @property

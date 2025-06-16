@@ -1,6 +1,8 @@
 
 from dataclasses import dataclass
 
+from models.row import Row
+
 @dataclass(slots=True)
 class Area:
     '''A geographic area defined by min/max latitudes and longitudes'''
@@ -11,9 +13,9 @@ class Area:
     max_lon: float
     
     @classmethod
-    def from_db(cls, row):
+    def from_db(cls, row: Row):
         '''Returns an area initialized from the given database row'''
-        area = cls(**row)
+        area = cls(**row.values)
         if area.min_lat is None and area.max_lat is None and area.min_lon is None and area.max_lon is None:
             return None
         return area

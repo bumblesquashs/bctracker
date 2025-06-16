@@ -31,12 +31,12 @@ class StopRepository:
         '''Returns the stop with the given context and stop ID'''
         stops = self.database.select('stop',
             columns={
-                'stop.system_id': 'stop_system_id',
-                'stop.stop_id': 'stop_id',
-                'stop.number': 'stop_number',
-                'stop.name': 'stop_name',
-                'stop.lat': 'stop_lat',
-                'stop.lon': 'stop_lon'
+                'stop.system_id': 'system_id',
+                'stop.stop_id': 'id',
+                'stop.number': 'number',
+                'stop.name': 'name',
+                'stop.lat': 'lat',
+                'stop.lon': 'lon'
             },
             filters={
                 'stop.system_id': context.system_id,
@@ -67,12 +67,12 @@ class StopRepository:
             }
         return self.database.select('stop',
             columns={
-                'stop.system_id': 'stop_system_id',
-                'stop.stop_id': 'stop_id',
-                'stop.number': 'stop_number',
-                'stop.name': 'stop_name',
-                'stop.lat': 'stop_lat',
-                'stop.lon': 'stop_lon'
+                'stop.system_id': 'system_id',
+                'stop.stop_id': 'id',
+                'stop.number': 'number',
+                'stop.name': 'name',
+                'stop.lat': 'lat',
+                'stop.lon': 'lon'
             },
             filters=filters,
             limit=limit,

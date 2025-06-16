@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from models.context import Context
+from models.row import Row
 from models.time import Time
 
 import repositories
@@ -14,6 +15,13 @@ class PickupType(Enum):
     UNAVAILABLE = '1'
     PHONE_REQUEST = '2'
     DRIVER_REQUEST = '3'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.NORMAL
     
     def __str__(self):
         if self == PickupType.UNAVAILABLE:
@@ -36,6 +44,13 @@ class DropoffType(Enum):
     UNAVAILABLE = '1'
     PHONE_REQUEST = '2'
     DRIVER_REQUEST = '3'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.NORMAL
     
     def __str__(self):
         if self == DropoffType.UNAVAILABLE:
@@ -67,24 +82,18 @@ class Departure:
     headsign: str | None
     
     @classmethod
-    def from_db(cls, row, prefix='departure'):
+    def from_db(cls, row: Row):
         '''Returns a departure initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        trip_id = row[f'{prefix}_trip_id']
-        sequence = row[f'{prefix}_sequence']
-        stop_id = row[f'{prefix}_stop_id']
-        time = Time.parse(row[f'{prefix}_time'], context.timezone, context.accurate_seconds)
-        try:
-            pickup_type = PickupType(row[f'{prefix}_pickup_type'])
-        except:
-            pickup_type = PickupType.NORMAL
-        try:
-            dropoff_type = DropoffType(row[f'{prefix}_dropoff_type'])
-        except:
-            dropoff_type = DropoffType.NORMAL
-        timepoint = row[f'{prefix}_timepoint'] == 1
-        distance = row[f'{prefix}_distance']
-        headsign = row[f'{prefix}_headsign']
+        context = row.context()
+        trip_id = row['trip_id']
+        sequence = row['sequence']
+        stop_id = row['stop_id']
+        time = Time.parse(row['time'], context.timezone, context.accurate_seconds)
+        pickup_type = PickupType.from_db(row['pickup_type'])
+        dropoff_type = DropoffType.from_db(row['dropoff_type'])
+        timepoint = row['timepoint'] == 1
+        distance = row['distance']
+        headsign = row['headsign']
         return cls(context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
     
     @property
