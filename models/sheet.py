@@ -58,7 +58,7 @@ class Sheet:
         self.modifications = added_dates.intersection(removed_dates)
     
     def __str__(self):
-        if self.schedule.is_special:
+        if self.schedule.is_special and self.schedule.added_dates:
             return self.schedule.added_dates_string
         return str(self.schedule.date_range)
     
