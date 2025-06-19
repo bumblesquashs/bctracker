@@ -77,16 +77,16 @@ class DepartureRepository:
             }
         return self.database.select('departure',
             columns={
-                'departure.system_id': 'departure_system_id',
-                'departure.trip_id': 'departure_trip_id',
-                'departure.sequence': 'departure_sequence',
-                'departure.stop_id': 'departure_stop_id',
-                'departure.time': 'departure_time',
-                'departure.pickup_type': 'departure_pickup_type',
-                'departure.dropoff_type': 'departure_dropoff_type',
-                'departure.timepoint': 'departure_timepoint',
-                'departure.distance': 'departure_distance',
-                'departure.headsign': 'departure_headsign'
+                'departure.system_id': 'system_id',
+                'departure.trip_id': 'trip_id',
+                'departure.sequence': 'sequence',
+                'departure.stop_id': 'stop_id',
+                'departure.time': 'time',
+                'departure.pickup_type': 'pickup_type',
+                'departure.dropoff_type': 'dropoff_type',
+                'departure.timepoint': 'timepoint',
+                'departure.distance': 'distance',
+                'departure.headsign': 'headsign'
             },
             joins=joins,
             filters={
@@ -107,16 +107,16 @@ class DepartureRepository:
         trip_id = getattr(trip, 'id', trip)
         return self.database.select('departure',
             columns={
-                'departure.system_id': 'departure_system_id',
-                'departure.trip_id': 'departure_trip_id',
-                'departure.sequence': 'departure_sequence',
-                'departure.stop_id': 'departure_stop_id',
-                'departure.time': 'departure_time',
-                'departure.pickup_type': 'departure_pickup_type',
-                'departure.dropoff_type': 'departure_dropoff_type',
-                'departure.timepoint': 'departure_timepoint',
-                'departure.distance': 'departure_distance',
-                'departure.headsign': 'departure_headsign'
+                'departure.system_id': 'system_id',
+                'departure.trip_id': 'trip_id',
+                'departure.sequence': 'sequence',
+                'departure.stop_id': 'stop_id',
+                'departure.time': 'time',
+                'departure.pickup_type': 'pickup_type',
+                'departure.dropoff_type': 'dropoff_type',
+                'departure.timepoint': 'timepoint',
+                'departure.distance': 'distance',
+                'departure.headsign': 'headsign'
             },
             filters={
                 'departure.system_id': context.system_id,
@@ -147,16 +147,16 @@ class DepartureRepository:
             })
         return self.database.select('stop_trip',
             columns={
-                'departure.system_id': 'departure_system_id',
-                'departure.trip_id': 'departure_trip_id',
-                'departure.sequence': 'departure_sequence',
-                'departure.stop_id': 'departure_stop_id',
-                'departure.time': 'departure_time',
-                'departure.pickup_type': 'departure_pickup_type',
-                'departure.dropoff_type': 'departure_dropoff_type',
-                'departure.timepoint': 'departure_timepoint',
-                'departure.distance': 'departure_distance',
-                'departure.headsign': 'departure_headsign'
+                'departure.system_id': 'system_id',
+                'departure.trip_id': 'trip_id',
+                'departure.sequence': 'sequence',
+                'departure.stop_id': 'stop_id',
+                'departure.time': 'time',
+                'departure.pickup_type': 'pickup_type',
+                'departure.dropoff_type': 'dropoff_type',
+                'departure.timepoint': 'timepoint',
+                'departure.distance': 'distance',
+                'departure.headsign': 'headsign'
             },
             ctes={
                 'stop_trip': cte

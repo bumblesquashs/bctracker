@@ -71,16 +71,16 @@ class RecordRepository:
             filters['trip_record.trip_id'] = trip_id
         return self.database.select('record', 
             columns={
-                'record.record_id': 'record_id',
-                'record.bus_number': 'record_bus_number',
-                'record.date': 'record_date',
-                'record.system_id': 'record_system_id',
-                'record.block_id': 'record_block_id',
-                'record.routes': 'record_routes',
-                'record.start_time': 'record_start_time',
-                'record.end_time': 'record_end_time',
-                'record.first_seen': 'record_first_seen',
-                'record.last_seen': 'record_last_seen'
+                'record.record_id': 'id',
+                'record.bus_number': 'bus_number',
+                'record.date': 'date',
+                'record.system_id': 'system_id',
+                'record.block_id': 'block_id',
+                'record.routes': 'routes',
+                'record.start_time': 'start_time',
+                'record.end_time': 'end_time',
+                'record.first_seen': 'first_seen',
+                'record.last_seen': 'last_seen'
             },
             joins=joins,
             filters=filters,

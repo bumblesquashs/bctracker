@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
+from models.row import Row
 from models.time import Time
 
 @dataclass(slots=True)
@@ -24,18 +25,18 @@ class Record:
     warnings: list[str] = field(default_factory=list, init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='record'):
+    def from_db(cls, row: Row):
         '''Returns a record initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        id = row[f'{prefix}_id']
-        bus = Bus.find(context, row[f'{prefix}_bus_number'])
-        date = Date.parse(row[f'{prefix}_date'], context.timezone)
-        block_id = row[f'{prefix}_block_id']
-        route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]
-        start_time = Time.parse(row[f'{prefix}_start_time'], context.timezone, context.accurate_seconds)
-        end_time = Time.parse(row[f'{prefix}_end_time'], context.timezone, context.accurate_seconds)
-        first_seen = Time.parse(row[f'{prefix}_first_seen'], context.timezone, context.accurate_seconds)
-        last_seen = Time.parse(row[f'{prefix}_last_seen'], context.timezone, context.accurate_seconds)
+        context = row.context()
+        id = row['id']
+        bus = Bus.find(context, row['bus_number'])
+        date = Date.parse(row['date'], context.timezone)
+        block_id = row['block_id']
+        route_numbers = [n.strip() for n in row['routes'].split(',')]
+        start_time = Time.parse(row['start_time'], context.timezone, context.accurate_seconds)
+        end_time = Time.parse(row['end_time'], context.timezone, context.accurate_seconds)
+        first_seen = Time.parse(row['first_seen'], context.timezone, context.accurate_seconds)
+        last_seen = Time.parse(row['last_seen'], context.timezone, context.accurate_seconds)
         return cls(context, id, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property

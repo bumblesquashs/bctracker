@@ -28,14 +28,14 @@ class TripRepository:
         '''Returns the trip with the given context and trip ID'''
         trips = self.database.select('trip',
             columns={
-                'trip.system_id': 'trip_system_id',
-                'trip.trip_id': 'trip_id',
-                'trip.route_id': 'trip_route_id',
-                'trip.service_id': 'trip_service_id',
-                'trip.block_id': 'trip_block_id',
-                'trip.direction_id': 'trip_direction_id',
-                'trip.shape_id': 'trip_shape_id',
-                'trip.headsign': 'trip_headsign'
+                'trip.system_id': 'system_id',
+                'trip.trip_id': 'id',
+                'trip.route_id': 'route_id',
+                'trip.service_id': 'service_id',
+                'trip.block_id': 'block_id',
+                'trip.direction_id': 'direction_id',
+                'trip.shape_id': 'shape_id',
+                'trip.headsign': 'headsign'
             },
             filters={
                 'trip.system_id': context.system_id,
@@ -55,14 +55,14 @@ class TripRepository:
         block_id = getattr(block, 'id', block)
         return self.database.select('trip',
             columns={
-                'trip.system_id': 'trip_system_id',
-                'trip.trip_id': 'trip_id',
-                'trip.route_id': 'trip_route_id',
-                'trip.service_id': 'trip_service_id',
-                'trip.block_id': 'trip_block_id',
-                'trip.direction_id': 'trip_direction_id',
-                'trip.shape_id': 'trip_shape_id',
-                'trip.headsign': 'trip_headsign'
+                'trip.system_id': 'system_id',
+                'trip.trip_id': 'id',
+                'trip.route_id': 'route_id',
+                'trip.service_id': 'service_id',
+                'trip.block_id': 'block_id',
+                'trip.direction_id': 'direction_id',
+                'trip.shape_id': 'shape_id',
+                'trip.headsign': 'headsign'
             },
             filters={
                 'trip.system_id': context.system_id,

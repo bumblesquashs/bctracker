@@ -5,6 +5,7 @@ from typing import Self
 from models.context import Context
 from models.departure import Departure
 from models.direction import Direction
+from models.row import Row
 from models.sheet import Sheet
 from models.time import Time
 
@@ -29,16 +30,16 @@ class Trip:
     _related_trips: list[Self] | None = field(default=None, init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='trip'):
+    def from_db(cls, row: Row):
         '''Returns a trip initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        trip_id = row[f'{prefix}_id']
-        route_id = row[f'{prefix}_route_id']
-        service_id = row[f'{prefix}_service_id']
-        block_id = row[f'{prefix}_block_id']
-        direction_id = row[f'{prefix}_direction_id']
-        shape_id = row[f'{prefix}_shape_id']
-        headsign = row[f'{prefix}_headsign']
+        context = row.context()
+        trip_id = row['id']
+        route_id = row['route_id']
+        service_id = row['service_id']
+        block_id = row['block_id']
+        direction_id = row['direction_id']
+        shape_id = row['shape_id']
+        headsign = row['headsign']
         return cls(context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property

@@ -6,6 +6,7 @@ from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.route import Route
+from models.row import Row
 from models.schedule import Schedule
 from models.sheet import Sheet
 
@@ -26,16 +27,14 @@ class Stop:
     key: str = field(init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='stop'):
+    def from_db(cls, row: Row):
         '''Returns a stop initialized from the given database row'''
-        context = Context.find(system_id=row[f'{prefix}_system_id'])
-        id = row[f'{prefix}_id']
-        number = row[f'{prefix}_number']
-        if not number:
-            number = id
-        name = row[f'{prefix}_name']
-        lat = row[f'{prefix}_lat']
-        lon = row[f'{prefix}_lon']
+        context = row.context()
+        id = row['id']
+        number = row['number'] or id
+        name = row['name']
+        lat = row['lat']
+        lon = row['lon']
         return cls(context, id, number, name, lat, lon)
     
     @property
