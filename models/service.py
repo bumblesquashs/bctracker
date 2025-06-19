@@ -1,4 +1,10 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass
 from enum import IntEnum
 
@@ -38,7 +44,7 @@ class ServiceException:
 class Service:
     '''A set of dates when a transit service is operating'''
     
-    context: Context
+    system: System
     id: int
     schedule: Schedule
     
@@ -67,7 +73,7 @@ class Service:
         dates.difference_update(removed_dates)
         
         schedule = Schedule(dates, date_range)
-        return cls(context, id, schedule)
+        return cls(context.system, id, schedule)
     
     @classmethod
     def combine(cls, context: Context, id, exceptions):
@@ -75,7 +81,12 @@ class Service:
         dates = {e.date for e in exceptions if e.type == ServiceExceptionType.INCLUDED}
         date_range = DateRange(min(dates), max(dates))
         schedule = Schedule(dates, date_range)
-        return cls(context, id, schedule)
+        return cls(context.system, id, schedule)
+    
+    @property
+    def context(self):
+        '''The context for this service'''
+        return self.system.context
     
     def __hash__(self):
         return hash(self.id)

@@ -70,7 +70,7 @@ class GTFSService:
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
-        context.system.blocks = {id: Block(context, id, trips) for id, trips in block_trips.items()}
+        context.system.blocks = {id: Block(context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
     
@@ -177,11 +177,11 @@ def combine_sheets(context: Context, services):
             if previous_services.issubset(current_services) or current_services.issubset(previous_services):
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
                 new_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
-                sheets[-1] = Sheet(context, new_services, date_range)
+                sheets[-1] = Sheet(context.system, new_services, date_range)
             else:
-                sheets.append(Sheet(context, date_range_services, date_range))
+                sheets.append(Sheet(context.system, date_range_services, date_range))
         else:
-            sheets.append(Sheet(context, date_range_services, date_range))
+            sheets.append(Sheet(context.system, date_range_services, date_range))
     final_sheets = []
     for sheet in sheets:
         if final_sheets:
@@ -189,7 +189,7 @@ def combine_sheets(context: Context, services):
             if len(previous_sheet.schedule.date_range) <= 7 or len(sheet.schedule.date_range) <= 7:
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, sheet.schedule.date_range])
                 combined_services = previous_sheet.services.union(sheet.services)
-                final_sheets[-1] = Sheet(context, combined_services, date_range)
+                final_sheets[-1] = Sheet(context.system, combined_services, date_range)
             else:
                 final_sheets.append(sheet)
         else:

@@ -1,8 +1,13 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass, field
 from typing import Self
 
-from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
 from models.sheet import Sheet
@@ -15,7 +20,7 @@ import repositories
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    context: Context
+    system: System
     id: str
     trips: list[Trip]
     
@@ -23,6 +28,11 @@ class Block:
     sheets: list[Sheet] = field(init=False)
     
     _related_blocks: list[Self] | None = field(default=None, init=False)
+    
+    @property
+    def context(self):
+        '''The context for this block'''
+        return self.system.context
     
     @property
     def url_id(self):
@@ -33,14 +43,14 @@ class Block:
     def related_blocks(self):
         '''Returns all blocks that have the same start time, end time, and routes as this block'''
         if self._related_blocks is None:
-            related_blocks = [b for b in self.context.system.get_blocks() if self.is_related(b)]
+            related_blocks = [b for b in self.system.get_blocks() if self.is_related(b)]
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
     def __post_init__(self):
         services = {t.service for t in self.trips}
         self.schedule = Schedule.combine(services)
-        self.sheets = self.context.system.copy_sheets(services)
+        self.sheets = self.system.copy_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id

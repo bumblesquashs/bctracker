@@ -1,4 +1,10 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass, field
 from random import randint, seed
 from math import sqrt
@@ -20,7 +26,7 @@ import repositories
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    context: Context
+    system: System
     id: str
     number: str
     name: str
@@ -38,7 +44,12 @@ class Route:
         name = row['name']
         colour = row['colour'] or generate_colour(context, number)
         text_colour = row['text_colour'] or 'FFFFFF'
-        return cls(context, id, number, name, colour, text_colour)
+        return cls(context.system, id, number, name, colour, text_colour)
+    
+    @property
+    def context(self):
+        '''The context for this route'''
+        return self.system.context
     
     @property
     def url_id(self):
@@ -55,7 +66,7 @@ class Route:
     @property
     def cache(self):
         '''Returns the cache for this route'''
-        return self.context.system.get_route_cache(self)
+        return self.system.get_route_cache(self)
     
     @property
     def trips(self):
@@ -111,8 +122,8 @@ class Route:
         json = []
         for point in self.indicator_points:
             json.append({
-                'system_id': self.context.system_id,
-                'system_name': str(self.context.system),
+                'system_id': self.system.id,
+                'system_name': str(self.system),
                 'agency_id': self.context.agency_id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),

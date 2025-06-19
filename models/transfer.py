@@ -1,4 +1,10 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass
 
 from models.bus import Bus
@@ -13,8 +19,18 @@ class Transfer:
     id: int
     bus: Bus
     date: Date
-    old_context: Context
-    new_context: Context
+    old_system: System
+    new_system: System
+    
+    @property
+    def old_context(self):
+        '''The old context for this transfer'''
+        return self.old_system.context
+    
+    @property
+    def new_context(self):
+        '''The new context for this transfer'''
+        return self.new_system.context
     
     @classmethod
     def from_db(cls, row: Row):
@@ -25,4 +41,4 @@ class Transfer:
         old_context = row.context('old_system_id')
         new_context = row.context('new_system_id')
         date = Date.parse(row['date'], new_context.timezone)
-        return cls(id, bus, date, old_context, new_context)
+        return cls(id, bus, date, old_context.system, new_context.system)

@@ -1,8 +1,13 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass
 from typing import Self
 
-from models.context import Context
 from models.date import Date
 from models.schedule import Schedule
 from models.service import Service
@@ -11,9 +16,14 @@ from models.service import Service
 class ServiceGroup:
     '''A collection of services represented as a single schedule'''
     
-    context: Context
+    system: System
     schedule: Schedule
     services: tuple
+    
+    @property
+    def context(self):
+        '''The context for this service group'''
+        return self.system.context
     
     def __str__(self):
         return str(self.schedule)
@@ -34,12 +44,17 @@ class ServiceGroup:
 class Sheet:
     '''A collection of overlapping services'''
     
-    context: Context
+    system: System
     schedule: Schedule
     services: list[Service]
     service_groups: list[ServiceGroup]
     modifications: set[Date]
     copies: dict[tuple, Self]
+    
+    @property
+    def context(self):
+        '''The context for this sheet'''
+        return self.system.context
     
     @property
     def normal_service_groups(self):
@@ -64,8 +79,8 @@ class Sheet:
         '''Checks if this sheet indicates no service'''
         return self.schedule.has_no_service
     
-    def __init__(self, context: Context, services, date_range):
-        self.context = context
+    def __init__(self, system: System, services, date_range):
+        self.system = system
         self.schedule = Schedule.combine(services, date_range)
         self.services = services
         self.copies = {}
@@ -77,7 +92,7 @@ class Sheet:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
             schedule = Schedule(dates, date_range)
-            service_group = ServiceGroup(context, schedule, service_set)
+            service_group = ServiceGroup(system, schedule, service_set)
             service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
@@ -108,7 +123,7 @@ class Sheet:
             return self.copies[key]
         if not services:
             return None
-        copy = Sheet(self.context, services, self.schedule.date_range)
+        copy = Sheet(self.system, services, self.schedule.date_range)
         self.copies[key] = copy
         return copy
     

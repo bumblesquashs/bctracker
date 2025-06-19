@@ -1,9 +1,14 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass
 
 from models.adherence import Adherence
 from models.bus import Bus
-from models.context import Context
 from models.occupancy import Occupancy
 from models.row import Row
 from models.timestamp import Timestamp
@@ -14,7 +19,7 @@ import repositories
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    context: Context
+    system: System
     bus: Bus
     trip_id: str | None
     stop_id: str | None
@@ -52,7 +57,12 @@ class Position:
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)
-        return cls(context, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+        return cls(context.system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+    
+    @property
+    def context(self):
+        '''The context for this position'''
+        return self.system.context
     
     @property
     def has_location(self):
@@ -63,28 +73,28 @@ class Position:
     def trip(self):
         '''Returns the trip associated with this position'''
         if self.trip_id:
-            return self.context.system.get_trip(self.trip_id)
+            return self.system.get_trip(self.trip_id)
         return None
     
     @property
     def stop(self):
         '''Returns the stop associated with this position'''
         if self.stop_id:
-            return self.context.system.get_stop(stop_id=self.stop_id)
+            return self.system.get_stop(stop_id=self.stop_id)
         return None
     
     @property
     def block(self):
         '''Returns the block associated with this position'''
         if not self.block_id:
-            return self.context.system.get_block(self.block_id)
+            return self.system.get_block(self.block_id)
         return None
     
     @property
     def route(self):
         '''Returns the route associated with this position'''
         if not self.route_id:
-            return self.context.system.get_route(route_id=self.route_id)
+            return self.system.get_route(route_id=self.route_id)
         return None
     
     @property
@@ -120,7 +130,7 @@ class Position:
             'bus_number': self.bus.number,
             'bus_display': str(self.bus),
             'bus_url_id': str(self.bus.url_id),
-            'system': str(self.context.system),
+            'system': str(self.system),
             'agency_id': self.context.agency_id,
             'lon': self.lon,
             'lat': self.lat,
