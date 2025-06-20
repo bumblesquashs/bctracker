@@ -1,8 +1,13 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass, field
 from typing import Self
 
-from models.context import Context
 from models.departure import Departure
 from models.direction import Direction
 from models.row import Row
@@ -15,7 +20,7 @@ import repositories
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
-    context: Context
+    system: System
     id: str
     route_id: str
     service_id: str
@@ -40,7 +45,12 @@ class Trip:
         direction_id = row['direction_id']
         shape_id = row['shape_id']
         headsign = row['headsign']
-        return cls(context, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+        return cls(context.system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+    
+    @property
+    def context(self):
+        '''The context for this trip'''
+        return self.system.context
     
     @property
     def url_id(self):
@@ -55,17 +65,17 @@ class Trip:
     @property
     def route(self):
         '''Returns the route associated with this trip'''
-        return self.context.system.get_route(route_id=self.route_id)
+        return self.system.get_route(route_id=self.route_id)
     
     @property
     def block(self):
         '''Returns the block associated with this trip'''
-        return self.context.system.get_block(self.block_id)
+        return self.system.get_block(self.block_id)
     
     @property
     def service(self):
         '''Returns the service associated with this trip'''
-        return self.context.system.get_service(self.service_id)
+        return self.system.get_service(self.service_id)
     
     @property
     def first_stop(self):
@@ -116,14 +126,14 @@ class Trip:
     def related_trips(self):
         '''Returns all trips with the same route, direction, start time, and end time as this trip'''
         if self._related_trips is None:
-            self._related_trips = [t for t in self.context.system.get_trips() if self.is_related(t)]
+            self._related_trips = [t for t in self.system.get_trips() if self.is_related(t)]
             self._related_trips.sort(key=lambda t: t.service)
         return self._related_trips
     
     @property
     def cache(self):
         '''Returns the cache for this trip'''
-        return self.context.system.get_trip_cache(self)
+        return self.system.get_trip_cache(self)
     
     @property
     def first_departure(self):
@@ -157,7 +167,7 @@ class Trip:
         else:
             self.short_id = id_parts[0]
         
-        self.sheets = self.context.system.copy_sheets([self.service])
+        self.sheets = self.system.copy_sheets([self.service])
     
     def __str__(self):
         if self.context.prefix_headsigns and self.route:

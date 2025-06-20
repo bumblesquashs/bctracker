@@ -1,6 +1,8 @@
 
 from dataclasses import dataclass
 
+from models.context import Context
+
 from constants import *
 
 @dataclass(slots=True)
@@ -21,6 +23,10 @@ class Agency:
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
+    
+    @property
+    def context(self):
+        return Context(agency=self)
     
     @property
     def gtfs_enabled(self):

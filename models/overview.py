@@ -1,4 +1,10 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass
 
 from models.bus import Bus
@@ -13,10 +19,10 @@ class Overview:
     
     bus: Bus
     first_seen_date: Date
-    first_seen_context: Context
+    first_seen_system: System
     first_record: Record | None
     last_seen_date: Date
-    last_seen_context: Context
+    last_seen_system: System
     last_record: Record | None
     
     @classmethod
@@ -30,4 +36,14 @@ class Overview:
         last_seen_context = row.context('last_seen_system_id')
         last_seen_date = Date.parse(row['last_seen_date'], last_seen_context.timezone)
         last_record = row.obj('last_record', Record.from_db)
-        return cls(bus, first_seen_date, first_seen_context, first_record, last_seen_date, last_seen_context, last_record)
+        return cls(bus, first_seen_date, first_seen_context.system, first_record, last_seen_date, last_seen_context.system, last_record)
+    
+    @property
+    def first_seen_context(self):
+        '''The first seen context for this overview'''
+        return self.first_seen_system.context
+    
+    @property
+    def last_seen_context(self):
+        '''The last seen context for this overview'''
+        return self.last_seen_system.context

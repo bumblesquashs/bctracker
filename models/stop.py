@@ -1,8 +1,13 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass, field
 from math import sqrt
 
-from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.route import Route
@@ -17,7 +22,7 @@ import repositories
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
-    context: Context
+    system: System
     id: str
     number: str
     name: str
@@ -35,7 +40,12 @@ class Stop:
         name = row['name']
         lat = row['lat']
         lon = row['lon']
-        return cls(context, id, number, name, lat, lon)
+        return cls(context.system, id, number, name, lat, lon)
+    
+    @property
+    def context(self):
+        '''The context for this stop'''
+        return self.system.context
     
     @property
     def url_id(self):
@@ -47,13 +57,13 @@ class Stop:
     @property
     def nearby_stops(self):
         '''Returns all stops with coordinates close to this stop'''
-        stops = self.context.system.get_stops()
+        stops = self.system.get_stops()
         return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
     
     @property
     def cache(self):
         '''Returns the cache for this stop'''
-        return self.context.system.get_stop_cache(self)
+        return self.system.get_stop_cache(self)
     
     @property
     def schedule(self):
@@ -91,8 +101,8 @@ class Stop:
         '''Returns a representation of this stop in JSON-compatible format'''
         number = self.number if self.context.show_stop_number else None
         return {
-            'system_id': self.context.system_id,
-            'system_name': str(self.context.system),
+            'system_id': self.system.id,
+            'system_name': str(self.system),
             'agency_id': self.context.agency_id,
             'number': number,
             'name': self.name.replace("'", '&apos;'),

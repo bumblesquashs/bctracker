@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 from dataclasses import dataclass
 
+from models.agency import Agency
 from models.context import Context
 
 import repositories
@@ -15,7 +16,7 @@ import repositories
 class Bus:
     '''A public transportation vehicle'''
     
-    context: Context
+    agency: Agency
     number: int
     order: Order
     
@@ -23,7 +24,12 @@ class Bus:
     def find(cls, context: Context, number):
         '''Returns a bus for the given context with the given number'''
         order = repositories.order.find(context, number)
-        return cls(context, number, order)
+        return cls(context.agency, number, order)
+    
+    @property
+    def context(self):
+        '''The context for this bus'''
+        return self.agency.context
     
     @property
     def url_id(self):

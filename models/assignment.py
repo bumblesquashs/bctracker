@@ -1,8 +1,13 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
 from dataclasses import dataclass
 
 from models.bus import Bus
-from models.context import Context
 from models.date import Date
 from models.row import Row
 
@@ -10,7 +15,7 @@ from models.row import Row
 class Assignment:
     '''An association between a block and a bus for a specific date'''
     
-    context: Context
+    system: System
     block_id: str
     bus_number: int
     date: Date
@@ -22,12 +27,17 @@ class Assignment:
         block_id = row['block_id']
         bus_number = row['bus_number']
         date = Date.parse(row['date'], context.timezone)
-        return cls(context, block_id, bus_number, date)
+        return cls(context.system, block_id, bus_number, date)
+    
+    @property
+    def context(self):
+        '''The context for this assignment'''
+        return self.system.context
     
     @property
     def key(self):
         '''The unique identifier for this assignment'''
-        return (self.context.system_id, self.block_id)
+        return (self.system.id, self.block_id)
     
     @property
     def bus(self):
