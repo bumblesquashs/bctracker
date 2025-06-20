@@ -31,6 +31,10 @@
             </div>
             <div class="container inline flex-3">
                 % for (i, sheet) in enumerate(sheets):
+                    % sheet_blocks = [b for b in blocks if [t for t in b.trips if t.service in sheet.services]]
+                    % if not sheet_blocks:
+                        % continue
+                    % end
                     % path_suffix = '' if i == 0 else str(i + 1)
                     <div class="section">
                         <div class="header" onclick="toggleSection(this)">
