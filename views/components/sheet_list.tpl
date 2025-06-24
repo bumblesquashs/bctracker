@@ -37,35 +37,37 @@
         % for (i, sheet) in enumerate(sheets):
             % today = Date.today(sheet.context.timezone)
             % schedule = sheet.schedule
-            <div class="sheet">
-                % if not schedule.is_special:
-                    <div class="title">{{ schedule.date_range }}</div>
-                    % include('components/weekdays', path_suffix='' if i == 0 else str(i + 1))
-                % end
-                % dates = schedule.exceptions.union(sheet.modifications)
-                % if dates:
-                    <div class="dates">
-                        % for (year, month) in sorted({(d.year, d.month) for d in dates}):
-                            % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
-                            <div class="month {{ 'title' if schedule.is_special else '' }}">
-                                % if year == today.year:
-                                    <div class="name">{{ calendar.month_name[month] }}</div>
-                                % else:
-                                    <div class="name">{{ calendar.month_name[month] }} {{ year }}</div>
-                                % end
-                                % for date in month_dates:
-                                    % status = sheet.get_date_status(date)
-                                    % if schedule_path:
-                                        <a class="date {{ status }}" href="{{ get_url(context, date_path, date) }}">{{ date.day }}</a>
+            % dates = schedule.exceptions.union(sheet.modifications)
+            % if not schedule.is_special or dates:
+                <div class="sheet">
+                    % if not schedule.is_special:
+                        <div class="title">{{ schedule.date_range }}</div>
+                        % include('components/weekdays', path_suffix='' if i == 0 else str(i + 1))
+                    % end
+                    % if dates:
+                        <div class="dates">
+                            % for (year, month) in sorted({(d.year, d.month) for d in dates}):
+                                % month_dates = sorted({d for d in dates if d.month == month and d.year == year})
+                                <div class="month {{ 'title' if schedule.is_special else '' }}">
+                                    % if year == today.year:
+                                        <div class="name">{{ calendar.month_name[month] }}</div>
                                     % else:
-                                        <span class="date {{ status }}">{{ date.day }}</span>
+                                        <div class="name">{{ calendar.month_name[month] }} {{ year }}</div>
                                     % end
-                                % end
-                            </div>
-                        % end
-                    </div>
-                % end
-            </div>
+                                    % for date in month_dates:
+                                        % status = sheet.get_date_status(date)
+                                        % if schedule_path:
+                                            <a class="date {{ status }}" href="{{ get_url(context, date_path, date) }}">{{ date.day }}</a>
+                                        % else:
+                                            <span class="date {{ status }}">{{ date.day }}</span>
+                                        % end
+                                    % end
+                                </div>
+                            % end
+                        </div>
+                    % end
+                </div>
+            % end
         % end
     </div>
     % if schedule_path:

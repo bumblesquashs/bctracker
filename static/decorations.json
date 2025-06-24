@@ -38,6 +38,10 @@
             "text": "🎅",
             "description": "Santa Bus",
             "enabled": false
+        },
+        "9458": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus"
         }
     }
 }

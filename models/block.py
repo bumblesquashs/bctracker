@@ -3,7 +3,9 @@ from dataclasses import dataclass, field
 
 from models.context import Context
 from models.schedule import Schedule
+from models.sheet import Sheet
 from models.time import Time
+from models.trip import Trip
 
 @dataclass(slots=True)
 class Block:
@@ -11,10 +13,10 @@ class Block:
     
     context: Context
     id: str
-    trips: list
+    trips: list[Trip]
     
     schedule: Schedule = field(init=False)
-    sheets: list = field(init=False)
+    sheets: list[Sheet] = field(init=False)
     
     @property
     def url_id(self):

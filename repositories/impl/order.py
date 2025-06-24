@@ -21,7 +21,6 @@ class OrderRepository:
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency = repositories.agency.find(agency_id)
-                context = Context(agency=agency)
                 agency_orders = []
                 for (model_id, model_values) in agency_values.items():
                     model = repositories.model.find(model_id)
@@ -32,7 +31,7 @@ class OrderRepository:
                             del values['number']
                         if 'exceptions' in values:
                             values['exceptions'] = set(values['exceptions'])
-                        agency_orders.append(Order(context, model, **values))
+                        agency_orders.append(Order(agency.context, model, **values))
                 self.orders[agency_id] = agency_orders
     
     def find(self, context: Context, bus) -> Order | None:

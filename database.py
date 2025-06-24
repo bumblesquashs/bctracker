@@ -1,6 +1,7 @@
 
 import sqlite3
 import shutil
+from dataclasses import dataclass, field
 
 from models.row import Row
 
@@ -148,16 +149,11 @@ SQL_SCRIPTS = [
     'CREATE INDEX IF NOT EXISTS departure_stop_id ON departure (stop_id)'
 ]
 
+@dataclass(slots=True)
 class Database:
     
-    __slots__ = (
-        'name',
-        'connection'
-    )
-    
-    def __init__(self, name='bctracker'):
-        self.name = name
-        self.connection = None
+    name: str = 'bctracker'
+    connection: sqlite3.Connection | None = field(default=None, init=False)
     
     def connect(self, foreign_keys=True):
         '''Opens a connection to the database and runs setup scripts'''
