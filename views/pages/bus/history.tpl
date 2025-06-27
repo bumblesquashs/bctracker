@@ -41,8 +41,8 @@
                         <div class="row section align-start">
                             <div class="name">{{ 'System' if len(tracked_systems) == 1 else 'Systems' }}</div>
                             <div class="value">
-                                % for tracked_system in sorted(tracked_systems):
-                                    <a href="{{ get_url(tracked_system) }}">{{ tracked_system }}</a>
+                                % for system in sorted(tracked_systems):
+                                    <a href="{{ get_url(system.context) }}">{{ system }}</a>
                                 % end
                             </div>
                         </div>
