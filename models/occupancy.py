@@ -16,7 +16,7 @@ class Occupancy(Enum):
     @classmethod
     def from_db(cls, value):
         try:
-            return cls(value)
+            return cls[value]
         except:
             return cls.NO_DATA_AVAILABLE
     
