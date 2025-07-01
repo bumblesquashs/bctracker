@@ -662,6 +662,13 @@ table tr.table-button {
     padding: 5px;
 }
 
+.button.icon.small {
+    --image-size: 18px;
+    width: 18px;
+    height: 18px;
+    padding: 3px;
+}
+
 .button-container {
     display: flex;
     flex-direction: row;

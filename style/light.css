@@ -90,12 +90,20 @@
     background-color: #FF7F7F;
 }
 
+.percentage.low.inverted {
+    background-color: #7DBD88;
+}
+
 .percentage.mid {
     background-color: #FFA560;
 }
 
 .percentage.high {
     background-color: #7DBD88;
+}
+
+.percentage.high.inverted {
+    background-color: #FF7F7F;
 }
 
 .positive {

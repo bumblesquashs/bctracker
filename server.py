@@ -106,6 +106,7 @@ class Server(Bottle):
         self.add('/api/admin/reload-themes', method='POST', require_admin=True, callback=self.api_admin_reload_themes)
         self.add('/api/admin/restart-cron', method='POST', require_admin=True, callback=self.api_admin_restart_cron)
         self.add('/api/admin/backup-database', method='POST', require_admin=True, callback=self.api_admin_backup_database)
+        self.add('/api/admin/reset-cache/<reset_system_id>', method='POST', require_admin=True, callback=self.api_admin_reset_cache)
         self.add('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True, callback=self.api_admin_reload_gtfs)
         self.add('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True, callback=self.api_admin_reload_realtime)
         
@@ -151,7 +152,6 @@ class Server(Bottle):
                     services.gtfs.load(context, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
                         services.gtfs.load(context, True)
-                    services.gtfs.update_cache(context)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
@@ -1363,7 +1363,6 @@ class Server(Bottle):
                     services.gtfs.load(context)
                     if not services.gtfs.validate(context):
                         services.gtfs.load(context, True)
-                    services.gtfs.update_cache(context)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
@@ -1390,6 +1389,13 @@ class Server(Bottle):
         self.database.archive()
         return 'Success'
     
+    def api_admin_reset_cache(self, context: Context, reset_system_id):
+        system = repositories.system.find(reset_system_id)
+        if not system:
+            return 'Invalid system'
+        system.reset_caches()
+        return 'Success'
+    
     def api_admin_reload_gtfs(self, context: Context, reload_system_id):
         system = repositories.system.find(reload_system_id)
         if not system:
@@ -1397,7 +1403,6 @@ class Server(Bottle):
         context = system.context
         try:
             services.gtfs.load(context, True)
-            services.gtfs.update_cache(context)
             services.realtime.update(context)
             services.realtime.update_records()
             if not system.gtfs_downloaded or not services.realtime.validate(context):

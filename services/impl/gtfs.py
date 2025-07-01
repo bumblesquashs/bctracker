@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from zipfile import ZipFile
 from shutil import rmtree
-from threading import Thread
 
 import csv
 import requests
@@ -73,6 +72,7 @@ class GTFSService:
         context.system.blocks = {id: Block(context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
+        context.system.reset_caches()
     
     def download(self, context: Context):
         '''Downloads the GTFS for the given system'''
@@ -127,14 +127,6 @@ class GTFSService:
         if end_dates:
             return Date.today(context.timezone) < max(end_dates) - timedelta(days=7)
         return True
-    
-    def update_cache(self, context: Context):
-        '''Updates cached data for the given context'''
-        if self.settings.update_cache_in_background:
-            thread = Thread(target=context.system.update_cache)
-            thread.start()
-        else:
-            context.system.update_cache()
 
 def read_csv(context: Context, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''
