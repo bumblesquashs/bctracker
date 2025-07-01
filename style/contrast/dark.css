@@ -42,12 +42,20 @@
     background-color: #A1004F;
 }
 
+.percentage.low.inverted {
+    background-color: #1658FC;
+}
+
 .percentage.mid {
     background-color: #9B6B00;
 }
 
 .percentage.high {
     background-color: #1658FC;
+}
+
+.percentage.high.inverted {
+    background-color: #A1004F;
 }
 
 .sheet a.modified-service:hover {

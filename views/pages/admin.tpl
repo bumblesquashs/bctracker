@@ -65,8 +65,8 @@
                                                         <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
                                                             {{ 'Enabled' if system.enabled else 'Disabled' }}
                                                         </div>
-                                                        <div class="mobile-only smaller-font {{ 'positive' if total and progress == total else 'negative' }}">
-                                                            {{ progress }} / {{ total }}
+                                                        <div class="mobile-only smaller-font">
+                                                            % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
                                                         </div>
                                                     </div>
                                                 </div>
@@ -78,8 +78,8 @@
                                                     % include('components/svg', name='status/disabled')
                                                 % end
                                             </td>
-                                            <td class="non-mobile {{ 'positive' if total and progress == total else 'negative' }}">
-                                                {{ progress }} / {{ total }}
+                                            <td class="non-mobile">
+                                                % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
                                             </td>
                                             <td>
                                                 % if system.gtfs_enabled:
