@@ -106,6 +106,7 @@ class Server(Bottle):
         self.add('/api/admin/reload-themes', method='POST', require_admin=True, callback=self.api_admin_reload_themes)
         self.add('/api/admin/restart-cron', method='POST', require_admin=True, callback=self.api_admin_restart_cron)
         self.add('/api/admin/backup-database', method='POST', require_admin=True, callback=self.api_admin_backup_database)
+        self.add('/api/admin/reset-cache/<reset_system_id>', method='POST', require_admin=True, callback=self.api_admin_reset_cache)
         self.add('/api/admin/reload-gtfs/<reload_system_id>', method='POST', require_admin=True, callback=self.api_admin_reload_gtfs)
         self.add('/api/admin/reload-realtime/<reload_system_id>', method='POST', require_admin=True, callback=self.api_admin_reload_realtime)
         
@@ -1386,6 +1387,13 @@ class Server(Bottle):
     
     def api_admin_backup_database(self, context: Context):
         self.database.archive()
+        return 'Success'
+    
+    def api_admin_reset_cache(self, context: Context, reset_system_id):
+        system = repositories.system.find(reset_system_id)
+        if not system:
+            return 'Invalid system'
+        system.reset_caches()
         return 'Success'
     
     def api_admin_reload_gtfs(self, context: Context, reload_system_id):

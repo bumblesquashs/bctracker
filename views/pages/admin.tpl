@@ -65,8 +65,13 @@
                                                         <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
                                                             {{ 'Enabled' if system.enabled else 'Disabled' }}
                                                         </div>
-                                                        <div class="mobile-only smaller-font">
+                                                        <div class="mobile-only smaller-font row">
                                                             % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                            % if total:
+                                                                <div class="button icon small" onclick="resetCache('{{ system.id }}')">
+                                                                    % include('components/svg', name='action/delete')
+                                                                </div>
+                                                            % end
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,7 +84,14 @@
                                                 % end
                                             </td>
                                             <td class="non-mobile">
-                                                % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                <div class="row space-between">
+                                                    % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                    % if total:
+                                                        <div class="button icon small" onclick="resetCache('{{ system.id }}')">
+                                                            % include('components/svg', name='action/delete')
+                                                        </div>
+                                                    % end
+                                                </div>
                                             </td>
                                             <td>
                                                 % if system.gtfs_enabled:
@@ -87,7 +99,7 @@
                                                         <div class="positive">
                                                             % include('components/svg', name='status/enabled')
                                                         </div>
-                                                        <div class="button icon" onclick="reloadGTFS('{{ system.id }}')">
+                                                        <div class="button icon small" onclick="reloadGTFS('{{ system.id }}')">
                                                             % include('components/svg', name='action/refresh')
                                                         </div>
                                                     </div>
@@ -103,7 +115,7 @@
                                                         <div class="positive">
                                                             % include('components/svg', name='status/enabled')
                                                         </div>
-                                                        <div class="button icon" onclick="reloadRealtime('{{ system.id }}')">
+                                                        <div class="button icon small" onclick="reloadRealtime('{{ system.id }}')">
                                                             % include('components/svg', name='action/refresh')
                                                         </div>
                                                     </div>
@@ -159,6 +171,15 @@
     function backupDatabase() {
         const request = new XMLHttpRequest();
         request.open("POST", getUrl(currentSystemID, "api/admin/backup-database"), true);
+        request.send();
+    }
+    
+    function resetCache(resetSystemID) {
+        const request = new XMLHttpRequest();
+        request.open("POST", getUrl(currentSystemID, "api/admin/reset-cache/" + resetSystemID), true);
+        request.onload = function() {
+            location.reload();
+        }
         request.send();
     }
     

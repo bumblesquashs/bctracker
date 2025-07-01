@@ -72,6 +72,7 @@ class GTFSService:
         context.system.blocks = {id: Block(context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
+        context.system.reset_caches()
     
     def download(self, context: Context):
         '''Downloads the GTFS for the given system'''

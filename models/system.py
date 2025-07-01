@@ -228,3 +228,9 @@ class System:
             cache = TripCache.build(departures)
             self.trip_caches[trip_id] = cache
             return cache
+    
+    def reset_caches(self):
+        '''Resets the route, stop, and trip caches'''
+        self.route_caches = {}
+        self.stop_caches = {}
+        self.trip_caches = {}
