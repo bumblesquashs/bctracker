@@ -127,14 +127,6 @@ class GTFSService:
         if end_dates:
             return Date.today(context.timezone) < max(end_dates) - timedelta(days=7)
         return True
-    
-    def update_cache(self, context: Context):
-        '''Updates cached data for the given context'''
-        if self.settings.update_cache_in_background:
-            thread = Thread(target=context.system.update_cache)
-            thread.start()
-        else:
-            context.system.update_cache()
 
 def read_csv(context: Context, name, initializer):
     '''Opens a CSV file and applies an initializer to each row'''

@@ -54,7 +54,6 @@ class CronService:
                     date = Date.today(context.timezone)
                     if date.weekday == Weekday.MON or not services.gtfs.validate(context):
                         services.gtfs.load(context, True)
-                        services.gtfs.update_cache(context)
                 except Exception as e:
                     print(f'Error loading GTFS data for {context}: {e}')
         if self.running:
@@ -78,7 +77,6 @@ class CronService:
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
                         services.gtfs.load(context, True)
-                        services.gtfs.update_cache(context)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
