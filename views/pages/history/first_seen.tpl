@@ -10,91 +10,109 @@
     </div>
 </div>
 
-% if overviews:
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Bus</th>
-                <th class="desktop-only">Model</th>
-                % if not context.system:
-                    <th class="non-mobile">System</th>
+<div class="container">
+    <div class="section">
+        <div class="content">
+            % if overviews:
+                % if [o for o in overviews if o.first_record and o.first_record.warnings]:
+                    <p>
+                        <span>Entries with a</span>
+                        <span class="record-warnings">
+                            % include('components/svg', name='status/warning')
+                        </span>
+                        <span>may be accidental logins.</span>
+                    </p>
                 % end
-                <th>Block</th>
-                <th class="desktop-only">Routes</th>
-            </tr>
-        </thead>
-        <tbody>
-            % last_date = None
-            % for overview in overviews:
-                % record = overview.first_record
-                % bus = record.bus
-                % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
-                    <tr class="header">
-                        <td colspan="6">{{ record.date.format_month() }}</td>
-                        <tr class="display-none"></tr>
-                    </tr>
-                % end
-                % last_date = record.date
-                <tr>
-                    <td>
-                        <div class="column">
-                            {{ record.date.format_day() }}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Bus</th>
+                            <th class="desktop-only">Model</th>
                             % if not context.system:
-                                <span class="mobile-only smaller-font">{{ record.context }}</span>
+                                <th class="non-mobile">System</th>
                             % end
-                        </div>
-                    </td>
-                    <td>
-                        <div class="column">
-                            % include('components/bus')
-                            <span class="non-desktop smaller-font">
-                                % include('components/order', order=bus.order)
-                            </span>
-                        </div>
-                    </td>
-                    <td class="desktop-only">
-                        % include('components/order', order=bus.order)
-                    </td>
+                            <th>Block</th>
+                            <th class="desktop-only">Routes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        % last_date = None
+                        % for overview in overviews:
+                            % record = overview.first_record
+                            % bus = record.bus
+                            % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                                <tr class="header">
+                                    <td colspan="6">{{ record.date.format_month() }}</td>
+                                    <tr class="display-none"></tr>
+                                </tr>
+                            % end
+                            % last_date = record.date
+                            <tr>
+                                <td>
+                                    <div class="column">
+                                        {{ record.date.format_day() }}
+                                        % if not context.system:
+                                            <span class="mobile-only smaller-font">{{ record.context }}</span>
+                                        % end
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="column">
+                                        % include('components/bus')
+                                        <span class="non-desktop smaller-font">
+                                            % include('components/order', order=bus.order)
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="desktop-only">
+                                    % include('components/order', order=bus.order)
+                                </td>
+                                % if not context.system:
+                                    <td class="non-mobile">{{ record.context }}</td>
+                                % end
+                                <td>
+                                    <div class="column stretch">
+                                        <div class="row space-between">
+                                            % if record.is_available:
+                                                % block = record.block
+                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                            % else:
+                                                <span>{{ record.block_id }}</span>
+                                            % end
+                                            % include('components/record_warnings')
+                                        </div>
+                                        <div class="non-desktop">
+                                            % include('components/route_list', routes=record.routes)
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="desktop-only">
+                                    % include('components/route_list', routes=record.routes)
+                                </td>
+                            </tr>
+                        % end
+                    </tbody>
+                </table>
+            % else:
+                <div class="placeholder">
                     % if not context.system:
-                        <td class="non-mobile">{{ record.context }}</td>
-                    % end
-                    <td>
-                        <div class="column">
-                            % if record.is_available:
-                                % block = record.block
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                            % else:
-                                <span>{{ record.block_id }}</span>
-                            % end
-                            <div class="non-desktop">
-                                % include('components/route_list', routes=record.routes)
-                            </div>
+                        <h3>No vehicle history found</h3>
+                        <p>Something has probably gone terribly wrong if you're seeing this.</p>
+                    % elif not context.realtime_enabled:
+                        <h3>{{ context }} realtime information is not supported</h3>
+                        <p>You can browse schedule data using the links above, or choose a different system.</p>
+                        <div class="non-desktop">
+                            % include('components/systems')
                         </div>
-                    </td>
-                    <td class="desktop-only">
-                        % include('components/route_list', routes=record.routes)
-                    </td>
-                </tr>
+                    % else:
+                        <h3>No {{ context }} buses have been recorded</h3>
+                        <p>Please check again later!</p>
+                    % end
+                </div>
             % end
-        </tbody>
-    </table>
-% else:
-    <div class="placeholder">
-        % if not context.system:
-            <h3>No vehicle history found</h3>
-            <p>Something has probably gone terribly wrong if you're seeing this.</p>
-        % elif not context.realtime_enabled:
-            <h3>{{ context }} realtime information is not supported</h3>
-            <p>You can browse schedule data using the links above, or choose a different system.</p>
-            <div class="non-desktop">
-                % include('components/systems')
-            </div>
-        % else:
-            <h3>No {{ context }} buses have been recorded</h3>
-            <p>Please check again later!</p>
-        % end
+        </div>
     </div>
-% end
+</div>
 
 % include('components/top_button')

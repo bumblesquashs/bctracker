@@ -147,6 +147,10 @@
     background-color: #003B00;
 }
 
+.record-warnings {
+    --image-color: #DC5050;
+}
+
 .very-ahead {
     --adherence-background: #FF0007;
 }
