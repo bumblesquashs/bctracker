@@ -72,8 +72,8 @@
                                     <td class="non-mobile">{{ record.context }}</td>
                                 % end
                                 <td>
-                                    <div class="column">
-                                        <div class="row">
+                                    <div class="column stretch">
+                                        <div class="row space-between">
                                             % if record.is_available:
                                                 % block = record.block
                                                 <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
