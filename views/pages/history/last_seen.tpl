@@ -115,6 +115,15 @@
                     % known_overviews = [o for o in overviews if o.bus.order]
                     % unknown_overviews = [o for o in overviews if not o.bus.order]
                     % orders = sorted({o.bus.order for o in known_overviews})
+                    % if [o for o in overviews if o.last_record and o.last_record.warnings]:
+                        <p>
+                            <span>Entries with a</span>
+                            <span class="record-warnings">
+                                % include('components/svg', name='status/warning')
+                            </span>
+                            <span>may be accidental logins.</span>
+                        </p>
+                    % end
                     <table>
                         <thead>
                             <tr>
@@ -159,12 +168,15 @@
                                         % end
                                         <td>
                                             <div class="column">
-                                                % if record.is_available:
-                                                    % block = record.block
-                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                % else:
-                                                    <span>{{ record.block_id }}</span>
-                                                % end
+                                                <div class="row">
+                                                    % if record.is_available:
+                                                        % block = record.block
+                                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                    % else:
+                                                        <span>{{ record.block_id }}</span>
+                                                    % end
+                                                    % include('components/record_warnings')
+                                                </div>
                                                 <div class="non-desktop">
                                                     % include('components/route_list', routes=record.routes)
                                                 </div>
@@ -208,12 +220,15 @@
                                         % end
                                         <td>
                                             <div class="column">
-                                                % if record.is_available:
-                                                    % block = record.block
-                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                % else:
-                                                    <span>{{ record.block_id }}</span>
-                                                % end
+                                                <div class="row">
+                                                    % if record.is_available:
+                                                        % block = record.block
+                                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                    % else:
+                                                        <span>{{ record.block_id }}</span>
+                                                    % end
+                                                    % include('components/record_warnings')
+                                                </div>
                                                 <div class="non-desktop">
                                                     % include('components/route_list', routes=record.routes)
                                                 </div>
