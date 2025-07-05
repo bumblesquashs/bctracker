@@ -123,6 +123,10 @@
     background-color: #509F5E;
 }
 
+.record-warnings {
+    --image-color: #DC5050;
+}
+
 .very-ahead {
     --adherence-background: #FD393E;
 }

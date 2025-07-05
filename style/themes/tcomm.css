@@ -523,10 +523,6 @@ table tr.table-button:hover {
     text-shadow: none;
 }
 
-.record-warnings {
-    --image-color: #FF0000;
-}
-
 .route {
     color: #FFFFFF;
     border-color: #FFFFFF;
