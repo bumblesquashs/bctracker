@@ -371,6 +371,10 @@ table tr.table-button:hover {
     --image-color: #69BB65;
 }
 
+.paging {
+    --image-color: #69BB65;
+}
+
 .paging .page {
     background-color: #E4F6E3;
     color: #000000;

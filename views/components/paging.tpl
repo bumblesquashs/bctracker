@@ -24,7 +24,11 @@
         % previous_page = 0
         % for page_number in sorted(page_numbers):
             % if page_number > previous_page + 1:
-                <div class="lighter-text flex-1 centred">...</div>
+                % if previous_page == 1:
+                    % include('components/svg', name='paging/left-double')
+                % else:
+                    % include('components/svg', name='paging/right-double')
+                % end
             % end
             % if page_number == page:
                 <div class="page current flex-1">{{ page_number }}</div>
