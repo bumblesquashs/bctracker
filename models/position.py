@@ -52,8 +52,7 @@ class Position:
         if adherence_value is None:
             adherence = None
         else:
-            trip = context.system.get_trip(trip_id)
-            layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
+            layover = row['layover'] == 1
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)

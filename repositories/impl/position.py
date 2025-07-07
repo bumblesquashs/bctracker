@@ -98,6 +98,7 @@ class PositionRepository:
         }
         if adherence:
             values['adherence'] = adherence.value
+            values['layover'] = 1 if adherence.layover else 0
         if timestamp:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
@@ -119,6 +120,7 @@ class PositionRepository:
                 'position.bearing': 'bearing',
                 'position.speed': 'speed',
                 'position.adherence': 'adherence',
+                'position.layover': 'layover',
                 'position.occupancy': 'occupancy',
                 'position.timestamp': 'timestamp'
             },
@@ -186,6 +188,7 @@ class PositionRepository:
                 'position.bearing': 'bearing',
                 'position.speed': 'speed',
                 'position.adherence': 'adherence',
+                'position.layover': 'layover',
                 'position.occupancy': 'occupancy',
                 'position.timestamp': 'timestamp'
             },
