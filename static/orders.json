@@ -148,7 +148,7 @@
             { "year": 2008, "low": 9290, "high": 9300 }
         ],
         "nova-bus-lfse+": [
-            { "year": 2025, "low": 7000, "high": 7032 }
+            { "year": 2025, "low": 7010, "high": 7011 }
         ],
         "proterra-zx5": [
             { "year": 2022, "number": 9093, "demo": true }
