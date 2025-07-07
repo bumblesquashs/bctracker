@@ -396,10 +396,6 @@ table tr.table-button:hover {
     background-color: #2247B7;
 }
 
-.record-warnings {
-    --image-color: #FF0000;
-}
-
 .route {
     color: #FFFFFF;
     border-color: #393939;

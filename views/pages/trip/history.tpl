@@ -88,8 +88,8 @@
                                     <tr>
                                         <td>{{ record.date.format_day() }}</td>
                                         <td>
-                                            <div class="column">
-                                                <div class="row">
+                                            <div class="column stretch">
+                                                <div class="row space-between">
                                                     % include('components/bus')
                                                     % include('components/record_warnings')
                                                 </div>
