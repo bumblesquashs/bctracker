@@ -154,6 +154,27 @@ table tr.table-button {
     flex: 1;
 }
 
+#header-curve {
+    pointer-events: none;
+    height: 150px;
+    width: 300px;
+}
+
+#header-curve svg {
+    display: block;
+}
+
+#header-curve .shape-fill {
+    fill: var(--status-bar-background)
+}
+
+#header-curve-container {
+    height: 0px;
+    overflow: visible;
+    z-index: 100;
+    align-self: flex-end;
+}
+
 #last-updated {
     font-size: 12pt;
 }
@@ -222,6 +243,9 @@ table tr.table-button {
 #main {
     flex: 1;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 #map.full-screen {

@@ -402,6 +402,15 @@
                 % include('components/svg', name='action/refresh')
             </div>
         </div>
+        % if theme.show_header_curve:
+            <div id="header-curve-container">
+                <div id="header-curve">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+                        <path d="M 0,0 H 300 V 150 C 279.86754,47.920183 160.84806,0.90818246 0,0 Z" class="shape-fill"></path>
+                    </svg>
+                </div>
+            </div>
+        % end
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
                 % if context.system:

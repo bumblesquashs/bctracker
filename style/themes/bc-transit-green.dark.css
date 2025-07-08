@@ -1,0 +1,454 @@
+/* COLOR REFERENCE
+ * 
+ * Primary Background: #2F2F2F
+ * Secondary Background: #393939
+ * Primary Header: #154E15
+ * Secondary Header: #276227
+ * Menu: #053305
+ * Borders: #565656
+ * Selection: #565656
+ * 
+ * Primary Text: #FFFFFF
+ * Secondary Text: #ABABAB
+ * Links: #5CC3FF
+ * Buttons: #2247B7
+ * 
+ * Other colors may also be used for specific purposes
+*/
+
+:root {
+    color-scheme: dark;
+    
+    --navigation-bar-background: #0A6C00;
+    --navigation-bar-hover: #074700;
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: #074700;
+    --navigation-menu-foreground: #FFFFFF;
+    
+    --status-bar-background: #0D8A00;
+    --status-bar-hover: #0A6C00;
+    --status-bar-foreground: #FFFFFF;
+    
+    --loading-background: #2F2F2F;
+    --loading-foreground: #0D8A00;
+    
+    --checkbox-color: #0D8A00;
+    --radio-button-color: #0D8A00;
+    --toggle-button-color: #0D8A00;
+    
+    --stop-number-background: #2F2F2F;
+    --stop-number-text: #FFFFFF;
+    --stop-number-border: #565656;
+    
+    --map-control-background: rgba(30, 30, 30, 0.7);
+    --map-control-background-hover: rgba(30, 30, 30, 0.7);
+    --map-control-icon: #FFFFFF;
+}
+
+a {
+    color: #0D8A00;
+}
+
+body {
+    background-color: #2F2F2F;
+    color: #FFFFFF;
+}
+
+body.full-map #page {
+    background-color: rgba(30, 30, 30, 0.7);
+}
+
+body.full-map #page .option {
+    --hover-background: #2F2F2F;
+}
+
+h1, h2, h3 {
+    --stop-number-background: #393939;
+}
+
+input[type="text"] {
+    border-color: #565656;
+    background-color: #393939;
+    color: #FFFFFF;
+}
+
+input[type="text"]:focus {
+    border-color: #074700;
+}
+
+input[type="text"]::placeholder {
+    color: #ABABAB;
+}
+
+iframe {
+    color-scheme: light;
+}
+
+table {
+    border-color: #565656;
+}
+
+table tbody tr:hover {
+    background-color: #565656;
+}
+
+table tbody tr.header {
+    background-color: #565656;
+    color: #FFFFFF;
+}
+
+table td {
+    border-color: #565656;
+}
+
+table th {
+    background-color: #0D8A00;
+    color: #FFFFFF;
+    border-color: #565656;
+}
+
+table tr {
+    background-color: #2F2F2F;
+}
+
+table tr:nth-child(2n-1) {
+    background-color: #393939;
+}
+
+table tr.table-button {
+    background-color: #0D8A00;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: #074700;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
+}
+
+#map.preview {
+    border-color: #565656;
+}
+
+#map-controls .control.active {
+    --map-control-icon: #0D8A00;
+}
+
+#navigation-bar {
+    --tooltip-background: #074700;
+}
+
+#nearby-status.loading {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #360000;
+}
+
+#page {
+    --image-color: #FFFFFF;
+}
+
+#page-header {
+    border-bottom-color: #565656;
+}
+
+#quick-navigation .item {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+#search {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+#search-header {
+    background-color: #0D8A00;
+    border-color: #565656;
+    --tooltip-background: #074700;
+}
+
+#search-input {
+    border-color: #2F2F2F;
+}
+
+#search-input:focus {
+    border-color: #074700;
+}
+
+#search-paging {
+    background-color: #2F2F2F;
+    border-color: #565656;
+}
+
+#search-placeholder {
+    color: #ABABAB;
+}
+
+#search-results {
+    --image-color: #FFFFFF;
+}
+
+#search-results .result {
+    color: #FFFFFF;
+}
+
+#search-results .result:hover {
+    background-color: #565656;
+}
+
+#search-results .result.keyboard-selected {
+    background-color: #565656;
+}
+
+#search-results .result .description {
+    color: #ABABAB;
+}
+
+#status-bar {
+    --tooltip-background: #074700;
+}
+
+#system-menu {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+#system-menu .header {
+    background-color: #565656;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    color: #FFFFFF;
+}
+
+#system-menu .system-button:hover {
+    background-color: #2F2F2F;
+}
+
+#system-menu .system-button.current {
+    background-color: #2F2F2F;
+}
+
+.banner {
+    background-color: #8A4D00;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+.banner a {
+    color: #FFFFFF;
+}
+
+.button {
+    background-color: #0D8A00;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+.button:hover {
+    background-color: #074700;
+}
+
+.button.disabled {
+    background-color: #565656;
+}
+
+.button.disabled:hover {
+    background-color: #565656 !important;
+}
+
+.button.inactive {
+    background-color: #ABABAB;
+}
+
+.button.inactive:hover {
+    background-color: #666666;
+}
+
+.button.survey-button {
+    background-color: #AA6816;
+}
+
+.button.survey-button:hover {
+    background-color: #653800;
+}
+
+.code-block {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+.container > .section > .header {
+    border-bottom-color: #565656;
+}
+
+.container > .section > .header > .toggle {
+    --image-color: #0D8A00;
+}
+
+.events .date {
+    border-right-color: #565656;
+}
+
+.favourite {
+    --image-color: #0D8A00;
+}
+
+.favourite:hover {
+    background-color: #393939;
+}
+
+.favourite.disabled {
+    --image-color: #565656;
+}
+
+.favourite.disabled:hover {
+    background-color: initial;
+}
+
+.info-box {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+.info-box .section {
+    border-color: #565656;
+}
+
+.info-box .option {
+    --hover-background: #565656;
+}
+
+.lighter-text {
+    color: #ABABAB;
+}
+
+.marker .details {
+    background-color: rgba(30, 30, 30, 0.7);
+    color: #FFFFFF;
+}
+
+.marker .icon {
+    background-color: #0D8A00;
+    border-color: #2F2F2F;
+    --image-color: #FFFFFF;
+}
+
+.marker .icon.route .number {
+    color: #FFFFFF;
+}
+
+.marker .icon.bus_route {
+    color: #FFFFFF;
+}
+
+.news-post {
+    background-color: #393939;
+    border-color: #565656;
+}
+
+.news-post .header {
+    background-color: #0D8A00;
+    border-bottom-color: #565656;
+}
+
+.option {
+    --hover-background: #393939;
+}
+
+.option .checkbox {
+    background-color: #2F2F2F;
+}
+
+.option .radio-button {
+    background-color: #2F2F2F;
+}
+
+.order-details .content {
+    --image-color: #565656;
+}
+
+.paging {
+    --image-color: #989898;
+}
+
+.paging .page {
+    background-color: #393939;
+    color: #FFFFFF;
+}
+
+.paging .page:hover {
+    background-color: #565656;
+}
+
+.paging .page.current {
+    background-color: #0D8A00;
+    color: #FFFFFF;
+}
+
+.paging .page.current:hover {
+    background-color: #0D8A00;
+}
+
+.route {
+    color: #FFFFFF;
+    border-color: #393939;
+    background-color: #989898;
+}
+
+.scheduled {
+    --image-color: #989898;
+}
+
+.sheet {
+    background-color: #565656;
+}
+
+.sheet-list .footer {
+    color: #ABABAB;
+}
+
+.sheet-list .legend {
+    color: #ABABAB;
+}
+
+.tab-button-bar {
+    background: #565656;
+    border-color: #565656;
+}
+
+.tab-button {
+    background-color: #2F2F2F;
+    color: #5CC3FF;
+}
+
+.tab-button:hover {
+    background-color: #393939;
+}
+
+.tab-button.current {
+    background-color: #565656;
+    color: #FFFFFF;
+}
+
+.timeline .now {
+    background-color: #FF0000;
+}
+
+.timeline .section:hover {
+    border-color: #565656;
+}
+
+.timespan .time {
+    background-color: #989898;
+}

@@ -10,6 +10,7 @@ class Theme:
     visible: bool = True
     light: bool = False
     dark: bool = False
+    show_header_curve: bool = False
     
     def __str__(self):
         return self.name

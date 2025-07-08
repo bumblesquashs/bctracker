@@ -4,6 +4,12 @@
         "light": true,
         "dark": true
     },
+    "bc-transit-green": {
+        "name": "BC Transit Green",
+        "light": true,
+        "dark": true,
+        "show_header_curve": true
+    },
     "bc-transit-classic": {
         "name": "BC Transit Classic",
         "light": true
