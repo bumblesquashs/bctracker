@@ -1,29 +1,27 @@
 
 import math
-
-from di import di
+from dataclasses import dataclass, field
 
 from models.timestamp import Timestamp
 
-from repositories import DepartureRepository
+import repositories
 
 MINIMUM_MINUTES = 4
 
+@dataclass(slots=True)
 class Adherence:
     '''Indicates how far ahead or behind a bus is compared to its trip's schedule'''
     
-    __slots__ = (
-        'value',
-        'layover',
-        'status_class',
-        'description'
-    )
+    value: int
+    layover: bool
+    
+    status_class: str = field(init=False)
+    description: str = field(init=False)
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon, timestamp, **kwargs):
+    def calculate(cls, trip, stop, sequence, lat, lon, timestamp):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
-        departure = departure_repository.find(trip.system, trip=trip, sequence=sequence)
+        departure = repositories.departure.find(trip.context, trip=trip, sequence=sequence)
         if not departure:
             return None
         previous_departure = departure.find_previous()
@@ -38,16 +36,16 @@ class Adherence:
                 if time_difference >= MINIMUM_MINUTES:
                     expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
             if not timestamp:
-                timestamp = Timestamp.now(trip.system.timezone)
+                timestamp = Timestamp.now(trip.context.timezone)
             value = expected_scheduled_mins - timestamp.time.get_minutes(round_seconds=True)
             layover = trip.first_departure and sequence == trip.first_departure.sequence and value > 0
             return cls(value, layover)
         except AttributeError:
             return None
     
-    def __init__(self, value, layover):
-        self.value = value
-        self.layover = layover
+    def __post_init__(self):
+        value = self.value
+        layover = self.layover
         
         if layover:
             self.status_class = 'layover'

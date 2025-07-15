@@ -1,17 +1,60 @@
 
-from models.schedule import Schedule
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from models.system import System
+
+from dataclasses import dataclass
+from typing import Self
+
+from models.date import Date
+from models.schedule import Schedule
+from models.service import Service
+
+@dataclass(slots=True)
+class ServiceGroup:
+    '''A collection of services represented as a single schedule'''
+    
+    system: System
+    schedule: Schedule
+    services: tuple
+    
+    @property
+    def context(self):
+        '''The context for this service group'''
+        return self.system.context
+    
+    def __str__(self):
+        return str(self.schedule)
+    
+    def __hash__(self):
+        return hash(self.schedule)
+    
+    def __eq__(self, other):
+        return self.schedule == other.schedule
+    
+    def __lt__(self, other):
+        return self.schedule < other.schedule
+    
+    def __contains__(self, service):
+        return service in self.services
+
+@dataclass(init=False, slots=True)
 class Sheet:
     '''A collection of overlapping services'''
     
-    __slots__ = (
-        'system',
-        'schedule',
-        'services',
-        'service_groups',
-        'modifications',
-        'copies'
-    )
+    system: System
+    schedule: Schedule
+    services: list[Service]
+    service_groups: list[ServiceGroup]
+    modifications: set[Date]
+    copies: dict[tuple, Self]
+    
+    @property
+    def context(self):
+        '''The context for this sheet'''
+        return self.system.context
     
     @property
     def normal_service_groups(self):
@@ -36,7 +79,7 @@ class Sheet:
         '''Checks if this sheet indicates no service'''
         return self.schedule.has_no_service
     
-    def __init__(self, system, services, date_range):
+    def __init__(self, system: System, services, date_range):
         self.system = system
         self.schedule = Schedule.combine(services, date_range)
         self.services = services
@@ -48,7 +91,8 @@ class Sheet:
             if not service_set:
                 continue
             dates = {k for k,v in date_services.items() if v == service_set}
-            service_group = ServiceGroup(system, dates, date_range, service_set)
+            schedule = Schedule(dates, date_range)
+            service_group = ServiceGroup(system, schedule, service_set)
             service_groups.append(service_group)
         
         self.service_groups = sorted(service_groups)
@@ -58,7 +102,7 @@ class Sheet:
         self.modifications = added_dates.intersection(removed_dates)
     
     def __str__(self):
-        if self.schedule.is_special:
+        if self.schedule.is_special and self.schedule.added_dates:
             return self.schedule.added_dates_string
         return str(self.schedule.date_range)
     
@@ -92,32 +136,3 @@ class Sheet:
         if date in self.modifications:
             return 'modified-service'
         return self.schedule.get_date_status(date)
-
-class ServiceGroup:
-    '''A collection of services represented as a single schedule'''
-    
-    __slots__ = (
-        'system',
-        'schedule',
-        'services'
-    )
-    
-    def __init__(self, system, dates, date_range, services):
-        self.system = system
-        self.schedule = Schedule(dates, date_range)
-        self.services = services
-    
-    def __str__(self):
-        return str(self.schedule)
-    
-    def __hash__(self):
-        return hash(self.schedule)
-    
-    def __eq__(self, other):
-        return self.schedule == other.schedule
-    
-    def __lt__(self, other):
-        return self.schedule < other.schedule
-    
-    def __contains__(self, service):
-        return service in self.services

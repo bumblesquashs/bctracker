@@ -1,7 +1,5 @@
 
-% from repositories import SystemRepository
-
-% system_repository = di[SystemRepository]
+% import repositories
 
 % rebase('base')
 
@@ -19,7 +17,7 @@
             </div>
             <div class="content">
                 <div class="button-container">
-                    <div class="button" onclick="reloadAdornments()">Reload Adornments</div>
+                    <div class="button" onclick="reloadDecorations()">Reload Decorations</div>
                     <div class="button" onclick="reloadOrders()">Reload Orders</div>
                     <div class="button" onclick="reloadSystems()">Reload Systems</div>
                     <div class="button" onclick="reloadThemes()">Reload Themes</div>
@@ -49,47 +47,59 @@
                         </thead>
                         <tbody>
                             % for region in regions:
-                                % region_systems = [s for s in system_repository.find_all(enabled_only=False) if s.region == region]
+                                % region_systems = [s for s in repositories.system.find_all(enabled_only=False) if s.region == region]
                                 % if region_systems:
                                     <tr class="header">
                                         <td class="section" colspan="11">{{ region }}</td>
                                     </tr>
                                     <tr class="display-none"></tr>
-                                    % for region_system in sorted(region_systems):
-                                        % total = len(region_system.routes) + len(region_system.stops) + len(region_system.trips)
-                                        % progress = len(region_system.route_caches) + len(region_system.stop_caches) + len(region_system.trip_caches)
+                                    % for system in sorted(region_systems):
+                                        % total = len(system.routes) + len(system.stops) + len(system.trips)
+                                        % progress = len(system.route_caches) + len(system.stop_caches) + len(system.trip_caches)
                                         <tr>
                                             <td>
                                                 <div class="row">
-                                                    % include('components/agency_logo', agency=region_system.agency)
+                                                    % include('components/agency_logo', agency=system.agency)
                                                     <div class="column">
-                                                        {{ region_system }}
-                                                        <div class="mobile-only smaller-font {{ 'positive' if region_system.enabled else 'negative' }}">
-                                                            {{ 'Enabled' if region_system.enabled else 'Disabled' }}
+                                                        {{ system }}
+                                                        <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
+                                                            {{ 'Enabled' if system.enabled else 'Disabled' }}
                                                         </div>
-                                                        <div class="mobile-only smaller-font {{ 'positive' if total and progress == total else 'negative' }}">
-                                                            {{ progress }} / {{ total }}
+                                                        <div class="mobile-only smaller-font row">
+                                                            % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                            % if total:
+                                                                <div class="button icon small" onclick="resetCache('{{ system.id }}')">
+                                                                    % include('components/svg', name='action/delete')
+                                                                </div>
+                                                            % end
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="non-mobile {{ 'positive' if region_system.enabled else 'negative' }}">
-                                                % if region_system.enabled:
+                                            <td class="non-mobile {{ 'positive' if system.enabled else 'negative' }}">
+                                                % if system.enabled:
                                                     % include('components/svg', name='status/enabled')
                                                 % else:
                                                     % include('components/svg', name='status/disabled')
                                                 % end
                                             </td>
-                                            <td class="non-mobile {{ 'positive' if total and progress == total else 'negative' }}">
-                                                {{ progress }} / {{ total }}
+                                            <td class="non-mobile">
+                                                <div class="row space-between">
+                                                    % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                    % if total:
+                                                        <div class="button icon small" onclick="resetCache('{{ system.id }}')">
+                                                            % include('components/svg', name='action/delete')
+                                                        </div>
+                                                    % end
+                                                </div>
                                             </td>
                                             <td>
-                                                % if region_system.gtfs_enabled:
+                                                % if system.gtfs_enabled:
                                                     <div class="row">
                                                         <div class="positive">
                                                             % include('components/svg', name='status/enabled')
                                                         </div>
-                                                        <div class="button icon" onclick="reloadGTFS('{{ region_system.id }}')">
+                                                        <div class="button icon small" onclick="reloadGTFS('{{ system.id }}')">
                                                             % include('components/svg', name='action/refresh')
                                                         </div>
                                                     </div>
@@ -100,12 +110,12 @@
                                                 % end
                                             </td>
                                             <td>
-                                                % if region_system.realtime_enabled:
+                                                % if system.realtime_enabled:
                                                     <div class="row">
                                                         <div class="positive">
                                                             % include('components/svg', name='status/enabled')
                                                         </div>
-                                                        <div class="button icon" onclick="reloadRealtime('{{ region_system.id }}')">
+                                                        <div class="button icon small" onclick="reloadRealtime('{{ system.id }}')">
                                                             % include('components/svg', name='action/refresh')
                                                         </div>
                                                     </div>
@@ -128,9 +138,9 @@
 </div>
 
 <script>
-    function reloadAdornments() {
+    function reloadDecorations() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-adornments"), true);
+        request.open("POST", getUrl(currentSystemID, "api/admin/reload-decorations"), true);
         request.send();
     }
     
@@ -161,6 +171,15 @@
     function backupDatabase() {
         const request = new XMLHttpRequest();
         request.open("POST", getUrl(currentSystemID, "api/admin/backup-database"), true);
+        request.send();
+    }
+    
+    function resetCache(resetSystemID) {
+        const request = new XMLHttpRequest();
+        request.open("POST", getUrl(currentSystemID, "api/admin/reset-cache/" + resetSystemID), true);
+        request.onload = function() {
+            location.reload();
+        }
         request.send();
     }
     

@@ -1,4 +1,5 @@
 
+from dataclasses import dataclass
 from enum import Enum
 
 class ModelType(Enum):
@@ -23,17 +24,16 @@ class ModelType(Enum):
     def __lt__(self, other):
         return self.value < other.value
 
+@dataclass(slots=True)
 class Model:
     '''A specific version of a vehicle'''
     
-    __slots__ = (
-        'id',
-        'type',
-        'name',
-        'manufacturer',
-        'length',
-        'fuel'
-    )
+    id: str
+    type: ModelType
+    name: str
+    manufacturer: str | None = None
+    length: float | None = None
+    fuel: str | None = None
     
     @property
     def display_manufacturer(self):
@@ -46,14 +46,6 @@ class Model:
     def display_name(self):
         '''Formats the model name for web display'''
         return self.name.replace('/', '/<wbr />')
-    
-    def __init__(self, id, type, name, **kwargs):
-        self.id = id
-        self.type = type
-        self.name = name
-        self.manufacturer = kwargs.get('manufacturer')
-        self.length = kwargs.get('length')
-        self.fuel = kwargs.get('fuel')
     
     def __str__(self):
         if self.manufacturer:

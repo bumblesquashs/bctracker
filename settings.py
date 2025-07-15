@@ -1,41 +1,27 @@
 
+from dataclasses import dataclass
+
+@dataclass(slots=True)
 class Settings:
     
-    __slots__ = (
-        'cron_id',
-        'admin_key',
-        'all_systems_domain',
-        'system_domain',
-        'system_domain_path',
-        'cookie_domain',
-        'analytics_key',
-        'enable_analytics',
-        'enable_gtfs_backups',
-        'enable_realtime_backups',
-        'enable_database_backups',
-        'update_cache_in_background'
-    )
+    # Basic settings
+    cron_id: str = 'bctracker-muncher'
+    admin_key: str | None = None
     
-    def __init__(self):
-        # Basic settings
-        self.cron_id = None
-        self.admin_key = None
-        
-        # Domain settings
-        self.all_systems_domain = None
-        self.system_domain = None
-        self.system_domain_path = None
-        self.cookie_domain = None
-        
-        # Key settings
-        self.analytics_key = None
-        
-        # Functionality settings
-        self.enable_analytics = True
-        self.enable_gtfs_backups = True
-        self.enable_realtime_backups = True
-        self.enable_database_backups = True
-        self.update_cache_in_background = True
+    # Domain settings
+    all_systems_domain: str | None = None
+    system_domain: str | None = None
+    system_domain_path: str | None = None
+    cookie_domain: str | None = None
+    
+    # Key settings
+    analytics_key: str | None = None
+    
+    # Functionality settings
+    enable_analytics: bool = True
+    enable_gtfs_backups: bool = True
+    enable_realtime_backups: bool = True
+    enable_database_backups: bool = True
     
     def setup(self, config):
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
@@ -52,4 +38,3 @@ class Settings:
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'
         self.enable_database_backups = config.get('enable_database_backups', 'true') == 'true'
-        self.update_cache_in_background = config.get('update_cache_in_background', 'true') == 'true'

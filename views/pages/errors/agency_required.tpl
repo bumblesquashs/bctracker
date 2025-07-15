@@ -19,7 +19,7 @@
                     <td>
                         <div class="row">
                             % include('components/agency_logo', agency=a)
-                            <a href="{{ get_url(system, 'bus', a, bus_number) }}">{{ a }}</a>
+                            <a href="{{ get_url(context, 'bus', a, bus_number) }}">{{ a }}</a>
                         </div>
                     </td>
                 </tr>

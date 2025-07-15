@@ -1,11 +1,14 @@
 
+from dataclasses import dataclass
+
+from models.date import Date
+
+@dataclass(slots=True)
 class DateRange:
     '''A set of dates between starting and ending points'''
     
-    __slots__ = (
-        'start',
-        'end'
-    )
+    start: Date
+    end: Date
     
     @classmethod
     def combine(cls, date_ranges):
@@ -14,10 +17,6 @@ class DateRange:
         end = max({r.end for r in date_ranges})
         return cls(start, end)
     
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
-    
     def __str__(self):
         if self.start == self.end:
             return str(self.start)
@@ -25,9 +24,6 @@ class DateRange:
     
     def __hash__(self):
         return hash((self.start, self.end))
-    
-    def __eq__(self, other):
-        return self.start == other.start and self.end == other.end
     
     def __lt__(self, other):
         if self.start == other.start:

@@ -1,4 +1,5 @@
 
+% inverted = get('inverted', False)
 % if denominator == 0:
     <div class="percentage tooltip-anchor">
         {{ numerator }} / {{ denominator }}
@@ -13,7 +14,7 @@
     % else:
         % percentage_class = 'mid'
     % end   
-    <div class="percentage {{ percentage_class }} tooltip-anchor">
+    <div class="percentage {{ percentage_class }} {{ 'inverted' if inverted else '' }} tooltip-anchor">
         {{ numerator }} / {{ denominator }}
         <div class="tooltip right">
             % percentage_rounded = round(percentage, 2)

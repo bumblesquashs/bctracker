@@ -13,6 +13,13 @@ class Occupancy(Enum):
     NO_DATA_AVAILABLE = 'Unavailable'
     NOT_BOARDABLE = 'Not boardable'
     
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls[value]
+        except:
+            return cls.NO_DATA_AVAILABLE
+    
     @property
     def status_class(self):
         match self:

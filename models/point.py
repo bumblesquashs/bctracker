@@ -1,36 +1,38 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from repositories import SystemRepository
+if TYPE_CHECKING:
+    from models.system import System
 
+from dataclasses import dataclass
+
+from models.row import Row
+
+@dataclass(slots=True)
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
     
-    __slots__ = (
-        'system',
-        'shape_id',
-        'sequence',
-        'lat',
-        'lon'
-    )
+    system: System
+    shape_id: str
+    sequence: int
+    lat: float
+    lon: float
     
     @classmethod
-    def from_db(cls, row, prefix='point', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a point initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        shape_id = row[f'{prefix}_shape_id']
-        sequence = row[f'{prefix}_sequence']
-        lat = row[f'{prefix}_lat']
-        lon = row[f'{prefix}_lon']
-        return cls(system, shape_id, sequence, lat, lon)
+        context = row.context()
+        shape_id = row['shape_id']
+        sequence = row['sequence']
+        lat = row['lat']
+        lon = row['lon']
+        return cls(context.system, shape_id, sequence, lat, lon)
     
-    def __init__(self, system, shape_id, sequence, lat, lon):
-        self.system = system
-        self.shape_id = shape_id
-        self.sequence = sequence
-        self.lat = lat
-        self.lon = lon
+    @property
+    def context(self):
+        '''The context for this point'''
+        return self.system.context
     
     def __eq__(self, other):
         return self.sequence == other.sequence

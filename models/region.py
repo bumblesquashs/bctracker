@@ -1,15 +1,12 @@
 
+from dataclasses import dataclass
+
+@dataclass(slots=True)
 class Region:
     '''A large area that contains multiple systems'''
     
-    __slots__ = (
-        'id',
-        'name'
-    )
-    
-    def __init__(self, id, name, **kwargs):
-        self.id = id
-        self.name = name
+    id: str
+    name: str
     
     def __str__(self):
         return self.name

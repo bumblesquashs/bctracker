@@ -1,53 +1,48 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
+from dataclasses import dataclass
 
 from models.bus import Bus
 from models.date import Date
 from models.record import Record
+from models.row import Row
 
-from repositories import AgencyRepository, SystemRepository
-
+@dataclass(slots=True)
 class Overview:
     '''An overview of a bus' history'''
     
-    __slots__ = (
-        'agency',
-        'bus',
-        'first_seen_date',
-        'first_seen_system',
-        'first_record',
-        'last_seen_date',
-        'last_seen_system',
-        'last_record'
-    )
+    bus: Bus
+    first_seen_date: Date
+    first_seen_system: System
+    first_record: Record | None
+    last_seen_date: Date
+    last_seen_system: System
+    last_record: Record | None
     
     @classmethod
-    def from_db(cls, row, prefix='overview', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns an overview initialized from the given database row'''
-        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        agency = agency_repository.find(row[f'{prefix}_agency_id'])
-        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        first_seen_system = system_repository.find(row[f'{prefix}_first_seen_system_id'])
-        first_seen_date = Date.parse(row[f'{prefix}_first_seen_date'], first_seen_system.timezone)
-        if row[f'{prefix}_first_record_id'] is None:
-            first_record = None
-        else:
-            first_record = Record.from_db(row, prefix=f'{prefix}_first_record')
-        last_seen_system = system_repository.find(row[f'{prefix}_last_seen_system_id'])
-        last_seen_date = Date.parse(row[f'{prefix}_last_seen_date'], last_seen_system.timezone)
-        if row[f'{prefix}_last_record_id'] is None:
-            last_record = None
-        else:
-            last_record = Record.from_db(row, prefix=f'{prefix}_last_record')
-        return cls(agency, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record)
+        context = row.context()
+        bus = Bus.find(context, row['bus_number'])
+        first_seen_context = row.context(system_key='first_seen_system_id')
+        first_seen_date = Date.parse(row['first_seen_date'], first_seen_context.timezone)
+        first_record = row.obj('first_record', Record.from_db)
+        last_seen_context = row.context(system_key='last_seen_system_id')
+        last_seen_date = Date.parse(row['last_seen_date'], last_seen_context.timezone)
+        last_record = row.obj('last_record', Record.from_db)
+        return cls(bus, first_seen_date, first_seen_context.system, first_record, last_seen_date, last_seen_context.system, last_record)
     
-    def __init__(self, agency, bus, first_seen_date, first_seen_system, first_record, last_seen_date, last_seen_system, last_record):
-        self.agency = agency
-        self.bus = bus
-        self.first_seen_date = first_seen_date
-        self.first_seen_system = first_seen_system
-        self.first_record = first_record
-        self.last_seen_date = last_seen_date
-        self.last_seen_system = last_seen_system
-        self.last_record = last_record
+    @property
+    def first_seen_context(self):
+        '''The first seen context for this overview'''
+        return self.first_seen_system.context
+    
+    @property
+    def last_seen_context(self):
+        '''The last seen context for this overview'''
+        return self.last_seen_system.context

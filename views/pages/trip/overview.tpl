@@ -1,5 +1,5 @@
 
-% from repositories import PositionRepository
+% import repositories
 
 % rebase('base')
 
@@ -14,9 +14,9 @@
     </h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'trips', trip, 'map') }}" class="tab-button">Map</a>
-        % if system.realtime_enabled:
-            <a href="{{ get_url(system, 'trips', trip, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        % if context.realtime_enabled:
+            <a href="{{ get_url(context, 'trips', trip, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -42,7 +42,7 @@
                         % if route:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         % else:
                             <div class="lighter-text">Unknown Route</div>
@@ -56,7 +56,7 @@
                         <div class="name">Block</div>
                         <div class="value">
                             % if block:
-                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                             % else:
                                 <span class="lighter-text">Loading</span>
                             % end
@@ -84,7 +84,7 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
-                        % km = length / trip.system.agency.distance_scale
+                        % km = length / trip.context.agency.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="row section">
                             <div class="name">Length</div>
@@ -136,7 +136,7 @@
                                     </td>
                                     <td class="non-mobile">
                                         % if block:
-                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                         % else:
                                             <div class="lighter-text">Unknown</div>
                                         % end
@@ -212,7 +212,7 @@
             </div>
         % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
             % bus = assignment.bus
-            % position = di[PositionRepository].find(bus.agency, bus)
+            % position = repositories.position.find(bus)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Scheduled Bus</h2>

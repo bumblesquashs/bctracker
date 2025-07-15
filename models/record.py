@@ -1,49 +1,53 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
+from dataclasses import dataclass, field
 
 from models.bus import Bus
 from models.date import Date
+from models.row import Row
 from models.time import Time
 
-from repositories import AgencyRepository, SystemRepository
-
+@dataclass(slots=True)
 class Record:
     '''Information about a bus' history on a specific date'''
     
-    __slots__ = (
-        'id',
-        'agency',
-        'bus',
-        'date',
-        'system',
-        'block_id',
-        'route_numbers',
-        'start_time',
-        'end_time',
-        'first_seen',
-        'last_seen',
-        'warnings'
-    )
+    system: System
+    id: int
+    bus: Bus
+    date: Date
+    block_id: str
+    route_numbers: list[str]
+    start_time: Time
+    end_time: Time
+    first_seen: Time
+    last_seen: Time
+    
+    warnings: list[str] = field(default_factory=list, init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='record', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a record initialized from the given database row'''
-        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        id = row[f'{prefix}_id']
-        agency = agency_repository.find(row[f'{prefix}_agency_id'])
-        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        date = Date.parse(row[f'{prefix}_date'], system.timezone)
-        block_id = row[f'{prefix}_block_id']
-        route_numbers = [n.strip() for n in row[f'{prefix}_routes'].split(',')]
-        timezone = system.timezone
-        accurate_seconds = system.agency.accurate_seconds
-        start_time = Time.parse(row[f'{prefix}_start_time'], timezone, accurate_seconds)
-        end_time = Time.parse(row[f'{prefix}_end_time'], timezone, accurate_seconds)
-        first_seen = Time.parse(row[f'{prefix}_first_seen'], timezone, accurate_seconds)
-        last_seen = Time.parse(row[f'{prefix}_last_seen'], timezone, accurate_seconds)
-        return cls(id, agency, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
+        context = row.context()
+        id = row['id']
+        bus = Bus.find(context, row['bus_number'])
+        date = Date.parse(row['date'], context.timezone)
+        block_id = row['block_id']
+        route_numbers = [n.strip() for n in row['routes'].split(',')]
+        start_time = Time.parse(row['start_time'], context.timezone, context.accurate_seconds)
+        end_time = Time.parse(row['end_time'], context.timezone, context.accurate_seconds)
+        first_seen = Time.parse(row['first_seen'], context.timezone, context.accurate_seconds)
+        last_seen = Time.parse(row['last_seen'], context.timezone, context.accurate_seconds)
+        return cls(context.system, id, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
+    
+    @property
+    def context(self):
+        '''The context for this record'''
+        return self.system.context
     
     @property
     def total_minutes(self):
@@ -75,29 +79,16 @@ class Record:
             return [self.system.get_route(number=n) for n in self.route_numbers]
         return self.route_numbers
     
-    def __init__(self, id, agency, bus, date, system, block_id, route_numbers, start_time, end_time, first_seen, last_seen):
-        self.id = id
-        self.agency = agency
-        self.bus = bus
-        self.date = date
-        self.system = system
-        self.block_id = block_id
-        self.route_numbers = route_numbers
-        self.start_time = start_time
-        self.end_time = end_time
-        self.first_seen = first_seen
-        self.last_seen = last_seen
-        self.warnings = []
-        
+    def __post_init__(self):
         total_minutes = self.total_minutes
         total_seen_minutes = self.total_seen_minutes
         if total_minutes is not None and total_seen_minutes is not None:
-            if not date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
+            if not self.date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
                 if total_seen_minutes == 1:
                     self.warnings.append('Bus was logged in for only 1 minute')
                 else:
                     self.warnings.append(f'Bus was logged in for only {total_seen_minutes} minutes')
-            if (start_time.get_minutes() - last_seen.get_minutes()) > 30:
+            if (self.start_time.get_minutes() - self.last_seen.get_minutes()) > 30:
                 self.warnings.append('Bus was logged in before block started')
-            if (first_seen.get_minutes() - end_time.get_minutes()) > 30:
+            if (self.first_seen.get_minutes() - self.end_time.get_minutes()) > 30:
                 self.warnings.append('Bus was logged in after block ended')

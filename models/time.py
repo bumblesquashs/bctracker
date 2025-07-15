@@ -1,22 +1,22 @@
 
+from dataclasses import dataclass
 from datetime import datetime
 import pytz
 
+from constants import DEFAULT_TIMEZONE
+
+@dataclass(slots=True)
 class Time:
     '''A specific hour, minute, and second'''
     
-    __slots__ = (
-        'hour',
-        'minute',
-        'second',
-        'timezone'
-    )
+    hour: int | None
+    minute: int | None
+    second: int | None
+    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
     
     @classmethod
-    def parse(cls, time_string, timezone=None, accurate_seconds=False):
+    def parse(cls, time_string, timezone=DEFAULT_TIMEZONE, accurate_seconds=False):
         '''Returns a time parsed from the given string in HH:MM:SS format'''
-        if not timezone:
-            timezone = pytz.timezone('America/Edmonton')
         if not time_string:
             return cls.unknown(timezone)
         time_parts = time_string.split(':')
@@ -30,17 +30,13 @@ class Time:
         return cls(hour, minute, second, timezone)
     
     @classmethod
-    def now(cls, timezone=None, accurate_seconds=True):
+    def now(cls, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
         '''Returns the current time'''
-        if not timezone:
-            timezone = pytz.timezone('America/Edmonton')
         return cls.fromdatetime(datetime.now(timezone), timezone, accurate_seconds)
     
     @classmethod
-    def fromdatetime(cls, datetime, timezone=None, accurate_seconds=True):
+    def fromdatetime(cls, datetime, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
         '''Returns a time from the given datetime'''
-        if not timezone:
-            timezone = pytz.timezone('America/Edmonton')
         hour = datetime.hour
         if hour < 4:
             hour += 24
@@ -51,10 +47,8 @@ class Time:
         return cls(hour, datetime.minute, second, timezone)
     
     @classmethod
-    def unknown(cls, timezone=None):
+    def unknown(cls, timezone=DEFAULT_TIMEZONE):
         '''Returns an unknown time'''
-        if not timezone:
-            timezone = pytz.timezone('America/Edmonton')
         return cls(None, None, None, timezone)
     
     @property
@@ -92,12 +86,6 @@ class Time:
     def timezone_name(self):
         '''Returns the name of this time's timezone'''
         return datetime.now(self.timezone).tzname()
-    
-    def __init__(self, hour, minute, second, timezone):
-        self.hour = hour
-        self.minute = minute
-        self.second = second
-        self.timezone = timezone
     
     def __str__(self):
         return self.format_web()

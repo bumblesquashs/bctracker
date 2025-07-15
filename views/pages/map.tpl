@@ -12,23 +12,23 @@
 <div id="page-header">
     <div class="row">
         <h1 class="flex-1">Map</h1>
-        % if not system or system.realtime_enabled:
+        % if context.realtime_enabled:
             % include('components/settings_toggle')
         % end
     </div>
 </div>
 
 <div id="no-buses-message" class="{{ 'display-none' if positions else '' }}">
-    % if system and not system.realtime_enabled:
-        <i>{{ system }} realtime information is not supported</i>
-    % elif system:
-        <i>There are no {{ system }} buses out right now</i>
+    % if not context.realtime_enabled:
+        <i>{{ context }} realtime information is not supported</i>
+    % elif context.system:
+        <i>There are no {{ context }} buses out right now</i>
     % else:
         <i>There are no buses out right now</i>
     % end
 </div>
 
-% if not system or system.realtime_enabled:
+% if context.realtime_enabled:
     <div id="settings" class="container collapsed">
         <div class="section">
             <div class="header">
@@ -279,8 +279,8 @@
             const title = document.createElement("div");
             title.className = "title";
             title.innerHTML = position.bus_display;
-            if (position.adornment != null) {
-                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            if (position.decoration != null) {
+                title.innerHTML += " <span class='decoration'>" + position.decoration + "</span>";
             }
             details.appendChild(title);
             
@@ -460,7 +460,7 @@
     
     function updatePositionData() {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{ get_url(system, 'api', 'positions') }}", true);
+        request.open("GET", "{{ get_url(context, 'api', 'positions') }}", true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {
@@ -727,7 +727,7 @@
     }
 </script>
 
-% if not system or system.realtime_enabled:
+% if context.realtime_enabled:
     <script>
         setTimeout(function() {
             if (automaticRefresh) {

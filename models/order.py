@@ -1,21 +1,30 @@
 
-from models.bus import Bus
+from dataclasses import dataclass, field
 
+from models.agency import Agency
+from models.bus import Bus
+from models.model import Model
+
+@dataclass(slots=True)
 class Order:
     '''A range of buses of a specific model ordered in a specific year'''
     
-    __slots__ = (
-        'agency',
-        'model',
-        'prefix',
-        'low',
-        'high',
-        'year',
-        'visible',
-        'demo',
-        'exceptions',
-        'size'
-    )
+    agency: Agency
+    model: Model
+    low: int
+    high: int
+    prefix: str | None = None
+    year: int | None = None
+    visible: bool = True
+    demo: bool = False
+    exceptions: set[int] = field(default_factory=set)
+    
+    size: int = field(init=False)
+    
+    @property
+    def context(self):
+        '''The context for this order'''
+        return self.agency.context
     
     @property
     def first_bus(self):
@@ -27,24 +36,7 @@ class Order:
         '''The last bus in the order'''
         return Bus(self.agency, self.with_prefix(self.high), self)
     
-    def __init__(self, agency, model, **kwargs):
-        self.agency = agency
-        self.model = model
-        self.prefix = kwargs.get('prefix')
-        if 'number' in kwargs:
-            self.low = kwargs['number']
-            self.high = kwargs['number']
-        else:
-            self.low = kwargs['low']
-            self.high = kwargs['high']
-        self.year = kwargs.get('year')
-        self.visible = kwargs.get('visible', True)
-        self.demo = kwargs.get('demo', False)
-        if 'exceptions' in kwargs:
-            self.exceptions = set(kwargs['exceptions'])
-        else:
-            self.exceptions = set()
-        
+    def __post_init__(self):
         self.size = (self.high - self.low) + 1 - len(self.exceptions)
     
     def __str__(self):
@@ -55,13 +47,13 @@ class Order:
         return 'Unknown year/model'
     
     def __hash__(self):
-        return hash((self.agency, self.prefix, self.low, self.high))
+        return hash((self.context, self.prefix, self.low, self.high))
     
     def __eq__(self, other):
-        return self.agency == other.agency and self.prefix == other.prefix and self.low == other.low and self.high == other.high
+        return self.context == other.context and self.prefix == other.prefix and self.low == other.low and self.high == other.high
     
     def __lt__(self, other):
-        if self.agency == other.agency:
+        if self.context == other.context:
             if self.prefix and other.prefix and self.prefix != other.prefix:
                 return self.prefix < other.prefix
             if self.prefix and not other.prefix:
@@ -69,7 +61,7 @@ class Order:
             if not self.prefix and other.prefix:
                 return True
             return self.low < other.low
-        return self.agency < other.agency
+        return self.context < other.context
     
     def __iter__(self):
         for number in range(self.low, self.high + 1):

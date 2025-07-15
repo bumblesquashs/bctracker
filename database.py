@@ -1,6 +1,9 @@
 
 import sqlite3
 import shutil
+from dataclasses import dataclass, field
+
+from models.row import Row
 
 SQL_SCRIPTS = [
     '''
@@ -151,16 +154,11 @@ SQL_SCRIPTS = [
     'CREATE INDEX IF NOT EXISTS departure_stop_id ON departure (stop_id)'
 ]
 
+@dataclass(slots=True)
 class Database:
     
-    __slots__ = (
-        'name',
-        'connection'
-    )
-    
-    def __init__(self, name='abtracker'):
-        self.name = name
-        self.connection = None
+    name: str = 'abtracker'
+    connection: sqlite3.Connection | None = field(default=None, init=False)
     
     def connect(self, foreign_keys=True):
         '''Opens a connection to the database and runs setup scripts'''
@@ -213,12 +211,12 @@ class Database:
         result = self.execute(sql, custom_args + args)
         if type(columns) is list:
             if initializer:
-                return [initializer(dict(zip(columns, r))) for r in result]
-            return [dict(zip(columns, r)) for r in result]
+                return [initializer(Row(dict(zip(columns, r)))) for r in result]
+            return [Row(dict(zip(columns, r))) for r in result]
         elif type(columns) is dict:
             if initializer:
-                return [initializer(dict(zip(columns.values(), r))) for r in result]
-            return [dict(zip(columns.values(), r)) for r in result]
+                return [initializer(Row(dict(zip(columns.values(), r)))) for r in result]
+            return [Row(dict(zip(columns.values(), r))) for r in result]
         return result
     
     def insert(self, table, values):
