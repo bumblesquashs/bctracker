@@ -15,8 +15,8 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'bus', bus) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'bus', bus) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'bus', bus, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -41,8 +41,8 @@
                         <div class="row section align-start">
                             <div class="name">{{ 'System' if len(tracked_systems) == 1 else 'Systems' }}</div>
                             <div class="value">
-                                % for tracked_system in sorted(tracked_systems):
-                                    <a href="{{ get_url(tracked_system) }}">{{ tracked_system }}</a>
+                                % for system in sorted(tracked_systems):
+                                    <a href="{{ get_url(system.context) }}">{{ system }}</a>
                                 % end
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">
-                                    % include('components/svg', name='warning')
+                                    % include('components/svg', name='status/warning')
                                 </span>
                                 <span>may be accidental logins.</span>
                             </p>
@@ -113,16 +113,16 @@
                                         <td>
                                             <div class="column">
                                                 {{ record.date.format_day() }}
-                                                <span class="non-desktop smaller-font">{{ record.system }}</span>
+                                                <span class="non-desktop smaller-font">{{ record.context }}</span>
                                             </div>
                                         </td>
-                                        <td class="desktop-only">{{ record.system }}</td>
+                                        <td class="desktop-only">{{ record.context }}</td>
                                         <td>
-                                            <div class="column">
-                                                <div class="row">
+                                            <div class="column stretch">
+                                                <div class="row space-between">
                                                     % if record.is_available:
                                                         % block = record.block
-                                                        <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                     % else:
                                                         <span>{{ record.block_id }}</span>
                                                     % end

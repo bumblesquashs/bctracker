@@ -8,10 +8,11 @@
 % end
 
 % include('components/svg_script', name='fish')
-% include('components/svg_script', name='no-people')
-% include('components/svg_script', name='one-person')
-% include('components/svg_script', name='two-people')
-% include('components/svg_script', name='three-people')
+% include('components/svg_script', name='snail')
+% include('components/svg_script', name='occupancy/no-people')
+% include('components/svg_script', name='occupancy/one-person')
+% include('components/svg_script', name='occupancy/two-people')
+% include('components/svg_script', name='occupancy/three-people')
 
 % if is_preview:
     <script>
@@ -131,7 +132,7 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                icon.href = getUrl(systemID, "bus/" + position.bus_url_id);
+                icon.href = getUrl(currentSystemID, "bus/" + position.bus_url_id, true);
                 icon.innerHTML = "<div class='link'></div>";
             }
             icon.className = "icon";
@@ -141,6 +142,8 @@
                 icon.classList.add("bus_route");
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
+                } else if (adherence && adherence.value <= -66) {
+                    icon.innerHTML += getSVG("snail");
                 } else {
                     icon.innerHTML += position.route_number;
                 }
@@ -162,6 +165,8 @@
                 } else {
                     if (position.lat === 0 && position.lon === 0) {
                         icon.innerHTML += getSVG("fish");
+                    } else if (adherence.value <= -66) {
+                        icon.innerHTML += getSVG("snail");
                     } else {
                         icon.innerHTML += adherence.value;
                     }
@@ -176,12 +181,16 @@
                 icon.classList.add(position.occupancy_status_class);
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
+                } else if (adherence && adherence.value <= -66) {
+                    icon.innerHTML += getSVG("snail");
                 } else {
                     icon.innerHTML += getSVG(position.occupancy_icon);
                 }
             } else {
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
+                } else if (adherence && adherence.value <= -66) {
+                    icon.innerHTML += getSVG("snail");
                 } else {
                     icon.innerHTML += getSVG(position.bus_icon);
                 }
@@ -195,8 +204,8 @@
             const title = document.createElement("div");
             title.className = "title";
             title.innerHTML = position.bus_display;
-            if (position.adornment != null) {
-                title.innerHTML += " <span class='adornment'>" + position.adornment + "</span>";
+            if (position.decoration != null) {
+                title.innerHTML += " <span class='decoration'>" + position.decoration + "</span>";
             }
             details.appendChild(title);
             
@@ -264,7 +273,7 @@
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";
-            agencyLogo.src = "/img/icons/" + position.agency_id + ".png";
+            agencyLogo.src = "/img/agencies/" + position.agency_id + ".png";
             agencyLogo.onerror = function() {
                 agencyLogo.style.visibility = 'hidden';
             };
@@ -296,7 +305,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
+            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id, true);
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             
             const details = document.createElement("div");
@@ -365,7 +374,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id);
+            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id, true);
             icon.style.backgroundColor = "#" + departure.colour;
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             

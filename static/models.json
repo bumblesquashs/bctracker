@@ -24,6 +24,12 @@
             "length": 40,
             "fuel": "Hydrogen Fuel Cell"
         },
+        "new-flyer-xe40": {
+            "manufacturer": "New Flyer",
+            "name": "XE40",
+            "length": 40,
+            "fuel": "Battery Electric"
+        },
         "new-flyer-xn40": {
             "manufacturer": "New Flyer",
             "name": "XN40",
@@ -47,6 +53,12 @@
             "name": "LFS (4th Gen)",
             "length": 40,
             "fuel": "Diesel"
+        },
+        "nova-bus-lfse+": {
+            "manufacturer": "Nova Bus",
+            "name": "LFSe+",
+            "length": 40,
+            "fuel": "Battery Electric"
         },
         "nova-bus-lfs-suburban-2": {
             "manufacturer": "Nova Bus",

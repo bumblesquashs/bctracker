@@ -30,6 +30,7 @@
         "name": "Hornby Bus",
         "website": "https://hornbybus.com",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/HORNBY_feed/feed-hornby.zip",
+        "prefix_headsigns": true,
         "prefer_route_id": true,
         "prefer_stop_id": true,
         "show_stop_number": false

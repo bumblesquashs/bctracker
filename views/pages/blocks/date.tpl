@@ -4,12 +4,12 @@
 <div id="page-header">
     <h1>Blocks</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'blocks') }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'blocks') }}" class="tab-button">Overview</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
 
-% if system:
+% if context.system:
     <div class="page-container">
         <div class="sidebar container flex-1">
             <div class="section">
@@ -22,19 +22,19 @@
                         <div class="row section align-center">
                             % previous_date = date.previous()
                             % next_date = date.next()
-                            <a class="icon button" href="{{ get_url(system, 'blocks', 'schedule', previous_date) }}">
-                                % include('components/svg', name='left')
+                            <a class="icon button" href="{{ get_url(context, 'blocks', 'schedule', previous_date) }}">
+                                % include('components/svg', name='paging/left')
                             </a>
                             <div class="centred">
                                 <h3>{{ date.format_long() }}</h3>
-                                <a href="{{ get_url(system, 'blocks', 'schedule') }}">Go to weekly schedule</a>
+                                <a href="{{ get_url(context, 'blocks', 'schedule') }}">Go to weekly schedule</a>
                             </div>
-                            <a class="icon button" href="{{ get_url(system, 'blocks', 'schedule', next_date) }}">
-                                % include('components/svg', name='right')
+                            <a class="icon button" href="{{ get_url(context, 'blocks', 'schedule', next_date) }}">
+                                % include('components/svg', name='paging/right')
                             </a>
                         </div>
                         <div class="section">
-                            % include('components/sheet_list', sheets=system.get_sheets(), schedule_path='blocks/schedule')
+                            % include('components/sheet_list', sheets=context.system.get_sheets(), schedule_path='blocks/schedule')
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % blocks = sorted([b for b in system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
+                    % blocks = sorted([b for b in context.system.get_blocks() if date in b.schedule], key=lambda b: (b.get_start_time(date=date), b.get_end_time(date=date)))
                     % if blocks:
                         <table>
                             <thead>
@@ -68,7 +68,7 @@
                                     % start_time = block.get_start_time(date=date).format_web(time_format)
                                     % end_time = block.get_end_time(date=date).format_web(time_format)
                                     <tr>
-                                        <td><a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a></td>
+                                        <td><a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a></td>
                                         <td>
                                             % include('components/route_list', routes=block.get_routes(date=date))
                                         </td>
@@ -82,8 +82,8 @@
                         </table>
                     % else:
                         <div class="placeholder">
-                            % if system.gtfs_loaded:
-                                <h3>No blocks found for {{ system }} on {{ date.format_long() }}</h3>
+                            % if context.gtfs_loaded:
+                                <h3>No {{ context }} blocks found on {{ date.format_long() }}</h3>
                                 <p>There are a few reasons why that might be the case:</p>
                                 <ol>
                                     <li>It may be a day of the week that does not normally have service</li>
@@ -92,7 +92,7 @@
                                 </ol>
                                 <p>Please check again later!</p>
                             % else:
-                                <h3>Block information for {{ system }} is unavailable</h3>
+                                <h3>{{ context }} block information is unavailable</h3>
                                 <p>System data is currently loading and will be available soon.</p>
                             % end
                         </div>

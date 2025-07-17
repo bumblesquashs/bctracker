@@ -2,9 +2,9 @@
  * 
  * Primary Background: #FFFFFF
  * Secondary Background: #E6E6E6
- * Primary Header: #FFFFFF
- * Secondary Header: #FFFFFF
- * Menu: #094409
+ * Primary Header: #EEEEEE
+ * Secondary Header: #EEEEEE
+ * Menu: #DDDDDD
  * Borders: #DDDDDD
  * Selection: #CBCBCB
  * 
@@ -17,6 +17,17 @@
 */
 
 :root {
+    --navigation-bar-background: #EEEEEE;
+    --navigation-bar-hover: #DDDDDD;
+    --navigation-bar-foreground: #000000;
+    
+    --navigation-menu-background: #DDDDDD;
+    --navigation-menu-foreground: #000000;
+    
+    --status-bar-background: #EEEEEE;
+    --status-bar-hover: #DDDDDD;
+    --status-bar-foreground: #000000;
+    
     --tooltip-background: #888888;
     
     --loading-background: #FFFFFF;
@@ -89,6 +100,16 @@ table tr {
     background-color: #FFFFFF;
 }
 
+table tr.table-button {
+    background-color: #AAAAAA;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: #888888;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
@@ -99,53 +120,6 @@ table tr {
 
 #map-controls .control.active {
     --map-control-icon: #365CCB;
-}
-
-#navigation-bar {
-    background-color: #EEEEEE;
-    --image-color: #000000;
-}
-
-#navigation-bar .navigation-icon {
-    color: #000000;
-}
-
-#navigation-bar .navigation-icon:hover {
-    background-color: #DDDDDD;
-}
-
-#navigation-bar .navigation-icon.disabled:hover {
-    background-color: #FFFFFF !important;
-}
-
-#navigation-bar .navigation-item {
-    color: #000000;
-}
-
-#navigation-bar .navigation-item:hover {
-    background-color: #DDDDDD;
-}
-
-#navigation-bar .navigation-item.disabled:hover {
-    background-color: #FFFFFF !important;
-}
-
-#navigation-menu {
-    background-color: #DDDDDD;
-    --image-color: #000000;
-}
-
-#navigation-menu .menu-button {
-    color: #000000;
-}
-
-#navigation-menu .menu-button.disabled {
-    color: #888888;
-    --image-color: #888888;
-}
-
-#navigation-menu-toggle .line {
-    background-color: #000000;
 }
 
 #nearby-status.loading {
@@ -169,18 +143,6 @@ table tr {
 #quick-navigation .item {
     background-color: #EEEEEE;
     border-color: #DDDDDD;
-}
-
-#refresh-button {
-    --image-color: #666666;
-}
-
-#refresh-button:hover {
-    background-color: #DDDDDD;
-}
-
-#refresh-button.disabled:hover {
-    background-color: #FFFFFF;
 }
 
 #search {
@@ -229,27 +191,9 @@ table tr {
     color: #888888;
 }
 
-#side-bar {
-    border-right-color: #EEEEEE;
-}
-
-#side-bar-toggle {
-    background-color: #EEEEEE;
-}
-
-#side-bar-toggle:hover {
-    background-color: #DDDDDD;
-}
-
-#status {
-    background-color: #FFFFFF;
-    color: #000000;
-    border-bottom-color: #EEEEEE;
-}
-
 #system-menu {
     background-color: #FFFFFF;
-    border-bottom-color: #EEEEEE;
+    border-color: #EEEEEE;
 }
 
 #system-menu .header {
@@ -265,22 +209,6 @@ table tr {
 }
 
 #system-menu .system-button.current {
-    background-color: #DDDDDD;
-    font-weight: bold;
-    cursor: default;
-}
-
-#system-menu-toggle {
-    --image-color: #666666;
-}
-
-#title {
-    background-color: #EEEEEE;
-    color: #000000;
-    --image-color: #000000;
-}
-
-#title:hover {
     background-color: #DDDDDD;
 }
 
@@ -423,6 +351,10 @@ table tr {
     --image-color: #888888;
 }
 
+.paging {
+    --image-color: #888888;
+}
+
 .paging .page {
     background-color: #EEEEEE;
     color: #000000;
@@ -439,10 +371,6 @@ table tr {
 
 .paging .page.current:hover {
     background-color: #AAAAAA;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

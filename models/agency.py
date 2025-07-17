@@ -1,22 +1,32 @@
 
+from dataclasses import dataclass
+
+from models.context import Context
+
+from constants import *
+
+@dataclass(slots=True)
 class Agency:
     '''A company or entity that runs transit'''
     
-    __slots__ = (
-        'id',
-        'name',
-        'website',
-        'gtfs_url',
-        'realtime_url',
-        'enabled',
-        'prefix_headsigns',
-        'accurate_seconds',
-        'prefer_route_id',
-        'prefer_stop_id',
-        'show_stop_number',
-        'vehicle_name_length',
-        'distance_scale'
-    )
+    id: str
+    name: str
+    
+    website: str | None = None
+    gtfs_url: str | None = None
+    realtime_url: str | None = None
+    enabled: bool = True
+    prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
+    accurate_seconds: bool = DEFAULT_ACCURATE_SECONDS
+    prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
+    prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
+    show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
+    vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
+    distance_scale: int = DEFAULT_DISTANCE_SCALE
+    
+    @property
+    def context(self):
+        return Context(agency=self)
     
     @property
     def gtfs_enabled(self):
@@ -28,21 +38,6 @@ class Agency:
         '''Checks if realtime is enabled for this agency'''
         return self.enabled and self.realtime_url
     
-    def __init__(self, id, name, **kwargs):
-        self.id = id
-        self.name = name
-        self.website = kwargs.get('website')
-        self.gtfs_url = kwargs.get('gtfs_url')
-        self.realtime_url = kwargs.get('realtime_url')
-        self.enabled = kwargs.get('enabled', True)
-        self.prefix_headsigns = kwargs.get('prefix_headsigns', False)
-        self.accurate_seconds = kwargs.get('accurate_seconds', True)
-        self.prefer_route_id = kwargs.get('prefer_route_id', False)
-        self.prefer_stop_id = kwargs.get('prefer_stop_id', False)
-        self.show_stop_number = kwargs.get('show_stop_number', True)
-        self.vehicle_name_length = kwargs.get('vehicle_name_length')
-        self.distance_scale = kwargs.get('distance_scale', 1)
-    
     def __str__(self):
         return self.name
     
@@ -50,6 +45,8 @@ class Agency:
         return hash(self.id)
     
     def __eq__(self, other):
+        if other is None:
+            return False
         return self.id == other.id
     
     def __lt__(self, other):

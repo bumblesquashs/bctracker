@@ -24,13 +24,17 @@
         % previous_page = 0
         % for page_number in sorted(page_numbers):
             % if page_number > previous_page + 1:
-                <div class="lighter-text flex-1 centred">...</div>
+                % if previous_page == 1:
+                    % include('components/svg', name='paging/left-double')
+                % else:
+                    % include('components/svg', name='paging/right-double')
+                % end
             % end
             % if page_number == page:
                 <div class="page current flex-1">{{ page_number }}</div>
             % else:
                 % if get('use_path', False):
-                    <a class="page flex-1" href="{{ get_url(system, *path, page=page_number, **path_args) }}">{{ page_number }}</a>
+                    <a class="page flex-1" href="{{ get_url(context, *path, page=page_number, **path_args) }}">{{ page_number }}</a>
                 % else:
                     <a class="page flex-1" href="?page={{ page_number }}">{{ page_number }}</a>
                 % end

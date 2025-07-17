@@ -5,11 +5,11 @@
     <h1>Realtime</h1>
     <h2>Currently active vehicles</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'realtime') }}" class="tab-button">All Buses</a>
-        % if system:
-            <a href="{{ get_url(system, 'realtime', 'routes') }}" class="tab-button">By Route</a>
+        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All Buses</a>
+        % if context.system:
+            <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
-        <a href="{{ get_url(system, 'realtime', 'models') }}" class="tab-button">By Model</a>
+        <a href="{{ get_url(context, 'realtime', 'models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
 </div>
@@ -17,7 +17,7 @@
 <div class="options-container">
     <div class="option" onclick="toggleNISBuses()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-            % include('components/svg', name='check')
+            % include('components/svg', name='status/check')
         </div>
         <div>Show NIS Buses</div>
     </div>
@@ -29,7 +29,7 @@
             <tr>
                 <th>Bus</th>
                 <th class="desktop-only">Model</th>
-                % if not system:
+                % if not context.system:
                     <th class="desktop-only">System</th>
                 % end
                 <th class="desktop-only">Speed</th>
@@ -63,8 +63,8 @@
                     <td class="desktop-only">
                         % include('components/order', order=bus.order)
                     </td>
-                    % if not system:
-                        <td class="desktop-only">{{ position.system }}</td>
+                    % if not context.system:
+                        <td class="desktop-only">{{ position.context }}</td>
                     % end
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                     % if position.trip:
@@ -73,7 +73,7 @@
                         % stop = position.stop
                         <td>
                             <div class="column">
-                                % include('components/headsign')
+                                % include('components/headsign', departure=position.departure)
                                 <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
                                 <div class="mobile-only smaller-font">
                                     Trip:
@@ -88,7 +88,7 @@
                             </div>
                         </td>
                         <td class="non-mobile">
-                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                         </td>
                         <td class="non-mobile">
                             % include('components/trip')
@@ -112,7 +112,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        % if not system:
+        % if not context.system:
             % if show_nis:
                 <h3>There are no buses out right now</h3>
                 <p>
@@ -124,20 +124,20 @@
                 <h3>There are no buses in service right now</h3>
                 <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
             % end
-        % elif not system.realtime_enabled:
-            <h3>{{ system }} does not support realtime</h3>
-            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+        % elif not context.realtime_enabled:
+            <h3>{{ context }} realtime information is not supported</h3>
+            <p>You can browse schedule data for using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
-        % elif not system.realtime_loaded:
-            <h3>Realtime information for {{ system }} is unavailable</h3>
+        % elif not context.realtime_loaded:
+            <h3>{{ context }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no buses in service in {{ system }} right now</h3>
+            <h3>There are no {{ context }} buses in service right now</h3>
             <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
         % else:
-            <h3>There are no buses out in {{ system }} right now</h3>
+            <h3>There are no {{ context }} buses out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>
@@ -145,6 +145,6 @@
 
 <script>
     function toggleNISBuses() {
-        window.location = "{{ get_url(system, 'realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ get_url(context, 'realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

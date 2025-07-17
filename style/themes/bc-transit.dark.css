@@ -19,6 +19,17 @@
 :root {
     color-scheme: dark;
     
+    --navigation-bar-background: #154E15;
+    --navigation-bar-hover: #053305;
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: #053305;
+    --navigation-menu-foreground: #FFFFFF;
+    
+    --status-bar-background: #276227;
+    --status-bar-hover: #053305;
+    --status-bar-foreground: #FFFFFF;
+    
     --loading-background: #2F2F2F;
     --loading-foreground: #154E15;
     
@@ -105,6 +116,16 @@ table tr:nth-child(2n-1) {
     background-color: #393939;
 }
 
+table tr.table-button {
+    background-color: #2247B7;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: #10308F;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
@@ -118,51 +139,7 @@ table tr:nth-child(2n-1) {
 }
 
 #navigation-bar {
-    background-color: #154E15;
     --tooltip-background: #053305;
-    --image-color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon:hover {
-    background-color: #053305;
-}
-
-#navigation-bar .navigation-icon.disabled:hover {
-    background-color: #154E15 !important;
-}
-
-#navigation-bar .navigation-item {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-item:hover {
-    background-color: #053305;
-}
-
-#navigation-bar .navigation-item.disabled:hover {
-    background-color: #154E15 !important;
-}
-
-#navigation-menu {
-    background-color: #053305;
-    --image-color: #FFFFFF;
-}
-
-#navigation-menu .menu-button {
-    color: #FFFFFF;
-}
-
-#navigation-menu .menu-button.disabled {
-    color: #ABABAB;
-    --image-color: #ABABAB;
-}
-
-#navigation-menu-toggle .line {
-    background-color: #FFFFFF;
 }
 
 #nearby-status.loading {
@@ -186,18 +163,6 @@ table tr:nth-child(2n-1) {
 #quick-navigation .item {
     background-color: #393939;
     border-color: #565656;
-}
-
-#refresh-button {
-    --image-color: #FFFFFF;
-}
-
-#refresh-button:hover {
-    background-color: #053305;
-}
-
-#refresh-button.disabled:hover {
-    background-color: #276227;
 }
 
 #search {
@@ -248,28 +213,13 @@ table tr:nth-child(2n-1) {
     color: #ABABAB;
 }
 
-#side-bar {
-    border-right-color: #565656;
-}
-
-#side-bar-toggle {
-    background-color: #393939;
-    --image-color: #FFFFFF;
-}
-
-#side-bar-toggle:hover {
-    background-color: #565656;
-}
-
-#status {
-    background-color: #276227;
-    color: #FFFFFF;
-    border-bottom-color: #565656;
+#status-bar {
+    --tooltip-background: #053305;
 }
 
 #system-menu {
     background-color: #393939;
-    border-bottom-color: #565656;
+    border-color: #565656;
 }
 
 #system-menu .header {
@@ -287,22 +237,6 @@ table tr:nth-child(2n-1) {
 
 #system-menu .system-button.current {
     background-color: #2F2F2F;
-    font-weight: bold;
-    cursor: default;
-}
-
-#system-menu-toggle {
-    --image-color: #FFFFFF;
-}
-
-#title {
-    background-color: #154E15;
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-#title:hover {
-    background-color: #053305;
 }
 
 .banner {
@@ -444,6 +378,10 @@ table tr:nth-child(2n-1) {
     --image-color: #565656;
 }
 
+.paging {
+    --image-color: #989898;
+}
+
 .paging .page {
     background-color: #393939;
     color: #FFFFFF;
@@ -460,10 +398,6 @@ table tr:nth-child(2n-1) {
 
 .paging .page.current:hover {
     background-color: #2247B7;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

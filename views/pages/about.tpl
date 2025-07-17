@@ -58,6 +58,17 @@
                     </div>
                     <div class="section">
                         <div class="header" onclick="toggleSection(this)">
+                            <h3>Is BCTracker related to <a href="https://abtracker.ca">ABTracker</a>?</h3>
+                            % include('components/toggle')
+                        </div>
+                        <div class="content">
+                            <p>
+                                Yes! ABTracker was originally introduced as an April Fools joke, but there was enough interest that we decided to keep it running permanently.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="header" onclick="toggleSection(this)">
                             <h3>How is BCTracker made?</h3>
                             % include('components/toggle')
                         </div>

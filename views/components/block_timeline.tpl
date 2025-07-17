@@ -25,7 +25,7 @@
                 % percentage = (trip_minutes / total_minutes) * 100
                 % offset_minutes = trip.start_time.get_minutes() - start_time.get_minutes()
                 % offset_percentage = (offset_minutes / total_minutes) * 100
-                <a href="{{ get_url(trip.system, 'trips', trip) }}" class="section tooltip-anchor {{ 'non-current' if current_trip and trip != current_trip else '' }}" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
+                <a href="{{ get_url(trip.context, 'trips', trip) }}" class="section tooltip-anchor {{ 'non-current' if current_trip and trip != current_trip else '' }}" style="background-color: #{{ trip.route.colour }}; width: {{ percentage }}%; left: {{ offset_percentage }}%;">
                     <div class="tooltip right">
                         <div class="title">{{ trip }}</div>
                         {{ trip.start_time.format_web(time_format) }} - {{ trip.end_time.format_web(time_format) }}
@@ -33,8 +33,8 @@
                 </a>
             % end
             
-            % date = Date.today(block.system.timezone)
-            % time = Time.now(block.system.timezone)
+            % date = Date.today(block.context.timezone)
+            % time = Time.now(block.context.timezone)
             % if start_time < time and end_time > time and date in block.schedule:
                 % offset_minutes = time.get_minutes() - start_time.get_minutes()
                 % offset_percentage = (offset_minutes / total_minutes) * 100

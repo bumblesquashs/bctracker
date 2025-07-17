@@ -1,18 +1,18 @@
 
-% from repositories import PositionRepository
+% import repositories
 
 % rebase('base')
 
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
-    % if system:
-        % if agency.realtime_enabled:
-            <h2>Transit Schedules and Bus Tracking {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
+    % if context.system:
+        % if context.realtime_enabled:
+            <h2>{{ context }} Transit Schedules and Bus Tracking</h2>
         % else:
-            <h2>Transit Schedules {{ system.preposition }} {{ system }}{{ ' Region' if system.regional else '' }}</h2>
+            <h2>{{ context }} Transit Schedules</h2>
         % end
     % else:
-        <h2>Transit Schedules and Bus Tracking for British Columbia</h2>
+        <h2>British Columbia Transit Schedules and Bus Tracking</h2>
     % end
 </div>
 
@@ -31,7 +31,7 @@
                             if (isNaN(value)) {
                                 alert("Please enter a valid bus number")
                             } else {
-                                window.location = "{{ get_url(system, 'bus') }}/" + value;
+                                window.location = "{{ get_url(context, 'bus') }}/" + value;
                             }
                         }
                     }
@@ -39,7 +39,7 @@
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system, 'routes') }}/" + value;
+                            window.location = "{{ get_url(context, 'routes') }}/" + value;
                         }
                     }
                     
@@ -47,9 +47,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(system, 'stops') }}?search=" + value;
+                                window.location = "{{ get_url(context, 'stops') }}?search=" + value;
                             } else {
-                                window.location = "{{ get_url(system, 'stops') }}/" + value;
+                                window.location = "{{ get_url(context, 'stops') }}/" + value;
                             }
                         }
                     }
@@ -57,13 +57,13 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(system, 'blocks') }}/" + value;
+                            window.location = "{{ get_url(context, 'blocks') }}/" + value;
                         }
                     }
                 </script>
                 
-                % if system:
-                    % if system.realtime_enabled:
+                % if context.system:
+                    % if context.realtime_enabled:
                         <form onsubmit="busSearch()" action="javascript:void(0)">
                             <label for="bus_search">Bus Number:</label>
                             <div class="input-container">
@@ -116,7 +116,7 @@
             <div class="content">
                 <p>
                     Add up to 20 favourites using the
-                    % include('components/svg', name='non-favourite')
+                    % include('components/svg', name='action/non-favourite')
                     button on buses, routes, and stops.
                 </p>
                 % if favourites:
@@ -144,7 +144,7 @@
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = di[PositionRepository].find(value)
+                                                    % position = repositories.position.find(value)
                                                     <tr>
                                                         <td>
                                                             <div class="row">
@@ -159,7 +159,7 @@
                                                         </td>
                                                         <td>
                                                             % if position and position.trip:
-                                                                % include('components/headsign', trip=position.trip)
+                                                                % include('components/headsign', departure=position.departure, trip=position.trip)
                                                             % else:
                                                                 <div class="lighter-text">Not in service</div>
                                                             % end
@@ -182,11 +182,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.value.system for f in route_favourites}
-                                            % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.value.system == favourite_system]
+                                            % favourite_systems = {f.value.context.system for f in route_favourites}
+                                            % for system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in route_favourites if f.value.context.system == system]
                                                 <tr class="header">
-                                                    <td>{{ favourite_system }}</td>
+                                                    <td>{{ system }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in system_favourites:
@@ -195,7 +195,7 @@
                                                         <td>
                                                             <div class="row">
                                                                 % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.system, 'routes', value) }}">{{! value.display_name }}</a>
+                                                                <a href="{{ get_url(value.context, 'routes', value) }}">{{! value.display_name }}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -217,11 +217,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % favourite_systems = {f.value.system for f in stop_favourites}
-                                            % for favourite_system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in stop_favourites if f.value.system == favourite_system]
+                                            % favourite_systems = {f.value.context.system for f in stop_favourites}
+                                            % for system in sorted(favourite_systems):
+                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == system]
                                                 <tr class="header">
-                                                    <td colspan="2">{{ favourite_system }}</td>
+                                                    <td colspan="2">{{ system }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in system_favourites:
@@ -262,9 +262,9 @@
                             <p>See all buses that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'realtime') }}">List</a>
-                            <a class="button" href="{{ get_url(system, 'map') }}">Map</a>
-                            <a class="button" href="{{ get_url(system, 'history') }}">History</a>
+                            <a class="button" href="{{ get_url(context, 'realtime') }}">List</a>
+                            <a class="button" href="{{ get_url(context, 'map') }}">Map</a>
+                            <a class="button" href="{{ get_url(context, 'history') }}">History</a>
                         </div>
                     </div>
                     <div class="item">
@@ -274,9 +274,9 @@
                             <p>See departure times and routing details for routes, stops, blocks, and more</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(system, 'routes') }}">Routes</a>
-                            <a class="button" href="{{ get_url(system, 'stops') }}">Stops</a>
-                            <a class="button" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+                            <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
+                            <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
+                            <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
                         </div>
                     </div>
                 </div>
@@ -289,6 +289,44 @@
             </div>
             <div class="content">
                 <div class="container">
+                    <div class="news-post" id="abtracker">
+                        <div class="header">
+                            <h3>Introducing ABTracker</h3>
+                            April 1, 2025
+                        </div>
+                        <div class="content">
+                            <p>
+                                Following the great success of BCTracker, we've decided it's time to expand to new territory.
+                                The most obvious choice of course is our neighbours to the east, so without further ado we're very pleased to announce the launch of <b><a href="https://abtracker.ca">ABTracker</a></b>!
+                            </p>
+                            <p>
+                                Like BCTracker, ABTracker pulls together transit data from a bunch of larger communities in Alberta into one place, making it easy to see buses running all over the province.
+                                The following agencies/systems are supported as of this initial launch:
+                            </p>
+                            <ul>
+                                <li>Calgary Transit (Calgary)</li>
+                                <li>Edmonton Transit Service (Edmonton)</li>
+                                <li>Grande Prairie Transit (Grande Prairie)</li>
+                                <li>Lethbridge Transit (Lethbridge) <i>(no realtime)</i></li>
+                                <li>Medicine Hat Transit (Medicine Hat)</li>
+                                <li>Red Deer Transit (Red Deer) <i>(no realtime)</i></li>
+                                <li>Roam (Banff)</li>
+                                <li>Woosh (Fort McMurray)</li>
+                            </ul>
+                            <p>
+                                We hope you find ABTracker useful as we all inevitably move to Alberta for cheaper housing!
+                            </p>
+                            <p><b>UPDATE:</b></p>
+                            <p>
+                                So, despite intending for this to be a one-day April Fools joke, a lot of people really want ABTracker permanently!
+                                It turns out we were the fools all along for not anticipating this...
+                            </p>
+                            <p>
+                                Instead of taking down the website at the end of the day, we're instead going to leave it available but advertised as being in <b>beta</b>, which means that some stuff could still break or get changed at any time.
+                                Please see the <a href="https://abtracker.ca/about#beta-testing">ABTracker about page</a> for more info.
+                            </p>
+                        </div>
+                    </div>
                     <div class="news-post">
                         <div class="header">
                             <h3>Winter Update</h3>
@@ -321,34 +359,8 @@
                             <p>Enjoy, stay safe, and have a great year!</p>
                         </div>
                     </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Summer Update</h3>
-                            June 27, 2024
-                        </div>
-                        <div class="content">
-                            <p>
-                                It's summer already - time sure flies!
-                                Here's what we've been up to since the last post.
-                            </p>
-                            <ul>
-                                <li>Favourites: A quick way to get to your frequently-used pages from the home page</li>
-                                <li>Themes: A new Pride theme, and improvements for High Contrast mode</li>
-                                <li>Bus History: Now has paging to improve loading time</li>
-                                <li>Mobile Sections: Now can be toggled to make it easier to scroll down</li>
-                                <li>Transfers: Now can be filtered and shows statistics</li>
-                            </ul>
-                            <p>As usual we've also been making small improvements to the general design of the site, as well as improvements to the server itself behind the scenes.</p>
-                            <p>On BC Transit's end, we've started seeing more buses in service in some of the new NextRide systems, including <b>Quesnel</b>, <b>Williams Lake</b>, <b>100 Mile House</b>, and <b>Pemberton</b>.</p>
-                            <p>
-                                That's all from us for now!
-                                As always, we appreciate your support and feedback, so let us know if you have any comments or suggestions.
-                                Have a great summer!
-                            </p>
-                        </div>
-                    </div>
                     <div>
-                        <a href="{{ get_url(system, 'news') }}">See older news</a>
+                        <a href="{{ get_url(context, 'news') }}">See older news</a>
                     </div>
                 </div>
             </div>
@@ -364,6 +376,20 @@
             <div class="content">
                 <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
                 <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Support</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                <p>We would be incredibly grateful to anyone willing to chip in a little bit to help cover our server and website hosting costs.</p>
+                <p>
+                    Please, only donate if you can afford to!
+                    There is no obligation to do so, and our website will continue to be free to use for all who find it useful or interesting.
+                </p>
+                <a class="button" target="_blank" href="https://ko-fi.com/bctracker">Donate ❤️</a>
             </div>
         </div>
     </div>

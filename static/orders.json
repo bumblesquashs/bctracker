@@ -113,6 +113,9 @@
         "new-flyer-h40lfr": [
             { "year": 2009, "low": 1000, "high": 1019 }
         ],
+        "new-flyer-xe40": [
+            { "year": 2025, "low": 7500, "high": 7524 }
+        ],
         "new-flyer-xn40": [
             { "year": 2013, "low": 1020, "high": 1044 },
             { "year": 2015, "low": 1045, "high": 1069 },
@@ -123,7 +126,8 @@
             { "year": 2020, "low": 1186, "high": 1212 },
             { "year": 2021, "low": 1213, "high": 1232 },
             { "year": 2022, "low": 1233, "high": 1253 },
-            { "year": 2024, "low": 1254, "high": 1261 }
+            { "year": 2024, "low": 1254, "high": 1261 },
+            { "year": 2025, "low": 1262, "high": 1277 }
         ],
         "nova-bus-lfs-2": [
             { "year": 2006, "low": 9201, "high": 9231 },
@@ -142,6 +146,9 @@
         ],
         "nova-bus-lfs-suburban-2": [
             { "year": 2008, "low": 9290, "high": 9300 }
+        ],
+        "nova-bus-lfse+": [
+            { "year": 2025, "low": 7010, "high": 7011 }
         ],
         "proterra-zx5": [
             { "year": 2022, "number": 9093, "demo": true }

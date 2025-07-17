@@ -1,38 +1,44 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
+from dataclasses import dataclass
 
 from models.bus import Bus
+from models.context import Context
 from models.date import Date
+from models.row import Row
 
-from repositories import AgencyRepository, SystemRepository
-
+@dataclass(slots=True)
 class Transfer:
     '''Information about a bus moving from one system to another system'''
     
-    __slots__ = (
-        'id',
-        'bus',
-        'date',
-        'old_system',
-        'new_system'
-    )
+    id: int
+    bus: Bus
+    date: Date
+    old_system: System
+    new_system: System
+    
+    @property
+    def old_context(self):
+        '''The old context for this transfer'''
+        return self.old_system.context
+    
+    @property
+    def new_context(self):
+        '''The new context for this transfer'''
+        return self.new_system.context
     
     @classmethod
-    def from_db(cls, row, prefix='transfer', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a transfer initialized from the given database row'''
-        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        id = row[f'{prefix}_id']
-        agency = agency_repository.find('bc-transit')
-        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        old_system = system_repository.find(row[f'{prefix}_old_system_id'])
-        new_system = system_repository.find(row[f'{prefix}_new_system_id'])
-        date = Date.parse(row[f'{prefix}_date'], new_system.timezone)
-        return cls(id, bus, date, old_system, new_system)
-    
-    def __init__(self, id, bus, date, old_system, new_system):
-        self.id = id
-        self.bus = bus
-        self.date = date
-        self.old_system = old_system
-        self.new_system = new_system
+        id = row['id']
+        context = Context.find(agency_id='bc-transit')
+        bus = Bus.find(context, row['bus_number'])
+        old_context = row.context('old_system_id')
+        new_context = row.context('new_system_id')
+        date = Date.parse(row['date'], new_context.timezone)
+        return cls(id, bus, date, old_context.system, new_context.system)

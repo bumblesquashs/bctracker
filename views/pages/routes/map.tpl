@@ -12,7 +12,7 @@
     </div>
     <div class="column gap-10 stretch">
         <div class="tab-button-bar">
-            <a href="{{ get_url(system, 'routes') }}" class="tab-button">List</a>
+            <a href="{{ get_url(context, 'routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
     </div>
@@ -22,7 +22,7 @@
     <div id="settings" class="options-container collapsed">
         <div class="option" onclick="toggleRouteNumbers()">
             <div id="route-numbers-checkbox" class="checkbox {{ 'selected' if show_route_numbers else '' }}">
-                % include('components/svg', name='check')
+                % include('components/svg', name='status/check')
             </div>
             <span>Show Route Numbers</span>
         </div>
@@ -75,7 +75,7 @@
                 
                 const icon = document.createElement("a");
                 icon.className = "icon route";
-                icon.href = getUrl(route.system_id, "routes/" + route.url_id);
+                icon.href = getUrl(route.system_id, "routes/" + route.url_id, true);
                 icon.style.backgroundColor = "#" + route.colour;
                 icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
                 
@@ -158,7 +158,7 @@
         document.body.onload = function() {
             startLoading();
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(system, 'api', 'routes') }}", true);
+            request.open("GET", "{{ get_url(context, 'api', 'routes') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -185,12 +185,12 @@
     </script>
 % else:
     <div class="placeholder">
-        % if not system:
+        % if not context.system:
             <h3>Route information is unavailable</h3>
             <p>Please check again later!</p>
         % else:
-            <h3>Route information for {{ system }} is unavailable</h3>
-            % if system.gtfs_loaded:
+            <h3>{{ context }} route information is unavailable</h3>
+            % if context.gtfs_loaded:
                 <p>Please check again later!</p>
             % else:
                 <p>System data is currently loading and will be available soon.</p>

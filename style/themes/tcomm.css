@@ -4,6 +4,17 @@
 */
 
 :root {
+    --navigation-bar-background: #111111;
+    --navigation-bar-hover: #444444;
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: #EEEEEE;
+    --navigation-menu-foreground: #222222;
+    
+    --status-bar-background: #333333;
+    --status-bar-hover: #444444;
+    --status-bar-foreground: #FFFFFF;
+    
     --tooltip-background: #000000;
     
     --loading-background: #FFFFFF;
@@ -89,6 +100,18 @@ table tr {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
 }
 
+table tr.table-button {
+    background: #EEEEEE;
+    color: #222222;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #222222;
+}
+
+table tr.table-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
@@ -103,62 +126,30 @@ table tr {
 }
 
 #navigation-bar {
-    background-color: #111111;
     background-image: linear-gradient(#3C3C3C, #111111);
     text-shadow: 0 -1px 1px #000000;
     --tooltip-background: #444444;
-    --image-color: #FFFFFF;
 }
 
-#navigation-bar .navigation-icon {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon:hover {
-    background-color: #444444;
-    background-image: linear-gradient(#555555, #383838);
-}
-
-#navigation-bar .navigation-icon.disabled:hover {
-    background-color: #111111 !important;
-    background-image: linear-gradient(#3C3C3C, #111111) !important;
-}
-
-#navigation-bar .navigation-item {
-    color: #FFFFFF;
+#navigation-bar .navigation-button {
     text-shadow: none;
 }
 
-#navigation-bar .navigation-item:hover {
-    background-color: #444444;
+#navigation-bar .navigation-button:hover {
     background-image: linear-gradient(#555555, #383838);
 }
 
-#navigation-bar .navigation-item.disabled:hover {
-    background-color: #111111 !important;
-    background-image: linear-gradient(#3C3C3C, #111111) !important;
+#navigation-bar .navigation-button.disabled:hover {
+    background-image: unset;
 }
 
 #navigation-menu {
-    background-color: #EEEEEE;
-    color: #222222;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
-    --image-color: #000000;
 }
 
 #navigation-menu .menu-button {
-    color: #000000;
     text-decoration: none;
-}
-
-#navigation-menu .menu-button.disabled {
-    color: #666666;
-    --image-color: #666666;
-}
-
-#navigation-menu-toggle .line {
-    background-color: #FFFFFF;
 }
 
 #nearby-status.loading {
@@ -189,15 +180,7 @@ table tr {
 }
 
 #refresh-button:hover {
-    background-color: #000000;
-}
-
-#refresh-button.disabled {
-    background-color: transparent;
-}
-
-#refresh-button {
-    --image-color: #FFFFFF;
+    background-image: linear-gradient(#555555, #383838);
 }
 
 #search {
@@ -273,31 +256,21 @@ table tr {
     color: #666666;
 }
 
-#side-bar {
-    border-right-color: #000000;
-}
-
-#side-bar-toggle {
-    background-color: #EEEEEE;
-    background-image: linear-gradient(#FFFFFF, #F1F1F1);
-}
-
-#side-bar-toggle:hover {
-    background: #DFDFDF;
-    background-image: linear-gradient(#F6F6F6, #E0E0E0);
-}
-
-#status {
+#status-bar {
     background-color: #333333;
     background-image: linear-gradient(#444444, #2D2D2D);
     text-shadow: 0 -1px 1px #000000;
-    color: #FFFFFF;
     border-bottom-color: #000000;
+    --tooltip-background: #444444;
+}
+
+#system:hover {
+    background-image: linear-gradient(#555555, #383838);
 }
 
 #system-menu {
     background-color: #EEEEEE;
-    border-bottom-color: #000000;
+    border-color: #000000;
 }
 
 #system-menu .header {
@@ -328,20 +301,7 @@ table tr {
     color: #FFFFFF;
 }
 
-#system-menu-toggle {
-    --image-color: #FFFFFF;
-}
-
-#title {
-    background-color: #111111;
-    background-image: linear-gradient(#3C3C3C, #111111);
-    text-shadow: none;
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
 #title:hover {
-    background-color: #444444;
     background-image: linear-gradient(#555555, #383838);
 }
 
@@ -561,10 +521,6 @@ table tr {
 
 .percentage {
     text-shadow: none;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

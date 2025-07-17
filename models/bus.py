@@ -1,23 +1,35 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from repositories import AdornmentRepository, OrderRepository
+if TYPE_CHECKING:
+    from models.order import Order
 
+from dataclasses import dataclass
+
+from models.agency import Agency
+from models.context import Context
+
+import repositories
+
+@dataclass(slots=True)
 class Bus:
     '''A public transportation vehicle'''
     
-    __slots__ = (
-        'adornment_repository',
-        'number',
-        'order'
-    )
+    agency: Agency
+    number: int
+    order: Order
     
     @classmethod
-    def find(cls, agency, number, **kwargs):
-        '''Returns a bus for the given agency with the given number'''
-        order_repository = kwargs.get('order_repository') or di[OrderRepository]
-        order = order_repository.find(agency, number)
-        return cls(number, order)
+    def find(cls, context: Context, number):
+        '''Returns a bus for the given context with the given number'''
+        order = repositories.order.find(context, number)
+        return cls(context.agency, number, order)
+    
+    @property
+    def context(self):
+        '''The context for this bus'''
+        return self.agency.context
     
     @property
     def url_id(self):
@@ -45,24 +57,10 @@ class Bus:
             return order.model
         return None
     
-    @property
-    def agency(self):
-        order = self.order
-        if order:
-            return order.agency
-        return None
-    
-    def __init__(self, number, order, **kwargs):
-        self.number = number
-        self.order = order
-        
-        self.adornment_repository = kwargs.get('adornment_repository') or di[AdornmentRepository]
-    
     def __str__(self):
         if self.is_known:
-            agency = self.agency
-            if agency and agency.vehicle_name_length:
-                return f'{self.number:0{agency.vehicle_name_length}d}'
+            if self.context.vehicle_name_length:
+                return f'{self.number:0{self.context.vehicle_name_length}d}'
             return str(self.number)
         return 'Unknown Bus'
     
@@ -75,9 +73,6 @@ class Bus:
     def __lt__(self, other):
         return self.number < other.number
     
-    def find_adornment(self):
-        '''Returns the adornment for this bus, if one exists'''
-        agency = self.agency
-        if agency:
-            return self.adornment_repository.find(agency, self)
-        return None
+    def find_decoration(self):
+        '''Returns the decoration for this bus, if one exists'''
+        return repositories.decoration.find(self)

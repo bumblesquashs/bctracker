@@ -4,15 +4,15 @@
 <div id="page-header">
     <h1>Vehicle History</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'history') }}" class="tab-button">Last Seen</a>
-        <a href="{{ get_url(system, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ get_url(context, 'history') }}" class="tab-button">Last Seen</a>
+        <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
 </div>
 
 <div class="page-container">
     <div class="sidebar container flex-1">
-        % if system:
+        % if context.system:
             <div class="section {{ '' if filter else '' }}">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Filters</h2>
@@ -28,11 +28,11 @@
                                 </div>
                                 <div class="option" onclick="setFilter('from')">
                                     <div class="radio-button {{ 'selected' if filter == 'from' else '' }}"></div>
-                                    <div>From {{ system }}</div>
+                                    <div>From {{ context }}</div>
                                 </div>
                                 <div class="option" onclick="setFilter('to')">
                                     <div class="radio-button {{ 'selected' if filter == 'to' else '' }}"></div>
-                                    <div>To {{ system }}</div>
+                                    <div>To {{ context }}</div>
                                 </div>
                             </div>
                         </div>
@@ -40,9 +40,9 @@
                     <script>
                         function setFilter(filter) {
                             if (filter === null) {
-                                window.location = "{{ get_url(system, 'history', 'transfers') }}";
+                                window.location = "{{ get_url(context, 'history', 'transfers') }}";
                             } else {
-                                window.location = "{{ get_url(system, 'history', 'transfers') }}?filter=" + filter;
+                                window.location = "{{ get_url(context, 'history', 'transfers') }}?filter=" + filter;
                             }
                         }
                     </script>
@@ -135,17 +135,17 @@
                                     <td class="desktop-only">
                                         % include('components/order', order=bus.order)
                                     </td>
-                                    <td class="non-mobile">{{ transfer.old_system }}</td>
-                                    <td class="non-mobile">{{ transfer.new_system }}</td>
+                                    <td class="non-mobile">{{ transfer.old_context }}</td>
+                                    <td class="non-mobile">{{ transfer.new_context }}</td>
                                     <td class="mobile-only">
                                         <div class="column">
                                             <div>
                                                 <div class="smaller-font">From:</div>
-                                                {{ transfer.old_system }}
+                                                {{ transfer.old_context }}
                                             </div>
                                             <div>
                                                 <div class="smaller-font">To:</div>
-                                                {{ transfer.new_system }}
+                                                {{ transfer.new_context }}
                                             </div>
                                         </div>
                                     </td>
@@ -155,23 +155,23 @@
                     </table>
                 % else:
                     <div class="placeholder">
-                        % if not system:
+                        % if not context.system:
                             <h3>No transfers found</h3>
                             <p>Something has probably gone terribly wrong if you're seeing this.</p>
-                        % elif not system.realtime_enabled:
-                            <h3>{{ system }} does not currently support realtime</h3>
-                            <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+                        % elif not context.realtime_enabled:
+                            <h3>{{ context }} realtime information is not supported</h3>
+                            <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">
                                 % include('components/systems')
                             </div>
                         % elif filter == 'from':
-                            <h3>No buses have been transferred from {{ system }}</h3>
+                            <h3>No buses have been transferred from {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % elif filter == 'to':
-                            <h3>No buses have been transferred to {{ system }}</h3>
+                            <h3>No buses have been transferred to {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % else:
-                            <h3>No buses have been transferred to or from {{ system }}</h3>
+                            <h3>No buses have been transferred to or from {{ context }}</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

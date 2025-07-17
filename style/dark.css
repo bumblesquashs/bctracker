@@ -27,6 +27,10 @@
     --adherence-background: #FF6A00;
 }
 
+.custom-headsigns {
+    --image-color: #ABABAB;
+}
+
 .marker .bearing {
     filter: brightness(80%);
 }
@@ -110,12 +114,20 @@
     background-color: #700000;
 }
 
+.percentage.low.inverted {
+    background-color: #005900;
+}
+
 .percentage.mid {
     background-color: #B65901;
 }
 
 .percentage.high {
     background-color: #005900;
+}
+
+.percentage.high.inverted {
+    background-color: #700000;
 }
 
 .positive {
@@ -133,6 +145,10 @@
 
 .sheet a.normal-service:hover {
     background-color: #003B00;
+}
+
+.record-warnings {
+    --image-color: #DC5050;
 }
 
 .very-ahead {

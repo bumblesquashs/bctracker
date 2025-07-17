@@ -6,9 +6,11 @@ pip install requests
 pip install Bottle
 pip install cherrypy
 pip install wsgi-request-logger
-pip install protobuf
+pip install protobuf==3.20
 pip install google
 pip install python-crontab
+pip install pytz
+pip install pytest
 
 # Create directories
 mkdir -p archives/gtfs

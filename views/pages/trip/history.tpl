@@ -3,15 +3,21 @@
 
 <div id="page-header">
     <h1>Trip {{! trip.display_id }}</h1>
-    <h2>{{ trip }}</h2>
+    <h2>
+        % if trip.custom_headsigns:
+            % include('components/custom_headsigns', custom_headsigns=trip.custom_headsigns)
+        % else:
+            {{ trip }}
+        % end
+    </h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'trips', trip) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'trips', trip) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
 
-% if system.realtime_enabled:
+% if context.realtime_enabled:
     <div class="page-container">
         % if records:
             <div class="sidebar container flex-1">
@@ -53,7 +59,7 @@
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">
-                                    % include('components/svg', name='warning')
+                                    % include('components/svg', name='status/warning')
                                 </span>
                                 <span>may be accidental logins.</span>
                             </p>
@@ -82,8 +88,8 @@
                                     <tr>
                                         <td>{{ record.date.format_day() }}</td>
                                         <td>
-                                            <div class="column">
-                                                <div class="row">
+                                            <div class="column stretch">
+                                                <div class="row space-between">
                                                     % include('components/bus')
                                                     % include('components/record_warnings')
                                                 </div>
@@ -121,7 +127,7 @@
     % include('components/top_button')
 % else:
     <div class="placeholder">
-        <h3>{{ system }} does not currently support realtime</h3>
-        <p>You can browse the schedule data for {{ system }} using the links above, or choose a different system.</p>
+        <h3>{{ context }} realtime information is not supported</h3>
+        <p>You can browse schedule data using the links above, or choose a different system.</p>
     </div>
 % end

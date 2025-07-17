@@ -27,8 +27,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(system, 'bus', bus, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(system, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'bus', bus, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -65,7 +65,7 @@
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_system) }}">{{ overview.last_seen_system }}</a>
+                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
                                 </div>
                             </div>
                         % end
@@ -81,7 +81,7 @@
                         % if last_record and last_record.date.is_today:
                             % block = last_record.block
                             % if block:
-                                % date = Date.today(block.system.timezone)
+                                % date = Date.today(block.context.timezone)
                                 % end_time = block.get_end_time(date=date)
                                 % if end_time and end_time.is_later:
                                     <div class="section no-flex">
@@ -105,7 +105,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.system) }}">{{ position.system }}</a>
+                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -136,17 +136,22 @@
                         <div class="section">
                             <div class="row">
                                 % include('components/adherence', adherence=position.adherence, size='large')
-                                <h3>{{ trip }}</h3>
+                                % departure = position.departure
+                                % if departure and departure.headsign:
+                                    <h3>{{ departure }}</h3>
+                                % else:
+                                    <h3>{{ trip }}</h3>
+                                % end
                             </div>
                         </div>
                         <div class="section">
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.system, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </div>
                         <div class="section">
-                            % include('components/block_timeline', date=Date.today(block.system.timezone))
+                            % include('components/block_timeline', date=Date.today(block.context.timezone))
                         </div>
                         % if position.timestamp:
                             <div class="row section">
@@ -165,7 +170,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(trip.system) }}">{{ trip.system }}</a>
+                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -186,8 +191,8 @@
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
-                                <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
-                                % date = Date.today(block.system.timezone)
+                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                % date = Date.today(block.context.timezone)
                                 % start_time = block.get_start_time(date=date).format_web(time_format)
                                 % end_time = block.get_end_time(date=date).format_web(time_format)
                                 % duration = block.get_duration(date=date)
@@ -279,48 +284,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                % for departure in upcoming_departures:
-                                    % trip = departure.trip
-                                    % stop = departure.stop
-                                    <tr>
-                                        <td>
-                                            <div class="row">
-                                                <div class="{{ 'timing-point' if departure.timepoint else '' }}">
-                                                    {{ departure.time.format_web(time_format) }}
-                                                </div>
-                                                % if position.adherence and position.adherence.value != 0:
-                                                    % expected_time = departure.time - timedelta(minutes=position.adherence.value)
-                                                    <div class="lighter-text">
-                                                        ({{ expected_time.format_web(time_format) }})
-                                                    </div>
-                                                % end
+                                % for departure in upcoming_departures[:5]:
+                                    % include('rows/upcoming_departure')
+                                % end
+                                % if len(upcoming_departures) > 5:
+                                    <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
+                                        <td colspan="2">
+                                            <div class="row justify-center">
+                                                % include('components/svg', name='action/open')
+                                                Show Full Schedule
                                             </div>
                                         </td>
-                                        % if stop:
-                                            <td>
-                                                <div class="column">
-                                                    % include('components/stop', timepoint=departure.timepoint)
-                                                    % if not departure.pickup_type.is_normal:
-                                                        <span class="smaller-font italics">{{ departure.pickup_type }}</span>
-                                                    % elif departure == trip.last_departure:
-                                                        <span class="smaller-font italics">No pick up</span>
-                                                    % end
-                                                    % if not departure.dropoff_type.is_normal:
-                                                        <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
-                                                    % elif departure == trip.first_departure:
-                                                        <span class="smaller-font italics">No drop off</span>
-                                                    % end
-                                                </div>
-                                            </td>
-                                        % else:
-                                            <td class="lighter-text">Unknown</td>
-                                        % end
                                     </tr>
+                                    <tr class="display-none"></tr>
+                                    % for departure in upcoming_departures[5:]:
+                                        % include('rows/upcoming_departure', hidden=True)
+                                    % end
                                 % end
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <script>
+                    function showAllUpcomingStops() {
+                        document.getElementById("show-all-upcoming-stops-button").classList.add("display-none");
+                        for (const element of document.getElementsByClassName("table-button-target")) {
+                            element.classList.remove("display-none");
+                        }
+                    }
+                </script>
             % end
         % end
         <div class="section">
@@ -334,7 +326,7 @@
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
-                                % include('components/svg', name='warning')
+                                % include('components/svg', name='status/warning')
                             </span>
                             <span>may be accidental logins.</span>
                         </p>
@@ -366,16 +358,16 @@
                                     <td>
                                         <div class="column">
                                             {{ record.date.format_day() }}
-                                            <span class="non-desktop smaller-font">{{ record.system }}</span>
+                                            <span class="non-desktop smaller-font">{{ record.context }}</span>
                                         </div>
                                     </td>
-                                    <td class="desktop-only">{{ record.system }}</td>
+                                    <td class="desktop-only">{{ record.context }}</td>
                                     <td>
-                                        <div class="column">
-                                            <div class="row">
+                                        <div class="column stretch">
+                                            <div class="row space-between">
                                                 % if record.is_available:
                                                     % block = record.block
-                                                    <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                                 % else:
                                                     <span>{{ record.block_id }}</span>
                                                 % end

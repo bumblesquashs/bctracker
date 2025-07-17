@@ -1,64 +1,68 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
+from dataclasses import dataclass
 
 from models.adherence import Adherence
 from models.bus import Bus
 from models.occupancy import Occupancy
+from models.row import Row
 from models.timestamp import Timestamp
 
-from repositories import AgencyRepository, DepartureRepository, SystemRepository
+import repositories
 
+@dataclass(slots=True)
 class Position:
     '''Current information about a bus' coordinates, trip, and stop'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'bus',
-        'trip_id',
-        'stop_id',
-        'block_id',
-        'route_id',
-        'sequence',
-        'lat',
-        'lon',
-        'bearing',
-        'speed',
-        'adherence',
-        'occupancy',
-        'timestamp'
-    )
+    system: System
+    bus: Bus
+    trip_id: str | None
+    stop_id: str | None
+    block_id: str | None
+    route_id: str | None
+    sequence: int | None
+    lat: float | None
+    lon: float | None
+    bearing: float | None
+    speed: float | None
+    adherence: Adherence | None
+    occupancy: Occupancy | None
+    timestamp: Timestamp
     
     @classmethod
-    def from_db(cls, row, prefix='position', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
-        agency_repository = kwargs.get('agency_repository') or di[AgencyRepository]
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        agency = agency_repository.find('bc-transit')
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        bus = Bus.find(agency, row[f'{prefix}_bus_number'])
-        trip_id = row[f'{prefix}_trip_id']
-        stop_id = row[f'{prefix}_stop_id']
-        block_id = row[f'{prefix}_block_id']
-        route_id = row[f'{prefix}_route_id']
-        sequence = row[f'{prefix}_sequence']
-        lat = row[f'{prefix}_lat']
-        lon = row[f'{prefix}_lon']
-        bearing = row[f'{prefix}_bearing']
-        speed = row[f'{prefix}_speed']
-        adherence_value = row[f'{prefix}_adherence']
+        context = row.context()
+        bus = Bus.find(context, row['bus_number'])
+        trip_id = row['trip_id']
+        stop_id = row['stop_id']
+        block_id = row['block_id']
+        route_id = row['route_id']
+        sequence = row['sequence']
+        lat = row['lat']
+        lon = row['lon']
+        bearing = row['bearing']
+        speed = row['speed']
+        adherence_value = row['adherence']
         if adherence_value is None:
             adherence = None
         else:
-            trip = system.get_trip(trip_id)
+            trip = context.system.get_trip(trip_id)
             layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
-        try:
-            occupancy = Occupancy[row[f'{prefix}_occupancy']]
-        except KeyError:
-            occupancy = Occupancy.NO_DATA_AVAILABLE
-        timestamp = Timestamp.parse(row[f'{prefix}_timestamp'], timezone=system.timezone)
-        return cls(system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+        occupancy = Occupancy.from_db(row['occupancy'])
+        timestamp = Timestamp.parse(row['timestamp'], context.timezone)
+        return cls(context.system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+    
+    @property
+    def context(self):
+        '''The context for this position'''
+        return self.system.context
     
     @property
     def has_location(self):
@@ -109,23 +113,10 @@ class Position:
             return trip.route.text_colour
         return 'FFFFFF'
     
-    def __init__(self, system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, **kwargs):
-        self.system = system
-        self.bus = bus
-        self.trip_id = trip_id
-        self.stop_id = stop_id
-        self.block_id = block_id
-        self.route_id = route_id
-        self.sequence = sequence
-        self.lat = lat
-        self.lon = lon
-        self.bearing = bearing
-        self.speed = speed
-        self.adherence = adherence
-        self.occupancy = occupancy
-        self.timestamp = timestamp
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+    @property
+    def departure(self):
+        '''Returns the departure associated with this position'''
+        return repositories.departure.find(self.context, self.trip_id, self.sequence)
     
     def __eq__(self, other):
         return self.bus == other.bus
@@ -140,7 +131,7 @@ class Position:
             'bus_display': str(self.bus),
             'bus_url_id': str(self.bus.url_id),
             'system': str(self.system),
-            'agency_id': self.system.agency.id,
+            'agency_id': self.context.agency_id,
             'lon': self.lon,
             'lat': self.lat,
             'colour': self.colour,
@@ -153,20 +144,24 @@ class Position:
         if order:
             data['bus_order'] = str(order).replace("'", '&apos;')
             if order.model and order.model.type:
-                data['bus_icon'] = f'bus-{order.model.type.name}'
+                data['bus_icon'] = f'model/type/bus-{order.model.type.name}'
             else:
                 data['bus_icon'] = 'ghost'
         else:
             data['bus_order'] = 'Unknown Year/Model'
             data['bus_icon'] = 'ghost'
-        adornment = self.bus.find_adornment()
-        if adornment and adornment.enabled:
-            data['adornment'] = str(adornment)
+        decoration = self.bus.find_decoration()
+        if decoration and decoration.enabled:
+            data['decoration'] = str(decoration)
         trip = self.trip
         if trip:
-            data['headsign'] = str(trip).replace("'", '&apos;')
+            departure = self.departure
+            if departure and departure.headsign:
+                data['headsign'] = str(departure).replace("'", '&apos;')
+            else:
+                data['headsign'] = str(trip).replace("'", '&apos;')
             data['route_number'] = trip.route.number
-            data['system_id'] = trip.system.id
+            data['system_id'] = trip.context.system_id
             data['shape_id'] = trip.shape_id
         else:
             data['headsign'] = 'Not In Service'
@@ -186,7 +181,7 @@ class Position:
         return data
     
     def find_upcoming_departures(self):
-        '''Returns the next 5 upcoming departures'''
+        '''Returns the trip's upcoming departures'''
         if self.sequence is None or not self.trip:
             return []
-        return self.departure_repository.find_upcoming(self.system, self.trip, self.sequence)
+        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)

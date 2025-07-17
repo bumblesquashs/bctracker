@@ -1,18 +1,27 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+    
+from dataclasses import dataclass, field
 from enum import Enum
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
 
-from di import di
-
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
+from models.point import Point
+from models.row import Row
 from models.schedule import Schedule
-
-from repositories import DepartureRepository, SystemRepository
+from models.sheet import Sheet
+from models.trip import Trip
 
 import helpers
+import repositories
 
 class RouteType(Enum):
     '''Options for route types'''
@@ -28,6 +37,13 @@ class RouteType(Enum):
     FUNICULAR = '7'
     TROLLEY_BUS = '11'
     MONORAIL = '12'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.UNKNOWN
     
     def __str__(self):
         match self:
@@ -54,43 +70,41 @@ class RouteType(Enum):
             case RouteType.MONORAIL:
                 return 'Monorail Line'
 
+@dataclass(slots=True)
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'id',
-        'number',
-        'key',
-        'name',
-        'colour',
-        'text_colour',
-        'type'
-    )
+    system: System
+    id: str
+    number: str
+    name: str
+    colour: str
+    text_colour: str
+    type: RouteType
+    
+    key: str = field(init=False)
     
     @classmethod
-    def from_db(cls, row, prefix='route', **kwargs):
+    def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
-        system_repository = kwargs.get('system_repository') or di[SystemRepository]
-        system = system_repository.find(row[f'{prefix}_system_id'])
-        id = row[f'{prefix}_id']
-        number = row[f'{prefix}_number']
-        if not number:
-            number = id
-        name = row[f'{prefix}_name']
-        colour = row[f'{prefix}_colour'] or generate_colour(system, number)
-        text_colour = row[f'{prefix}_text_colour'] or 'FFFFFF'
-        try:
-            type = RouteType(row[f'{prefix}_type'])
-        except ValueError:
-            type = RouteType.UNKNOWN
-        return cls(system, id, number, name, colour, text_colour, type)
+        context = row.context()
+        id = row['id']
+        number = row['number'] or id
+        name = row['name']
+        colour = row['colour'] or generate_colour(context, number)
+        text_colour = row['text_colour'] or 'FFFFFF'
+        type = RouteType.from_db(row['type'])
+        return cls(context.system, id, number, name, colour, text_colour, type)
+    
+    @property
+    def context(self):
+        '''The context for this route'''
+        return self.system.context
     
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
-        if self.system.agency.prefer_route_id:
+        if self.context.prefer_route_id:
             return self.id
         return self.number
     
@@ -124,18 +138,8 @@ class Route:
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
     
-    def __init__(self, system, id, number, name, colour, text_colour, type, **kwargs):
-        self.system = system
-        self.id = id
-        self.number = number
-        self.name = name
-        self.colour = colour
-        self.text_colour = text_colour
-        self.type = type
-        
-        self.key = helpers.key(number)
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+    def __post_init__(self):
+        self.key = helpers.key(self.number)
     
     def __str__(self):
         return f'{self.number} {self.name}'
@@ -171,7 +175,7 @@ class Route:
             json.append({
                 'system_id': self.system.id,
                 'system_name': str(self.system),
-                'agency_id': self.system.agency.id,
+                'agency_id': self.context.agency_id,
                 'number': self.number,
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
@@ -194,7 +198,12 @@ class Route:
     
     def get_headsigns(self, service_group=None, date=None):
         '''Returns all headsigns from this route'''
-        return sorted({str(t) for t in self.get_trips(service_group, date)})
+        headsigns = set()
+        for trip in self.get_trips(service_group, date):
+            headsigns.add(str(trip))
+            for headsign in trip.custom_headsigns:
+                headsigns.add(headsign)
+        return sorted(headsigns)
     
     def get_match(self, query):
         '''Returns a match for this route with the given query'''
@@ -214,7 +223,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return self.departure_repository.find_all(self.system, route=self)
+        return repositories.departure.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
@@ -224,15 +233,15 @@ class Route:
         route_key = tuple([k for k in route.key if type(k) == int])
         return self_key and route_key and self_key == route_key
 
-def generate_colour(system, number):
-    '''Generate a random colour based on system ID and route number'''
-    seed(system.id)
+def generate_colour(context: Context, number):
+    '''Generate a random colour based on context and route number'''
+    seed(context.system_id)
     number_digits = ''.join([d for d in number if d.isdigit()])
     if len(number_digits) == 0:
         h = randint(1, 360) / 360.0
     else:
         h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-    seed(system.id + number)
+    seed(context.system_id + number)
     l = randint(30, 50) / 100.0
     s = randint(50, 100) / 100.0
     rgb = hls_to_rgb(h, l, s)
@@ -241,25 +250,24 @@ def generate_colour(system, number):
     b = int(rgb[2] * 255)
     return f'{r:02x}{g:02x}{b:02x}'
 
+@dataclass(slots=True)
 class RouteCache:
     '''A collection of calculated values for a single route'''
     
-    __slots__ = (
-        'trips',
-        'schedule',
-        'sheets',
-        'indicator_points'
-    )
+    trips: list[Trip]
+    schedule: Schedule | None
+    sheets: list[Sheet]
+    indicator_points: list[Point]
     
-    def __init__(self, system, trips):
-        self.trips = trips
+    @classmethod
+    def build(cls, system, trips):
         services = {t.service for t in trips}
-        self.sheets = system.copy_sheets(services)
-        if self.sheets:
-            date_range = DateRange.combine([s.schedule.date_range for s in self.sheets])
-            self.schedule = Schedule.combine(services, date_range)
+        sheets = system.copy_sheets(services)
+        if sheets:
+            date_range = DateRange.combine([s.schedule.date_range for s in sheets])
+            schedule = Schedule.combine(services, date_range)
         else:
-            self.schedule = None
+            schedule = None
         try:
             sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
             points = sorted_trips[0].find_points()
@@ -271,6 +279,7 @@ class RouteCache:
             else:
                 count = min(int(distance * 8) + 1, 4)
             size = len(points) // count
-            self.indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+            indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
         except IndexError:
-            self.indicator_points = []
+            indicator_points = []
+        return cls(trips, schedule, sheets, indicator_points)

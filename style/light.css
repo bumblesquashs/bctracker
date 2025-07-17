@@ -19,6 +19,10 @@
     --adherence-background: #FF9A3A;
 }
 
+.custom-headsigns {
+    --image-color: #666666;
+}
+
 .modified-service {
     background-color: #FFA560;
     color: #000000;
@@ -86,12 +90,20 @@
     background-color: #FF7F7F;
 }
 
+.percentage.low.inverted {
+    background-color: #7DBD88;
+}
+
 .percentage.mid {
     background-color: #FFA560;
 }
 
 .percentage.high {
     background-color: #7DBD88;
+}
+
+.percentage.high.inverted {
+    background-color: #FF7F7F;
 }
 
 .positive {
@@ -109,6 +121,10 @@
 
 .sheet a.normal-service:hover {
     background-color: #509F5E;
+}
+
+.record-warnings {
+    --image-color: #DC5050;
 }
 
 .very-ahead {

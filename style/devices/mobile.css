@@ -6,20 +6,8 @@ body {
     overflow: visible;
 }
 
-body.full-map {
-    overflow: hidden;
-}
-
-body.full-map #main {
-    overflow: hidden;
-}
-
 body.full-map #page {
     padding: 10px 20px 10px 20px;
-}
-
-body.full-map #side-bar {
-    overflow: hidden;
 }
 
 body.full-map #system-menu {
@@ -52,8 +40,13 @@ table th {
     font-size: 12pt;
 }
 
+#content {
+    display: flex;
+    flex-direction: column;
+}
+
 #last-updated {
-    font-size: 12pt;
+    text-align: center;
 }
 
 #loading {
@@ -61,8 +54,8 @@ table th {
 }
 
 #main {
+    order: 3;
     font-size: 12pt;
-    order: 6;
 }
 
 #map-controls {
@@ -77,55 +70,16 @@ table th {
     --image-size: 24px;
 }
 
-#navigation-bar {
-    order: 2;
-    padding: 0px 5px;
-}
-
-#navigation-bar .title {
-    font-size: 22pt;
-}
-
-#navigation-bar .navigation-icon {
+#navigation-bar .navigation-button {
     --image-size: 36px;
 }
 
-#navigation-bar .navigation-icon .label {
+#navigation-bar .navigation-button.compact .label {
     display: none;
 }
 
 #navigation-menu {
-    order: 3;
-    position: relative;
-    margin: 0px;
-    padding: 5px 0px;
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    align-items: center;
-    font-family: var(--sans-serif-font);
-}
-
-#navigation-menu .menu-button {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    padding: 15px 20px;
-    font-size: 16pt;
-    font-weight: normal;
-    --image-size: 24px;
-}
-
-#navigation-menu-toggle {
-    padding: 5px;
-    margin: 5px 10px 5px 0px;
-}
-
-#navigation-menu-toggle .line {
-    width: 32px;
-    height: 4px;
-    border-radius: 2px;
-    margin: 6px;
 }
 
 #page {
@@ -142,7 +96,7 @@ table th {
 }
 
 #search {
-    order: 4;
+    order: 2;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
@@ -196,28 +150,33 @@ table th {
     font-size: 11pt;
 }
 
-#side-bar {
-    order: 5;
-}
-
-#side-bar-toggle-container {
-    display: none;
-}
-
-#status .details {
+#status-bar {
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
+    column-gap: 10px;
+    padding: 5px 20px;
+}
+
+#status-bar .details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 #system {
-    font-size: 14pt;
+    text-align: center;
 }
 
 #system-menu {
+    order: 1;
+    display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     border-bottom-width: 1px;
     border-bottom-style: solid;
+    font-size: 12pt;
 }
 
 #system-menu.collapse-non-desktop {
@@ -226,13 +185,11 @@ table th {
 
 #system-menu .header {
     grid-column-end: span 2;
-    font-size: 15pt;
     text-align: center;
 }
 
 #system-menu .system-button {
     padding: 5px 20px;
-    font-size: 14pt;
     font-weight: normal;
 }
 
@@ -241,12 +198,8 @@ table th {
 }
 
 #system-menu-toggle {
-    --image-size: 36px;
-}
-
-#title {
-    order: 1;
-    display: none;
+    grid-row: span 2;
+    --image-size: 32px;
 }
 
 .button {
@@ -293,6 +246,10 @@ table th {
 .page-container {
     flex-direction: column;
     gap: 20px;
+}
+
+.placeholder {
+    align-items: stretch;
 }
 
 .sheet .dates .month .name {

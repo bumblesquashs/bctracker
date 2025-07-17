@@ -5,7 +5,7 @@
     <h1>Stops</h1>
 </div>
 
-% if system:
+% if context.system:
     <script>
         const routesFilter = new Set("{{ ','.join(routes_filter) }}".split(",").filter(function(route) {
             return route !== "";
@@ -39,7 +39,7 @@
         
         function updateFilters() {
             const search = document.getElementById('stop_id_search').value;
-            window.location = getUrl(systemID, "stops", {
+            window.location = getUrl(currentSystemID, "stops", true, {
                 "search": search.length === 0 ? null : search,
                 "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
                 "sort": sort === "name" ? null : sort,
@@ -62,7 +62,7 @@
                                     <div class="radio-button {{ 'selected' if sort == 'name' else '' }}"></div>
                                     <div>Stop Name</div>
                                 </div>
-                                % if agency.show_stop_number:
+                                % if context.show_stop_number:
                                     <div class="option" onclick="setSort('number')">
                                         <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
                                         <div>Stop Number</div>
@@ -115,14 +115,14 @@
                         </div>
                         <div class="section">
                             <div class="options-container">
-                                % for route in system.get_routes():
+                                % for route in context.system.get_routes():
                                     <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
                                         <div class="row">
                                             % include('components/route')
                                             {{! route.display_name }}
                                         </div>
                                         <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
-                                            % include('components/svg', name='check')
+                                            % include('components/svg', name='status/check')
                                         </div>
                                     </div>
                                 % end
@@ -159,8 +159,8 @@
                                     <p>Please try selecting different routes!</p>
                                 % end
                             % else:
-                                <h3>Stop information for {{ system }} is unavailable</h3>
-                                % if system.gtfs_loaded:
+                                <h3>{{ context }} stop information is unavailable</h3>
+                                % if context.gtfs_loaded:
                                     <p>Please check again later!</p>
                                 % else:
                                     <p>System data is currently loading and will be available soon.</p>
@@ -251,16 +251,16 @@
                             </td>
                         </tr>
                         <tr class="display-none"></tr>
-                        % for region_system in sorted(region_systems):
-                            % count = len(region_system.get_stops())
+                        % for system in sorted(region_systems):
+                            % count = len(system.get_stops())
                             <tr>
                                 <td>
                                     <div class="row">
-                                        % include('components/agency_logo', agency=region_system.agency)
+                                        % include('components/agency_logo', agency=system.agency)
                                         <div class="column">
-                                            <a href="{{ get_url(region_system, *path) }}">{{ region_system }}</a>
+                                            <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
                                             <span class="mobile-only smaller-font">
-                                                % if region_system.gtfs_loaded:
+                                                % if system.gtfs_loaded:
                                                     % if count == 1:
                                                         1 Stop
                                                     % else:
@@ -271,10 +271,10 @@
                                         </div>
                                     </div>
                                 </td>
-                                % if region_system.gtfs_loaded:
+                                % if system.gtfs_loaded:
                                     <td class="non-mobile align-right">{{ count }}</td>
                                     <td>
-                                        % include('components/weekdays', schedule=region_system.schedule, compact=True)
+                                        % include('components/weekdays', schedule=system.schedule, compact=True)
                                     </td>
                                 % else:
                                     <td class="lighter-text" colspan="2">Stops are loading...</td>

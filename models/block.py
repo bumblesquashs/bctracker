@@ -1,24 +1,38 @@
 
-from di import di
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.system import System
+
+from dataclasses import dataclass, field
+from typing import Self
 
 from models.match import Match
 from models.schedule import Schedule
+from models.sheet import Sheet
 from models.time import Time
+from models.trip import Trip
 
-from repositories import DepartureRepository
+import repositories
 
+@dataclass(slots=True)
 class Block:
     '''A list of trips that are operated by the same bus sequentially'''
     
-    __slots__ = (
-        'departure_repository',
-        'system',
-        'id',
-        'trips',
-        'schedule',
-        'sheets',
-        '_related_blocks'
-    )
+    system: System
+    id: str
+    trips: list[Trip]
+    
+    schedule: Schedule = field(init=False)
+    sheets: list[Sheet] = field(init=False)
+    
+    _related_blocks: list[Self] | None = field(default=None, init=False)
+    
+    @property
+    def context(self):
+        '''The context for this block'''
+        return self.system.context
     
     @property
     def url_id(self):
@@ -33,18 +47,10 @@ class Block:
             self._related_blocks = sorted(related_blocks, key=lambda b: b.schedule)
         return self._related_blocks
     
-    def __init__(self, system, id, trips, **kwargs):
-        self.system = system
-        self.id = id
-        self.trips = trips
-        
-        services = {t.service for t in trips}
+    def __post_init__(self):
+        services = {t.service for t in self.trips}
         self.schedule = Schedule.combine(services)
-        self.sheets = system.copy_sheets(services)
-        
-        self._related_blocks = None
-        
-        self.departure_repository = kwargs.get('departure_repository') or di[DepartureRepository]
+        self.sheets = self.system.copy_sheets(services)
     
     def __eq__(self, other):
         return self.id == other.id
@@ -127,4 +133,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return self.departure_repository.find_all(self.system, block=self)
+        return repositories.departure.find_all(self.context, block=self)

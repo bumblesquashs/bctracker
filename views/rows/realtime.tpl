@@ -12,20 +12,20 @@
                     % include('components/adherence', adherence=position.adherence)
                 </div>
             </div>
-            % if not system:
-                <span class="non-desktop smaller-font">{{ position.system }}</span>
+            % if not context.system:
+                <span class="non-desktop smaller-font">{{ position.context }}</span>
             % end
         </div>
     </td>
-    % if not system:
-        <td class="desktop-only">{{ position.system }}</td>
+    % if not context.system:
+        <td class="desktop-only">{{ position.context }}</td>
     % end
     % if trip:
         % block = trip.block
         % stop = position.stop
         <td>
             <div class="column">
-                % include('components/headsign')
+                % include('components/headsign', departure=position.departure)
                 <div class="mobile-only smaller-font">
                     Trip:
                     % include('components/trip', include_tooltip=False)
@@ -39,7 +39,7 @@
             </div>
         </td>
         <td class="non-mobile">
-            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
         </td>
         <td class="non-mobile">
             % include('components/trip')

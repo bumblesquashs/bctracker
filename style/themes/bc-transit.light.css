@@ -17,6 +17,17 @@
 */
 
 :root {
+    --navigation-bar-background: #1A671A;
+    --navigation-bar-hover: #094409;
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: #094409;
+    --navigation-menu-foreground: #FFFFFF;
+    
+    --status-bar-background: #48A348;
+    --status-bar-hover: #094409;
+    --status-bar-foreground: #FFFFFF;
+    
     --loading-background: #FFFFFF;
     --loading-foreground: #48A348;
     
@@ -95,6 +106,16 @@ table tr:nth-child(2n-1) {
     background-color: #E6E6E6;
 }
 
+table tr.table-button {
+    background-color: #365CCB;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: #1440C2;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
@@ -108,51 +129,7 @@ table tr:nth-child(2n-1) {
 }
 
 #navigation-bar {
-    background-color: #1A671A;
     --tooltip-background: #094409;
-    --image-color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-icon:hover {
-    background-color: #094409;
-}
-
-#navigation-bar .navigation-icon.disabled:hover {
-    background-color: #1A671A !important;
-}
-
-#navigation-bar .navigation-item {
-    color: #FFFFFF;
-}
-
-#navigation-bar .navigation-item:hover {
-    background-color: #094409;
-}
-
-#navigation-bar .navigation-item.disabled:hover {
-    background-color: #1A671A !important;
-}
-
-#navigation-menu {
-    background-color: #094409;
-}
-
-#navigation-menu .menu-button {
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-#navigation-menu .menu-button.disabled {
-    color: #ABABAB;
-    --image-color: #ABABAB;
-}
-
-#navigation-menu-toggle .line {
-    background-color: #FFFFFF;
 }
 
 #nearby-status.loading {
@@ -176,18 +153,6 @@ table tr:nth-child(2n-1) {
 #quick-navigation .item {
     background-color: #E6E6E6;
     border-color: #666666;
-}
-
-#refresh-button {
-    --image-color: #FFFFFF;
-}
-
-#refresh-button:hover {
-    background-color: #094409;
-}
-
-#refresh-button.disabled:hover {
-    background-color: #48A348;
 }
 
 #search {
@@ -239,27 +204,13 @@ table tr:nth-child(2n-1) {
     color: #666666;
 }
 
-#side-bar {
-    border-right-color: #666666;
-}
-
-#side-bar-toggle {
-    background-color: #E6E6E6;
-}
-
-#side-bar-toggle:hover {
-    background-color: #CBCBCB;
-}
-
-#status {
-    background-color: #48A348;
-    color: #FFFFFF;
-    border-bottom-color: #666666;
+#status-bar {
+    --tooltip-background: #094409;
 }
 
 #system-menu {
     background-color: #E6E6E6;
-    border-bottom-color: #666666;
+    border-color: #666666;
 }
 
 #system-menu .header {
@@ -277,22 +228,6 @@ table tr:nth-child(2n-1) {
 
 #system-menu .system-button.current {
     background-color: #CBCBCB;
-    font-weight: bold;
-    cursor: default;
-}
-
-#system-menu-toggle {
-    --image-color: #FFFFFF;
-}
-
-#title {
-    background-color: #1A671A;
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-#title:hover {
-    background-color: #094409;
 }
 
 .banner {
@@ -434,6 +369,10 @@ table tr:nth-child(2n-1) {
     --image-color: #666666;
 }
 
+.paging {
+    --image-color: #666666;
+}
+
 .paging .page {
     background-color: #E6E6E6;
     color: #000000;
@@ -450,10 +389,6 @@ table tr:nth-child(2n-1) {
 
 .paging .page.current:hover {
     background-color: #365CCB;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

@@ -7,8 +7,8 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(system, 'stops', stop) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(system, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'stops', stop) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'stops', stop, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -25,15 +25,15 @@
                     <div class="row section align-center">
                         % previous_date = date.previous()
                         % next_date = date.next()
-                        <a class="icon button" href="{{ get_url(system, 'stops', stop, 'schedule', previous_date) }}">
-                            % include('components/svg', name='left')
+                        <a class="icon button" href="{{ get_url(stop.context, 'stops', stop, 'schedule', previous_date) }}">
+                            % include('components/svg', name='paging/left')
                         </a>
                         <div class="centred">
                             <h3>{{ date.format_long() }}</h3>
-                            <a href="{{ get_url(system, 'stops', stop, 'schedule') }}">Return to week view</a>
+                            <a href="{{ get_url(stop.context, 'stops', stop, 'schedule') }}">Return to week view</a>
                         </div>
-                        <a class="icon button" href="{{ get_url(system, 'stops', stop, 'schedule', next_date) }}">
-                            % include('components/svg', name='right')
+                        <a class="icon button" href="{{ get_url(stop.context, 'stops', stop, 'schedule', next_date) }}">
+                            % include('components/svg', name='paging/right')
                         </a>
                     </div>
                     <div class="section">
@@ -89,7 +89,7 @@
                                     </td>
                                     <td class="non-mobile">
                                         % if block:
-                                            <a href="{{ get_url(block.system, 'blocks', block) }}">{{ block.id }}</a>
+                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
                                         % else:
                                             <div class="lighter-text">Unknown</div>
                                         % end
@@ -117,7 +117,7 @@
                     </table>
                 % else:
                     <div class="placeholder">
-                        % if system.gtfs_loaded:
+                        % if context.gtfs_loaded:
                             <h3>No departures found on {{ date.format_long() }}</h3>
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>
