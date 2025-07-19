@@ -48,27 +48,27 @@ class RouteType(Enum):
     def __str__(self):
         match self:
             case RouteType.UNKNOWN:
-                return 'Unknown Route'
+                return 'Unknown'
             case RouteType.LIGHT_RAIL:
-                return 'Light Rail Line'
+                return 'Light Rail'
             case RouteType.METRO:
-                return 'Metro Line'
+                return 'Metro'
             case RouteType.RAIL:
-                return 'Rail Line'
+                return 'Rail'
             case RouteType.BUS:
-                return 'Bus Route'
+                return 'Bus'
             case RouteType.FERRY:
-                return 'Ferry Route'
+                return 'Ferry'
             case RouteType.CABLE_CAR:
-                return 'Cable Car Route'
+                return 'Cable Car'
             case RouteType.AERIAL_LIFT:
-                return 'Gondola Route'
+                return 'Gondola'
             case RouteType.FUNICULAR:
-                return 'Funicular Route'
+                return 'Funicular'
             case RouteType.TROLLEY_BUS:
-                return 'Trolley Bus Route'
+                return 'Trolley Bus'
             case RouteType.MONORAIL:
-                return 'Monorail Line'
+                return 'Monorail'
 
 @dataclass(slots=True)
 class Route:

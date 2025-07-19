@@ -31,7 +31,7 @@
                         </div>
                         <div class="row section">
                             <div class="name">Type</div>
-                            <div class="value">{{ route.type }}</div>
+                            <div class="value">{{ route.type }} Service</div>
                         </div>
                         <div class="column section">
                             % headsigns = route.get_headsigns()

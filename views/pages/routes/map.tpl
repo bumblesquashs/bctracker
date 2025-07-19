@@ -93,7 +93,7 @@
                 
                 const routeType = document.createElement("div");
                 routeType.className = "lighter-text";
-                routeType.innerHTML = route.type;
+                routeType.innerHTML = route.type + " Service";
                 content.appendChild(routeType);
                 
                 const headsignSection = document.createElement("div");

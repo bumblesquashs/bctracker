@@ -18,7 +18,7 @@
                 % type_routes = [r for r in routes if r.type == route_type]
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
-                        <h2>{{ route_type }}s</h2>
+                        <h2>{{ route_type }} Services</h2>
                         % include('components/toggle')
                     </div>
                     <div class="content">
