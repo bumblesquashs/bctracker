@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.system import System
-    
+
 from dataclasses import dataclass, field
 from enum import Enum
 from random import randint, seed
