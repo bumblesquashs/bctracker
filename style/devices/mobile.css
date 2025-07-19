@@ -202,6 +202,10 @@ table th {
     --image-size: 32px;
 }
 
+.bus .number {
+    min-width: 34px;
+}
+
 .button {
     font-size: 14pt;
     overflow: hidden;
