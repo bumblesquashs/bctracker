@@ -27,6 +27,7 @@ class RouteRepository:
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
+        type = int(row['route_type'])
         route_id = row['route_id']
         number = row['route_short_name']
         if not number:
@@ -37,7 +38,8 @@ class RouteRepository:
             'number': number,
             'name': row['route_long_name'],
             'colour': colour,
-            'text_colour': text_colour
+            'text_colour': text_colour,
+            'type': type
         })
     
     def find(self, context: Context, route_id=None, number=None) -> Route | None:
@@ -49,7 +51,8 @@ class RouteRepository:
                 'route.number': 'number',
                 'route.name': 'name',
                 'route.colour': 'colour',
-                'route.text_colour': 'text_colour'
+                'route.text_colour': 'text_colour',
+                'route.type': 'type'
             },
             filters={
                 'route.system_id': context.system_id,
@@ -73,7 +76,8 @@ class RouteRepository:
                 'route.number': 'number',
                 'route.name': 'name',
                 'route.colour': 'colour',
-                'route.text_colour': 'text_colour'
+                'route.text_colour': 'text_colour',
+                'route.type': 'type'
             },
             filters={
                 'route.system_id': context.system_id

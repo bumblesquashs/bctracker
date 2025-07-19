@@ -29,6 +29,10 @@
                         <div class="section">
                             % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.url_id}/schedule')
                         </div>
+                        <div class="row section">
+                            <div class="name">Type</div>
+                            <div class="value">{{ route.type }} Service</div>
+                        </div>
                         <div class="column section">
                             % headsigns = route.get_headsigns()
                             % for headsign in headsigns:

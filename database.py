@@ -77,6 +77,7 @@ SQL_SCRIPTS = [
             name TEXT NOT NULL,
             colour TEXT,
             text_colour TEXT,
+            type TEXT,
             PRIMARY KEY (system_id, route_id)
         )
     ''',

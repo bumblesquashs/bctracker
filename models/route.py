@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from models.system import System
 
 from dataclasses import dataclass, field
+from enum import Enum
 from random import randint, seed
 from math import sqrt
 from colorsys import hls_to_rgb
@@ -22,6 +23,53 @@ from models.trip import Trip
 import helpers
 import repositories
 
+class RouteType(Enum):
+    '''Options for route types'''
+    
+    UNKNOWN = ''
+    LIGHT_RAIL = '0'
+    METRO = '1'
+    RAIL = '2'
+    BUS = '3'
+    FERRY = '4'
+    CABLE_CAR = '5'
+    AERIAL_LIFT = '6'
+    FUNICULAR = '7'
+    TROLLEY_BUS = '11'
+    MONORAIL = '12'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.UNKNOWN
+    
+    def __str__(self):
+        match self:
+            case RouteType.UNKNOWN:
+                return 'Unknown'
+            case RouteType.LIGHT_RAIL:
+                return 'Light Rail'
+            case RouteType.METRO:
+                return 'Metro'
+            case RouteType.RAIL:
+                return 'Rail'
+            case RouteType.BUS:
+                return 'Bus'
+            case RouteType.FERRY:
+                return 'Ferry'
+            case RouteType.CABLE_CAR:
+                return 'Cable Car'
+            case RouteType.AERIAL_LIFT:
+                return 'Gondola'
+            case RouteType.FUNICULAR:
+                return 'Funicular'
+            case RouteType.TROLLEY_BUS:
+                return 'Trolley Bus'
+            case RouteType.MONORAIL:
+                return 'Monorail'
+
 @dataclass(slots=True)
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
@@ -32,6 +80,7 @@ class Route:
     name: str
     colour: str
     text_colour: str
+    type: RouteType
     
     key: str = field(init=False)
     
@@ -44,7 +93,8 @@ class Route:
         name = row['name']
         colour = row['colour'] or generate_colour(context, number)
         text_colour = row['text_colour'] or 'FFFFFF'
-        return cls(context.system, id, number, name, colour, text_colour)
+        type = RouteType.from_db(row['type'])
+        return cls(context.system, id, number, name, colour, text_colour, type)
     
     @property
     def context(self):
@@ -114,6 +164,7 @@ class Route:
             'name': self.name.replace("'", '&apos;'),
             'colour': self.colour,
             'text_colour': self.text_colour,
+            'type': str(self.type),
             'url_id': self.url_id
         }
     
@@ -129,6 +180,7 @@ class Route:
                 'name': self.name.replace("'", '&apos;'),
                 'colour': self.colour,
                 'text_colour': self.text_colour,
+                'type': str(self.type),
                 'lat': point.lat,
                 'lon': point.lon,
                 'url_id': self.url_id,
