@@ -195,6 +195,10 @@ table th {
     text-decoration: underline;
 }
 
+.bus {
+    min-width: 38px;
+}
+
 .button {
     font-size: 12pt;
     vertical-align: middle;

@@ -170,6 +170,10 @@ table th {
     --image-size: 28px;
 }
 
+.bus {
+    min-width: 38px;
+}
+
 .button {
     font-size: 14pt;
     overflow: hidden;
