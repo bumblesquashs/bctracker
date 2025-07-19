@@ -5,14 +5,16 @@
         "gtfs_url": "https://data.calgary.ca/download/npk7-z3bj/application%2Fx-zip-compressed",
         "realtime_url": "https://data.calgary.ca/download/am7c-qe3u/application%2Foctet-stream",
         "prefix_headsigns": true,
-        "accurate_seconds": false
+        "accurate_seconds": false,
+        "invalid_realtime_percentage": 0.5
     },
     "edmonton-transit-service": {
         "name": "Edmonton Transit Service",
         "website": "https://www.edmonton.ca/edmonton-transit-system-ets",
         "gtfs_url": "https://gtfs.edmonton.ca/TMGTFSRealTimeWebService/GTFS/gtfs.zip",
         "realtime_url": "http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb",
-        "accurate_seconds": false
+        "accurate_seconds": false,
+        "invalid_realtime_percentage": 0.5
     },
     "grande-prairie-transit": {
         "name": "Grande Prairie Transit",
@@ -53,7 +55,8 @@
         "prefix_headsigns": true,
         "prefer_stop_id": true,
         "show_stop_number": false,
-        "distance_scale": 1000
+        "distance_scale": 1000,
+        "invalid_realtime_percentage": 0.5
     },
     "woosh": {
         "name": "Woosh",

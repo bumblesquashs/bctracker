@@ -471,7 +471,7 @@ class Server(Bottle):
             overviews={o.bus.number: o for o in overviews}
         )
     
-    def bus_overview(self, context: Context, bus_number, bus_agency):
+    def bus_overview(self, context: Context, bus_number, bus_agency=None):
         if bus_agency:
             bus_agency = repositories.agency.find(bus_agency)
             if not bus_agency:
@@ -512,7 +512,7 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def bus_map(self, context: Context, bus_number, bus_agency):
+    def bus_map(self, context: Context, bus_number, bus_agency=None):
         if bus_agency:
             bus_agency = repositories.agency.find(bus_agency)
             if not bus_agency:
@@ -550,7 +550,7 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def bus_history(self, context: Context, bus_number, bus_agency):
+    def bus_history(self, context: Context, bus_number, bus_agency=None):
         if bus_agency:
             bus_agency = repositories.agency.find(bus_agency)
             if not bus_agency:

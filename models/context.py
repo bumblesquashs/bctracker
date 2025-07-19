@@ -119,6 +119,12 @@ class Context:
             return self.agency.distance_scale
         return DEFAULT_DISTANCE_SCALE
     
+    @property
+    def invalid_realtime_percentage(self):
+        if self.agency:
+            return self.agency.invalid_realtime_percentage
+        return DEFAULT_INVALID_REALTIME_PERCENTAGE
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')

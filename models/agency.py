@@ -23,6 +23,7 @@ class Agency:
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
+    invalid_realtime_percentage: int = DEFAULT_INVALID_REALTIME_PERCENTAGE
     
     @property
     def context(self):
