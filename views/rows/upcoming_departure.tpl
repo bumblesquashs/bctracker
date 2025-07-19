@@ -7,7 +7,7 @@
             <div class="{{ 'timing-point' if departure.timepoint else '' }}">
                 {{ departure.time.format_web(time_format) }}
             </div>
-            % if position.adherence and position.adherence.value != 0:
+            % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
                 % expected_time = departure.time - timedelta(minutes=position.adherence.value)
                 <div class="lighter-text">
                     ({{ expected_time.format_web(time_format) }})

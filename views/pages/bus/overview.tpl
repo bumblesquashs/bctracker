@@ -273,7 +273,7 @@
                         % if [d for d in upcoming_departures if d.timepoint]:
                             <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                         % end
-                        % if position.adherence and position.adherence.value != 0:
+                        % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
                             <p>Times in brackets are estimates based on current location.</p>
                         % end
                         <table>
