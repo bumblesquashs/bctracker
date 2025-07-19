@@ -1,8 +1,8 @@
 <div class="bus">
     % if bus.is_known and get('enable_link', True):
-        <a class="number" href="{{ get_url(context, 'bus', bus) }}">{{ bus }}</a>
+        <a href="{{ get_url(context, 'bus', bus) }}">{{ bus }}</a>
     % else:
-        <div class="number">{{ bus }}</div>
+        <div>{{ bus }}</div>
     % end
     % decoration = bus.find_decoration()
     % if decoration and decoration.enabled:

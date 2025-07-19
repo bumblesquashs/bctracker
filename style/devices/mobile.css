@@ -202,7 +202,7 @@ table th {
     --image-size: 32px;
 }
 
-.bus .number {
+.bus {
     min-width: 34px;
 }
 
