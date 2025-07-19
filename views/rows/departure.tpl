@@ -13,7 +13,7 @@
             % expected_time = None
             % if trip.id in positions:
                 % position = positions[trip.id]
-                % if position.adherence and position.adherence.value != 0:
+                % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
                     % expected_time = departure.time - timedelta(minutes=position.adherence.value)
                 % end
             % end
