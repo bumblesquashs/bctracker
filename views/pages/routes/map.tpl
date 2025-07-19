@@ -121,7 +121,7 @@
                 
                 const agencyLogo = document.createElement("img");
                 agencyLogo.className = "agency-logo";
-                agencyLogo.src = "/img/icons/" + route.agency_id + ".png";
+                agencyLogo.src = "/img/agencies/" + route.agency_id + ".png";
                 agencyLogo.onerror = function() {
                     agencyLogo.style.visibility = 'hidden';
                 };

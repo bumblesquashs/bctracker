@@ -1291,6 +1291,10 @@ table tr.table-button {
     text-align: center;
 }
 
+.route.min-width {
+    min-width: 24px;
+}
+
 .route-list {
     display: flex;
     flex-direction: row;

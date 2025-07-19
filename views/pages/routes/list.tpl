@@ -35,7 +35,12 @@
                                         <td>
                                             <div class="row">
                                                 % include('components/route')
-                                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                                <div class="column gap-5">
+                                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                                    <div class="mobile-only">
+                                                        % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="non-mobile">
