@@ -47,7 +47,15 @@ class GTFSService:
             service_exceptions.setdefault(exception.service_id, []).append(exception)
         
         try:
-            services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions))
+            feed_info = read_csv(context, 'feed_info', lambda r: r)[0]
+            start_date = Date.parse(feed_info['feed_start_date'], context.timezone, '%Y%m%d')
+            end_date = Date.parse(feed_info['feed_end_date'], context.timezone, '%Y%m%d')
+            feed_date_range = DateRange(start_date, end_date)
+        except:
+            feed_date_range = None
+        
+        try:
+            services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
         except:
             services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
