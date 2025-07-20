@@ -202,5 +202,12 @@
                 "name": "Metro Vancouver"
             }
         }
+    },
+    "via-rail": {
+        "interregional": {
+            "via-rail": {
+                "name": "VIA Rail"
+            }
+        }
     }
 }

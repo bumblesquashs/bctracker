@@ -74,5 +74,13 @@
         "name": "Translink",
         "website": "https://translink.ca",
         "enabled": false
+    },
+    "via-rail": {
+        "name": "VIA Rail Canada",
+        "website": "https://viarail.ca",
+        "gtfs_url": "https://www.viarail.ca/sites/all/files/gtfs/viarail.zip",
+        "accurate_seconds": false,
+        "prefer_route_id": true,
+        "enable_blocks": false
     }
 }

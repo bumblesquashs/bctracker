@@ -157,6 +157,7 @@ class Server(Bottle):
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
+                    raise e
                 if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:

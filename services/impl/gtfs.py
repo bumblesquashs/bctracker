@@ -41,10 +41,13 @@ class GTFSService:
         
         print(f'Loading GTFS data for {context}')
         
-        exceptions = read_csv(context, 'calendar_dates', lambda r: ServiceException.from_csv(r, context))
-        service_exceptions = {}
-        for exception in exceptions:
-            service_exceptions.setdefault(exception.service_id, []).append(exception)
+        try:
+            exceptions = read_csv(context, 'calendar_dates', lambda r: ServiceException.from_csv(r, context))
+            service_exceptions = {}
+            for exception in exceptions:
+                service_exceptions.setdefault(exception.service_id, []).append(exception)
+        except:
+            service_exceptions = {}
         
         try:
             feed_info = read_csv(context, 'feed_info', lambda r: r)[0]
