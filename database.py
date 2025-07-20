@@ -90,6 +90,8 @@ SQL_SCRIPTS = [
             name TEXT NOT NULL,
             lat REAL NOT NULL,
             lon REAL NOT NULL,
+            parent_id TEXT,
+            type TEXT,
             PRIMARY KEY (system_id, stop_id)
         )
     ''',

@@ -33,6 +33,9 @@
         </div>
         <div class="container flex-3">
             % for (i, sheet) in enumerate(sheets):
+                % if not sheet.normal_service_groups:
+                    % continue
+                % end
                 % path_suffix = '' if i == 0 else str(i + 1)
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
