@@ -70,7 +70,9 @@
                                                                     <th class="non-mobile">Start Time</th>
                                                                     <th class="mobile-only">Start</th>
                                                                     <th class="non-mobile">Headsign</th>
-                                                                    <th class="non-mobile">Block</th>
+                                                                    % if context.enable_blocks:
+                                                                        <th class="non-mobile">Block</th>
+                                                                    % end
                                                                     <th>Trip</th>
                                                                     <th class="desktop-only">First Stop</th>
                                                                 </tr>
@@ -88,10 +90,12 @@
                                                                         <td class="non-mobile">
                                                                             % include('components/headsign')
                                                                         </td>
-                                                                        <td class="non-mobile">
-                                                                            % block = trip.block
-                                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                                        </td>
+                                                                        % if context.enable_blocks:
+                                                                            <td class="non-mobile">
+                                                                                % block = trip.block
+                                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                            </td>
+                                                                        % end
                                                                         <td>
                                                                             <div class="column">
                                                                                 % include('components/trip')

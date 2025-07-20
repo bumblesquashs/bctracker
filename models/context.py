@@ -119,6 +119,12 @@ class Context:
             return self.agency.distance_scale
         return DEFAULT_DISTANCE_SCALE
     
+    @property
+    def enable_blocks(self):
+        if self.agency:
+            return self.agency.enable_blocks
+        return DEFAULT_ENABLE_BLOCKS
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')

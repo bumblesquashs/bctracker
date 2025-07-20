@@ -34,7 +34,9 @@
                 % end
                 <th class="desktop-only">Speed</th>
                 <th>Headsign</th>
-                <th class="non-mobile">Block</th>
+                % if context.enable_blocks:
+                    <th class="non-mobile">Block</th>
+                % end
                 <th class="non-mobile">Trip</th>
                 <th class="desktop-only">Next Stop</th>
             </tr>
@@ -87,9 +89,11 @@
                                 % end
                             </div>
                         </td>
-                        <td class="non-mobile">
-                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                        </td>
+                        % if context.enable_blocks:
+                            <td class="non-mobile">
+                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                            </td>
+                        % end
                         <td class="non-mobile">
                             % include('components/trip')
                         </td>
@@ -126,7 +130,7 @@
             % end
         % elif not context.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
-            <p>You can browse schedule data for using the links above, or choose a different system.</p>
+            <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>

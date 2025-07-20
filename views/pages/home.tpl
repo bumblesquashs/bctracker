@@ -89,13 +89,15 @@
                         </div>
                     </form>
                     
-                    <form onsubmit="blockSearch()" action="javascript:void(0)">
-                        <label for="block_search">Block ID:</label>
-                        <div class="input-container">
-                            <input type="text" id="block_search" name="block_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
+                    % if context.enable_blocks:
+                        <form onsubmit="blockSearch()" action="javascript:void(0)">
+                            <label for="block_search">Block ID:</label>
+                            <div class="input-container">
+                                <input type="text" id="block_search" name="block_search" method="post" size="10">
+                                <input type="submit" value="Search" class="button">
+                            </div>
+                        </form>
+                    % end
                 % else:
                     <form onsubmit="busSearch()" action="javascript:void(0)">
                         <label for="bus_search">Bus Number:</label>
@@ -276,7 +278,9 @@
                         <div class="button-container">
                             <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
                             <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
-                            <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                            % if context.enable_blocks:
+                                <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                            % end
                         </div>
                     </div>
                 </div>

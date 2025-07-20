@@ -21,7 +21,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 56
+VERSION = 57
 
 random = Random()
 
@@ -639,6 +639,7 @@ class Server(Bottle):
         )
     
     def route_overview(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -673,6 +674,7 @@ class Server(Bottle):
         )
     
     def route_map(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -703,6 +705,7 @@ class Server(Bottle):
         )
     
     def route_schedule(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -732,6 +735,7 @@ class Server(Bottle):
         )
     
     def route_schedule_date(self, context: Context, route_number, date_string):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,

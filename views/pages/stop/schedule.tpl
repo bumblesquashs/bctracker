@@ -59,7 +59,9 @@
                                                 <tr>
                                                     <th>Time</th>
                                                     <th class="non-mobile">Headsign</th>
-                                                    <th class="non-mobile">Block</th>
+                                                    % if context.enable_blocks:
+                                                        <th class="non-mobile">Block</th>
+                                                    % end
                                                     <th>Trip</th>
                                                 </tr>
                                             </thead>
@@ -86,13 +88,15 @@
                                                                 % end
                                                             </div>
                                                         </td>
-                                                        <td class="non-mobile">
-                                                            % if block:
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                            % else:
-                                                                <div class="lighter-text">Unknown</div>
-                                                            % end
-                                                        </td>
+                                                        % if context.enable_blocks:
+                                                            <td class="non-mobile">
+                                                                % if block:
+                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                % else:
+                                                                    <div class="lighter-text">Unknown</div>
+                                                                % end
+                                                            </td>
+                                                        % end
                                                         <td>
                                                             <div class="column">
                                                                 % include('components/trip')

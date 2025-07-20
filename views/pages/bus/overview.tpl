@@ -150,9 +150,11 @@
                                 <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                             </div>
                         </div>
-                        <div class="section">
-                            % include('components/block_timeline', date=Date.today(block.context.timezone))
-                        </div>
+                        % if context.enable_blocks:
+                            <div class="section">
+                                % include('components/block_timeline', date=Date.today(block.context.timezone))
+                            </div>
+                        % end
                         % if position.timestamp:
                             <div class="row section">
                                 <div class="name">Last Update</div>
@@ -188,17 +190,19 @@
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
                         % end
-                        <div class="row section">
-                            <div class="name">Block</div>
-                            <div class="value">
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                % date = Date.today(block.context.timezone)
-                                % start_time = block.get_start_time(date=date).format_web(time_format)
-                                % end_time = block.get_end_time(date=date).format_web(time_format)
-                                % duration = block.get_duration(date=date)
-                                <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
+                        % if context.enable_blocks:
+                            <div class="row section">
+                                <div class="name">Block</div>
+                                <div class="value">
+                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                    % date = Date.today(block.context.timezone)
+                                    % start_time = block.get_start_time(date=date).format_web(time_format)
+                                    % end_time = block.get_end_time(date=date).format_web(time_format)
+                                    % duration = block.get_duration(date=date)
+                                    <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
+                                </div>
                             </div>
-                        </div>
+                        % end
                         <div class="row section">
                             <div class="name">Trip</div>
                             <div class="value">
@@ -336,8 +340,12 @@
                             <tr>
                                 <th>Date</th>
                                 <th class="desktop-only">System</th>
-                                <th>Block</th>
-                                <th class="desktop-only">Routes</th>
+                                % if context.enable_blocks:
+                                    <th>Block</th>
+                                    <th class="desktop-only">Routes</th>
+                                % else:
+                                    <th>Routes</th>
+                                % end
                                 <th class="desktop-only">Start Time</th>
                                 <th class="desktop-only">End Time</th>
                                 <th class="no-wrap non-mobile">First Seen</th>
@@ -362,25 +370,31 @@
                                         </div>
                                     </td>
                                     <td class="desktop-only">{{ record.context }}</td>
-                                    <td>
-                                        <div class="column stretch">
-                                            <div class="row space-between">
-                                                % if record.is_available:
-                                                    % block = record.block
-                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                % else:
-                                                    <span>{{ record.block_id }}</span>
-                                                % end
-                                                % include('components/record_warnings')
+                                    % if context.enable_blocks:
+                                        <td>
+                                            <div class="column stretch">
+                                                <div class="row space-between">
+                                                    % if record.is_available:
+                                                        % block = record.block
+                                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                    % else:
+                                                        <span>{{ record.block_id }}</span>
+                                                    % end
+                                                    % include('components/record_warnings')
+                                                </div>
+                                                <div class="non-desktop">
+                                                    % include('components/route_list', routes=record.routes)
+                                                </div>
                                             </div>
-                                            <div class="non-desktop">
-                                                % include('components/route_list', routes=record.routes)
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="desktop-only">
-                                        % include('components/route_list', routes=record.routes)
-                                    </td>
+                                        </td>
+                                        <td class="desktop-only">
+                                            % include('components/route_list', routes=record.routes)
+                                        </td>
+                                    % else:
+                                        <td>
+                                            % include('components/route_list', routes=record.routes)
+                                        </td>
+                                    % end
                                     <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
                                     <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>
                                     <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>

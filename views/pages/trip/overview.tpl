@@ -48,20 +48,22 @@
                             <div class="lighter-text">Unknown Route</div>
                         % end
                     </div>
-                    <div class="section">
-                        % include('components/block_timeline', block=trip.block)
-                    </div>
-                    <div class="row section">
-                        % block = trip.block
-                        <div class="name">Block</div>
-                        <div class="value">
-                            % if block:
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                            % else:
-                                <span class="lighter-text">Loading</span>
-                            % end
+                    % if context.enable_blocks:
+                        <div class="section">
+                            % include('components/block_timeline', block=trip.block)
                         </div>
-                    </div>
+                        <div class="row section">
+                            % block = trip.block
+                            <div class="name">Block</div>
+                            <div class="value">
+                                % if block:
+                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                % else:
+                                    <span class="lighter-text">Loading</span>
+                                % end
+                            </div>
+                        </div>
+                    % end
                     <div class="row section">
                         <div class="name">Start time</div>
                         <div class="value">{{ trip.start_time.format_web(time_format) }}</div>
@@ -123,7 +125,9 @@
                         <thead>
                             <tr>
                                 <th>Trip</th>
-                                <th class="non-mobile">Block</th>
+                                % if context.enable_blocks:
+                                    <th class="non-mobile">Block</th>
+                                % end
                                 <th>Service Days</th>
                             </tr>
                         </thead>
@@ -134,13 +138,15 @@
                                     <td>
                                         % include('components/trip', trip=related_trip)
                                     </td>
-                                    <td class="non-mobile">
-                                        % if block:
-                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                        % else:
-                                            <div class="lighter-text">Unknown</div>
-                                        % end
-                                    </td>
+                                    % if context.enable_blocks:
+                                        <td class="non-mobile">
+                                            % if block:
+                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                            % else:
+                                                <div class="lighter-text">Unknown</div>
+                                            % end
+                                        </td>
+                                    % end
                                     <td>
                                         <div class="column">
                                             % for sheet in related_trip.sheets:

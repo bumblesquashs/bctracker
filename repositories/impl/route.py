@@ -27,11 +27,21 @@ class RouteRepository:
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
-        type = int(row['route_type'])
+        try:
+            type = int(row['route_type'])
+        except (KeyError, ValueError):
+            type = None
+        try:
+            sort_order = int(row['route_sort_order'])
+        except (KeyError, ValueError):
+            sort_order = None
         route_id = row['route_id']
         number = row['route_short_name']
         if not number:
-            number = route_id
+            try:
+                number = context.agency.custom_route_numbers[route_id]
+            except KeyError:
+                number = route_id
         self.database.insert('route', {
             'system_id': context.system_id,
             'route_id': route_id,
@@ -39,7 +49,8 @@ class RouteRepository:
             'name': row['route_long_name'],
             'colour': colour,
             'text_colour': text_colour,
-            'type': type
+            'type': type,
+            'sort_order': sort_order
         })
     
     def find(self, context: Context, route_id=None, number=None) -> Route | None:
@@ -52,7 +63,8 @@ class RouteRepository:
                 'route.name': 'name',
                 'route.colour': 'colour',
                 'route.text_colour': 'text_colour',
-                'route.type': 'type'
+                'route.type': 'type',
+                'route.sort_order': 'sort_order'
             },
             filters={
                 'route.system_id': context.system_id,
@@ -77,7 +89,8 @@ class RouteRepository:
                 'route.name': 'name',
                 'route.colour': 'colour',
                 'route.text_colour': 'text_colour',
-                'route.type': 'type'
+                'route.type': 'type',
+                'route.sort_order': 'sort_order'
             },
             filters={
                 'route.system_id': context.system_id

@@ -95,6 +95,10 @@ table th {
     --image-size: 36px;
 }
 
+#refresh-button-placeholder {
+    width: 36px;
+}
+
 #search {
     order: 2;
     border-bottom-width: 1px;

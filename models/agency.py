@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from models.context import Context
 
@@ -23,6 +23,8 @@ class Agency:
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
+    enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
+    custom_route_numbers: dict[str, str] = field(default_factory=dict)
     
     @property
     def context(self):

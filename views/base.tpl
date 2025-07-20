@@ -284,7 +284,11 @@
             
             <a class="navigation-button desktop-only" href="{{ get_url(context, 'routes') }}">Routes</a>
             <a class="navigation-button desktop-only" href="{{ get_url(context, 'stops') }}">Stops</a>
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+            % if context.enable_blocks:
+                <a class="navigation-button desktop-only" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+            % else:
+                <div class="navigation-button desktop-only disabled">Blocks</div>
+            % end
             
             <a class="navigation-button desktop-only" href="{{ get_url(context, 'about') }}">About</a>
             
@@ -358,10 +362,17 @@
                 % include('components/svg', name='stop')
                 <span>Stops</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'blocks') }}">
-                % include('components/svg', name='block')
-                <span>Blocks</span>
-            </a>
+            % if context.enable_blocks:
+                <a class="menu-button" href="{{ get_url(context, 'blocks') }}">
+                    % include('components/svg', name='block')
+                    <span>Blocks</span>
+                </a>
+            % else:
+                <div class="menu-button disabled">
+                    % include('components/svg', name='block')
+                    <span>Blocks</span>
+                </div>
+            % end
             <a class="menu-button" href="{{ get_url(context, 'about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
@@ -398,9 +409,15 @@
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
                 % end
             </div>
-            <div id="refresh-button" class="disabled tooltip-anchor">
-                % include('components/svg', name='action/refresh')
-            </div>
+            % if context.realtime_enabled:
+                <div id="refresh-button" class="disabled tooltip-anchor">
+                    % include('components/svg', name='action/refresh')
+                </div>
+            % else:
+                <div id="refresh-button-placeholder">
+                    <!-- Used to keep mobile details centred properly -->
+                </div>
+            % end
         </div>
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
