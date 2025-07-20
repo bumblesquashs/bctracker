@@ -18,7 +18,7 @@
                     % for agency in agencies:
                         <div class="row">
                             % include('components/agency_logo')
-                            <a href="{{ agency.website }}">{{ agency }}</a>
+                            <a href="{{ agency.website }}" target="_blank">{{ agency }}</a>
                         </div>
                     % end
                 </div>

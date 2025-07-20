@@ -1192,7 +1192,9 @@ class Server(Bottle):
         systems = list(repositories.system.find_all())
         system = random.choice(systems)
         context = system.context
-        options = ['route', 'stop', 'block', 'trip']
+        options = ['route', 'stop', 'trip']
+        if context.enable_blocks:
+            options.append('block')
         if system.realtime_enabled:
             options.append('bus')
         selection = random.choice(options)
@@ -1317,12 +1319,11 @@ class Server(Bottle):
         include_blocks = int(request.forms.get('include_blocks', 1)) == 1
         matches = []
         if query != '':
-            if query.isnumeric() and context.realtime_enabled:
-                if include_buses:
-                    bus_numbers = repositories.overview.find_bus_numbers(context)
-                    matches += repositories.order.find_matches(context, query, bus_numbers)
+            if query.isnumeric() and context.realtime_enabled and include_buses:
+                bus_numbers = repositories.overview.find_bus_numbers(context)
+                matches += repositories.order.find_matches(context, query, bus_numbers)
             if context.system:
-                if include_blocks:
+                if include_blocks and context.enable_blocks:
                     matches += context.system.search_blocks(query)
                 if include_routes:
                     matches += context.system.search_routes(query)

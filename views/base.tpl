@@ -504,10 +504,12 @@
                     % if context.system:
                         <div id="search-filters">
                             <div class="flex-1">Filters:</div>
-                            <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
-                                % include('components/svg', name='bus')
-                                <div class="tooltip left">Include Buses</div>
-                            </div>
+                            % if context.realtime_enabled:
+                                <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
+                                    % include('components/svg', name='bus')
+                                    <div class="tooltip left">Include Buses</div>
+                                </div>
+                            % end
                             <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
                                 % include('components/svg', name='route')
                                 <div class="tooltip left">Include Routes</div>
@@ -516,20 +518,16 @@
                                 % include('components/svg', name='stop')
                                 <div class="tooltip left">Include Stops</div>
                             </div>
-                            <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
-                                % include('components/svg', name='block')
-                                <div class="tooltip left">Include Blocks</div>
-                            </div>
+                            % if context.enable_blocks:
+                                <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
+                                    % include('components/svg', name='block')
+                                    <div class="tooltip left">Include Blocks</div>
+                                </div>
+                            % end
                         </div>
                     % end
                 </div>
-                <div id="search-placeholder">
-                    % if context.system:
-                        Search for {{ context }} buses, routes, stops, and blocks
-                    % else:
-                        Search for buses in all systems
-                    % end
-                </div>
+                <div id="search-placeholder">{{ context.search_placeholder_text() }}</div>
                 <div id="search-results" class="display-none">
                     
                 </div>
