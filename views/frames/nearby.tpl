@@ -42,7 +42,9 @@
                             <tr>
                                 <th>Time</th>
                                 <th class="non-mobile">Headsign</th>
-                                <th class="desktop-only">Block</th>
+                                % if context.enable_blocks:
+                                    <th class="desktop-only">Block</th>
+                                % end
                                 <th>Trip</th>
                                 % if context.realtime_enabled:
                                     <th>Bus</th>

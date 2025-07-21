@@ -3,6 +3,12 @@
 
 <div id="page-header">
     <h1>Stops</h1>
+    % if show_stations_tab:
+        <div class="tab-button-bar">
+            <span class="tab-button current">Stops</span>
+            <a href="{{ get_url(context, 'stops', 'stations') }}" class="tab-button">Stations</a>
+        </div>
+    % end
 </div>
 
 % if context.system:

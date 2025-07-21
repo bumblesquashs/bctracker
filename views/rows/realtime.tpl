@@ -38,9 +38,11 @@
                 % end
             </div>
         </td>
-        <td class="non-mobile">
-            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-        </td>
+        % if context.enable_blocks:
+            <td class="non-mobile">
+                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+            </td>
+        % end
         <td class="non-mobile">
             % include('components/trip')
         </td>

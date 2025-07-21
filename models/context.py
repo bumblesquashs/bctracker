@@ -119,6 +119,12 @@ class Context:
             return self.agency.distance_scale
         return DEFAULT_DISTANCE_SCALE
     
+    @property
+    def enable_blocks(self):
+        if self.agency:
+            return self.agency.enable_blocks
+        return DEFAULT_ENABLE_BLOCKS
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')
@@ -152,3 +158,21 @@ class Context:
         if not other.agency:
             return False
         return self.agency < other.agency
+    
+    def search_placeholder_text(self):
+        '''Search placeholder text to display for this context'''
+        if self.system:
+            values = []
+            if self.realtime_enabled:
+                values.append('buses')
+            values.append('routes')
+            values.append('stops')
+            if self.enable_blocks:
+                values.append('blocks')
+            if len(values) == 1:
+                return f'Search for {self} {values[0]}'
+            if len(values) == 2:
+                return f'Search for {self} {values[0]} and {values[1]}'
+            values_string = ','.join(values[:-1])
+            return f'Search for {self} {values_string}, and {values[-1]}'
+        return 'Search for buses in all systems'

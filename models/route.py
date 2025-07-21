@@ -81,6 +81,7 @@ class Route:
     colour: str
     text_colour: str
     type: RouteType
+    sort_order: int | None
     
     key: str = field(init=False)
     
@@ -94,7 +95,8 @@ class Route:
         colour = row['colour'] or generate_colour(context, number)
         text_colour = row['text_colour'] or 'FFFFFF'
         type = RouteType.from_db(row['type'])
-        return cls(context.system, id, number, name, colour, text_colour, type)
+        sort_order = row['sort_order']
+        return cls(context.system, id, number, name, colour, text_colour, type, sort_order)
     
     @property
     def context(self):
@@ -105,8 +107,8 @@ class Route:
     def url_id(self):
         '''The ID to use when making route URLs'''
         if self.context.prefer_route_id:
-            return self.id
-        return self.number
+            return self.id.replace('/', '-and-')
+        return self.number.replace('/', '-and-')
     
     @property
     def display_name(self):
@@ -151,9 +153,13 @@ class Route:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.sort_order is not None and other.sort_order is not None:
+            return self.sort_order < other.sort_order
         return self.key < other.key
     
     def __gt__(self, other):
+        if self.sort_order is not None and other.sort_order is not None:
+            return self.sort_order > other.sort_order
         return self.key > other.key
     
     def get_json(self):

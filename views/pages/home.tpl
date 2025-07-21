@@ -89,13 +89,15 @@
                         </div>
                     </form>
                     
-                    <form onsubmit="blockSearch()" action="javascript:void(0)">
-                        <label for="block_search">Block ID:</label>
-                        <div class="input-container">
-                            <input type="text" id="block_search" name="block_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
+                    % if context.enable_blocks:
+                        <form onsubmit="blockSearch()" action="javascript:void(0)">
+                            <label for="block_search">Block ID:</label>
+                            <div class="input-container">
+                                <input type="text" id="block_search" name="block_search" method="post" size="10">
+                                <input type="submit" value="Search" class="button">
+                            </div>
+                        </form>
+                    % end
                 % else:
                     <form onsubmit="busSearch()" action="javascript:void(0)">
                         <label for="bus_search">Bus Number:</label>
@@ -276,7 +278,9 @@
                         <div class="button-container">
                             <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
                             <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
-                            <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                            % if context.enable_blocks:
+                                <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                            % end
                         </div>
                     </div>
                 </div>
@@ -289,6 +293,32 @@
             </div>
             <div class="content">
                 <div class="container">
+                    <div class="news-post">
+                        <div class="header">
+                            <h3>Summer Update</h3>
+                            July 21st, 2025
+                        </div>
+                        <div class="content">
+                            <p>
+                                Let's jump right in with the big news: BCTracker now includes schedule data for <b>BC Ferries</b>!
+                                We're still figuring out the best way to integrate realtime data for tracking vessels, so that will be added down the road.
+                                In the meantime we hope the schedule information is still useful!
+                            </p>
+                            <p>
+                                As always, there's been a bunch of other improvements since our last update post that you may have noticed already.
+                                This includes:
+                            </p>
+                            <ul>
+                                <li>Stop icons on the main map page</li>
+                                <li>Geolocation and dark mode for maps</li>
+                                <li>Redesigned status bar on desktop</li>
+                                <li>Trips with changing headsigns</li>
+                                <li>The new <b>West Coast</b> system</li>
+                            </ul>
+                            <p>We've also been busy making some memory usage improvements to keep the site running smoothly and prepare for larger datasets such as Translink.</p>
+                            <p>See you in the next update!</p>
+                        </div>
+                    </div>
                     <div class="news-post" id="abtracker">
                         <div class="header">
                             <h3>Introducing ABTracker</h3>
@@ -325,38 +355,6 @@
                                 Instead of taking down the website at the end of the day, we're instead going to leave it available but advertised as being in <b>beta</b>, which means that some stuff could still break or get changed at any time.
                                 Please see the <a href="https://abtracker.ca/about#beta-testing">ABTracker about page</a> for more info.
                             </p>
-                        </div>
-                    </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Winter Update</h3>
-                            January 10th, 2025
-                        </div>
-                        <div class="content">
-                            <p>
-                                Happy new year!
-                                We're kicking things off with a very exciting announcement: BCTracker is adding support for more transit agencies in BC!
-                            </p>
-                            <p>
-                                We imagine that the first question coming to many minds is "Do you now support TransLink"?
-                                The answer is <i>not yet</i>, but hopefully we can get there in the future.
-                                For now we're starting with a few small agencies without realtime tracking, to ease ourselves in and have time to iron out any issues before taking on something bigger.
-                                The initial new systems/agencies are:
-                            </p>
-                            <ul>
-                                <li><b>Denman Island</b> - operated by <a href="https://www.denmanislandbus.ca">Denman Island Bus</a></li>
-                                <li><b>Gabriola Island</b> - operated by <a href="https://gertie.ca">GERTIE</a></li>
-                                <li><b>Hornby Island</b> - operated by <a href="https://hornbybus.com">Hornby Bus</a></li>
-                            </ul>
-                            <p>If you happen to live in or visit one of these places, we hope you find BCTracker useful!</p>
-                            <p>In other news, plenty of other improvements have been made since our previous post, including:</p>
-                            <ul>
-                                <li>Bus occupancy status</li>
-                                <li>Time since each bus position was last updated</li>
-                                <li>Stop list filtering and sorting</li>
-                                <li>Various layout and style updates</li>
-                            </ul>
-                            <p>Enjoy, stay safe, and have a great year!</p>
                         </div>
                     </div>
                     <div>

@@ -87,6 +87,10 @@ table th {
     background-color: unset;
 }
 
+#refresh-button-placeholder {
+    width: 32px;
+}
+
 #search {
     width: 275px;
     border-left-width: 1px;

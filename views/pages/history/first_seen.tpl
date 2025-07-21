@@ -32,8 +32,12 @@
                             % if not context.system:
                                 <th class="non-mobile">System</th>
                             % end
-                            <th>Block</th>
-                            <th class="desktop-only">Routes</th>
+                            % if context.enable_blocks:
+                                <th>Block</th>
+                                <th class="desktop-only">Routes</th>
+                            % else:
+                                <th>Routes</th>
+                            % end
                         </tr>
                     </thead>
                     <tbody>
@@ -71,25 +75,31 @@
                                 % if not context.system:
                                     <td class="non-mobile">{{ record.context }}</td>
                                 % end
-                                <td>
-                                    <div class="column stretch">
-                                        <div class="row space-between">
-                                            % if record.is_available:
-                                                % block = record.block
-                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                            % else:
-                                                <span>{{ record.block_id }}</span>
-                                            % end
-                                            % include('components/record_warnings')
+                                % if context.enable_blocks:
+                                    <td>
+                                        <div class="column stretch">
+                                            <div class="row space-between">
+                                                % if record.is_available:
+                                                    % block = record.block
+                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                % else:
+                                                    <span>{{ record.block_id }}</span>
+                                                % end
+                                                % include('components/record_warnings')
+                                            </div>
+                                            <div class="non-desktop">
+                                                % include('components/route_list', routes=record.routes)
+                                            </div>
                                         </div>
-                                        <div class="non-desktop">
-                                            % include('components/route_list', routes=record.routes)
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="desktop-only">
-                                    % include('components/route_list', routes=record.routes)
-                                </td>
+                                    </td>
+                                    <td class="desktop-only">
+                                        % include('components/route_list', routes=record.routes)
+                                    </td>
+                                % else:
+                                    <td>
+                                        % include('components/route_list', routes=record.routes)
+                                    </td>
+                                % end
                             </tr>
                         % end
                     </tbody>

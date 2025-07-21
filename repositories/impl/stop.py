@@ -24,7 +24,9 @@ class StopRepository:
             'number': number,
             'name': row['stop_name'],
             'lat': float(row['stop_lat']),
-            'lon': float(row['stop_lon'])
+            'lon': float(row['stop_lon']),
+            'parent_id': row.get('parent_station'),
+            'type': row.get('location_type')
         })
     
     def find(self, context: Context, stop_id=None, number=None) -> Stop | None:
@@ -36,7 +38,9 @@ class StopRepository:
                 'stop.number': 'number',
                 'stop.name': 'name',
                 'stop.lat': 'lat',
-                'stop.lon': 'lon'
+                'stop.lon': 'lon',
+                'stop.parent_id': 'parent_id',
+                'stop.type': 'type'
             },
             filters={
                 'stop.system_id': context.system_id,
@@ -51,10 +55,12 @@ class StopRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None, lat=None, lon=None, size=0.01) -> list[Stop]:
+    def find_all(self, context: Context, limit=None, lat=None, lon=None, size=0.01, parent_id=None, type=None) -> list[Stop]:
         '''Returns all stops that match the given context'''
         filters = {
-            'stop.system_id': context.system_id
+            'stop.system_id': context.system_id,
+            'stop.parent_id': parent_id,
+            'stop.type': getattr(type, 'value', type)
         }
         if (lat is not None and lon is not None):
             filters['lat'] = {
@@ -72,7 +78,9 @@ class StopRepository:
                 'stop.number': 'number',
                 'stop.name': 'name',
                 'stop.lat': 'lat',
-                'stop.lon': 'lon'
+                'stop.lon': 'lon',
+                'stop.parent_id': 'parent_id',
+                'stop.type': 'type'
             },
             filters=filters,
             limit=limit,

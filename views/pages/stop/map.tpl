@@ -1,4 +1,6 @@
 
+% from models.stop import StopType
+
 % rebase('base')
 
 <div id="page-header">
@@ -9,7 +11,9 @@
     <div class="tab-button-bar">
         <a href="{{ get_url(context, 'stops', stop) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        <a href="{{ get_url(context, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
+        % if stop.type != StopType.STATION:
+            <a href="{{ get_url(context, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
+        % end
     </div>
 </div>
 

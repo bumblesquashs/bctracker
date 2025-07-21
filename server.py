@@ -14,6 +14,7 @@ from models.context import Context
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.stop import StopType
 from models.time import Time
 from models.timestamp import Timestamp
 
@@ -21,7 +22,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 56
+VERSION = 57
 
 random = Random()
 
@@ -77,6 +78,7 @@ class Server(Bottle):
         self.add('/trips/<trip_id>/map', callback=self.trip_map)
         self.add('/trips/<trip_id>/history', callback=self.trip_history)
         self.add('/stops', callback=self.stops)
+        self.add('/stops/stations', callback=self.stations)
         self.add('/stops/<stop_number>', callback=self.stop_overview)
         self.add('/stops/<stop_number>/map', callback=self.stop_map)
         self.add('/stops/<stop_number>/schedule', callback=self.stop_schedule)
@@ -639,6 +641,7 @@ class Server(Bottle):
         )
     
     def route_overview(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -673,6 +676,7 @@ class Server(Bottle):
         )
     
     def route_map(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -703,6 +707,7 @@ class Server(Bottle):
         )
     
     def route_schedule(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -732,6 +737,7 @@ class Server(Bottle):
         )
     
     def route_schedule_date(self, context: Context, route_number, date_string):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -982,6 +988,8 @@ class Server(Bottle):
         items_per_page = 100
         if context.system:
             stops = context.system.get_stops()
+            show_stations_tab = any(s.type == StopType.STATION for s in stops)
+            stops = [s for s in stops if s.type != StopType.STATION]
             if search:
                 stops = [s for s in stops if search.lower() in s.name.lower()]
             for route_url_id in routes_filter:
@@ -999,15 +1007,17 @@ class Server(Bottle):
                 stops = stops[start_index:end_index]
         else:
             stops = []
+            show_stations_tab = False
             total_items = 0
         return self.page(
             context=context,
-            name='stops',
+            name='stops/stops',
             title='Stops',
             path=['stops'],
             path_args=path_args,
             enable_refresh=False,
             stops=stops,
+            show_stations_tab=show_stations_tab,
             search=search,
             routes_filter=routes_filter,
             sort=sort,
@@ -1015,6 +1025,19 @@ class Server(Bottle):
             page=page,
             items_per_page=items_per_page,
             total_items=total_items
+        )
+    
+    def stations(self, context: Context):
+        if context.system:
+            stops = [s for s in context.system.get_stops() if s.type == StopType.STATION]
+        else:
+            stops = []
+        return self.page(
+            context=context,
+            name='stops/stations',
+            title='Stations',
+            path=['stops', 'stations'],
+            stops=stops
         )
     
     def stop_overview(self, context: Context, stop_number):
@@ -1036,6 +1059,16 @@ class Server(Bottle):
                 title='Unknown Stop',
                 stop_number=stop_number
             )
+        if stop.type == StopType.STATION:
+            nearby_stops = []
+        else:
+            all_stops = context.system.get_stops()
+            nearby_stops = sorted({s for s in all_stops if s.is_near(stop.lat, stop.lon) and s != stop and s.type != StopType.STATION})
+        child_stops = repositories.stop.find_all(context, parent_id=stop.id)
+        if stop.parent_id:
+            parent_stop = repositories.stop.find(context, stop_id=stop.parent_id)
+        else:
+            parent_stop = None
         departures = stop.find_departures(date=Date.today(context.timezone))
         trips = [d.trip for d in departures]
         positions = repositories.position.find_all(context, trip=trips)
@@ -1045,6 +1078,9 @@ class Server(Bottle):
             title=str(stop),
             include_maps=True,
             stop=stop,
+            nearby_stops=nearby_stops,
+            child_stops=child_stops,
+            parent_stop=parent_stop,
             departures=departures,
             recorded_today=repositories.record.find_recorded_today(context, trips),
             assignments=repositories.assignment.find_all(context, stop=stop),
@@ -1188,7 +1224,9 @@ class Server(Bottle):
         systems = list(repositories.system.find_all())
         system = random.choice(systems)
         context = system.context
-        options = ['route', 'stop', 'block', 'trip']
+        options = ['route', 'stop', 'trip']
+        if context.enable_blocks:
+            options.append('block')
         if system.realtime_enabled:
             options.append('bus')
         selection = random.choice(options)
@@ -1313,12 +1351,11 @@ class Server(Bottle):
         include_blocks = int(request.forms.get('include_blocks', 1)) == 1
         matches = []
         if query != '':
-            if query.isnumeric() and context.realtime_enabled:
-                if include_buses:
-                    bus_numbers = repositories.overview.find_bus_numbers(context)
-                    matches += repositories.order.find_matches(context, query, bus_numbers)
+            if query.isnumeric() and context.realtime_enabled and include_buses:
+                bus_numbers = repositories.overview.find_bus_numbers(context)
+                matches += repositories.order.find_matches(context, query, bus_numbers)
             if context.system:
-                if include_blocks:
+                if include_blocks and context.enable_blocks:
                     matches += context.system.search_blocks(query)
                 if include_routes:
                     matches += context.system.search_routes(query)

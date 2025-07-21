@@ -45,5 +45,10 @@
         "name": "Broome County",
         "visible": false,
         "light": true
+    },
+    "bc-ferries": {
+        "name": "BC Ferries",
+        "light": true,
+        "dark": true
     }
 }

@@ -46,13 +46,15 @@
             % end
         </div>
     </td>
-    <td class="desktop-only">
-        % if block:
-            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-        % else:
-            <span class="lighter-text">Loading</span>
-        % end
-    </td>
+    % if context.enable_blocks:
+        <td class="desktop-only">
+            % if block:
+                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+            % else:
+                <span class="lighter-text">Loading</span>
+            % end
+        </td>
+    % end
     <td>
         <div class="column">
             % include('components/trip')

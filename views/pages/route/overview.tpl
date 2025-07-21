@@ -73,7 +73,9 @@
                                 <th>Bus</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
-                                <th class="non-mobile">Block</th>
+                                % if context.enable_blocks:
+                                    <th class="non-mobile">Block</th>
+                                % end
                                 <th class="non-mobile">Trip</th>
                                 <th class="desktop-only">Next Stop</th>
                             </tr>
@@ -116,10 +118,12 @@
                                             % end
                                         </div>
                                     </td>
-                                    <td class="non-mobile">
-                                        % block = trip.block
-                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                    </td>
+                                    % if context.enable_blocks:
+                                        <td class="non-mobile">
+                                            % block = trip.block
+                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                        </td>
+                                    % end
                                     <td class="non-mobile">
                                         % include('components/trip')
                                     </td>
@@ -168,7 +172,9 @@
                                                     <th class="non-mobile">Start Time</th>
                                                     <th class="mobile-only">Start</th>
                                                     <th class="desktop-only">Headsign</th>
-                                                    <th class="non-mobile">Block</th>
+                                                    % if context.enable_blocks:
+                                                        <th class="non-mobile">Block</th>
+                                                    % end
                                                     <th>Trip</th>
                                                     <th class="desktop-only">First Stop</th>
                                                     % if context.realtime_enabled:
@@ -190,10 +196,12 @@
                                                         <td class="desktop-only">
                                                             % include('components/headsign')
                                                         </td>
-                                                        <td class="non-mobile">
-                                                            % block = trip.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                        </td>
+                                                        % if context.enable_blocks:
+                                                            <td class="non-mobile">
+                                                                % block = trip.block
+                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            </td>
+                                                        % end
                                                         <td>
                                                             <div class="column">
                                                                 % include('components/trip')

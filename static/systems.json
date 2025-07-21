@@ -1,4 +1,11 @@
 {
+    "bc-ferries": {
+        "interregional": {
+            "bc-ferries": {
+                "name": "BC Ferries"
+            }
+        }
+    },
     "bc-transit": {
         "vancouver-island": {
             "campbell-river": {

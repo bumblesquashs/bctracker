@@ -68,6 +68,10 @@ table th {
     --image-size: 28px;
 }
 
+#refresh-button-placeholder {
+    width: 28px;
+}
+
 #search {
     order: 2;
     border-bottom-width: 1px;

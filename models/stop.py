@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from models.system import System
 
 from dataclasses import dataclass, field
+from enum import Enum
 from math import sqrt
 
 from models.daterange import DateRange
@@ -18,6 +19,35 @@ from models.sheet import Sheet
 import helpers
 import repositories
 
+class StopType(Enum):
+    '''Options for stop types'''
+    
+    STOP = '0'
+    STATION = '1'
+    ENTRANCE_EXIT = '2'
+    NODE = '3'
+    BOARDING_AREA = '4'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.STOP
+    
+    def __str__(self):
+        match self:
+            case StopType.STOP:
+                return 'Stop'
+            case StopType.STATION:
+                return 'Station'
+            case StopType.ENTRANCE_EXIT:
+                return 'Entrance/Exit'
+            case StopType.NODE:
+                return 'Node'
+            case StopType.BOARDING_AREA:
+                return 'Boarding Area'
+
 @dataclass(slots=True)
 class Stop:
     '''A location where a vehicle stops along a trip'''
@@ -28,6 +58,8 @@ class Stop:
     name: str
     lat: float
     lon: float
+    parent_id: str | None
+    type: StopType
     
     key: str = field(init=False)
     
@@ -40,7 +72,9 @@ class Stop:
         name = row['name']
         lat = row['lat']
         lon = row['lon']
-        return cls(context.system, id, number, name, lat, lon)
+        parent_id = row['parent_id']
+        type = StopType.from_db(row['type'])
+        return cls(context.system, id, number, name, lat, lon, parent_id, type)
     
     @property
     def context(self):
@@ -53,12 +87,6 @@ class Stop:
         if self.context.prefer_stop_id:
             return self.id
         return self.number
-    
-    @property
-    def nearby_stops(self):
-        '''Returns all stops with coordinates close to this stop'''
-        stops = self.system.get_stops()
-        return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
     
     @property
     def cache(self):

@@ -1,0 +1,448 @@
+/* COLOR REFERENCE
+ * 
+ * Primary Background: #FFFFFF
+ * Secondary Background: #F1F8FF
+ * Primary Header: #00284C
+ * Secondary Header: #003769
+ * Menu: #001325
+ * Borders: #001325
+ * Selection: #CEE8FF
+ * 
+ * Primary Text: #000000
+ * Secondary Text: #666666
+ * Links: #003769
+ * Buttons: #003769
+ * 
+ * Other colors may also be used for specific purposes
+*/
+
+:root {
+    --tooltip-background: #00284C;
+    
+    --navigation-bar-background: #00284C;
+    --navigation-bar-hover: #001325;
+    --navigation-bar-foreground: #FFFFFF;
+    
+    --navigation-menu-background: #001325;
+    --navigation-menu-foreground: #FFFFFF;
+    
+    --status-bar-background: #003769;
+    --status-bar-hover: #001325;
+    --status-bar-foreground: #FFFFFF;
+    
+    --loading-background: #FFFFFF;
+    --loading-foreground: #003769;
+    
+    --checkbox-color: #003769;
+    --radio-button-color: #003769;
+    --toggle-button-color: #003769;
+    
+    --stop-number-background: #FFFFFF;
+    --stop-number-text: #000000;
+    --stop-number-border: #CEE8FF;
+    
+    --map-control-background: rgba(255, 255, 255, 0.7);
+    --map-control-background-hover: rgba(255, 255, 255, 0.7);
+    --map-control-icon: #000000;
+}
+
+a {
+    color: #003769;
+}
+
+body {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.full-map #page {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+body.full-map #page .option {
+    --hover-background: #FFFFFF;
+}
+
+h1, h2, h3 {
+    --stop-number-background: #F1F8FF;
+}
+
+input[type="text"] {
+    border-color: #001325;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+input[type="text"]:focus {
+    border-color: #001325;
+}
+
+table {
+    border-color: #001325;
+}
+
+table tbody tr:hover {
+    background-color: #CEE8FF;
+}
+
+table tbody tr.header {
+    background-color: #00284C;
+    color: #FFFFFF;
+}
+
+table td {
+    border-color: #001325;
+}
+
+table th {
+    background-color: #003769;
+    color: #FFFFFF;
+    border-color: #001325;
+}
+
+table tr {
+    background-color: #FFFFFF;
+}
+
+table tr:nth-child(2n-1) {
+    background-color: #F1F8FF;
+}
+
+table tr.table-button {
+    background-color: #003769;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+table tr.table-button:hover {
+    background-color: #001325;
+}
+
+#loading-stop {
+    --image-color: #FFFFFF;
+}
+
+#map.preview {
+    border-color: #001325;
+}
+
+#map-controls .control.active {
+    --map-control-icon: #003769;
+}
+
+#navigation-bar {
+    --tooltip-background: #001325;
+}
+
+#nearby-status.loading {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+#nearby-status.error {
+    border-color: #FF0000;
+    background-color: #FFCCCC;
+}
+
+#page {
+    --image-color: #000000;
+}
+
+#page-header {
+    border-bottom-color: #001325;
+}
+
+#quick-navigation .item {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+#search {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+#search-header {
+    background-color: #003769;
+    color: #FFFFFF;
+    border-color: #001325;
+    --tooltip-background: #001325;
+}
+
+#search-input {
+    border-color: #FFFFFF;
+}
+
+#search-input:focus {
+    border-color: #001325;
+}
+
+#search-paging {
+    background-color: #FFFFFF;
+    border-color: #001325;
+}
+
+#search-placeholder {
+    color: #001325;
+}
+
+#search-results {
+    --image-color: #000000;
+}
+
+#search-results .result {
+    color: #000000;
+}
+
+#search-results .result:hover {
+    background-color: #CEE8FF;
+}
+
+#search-results .result.keyboard-selected {
+    background-color: #CEE8FF;
+}
+
+#search-results .result .description {
+    color: #666666;
+}
+
+#status-bar {
+    --tooltip-background: #001325;
+}
+
+#system-menu {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+#system-menu .header {
+    background-color: #00284C;
+    color: #FFFFFF;
+}
+
+#system-menu .system-button {
+    color: #000000;
+}
+
+#system-menu .system-button:hover {
+    background-color: #CEE8FF;
+}
+
+#system-menu .system-button.current {
+    background-color: #CEE8FF;
+}
+
+.banner {
+    background-color: #FFA027;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+.banner a {
+    color: #FFFFFF;
+}
+
+.button {
+    background-color: #003769;
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+.button:hover {
+    background-color: #001325;
+}
+
+.button.disabled {
+    background-color: #666666;
+}
+
+.button.disabled:hover {
+    background-color: #666666 !important;
+}
+
+.button.inactive {
+    background-color: #ABABAB;
+}
+
+.button.inactive:hover {
+    background-color: #666666;
+}
+
+.button.survey-button {
+    background-color: #DD7D03;
+}
+
+.button.survey-button:hover {
+    background-color: #AD6000;
+}
+
+.code-block {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+.container > .section > .header {
+    border-bottom-color: #001325;
+}
+
+.container > .section > .header > .toggle {
+    --image-color: #003769;
+}
+
+.events .date {
+    border-right-color: #CEE8FF;
+}
+
+.favourite {
+    --image-color: #003769;
+}
+
+.favourite:hover {
+    background-color: #F1F8FF;
+}
+
+.favourite.disabled {
+    --image-color: #666666;
+}
+
+.favourite.disabled:hover {
+    background-color: initial;
+}
+
+.info-box {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+.info-box .section {
+    border-color: #CEE8FF;
+}
+
+.info-box .option {
+    --hover-background: #CEE8FF;
+}
+
+.lighter-text {
+    color: #666666;
+}
+
+.marker .details {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.marker .icon {
+    border-color: #FFFFFF;
+    background-color: #003769;
+    --image-color: #FFFFFF;
+}
+
+.marker .icon.route .number {
+    color: #FFFFFF;
+}
+
+.marker .icon.bus_route {
+    color: #FFFFFF;
+}
+
+.news-post {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+.news-post .header {
+    background-color: #003769;
+    color: white;
+    border-bottom-color: #001325;
+}
+
+.option {
+    --hover-background: #F1F8FF;
+}
+
+.option .checkbox {
+    background-color: #FFFFFF;
+}
+
+.option .radio-button {
+    background-color: #FFFFFF;
+}
+
+.order-details .content {
+    --image-color: #666666;
+}
+
+.paging {
+    --image-color: #666666;
+}
+
+.paging .page {
+    background-color: #F1F8FF;
+    color: #000000;
+}
+
+.paging .page:hover {
+    background-color: #CEE8FF;
+}
+
+.paging .page.current {
+    background-color: #003769;
+    color: #FFFFFF;
+}
+
+.paging .page.current:hover {
+    background-color: #003769;
+}
+
+.route {
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    background-color: #989898;
+}
+
+.scheduled {
+    --image-color: #666666;
+}
+
+.sheet {
+    background-color: #E1F1FF;
+}
+
+.sheet-list .footer {
+    color: #666666;
+}
+
+.sheet-list .legend {
+    color: #666666;
+}
+
+.tab-button-bar {
+    background: #001325;
+    border-color: #001325;
+}
+
+.tab-button {
+    background-color: #FFFFFF;
+    color: #003769;
+}
+
+.tab-button:hover {
+    background-color: #F1F8FF;
+    cursor: pointer;
+}
+
+.tab-button.current {
+    background-color: #CEE8FF;
+    color: #000000;
+}
+
+.timeline .now {
+    background-color: #FF0000;
+}
+
+.timeline .section:hover {
+    border-color: #001325;
+}
+
+.timespan .time {
+    background-color: #ABABAB;
+}
