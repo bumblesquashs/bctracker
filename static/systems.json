@@ -196,6 +196,13 @@
             }
         }
     },
+    "tofino-shuttle": {
+        "vancouver-island": {
+            "tofino": {
+                "name": "Tofino Free Shuttle"
+            }
+        }
+    },
     "translink": {
         "southern-coast": {
             "vancouver": {

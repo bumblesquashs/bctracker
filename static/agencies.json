@@ -70,6 +70,14 @@
         "prefer_stop_id": true,
         "show_stop_number": false
     },
+    "tofino-shuttle": {
+        "name": "Tofino Free Shuttle",
+        "website": "https://tourismtofino.com/plan-your-trip/getting-around",
+        "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/TOFINO_feed/feed-tofino.zip",
+        "accurate_seconds": false,
+        "prefer_stop_id": true,
+        "show_stop_number": false
+    },
     "translink": {
         "name": "Translink",
         "website": "https://translink.ca",

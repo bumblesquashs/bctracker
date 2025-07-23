@@ -93,7 +93,8 @@ class System:
     @property
     def schedule(self):
         '''The overall service schedule for this system'''
-        return Schedule.combine(self.get_services())
+        services = [s for s in self.get_services() if s.schedule.dates]
+        return Schedule.combine(services)
     
     def __post_init__(self):
         self.reload_backoff = Backoff(max_target=2**8)

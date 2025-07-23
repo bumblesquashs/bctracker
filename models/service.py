@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from models.system import System
 
 from dataclasses import dataclass
-from datetime import timedelta
 from enum import IntEnum
 
 from models.context import Context
