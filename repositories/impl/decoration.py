@@ -23,6 +23,6 @@ class DecorationRepository:
     def find(self, bus) -> Decoration | None:
         '''Returns the decorations with the given bus number'''
         try:
-            return self.decorations[bus.context.agency_id][bus.number]
+            return self.decorations[bus.context.agency_id][bus.order.without_prefix(bus.number)]
         except KeyError:
             return None

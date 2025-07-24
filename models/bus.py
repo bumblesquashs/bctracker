@@ -17,7 +17,7 @@ class Bus:
     '''A public transportation vehicle'''
     
     agency: Agency
-    number: int
+    number: str
     order: Order
     
     @classmethod

@@ -87,7 +87,7 @@ class OverviewRepository:
             initializer=Overview.from_db
         )
     
-    def find_bus_numbers(self, context: Context) -> list[int]:
+    def find_bus_numbers(self, context: Context) -> list[str]:
         '''Returns all bus numbers that have been seen'''
         joins = {}
         filters = {}
