@@ -498,7 +498,7 @@ class Server(Bottle):
                 bus_number=bus_number
             )
         position = repositories.position.find(bus)
-        records = repositories.record.find_all(bus=bus, limit=20)
+        records = repositories.record.find_all(Context(agency=bus.agency), bus=bus, limit=20)
         return self.page(
             context=context,
             name='bus/overview',
@@ -581,11 +581,11 @@ class Server(Bottle):
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = repositories.record.count(bus=bus)
+        total_items = repositories.record.count(Context(agency=bus.agency), bus=bus)
         if page < 1:
             records = []
         else:
-            records = repositories.record.find_all(bus=bus, limit=items_per_page, page=page)
+            records = repositories.record.find_all(Context(agency=bus.agency), bus=bus, limit=items_per_page, page=page)
         transfers = repositories.transfer.find_all(bus=bus)
         tracked_systems = set()
         events = []
