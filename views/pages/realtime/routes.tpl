@@ -64,15 +64,15 @@
                             % last_bus = None
                             % for position in sorted(route_positions):
                                 % bus = position.bus
-                                % order = bus.order
+                                % order_id = bus.order_id
                                 % if not last_bus:
                                     % same_order = True
-                                % elif not order and not last_bus.order:
+                                % elif not order_id and not last_bus.order_id:
                                     % same_order = True
-                                % elif not order or not last_bus.order:
+                                % elif not order_id or not last_bus.order_id:
                                     % same_order = False
                                 % else:
-                                    % same_order = order == last_bus.order
+                                    % same_order = order_id == last_bus.order_id
                                 % end
                                 % last_bus = bus
                                 <tr class="{{'' if same_order else 'divider'}}">
@@ -86,12 +86,12 @@
                                                 </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order')
+                                                % include('components/year_model', year_model=bus.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order')
+                                        % include('components/year_model', year_model=bus.year_model)
                                     </td>
                                     % if not context.system:
                                         <td class="desktop-only">{{ position.context }}</td>
@@ -155,15 +155,15 @@
                             % last_bus = None
                             % for position in no_route_positions:
                                 % bus = position.bus
-                                % order = bus.order
+                                % order_id = bus.order_id
                                 % if not last_bus:
                                     % same_order = True
-                                % elif not order and not last_bus.order:
+                                % elif not order_id and not last_bus.order_id:
                                     % same_order = True
-                                % elif not order or not last_bus.order:
+                                % elif not order_id or not last_bus.order_id:
                                     % same_order = False
                                 % else:
-                                    % same_order = order == last_bus.order
+                                    % same_order = order_id == last_bus.order_id
                                 % end
                                 % last_bus = bus
                                 <tr class="{{'' if same_order else 'divider'}}">
@@ -171,12 +171,12 @@
                                         <div class="column">
                                             % include('components/bus')
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order')
+                                                % include('components/year_model', year_model=bus.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order')
+                                        % include('components/year_model', year_model=bus.year_model)
                                     </td>
                                     % if not context.system:
                                         <td>{{ position.context }}</td>

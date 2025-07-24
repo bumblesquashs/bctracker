@@ -32,9 +32,8 @@
                                 % include('components/events_list', events=events)
                             </div>
                             <div class="column section">
-                                % orders = sorted({r.bus.order for r in records if r.bus.order})
                                 % for order in orders:
-                                    % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
+                                    % percentage = (len([r for r in records if r.bus.order_id == order.id]) / len(records)) * 100
                                     <div class="row space-between">
                                         <div>{{! order }}</div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
@@ -94,12 +93,12 @@
                                                     % include('components/record_warnings')
                                                 </div>
                                                 <span class="non-desktop smaller-font">
-                                                    % include('components/order', order=bus.order)
+                                                    % include('components/year_model', year_model=bus.year_model)
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="desktop-only">
-                                            % include('components/order', order=bus.order)
+                                            % include('components/year_model', year_model=bus.year_model)
                                         </td>
                                         <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                         <td>{{ record.last_seen.format_web(time_format) }}</td>

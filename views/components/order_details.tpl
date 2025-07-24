@@ -1,12 +1,13 @@
-% order = bus.order
 <div class="order-details">
     <div class="title">{{! order }}</div>
+    <div class="content lighter-text smaller-font">{{ len(order.buses) }} buses</div>
     <div class="content">
-        % if bus.number > order.low:
-            % first_bus = order.first_bus
-            % previous_bus = order.previous_bus(bus.number)
+        % first_bus = order.buses[0]
+        % if bus > first_bus:
             % include('components/bus', bus=first_bus)
-            % if previous_bus.number > order.low:
+            
+            % previous_bus = order.previous_bus(bus)
+            % if previous_bus > first_bus:
                 % include('components/svg', name='paging/left-triple')
                 % include('components/bus', bus=previous_bus)
             % end
@@ -15,11 +16,11 @@
         
         % include('components/bus', enable_link=False)
         
-        % if bus.number < order.high:
-            % last_bus = order.last_bus
-            % next_bus = order.next_bus(bus.number)
+        % last_bus = order.buses[-1]
+        % if bus < last_bus:
             % include('components/svg', name='paging/right')
-            % if next_bus.number < order.high:
+            % next_bus = order.next_bus(bus)
+            % if next_bus < last_bus:
                  % include('components/bus', bus=next_bus)
                  % include('components/svg', name='paging/right-triple')
             % end

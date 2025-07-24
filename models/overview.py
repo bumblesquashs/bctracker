@@ -29,7 +29,7 @@ class Overview:
     def from_db(cls, row: Row):
         '''Returns an overview initialized from the given database row'''
         context = Context.find(agency_id='bc-transit')
-        bus = Bus.find(context, row['bus_number'])
+        bus = context.find_bus(row['bus_number'])
         first_seen_context = row.context('first_seen_system_id')
         first_seen_date = Date.parse(row['first_seen_date'], first_seen_context.timezone)
         first_record = row.obj('first_record', Record.from_db)

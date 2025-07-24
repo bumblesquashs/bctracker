@@ -128,12 +128,12 @@
                                         <div class="column">
                                             % include('components/bus')
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=bus.order)
+                                                % include('components/year_model', year_model=bus.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=bus.order)
+                                        % include('components/year_model', year_model=bus.year_model)
                                     </td>
                                     <td class="non-mobile">{{ transfer.old_context }}</td>
                                     <td class="non-mobile">{{ transfer.new_context }}</td>

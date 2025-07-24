@@ -20,8 +20,9 @@
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
-    % if bus.order:
-        <h2>{{! bus.order }}</h2>
+    % year_model = bus.year_model
+    % if year_model:
+        <h2>{{! year_model }}</h2>
     % else:
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
@@ -229,7 +230,7 @@
             </div>
         </div>
         
-        % if bus.order:
+        % if order:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Details</h2>
@@ -237,26 +238,28 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        % if bus.order.size > 1:
+                        % if len(order.buses) > 1:
                             <div class="section">
-                                % include('components/order_details')
+                                % include('components/order_details', order=order)
                             </div>
                         % end
-                        <div class="row section">
-                            <div class="name">Vehicle Type</div>
-                            <div class="value">{{ model.type }}</div>
-                        </div>
-                        % if model.length:
+                        % if model:
                             <div class="row section">
-                                <div class="name">Length</div>
-                                <div class="value">{{ model.length }} feet</div>
+                                <div class="name">Vehicle Type</div>
+                                <div class="value">{{ model.type }}</div>
                             </div>
-                        % end
-                        % if model.fuel:
-                            <div class="row section">
-                                <div class="name">Fuel Type</div>
-                                <div class="value">{{ model.fuel }}</div>
-                            </div>
+                            % if model.length:
+                                <div class="row section">
+                                    <div class="name">Length</div>
+                                    <div class="value">{{ model.length }} feet</div>
+                                </div>
+                            % end
+                            % if model.fuel:
+                                <div class="row section">
+                                    <div class="name">Fuel Type</div>
+                                    <div class="value">{{ model.fuel }}</div>
+                                </div>
+                            % end
                         % end
                     </div>
                 </div>

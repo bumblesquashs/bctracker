@@ -3,13 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.order import Order
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from models.agency import Agency
-from models.context import Context
+from models.model import Model
 
+import helpers
 import repositories
 
 @dataclass(slots=True)
@@ -18,13 +19,16 @@ class Bus:
     
     agency: Agency
     number: int
-    order: Order
+    name: str
+    order_id: int | None = None
+    model: Model | None = None
+    year: int | None = None
+    visible: bool = True
+    demo: bool = False,
+    livery: str | None = None
+    air_conditioned: bool = True
     
-    @classmethod
-    def find(cls, context: Context, number):
-        '''Returns a bus for the given context with the given number'''
-        order = repositories.order.find(context, number)
-        return cls(context.agency, number, order)
+    key: tuple = field(init=False)
     
     @property
     def context(self):
@@ -38,31 +42,21 @@ class Bus:
     
     @property
     def is_known(self):
-        '''Checks if the bus number is known'''
         return self.number >= 0
     
     @property
-    def visible(self):
-        '''Checks if the bus is visible'''
-        order = self.order
-        if order:
-            return order.visible
-        return True
-    
-    @property
-    def model(self):
-        '''Returns the model of this bus'''
-        order = self.order
-        if order:
-            return order.model
+    def year_model(self):
+        if self.model:
+            if self.year:
+                return f'{self.year} {self.model}'
+            return str(self.model)
         return None
     
+    def __post_init__(self):
+        self.key = helpers.key(self.name)
+    
     def __str__(self):
-        if self.is_known:
-            if self.context.vehicle_name_length:
-                return f'{self.number:0{self.context.vehicle_name_length}d}'
-            return str(self.number)
-        return 'Unknown Bus'
+        return self.name
     
     def __hash__(self):
         return hash(self.number)
@@ -71,8 +65,8 @@ class Bus:
         return self.number == other.number
     
     def __lt__(self, other):
-        return self.number < other.number
+        return self.key < other.key
     
     def find_decoration(self):
         '''Returns the decoration for this bus, if one exists'''
-        return repositories.decoration.find(self)
+        return repositories.decoration.find(self.agency.id, self.number)

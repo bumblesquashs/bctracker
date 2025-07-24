@@ -7,8 +7,9 @@
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
-    % if bus.order:
-        <h2>{{! bus.order }}</h2>
+    % year_model = bus.year_model
+    % if year_model:
+        <h2>{{! year_model }}</h2>
     % else:
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end

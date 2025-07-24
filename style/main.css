@@ -1217,6 +1217,12 @@ table tr.table-button {
     background-color: var(--radio-button-color);
 }
 
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
 .order-details .content {
     display: flex;
     flex-direction: row;
@@ -1226,7 +1232,6 @@ table tr.table-button {
 }
 
 .order-details .title {
-    margin-bottom: 5px;
     text-align: center;
     font-weight: bold;
 }

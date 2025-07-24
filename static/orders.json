@@ -1,177 +1,389 @@
 {
     "bc-transit": {
         "alexander-dennis-enviro500": [
-            { "year": 2004, "low": 9041, "high": 9049 },
-            { "year": 2008, "low": 9501, "high": 9526 },
-            { "year": 2007, "number": 9528 },
-            { "year": 2008, "low": 9529, "high": 9531 }
+            [
+                { "year": 2004, "low": 9041, "high": 9049, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2008, "low": 9501, "high": 9526, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2007, "number": 9528, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2008, "low": 9529, "high": 9531, "livery": "bc-transit" }
+            ]
         ],
         "alexander-dennis-enviro500-lhd": [
-            { "year": 2020, "low": 9532, "high": 9542 },
-            { "year": 2022, "low": 9543, "high": 9550 }
+            [
+                { "year": 2020, "low": 9532, "high": 9542, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2022, "low": 9543, "high": 9550, "livery": "bc-transit" }
+            ]
         ],
         "alexander-dennis-enviro500h": [
-            { "year": 2008, "number": 9527 }
+            [
+                { "year": 2008, "number": 9527, "livery": "bc-transit" }
+            ]
         ],
         "byd-k9": [
-            { "year": 2016, "number": 9092, "demo": true }
+            [
+                { "year": 2016, "number": 9092, "demo": true, "livery": "bc-transit" }
+            ]
         ],
         "chevrolet-arboc-4500-sof-27": [
-            { "year": 2020, "low": 2723, "high": 2756 },
-            { "year": 2022, "low": 2802, "high": 2860 },
-            { "year": 2023, "low": 2861, "high": 2895 },
-            { "year": 2024, "low": 2896, "high": 2976 }
+            [
+                { "year": 2020, "low": 2723, "high": 2756, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2022, "low": 2802, "high": 2860, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2023, "low": 2861, "high": 2895, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2024, "low": 2896, "high": 2976, "livery": "bc-transit-green-front" }
+            ]
         ],
         "chevrolet-arboc-4500-som-28": [
-            { "year": 2017, "low": 2641, "high": 2662 },
-            { "year": 2018, "low": 2663, "high": 2687 }
+            [
+                { "year": 2017, "low": 2641, "high": 2662, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2018, "low": 2663, "high": 2687, "livery": "bc-transit" }
+            ]
         ],
         "chevrolet-arboc-4500-som23d": [
-            { "year": 2010, "low": 2301, "high": 2310 }
+            [
+                { "year": 2010, "low": 2301, "high": 2310, "livery": "bc-transit" }
+            ]
         ],
         "chevrolet-arboc-4500-som28d": [
-            { "year": 2010, "low": 2311, "high": 2315 },
-            { "year": 2012, "low": 2316, "high": 2339 },
-            { "year": 2012, "low": 2342, "high": 2344 },
-            { "year": 2012, "low": 2347, "high": 2367 },
-            { "year": 2012, "low": 2369, "high": 2377 },
-            { "year": 2013, "low": 2378, "high": 2449 },
-            { "year": 2014, "low": 2451, "high": 2557 },
-            { "year": 2015, "low": 2558, "high": 2618 },
-            { "year": 2016, "low": 2625, "high": 2636 }
+            [
+                { "year": 2010, "low": 2311, "high": 2315, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2012, "low": 2316, "high": 2339, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2012, "low": 2342, "high": 2344, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2012, "low": 2347, "high": 2367, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2012, "low": 2369, "high": 2377, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2013, "low": 2378, "high": 2449, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2014, "low": 2451, "high": 2557, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2015, "low": 2558, "high": 2618, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2016, "low": 2625, "high": 2636, "livery": "bc-transit" }
+            ]
         ],
         "chevrolet-arboc-4500-som28g": [
-            { "year": 2015, "low": 2619, "high": 2624 },
-            { "year": 2016, "low": 2637, "high": 2640 }
+            [
+                { "year": 2015, "low": 2619, "high": 2624, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2016, "low": 2637, "high": 2640, "livery": "bc-transit" }
+            ]
         ],
         "chevrolet-girardin-4500-g5": [
-            { "year": 2020, "low": 2688, "high": 2722 },
-            { "year": 2021, "low": 2757, "high": 2784 }
+            [
+                { "year": 2020, "low": 2688, "high": 2722, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2021, "low": 2757, "high": 2784, "livery": "bc-transit" }
+            ]
         ],
         "dennis-dart-slf-30": [
-            { "year": 1999, "low": 9901, "high": 9951 }
+            [
+                { "year": 1999, "low": 9901, "high": 9904, "livery": "bc-transit-classic" },
+                { "year": 1999, "low": 9905, "high": 9909, "livery": "bc-transit" },
+                { "year": 1999, "low": 9910, "high": 9928, "livery": "bc-transit-classic" },
+                { "year": 1999, "number": 9929, "livery": "bc-transit" },
+                { "year": 1999, "low": 9930, "high": 9943, "livery": "bc-transit-classic" },
+                { "year": 1999, "low": 9944, "high": 9947, "livery": "bc-transit" },
+                { "year": 1999, "low": 9948, "high": 9951, "livery": "bc-transit-classic" }
+            ]
         ],
         "dennis-dart-slf-35": [
-            { "year": 2000, "low": 1, "high": 18 },
-            { "year": 2001, "low": 101, "high": 116 },
-            { "year": 2002, "low": 221, "high": 237 },
-            { "year": 2000, "low": 9051, "high": 9078 },
-            { "year": 2001, "low": 9081, "high": 9085 }
+            [
+                { "year": 2000, "low": 1, "high": 7, "livery": "bc-transit" },
+                { "year": 2000, "low": 8, "high": 18, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 2001, "low": 101, "high": 116, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 2002, "low": 221, "high": 228, "livery": "bc-transit-classic" },
+                { "year": 2002, "low": 229, "high": 230, "livery": "bc-transit" },
+                { "year": 2002, "low": 231, "high": 233, "livery": "bc-transit-classic" },
+                { "year": 2002, "number": 234, "livery": "bc-transit" },
+                { "year": 2002, "low": 235, "high": 237, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 2000, "low": 9051, "high": 9078, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 2001, "low": 9081, "high": 9083, "livery": "bc-transit-classic" },
+                { "year": 2001, "number": 9084, "livery": "bc-transit" },
+                { "year": 2001, "number": 9085, "livery": "bc-transit-classic" }
+            ]
         ],
         "dennis-trident-iii": [
-            { "year": 2000, "low": 9001, "high": 9010 }
+            [
+                { "year": 2000, "number": 9001, "livery": "bc-transit-classic" },
+                { "year": 2000, "low": 9002, "high": 9010, "livery": "bc-transit" }
+            ]
         ],
         "ford-cbb-e450-polar-v": [
-            { "year": 2009, "low": 2173, "high": 2240 }
+            [
+                { "year": 2009, "low": 2173, "high": 2240, "livery": "bc-transit" }
+            ]
         ],
         "ford-girardin-t350-mbii": [
-            { "year": 2021, "low": 2785, "high": 2801 }
+            [
+                { "year": 2021, "low": 2785, "high": 2801, "livery": "bc-transit" }
+            ]
         ],
         "grande-west-vicinity-27": [
-            { "year": 2013, "low": 3001, "high": 3015 }
+            [
+                { "year": 2013, "low": 3001, "high": 3015, "livery": "bc-transit" }
+            ]
         ],
         "grande-west-vicinity-30": [
-            { "year": 2017, "low": 4007, "high": 4070 },
-            { "year": 2018, "low": 4071, "high": 4073 }
+            [
+                { "year": 2017, "low": 4007, "high": 4070, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2018, "low": 4071, "high": 4073, "livery": "bc-transit" }
+            ]
         ],
         "grande-west-vicinity-35": [
-            { "year": 2017, "low": 4400, "high": 4432 },
-            { "year": 2018, "low": 4433, "high": 4474 }
+            [
+                { "year": 2017, "low": 4400, "high": 4432, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2018, "low": 4433, "high": 4446, "livery": "bc-transit" },
+                { "year": 2019, "low": 4447, "high": 4474, "livery": "bc-transit" }
+            ]
         ],
         "grande-west-vicinity-cng-30": [
-            { "year": 2020, "low": 4200, "high": 4233 }
+            [
+                { "year": 2020, "low": 4200, "high": 4233, "livery": "bc-transit" }
+            ]
         ],
         "international-eldorado-3200-advantage": [
-            { "year": 2022, "low": 3029, "high": 3034 }
+            [
+                { "year": 2022, "low": 3029, "high": 3034, "livery": "bc-transit" }
+            ]
         ],
         "international-eldorado-3200-aero-elite": [
-            { "year": 2015, "low": 3016, "high": 3023, "exceptions": [ 3020, 3022 ] },
-            { "year": 2018, "low": 3024, "high": 3028 }
+            [
+                { "year": 2015, "low": 3016, "high": 3019, "livery": "bc-transit" },
+                { "year": 2015, "number": 3021, "livery": "bc-transit" },
+                { "year": 2015, "number": 3023, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2018, "low": 3024, "high": 3028, "livery": "bc-transit" }
+            ]
         ],
         "mercedes-benz-sprinter-minibus": [
-            { "year": 2012, "low": 2340, "high": 2341 },
-            { "year": 2012, "low": 2345, "high": 2346 },
-            { "year": 2012, "number": 2368 },
-            { "year": 2011, "number": 2450 }
+            [
+                { "year": 2012, "low": 2340, "high": 2341, "livery": "bc-transit" },
+                { "year": 2012, "low": 2345, "high": 2346, "livery": "bc-transit" },
+                { "year": 2012, "number": 2368, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2011, "number": 2450, "livery": "bc-transit" }
+            ]
         ],
         "new-flyer-d40lf": [
-            { "year": 1991, "low": 8001, "high": 8009 },
-            { "year": 1992, "low": 8010, "high": 8033 },
-            { "year": 1994, "low": 8034, "high": 8048 },
-            { "year": 1995, "low": 8049, "high": 8094 },
-            { "year": 1996, "low": 8095, "high": 8117 },
-            { "year": 1996, "low": 9701, "high": 9749 },
-            { "year": 1995, "low": 9750, "high": 9760 },
-            { "year": 1998, "low": 9815, "high": 9828 },
-            { "year": 1998, "low": 9831, "high": 9856 },
-            { "year": 1998, "low": 9861, "high": 9878 },
-            { "year": 1998, "low": 9881, "high": 9891 }
+            [
+                { "year": 1991, "low": 8001, "high": 8009, "livery": "bc-transit-classic", "air_conditioned": false }
+            ],
+            [
+                { "year": 1992, "low": 8010, "high": 8025, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1992, "low": 8026, "high": 8033, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 1994, "low": 8034, "high": 8047, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1994, "number": 8048, "livery": "bc-transit", "air_conditioned": false }
+            ],
+            [
+                { "year": 1995, "low": 8049, "high": 8063, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1995, "number": 8064, "livery": "bc-transit", "air_conditioned": false },
+                { "year": 1995, "number": 8065, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1995, "low": 8066, "high": 8071, "livery": "bc-transit-classic" },
+                { "year": 1995, "number": 8072, "livery": "bc-transit" },
+                { "year": 1995, "low": 8073, "high": 8077, "livery": "bc-transit-classic" },
+                { "year": 1995, "number": 8078, "livery": "bc-transit" },
+                { "year": 1995, "low": 8079, "high": 8091, "livery": "bc-transit-classic" },
+                { "year": 1995, "number": 8092, "livery": "bc-transit" },
+                { "year": 1995, "low": 8093, "high": 8094, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 1996, "low": 8095, "high": 8099, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1996, "number": 8100, "livery": "bc-transit", "air_conditioned": false },
+                { "year": 1996, "low": 8101, "high": 8102, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1996, "number": 8103,  "livery": "bc-transit", "air_conditioned": false },
+                { "year": 1996, "low": 8104, "high": 8113, "livery": "bc-transit-classic", "air_conditioned": false },
+                { "year": 1996, "number": 8114, "livery": "bc-transit", "air_conditioned": false },
+                { "year": 1996, "low": 8115, "high": 8117, "livery": "bc-transit-classic", "air_conditioned": false }
+            ],
+            [
+                { "year": 1996, "low": 9701, "high": 9723, "livery": "bc-transit-classic" },
+                { "year": 1996, "number": 9724, "livery": "bc-transit" },
+                { "year": 1996, "low": 9725, "high": 9749, "livery": "bc-transit-classic" }
+            ],
+            [
+                { "year": 1995, "low": 9750, "high": 9751, "livery": "bc-transit", "air_conditioned": false },
+                { "year": 1996, "low": 9752, "high": 9760, "livery": "bc-transit", "air_conditioned": false }
+            ],
+            [
+                { "year": 1998, "low": 9815, "high": 9828, "livery": "bc-transit", "air_conditioned": false },
+                { "year": 1998, "low": 9831, "high": 9854, "livery": "bc-transit" },
+                { "year": 1998, "number": 9855, "livery": "bc-transit-classic" },
+                { "year": 1998, "number": 9866, "livery": "bc-transit" },
+                { "year": 1998, "low": 9861, "high": 9878, "livery": "bc-transit" },
+                { "year": 1998, "low": 9881, "high": 9891, "livery": "bc-transit", "air_conditioned": false }
+            ]
         ],
         "new-flyer-de40lf": [
-            { "year": 2005, "low": 9101, "high": 9106 }
+            [
+                { "year": 2005, "number": 9101, "livery": "bc-transit" },
+                { "year": 2005, "low": 9102, "high": 9104, "livery": "bc-transit-classic" },
+                { "year": 2005, "low": 9105, "high": 9106, "livery": "bc-transit" }
+            ]
         ],
         "new-flyer-h40lfr": [
-            { "year": 2009, "low": 1000, "high": 1019 }
+            [
+                { "year": 2009, "low": 1000, "high": 1019, "livery": "bc-transit" }
+            ]
         ],
         "new-flyer-xe40": [
-            { "year": 2025, "low": 7500, "high": 7524 }
+            [
+                { "year": 2025, "low": 7500, "high": 7524, "livery": "bc-transit-green-front" }
+            ]
         ],
         "new-flyer-xn40": [
-            { "year": 2013, "low": 1020, "high": 1044 },
-            { "year": 2015, "low": 1045, "high": 1069 },
-            { "year": 2016, "low": 1070, "high": 1114 },
-            { "year": 2017, "low": 1115, "high": 1139 },
-            { "year": 2018, "low": 1140, "high": 1147 },
-            { "year": 2019, "low": 1148, "high": 1185 },
-            { "year": 2020, "low": 1186, "high": 1212 },
-            { "year": 2021, "low": 1213, "high": 1232 },
-            { "year": 2022, "low": 1233, "high": 1253 },
-            { "year": 2024, "low": 1254, "high": 1261 },
-            { "year": 2025, "low": 1262, "high": 1277 }
+            [
+                { "year": 2013, "low": 1020, "high": 1044, "livery": "bc-transit-green-back" }
+            ],
+            [
+                { "year": 2015, "low": 1045, "high": 1069, "livery": "bc-transit-green-back" }
+            ],
+            [
+                { "year": 2016, "low": 1070, "high": 1114, "livery": "bc-transit-green-back" }
+            ],
+            [
+                { "year": 2017, "low": 1115, "high": 1139, "livery": "bc-transit-green-back" }
+            ],
+            [
+                { "year": 2018, "low": 1140, "high": 1147, "livery": "bc-transit-green-back" }
+            ],
+            [
+                { "year": 2019, "low": 1148, "high": 1185, "livery": "bc-transit-green-back" }
+            ],
+            [
+                { "year": 2020, "low": 1186, "high": 1202, "livery": "bc-transit-green-back" },
+                { "year": 2020, "low": 1203, "high": 1212, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2021, "low": 1213, "high": 1232, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2022, "low": 1233, "high": 1253, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2024, "low": 1254, "high": 1261, "livery": "bc-transit-green-front" }
+            ],
+            [
+                { "year": 2025, "low": 1262, "high": 1277, "livery": "bc-transit-green-front" }
+            ]
         ],
         "nova-bus-lfs-2": [
-            { "year": 2006, "low": 9201, "high": 9231 },
-            { "year": 2007, "low": 9232, "high": 9267 },
-            { "year": 2008, "low": 9268, "high": 9289 },
-            { "year": 2008, "low": 9301, "high": 9318 }
+            [
+                { "year": 2006, "low": 9201, "high": 9231, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2007, "low": 9232, "high": 9267, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2008, "low": 9268, "high": 9289, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2008, "low": 9301, "high": 9318, "livery": "bc-transit" }
+            ]
         ],
         "nova-bus-lfs-3": [
-            { "year": 2009, "low": 9319, "high": 9433 },
-            { "year": 2012, "number": 9434 },
-            { "year": 2013, "low": 9435, "high": 9446 }
+            [
+                { "year": 2009, "low": 9319, "high": 9433, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2012, "number": 9434, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2013, "low": 9435, "high": 9446, "livery": "bc-transit" }
+            ]
         ],
         "nova-bus-lfs-4": [
-            { "year": 2015, "low": 9447, "high": 9486 },
-            { "year": 2017, "low": 6000, "high": 6029 }
+            [
+                { "year": 2015, "low": 9447, "high": 9486, "livery": "bc-transit" }
+            ],
+            [
+                { "year": 2017, "low": 6000, "high": 6029, "livery": "bc-transit" }
+            ]
         ],
         "nova-bus-lfs-suburban-2": [
-            { "year": 2008, "low": 9290, "high": 9300 }
+            [
+                { "year": 2008, "low": 9290, "high": 9300, "livery": "bc-transit" }
+            ]
         ],
         "nova-bus-lfse+": [
-            { "year": 2025, "low": 7010, "high": 7011 }
+            [
+                { "year": 2025, "low": 7010, "high": 7011, "livery": "bc-transit-green-front" }
+            ]
         ],
         "proterra-zx5": [
-            { "year": 2022, "number": 9093, "demo": true }
+            [
+                { "year": 2022, "number": 9093, "demo": true }
+            ]
         ],
         "transbus-trident-iii": [
-            { "year": 2002, "low": 9021, "high": 9039 }
+            [
+                { "year": 2002, "low": 9021, "high": 9039, "livery": "bc-transit" }
+            ]
         ],
         "unknown": [
-            { "number": 0, "visible": false },
-            { "number": 46, "visible": false },
-            { "number": 49, "visible": false },
-            { "number": 53, "visible": false },
-            { "number": 65, "visible": false },
-            { "low": 92, "high": 94, "visible": false },
-            { "low": 990, "high": 999, "visible": false },
-            { "number": 1717, "visible": false },
-            { "number": 7404, "visible": false },
-            { "number": 7812, "visible": false },
-            { "number": 8888, "visible": false },
-            { "low": 9980, "high": 9999, "visible": false }
+            [
+                { "number": 0, "visible": false },
+                { "number": 46, "visible": false },
+                { "number": 49, "visible": false },
+                { "number": 53, "visible": false },
+                { "number": 65, "visible": false },
+                { "low": 92, "high": 94, "visible": false },
+                { "low": 990, "high": 999, "visible": false },
+                { "number": 1717, "visible": false },
+                { "number": 7404, "visible": false },
+                { "number": 7812, "visible": false },
+                { "number": 8888, "visible": false },
+                { "low": 9980, "high": 9999, "visible": false }
+            ]
         ],
         "vmc-classic-vi30-cng": [
-            { "year": 2022, "low": 4234, "high": 4248 }
+            [
+                { "year": 2022, "low": 4234, "high": 4248, "livery": "bc-transit" }
+            ]
         ]
     }
 }

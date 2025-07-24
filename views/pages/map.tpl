@@ -295,7 +295,7 @@
             
             const model = document.createElement("div");
             model.className = "lighter-text";
-            model.innerHTML = position.bus_order;
+            model.innerHTML = position.bus_year_model;
             content.appendChild(model);
             
             const headsign = document.createElement("div");

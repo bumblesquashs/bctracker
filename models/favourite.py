@@ -22,7 +22,7 @@ class Favourite:
         type = parts[0]
         if type == 'vehicle':
             context = Context.find(agency_id=parts[1])
-            value = Bus.find(context, int(parts[2]))
+            value = context.find_bus(int(parts[2]))
         elif type == 'route':
             context = Context.find(system_id=parts[1])
             if context.prefer_route_id:
