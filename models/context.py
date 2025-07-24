@@ -173,6 +173,6 @@ class Context:
                 return f'Search for {self} {values[0]}'
             if len(values) == 2:
                 return f'Search for {self} {values[0]} and {values[1]}'
-            values_string = ','.join(values[:-1])
+            values_string = ', '.join(values[:-1])
             return f'Search for {self} {values_string}, and {values[-1]}'
         return 'Search for buses in all systems'
