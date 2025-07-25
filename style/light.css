@@ -5,6 +5,8 @@
     
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
+    
+    --livery-border: #000000;
 }
 
 #map-controls .control.error {

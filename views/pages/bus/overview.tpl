@@ -238,11 +238,9 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        % if len(order.buses) > 1:
-                            <div class="section">
-                                % include('components/order_details', order=order)
-                            </div>
-                        % end
+                        <div class="section">
+                            % include('components/order_details', livery=bus.find_livery())
+                        </div>
                         % if model:
                             <div class="row section">
                                 <div class="name">Vehicle Type</div>

@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.agency import Agency
-    from models.order import Order
 
 from dataclasses import dataclass, field
 
@@ -70,3 +69,9 @@ class Bus:
     def find_decoration(self):
         '''Returns the decoration for this bus, if one exists'''
         return repositories.decoration.find(self.agency.id, self.number)
+    
+    def find_livery(self):
+        '''Returns the livery for this bus, if one exists'''
+        if self.livery:
+            return repositories.livery.find(self.agency.id, self.livery)
+        return None

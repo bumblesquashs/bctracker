@@ -153,6 +153,8 @@ class Position:
         decoration = self.bus.find_decoration()
         if decoration and decoration.enabled:
             data['decoration'] = str(decoration)
+        if self.bus.livery:
+            data['livery'] = self.bus.livery
         trip = self.trip
         if trip:
             departure = self.departure

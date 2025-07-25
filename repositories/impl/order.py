@@ -21,6 +21,7 @@ class OrderRepository:
         self.buses = {}
         repositories.agency.load()
         repositories.model.load()
+        repositories.livery.load()
         id = 1
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():

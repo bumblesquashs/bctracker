@@ -3,6 +3,7 @@ from .agency import AgencyRepository
 from .assignment import AssignmentRepository
 from .decoration import DecorationRepository
 from .departure import DepartureRepository
+from .livery import LiveryRepository
 from .model import ModelRepository
 from .order import OrderRepository
 from .overview import OverviewRepository
