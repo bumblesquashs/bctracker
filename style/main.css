@@ -577,6 +577,10 @@ table tr.table-button {
     text-align: right;
 }
 
+.amenity {
+    --image-size: 24px;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;

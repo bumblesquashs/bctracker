@@ -25,7 +25,10 @@ class Bus:
     visible: bool = True
     demo: bool = False,
     livery: str | None = None
+    accessible: bool = True
     air_conditioned: bool = True
+    usb_charging: bool = False
+    cctv: bool = True
     
     key: tuple = field(init=False)
     
@@ -50,6 +53,10 @@ class Bus:
                 return f'{self.year} {self.model}'
             return str(self.model)
         return None
+    
+    @property
+    def has_amenities(self):
+        return any([self.accessible, self.air_conditioned, self.usb_charging, self.cctv])
     
     def __post_init__(self):
         self.key = helpers.key(self.name)

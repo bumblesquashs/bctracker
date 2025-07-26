@@ -259,6 +259,39 @@
                                 </div>
                             % end
                         % end
+                        % if bus.has_amenities:
+                            <div class="row section">
+                                <div class="name">Amenities</div>
+                                <div class="value">
+                                    <div class="row gap-5">
+                                        % if bus.accessible:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/accessible')
+                                                <div class="tooltip right">Accessible</div>
+                                            </div>
+                                        % end
+                                        % if bus.air_conditioned:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/air-conditioned')
+                                                <div class="tooltip right">Air conditioned</div>
+                                            </div>
+                                        % end
+                                        % if bus.usb_charging:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/usb')
+                                                <div class="tooltip right">USB charging ports</div>
+                                            </div>
+                                        % end
+                                        % if bus.cctv:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/cctv')
+                                                <div class="tooltip right">CCTV cameras</div>
+                                            </div>
+                                        % end
+                                    </div>
+                                </div>
+                            </div>
+                        % end
                     </div>
                 </div>
             </div>
