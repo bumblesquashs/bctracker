@@ -137,9 +137,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % orders = {f.value.order for f in vehicle_favourites}
-                                            % for order in sorted(orders):
-                                                % order_favourites = [f for f in vehicle_favourites if f.value.order == order]
+                                            % for order in orders:
+                                                % order_favourites = [f for f in vehicle_favourites if f.value.order_id == order.id]
                                                 <tr class="header">
                                                     <td colspan="2">{{! order }}</td>
                                                 </tr>

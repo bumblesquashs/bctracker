@@ -362,12 +362,16 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
+        favourites = self.get_favourites()
+        order_ids = {f.value.order_id for f in favourites if f.type == 'vehicle' and f.value.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='home',
             title='Home',
             enable_refresh=False,
-            favourites=self.get_favourites()
+            favourites=favourites,
+            orders=orders
         )
     
     def news(self, context: Context):
