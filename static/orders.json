@@ -64,15 +64,9 @@
                 { "year": 2010, "low": 2311, "high": 2315, "livery": "green-blue-stripes", "cctv": false }
             ],
             [
-                { "year": 2012, "low": 2316, "high": 2339, "livery": "green-blue-stripes", "cctv": false }
-            ],
-            [
-                { "year": 2012, "low": 2342, "high": 2344, "livery": "green-blue-stripes", "cctv": false }
-            ],
-            [
-                { "year": 2012, "low": 2347, "high": 2367, "livery": "green-blue-stripes", "cctv": false }
-            ],
-            [
+                { "year": 2012, "low": 2316, "high": 2339, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 2012, "low": 2342, "high": 2344, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 2012, "low": 2347, "high": 2367, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 2012, "low": 2369, "high": 2377, "livery": "green-blue-stripes", "cctv": false }
             ],
             [
@@ -253,7 +247,7 @@
                 { "year": 1998, "low": 9815, "high": 9828, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
                 { "year": 1998, "low": 9831, "high": 9854, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1998, "number": 9855, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1998, "number": 9866, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1998, "number": 9856, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1998, "low": 9861, "high": 9878, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1998, "low": 9881, "high": 9891, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false }
             ]
