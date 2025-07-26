@@ -577,6 +577,10 @@ table tr.table-button {
     text-align: right;
 }
 
+.amenity {
+    --image-size: 24px;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;
@@ -612,6 +616,10 @@ table tr.table-button {
 
 .bearing.occupancy {
     border-bottom-color: var(--occupancy-background);
+}
+
+.bearing.livery-style {
+    border-bottom-color: var(--livery-border);
 }
 
 .block-timeline {
@@ -918,6 +926,14 @@ table tr.table-button {
     font-style: italic;
 }
 
+.livery {
+    border: 1px solid var(--livery-border);
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
 .marker {
     position: relative;
     font-family: var(--sans-serif-font);
@@ -1101,6 +1117,18 @@ table tr.table-button {
     --image-color: var(--occupancy-foreground);
 }
 
+.marker .icon.livery {
+    border-color: var(--livery-border);
+    padding: 0px;
+    width: 32px;
+    height: 32px;
+}
+
+.marker .icon.livery img {
+    width: 100%;
+    height: 100%;
+}
+
 .marker.small .icon {
     width: 12px;
     height: 12px;
@@ -1217,6 +1245,12 @@ table tr.table-button {
     background-color: var(--radio-button-color);
 }
 
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .order-details .content {
     display: flex;
     flex-direction: row;
@@ -1226,7 +1260,6 @@ table tr.table-button {
 }
 
 .order-details .title {
-    margin-bottom: 5px;
     text-align: center;
     font-weight: bold;
 }

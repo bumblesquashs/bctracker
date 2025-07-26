@@ -58,7 +58,7 @@
                                         <tr class="header">
                                             <td>{{ type }}</td>
                                             <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model and o.bus.model.type == type]) }}</td>
-                                            <td class="align-right">{{ sum([o.size for o in orders if o.model.type == type]) }}</td>
+                                            <td class="align-right">{{ sum([len(o.buses) for o in orders if o.model.type == type]) }}</td>
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % type_models = [m for m in models if m.type == type]
@@ -66,14 +66,14 @@
                                             <tr>
                                                 <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                                 <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model and o.bus.model == model]) }}</td>
-                                                <td class="align-right">{{ sum([o.size for o in orders if o.model == model]) }}</td>
+                                                <td class="align-right">{{ sum([len(o.buses) for o in orders if o.model == model]) }}</td>
                                             </tr>
                                         % end
                                     % end
                                     <tr class="header">
                                         <td>Total</td>
                                         <td class="align-right">{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
-                                        <td class="align-right">{{ sum([o.size for o in orders]) }}</td>
+                                        <td class="align-right">{{ sum([len(o.buses) for o in orders]) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -113,13 +113,13 @@
                                                             <tr class="header">
                                                                 <td colspan="5">
                                                                     <div class="row space-between">
-                                                                        <div>{{ order.year }}</div>
-                                                                        <div>{{ order.size }}</div>
+                                                                        <div>{{ order.years_string }}</div>
+                                                                        <div>{{ len(order.buses) }}</div>
                                                                     </div>
                                                                 </td>
                                                             </tr>
                                                             <tr class="display-none"></tr>
-                                                            % for bus in order:
+                                                            % for bus in order.buses:
                                                                 % if bus.number in overviews:
                                                                     % overview = overviews[bus.number]
                                                                     <tr>

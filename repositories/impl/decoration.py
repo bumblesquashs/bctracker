@@ -20,9 +20,9 @@ class DecorationRepository:
                     agency_decorations[bus_number] = Decoration(agency_id, bus_number, **values)
                 self.decorations[agency_id] = agency_decorations
     
-    def find(self, bus) -> Decoration | None:
-        '''Returns the decorations with the given bus number'''
+    def find(self, agency_id, bus_number) -> Decoration | None:
+        '''Returns the decorations with the given bus ID'''
         try:
-            return self.decorations[bus.context.agency_id][bus.number]
+            return self.decorations[agency_id][bus_number]
         except KeyError:
             return None

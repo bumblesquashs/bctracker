@@ -116,6 +116,8 @@
                 } else if (busMarkerStyle === "occupancy") {
                     bearing.classList.add("occupancy");
                     bearing.classList.add(position.occupancy_status_class);
+                } else if (busMarkerStyle === "livery") {
+                    bearing.classList.add("livery-style");
                 } else {
                     bearing.style.borderBottomColor = "#" + position.colour;
                 }
@@ -186,6 +188,9 @@
                 } else {
                     icon.innerHTML += getSVG(position.occupancy_icon);
                 }
+            } else if (busMarkerStyle === "livery" && position.livery) {
+                icon.classList.add("livery");
+                icon.innerHTML = '<img src="/img/liveries/' + position.livery  +'.png" />';
             } else {
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
@@ -215,7 +220,7 @@
             
             const model = document.createElement("div");
             model.className = "lighter-text";
-            model.innerHTML = position.bus_order;
+            model.innerHTML = position.bus_year_model;
             content.appendChild(model);
                 
             const headsign = document.createElement("div");

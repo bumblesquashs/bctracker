@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 import json
 
+from models.bus import Bus
 from models.context import Context
 from models.match import Match
 from models.order import Order
@@ -11,37 +12,46 @@ import repositories
 @dataclass(slots=True)
 class OrderRepository:
     
-    orders: dict[str, list[Order]] = field(default_factory=dict)
+    orders: dict[str, dict[int, Order]] = field(default_factory=dict)
+    buses: dict[str, dict[int, Bus]] = field(default_factory=dict)
     
     def load(self):
         '''Loads order data from the static JSON file'''
         self.orders = {}
+        self.buses = {}
         repositories.agency.load()
         repositories.model.load()
+        repositories.livery.load()
+        id = 1
         with open(f'./static/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency = repositories.agency.find(agency_id)
-                agency_orders = []
+                agency_orders = {}
+                agency_buses = {}
                 for (model_id, model_values) in agency_values.items():
                     model = repositories.model.find(model_id)
                     for values in model_values:
-                        if 'number' in values:
-                            values['low'] = values['number']
-                            values['high'] = values['number']
-                            del values['number']
-                        if 'exceptions' in values:
-                            values['exceptions'] = set(values['exceptions'])
-                        agency_orders.append(Order(agency, model, **values))
+                        order = Order.from_json(id, agency, model, values)
+                        agency_orders[id] = order
+                        for bus in order.buses:
+                            agency_buses[bus.number] = bus
+                        id += 1
                 self.orders[agency_id] = agency_orders
+                self.buses[agency_id] = agency_buses
     
-    def find(self, context: Context, bus) -> Order | None:
-        '''Returns the order containing the given bus number'''
-        bus_number = getattr(bus, 'number', bus)
+    def find_bus(self, context: Context, number: int) -> Bus | None:
         try:
-            agency_orders = self.orders[context.agency_id]
-            for order in agency_orders:
-                if bus_number in order:
-                    return order
+            return self.buses[context.agency_id][number]
+        except:
+            if context.vehicle_name_length:
+                name = f'{number:0{context.vehicle_name_length}d}'
+            else:
+                name = str(number)
+            return Bus(context.agency, number, name)
+    
+    def find_order(self, context: Context, id: int) -> Order | None:
+        try:
+            return self.orders[context.agency_id][id]
         except KeyError:
             return None
     
@@ -49,34 +59,36 @@ class OrderRepository:
         '''Returns all orders'''
         if context.agency:
             try:
-                return self.orders[context.agency_id]
+                return sorted(self.orders[context.agency_id].values())
             except KeyError:
                 return []
-        return [o for a in self.orders.values() for o in a]
+        return sorted([o for a in self.orders.values() for o in a.values()])
     
     def find_matches(self, context: Context, query, recorded_bus_numbers) -> list[Match]:
         '''Returns matching buses for a given query'''
         matches = []
-        orders = self.find_all(context)
-        for order in orders:
-            if not order.visible:
+        try:
+            buses = self.buses[context.agency_id].values()
+        except KeyError:
+            buses = [b for a in self.buses.values() for b in a.values()]
+        for bus in buses:
+            if not bus.visible:
                 continue
-            order_string = str(order)
-            if not order.model or not order.model.type:
+            year_model = bus.year_model or 'Unknown year/model'
+            if not bus.model or not bus.model.type:
                 model_icon = 'ghost'
             else:
-                model_icon = f'model/type/bus-{order.model.type.name}'
-            for bus in order:
-                bus_number_string = str(bus)
-                value = 0
-                if query in bus_number_string:
-                    value += (len(query) / len(bus_number_string)) * 100
-                    if bus_number_string.startswith(query):
-                        value += len(query)
-                if bus.number not in recorded_bus_numbers:
-                    value /= 10
-                decoration = bus.find_decoration()
-                if decoration and decoration.enabled:
-                    bus_number_string += f' {decoration}'
-                matches.append(Match(f'Bus {bus_number_string}', order_string, model_icon, f'bus/{bus.url_id}', value))
+                model_icon = f'model/type/bus-{bus.model.type.name}'
+            value = 0
+            if query in bus.name:
+                value += (len(query) / len(bus.name)) * 100
+                if bus.name.startswith(query):
+                    value += len(query)
+            if bus.number not in recorded_bus_numbers:
+                value /= 10
+            decoration = bus.find_decoration()
+            name = bus.name
+            if decoration and decoration.enabled:
+                name += f' {decoration}'
+            matches.append(Match(f'Bus {name}', year_model, model_icon, f'bus/{bus.url_id}', value))
         return matches

@@ -109,12 +109,12 @@
                                                             <div class="column">
                                                                 % include('components/bus')
                                                                 <span class="mobile-only smaller-font">
-                                                                    % include('components/order', order=bus.order)
+                                                                    % include('components/year_model', year_model=bus.year_model)
                                                                 </span>
                                                             </div>
                                                         </td>
                                                         <td class="non-mobile">
-                                                            % include('components/order', order=bus.order)
+                                                            % include('components/year_model', year_model=bus.year_model)
                                                         </td>
                                                     % else:
                                                         <td class="non-mobile lighter-text" colspan="2">Unavailable</td>

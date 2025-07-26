@@ -87,12 +87,12 @@
                         % end
                     </div>
                     <span class="non-desktop smaller-font">
-                        % include('components/order', order=bus.order)
+                        % include('components/year_model', year_model=bus.year_model)
                     </span>
                 </div>
             </td>
             <td class="desktop-only">
-                % include('components/order', order=bus.order)
+                % include('components/year_model', year_model=bus.year_model)
             </td>
         % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
             % assignment = assignments[(trip.context.system_id, trip.block_id)]
@@ -104,12 +104,12 @@
                         % include('components/scheduled')
                     </div>
                     <span class="non-desktop smaller-font">
-                        % include('components/order', order=bus.order)
+                        % include('components/year_model', year_model=bus.year_model)
                     </span>
                 </div>
             </td>
             <td class="desktop-only">
-                % include('components/order', order=bus.order)
+                % include('components/year_model', year_model=bus.year_model)
             </td>
         % else:
             <td class="desktop-only lighter-text" colspan="2">Unavailable</td>

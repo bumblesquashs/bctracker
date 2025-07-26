@@ -119,7 +119,7 @@ class RecordRepository:
             },
             order_by='record.last_seen ASC'
         )
-        return {row['trip_id']: Bus.find(context, row['bus_number']) for row in rows}
+        return {row['trip_id']: context.find_bus(row['bus_number']) for row in rows}
     
     def find_recorded_today_by_block(self, context: Context) -> dict[str, Bus]:
         '''Returns all bus numbers matching the given context that werer ecorded on the current date'''
@@ -135,7 +135,7 @@ class RecordRepository:
             },
             order_by='record.last_seen ASC'
         )
-        return {row['block_id']: Bus.find(context, row['bus_number']) for row in rows}
+        return {row['block_id']: context.find_bus(row['bus_number']) for row in rows}
     
     def count(self, context: Context = Context(), bus=None, block=None, trip=None) -> int:
         '''Returns the number of records for the given system, bus, block, and trip'''

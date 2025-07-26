@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.agency import Agency
+    from models.bus import Bus
     from models.system import System
 
 from dataclasses import dataclass
@@ -158,6 +159,9 @@ class Context:
         if not other.agency:
             return False
         return self.agency < other.agency
+    
+    def find_bus(self, number: int) -> Bus:
+        return repositories.order.find_bus(self, number)
     
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''

@@ -95,7 +95,8 @@
                         <div class="container">
                             % for model in type_models:
                                 % model_positions = sorted([p for p in positions if p.bus.model and p.bus.model == model])
-                                % model_years = sorted({p.bus.order.year for p in model_positions})
+                                % model_order_ids = {p.bus.order_id for p in model_positions}
+                                % model_orders = [o for o in orders if o.id in model_order_ids]
                                 <div id="{{ model.id }}" class="section">
                                     <div class="header" onclick="toggleSection(this)">
                                         <h3>{{! model }}</h3>
@@ -118,18 +119,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                % for year in model_years:
-                                                    % year_positions = [p for p in model_positions if p.bus.order.year == year]
+                                                % for order in model_orders:
+                                                    % order_positions = [p for p in model_positions if p.bus.order_id == order.id]
                                                     <tr class="header">
                                                         <td colspan="7">
                                                             <div class="row space-between">
-                                                                <div>{{ year }}</div>
-                                                                <div>{{ len(year_positions) }}</div>
+                                                                <div>{{ order.years_string }}</div>
+                                                                <div>{{ len(order_positions) }}</div>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr class="display-none"></tr>
-                                                    % for position in year_positions:
+                                                    % for position in order_positions:
                                                         % include('rows/realtime', position=position)
                                                     % end
                                                 % end
@@ -143,7 +144,7 @@
                 </div>
             % end
             
-            % unknown_positions = sorted([p for p in positions if not p.bus.order])
+            % unknown_positions = sorted([p for p in positions if not p.bus.order_id])
             % if unknown_positions:
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">

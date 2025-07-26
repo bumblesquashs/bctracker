@@ -7,18 +7,16 @@ from models.model import Model
 
 @dataclass(slots=True)
 class Order:
-    '''A range of buses of a specific model ordered in a specific year'''
+    '''A set of buses of a specific model'''
     
+    id: int
     agency: Agency
-    model: Model
-    low: int
-    high: int
-    year: int | None = None
-    visible: bool = True
-    demo: bool = False
-    exceptions: set[int] = field(default_factory=set)
+    model: Model | None
+    buses: list[Bus]
     
-    size: int = field(init=False)
+    key: tuple = field(init=False)
+    years: int = field(init=False)
+    visible: bool = field(init=False)
     
     @property
     def context(self):
@@ -26,60 +24,75 @@ class Order:
         return self.agency.context
     
     @property
-    def first_bus(self):
-        '''The first bus in the order'''
-        return Bus(self.agency, self.low, self)
-    
-    @property
-    def last_bus(self):
-        '''The last bus in the order'''
-        return Bus(self.agency, self.high, self)
+    def years_string(self) -> str:
+        if self.years:
+            if len(self.years) == 1:
+                return str(self.years[0])
+            return f'{self.years[0]}-{self.years[-1]}'
+        return 'Unknown Year'
     
     def __post_init__(self):
-        self.size = (self.high - self.low) + 1 - len(self.exceptions)
+        self.key = min([b.key for b in self.buses])
+        self.years = sorted({b.year for b in self.buses})
+        self.visible = any(b.visible for b in self.buses)
     
     def __str__(self):
-        model = self.model
-        year = self.year
-        if model and year:
-            return f'{year} {model}'
+        if self.model:
+            if self.years:
+                if len(self.years) == 1:
+                    return f'{self.years[0]} {self.model}'
+                return f'{self.years[0]}-{self.years[-1]} {self.model}'
+            return str(self.model)
         return 'Unknown year/model'
     
     def __hash__(self):
-        return hash((self.context, self.low, self.high))
+        return hash(self.id)
     
     def __eq__(self, other):
-        return self.context == other.context and self.low == other.low and self.high == other.high
+        return self.id == other.id
     
     def __lt__(self, other):
-        if self.context == other.context:
-            return self.low < other.low
-        return self.context < other.context
+        if self.agency == other.agency:
+            return self.key < other.key
+        return self.agency < other.agency
     
-    def __iter__(self):
-        for number in range(self.low, self.high + 1):
-            if number not in self.exceptions:
-                yield Bus(self.agency, number, self)
-    
-    def __contains__(self, bus_number):
-        if bus_number in self.exceptions:
-            return False
-        return self.low <= bus_number <= self.high
-    
-    def previous_bus(self, bus_number):
-        '''The previous bus before the given bus number'''
-        if bus_number <= self.low:
+    def previous_bus(self, bus):
+        '''The previous bus before the given bus'''
+        try:
+            index = self.buses.index(bus)
+            return self.buses[index - 1]
+        except (IndexError, ValueError):
             return None
-        previous_bus_number = bus_number - 1
-        if previous_bus_number in self.exceptions:
-            return self.previous_bus(previous_bus_number)
-        return Bus(self.agency, previous_bus_number, self)
     
-    def next_bus(self, bus_number):
-        '''The next bus following the given bus number'''
-        if bus_number >= self.high:
+    def next_bus(self, bus):
+        '''The next bus following the given bus'''
+        try:
+            index = self.buses.index(bus)
+            return self.buses[index + 1]
+        except (IndexError, ValueError):
             return None
-        next_bus_number = bus_number + 1
-        if next_bus_number in self.exceptions:
-            return self.next_bus(next_bus_number)
-        return Bus(self.agency, next_bus_number, self)
+    
+    @classmethod
+    def from_json(cls, id: int, agency: Agency, model: Model | None, rows: list):
+        buses = []
+        for row in rows:
+            if 'number' in row:
+                number = row['number']
+                del row['number']
+                if agency.vehicle_name_length:
+                    name = f'{number:0{agency.vehicle_name_length}d}'
+                else:
+                    name = str(number)
+                buses.append(Bus(agency, number, name, id, model, **row))
+            else:
+                low = row['low']
+                high = row['high']
+                del row['low']
+                del row['high']
+                for number in range(low, high + 1):
+                    if agency.vehicle_name_length:
+                        name = f'{number:0{agency.vehicle_name_length}d}'
+                    else:
+                        name = str(number)
+                    buses.append(Bus(agency, number, name, id, model, **row))
+        return cls(id, agency, model, buses)

@@ -38,7 +38,7 @@ class Position:
     def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
         context = row.context()
-        bus = Bus.find(context, row['bus_number'])
+        bus = context.find_bus(row['bus_number'])
         trip_id = row['trip_id']
         stop_id = row['stop_id']
         block_id = row['block_id']
@@ -140,19 +140,21 @@ class Position:
             'occupancy_status_class': self.occupancy.status_class,
             'occupancy_icon': self.occupancy.icon
         }
-        order = self.bus.order
-        if order:
-            data['bus_order'] = str(order).replace("'", '&apos;')
-            if order.model and order.model.type:
-                data['bus_icon'] = f'model/type/bus-{order.model.type.name}'
-            else:
-                data['bus_icon'] = 'ghost'
+        year_model = self.bus.year_model
+        if year_model:
+            data['bus_year_model'] = year_model.replace("'", '&apos;')
         else:
-            data['bus_order'] = 'Unknown Year/Model'
+            data['bus_year_model'] = 'Unknown Year/Model'
+        model = self.bus.model
+        if model and model.type:
+            data['bus_icon'] = f'model/type/bus-{model.type.name}'
+        else:
             data['bus_icon'] = 'ghost'
         decoration = self.bus.find_decoration()
         if decoration and decoration.enabled:
             data['decoration'] = str(decoration)
+        if self.bus.livery:
+            data['livery'] = self.bus.livery
         trip = self.trip
         if trip:
             departure = self.departure

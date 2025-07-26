@@ -34,7 +34,7 @@ class Record:
         '''Returns a record initialized from the given database row'''
         context = row.context()
         id = row['id']
-        bus = Bus.find(context, row['bus_number'])
+        bus = context.find_bus(row['bus_number'])
         date = Date.parse(row['date'], context.timezone)
         block_id = row['block_id']
         route_numbers = [n.strip() for n in row['routes'].split(',')]

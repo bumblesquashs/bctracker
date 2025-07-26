@@ -5,6 +5,8 @@
     
     --adherence-background: #444444;
     --adherence-text: #FFFFFF;
+    
+    --livery-border: #FFFFFF;
 }
 
 #map .route-layer {

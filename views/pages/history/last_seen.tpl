@@ -112,9 +112,8 @@
             </div>
             <div class="content">
                 % if overviews:
-                    % known_overviews = [o for o in overviews if o.bus.order]
-                    % unknown_overviews = [o for o in overviews if not o.bus.order]
-                    % orders = sorted({o.bus.order for o in known_overviews})
+                    % known_overviews = [o for o in overviews if o.bus.order_id]
+                    % unknown_overviews = [o for o in overviews if not o.bus.order_id]
                     % if [o for o in overviews if o.last_record and o.last_record.warnings]:
                         <p>
                             <span>Entries with a</span>
@@ -199,7 +198,7 @@
                                 % end
                             % end
                             % for order in orders:
-                                % order_overviews = [o for o in known_overviews if o.bus.order == order]
+                                % order_overviews = [o for o in known_overviews if o.bus.order_id == order.id]
                                 <tr class="header">
                                     <td colspan="5">
                                         <div class="row space-between">

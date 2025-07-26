@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from .impl.assignment import AssignmentRepository
     from .impl.decoration import DecorationRepository
     from .impl.departure import DepartureRepository
+    from .impl.livery import LiveryRepository
     from .impl.model import ModelRepository
     from .impl.order import OrderRepository
     from .impl.overview import OverviewRepository
@@ -25,6 +26,7 @@ agency: AgencyRepository
 assignment: AssignmentRepository
 decoration: DecorationRepository
 departure: DepartureRepository
+livery: LiveryRepository
 model: ModelRepository
 order: OrderRepository
 overview: OverviewRepository

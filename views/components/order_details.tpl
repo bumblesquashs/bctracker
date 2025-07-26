@@ -1,29 +1,50 @@
-% order = bus.order
 <div class="order-details">
-    <div class="title">{{! order }}</div>
-    <div class="content">
-        % if bus.number > order.low:
-            % first_bus = order.first_bus
-            % previous_bus = order.previous_bus(bus.number)
-            % include('components/bus', bus=first_bus)
-            % if previous_bus.number > order.low:
-                % include('components/svg', name='paging/left-triple')
-                % include('components/bus', bus=previous_bus)
-            % end
-            % include('components/svg', name='paging/left')
+    <div class="row space-between">
+        % if livery:
+            <div style="width: 40px"></div>
         % end
-        
-        % include('components/bus', enable_link=False)
-        
-        % if bus.number < order.high:
-            % last_bus = order.last_bus
-            % next_bus = order.next_bus(bus.number)
-            % include('components/svg', name='paging/right')
-            % if next_bus.number < order.high:
-                 % include('components/bus', bus=next_bus)
-                 % include('components/svg', name='paging/right-triple')
-            % end
-            % include('components/bus', bus=last_bus)
+        <div class="column center">
+            <div class="title">{{! order }}</div>
+            <div class="content lighter-text smaller-font">
+                % if len(order.buses) == 1:
+                    1 Bus
+                % else:
+                    {{ len(order.buses) }} buses
+                % end
+            </div>
+        </div>
+        % if livery:
+            <div>
+                % include('components/livery')
+            </div>
         % end
     </div>
+    % if len(order.buses) > 1:
+        <div class="content">
+            % first_bus = order.buses[0]
+            % if bus > first_bus:
+                % include('components/bus', bus=first_bus)
+                
+                % previous_bus = order.previous_bus(bus)
+                % if previous_bus > first_bus:
+                    % include('components/svg', name='paging/left-triple')
+                    % include('components/bus', bus=previous_bus)
+                % end
+                % include('components/svg', name='paging/left')
+            % end
+            
+            % include('components/bus', enable_link=False)
+            
+            % last_bus = order.buses[-1]
+            % if bus < last_bus:
+                % include('components/svg', name='paging/right')
+                % next_bus = order.next_bus(bus)
+                % if next_bus < last_bus:
+                    % include('components/bus', bus=next_bus)
+                    % include('components/svg', name='paging/right-triple')
+                % end
+                % include('components/bus', bus=last_bus)
+            % end
+        </div>
+    % end
 </div>

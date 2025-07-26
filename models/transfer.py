@@ -37,7 +37,7 @@ class Transfer:
         '''Returns a transfer initialized from the given database row'''
         id = row['id']
         context = Context.find(agency_id='bc-transit')
-        bus = Bus.find(context, row['bus_number'])
+        bus = context.find_bus(row['bus_number'])
         old_context = row.context('old_system_id')
         new_context = row.context('new_system_id')
         date = Date.parse(row['date'], new_context.timezone)

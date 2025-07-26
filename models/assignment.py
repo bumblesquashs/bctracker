@@ -7,7 +7,6 @@ if TYPE_CHECKING:
 
 from dataclasses import dataclass
 
-from models.bus import Bus
 from models.date import Date
 from models.row import Row
 
@@ -42,4 +41,4 @@ class Assignment:
     @property
     def bus(self):
         '''The bus for this assignment'''
-        return Bus.find(self.context, self.bus_number)
+        return self.context.find_bus(self.bus_number)

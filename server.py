@@ -9,7 +9,6 @@ import cherrypy as cp
 from database import Database
 from settings import Settings
 
-from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.event import Event
@@ -22,7 +21,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 57
+VERSION = 58
 
 random = Random()
 
@@ -406,13 +405,16 @@ class Server(Bottle):
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
+        order_ids = {p.bus.order_id for p in positions if p.bus.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='realtime/all',
             title='Realtime',
             path=['realtime'],
             positions=positions,
-            show_nis=show_nis
+            show_nis=show_nis,
+            orders=orders
         )
     
     def realtime_routes(self, context: Context):
@@ -434,13 +436,15 @@ class Server(Bottle):
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
+        orders = repositories.order.find_all(context)
         return self.page(
             context=context,
             name='realtime/models',
             title='Realtime',
             path=['realtime', 'models'],
             positions=positions,
-            show_nis=show_nis
+            show_nis=show_nis,
+            orders = orders
         )
     
     def realtime_speed(self, context: Context):
@@ -471,15 +475,16 @@ class Server(Bottle):
         )
     
     def bus_overview(self, context: Context, bus_number):
-        bus = Bus.find(context, bus_number)
+        bus = context.find_bus(bus_number)
         overview = repositories.overview.find(bus)
-        if (not bus.order and not overview) or not bus.visible:
+        if (not bus.order_id and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
                 bus_number=bus_number
             )
+        order = repositories.order.find_order(context, bus.order_id)
         position = repositories.position.find(bus)
         records = repositories.record.find_all(bus=bus, limit=20)
         return self.page(
@@ -488,6 +493,7 @@ class Server(Bottle):
             title=f'Bus {bus}',
             include_maps=bool(position),
             bus=bus,
+            order=order,
             position=position,
             records=records,
             overview=overview,
@@ -496,9 +502,9 @@ class Server(Bottle):
         )
     
     def bus_map(self, context: Context, bus_number):
-        bus = Bus.find(context, bus_number)
+        bus = context.find_bus(bus_number)
         overview = repositories.overview.find(bus)
-        if (not bus.order and not overview) or not bus.visible:
+        if (not bus.order_id and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
                 name='invalid_bus',
@@ -518,9 +524,9 @@ class Server(Bottle):
         )
     
     def bus_history(self, context: Context, bus_number):
-        bus = Bus.find(context, bus_number)
+        bus = context.find_bus(bus_number)
         overview = repositories.overview.find(bus)
-        if (not bus.order and not overview) or not bus.visible:
+        if (not bus.order_id and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
                 name='invalid_bus',
@@ -571,6 +577,8 @@ class Server(Bottle):
     
     def history_last_seen(self, context: Context):
         overviews = [o for o in repositories.overview.find_all(context=context) if o.last_record and o.bus.visible]
+        order_ids = {o.bus.order_id for o in overviews if o.bus.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -587,6 +595,7 @@ class Server(Bottle):
                 'days': days
             },
             overviews=sorted(overviews, key=lambda o: o.bus),
+            orders=orders,
             days=days
         )
     
@@ -869,6 +878,8 @@ class Server(Bottle):
                 block_id=block_id
             )
         records = repositories.record.find_all(context, block=block)
+        order_ids = {r.bus.order_id for r in records if r.bus.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -878,6 +889,7 @@ class Server(Bottle):
             name='block/history',
             title=f'Block {block.id}',
             block=block,
+            orders=orders,
             records=records,
             events=events
         )
@@ -950,6 +962,8 @@ class Server(Bottle):
                 trip_id=trip_id
             )
         records = repositories.record.find_all(context, trip=trip)
+        order_ids = {r.bus.order_id for r in records if r.bus.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -960,6 +974,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             trip=trip,
             records=records,
+            orders=orders,
             events=events
         )
     
