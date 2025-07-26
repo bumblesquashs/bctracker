@@ -44,6 +44,9 @@
     --map-control-background: rgba(30, 30, 30, 0.7);
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
+    
+    --amenity-background: #565656;
+    --amenity-color: #FFFFFF;
 }
 
 a {

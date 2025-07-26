@@ -29,6 +29,9 @@
     --map-control-background: rgba(30, 30, 30, 0.7);
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
+    
+    --amenity-background: rgba(0, 0, 0, 0.6);
+    --amenity-color: #FFFFFF;
 }
 
 a {

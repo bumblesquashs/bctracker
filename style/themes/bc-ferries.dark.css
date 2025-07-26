@@ -6,7 +6,7 @@
  * Secondary Header: #003769
  * Menu: #001325
  * Borders: #003769
- * Selection: #565656
+ * Selection: #002241
  * 
  * Primary Text: #FFFFFF
  * Secondary Text: #ABABAB
@@ -41,11 +41,14 @@
     
     --stop-number-background: #000E1A;
     --stop-number-text: #FFFFFF;
-    --stop-number-border: #565656;
+    --stop-number-border: #003769;
     
     --map-control-background: rgba(30, 30, 30, 0.7);
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
+    
+    --amenity-background: #003769;
+    --amenity-color: #FFFFFF;
 }
 
 a {

@@ -44,10 +44,13 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --amenity-background: #CEE8FF;
+    --amenity-color: #003769;
 }
 
 a {
-    color: #003769;
+    color: #0057A5;
 }
 
 body {
@@ -422,7 +425,7 @@ table tr.table-button:hover {
 
 .tab-button {
     background-color: #FFFFFF;
-    color: #003769;
+    color: #0057A5;
 }
 
 .tab-button:hover {

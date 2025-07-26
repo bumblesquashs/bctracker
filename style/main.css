@@ -578,7 +578,11 @@ table tr.table-button {
 }
 
 .amenity {
-    --image-size: 24px;
+    background-color: var(--amenity-background);
+    border-radius: 50%;
+    padding: 4px;
+    --image-color: var(--amenity-color);
+    --image-size: 22px;
 }
 
 .banner {
