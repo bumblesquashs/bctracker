@@ -123,140 +123,142 @@
                             <span>may be accidental logins.</span>
                         </p>
                     % end
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bus</th>
-                                <th>Last Seen</th>
-                                % if not context.system:
-                                    <th class="non-mobile">System</th>
-                                % end
-                                % if context.enable_blocks:
-                                    <th>Block</th>
-                                    <th class="desktop-only">Routes</th>
-                                % else:
-                                    <th>Routes</th>
-                                % end
-                            </tr>
-                        </thead>
-                        <tbody>
-                            % if unknown_overviews:
-                                <tr class="header">
-                                    <td colspan="5">
-                                        <div class="row space-between">
-                                            <div>Unknown Year/Model</div>
-                                            <div>{{ len(unknown_overviews) }}</div>
-                                        </div>
-                                    </td>
+                    <div class="table-border-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bus</th>
+                                    <th>Last Seen</th>
+                                    % if not context.system:
+                                        <th class="non-mobile">System</th>
+                                    % end
+                                    % if context.enable_blocks:
+                                        <th>Block</th>
+                                        <th class="desktop-only">Routes</th>
+                                    % else:
+                                        <th>Routes</th>
+                                    % end
                                 </tr>
-                                <tr class="display-none"></tr>
-                                % for overview in unknown_overviews:
-                                    % record = overview.last_record
-                                    % bus = overview.bus
-                                    <tr>
-                                        <td>
-                                            % include('components/bus')
-                                        </td>
-                                        <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                        <td class="non-desktop">
-                                            <div class="column">
-                                                {{ record.date.format_short() }}
-                                                % if not context.system:
-                                                    <span class="mobile-only smaller-font">{{ record.context }}</span>
-                                                % end
+                            </thead>
+                            <tbody>
+                                % if unknown_overviews:
+                                    <tr class="header">
+                                        <td colspan="5">
+                                            <div class="row space-between">
+                                                <div>Unknown Year/Model</div>
+                                                <div>{{ len(unknown_overviews) }}</div>
                                             </div>
                                         </td>
-                                        % if not context.system:
-                                            <td class="non-mobile">{{ record.context }}</td>
-                                        % end
-                                        % if context.enable_blocks:
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                    % for overview in unknown_overviews:
+                                        % record = overview.last_record
+                                        % bus = overview.bus
+                                        <tr>
                                             <td>
+                                                % include('components/bus')
+                                            </td>
+                                            <td class="desktop-only">{{ record.date.format_long() }}</td>
+                                            <td class="non-desktop">
                                                 <div class="column">
-                                                    <div class="row space-between">
-                                                        % if record.is_available:
-                                                            % block = record.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                        % else:
-                                                            <span>{{ record.block_id }}</span>
-                                                        % end
-                                                        % include('components/record_warnings')
-                                                    </div>
-                                                    <div class="non-desktop">
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </div>
+                                                    {{ record.date.format_short() }}
+                                                    % if not context.system:
+                                                        <span class="mobile-only smaller-font">{{ record.context }}</span>
+                                                    % end
                                                 </div>
                                             </td>
-                                            <td class="desktop-only">
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % else:
-                                            <td>
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % end
-                                    </tr>
+                                            % if not context.system:
+                                                <td class="non-mobile">{{ record.context }}</td>
+                                            % end
+                                            % if context.enable_blocks:
+                                                <td>
+                                                    <div class="column">
+                                                        <div class="row space-between">
+                                                            % if record.is_available:
+                                                                % block = record.block
+                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            % else:
+                                                                <span>{{ record.block_id }}</span>
+                                                            % end
+                                                            % include('components/record_warnings')
+                                                        </div>
+                                                        <div class="non-desktop">
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="desktop-only">
+                                                    % include('components/route_list', routes=record.routes)
+                                                </td>
+                                            % else:
+                                                <td>
+                                                    % include('components/route_list', routes=record.routes)
+                                                </td>
+                                            % end
+                                        </tr>
+                                    % end
                                 % end
-                            % end
-                            % for order in orders:
-                                % order_overviews = [o for o in known_overviews if o.bus.order_id == order.id]
-                                <tr class="header">
-                                    <td colspan="5">
-                                        <div class="row space-between">
-                                            <div>{{! order }}</div>
-                                            <div>{{ len(order_overviews) }}</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="display-none"></tr>
-                                % for overview in order_overviews:
-                                    % record = overview.last_record
-                                    % bus = overview.bus
-                                    <tr>
-                                        <td>
-                                            % include('components/bus')
-                                        </td>
-                                        <td class="desktop-only">{{ record.date.format_long() }}</td>
-                                        <td class="non-desktop">
-                                            <div class="column">
-                                                {{ record.date.format_short() }}
-                                                % if not context.system:
-                                                    <span class="mobile-only smaller-font">{{ record.context }}</span>
-                                                % end
+                                % for order in orders:
+                                    % order_overviews = [o for o in known_overviews if o.bus.order_id == order.id]
+                                    <tr class="header">
+                                        <td colspan="5">
+                                            <div class="row space-between">
+                                                <div>{{! order }}</div>
+                                                <div>{{ len(order_overviews) }}</div>
                                             </div>
                                         </td>
-                                        % if not context.system:
-                                            <td class="non-mobile">{{ record.context }}</td>
-                                        % end
-                                        % if context.enable_blocks:
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                    % for overview in order_overviews:
+                                        % record = overview.last_record
+                                        % bus = overview.bus
+                                        <tr>
                                             <td>
-                                                <div class="column stretch">
-                                                    <div class="row space-between">
-                                                        % if record.is_available:
-                                                            % block = record.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                        % else:
-                                                            <span>{{ record.block_id }}</span>
-                                                        % end
-                                                        % include('components/record_warnings')
-                                                    </div>
-                                                    <div class="non-desktop">
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </div>
+                                                % include('components/bus')
+                                            </td>
+                                            <td class="desktop-only">{{ record.date.format_long() }}</td>
+                                            <td class="non-desktop">
+                                                <div class="column">
+                                                    {{ record.date.format_short() }}
+                                                    % if not context.system:
+                                                        <span class="mobile-only smaller-font">{{ record.context }}</span>
+                                                    % end
                                                 </div>
                                             </td>
-                                            <td class="desktop-only">
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % else:
-                                            <td>
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % end
-                                    </tr>
+                                            % if not context.system:
+                                                <td class="non-mobile">{{ record.context }}</td>
+                                            % end
+                                            % if context.enable_blocks:
+                                                <td>
+                                                    <div class="column stretch">
+                                                        <div class="row space-between">
+                                                            % if record.is_available:
+                                                                % block = record.block
+                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            % else:
+                                                                <span>{{ record.block_id }}</span>
+                                                            % end
+                                                            % include('components/record_warnings')
+                                                        </div>
+                                                        <div class="non-desktop">
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="desktop-only">
+                                                    % include('components/route_list', routes=record.routes)
+                                                </td>
+                                            % else:
+                                                <td>
+                                                    % include('components/route_list', routes=record.routes)
+                                                </td>
+                                            % end
+                                        </tr>
+                                    % end
                                 % end
-                            % end
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
         
                     % include('components/top_button')
                 % else:

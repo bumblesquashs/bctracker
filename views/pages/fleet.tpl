@@ -98,63 +98,65 @@
                                                 % include('components/toggle')
                                             </div>
                                             <div class="content">
-                                                <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Bus</th>
-                                                            <th>First Seen</th>
-                                                            <th class="non-mobile">First System</th>
-                                                            <th>Last Seen</th>
-                                                            <th class="non-mobile">Last System</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        % for order in model_orders:
-                                                            <tr class="header">
-                                                                <td colspan="5">
-                                                                    <div class="row space-between">
-                                                                        <div>{{ order.years_string }}</div>
-                                                                        <div>{{ len(order.buses) }}</div>
-                                                                    </div>
-                                                                </td>
+                                                <div class="table-border-wrapper">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Bus</th>
+                                                                <th>First Seen</th>
+                                                                <th class="non-mobile">First System</th>
+                                                                <th>Last Seen</th>
+                                                                <th class="non-mobile">Last System</th>
                                                             </tr>
-                                                            <tr class="display-none"></tr>
-                                                            % for bus in order.buses:
-                                                                % if bus.number in overviews:
-                                                                    % overview = overviews[bus.number]
-                                                                    <tr>
-                                                                        <td>
-                                                                            % include('components/bus')
-                                                                        </td>
-                                                                        <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
-                                                                        <td class="non-desktop">
-                                                                            <div class="column">
-                                                                                {{ overview.first_seen_date.format_short() }}
-                                                                                <span class="mobile-only smaller-font">{{ overview.first_seen_context }}</span>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="non-mobile">{{ overview.first_seen_context }}</td>
-                                                                        <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
-                                                                        <td class="non-desktop">
-                                                                            <div class="column">
-                                                                                {{ overview.last_seen_date.format_short() }}
-                                                                                <span class="mobile-only smaller-font">{{ overview.last_seen_context }}</span>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="non-mobile">{{ overview.last_seen_context }}</td>
-                                                                    </tr>
-                                                                % else:
-                                                                    <tr>
-                                                                        <td>
-                                                                            % include('components/bus', enable_link=False)
-                                                                        </td>
-                                                                        <td class="lighter-text" colspan="4">Unavailable</td>
-                                                                    </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            % for order in model_orders:
+                                                                <tr class="header">
+                                                                    <td colspan="5">
+                                                                        <div class="row space-between">
+                                                                            <div>{{ order.years_string }}</div>
+                                                                            <div>{{ len(order.buses) }}</div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="display-none"></tr>
+                                                                % for bus in order.buses:
+                                                                    % if bus.number in overviews:
+                                                                        % overview = overviews[bus.number]
+                                                                        <tr>
+                                                                            <td>
+                                                                                % include('components/bus')
+                                                                            </td>
+                                                                            <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
+                                                                            <td class="non-desktop">
+                                                                                <div class="column">
+                                                                                    {{ overview.first_seen_date.format_short() }}
+                                                                                    <span class="mobile-only smaller-font">{{ overview.first_seen_context }}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="non-mobile">{{ overview.first_seen_context }}</td>
+                                                                            <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
+                                                                            <td class="non-desktop">
+                                                                                <div class="column">
+                                                                                    {{ overview.last_seen_date.format_short() }}
+                                                                                    <span class="mobile-only smaller-font">{{ overview.last_seen_context }}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="non-mobile">{{ overview.last_seen_context }}</td>
+                                                                        </tr>
+                                                                    % else:
+                                                                        <tr>
+                                                                            <td>
+                                                                                % include('components/bus', enable_link=False)
+                                                                            </td>
+                                                                            <td class="lighter-text" colspan="4">Unavailable</td>
+                                                                        </tr>
+                                                                    % end
                                                                 % end
                                                             % end
-                                                        % end
-                                                    </tbody>
-                                                </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     % end

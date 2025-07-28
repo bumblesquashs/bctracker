@@ -106,13 +106,13 @@ table {
     border-collapse: collapse;
     border-spacing: 0px;
     empty-cells: show;
-    border-width: 1px;
-    border-style: solid;
+    border: 1px solid var(--table-border);
 }
 
 table td {
     border-width: 0 0 1 0px;
     border-style: solid;
+    border-color: var(--table-border);
     margin: 0px;
     overflow: visible;
     padding: 0.5em 1em;
@@ -123,6 +123,7 @@ table th {
     vertical-align: top;
     border-width: 0 0 1 0px;
     border-style: solid;
+    border-color: var(--table-border);
     margin: 0px;
     overflow: visible;
     padding: 0.5em 1em;
@@ -130,7 +131,6 @@ table th {
 
 table tr.divider {
     border-top-width: 4px;
-    border-top-style: solid;
 }
 
 table tr.header td {
@@ -1502,6 +1502,14 @@ table tr.table-button {
 
 .tab-button.current:hover {
     cursor: default !important;
+}
+
+.table-border-wrapper {
+    border: 1px solid var(--table-border);
+}
+
+.table-border-wrapper table {
+    border-width: 0px;
 }
 
 .timeline {

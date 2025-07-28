@@ -293,6 +293,10 @@ table th {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
+.table-border-wrapper {
+    width: 100%;
+}
+
 .tablet-only {
     display: none !important;
 }

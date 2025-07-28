@@ -109,56 +109,58 @@
     % else:
         <div class="placeholder">
             <p>Choose a system to see blocks.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>System</th>
-                        <th class="non-mobile align-right">Blocks</th>
-                        <th>Service Days</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    % for region in regions:
-                        % region_systems = [s for s in systems if s.region == region]
-                        % if region_systems:
-                            <tr class="header">
-                                <td colspan="3">{{ region }}</td>
-                            </tr>
-                            <tr class="display-none"></tr>
-                            % for system in sorted(region_systems):
-                                % count = len(system.get_blocks())
-                                <tr>
-                                    <td>
-                                        <div class="row">
-                                            % include('components/agency_logo', agency=system.agency)
-                                            <div class="column">
-                                                <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
-                                                <span class="mobile-only smaller-font">
-                                                    % if system.gtfs_loaded:
-                                                        % if count == 1:
-                                                            1 Block
-                                                        % else:
-                                                            {{ count }} Blocks
-                                                        % end
-                                                    % end
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    % if system.gtfs_loaded:
-                                        <td class="non-mobile align-right">{{ count }}</td>
-                                        <td>
-                                            % include('components/weekdays', schedule=system.schedule, compact=True, schedule_path='blocks')
-                                        </td>
-                                    % else:
-                                        <td class="lighter-text" colspan="2">Blocks are loading...</td>
-                                    % end
+            <div class="table-border-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>System</th>
+                            <th class="non-mobile align-right">Blocks</th>
+                            <th>Service Days</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        % for region in regions:
+                            % region_systems = [s for s in systems if s.region == region]
+                            % if region_systems:
+                                <tr class="header">
+                                    <td colspan="3">{{ region }}</td>
                                 </tr>
+                                <tr class="display-none"></tr>
+                                % for system in sorted(region_systems):
+                                    % count = len(system.get_blocks())
+                                    <tr>
+                                        <td>
+                                            <div class="row">
+                                                % include('components/agency_logo', agency=system.agency)
+                                                <div class="column">
+                                                    <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+                                                    <span class="mobile-only smaller-font">
+                                                        % if system.gtfs_loaded:
+                                                            % if count == 1:
+                                                                1 Block
+                                                            % else:
+                                                                {{ count }} Blocks
+                                                            % end
+                                                        % end
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        % if system.gtfs_loaded:
+                                            <td class="non-mobile align-right">{{ count }}</td>
+                                            <td>
+                                                % include('components/weekdays', schedule=system.schedule, compact=True, schedule_path='blocks')
+                                            </td>
+                                        % else:
+                                            <td class="lighter-text" colspan="2">Blocks are loading...</td>
+                                        % end
+                                    </tr>
+                                % end
                             % end
                         % end
-                    % end
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     % end
 % else:

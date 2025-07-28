@@ -24,100 +24,102 @@
 </div>
 
 % if positions:
-    <table>
-        <thead>
-            <tr>
-                <th>Bus</th>
-                <th class="desktop-only">Model</th>
-                % if not context.system:
-                    <th class="desktop-only">System</th>
-                % end
-                <th class="desktop-only">Speed</th>
-                <th>Headsign</th>
-                % if context.enable_blocks:
-                    <th class="non-mobile">Block</th>
-                % end
-                <th class="non-mobile">Trip</th>
-                <th class="desktop-only">Next Stop</th>
-            </tr>
-        </thead>
-        <tbody>
-            % last_speed = None
-            % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
-                % bus = position.bus
-                % trip = position.trip
-                % stop = position.stop
-                % same_speed = not last_speed or position.speed // 10 == last_speed
-                % last_speed = position.speed // 10
-                <tr class="{{'' if same_speed else 'divider'}}">
-                    <td>
-                        <div class="column">
-                            <div class="row">
-                                % include('components/bus')
-                                <div class="row gap-5">
-                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                                    % include('components/adherence', adherence=position.adherence)
-                                </div>
-                            </div>
-                            <span class="non-desktop smaller-font">
-                                % include('components/year_model', year_model=bus.year_model)
-                            </span>
-                        </div>
-                    </td>
-                    <td class="desktop-only">
-                        % include('components/year_model', year_model=bus.year_model)
-                    </td>
+    <div class="table-border-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Bus</th>
+                    <th class="desktop-only">Model</th>
                     % if not context.system:
-                        <td class="desktop-only">{{ position.context }}</td>
+                        <th class="desktop-only">System</th>
                     % end
-                    <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
-                    % if trip:
-                        % block = trip.block
+                    <th class="desktop-only">Speed</th>
+                    <th>Headsign</th>
+                    % if context.enable_blocks:
+                        <th class="non-mobile">Block</th>
+                    % end
+                    <th class="non-mobile">Trip</th>
+                    <th class="desktop-only">Next Stop</th>
+                </tr>
+            </thead>
+            <tbody>
+                % last_speed = None
+                % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
+                    % bus = position.bus
+                    % trip = position.trip
+                    % stop = position.stop
+                    % same_speed = not last_speed or position.speed // 10 == last_speed
+                    % last_speed = position.speed // 10
+                    <tr class="{{'' if same_speed else 'divider'}}">
                         <td>
                             <div class="column">
-                                % include('components/headsign', departure=position.departure)
-                                <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
-                                <div class="mobile-only smaller-font">
-                                    Trip:
-                                    % include('components/trip')
-                                </div>
-                                % if stop:
-                                    <div class="non-desktop smaller-font">
-                                        <span class="align-middle">Next Stop:</span>
-                                        % include('components/stop')
+                                <div class="row">
+                                    % include('components/bus')
+                                    <div class="row gap-5">
+                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                        % include('components/adherence', adherence=position.adherence)
                                     </div>
-                                % end
+                                </div>
+                                <span class="non-desktop smaller-font">
+                                    % include('components/year_model', year_model=bus.year_model)
+                                </span>
                             </div>
                         </td>
-                        % if context.enable_blocks:
+                        <td class="desktop-only">
+                            % include('components/year_model', year_model=bus.year_model)
+                        </td>
+                        % if not context.system:
+                            <td class="desktop-only">{{ position.context }}</td>
+                        % end
+                        <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
+                        % if trip:
+                            % block = trip.block
+                            <td>
+                                <div class="column">
+                                    % include('components/headsign', departure=position.departure)
+                                    <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                                    <div class="mobile-only smaller-font">
+                                        Trip:
+                                        % include('components/trip')
+                                    </div>
+                                    % if stop:
+                                        <div class="non-desktop smaller-font">
+                                            <span class="align-middle">Next Stop:</span>
+                                            % include('components/stop')
+                                        </div>
+                                    % end
+                                </div>
+                            </td>
+                            % if context.enable_blocks:
+                                <td class="non-mobile">
+                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                </td>
+                            % end
                             <td class="non-mobile">
-                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                % include('components/trip')
+                            </td>
+                        % else:
+                            <td colspan="3">
+                                <div class="column">
+                                    <span class="lighter-text">Not In Service</span>
+                                    <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                                    % if stop:
+                                        <div class="non-desktop smaller-font">
+                                            <span class="align-middle">Next Stop:</span>
+                                            % include('components/stop')
+                                        </div>
+                                    % end
+                                </div>
                             </td>
                         % end
-                        <td class="non-mobile">
-                            % include('components/trip')
+                        <td class="desktop-only">
+                            % include('components/stop')
                         </td>
-                    % else:
-                        <td colspan="3">
-                            <div class="column">
-                                <span class="lighter-text">Not In Service</span>
-                                <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
-                                % if stop:
-                                    <div class="non-desktop smaller-font">
-                                        <span class="align-middle">Next Stop:</span>
-                                        % include('components/stop')
-                                    </div>
-                                % end
-                            </div>
-                        </td>
-                    % end
-                    <td class="desktop-only">
-                        % include('components/stop')
-                    </td>
-                </tr>
-            % end
-        </tbody>
-    </table>
+                    </tr>
+                % end
+            </tbody>
+        </table>
+    </div>
     
     % include('components/top_button')
 % else:

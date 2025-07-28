@@ -11,6 +11,8 @@
     --status-bar-hover: rgba(0, 0, 0, 0.6);
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: rgba(0, 0, 0, 0.5);
+    
     --tooltip-background: #000000;
     
     --loading-background: rgba(0, 0, 0, 0);
@@ -72,10 +74,6 @@ input[type="text"]:focus {
     border-color: rgba(0, 0, 0, 0.8);
 }
 
-table {
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
 table tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.7);
 }
@@ -84,13 +82,8 @@ table tbody tr.header {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-table td {
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
 table th {
     background-color: rgba(255, 255, 255, 0.7);
-    border-color: rgba(0, 0, 0, 0.5);
 }
 
 table tr {

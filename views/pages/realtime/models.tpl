@@ -103,39 +103,41 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Bus</th>
-                                                    % if not context.system:
-                                                        <th class="desktop-only">System</th>
-                                                    % end
-                                                    <th>Headsign</th>
-                                                    % if context.enable_blocks:
-                                                        <th class="non-mobile">Block</th>
-                                                    % end
-                                                    <th class="non-mobile">Trip</th>
-                                                    <th class="desktop-only">Next Stop</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                % for order in model_orders:
-                                                    % order_positions = [p for p in model_positions if p.bus.order_id == order.id]
-                                                    <tr class="header">
-                                                        <td colspan="7">
-                                                            <div class="row space-between">
-                                                                <div>{{ order.years_string }}</div>
-                                                                <div>{{ len(order_positions) }}</div>
-                                                            </div>
-                                                        </td>
+                                        <div class="table-border-wrapper">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Bus</th>
+                                                        % if not context.system:
+                                                            <th class="desktop-only">System</th>
+                                                        % end
+                                                        <th>Headsign</th>
+                                                        % if context.enable_blocks:
+                                                            <th class="non-mobile">Block</th>
+                                                        % end
+                                                        <th class="non-mobile">Trip</th>
+                                                        <th class="desktop-only">Next Stop</th>
                                                     </tr>
-                                                    <tr class="display-none"></tr>
-                                                    % for position in order_positions:
-                                                        % include('rows/realtime', position=position)
+                                                </thead>
+                                                <tbody>
+                                                    % for order in model_orders:
+                                                        % order_positions = [p for p in model_positions if p.bus.order_id == order.id]
+                                                        <tr class="header">
+                                                            <td colspan="6">
+                                                                <div class="row space-between">
+                                                                    <div>{{ order.years_string }}</div>
+                                                                    <div>{{ len(order_positions) }}</div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="display-none"></tr>
+                                                        % for position in order_positions:
+                                                            % include('rows/realtime', position=position)
+                                                        % end
                                                     % end
-                                                % end
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             % end
