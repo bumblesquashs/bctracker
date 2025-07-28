@@ -1512,6 +1512,10 @@ table tr.table-button {
     border-width: 0px;
 }
 
+.table-border-wrapper table tr:last-child td {
+    border-bottom-width: 0px;
+}
+
 .timeline {
     position: relative;
     height: 15px;
