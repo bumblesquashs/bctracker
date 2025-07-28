@@ -1,6 +1,7 @@
 
 % bus = position.bus
 % trip = position.trip
+% stop = position.stop
 
 <tr>
     <td>
@@ -22,7 +23,6 @@
     % end
     % if trip:
         % block = trip.block
-        % stop = position.stop
         <td>
             <div class="column">
                 % include('components/headsign', departure=position.departure)
@@ -46,10 +46,20 @@
         <td class="non-mobile">
             % include('components/trip')
         </td>
-        <td class="desktop-only">
-            % include('components/stop')
-        </td>
     % else:
-        <td class="lighter-text" colspan="4">Not in service</td>
+        <td colspan="3">
+            <div class="column">
+                <div class="lighter-text">Not In Service</div>
+                % if stop:
+                    <div class="non-desktop smaller-font">
+                        <span class="align-middle">Next Stop:</span>
+                        % include('components/stop')
+                    </div>
+                % end
+            </div>
+        </td>
     % end
+    <td class="desktop-only">
+        % include('components/stop')
+    </td>
 </tr>

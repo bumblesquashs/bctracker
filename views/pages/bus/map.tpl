@@ -29,6 +29,6 @@
     % end
 % else:
     <div class="placeholder">
-        <h3>Not in service</h3>
+        <h3>Not In Service</h3>
     </div>
 % end

@@ -162,7 +162,7 @@
                                                             % if position and position.trip:
                                                                 % include('components/headsign', departure=position.departure, trip=position.trip)
                                                             % else:
-                                                                <div class="lighter-text">Not in service</div>
+                                                                <div class="lighter-text">Not In Service</div>
                                                             % end
                                                         </td>
                                                     </tr>
