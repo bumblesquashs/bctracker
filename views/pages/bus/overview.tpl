@@ -41,55 +41,54 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if not position:
-                    <div class="info-box">
-                        <div class="section">
-                            <h3>Not in service</h3>
-                        </div>
-                        <div class="row section">
-                            <div class="name">Last Seen</div>
-                            <div class="value">
-                                % if overview:
-                                    % last_seen = overview.last_seen_date
-                                    % if last_seen.is_today:
-                                        <div>Today</div>
-                                    % else:
-                                        <div>{{ last_seen.format_long() }}</div>
-                                        <div class="smaller-font">{{ last_seen.format_since() }}</div>
-                                    % end
+                % if position:
+                    % trip = position.trip
+                    % if trip:
+                        % include('components/map', map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
+                    % else:
+                        % include('components/map', map_position=position)
+                    % end
+                % else:
+                    % trip = None
+                % end
+                
+                <div class="info-box">
+                    <div class="section">
+                        % if position and trip:
+                            <div class="row">
+                                % include('components/adherence', adherence=position.adherence, size='large')
+                                % departure = position.departure
+                                % if departure and departure.headsign:
+                                    <h3>{{ departure }}</h3>
                                 % else:
-                                    <div class="lighter-text">Never</div>
+                                    <h3>{{ trip }}</h3>
                                 % end
                             </div>
-                        </div>
-                        % if overview:
-                            <div class="row section">
-                                <div class="name">System</div>
-                                <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
+                        % else:
+                            <h3>Not In Service</h3>
+                        % end
+                    </div>
+                    % if position:
+                        % stop = position.stop
+                        % if trip:
+                            % route = trip.route
+                            % block = trip.block
+                        % else:
+                            % route = None
+                            % block = None
+                        % end
+                        % if route:
+                            <div class="section">
+                                <div class="row">
+                                    % include('components/route')
+                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
                                 </div>
                             </div>
                         % end
-                    </div>
-                % elif not position.trip:
-                    % include('components/map', map_position=position)
-                    
-                    <div class="info-box">
-                        <div class="section">
-                            <h3>Not in service</h3>
-                        </div>
-                        % last_record = overview.last_record
-                        % if last_record and last_record.date.is_today:
-                            % block = last_record.block
-                            % if block:
-                                % date = Date.today(block.context.timezone)
-                                % end_time = block.get_end_time(date=date)
-                                % if end_time and end_time.is_later:
-                                    <div class="section no-flex">
-                                        % include('components/block_timeline', date=date)
-                                    </div>
-                                % end
-                            % end
+                        % if context.enable_blocks and block:
+                            <div class="section">
+                                % include('components/block_timeline', date=Date.today(block.context.timezone))
+                            </div>
                         % end
                         % if position.timestamp:
                             <div class="row section">
@@ -124,74 +123,7 @@
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
                         % end
-                    </div>
-                % else:
-                    % trip = position.trip
-                    % stop = position.stop
-                    % block = trip.block
-                    % route = trip.route
-                    
-                    % include('components/map', map_position=position, map_trip=trip, map_departures=trip.find_departures(), zoom_trips=False, zoom_departures=False)
-                    
-                    <div class="info-box">
-                        <div class="section">
-                            <div class="row">
-                                % include('components/adherence', adherence=position.adherence, size='large')
-                                % departure = position.departure
-                                % if departure and departure.headsign:
-                                    <h3>{{ departure }}</h3>
-                                % else:
-                                    <h3>{{ trip }}</h3>
-                                % end
-                            </div>
-                        </div>
-                        <div class="section">
-                            <div class="row">
-                                % include('components/route')
-                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
-                            </div>
-                        </div>
-                        % if context.enable_blocks:
-                            <div class="section">
-                                % include('components/block_timeline', date=Date.today(block.context.timezone))
-                            </div>
-                        % end
-                        % if position.timestamp:
-                            <div class="row section">
-                                <div class="name">Last Update</div>
-                                <div class="value">
-                                    <div id="timestamp"></div>
-                                    <script>
-                                        updateTimestampFunctions.push(function(currentTime) {
-                                            const difference = getDifference(currentTime, originalTimestamp + timestampOffset);
-                                            document.getElementById("timestamp").innerHTML = difference;
-                                        });
-                                    </script>
-                                </div>
-                            </div>
-                        % end
-                        <div class="row section">
-                            <div class="name">System</div>
-                            <div class="value">
-                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
-                            </div>
-                        </div>
-                        <div class="row section">
-                            <div class="name">Occupancy</div>
-                            <div class="value">
-                                <div class="row gap-5 center">
-                                    <div>{{ position.occupancy }}</div>
-                                    % include('components/occupancy', occupancy=position.occupancy, size='large')
-                                </div>
-                            </div>
-                        </div>
-                        % if show_speed:
-                            <div class="row section">
-                                <div class="name">Speed</div>
-                                <div class="value">{{ position.speed }} km/h</div>
-                            </div>
-                        % end
-                        % if context.enable_blocks:
+                        % if context.enable_blocks and block:
                             <div class="row section">
                                 <div class="name">Block</div>
                                 <div class="value">
@@ -204,15 +136,17 @@
                                 </div>
                             </div>
                         % end
-                        <div class="row section">
-                            <div class="name">Trip</div>
-                            <div class="value">
-                                % include('components/trip')
-                                % start_time = trip.start_time.format_web(time_format)
-                                % end_time = trip.end_time.format_web(time_format)
-                                <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
+                        % if trip:
+                            <div class="row section">
+                                <div class="name">Trip</div>
+                                <div class="value">
+                                    % include('components/trip')
+                                    % start_time = trip.start_time.format_web(time_format)
+                                    % end_time = trip.end_time.format_web(time_format)
+                                    <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ trip.duration }})</span>
+                                </div>
                             </div>
-                        </div>
+                        % end
                         % if stop:
                             <div class="row section">
                                 <div class="name">Next Stop</div>
@@ -225,8 +159,33 @@
                                 </div>
                             </div>
                         % end
-                    </div>
-                % end
+                    % else:
+                        <div class="row section">
+                            <div class="name">Last Seen</div>
+                            <div class="value">
+                                % if overview:
+                                    % last_seen = overview.last_seen_date
+                                    % if last_seen.is_today:
+                                        <div>Today</div>
+                                    % else:
+                                        <div>{{ last_seen.format_long() }}</div>
+                                        <div class="smaller-font">{{ last_seen.format_since() }}</div>
+                                    % end
+                                % else:
+                                    <div class="lighter-text">Never</div>
+                                % end
+                            </div>
+                        </div>
+                        % if overview:
+                            <div class="row section">
+                                <div class="name">System</div>
+                                <div class="value">
+                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
+                                </div>
+                            </div>
+                        % end
+                    % end
+                </div>
             </div>
         </div>
         
@@ -308,7 +267,7 @@
                         % include('components/toggle')
                     </div>
                     <div class="content">
-                        % if [d for d in upcoming_departures if d.timepoint]:
+                        % if any(d.timepoint for d in upcoming_departures):
                             <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                         % end
                         % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
@@ -360,7 +319,7 @@
             </div>
             <div class="content">
                 % if records:
-                    % if [r for r in records if r.warnings]:
+                    % if any(r.warnings for r in records):
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">

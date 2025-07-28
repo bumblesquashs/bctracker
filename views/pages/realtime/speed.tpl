@@ -45,6 +45,8 @@
             % last_speed = None
             % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
                 % bus = position.bus
+                % trip = position.trip
+                % stop = position.stop
                 % same_speed = not last_speed or position.speed // 10 == last_speed
                 % last_speed = position.speed // 10
                 <tr class="{{'' if same_speed else 'divider'}}">
@@ -69,10 +71,8 @@
                         <td class="desktop-only">{{ position.context }}</td>
                     % end
                     <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
-                    % if position.trip:
-                        % trip = position.trip
+                    % if trip:
                         % block = trip.block
-                        % stop = position.stop
                         <td>
                             <div class="column">
                                 % include('components/headsign', departure=position.departure)
@@ -97,17 +97,23 @@
                         <td class="non-mobile">
                             % include('components/trip')
                         </td>
-                        <td class="desktop-only">
-                            % include('components/stop')
-                        </td>
                     % else:
-                        <td colspan="4">
+                        <td colspan="3">
                             <div class="column">
-                                <span class="lighter-text">Not in service</span>
+                                <span class="lighter-text">Not In Service</span>
                                 <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                                % if stop:
+                                    <div class="non-desktop smaller-font">
+                                        <span class="align-middle">Next Stop:</span>
+                                        % include('components/stop')
+                                    </div>
+                                % end
                             </div>
                         </td>
                     % end
+                    <td class="desktop-only">
+                        % include('components/stop')
+                    </td>
                 </tr>
             % end
         </tbody>

@@ -149,12 +149,14 @@
                                 % if not context.system:
                                     <th>System</th>
                                 % end
+                                <th>Next Stop</th>
                             </tr>
                         </thead>
                         <tbody>
                             % last_bus = None
                             % for position in no_route_positions:
                                 % bus = position.bus
+                                % stop = position.stop
                                 % order_id = bus.order_id
                                 % if not last_bus:
                                     % same_order = True
@@ -181,6 +183,9 @@
                                     % if not context.system:
                                         <td>{{ position.context }}</td>
                                     % end
+                                    <td>
+                                        % include('components/stop')
+                                    </td>
                                 </tr>
                             % end
                         </tbody>
