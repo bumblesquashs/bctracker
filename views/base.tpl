@@ -36,6 +36,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
         
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="date=no">
+        <meta name="format-detection" content="address=no">
+        <meta name="format-detection" content="email=no">
+        
         % if get('disable_indexing', False):
             <meta name="robots" content="noindex">
         % end
