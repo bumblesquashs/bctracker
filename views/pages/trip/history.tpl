@@ -63,49 +63,51 @@
                                 <span>may be accidental logins.</span>
                             </p>
                         % end
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Bus</th>
-                                    <th class="desktop-only">Model</th>
-                                    <th class="no-wrap non-mobile">First Seen</th>
-                                    <th class="no-wrap">Last Seen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % last_date = None
-                                % for record in records:
-                                    % bus = record.bus
-                                    % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
-                                        <tr class="header">
-                                            <td colspan="5">{{ record.date.format_month() }}</td>
-                                            <tr class="display-none"></tr>
+                        <div class="table-border-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Bus</th>
+                                        <th class="desktop-only">Model</th>
+                                        <th class="no-wrap non-mobile">First Seen</th>
+                                        <th class="no-wrap">Last Seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    % last_date = None
+                                    % for record in records:
+                                        % bus = record.bus
+                                        % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                                            <tr class="header">
+                                                <td colspan="5">{{ record.date.format_month() }}</td>
+                                                <tr class="display-none"></tr>
+                                            </tr>
+                                        % end
+                                        % last_date = record.date
+                                        <tr>
+                                            <td>{{ record.date.format_day() }}</td>
+                                            <td>
+                                                <div class="column stretch">
+                                                    <div class="row space-between">
+                                                        % include('components/bus')
+                                                        % include('components/record_warnings')
+                                                    </div>
+                                                    <span class="non-desktop smaller-font">
+                                                        % include('components/year_model', year_model=bus.year_model)
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="desktop-only">
+                                                % include('components/year_model', year_model=bus.year_model)
+                                            </td>
+                                            <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
+                                            <td>{{ record.last_seen.format_web(time_format) }}</td>
                                         </tr>
                                     % end
-                                    % last_date = record.date
-                                    <tr>
-                                        <td>{{ record.date.format_day() }}</td>
-                                        <td>
-                                            <div class="column stretch">
-                                                <div class="row space-between">
-                                                    % include('components/bus')
-                                                    % include('components/record_warnings')
-                                                </div>
-                                                <span class="non-desktop smaller-font">
-                                                    % include('components/year_model', year_model=bus.year_model)
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="desktop-only">
-                                            % include('components/year_model', year_model=bus.year_model)
-                                        </td>
-                                        <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
-                                        <td>{{ record.last_seen.format_web(time_format) }}</td>
-                                    </tr>
-                                % end
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     % else:
                         <div class="placeholder">
                             <h3>This trip doesn't have any recorded history</h3>

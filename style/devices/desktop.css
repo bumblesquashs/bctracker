@@ -228,6 +228,10 @@ table th {
     align-self: stretch;
 }
 
+.sidebar .table-border-wrapper {
+    align-self: stretch;
+}
+
 .smaller-font {
     font-size: 10pt;
 }
@@ -237,6 +241,10 @@ table th {
 }
 
 .tab-button-bar {
+    align-self: flex-start;
+}
+
+.table-border-wrapper {
     align-self: flex-start;
 }
 
@@ -251,6 +259,10 @@ table th {
     }
     
     table {
+        align-self: stretch;
+    }
+    
+    .table-border-wrapper {
         align-self: stretch;
     }
 }

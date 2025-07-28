@@ -87,74 +87,76 @@
                                 <span>may be accidental logins.</span>
                             </p>
                         % end
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th class="desktop-only">System</th>
-                                    % if context.enable_blocks:
-                                        <th>Block</th>
-                                        <th class="desktop-only">Routes</th>
-                                    % else:
-                                        <th>Routes</th>
-                                    % end
-                                    <th class="desktop-only">Start Time</th>
-                                    <th class="desktop-only">End Time</th>
-                                    <th class="no-wrap non-mobile">First Seen</th>
-                                    <th class="no-wrap">Last Seen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % last_date = None
-                                % for record in records:
-                                    % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
-                                        <tr class="header">
-                                            <td colspan="8">{{ record.date.format_month() }}</td>
-                                            <tr class="display-none"></tr>
-                                        </tr>
-                                    % end
-                                    % last_date = record.date
+                        <div class="table-border-wrapper">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <div class="column">
-                                                {{ record.date.format_day() }}
-                                                <span class="non-desktop smaller-font">{{ record.context }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="desktop-only">{{ record.context }}</td>
+                                        <th>Date</th>
+                                        <th class="desktop-only">System</th>
                                         % if context.enable_blocks:
+                                            <th>Block</th>
+                                            <th class="desktop-only">Routes</th>
+                                        % else:
+                                            <th>Routes</th>
+                                        % end
+                                        <th class="desktop-only">Start Time</th>
+                                        <th class="desktop-only">End Time</th>
+                                        <th class="no-wrap non-mobile">First Seen</th>
+                                        <th class="no-wrap">Last Seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    % last_date = None
+                                    % for record in records:
+                                        % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                                            <tr class="header">
+                                                <td colspan="8">{{ record.date.format_month() }}</td>
+                                                <tr class="display-none"></tr>
+                                            </tr>
+                                        % end
+                                        % last_date = record.date
+                                        <tr>
                                             <td>
-                                                <div class="column stretch">
-                                                    <div class="row space-between">
-                                                        % if record.is_available:
-                                                            % block = record.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                        % else:
-                                                            <span>{{ record.block_id }}</span>
-                                                        % end
-                                                        % include('components/record_warnings')
-                                                    </div>
-                                                    <div class="non-desktop">
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </div>
+                                                <div class="column">
+                                                    {{ record.date.format_day() }}
+                                                    <span class="non-desktop smaller-font">{{ record.context }}</span>
                                                 </div>
                                             </td>
-                                            <td class="desktop-only">
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % else:
-                                            <td>
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % end
-                                        <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
-                                        <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>
-                                        <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
-                                        <td>{{ record.last_seen.format_web(time_format) }}</td>
-                                    </tr>
-                                % end
-                            </tbody>
-                        </table>
+                                            <td class="desktop-only">{{ record.context }}</td>
+                                            % if context.enable_blocks:
+                                                <td>
+                                                    <div class="column stretch">
+                                                        <div class="row space-between">
+                                                            % if record.is_available:
+                                                                % block = record.block
+                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            % else:
+                                                                <span>{{ record.block_id }}</span>
+                                                            % end
+                                                            % include('components/record_warnings')
+                                                        </div>
+                                                        <div class="non-desktop">
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="desktop-only">
+                                                    % include('components/route_list', routes=record.routes)
+                                                </td>
+                                            % else:
+                                                <td>
+                                                    % include('components/route_list', routes=record.routes)
+                                                </td>
+                                            % end
+                                            <td class="desktop-only">{{ record.start_time.format_web(time_format) }}</td>
+                                            <td class="desktop-only">{{ record.end_time.format_web(time_format) }}</td>
+                                            <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
+                                            <td>{{ record.last_seen.format_web(time_format) }}</td>
+                                        </tr>
+                                    % end
+                                </tbody>
+                            </table>
+                        </div>
                         % include('components/paging')
                     % else:
                         <div class="placeholder">

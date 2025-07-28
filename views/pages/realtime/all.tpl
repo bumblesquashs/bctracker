@@ -30,53 +30,55 @@
 % if positions:
     % known_positions = [p for p in positions if p.bus.order_id]
     % unknown_positions = sorted([p for p in positions if not p.bus.order_id])
-    <table>
-        <thead>
-            <tr>
-                <th>Bus</th>
-                % if not context.system:
-                    <th class="desktop-only">System</th>
-                % end
-                <th>Headsign</th>
-                % if context.enable_blocks:
-                    <th class="non-mobile">Block</th>
-                % end
-                <th class="non-mobile">Trip</th>
-                <th class="desktop-only">Next Stop</th>
-            </tr>
-        </thead>
-        <tbody>
-            % if unknown_positions:
-                <tr class="header">
-                    <td colspan="6">
-                        <div class="row space-between">
-                            <div>Unknown Year/Model</div>
-                            <div>{{ len(unknown_positions) }}</div>
-                        </div>
-                    </td>
+    <div class="table-border-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Bus</th>
+                    % if not context.system:
+                        <th class="desktop-only">System</th>
+                    % end
+                    <th>Headsign</th>
+                    % if context.enable_blocks:
+                        <th class="non-mobile">Block</th>
+                    % end
+                    <th class="non-mobile">Trip</th>
+                    <th class="desktop-only">Next Stop</th>
                 </tr>
-                <tr class="display-none"></tr>
-                % for position in unknown_positions:
-                    % include('rows/realtime')
+            </thead>
+            <tbody>
+                % if unknown_positions:
+                    <tr class="header">
+                        <td colspan="6">
+                            <div class="row space-between">
+                                <div>Unknown Year/Model</div>
+                                <div>{{ len(unknown_positions) }}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="display-none"></tr>
+                    % for position in unknown_positions:
+                        % include('rows/realtime')
+                    % end
                 % end
-            % end
-            % for order in orders:
-                % order_positions = sorted([p for p in known_positions if p.bus.order_id == order.id])
-                <tr class="header">
-                    <td colspan="6">
-                        <div class="row space-between">
-                            <div>{{! order }}</div>
-                            <div>{{ len(order_positions) }}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="display-none"></tr>
-                % for position in order_positions:
-                    % include('rows/realtime')
+                % for order in orders:
+                    % order_positions = sorted([p for p in known_positions if p.bus.order_id == order.id])
+                    <tr class="header">
+                        <td colspan="6">
+                            <div class="row space-between">
+                                <div>{{! order }}</div>
+                                <div>{{ len(order_positions) }}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="display-none"></tr>
+                    % for position in order_positions:
+                        % include('rows/realtime')
+                    % end
                 % end
-            % end
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
     
     % include('components/top_button')
 % else:

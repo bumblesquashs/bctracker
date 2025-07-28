@@ -30,6 +30,8 @@
     --status-bar-hover: #053305;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #565656;
+    
     --loading-background: #2F2F2F;
     --loading-foreground: #154E15;
     
@@ -88,10 +90,6 @@ iframe {
     color-scheme: light;
 }
 
-table {
-    border-color: #565656;
-}
-
 table tbody tr:hover {
     background-color: #565656;
 }
@@ -101,14 +99,9 @@ table tbody tr.header {
     color: #FFFFFF;
 }
 
-table td {
-    border-color: #565656;
-}
-
 table th {
     background-color: #276227;
     color: #FFFFFF;
-    border-color: #565656;
 }
 
 table tr {

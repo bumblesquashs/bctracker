@@ -15,6 +15,8 @@
     --status-bar-hover: #444444;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #CCCCCC;
+    
     --tooltip-background: #000000;
     
     --loading-background: #FFFFFF;
@@ -67,7 +69,6 @@ input[type="text"]:focus {
 }
 
 table {
-    border-color: #CCCCCC;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
 }
 
@@ -82,10 +83,6 @@ table tbody tr.header {
     background-image: linear-gradient(#6fACD5,#497BAE);
     text-shadow: 0 -1px 1px #3E6790;
     color: #FFFFFF;
-}
-
-table td {
-    border-color: #CCCCCC;
 }
 
 table th {
@@ -585,6 +582,14 @@ table tr.table-button:hover {
     color: #FFFFFF;
     text-shadow: 0 1px 1px #3373a5;
     background-image: linear-gradient( #5393c5,#6facd5 );
+}
+
+.table-border-wrapper {
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+}
+
+.table-border-wraper table {
+    box-shadow: unset;
 }
 
 .timeline .now {

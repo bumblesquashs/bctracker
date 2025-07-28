@@ -141,7 +141,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Bus</th>

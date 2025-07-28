@@ -249,6 +249,10 @@ button.compact {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
+.table-border-wrapper {
+    width: 100%;
+}
+
 .tab-button {
     flex: 1;
 }

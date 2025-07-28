@@ -28,6 +28,8 @@
     --status-bar-hover: #985C0A;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #666666;
+    
     --loading-background: #FFFBEF;
     --loading-foreground: #C7743B;
     
@@ -74,10 +76,6 @@ input[type="text"]:focus {
     border-color: #7E3704;
 }
 
-table {
-    border-color: #666666;
-}
-
 table tbody tr:hover {
     background-color: #CBCBCB;
 }
@@ -87,14 +85,9 @@ table tbody tr.header {
     color: #FFFFFF;
 }
 
-table td {
-    border-color: #666666;
-}
-
 table th {
     background-color: #DC9B41;
     color: #FFFFFF;
-    border-color: #666666;
 }
 
 table tr {

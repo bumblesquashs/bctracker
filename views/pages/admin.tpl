@@ -35,102 +35,104 @@
             </div>
             <div class="content">
                 <div class="container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>System</th>
-                                <th class="non-mobile">Enabled</th>
-                                <th class="non-mobile">Cache</th>
-                                <th>GTFS</th>
-                                <th>Realtime</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            % for region in regions:
-                                % region_systems = [s for s in repositories.system.find_all(enabled_only=False) if s.region == region]
-                                % if region_systems:
-                                    <tr class="header">
-                                        <td class="section" colspan="11">{{ region }}</td>
-                                    </tr>
-                                    <tr class="display-none"></tr>
-                                    % for system in sorted(region_systems):
-                                        % total = len(system.routes) + len(system.stops) + len(system.trips)
-                                        % progress = len(system.route_caches) + len(system.stop_caches) + len(system.trip_caches)
-                                        <tr>
-                                            <td>
-                                                <div class="row">
-                                                    % include('components/agency_logo', agency=system.agency)
-                                                    <div class="column">
-                                                        {{ system }}
-                                                        <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
-                                                            {{ 'Enabled' if system.enabled else 'Disabled' }}
-                                                        </div>
-                                                        <div class="mobile-only smaller-font row">
-                                                            % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
-                                                            % if total:
-                                                                <div class="button icon small" onclick="resetCache('{{ system.id }}')">
-                                                                    % include('components/svg', name='action/delete')
-                                                                </div>
-                                                            % end
+                    <div class="table-border-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>System</th>
+                                    <th class="non-mobile">Enabled</th>
+                                    <th class="non-mobile">Cache</th>
+                                    <th>GTFS</th>
+                                    <th>Realtime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for region in regions:
+                                    % region_systems = [s for s in repositories.system.find_all(enabled_only=False) if s.region == region]
+                                    % if region_systems:
+                                        <tr class="header">
+                                            <td class="section" colspan="5">{{ region }}</td>
+                                        </tr>
+                                        <tr class="display-none"></tr>
+                                        % for system in sorted(region_systems):
+                                            % total = len(system.routes) + len(system.stops) + len(system.trips)
+                                            % progress = len(system.route_caches) + len(system.stop_caches) + len(system.trip_caches)
+                                            <tr>
+                                                <td>
+                                                    <div class="row">
+                                                        % include('components/agency_logo', agency=system.agency)
+                                                        <div class="column">
+                                                            {{ system }}
+                                                            <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
+                                                                {{ 'Enabled' if system.enabled else 'Disabled' }}
+                                                            </div>
+                                                            <div class="mobile-only smaller-font row">
+                                                                % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                                % if total:
+                                                                    <div class="button icon small" onclick="resetCache('{{ system.id }}')">
+                                                                        % include('components/svg', name='action/delete')
+                                                                    </div>
+                                                                % end
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="non-mobile {{ 'positive' if system.enabled else 'negative' }}">
-                                                % if system.enabled:
-                                                    % include('components/svg', name='status/enabled')
-                                                % else:
-                                                    % include('components/svg', name='status/disabled')
-                                                % end
-                                            </td>
-                                            <td class="non-mobile">
-                                                <div class="row space-between">
-                                                    % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
-                                                    % if total:
-                                                        <div class="button icon small" onclick="resetCache('{{ system.id }}')">
-                                                            % include('components/svg', name='action/delete')
+                                                </td>
+                                                <td class="non-mobile {{ 'positive' if system.enabled else 'negative' }}">
+                                                    % if system.enabled:
+                                                        % include('components/svg', name='status/enabled')
+                                                    % else:
+                                                        % include('components/svg', name='status/disabled')
+                                                    % end
+                                                </td>
+                                                <td class="non-mobile">
+                                                    <div class="row space-between">
+                                                        % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                                        % if total:
+                                                            <div class="button icon small" onclick="resetCache('{{ system.id }}')">
+                                                                % include('components/svg', name='action/delete')
+                                                            </div>
+                                                        % end
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    % if system.gtfs_enabled:
+                                                        <div class="row">
+                                                            <div class="positive">
+                                                                % include('components/svg', name='status/enabled')
+                                                            </div>
+                                                            <div class="button icon small" onclick="reloadGTFS('{{ system.id }}')">
+                                                                % include('components/svg', name='action/refresh')
+                                                            </div>
+                                                        </div>
+                                                    % else:
+                                                        <div class="negative">
+                                                            % include('components/svg', name='status/disabled')
                                                         </div>
                                                     % end
-                                                </div>
-                                            </td>
-                                            <td>
-                                                % if system.gtfs_enabled:
-                                                    <div class="row">
-                                                        <div class="positive">
-                                                            % include('components/svg', name='status/enabled')
+                                                </td>
+                                                <td>
+                                                    % if system.realtime_enabled:
+                                                        <div class="row">
+                                                            <div class="positive">
+                                                                % include('components/svg', name='status/enabled')
+                                                            </div>
+                                                            <div class="button icon small" onclick="reloadRealtime('{{ system.id }}')">
+                                                                % include('components/svg', name='action/refresh')
+                                                            </div>
                                                         </div>
-                                                        <div class="button icon small" onclick="reloadGTFS('{{ system.id }}')">
-                                                            % include('components/svg', name='action/refresh')
+                                                    % else:
+                                                        <div class="negative">
+                                                            % include('components/svg', name='status/disabled')
                                                         </div>
-                                                    </div>
-                                                % else:
-                                                    <div class="negative">
-                                                        % include('components/svg', name='status/disabled')
-                                                    </div>
-                                                % end
-                                            </td>
-                                            <td>
-                                                % if system.realtime_enabled:
-                                                    <div class="row">
-                                                        <div class="positive">
-                                                            % include('components/svg', name='status/enabled')
-                                                        </div>
-                                                        <div class="button icon small" onclick="reloadRealtime('{{ system.id }}')">
-                                                            % include('components/svg', name='action/refresh')
-                                                        </div>
-                                                    </div>
-                                                % else:
-                                                    <div class="negative">
-                                                        % include('components/svg', name='status/disabled')
-                                                    </div>
-                                                % end
-                                            </td>
-                                        </tr>
+                                                    % end
+                                                </td>
+                                            </tr>
+                                        % end
                                     % end
                                 % end
-                            % end
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
