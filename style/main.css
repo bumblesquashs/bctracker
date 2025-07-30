@@ -131,6 +131,7 @@ table th {
 
 table tr.divider {
     border-top-width: 4px;
+    border-top-style: solid;
 }
 
 table tr.header td {
