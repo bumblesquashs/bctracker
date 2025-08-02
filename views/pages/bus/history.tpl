@@ -78,6 +78,13 @@
                 % else:
                     % if records:
                         % include('components/paging')
+                        
+                        % dates = {r.date for r in records}
+                        % min_date = min(dates)
+                        % max_date = max(dates)
+                        <h3 class="non-mobile">{{ min_date.format_long() }} - {{ max_date.format_long() }}</h3>
+                        <h3 class="mobile-only">{{ min_date.format_short() }} - {{ max_date.format_short() }}</h3>
+                        
                         % if [r for r in records if r.warnings]:
                             <p>
                                 <span>Entries with a</span>
