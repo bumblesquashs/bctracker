@@ -152,7 +152,7 @@ class Server(Bottle):
                 try:
                     services.gtfs.load(context, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, True)
+                        services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
@@ -1418,7 +1418,7 @@ class Server(Bottle):
                 try:
                     services.gtfs.load(context)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, True)
+                        services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')

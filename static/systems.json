@@ -38,7 +38,8 @@
             },
             "victoria": {
                 "name": "Victoria",
-                "remote_id": 48
+                "remote_id": 48,
+                "enable_force_gtfs": false
             },
             "west-coast": {
                 "name": "West Coast",

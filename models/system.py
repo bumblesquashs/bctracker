@@ -32,6 +32,7 @@ class System:
     enabled: bool = True
     timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
     colour_routes: str | None = None
+    enable_force_gtfs: bool = True
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)
