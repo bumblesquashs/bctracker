@@ -5,7 +5,7 @@ from database import Database
 
 from models.area import Area
 from models.context import Context
-from models.stop import Stop
+from models.stop import Stop, StopType
 
 @dataclass(slots=True)
 class StopRepository:
@@ -32,7 +32,7 @@ class StopRepository:
             }
         )
     
-    def find(self, context: Context, stop_id=None, number=None) -> Stop | None:
+    def find(self, context: Context, stop_id: str | None = None, number: str | None = None) -> Stop | None:
         '''Returns the stop with the given context and stop ID'''
         stops = self.database.select(
             table='stop',
@@ -59,12 +59,12 @@ class StopRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None, lat=None, lon=None, size=0.01, parent_id=None, type=None) -> list[Stop]:
+    def find_all(self, context: Context, limit: int | None = None, lat: float | None = None, lon: float | None = None, size: float = 0.01, parent_id: str | None = None, type: StopType | None = None) -> list[Stop]:
         '''Returns all stops that match the given context'''
         filters = {
             'stop.system_id': context.system_id,
             'stop.parent_id': parent_id,
-            'stop.type': getattr(type, 'value', type)
+            'stop.type': type.value if type else None
         }
         if (lat is not None and lon is not None):
             filters['lat'] = {

@@ -134,24 +134,8 @@ class PositionRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context = Context(), trip=None, stop=None, block=None, route=None, has_location=None) -> list[Position]:
+    def find_all(self, context: Context = Context(), trip_id: str | list[str] | None = None, stop_id: str | list[str] | None = None, block_id: str | list[str] | None = None, route_id: str | list[str] | None = None, has_location: bool | None = None) -> list[Position]:
         '''Returns all positions that match the given system, trip, stop, block, and route'''
-        if isinstance(trip, list):
-            trip_id = [getattr(t, 'id', t) for t in trip]
-        else:
-            trip_id = getattr(trip, 'id', trip)
-        if isinstance(stop, list):
-            stop_id = [getattr(s, 'id', s) for s in stop]
-        else:
-            stop_id = getattr(stop, 'id', stop)
-        if isinstance(block, list):
-            block_id = [getattr(b, 'id', b) for b in block]
-        else:
-            block_id = getattr(block, 'id', block)
-        if isinstance(route, list):
-            route_id = [getattr(r, 'id', r) for r in route]
-        else:
-            route_id = getattr(route, 'id', route)
         filters = {
             'position.agency_id': context.agency_id,
             'position.system_id': context.system_id,

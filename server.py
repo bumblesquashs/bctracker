@@ -490,7 +490,7 @@ class Server(Bottle):
             )
         order = repositories.order.find_order(context, bus.order_id)
         position = repositories.position.find(context.agency_id, vehicle_id)
-        records = repositories.record.find_all(bus=bus, limit=20)
+        records = repositories.record.find_all(vehicle_id=vehicle_id, limit=20)
         return self.page(
             context=context,
             name='bus/overview',
@@ -542,11 +542,11 @@ class Server(Bottle):
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = repositories.record.count(bus=bus)
+        total_items = repositories.record.count(context.without_system(), vehicle_id=vehicle_id)
         if page < 1:
             records = []
         else:
-            records = repositories.record.find_all(bus=bus, limit=items_per_page, page=page)
+            records = repositories.record.find_all(context.without_system(), vehicle_id=vehicle_id, limit=items_per_page, page=page)
         transfers = repositories.transfer.find_all_by_bus(context, vehicle_id)
         tracked_systems = set()
         events = []
@@ -683,7 +683,7 @@ class Server(Bottle):
             trips=trips,
             recorded_today=repositories.record.find_recorded_today(context, trips),
             assignments=repositories.assignment.find_all(context, route_id=route.id),
-            positions=repositories.position.find_all(context, route=route),
+            positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -714,7 +714,7 @@ class Server(Bottle):
             title=str(route),
             full_map=len(route.trips) > 0,
             route=route,
-            positions=repositories.position.find_all(context, route=route),
+            positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
@@ -836,7 +836,7 @@ class Server(Bottle):
             title=f'Block {block.id}',
             include_maps=True,
             block=block,
-            positions=repositories.position.find_all(context, block=block),
+            positions=repositories.position.find_all(context, block_id=block_id),
             assignment=repositories.assignment.find_by_context(context, block_id)
         )
     
@@ -862,7 +862,7 @@ class Server(Bottle):
             title=f'Block {block.id}',
             full_map=True,
             block=block,
-            positions=repositories.position.find_all(context, block=block)
+            positions=repositories.position.find_all(context, block_id=block_id)
         )
     
     def block_history(self, context: Context, block_id):
@@ -881,7 +881,7 @@ class Server(Bottle):
                 title='Unknown Block',
                 block_id=block_id
             )
-        records = repositories.record.find_all(context, block=block)
+        records = repositories.record.find_all(context, block_id=block_id)
         order_ids = {r.bus.order_id for r in records if r.bus.order_id}
         orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         events = []
@@ -920,7 +920,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             include_maps=True,
             trip=trip,
-            positions=repositories.position.find_all(context, trip=trip),
+            positions=repositories.position.find_all(context, trip_id=trip_id),
             assignment=repositories.assignment.find_by_context(context, trip.block_id)
         )
     
@@ -946,7 +946,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             full_map=True,
             trip=trip,
-            positions=repositories.position.find_all(context, trip=trip)
+            positions=repositories.position.find_all(context, trip_id=trip_id)
         )
     
     def trip_history(self, context: Context, trip_id):
@@ -965,7 +965,7 @@ class Server(Bottle):
                 title='Unknown Trip',
                 trip_id=trip_id
             )
-        records = repositories.record.find_all(context, trip=trip)
+        records = repositories.record.find_all(context, trip_id=trip_id)
         order_ids = {r.bus.order_id for r in records if r.bus.order_id}
         orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         events = []
@@ -1089,8 +1089,8 @@ class Server(Bottle):
         else:
             parent_stop = None
         departures = stop.find_departures(date=Date.today(context.timezone))
-        trips = [d.trip for d in departures]
-        positions = repositories.position.find_all(context, trip=trips)
+        trip_ids = [d.trip_id for d in departures]
+        positions = repositories.position.find_all(context, trip_id=trip_ids)
         return self.page(
             context=context,
             name='stop/overview',
@@ -1101,7 +1101,7 @@ class Server(Bottle):
             child_stops=child_stops,
             parent_stop=parent_stop,
             departures=departures,
-            recorded_today=repositories.record.find_recorded_today(context, trips),
+            recorded_today=repositories.record.find_recorded_today(context, trip_ids),
             assignments=repositories.assignment.find_all(context, stop_id=stop.id),
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),

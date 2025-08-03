@@ -186,4 +186,4 @@ class Position:
         '''Returns the trip's upcoming departures'''
         if self.sequence is None or not self.trip:
             return []
-        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)
+        return repositories.departure.find_upcoming(self.context, self.trip_id, self.sequence)

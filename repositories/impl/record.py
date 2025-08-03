@@ -56,11 +56,8 @@ class RecordRepository:
             }
         )
     
-    def find_all(self, context: Context = Context(), bus=None, block=None, trip=None, limit=None, page=None) -> list[Record]:
+    def find_all(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None, limit: int | None = None, page: int | None = None) -> list[Record]:
         '''Returns all records that match the given context, bus, block, and trip'''
-        vehicle_id = getattr(bus, 'number', bus)
-        block_id = getattr(block, 'id', block)
-        trip_id = getattr(trip, 'id', trip)
         joins = {
             'allocation': {
                 'allocation.allocation_id': 'record.allocation_id'
@@ -108,9 +105,8 @@ class RecordRepository:
         '''Returns all trip IDs associated with the given record'''
         return self.database.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
     
-    def find_recorded_today(self, context: Context, trips) -> dict[str: Bus]:
+    def find_recorded_today(self, context: Context, trip_ids: list[str]) -> dict[str: Bus]:
         '''Returns all bus numbers matching the given context and trips that were recorded on the current date'''
-        trip_ids = [getattr(t, 'id', t) for t in trips]
         date = Date.today(context.timezone)
         rows = self.database.select(
             table='trip_record',
@@ -161,11 +157,8 @@ class RecordRepository:
         )
         return {row['block_id']: context.find_bus(row['vehicle_id']) for row in rows}
     
-    def count(self, context: Context = Context(), bus=None, block=None, trip=None) -> int:
+    def count(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None) -> int:
         '''Returns the number of records for the given system, bus, block, and trip'''
-        vehicle_id = getattr(bus, 'number', bus)
-        block_id = getattr(block, 'id', block)
-        trip_id = getattr(trip, 'id', trip)
         joins = {
             'allocation': {
                 'allocation.allocation_id': 'record.allocation_id'

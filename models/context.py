@@ -160,6 +160,9 @@ class Context:
             return False
         return self.agency < other.agency
     
+    def without_system(self):
+        return Context(self.agency)
+    
     def find_bus(self, number: int) -> Bus:
         return repositories.order.find_bus(self, number)
     

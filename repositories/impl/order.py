@@ -39,19 +39,19 @@ class OrderRepository:
                 self.orders[agency_id] = agency_orders
                 self.buses[agency_id] = agency_buses
     
-    def find_bus(self, context: Context, number: str) -> Bus | None:
+    def find_bus(self, context: Context, id: str) -> Bus | None:
         try:
-            return self.buses[context.agency_id][number]
+            return self.buses[context.agency_id][id]
         except:
             if context.vehicle_name_length:
                 try:
-                    int_number = int(number)
-                    name = f'{int_number:0{context.vehicle_name_length}d}'
+                    int_id = int(id)
+                    name = f'{int_id:0{context.vehicle_name_length}d}'
                 except:
-                    name = number[:context.vehicle_name_length]
+                    name = id[:context.vehicle_name_length]
             else:
-                name = number
-            return Bus(context.agency, number, name)
+                name = id
+            return Bus(context.agency, id, name)
     
     def find_order(self, context: Context, id: int) -> Order | None:
         try:
@@ -68,7 +68,7 @@ class OrderRepository:
                 return []
         return sorted([o for a in self.orders.values() for o in a.values()])
     
-    def find_matches(self, context: Context, query, recorded_vehicle_ids) -> list[Match]:
+    def find_matches(self, context: Context, query: str, recorded_vehicle_ids: set[str]) -> list[Match]:
         '''Returns matching buses for a given query'''
         matches = []
         try:

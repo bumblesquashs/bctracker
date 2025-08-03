@@ -11,7 +11,7 @@ class PointRepository:
     
     database: Database
     
-    def create(self, context: Context, row):
+    def create(self, context: Context, row: dict):
         '''Inserts a new point into the database'''
         self.database.insert(
             table='point',
@@ -24,9 +24,8 @@ class PointRepository:
             }
         )
     
-    def find_all(self, context: Context, shape=None) -> list[Point]:
+    def find_all(self, context: Context, shape_id: str) -> list[Point]:
         '''Returns all points that match the given context and shape'''
-        shape_id = getattr(shape, 'id', shape)
         return self.database.select(
             table='point',
             columns={

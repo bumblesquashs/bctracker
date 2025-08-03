@@ -91,7 +91,7 @@ class Stop:
     @property
     def cache(self):
         '''Returns the cache for this stop'''
-        return self.system.get_stop_cache(self)
+        return self.system.get_stop_cache(self.id)
     
     @property
     def schedule(self):
@@ -166,7 +166,7 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = repositories.departure.find_all(self.context, stop=self)
+        departures = repositories.departure.find_all(self.context, stop_id=self.id)
         if service_group:
             return sorted([d for d in departures if d.trip and d.trip.service in service_group])
         if date:
@@ -175,7 +175,7 @@ class Stop:
     
     def find_adjacent_departures(self):
         '''Returns all departures on trips that serve this stop'''
-        return repositories.departure.find_adjacent(self.context, self)
+        return repositories.departure.find_adjacent(self.context, self.id)
 
 @dataclass(slots=True)
 class StopCache:

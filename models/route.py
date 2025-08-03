@@ -229,7 +229,7 @@ class Route:
     
     def find_departures(self):
         '''Returns all departures for this route'''
-        return repositories.departure.find_all(self.context, route=self)
+        return repositories.departure.find_all(self.context, route_id=self.id)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

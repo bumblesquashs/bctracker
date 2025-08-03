@@ -133,4 +133,4 @@ class Block:
     
     def find_departures(self):
         '''Returns all departures for this block'''
-        return repositories.departure.find_all(self.context, block=self)
+        return repositories.departure.find_all(self.context, block_id=self.id)

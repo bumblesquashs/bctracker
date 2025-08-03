@@ -11,7 +11,7 @@ class TripRepository:
     
     database: Database
     
-    def create(self, context: Context, row):
+    def create(self, context: Context, row: dict):
         '''Inserts a new trip into the database'''
         self.database.insert(
             table='trip',
@@ -27,7 +27,7 @@ class TripRepository:
             }
         )
     
-    def find(self, context: Context, trip_id) -> Trip | None:
+    def find(self, context: Context, trip_id: str) -> Trip | None:
         '''Returns the trip with the given context and trip ID'''
         trips = self.database.select(
             table='trip',
@@ -53,10 +53,8 @@ class TripRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, route=None, block=None, limit=None) -> list[Trip]:
+    def find_all(self, context: Context, route_id: str | None = None, block_id: str | None = None, limit: int | None = None) -> list[Trip]:
         '''Returns all trips that match the given context, route, and block'''
-        route_id = getattr(route, 'id', route)
-        block_id = getattr(block, 'id', block)
         return self.database.select(
             table='trip',
             columns={

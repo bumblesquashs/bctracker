@@ -130,10 +130,10 @@
                 % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
                 % upcoming_count = 3 + floor(len(routes) / 3)
                 % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
-                % trips = [d.trip for d in upcoming_departures]
-                % recorded_today = repositories.record.find_recorded_today(child_stop.context, trips)
+                % trip_ids = [d.trip_id for d in upcoming_departures]
+                % recorded_today = repositories.record.find_recorded_today(child_stop.context, trip_ids)
                 % assignments = repositories.assignment.find_all(child_stop.context, stop_id=child_stop.id)
-                % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip=trips)}
+                % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip=trip_ids)}
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         <div class="column">

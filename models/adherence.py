@@ -2,7 +2,9 @@
 import math
 from dataclasses import dataclass, field
 
+from models.stop import Stop
 from models.timestamp import Timestamp
+from models.trip import Trip
 
 import repositories
 
@@ -19,9 +21,9 @@ class Adherence:
     description: str = field(init=False)
     
     @classmethod
-    def calculate(cls, trip, stop, sequence, lat, lon, timestamp):
+    def calculate(cls, trip: Trip, stop: Stop, sequence: int, lat: float, lon: float, timestamp: Timestamp | None):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = repositories.departure.find(trip.context, trip=trip, sequence=sequence)
+        departure = repositories.departure.find(trip.context, trip.id, sequence)
         if not departure:
             return None
         previous_departure = departure.find_previous()
@@ -94,7 +96,7 @@ class Adherence:
             'description': self.description
         }
 
-def linear_interpolate(lat, lon, previous_stop, next_stop, time_difference):
+def linear_interpolate(lat: float, lon: float, previous_stop: Stop, next_stop: Stop, time_difference: int):
     '''
     Estimate how far the position is between two stops in minutes...
     aka calculate the fraction of distance a point has travelled between two other points.

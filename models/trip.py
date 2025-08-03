@@ -133,7 +133,7 @@ class Trip:
     @property
     def cache(self):
         '''Returns the cache for this trip'''
-        return self.system.get_trip_cache(self)
+        return self.system.get_trip_cache(self.id)
     
     @property
     def first_departure(self):
@@ -202,7 +202,7 @@ class Trip:
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return repositories.departure.find_all(self.context, trip=self)
+        return repositories.departure.find_all(self.context, trip_id=self.id)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

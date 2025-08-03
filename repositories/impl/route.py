@@ -11,7 +11,7 @@ class RouteRepository:
     
     database: Database
     
-    def create(self, context: Context, row):
+    def create(self, context: Context, row: dict):
         '''Inserts a new route into the database'''
         try:
             colour = row['route_color']
@@ -56,7 +56,7 @@ class RouteRepository:
             }
         )
     
-    def find(self, context: Context, route_id=None, number=None) -> Route | None:
+    def find(self, context: Context, route_id: str | None = None, number: str | None = None) -> Route | None:
         '''Returns the route with the given context and route ID'''
         routes = self.database.select(
             table='route',
@@ -83,7 +83,7 @@ class RouteRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit=None) -> list[Route]:
+    def find_all(self, context: Context, limit: int | None = None) -> list[Route]:
         '''Returns all routes that match the given context'''
         return self.database.select(
             table='route',
