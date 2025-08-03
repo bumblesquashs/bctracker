@@ -15,13 +15,13 @@ class DecorationRepository:
         with open(f'./static/decorations.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency_decorations = {}
-                for (bus_number, values) in agency_values.items():
-                    agency_decorations[bus_number] = Decoration(agency_id, bus_number, **values)
+                for (vehicle_id, values) in agency_values.items():
+                    agency_decorations[vehicle_id] = Decoration(agency_id, vehicle_id, **values)
                 self.decorations[agency_id] = agency_decorations
     
-    def find(self, agency_id: str, bus_number: str) -> Decoration | None:
-        '''Returns the decorations with the given bus ID'''
+    def find(self, agency_id: str, vehicle_id: str) -> Decoration | None:
+        '''Returns the decorations with the given vehicle ID'''
         try:
-            return self.decorations[agency_id][bus_number]
+            return self.decorations[agency_id][vehicle_id]
         except KeyError:
             return None

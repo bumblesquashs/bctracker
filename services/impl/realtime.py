@@ -53,10 +53,9 @@ class RealtimeService:
                 vehicle_name_length = context.vehicle_name_length
                 if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                     vehicle_id = vehicle_id[-vehicle_name_length:]
-                bus_number = str(vehicle_id)
             except:
-                bus_number = str(-(index + 1))
-            repositories.position.create(context, bus_number, vehicle)
+                vehicle_id = str(-(index + 1))
+            repositories.position.create(context, vehicle_id, vehicle)
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
     
@@ -71,7 +70,7 @@ class RealtimeService:
                 date = Date.today(context.timezone)
                 time = Time.now(context.timezone)
                 
-                allocation = repositories.allocation.find_active(context, bus.number)
+                allocation = repositories.allocation.find_active(context, bus.id)
                 if allocation:
                     if allocation.context == context:
                         repositories.allocation.set_last_seen(allocation.id, date)
@@ -81,12 +80,12 @@ class RealtimeService:
                     else:
                         repositories.allocation.set_inactive(allocation.id)
                         repositories.assignment.delete_all(allocation_id=allocation.id)
-                        allocation_id = repositories.allocation.create(context, bus.number, date)
+                        allocation_id = repositories.allocation.create(context, bus.id, date)
                         repositories.transfer.create(date, allocation.id, allocation_id)
                         first_record = None
                         last_record = None
                 else:
-                    allocation_id = repositories.allocation.create(context, bus.number, date)
+                    allocation_id = repositories.allocation.create(context, bus.id, date)
                     first_record = None
                     last_record = None
                 

@@ -58,7 +58,7 @@ class RecordRepository:
     
     def find_all(self, context: Context = Context(), bus=None, block=None, trip=None, limit=None, page=None) -> list[Record]:
         '''Returns all records that match the given context, bus, block, and trip'''
-        bus_number = getattr(bus, 'number', bus)
+        vehicle_id = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
         trip_id = getattr(trip, 'id', trip)
         joins = {
@@ -68,7 +68,7 @@ class RecordRepository:
         }
         filters = {
             'allocation.agency_id': context.agency_id,
-            'allocation.vehicle_id': bus_number,
+            'allocation.vehicle_id': vehicle_id,
             'allocation.system_id': context.system_id,
             'record.block_id': block_id
         }
@@ -163,7 +163,7 @@ class RecordRepository:
     
     def count(self, context: Context = Context(), bus=None, block=None, trip=None) -> int:
         '''Returns the number of records for the given system, bus, block, and trip'''
-        bus_number = getattr(bus, 'number', bus)
+        vehicle_id = getattr(bus, 'number', bus)
         block_id = getattr(block, 'id', block)
         trip_id = getattr(trip, 'id', trip)
         joins = {
@@ -173,7 +173,7 @@ class RecordRepository:
         }
         filters = {
             'allocation.agency_id': context.agency_id,
-            'allocation.vehicle_id': bus_number,
+            'allocation.vehicle_id': vehicle_id,
             'allocation.system_id': context.system_id,
             'record.block_id': block_id
         }

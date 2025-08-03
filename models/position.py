@@ -127,7 +127,7 @@ class Position:
     def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
-            'bus_number': self.bus.number,
+            'vehicle_id': self.bus.id,
             'bus_display': str(self.bus),
             'bus_url_id': str(self.bus.url_id),
             'system': str(self.system),

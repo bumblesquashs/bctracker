@@ -73,38 +73,38 @@ class Order:
             return None
     
     @classmethod
-    def from_json(cls, id: int, agency: Agency, model: Model | None, rows: list):
+    def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
         buses = []
         for row in rows:
-            if 'number' in row:
-                number = row['number']
-                del row['number']
+            if 'id' in row:
+                id = row['id']
+                del row['id']
                 if agency.vehicle_name_length:
-                    if type(number) is int:
-                        name = f'{number:0{agency.vehicle_name_length}d}'
-                        number = str(number)
+                    if type(id) is int:
+                        name = f'{id:0{agency.vehicle_name_length}d}'
+                        id = str(id)
                     else:
-                        number = str(number)
-                        name = number[:agency.vehicle_name_length]
+                        id = str(id)
+                        name = id[:agency.vehicle_name_length]
                 else:
-                    number = str(number)
-                    name = number
-                buses.append(Bus(agency, number, name, id, model, **row))
+                    id = str(id)
+                    name = id
+                buses.append(Bus(agency, id, name, order_id, model, **row))
             else:
                 low = row['low']
                 high = row['high']
                 del row['low']
                 del row['high']
-                for number in range(low, high + 1):
+                for id in range(low, high + 1):
                     if agency.vehicle_name_length:
-                        if type(number) is int:
-                            name = f'{number:0{agency.vehicle_name_length}d}'
-                            number = str(number)
+                        if type(id) is int:
+                            name = f'{id:0{agency.vehicle_name_length}d}'
+                            id = str(id)
                         else:
-                            number = str(number)
-                            name = number[:agency.vehicle_name_length]
+                            id = str(id)
+                            name = id[:agency.vehicle_name_length]
                     else:
-                        number = str(number)
-                        name = number
-                    buses.append(Bus(agency, number, name, id, model, **row))
-        return cls(id, agency, model, buses)
+                        id = str(id)
+                        name = id
+                    buses.append(Bus(agency, id, name, order_id, model, **row))
+        return cls(order_id, agency, model, buses)

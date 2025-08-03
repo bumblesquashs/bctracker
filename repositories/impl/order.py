@@ -34,7 +34,7 @@ class OrderRepository:
                         order = Order.from_json(id, agency, model, values)
                         agency_orders[id] = order
                         for bus in order.buses:
-                            agency_buses[bus.number] = bus
+                            agency_buses[bus.id] = bus
                         id += 1
                 self.orders[agency_id] = agency_orders
                 self.buses[agency_id] = agency_buses
@@ -68,7 +68,7 @@ class OrderRepository:
                 return []
         return sorted([o for a in self.orders.values() for o in a.values()])
     
-    def find_matches(self, context: Context, query, recorded_bus_numbers) -> list[Match]:
+    def find_matches(self, context: Context, query, recorded_vehicle_ids) -> list[Match]:
         '''Returns matching buses for a given query'''
         matches = []
         try:
@@ -88,7 +88,7 @@ class OrderRepository:
                 value += (len(query) / len(bus.name)) * 100
                 if bus.name.startswith(query):
                     value += len(query)
-            if bus.number not in recorded_bus_numbers:
+            if bus.id not in recorded_vehicle_ids:
                 value /= 10
             decoration = bus.find_decoration()
             name = bus.name

@@ -17,7 +17,7 @@ class Bus:
     '''A public transportation vehicle'''
     
     agency: Agency
-    number: str
+    id: str
     name: str
     order_id: int | None = None
     model: Model | None = None
@@ -40,11 +40,11 @@ class Bus:
     @property
     def url_id(self):
         '''The ID to use when making bus URLs'''
-        return self.number
+        return self.id
     
     @property
     def is_known(self):
-        return not self.number.startswith('-')
+        return not self.id.startswith('-')
     
     @property
     def year_model(self):
@@ -67,17 +67,17 @@ class Bus:
         return 'Unknown Bus'
     
     def __hash__(self):
-        return hash((self.agency, self.number))
+        return hash((self.agency, self.id))
     
     def __eq__(self, other):
-        return self.agency == other.agency and self.number == other.number and self.order_id == other.order_id
+        return self.agency == other.agency and self.id == other.id and self.order_id == other.order_id
     
     def __lt__(self, other):
         return self.key < other.key
     
     def find_decoration(self):
         '''Returns the decoration for this bus, if one exists'''
-        return repositories.decoration.find(self.agency.id, self.number)
+        return repositories.decoration.find(self.agency.id, self.id)
     
     def find_livery(self):
         '''Returns the livery for this bus, if one exists'''

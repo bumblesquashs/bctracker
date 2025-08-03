@@ -241,7 +241,7 @@
             </div>
         % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
             % bus = assignment.bus
-            % position = repositories.position.find(bus.agency.id, bus.number)
+            % position = repositories.position.find(bus.agency.id, bus.id)
             <div class="section">
                 <div class="header">
                     <h2>Scheduled Bus</h2>

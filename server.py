@@ -55,9 +55,9 @@ class Server(Bottle):
         self.add('/realtime/models', callback=self.realtime_models)
         self.add('/realtime/speed', callback=self.realtime_speed)
         self.add('/fleet', callback=self.fleet)
-        self.add('/bus/<bus_number>', callback=self.bus_overview)
-        self.add('/bus/<bus_number>/map', callback=self.bus_map)
-        self.add('/bus/<bus_number>/history', callback=self.bus_history)
+        self.add('/bus/<vehicle_id>', callback=self.bus_overview)
+        self.add('/bus/<vehicle_id>/map', callback=self.bus_map)
+        self.add('/bus/<vehicle_id>/history', callback=self.bus_history)
         self.add('/history', callback=self.history_last_seen)
         self.add('/history/first-seen', callback=self.history_first_seen)
         self.add('/history/transfers', callback=self.history_transfers)
@@ -478,18 +478,18 @@ class Server(Bottle):
             allocations=allocations
         )
     
-    def bus_overview(self, context: Context, bus_number):
-        bus = context.find_bus(bus_number)
-        allocation = repositories.allocation.find_active(context, bus_number)
+    def bus_overview(self, context: Context, vehicle_id):
+        bus = context.find_bus(vehicle_id)
+        allocation = repositories.allocation.find_active(context, vehicle_id)
         if (not bus.order_id and not allocation) or not bus.visible:
             return self.error_page(
                 context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
-                bus_number=bus_number
+                vehicle_id=vehicle_id
             )
         order = repositories.order.find_order(context, bus.order_id)
-        position = repositories.position.find(context.agency_id, bus_number)
+        position = repositories.position.find(context.agency_id, vehicle_id)
         records = repositories.record.find_all(bus=bus, limit=20)
         return self.page(
             context=context,
@@ -505,17 +505,17 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def bus_map(self, context: Context, bus_number):
-        bus = context.find_bus(bus_number)
-        allocation = repositories.allocation.find_active(context, bus_number)
+    def bus_map(self, context: Context, vehicle_id):
+        bus = context.find_bus(vehicle_id)
+        allocation = repositories.allocation.find_active(context, vehicle_id)
         if (not bus.order_id and not allocation) or not bus.visible:
             return self.error_page(
                 context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
-                bus_number=bus_number
+                vehicle_id=vehicle_id
             )
-        position = repositories.position.find(context.agency_id, bus_number)
+        position = repositories.position.find(context.agency_id, vehicle_id)
         return self.page(
             context=context,
             name='bus/map',
@@ -527,15 +527,15 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def bus_history(self, context: Context, bus_number):
-        bus = context.find_bus(bus_number)
-        allocations = repositories.allocation.find_all(context, bus_number)
+    def bus_history(self, context: Context, vehicle_id):
+        bus = context.find_bus(vehicle_id)
+        allocations = repositories.allocation.find_all(context, vehicle_id)
         if (not bus.order_id and not allocations) or not bus.visible:
             return self.error_page(
                 context=context,
                 name='invalid_bus',
                 title='Unknown Bus',
-                bus_number=bus_number
+                vehicle_id=vehicle_id
             )
         try:
             page = int(request.query['page'])
@@ -547,7 +547,7 @@ class Server(Bottle):
             records = []
         else:
             records = repositories.record.find_all(bus=bus, limit=items_per_page, page=page)
-        transfers = repositories.transfer.find_all_by_bus(context, bus_number)
+        transfers = repositories.transfer.find_all_by_bus(context, vehicle_id)
         tracked_systems = set()
         events = []
         # if overview:
@@ -1371,8 +1371,8 @@ class Server(Bottle):
         matches = []
         if query != '':
             if context.realtime_enabled and include_buses:
-                bus_numbers = repositories.allocation.find_vehicle_ids(context)
-                matches += repositories.order.find_matches(context, query, bus_numbers)
+                vehicle_ids = repositories.allocation.find_vehicle_ids(context)
+                matches += repositories.order.find_matches(context, query, vehicle_ids)
             if context.system:
                 if include_blocks and context.enable_blocks:
                     matches += context.system.search_blocks(query)

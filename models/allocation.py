@@ -80,7 +80,7 @@ class Allocation:
         if 'first_record_id' in row:
             row.values['first_record_allocation_id'] = id
             row.values['first_record_agency_id'] = agency.id
-            row.values['first_record_vehicle_id'] = bus.number
+            row.values['first_record_vehicle_id'] = bus.id
             row.values['first_record_system_id'] = system.id if system else None
             first_record = row.obj('first_record', Record.from_db)
         else:
@@ -89,7 +89,7 @@ class Allocation:
         if 'last_record_id' in row:
             row.values['last_record_allocation_id'] = id
             row.values['last_record_agency_id'] = agency.id
-            row.values['last_record_vehicle_id'] = bus.number
+            row.values['last_record_vehicle_id'] = bus.id
             row.values['last_record_system_id'] = system.id if system else None
             last_record = row.obj('last_record', Record.from_db)
         else:

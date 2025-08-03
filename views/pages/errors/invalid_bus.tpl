@@ -2,14 +2,14 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Error: Bus {{ bus_number }} Not Found</h1>
+    <h1>Error: Bus {{ vehicle_id }} Not Found</h1>
 </div>
 
 <div class="placeholder">
     <h3>The bus you are looking for doesn't seem to exist!</h3>
     <p>There are a few reasons why that might be the case:</p>
     <ol>
-        <li>It may be the wrong number - are you sure bus <b>{{ bus_number }}</b> is the one you want?</li>
+        <li>It may be the wrong number - are you sure bus <b>{{ vehicle_id }}</b> is the one you want?</li>
         <li>It may have been retired before this tracker was started</li>
         <li>It may be a brand new bus that hasn't been registered with the tracker yet</li>
     </ol>
