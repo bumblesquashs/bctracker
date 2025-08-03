@@ -33,7 +33,7 @@
                             </div>
                             <div class="column section">
                                 % for order in orders:
-                                    % percentage = (len([r for r in records if r.bus.order_id == order.id]) / len(records)) * 100
+                                    % percentage = (sum(1 for r in records if r.bus.order_id == order.id) / len(records)) * 100
                                     <div class="row space-between">
                                         <div>{{! order }}</div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="content">
                     % if records:
-                        % if [r for r in records if r.warnings]:
+                        % if any(r.warnings for r in records):
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">

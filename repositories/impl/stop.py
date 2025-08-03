@@ -18,20 +18,24 @@ class StopRepository:
         number = row['stop_code']
         if not number:
             number = stop_id
-        self.database.insert('stop', {
-            'system_id': context.system_id,
-            'stop_id': stop_id,
-            'number': number,
-            'name': row['stop_name'],
-            'lat': float(row['stop_lat']),
-            'lon': float(row['stop_lon']),
-            'parent_id': row.get('parent_station'),
-            'type': row.get('location_type')
-        })
+        self.database.insert(
+            table='stop',
+            values={
+                'system_id': context.system_id,
+                'stop_id': stop_id,
+                'number': number,
+                'name': row['stop_name'],
+                'lat': float(row['stop_lat']),
+                'lon': float(row['stop_lon']),
+                'parent_id': row.get('parent_station'),
+                'type': row.get('location_type')
+            }
+        )
     
     def find(self, context: Context, stop_id=None, number=None) -> Stop | None:
         '''Returns the stop with the given context and stop ID'''
-        stops = self.database.select('stop',
+        stops = self.database.select(
+            table='stop',
             columns={
                 'stop.system_id': 'system_id',
                 'stop.stop_id': 'id',
@@ -71,7 +75,8 @@ class StopRepository:
                 '>=': lon,
                 '<=': lon + size
             }
-        return self.database.select('stop',
+        return self.database.select(
+            table='stop',
             columns={
                 'stop.system_id': 'system_id',
                 'stop.stop_id': 'id',
@@ -115,6 +120,9 @@ class StopRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all stops for the given context from the database'''
-        self.database.delete('stop', {
-            'system_id': context.system_id
-        })
+        self.database.delete(
+            table='stop',
+            filters={
+                'system_id': context.system_id
+            }
+        )

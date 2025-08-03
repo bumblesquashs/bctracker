@@ -13,20 +13,24 @@ class TripRepository:
     
     def create(self, context: Context, row):
         '''Inserts a new trip into the database'''
-        self.database.insert('trip', {
-            'system_id': context.system_id,
-            'trip_id': row['trip_id'],
-            'route_id': row['route_id'],
-            'service_id': row['service_id'],
-            'block_id': row['block_id'],
-            'direction_id': int(row['direction_id']),
-            'shape_id': row['shape_id'],
-            'headsign': row['trip_headsign']
-        })
+        self.database.insert(
+            table='trip',
+            values={
+                'system_id': context.system_id,
+                'trip_id': row['trip_id'],
+                'route_id': row['route_id'],
+                'service_id': row['service_id'],
+                'block_id': row['block_id'],
+                'direction_id': int(row['direction_id']),
+                'shape_id': row['shape_id'],
+                'headsign': row['trip_headsign']
+            }
+        )
     
     def find(self, context: Context, trip_id) -> Trip | None:
         '''Returns the trip with the given context and trip ID'''
-        trips = self.database.select('trip',
+        trips = self.database.select(
+            table='trip',
             columns={
                 'trip.system_id': 'system_id',
                 'trip.trip_id': 'id',
@@ -53,7 +57,8 @@ class TripRepository:
         '''Returns all trips that match the given context, route, and block'''
         route_id = getattr(route, 'id', route)
         block_id = getattr(block, 'id', block)
-        return self.database.select('trip',
+        return self.database.select(
+            table='trip',
             columns={
                 'trip.system_id': 'system_id',
                 'trip.trip_id': 'id',
@@ -75,6 +80,9 @@ class TripRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all trips for the given context from the database'''
-        self.database.delete('trip', {
-            'system_id': context.system_id
-        })
+        self.database.delete(
+            table='trip',
+            filters={
+                'system_id': context.system_id
+            }
+        )

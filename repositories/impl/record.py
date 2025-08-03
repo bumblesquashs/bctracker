@@ -46,7 +46,8 @@ class RecordRepository:
     
     def update(self, record_id: int, time: Time):
         '''Updates a record in the database'''
-        self.database.update('record',
+        self.database.update(
+            table='record',
             values={
                 'last_seen': time.format_db()
             },
@@ -76,7 +77,8 @@ class RecordRepository:
                 'trip_record.record_id': 'record.record_id'
             }
             filters['trip_record.trip_id'] = trip_id
-        return self.database.select('record', 
+        return self.database.select(
+            table='record', 
             columns={
                 'allocation.agency_id': 'agency_id',
                 'allocation.vehicle_id': 'vehicle_id',
@@ -110,7 +112,8 @@ class RecordRepository:
         '''Returns all bus numbers matching the given context and trips that were recorded on the current date'''
         trip_ids = [getattr(t, 'id', t) for t in trips]
         date = Date.today(context.timezone)
-        rows = self.database.select('trip_record',
+        rows = self.database.select(
+            table='trip_record',
             columns={
                 'trip_record.trip_id': 'trip_id',
                 'allocation.agency_id': 'agency_id',
@@ -137,7 +140,8 @@ class RecordRepository:
     def find_recorded_today_by_block(self, context: Context) -> dict[str, Bus]:
         '''Returns all bus numbers matching the given context that werer ecorded on the current date'''
         date = Date.today(context.timezone)
-        rows = self.database.select('record',
+        rows = self.database.select(
+            table='record',
             columns={
                 'record.block_id': 'block_id',
                 'allocation.agency_id': 'agency_id',

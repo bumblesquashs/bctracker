@@ -42,20 +42,24 @@ class RouteRepository:
                 number = context.agency.custom_route_numbers[route_id]
             except KeyError:
                 number = route_id
-        self.database.insert('route', {
-            'system_id': context.system_id,
-            'route_id': route_id,
-            'number': number,
-            'name': row['route_long_name'],
-            'colour': colour,
-            'text_colour': text_colour,
-            'type': type,
-            'sort_order': sort_order
-        })
+        self.database.insert(
+            table='route',
+            values={
+                'system_id': context.system_id,
+                'route_id': route_id,
+                'number': number,
+                'name': row['route_long_name'],
+                'colour': colour,
+                'text_colour': text_colour,
+                'type': type,
+                'sort_order': sort_order
+            }
+        )
     
     def find(self, context: Context, route_id=None, number=None) -> Route | None:
         '''Returns the route with the given context and route ID'''
-        routes = self.database.select('route',
+        routes = self.database.select(
+            table='route',
             columns={
                 'route.system_id': 'system_id',
                 'route.route_id': 'id',
@@ -81,7 +85,8 @@ class RouteRepository:
     
     def find_all(self, context: Context, limit=None) -> list[Route]:
         '''Returns all routes that match the given context'''
-        return self.database.select('route',
+        return self.database.select(
+            table='route',
             columns={
                 'route.system_id': 'system_id',
                 'route.route_id': 'id',
@@ -101,6 +106,9 @@ class RouteRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all routes for the given context from the database'''
-        self.database.delete('route', {
-            'system_id': context.system_id
-        })
+        self.database.delete(
+            table='route',
+            filters={
+                'system_id': context.system_id
+            }
+        )

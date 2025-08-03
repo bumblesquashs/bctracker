@@ -14,15 +14,19 @@ class TransferRepository:
     
     def create(self, date: Date, old_allocation_id: int, new_allocation_id: int):
         '''Inserts a new transfer into the database'''
-        self.database.insert('transfer', {
-            'date': date.format_db(),
-            'old_allocation_id': old_allocation_id,
-            'new_allocation_id': new_allocation_id
-        })
+        self.database.insert(
+            table='transfer',
+            values={
+                'date': date.format_db(),
+                'old_allocation_id': old_allocation_id,
+                'new_allocation_id': new_allocation_id
+            }
+        )
     
     def find_all(self, old_context: Context, new_context: Context) -> list[Transfer]:
         '''Returns all transfers that match the given system'''
-        return self.database.select('transfer',
+        return self.database.select(
+            table='transfer',
             columns={
                 'transfer.transfer_id': 'id',
                 'transfer.date': 'date',

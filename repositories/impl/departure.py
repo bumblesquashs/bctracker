@@ -33,18 +33,21 @@ class DepartureRepository:
             headsign = row['stop_headsign']
         except KeyError:
             headsign = None
-        self.database.insert('departure', {
-            'system_id': context.system_id,
-            'trip_id': row['trip_id'],
-            'sequence': int(row['stop_sequence']),
-            'stop_id': row['stop_id'],
-            'time': row['departure_time'],
-            'pickup_type': pickup_type.value,
-            'dropoff_type': dropoff_type.value,
-            'timepoint': 1 if timepoint else 0,
-            'distance': distance,
-            'headsign': headsign
-        })
+        self.database.insert(
+            table='departure',
+            values={
+                'system_id': context.system_id,
+                'trip_id': row['trip_id'],
+                'sequence': int(row['stop_sequence']),
+                'stop_id': row['stop_id'],
+                'time': row['departure_time'],
+                'pickup_type': pickup_type.value,
+                'dropoff_type': dropoff_type.value,
+                'timepoint': 1 if timepoint else 0,
+                'distance': distance,
+                'headsign': headsign
+            }
+        )
     
     def find(self, context: Context, trip=None, sequence=None, stop=None) -> Departure:
         '''Returns the departure with the given context, trip, sequence, and stop'''
@@ -75,7 +78,8 @@ class DepartureRepository:
                 'trip.system_id': 'departure.system_id',
                 'trip.trip_id': 'departure.trip_id'
             }
-        return self.database.select('departure',
+        return self.database.select(
+            table='departure',
             columns={
                 'departure.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
@@ -105,7 +109,8 @@ class DepartureRepository:
     def find_upcoming(self, context: Context, trip, sequence, limit=None) -> list[Departure]:
         '''Returns all departures on a trip from the given sequence number onwards'''
         trip_id = getattr(trip, 'id', trip)
-        return self.database.select('departure',
+        return self.database.select(
+            table='departure',
             columns={
                 'departure.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
@@ -145,7 +150,8 @@ class DepartureRepository:
                 'departure.system_id': context.system_id,
                 'departure.stop_id': stop_id
             })
-        return self.database.select('stop_trip',
+        return self.database.select(
+            table='stop_trip',
             columns={
                 'departure.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
@@ -178,6 +184,9 @@ class DepartureRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all departures for the given context from the database'''
-        self.database.delete('departure', {
-            'system_id': context.system_id
-        })
+        self.database.delete(
+            table='departure',
+            filters={
+                'system_id': context.system_id
+            }
+        )

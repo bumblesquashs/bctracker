@@ -14,15 +14,19 @@ class AssignmentRepository:
     
     def create(self, block_id: str, allocation_id: int, date: Date):
         '''Inserts a new assignment into the database'''
-        self.database.insert('assignment', {
-            'block_id': block_id,
-            'allocation_id': allocation_id,
-            'date': date.format_db()
-        })
+        self.database.insert(
+            table='assignment',
+            values={
+                'block_id': block_id,
+                'allocation_id': allocation_id,
+                'date': date.format_db()
+            }
+        )
     
     def find(self, block_id: str, allocation_id: int, date: Date) -> Assignment | None:
         '''Returns the assignment for the given context and block'''
-        assignments = self.database.select('assignment',
+        assignments = self.database.select(
+            table='assignment',
             columns={
                 'assignment.block_id': 'block_id',
                 'assignment.allocation_id': 'allocation_id',
@@ -106,7 +110,8 @@ class AssignmentRepository:
                     'departure.trip_id': 'trip.trip_id'
                 }
                 filters['departure.stop_id'] = stop_id
-        assignments = self.database.select('assignment',
+        assignments = self.database.select(
+            table='assignment',
             columns={
                 'assignment.block_id': 'block_id',
                 'assignment.allocation_id': 'allocation_id',
@@ -123,7 +128,10 @@ class AssignmentRepository:
     
     def delete_all(self, block_id: str | None = None, allocation_id: int | None = None):
         '''Deletes all assignments from the database'''
-        self.database.delete('assignment', {
-            'block_id': block_id,
-            'allocation_id': allocation_id
-        })
+        self.database.delete(
+            table='assignment',
+            filters={
+                'block_id': block_id,
+                'allocation_id': allocation_id
+            }
+        )

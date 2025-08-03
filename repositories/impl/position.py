@@ -104,7 +104,8 @@ class PositionRepository:
     
     def find(self, agency_id: str, vehicle_id: str) -> Position | None:
         '''Returns the position of the given bus'''
-        positions = self.database.select('position',
+        positions = self.database.select(
+            table='position',
             columns={
                 'position.agency_id': 'agency_id',
                 'position.vehicle_id': 'vehicle_id',
@@ -174,7 +175,8 @@ class PositionRepository:
                 filters['position.lon'] = {
                     'IS': None
                 }
-        positions = self.database.select('position',
+        positions = self.database.select(
+            table='position',
             columns={
                 'position.agency_id': 'agency_id',
                 'position.vehicle_id': 'vehicle_id',
@@ -199,6 +201,9 @@ class PositionRepository:
     
     def delete_all(self, context: Context = Context()):
         '''Deletes all positions for the given system from the database'''
-        self.database.delete('position', {
-            'position.system_id': context.system_id
-        })
+        self.database.delete(
+            table='position',
+            filters={
+                'position.system_id': context.system_id
+            }
+        )

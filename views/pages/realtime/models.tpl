@@ -54,7 +54,7 @@
                                 <tr class="header">
                                     <td>{{ type }}</td>
                                     % if show_nis:
-                                        <td class="align-right">{{ len([p for p in type_positions if p.trip]) }}</td>
+                                        <td class="align-right">{{ sum(1 for p in type_positions if p.trip) }}</td>
                                     % end
                                     <td class="align-right">{{ len(type_positions) }}</td>
                                 </tr>
@@ -65,7 +65,7 @@
                                     <tr>
                                         <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                         % if show_nis:
-                                            <td class="align-right">{{ len([p for p in model_positions if p.trip]) }}</td>
+                                            <td class="align-right">{{ sum(1 for p in model_positions if p.trip) }}</td>
                                         % end
                                         <td class="align-right">{{ len(model_positions) }}</td>
                                     </tr>
@@ -74,7 +74,7 @@
                             <tr class="header">
                                 <td>Total</td>
                                 % if show_nis:
-                                    <td class="align-right">{{ len([p for p in positions if p.trip]) }}</td>
+                                    <td class="align-right">{{ sum(1 for p in positions if p.trip) }}</td>
                                 % end
                                 <td class="align-right">{{ len(positions) }}</td>
                             </tr>

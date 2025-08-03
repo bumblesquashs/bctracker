@@ -91,7 +91,7 @@
                         % dates = {r.date for r in records}
                         <h3>{{ min(dates).format_long() }} - {{ max(dates).format_long() }}</h3>
                         
-                        % if [r for r in records if r.warnings]:
+                        % if any(r.warnings for r in records):
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">

@@ -310,7 +310,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if [d for d in departures if d.timepoint]:
+                % if any(d.timepoint for d in departures):
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 % last_headsign = None

@@ -111,7 +111,7 @@
                                     % end
                                 </div>
                             </div>
-                            % if [t for t in block.get_trips() if t.length is not None]:
+                            % if any(t.length is not None for t in block.get_trips()):
                                 <div class="row section">
                                     <div class="name">Length</div>
                                     <div class="value">
