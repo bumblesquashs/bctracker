@@ -17,6 +17,9 @@ class Row:
             return f'{self.prefix}_{key}'
         return key
     
+    def __contains__(self, key) -> bool:
+        return self.make_key(key) in self.values
+    
     def __getitem__(self, key: str) -> str | int | float | None:
         return self.values[self.make_key(key)]
     
@@ -29,5 +32,11 @@ class Row:
         except:
             return None
     
-    def context(self, key: str = 'system_id') -> Context | None:
-        return Context.find(system_id=self.get(key))
+    def context(self, agency_key: str = 'agency_id', system_key: str = 'system_id') -> Context | None:
+        if system_key in self:
+            if agency_key in self:
+                return Context.find(self.get(agency_key), self.get(system_key))
+            return Context.find(system_id=self.get(system_key))
+        if agency_key in self:
+            return Context.find(agency_id=self.get(agency_key))
+        return None

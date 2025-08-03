@@ -80,9 +80,15 @@ class Order:
                 number = row['number']
                 del row['number']
                 if agency.vehicle_name_length:
-                    name = f'{number:0{agency.vehicle_name_length}d}'
+                    if type(number) is int:
+                        name = f'{number:0{agency.vehicle_name_length}d}'
+                        number = str(number)
+                    else:
+                        number = str(number)
+                        name = number[:agency.vehicle_name_length]
                 else:
-                    name = str(number)
+                    number = str(number)
+                    name = number
                 buses.append(Bus(agency, number, name, id, model, **row))
             else:
                 low = row['low']
@@ -91,8 +97,14 @@ class Order:
                 del row['high']
                 for number in range(low, high + 1):
                     if agency.vehicle_name_length:
-                        name = f'{number:0{agency.vehicle_name_length}d}'
+                        if type(number) is int:
+                            name = f'{number:0{agency.vehicle_name_length}d}'
+                            number = str(number)
+                        else:
+                            number = str(number)
+                            name = number[:agency.vehicle_name_length]
                     else:
-                        name = str(number)
+                        number = str(number)
+                        name = number
                     buses.append(Bus(agency, number, name, id, model, **row))
         return cls(id, agency, model, buses)

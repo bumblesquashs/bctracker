@@ -23,7 +23,7 @@
 </div>
 
 <div class="page-container">
-    % if overview:
+    % if allocations:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -32,6 +32,15 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
+                        % for allocation in allocations:
+                            <div class="section">
+                                <h3>{{ allocation.context }}</h3>
+                                <div class="smaller-font ligher-text">
+                                    {{ allocation.first_seen.format_long() }} - {{ allocation.last_seen.format_long() }}
+                                </div>
+                                <div>{{ allocation.records_count }} Records</div>
+                            </div>
+                        % end
                         <div class="section">
                             % include('components/events_list', events=events)
                         </div>

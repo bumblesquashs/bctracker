@@ -13,7 +13,7 @@ import repositories
 class OrderRepository:
     
     orders: dict[str, dict[int, Order]] = field(default_factory=dict)
-    buses: dict[str, dict[int, Bus]] = field(default_factory=dict)
+    buses: dict[str, dict[str, Bus]] = field(default_factory=dict)
     
     def load(self):
         '''Loads order data from the static JSON file'''
@@ -39,14 +39,18 @@ class OrderRepository:
                 self.orders[agency_id] = agency_orders
                 self.buses[agency_id] = agency_buses
     
-    def find_bus(self, context: Context, number: int) -> Bus | None:
+    def find_bus(self, context: Context, number: str) -> Bus | None:
         try:
             return self.buses[context.agency_id][number]
         except:
             if context.vehicle_name_length:
-                name = f'{number:0{context.vehicle_name_length}d}'
+                try:
+                    int_number = int(number)
+                    name = f'{int_number:0{context.vehicle_name_length}d}'
+                except:
+                    name = number[:context.vehicle_name_length]
             else:
-                name = str(number)
+                name = number
             return Bus(context.agency, number, name)
     
     def find_order(self, context: Context, id: int) -> Order | None:

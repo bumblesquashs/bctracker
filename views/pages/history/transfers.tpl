@@ -11,45 +11,45 @@
 </div>
 
 <div class="page-container">
-    <div class="sidebar container flex-1">
-        % if context.system:
-            <div class="section {{ '' if filter else '' }}">
-                <div class="header" onclick="toggleSection(this)">
-                    <h2>Filters</h2>
-                    % include('components/toggle')
-                </div>
-                <div class="content">
-                    <div class="info-box">
-                        <div class="section">
-                            <div class="options-container">
-                                <div class="option" onclick="setFilter(null)">
-                                    <div class="radio-button {{ '' if filter else 'selected' }}"></div>
-                                    <div>All Transfers</div>
-                                </div>
-                                <div class="option" onclick="setFilter('from')">
-                                    <div class="radio-button {{ 'selected' if filter == 'from' else '' }}"></div>
-                                    <div>From {{ context }}</div>
-                                </div>
-                                <div class="option" onclick="setFilter('to')">
-                                    <div class="radio-button {{ 'selected' if filter == 'to' else '' }}"></div>
-                                    <div>To {{ context }}</div>
+    % if transfers:
+        <div class="sidebar container flex-1">
+            % if context.system:
+                <div class="section {{ '' if filter else '' }}">
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>Filters</h2>
+                        % include('components/toggle')
+                    </div>
+                    <div class="content">
+                        <div class="info-box">
+                            <div class="section">
+                                <div class="options-container">
+                                    <div class="option" onclick="setFilter(null)">
+                                        <div class="radio-button {{ '' if filter else 'selected' }}"></div>
+                                        <div>All Transfers</div>
+                                    </div>
+                                    <div class="option" onclick="setFilter('from')">
+                                        <div class="radio-button {{ 'selected' if filter == 'from' else '' }}"></div>
+                                        <div>From {{ context }}</div>
+                                    </div>
+                                    <div class="option" onclick="setFilter('to')">
+                                        <div class="radio-button {{ 'selected' if filter == 'to' else '' }}"></div>
+                                        <div>To {{ context }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <script>
-                        function setFilter(filter) {
-                            if (filter === null) {
-                                window.location = "{{ get_url(context, 'history', 'transfers') }}";
-                            } else {
-                                window.location = "{{ get_url(context, 'history', 'transfers') }}?filter=" + filter;
+                        <script>
+                            function setFilter(filter) {
+                                if (filter === null) {
+                                    window.location = "{{ get_url(context, 'history', 'transfers') }}";
+                                } else {
+                                    window.location = "{{ get_url(context, 'history', 'transfers') }}?filter=" + filter;
+                                }
                             }
-                        }
-                    </script>
+                        </script>
+                    </div>
                 </div>
-            </div>
-        % end
-        % if transfers:
+            % end
             <div class="section closed">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Statistics</h2>
@@ -90,8 +90,8 @@
                     </table>
                 </div>
             </div>
-        % end
-    </div>
+        </div>
+    % end
     <div class="container flex-3">
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
@@ -114,7 +114,7 @@
                         <tbody>
                             % last_date = None
                             % for transfer in transfers:
-                                % bus = transfer.bus
+                                % bus = transfer.new_bus
                                 % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
                                     <tr class="header">
                                         <td colspan="6">{{ transfer.date.format_month() }}</td>

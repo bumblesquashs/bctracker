@@ -38,7 +38,7 @@ class Position:
     def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
         context = row.context()
-        bus = context.find_bus(row['bus_number'])
+        bus = context.find_bus(row['vehicle_id'])
         trip_id = row['trip_id']
         stop_id = row['stop_id']
         block_id = row['block_id']
@@ -86,7 +86,7 @@ class Position:
     @property
     def block(self):
         '''Returns the block associated with this position'''
-        if not self.block_id:
+        if self.block_id:
             return self.system.get_block(self.block_id)
         return None
     

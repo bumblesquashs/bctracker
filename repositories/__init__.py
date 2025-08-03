@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .impl.agency import AgencyRepository
+    from .impl.allocation import AllocationRepository
     from .impl.assignment import AssignmentRepository
     from .impl.decoration import DecorationRepository
     from .impl.departure import DepartureRepository
     from .impl.livery import LiveryRepository
     from .impl.model import ModelRepository
     from .impl.order import OrderRepository
-    from .impl.overview import OverviewRepository
     from .impl.point import PointRepository
     from .impl.position import PositionRepository
     from .impl.record import RecordRepository
@@ -23,13 +23,13 @@ if TYPE_CHECKING:
     from .impl.trip import TripRepository
 
 agency: AgencyRepository
+allocation: AllocationRepository
 assignment: AssignmentRepository
 decoration: DecorationRepository
 departure: DepartureRepository
 livery: LiveryRepository
 model: ModelRepository
 order: OrderRepository
-overview: OverviewRepository
 point: PointRepository
 position: PositionRepository
 record: RecordRepository

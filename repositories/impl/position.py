@@ -16,9 +16,8 @@ class PositionRepository:
     
     database: Database
     
-    def create(self, context: Context, bus, data):
+    def create(self, context: Context, vehicle_id: str, data):
         '''Inserts a new position into the database'''
-        bus_number = getattr(bus, 'number', bus)
         try:
             trip_id = data.trip.trip_id
             if trip_id == '':
@@ -83,8 +82,9 @@ class PositionRepository:
         except KeyError:
             occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
+            'agency_id': context.agency_id,
+            'vehicle_id': vehicle_id,
             'system_id': context.system_id,
-            'bus_number': bus_number,
             'trip_id': trip_id,
             'stop_id': stop_id,
             'block_id': block_id,
@@ -102,13 +102,13 @@ class PositionRepository:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
     
-    def find(self, bus) -> Position | None:
+    def find(self, agency_id: str, vehicle_id: str) -> Position | None:
         '''Returns the position of the given bus'''
-        bus_number = getattr(bus, 'number', bus)
         positions = self.database.select('position',
             columns={
+                'position.agency_id': 'agency_id',
+                'position.vehicle_id': 'vehicle_id',
                 'position.system_id': 'system_id',
-                'position.bus_number': 'bus_number',
                 'position.trip_id': 'trip_id',
                 'position.stop_id': 'stop_id',
                 'position.block_id': 'block_id',
@@ -123,7 +123,8 @@ class PositionRepository:
                 'position.timestamp': 'timestamp'
             },
             filters={
-                'position.bus_number': bus_number
+                'position.agency_id': agency_id,
+                'position.vehicle_id': vehicle_id
             },
             initializer=Position.from_db
         )
@@ -151,6 +152,7 @@ class PositionRepository:
         else:
             route_id = getattr(route, 'id', route)
         filters = {
+            'position.agency_id': context.agency_id,
             'position.system_id': context.system_id,
             'position.trip_id': trip_id,
             'position.stop_id': stop_id,
@@ -174,8 +176,9 @@ class PositionRepository:
                 }
         positions = self.database.select('position',
             columns={
+                'position.agency_id': 'agency_id',
+                'position.vehicle_id': 'vehicle_id',
                 'position.system_id': 'system_id',
-                'position.bus_number': 'bus_number',
                 'position.trip_id': 'trip_id',
                 'position.stop_id': 'stop_id',
                 'position.block_id': 'block_id',

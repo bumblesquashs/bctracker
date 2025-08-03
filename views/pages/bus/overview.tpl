@@ -163,24 +163,23 @@
                         <div class="row section">
                             <div class="name">Last Seen</div>
                             <div class="value">
-                                % if overview:
-                                    % last_seen = overview.last_seen_date
-                                    % if last_seen.is_today:
+                                % if allocation:
+                                    % if allocation.last_seen.is_today:
                                         <div>Today</div>
                                     % else:
-                                        <div>{{ last_seen.format_long() }}</div>
-                                        <div class="smaller-font">{{ last_seen.format_since() }}</div>
+                                        <div>{{ allocation.last_seen.format_long() }}</div>
+                                        <div class="smaller-font">{{ allocation.last_seen.format_since() }}</div>
                                     % end
                                 % else:
                                     <div class="lighter-text">Never</div>
                                 % end
                             </div>
                         </div>
-                        % if overview:
+                        % if allocation:
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
+                                    <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
                                 </div>
                             </div>
                         % end

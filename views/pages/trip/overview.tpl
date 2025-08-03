@@ -218,7 +218,7 @@
             </div>
         % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
             % bus = assignment.bus
-            % position = repositories.position.find(bus)
+            % position = repositories.position.find(bus.agency.id, bus.number)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Scheduled Bus</h2>

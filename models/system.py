@@ -124,9 +124,9 @@ class System:
         '''Returns all blocks'''
         return sorted(self.blocks.values())
     
-    def get_overviews(self):
-        '''Returns all overviews'''
-        return repositories.overview.find_all(last_seen_context=self.context)
+    def get_allocations(self):
+        '''Returns all allocations'''
+        return repositories.allocation.find_all(self.context, active=True)
     
     def get_positions(self):
         '''Returns all positions'''

@@ -132,7 +132,7 @@
                 % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                 % trips = [d.trip for d in upcoming_departures]
                 % recorded_today = repositories.record.find_recorded_today(child_stop.context, trips)
-                % assignments = repositories.assignment.find_all(child_stop.context, stop=child_stop)
+                % assignments = repositories.assignment.find_all(child_stop.context, stop_id=child_stop.id)
                 % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip=trips)}
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">

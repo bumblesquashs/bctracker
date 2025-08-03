@@ -17,7 +17,7 @@ class Bus:
     '''A public transportation vehicle'''
     
     agency: Agency
-    number: int
+    number: str
     name: str
     order_id: int | None = None
     model: Model | None = None
@@ -44,7 +44,7 @@ class Bus:
     
     @property
     def is_known(self):
-        return self.number >= 0
+        return not self.number.startswith('-')
     
     @property
     def year_model(self):
@@ -62,13 +62,15 @@ class Bus:
         self.key = helpers.key(self.name)
     
     def __str__(self):
-        return self.name
+        if self.is_known:
+            return self.name
+        return 'Unknown Bus'
     
     def __hash__(self):
-        return hash(self.number)
+        return hash((self.agency, self.number))
     
     def __eq__(self, other):
-        return self.number == other.number
+        return self.agency == other.agency and self.number == other.number and self.order_id == other.order_id
     
     def __lt__(self, other):
         return self.key < other.key

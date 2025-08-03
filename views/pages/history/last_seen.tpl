@@ -60,14 +60,14 @@
             </div>
         </div>
         
-        % if overviews:
+        % if allocations:
             <div class="section closed">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Statistics</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % models = sorted({o.bus.model for o in overviews if o.bus.model})
+                    % models = sorted({a.bus.model for a in allocations if a.bus.model})
                     % model_types = sorted({m.type for m in models})
                     <table>
                         <thead>
@@ -78,24 +78,24 @@
                         </thead>
                         <tbody>
                             % for model_type in model_types:
-                                % type_overviews = [o for o in overviews if o.bus.model and o.bus.model.type == model_type]
+                                % type_allocations = [a for a in allocations if a.bus.model and a.bus.model.type == model_type]
                                 <tr class="header">
                                     <td>{{ model_type }}</td>
-                                    <td class="align-right">{{ len(type_overviews) }}</td>
+                                    <td class="align-right">{{ len(type_allocations) }}</td>
                                 </tr>
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == model_type]
                                 % for model in type_models:
-                                    % model_overviews = [o for o in type_overviews if o.bus.model == model]
+                                    % model_allocations = [a for a in type_allocations if a.bus.model == model]
                                     <tr>
                                         <td>{{! model }}</td>
-                                        <td class="align-right">{{ len(model_overviews) }}</td>
+                                        <td class="align-right">{{ len(model_allocations) }}</td>
                                     </tr>
                                 % end
                             % end
                             <tr class="header">
                                 <td>Total</td>
-                                <td class="align-right">{{ len(overviews) }}</td>
+                                <td class="align-right">{{ len(allocations) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,10 +111,10 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if overviews:
-                    % known_overviews = [o for o in overviews if o.bus.order_id]
-                    % unknown_overviews = [o for o in overviews if not o.bus.order_id]
-                    % if [o for o in overviews if o.last_record and o.last_record.warnings]:
+                % if allocations:
+                    % known_allocations = [a for a in allocations if a.bus.order_id]
+                    % unknown_allocations = [a for a in allocations if not a.bus.order_id]
+                    % if any(a.last_record and a.last_record.warnings for a in allocations):
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
@@ -141,117 +141,133 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                % if unknown_overviews:
+                                % if unknown_allocations:
                                     <tr class="header">
                                         <td colspan="5">
                                             <div class="row space-between">
                                                 <div>Unknown Year/Model</div>
-                                                <div>{{ len(unknown_overviews) }}</div>
+                                                <div>{{ len(unknown_allocations) }}</div>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr class="display-none"></tr>
-                                    % for overview in unknown_overviews:
-                                        % record = overview.last_record
-                                        % bus = overview.bus
+                                    % for allocation in unknown_allocations:
+                                        % bus = allocation.bus
+                                        % record = allocation.record
                                         <tr>
                                             <td>
                                                 % include('components/bus')
                                             </td>
-                                            <td class="desktop-only">{{ record.date.format_long() }}</td>
+                                            <td class="desktop-only">{{ allocation.last_date.format_long() }}</td>
                                             <td class="non-desktop">
                                                 <div class="column">
-                                                    {{ record.date.format_short() }}
+                                                    {{ allocation.last_date.format_short() }}
                                                     % if not context.system:
-                                                        <span class="mobile-only smaller-font">{{ record.context }}</span>
+                                                        <span class="mobile-only smaller-font">{{ allocation.context }}</span>
                                                     % end
                                                 </div>
                                             </td>
                                             % if not context.system:
-                                                <td class="non-mobile">{{ record.context }}</td>
+                                                <td class="non-mobile">{{ allocation.context }}</td>
                                             % end
                                             % if context.enable_blocks:
-                                                <td>
-                                                    <div class="column">
-                                                        <div class="row space-between">
-                                                            % if record.is_available:
-                                                                % block = record.block
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                            % else:
-                                                                <span>{{ record.block_id }}</span>
-                                                            % end
-                                                            % include('components/record_warnings')
+                                                % if record:
+                                                    <td>
+                                                        <div class="column stretch">
+                                                            <div class="row space-between">
+                                                                % if record.is_available:
+                                                                    % block = record.block
+                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                % else:
+                                                                    <span>{{ record.block_id }}</span>
+                                                                % end
+                                                                % include('components/record_warnings')
+                                                            </div>
+                                                            <div class="non-desktop">
+                                                                % include('components/route_list', routes=record.routes)
+                                                            </div>
                                                         </div>
-                                                        <div class="non-desktop">
-                                                            % include('components/route_list', routes=record.routes)
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="desktop-only">
-                                                    % include('components/route_list', routes=record.routes)
-                                                </td>
+                                                    </td>
+                                                    <td class="desktop-only">
+                                                        % include('components/route_list', routes=record.routes)
+                                                    </td>
+                                                % else:
+                                                    <td colspan="2" class="lighter-text">Not In Service</td>
+                                                % end
                                             % else:
-                                                <td>
-                                                    % include('components/route_list', routes=record.routes)
-                                                </td>
+                                                % if record:
+                                                    <td>
+                                                        % include('components/route_list', routes=record.routes)
+                                                    </td>
+                                                % else:
+                                                    <td class="lighter-text">Not In Service</td>
+                                                % end
                                             % end
                                         </tr>
                                     % end
                                 % end
                                 % for order in orders:
-                                    % order_overviews = [o for o in known_overviews if o.bus.order_id == order.id]
+                                    % order_allocations = [a for a in known_allocations if a.bus.order_id == order.id]
                                     <tr class="header">
                                         <td colspan="5">
                                             <div class="row space-between">
                                                 <div>{{! order }}</div>
-                                                <div>{{ len(order_overviews) }}</div>
+                                                <div>{{ len(order_allocations) }}</div>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr class="display-none"></tr>
-                                    % for overview in order_overviews:
-                                        % record = overview.last_record
-                                        % bus = overview.bus
+                                    % for allocation in order_allocations:
+                                        % bus = allocation.bus
+                                        % record = allocation.last_record
                                         <tr>
                                             <td>
                                                 % include('components/bus')
                                             </td>
-                                            <td class="desktop-only">{{ record.date.format_long() }}</td>
+                                            <td class="desktop-only">{{ allocation.last_date.format_long() }}</td>
                                             <td class="non-desktop">
                                                 <div class="column">
-                                                    {{ record.date.format_short() }}
+                                                    {{ allocation.last_date.format_short() }}
                                                     % if not context.system:
-                                                        <span class="mobile-only smaller-font">{{ record.context }}</span>
+                                                        <span class="mobile-only smaller-font">{{ allocation.context }}</span>
                                                     % end
                                                 </div>
                                             </td>
                                             % if not context.system:
-                                                <td class="non-mobile">{{ record.context }}</td>
+                                                <td class="non-mobile">{{ allocation.context }}</td>
                                             % end
                                             % if context.enable_blocks:
-                                                <td>
-                                                    <div class="column stretch">
-                                                        <div class="row space-between">
-                                                            % if record.is_available:
-                                                                % block = record.block
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                            % else:
-                                                                <span>{{ record.block_id }}</span>
-                                                            % end
-                                                            % include('components/record_warnings')
+                                                % if record:
+                                                    <td>
+                                                        <div class="column stretch">
+                                                            <div class="row space-between">
+                                                                % if record.is_available:
+                                                                    % block = record.block
+                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                % else:
+                                                                    <span>{{ record.block_id }}</span>
+                                                                % end
+                                                                % include('components/record_warnings')
+                                                            </div>
+                                                            <div class="non-desktop">
+                                                                % include('components/route_list', routes=record.routes)
+                                                            </div>
                                                         </div>
-                                                        <div class="non-desktop">
-                                                            % include('components/route_list', routes=record.routes)
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="desktop-only">
-                                                    % include('components/route_list', routes=record.routes)
-                                                </td>
+                                                    </td>
+                                                    <td class="desktop-only">
+                                                        % include('components/route_list', routes=record.routes)
+                                                    </td>
+                                                % else:
+                                                    <td colspan="2" class="lighter-text">Not In Service</td>
+                                                % end
                                             % else:
-                                                <td>
-                                                    % include('components/route_list', routes=record.routes)
-                                                </td>
+                                                % if record:
+                                                    <td>
+                                                        % include('components/route_list', routes=record.routes)
+                                                    </td>
+                                                % else:
+                                                    <td class="lighter-text">Not In Service</td>
+                                                % end
                                             % end
                                         </tr>
                                     % end
