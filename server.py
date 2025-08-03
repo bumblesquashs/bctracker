@@ -581,8 +581,6 @@ class Server(Bottle):
     
     def history_last_seen(self, context: Context):
         overviews = [o for o in repositories.overview.find_all(context=context) if o.last_record and o.bus.visible]
-        order_ids = {o.bus.order_id for o in overviews if o.bus.order_id}
-        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -590,6 +588,8 @@ class Server(Bottle):
         if days:
             date = Date.today(context.timezone) - timedelta(days=days)
             overviews = [o for o in overviews if o.last_record.date > date]
+        order_ids = {o.bus.order_id for o in overviews if o.bus.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='history/last_seen',
