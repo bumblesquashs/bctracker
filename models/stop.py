@@ -3,12 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
 from enum import Enum
 from math import sqrt
 
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.route import Route
@@ -52,6 +54,7 @@ class StopType(Enum):
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
+    agency: Agency
     system: System
     id: str
     number: str
@@ -74,12 +77,12 @@ class Stop:
         lon = row['lon']
         parent_id = row['parent_id']
         type = StopType.from_db(row['type'])
-        return cls(context.system, id, number, name, lat, lon, parent_id, type)
+        return cls(context.agency, context.system, id, number, name, lat, lon, parent_id, type)
     
     @property
     def context(self):
         '''The context for this stop'''
-        return self.system.context
+        return Context(self.agency, self.system)
     
     @property
     def url_id(self):

@@ -45,6 +45,7 @@ class RouteRepository:
         self.database.insert(
             table='route',
             values={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'route_id': route_id,
                 'number': number,
@@ -61,6 +62,7 @@ class RouteRepository:
         routes = self.database.select(
             table='route',
             columns=[
+                'agency_id',
                 'system_id',
                 'route_id',
                 'number',
@@ -71,6 +73,7 @@ class RouteRepository:
                 'sort_order'
             ],
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'route_id': route_id,
                 'number': number
@@ -88,6 +91,7 @@ class RouteRepository:
         return self.database.select(
             table='route',
             columns=[
+                'agency_id',
                 'system_id',
                 'route_id',
                 'number',
@@ -98,6 +102,7 @@ class RouteRepository:
                 'sort_order'
             ],
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id
             },
             limit=limit,
@@ -109,6 +114,7 @@ class RouteRepository:
         self.database.delete(
             table='route',
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )

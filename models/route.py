@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
@@ -74,6 +75,7 @@ class RouteType(Enum):
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
+    agency: Agency
     system: System
     id: str
     number: str
@@ -96,7 +98,7 @@ class Route:
         text_colour = row['text_colour'] or 'FFFFFF'
         type = RouteType.from_db(row['type'])
         sort_order = row['sort_order']
-        return cls(context.system, id, number, name, colour, text_colour, type, sort_order)
+        return cls(context.agency, context.system, id, number, name, colour, text_colour, type, sort_order)
     
     @property
     def context(self):

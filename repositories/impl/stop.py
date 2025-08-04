@@ -21,6 +21,7 @@ class StopRepository:
         self.database.insert(
             table='stop',
             values={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'stop_id': stop_id,
                 'number': number,
@@ -37,6 +38,7 @@ class StopRepository:
         stops = self.database.select(
             table='stop',
             columns=[
+                'agency_id',
                 'system_id',
                 'stop_id',
                 'number',
@@ -47,6 +49,7 @@ class StopRepository:
                 'type'
             ],
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'stop_id': stop_id,
                 'number': number
@@ -62,6 +65,7 @@ class StopRepository:
     def find_all(self, context: Context, limit: int | None = None, lat: float | None = None, lon: float | None = None, size: float = 0.01, parent_id: str | None = None, type: StopType | None = None) -> list[Stop]:
         '''Returns all stops that match the given context'''
         filters = {
+            'agency_id': context.agency_id,
             'system_id': context.system_id,
             'parent_id': parent_id,
             'type': type.value if type else None
@@ -78,6 +82,7 @@ class StopRepository:
         return self.database.select(
             table='stop',
             columns=[
+                'agency_id',
                 'system_id',
                 'stop_id',
                 'number',
@@ -103,6 +108,7 @@ class StopRepository:
                 'MAX(lon)': 'max_lon'
             },
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'lat': {
                     '!=': 0
@@ -123,6 +129,7 @@ class StopRepository:
         self.database.delete(
             table='stop',
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )

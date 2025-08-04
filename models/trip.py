@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
@@ -20,6 +21,7 @@ import repositories
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
+    agency: Agency
     system: System
     id: str
     route_id: str
@@ -45,7 +47,7 @@ class Trip:
         direction_id = row['direction_id']
         shape_id = row['shape_id']
         headsign = row['headsign']
-        return cls(context.system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+        return cls(context.agency, context.system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property
     def context(self):

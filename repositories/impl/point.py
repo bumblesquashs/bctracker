@@ -16,6 +16,7 @@ class PointRepository:
         self.database.insert(
             table='point',
             values={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'shape_id': row['shape_id'],
                 'sequence': int(row['shape_pt_sequence']),
@@ -29,6 +30,7 @@ class PointRepository:
         return self.database.select(
             table='point',
             columns=[
+                'agency_id',
                 'system_id',
                 'shape_id',
                 'sequence',
@@ -36,6 +38,7 @@ class PointRepository:
                 'lon'
             ],
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'shape_id': shape_id
             },
@@ -48,6 +51,7 @@ class PointRepository:
         self.database.delete(
             table='point',
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )
