@@ -23,7 +23,7 @@ SQL_SCRIPTS = [
             allocation_id INTEGER NOT NULL,
             date TEXT NOT NULL,
             block_id TEXT,
-            routes TEXT NOT NULL,
+            route_numbers TEXT NOT NULL,
             start_time TEXT,
             end_time TEXT,
             first_seen TEXT,
@@ -169,7 +169,7 @@ class Database:
     name: str = 'bctracker'
     connection: sqlite3.Connection | None = field(default=None, init=False)
     
-    def connect(self, foreign_keys=True):
+    def connect(self, foreign_keys=True, run_scripts=True):
         '''Opens a connection to the database and runs setup scripts'''
         if self.connection:
             return
@@ -179,8 +179,9 @@ class Database:
         else:
             self.connection.execute('PRAGMA foreign_keys = 0')
         
-        for sql in SQL_SCRIPTS:
-            self.execute(sql)
+        if run_scripts:
+            for sql in SQL_SCRIPTS:
+                self.execute(sql)
         self.commit()
     
     def disconnect(self):

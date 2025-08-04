@@ -56,7 +56,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % models = sorted({t.bus.model for t in transfers if t.bus.model})
+                    % models = sorted({t.new_bus.model for t in transfers if t.new_bus.model})
                     % model_types = sorted({m.type for m in models})
                     <table>
                         <thead>
@@ -67,7 +67,7 @@
                         </thead>
                         <tbody>
                             % for model_type in model_types:
-                                % type_transfers = [t for t in transfers if t.bus.model and t.bus.model.type == model_type]
+                                % type_transfers = [t for t in transfers if t.new_bus.model and t.new_bus.model.type == model_type]
                                 <tr class="header">
                                     <td>{{ model_type }}</td>
                                     <td class="align-right">{{ len(type_transfers) }}</td>
@@ -75,7 +75,7 @@
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == model_type]
                                 % for model in type_models:
-                                    % model_transfers = [t for t in type_transfers if t.bus.model == model]
+                                    % model_transfers = [t for t in type_transfers if t.new_bus.model == model]
                                     <tr>
                                         <td>{{! model }}</td>
                                         <td class="align-right">{{ len(model_transfers) }}</td>
@@ -100,59 +100,61 @@
             </div>
             <div class="content">
                 % if transfers:
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Bus</th>
-                                <th class="desktop-only">Model</th>
-                                <th class="non-mobile">From</th>
-                                <th class="non-mobile">To</th>
-                                <th class="mobile-only">Systems</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            % last_date = None
-                            % for transfer in transfers:
-                                % bus = transfer.new_bus
-                                % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
-                                    <tr class="header">
-                                        <td colspan="6">{{ transfer.date.format_month() }}</td>
-                                        <tr class="display-none"></tr>
+                    <div class="table-border-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Bus</th>
+                                    <th class="desktop-only">Model</th>
+                                    <th class="non-mobile">From</th>
+                                    <th class="non-mobile">To</th>
+                                    <th class="mobile-only">Systems</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % last_date = None
+                                % for transfer in transfers:
+                                    % bus = transfer.new_bus
+                                    % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
+                                        <tr class="header">
+                                            <td colspan="6">{{ transfer.date.format_month() }}</td>
+                                            <tr class="display-none"></tr>
+                                        </tr>
+                                    % end
+                                    % last_date = transfer.date
+                                    <tr>
+                                        <td>{{ transfer.date.format_day() }}</td>
+                                        <td>
+                                            <div class="column">
+                                                % include('components/bus')
+                                                <span class="non-desktop smaller-font">
+                                                    % include('components/year_model', year_model=bus.year_model)
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="desktop-only">
+                                            % include('components/year_model', year_model=bus.year_model)
+                                        </td>
+                                        <td class="non-mobile">{{ transfer.old_context }}</td>
+                                        <td class="non-mobile">{{ transfer.new_context }}</td>
+                                        <td class="mobile-only">
+                                            <div class="column">
+                                                <div>
+                                                    <div class="smaller-font">From:</div>
+                                                    {{ transfer.old_context }}
+                                                </div>
+                                                <div>
+                                                    <div class="smaller-font">To:</div>
+                                                    {{ transfer.new_context }}
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 % end
-                                % last_date = transfer.date
-                                <tr>
-                                    <td>{{ transfer.date.format_day() }}</td>
-                                    <td>
-                                        <div class="column">
-                                            % include('components/bus')
-                                            <span class="non-desktop smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="desktop-only">
-                                        % include('components/year_model', year_model=bus.year_model)
-                                    </td>
-                                    <td class="non-mobile">{{ transfer.old_context }}</td>
-                                    <td class="non-mobile">{{ transfer.new_context }}</td>
-                                    <td class="mobile-only">
-                                        <div class="column">
-                                            <div>
-                                                <div class="smaller-font">From:</div>
-                                                {{ transfer.old_context }}
-                                            </div>
-                                            <div>
-                                                <div class="smaller-font">To:</div>
-                                                {{ transfer.new_context }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            % end
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 % else:
                     <div class="placeholder">
                         % if not context.system:

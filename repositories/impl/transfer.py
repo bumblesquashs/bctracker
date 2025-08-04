@@ -25,6 +25,22 @@ class TransferRepository:
     
     def find_all(self, old_context: Context, new_context: Context) -> list[Transfer]:
         '''Returns all transfers that match the given system'''
+        filters = []
+        args = []
+        if old_context.agency_id:
+            args.append(old_context.agency_id)
+            if old_context.system_id:
+                args.append(old_context.system_id)
+                filters.append('(old_allocation.agency_id = ? AND old_allocation.system_id = ?)')
+            else:
+                filters.append('old_allocation.agency_id = ?')
+        if new_context.agency_id:
+            args.append(new_context.agency_id)
+            if new_context.system_id:
+                args.append(new_context.system_id)
+                filters.append('(new_allocation.agency_id = ? AND new_allocation.system_id = ?)')
+            else:
+                filters.append('new_allocation.agency_id = ?')
         return self.database.select(
             table='transfer',
             columns={
@@ -39,12 +55,8 @@ class TransferRepository:
                 'new_allocation.vehicle_id': 'new_allocation_vehicle_id',
                 'new_allocation.system_id': 'new_allocation_system_id'
             },
-            filters={
-                'old_allocation.agency_id': old_context.agency_id,
-                'old_allocation.system_id': old_context.system_id,
-                'new_allocation.agency_id': new_context.agency_id,
-                'new_allocation.system_id': new_context.system_id,
-            },
+            filters=filters,
+            operation='OR',
             joins={
                 'allocation old_allocation': {
                     'old_allocation.allocation_id': 'transfer.old_allocation_id'
@@ -57,6 +69,7 @@ class TransferRepository:
                 'transfer.date': 'DESC',
                 'transfer.transfer_id': 'DESC'
             },
+            custom_args=args,
             initializer=Transfer.from_db
         )
     
