@@ -65,8 +65,7 @@ class AllocationRepository:
                 'last_record.end_time': 'last_record_end_time',
                 'last_record.first_seen': 'last_record_first_seen',
                 'last_record.last_seen': 'last_record_last_seen',
-                'allocation.active': 'active',
-                'COUNT(record.record_id)': 'records_count'
+                'allocation.active': 'active'
             },
             filters=filters,
             join_type='LEFT',
@@ -79,9 +78,6 @@ class AllocationRepository:
                 },
                 'record last_record': {
                     'last_record.record_id': 'allocation_record.last_record_id'
-                },
-                'record': {
-                    'record.allocation_id': 'allocation.allocation_id'
                 }
             },
             group_by='allocation.allocation_id',

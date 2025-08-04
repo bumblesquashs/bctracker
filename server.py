@@ -548,20 +548,20 @@ class Server(Bottle):
         else:
             records = repositories.record.find_all(context.without_system(), vehicle_id=vehicle_id, limit=items_per_page, page=page)
         transfers = repositories.transfer.find_all_by_bus(context, vehicle_id)
-        tracked_systems = set()
         events = []
-        # if overview:
-            # tracked_systems.add(overview.first_seen_context.system)
-            # tracked_systems.add(overview.last_seen_context.system)
-            # events.append(Event(overview.first_seen_date, 'First Seen'))
-            # if overview.first_record:
-            #     events.append(Event(overview.first_record.date, 'First Tracked'))
-            # events.append(Event(overview.last_seen_date, 'Last Seen'))
-            # if overview.last_record:
-            #     events.append(Event(overview.last_record.date, 'Last Tracked'))
+        first_seen_dates = {a.first_seen for a in allocations}
+        if first_seen_dates:
+            events.append(Event(min(first_seen_dates), 'First Seen'))
+        first_tracked_dates = {a.first_record.date for a in allocations if a.first_record}
+        if first_tracked_dates:
+            events.append(Event(min(first_tracked_dates), 'First Tracked'))
+        last_seen_dates = {a.last_seen for a in allocations}
+        if last_seen_dates:
+            events.append(Event(max(last_seen_dates), 'Last Seen'))
+        last_tracked_dates = {a.last_record.date for a in allocations if a.last_record}
+        if last_tracked_dates:
+            events.append(Event(max(last_tracked_dates), 'Last Tracked'))
         for transfer in transfers:
-            tracked_systems.add(transfer.old_context.system)
-            tracked_systems.add(transfer.new_context.system)
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
         return self.page(
             context=context,
@@ -569,8 +569,7 @@ class Server(Bottle):
             title=f'Bus {bus}',
             bus=bus,
             records=records,
-            allocations=allocations,
-            tracked_systems=tracked_systems,
+            allocations=sorted(allocations, reverse=True),
             events=events,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites(),

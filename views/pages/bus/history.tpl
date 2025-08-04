@@ -32,15 +32,6 @@
                 </div>
                 <div class="content">
                     <div class="info-box">
-                        % for allocation in allocations:
-                            <div class="section">
-                                <h3>{{ allocation.context }}</h3>
-                                <div class="smaller-font ligher-text">
-                                    {{ allocation.first_seen.format_long() }} - {{ allocation.last_seen.format_long() }}
-                                </div>
-                                <div>{{ allocation.records_count }} Records</div>
-                            </div>
-                        % end
                         <div class="section">
                             % include('components/events_list', events=events)
                         </div>
@@ -48,14 +39,15 @@
                             <div class="name">Total Records</div>
                             <div class="value">{{ total_items }}</div>
                         </div>
-                        <div class="row section align-start">
-                            <div class="name">{{ 'System' if len(tracked_systems) == 1 else 'Systems' }}</div>
-                            <div class="value">
-                                % for system in sorted(tracked_systems):
-                                    <a href="{{ get_url(system.context) }}">{{ system }}</a>
-                                % end
+                        <h3>Allocation History</h3>
+                        % for allocation in allocations:
+                            <div class="section">
+                                <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
+                                <div class="smaller-font ligher-text">
+                                    {{ allocation.first_seen.format_long() }} - {{ allocation.last_seen.format_long() }}
+                                </div>
                             </div>
-                        </div>
+                        % end
                     </div>
                 </div>
             </div>

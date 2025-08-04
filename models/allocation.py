@@ -24,7 +24,6 @@ class Allocation:
     last_seen: Date
     last_record: Record | None
     active: bool
-    records_count: int
     
     def __hash__(self):
         return hash(self.id)
@@ -95,5 +94,4 @@ class Allocation:
         else:
             last_record = None
         active = row['active'] == 1
-        records_count = row['records_count']
-        return cls(id, agency, bus, system, first_seen, first_record, last_seen, last_record, active, records_count)
+        return cls(id, agency, bus, system, first_seen, first_record, last_seen, last_record, active)
