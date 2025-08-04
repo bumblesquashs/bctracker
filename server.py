@@ -680,7 +680,7 @@ class Server(Bottle):
             include_maps=len(route.trips) > 0,
             route=route,
             trips=trips,
-            recorded_today=repositories.record.find_recorded_today(context, trips),
+            recorded_today=repositories.record.find_recorded_today(context, [t.id for t in trips]),
             assignments=repositories.assignment.find_all(context, route_id=route.id),
             positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
