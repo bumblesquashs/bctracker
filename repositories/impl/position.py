@@ -106,26 +106,26 @@ class PositionRepository:
         '''Returns the position of the given bus'''
         positions = self.database.select(
             table='position',
-            columns={
-                'position.agency_id': 'agency_id',
-                'position.vehicle_id': 'vehicle_id',
-                'position.system_id': 'system_id',
-                'position.trip_id': 'trip_id',
-                'position.stop_id': 'stop_id',
-                'position.block_id': 'block_id',
-                'position.route_id': 'route_id',
-                'position.sequence': 'sequence',
-                'position.lat': 'lat',
-                'position.lon': 'lon',
-                'position.bearing': 'bearing',
-                'position.speed': 'speed',
-                'position.adherence': 'adherence',
-                'position.occupancy': 'occupancy',
-                'position.timestamp': 'timestamp'
-            },
+            columns=[
+                'agency_id',
+                'vehicle_id',
+                'system_id',
+                'trip_id',
+                'stop_id',
+                'block_id',
+                'route_id',
+                'sequence',
+                'lat',
+                'lon',
+                'bearing',
+                'speed',
+                'adherence',
+                'occupancy',
+                'timestamp'
+            ],
             filters={
-                'position.agency_id': agency_id,
-                'position.vehicle_id': vehicle_id
+                'agency_id': agency_id,
+                'vehicle_id': vehicle_id
             },
             initializer=Position.from_db
         )
@@ -137,47 +137,47 @@ class PositionRepository:
     def find_all(self, context: Context = Context(), trip_id: str | list[str] | None = None, stop_id: str | list[str] | None = None, block_id: str | list[str] | None = None, route_id: str | list[str] | None = None, has_location: bool | None = None) -> list[Position]:
         '''Returns all positions that match the given system, trip, stop, block, and route'''
         filters = {
-            'position.agency_id': context.agency_id,
-            'position.system_id': context.system_id,
-            'position.trip_id': trip_id,
-            'position.stop_id': stop_id,
-            'position.block_id': block_id,
-            'position.route_id': route_id
+            'agency_id': context.agency_id,
+            'system_id': context.system_id,
+            'trip_id': trip_id,
+            'stop_id': stop_id,
+            'block_id': block_id,
+            'route_id': route_id
         }
         if has_location is not None:
             if has_location:
-                filters['position.lat'] = {
+                filters['lat'] = {
                     'IS NOT': None
                 }
-                filters['position.lon'] = {
+                filters['lon'] = {
                     'IS NOT': None
                 }
             else:
-                filters['position.lat'] = {
+                filters['lat'] = {
                     'IS': None
                 }
-                filters['position.lon'] = {
+                filters['lon'] = {
                     'IS': None
                 }
         positions = self.database.select(
             table='position',
-            columns={
-                'position.agency_id': 'agency_id',
-                'position.vehicle_id': 'vehicle_id',
-                'position.system_id': 'system_id',
-                'position.trip_id': 'trip_id',
-                'position.stop_id': 'stop_id',
-                'position.block_id': 'block_id',
-                'position.route_id': 'route_id',
-                'position.sequence': 'sequence',
-                'position.lat': 'lat',
-                'position.lon': 'lon',
-                'position.bearing': 'bearing',
-                'position.speed': 'speed',
-                'position.adherence': 'adherence',
-                'position.occupancy': 'occupancy',
-                'position.timestamp': 'timestamp'
-            },
+            columns=[
+                'agency_id',
+                'vehicle_id',
+                'system_id',
+                'trip_id',
+                'stop_id',
+                'block_id',
+                'route_id',
+                'sequence',
+                'lat',
+                'lon',
+                'bearing',
+                'speed',
+                'adherence',
+                'occupancy',
+                'timestamp'
+            ],
             filters=filters,
             initializer=Position.from_db
         )
@@ -188,6 +188,6 @@ class PositionRepository:
         self.database.delete(
             table='position',
             filters={
-                'position.system_id': context.system_id
+                'system_id': context.system_id
             }
         )

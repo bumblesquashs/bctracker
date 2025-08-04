@@ -28,16 +28,16 @@ class PointRepository:
         '''Returns all points that match the given context and shape'''
         return self.database.select(
             table='point',
-            columns={
-                'point.system_id': 'system_id',
-                'point.shape_id': 'shape_id',
-                'point.sequence': 'sequence',
-                'point.lat': 'lat',
-                'point.lon': 'lon'
-            },
+            columns=[
+                'system_id',
+                'shape_id',
+                'sequence',
+                'lat',
+                'lon'
+            ],
             filters={
-                'point.system_id': context.system_id,
-                'point.shape_id': shape_id
+                'system_id': context.system_id,
+                'shape_id': shape_id
             },
             order_by='point.sequence ASC',
             initializer=Point.from_db
@@ -48,6 +48,6 @@ class PointRepository:
         self.database.delete(
             table='point',
             filters={
-                'point.system_id': context.system_id
+                'system_id': context.system_id
             }
         )

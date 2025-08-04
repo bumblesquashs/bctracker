@@ -106,26 +106,26 @@ class DepartureRepository:
         '''Returns all departures on a trip from the given sequence number onwards'''
         return self.database.select(
             table='departure',
-            columns={
-                'departure.system_id': 'system_id',
-                'departure.trip_id': 'trip_id',
-                'departure.sequence': 'sequence',
-                'departure.stop_id': 'stop_id',
-                'departure.time': 'time',
-                'departure.pickup_type': 'pickup_type',
-                'departure.dropoff_type': 'dropoff_type',
-                'departure.timepoint': 'timepoint',
-                'departure.distance': 'distance',
-                'departure.headsign': 'headsign'
-            },
+            columns=[
+                'system_id',
+                'trip_id',
+                'sequence',
+                'stop_id',
+                'time',
+                'pickup_type',
+                'dropoff_type',
+                'timepoint',
+                'distance',
+                'headsign'
+            ],
             filters={
-                'departure.system_id': context.system_id,
-                'departure.trip_id': trip_id,
-                'departure.sequence': {
+                'system_id': context.system_id,
+                'trip_id': trip_id,
+                'sequence': {
                     '>=': sequence
                 }
             },
-            order_by='departure.sequence',
+            order_by='sequence',
             limit=limit,
             initializer=Departure.from_db
         )

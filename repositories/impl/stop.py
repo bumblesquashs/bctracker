@@ -36,20 +36,20 @@ class StopRepository:
         '''Returns the stop with the given context and stop ID'''
         stops = self.database.select(
             table='stop',
-            columns={
-                'stop.system_id': 'system_id',
-                'stop.stop_id': 'id',
-                'stop.number': 'number',
-                'stop.name': 'name',
-                'stop.lat': 'lat',
-                'stop.lon': 'lon',
-                'stop.parent_id': 'parent_id',
-                'stop.type': 'type'
-            },
+            columns=[
+                'system_id',
+                'stop_id',
+                'number',
+                'name',
+                'lat',
+                'lon',
+                'parent_id',
+                'type'
+            ],
             filters={
-                'stop.system_id': context.system_id,
-                'stop.stop_id': stop_id,
-                'stop.number': number
+                'system_id': context.system_id,
+                'stop_id': stop_id,
+                'number': number
             },
             limit=1,
             initializer=Stop.from_db
@@ -62,9 +62,9 @@ class StopRepository:
     def find_all(self, context: Context, limit: int | None = None, lat: float | None = None, lon: float | None = None, size: float = 0.01, parent_id: str | None = None, type: StopType | None = None) -> list[Stop]:
         '''Returns all stops that match the given context'''
         filters = {
-            'stop.system_id': context.system_id,
-            'stop.parent_id': parent_id,
-            'stop.type': type.value if type else None
+            'system_id': context.system_id,
+            'parent_id': parent_id,
+            'type': type.value if type else None
         }
         if (lat is not None and lon is not None):
             filters['lat'] = {
@@ -77,16 +77,16 @@ class StopRepository:
             }
         return self.database.select(
             table='stop',
-            columns={
-                'stop.system_id': 'system_id',
-                'stop.stop_id': 'id',
-                'stop.number': 'number',
-                'stop.name': 'name',
-                'stop.lat': 'lat',
-                'stop.lon': 'lon',
-                'stop.parent_id': 'parent_id',
-                'stop.type': 'type'
-            },
+            columns=[
+                'system_id',
+                'stop_id',
+                'number',
+                'name',
+                'lat',
+                'lon',
+                'parent_id',
+                'type'
+            ],
             filters=filters,
             limit=limit,
             initializer=Stop.from_db
@@ -97,17 +97,17 @@ class StopRepository:
         areas = self.database.select(
             table='stop',
             columns={
-                'MIN(stop.lat)': 'min_lat',
-                'MAX(stop.lat)': 'max_lat',
-                'MIN(stop.lon)': 'min_lon',
-                'MAX(stop.lon)': 'max_lon'
+                'MIN(lat)': 'min_lat',
+                'MAX(lat)': 'max_lat',
+                'MIN(lon)': 'min_lon',
+                'MAX(lon)': 'max_lon'
             },
             filters={
-                'stop.system_id': context.system_id,
-                'stop.lat': {
+                'system_id': context.system_id,
+                'lat': {
                     '!=': 0
                 },
-                'stop.lon': {
+                'lon': {
                     '!=': 0
                 }
             },

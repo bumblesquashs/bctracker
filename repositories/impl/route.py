@@ -60,20 +60,20 @@ class RouteRepository:
         '''Returns the route with the given context and route ID'''
         routes = self.database.select(
             table='route',
-            columns={
-                'route.system_id': 'system_id',
-                'route.route_id': 'id',
-                'route.number': 'number',
-                'route.name': 'name',
-                'route.colour': 'colour',
-                'route.text_colour': 'text_colour',
-                'route.type': 'type',
-                'route.sort_order': 'sort_order'
-            },
+            columns=[
+                'system_id',
+                'route_id',
+                'number',
+                'name',
+                'colour',
+                'text_colour',
+                'type',
+                'sort_order'
+            ],
             filters={
-                'route.system_id': context.system_id,
-                'route.route_id': route_id,
-                'route.number': number
+                'system_id': context.system_id,
+                'route_id': route_id,
+                'number': number
             },
             limit=1,
             initializer=Route.from_db
@@ -87,18 +87,18 @@ class RouteRepository:
         '''Returns all routes that match the given context'''
         return self.database.select(
             table='route',
-            columns={
-                'route.system_id': 'system_id',
-                'route.route_id': 'id',
-                'route.number': 'number',
-                'route.name': 'name',
-                'route.colour': 'colour',
-                'route.text_colour': 'text_colour',
-                'route.type': 'type',
-                'route.sort_order': 'sort_order'
-            },
+            columns=[
+                'system_id',
+                'route_id',
+                'number',
+                'name',
+                'colour',
+                'text_colour',
+                'type',
+                'sort_order'
+            ],
             filters={
-                'route.system_id': context.system_id
+                'system_id': context.system_id
             },
             limit=limit,
             initializer=Route.from_db

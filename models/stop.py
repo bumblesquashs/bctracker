@@ -67,7 +67,7 @@ class Stop:
     def from_db(cls, row: Row):
         '''Returns a stop initialized from the given database row'''
         context = row.context()
-        id = row['id']
+        id = row['stop_id']
         number = row['number'] or id
         name = row['name']
         lat = row['lat']

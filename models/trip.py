@@ -38,7 +38,7 @@ class Trip:
     def from_db(cls, row: Row):
         '''Returns a trip initialized from the given database row'''
         context = row.context()
-        trip_id = row['id']
+        trip_id = row['trip_id']
         route_id = row['route_id']
         service_id = row['service_id']
         block_id = row['block_id']

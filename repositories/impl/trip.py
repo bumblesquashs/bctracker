@@ -31,19 +31,19 @@ class TripRepository:
         '''Returns the trip with the given context and trip ID'''
         trips = self.database.select(
             table='trip',
-            columns={
-                'trip.system_id': 'system_id',
-                'trip.trip_id': 'id',
-                'trip.route_id': 'route_id',
-                'trip.service_id': 'service_id',
-                'trip.block_id': 'block_id',
-                'trip.direction_id': 'direction_id',
-                'trip.shape_id': 'shape_id',
-                'trip.headsign': 'headsign'
-            },
+            columns=[
+                'system_id',
+                'trip_id',
+                'route_id',
+                'service_id',
+                'block_id',
+                'direction_id',
+                'shape_id',
+                'headsign'
+            ],
             filters={
-                'trip.system_id': context.system_id,
-                'trip.trip_id': trip_id
+                'system_id': context.system_id,
+                'trip_id': trip_id
             },
             limit=1,
             initializer=Trip.from_db
@@ -57,20 +57,20 @@ class TripRepository:
         '''Returns all trips that match the given context, route, and block'''
         return self.database.select(
             table='trip',
-            columns={
-                'trip.system_id': 'system_id',
-                'trip.trip_id': 'id',
-                'trip.route_id': 'route_id',
-                'trip.service_id': 'service_id',
-                'trip.block_id': 'block_id',
-                'trip.direction_id': 'direction_id',
-                'trip.shape_id': 'shape_id',
-                'trip.headsign': 'headsign'
-            },
+            columns=[
+                'system_id',
+                'trip_id',
+                'route_id',
+                'service_id',
+                'block_id',
+                'direction_id',
+                'shape_id',
+                'headsign'
+            ],
             filters={
-                'trip.system_id': context.system_id,
-                'trip.route_id': route_id,
-                'trip.block_id': block_id
+                'system_id': context.system_id,
+                'route_id': route_id,
+                'block_id': block_id
             },
             limit=limit,
             initializer=Trip.from_db

@@ -89,7 +89,7 @@ class Route:
     def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
         context = row.context()
-        id = row['id']
+        id = row['route_id']
         number = row['number'] or id
         name = row['name']
         colour = row['colour'] or generate_colour(context, number)

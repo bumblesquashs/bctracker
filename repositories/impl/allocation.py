@@ -89,12 +89,12 @@ class AllocationRepository:
         '''Returns all vehicle IDs that have been seen'''
         vehicle_ids = self.database.select(
             table='allocation',
-            columns={
-                'allocation.vehicle_id': 'vehicle_id'
-            },
+            columns=[
+                'vehicle_id'
+            ],
             filters={
-                'allocation.agency_id': context.agency_id,
-                'allocation.system_id': context.system_id
+                'agency_id': context.agency_id,
+                'system_id': context.system_id
             },
             initializer=lambda r: r['vehicle_id']
         )
