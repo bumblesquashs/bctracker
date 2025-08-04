@@ -175,10 +175,6 @@ class Stop:
         if date:
             return sorted([d for d in departures if d.trip and date in d.trip.service])
         return sorted(departures)
-    
-    def find_adjacent_departures(self):
-        '''Returns all departures on trips that serve this stop'''
-        return repositories.departure.find_adjacent(self.context, self.id)
 
 @dataclass(slots=True)
 class StopCache:

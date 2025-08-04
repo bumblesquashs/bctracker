@@ -22,7 +22,6 @@ from models.sheet import Sheet
 from models.trip import Trip
 
 import helpers
-import repositories
 
 class RouteType(Enum):
     '''Options for route types'''
@@ -228,10 +227,6 @@ class Route:
             if name.startswith(query):
                 value += len(query)
         return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
-    
-    def find_departures(self):
-        '''Returns all departures for this route'''
-        return repositories.departure.find_all(self.context, route_id=self.id)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

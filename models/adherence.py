@@ -23,10 +23,9 @@ class Adherence:
     @classmethod
     def calculate(cls, trip: Trip, stop: Stop, sequence: int, lat: float, lon: float, timestamp: Timestamp | None):
         '''Returns the calculated adherence for the given stop, trip, and coordinates'''
-        departure = repositories.departure.find(trip.context, trip.id, sequence)
+        (departure, previous_departure) = repositories.departure.find_with_previous(trip.context, trip.id, sequence)
         if not departure:
             return None
-        previous_departure = departure.find_previous()
         try:
             expected_scheduled_mins = departure.time.get_minutes(round_seconds=True)
             

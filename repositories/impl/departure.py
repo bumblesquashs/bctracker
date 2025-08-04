@@ -187,6 +187,40 @@ class DepartureRepository:
             initializer=Departure.from_db
         )
     
+    def find_with_previous(self, context: Context, trip_id: str, sequence: int) -> tuple[Departure | None, Departure | None]:
+        departures = self.database.select(
+            table='departure',
+            columns=[
+                'agency_id',
+                'system_id',
+                'trip_id',
+                'sequence',
+                'stop_id',
+                'time',
+                'pickup_type',
+                'dropoff_type',
+                'timepoint',
+                'distance',
+                'headsign'
+            ],
+            filters={
+                'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'trip_id': trip_id,
+                'sequence': {
+                    '<=': sequence
+                }
+            },
+            order_by='sequence DESC',
+            limit=2,
+            initializer=Departure.from_db
+        )
+        if departures:
+            if len(departures) == 2:
+                return (departures[0], departures[1])
+            return (departures[0], None)
+        return (None, None)
+    
     def delete_all(self, context: Context):
         '''Deletes all departures for the given context from the database'''
         self.database.delete(

@@ -491,6 +491,14 @@ class Server(Bottle):
         order = repositories.order.find_order(context, bus.order_id)
         position = repositories.position.find(context.agency_id, vehicle_id)
         records = repositories.record.find_all(vehicle_id=vehicle_id, limit=20)
+        if bus.livery:
+            livery = repositories.livery.find(context.agency_id, bus.livery)
+        else:
+            livery = None
+        if position and position.trip and position.sequence is not None:
+            upcoming_departures = repositories.departure.find_upcoming(position.context, position.trip_id, position.sequence)
+        else:
+            upcoming_departures = []
         return self.page(
             context=context,
             name='bus/overview',
@@ -500,6 +508,8 @@ class Server(Bottle):
             order=order,
             position=position,
             records=records,
+            livery=livery,
+            upcoming_departures=upcoming_departures,
             allocation=allocation,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites()
@@ -713,6 +723,7 @@ class Server(Bottle):
             title=str(route),
             full_map=len(route.trips) > 0,
             route=route,
+            departures=repositories.departure.find_all(context, route_id=route.id),
             positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
@@ -861,6 +872,7 @@ class Server(Bottle):
             title=f'Block {block.id}',
             full_map=True,
             block=block,
+            departures=repositories.departure.find_all(context, block_id=block_id),
             positions=repositories.position.find_all(context, block_id=block_id)
         )
     
@@ -1132,6 +1144,7 @@ class Server(Bottle):
             context=context,
             full_map=True,
             stop=stop,
+            adjacent_departures=repositories.departure.find_adjacent(context, stop.id),
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
         )

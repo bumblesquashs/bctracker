@@ -6,8 +6,6 @@ from models.context import Context
 from models.row import Row
 from models.time import Time
 
-import repositories
-
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
     
@@ -159,11 +157,3 @@ class Departure:
             json['colour'] = '666666'
             json['text_colour'] = 'FFFFFF'
         return json
-    
-    def find_previous(self):
-        '''Returns the previous departure for the trip'''
-        return repositories.departure.find(self.context, self.trip_id, self.sequence - 1)
-    
-    def find_next(self):
-        '''Returns the next departure for the trip'''
-        return repositories.departure.find(self.context, self.trip_id, self.sequence + 1)

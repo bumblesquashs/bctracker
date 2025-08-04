@@ -1,24 +1,19 @@
 
 from dataclasses import dataclass
 
-from models.agency import Agency
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.record import Record
 from models.row import Row
-from models.system import System
 from models.time import Time
-
-import repositories
 
 @dataclass(slots=True)
 class Allocation:
     
     id: int
-    agency: Agency
+    context: Context
     bus: Bus
-    system: System | None
     first_seen: Date
     first_record: Record | None
     last_seen: Date
@@ -35,10 +30,6 @@ class Allocation:
     
     def __eq__(self, other):
         return self.id == other.id
-    
-    @property
-    def context(self):
-        return Context(self.agency, self.system)
     
     @property
     def first_date(self):
@@ -76,25 +67,23 @@ class Allocation:
     @classmethod
     def from_db(cls, row: Row):
         id = row['id']
-        agency = repositories.agency.find(row['agency_id'])
-        bus = repositories.order.find_bus(agency.context, row['vehicle_id'])
-        system = repositories.system.find(row['system_id'])
-        context = Context(agency, system)
+        context = row.context()
+        bus = context.find_bus(row['vehicle_id'])
         first_seen = Date.parse(row['first_seen'], context.timezone)
         if 'first_record_id' in row:
             row.values['first_record_allocation_id'] = id
-            row.values['first_record_agency_id'] = agency.id
+            row.values['first_record_agency_id'] = context.agency_id
             row.values['first_record_vehicle_id'] = bus.id
-            row.values['first_record_system_id'] = system.id if system else None
+            row.values['first_record_system_id'] = context.system_id
             first_record = row.obj('first_record', Record.from_db)
         else:
             first_record = None
         last_seen = Date.parse(row['last_seen'], context.timezone)
         if 'last_record_id' in row:
             row.values['last_record_allocation_id'] = id
-            row.values['last_record_agency_id'] = agency.id
+            row.values['last_record_agency_id'] = context.agency_id
             row.values['last_record_vehicle_id'] = bus.id
-            row.values['last_record_system_id'] = system.id if system else None
+            row.values['last_record_system_id'] = context.system_id
             last_record = row.obj('last_record', Record.from_db)
         else:
             last_record = None
@@ -104,4 +93,4 @@ class Allocation:
         last_stop_id = row['last_stop_id']
         last_stop_number = row['last_stop_number']
         last_stop_name = row['last_stop_name']
-        return cls(id, agency, bus, system, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name)
+        return cls(id, context, bus, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name)

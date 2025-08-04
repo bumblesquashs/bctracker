@@ -180,9 +180,3 @@ class Position:
         if timestamp:
             data['timestamp'] = timestamp.value
         return data
-    
-    def find_upcoming_departures(self):
-        '''Returns the trip's upcoming departures'''
-        if self.sequence is None or not self.trip:
-            return []
-        return repositories.departure.find_upcoming(self.context, self.trip_id, self.sequence)
