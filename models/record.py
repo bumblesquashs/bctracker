@@ -34,7 +34,10 @@ class Record:
         bus = context.find_bus(row['vehicle_id'])
         date = Date.parse(row['date'], context.timezone)
         block_id = row['block_id']
-        route_numbers = [n.strip() for n in row['route_numbers'].split(',')]
+        if 'route_numbers' in row:
+            route_numbers = [n.strip() for n in row['route_numbers'].split(',')]
+        else:
+            route_numbers = []
         start_time = Time.parse(row['start_time'], context.timezone, context.accurate_seconds)
         end_time = Time.parse(row['end_time'], context.timezone, context.accurate_seconds)
         first_seen = Time.parse(row['first_seen'], context.timezone, context.accurate_seconds)

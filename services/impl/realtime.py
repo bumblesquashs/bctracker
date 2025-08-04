@@ -73,19 +73,19 @@ class RealtimeService:
                 allocation = repositories.allocation.find_active(context, bus.id)
                 if allocation:
                     if allocation.context == context:
-                        repositories.allocation.set_last_seen(allocation.id, date)
+                        repositories.allocation.set_last_seen(allocation.id, date, position.lat, position.lon, position.stop)
                         allocation_id = allocation.id
                         first_record = allocation.first_record
                         last_record = allocation.last_record
                     else:
                         repositories.allocation.set_inactive(allocation.id)
                         repositories.assignment.delete_all(allocation_id=allocation.id)
-                        allocation_id = repositories.allocation.create(context, bus.id, date)
+                        allocation_id = repositories.allocation.create(context, bus.id, date, position.lat, position.lon, position.stop)
                         repositories.transfer.create(date, allocation.id, allocation_id)
                         first_record = None
                         last_record = None
                 else:
-                    allocation_id = repositories.allocation.create(context, bus.id, date)
+                    allocation_id = repositories.allocation.create(context, bus.id, date, position.lat, position.lon, position.stop)
                     first_record = None
                     last_record = None
                 

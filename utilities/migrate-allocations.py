@@ -41,7 +41,12 @@ for row in overview_rows:
             'system_id': row['first_seen_system_id'],
             'first_seen': row['first_seen_date'],
             'last_seen': row['first_seen_date'],
-            'active': 1
+            'active': 1,
+            'last_lat': None,
+            'last_lon': None,
+            'last_stop_id': None,
+            'last_stop_number': None,
+            'last_stop_name': None
         }
     )
 
@@ -103,7 +108,12 @@ for date in date_range:
                     'system_id': row['new_system_id'],
                     'first_seen': date.format_db(),
                     'last_seen': date.format_db(),
-                    'active': 1
+                    'active': 1,
+                    'last_lat': None,
+                    'last_lon': None,
+                    'last_stop_id': None,
+                    'last_stop_number': None,
+                    'last_stop_name': None
                 }
             )
             new_db.insert(
@@ -187,7 +197,12 @@ for date in date_range:
                         'system_id': system_id,
                         'first_seen': date.format_db(),
                         'last_seen': date.format_db(),
-                        'active': 1
+                        'active': 1,
+                        'last_lat': None,
+                        'last_lon': None,
+                        'last_stop_id': None,
+                        'last_stop_number': None,
+                        'last_stop_name': None
                     }
                 )
                 new_db.insert(
@@ -264,7 +279,12 @@ for row in overview_rows:
                 'system_id': system_id,
                 'first_seen': row['last_seen_date'],
                 'last_seen': row['last_seen_date'],
-                'active': 1
+                'active': 1,
+                'last_lat': None,
+                'last_lon': None,
+                'last_stop_id': None,
+                'last_stop_number': None,
+                'last_stop_name': None
             }
         )
         new_db.insert(

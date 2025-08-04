@@ -24,6 +24,11 @@ class Allocation:
     last_seen: Date
     last_record: Record | None
     active: bool
+    last_lat: float | None
+    last_lon: float | None
+    last_stop_id: str | None
+    last_stop_number: str | None
+    last_stop_name: str | None
     
     def __hash__(self):
         return hash(self.id)
@@ -94,4 +99,9 @@ class Allocation:
         else:
             last_record = None
         active = row['active'] == 1
-        return cls(id, agency, bus, system, first_seen, first_record, last_seen, last_record, active)
+        last_lat = row['last_lat']
+        last_lon = row['last_lon']
+        last_stop_id = row['last_stop_id']
+        last_stop_number = row['last_stop_number']
+        last_stop_name = row['last_stop_name']
+        return cls(id, agency, bus, system, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name)

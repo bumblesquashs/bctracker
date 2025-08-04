@@ -98,6 +98,7 @@ class PositionRepository:
         }
         if adherence:
             values['adherence'] = adherence.value
+            values['layover'] = 1 if adherence.layover else 0
         if timestamp:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
@@ -120,6 +121,7 @@ class PositionRepository:
                 'bearing',
                 'speed',
                 'adherence',
+                'layover',
                 'occupancy',
                 'timestamp'
             ],
@@ -175,6 +177,7 @@ class PositionRepository:
                 'bearing',
                 'speed',
                 'adherence',
+                'layover',
                 'occupancy',
                 'timestamp'
             ],
@@ -188,6 +191,7 @@ class PositionRepository:
         self.database.delete(
             table='position',
             filters={
+                'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )

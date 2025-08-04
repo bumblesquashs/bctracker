@@ -14,7 +14,12 @@ SQL_SCRIPTS = [
             system_id TEXT,
             first_seen TEXT NOT NULL,
             last_seen TEXT NOT NULL,
-            active INTEGER NOT NULL
+            active INTEGER NOT NULL,
+            last_lat REAL,
+            last_lon REAL,
+            last_stop_id TEXT,
+            last_stop_number TEXT,
+            last_stop_name TEXT
         )
     ''',
     '''
@@ -23,7 +28,7 @@ SQL_SCRIPTS = [
             allocation_id INTEGER NOT NULL,
             date TEXT NOT NULL,
             block_id TEXT,
-            route_numbers TEXT NOT NULL,
+            route_numbers TEXT,
             start_time TEXT,
             end_time TEXT,
             first_seen TEXT,
@@ -74,6 +79,7 @@ SQL_SCRIPTS = [
             bearing REAL,
             speed INTEGER,
             adherence INTEGER,
+            layover INTEGER,
             occupancy TEXT,
             timestamp REAL,
             PRIMARY KEY (agency_id, vehicle_id)
