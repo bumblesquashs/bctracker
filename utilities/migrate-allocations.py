@@ -2,6 +2,30 @@
 
 # Migration from overviews to allocations
 
+# How it works:
+# 1. Load old overviews
+# 2. For each old overview, create an allocation based on the first seen system
+# 3. Create a date range from Jan 1 2020 to the current date
+# 4. For each day in that date range, migrate any transfers and records, creating new allocations as needed
+# 5. For each old overview, create another allocation if the last seen system doesn't match the last allocation
+# 6. For each allocation, create allocation/record references
+
+# Exceptions:
+# 1. A couple of transfers are missing; while these could be generated automatically through the fallback, the dates may be incorrect
+#      3029: West Kootenay -> East Kootenay on 2023-03-03
+#      9386: Comox -> Cowichan on 2023-08-28
+#      9298: Whistler -> Pemberton on 2023-09-11
+#      2804: North Okanagan -> Quesnel on 2023-09-28
+#      2805: North Okanagan -> Quesnel on 2023-09-28
+#      9260: Kelowna -> Kamloops on 2023-12-12
+#      2620: North Okanagan -> Kamloops on 2023-12-22
+# 2. Generally we assume that any transfers for a bus on any given day occurred before its first record, so it's safe to migrate those first.
+#    However, there's a couple of cases of buses that mistakenly logged in to the wrong system and created a record, then were "transferred" to the right system and made another record.
+#    This has happened for:
+#      2520: Sunshine Coast -> Mount Waddington on 2023-11-15
+#      1261: Victoria -> Fraser Valley on 2025-02-05
+#    For these cases, we can skip the transfers migration and rely on the fallback to auto-create transfers
+
 import sys
 import os
 
@@ -18,6 +42,73 @@ new_db = Database('bctracker-new')
 
 old_db.connect(run_scripts=False)
 new_db.connect()
+
+unexpected_updates = []
+
+# Exception 1 - see notes at top of file
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 3029,
+        'date': '2023-03-03',
+        'old_system_id': 'west-kootenay',
+        'new_system_id': 'east-kootenay'
+    }
+)
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 9386,
+        'date': '2023-08-28',
+        'old_system_id': 'comox',
+        'new_system_id': 'cowichan-valley'
+    }
+)
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 9298,
+        'date': '2023-09-11',
+        'old_system_id': 'whistler',
+        'new_system_id': 'pemberton'
+    }
+)
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 2804,
+        'date': '2023-09-28',
+        'old_system_id': 'north-okanagan',
+        'new_system_id': 'quesnel'
+    }
+)
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 2805,
+        'date': '2023-09-28',
+        'old_system_id': 'north-okanagan',
+        'new_system_id': 'quesnel'
+    }
+)
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 9260,
+        'date': '2023-12-12',
+        'old_system_id': 'kelowna',
+        'new_system_id': 'kamloops'
+    }
+)
+old_db.insert(
+    table='transfer',
+    values={
+        'bus_number': 2620,
+        'date': '2023-12-22',
+        'old_system_id': 'north-okanagan',
+        'new_system_id': 'kamloops'
+    }
+)
 
 overview_rows = old_db.select(
     table='overview',
@@ -50,14 +141,7 @@ for row in overview_rows:
         }
     )
 
-new_db.commit()
-
-date_range = DateRange(Date(2020, 1, 1, DEFAULT_TIMEZONE), Date.today())
-
-unexpected_updates = []
-
-for date in date_range:
-    print(f'Migrating data for {date.format_long()}')
+def migrate_transfers(date: Date):
     transfer_rows = old_db.select(
         table='transfer',
         columns=[
@@ -71,11 +155,12 @@ for date in date_range:
     )
     if transfer_rows:
         print(f'  Transfers: {len(transfer_rows)}')
-        
-        # Assumption: Buses have only ever been transferred once in a day, before any records are created on that day
-        # This means we can and should update transfers FIRST
         for row in transfer_rows:
             vehicle_id = str(row['bus_number'])
+            # Exception 2 - see notes at top of file
+            if (vehicle_id == '2520' and date.format_db() == '2023-11-15') or (vehicle_id == '1261' and date.format_db() == '2025-02-05'):
+                continue
+            
             old_allocation_id = new_db.select(
                 table='allocation',
                 columns=[
@@ -124,7 +209,8 @@ for date in date_range:
                     'new_allocation_id': new_allocation_id
                 }
             )
-    
+
+def migrate_records(date: Date):
     record_rows = old_db.select(
         table='record',
         columns=[
@@ -227,7 +313,13 @@ for date in date_range:
                     'last_seen': row['last_seen']
                 }
             )
-    new_db.commit()
+
+date_range = DateRange(Date(2020, 1, 1, DEFAULT_TIMEZONE), Date.today())
+for date in date_range:
+    print(f'Migrating data for {date.format_long()}')
+    
+    migrate_transfers(date)
+    migrate_records(date)
 
 for row in overview_rows:
     vehicle_id = str(row['bus_number'])
@@ -296,8 +388,6 @@ for row in overview_rows:
             }
         )
 
-new_db.commit()
-
 print('Creating allocation_record entries')
 allocation_ids = new_db.select(
     table='allocation',
@@ -330,6 +420,9 @@ for allocation_id in allocation_ids:
                 'last_record_id': record_ids[-1]
             }
         )
+
+for update in unexpected_updates:
+    print(update)
 
 new_db.commit()
 
