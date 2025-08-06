@@ -70,7 +70,7 @@ class RealtimeService:
                 date = Date.today(context.timezone)
                 time = Time.now(context.timezone)
                 
-                allocation = repositories.allocation.find_active(context, bus.id)
+                allocation = repositories.allocation.find_active(context.without_system(), bus.id)
                 if allocation:
                     if allocation.context == context:
                         repositories.allocation.set_last_seen(allocation.id, date, position)
