@@ -19,7 +19,8 @@ SQL_SCRIPTS = [
             last_lon REAL,
             last_stop_id TEXT,
             last_stop_number TEXT,
-            last_stop_name TEXT
+            last_stop_name TEXT,
+            last_seen_timestamp REAL
         )
     ''',
     '''

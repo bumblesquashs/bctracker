@@ -6,14 +6,15 @@ from database import Database
 from models.allocation import Allocation
 from models.context import Context
 from models.date import Date
-from models.stop import Stop
+from models.position import Position
 
 @dataclass(slots=True)
 class AllocationRepository:
     
     database: Database
     
-    def create(self, context: Context, vehicle_id: str, date: Date, lat: float | None, lon: float | None, stop: Stop | None, active: bool = True):
+    def create(self, context: Context, vehicle_id: str, date: Date, position: Position, active: bool = True):
+        stop = position.stop
         return self.database.insert(
             table='allocation',
             values={
@@ -23,11 +24,12 @@ class AllocationRepository:
                 'first_seen': date.format_db(),
                 'last_seen': date.format_db(),
                 'active': 1 if active else 0,
-                'last_lat': lat,
-                'last_lon': lon,
-                'last_stop_id': stop.id if stop else None,
+                'last_lat': position.lat,
+                'last_lon': position.lon,
+                'last_stop_id': position.stop_id,
                 'last_stop_number': stop.number if stop else None,
-                'last_stop_name': stop.name if stop else None
+                'last_stop_name': stop.name if stop else None,
+                'last_seen_timestamp': position.timestamp.value if position.timestamp else None
             }
         )
     
@@ -76,7 +78,8 @@ class AllocationRepository:
                 'allocation.last_lon': 'last_lon',
                 'allocation.last_stop_id': 'last_stop_id',
                 'allocation.last_stop_number': 'last_stop_number',
-                'allocation.last_stop_name': 'last_stop_name'
+                'allocation.last_stop_name': 'last_stop_name',
+                'allocation.last_seen_timestamp': 'last_seen_timestamp'
             },
             filters=filters,
             join_type='LEFT',
@@ -133,6 +136,7 @@ class AllocationRepository:
                 'allocation.last_stop_id': 'last_stop_id',
                 'allocation.last_stop_number': 'last_stop_number',
                 'allocation.last_stop_name': 'last_stop_name',
+                'allocation.last_seen_timestamp': 'last_seen_timestamp',
                 'MAX(allocation.last_seen)': 'max_last_seen'
             },
             filters=filters,
@@ -193,6 +197,7 @@ class AllocationRepository:
                 'allocation.last_stop_id': 'last_stop_id',
                 'allocation.last_stop_number': 'last_stop_number',
                 'allocation.last_stop_name': 'last_stop_name',
+                'allocation.last_seen_timestamp': 'last_seen_timestamp',
                 'MIN(allocation.first_seen)': 'min_first_seen'
             },
             filters=filters,
@@ -241,16 +246,18 @@ class AllocationRepository:
             }
         )
     
-    def set_last_seen(self, allocation_id: int, date: Date, lat: float | None, lon: float | None, stop: Stop | None):
+    def set_last_seen(self, allocation_id: int, date: Date, position: Position):
+        stop = position.stop
         self.database.update(
             table='allocation',
             values={
                 'last_seen': date.format_db(),
-                'last_lat': lat,
-                'last_lon': lon,
-                'last_stop_id': stop.id if stop else None,
+                'last_lat': position.lat,
+                'last_lon': position.lon,
+                'last_stop_id': position.stop_id,
                 'last_stop_number': stop.number if stop else None,
-                'last_stop_name': stop.name if stop else None
+                'last_stop_name': stop.name if stop else None,
+                'last_seen_timestamp': position.timestamp.value if position.timestamp else None
             },
             filters={
                 'allocation_id': allocation_id

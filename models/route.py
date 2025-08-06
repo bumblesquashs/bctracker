@@ -119,7 +119,7 @@ class Route:
     @property
     def cache(self):
         '''Returns the cache for this route'''
-        return self.system.get_route_cache(self)
+        return self.system.get_route_cache(self.id)
     
     @property
     def trips(self):

@@ -7,6 +7,7 @@ from models.date import Date
 from models.record import Record
 from models.row import Row
 from models.time import Time
+from models.timestamp import Timestamp
 
 @dataclass(slots=True)
 class Allocation:
@@ -24,6 +25,7 @@ class Allocation:
     last_stop_id: str | None
     last_stop_number: str | None
     last_stop_name: str | None
+    last_seen_timestamp: Timestamp | None
     
     def __hash__(self):
         return hash(self.id)
@@ -93,4 +95,5 @@ class Allocation:
         last_stop_id = row['last_stop_id']
         last_stop_number = row['last_stop_number']
         last_stop_name = row['last_stop_name']
-        return cls(id, context, bus, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name)
+        last_seen_timestamp = Timestamp.parse(row['last_seen_timestamp'], context.timezone)
+        return cls(id, context, bus, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name, last_seen_timestamp)

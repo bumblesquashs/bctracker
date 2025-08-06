@@ -11,7 +11,7 @@
 # 6. For each allocation, create allocation/record references
 
 # Exceptions:
-# 1. A couple of transfers are missing; while these could be generated automatically through the fallback, the dates may be incorrect
+# 1. A few transfers are missing; while these could be generated automatically through the fallback, the dates would be incorrect
 #      3029: West Kootenay -> East Kootenay on 2023-03-03
 #      9386: Comox -> Cowichan on 2023-08-28
 #      9298: Whistler -> Pemberton on 2023-09-11

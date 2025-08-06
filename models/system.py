@@ -198,9 +198,8 @@ class System:
         '''Returns all stops that match the given query'''
         return [s.get_match(query) for s in self.stops.values()]
     
-    def get_route_cache(self, route):
+    def get_route_cache(self, route_id: str):
         '''Returns the cache for the given route'''
-        route_id = getattr(route, 'id', route)
         try:
             return self.route_caches[route_id]
         except KeyError:
