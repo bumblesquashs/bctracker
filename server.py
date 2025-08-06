@@ -21,7 +21,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 59
+VERSION = 60
 
 random = Random()
 
@@ -589,9 +589,8 @@ class Server(Bottle):
         )
     
     def history_last_seen(self, context: Context):
-        allocations = [a for a in repositories.allocation.find_all(context) if a.bus.visible]
-        order_ids = {a.bus.order_id for a in allocations if a.bus.order_id}
-        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
+        show_transfers = self.query_cookie('show_transfers', 'true') == 'true'
+        allocations = [a for a in repositories.allocation.find_all_last_seen(context, None if show_transfers else True) if a.bus.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
@@ -599,6 +598,8 @@ class Server(Bottle):
         if days:
             date = Date.today(context.timezone) - timedelta(days=days)
             allocations = [a for a in allocations if a.last_date > date]
+        order_ids = {a.bus.order_id for a in allocations if a.bus.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='history/last_seen',
@@ -608,18 +609,21 @@ class Server(Bottle):
                 'days': days
             },
             allocations=sorted(allocations, key=lambda a: a.bus),
+            show_transfers=show_transfers,
             orders=orders,
             days=days
         )
     
     def history_first_seen(self, context: Context):
-        allocations = [a for a in repositories.allocation.find_all(context) if a.bus.visible]
+        show_transfers = self.query_cookie('show_transfers', 'true') == 'true'
+        allocations = [a for a in repositories.allocation.find_all_first_seen(context, None if show_transfers else True) if a.bus.visible]
         return self.page(
             context=context,
             name='history/first_seen',
             title='Vehicle History',
             path=['history', 'first-seen'],
-            allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.bus), reverse=True)
+            allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.bus), reverse=True),
+            show_transfers=show_transfers
         )
     
     def history_transfers(self, context: Context):

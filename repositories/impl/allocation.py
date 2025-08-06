@@ -91,8 +91,127 @@ class AllocationRepository:
                     'last_record.record_id': 'allocation_record.last_record_id'
                 }
             },
-            group_by='allocation.allocation_id',
             limit=limit,
+            initializer=Allocation.from_db
+        )
+    
+    def find_all_last_seen(self, context: Context, active: bool | None) -> list[Allocation]:
+        filters = {
+            'allocation.agency_id': context.agency_id,
+            'allocation.system_id': context.system_id
+        }
+        if active is not None:
+            filters['allocation.active'] = 1 if active else 0
+        return self.database.select(
+            table='allocation',
+            columns={
+                'allocation.allocation_id': 'id',
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id',
+                'allocation.system_id': 'system_id',
+                'allocation.first_seen': 'first_seen',
+                'first_record.record_id': 'first_record_id',
+                'first_record.date': 'first_record_date',
+                'first_record.block_id': 'first_record_block_id',
+                'first_record.route_numbers': 'first_record_route_numbers',
+                'first_record.start_time': 'first_record_start_time',
+                'first_record.end_time': 'first_record_end_time',
+                'first_record.first_seen': 'first_record_first_seen',
+                'first_record.last_seen': 'first_record_last_seen',
+                'allocation.last_seen': 'last_seen',
+                'last_record.record_id': 'last_record_id',
+                'last_record.date': 'last_record_date',
+                'last_record.block_id': 'last_record_block_id',
+                'last_record.route_numbers': 'last_record_route_numbers',
+                'last_record.start_time': 'last_record_start_time',
+                'last_record.end_time': 'last_record_end_time',
+                'last_record.first_seen': 'last_record_first_seen',
+                'last_record.last_seen': 'last_record_last_seen',
+                'allocation.active': 'active',
+                'allocation.last_lat': 'last_lat',
+                'allocation.last_lon': 'last_lon',
+                'allocation.last_stop_id': 'last_stop_id',
+                'allocation.last_stop_number': 'last_stop_number',
+                'allocation.last_stop_name': 'last_stop_name',
+                'MAX(allocation.last_seen)': 'max_last_seen'
+            },
+            filters=filters,
+            join_type='LEFT',
+            joins={
+                'allocation_record': {
+                    'allocation_record.allocation_id': 'allocation.allocation_id'
+                },
+                'record first_record': {
+                    'first_record.record_id': 'allocation_record.first_record_id'
+                },
+                'record last_record': {
+                    'last_record.record_id': 'allocation_record.last_record_id'
+                }
+            },
+            group_by=[
+                'allocation.agency_id',
+                'allocation.vehicle_id'
+            ],
+            initializer=Allocation.from_db
+        )
+    
+    def find_all_first_seen(self, context: Context, active: bool | None) -> list[Allocation]:
+        filters = {
+            'allocation.agency_id': context.agency_id,
+            'allocation.system_id': context.system_id
+        }
+        if active is not None:
+            filters['allocation.active'] = 1 if active else 0
+        return self.database.select(
+            table='allocation',
+            columns={
+                'allocation.allocation_id': 'id',
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id',
+                'allocation.system_id': 'system_id',
+                'allocation.first_seen': 'first_seen',
+                'first_record.record_id': 'first_record_id',
+                'first_record.date': 'first_record_date',
+                'first_record.block_id': 'first_record_block_id',
+                'first_record.route_numbers': 'first_record_route_numbers',
+                'first_record.start_time': 'first_record_start_time',
+                'first_record.end_time': 'first_record_end_time',
+                'first_record.first_seen': 'first_record_first_seen',
+                'first_record.last_seen': 'first_record_last_seen',
+                'allocation.last_seen': 'last_seen',
+                'last_record.record_id': 'last_record_id',
+                'last_record.date': 'last_record_date',
+                'last_record.block_id': 'last_record_block_id',
+                'last_record.route_numbers': 'last_record_route_numbers',
+                'last_record.start_time': 'last_record_start_time',
+                'last_record.end_time': 'last_record_end_time',
+                'last_record.first_seen': 'last_record_first_seen',
+                'last_record.last_seen': 'last_record_last_seen',
+                'allocation.active': 'active',
+                'allocation.last_lat': 'last_lat',
+                'allocation.last_lon': 'last_lon',
+                'allocation.last_stop_id': 'last_stop_id',
+                'allocation.last_stop_number': 'last_stop_number',
+                'allocation.last_stop_name': 'last_stop_name',
+                'MIN(allocation.first_seen)': 'min_first_seen'
+            },
+            filters=filters,
+            join_type='LEFT',
+            joins={
+                'allocation_record': {
+                    'allocation_record.allocation_id': 'allocation.allocation_id'
+                },
+                'record first_record': {
+                    'first_record.record_id': 'allocation_record.first_record_id'
+                },
+                'record last_record': {
+                    'last_record.record_id': 'allocation_record.last_record_id'
+                }
+            },
+            group_by=[
+                'allocation.agency_id',
+                'allocation.vehicle_id'
+            ],
             initializer=Allocation.from_db
         )
     
