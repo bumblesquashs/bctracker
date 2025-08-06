@@ -480,7 +480,7 @@ class Server(Bottle):
     
     def bus_overview(self, context: Context, vehicle_id):
         bus = context.find_bus(vehicle_id)
-        allocation = repositories.allocation.find_active(context, vehicle_id)
+        allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not bus.order_id and not allocation) or not bus.visible:
             return self.error_page(
                 context=context,
@@ -517,7 +517,7 @@ class Server(Bottle):
     
     def bus_map(self, context: Context, vehicle_id):
         bus = context.find_bus(vehicle_id)
-        allocation = repositories.allocation.find_active(context, vehicle_id)
+        allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not bus.order_id and not allocation) or not bus.visible:
             return self.error_page(
                 context=context,
@@ -539,7 +539,7 @@ class Server(Bottle):
     
     def bus_history(self, context: Context, vehicle_id):
         bus = context.find_bus(vehicle_id)
-        allocations = repositories.allocation.find_all(context, vehicle_id)
+        allocations = repositories.allocation.find_all(context.without_system(), vehicle_id)
         if (not bus.order_id and not allocations) or not bus.visible:
             return self.error_page(
                 context=context,
