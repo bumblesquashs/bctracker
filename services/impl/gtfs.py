@@ -77,7 +77,7 @@ class GTFSService:
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
-        context.system.blocks = {id: Block(context.system, id, trips) for id, trips in block_trips.items()}
+        context.system.blocks = {id: Block(context.agency, context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
         context.system.reset_caches()

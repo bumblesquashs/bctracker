@@ -13,7 +13,7 @@ import repositories
 class OrderRepository:
     
     orders: dict[str, dict[int, Order]] = field(default_factory=dict)
-    buses: dict[str, dict[int, Bus]] = field(default_factory=dict)
+    buses: dict[str, dict[str, Bus]] = field(default_factory=dict)
     
     def load(self):
         '''Loads order data from the static JSON file'''
@@ -34,20 +34,24 @@ class OrderRepository:
                         order = Order.from_json(id, agency, model, values)
                         agency_orders[id] = order
                         for bus in order.buses:
-                            agency_buses[bus.number] = bus
+                            agency_buses[bus.id] = bus
                         id += 1
                 self.orders[agency_id] = agency_orders
                 self.buses[agency_id] = agency_buses
     
-    def find_bus(self, context: Context, number: int) -> Bus | None:
+    def find_bus(self, context: Context, id: str) -> Bus | None:
         try:
-            return self.buses[context.agency_id][number]
+            return self.buses[context.agency_id][id]
         except:
             if context.vehicle_name_length:
-                name = f'{number:0{context.vehicle_name_length}d}'
+                try:
+                    int_id = int(id)
+                    name = f'{int_id:0{context.vehicle_name_length}d}'
+                except:
+                    name = id[:context.vehicle_name_length]
             else:
-                name = str(number)
-            return Bus(context.agency, number, name)
+                name = id
+            return Bus(context.agency, id, name)
     
     def find_order(self, context: Context, id: int) -> Order | None:
         try:
@@ -64,7 +68,7 @@ class OrderRepository:
                 return []
         return sorted([o for a in self.orders.values() for o in a.values()])
     
-    def find_matches(self, context: Context, query, recorded_bus_numbers) -> list[Match]:
+    def find_matches(self, context: Context, query: str, recorded_vehicle_ids: set[str]) -> list[Match]:
         '''Returns matching buses for a given query'''
         matches = []
         try:
@@ -84,7 +88,7 @@ class OrderRepository:
                 value += (len(query) / len(bus.name)) * 100
                 if bus.name.startswith(query):
                     value += len(query)
-            if bus.number not in recorded_bus_numbers:
+            if bus.id not in recorded_vehicle_ids:
                 value /= 10
             decoration = bus.find_decoration()
             name = bus.name

@@ -54,7 +54,7 @@
                                                 <div class="lighter-text smaller-font">As of {{ now.format_web(time_format) }}</div>
                                             </div>
                                             <div class="value">
-                                                % include('components/percentage', numerator=len([b for b in blocks_so_far if b.id in recorded_buses]), denominator=len(blocks_so_far), low_cutoff=80, high_cutoff=95)
+                                                % include('components/percentage', numerator=sum(1 for b in blocks_so_far if b.id in recorded_buses), denominator=len(blocks_so_far), low_cutoff=80, high_cutoff=95)
                                             </div>
                                         </div>
                                     % end

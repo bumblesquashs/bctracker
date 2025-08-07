@@ -12,7 +12,4 @@
     </div>
 </div>
 
-% trips = block.trips
-% departures = block.find_departures()
-
-% include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_positions=positions)
+% include('components/map', is_preview=False, map_trips=block.trips, map_departures=departures, map_positions=positions)

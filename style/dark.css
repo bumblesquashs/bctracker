@@ -153,6 +153,10 @@
     --image-color: #DC5050;
 }
 
+.transfer {
+    --image-color: #AAAAAA;
+}
+
 .very-ahead {
     --adherence-background: #FF0007;
 }

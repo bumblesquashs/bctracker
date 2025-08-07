@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
@@ -20,6 +21,7 @@ import repositories
 class Trip:
     '''A list of departures for a specific route and a specific service'''
     
+    agency: Agency
     system: System
     id: str
     route_id: str
@@ -38,14 +40,14 @@ class Trip:
     def from_db(cls, row: Row):
         '''Returns a trip initialized from the given database row'''
         context = row.context()
-        trip_id = row['id']
+        trip_id = row['trip_id']
         route_id = row['route_id']
         service_id = row['service_id']
         block_id = row['block_id']
         direction_id = row['direction_id']
         shape_id = row['shape_id']
         headsign = row['headsign']
-        return cls(context.system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
+        return cls(context.agency, context.system, trip_id, route_id, service_id, block_id, direction_id, shape_id, headsign)
     
     @property
     def context(self):
@@ -133,7 +135,7 @@ class Trip:
     @property
     def cache(self):
         '''Returns the cache for this trip'''
-        return self.system.get_trip_cache(self)
+        return self.system.get_trip_cache(self.id)
     
     @property
     def first_departure(self):
@@ -202,7 +204,7 @@ class Trip:
     
     def find_departures(self):
         '''Returns all departures associated with this trip'''
-        return repositories.departure.find_all(self.context, trip=self)
+        return repositories.departure.find_all(self.context, trip_id=self.id)
     
     def is_related(self, other):
         '''Checks if this trip has the same route, direction, start time, and end time as another trip'''

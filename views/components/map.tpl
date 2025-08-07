@@ -130,7 +130,7 @@
             }
             
             let icon;
-            if (position.bus_number < 0) {
+            if (position.vehicle_id.startsWith("-")) {
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");

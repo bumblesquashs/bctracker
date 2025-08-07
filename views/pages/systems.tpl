@@ -41,22 +41,22 @@
                             <div class="column">
                                 % if system.realtime_enabled and system.realtime_loaded:
                                     % positions = system.get_positions()
-                                    % overviews = system.get_overviews()
+                                    % allocations = system.get_allocations()
                                     <div class="row gap-5">
                                         <span class="bold">Online:</span>
                                         {{ len(positions) }}
                                     </div>
                                     <div class="row gap-5">
                                         <span class="bold">In Service:</span>
-                                        {{ len([p for p in positions if p.trip]) }}
+                                        {{ sum(1 for p in positions if p.trip) }}
                                     </div>
                                     <div class="row gap-5">
                                         <span class="bold">Seen:</span>
-                                        {{ len(overviews) }}
+                                        {{ len(allocations) }}
                                     </div>
                                     <div class="row gap-5">
                                         <span class="bold">Tracked:</span>
-                                        {{ len([o for o in overviews if o.last_record]) }}
+                                        {{ sum(1 for a in allocations if a.last_record) }}
                                     </div>
                                 % end
                                 % if system.gtfs_enabled and system.gtfs_loaded:
@@ -82,9 +82,9 @@
                         % if system.realtime_enabled:
                             % if system.realtime_loaded:
                                 <td class="desktop-only align-right">{{ len(positions) }}</td>
-                                <td class="desktop-only align-right">{{ len([p for p in positions if p.trip]) }}</td>
-                                <td class="desktop-only align-right">{{ len(overviews) }}</td>
-                                <td class="desktop-only align-right">{{ len([o for o in overviews if o.last_record]) }}</td>
+                                <td class="desktop-only align-right">{{ sum(1 for p in positions if p.trip) }}</td>
+                                <td class="desktop-only align-right">{{ len(allocations) }}</td>
+                                <td class="desktop-only align-right">{{ sum(1 for a in allocations if a.last_record) }}</td>
                             % else:
                                 <td class="lighter-text desktop-only" colspan="4">Data is loading</td>
                             % end

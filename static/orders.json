@@ -8,7 +8,7 @@
                 { "year": 2008, "low": 9501, "high": 9526, "livery": "green-blue-stripes" }
             ],
             [
-                { "year": 2007, "number": 9528, "livery": "green-blue-stripes" }
+                { "year": 2007, "id": 9528, "livery": "green-blue-stripes" }
             ],
             [
                 { "year": 2008, "low": 9529, "high": 9531, "livery": "green-blue-stripes" }
@@ -24,12 +24,12 @@
         ],
         "alexander-dennis-enviro500h": [
             [
-                { "year": 2008, "number": 9527, "livery": "green-blue-stripes" }
+                { "year": 2008, "id": 9527, "livery": "green-blue-stripes" }
             ]
         ],
         "byd-k9": [
             [
-                { "year": 2016, "number": 9092, "demo": true, "livery": "green-blue-stripes" }
+                { "year": 2016, "id": 9092, "demo": true, "livery": "green-blue-stripes" }
             ]
         ],
         "chevrolet-arboc-4500-sof-27": [
@@ -103,7 +103,7 @@
                 { "year": 1999, "low": 9901, "high": 9904, "livery": "red-blue-stripes", "cctv": false },
                 { "year": 1999, "low": 9905, "high": 9909, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1999, "low": 9910, "high": 9928, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1999, "number": 9929, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1999, "id": 9929, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1999, "low": 9930, "high": 9943, "livery": "red-blue-stripes", "cctv": false },
                 { "year": 1999, "low": 9944, "high": 9947, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1999, "low": 9948, "high": 9951, "livery": "red-blue-stripes", "cctv": false }
@@ -121,7 +121,7 @@
                 { "year": 2002, "low": 221, "high": 228, "livery": "red-blue-stripes", "cctv": false },
                 { "year": 2002, "low": 229, "high": 230, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 2002, "low": 231, "high": 233, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 2002, "number": 234, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 2002, "id": 234, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 2002, "low": 235, "high": 237, "livery": "red-blue-stripes", "cctv": false }
             ],
             [
@@ -129,13 +129,13 @@
             ],
             [
                 { "year": 2001, "low": 9081, "high": 9083, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 2001, "number": 9084, "livery": "green-blue-stripes", "cctv": false },
-                { "year": 2001, "number": 9085, "livery": "red-blue-stripes", "cctv": false }
+                { "year": 2001, "id": 9084, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 2001, "id": 9085, "livery": "red-blue-stripes", "cctv": false }
             ]
         ],
         "dennis-trident-iii": [
             [
-                { "year": 2000, "number": 9001, "livery": "red-blue-stripes", "cctv": false },
+                { "year": 2000, "id": 9001, "livery": "red-blue-stripes", "cctv": false },
                 { "year": 2000, "low": 9002, "high": 9010, "livery": "green-blue-stripes", "cctv": false }
             ]
         ],
@@ -184,8 +184,8 @@
         "international-eldorado-3200-aero-elite": [
             [
                 { "year": 2015, "low": 3016, "high": 3019, "livery": "green-blue-stripes", "cctv": false },
-                { "year": 2015, "number": 3021, "livery": "green-blue-stripes", "cctv": false },
-                { "year": 2015, "number": 3023, "livery": "green-blue-stripes", "cctv": false }
+                { "year": 2015, "id": 3021, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 2015, "id": 3023, "livery": "green-blue-stripes", "cctv": false }
             ],
             [
                 { "year": 2018, "low": 3024, "high": 3028, "livery": "green-blue-stripes", "cctv": false }
@@ -195,10 +195,10 @@
             [
                 { "year": 2012, "low": 2340, "high": 2341, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 2012, "low": 2345, "high": 2346, "livery": "green-blue-stripes", "cctv": false },
-                { "year": 2012, "number": 2368, "livery": "green-blue-stripes", "cctv": false }
+                { "year": 2012, "id": 2368, "livery": "green-blue-stripes", "cctv": false }
             ],
             [
-                { "year": 2011, "number": 2450, "livery": "green-blue-stripes", "cctv": false }
+                { "year": 2011, "id": 2450, "livery": "green-blue-stripes", "cctv": false }
             ]
         ],
         "new-flyer-d40lf": [
@@ -211,32 +211,32 @@
             ],
             [
                 { "year": 1994, "low": 8034, "high": 8047, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 1994, "number": 8048, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false }
+                { "year": 1994, "id": 8048, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false }
             ],
             [
                 { "year": 1995, "low": 8049, "high": 8063, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 1995, "number": 8064, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 1995, "number": 8065, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
+                { "year": 1995, "id": 8064, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
+                { "year": 1995, "id": 8065, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
                 { "year": 1995, "low": 8066, "high": 8071, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1995, "number": 8072, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1995, "id": 8072, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1995, "low": 8073, "high": 8077, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1995, "number": 8078, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1995, "id": 8078, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1995, "low": 8079, "high": 8091, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1995, "number": 8092, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1995, "id": 8092, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1995, "low": 8093, "high": 8094, "livery": "red-blue-stripes", "cctv": false }
             ],
             [
                 { "year": 1996, "low": 8095, "high": 8099, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 1996, "number": 8100, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
+                { "year": 1996, "id": 8100, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
                 { "year": 1996, "low": 8101, "high": 8102, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 1996, "number": 8103,  "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
+                { "year": 1996, "id": 8103,  "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
                 { "year": 1996, "low": 8104, "high": 8113, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 1996, "number": 8114, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
+                { "year": 1996, "id": 8114, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
                 { "year": 1996, "low": 8115, "high": 8117, "livery": "red-blue-stripes", "air_conditioned": false, "cctv": false }
             ],
             [
                 { "year": 1996, "low": 9701, "high": 9723, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1996, "number": 9724, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1996, "id": 9724, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1996, "low": 9725, "high": 9749, "livery": "red-blue-stripes", "cctv": false }
             ],
             [
@@ -246,15 +246,15 @@
             [
                 { "year": 1998, "low": 9815, "high": 9828, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false },
                 { "year": 1998, "low": 9831, "high": 9854, "livery": "green-blue-stripes", "cctv": false },
-                { "year": 1998, "number": 9855, "livery": "red-blue-stripes", "cctv": false },
-                { "year": 1998, "number": 9856, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 1998, "id": 9855, "livery": "red-blue-stripes", "cctv": false },
+                { "year": 1998, "id": 9856, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1998, "low": 9861, "high": 9878, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 1998, "low": 9881, "high": 9891, "livery": "green-blue-stripes", "air_conditioned": false, "cctv": false }
             ]
         ],
         "new-flyer-de40lf": [
             [
-                { "year": 2005, "number": 9101, "livery": "green-blue-stripes", "cctv": false },
+                { "year": 2005, "id": 9101, "livery": "green-blue-stripes", "cctv": false },
                 { "year": 2005, "low": 9102, "high": 9104, "livery": "red-blue-stripes", "cctv": false },
                 { "year": 2005, "low": 9105, "high": 9106, "livery": "green-blue-stripes", "cctv": false }
             ]
@@ -324,7 +324,7 @@
                 { "year": 2009, "low": 9319, "high": 9433, "livery": "green-blue-stripes" }
             ],
             [
-                { "year": 2012, "number": 9434, "livery": "green-blue-stripes" }
+                { "year": 2012, "id": 9434, "livery": "green-blue-stripes" }
             ],
             [
                 { "year": 2013, "low": 9435, "high": 9446, "livery": "green-blue-stripes" }
@@ -350,7 +350,7 @@
         ],
         "proterra-zx5": [
             [
-                { "year": 2022, "number": 9093, "demo": true }
+                { "year": 2022, "id": 9093, "demo": true }
             ]
         ],
         "transbus-trident-iii": [
@@ -360,17 +360,17 @@
         ],
         "unknown": [
             [
-                { "number": 0, "visible": false },
-                { "number": 46, "visible": false },
-                { "number": 49, "visible": false },
-                { "number": 53, "visible": false },
-                { "number": 65, "visible": false },
+                { "id": 0, "visible": false },
+                { "id": 46, "visible": false },
+                { "id": 49, "visible": false },
+                { "id": 53, "visible": false },
+                { "id": 65, "visible": false },
                 { "low": 92, "high": 94, "visible": false },
                 { "low": 990, "high": 999, "visible": false },
-                { "number": 1717, "visible": false },
-                { "number": 7404, "visible": false },
-                { "number": 7812, "visible": false },
-                { "number": 8888, "visible": false },
+                { "id": 1717, "visible": false },
+                { "id": 7404, "visible": false },
+                { "id": 7812, "visible": false },
+                { "id": 8888, "visible": false },
                 { "low": 9980, "high": 9999, "visible": false }
             ]
         ],

@@ -1,17 +1,10 @@
 
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from models.system import System
-
 from dataclasses import dataclass
 from enum import Enum
 
+from models.context import Context
 from models.row import Row
 from models.time import Time
-
-import repositories
 
 class PickupType(Enum):
     '''Options for pickup behaviour for a departure'''
@@ -75,7 +68,7 @@ class DropoffType(Enum):
 class Departure:
     '''An association between a trip and a stop'''
     
-    system: System
+    context: Context
     trip_id: str
     sequence: int
     stop_id: str
@@ -99,22 +92,17 @@ class Departure:
         timepoint = row['timepoint'] == 1
         distance = row['distance']
         headsign = row['headsign']
-        return cls(context.system, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
-    
-    @property
-    def context(self):
-        '''The context for this system'''
-        return self.system.context
+        return cls(context, trip_id, sequence, stop_id, time, pickup_type, dropoff_type, timepoint, distance, headsign)
     
     @property
     def stop(self):
         '''Returns the stop associated with this departure'''
-        return self.system.get_stop(stop_id=self.stop_id)
+        return self.context.system.get_stop(stop_id=self.stop_id)
     
     @property
     def trip(self):
         '''Returns the trip associated with this departure'''
-        return self.system.get_trip(self.trip_id)
+        return self.context.system.get_trip(self.trip_id)
     
     @property
     def pickup_only(self):
@@ -169,11 +157,3 @@ class Departure:
             json['colour'] = '666666'
             json['text_colour'] = 'FFFFFF'
         return json
-    
-    def find_previous(self):
-        '''Returns the previous departure for the trip'''
-        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence - 1)
-    
-    def find_next(self):
-        '''Returns the next departure for the trip'''
-        return repositories.departure.find(self.context, trip=self.trip, sequence=self.sequence + 1)

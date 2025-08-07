@@ -19,7 +19,7 @@ class LiveryRepository:
                     agency_liveries[id] = Livery(agency_id, id, **values)
                 self.liveries[agency_id] = agency_liveries
     
-    def find(self, agency_id, id) -> Livery | None:
+    def find(self, agency_id: str, id: str) -> Livery | None:
         '''Returns the livery with the given ID'''
         try:
             return self.liveries[agency_id][id]

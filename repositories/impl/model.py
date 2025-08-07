@@ -18,6 +18,6 @@ class ModelRepository:
                 for (id, values) in type_values.items():
                     self.models[id] = Model(id, type, **values)
     
-    def find(self, model_id) -> Model | None:
+    def find(self, model_id: str) -> Model | None:
         '''Returns the model with the given ID'''
         return self.models.get(model_id)

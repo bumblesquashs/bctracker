@@ -31,9 +31,9 @@ if __name__ == '__main__':
     repositories.system = SystemRepository()
     repositories.theme = ThemeRepository()
     
+    repositories.allocation = AllocationRepository(database)
     repositories.assignment = AssignmentRepository(database)
     repositories.departure = DepartureRepository(database)
-    repositories.overview = OverviewRepository(database)
     repositories.point = PointRepository(database)
     repositories.position = PositionRepository(database)
     repositories.record = RecordRepository(database)

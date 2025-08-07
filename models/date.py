@@ -21,6 +21,8 @@ class Date:
     @classmethod
     def parse(cls, date_string, timezone=DEFAULT_TIMEZONE, format='%Y-%m-%d'):
         '''Returns a date parsed from a string in the given format'''
+        if not date_string:
+            return None
         date = datetime.strptime(date_string, format)
         return cls(date.year, date.month, date.day, timezone)
     

@@ -16,7 +16,7 @@ class AgencyRepository:
             for (id, values) in json.load(file).items():
                 self.agencies[id] = Agency(id, **values)
     
-    def find(self, agency_id) -> Agency | None:
+    def find(self, agency_id: str) -> Agency | None:
         '''Returns the agency with the given ID'''
         return self.agencies.get(agency_id)
     
