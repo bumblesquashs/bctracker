@@ -94,8 +94,8 @@
             <td class="desktop-only">
                 % include('components/year_model', year_model=bus.year_model)
             </td>
-        % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
-            % assignment = assignments[(trip.context.system_id, trip.block_id)]
+        % elif trip.block_id in assignments and trip.end_time.is_later:
+            % assignment = assignments[trip.block_id]
             % bus = assignment.bus
             <td>
                 <div class="column">

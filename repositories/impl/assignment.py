@@ -124,7 +124,7 @@ class AssignmentRepository:
             filters=filters,
             initializer=Assignment.from_db
         )
-        return {a.key: a for a in assignments}
+        return assignments
     
     def delete_all(self, block_id: str | None = None, allocation_id: int | None = None):
         '''Deletes all assignments from the database'''

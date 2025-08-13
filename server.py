@@ -702,6 +702,7 @@ class Server(Bottle):
                 route_number=route_number
             )
         trips = sorted(route.get_trips(date=Date.today(context.timezone)))
+        assignments = repositories.assignment.find_all(context, route_id=route.id)
         return self.page(
             context=context,
             name='route/overview',
@@ -710,7 +711,7 @@ class Server(Bottle):
             route=route,
             trips=trips,
             recorded_today=repositories.record.find_recorded_today(context, [t.id for t in trips]),
-            assignments=repositories.assignment.find_all(context, route_id=route.id),
+            assignments={a.block_id: a for a in assignments},
             positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
@@ -1123,6 +1124,7 @@ class Server(Bottle):
         departures = stop.find_departures(date=Date.today(context.timezone))
         trip_ids = [d.trip_id for d in departures]
         positions = repositories.position.find_all(context, trip_id=trip_ids)
+        assignments = repositories.assignment.find_all(context, stop_id=stop.id)
         return self.page(
             context=context,
             name='stop/overview',
@@ -1134,7 +1136,7 @@ class Server(Bottle):
             parent_stop=parent_stop,
             departures=departures,
             recorded_today=repositories.record.find_recorded_today(context, trip_ids),
-            assignments=repositories.assignment.find_all(context, stop_id=stop.id),
+            assignments={a.block_id: a for a in assignments},
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()

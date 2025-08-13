@@ -26,11 +26,6 @@ class Assignment:
         return cls(block_id, allocation_id, context, vehicle_id, date)
     
     @property
-    def key(self):
-        '''The unique identifier for this assignment'''
-        return (self.block_id, self.allocation_id)
-    
-    @property
     def bus(self):
         '''The bus for this assignment'''
         return self.context.find_bus(self.vehicle_id)
