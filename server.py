@@ -653,7 +653,11 @@ class Server(Bottle):
         )
     
     def routes_map(self, context: Context):
-        routes = repositories.route.find_all(context)
+        if context.system:
+            routes = repositories.route.find_all(context)
+        else:
+            # Workaround as default context is currently for BC Transit only
+            routes = repositories.route.find_all(Context())
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             context=context,
@@ -1362,7 +1366,11 @@ class Server(Bottle):
         }
     
     def api_routes(self, context: Context):
-        routes = repositories.route.find_all(context)
+        if context.system:
+            routes = repositories.route.find_all(context)
+        else:
+            # Workaround as default context is currently for BC Transit only
+            routes = repositories.route.find_all(Context())
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
         shape_ids = set()
         shape_trips = []
