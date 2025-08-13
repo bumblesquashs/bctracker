@@ -167,6 +167,7 @@ SQL_SCRIPTS = [
             PRIMARY KEY (agency_id, system_id, shape_id, sequence)
         )
     ''',
+    'CREATE INDEX IF NOT EXISTS allocation_agency_vehicle ON allocation (agency_id, vehicle_id)',
     'CREATE INDEX IF NOT EXISTS record_allocation ON record (allocation_id)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
     'CREATE INDEX IF NOT EXISTS transfer_old_allocation ON transfer (old_allocation_id)',
