@@ -1054,11 +1054,11 @@ class Server(Bottle):
                 stops = []
             else:
                 stops = stops[start_index:end_index]
+            context.system.update_stop_caches([s.id for s in stops])
         else:
             stops = []
             show_stations_tab = False
             total_items = 0
-        context.system.update_stop_caches([s.id for s in stops])
         return self.page(
             context=context,
             name='stops/stops',
@@ -1080,9 +1080,9 @@ class Server(Bottle):
     def stations(self, context: Context):
         if context.system:
             stops = [s for s in context.system.get_stops() if s.type == StopType.STATION]
+            context.system.update_stop_caches([s.id for s in stops])
         else:
             stops = []
-        context.system.update_stop_caches([s.id for s in stops])
         return self.page(
             context=context,
             name='stops/stations',
