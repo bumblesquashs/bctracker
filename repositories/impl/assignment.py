@@ -99,6 +99,7 @@ class AssignmentRepository:
         }
         if trip_id or route_id or stop_id:
             joins['trip'] = {
+                'trip.agency_id': 'allocation.agency_id',
                 'trip.system_id': 'allocation.system_id',
                 'trip.block_id': 'assignment.block_id'
             }
@@ -106,6 +107,7 @@ class AssignmentRepository:
             filters['trip.route_id'] = route_id
             if stop_id:
                 joins['departure'] = {
+                    'departure.agency_id': 'trip.agency_id',
                     'departure.system_id': 'trip.system_id',
                     'departure.trip_id': 'trip.trip_id'
                 }
