@@ -11,30 +11,36 @@ class PointRepository:
     
     database: Database
     
-    def create(self, context: Context, row):
+    def create(self, context: Context, row: dict):
         '''Inserts a new point into the database'''
-        self.database.insert('point', {
-            'system_id': context.system_id,
-            'shape_id': row['shape_id'],
-            'sequence': int(row['shape_pt_sequence']),
-            'lat': float(row['shape_pt_lat']),
-            'lon': float(row['shape_pt_lon'])
-        })
+        self.database.insert(
+            table='point',
+            values={
+                'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'shape_id': row['shape_id'],
+                'sequence': int(row['shape_pt_sequence']),
+                'lat': float(row['shape_pt_lat']),
+                'lon': float(row['shape_pt_lon'])
+            }
+        )
     
-    def find_all(self, context: Context, shape=None) -> list[Point]:
+    def find_all(self, context: Context, shape_id: str) -> list[Point]:
         '''Returns all points that match the given context and shape'''
-        shape_id = getattr(shape, 'id', shape)
-        return self.database.select('point',
-            columns={
-                'point.system_id': 'system_id',
-                'point.shape_id': 'shape_id',
-                'point.sequence': 'sequence',
-                'point.lat': 'lat',
-                'point.lon': 'lon'
-            },
+        return self.database.select(
+            table='point',
+            columns=[
+                'agency_id',
+                'system_id',
+                'shape_id',
+                'sequence',
+                'lat',
+                'lon'
+            ],
             filters={
-                'point.system_id': context.system_id,
-                'point.shape_id': shape_id
+                'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'shape_id': shape_id
             },
             order_by='point.sequence ASC',
             initializer=Point.from_db
@@ -42,6 +48,10 @@ class PointRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all points for the given context from the database'''
-        self.database.delete('point', {
-            'point.system_id': context.system_id
-        })
+        self.database.delete(
+            table='point',
+            filters={
+                'agency_id': context.agency_id,
+                'system_id': context.system_id
+            }
+        )

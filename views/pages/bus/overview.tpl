@@ -163,24 +163,23 @@
                         <div class="row section">
                             <div class="name">Last Seen</div>
                             <div class="value">
-                                % if overview:
-                                    % last_seen = overview.last_seen_date
-                                    % if last_seen.is_today:
+                                % if allocation:
+                                    % if allocation.last_seen.is_today:
                                         <div>Today</div>
                                     % else:
-                                        <div>{{ last_seen.format_long() }}</div>
-                                        <div class="smaller-font">{{ last_seen.format_since() }}</div>
+                                        <div>{{ allocation.last_seen.format_long() }}</div>
+                                        <div class="smaller-font">{{ allocation.last_seen.format_since() }}</div>
                                     % end
                                 % else:
                                     <div class="lighter-text">Never</div>
                                 % end
                             </div>
                         </div>
-                        % if overview:
+                        % if allocation:
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(overview.last_seen_context) }}">{{ overview.last_seen_context }}</a>
+                                    <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
                                 </div>
                             </div>
                         % end
@@ -198,7 +197,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section">
-                            % include('components/order_details', livery=bus.find_livery())
+                            % include('components/order_details')
                         </div>
                         % if model:
                             <div class="row section">
@@ -258,59 +257,56 @@
     </div>
     
     <div class="container flex-3">
-        % if position:
-            % upcoming_departures = position.find_upcoming_departures()
-            % if upcoming_departures:
-                <div class="section">
-                    <div class="header" onclick="toggleSection(this)">
-                        <h2>Upcoming Stops</h2>
-                        % include('components/toggle')
-                    </div>
-                    <div class="content">
-                        % if any(d.timepoint for d in upcoming_departures):
-                            <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
-                        % end
-                        % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
-                            <p>Times in brackets are estimates based on current location.</p>
-                        % end
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Stop</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % for departure in upcoming_departures[:5]:
-                                    % include('rows/upcoming_departure')
-                                % end
-                                % if len(upcoming_departures) > 5:
-                                    <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
-                                        <td colspan="2">
-                                            <div class="row justify-center">
-                                                % include('components/svg', name='action/open')
-                                                Show Full Schedule
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="display-none"></tr>
-                                    % for departure in upcoming_departures[5:]:
-                                        % include('rows/upcoming_departure', hidden=True)
-                                    % end
-                                % end
-                            </tbody>
-                        </table>
-                    </div>
+        % if position and upcoming_departures:
+            <div class="section">
+                <div class="header" onclick="toggleSection(this)">
+                    <h2>Upcoming Stops</h2>
+                    % include('components/toggle')
                 </div>
-                <script>
-                    function showAllUpcomingStops() {
-                        document.getElementById("show-all-upcoming-stops-button").classList.add("display-none");
-                        for (const element of document.getElementsByClassName("table-button-target")) {
-                            element.classList.remove("display-none");
-                        }
+                <div class="content">
+                    % if any(d.timepoint for d in upcoming_departures):
+                        <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
+                    % end
+                    % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
+                        <p>Times in brackets are estimates based on current location.</p>
+                    % end
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Stop</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % for departure in upcoming_departures[:5]:
+                                % include('rows/upcoming_departure')
+                            % end
+                            % if len(upcoming_departures) > 5:
+                                <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
+                                    <td colspan="2">
+                                        <div class="row justify-center">
+                                            % include('components/svg', name='action/open')
+                                            Show Full Schedule
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="display-none"></tr>
+                                % for departure in upcoming_departures[5:]:
+                                    % include('rows/upcoming_departure', hidden=True)
+                                % end
+                            % end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <script>
+                function showAllUpcomingStops() {
+                    document.getElementById("show-all-upcoming-stops-button").classList.add("display-none");
+                    for (const element of document.getElementsByClassName("table-button-target")) {
+                        element.classList.remove("display-none");
                     }
-                </script>
-            % end
+                }
+            </script>
         % end
         <div class="section">
             <div class="header" onclick="toggleSection(this)">

@@ -1,13 +1,8 @@
 
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from models.system import System
-
 from dataclasses import dataclass, field
 
 from models.bus import Bus
+from models.context import Context
 from models.date import Date
 from models.row import Row
 from models.time import Time
@@ -16,8 +11,9 @@ from models.time import Time
 class Record:
     '''Information about a bus' history on a specific date'''
     
-    system: System
     id: int
+    allocation_id: int
+    context: Context
     bus: Bus
     date: Date
     block_id: str
@@ -32,22 +28,21 @@ class Record:
     @classmethod
     def from_db(cls, row: Row):
         '''Returns a record initialized from the given database row'''
-        context = row.context()
         id = row['id']
-        bus = context.find_bus(row['bus_number'])
+        allocation_id = row['allocation_id']
+        context = row.context()
+        bus = context.find_bus(row['vehicle_id'])
         date = Date.parse(row['date'], context.timezone)
         block_id = row['block_id']
-        route_numbers = [n.strip() for n in row['routes'].split(',')]
+        if 'route_numbers' in row:
+            route_numbers = [n.strip() for n in row['route_numbers'].split(',')]
+        else:
+            route_numbers = []
         start_time = Time.parse(row['start_time'], context.timezone, context.accurate_seconds)
         end_time = Time.parse(row['end_time'], context.timezone, context.accurate_seconds)
         first_seen = Time.parse(row['first_seen'], context.timezone, context.accurate_seconds)
         last_seen = Time.parse(row['last_seen'], context.timezone, context.accurate_seconds)
-        return cls(context.system, id, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
-    
-    @property
-    def context(self):
-        '''The context for this record'''
-        return self.system.context
+        return cls(id, allocation_id, context, bus, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property
     def total_minutes(self):
@@ -66,7 +61,7 @@ class Record:
     @property
     def block(self):
         '''Returns the block associated with this record'''
-        return self.system.get_block(self.block_id)
+        return self.context.system.get_block(self.block_id)
     
     @property
     def is_available(self):
@@ -76,7 +71,7 @@ class Record:
     @property
     def routes(self):
         if self.is_available:
-            return [self.system.get_route(number=n) for n in self.route_numbers]
+            return [self.context.system.get_route(number=n) for n in self.route_numbers]
         return self.route_numbers
     
     def __post_init__(self):

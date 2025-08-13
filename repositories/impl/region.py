@@ -16,7 +16,7 @@ class RegionRepository:
             for (id, values) in json.load(file).items():
                 self.regions[id] = Region(id, **values)
     
-    def find(self, region_id) -> Region | None:
+    def find(self, region_id: str) -> Region | None:
         '''Returns the region with the given ID'''
         return self.regions.get(region_id)
     

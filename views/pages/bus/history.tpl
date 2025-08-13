@@ -23,7 +23,7 @@
 </div>
 
 <div class="page-container">
-    % if overview:
+    % if allocations:
         <div class="sidebar container flex-1">
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -39,14 +39,15 @@
                             <div class="name">Total Records</div>
                             <div class="value">{{ total_items }}</div>
                         </div>
-                        <div class="row section align-start">
-                            <div class="name">{{ 'System' if len(tracked_systems) == 1 else 'Systems' }}</div>
-                            <div class="value">
-                                % for system in sorted(tracked_systems):
-                                    <a href="{{ get_url(system.context) }}">{{ system }}</a>
-                                % end
+                        <h3>Allocation History</h3>
+                        % for allocation in allocations:
+                            <div class="section">
+                                <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
+                                <div class="smaller-font ligher-text">
+                                    {{ allocation.first_seen.format_long() }} - {{ allocation.last_seen.format_long() }}
+                                </div>
                             </div>
-                        </div>
+                        % end
                     </div>
                 </div>
             </div>
@@ -82,7 +83,7 @@
                         % dates = {r.date for r in records}
                         <h3>{{ min(dates).format_long() }} - {{ max(dates).format_long() }}</h3>
                         
-                        % if [r for r in records if r.warnings]:
+                        % if any(r.warnings for r in records):
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">

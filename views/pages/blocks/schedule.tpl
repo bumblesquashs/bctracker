@@ -32,7 +32,7 @@
                 </div>
                 <div class="container inline flex-3">
                     % for (i, sheet) in enumerate(sheets):
-                        % sheet_blocks = [b for b in blocks if [t for t in b.trips if t.service in sheet.services]]
+                        % sheet_blocks = [b for b in blocks if any(t.service in sheet.services for t in b.trips)]
                         % if not sheet_blocks:
                             % continue
                         % end

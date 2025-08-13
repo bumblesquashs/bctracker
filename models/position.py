@@ -38,7 +38,7 @@ class Position:
     def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
         context = row.context()
-        bus = context.find_bus(row['bus_number'])
+        bus = context.find_bus(row['vehicle_id'])
         trip_id = row['trip_id']
         stop_id = row['stop_id']
         block_id = row['block_id']
@@ -49,11 +49,10 @@ class Position:
         bearing = row['bearing']
         speed = row['speed']
         adherence_value = row['adherence']
+        layover = row['layover'] == 1
         if adherence_value is None:
             adherence = None
         else:
-            trip = context.system.get_trip(trip_id)
-            layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)
@@ -86,7 +85,7 @@ class Position:
     @property
     def block(self):
         '''Returns the block associated with this position'''
-        if not self.block_id:
+        if self.block_id:
             return self.system.get_block(self.block_id)
         return None
     
@@ -127,7 +126,7 @@ class Position:
     def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
-            'bus_number': self.bus.number,
+            'vehicle_id': self.bus.id,
             'bus_display': str(self.bus),
             'bus_url_id': str(self.bus.url_id),
             'system': str(self.system),
@@ -181,9 +180,3 @@ class Position:
         if timestamp:
             data['timestamp'] = timestamp.value
         return data
-    
-    def find_upcoming_departures(self):
-        '''Returns the trip's upcoming departures'''
-        if self.sequence is None or not self.trip:
-            return []
-        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)

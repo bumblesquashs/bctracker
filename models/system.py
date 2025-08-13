@@ -124,9 +124,9 @@ class System:
         '''Returns all blocks'''
         return sorted(self.blocks.values())
     
-    def get_overviews(self):
-        '''Returns all overviews'''
-        return repositories.overview.find_all(last_seen_context=self.context)
+    def get_allocations(self):
+        '''Returns all allocations'''
+        return repositories.allocation.find_all(self.context, active=True)
     
     def get_positions(self):
         '''Returns all positions'''
@@ -198,9 +198,8 @@ class System:
         '''Returns all stops that match the given query'''
         return [s.get_match(query) for s in self.stops.values()]
     
-    def get_route_cache(self, route):
+    def get_route_cache(self, route_id: str):
         '''Returns the cache for the given route'''
-        route_id = getattr(route, 'id', route)
         try:
             return self.route_caches[route_id]
         except KeyError:
@@ -209,24 +208,22 @@ class System:
             self.route_caches[route_id] = cache
             return cache
     
-    def get_stop_cache(self, stop):
+    def get_stop_cache(self, stop_id: str):
         '''Returns the cache for the given stop'''
-        stop_id = getattr(stop, 'id', stop)
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = repositories.departure.find_all(self.context, stop=stop)
+            departures = repositories.departure.find_all(self.context, stop_id=stop_id)
             cache = StopCache.build(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
     
-    def get_trip_cache(self, trip):
+    def get_trip_cache(self, trip_id: str):
         '''Returns the cache for the given trip'''
-        trip_id = getattr(trip, 'id', trip)
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = repositories.departure.find_all(self.context, trip=trip)
+            departures = repositories.departure.find_all(self.context, trip_id=trip_id)
             cache = TripCache.build(departures)
             self.trip_caches[trip_id] = cache
             return cache

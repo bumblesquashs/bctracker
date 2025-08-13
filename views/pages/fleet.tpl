@@ -54,26 +54,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    % buses = {a.bus for a in allocations}
                                     % for type in model_types:
                                         <tr class="header">
                                             <td>{{ type }}</td>
-                                            <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model and o.bus.model.type == type]) }}</td>
-                                            <td class="align-right">{{ sum([len(o.buses) for o in orders if o.model.type == type]) }}</td>
+                                            <td class="align-right">{{ sum(1 for b in buses if b.model and b.model.type == type) }}</td>
+                                            <td class="align-right">{{ sum(len(o.buses) for o in orders if o.model.type == type) }}</td>
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % type_models = [m for m in models if m.type == type]
                                         % for model in type_models:
                                             <tr>
                                                 <td><a href="#{{ model.id }}">{{! model }}</a></td>
-                                                <td class="align-right">{{ len([o for o in overviews.values() if o.bus.model and o.bus.model == model]) }}</td>
-                                                <td class="align-right">{{ sum([len(o.buses) for o in orders if o.model == model]) }}</td>
+                                                <td class="align-right">{{ sum(1 for b in buses if b.model and b.model == model) }}</td>
+                                                <td class="align-right">{{ sum(len(o.buses) for o in orders if o.model == model) }}</td>
                                             </tr>
                                         % end
                                     % end
                                     <tr class="header">
                                         <td>Total</td>
-                                        <td class="align-right">{{ len([o for o in overviews.values() if o.bus.visible]) }}</td>
-                                        <td class="align-right">{{ sum([len(o.buses) for o in orders]) }}</td>
+                                        <td class="align-right">{{ sum(1 for b in buses if b.visible) }}</td>
+                                        <td class="align-right">{{ sum(len(o.buses) for o in orders) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -121,28 +122,32 @@
                                                                 </tr>
                                                                 <tr class="display-none"></tr>
                                                                 % for bus in order.buses:
-                                                                    % if bus.number in overviews:
-                                                                        % overview = overviews[bus.number]
+                                                                    % bus_allocations = [a for a in allocations if a.bus == bus]
+                                                                    % if bus_allocations:
+                                                                        % first_seen_date = min(a.first_seen for a in bus_allocations)
+                                                                        % first_seen_context = min(bus_allocations).context
+                                                                        % last_seen_date = max(a.last_seen for a in bus_allocations)
+                                                                        % last_seen_context = max(bus_allocations).context
                                                                         <tr>
                                                                             <td>
                                                                                 % include('components/bus')
                                                                             </td>
-                                                                            <td class="desktop-only">{{ overview.first_seen_date.format_long() }}</td>
+                                                                            <td class="desktop-only">{{ first_seen_date.format_long() }}</td>
                                                                             <td class="non-desktop">
                                                                                 <div class="column">
-                                                                                    {{ overview.first_seen_date.format_short() }}
-                                                                                    <span class="mobile-only smaller-font">{{ overview.first_seen_context }}</span>
+                                                                                    {{ first_seen_date.format_short() }}
+                                                                                    <span class="mobile-only smaller-font">{{ first_seen_context }}</span>
                                                                                 </div>
                                                                             </td>
-                                                                            <td class="non-mobile">{{ overview.first_seen_context }}</td>
-                                                                            <td class="desktop-only">{{ overview.last_seen_date.format_long() }}</td>
+                                                                            <td class="non-mobile">{{ first_seen_context }}</td>
+                                                                            <td class="desktop-only">{{ last_seen_date.format_long() }}</td>
                                                                             <td class="non-desktop">
                                                                                 <div class="column">
-                                                                                    {{ overview.last_seen_date.format_short() }}
-                                                                                    <span class="mobile-only smaller-font">{{ overview.last_seen_context }}</span>
+                                                                                    {{ last_seen_date.format_short() }}
+                                                                                    <span class="mobile-only smaller-font">{{ last_seen_context }}</span>
                                                                                 </div>
                                                                             </td>
-                                                                            <td class="non-mobile">{{ overview.last_seen_context }}</td>
+                                                                            <td class="non-mobile">{{ last_seen_context }}</td>
                                                                         </tr>
                                                                     % else:
                                                                         <tr>

@@ -145,7 +145,7 @@
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = repositories.position.find(value)
+                                                    % position = repositories.position.find(value.agency.id, value.id)
                                                     <tr>
                                                         <td>
                                                             <div class="row">

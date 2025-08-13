@@ -168,7 +168,7 @@
             const adherence = position.adherence;
             
             const element = document.createElement("div");
-            element.id = "bus-marker-" + position.bus_number;
+            element.id = "bus-marker-" + position.vehicle_id;
             element.className = "marker";
             if (position.shape_id === null || position.shape_id === undefined) {
                 element.classList.add("nis-bus");
@@ -204,7 +204,7 @@
             }
             
             let icon;
-            if (position.bus_number < 0) {
+            if (position.vehicle_id.startsWith("-")) {
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");

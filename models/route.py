@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
@@ -21,7 +22,6 @@ from models.sheet import Sheet
 from models.trip import Trip
 
 import helpers
-import repositories
 
 class RouteType(Enum):
     '''Options for route types'''
@@ -74,6 +74,7 @@ class RouteType(Enum):
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
+    agency: Agency
     system: System
     id: str
     number: str
@@ -89,14 +90,14 @@ class Route:
     def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
         context = row.context()
-        id = row['id']
+        id = row['route_id']
         number = row['number'] or id
         name = row['name']
         colour = row['colour'] or generate_colour(context, number)
         text_colour = row['text_colour'] or 'FFFFFF'
         type = RouteType.from_db(row['type'])
         sort_order = row['sort_order']
-        return cls(context.system, id, number, name, colour, text_colour, type, sort_order)
+        return cls(context.agency, context.system, id, number, name, colour, text_colour, type, sort_order)
     
     @property
     def context(self):
@@ -118,7 +119,7 @@ class Route:
     @property
     def cache(self):
         '''Returns the cache for this route'''
-        return self.system.get_route_cache(self)
+        return self.system.get_route_cache(self.id)
     
     @property
     def trips(self):
@@ -226,10 +227,6 @@ class Route:
             if name.startswith(query):
                 value += len(query)
         return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
-    
-    def find_departures(self):
-        '''Returns all departures for this route'''
-        return repositories.departure.find_all(self.context, route=self)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

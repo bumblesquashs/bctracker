@@ -160,8 +160,11 @@ class Context:
             return False
         return self.agency < other.agency
     
-    def find_bus(self, number: int) -> Bus:
-        return repositories.order.find_bus(self, number)
+    def without_system(self):
+        return Context(self.agency)
+    
+    def find_bus(self, id: str) -> Bus:
+        return repositories.order.find_bus(self, id)
     
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''

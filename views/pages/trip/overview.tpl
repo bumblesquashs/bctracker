@@ -218,7 +218,7 @@
             </div>
         % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
             % bus = assignment.bus
-            % position = repositories.position.find(bus)
+            % position = repositories.position.find(bus.agency.id, bus.id)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Scheduled Bus</h2>
@@ -310,7 +310,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if [d for d in departures if d.timepoint]:
+                % if any(d.timepoint for d in departures):
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 % last_headsign = None
