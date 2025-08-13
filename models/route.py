@@ -22,6 +22,7 @@ from models.sheet import Sheet
 from models.trip import Trip
 
 import helpers
+import repositories
 
 class RouteType(Enum):
     '''Options for route types'''
@@ -272,17 +273,31 @@ class RouteCache:
         else:
             schedule = None
         try:
-            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
-            points = sorted_trips[0].find_points()
-            first_point = points[0]
-            last_point = points[-1]
-            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-            if distance <= 0.05:
-                count = min((len(points) // 500) + 1, 3)
+            shape_ids = {t.shape_id for t in trips}
+            if shape_ids:
+                all_points = repositories.point.find_all(system.context, shape_ids)
+                longest_points = None
+                longest_distance = None
+                for shape_id in shape_ids:
+                    shape_points = [p for p in all_points if p.shape_id == shape_id]
+                    if shape_points:
+                        first_point = shape_points[0]
+                        last_point = shape_points[-1]
+                        distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+                        if not longest_distance or distance > longest_distance:
+                            longest_points = shape_points
+                            longest_distance = distance
+                if longest_points:
+                    if longest_distance <= 0.05:
+                        count = min((len(longest_points) // 500) + 1, 3)
+                    else:
+                        count = min(int(longest_distance * 8) + 1, 4)
+                    size = len(longest_points) // count
+                    indicator_points = [longest_points[(i * size) + (size // 2)] for i in range(count)]
+                else:
+                    indicator_points = []
             else:
-                count = min(int(distance * 8) + 1, 4)
-            size = len(points) // count
-            indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+                indicator_points = []
         except IndexError:
             indicator_points = []
         return cls(trips, schedule, sheets, indicator_points)

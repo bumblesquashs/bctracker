@@ -131,8 +131,8 @@ SQL_SCRIPTS = [
             route_id TEXT NOT NULL,
             service_id TEXT NOT NULL,
             block_id TEXT,
-            direction_id TEXT,
-            shape_id INTEGER,
+            direction_id INTEGER,
+            shape_id TEXT,
             headsign TEXT NOT NULL,
             PRIMARY KEY (agency_id, system_id, trip_id),
             FOREIGN KEY (agency_id, system_id, route_id) REFERENCES route (agency_id, system_id, route_id)

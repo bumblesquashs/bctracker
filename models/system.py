@@ -198,6 +198,17 @@ class System:
         '''Returns all stops that match the given query'''
         return [s.get_match(query) for s in self.stops.values()]
     
+    def update_route_caches(self, route_ids: list[str]):
+        missing_route_ids = [id for id in route_ids if id not in self.route_caches]
+        if not missing_route_ids:
+            return
+        trips = repositories.trip.find_all(self.context, route_id=missing_route_ids)
+        trips_by_route = {}
+        for trip in trips:
+            trips_by_route.setdefault(trip.route_id, []).append(trip)
+        for (route_id, route_trips) in trips_by_route.items():
+            self.route_caches[route_id] = RouteCache.build(self, route_trips)
+    
     def get_route_cache(self, route_id: str):
         '''Returns the cache for the given route'''
         try:
@@ -208,6 +219,17 @@ class System:
             self.route_caches[route_id] = cache
             return cache
     
+    def update_stop_caches(self, stop_ids: list[str]):
+        missing_stop_ids = [id for id in stop_ids if id not in self.stop_caches]
+        if not missing_stop_ids:
+            return
+        departures = repositories.departure.find_all(self.context, stop_id=missing_stop_ids)
+        departures_by_stop = {}
+        for departure in departures:
+            departures_by_stop.setdefault(departure.stop_id, []).append(departure)
+        for (stop_id, stop_departures) in departures_by_stop.items():
+            self.stop_caches[stop_id] = StopCache.build(self, stop_departures)
+    
     def get_stop_cache(self, stop_id: str):
         '''Returns the cache for the given stop'''
         try:
@@ -217,6 +239,17 @@ class System:
             cache = StopCache.build(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
+    
+    def update_trip_caches(self, trip_ids: list[str]):
+        missing_trip_ids = [id for id in trip_ids if id not in self.trip_caches]
+        if not missing_trip_ids:
+            return
+        departures = repositories.departure.find_all(self.context, trip_id=missing_trip_ids)
+        departures_by_trip = {}
+        for departure in departures:
+            departures_by_trip.setdefault(departure.trip_id, []).append(departure)
+        for (trip_id, trip_departures) in departures_by_trip.items():
+            self.trip_caches[trip_id] = TripCache.build(trip_departures)
     
     def get_trip_cache(self, trip_id: str):
         '''Returns the cache for the given trip'''

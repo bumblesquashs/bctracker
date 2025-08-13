@@ -644,20 +644,31 @@ class Server(Bottle):
         )
     
     def routes_list(self, context: Context):
+        if context.system:
+            routes = repositories.route.find_all(context)
+            context.system.update_route_caches([r.id for r in routes])
+        else:
+            routes = []
         return self.page(
             context=context,
             name='routes/list',
             title='Routes',
             path=['routes'],
-            enable_refresh=False
+            enable_refresh=False,
+            routes=sorted(routes)
         )
     
     def routes_map(self, context: Context):
         if context.system:
             routes = repositories.route.find_all(context)
+            context.system.update_route_caches([r.id for r in routes])
         else:
             # Workaround as default context is currently for BC Transit only
             routes = repositories.route.find_all(Context())
+            systems = {r.system for r in routes}
+            for system in systems:
+                system_route_ids = [r.id for r in routes if r.system == system]
+                system.update_route_caches(system_route_ids)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             context=context,
@@ -1047,6 +1058,7 @@ class Server(Bottle):
             stops = []
             show_stations_tab = False
             total_items = 0
+        context.system.update_stop_caches([s.id for s in stops])
         return self.page(
             context=context,
             name='stops/stops',
@@ -1070,6 +1082,7 @@ class Server(Bottle):
             stops = [s for s in context.system.get_stops() if s.type == StopType.STATION]
         else:
             stops = []
+        context.system.update_stop_caches([s.id for s in stops])
         return self.page(
             context=context,
             name='stops/stations',
@@ -1361,6 +1374,13 @@ class Server(Bottle):
         lon = float(request.query['lon'])
         size = float(request.query.get('size', 0.01))
         stops = repositories.stop.find_all(context, lat=lat, lon=lon, size=size)
+        if context.system:
+            context.system.update_stop_caches([s.id for s in stops])
+        else:
+            systems = {s.system for s in stops}
+            for system in systems:
+                system_stop_ids = [s.id for s in stops if s.system == system]
+                system.update_stop_caches(system_stop_ids)
         return {
             'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
@@ -1368,10 +1388,22 @@ class Server(Bottle):
     def api_routes(self, context: Context):
         if context.system:
             routes = repositories.route.find_all(context)
+            context.system.update_route_caches([r.id for r in routes])
         else:
             # Workaround as default context is currently for BC Transit only
             routes = repositories.route.find_all(Context())
+            systems = {r.system for r in routes}
+            for system in systems:
+                system_route_ids = [r.id for r in routes if r.system == system]
+                system.update_route_caches(system_route_ids)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
+        if context.system:
+            context.system.update_trip_caches([t.id for t in trips])
+        else:
+            systems = {t.system for t in trips}
+            for system in systems:
+                system_trip_ids = [t.id for t in trips if t.system == system]
+                system.update_trip_caches(system_trip_ids)
         shape_ids = set()
         shape_trips = []
         for trip in trips:

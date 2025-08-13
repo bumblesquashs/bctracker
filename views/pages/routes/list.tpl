@@ -10,7 +10,6 @@
 </div>
 
 % if context.system:
-    % routes = context.system.get_routes()
     % if routes:
         % route_types = {r.type for r in routes}
         <div class="container">
