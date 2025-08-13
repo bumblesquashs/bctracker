@@ -19,4 +19,4 @@
 
 % trips = [d.trip for d in stop.find_departures() if d.trip and d.trip.route]
 
-% include('components/map', is_preview=False, map_trips=trips, map_departures=departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
+% include('components/map', is_preview=False, map_trips=trips, map_departures=adjacent_departures, map_stop=stop, zoom_trips=False, zoom_departures=False)
