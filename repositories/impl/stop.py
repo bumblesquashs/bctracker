@@ -108,7 +108,7 @@ class StopRepository:
                 'MAX(lon)': 'max_lon'
             },
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'lat': {
                     '!=': 0
