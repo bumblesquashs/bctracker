@@ -16,7 +16,7 @@ class TripRepository:
         self.database.insert(
             table='trip',
             values={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': row['trip_id'],
                 'route_id': row['route_id'],
@@ -33,7 +33,7 @@ class TripRepository:
         trips = self.database.select(
             table='trip',
             columns=[
-                'agency_id',
+                # 'agency_id',
                 'system_id',
                 'trip_id',
                 'route_id',
@@ -44,7 +44,7 @@ class TripRepository:
                 'headsign'
             ],
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': trip_id
             },
@@ -61,7 +61,7 @@ class TripRepository:
         return self.database.select(
             table='trip',
             columns=[
-                'agency_id',
+                # 'agency_id',
                 'system_id',
                 'trip_id',
                 'route_id',
@@ -72,7 +72,7 @@ class TripRepository:
                 'headsign'
             ],
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'route_id': route_id,
                 'block_id': block_id
@@ -86,7 +86,7 @@ class TripRepository:
         self.database.delete(
             table='trip',
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )

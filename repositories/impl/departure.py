@@ -36,7 +36,7 @@ class DepartureRepository:
         self.database.insert(
             table='departure',
             values={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': row['trip_id'],
                 'sequence': int(row['stop_sequence']),
@@ -72,14 +72,14 @@ class DepartureRepository:
         joins = {}
         if route_id or block_id:
             joins['trip'] = {
-                'trip.agency_id': 'departure.agency_id',
+                # 'trip.agency_id': 'departure.agency_id',
                 'trip.system_id': 'departure.system_id',
                 'trip.trip_id': 'departure.trip_id'
             }
         return self.database.select(
             table='departure',
             columns={
-                'departure.agency_id': 'agency_id',
+                # 'departure.agency_id': 'agency_id',
                 'departure.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
                 'departure.sequence': 'sequence',
@@ -93,7 +93,7 @@ class DepartureRepository:
             },
             joins=joins,
             filters={
-                'departure.agency_id': context.agency_id,
+                # 'departure.agency_id': context.agency_id,
                 'departure.system_id': context.system_id,
                 'departure.trip_id': trip_id,
                 'departure.sequence': sequence,
@@ -111,7 +111,7 @@ class DepartureRepository:
         return self.database.select(
             table='departure',
             columns=[
-                'agency_id',
+                # 'agency_id',
                 'system_id',
                 'trip_id',
                 'sequence',
@@ -124,7 +124,7 @@ class DepartureRepository:
                 'headsign'
             ],
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': trip_id,
                 'sequence': {
@@ -143,20 +143,20 @@ class DepartureRepository:
             columns='trip.*',
             joins={
                 'trip': {
-                    'trip.agency_id': 'departure.agency_id',
+                    # 'trip.agency_id': 'departure.agency_id',
                     'trip.system_id': 'departure.system_id',
                     'trip.trip_id': 'departure.trip_id'
                 }
             },
             filters={
-                'departure.agency_id': context.agency_id,
+                # 'departure.agency_id': context.agency_id,
                 'departure.system_id': context.system_id,
                 'departure.stop_id': stop_id
             })
         return self.database.select(
             table='stop_trip',
             columns={
-                'departure.agency_id': 'agency_id',
+                # 'departure.agency_id': 'agency_id',
                 'departure.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
                 'departure.sequence': 'sequence',
@@ -173,7 +173,7 @@ class DepartureRepository:
             },
             joins={
                 'departure': {
-                    'departure.agency_id': 'stop_trip.agency_id',
+                    # 'departure.agency_id': 'stop_trip.agency_id',
                     'departure.system_id': 'stop_trip.system_id',
                     'departure.trip_id': 'stop_trip.trip_id'
                 }
@@ -191,7 +191,7 @@ class DepartureRepository:
         departures = self.database.select(
             table='departure',
             columns=[
-                'agency_id',
+                # 'agency_id',
                 'system_id',
                 'trip_id',
                 'sequence',
@@ -204,7 +204,7 @@ class DepartureRepository:
                 'headsign'
             ],
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': trip_id,
                 'sequence': {
@@ -226,7 +226,7 @@ class DepartureRepository:
         self.database.delete(
             table='departure',
             filters={
-                'agency_id': context.agency_id,
+                # 'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )
