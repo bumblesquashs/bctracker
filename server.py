@@ -490,6 +490,10 @@ class Server(Bottle):
             )
         order = repositories.order.find_order(context, bus.order_id)
         position = repositories.position.find(context.agency_id, vehicle_id)
+        if allocation:
+            last_position = allocation.last_position
+        else:
+            last_position = None
         records = repositories.record.find_all(vehicle_id=vehicle_id, limit=20)
         if bus.livery:
             livery = repositories.livery.find(context.agency_id, bus.livery)
@@ -503,10 +507,11 @@ class Server(Bottle):
             context=context,
             name='bus/overview',
             title=f'Bus {bus}',
-            include_maps=bool(position),
+            include_maps=bool(position) or bool(last_position),
             bus=bus,
             order=order,
             position=position,
+            last_position=last_position,
             records=records,
             livery=livery,
             upcoming_departures=upcoming_departures,

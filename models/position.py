@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.system import System
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from models.adherence import Adherence
 from models.bus import Bus
@@ -21,18 +21,19 @@ class Position:
     
     system: System
     bus: Bus
-    trip_id: str | None
-    stop_id: str | None
-    block_id: str | None
-    route_id: str | None
-    sequence: int | None
-    lat: float | None
-    lon: float | None
-    bearing: float | None
-    speed: float | None
-    adherence: Adherence | None
-    occupancy: Occupancy | None
-    timestamp: Timestamp
+    trip_id: str | None = None
+    stop_id: str | None = None
+    block_id: str | None = None
+    route_id: str | None = None
+    sequence: int | None = None
+    lat: float | None = None
+    lon: float | None = None
+    bearing: float | None = None
+    speed: float | None = None
+    adherence: Adherence | None = None
+    occupancy: Occupancy = field(default=Occupancy.NO_DATA_AVAILABLE)
+    timestamp: Timestamp = field(default_factory=Timestamp.now)
+    outdated: bool = False
     
     @classmethod
     def from_db(cls, row: Row):
@@ -137,7 +138,8 @@ class Position:
             'text_colour': self.text_colour,
             'occupancy_name': self.occupancy.value,
             'occupancy_status_class': self.occupancy.status_class,
-            'occupancy_icon': self.occupancy.icon
+            'occupancy_icon': self.occupancy.icon,
+            'outdated': self.outdated
         }
         year_model = self.bus.year_model
         if year_model:

@@ -49,6 +49,15 @@
                         % include('components/map', map_position=position)
                     % end
                 % else:
+                    % if last_position:
+                        <div class="column stretch gap-10">
+                            <div class="warning-box">
+                                % include('components/svg', name='status/warning')
+                                <p>Showing last known location, may not be current</p>
+                            </div>
+                            % include('components/map', map_position=last_position, outdated=True)
+                        </div>
+                    % end
                     % trip = None
                 % end
                 

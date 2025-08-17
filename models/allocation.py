@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from models.bus import Bus
 from models.context import Context
 from models.date import Date
+from models.position import Position
 from models.record import Record
 from models.row import Row
 from models.time import Time
@@ -56,6 +57,12 @@ class Allocation:
         if self.last_record:
             return self.last_record.last_seen
         return Time.unknown(self.context.timezone)
+    
+    @property
+    def last_position(self):
+        if self.last_lat and self.last_lon:
+            return Position(self.context.system, self.bus, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, outdated=True)
+        return None
     
     def __hash__(self):
         return hash(self.id)

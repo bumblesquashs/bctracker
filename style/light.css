@@ -7,6 +7,14 @@
     --adherence-text: #FFFFFF;
     
     --livery-border: #000000;
+    
+    --warning-box-background: #FFE9D3;
+    --warning-box-foreground: #FF9A3A;
+    --warning-box-border: #FF9A3A;
+}
+
+#map.outdated .tile-layer {
+    filter: grayscale(1);
 }
 
 #map-controls .control.error {

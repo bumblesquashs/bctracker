@@ -1649,6 +1649,20 @@ table tr.table-button {
     font-weight: bold;
 }
 
+.warning-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    font-style: italic;
+    background-color: var(--warning-box-background);
+    color: var(--warning-box-foreground);
+    border: 1px solid var(--warning-box-border);
+    --image-size: 24px;
+    --image-color: var(--warning-box-foreground);
+}
+
 .weekdays {
     display: flex;
     flex-direction: row;

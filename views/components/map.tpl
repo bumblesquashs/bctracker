@@ -2,9 +2,10 @@
 % import json
 
 % is_preview = get('is_preview', True)
+% outdated = get('outdated', False)
 
 % if is_preview:
-    <div id="map" class="preview"></div>
+    <div id="map" class="preview {{ 'outdated' if outdated else '' }}"></div>
 % end
 
 % include('components/svg_script', name='fish')
@@ -222,20 +223,22 @@
             model.className = "lighter-text";
             model.innerHTML = position.bus_year_model;
             content.appendChild(model);
-                
-            const headsign = document.createElement("div");
-            if (position.headsign === "Not In Service") {
-                headsign.innerHTML = position.headsign;
-            } else {
-                headsign.className = "headsign";
             
-                const routeLine = document.createElement("div");
-                routeLine.className = "route-line";
-                routeLine.style.backgroundColor = "#" + position.colour;
+            if (!position.outdated) {
+                const headsign = document.createElement("div");
+                if (position.headsign === "Not In Service") {
+                    headsign.innerHTML = position.headsign;
+                } else {
+                    headsign.className = "headsign";
                 
-                headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                    const routeLine = document.createElement("div");
+                    routeLine.className = "route-line";
+                    routeLine.style.backgroundColor = "#" + position.colour;
+                    
+                    headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                }
+                content.appendChild(headsign);
             }
-            content.appendChild(headsign);
             
             const footer = document.createElement("div");
             footer.className = "lighter-text";
@@ -270,11 +273,13 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            const occupancyIcon = document.createElement("div");
-            occupancyIcon.className = "occupancy-icon";
-            occupancyIcon.classList.add(position.occupancy_status_class);
-            occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
-            iconsRow.appendChild(occupancyIcon);
+            if (!position.outdated) {
+                const occupancyIcon = document.createElement("div");
+                occupancyIcon.className = "occupancy-icon";
+                occupancyIcon.classList.add(position.occupancy_status_class);
+                occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
+                iconsRow.appendChild(occupancyIcon);
+            }
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";
