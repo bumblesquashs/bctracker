@@ -34,7 +34,7 @@
     % if last_position:
         <div class="warning-box">
             % include('components/svg', name='status/warning')
-            <p>Showing last known location</p>
+            <p>Showing last known location — not currently online</p>
         </div>
         % include('components/map', is_preview=False, map_position=last_position, outdated=True)
     % end
