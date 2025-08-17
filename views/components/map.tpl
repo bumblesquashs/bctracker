@@ -183,7 +183,7 @@
                         icon.classList.add("smaller-font");
                     }
                 }
-            } else if (busMarkerStyle === "occupancy") {
+            } else if (busMarkerStyle === "occupancy" && position.occupancy_icon) {
                 icon.classList.add("occupancy");
                 icon.classList.add(position.occupancy_status_class);
                 if (position.lat === 0 && position.lon === 0) {
@@ -277,7 +277,7 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            if (!position.outdated) {
+            if (!position.outdated && position.occupancy_icon) {
                 const occupancyIcon = document.createElement("div");
                 occupancyIcon.className = "occupancy-icon";
                 occupancyIcon.classList.add(position.occupancy_status_class);

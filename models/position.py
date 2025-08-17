@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.system import System
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from models.adherence import Adherence
 from models.bus import Bus
@@ -31,8 +31,8 @@ class Position:
     bearing: float | None = None
     speed: float | None = None
     adherence: Adherence | None = None
-    occupancy: Occupancy = field(default=Occupancy.NO_DATA_AVAILABLE)
-    timestamp: Timestamp = field(default_factory=Timestamp.now)
+    occupancy: Occupancy | None = None
+    timestamp: Timestamp | None = None
     outdated: bool = False
     
     @classmethod
@@ -136,9 +136,6 @@ class Position:
             'lat': self.lat,
             'colour': self.colour,
             'text_colour': self.text_colour,
-            'occupancy_name': self.occupancy.value,
-            'occupancy_status_class': self.occupancy.status_class,
-            'occupancy_icon': self.occupancy.icon,
             'outdated': self.outdated
         }
         year_model = self.bus.year_model
@@ -169,6 +166,11 @@ class Position:
         else:
             data['headsign'] = 'Not In Service'
             data['route_number'] = 'NIS'
+        occupancy = self.occupancy
+        if occupancy:
+            data['occupancy_name'] = occupancy.value,
+            data['occupancy_status_class'] = occupancy.status_class,
+            data['occupancy_icon'] = occupancy.icon,
         bearing = self.bearing
         if bearing is not None:
             data['bearing'] = bearing
