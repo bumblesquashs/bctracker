@@ -126,6 +126,18 @@ class Context:
             return self.agency.enable_blocks
         return DEFAULT_ENABLE_BLOCKS
     
+    @property
+    def nis_colour(self):
+        if self.agency:
+            return self.agency.nis_colour
+        return DEFAULT_NIS_COLOUR
+    
+    @property
+    def nis_text_colour(self):
+        if self.agency:
+            return self.agency.nis_text_colour
+        return DEFAULT_NIS_TEXT_COLOUR
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')

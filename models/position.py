@@ -93,25 +93,25 @@ class Position:
     @property
     def route(self):
         '''Returns the route associated with this position'''
-        if not self.route_id:
+        if self.route_id:
             return self.system.get_route(route_id=self.route_id)
         return None
     
     @property
     def colour(self):
         '''Returns the route colour associated with this position'''
-        trip = self.trip
-        if trip and trip.route:
-            return trip.route.colour
-        return '989898'
+        route = self.route
+        if route:
+            return route.colour
+        return self.context.nis_colour
     
     @property
     def text_colour(self):
         '''Returns the route text colour associated with this position'''
-        trip = self.trip
-        if trip and trip.route:
-            return trip.route.text_colour
-        return 'FFFFFF'
+        route = self.route
+        if route:
+            return route.text_colour
+        return self.context.nis_text_colour
     
     @property
     def departure(self):
