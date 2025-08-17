@@ -2,13 +2,13 @@
 % import json
 
 % is_preview = get('is_preview', True)
-% outdated = get('outdated', False)
+% offline = get('offline', False)
 
 % if is_preview:
-    <div id="map" class="preview {{ 'outdated' if outdated else '' }}"></div>
-% elif outdated:
+    <div id="map" class="preview {{ 'offline' if offline else '' }}"></div>
+% elif offline:
     <script>
-        document.getElementById("map").classList.add("outdated");
+        document.getElementById("map").classList.add("offline");
     </script>
 % end
 
@@ -107,6 +107,9 @@
             
             const element = document.createElement("div");
             element.className = "marker";
+            if (position.offline) {
+                element.classList.add("offline");
+            }
             if (position.bearing !== undefined) {
                 const sideWidthValue = busMarkerStyle == "mini" ? 8 : 16;
                 const bottomWidthValue = busMarkerStyle == "mini" ? 18 : 26;
@@ -228,7 +231,7 @@
             model.innerHTML = position.bus_year_model;
             content.appendChild(model);
             
-            if (!position.outdated) {
+            if (!position.offline) {
                 const headsign = document.createElement("div");
                 if (position.headsign === "Not In Service") {
                     headsign.innerHTML = position.headsign;
@@ -277,7 +280,7 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            if (!position.outdated && position.occupancy_icon) {
+            if (!position.offline && position.occupancy_icon) {
                 const occupancyIcon = document.createElement("div");
                 occupancyIcon.className = "occupancy-icon";
                 occupancyIcon.classList.add(position.occupancy_status_class);

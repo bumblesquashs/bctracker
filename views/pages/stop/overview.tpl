@@ -30,7 +30,7 @@
                 <h2>Overview</h2>
                 % include('components/toggle')
             </div>
-            <div class="content">
+            <div class="content gap-20">
                 % stop_departures = stop.find_departures()
                 % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop_departures], zoom_trips=False)
                 

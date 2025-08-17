@@ -28,14 +28,16 @@
         % include('components/map', is_preview=False, map_position=position)
     % end
 % else:
-    <div class="placeholder">
-        <h3>Not In Service</h3>
-    </div>
     % if last_position:
-        <div class="warning-box">
+        <div class="warning-box align-start">
             % include('components/svg', name='status/warning')
-            <p>Showing last known location — not currently online</p>
+            <p>Offline — showing last known location</p>
         </div>
-        % include('components/map', is_preview=False, map_position=last_position, outdated=True)
+        % include('components/map', is_preview=False, map_position=last_position, offline=True)
+    % else:
+        <div class="warning-box align-start">
+            % include('components/svg', name='status/warning')
+            <p>Offline — last known location not available</p>
+        </div>
     % end
 % end

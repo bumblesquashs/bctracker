@@ -236,7 +236,6 @@ table tr.table-button {
 
 #map.preview {
     height: 300px;
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -946,6 +945,10 @@ table tr.table-button {
 
 .marker:hover {
     z-index: 10;
+}
+
+.marker.offline {
+    opacity: 0.75;
 }
 
 .marker .bearing {
@@ -1661,6 +1664,10 @@ table tr.table-button {
     border: 1px solid var(--warning-box-border);
     --image-size: 24px;
     --image-color: var(--warning-box-foreground);
+}
+
+.warning-box.align-start {
+    align-self: flex-start;
 }
 
 .weekdays {

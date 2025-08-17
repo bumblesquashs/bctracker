@@ -21,7 +21,7 @@
     filter: invert(100%) hue-rotate(180deg) saturate(42.069%); /* Nice! */
 }
 
-#map.outdated .tile-layer {
+#map.offline .tile-layer {
     filter: invert(100%) hue-rotate(180deg) saturate(42.069%) grayscale(1); /* Nice! */
 }
 

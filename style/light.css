@@ -13,7 +13,7 @@
     --warning-box-border: #FF9A3A;
 }
 
-#map.outdated .tile-layer {
+#map.offline .tile-layer {
     filter: grayscale(1);
 }
 

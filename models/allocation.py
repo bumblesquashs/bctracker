@@ -61,7 +61,7 @@ class Allocation:
     @property
     def last_position(self):
         if self.last_lat and self.last_lon:
-            return Position(self.context.system, self.bus, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, outdated=True)
+            return Position(self.context.system, self.bus, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, offline=True)
         return None
     
     def __hash__(self):

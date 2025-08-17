@@ -33,7 +33,7 @@ class Position:
     adherence: Adherence | None = None
     occupancy: Occupancy | None = None
     timestamp: Timestamp | None = None
-    outdated: bool = False
+    offline: bool = False
     
     @classmethod
     def from_db(cls, row: Row):
@@ -136,7 +136,7 @@ class Position:
             'lat': self.lat,
             'colour': self.colour,
             'text_colour': self.text_colour,
-            'outdated': self.outdated
+            'offline': self.offline
         }
         year_model = self.bus.year_model
         if year_model:
