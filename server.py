@@ -531,13 +531,18 @@ class Server(Bottle):
                 vehicle_id=vehicle_id
             )
         position = repositories.position.find(context.agency_id, vehicle_id)
+        if allocation:
+            last_position = allocation.last_position
+        else:
+            last_position = None
         return self.page(
             context=context,
             name='bus/map',
             title=f'Bus {bus}',
-            full_map=bool(position),
+            full_map=bool(position) or bool(last_position),
             bus=bus,
             position=position,
+            last_position=last_position,
             favourite=Favourite('vehicle', bus),
             favourites=self.get_favourites()
         )

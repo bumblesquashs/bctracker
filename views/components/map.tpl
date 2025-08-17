@@ -6,6 +6,10 @@
 
 % if is_preview:
     <div id="map" class="preview {{ 'outdated' if outdated else '' }}"></div>
+% elif outdated:
+    <script>
+        document.getElementById("map").classList.add("outdated");
+    </script>
 % end
 
 % include('components/svg_script', name='fish')

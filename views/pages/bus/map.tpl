@@ -31,4 +31,11 @@
     <div class="placeholder">
         <h3>Not In Service</h3>
     </div>
+    % if last_position:
+        <div class="warning-box">
+            % include('components/svg', name='status/warning')
+            <p>Showing last known location, may not be current</p>
+        </div>
+        % include('components/map', is_preview=False, map_position=last_position, outdated=True)
+    % end
 % end
