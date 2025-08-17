@@ -53,7 +53,7 @@
                         <div class="column stretch gap-10">
                             <div class="warning-box">
                                 % include('components/svg', name='status/warning')
-                                <p>Showing last known location, may not be current</p>
+                                <p>Showing last known location</p>
                             </div>
                             % include('components/map', map_position=last_position, outdated=True)
                         </div>
