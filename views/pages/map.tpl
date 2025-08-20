@@ -90,6 +90,12 @@
                         <div id="bus-marker-style-occupancy" class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
                         <div>Occupancy</div>
                     </div>
+                    % if show_speed:
+                        <div class="option" onclick="setBusMarkerStyle('speed')">
+                            <div id="bus-marker-style-speed" class="radio-button {{ 'selected' if bus_marker_style == 'speed' else '' }}"></div>
+                            <div>Speed</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>
@@ -271,6 +277,10 @@
             } else if (busMarkerStyle === "livery" && position.livery) {
                 icon.classList.add("livery");
                 icon.innerHTML = '<img src="/img/liveries/' + position.livery  +'.png" />';
+            } else if (busMarkerStyle === "speed" && position.speed !== undefined) {
+                icon.classList.add("speed");
+                icon.innerHTML = position.speed + '<div class="units">km/h</div>';
+                icon.style.backgroundColor = "#" + position.colour;
             } else {
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
@@ -337,6 +347,13 @@
                     const difference = getDifference(currentTime, (position.timestamp * 1000) + timestampOffset);
                     timestamp.innerHTML = difference;
                 });
+            }
+            
+            if ("{{ show_speed }}" === "True" && position.speed !== undefined) {
+                const speedElement = document.createElement("div");
+                speedElement.className = "lighter-text";
+                speedElement.innerHTML = position.speed + " km/h";
+                content.appendChild(speedElement);
             }
             
             const iconsRow = document.createElement("div");

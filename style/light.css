@@ -25,6 +25,10 @@
     --image-color: #666666;
 }
 
+.marker .icon.speed {
+    color: #FFFFFF;
+}
+
 .modified-service {
     background-color: #FFA560;
     color: #000000;

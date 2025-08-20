@@ -49,6 +49,10 @@
     filter: unset;
 }
 
+.marker .icon.speed {
+    color: #FFFFFF;
+}
+
 .modified-service {
     background-color: #B65901;
     color: #FFFFFF;
