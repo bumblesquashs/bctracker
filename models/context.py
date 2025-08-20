@@ -126,6 +126,12 @@ class Context:
             return self.agency.enable_blocks
         return DEFAULT_ENABLE_BLOCKS
     
+    @property
+    def max_invalid_positions(self):
+        if self.system:
+            return self.system.max_invalid_positions
+        return DEFAULT_MAX_INVALID_POSITIONS
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')

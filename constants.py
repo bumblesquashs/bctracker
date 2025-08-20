@@ -11,5 +11,8 @@ DEFAULT_VEHICLE_NAME_LENGTH = None
 DEFAULT_DISTANCE_SCALE = 1
 DEFAULT_ENABLE_BLOCKS = True
 
+#System config
+DEFAULT_MAX_INVALID_POSITIONS = 0
+
 # Date/time config
 DEFAULT_TIMEZONE = pytz.timezone('America/Vancouver')
