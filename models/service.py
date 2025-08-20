@@ -45,7 +45,7 @@ class Service:
     '''A set of dates when a transit service is operating'''
     
     system: System
-    id: int
+    id: str
     schedule: Schedule
     
     @classmethod

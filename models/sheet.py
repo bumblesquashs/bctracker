@@ -46,7 +46,7 @@ class Sheet:
     
     system: System
     schedule: Schedule
-    services: list[Service]
+    services: set[Service]
     service_groups: list[ServiceGroup]
     modifications: set[Date]
     copies: dict[tuple, Self]
@@ -117,7 +117,7 @@ class Sheet:
     
     def copy(self, services):
         '''Returns a duplicate of this sheet, restricted to the given services'''
-        services = [s for s in self.services if s in services]
+        services = {s for s in self.services if s in services}
         key = tuple(sorted(services))
         if key in self.copies:
             return self.copies[key]

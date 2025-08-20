@@ -39,7 +39,7 @@
             "victoria": {
                 "name": "Victoria",
                 "remote_id": 48,
-                "enable_force_gtfs": false
+                "gtfs_cutoff": "2025-12-07"
             },
             "west-coast": {
                 "name": "West Coast",
