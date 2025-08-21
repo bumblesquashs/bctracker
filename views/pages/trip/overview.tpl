@@ -30,7 +30,7 @@
                 <h2>Overview</h2>
                 % include('components/toggle')
             </div>
-            <div class="content">
+            <div class="content gap-20">
                 % include('components/map', map_trip=trip, map_positions=positions)
                 
                 <div class="info-box">

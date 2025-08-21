@@ -21,18 +21,19 @@ class Position:
     
     system: System
     bus: Bus
-    trip_id: str | None
-    stop_id: str | None
-    block_id: str | None
-    route_id: str | None
-    sequence: int | None
-    lat: float | None
-    lon: float | None
-    bearing: float | None
-    speed: float | None
-    adherence: Adherence | None
-    occupancy: Occupancy | None
-    timestamp: Timestamp
+    trip_id: str | None = None
+    stop_id: str | None = None
+    block_id: str | None = None
+    route_id: str | None = None
+    sequence: int | None = None
+    lat: float | None = None
+    lon: float | None = None
+    bearing: float | None = None
+    speed: float | None = None
+    adherence: Adherence | None = None
+    occupancy: Occupancy | None = None
+    timestamp: Timestamp | None = None
+    offline: bool = False
     
     @classmethod
     def from_db(cls, row: Row):
@@ -92,25 +93,25 @@ class Position:
     @property
     def route(self):
         '''Returns the route associated with this position'''
-        if not self.route_id:
+        if self.route_id:
             return self.system.get_route(route_id=self.route_id)
         return None
     
     @property
     def colour(self):
         '''Returns the route colour associated with this position'''
-        trip = self.trip
-        if trip and trip.route:
-            return trip.route.colour
-        return '989898'
+        route = self.route
+        if route:
+            return route.colour
+        return self.context.nis_colour
     
     @property
     def text_colour(self):
         '''Returns the route text colour associated with this position'''
-        trip = self.trip
-        if trip and trip.route:
-            return trip.route.text_colour
-        return 'FFFFFF'
+        route = self.route
+        if route:
+            return route.text_colour
+        return self.context.nis_text_colour
     
     @property
     def departure(self):
@@ -135,9 +136,7 @@ class Position:
             'lat': self.lat,
             'colour': self.colour,
             'text_colour': self.text_colour,
-            'occupancy_name': self.occupancy.value,
-            'occupancy_status_class': self.occupancy.status_class,
-            'occupancy_icon': self.occupancy.icon
+            'offline': self.offline
         }
         year_model = self.bus.year_model
         if year_model:
@@ -167,6 +166,11 @@ class Position:
         else:
             data['headsign'] = 'Not In Service'
             data['route_number'] = 'NIS'
+        occupancy = self.occupancy
+        if occupancy:
+            data['occupancy_name'] = occupancy.value,
+            data['occupancy_status_class'] = occupancy.status_class,
+            data['occupancy_icon'] = occupancy.icon,
         bearing = self.bearing
         if bearing is not None:
             data['bearing'] = bearing
