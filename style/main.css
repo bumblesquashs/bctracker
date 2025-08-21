@@ -1137,6 +1137,20 @@ table tr.table-button {
     height: 100%;
 }
 
+.marker .icon.speed {
+    font-weight: bold;
+    text-align: center;
+    line-height: 13px;
+    font-size: 9pt;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+.marker .icon.speed .units {
+    line-height: 11px;
+    font-size: 6pt;
+}
+
 .marker.small .icon {
     width: 12px;
     height: 12px;
