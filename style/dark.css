@@ -7,6 +7,10 @@
     --adherence-text: #FFFFFF;
     
     --livery-border: #FFFFFF;
+    
+    --warning-box-background: #4C1F00;
+    --warning-box-foreground: #FF6A00;
+    --warning-box-border: #FF6A00;
 }
 
 #map .route-layer {
@@ -15,6 +19,10 @@
 
 #map .tile-layer {
     filter: invert(100%) hue-rotate(180deg) saturate(42.069%); /* Nice! */
+}
+
+#map.offline .tile-layer {
+    filter: invert(100%) hue-rotate(180deg) saturate(42.069%) grayscale(1); /* Nice! */
 }
 
 #map-controls .control.error {
@@ -47,6 +55,10 @@
 
 .marker .icon.occupancy {
     filter: unset;
+}
+
+.marker .icon.speed {
+    color: #FFFFFF;
 }
 
 .modified-service {

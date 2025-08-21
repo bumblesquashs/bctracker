@@ -2,9 +2,14 @@
 % import json
 
 % is_preview = get('is_preview', True)
+% offline = get('offline', False)
 
 % if is_preview:
-    <div id="map" class="preview"></div>
+    <div id="map" class="preview {{ 'offline' if offline else '' }}"></div>
+% elif offline:
+    <script>
+        document.getElementById("map").classList.add("offline");
+    </script>
 % end
 
 % include('components/svg_script', name='fish')
@@ -102,6 +107,9 @@
             
             const element = document.createElement("div");
             element.className = "marker";
+            if (position.offline) {
+                element.classList.add("offline");
+            }
             if (position.bearing !== undefined) {
                 const sideWidthValue = busMarkerStyle == "mini" ? 8 : 16;
                 const bottomWidthValue = busMarkerStyle == "mini" ? 18 : 26;
@@ -178,7 +186,7 @@
                         icon.classList.add("smaller-font");
                     }
                 }
-            } else if (busMarkerStyle === "occupancy") {
+            } else if (busMarkerStyle === "occupancy" && position.occupancy_icon) {
                 icon.classList.add("occupancy");
                 icon.classList.add(position.occupancy_status_class);
                 if (position.lat === 0 && position.lon === 0) {
@@ -191,6 +199,10 @@
             } else if (busMarkerStyle === "livery" && position.livery) {
                 icon.classList.add("livery");
                 icon.innerHTML = '<img src="/img/liveries/' + position.livery  +'.png" />';
+            } else if (busMarkerStyle === "speed" && position.speed !== undefined) {
+                icon.classList.add("speed");
+                icon.innerHTML = position.speed + '<div class="units">km/h</div>';
+                icon.style.backgroundColor = "#" + position.colour;
             } else {
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
@@ -222,20 +234,22 @@
             model.className = "lighter-text";
             model.innerHTML = position.bus_year_model;
             content.appendChild(model);
-                
-            const headsign = document.createElement("div");
-            if (position.headsign === "Not In Service") {
-                headsign.innerHTML = position.headsign;
-            } else {
-                headsign.className = "headsign";
             
-                const routeLine = document.createElement("div");
-                routeLine.className = "route-line";
-                routeLine.style.backgroundColor = "#" + position.colour;
+            if (!position.offline) {
+                const headsign = document.createElement("div");
+                if (position.headsign === "Not In Service") {
+                    headsign.innerHTML = position.headsign;
+                } else {
+                    headsign.className = "headsign";
                 
-                headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                    const routeLine = document.createElement("div");
+                    routeLine.className = "route-line";
+                    routeLine.style.backgroundColor = "#" + position.colour;
+                    
+                    headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                }
+                content.appendChild(headsign);
             }
-            content.appendChild(headsign);
             
             const footer = document.createElement("div");
             footer.className = "lighter-text";
@@ -259,6 +273,13 @@
                 });
             }
             
+            if ("{{ show_speed }}" === "True" && position.speed !== undefined) {
+                const speedElement = document.createElement("div");
+                speedElement.className = "lighter-text";
+                speedElement.innerHTML = position.speed + " km/h";
+                content.appendChild(speedElement);
+            }
+            
             const iconsRow = document.createElement("div");
             iconsRow.className = "row center gap-5";
             content.appendChild(iconsRow);
@@ -270,11 +291,13 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            const occupancyIcon = document.createElement("div");
-            occupancyIcon.className = "occupancy-icon";
-            occupancyIcon.classList.add(position.occupancy_status_class);
-            occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
-            iconsRow.appendChild(occupancyIcon);
+            if (!position.offline && position.occupancy_icon) {
+                const occupancyIcon = document.createElement("div");
+                occupancyIcon.className = "occupancy-icon";
+                occupancyIcon.classList.add(position.occupancy_status_class);
+                occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
+                iconsRow.appendChild(occupancyIcon);
+            }
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";

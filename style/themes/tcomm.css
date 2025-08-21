@@ -36,6 +36,10 @@
     
     --amenity-background: #DDDDDD;
     --amenity-color: #000000;
+    
+    --warning-box-background: #FFF9DF;
+    --warning-box-foreground: #664d03;
+    --warning-box-border: #F7C942;
 }
 
 a {

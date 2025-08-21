@@ -127,6 +127,18 @@ class Context:
         return DEFAULT_ENABLE_BLOCKS
     
     @property
+    def nis_colour(self):
+        if self.agency:
+            return self.agency.nis_colour
+        return DEFAULT_NIS_COLOUR
+    
+    @property
+    def nis_text_colour(self):
+        if self.agency:
+            return self.agency.nis_text_colour
+        return DEFAULT_NIS_TEXT_COLOUR
+    
+    @property
     def max_invalid_positions(self):
         if self.system:
             return self.system.max_invalid_positions

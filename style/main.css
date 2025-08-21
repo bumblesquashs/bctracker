@@ -236,7 +236,6 @@ table tr.table-button {
 
 #map.preview {
     height: 300px;
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -948,6 +947,10 @@ table tr.table-button {
     z-index: 10;
 }
 
+.marker.offline {
+    opacity: 0.75;
+}
+
 .marker .bearing {
     position: absolute;
     margin-top: -8px;
@@ -1132,6 +1135,20 @@ table tr.table-button {
 .marker .icon.livery img {
     width: 100%;
     height: 100%;
+}
+
+.marker .icon.speed {
+    font-weight: bold;
+    text-align: center;
+    line-height: 13px;
+    font-size: 9pt;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+.marker .icon.speed .units {
+    line-height: 11px;
+    font-size: 6pt;
 }
 
 .marker.small .icon {
@@ -1647,6 +1664,24 @@ table tr.table-button {
 
 .tooltip-anchor .tooltip .title {
     font-weight: bold;
+}
+
+.warning-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    font-style: italic;
+    background-color: var(--warning-box-background);
+    color: var(--warning-box-foreground);
+    border: 1px solid var(--warning-box-border);
+    --image-size: 24px;
+    --image-color: var(--warning-box-foreground);
+}
+
+.warning-box.align-start {
+    align-self: flex-start;
 }
 
 .weekdays {

@@ -32,6 +32,10 @@
     
     --amenity-background: rgba(255, 255, 255, 0.7);
     --amenity-color: #000000;
+    
+    --warning-box-background: rgba(255, 233, 211, 0.7);
+    --warning-box-foreground: #FF9A3A;
+    --warning-box-border: #FF9A3A;
 }
 
 a {

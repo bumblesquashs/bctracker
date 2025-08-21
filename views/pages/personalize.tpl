@@ -157,6 +157,12 @@
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
                         <div>Occupancy</div>
                     </div>
+                    % if show_speed:
+                        <div class="option" onclick="setBusMarkerStyle('speed')">
+                            <div class="radio-button {{ 'selected' if bus_marker_style == 'speed' else '' }}"></div>
+                            <div>Speed</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>

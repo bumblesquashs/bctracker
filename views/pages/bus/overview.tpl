@@ -40,7 +40,7 @@
                 <h2>Realtime Information</h2>
                 % include('components/toggle')
             </div>
-            <div class="content">
+            <div class="content gap-20">
                 % if position:
                     % trip = position.trip
                     % if trip:
@@ -49,25 +49,39 @@
                         % include('components/map', map_position=position)
                     % end
                 % else:
+                    % if last_position:
+                        <div class="warning-box">
+                            % include('components/svg', name='status/warning')
+                            <p>Offline — showing last known location</p>
+                        </div>
+                        % include('components/map', map_position=last_position, offline=True)
+                    % else:
+                        <div class="warning-box">
+                            % include('components/svg', name='status/warning')
+                            <p>Offline — last known location not available</p>
+                        </div>
+                    % end
                     % trip = None
                 % end
                 
                 <div class="info-box">
-                    <div class="section">
-                        % if position and trip:
-                            <div class="row">
-                                % include('components/adherence', adherence=position.adherence, size='large')
-                                % departure = position.departure
-                                % if departure and departure.headsign:
-                                    <h3>{{ departure }}</h3>
-                                % else:
-                                    <h3>{{ trip }}</h3>
-                                % end
-                            </div>
-                        % else:
-                            <h3>Not In Service</h3>
-                        % end
-                    </div>
+                    % if position:
+                        <div class="section">
+                            % if trip:
+                                <div class="row">
+                                    % include('components/adherence', adherence=position.adherence, size='large')
+                                    % departure = position.departure
+                                    % if departure and departure.headsign:
+                                        <h3>{{ departure }}</h3>
+                                    % else:
+                                        <h3>{{ trip }}</h3>
+                                    % end
+                                </div>
+                            % else:
+                                <h3>Not In Service</h3>
+                            % end
+                        </div>
+                    % end
                     % if position:
                         % stop = position.stop
                         % if trip:
