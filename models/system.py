@@ -17,7 +17,7 @@ from models.trip import Trip, TripCache
 
 import repositories
 
-from constants import DEFAULT_TIMEZONE
+from constants import *
 
 @dataclass(slots=True)
 class System:
@@ -33,6 +33,8 @@ class System:
     timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
     colour_routes: str | None = None
     enable_force_gtfs: bool = True
+    gtfs_cutoff: str | None = None
+    max_invalid_positions: int = DEFAULT_MAX_INVALID_POSITIONS
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)

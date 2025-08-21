@@ -13,5 +13,8 @@ DEFAULT_ENABLE_BLOCKS = True
 DEFAULT_NIS_COLOUR = '666666'
 DEFAULT_NIS_TEXT_COLOUR = 'FFFFFF'
 
+#System config
+DEFAULT_MAX_INVALID_POSITIONS = 0
+
 # Date/time config
 DEFAULT_TIMEZONE = pytz.timezone('America/Vancouver')
