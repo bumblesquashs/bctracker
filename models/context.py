@@ -133,10 +133,22 @@ class Context:
         return DEFAULT_NIS_COLOUR
     
     @property
-    def nis_text_colour(self):
+    def default_route_colour(self):
         if self.agency:
-            return self.agency.nis_text_colour
-        return DEFAULT_NIS_TEXT_COLOUR
+            return self.agency.default_route_colour
+        return DEFAULT_ROUTE_COLOUR
+    
+    @property
+    def ignore_route_colour(self):
+        if self.system:
+            return self.system.ignore_route_colour
+        return DEFAULT_IGNORE_ROUTE_COLOUR
+    
+    @property
+    def gtfs_cutoff(self):
+        if self.system:
+            return self.system.gtfs_cutoff
+        return DEFAULT_GTFS_CUTOFF
     
     @property
     def max_invalid_positions(self):

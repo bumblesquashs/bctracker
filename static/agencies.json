@@ -8,6 +8,8 @@
         "prefer_stop_id": true,
         "show_stop_number": false,
         "enable_blocks": false,
+        "nis_colour": "003769",
+        "default_route_colour": "003769",
         "custom_route_numbers": {
             "12443": "1",
             "12444": "2",
