@@ -54,7 +54,7 @@ class GTFSService:
         except:
             services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
-        gtfs_cutoff = context.system.gtfs_cutoff
+        gtfs_cutoff = context.gtfs_cutoff
         if gtfs_cutoff:
             cutoff_date = Date.parse(gtfs_cutoff, context.timezone)
             if cutoff_date > Date.today(context.timezone):

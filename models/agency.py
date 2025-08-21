@@ -25,7 +25,7 @@ class Agency:
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
     nis_colour: str = DEFAULT_NIS_COLOUR
-    nis_text_colour: str = DEFAULT_NIS_TEXT_COLOUR
+    default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     custom_route_numbers: dict[str, str] = field(default_factory=dict)
     
     @property

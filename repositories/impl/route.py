@@ -17,7 +17,7 @@ class RouteRepository:
             colour = row['route_color']
             if colour == '':
                 raise ValueError('Colour must not be empty')
-            if colour == context.system.colour_routes:
+            if colour == context.ignore_route_colour:
                 raise ValueError('Colour must be auto-generated')
         except (KeyError, ValueError):
             colour = None

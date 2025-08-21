@@ -31,9 +31,9 @@ class System:
     remote_id: int | None = None
     enabled: bool = True
     timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
-    colour_routes: str | None = None
-    enable_force_gtfs: bool = True
-    gtfs_cutoff: str | None = None
+    ignore_route_colour: str | None = DEFAULT_IGNORE_ROUTE_COLOUR
+    enable_force_gtfs: bool = DEFAULT_ENABLE_FORCE_GTFS
+    gtfs_cutoff: str | None = DEFAULT_GTFS_CUTOFF
     max_invalid_positions: int = DEFAULT_MAX_INVALID_POSITIONS
     
     gtfs_downloaded: bool | None = field(default=None, init=False)

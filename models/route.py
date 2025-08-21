@@ -8,11 +8,8 @@ if TYPE_CHECKING:
 
 from dataclasses import dataclass, field
 from enum import Enum
-from random import randint, seed
 from math import sqrt
-from colorsys import hls_to_rgb
 
-from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.point import Point
@@ -94,8 +91,12 @@ class Route:
         id = row['route_id']
         number = row['number'] or id
         name = row['name']
-        colour = row['colour'] or generate_colour(context, number)
-        text_colour = row['text_colour'] or 'FFFFFF'
+        colour = row['colour']
+        if colour:
+            text_colour = row['text_colour'] or helpers.generate_text_colour(colour)
+        else:
+            colour = helpers.generate_colour(context, number)
+            text_colour = helpers.generate_text_colour(colour)
         type = RouteType.from_db(row['type'])
         sort_order = row['sort_order']
         return cls(context.agency, context.system, id, number, name, colour, text_colour, type, sort_order)
@@ -236,23 +237,6 @@ class Route:
         self_key = tuple([k for k in self.key if type(k) == int])
         route_key = tuple([k for k in route.key if type(k) == int])
         return self_key and route_key and self_key == route_key
-
-def generate_colour(context: Context, number):
-    '''Generate a random colour based on context and route number'''
-    seed(context.system_id)
-    number_digits = ''.join([d for d in number if d.isdigit()])
-    if len(number_digits) == 0:
-        h = randint(1, 360) / 360.0
-    else:
-        h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-    seed(context.system_id + number)
-    l = randint(30, 50) / 100.0
-    s = randint(50, 100) / 100.0
-    rgb = hls_to_rgb(h, l, s)
-    r = int(rgb[0] * 255)
-    g = int(rgb[1] * 255)
-    b = int(rgb[2] * 255)
-    return f'{r:02x}{g:02x}{b:02x}'
 
 @dataclass(slots=True)
 class RouteCache:

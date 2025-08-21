@@ -13,6 +13,7 @@ from models.occupancy import Occupancy
 from models.row import Row
 from models.timestamp import Timestamp
 
+import helpers
 import repositories
 
 @dataclass(slots=True)
@@ -111,7 +112,7 @@ class Position:
         route = self.route
         if route:
             return route.text_colour
-        return self.context.nis_text_colour
+        return helpers.generate_text_colour(self.context.nis_colour)
     
     @property
     def departure(self):
