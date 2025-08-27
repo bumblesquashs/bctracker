@@ -256,15 +256,15 @@
                                         % include('components/year_model', year_model=bus.year_model)
                                     </td>
                                     % if position:
-                                        % trip = position.trip
+                                        % position_trip = position.trip
                                         % stop = position.stop
-                                        % if trip:
+                                        % if position_trip:
                                             <td>
                                                 <div class="column">
-                                                    % include('components/headsign', departure=position.departure, trip=position.trip)
+                                                    % include('components/headsign', departure=position.departure, trip=position_trip)
                                                     <div class="non-desktop smaller-font">
                                                         Trip:
-                                                        % include('components/trip', include_tooltip=False, trip=position.trip)
+                                                        % include('components/trip', include_tooltip=False, trip=position_trip)
                                                     </div>
                                                     % if stop:
                                                         <div class="mobile-only smaller-font">
@@ -275,7 +275,7 @@
                                                 </div>
                                             </td>
                                             <td class="desktop-only">
-                                                % include('components/trip', include_tooltip=False, trip=position.trip)
+                                                % include('components/trip', include_tooltip=False, trip=position_trip)
                                             </td>
                                         % else:
                                             <td colspan="2">
