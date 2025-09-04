@@ -99,10 +99,26 @@
                                 </div>
                             </div>
                         % end
-                        % if context.enable_blocks and block:
-                            <div class="section">
-                                % include('components/block_timeline', date=Date.today(block.context.timezone))
-                            </div>
+                        % if context.enable_blocks:
+                            % if block:
+                                <div class="section">
+                                    % include('components/block_timeline', date=Date.today(block.context.timezone))
+                                </div>
+                            % elif allocation:
+                                % last_record = allocation.last_record
+                                % if last_record and last_record.date.is_today:
+                                    % last_block = last_record.block
+                                    % if last_block:
+                                        % date = Date.today(last_block.context.timezone)
+                                        % end_time = last_block.get_end_time(date=date)
+                                        % if end_time and end_time.is_later:
+                                            <div class="section no-flex">
+                                                % include('components/block_timeline', block=last_block, date=date)
+                                            </div>
+                                        % end
+                                    % end
+                                % end
+                            % end
                         % end
                         % if position.timestamp:
                             <div class="row section">
