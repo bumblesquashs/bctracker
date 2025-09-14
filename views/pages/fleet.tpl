@@ -30,7 +30,7 @@
             % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ context }} {{ context.realtime_vehicle_type_plural.lower() }}, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
+                    To see only {{ context }} {{ context.vehicle_type_plural.lower() }}, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
                 </p>
             % end
         </div>
@@ -103,7 +103,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th>{{ context.realtime_vehicle_type }}</th>
+                                                                <th>{{ context.vehicle_type }}</th>
                                                                 <th>First Seen</th>
                                                                 <th class="non-mobile">First System</th>
                                                                 <th>Last Seen</th>

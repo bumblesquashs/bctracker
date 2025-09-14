@@ -23,9 +23,9 @@
     % if not context.realtime_enabled:
         <i>{{ context }} realtime information is not supported</i>
     % elif context.system:
-        <i>There are no {{ context }} {{ context.realtime_vehicle_type_plural.lower() }} out right now</i>
+        <i>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</i>
     % else:
-        <i>There are no {{ context.realtime_vehicle_type_plural.lower() }} out right now</i>
+        <i>There are no {{ context.vehicle_type_plural.lower() }} out right now</i>
     % end
 </div>
 
@@ -59,7 +59,7 @@
                         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                             % include('components/svg', name='status/check')
                         </div>
-                        <span>Show NIS {{ context.realtime_vehicle_type_plural }}</span>
+                        <span>Show NIS {{ context.vehicle_type_plural }}</span>
                     </div>
                 </div>
             </div>

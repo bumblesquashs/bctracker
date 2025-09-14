@@ -3,9 +3,9 @@
 
 <div id="page-header">
     <h1>Realtime</h1>
-    <h2>Currently active {{ context.realtime_vehicle_type_plural.lower() }}</h2>
+    <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
-        <span class="tab-button current">All {{ context.realtime_vehicle_type_plural }}</span>
+        <span class="tab-button current">All {{ context.vehicle_type_plural }}</span>
         % if context.system:
             <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
@@ -23,7 +23,7 @@
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
-        <div>Show NIS {{ context.realtime_vehicle_type_plural }}</div>
+        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
 </div>
 
@@ -34,7 +34,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>{{ context.realtime_vehicle_type }}</th>
+                    <th>{{ context.vehicle_type }}</th>
                     % if not context.system:
                         <th class="desktop-only">System</th>
                     % end
@@ -85,15 +85,15 @@
     <div class="placeholder">
         % if not context.system:
             % if show_nis:
-                <h3>There are no {{ context.realtime_vehicle_type_plural.lower() }} out right now</h3>
+                <h3>There are no {{ context.vehicle_type_plural.lower() }} out right now</h3>
                 <p>
                     None of our current agencies operate late night service, so this should be the case overnight.
                     If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                 </p>
                 <p>Please check again later!</p>
             % else:
-                <h3>There are no {{ context.realtime_vehicle_type_plural.lower() }} in service right now</h3>
-                <p>You can see all active {{ context.realtime_vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.realtime_vehicle_type_plural }}</b> checkbox.</p>
+                <h3>There are no {{ context.vehicle_type_plural.lower() }} in service right now</h3>
+                <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
             % end
         % elif not context.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
@@ -105,10 +105,10 @@
             <h3>{{ context }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no {{ context }} {{ context.realtime_vehicle_type_plural.lower() }} in service right now</h3>
-            <p>You can see all active {{ context.realtime_vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.realtime_vehicle_type_plural }}</b> checkbox.</p>
+            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} in service right now</h3>
+            <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
         % else:
-            <h3>There are no {{ context }} {{ context.realtime_vehicle_type_plural.lower() }} out right now</h3>
+            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>

@@ -173,16 +173,16 @@
             <div class="section">
                 <div class="header">
                     % if len(positions) == 1:
-                        <h2>Active {{ context.realtime_vehicle_type }}</h2>
+                        <h2>Active {{ context.vehicle_type }}</h2>
                     % else:
-                        <h2>Active {{ context.realtime_vehicle_type_plural }}</h2>
+                        <h2>Active {{ context.vehicle_type_plural }}</h2>
                     % end
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.realtime_vehicle_type }}</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
                                 <th class="non-mobile">Trip</th>
@@ -244,15 +244,15 @@
             % position = repositories.position.find(bus.agency.id, bus.id)
             <div class="section">
                 <div class="header">
-                    <h2>Scheduled {{ context.realtime_vehicle_type }}</h2>
+                    <h2>Scheduled {{ context.vehicle_type }}</h2>
                 </div>
                 <div class="content">
-                    <p>This {{ context.realtime_vehicle_type.lower() }} is currently assigned to this block but may be swapped off.</p>
+                    <p>This {{ context.vehicle_type.lower() }} is currently assigned to this block but may be swapped off.</p>
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{{ context.realtime_vehicle_type }}</th>
+                                    <th>{{ context.vehicle_type }}</th>
                                     <th class="non-mobile">Model</th>
                                     <th>Current Headsign</th>
                                     <th class="desktop-only">Current Trip</th>

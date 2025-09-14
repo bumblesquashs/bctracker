@@ -70,11 +70,11 @@
             <div class="content">
                 % if total_items == 0:
                     <div class="placeholder">
-                        <h3>This {{ context.realtime_vehicle_type.lower() }} doesn't have any recorded history</h3>
+                        <h3>This {{ context.vehicle_type.lower() }} doesn't have any recorded history</h3>
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording {{ context.realtime_vehicle_type.lower() }} history</li>
+                            <li>It may not have been in service since BCTracker started recording {{ context.vehicle_type.lower() }} history</li>
                             <li>It may not have functional tracking equipment installed</li>
                             % model = bus.model
                             % if model is None or model.type == ModelType.shuttle:

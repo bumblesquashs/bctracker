@@ -485,7 +485,7 @@ class Server(Bottle):
             return self.error_page(
                 context=context,
                 name='invalid_bus',
-                title=f'Unknown {context.realtime_vehicle_type}',
+                title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
         order = repositories.order.find_order(context, bus.order_id)
@@ -532,7 +532,7 @@ class Server(Bottle):
             return self.error_page(
                 context=context,
                 name='invalid_bus',
-                title=f'Unknown {context.realtime_vehicle_type}',
+                title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
         position = repositories.position.find(context.agency_id, vehicle_id)
@@ -564,7 +564,7 @@ class Server(Bottle):
             return self.error_page(
                 context=context,
                 name='invalid_bus',
-                title=f'Unknown {context.realtime_vehicle_type}',
+                title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
         try:
@@ -628,7 +628,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             name='history/last_seen',
-            title=f'{context.realtime_vehicle_type} History',
+            title=f'{context.vehicle_type} History',
             path=['history'],
             path_args={
                 'days': days
@@ -645,7 +645,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             name='history/first_seen',
-            title=f'{context.realtime_vehicle_type} History',
+            title=f'{context.vehicle_type} History',
             path=['history', 'first-seen'],
             allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.bus), reverse=True),
             show_transfers=show_transfers

@@ -64,9 +64,9 @@
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     % if len(positions) == 1:
-                        <h2>Active {{ context.realtime_vehicle_type }}</h2>
+                        <h2>Active {{ context.vehicle_type }}</h2>
                     % else:
-                        <h2>Active {{ context.realtime_vehicle_type_plural }}</h2>
+                        <h2>Active {{ context.vehicle_type_plural }}</h2>
                     % end
                     % include('components/toggle')
                 </div>
@@ -74,7 +74,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.realtime_vehicle_type }}</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
                                 % if context.enable_blocks:
@@ -163,7 +163,7 @@
                                     <div class="content">
                                         % if context.realtime_enabled:
                                             <p>
-                                                <span>{{ context.realtime_vehicle_type_plural }} with a</span>
+                                                <span>{{ context.vehicle_type_plural }} with a</span>
                                                 <span class="scheduled">
                                                     % include('components/svg', name='schedule')
                                                 </span>
@@ -183,7 +183,7 @@
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
                                                         % if context.realtime_enabled:
-                                                            <th>{{ context.realtime_vehicle_type }}</th>
+                                                            <th>{{ context.vehicle_type }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
                                                     </tr>

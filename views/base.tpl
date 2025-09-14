@@ -27,8 +27,8 @@
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
         
         % if context.system:
-            <meta name="description" content="{{ context }} Transit Schedules and {{ context.realtime_vehicle_type }} Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, {{ context.realtime_vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
+            <meta name="description" content="{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking" />
+            <meta name="keywords" content="Transit, British Columbia, {{ context.vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
             <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
@@ -514,7 +514,7 @@
                             % if context.realtime_enabled:
                                 <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
                                     % include('components/svg', name=context.filter_vehicles_image_name)
-                                    <div class="tooltip left">Include {{ context.realtime_vehicle_type_plural }}</div>
+                                    <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
                                 </div>
                             % end
                             <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
