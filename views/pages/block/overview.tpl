@@ -247,7 +247,7 @@
                     <h2>Scheduled {{ context.vehicle_type }}</h2>
                 </div>
                 <div class="content">
-                    <p>This {{ context.vehicle_type.lower() }} is currently assigned to this block but may be swapped off.</p>
+                    <p>This {{ bus.type_generic_name.lower() }} is currently assigned to this block but may be swapped off.</p>
                     <div class="table-border-wrapper">
                         <table>
                             <thead>

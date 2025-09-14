@@ -225,7 +225,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <p>This {{ context.vehicle_type.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    <p>This {{ bus.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
                     <div class="table-border-wrapper">
                         <table>
                             <thead>

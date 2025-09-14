@@ -77,18 +77,13 @@ class Record:
     def __post_init__(self):
         total_minutes = self.total_minutes
         total_seen_minutes = self.total_seen_minutes
-        model = self.bus.model
-        if model and model.type:
-            vehicle_type = model.type.generic_name
-        else:
-            vehicle_type = self.context.vehicle_type
         if total_minutes is not None and total_seen_minutes is not None:
             if not self.date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
                 if total_seen_minutes == 1:
-                    self.warnings.append(f'{vehicle_type} was logged in for only 1 minute')
+                    self.warnings.append(f'{self.bus.type_generic_name} was logged in for only 1 minute')
                 else:
-                    self.warnings.append(f'{vehicle_type} was logged in for only {total_seen_minutes} minutes')
+                    self.warnings.append(f'{self.bus.type_generic_name} was logged in for only {total_seen_minutes} minutes')
             if (self.start_time.get_minutes() - self.last_seen.get_minutes()) > 30:
-                self.warnings.append(f'{vehicle_type} was logged in before block started')
+                self.warnings.append(f'{self.bus.type_generic_name} was logged in before block started')
             if (self.first_seen.get_minutes() - self.end_time.get_minutes()) > 30:
-                self.warnings.append(f'{vehicle_type} was logged in after block ended')
+                self.warnings.append(f'{self.bus.type_generic_name} was logged in after block ended')

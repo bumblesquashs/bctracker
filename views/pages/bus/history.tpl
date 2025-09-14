@@ -70,7 +70,7 @@
             <div class="content">
                 % if total_items == 0:
                     <div class="placeholder">
-                        <h3>This {{ context.vehicle_type.lower() }} doesn't have any recorded history</h3>
+                        <h3>This {{ bus.type_generic_name.lower() }} doesn't have any recorded history</h3>
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
