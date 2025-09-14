@@ -30,7 +30,7 @@
                 % if upcoming_departures:
                     % if context.realtime_enabled:
                         <p>
-                            <span>Buses with a</span>
+                            <span>{{ context.realtime_vehicle_type_plural }} with a</span>
                             <span class="scheduled">
                                 % include('components/svg', name='schedule')
                             </span>
@@ -47,7 +47,7 @@
                                 % end
                                 <th>Trip</th>
                                 % if context.realtime_enabled:
-                                    <th>Bus</th>
+                                    <th>{{ context.realtime_vehicle_type }}</th>
                                     <th class="desktop-only">Model</th>
                                 % end
                             </tr>

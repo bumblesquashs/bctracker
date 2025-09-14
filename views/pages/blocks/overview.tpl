@@ -50,7 +50,7 @@
                                     % if context.realtime_enabled:
                                         <div class="section row">
                                             <div class="name column">
-                                                <div>Assigned Buses</div>
+                                                <div>Assigned {{ context.realtime_vehicle_type_plural }}</div>
                                                 <div class="lighter-text smaller-font">As of {{ now.format_web(time_format) }}</div>
                                             </div>
                                             <div class="value">
@@ -81,7 +81,7 @@
                                                 <th class="non-mobile">End Time</th>
                                                 <th class="desktop-only">Duration</th>
                                                 % if context.realtime_enabled:
-                                                    <th>Bus</th>
+                                                    <th>{{ context.realtime_vehicle_type }}</th>
                                                     <th class="non-mobile">Model</th>
                                                 % end
                                             </tr>

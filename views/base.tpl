@@ -27,8 +27,8 @@
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
         
         % if context.system:
-            <meta name="description" content="{{ context }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ context }}, {{ context.agency }}" />
+            <meta name="description" content="{{ context }} Transit Schedules and {{ context.realtime_vehicle_type }} Tracking" />
+            <meta name="keywords" content="Transit, British Columbia, {{ context.realtime_vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
             <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
@@ -155,11 +155,13 @@
         % end
         
         % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='ferry')
         % include('components/svg_script', name='model/type/bus-artic')
         % include('components/svg_script', name='model/type/bus-conventional')
         % include('components/svg_script', name='model/type/bus-decker')
         % include('components/svg_script', name='model/type/bus-midibus')
         % include('components/svg_script', name='model/type/bus-shuttle')
+        % include('components/svg_script', name='model/type/ferry')
         % include('components/svg_script', name='ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
@@ -511,8 +513,8 @@
                             <div class="flex-1">Filters:</div>
                             % if context.realtime_enabled:
                                 <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
-                                    % include('components/svg', name='bus')
-                                    <div class="tooltip left">Include Buses</div>
+                                    % include('components/svg', name=context.filter_vehicles_image_name)
+                                    <div class="tooltip left">Include {{ context.realtime_vehicle_type_plural }}</div>
                                 </div>
                             % end
                             <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
@@ -596,7 +598,7 @@
         lastSearchTimestamp = timestamp;
         
         if (query === undefined || query === null || query === "") {
-            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {context}' if context.system else 'Search for buses in all systems' }}");
+            updateSearchView([], 0, "{{ context.search_placeholder_text() }}");
         } else {
             loadingResults = true;
             if (searchResults.length === 0) {

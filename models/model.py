@@ -10,6 +10,7 @@ class ModelType(Enum):
     decker = "Double Decker"
     midibus = "Midibus"
     shuttle = "Shuttle"
+    ferry = "Ferry"
     
     def __str__(self):
         return self.value
@@ -22,6 +23,18 @@ class ModelType(Enum):
     
     def __lt__(self, other):
         return self.value < other.value
+    
+    @property
+    def title_prefix(self):
+        if self == ModelType.ferry:
+            return None
+        return 'Bus'
+    
+    @property
+    def image_name(self):
+        if self == ModelType.ferry:
+            return self.name
+        return f'bus-{self.name}'
 
 @dataclass(slots=True)
 class Model:

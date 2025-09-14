@@ -108,7 +108,7 @@
             </div>
             <div class="content">
                 <p>You can choose whether times are displayed as 12hr or 30hr.</p>
-                <p>Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
+                <p>Since {{ context.realtime_vehicle_type_plural.lower() }} running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
                 <div class="options-container">
                     <div class="option" onclick="setTimeFormat('12hr')">
                         <div class="radio-button {{ 'selected' if time_format == '12hr' else '' }}"></div>
@@ -131,15 +131,15 @@
     <div class="container flex-1">
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
-                <h2>Map Bus Icon Style</h2>
+                <h2>Map {{ context.realtime_vehicle_type }} Icon Style</h2>
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>Choose a style for bus icons shown on the map screen.</p>
+                <p>Choose a style for {{ context.realtime_vehicle_type.lower() }} icons shown on the map screen.</p>
                 <div class="options-container">
                     <div class="option" onclick="setBusMarkerStyle('default')">
                         <div class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
-                        <div>Bus Type</div>
+                        <div>Vehicle Type</div>
                     </div>
                     <div class="option" onclick="setBusMarkerStyle('mini')">
                         <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>

@@ -146,7 +146,7 @@ class Position:
             data['bus_year_model'] = 'Unknown Year/Model'
         model = self.bus.model
         if model and model.type:
-            data['bus_icon'] = f'model/type/bus-{model.type.name}'
+            data['bus_icon'] = f'model/type/{model.type.image_name}'
         else:
             data['bus_icon'] = 'ghost'
         decoration = self.bus.find_decoration()

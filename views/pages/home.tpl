@@ -7,12 +7,12 @@
     <h1>Welcome to BCTracker!</h1>
     % if context.system:
         % if context.realtime_enabled:
-            <h2>{{ context }} Transit Schedules and Bus Tracking</h2>
+            <h2>{{ context }} Transit Schedules and {{ context.realtime_vehicle_type }} Tracking</h2>
         % else:
             <h2>{{ context }} Transit Schedules</h2>
         % end
     % else:
-        <h2>British Columbia Transit Schedules and Bus Tracking</h2>
+        <h2>British Columbia Transit Schedules and {{ context.realtime_vehicle_type }} Tracking</h2>
     % end
 </div>
 
@@ -28,11 +28,7 @@
                     function busSearch() {
                         let value = document.getElementById('bus_search').value;
                         if (value.length > 0) {
-                            if (isNaN(value)) {
-                                alert("Please enter a valid bus number")
-                            } else {
-                                window.location = "{{ get_url(context, 'bus') }}/" + value;
-                            }
+                            window.location = "{{ get_url(context, 'bus') }}/" + value;
                         }
                     }
                     
@@ -65,7 +61,7 @@
                 % if context.system:
                     % if context.realtime_enabled:
                         <form onsubmit="busSearch()" action="javascript:void(0)">
-                            <label for="bus_search">Bus Number:</label>
+                            <label for="bus_search">{{ context.realtime_vehicle_type }} Number or Name:</label>
                             <div class="input-container">
                                 <input type="text" id="bus_search" name="bus_search" method="post" size="10">
                                 <input type="submit" value="Search" class="button">
@@ -100,7 +96,7 @@
                     % end
                 % else:
                     <form onsubmit="busSearch()" action="javascript:void(0)">
-                        <label for="bus_search">Bus Number:</label>
+                        <label for="bus_search">{{ context.realtime_vehicle_type }} Number or Name:</label>
                         <div class="input-container">
                             <input type="text" id="bus_search" name="bus_search" method="post" size="10">
                             <input type="submit" value="Search" class="button">
@@ -119,7 +115,7 @@
                 <p>
                     Add up to 20 favourites using the
                     % include('components/svg', name='action/non-favourite')
-                    button on buses, routes, and stops.
+                    button on {{ context.realtime_vehicle_type_plural.lower() }}, routes, and stops.
                 </p>
                 % if favourites:
                     % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
@@ -132,7 +128,7 @@
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Bus</th>
+                                                <th>{{ context.realtime_vehicle_type }}</th>
                                                 <th>Headsign</th>
                                             </tr>
                                         </thead>
@@ -259,8 +255,8 @@
                     <div class="item">
                         <div class="column center">
                             % include('components/svg', name='realtime')
-                            <h3>Bus Tracking</h3>
-                            <p>See all buses that are currently active, including current route and location</p>
+                            <h3>{{ context.realtime_vehicle_type }} Tracking</h3>
+                            <p>See all {{ context.realtime_vehicle_type_plural.lower() }} that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
                             <a class="button" href="{{ get_url(context, 'realtime') }}">List</a>

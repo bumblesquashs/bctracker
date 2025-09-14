@@ -7,9 +7,9 @@
             <div class="title">{{! order }}</div>
             <div class="content lighter-text smaller-font">
                 % if len(order.buses) == 1:
-                    1 Bus
+                    1 {{ context.realtime_vehicle_type.lower() }}
                 % else:
-                    {{ len(order.buses) }} buses
+                    {{ len(order.buses) }} {{ context.realtime_vehicle_type_plural.lower() }}
                 % end
             </div>
         </div>

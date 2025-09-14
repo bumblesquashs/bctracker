@@ -139,6 +139,24 @@ class Context:
         return DEFAULT_ROUTE_COLOUR
     
     @property
+    def filter_vehicles_image_name(self):
+        if self.agency:
+            return self.agency.filter_vehicles_image_name
+        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    
+    @property
+    def realtime_vehicle_type(self):
+        if self.agency:
+            return self.agency.realtime_vehicle_type
+        return DEFAULT_REALTIME_VEHICLE_TYPE
+    
+    @property
+    def realtime_vehicle_type_plural(self):
+        if self.agency:
+            return self.agency.realtime_vehicle_type_plural
+        return DEFAULT_REALTIME_VEHICLE_TYPE_PLURAL
+    
+    @property
     def ignore_route_colour(self):
         if self.system:
             return self.system.ignore_route_colour
@@ -201,7 +219,7 @@ class Context:
         if self.system:
             values = []
             if self.realtime_enabled:
-                values.append('buses')
+                values.append(self.realtime_vehicle_type_plural.lower())
             values.append('routes')
             values.append('stops')
             if self.enable_blocks:
@@ -212,4 +230,4 @@ class Context:
                 return f'Search for {self} {values[0]} and {values[1]}'
             values_string = ', '.join(values[:-1])
             return f'Search for {self} {values_string}, and {values[-1]}'
-        return 'Search for buses in all systems'
+        return f'Search for {self.realtime_vehicle_type_plural.lower()} in all systems'

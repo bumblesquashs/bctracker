@@ -485,7 +485,7 @@ class Server(Bottle):
             return self.error_page(
                 context=context,
                 name='invalid_bus',
-                title='Unknown Bus',
+                title=f'Unknown {context.realtime_vehicle_type}',
                 vehicle_id=vehicle_id
             )
         order = repositories.order.find_order(context, bus.order_id)
@@ -503,10 +503,15 @@ class Server(Bottle):
             upcoming_departures = repositories.departure.find_upcoming(position.context, position.trip_id, position.sequence)
         else:
             upcoming_departures = []
+        model = bus.model
+        if model and model.type.title_prefix:
+            title = f'{model.type.title_prefix} {bus}'
+        else:
+            title = str(bus)
         return self.page(
             context=context,
             name='bus/overview',
-            title=f'Bus {bus}',
+            title=title,
             include_maps=bool(position) or bool(last_position),
             bus=bus,
             order=order,
@@ -527,7 +532,7 @@ class Server(Bottle):
             return self.error_page(
                 context=context,
                 name='invalid_bus',
-                title='Unknown Bus',
+                title=f'Unknown {context.realtime_vehicle_type}',
                 vehicle_id=vehicle_id
             )
         position = repositories.position.find(context.agency_id, vehicle_id)
@@ -535,10 +540,15 @@ class Server(Bottle):
             last_position = allocation.last_position
         else:
             last_position = None
+        model = bus.model
+        if model and model.type.title_prefix:
+            title = f'{model.type.title_prefix} {bus}'
+        else:
+            title = str(bus)
         return self.page(
             context=context,
             name='bus/map',
-            title=f'Bus {bus}',
+            title=title,
             full_map=bool(position) or bool(last_position),
             bus=bus,
             position=position,
@@ -554,7 +564,7 @@ class Server(Bottle):
             return self.error_page(
                 context=context,
                 name='invalid_bus',
-                title='Unknown Bus',
+                title=f'Unknown {context.realtime_vehicle_type}',
                 vehicle_id=vehicle_id
             )
         try:
@@ -583,10 +593,15 @@ class Server(Bottle):
             events.append(Event(max(last_tracked_dates), 'Last Tracked'))
         for transfer in transfers:
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
+        model = bus.model
+        if model and model.type.title_prefix:
+            title = f'{model.type.title_prefix} {bus}'
+        else:
+            title = str(bus)
         return self.page(
             context=context,
             name='bus/history',
-            title=f'Bus {bus}',
+            title=title,
             bus=bus,
             records=records,
             allocations=sorted(allocations, reverse=True),
@@ -613,7 +628,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             name='history/last_seen',
-            title='Vehicle History',
+            title=f'{context.realtime_vehicle_type} History',
             path=['history'],
             path_args={
                 'days': days
@@ -630,7 +645,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             name='history/first_seen',
-            title='Vehicle History',
+            title=f'{context.realtime_vehicle_type} History',
             path=['history', 'first-seen'],
             allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.bus), reverse=True),
             show_transfers=show_transfers
@@ -647,7 +662,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             name='history/transfers',
-            title='Vehicle History',
+            title='Transfers',
             path=['history', 'transfers'],
             transfers=[t for t in transfers if t.new_bus.visible],
             filter=filter

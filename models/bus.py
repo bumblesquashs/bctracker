@@ -64,7 +64,7 @@ class Bus:
     def __str__(self):
         if self.is_known:
             return self.name
-        return 'Unknown Bus'
+        return f'Unknown {self.agency.realtime_vehicle_type}'
     
     def __hash__(self):
         return hash((self.agency, self.id))

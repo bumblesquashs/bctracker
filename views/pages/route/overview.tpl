@@ -63,14 +63,18 @@
         % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>Active Buses</h2>
+                    % if len(positions) == 1:
+                        <h2>Active {{ context.realtime_vehicle_type }}</h2>
+                    % else:
+                        <h2>Active {{ context.realtime_vehicle_type_plural }}</h2>
+                    % end
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>Bus</th>
+                                <th>{{ context.realtime_vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
                                 % if context.enable_blocks:
@@ -159,7 +163,7 @@
                                     <div class="content">
                                         % if context.realtime_enabled:
                                             <p>
-                                                <span>Buses with a</span>
+                                                <span>{{ context.realtime_vehicle_type_plural }} with a</span>
                                                 <span class="scheduled">
                                                     % include('components/svg', name='schedule')
                                                 </span>
@@ -179,7 +183,7 @@
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
                                                         % if context.realtime_enabled:
-                                                            <th>Bus</th>
+                                                            <th>{{ context.realtime_vehicle_type }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
                                                     </tr>
