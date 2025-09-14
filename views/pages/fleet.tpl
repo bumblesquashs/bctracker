@@ -103,7 +103,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th>{{ context.vehicle_type }}</th>
+                                                                <th>Vehicle</th>
                                                                 <th>First Seen</th>
                                                                 <th class="non-mobile">First System</th>
                                                                 <th>Last Seen</th>
