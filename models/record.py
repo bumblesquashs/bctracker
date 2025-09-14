@@ -77,7 +77,11 @@ class Record:
     def __post_init__(self):
         total_minutes = self.total_minutes
         total_seen_minutes = self.total_seen_minutes
-        vehicle_type = self.context.vehicle_type
+        model = self.bus.model
+        if model and model.type:
+            vehicle_type = model.type.generic_name
+        else:
+            vehicle_type = self.context.vehicle_type
         if total_minutes is not None and total_seen_minutes is not None:
             if not self.date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
                 if total_seen_minutes == 1:

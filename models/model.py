@@ -25,10 +25,16 @@ class ModelType(Enum):
         return self.value < other.value
     
     @property
+    def generic_name(self):
+        if self == ModelType.ferry:
+            return 'Ferry'
+        return 'Bus'
+    
+    @property
     def title_prefix(self):
         if self == ModelType.ferry:
             return None
-        return 'Bus'
+        return self.generic_name
     
     @property
     def image_name(self):
