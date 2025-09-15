@@ -7,7 +7,7 @@ from models.row import Row
 
 @dataclass(slots=True)
 class Assignment:
-    '''An association between a block and a bus for a specific date'''
+    '''An association between a block and a vehicle for a specific date'''
     
     block_id: str
     allocation_id: int
@@ -26,6 +26,6 @@ class Assignment:
         return cls(block_id, allocation_id, context, vehicle_id, date)
     
     @property
-    def bus(self):
-        '''The bus for this assignment'''
-        return self.context.find_bus(self.vehicle_id)
+    def vehicle(self):
+        '''The vehicle for this assignment'''
+        return self.context.find_vehicle(self.vehicle_id)

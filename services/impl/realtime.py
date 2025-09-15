@@ -64,13 +64,13 @@ class RealtimeService:
         for position in repositories.position.find_all():
             try:
                 context = position.context
-                bus = position.bus
-                if not bus.is_known:
+                vehicle = position.vehicle
+                if not vehicle.is_known:
                     continue
                 date = Date.today(context.timezone)
                 time = Time.now(context.timezone)
                 
-                allocation = repositories.allocation.find_active(context.without_system(), bus.id)
+                allocation = repositories.allocation.find_active(context.without_system(), vehicle.id)
                 if allocation:
                     if allocation.context == context:
                         repositories.allocation.set_last_seen(allocation.id, date, position)
@@ -80,12 +80,12 @@ class RealtimeService:
                     else:
                         repositories.allocation.set_inactive(allocation.id)
                         repositories.assignment.delete_all(allocation_id=allocation.id)
-                        allocation_id = repositories.allocation.create(context, bus.id, date, position)
+                        allocation_id = repositories.allocation.create(context, vehicle.id, date, position)
                         repositories.transfer.create(date, allocation.id, allocation_id)
                         first_record = None
                         last_record = None
                 else:
-                    allocation_id = repositories.allocation.create(context, bus.id, date, position)
+                    allocation_id = repositories.allocation.create(context, vehicle.id, date, position)
                     first_record = None
                     last_record = None
                 

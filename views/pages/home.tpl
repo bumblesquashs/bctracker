@@ -25,8 +25,8 @@
             </div>
             <div class="content">
                 <script type="text/javascript">
-                    function busSearch() {
-                        let value = document.getElementById('bus_search').value;
+                    function vehicleSearch() {
+                        let value = document.getElementById('vehicle_search').value;
                         if (value.length > 0) {
                             window.location = "{{ get_url(context, 'bus') }}/" + value;
                         }
@@ -60,10 +60,10 @@
                 
                 % if context.system:
                     % if context.realtime_enabled:
-                        <form onsubmit="busSearch()" action="javascript:void(0)">
-                            <label for="bus_search">{{ context.vehicle_type }} Number or Name:</label>
+                        <form onsubmit="vehicleSearch()" action="javascript:void(0)">
+                            <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                             <div class="input-container">
-                                <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                                <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
                                 <input type="submit" value="Search" class="button">
                             </div>
                         </form>
@@ -95,10 +95,10 @@
                         </form>
                     % end
                 % else:
-                    <form onsubmit="busSearch()" action="javascript:void(0)">
-                        <label for="bus_search">{{ context.vehicle_type }} Number or Name:</label>
+                    <form onsubmit="vehicleSearch()" action="javascript:void(0)">
+                        <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                         <div class="input-container">
-                            <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                            <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
@@ -145,7 +145,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="row">
-                                                                % include('components/bus', bus=value)
+                                                                % include('components/vehicle', vehicle=value)
                                                                 % if position:
                                                                     <div class="row gap-5">
                                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)

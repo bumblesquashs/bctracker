@@ -68,7 +68,7 @@
                         <tbody>
                             % last_date = None
                             % for allocation in allocations:
-                                % bus = allocation.bus
+                                % vehicle = allocation.vehicle
                                 % record = allocation.first_record
                                 % allocation_date = allocation.first_date
                                 % if not last_date or allocation_date.year != last_date.year or allocation_date.month != last_date.month:
@@ -90,7 +90,7 @@
                                     <td>
                                         <div class="column">
                                             <div class="row space-between">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 % if context.system and not allocation.active:
                                                     <div class="transfer tooltip-anchor">
                                                         % include('components/svg', name='transfer')
@@ -99,12 +99,12 @@
                                                 % end
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/year_model', year_model=bus.year_model)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % if not context.system:
                                         <td class="non-mobile">{{ allocation.context }}</td>

@@ -83,7 +83,7 @@ class AssignmentRepository:
             return None
     
     def find_all(self, context: Context, block_id: str | None = None, vehicle_id: str | None = None, trip_id: str | None = None, route_id: str | None = None, stop_id: str | None = None) -> list[Assignment]:
-        '''Returns all assignments for the given block, bus, trip, route, and stop'''
+        '''Returns all assignments for the given block, vehicle, trip, route, and stop'''
         date = Date.today(context.timezone)
         joins = {
             'allocation': {

@@ -19,7 +19,7 @@
 </div>
 
 <div class="options-container">
-    <div class="option" onclick="toggleNISBuses()">
+    <div class="option" onclick="toggleNISVehicles()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
@@ -28,7 +28,7 @@
 </div>
 
 % if positions:
-    % models = sorted({p.bus.model for p in positions if p.bus.model})
+    % models = sorted({p.vehicle.model for p in positions if p.vehicle.model})
     % model_types = sorted({m.type for m in models})
     <div class="page-container">
         <div class="sidebar container flex-1">
@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                             % for type in model_types:
-                                % type_positions = [p for p in positions if p.bus.model and p.bus.model.type == type]
+                                % type_positions = [p for p in positions if p.vehicle.model and p.vehicle.model.type == type]
                                 <tr class="header">
                                     <td>{{ type }}</td>
                                     % if show_nis:
@@ -61,7 +61,7 @@
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == type]
                                 % for model in type_models:
-                                    % model_positions = [p for p in type_positions if p.bus.model == model]
+                                    % model_positions = [p for p in type_positions if p.vehicle.model == model]
                                     <tr>
                                         <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                         % if show_nis:
@@ -94,8 +94,8 @@
                     <div class="content">
                         <div class="container">
                             % for model in type_models:
-                                % model_positions = sorted([p for p in positions if p.bus.model and p.bus.model == model])
-                                % model_order_ids = {p.bus.order_id for p in model_positions}
+                                % model_positions = sorted([p for p in positions if p.vehicle.model and p.vehicle.model == model])
+                                % model_order_ids = {p.vehicle.order_id for p in model_positions}
                                 % model_orders = [o for o in orders if o.id in model_order_ids]
                                 <div id="{{ model.id }}" class="section">
                                     <div class="header" onclick="toggleSection(this)">
@@ -121,7 +121,7 @@
                                                 </thead>
                                                 <tbody>
                                                     % for order in model_orders:
-                                                        % order_positions = [p for p in model_positions if p.bus.order_id == order.id]
+                                                        % order_positions = [p for p in model_positions if p.vehicle.order_id == order.id]
                                                         <tr class="header">
                                                             <td colspan="6">
                                                                 <div class="row space-between">
@@ -146,7 +146,7 @@
                 </div>
             % end
             
-            % unknown_positions = sorted([p for p in positions if not p.bus.order_id])
+            % unknown_positions = sorted([p for p in positions if not p.vehicle.order_id])
             % if unknown_positions:
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
@@ -216,7 +216,7 @@
 % end
 
 <script>
-    function toggleNISBuses() {
+    function toggleNISVehicles() {
         window.location = "{{ get_url(context, 'realtime', 'models', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

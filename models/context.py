@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.agency import Agency
-    from models.bus import Bus
     from models.system import System
+    from models.vehicle import Vehicle
 
 from dataclasses import dataclass
 
@@ -211,8 +211,8 @@ class Context:
     def without_system(self):
         return Context(self.agency)
     
-    def find_bus(self, id: str) -> Bus:
-        return repositories.order.find_bus(self, id)
+    def find_vehicle(self, id: str) -> Vehicle:
+        return repositories.order.find_vehicle(self, id)
     
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''

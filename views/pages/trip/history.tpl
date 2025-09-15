@@ -33,7 +33,7 @@
                             </div>
                             <div class="column section">
                                 % for order in orders:
-                                    % percentage = (sum(1 for r in records if r.bus.order_id == order.id) / len(records)) * 100
+                                    % percentage = (sum(1 for r in records if r.vehicle.order_id == order.id) / len(records)) * 100
                                     <div class="row space-between">
                                         <div>{{! order }}</div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
@@ -77,7 +77,7 @@
                                 <tbody>
                                     % last_date = None
                                     % for record in records:
-                                        % bus = record.bus
+                                        % vehicle = record.vehicle
                                         % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
                                             <tr class="header">
                                                 <td colspan="5">{{ record.date.format_month() }}</td>
@@ -90,16 +90,16 @@
                                             <td>
                                                 <div class="column stretch">
                                                     <div class="row space-between">
-                                                        % include('components/bus')
+                                                        % include('components/vehicle')
                                                         % include('components/record_warnings')
                                                     </div>
                                                     <span class="non-desktop smaller-font">
-                                                        % include('components/year_model', year_model=bus.year_model)
+                                                        % include('components/year_model', year_model=vehicle.year_model)
                                                     </span>
                                                 </div>
                                             </td>
                                             <td class="desktop-only">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </td>
                                             <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
                                             <td>{{ record.last_seen.format_web(time_format) }}</td>

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class Livery:
-    '''The paint scheme for a bus'''
+    '''The paint scheme for a vehicle'''
     
     agency_id: str
     id: int

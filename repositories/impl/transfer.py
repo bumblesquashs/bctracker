@@ -73,7 +73,7 @@ class TransferRepository:
             initializer=Transfer.from_db
         )
     
-    def find_all_by_bus(self, context: Context, vehicle_id: str) -> list[Transfer]:
+    def find_all_by_vehicle(self, context: Context, vehicle_id: str) -> list[Transfer]:
         return self.database.select(
             table='transfer',
             columns={

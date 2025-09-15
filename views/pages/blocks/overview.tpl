@@ -54,7 +54,7 @@
                                                 <div class="lighter-text smaller-font">As of {{ now.format_web(time_format) }}</div>
                                             </div>
                                             <div class="value">
-                                                % include('components/percentage', numerator=sum(1 for b in blocks_so_far if b.id in recorded_buses), denominator=len(blocks_so_far), low_cutoff=80, high_cutoff=95)
+                                                % include('components/percentage', numerator=sum(1 for b in blocks_so_far if b.id in recorded_vehicles), denominator=len(blocks_so_far), low_cutoff=80, high_cutoff=95)
                                             </div>
                                         </div>
                                     % end
@@ -104,18 +104,18 @@
                                                     <td class="non-mobile">{{ end_time }}</td>
                                                     <td class="desktop-only">{{ block.get_duration(date=today) }}</td>
                                                     % if context.realtime_enabled:
-                                                        % if block.id in recorded_buses:
-                                                            % bus = recorded_buses[block.id]
+                                                        % if block.id in recorded_vehicles:
+                                                            % vehicle = recorded_vehicles[block.id]
                                                             <td>
                                                                 <div class="column">
-                                                                    % include('components/bus')
+                                                                    % include('components/vehicle')
                                                                     <span class="mobile-only smaller-font">
-                                                                        % include('components/year_model', year_model=bus.year_model)
+                                                                        % include('components/year_model', year_model=vehicle.year_model)
                                                                     </span>
                                                                 </div>
                                                             </td>
                                                             <td class="non-mobile">
-                                                                % include('components/year_model', year_model=bus.year_model)
+                                                                % include('components/year_model', year_model=vehicle.year_model)
                                                             </td>
                                                         % else:
                                                             <td class="non-mobile lighter-text" colspan="2">Unavailable</td>

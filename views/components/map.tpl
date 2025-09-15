@@ -100,7 +100,7 @@
     % map_positions = sorted([p for p in map_positions if p.has_location], key=lambda p: p.lat)
     <script>
         const positions = JSON.parse('{{! json.dumps([p.get_json() for p in map_positions]) }}');
-        const busMarkerStyle = "{{ bus_marker_style }}";
+        const vehicleMarkerStyle = "{{ vehicle_marker_style }}";
         
         for (const position of positions) {
             const adherence = position.adherence;
@@ -111,20 +111,20 @@
                 element.classList.add("offline");
             }
             if (position.bearing !== undefined) {
-                const sideWidthValue = busMarkerStyle == "mini" ? 8 : 16;
-                const bottomWidthValue = busMarkerStyle == "mini" ? 18 : 26;
+                const sideWidthValue = vehicleMarkerStyle == "mini" ? 8 : 16;
+                const bottomWidthValue = vehicleMarkerStyle == "mini" ? 18 : 26;
                 const length = Math.floor(position.speed / 10);
                 const bearing = document.createElement("div");
                 bearing.className = "bearing";
-                if (busMarkerStyle === "adherence") {
+                if (vehicleMarkerStyle === "adherence") {
                     bearing.classList.add('adherence');
                     if (adherence !== undefined && adherence !== null) {
                         bearing.classList.add(adherence.status_class)
                     }
-                } else if (busMarkerStyle === "occupancy") {
+                } else if (vehicleMarkerStyle === "occupancy") {
                     bearing.classList.add("occupancy");
                     bearing.classList.add(position.occupancy_status_class);
-                } else if (busMarkerStyle === "livery") {
+                } else if (vehicleMarkerStyle === "livery") {
                     bearing.classList.add("livery-style");
                 } else {
                     bearing.style.borderBottomColor = "#" + position.colour;
@@ -142,14 +142,14 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                icon.href = getUrl(currentSystemID, "bus/" + position.bus_url_id, true);
+                icon.href = getUrl(currentSystemID, "bus/" + position.vehicle_url_id, true);
                 icon.innerHTML = "<div class='link'></div>";
             }
             icon.className = "icon";
             element.appendChild(icon);
             
-            if (busMarkerStyle === "route") {
-                icon.classList.add("bus_route");
+            if (vehicleMarkerStyle === "route") {
+                icon.classList.add("vehicle_route");
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
                 } else if (adherence && adherence.value <= -66) {
@@ -158,11 +158,11 @@
                     icon.innerHTML += position.route_number;
                 }
                 icon.style.backgroundColor = "#" + position.colour;
-            } else if (busMarkerStyle === "mini") {
+            } else if (vehicleMarkerStyle === "mini") {
                 element.classList.add("small");
                 icon.classList.add("mini");
                 icon.style.backgroundColor = "#" + position.colour;
-            } else if (busMarkerStyle === "adherence") {
+            } else if (vehicleMarkerStyle === "adherence") {
                 icon.classList.add("adherence");
                 if (adherence === undefined || adherence === null) {
                     if (position.lat === 0 && position.lon === 0) {
@@ -186,7 +186,7 @@
                         icon.classList.add("smaller-font");
                     }
                 }
-            } else if (busMarkerStyle === "occupancy" && position.occupancy_icon) {
+            } else if (vehicleMarkerStyle === "occupancy" && position.occupancy_icon) {
                 icon.classList.add("occupancy");
                 icon.classList.add(position.occupancy_status_class);
                 if (position.lat === 0 && position.lon === 0) {
@@ -196,10 +196,10 @@
                 } else {
                     icon.innerHTML += getSVG(position.occupancy_icon);
                 }
-            } else if (busMarkerStyle === "livery" && position.livery) {
+            } else if (vehicleMarkerStyle === "livery" && position.livery) {
                 icon.classList.add("livery");
                 icon.innerHTML = '<img src="/img/liveries/' + position.livery  +'.png" />';
-            } else if (busMarkerStyle === "speed" && position.speed !== undefined) {
+            } else if (vehicleMarkerStyle === "speed" && position.speed !== undefined) {
                 icon.classList.add("speed");
                 icon.innerHTML = position.speed + '<div class="units">km/h</div>';
                 icon.style.backgroundColor = "#" + position.colour;
@@ -209,7 +209,7 @@
                 } else if (adherence && adherence.value <= -66) {
                     icon.innerHTML += getSVG("snail");
                 } else {
-                    icon.innerHTML += getSVG(position.bus_icon);
+                    icon.innerHTML += getSVG(position.vehicle_icon);
                 }
                 icon.style.backgroundColor = "#" + position.colour;
             }
@@ -220,7 +220,7 @@
             
             const title = document.createElement("div");
             title.className = "title";
-            title.innerHTML = position.bus_display;
+            title.innerHTML = position.vehicle_name;
             if (position.decoration != null) {
                 title.innerHTML += " <span class='decoration'>" + position.decoration + "</span>";
             }
@@ -232,7 +232,7 @@
             
             const model = document.createElement("div");
             model.className = "lighter-text";
-            model.innerHTML = position.bus_year_model;
+            model.innerHTML = position.vehicle_year_model;
             content.appendChild(model);
             
             if (!position.offline) {
@@ -314,7 +314,7 @@
                 stopEvent: false
             }));
             
-            if ("{{ get('zoom_buses', True) }}" === "True" && position.lat != 0 && position.lon != 0) {
+            if ("{{ get('zoom_vehicles', True) }}" === "True" && position.lat != 0 && position.lon != 0) {
                 area.combine(position.lat, position.lon);
             }
         }

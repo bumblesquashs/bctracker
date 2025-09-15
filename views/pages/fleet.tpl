@@ -54,27 +54,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    % buses = {a.bus for a in allocations}
+                                    % vehicles = {a.vehicle for a in allocations}
                                     % for type in model_types:
                                         <tr class="header">
                                             <td>{{ type }}</td>
-                                            <td class="align-right">{{ sum(1 for b in buses if b.model and b.model.type == type) }}</td>
-                                            <td class="align-right">{{ sum(len(o.buses) for o in orders if o.model.type == type) }}</td>
+                                            <td class="align-right">{{ sum(1 for v in vehicles if v.model and v.model.type == type) }}</td>
+                                            <td class="align-right">{{ sum(len(o.vehicles) for o in orders if o.model.type == type) }}</td>
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % type_models = [m for m in models if m.type == type]
                                         % for model in type_models:
                                             <tr>
                                                 <td><a href="#{{ model.id }}">{{! model }}</a></td>
-                                                <td class="align-right">{{ sum(1 for b in buses if b.model and b.model == model) }}</td>
-                                                <td class="align-right">{{ sum(len(o.buses) for o in orders if o.model == model) }}</td>
+                                                <td class="align-right">{{ sum(1 for v in vehicles if v.model and v.model == model) }}</td>
+                                                <td class="align-right">{{ sum(len(o.vehicles) for o in orders if o.model == model) }}</td>
                                             </tr>
                                         % end
                                     % end
                                     <tr class="header">
                                         <td>Total</td>
-                                        <td class="align-right">{{ sum(1 for b in buses if b.visible) }}</td>
-                                        <td class="align-right">{{ sum(len(o.buses) for o in orders) }}</td>
+                                        <td class="align-right">{{ sum(1 for v in vehicles if v.visible) }}</td>
+                                        <td class="align-right">{{ sum(len(o.vehicles) for o in orders) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -116,21 +116,21 @@
                                                                     <td colspan="5">
                                                                         <div class="row space-between">
                                                                             <div>{{ order.years_string }}</div>
-                                                                            <div>{{ len(order.buses) }}</div>
+                                                                            <div>{{ len(order.vehicles) }}</div>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="display-none"></tr>
-                                                                % for bus in order.buses:
-                                                                    % bus_allocations = [a for a in allocations if a.bus == bus]
-                                                                    % if bus_allocations:
-                                                                        % first_seen_date = min(a.first_seen for a in bus_allocations)
-                                                                        % first_seen_context = min(bus_allocations).context
-                                                                        % last_seen_date = max(a.last_seen for a in bus_allocations)
-                                                                        % last_seen_context = max(bus_allocations).context
+                                                                % for vehicle in order.vehicles:
+                                                                    % vehicle_allocations = [a for a in allocations if a.vehicle == vehicle]
+                                                                    % if vehicle_allocations:
+                                                                        % first_seen_date = min(a.first_seen for a in vehicle_allocations)
+                                                                        % first_seen_context = min(vehicle_allocations).context
+                                                                        % last_seen_date = max(a.last_seen for a in vehicle_allocations)
+                                                                        % last_seen_context = max(vehicle_allocations).context
                                                                         <tr>
                                                                             <td>
-                                                                                % include('components/bus')
+                                                                                % include('components/vehicle')
                                                                             </td>
                                                                             <td class="desktop-only">{{ first_seen_date.format_long() }}</td>
                                                                             <td class="non-desktop">
@@ -152,7 +152,7 @@
                                                                     % else:
                                                                         <tr>
                                                                             <td>
-                                                                                % include('components/bus', enable_link=False)
+                                                                                % include('components/vehicle', enable_link=False)
                                                                             </td>
                                                                             <td class="lighter-text" colspan="4">Unavailable</td>
                                                                         </tr>

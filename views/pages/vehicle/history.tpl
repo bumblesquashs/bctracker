@@ -3,7 +3,7 @@
 
 % rebase('base')
 
-% model = bus.model
+% model = vehicle.model
 
 <div id="page-header">
     <h1 class="row">
@@ -13,18 +13,18 @@
                 <span>{{ title_prefix }}</span>
             % end
         % end
-        % include('components/bus', enable_link=False)
+        % include('components/vehicle', enable_link=False)
         % include('components/favourite')
     </h1>
-    % year_model = bus.year_model
+    % year_model = vehicle.year_model
     % if year_model:
         <h2>{{! year_model }}</h2>
     % else:
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'bus', bus) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(context, 'bus', bus, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'bus', vehicle) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'bus', vehicle, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -70,13 +70,12 @@
             <div class="content">
                 % if total_items == 0:
                     <div class="placeholder">
-                        <h3>This {{ bus.type_generic_name.lower() }} doesn't have any recorded history</h3>
+                        <h3>This {{ vehicle.type_generic_name.lower() }} doesn't have any recorded history</h3>
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
                             <li>It may not have been in service since BCTracker started recording {{ context.vehicle_type.lower() }} history</li>
                             <li>It may not have functional tracking equipment installed</li>
-                            % model = bus.model
                             % if model is None or model.type == ModelType.shuttle:
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                             % end

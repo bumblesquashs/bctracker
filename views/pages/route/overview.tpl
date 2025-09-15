@@ -86,26 +86,26 @@
                         </thead>
                         <tbody>
                             % for position in positions:
-                                % bus = position.bus
+                                % vehicle = position.vehicle
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 <div class="row gap-5">
                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/year_model', year_model=bus.year_model)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     <td>
                                         <div class="column">
@@ -220,11 +220,11 @@
                                                             </td>
                                                             % if context.realtime_enabled:
                                                                 % if trip.id in recorded_today:
-                                                                    % bus = recorded_today[trip.id]
+                                                                    % vehicle = recorded_today[trip.id]
                                                                     <td>
                                                                         <div class="column">
                                                                             <div class="row">
-                                                                                % include('components/bus')
+                                                                                % include('components/vehicle')
                                                                                 % if trip.id in trip_positions:
                                                                                     % position = trip_positions[trip.id]
                                                                                     <div class="row gap-5">
@@ -234,29 +234,29 @@
                                                                                 % end
                                                                             </div>
                                                                             <span class="non-desktop smaller-font">
-                                                                                % include('components/year_model', year_model=bus.year_model)
+                                                                                % include('components/year_model', year_model=vehicle.year_model)
                                                                             </span>
                                                                         </div>
                                                                     </td>
                                                                     <td class="desktop-only">
-                                                                        % include('components/year_model', year_model=bus.year_model)
+                                                                        % include('components/year_model', year_model=vehicle.year_model)
                                                                     </td>
                                                                 % elif trip.block_id in assignments and trip.end_time.is_later:
                                                                     % assignment = assignments[trip.block_id]
-                                                                    % bus = assignment.bus
+                                                                    % vehicle = assignment.vehicle
                                                                     <td>
                                                                         <div class="column">
                                                                             <div class="row">
-                                                                                % include('components/bus')
+                                                                                % include('components/vehicle')
                                                                                 % include('components/scheduled')
                                                                             </div>
                                                                             <span class="non-desktop smaller-font">
-                                                                                % include('components/year_model', year_model=bus.year_model)
+                                                                                % include('components/year_model', year_model=vehicle.year_model)
                                                                             </span>
                                                                         </div>
                                                                     </td>
                                                                     <td class="desktop-only">
-                                                                        % include('components/year_model', year_model=bus.year_model)
+                                                                        % include('components/year_model', year_model=vehicle.year_model)
                                                                     </td>
                                                                 % else:
                                                                     <td class="desktop-only lighter-text" colspan="2">Unavailable</td>

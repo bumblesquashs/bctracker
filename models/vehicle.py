@@ -13,7 +13,7 @@ import helpers
 import repositories
 
 @dataclass(slots=True)
-class Bus:
+class Vehicle:
     '''A public transportation vehicle'''
     
     agency: Agency
@@ -34,12 +34,12 @@ class Bus:
     
     @property
     def context(self):
-        '''The context for this bus'''
+        '''The context for this vehicle'''
         return self.agency.context
     
     @property
     def url_id(self):
-        '''The ID to use when making bus URLs'''
+        '''The ID to use when making vehicle URLs'''
         return self.id
     
     @property
@@ -82,5 +82,5 @@ class Bus:
         return self.key < other.key
     
     def find_decoration(self):
-        '''Returns the decoration for this bus, if one exists'''
+        '''Returns the decoration for this vehicle, if one exists'''
         return repositories.decoration.find(self.agency.id, self.id)

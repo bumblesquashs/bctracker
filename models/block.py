@@ -18,7 +18,7 @@ from models.trip import Trip
 
 @dataclass(slots=True)
 class Block:
-    '''A list of trips that are operated by the same bus sequentially'''
+    '''A list of trips that are operated by the same vehicle sequentially'''
     
     agency: Agency
     system: System

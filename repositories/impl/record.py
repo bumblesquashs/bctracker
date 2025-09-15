@@ -5,11 +5,11 @@ from datetime import timedelta
 from database import Database
 
 from models.block import Block
-from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.record import Record
 from models.time import Time
+from models.vehicle import Vehicle
 
 @dataclass(slots=True)
 class RecordRepository:
@@ -57,7 +57,7 @@ class RecordRepository:
         )
     
     def find_all(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None, limit: int | None = None, page: int | None = None) -> list[Record]:
-        '''Returns all records that match the given context, bus, block, and trip'''
+        '''Returns all records that match the given context, vehicle, block, and trip'''
         joins = {
             'allocation': {
                 'allocation.allocation_id': 'record.allocation_id'
@@ -105,8 +105,8 @@ class RecordRepository:
         '''Returns all trip IDs associated with the given record'''
         return self.database.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
     
-    def find_recorded_today(self, context: Context, trip_ids: list[str]) -> dict[str: Bus]:
-        '''Returns all bus numbers matching the given context and trips that were recorded on the current date'''
+    def find_recorded_today(self, context: Context, trip_ids: list[str]) -> dict[str: Vehicle]:
+        '''Returns all vehicles matching the given context and trips that were recorded on the current date'''
         date = Date.today(context.timezone)
         rows = self.database.select(
             table='trip_record',
@@ -131,10 +131,10 @@ class RecordRepository:
             },
             order_by='record.last_seen ASC'
         )
-        return {row['trip_id']: context.find_bus(row['vehicle_id']) for row in rows}
+        return {row['trip_id']: context.find_vehicle(row['vehicle_id']) for row in rows}
     
-    def find_recorded_today_by_block(self, context: Context) -> dict[str, Bus]:
-        '''Returns all bus numbers matching the given context that werer ecorded on the current date'''
+    def find_recorded_today_by_block(self, context: Context) -> dict[str, Vehicle]:
+        '''Returns all vehicles matching the given context that were recorded on the current date'''
         date = Date.today(context.timezone)
         rows = self.database.select(
             table='record',
@@ -155,10 +155,10 @@ class RecordRepository:
             },
             order_by='record.last_seen ASC'
         )
-        return {row['block_id']: context.find_bus(row['vehicle_id']) for row in rows}
+        return {row['block_id']: context.find_vehicle(row['vehicle_id']) for row in rows}
     
     def count(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None) -> int:
-        '''Returns the number of records for the given system, bus, block, and trip'''
+        '''Returns the number of records for the given system, vehicle, block, and trip'''
         joins = {
             'allocation': {
                 'allocation.allocation_id': 'record.allocation_id'
