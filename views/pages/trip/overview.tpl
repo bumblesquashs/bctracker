@@ -169,9 +169,9 @@
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     % if len(positions) == 1:
-                        <h2>Active Bus</h2>
+                        <h2>Active {{ context.vehicle_type }}</h2>
                     % else:
-                        <h2>Active Buses</h2>
+                        <h2>Active {{ context.vehicle_type_plural }}</h2>
                     % end
                     % include('components/toggle')
                 </div>
@@ -179,7 +179,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Bus</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="non-mobile">Model</th>
                                 <th>Next Stop</th>
                             </tr>
@@ -221,16 +221,16 @@
             % position = repositories.position.find(bus.agency.id, bus.id)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>Scheduled Bus</h2>
+                    <h2>Scheduled {{ context.vehicle_type }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <p>This bus is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    <p>This {{ bus.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Bus</th>
+                                    <th>{{ context.vehicle_type }}</th>
                                     <th class="non-mobile">Model</th>
                                     <th>Current Headsign</th>
                                     <th class="desktop-only">Current Trip</th>

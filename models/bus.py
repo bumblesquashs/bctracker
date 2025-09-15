@@ -55,6 +55,12 @@ class Bus:
         return None
     
     @property
+    def type_generic_name(self):
+        if self.model and self.model.type:
+            return self.model.type.generic_name
+        return 'Vehicle'
+    
+    @property
     def has_amenities(self):
         return any([self.accessible, self.air_conditioned, self.usb_charging, self.cctv])
     
@@ -64,7 +70,7 @@ class Bus:
     def __str__(self):
         if self.is_known:
             return self.name
-        return 'Unknown Bus'
+        return f'Unknown {self.agency.vehicle_type}'
     
     def __hash__(self):
         return hash((self.agency, self.id))

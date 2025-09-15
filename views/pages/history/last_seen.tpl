@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Vehicle History</h1>
+    <h1>{{ context.vehicle_type }} History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
         <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
@@ -121,7 +121,7 @@
     <div class="container flex-3">
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
-                <h2>Vehicles</h2>
+                <h2>{{ context.vehicle_type_plural }}</h2>
                 % include('components/toggle')
             </div>
             <div class="content">
@@ -150,7 +150,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Bus</th>
+                                    <th>{{ context.vehicle_type }}</th>
                                     <th>Last Seen</th>
                                     % if not context.system:
                                         <th class="non-mobile">System</th>
@@ -176,7 +176,7 @@
                                     <tr class="display-none"></tr>
                                     % for allocation in unknown_allocations:
                                         % bus = allocation.bus
-                                        % record = allocation.record
+                                        % record = allocation.last_record
                                         <tr>
                                             <td>
                                                 <div class="row space-between">
@@ -333,10 +333,10 @@
                                 % include('components/systems')
                             </div>
                         % elif days:
-                            <h3>No {{ context }} buses have been recorded for the selected date range</h3>
+                            <h3>No {{ context }} {{ context.vehicle_type_plural.lower() }} have been recorded for the selected date range</h3>
                             <p>Please choose a different date range or check again later!</p>
                         % else:
-                            <h3>No {{ context }} buses have been recorded</h3>
+                            <h3>No {{ context }} {{ context.vehicle_type_plural.lower() }} have been recorded</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

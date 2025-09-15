@@ -79,10 +79,12 @@ class OrderRepository:
             if not bus.visible:
                 continue
             year_model = bus.year_model or 'Unknown year/model'
-            if not bus.model or not bus.model.type:
-                model_icon = 'ghost'
+            if bus.model and bus.model.type:
+                model_icon = f'model/type/{bus.model.type.image_name}'
+                title_prefix = bus.model.type.title_prefix
             else:
-                model_icon = f'model/type/bus-{bus.model.type.name}'
+                model_icon = 'ghost'
+                title_prefix = None
             value = 0
             if query in bus.name:
                 value += (len(query) / len(bus.name)) * 100
@@ -94,5 +96,7 @@ class OrderRepository:
             name = bus.name
             if decoration and decoration.enabled:
                 name += f' {decoration}'
-            matches.append(Match(f'Bus {name}', year_model, model_icon, f'bus/{bus.url_id}', value))
+            if title_prefix:
+                name = f'{title_prefix} {name}'
+            matches.append(Match(name, year_model, model_icon, f'bus/{bus.url_id}', value))
         return matches

@@ -34,7 +34,10 @@
             "12432": "25",
             "12442": "26",
             "12393": "30"
-        }
+        },
+        "filter_vehicles_image_name": "ferry",
+        "vehicle_type": "Vessel",
+        "vehicle_type_plural": "Vessels"
     },
     "bc-transit": {
         "name": "BC Transit",

@@ -23,9 +23,9 @@
     % if not context.realtime_enabled:
         <i>{{ context }} realtime information is not supported</i>
     % elif context.system:
-        <i>There are no {{ context }} buses out right now</i>
+        <i>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</i>
     % else:
-        <i>There are no buses out right now</i>
+        <i>There are no {{ context.vehicle_type_plural.lower() }} out right now</i>
     % end
 </div>
 
@@ -59,7 +59,7 @@
                         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                             % include('components/svg', name='status/check')
                         </div>
-                        <span>Show NIS Buses</span>
+                        <span>Show NIS {{ context.vehicle_type_plural }}</span>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                 <div class="options-container">
                     <div class="option" onclick="setBusMarkerStyle('default')">
                         <div id="bus-marker-style-default" class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
-                        <div>Bus Type</div>
+                        <div>Vehicle Type</div>
                     </div>
                     <div class="option" onclick="setBusMarkerStyle('mini')">
                         <div id="bus-marker-style-mini" class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>

@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Vehicle History</h1>
+    <h1>{{ context.vehicle_type }} History</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(context, 'history') }}" class="tab-button">Last Seen</a>
         <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
@@ -105,7 +105,7 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Bus</th>
+                                    <th>{{ context.vehicle_type }}</th>
                                     <th class="desktop-only">Model</th>
                                     <th class="non-mobile">From</th>
                                     <th class="non-mobile">To</th>
@@ -167,13 +167,13 @@
                                 % include('components/systems')
                             </div>
                         % elif filter == 'from':
-                            <h3>No buses have been transferred from {{ context }}</h3>
+                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred from {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % elif filter == 'to':
-                            <h3>No buses have been transferred to {{ context }}</h3>
+                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred to {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % else:
-                            <h3>No buses have been transferred to or from {{ context }}</h3>
+                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred to or from {{ context }}</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

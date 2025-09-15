@@ -27,6 +27,9 @@ class Agency:
     nis_colour: str = DEFAULT_NIS_COLOUR
     default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     custom_route_numbers: dict[str, str] = field(default_factory=dict)
+    filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    vehicle_type: str = DEFAULT_VEHICLE_TYPE
+    vehicle_type_plural: str = DEFAULT_VEHICLE_TYPE_PLURAL
     
     @property
     def context(self):

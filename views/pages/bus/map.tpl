@@ -1,9 +1,16 @@
 
 % rebase('base')
 
+% model = bus.model
+
 <div id="page-header">
     <h1 class="row">
-        <span>Bus</span>
+        % if model:
+            % title_prefix = model.type.title_prefix
+            % if title_prefix:
+                <span>{{ title_prefix }}</span>
+            % end
+        % end
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>

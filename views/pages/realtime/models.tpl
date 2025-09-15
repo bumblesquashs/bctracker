@@ -3,9 +3,9 @@
 
 <div id="page-header">
     <h1>Realtime</h1>
-    <h2>Currently active vehicles</h2>
+    <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All Buses</a>
+        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
         % if context.system:
             <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         % end
@@ -23,7 +23,7 @@
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
-        <div>Show NIS Buses</div>
+        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
 </div>
 
@@ -107,7 +107,7 @@
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th>Bus</th>
+                                                        <th>{{ context.vehicle_type }}</th>
                                                         % if not context.system:
                                                             <th class="desktop-only">System</th>
                                                         % end
@@ -157,7 +157,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Bus</th>
+                                    <th>{{ context.vehicle_type }}</th>
                                     % if not context.system:
                                         <th class="desktop-only">System</th>
                                     % end
@@ -186,15 +186,15 @@
     <div class="placeholder">
         % if not context.system:
             % if show_nis:
-                <h3>There are no buses out right now</h3>
+                <h3>There are no {{ context.vehicle_type_plural.lower() }} out right now</h3>
                 <p>
                     None of our current agencies operate late night service, so this should be the case overnight.
                     If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                 </p>
                 <p>Please check again later!</p>
             % else:
-                <h3>There are no buses in service right now</h3>
-                <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+                <h3>There are no {{ context.vehicle_type_plural.lower() }} in service right now</h3>
+                <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
             % end
         % elif not context.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
@@ -206,10 +206,10 @@
             <h3>{{ context }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no {{ context }} buses in service right now</h3>
-            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} in service right now</h3>
+            <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
         % else:
-            <h3>There are no {{ context }} buses out right now</h3>
+            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>

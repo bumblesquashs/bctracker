@@ -16,7 +16,12 @@
 
 <div id="page-header">
     <h1 class="row">
-        <span>Bus</span>
+        % if model:
+            % title_prefix = model.type.title_prefix
+            % if title_prefix:
+                <span>{{ title_prefix }}</span>
+            % end
+        % end
         % include('components/bus', enable_link=False)
         % include('components/favourite')
     </h1>
@@ -81,8 +86,7 @@
                                 <h3>Not In Service</h3>
                             % end
                         </div>
-                    % end
-                    % if position:
+                        
                         % stop = position.stop
                         % if trip:
                             % route = trip.route
@@ -426,11 +430,11 @@
                     </div>
                 % else:
                     <div class="placeholder">
-                        <h3>This bus doesn't have any recorded history</h3>
+                        <h3>This {{ bus.type_generic_name.lower() }} doesn't have any recorded history</h3>
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording bus history</li>
+                            <li>It may not have been in service since BCTracker started recording {{ context.vehicle_type.lower() }} history</li>
                             <li>It may not have functional tracking equipment installed</li>
                             % if model and model.type == ModelType.shuttle:
                                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>

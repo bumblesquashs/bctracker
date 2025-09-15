@@ -13,7 +13,7 @@
         <div class="content">
             <p>
                 This is the full list of vehicles that are currently available on BCTracker.
-                It does not include every bus that has ever been operated in BC, but it should be mostly up-to-date with modern bus fleets.
+                It does not include every vehicle that has ever been operated in BC, but it should be mostly up-to-date with modern fleets.
                 Many of the older units were retired long before BCTracker was started, but are included for the sake of completion.
             </p>
             <p>
@@ -22,7 +22,7 @@
             </p>
             <ol>
                 <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                <li>It may not have been in service since BCTracker started tracking buses</li>
+                <li>It may not have been in service since BCTracker started tracking vehicles</li>
                 <li>It may not have functional tracking equipment installed</li>
                 <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
             </ol>
@@ -30,7 +30,7 @@
             % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ context }} buses, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
+                    To see only {{ context }} {{ context.vehicle_type_plural.lower() }}, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
                 </p>
             % end
         </div>
@@ -103,7 +103,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th>Bus</th>
+                                                                <th>Vehicle</th>
                                                                 <th>First Seen</th>
                                                                 <th class="non-mobile">First System</th>
                                                                 <th>Last Seen</th>
