@@ -202,7 +202,7 @@ class Server(Bottle):
         is_admin = self.validate_admin()
         
         time_format = self.query_cookie('time_format')
-        vehicle_marker_style = self.query_cookie('bus_marker_style')
+        vehicle_marker_style = self.query_cookie('vehicle_marker_style')
         hide_systems = self.query_cookie('hide_systems') != 'no'
         if context.system:
             last_updated = context.system.last_updated

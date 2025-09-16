@@ -488,7 +488,7 @@
         document.getElementById("vehicle-marker-style-" + vehicleMarkerStyle).classList.remove("selected");
         vehicleMarkerStyle = style;
         document.getElementById("vehicle-marker-style-" + style).classList.add("selected");
-        setCookie("bus_marker_style", style);
+        setCookie("vehicle_marker_style", style);
         updateMap(false);
     }
     
