@@ -1,10 +1,10 @@
-<div class="bus">
-    % if bus.is_known and get('enable_link', True):
-        <a href="{{ get_url(context, 'bus', bus) }}">{{ bus }}</a>
+<div class="vehicle">
+    % if vehicle.is_known and get('enable_link', True):
+        <a href="{{ get_url(context, 'bus', vehicle) }}">{{ vehicle }}</a>
     % else:
-        <div>{{ bus }}</div>
+        <div>{{ vehicle }}</div>
     % end
-    % decoration = bus.find_decoration()
+    % decoration = vehicle.find_decoration()
     % if decoration and decoration.enabled:
         <div class="decoration tooltip-anchor">
             {{ decoration }}

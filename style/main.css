@@ -636,7 +636,7 @@ table tr.table-button {
     font-weight: bold;
 }
 
-.bus {
+.vehicle {
     display: flex;
     flex-direction: row;
     gap: 5px;
@@ -1111,7 +1111,7 @@ table tr.table-button {
     text-decoration: none;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     font-weight: bold;
     text-align: center;
     line-height: 24px;

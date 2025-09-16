@@ -1,7 +1,7 @@
 
 % rebase('base')
 
-% model = bus.model
+% model = vehicle.model
 
 <div id="page-header">
     <h1 class="row">
@@ -11,19 +11,19 @@
                 <span>{{ title_prefix }}</span>
             % end
         % end
-        % include('components/bus', enable_link=False)
+        % include('components/vehicle', enable_link=False)
         % include('components/favourite')
     </h1>
-    % year_model = bus.year_model
+    % year_model = vehicle.year_model
     % if year_model:
         <h2>{{! year_model }}</h2>
     % else:
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'bus', bus) }}" class="tab-button">Overview</a>
+        <a href="{{ get_url(context, 'bus', vehicle) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        <a href="{{ get_url(context, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'bus', vehicle, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 

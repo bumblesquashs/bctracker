@@ -512,7 +512,7 @@
                         <div id="search-filters">
                             <div class="flex-1">Filters:</div>
                             % if context.realtime_enabled:
-                                <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
+                                <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
                                     % include('components/svg', name=context.filter_vehicles_image_name)
                                     <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
                                 </div>
@@ -566,7 +566,7 @@
     let enterPending = false;
     let lastSearchTimestamp = Date.now();
     
-    let searchIncludeBuses = true;
+    let searchIncludeVehicles = true;
     let searchIncludeRoutes = true;
     let searchIncludeStops = true;
     let searchIncludeBlocks = true;
@@ -633,7 +633,7 @@
             data.set("query", query);
             data.set("page", searchPage);
             data.set("count", resultsPerPage);
-            data.set("include_buses", searchIncludeBuses ? 1 : 0);
+            data.set("include_vehicles", searchIncludeVehicles ? 1 : 0);
             data.set("include_routes", searchIncludeRoutes ? 1 : 0);
             data.set("include_stops", searchIncludeStops ? 1 : 0);
             data.set("include_blocks", searchIncludeBlocks ? 1 : 0);
@@ -814,9 +814,9 @@
         selectedResultIndex = index;
     }
     
-    function toggleSearchBusFilter() {
-        searchIncludeBuses = !searchIncludeBuses;
-        toggleFilter(searchIncludeBuses, "search-filter-bus");
+    function toggleSearchVehicleFilter() {
+        searchIncludeVehicles = !searchIncludeVehicles;
+        toggleFilter(searchIncludeVehicles, "search-filter-vehicle");
     }
     
     function toggleSearchRouteFilter() {

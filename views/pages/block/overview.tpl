@@ -191,26 +191,26 @@
                         </thead>
                         <tbody>
                             % for position in sorted(positions):
-                                % bus = position.bus
+                                % vehicle = position.vehicle
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 <div class="row gap-5">
                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/year_model', year_model=bus.year_model)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     <td>
                                         <div class="column">
@@ -240,14 +240,14 @@
                 </div>
             </div>
         % elif assignment and block.schedule.is_today and block.get_end_time(date=today).is_later:
-            % bus = assignment.bus
-            % position = repositories.position.find(bus.agency.id, bus.id)
+            % vehicle = assignment.vehicle
+            % position = repositories.position.find(vehicle.agency.id, vehicle.id)
             <div class="section">
                 <div class="header">
                     <h2>Scheduled {{ context.vehicle_type }}</h2>
                 </div>
                 <div class="content">
-                    <p>This {{ bus.type_generic_name.lower() }} is currently assigned to this block but may be swapped off.</p>
+                    <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this block but may be swapped off.</p>
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
@@ -264,18 +264,18 @@
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 % if position:
                                                     % include('components/adherence', adherence=position.adherence)
                                                 % end
                                             </div>
                                             <span class="mobile-only smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/year_model', year_model=bus.year_model)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % if position:
                                         % trip = position.trip

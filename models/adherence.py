@@ -12,7 +12,7 @@ MINIMUM_MINUTES = 4
 
 @dataclass(slots=True)
 class Adherence:
-    '''Indicates how far ahead or behind a bus is compared to its trip's schedule'''
+    '''Indicates how far ahead or behind a vehicle is compared to its trip's schedule'''
     
     value: int
     layover: bool

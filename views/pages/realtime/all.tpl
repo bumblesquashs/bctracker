@@ -19,7 +19,7 @@
 </div>
 
 <div class="options-container">
-    <div class="option" onclick="toggleNISBuses()">
+    <div class="option" onclick="toggleNISVehicles()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
@@ -28,8 +28,8 @@
 </div>
 
 % if positions:
-    % known_positions = [p for p in positions if p.bus.order_id]
-    % unknown_positions = sorted([p for p in positions if not p.bus.order_id])
+    % known_positions = [p for p in positions if p.vehicle.order_id]
+    % unknown_positions = sorted([p for p in positions if not p.vehicle.order_id])
     <div class="table-border-wrapper">
         <table>
             <thead>
@@ -62,7 +62,7 @@
                     % end
                 % end
                 % for order in orders:
-                    % order_positions = sorted([p for p in known_positions if p.bus.order_id == order.id])
+                    % order_positions = sorted([p for p in known_positions if p.vehicle.order_id == order.id])
                     <tr class="header">
                         <td colspan="6">
                             <div class="row space-between">
@@ -115,7 +115,7 @@
 % end
 
 <script>
-    function toggleNISBuses() {
+    function toggleNISVehicles() {
         window.location = "{{ get_url(context, 'realtime', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

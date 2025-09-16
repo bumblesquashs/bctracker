@@ -137,29 +137,29 @@
             <div class="content">
                 <p>Choose a style for {{ context.vehicle_type.lower() }} icons shown on the map screen.</p>
                 <div class="options-container">
-                    <div class="option" onclick="setBusMarkerStyle('default')">
-                        <div class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('default')">
+                        <div class="radio-button {{ 'selected' if not vehicle_marker_style or vehicle_marker_style == 'default' else '' }}"></div>
                         <div>Vehicle Type</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('mini')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('mini')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'mini' else '' }}"></div>
                         <div>Mini</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('route')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('route')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'route' else '' }}"></div>
                         <div>Route Number</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('adherence')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('adherence')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'adherence' else '' }}"></div>
                         <div>Schedule Adherence</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('occupancy')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('occupancy')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'occupancy' else '' }}"></div>
                         <div>Occupancy</div>
                     </div>
                     % if show_speed:
-                        <div class="option" onclick="setBusMarkerStyle('speed')">
-                            <div class="radio-button {{ 'selected' if bus_marker_style == 'speed' else '' }}"></div>
+                        <div class="option" onclick="setVehicleMarkerStyle('speed')">
+                            <div class="radio-button {{ 'selected' if vehicle_marker_style == 'speed' else '' }}"></div>
                             <div>Speed</div>
                         </div>
                     % end
@@ -194,7 +194,7 @@
         window.location = "?time_format=" + format;
     }
     
-    function setBusMarkerStyle(style) {
-        window.location = "?bus_marker_style=" + style;
+    function setVehicleMarkerStyle(style) {
+        window.location = "?vehicle_marker_style=" + style;
     }
 </script>

@@ -17,7 +17,7 @@
 </div>
 
 <div class="options-container">
-    <div class="option" onclick="toggleNISBuses()">
+    <div class="option" onclick="toggleNISVehicles()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
@@ -61,37 +61,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            % last_bus = None
+                            % last_vehicle = None
                             % for position in sorted(route_positions):
-                                % bus = position.bus
-                                % order_id = bus.order_id
-                                % if not last_bus:
+                                % vehicle = position.vehicle
+                                % order_id = vehicle.order_id
+                                % if not last_vehicle:
                                     % same_order = True
-                                % elif not order_id and not last_bus.order_id:
+                                % elif not order_id and not last_vehicle.order_id:
                                     % same_order = True
-                                % elif not order_id or not last_bus.order_id:
+                                % elif not order_id or not last_vehicle.order_id:
                                     % same_order = False
                                 % else:
-                                    % same_order = order_id == last_bus.order_id
+                                    % same_order = order_id == last_vehicle.order_id
                                 % end
-                                % last_bus = bus
+                                % last_vehicle = vehicle
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 <div class="row gap-5">
                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/year_model', year_model=bus.year_model)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % if not context.system:
                                         <td class="desktop-only">{{ position.context }}</td>
@@ -153,32 +153,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            % last_bus = None
+                            % last_vehicle = None
                             % for position in no_route_positions:
-                                % bus = position.bus
+                                % vehicle = position.vehicle
                                 % stop = position.stop
-                                % order_id = bus.order_id
-                                % if not last_bus:
+                                % order_id = vehicle.order_id
+                                % if not last_vehicle:
                                     % same_order = True
-                                % elif not order_id and not last_bus.order_id:
+                                % elif not order_id and not last_vehicle.order_id:
                                     % same_order = True
-                                % elif not order_id or not last_bus.order_id:
+                                % elif not order_id or not last_vehicle.order_id:
                                     % same_order = False
                                 % else:
-                                    % same_order = order_id == last_bus.order_id
+                                    % same_order = order_id == last_vehicle.order_id
                                 % end
-                                % last_bus = bus
+                                % last_vehicle = vehicle
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
                                         <div class="column">
-                                            % include('components/bus')
+                                            % include('components/vehicle')
                                             <span class="non-desktop smaller-font">
-                                                % include('components/year_model', year_model=bus.year_model)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/year_model', year_model=bus.year_model)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % if not context.system:
                                         <td>{{ position.context }}</td>
@@ -225,7 +225,7 @@
 % end
 
 <script>
-    function toggleNISBuses() {
+    function toggleNISVehicles() {
         window.location = "{{ get_url(context, 'realtime', 'routes', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

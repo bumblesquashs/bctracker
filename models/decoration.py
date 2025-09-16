@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class Decoration:
-    '''Text placed after a bus number'''
+    '''Text placed after a vehicle name'''
     
     agency_id: str
     vehicle_id: int

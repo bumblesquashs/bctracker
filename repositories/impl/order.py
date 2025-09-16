@@ -2,10 +2,10 @@
 from dataclasses import dataclass, field
 import json
 
-from models.bus import Bus
 from models.context import Context
 from models.match import Match
 from models.order import Order
+from models.vehicle import Vehicle
 
 import repositories
 
@@ -13,12 +13,12 @@ import repositories
 class OrderRepository:
     
     orders: dict[str, dict[int, Order]] = field(default_factory=dict)
-    buses: dict[str, dict[str, Bus]] = field(default_factory=dict)
+    vehicles: dict[str, dict[str, Vehicle]] = field(default_factory=dict)
     
     def load(self):
         '''Loads order data from the static JSON file'''
         self.orders = {}
-        self.buses = {}
+        self.vehicles = {}
         repositories.agency.load()
         repositories.model.load()
         repositories.livery.load()
@@ -27,21 +27,21 @@ class OrderRepository:
             for (agency_id, agency_values) in json.load(file).items():
                 agency = repositories.agency.find(agency_id)
                 agency_orders = {}
-                agency_buses = {}
+                agency_vehicles = {}
                 for (model_id, model_values) in agency_values.items():
                     model = repositories.model.find(model_id)
                     for values in model_values:
                         order = Order.from_json(id, agency, model, values)
                         agency_orders[id] = order
-                        for bus in order.buses:
-                            agency_buses[bus.id] = bus
+                        for vehicle in order.vehicles:
+                            agency_vehicles[vehicle.id] = vehicle
                         id += 1
                 self.orders[agency_id] = agency_orders
-                self.buses[agency_id] = agency_buses
+                self.vehicles[agency_id] = agency_vehicles
     
-    def find_bus(self, context: Context, id: str) -> Bus | None:
+    def find_vehicle(self, context: Context, id: str) -> Vehicle | None:
         try:
-            return self.buses[context.agency_id][id]
+            return self.vehicles[context.agency_id][id]
         except:
             if context.vehicle_name_length:
                 try:
@@ -51,7 +51,7 @@ class OrderRepository:
                     name = id[:context.vehicle_name_length]
             else:
                 name = id
-            return Bus(context.agency, id, name)
+            return Vehicle(context.agency, id, name)
     
     def find_order(self, context: Context, id: int) -> Order | None:
         try:
@@ -69,34 +69,34 @@ class OrderRepository:
         return sorted([o for a in self.orders.values() for o in a.values()])
     
     def find_matches(self, context: Context, query: str, recorded_vehicle_ids: set[str]) -> list[Match]:
-        '''Returns matching buses for a given query'''
+        '''Returns matching vehicles for a given query'''
         matches = []
         try:
-            buses = self.buses[context.agency_id].values()
+            vehicles = self.vehicles[context.agency_id].values()
         except KeyError:
-            buses = [b for a in self.buses.values() for b in a.values()]
-        for bus in buses:
-            if not bus.visible:
+            vehicles = [b for a in self.vehicles.values() for b in a.values()]
+        for vehicle in vehicles:
+            if not vehicle.visible:
                 continue
-            year_model = bus.year_model or 'Unknown year/model'
-            if bus.model and bus.model.type:
-                model_icon = f'model/type/{bus.model.type.image_name}'
-                title_prefix = bus.model.type.title_prefix
+            year_model = vehicle.year_model or 'Unknown year/model'
+            if vehicle.model and vehicle.model.type:
+                model_icon = f'model/type/{vehicle.model.type.image_name}'
+                title_prefix = vehicle.model.type.title_prefix
             else:
                 model_icon = 'ghost'
                 title_prefix = None
             value = 0
-            if query in bus.name:
-                value += (len(query) / len(bus.name)) * 100
-                if bus.name.startswith(query):
+            if query in vehicle.name:
+                value += (len(query) / len(vehicle.name)) * 100
+                if vehicle.name.startswith(query):
                     value += len(query)
-            if bus.id not in recorded_vehicle_ids:
+            if vehicle.id not in recorded_vehicle_ids:
                 value /= 10
-            decoration = bus.find_decoration()
-            name = bus.name
+            decoration = vehicle.find_decoration()
+            name = vehicle.name
             if decoration and decoration.enabled:
                 name += f' {decoration}'
             if title_prefix:
                 name = f'{title_prefix} {name}'
-            matches.append(Match(name, year_model, model_icon, f'bus/{bus.url_id}', value))
+            matches.append(Match(name, year_model, model_icon, f'bus/{vehicle.url_id}', value))
         return matches

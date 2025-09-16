@@ -15,7 +15,7 @@
 </div>
 
 <div class="options-container">
-    <div class="option" onclick="toggleNISBuses()">
+    <div class="option" onclick="toggleNISVehicles()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
@@ -45,7 +45,7 @@
             <tbody>
                 % last_speed = None
                 % for position in sorted(positions, key=lambda p: p.speed, reverse=True):
-                    % bus = position.bus
+                    % vehicle = position.vehicle
                     % trip = position.trip
                     % stop = position.stop
                     % same_speed = not last_speed or position.speed // 10 == last_speed
@@ -54,19 +54,19 @@
                         <td>
                             <div class="column">
                                 <div class="row">
-                                    % include('components/bus')
+                                    % include('components/vehicle')
                                     <div class="row gap-5">
                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                         % include('components/adherence', adherence=position.adherence)
                                     </div>
                                 </div>
                                 <span class="non-desktop smaller-font">
-                                    % include('components/year_model', year_model=bus.year_model)
+                                    % include('components/year_model', year_model=vehicle.year_model)
                                 </span>
                             </div>
                         </td>
                         <td class="desktop-only">
-                            % include('components/year_model', year_model=bus.year_model)
+                            % include('components/year_model', year_model=vehicle.year_model)
                         </td>
                         % if not context.system:
                             <td class="desktop-only">{{ position.context }}</td>
@@ -156,7 +156,7 @@
 % end
 
 <script>
-    function toggleNISBuses() {
+    function toggleNISVehicles() {
         window.location = "{{ get_url(context, 'realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

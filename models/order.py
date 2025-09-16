@@ -2,17 +2,17 @@
 from dataclasses import dataclass, field
 
 from models.agency import Agency
-from models.bus import Bus
 from models.model import Model
+from models.vehicle import Vehicle
 
 @dataclass(slots=True)
 class Order:
-    '''A set of buses of a specific model'''
+    '''A set of vehicles of a specific model'''
     
     id: int
     agency: Agency
     model: Model | None
-    buses: list[Bus]
+    vehicles: list[Vehicle]
     
     key: tuple = field(init=False)
     years: int = field(init=False)
@@ -32,9 +32,9 @@ class Order:
         return 'Unknown Year'
     
     def __post_init__(self):
-        self.key = min([b.key for b in self.buses])
-        self.years = sorted({b.year for b in self.buses})
-        self.visible = any(b.visible for b in self.buses)
+        self.key = min([b.key for b in self.vehicles])
+        self.years = sorted({b.year for b in self.vehicles})
+        self.visible = any(b.visible for b in self.vehicles)
     
     def __str__(self):
         if self.model:
@@ -56,25 +56,25 @@ class Order:
             return self.key < other.key
         return self.agency < other.agency
     
-    def previous_bus(self, bus):
-        '''The previous bus before the given bus'''
+    def previous_vehicle(self, vehicle):
+        '''The previous vehicle before the given vehicle'''
         try:
-            index = self.buses.index(bus)
-            return self.buses[index - 1]
+            index = self.vehicles.index(vehicle)
+            return self.vehicles[index - 1]
         except (IndexError, ValueError):
             return None
     
-    def next_bus(self, bus):
-        '''The next bus following the given bus'''
+    def next_vehicle(self, vehicle):
+        '''The next vehicle following the given vehicle'''
         try:
-            index = self.buses.index(bus)
-            return self.buses[index + 1]
+            index = self.vehicles.index(vehicle)
+            return self.vehicles[index + 1]
         except (IndexError, ValueError):
             return None
     
     @classmethod
     def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
-        buses = []
+        vehicles = []
         for row in rows:
             if 'id' in row:
                 id = row['id']
@@ -89,7 +89,7 @@ class Order:
                 else:
                     id = str(id)
                     name = id
-                buses.append(Bus(agency, id, name, order_id, model, **row))
+                vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
             else:
                 low = row['low']
                 high = row['high']
@@ -106,5 +106,5 @@ class Order:
                     else:
                         id = str(id)
                         name = id
-                    buses.append(Bus(agency, id, name, order_id, model, **row))
-        return cls(order_id, agency, model, buses)
+                    vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+        return cls(order_id, agency, model, vehicles)

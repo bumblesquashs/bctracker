@@ -6,7 +6,7 @@
 
 % rebase('base')
 
-% model = bus.model
+% model = vehicle.model
 
 % if position and position.timestamp:
     <script>
@@ -22,10 +22,10 @@
                 <span>{{ title_prefix }}</span>
             % end
         % end
-        % include('components/bus', enable_link=False)
+        % include('components/vehicle', enable_link=False)
         % include('components/favourite')
     </h1>
-    % year_model = bus.year_model
+    % year_model = vehicle.year_model
     % if year_model:
         <h2>{{! year_model }}</h2>
     % else:
@@ -33,8 +33,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'bus', bus, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(context, 'bus', bus, 'history') }}" class="tab-button">History</a>
+        <a href="{{ get_url(context, 'bus', vehicle, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ get_url(context, 'bus', vehicle, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -251,30 +251,30 @@
                                 </div>
                             % end
                         % end
-                        % if bus.has_amenities:
+                        % if vehicle.has_amenities:
                             <div class="row section">
                                 <div class="name">Amenities</div>
                                 <div class="value">
                                     <div class="row gap-5">
-                                        % if bus.accessible:
+                                        % if vehicle.accessible:
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/accessible')
                                                 <div class="tooltip right">Accessible</div>
                                             </div>
                                         % end
-                                        % if bus.air_conditioned:
+                                        % if vehicle.air_conditioned:
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/air-conditioned')
                                                 <div class="tooltip right">Air conditioned</div>
                                             </div>
                                         % end
-                                        % if bus.usb_charging:
+                                        % if vehicle.usb_charging:
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/usb')
                                                 <div class="tooltip right">USB charging ports</div>
                                             </div>
                                         % end
-                                        % if bus.cctv:
+                                        % if vehicle.cctv:
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/cctv')
                                                 <div class="tooltip right">CCTV cameras</div>
@@ -430,7 +430,7 @@
                     </div>
                 % else:
                     <div class="placeholder">
-                        <h3>This {{ bus.type_generic_name.lower() }} doesn't have any recorded history</h3>
+                        <h3>This {{ vehicle.type_generic_name.lower() }} doesn't have any recorded history</h3>
                         <p>There are a few reasons why that might be the case:</p>
                         <ol>
                             <li>It may be operating in a transit system that doesn't currently provide realtime information</li>

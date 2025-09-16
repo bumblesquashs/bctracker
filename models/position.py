@@ -8,20 +8,20 @@ if TYPE_CHECKING:
 from dataclasses import dataclass
 
 from models.adherence import Adherence
-from models.bus import Bus
 from models.occupancy import Occupancy
 from models.row import Row
 from models.timestamp import Timestamp
+from models.vehicle import Vehicle
 
 import helpers
 import repositories
 
 @dataclass(slots=True)
 class Position:
-    '''Current information about a bus' coordinates, trip, and stop'''
+    '''Current information about a vehicle's coordinates, trip, and stop'''
     
     system: System
-    bus: Bus
+    vehicle: Vehicle
     trip_id: str | None = None
     stop_id: str | None = None
     block_id: str | None = None
@@ -40,7 +40,7 @@ class Position:
     def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
         context = row.context()
-        bus = context.find_bus(row['vehicle_id'])
+        vehicle = context.find_vehicle(row['vehicle_id'])
         trip_id = row['trip_id']
         stop_id = row['stop_id']
         block_id = row['block_id']
@@ -58,7 +58,7 @@ class Position:
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)
-        return cls(context.system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+        return cls(context.system, vehicle, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
     def context(self):
@@ -120,17 +120,17 @@ class Position:
         return repositories.departure.find(self.context, self.trip_id, self.sequence)
     
     def __eq__(self, other):
-        return self.bus == other.bus
+        return self.vehicle == other.vehicle
     
     def __lt__(self, other):
-        return self.bus < other.bus
+        return self.vehicle < other.vehicle
     
     def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
-            'vehicle_id': self.bus.id,
-            'bus_display': str(self.bus),
-            'bus_url_id': str(self.bus.url_id),
+            'vehicle_id': self.vehicle.id,
+            'vehicle_name': str(self.vehicle),
+            'vehicle_url_id': str(self.vehicle.url_id),
             'system': str(self.system),
             'agency_id': self.context.agency_id,
             'lon': self.lon,
@@ -139,21 +139,21 @@ class Position:
             'text_colour': self.text_colour,
             'offline': self.offline
         }
-        year_model = self.bus.year_model
+        year_model = self.vehicle.year_model
         if year_model:
-            data['bus_year_model'] = year_model.replace("'", '&apos;')
+            data['vehicle_year_model'] = year_model.replace("'", '&apos;')
         else:
-            data['bus_year_model'] = 'Unknown Year/Model'
-        model = self.bus.model
+            data['vehicle_year_model'] = 'Unknown Year/Model'
+        model = self.vehicle.model
         if model and model.type:
-            data['bus_icon'] = f'model/type/{model.type.image_name}'
+            data['vehicle_icon'] = f'model/type/{model.type.image_name}'
         else:
-            data['bus_icon'] = 'ghost'
-        decoration = self.bus.find_decoration()
+            data['vehicle_icon'] = 'ghost'
+        decoration = self.vehicle.find_decoration()
         if decoration and decoration.enabled:
             data['decoration'] = str(decoration)
-        if self.bus.livery:
-            data['livery'] = self.bus.livery
+        if self.vehicle.livery:
+            data['livery'] = self.vehicle.livery
         trip = self.trip
         if trip:
             departure = self.departure

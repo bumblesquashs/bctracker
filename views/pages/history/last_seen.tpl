@@ -81,7 +81,7 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % models = sorted({a.bus.model for a in allocations if a.bus.model})
+                    % models = sorted({a.vehicle.model for a in allocations if a.vehicle.model})
                     % model_types = sorted({m.type for m in models})
                     <table>
                         <thead>
@@ -92,7 +92,7 @@
                         </thead>
                         <tbody>
                             % for model_type in model_types:
-                                % type_allocations = [a for a in allocations if a.bus.model and a.bus.model.type == model_type]
+                                % type_allocations = [a for a in allocations if a.vehicle.model and a.vehicle.model.type == model_type]
                                 <tr class="header">
                                     <td>{{ model_type }}</td>
                                     <td class="align-right">{{ len(type_allocations) }}</td>
@@ -100,7 +100,7 @@
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == model_type]
                                 % for model in type_models:
-                                    % model_allocations = [a for a in type_allocations if a.bus.model == model]
+                                    % model_allocations = [a for a in type_allocations if a.vehicle.model == model]
                                     <tr>
                                         <td>{{! model }}</td>
                                         <td class="align-right">{{ len(model_allocations) }}</td>
@@ -126,8 +126,8 @@
             </div>
             <div class="content">
                 % if allocations:
-                    % known_allocations = [a for a in allocations if a.bus.order_id]
-                    % unknown_allocations = [a for a in allocations if not a.bus.order_id]
+                    % known_allocations = [a for a in allocations if a.vehicle.order_id]
+                    % unknown_allocations = [a for a in allocations if not a.vehicle.order_id]
                     % if any(a.last_record and a.last_record.warnings for a in allocations):
                         <p>
                             <span>Entries with a</span>
@@ -175,12 +175,12 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for allocation in unknown_allocations:
-                                        % bus = allocation.bus
+                                        % vehicle = allocation.vehicle
                                         % record = allocation.last_record
                                         <tr>
                                             <td>
                                                 <div class="row space-between">
-                                                    % include('components/bus')
+                                                    % include('components/vehicle')
                                                     % if context.system and not allocation.active:
                                                         <div class="transfer tooltip-anchor">
                                                             % include('components/svg', name='transfer')
@@ -238,7 +238,7 @@
                                     % end
                                 % end
                                 % for order in orders:
-                                    % order_allocations = [a for a in known_allocations if a.bus.order_id == order.id]
+                                    % order_allocations = [a for a in known_allocations if a.vehicle.order_id == order.id]
                                     <tr class="header">
                                         <td colspan="5">
                                             <div class="row space-between">
@@ -249,12 +249,12 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for allocation in order_allocations:
-                                        % bus = allocation.bus
+                                        % vehicle = allocation.vehicle
                                         % record = allocation.last_record
                                         <tr>
                                             <td>
                                                 <div class="row space-between">
-                                                    % include('components/bus')
+                                                    % include('components/vehicle')
                                                     % if context.system and not allocation.active:
                                                         <div class="transfer tooltip-anchor">
                                                             % include('components/svg', name='transfer')

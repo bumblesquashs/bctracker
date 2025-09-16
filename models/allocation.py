@@ -1,7 +1,6 @@
 
 from dataclasses import dataclass
 
-from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.position import Position
@@ -9,13 +8,14 @@ from models.record import Record
 from models.row import Row
 from models.time import Time
 from models.timestamp import Timestamp
+from models.vehicle import Vehicle
 
 @dataclass(slots=True)
 class Allocation:
     
     id: int
     context: Context
-    bus: Bus
+    vehicle: Vehicle
     first_seen: Date
     first_record: Record | None
     last_seen: Date
@@ -61,7 +61,7 @@ class Allocation:
     @property
     def last_position(self):
         if self.last_lat and self.last_lon:
-            return Position(self.context.system, self.bus, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, offline=True)
+            return Position(self.context.system, self.vehicle, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, offline=True)
         return None
     
     def __hash__(self):
@@ -77,12 +77,12 @@ class Allocation:
     def from_db(cls, row: Row):
         id = row['id']
         context = row.context()
-        bus = context.find_bus(row['vehicle_id'])
+        vehicle = context.find_vehicle(row['vehicle_id'])
         first_seen = Date.parse(row['first_seen'], context.timezone)
         if 'first_record_id' in row:
             row.values['first_record_allocation_id'] = id
             row.values['first_record_agency_id'] = context.agency_id
-            row.values['first_record_vehicle_id'] = bus.id
+            row.values['first_record_vehicle_id'] = vehicle.id
             row.values['first_record_system_id'] = context.system_id
             first_record = row.obj('first_record', Record.from_db)
         else:
@@ -91,7 +91,7 @@ class Allocation:
         if 'last_record_id' in row:
             row.values['last_record_allocation_id'] = id
             row.values['last_record_agency_id'] = context.agency_id
-            row.values['last_record_vehicle_id'] = bus.id
+            row.values['last_record_vehicle_id'] = vehicle.id
             row.values['last_record_system_id'] = context.system_id
             last_record = row.obj('last_record', Record.from_db)
         else:
@@ -103,4 +103,4 @@ class Allocation:
         last_stop_number = row['last_stop_number']
         last_stop_name = row['last_stop_name']
         last_seen_timestamp = Timestamp.parse(row['last_seen_timestamp'], context.timezone)
-        return cls(id, context, bus, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name, last_seen_timestamp)
+        return cls(id, context, vehicle, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name, last_seen_timestamp)

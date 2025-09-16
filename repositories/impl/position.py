@@ -104,7 +104,7 @@ class PositionRepository:
         self.database.insert('position', values)
     
     def find(self, agency_id: str, vehicle_id: str) -> Position | None:
-        '''Returns the position of the given bus'''
+        '''Returns the position of the given vehicle'''
         positions = self.database.select(
             table='position',
             columns=[
@@ -184,7 +184,7 @@ class PositionRepository:
             filters=filters,
             initializer=Position.from_db
         )
-        return [p for p in positions if p.bus.visible]
+        return [p for p in positions if p.vehicle.visible]
     
     def delete_all(self, context: Context = Context()):
         '''Deletes all positions for the given system from the database'''
