@@ -195,6 +195,6 @@
     }
     
     function setVehicleMarkerStyle(style) {
-        window.location = "?bus_marker_style=" + style;
+        window.location = "?vehicle_marker_style=" + style;
     }
 </script>
