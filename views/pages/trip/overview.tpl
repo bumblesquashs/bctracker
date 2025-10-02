@@ -186,7 +186,7 @@
                         </thead>
                         <tbody>
                             % for position in sorted(positions):
-                                % vehicle = position.buvehicles
+                                % vehicle = position.vehicle
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
