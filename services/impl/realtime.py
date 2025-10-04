@@ -52,7 +52,7 @@ class RealtimeService:
                 vehicle_id = vehicle.vehicle.id
                 vehicle_name_length = context.vehicle_name_length
                 if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:]
+                    vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
             except:
                 vehicle_id = str(-(index + 1))
             repositories.position.create(context, vehicle_id, vehicle)
