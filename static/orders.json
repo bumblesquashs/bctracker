@@ -44,6 +44,10 @@
             ],
             [
                 { "year": 2024, "low": 2896, "high": 2976, "livery": "green-front" }
+            ],
+            [
+                { "year": 2025, "low": 2977, "high": 2999, "livery": "green-front" },
+                { "year": 2025, "low": 3200, "high": 3303, "livery": "green-front" }
             ]
         ],
         "chevrolet-arboc-4500-som-28": [
