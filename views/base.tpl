@@ -455,15 +455,7 @@
             </div>
             <div id="main">
                 <div id="banners">
-                    % from models.date import Date
-                    % if context.system_id == 'cowichan-valley' and today < Date(2025, 10, 6, context.timezone):
-                        <div class="banner">
-                            <div class="content">
-                                <h1>Service in the Cowichan Valley area will resume on October 6th</h1>
-                                <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
-                            </div>
-                        </div>
-                    % end
+                    <!-- No banners at the moment -->
                 </div>
                 % if full_map:
                     <div id="map" class="full-screen"></div>
