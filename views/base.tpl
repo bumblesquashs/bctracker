@@ -227,9 +227,17 @@
                 document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ settings.cookie_domain if settings.cookie_domain else '' }};path=/";
             }
             
-            function toggleSection(header) {
+            function toggleSection(header, reloadMap = false) {
                 const section = header.parentElement;
                 section.classList.toggle("closed");
+                if (reloadMap && "map" in window) {
+                    if (section.classList.contains("closed")) {
+                        map.setTarget(null);
+                    } else {
+                        map.setTarget(document.getElementById("map"));
+                        map.updateSize();
+                    }
+                }
             }
             
             function getTimestampOffset() {
