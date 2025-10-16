@@ -7,18 +7,34 @@ from models.row import Row
 
 SQL_SCRIPTS = [
     '''
+        CREATE TABLE IF NOT EXISTS allocation (
+            allocation_id INTEGER PRIMARY KEY ASC,
+            agency_id TEXT NOT NULL,
+            vehicle_id TEXT NOT NULL,
+            system_id TEXT,
+            first_seen TEXT NOT NULL,
+            last_seen TEXT NOT NULL,
+            active INTEGER NOT NULL,
+            last_lat REAL,
+            last_lon REAL,
+            last_stop_id TEXT,
+            last_stop_number TEXT,
+            last_stop_name TEXT,
+            last_seen_timestamp REAL
+        )
+    ''',
+    '''
         CREATE TABLE IF NOT EXISTS record (
             record_id INTEGER PRIMARY KEY ASC,
-            agency_id TEXT NOT NULL,
-            bus_number TEXT NOT NULL,
+            allocation_id INTEGER NOT NULL,
             date TEXT NOT NULL,
-            system_id TEXT NOT NULL,
-            block_id TEXT NOT NULL,
-            routes TEXT NOT NULL,
+            block_id TEXT,
+            route_numbers TEXT,
             start_time TEXT,
             end_time TEXT,
             first_seen TEXT,
-            last_seen TEXT
+            last_seen TEXT,
+            FOREIGN KEY (allocation_id) REFERENCES allocation (allocation_id)
         )
     ''',
     '''
@@ -30,35 +46,30 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS transfer (
-            transfer_id INTEGER PRIMARY KEY ASC,
-            agency_id TEXT NOT NULL,
-            bus_number TEXT NOT NULL,
-            date TEXT NOT NULL,
-            old_system_id TEXT NOT NULL,
-            new_system_id TEXT NOT NULL
-        )
-    ''',
-    '''
-        CREATE TABLE IF NOT EXISTS overview (
-            agency_id TEXT NOT NULL,
-            bus_number TEXT NOT NULL,
-            first_seen_date TEXT NOT NULL,
-            first_seen_system_id TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS allocation_record (
+            allocation_id INTEGER UNIQUE NOT NULL,
             first_record_id INTEGER,
-            last_seen_date TEXT NOT NULL,
-            last_seen_system_id TEXT NOT NULL,
             last_record_id INTEGER,
-            PRIMARY KEY (agency_id, bus_number),
+            FOREIGN KEY (allocation_id) REFERENCES allocation (allocation_id),
             FOREIGN KEY (first_record_id) REFERENCES record (record_id),
             FOREIGN KEY (last_record_id) REFERENCES record (record_id)
         )
     ''',
     '''
+        CREATE TABLE IF NOT EXISTS transfer (
+            transfer_id INTEGER PRIMARY KEY ASC,
+            date TEXT NOT NULL,
+            old_allocation_id INTEGER NOT NULL,
+            new_allocation_id INTEGER NOT NULL,
+            FOREIGN KEY (old_allocation_id) REFERENCES allocation (allocation_id),
+            FOREIGN KEY (new_allocation_id) REFERENCES allocation (allocation_id)
+        )
+    ''',
+    '''
         CREATE TABLE IF NOT EXISTS position (
-            system_id TEXT NOT NULL,
             agency_id TEXT NOT NULL,
-            bus_number TEXT NOT NULL,
+            vehicle_id TEXT NOT NULL,
+            system_id TEXT,
             trip_id TEXT,
             stop_id TEXT,
             block_id TEXT,
@@ -69,9 +80,19 @@ SQL_SCRIPTS = [
             bearing REAL,
             speed INTEGER,
             adherence INTEGER,
+            layover INTEGER,
             occupancy TEXT,
             timestamp REAL,
-            PRIMARY KEY (system_id, agency_id, bus_number)
+            PRIMARY KEY (agency_id, vehicle_id)
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS assignment (
+            block_id TEXT NOT NULL,
+            allocation_id INTEGER NOT NULL,
+            date TEXT NOT NULL,
+            PRIMARY KEY (block_id, allocation_id),
+            FOREIGN KEY (allocation_id) REFERENCES allocation (allocation_id)
         )
     ''',
     '''
@@ -83,6 +104,7 @@ SQL_SCRIPTS = [
             colour TEXT,
             text_colour TEXT,
             type TEXT,
+            sort_order INTEGER,
             PRIMARY KEY (system_id, route_id)
         )
     ''',
@@ -94,6 +116,8 @@ SQL_SCRIPTS = [
             name TEXT NOT NULL,
             lat REAL NOT NULL,
             lon REAL NOT NULL,
+            parent_id TEXT,
+            type TEXT,
             PRIMARY KEY (system_id, stop_id)
         )
     ''',
@@ -104,8 +128,8 @@ SQL_SCRIPTS = [
             route_id TEXT NOT NULL,
             service_id TEXT NOT NULL,
             block_id TEXT,
-            direction_id TEXT,
-            shape_id INTEGER,
+            direction_id INTEGER,
+            shape_id TEXT,
             headsign TEXT NOT NULL,
             PRIMARY KEY (system_id, trip_id),
             FOREIGN KEY (system_id, route_id) REFERENCES route (system_id, route_id)
@@ -138,18 +162,11 @@ SQL_SCRIPTS = [
             PRIMARY KEY (system_id, shape_id, sequence)
         )
     ''',
-    '''
-        CREATE TABLE IF NOT EXISTS assignment (
-            system_id TEXT NOT NULL,
-            block_id TEXT NOT NULL,
-            bus_number TEXT NOT NULL,
-            date TEXT NOT NULL,
-            PRIMARY KEY (system_id, block_id)
-        )
-    ''',
-    'CREATE INDEX IF NOT EXISTS record_bus_number ON record (bus_number)',
+    'CREATE INDEX IF NOT EXISTS allocation_agency_vehicle ON allocation (agency_id, vehicle_id)',
+    'CREATE INDEX IF NOT EXISTS record_allocation ON record (allocation_id)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',
-    'CREATE INDEX IF NOT EXISTS transfer_bus_number ON transfer (bus_number)',
+    'CREATE INDEX IF NOT EXISTS transfer_old_allocation ON transfer (old_allocation_id)',
+    'CREATE INDEX IF NOT EXISTS transfer_new_allocation ON transfer (new_allocation_id)',
     'CREATE INDEX IF NOT EXISTS departure_trip_id ON departure (trip_id)',
     'CREATE INDEX IF NOT EXISTS departure_stop_id ON departure (stop_id)'
 ]
@@ -160,7 +177,7 @@ class Database:
     name: str = 'abtracker'
     connection: sqlite3.Connection | None = field(default=None, init=False)
     
-    def connect(self, foreign_keys=True):
+    def connect(self, foreign_keys=True, run_scripts=True):
         '''Opens a connection to the database and runs setup scripts'''
         if self.connection:
             return
@@ -170,8 +187,9 @@ class Database:
         else:
             self.connection.execute('PRAGMA foreign_keys = 0')
         
-        for sql in SQL_SCRIPTS:
-            self.execute(sql)
+        if run_scripts:
+            for sql in SQL_SCRIPTS:
+                self.execute(sql)
         self.commit()
     
     def disconnect(self):
@@ -244,6 +262,32 @@ class Database:
         if where:
             return self.execute(f'UPDATE {table} SET {columns_string} WHERE {where}', values + args)
         return self.execute(f'UPDATE {table} SET {columns_string}', values)
+    
+    def upsert(self, table: str, conflict_column: str, insert_values: dict | list, update_values: dict):
+        sql = [f'INSERT INTO {table}']
+        
+        if type(insert_values) is dict:
+            insert_columns = insert_values.keys()
+            insert_values_list = list(insert_values.values())
+            insert_columns_string = ', '.join(insert_columns)
+            insert_values_string = ', '.join(['?'] * len(insert_values_list))
+            sql.append(f'({insert_columns_string}) VALUES ({insert_values_string})')
+        else:
+            if type(insert_values) is list:
+                insert_values_list = insert_values
+            else:
+                insert_values_list = [insert_values]
+            insert_values_string = ', '.join(['?'] * len(insert_values_list))
+            sql.append(f'VALUES ({insert_values_string})')
+        
+        sql.append(f'ON CONFLICT({conflict_column}) DO UPDATE SET')
+        
+        update_columns = update_values.keys()
+        update_values_list = list(update_values.values())
+        update_columns_string = ', '.join([c + ' = ?' for c in update_columns])
+        sql.append(update_columns_string)
+        
+        return self.execute(' '.join(sql), insert_values_list + update_values_list)
     
     def delete(self, table, filters=None, operation='AND'):
         '''Executes a DELETE script'''

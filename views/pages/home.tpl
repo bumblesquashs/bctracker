@@ -7,12 +7,12 @@
     <h1>Welcome to ABTracker!</h1>
     % if context.system:
         % if context.realtime_enabled:
-            <h2>{{ context }} Transit Schedules and Bus Tracking</h2>
+            <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
         % else:
             <h2>{{ context }} Transit Schedules</h2>
         % end
     % else:
-        <h2>Alberta Transit Schedules and Bus Tracking</h2>
+        <h2>Alberta Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
     % end
 </div>
 
@@ -25,14 +25,10 @@
             </div>
             <div class="content">
                 <script type="text/javascript">
-                    function busSearch() {
-                        let value = document.getElementById('bus_search').value;
+                    function vehicleSearch() {
+                        let value = document.getElementById('vehicle_search').value;
                         if (value.length > 0) {
-                            if (isNaN(value)) {
-                                alert("Please enter a valid bus number")
-                            } else {
-                                window.location = "{{ get_url(context, 'bus') }}/" + value;
-                            }
+                            window.location = "{{ get_url(context, 'bus') }}/" + value;
                         }
                     }
                     
@@ -64,10 +60,10 @@
                 
                 % if context.system:
                     % if context.realtime_enabled:
-                        <form onsubmit="busSearch()" action="javascript:void(0)">
-                            <label for="bus_search">Bus Number:</label>
+                        <form onsubmit="vehicleSearch()" action="javascript:void(0)">
+                            <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                             <div class="input-container">
-                                <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                                <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
                                 <input type="submit" value="Search" class="button">
                             </div>
                         </form>
@@ -89,18 +85,20 @@
                         </div>
                     </form>
                     
-                    <form onsubmit="blockSearch()" action="javascript:void(0)">
-                        <label for="block_search">Block ID:</label>
-                        <div class="input-container">
-                            <input type="text" id="block_search" name="block_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
+                    % if context.enable_blocks:
+                        <form onsubmit="blockSearch()" action="javascript:void(0)">
+                            <label for="block_search">Block ID:</label>
+                            <div class="input-container">
+                                <input type="text" id="block_search" name="block_search" method="post" size="10">
+                                <input type="submit" value="Search" class="button">
+                            </div>
+                        </form>
+                    % end
                 % else:
-                    <form onsubmit="busSearch()" action="javascript:void(0)">
-                        <label for="bus_search">Bus Number:</label>
+                    <form onsubmit="vehicleSearch()" action="javascript:void(0)">
+                        <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                         <div class="input-container">
-                            <input type="text" id="bus_search" name="bus_search" method="post" size="10">
+                            <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
@@ -117,7 +115,7 @@
                 <p>
                     Add up to 20 favourites using the
                     % include('components/svg', name='action/non-favourite')
-                    button on buses, routes, and stops.
+                    button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
                 </p>
                 % if favourites:
                     % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
@@ -130,25 +128,24 @@
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Bus</th>
+                                                <th>{{ context.vehicle_type }}</th>
                                                 <th>Headsign</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            % orders = {f.value.order for f in vehicle_favourites}
-                                            % for order in sorted(orders):
-                                                % order_favourites = [f for f in vehicle_favourites if f.value.order == order]
+                                            % for order in orders:
+                                                % order_favourites = [f for f in vehicle_favourites if f.value.order_id == order.id]
                                                 <tr class="header">
                                                     <td colspan="2">{{! order }}</td>
                                                 </tr>
                                                 <tr class="display-none"></tr>
                                                 % for favourite in order_favourites:
                                                     % value = favourite.value
-                                                    % position = repositories.position.find(value)
+                                                    % position = repositories.position.find(value.agency.id, value.id)
                                                     <tr>
                                                         <td>
                                                             <div class="row">
-                                                                % include('components/bus', bus=value)
+                                                                % include('components/vehicle', vehicle=value)
                                                                 % if position:
                                                                     <div class="row gap-5">
                                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
@@ -161,7 +158,7 @@
                                                             % if position and position.trip:
                                                                 % include('components/headsign', departure=position.departure, trip=position.trip)
                                                             % else:
-                                                                <div class="lighter-text">Not in service</div>
+                                                                <div class="lighter-text">Not In Service</div>
                                                             % end
                                                         </td>
                                                     </tr>
@@ -258,8 +255,8 @@
                     <div class="item">
                         <div class="column center">
                             % include('components/svg', name='realtime')
-                            <h3>Bus Tracking</h3>
-                            <p>See all buses that are currently active, including current route and location</p>
+                            <h3>{{ context.vehicle_type }} Tracking</h3>
+                            <p>See all {{ context.vehicle_type_plural.lower() }} that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
                             <a class="button" href="{{ get_url(context, 'realtime') }}">List</a>
@@ -276,7 +273,9 @@
                         <div class="button-container">
                             <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
                             <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
-                            <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                            % if context.enable_blocks:
+                                <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                            % end
                         </div>
                     </div>
                 </div>

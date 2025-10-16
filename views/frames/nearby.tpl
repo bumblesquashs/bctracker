@@ -12,10 +12,10 @@
         % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
-        % trips = [d.trip for d in upcoming_departures]
-        % recorded_today = repositories.record.find_recorded_today(stop.context, trips)
-        % assignments = repositories.assignment.find_all(stop.context, stop=stop)
-        % positions = {p.trip.id: p for p in repositories.position.find_all(stop.context, trip=trips)}
+        % trip_ids = [d.trip_id for d in upcoming_departures]
+        % recorded_today = repositories.record.find_recorded_today(stop.context, trip_ids)
+        % assignments = {a.block_id: a for a in repositories.assignment.find_all(stop.context, stop_id=stop.id)}
+        % positions = {p.trip.id: p for p in repositories.position.find_all(stop.context, trip_id=trip_ids)}
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
                 <div class="column">
@@ -30,7 +30,7 @@
                 % if upcoming_departures:
                     % if context.realtime_enabled:
                         <p>
-                            <span>Buses with a</span>
+                            <span>{{ context.vehicle_type_plural }} with a</span>
                             <span class="scheduled">
                                 % include('components/svg', name='schedule')
                             </span>
@@ -42,10 +42,12 @@
                             <tr>
                                 <th>Time</th>
                                 <th class="non-mobile">Headsign</th>
-                                <th class="desktop-only">Block</th>
+                                % if context.enable_blocks:
+                                    <th class="desktop-only">Block</th>
+                                % end
                                 <th>Trip</th>
                                 % if context.realtime_enabled:
-                                    <th>Bus</th>
+                                    <th>{{ context.vehicle_type }}</th>
                                     <th class="desktop-only">Model</th>
                                 % end
                             </tr>

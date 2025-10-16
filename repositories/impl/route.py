@@ -11,13 +11,13 @@ class RouteRepository:
     
     database: Database
     
-    def create(self, context: Context, row):
+    def create(self, context: Context, row: dict):
         '''Inserts a new route into the database'''
         try:
             colour = row['route_color']
             if colour == '':
                 raise ValueError('Colour must not be empty')
-            if colour == context.system.colour_routes:
+            if colour == context.ignore_route_colour:
                 raise ValueError('Colour must be auto-generated')
         except (KeyError, ValueError):
             colour = None
@@ -27,37 +27,56 @@ class RouteRepository:
                 raise ValueError('Text colour must not be empty')
         except (KeyError, ValueError):
             text_colour = None
-        type = int(row['route_type'])
+        try:
+            type = int(row['route_type'])
+        except (KeyError, ValueError):
+            type = None
+        try:
+            sort_order = int(row['route_sort_order'])
+        except (KeyError, ValueError):
+            sort_order = None
         route_id = row['route_id']
         number = row['route_short_name']
         if not number:
-            number = route_id
-        self.database.insert('route', {
-            'system_id': context.system_id,
-            'route_id': route_id,
-            'number': number,
-            'name': row['route_long_name'],
-            'colour': colour,
-            'text_colour': text_colour,
-            'type': type
-        })
+            try:
+                number = context.agency.custom_route_numbers[route_id]
+            except KeyError:
+                number = route_id
+        self.database.insert(
+            table='route',
+            values={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'route_id': route_id,
+                'number': number,
+                'name': row['route_long_name'],
+                'colour': colour,
+                'text_colour': text_colour,
+                'type': type,
+                'sort_order': sort_order
+            }
+        )
     
-    def find(self, context: Context, route_id=None, number=None) -> Route | None:
+    def find(self, context: Context, route_id: str | None = None, number: str | None = None) -> Route | None:
         '''Returns the route with the given context and route ID'''
-        routes = self.database.select('route',
-            columns={
-                'route.system_id': 'system_id',
-                'route.route_id': 'id',
-                'route.number': 'number',
-                'route.name': 'name',
-                'route.colour': 'colour',
-                'route.text_colour': 'text_colour',
-                'route.type': 'type'
-            },
+        routes = self.database.select(
+            table='route',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'route_id',
+                'number',
+                'name',
+                'colour',
+                'text_colour',
+                'type',
+                'sort_order'
+            ],
             filters={
-                'route.system_id': context.system_id,
-                'route.route_id': route_id,
-                'route.number': number
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'route_id': route_id,
+                'number': number
             },
             limit=1,
             initializer=Route.from_db
@@ -67,21 +86,24 @@ class RouteRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, type=None, limit=None) -> list[Route]:
+    def find_all(self, context: Context, limit: int | None = None) -> list[Route]:
         '''Returns all routes that match the given context'''
-        return self.database.select('route',
-            columns={
-                'route.system_id': 'system_id',
-                'route.route_id': 'id',
-                'route.number': 'number',
-                'route.name': 'name',
-                'route.colour': 'colour',
-                'route.text_colour': 'text_colour',
-                'route.type': 'type'
-            },
+        return self.database.select(
+            table='route',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'route_id',
+                'number',
+                'name',
+                'colour',
+                'text_colour',
+                'type',
+                'sort_order'
+            ],
             filters={
-                'route.system_id': context.system_id,
-                'route.type': type
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id
             },
             limit=limit,
             initializer=Route.from_db
@@ -89,6 +111,10 @@ class RouteRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all routes for the given context from the database'''
-        self.database.delete('route', {
-            'system_id': context.system_id
-        })
+        self.database.delete(
+            table='route',
+            filters={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id
+            }
+        )

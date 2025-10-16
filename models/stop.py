@@ -3,11 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
+from enum import Enum
 from math import sqrt
 
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.route import Route
@@ -18,16 +21,48 @@ from models.sheet import Sheet
 import helpers
 import repositories
 
+class StopType(Enum):
+    '''Options for stop types'''
+    
+    STOP = '0'
+    STATION = '1'
+    ENTRANCE_EXIT = '2'
+    NODE = '3'
+    BOARDING_AREA = '4'
+    
+    @classmethod
+    def from_db(cls, value):
+        try:
+            return cls(value)
+        except:
+            return cls.STOP
+    
+    def __str__(self):
+        match self:
+            case StopType.STOP:
+                return 'Stop'
+            case StopType.STATION:
+                return 'Station'
+            case StopType.ENTRANCE_EXIT:
+                return 'Entrance/Exit'
+            case StopType.NODE:
+                return 'Node'
+            case StopType.BOARDING_AREA:
+                return 'Boarding Area'
+
 @dataclass(slots=True)
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
+    agency: Agency
     system: System
     id: str
     number: str
     name: str
     lat: float
     lon: float
+    parent_id: str | None
+    type: StopType
     
     key: str = field(init=False)
     
@@ -35,17 +70,19 @@ class Stop:
     def from_db(cls, row: Row):
         '''Returns a stop initialized from the given database row'''
         context = row.context()
-        id = row['id']
+        id = row['stop_id']
         number = row['number'] or id
         name = row['name']
         lat = row['lat']
         lon = row['lon']
-        return cls(context.system, id, number, name, lat, lon)
+        parent_id = row['parent_id']
+        type = StopType.from_db(row['type'])
+        return cls(context.agency, context.system, id, number, name, lat, lon, parent_id, type)
     
     @property
     def context(self):
         '''The context for this stop'''
-        return self.system.context
+        return Context(self.agency, self.system)
     
     @property
     def url_id(self):
@@ -55,15 +92,9 @@ class Stop:
         return self.number
     
     @property
-    def nearby_stops(self):
-        '''Returns all stops with coordinates close to this stop'''
-        stops = self.system.get_stops()
-        return sorted({s for s in stops if s.is_near(self.lat, self.lon) and self != s})
-    
-    @property
     def cache(self):
         '''Returns the cache for this stop'''
-        return self.system.get_stop_cache(self)
+        return self.system.get_stop_cache(self.id)
     
     @property
     def schedule(self):
@@ -138,16 +169,12 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = repositories.departure.find_all(self.context, stop=self)
+        departures = repositories.departure.find_all(self.context, stop_id=self.id)
         if service_group:
             return sorted([d for d in departures if d.trip and d.trip.service in service_group])
         if date:
             return sorted([d for d in departures if d.trip and date in d.trip.service])
         return sorted(departures)
-    
-    def find_adjacent_departures(self):
-        '''Returns all departures on trips that serve this stop'''
-        return repositories.departure.find_adjacent(self.context, self)
 
 @dataclass(slots=True)
 class StopCache:

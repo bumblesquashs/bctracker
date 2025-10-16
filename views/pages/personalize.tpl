@@ -103,7 +103,7 @@
             </div>
             <div class="content">
                 <p>You can choose whether times are displayed as 12hr or 30hr.</p>
-                <p>Since buses running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
+                <p>Since {{ context.vehicle_type_plural.lower() }} running between midnight and early morning are considered part of the previous day's schedule, both formats modify how those times are shown.</p>
                 <div class="options-container">
                     <div class="option" onclick="setTimeFormat('12hr')">
                         <div class="radio-button {{ 'selected' if time_format == '12hr' else '' }}"></div>
@@ -126,32 +126,38 @@
     <div class="container flex-1">
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
-                <h2>Map Bus Icon Style</h2>
+                <h2>Map {{ context.vehicle_type }} Icon Style</h2>
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>Choose a style for bus icons shown on the map screen.</p>
+                <p>Choose a style for {{ context.vehicle_type.lower() }} icons shown on the map screen.</p>
                 <div class="options-container">
-                    <div class="option" onclick="setBusMarkerStyle('default')">
-                        <div class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
-                        <div>Bus Type</div>
+                    <div class="option" onclick="setVehicleMarkerStyle('default')">
+                        <div class="radio-button {{ 'selected' if not vehicle_marker_style or vehicle_marker_style == 'default' else '' }}"></div>
+                        <div>Vehicle Type</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('mini')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('mini')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'mini' else '' }}"></div>
                         <div>Mini</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('route')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('route')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'route' else '' }}"></div>
                         <div>Route Number</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('adherence')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('adherence')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'adherence' else '' }}"></div>
                         <div>Schedule Adherence</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('occupancy')">
-                        <div class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('occupancy')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'occupancy' else '' }}"></div>
                         <div>Occupancy</div>
                     </div>
+                    % if show_speed:
+                        <div class="option" onclick="setVehicleMarkerStyle('speed')">
+                            <div class="radio-button {{ 'selected' if vehicle_marker_style == 'speed' else '' }}"></div>
+                            <div>Speed</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>
@@ -183,7 +189,7 @@
         window.location = "?time_format=" + format;
     }
     
-    function setBusMarkerStyle(style) {
-        window.location = "?bus_marker_style=" + style;
+    function setVehicleMarkerStyle(style) {
+        window.location = "?vehicle_marker_style=" + style;
     }
 </script>

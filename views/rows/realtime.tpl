@@ -1,12 +1,13 @@
 
-% bus = position.bus
+% vehicle = position.vehicle
 % trip = position.trip
+% stop = position.stop
 
 <tr>
     <td>
         <div class="column">
             <div class="row">
-                % include('components/bus')
+                % include('components/vehicle')
                 <div class="row gap-5">
                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                     % include('components/adherence', adherence=position.adherence)
@@ -22,7 +23,6 @@
     % end
     % if trip:
         % block = trip.block
-        % stop = position.stop
         <td>
             <div class="column">
                 % include('components/headsign', departure=position.departure)
@@ -38,16 +38,28 @@
                 % end
             </div>
         </td>
-        <td class="non-mobile">
-            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-        </td>
+        % if context.enable_blocks:
+            <td class="non-mobile">
+                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+            </td>
+        % end
         <td class="non-mobile">
             % include('components/trip')
         </td>
-        <td class="desktop-only">
-            % include('components/stop')
-        </td>
     % else:
-        <td class="lighter-text" colspan="4">Not in service</td>
+        <td colspan="3">
+            <div class="column">
+                <div class="lighter-text">Not In Service</div>
+                % if stop:
+                    <div class="non-desktop smaller-font">
+                        <span class="align-middle">Next Stop:</span>
+                        % include('components/stop')
+                    </div>
+                % end
+            </div>
+        </td>
     % end
+    <td class="desktop-only">
+        % include('components/stop')
+    </td>
 </tr>

@@ -1,56 +1,8 @@
-# BCTracker
+# ABTracker
 
-A GTFS schedule browser and realtime bus tracker for transit in BC.
+A GTFS schedule browser and realtime bus tracker for transit in Alberta.
 
-Available at https://bctracker.ca
-
-## Agencies
-
-- BC Transit
-- Denman Island Bus
-- Gertie
-- Hornby Bus
-
-## Systems
-
-- 100 Mile House
-- Ashcroft-Clinton
-- Campbell River
-- Clearwater
-- Comox Valley
-- Cowichan Valley
-- Creston Valley
-- Dawson Creek
-- Denman Island
-- East Kootenay
-- Fort St. John
-- Fraser Valley
-- Gabriola Island
-- Hornby Island
-- Kamloops
-- Kelowna
-- Kitimat-Stikine
-- Merritt
-- Mount Waddington
-- Nanaimo
-- North Okanagan
-- Pemberton
-- Port Alberni
-- Prince George
-- Prince Rupert
-- Powell River
-- Quesnel
-- Revelstoke
-- Salt Spring Island
-- Smithers
-- South Okanagan
-- Squamish
-- Sunshine Coast
-- Victoria
-- West Coast
-- West Kootenay
-- Whistler
-- Williams Lake
+Available at https://abtracker.ca
 
 ## Running the project
 

@@ -28,6 +28,8 @@
     --status-bar-hover: #193A5A;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #666666;
+    
     --loading-background: #FFFFFF;
     --loading-foreground: #2886B9;
     
@@ -43,8 +45,13 @@
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
     
+<<<<<<< HEAD:style/themes/edmonton-transit.light.css
     --beta-tag-background: #193A5A;
     --beta-tag-text: #FFFFFF;
+=======
+    --amenity-background: #CBCBCB;
+    --amenity-color: #000000;
+>>>>>>> 353126089f3f6a108c61dfa701b2cce77b80e286:style/themes/bc-transit-classic.css
 }
 
 a {
@@ -78,10 +85,6 @@ input[type="text"]:focus {
     border-color: #193A5A;
 }
 
-table {
-    border-color: #666666;
-}
-
 table tbody tr:hover {
     background-color: #CBCBCB;
 }
@@ -91,14 +94,9 @@ table tbody tr.header {
     color: #FFFFFF;
 }
 
-table td {
-    border-color: #666666;
-}
-
 table th {
     background-color: #2886B9;
     color: #FFFFFF;
-    border-color: #666666;
 }
 
 table tr {
@@ -341,7 +339,7 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
 }
 
@@ -372,6 +370,10 @@ table tr.table-button:hover {
     --image-color: #666666;
 }
 
+.paging {
+    --image-color: #666666;
+}
+
 .paging .page {
     background-color: #E6E6E6;
     color: #000000;
@@ -388,10 +390,6 @@ table tr.table-button:hover {
 
 .paging .page.current:hover {
     background-color: #2886B9;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

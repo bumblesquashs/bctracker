@@ -29,7 +29,7 @@ class SystemRepository:
                             values['timezone'] = pytz.timezone(values['timezone'])
                         self.systems[id] = System(id, agency, region, **values)
     
-    def find(self, system_id) -> System | None:
+    def find(self, system_id: str) -> System | None:
         '''Returns the system with the given ID'''
         return self.systems.get(system_id)
     

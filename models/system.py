@@ -17,7 +17,7 @@ from models.trip import Trip, TripCache
 
 import repositories
 
-from constants import DEFAULT_TIMEZONE
+from constants import *
 
 @dataclass(slots=True)
 class System:
@@ -31,7 +31,10 @@ class System:
     remote_id: int | None = None
     enabled: bool = True
     timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
-    colour_routes: str | None = None
+    ignore_route_colour: str | None = DEFAULT_IGNORE_ROUTE_COLOUR
+    enable_force_gtfs: bool = DEFAULT_ENABLE_FORCE_GTFS
+    gtfs_cutoff: str | None = DEFAULT_GTFS_CUTOFF
+    max_invalid_positions: int = DEFAULT_MAX_INVALID_POSITIONS
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)
@@ -93,7 +96,8 @@ class System:
     @property
     def schedule(self):
         '''The overall service schedule for this system'''
-        return Schedule.combine(self.get_services())
+        services = [s for s in self.get_services() if s.schedule.dates]
+        return Schedule.combine(services)
     
     def __post_init__(self):
         self.reload_backoff = Backoff(max_target=2**8)
@@ -122,9 +126,9 @@ class System:
         '''Returns all blocks'''
         return sorted(self.blocks.values())
     
-    def get_overviews(self):
-        '''Returns all overviews'''
-        return repositories.overview.find_all(last_seen_context=self.context)
+    def get_allocations(self):
+        '''Returns all allocations'''
+        return repositories.allocation.find_all(self.context, active=True)
     
     def get_positions(self):
         '''Returns all positions'''
@@ -196,9 +200,19 @@ class System:
         '''Returns all stops that match the given query'''
         return [s.get_match(query) for s in self.stops.values()]
     
-    def get_route_cache(self, route):
+    def update_route_caches(self, route_ids: list[str]):
+        missing_route_ids = [id for id in route_ids if id not in self.route_caches]
+        if not missing_route_ids:
+            return
+        trips = repositories.trip.find_all(self.context, route_id=missing_route_ids)
+        trips_by_route = {}
+        for trip in trips:
+            trips_by_route.setdefault(trip.route_id, []).append(trip)
+        for (route_id, route_trips) in trips_by_route.items():
+            self.route_caches[route_id] = RouteCache.build(self, route_trips)
+    
+    def get_route_cache(self, route_id: str):
         '''Returns the cache for the given route'''
-        route_id = getattr(route, 'id', route)
         try:
             return self.route_caches[route_id]
         except KeyError:
@@ -207,24 +221,44 @@ class System:
             self.route_caches[route_id] = cache
             return cache
     
-    def get_stop_cache(self, stop):
+    def update_stop_caches(self, stop_ids: list[str]):
+        missing_stop_ids = [id for id in stop_ids if id not in self.stop_caches]
+        if not missing_stop_ids:
+            return
+        departures = repositories.departure.find_all(self.context, stop_id=missing_stop_ids)
+        departures_by_stop = {}
+        for departure in departures:
+            departures_by_stop.setdefault(departure.stop_id, []).append(departure)
+        for (stop_id, stop_departures) in departures_by_stop.items():
+            self.stop_caches[stop_id] = StopCache.build(self, stop_departures)
+    
+    def get_stop_cache(self, stop_id: str):
         '''Returns the cache for the given stop'''
-        stop_id = getattr(stop, 'id', stop)
         try:
             return self.stop_caches[stop_id]
         except KeyError:
-            departures = repositories.departure.find_all(self.context, stop=stop)
+            departures = repositories.departure.find_all(self.context, stop_id=stop_id)
             cache = StopCache.build(self, departures)
             self.stop_caches[stop_id] = cache
             return cache
     
-    def get_trip_cache(self, trip):
+    def update_trip_caches(self, trip_ids: list[str]):
+        missing_trip_ids = [id for id in trip_ids if id not in self.trip_caches]
+        if not missing_trip_ids:
+            return
+        departures = repositories.departure.find_all(self.context, trip_id=missing_trip_ids)
+        departures_by_trip = {}
+        for departure in departures:
+            departures_by_trip.setdefault(departure.trip_id, []).append(departure)
+        for (trip_id, trip_departures) in departures_by_trip.items():
+            self.trip_caches[trip_id] = TripCache.build(trip_departures)
+    
+    def get_trip_cache(self, trip_id: str):
         '''Returns the cache for the given trip'''
-        trip_id = getattr(trip, 'id', trip)
         try:
             return self.trip_caches[trip_id]
         except KeyError:
-            departures = repositories.departure.find_all(self.context, trip=trip)
+            departures = repositories.departure.find_all(self.context, trip_id=trip_id)
             cache = TripCache.build(departures)
             self.trip_caches[trip_id] = cache
             return cache

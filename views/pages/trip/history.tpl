@@ -32,9 +32,8 @@
                                 % include('components/events_list', events=events)
                             </div>
                             <div class="column section">
-                                % orders = sorted({r.bus.order for r in records if r.bus.order})
                                 % for order in orders:
-                                    % percentage = (len([r for r in records if r.bus.order == order]) / len(records)) * 100
+                                    % percentage = (sum(1 for r in records if r.vehicle.order_id == order.id) / len(records)) * 100
                                     <div class="row space-between">
                                         <div>{{! order }}</div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
@@ -55,7 +54,7 @@
                 </div>
                 <div class="content">
                     % if records:
-                        % if [r for r in records if r.warnings]:
+                        % if any(r.warnings for r in records):
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">
@@ -64,49 +63,51 @@
                                 <span>may be accidental logins.</span>
                             </p>
                         % end
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Bus</th>
-                                    <th class="desktop-only">Model</th>
-                                    <th class="no-wrap non-mobile">First Seen</th>
-                                    <th class="no-wrap">Last Seen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % last_date = None
-                                % for record in records:
-                                    % bus = record.bus
-                                    % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
-                                        <tr class="header">
-                                            <td colspan="5">{{ record.date.format_month() }}</td>
-                                            <tr class="display-none"></tr>
+                        <div class="table-border-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>{{ context.vehicle_type }}</th>
+                                        <th class="desktop-only">Model</th>
+                                        <th class="no-wrap non-mobile">First Seen</th>
+                                        <th class="no-wrap">Last Seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    % last_date = None
+                                    % for record in records:
+                                        % vehicle = record.vehicle
+                                        % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
+                                            <tr class="header">
+                                                <td colspan="5">{{ record.date.format_month() }}</td>
+                                                <tr class="display-none"></tr>
+                                            </tr>
+                                        % end
+                                        % last_date = record.date
+                                        <tr>
+                                            <td>{{ record.date.format_day() }}</td>
+                                            <td>
+                                                <div class="column stretch">
+                                                    <div class="row space-between">
+                                                        % include('components/vehicle')
+                                                        % include('components/record_warnings')
+                                                    </div>
+                                                    <span class="non-desktop smaller-font">
+                                                        % include('components/year_model', year_model=vehicle.year_model)
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="desktop-only">
+                                                % include('components/year_model', year_model=vehicle.year_model)
+                                            </td>
+                                            <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
+                                            <td>{{ record.last_seen.format_web(time_format) }}</td>
                                         </tr>
                                     % end
-                                    % last_date = record.date
-                                    <tr>
-                                        <td>{{ record.date.format_day() }}</td>
-                                        <td>
-                                            <div class="column">
-                                                <div class="row">
-                                                    % include('components/bus')
-                                                    % include('components/record_warnings')
-                                                </div>
-                                                <span class="non-desktop smaller-font">
-                                                    % include('components/order', order=bus.order)
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="desktop-only">
-                                            % include('components/order', order=bus.order)
-                                        </td>
-                                        <td class="non-mobile">{{ record.first_seen.format_web(time_format) }}</td>
-                                        <td>{{ record.last_seen.format_web(time_format) }}</td>
-                                    </tr>
-                                % end
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     % else:
                         <div class="placeholder">
                             <h3>This trip doesn't have any recorded history</h3>
@@ -114,7 +115,7 @@
                             <ol>
                                 <li>It may be a new trip introduced in the last service change</li>
                                 <li>It may not be operating due to driver or vehicle shortages</li>
-                                <li>It may have only been done by buses without functional tracking equipment installed</li>
+                                <li>It may have only been done by {{ context.vehicle_type_plural.lower() }} without functional tracking equipment installed</li>
                             </ol>
                             <p>Please check again later!</p>
                         </div>

@@ -13,7 +13,7 @@
             % expected_time = None
             % if trip.id in positions:
                 % position = positions[trip.id]
-                % if position.adherence and position.adherence.value != 0:
+                % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
                     % expected_time = departure.time - timedelta(minutes=position.adherence.value)
                 % end
             % end
@@ -46,13 +46,15 @@
             % end
         </div>
     </td>
-    <td class="desktop-only">
-        % if block:
-            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-        % else:
-            <span class="lighter-text">Loading</span>
-        % end
-    </td>
+    % if context.enable_blocks:
+        <td class="desktop-only">
+            % if block:
+                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+            % else:
+                <span class="lighter-text">Loading</span>
+            % end
+        </td>
+    % end
     <td>
         <div class="column">
             % include('components/trip')
@@ -71,11 +73,11 @@
     </td>
     % if context.realtime_enabled:
         % if trip.id in recorded_today:
-            % bus = recorded_today[trip.id]
+            % vehicle = recorded_today[trip.id]
             <td>
                 <div class="column">
                     <div class="row">
-                        % include('components/bus')
+                        % include('components/vehicle')
                         % if trip.id in positions:
                             % position = positions[trip.id]
                             <div class="row gap-5">
@@ -85,29 +87,29 @@
                         % end
                     </div>
                     <span class="non-desktop smaller-font">
-                        % include('components/order', order=bus.order)
+                        % include('components/year_model', year_model=vehicle.year_model)
                     </span>
                 </div>
             </td>
             <td class="desktop-only">
-                % include('components/order', order=bus.order)
+                % include('components/year_model', year_model=vehicle.year_model)
             </td>
-        % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
-            % assignment = assignments[(trip.context.system_id, trip.block_id)]
-            % bus = assignment.bus
+        % elif trip.block_id in assignments and trip.end_time.is_later:
+            % assignment = assignments[trip.block_id]
+            % vehicle = assignment.vehicle
             <td>
                 <div class="column">
                     <div class="row">
-                        % include('components/bus')
+                        % include('components/vehicle')
                         % include('components/scheduled')
                     </div>
                     <span class="non-desktop smaller-font">
-                        % include('components/order', order=bus.order)
+                        % include('components/year_model', year_model=vehicle.year_model)
                     </span>
                 </div>
             </td>
             <td class="desktop-only">
-                % include('components/order', order=bus.order)
+                % include('components/year_model', year_model=vehicle.year_model)
             </td>
         % else:
             <td class="desktop-only lighter-text" colspan="2">Unavailable</td>

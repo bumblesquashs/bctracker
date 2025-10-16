@@ -3,6 +3,12 @@
 
 <div id="page-header">
     <h1>Stops</h1>
+    % if show_stations_tab:
+        <div class="tab-button-bar">
+            <span class="tab-button current">Stops</span>
+            <a href="{{ get_url(context, 'stops', 'stations') }}" class="tab-button">Stations</a>
+        </div>
+    % end
 </div>
 
 % if context.system:
@@ -233,57 +239,59 @@
 % else:
     <div class="placeholder">
         <p>Choose a system to see individual stops.</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>System</th>
-                    <th class="non-mobile align-right">Stops</th>
-                    <th>Service Days</th>
-                </tr>
-            </thead>
-            <tbody>
-                % for region in regions:
-                    % region_systems = [s for s in systems if s.region == region]
-                    % if region_systems:
-                        <tr class="header">
-                            <td colspan="3">
-                                {{ region }}
-                            </td>
-                        </tr>
-                        <tr class="display-none"></tr>
-                        % for system in sorted(region_systems):
-                            % count = len(system.get_stops())
-                            <tr>
-                                <td>
-                                    <div class="row">
-                                        % include('components/agency_logo', agency=system.agency)
-                                        <div class="column">
-                                            <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
-                                            <span class="mobile-only smaller-font">
-                                                % if system.gtfs_loaded:
-                                                    % if count == 1:
-                                                        1 Stop
-                                                    % else:
-                                                        {{ count }} Stops
-                                                    % end
-                                                % end
-                                            </span>
-                                        </div>
-                                    </div>
+        <div class="table-border-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>System</th>
+                        <th class="non-mobile align-right">Stops</th>
+                        <th>Service Days</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    % for region in regions:
+                        % region_systems = [s for s in systems if s.region == region]
+                        % if region_systems:
+                            <tr class="header">
+                                <td colspan="3">
+                                    {{ region }}
                                 </td>
-                                % if system.gtfs_loaded:
-                                    <td class="non-mobile align-right">{{ count }}</td>
-                                    <td>
-                                        % include('components/weekdays', schedule=system.schedule, compact=True)
-                                    </td>
-                                % else:
-                                    <td class="lighter-text" colspan="2">Stops are loading...</td>
-                                % end
                             </tr>
+                            <tr class="display-none"></tr>
+                            % for system in sorted(region_systems):
+                                % count = len(system.get_stops())
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            % include('components/agency_logo', agency=system.agency)
+                                            <div class="column">
+                                                <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+                                                <span class="mobile-only smaller-font">
+                                                    % if system.gtfs_loaded:
+                                                        % if count == 1:
+                                                            1 Stop
+                                                        % else:
+                                                            {{ count }} Stops
+                                                        % end
+                                                    % end
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    % if system.gtfs_loaded:
+                                        <td class="non-mobile align-right">{{ count }}</td>
+                                        <td>
+                                            % include('components/weekdays', schedule=system.schedule, compact=True)
+                                        </td>
+                                    % else:
+                                        <td class="lighter-text" colspan="2">Stops are loading...</td>
+                                    % end
+                                </tr>
+                            % end
                         % end
                     % end
-                % end
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 % end

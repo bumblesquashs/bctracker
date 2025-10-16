@@ -3,23 +3,24 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
 from typing import Self
 
+from models.context import Context
 from models.match import Match
 from models.schedule import Schedule
 from models.sheet import Sheet
 from models.time import Time
 from models.trip import Trip
 
-import repositories
-
 @dataclass(slots=True)
 class Block:
-    '''A list of trips that are operated by the same bus sequentially'''
+    '''A list of trips that are operated by the same vehicle sequentially'''
     
+    agency: Agency
     system: System
     id: str
     trips: list[Trip]
@@ -32,7 +33,7 @@ class Block:
     @property
     def context(self):
         '''The context for this block'''
-        return self.system.context
+        return Context(self.agency, self.system)
     
     @property
     def url_id(self):
@@ -130,7 +131,3 @@ class Block:
         else:
             message = f'Routes {routes}'
         return Match(f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)
-    
-    def find_departures(self):
-        '''Returns all departures for this block'''
-        return repositories.departure.find_all(self.context, block=self)

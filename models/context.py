@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.agency import Agency
     from models.system import System
+    from models.vehicle import Vehicle
 
 from dataclasses import dataclass
 
@@ -120,10 +121,64 @@ class Context:
         return DEFAULT_DISTANCE_SCALE
     
     @property
+    def enable_blocks(self):
+        if self.agency:
+            return self.agency.enable_blocks
+        return DEFAULT_ENABLE_BLOCKS
+    
+    @property
+    def nis_colour(self):
+        if self.agency:
+            return self.agency.nis_colour
+        return DEFAULT_NIS_COLOUR
+    
+    @property
+    def default_route_colour(self):
+        if self.agency:
+            return self.agency.default_route_colour
+        return DEFAULT_ROUTE_COLOUR
+    
+    @property
+    def filter_vehicles_image_name(self):
+        if self.agency:
+            return self.agency.filter_vehicles_image_name
+        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    
+    @property
+    def vehicle_type(self):
+        if self.agency:
+            return self.agency.vehicle_type
+        return DEFAULT_VEHICLE_TYPE
+    
+    @property
+    def vehicle_type_plural(self):
+        if self.agency:
+            return self.agency.vehicle_type_plural
+        return DEFAULT_VEHICLE_TYPE_PLURAL
+    
+    @property
     def invalid_realtime_percentage(self):
         if self.agency:
             return self.agency.invalid_realtime_percentage
         return DEFAULT_INVALID_REALTIME_PERCENTAGE
+    
+    @property
+    def ignore_route_colour(self):
+        if self.system:
+            return self.system.ignore_route_colour
+        return DEFAULT_IGNORE_ROUTE_COLOUR
+    
+    @property
+    def gtfs_cutoff(self):
+        if self.system:
+            return self.system.gtfs_cutoff
+        return DEFAULT_GTFS_CUTOFF
+    
+    @property
+    def max_invalid_positions(self):
+        if self.system:
+            return self.system.max_invalid_positions
+        return DEFAULT_MAX_INVALID_POSITIONS
     
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
@@ -158,3 +213,27 @@ class Context:
         if not other.agency:
             return False
         return self.agency < other.agency
+    
+    def without_system(self):
+        return Context(self.agency)
+    
+    def find_vehicle(self, id: str) -> Vehicle:
+        return repositories.order.find_vehicle(self, id)
+    
+    def search_placeholder_text(self):
+        '''Search placeholder text to display for this context'''
+        if self.system:
+            values = []
+            if self.realtime_enabled:
+                values.append(self.vehicle_type_plural.lower())
+            values.append('routes')
+            values.append('stops')
+            if self.enable_blocks:
+                values.append('blocks')
+            if len(values) == 1:
+                return f'Search for {self} {values[0]}'
+            if len(values) == 2:
+                return f'Search for {self} {values[0]} and {values[1]}'
+            values_string = ', '.join(values[:-1])
+            return f'Search for {self} {values_string}, and {values[-1]}'
+        return f'Search for {self.vehicle_type_plural.lower()} in all systems'

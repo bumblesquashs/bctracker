@@ -7,7 +7,7 @@ from models.decoration import Decoration
 @dataclass(slots=True)
 class DecorationRepository:
     
-    decorations: dict[str, dict[int, Decoration]] = field(default_factory=dict)
+    decorations: dict[str, dict[str, Decoration]] = field(default_factory=dict)
     
     def load(self):
         '''Loads decoration data from the static JSON file'''
@@ -15,14 +15,13 @@ class DecorationRepository:
         with open(f'./static/decorations.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency_decorations = {}
-                for (bus_number, values) in agency_values.items():
-                    bus_number = int(bus_number)
-                    agency_decorations[bus_number] = Decoration(agency_id, bus_number, **values)
+                for (vehicle_id, values) in agency_values.items():
+                    agency_decorations[vehicle_id] = Decoration(agency_id, vehicle_id, **values)
                 self.decorations[agency_id] = agency_decorations
     
-    def find(self, bus) -> Decoration | None:
-        '''Returns the decorations with the given bus number'''
+    def find(self, agency_id: str, vehicle_id: str) -> Decoration | None:
+        '''Returns the decorations with the given vehicle ID'''
         try:
-            return self.decorations[bus.context.agency_id][bus.order.without_prefix(bus.number)]
+            return self.decorations[agency_id][vehicle_id]
         except KeyError:
             return None

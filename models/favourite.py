@@ -1,10 +1,10 @@
 
 from dataclasses import dataclass
 
-from models.bus import Bus
 from models.context import Context
 from models.route import Route
 from models.stop import Stop
+from models.vehicle import Vehicle
 
 import repositories
 
@@ -13,7 +13,7 @@ class Favourite:
     '''A vehicle, route, or stop selected by a user to have quick access to'''
     
     type: str
-    value: Bus | Route | Stop
+    value: Vehicle | Route | Stop
     
     @classmethod
     def parse(cls, string):
@@ -22,7 +22,7 @@ class Favourite:
         type = parts[0]
         if type == 'vehicle':
             context = Context.find(agency_id=parts[1])
-            value = Bus.find(context, parts[2])
+            value = context.find_vehicle(parts[2])
         elif type == 'route':
             context = Context.find(system_id=parts[1])
             if context.prefer_route_id:
@@ -44,7 +44,7 @@ class Favourite:
     def __str__(self):
         if self.type == 'vehicle':
             source = self.value.context.agency_id
-            number = self.value.number
+            number = self.value.id
         elif self.type == 'route':
             source = self.value.context.system_id
             if self.value.context.prefer_route_id:

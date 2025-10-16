@@ -1,14 +1,14 @@
-<div class="bus">
-    % if bus.is_known and get('enable_link', True):
+<div class="vehicle">
+    % if vehicle.is_known and get('enable_link', True):
         % if context.system:
-            <a href="{{ get_url(context, 'bus', bus) }}">{{ bus }}</a>
+            <a href="{{ get_url(context, 'bus', vehicle) }}">{{ vehicle }}</a>
         % else:
-            <a href="{{ get_url(bus.context, 'bus', bus.context.agency, bus) }}">{{ bus }}</a>
+            <a href="{{ get_url(context, 'bus', vehicle.context.agency, vehicle) }}">{{ vehicle }}</a>
         % end
     % else:
-        <div>{{ bus }}</div>
+        <div>{{ vehicle }}</div>
     % end
-    % decoration = bus.find_decoration()
+    % decoration = vehicle.find_decoration()
     % if decoration and decoration.enabled:
         <div class="decoration tooltip-anchor">
             {{ decoration }}

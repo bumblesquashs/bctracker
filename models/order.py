@@ -2,24 +2,21 @@
 from dataclasses import dataclass, field
 
 from models.agency import Agency
-from models.bus import Bus
 from models.model import Model
+from models.vehicle import Vehicle
 
 @dataclass(slots=True)
 class Order:
-    '''A range of buses of a specific model ordered in a specific year'''
+    '''A set of vehicles of a specific model'''
     
+    id: int
     agency: Agency
-    model: Model
-    low: int
-    high: int
-    prefix: str | None = None
-    year: int | None = None
-    visible: bool = True
-    demo: bool = False
-    exceptions: set[int] = field(default_factory=set)
+    model: Model | None
+    vehicles: list[Vehicle]
     
-    size: int = field(init=False)
+    key: tuple = field(init=False)
+    years: int = field(init=False)
+    visible: bool = field(init=False)
     
     @property
     def context(self):
@@ -27,83 +24,100 @@ class Order:
         return self.agency.context
     
     @property
-    def first_bus(self):
-        '''The first bus in the order'''
-        return Bus(self.agency, self.with_prefix(self.low), self)
-    
-    @property
-    def last_bus(self):
-        '''The last bus in the order'''
-        return Bus(self.agency, self.with_prefix(self.high), self)
+    def years_string(self) -> str:
+        if self.years:
+            if len(self.years) == 1:
+                return str(self.years[0])
+            return f'{self.years[0]}-{self.years[-1]}'
+        return 'Unknown Year'
     
     def __post_init__(self):
-        self.size = (self.high - self.low) + 1 - len(self.exceptions)
+        self.key = min([b.key for b in self.vehicles])
+        self.years = sorted({b.year for b in self.vehicles})
+        self.visible = any(b.visible for b in self.vehicles)
     
     def __str__(self):
-        model = self.model
-        year = self.year
-        if model and year:
-            return f'{year} {model}'
+        if self.model:
+            if self.years:
+                if len(self.years) == 1:
+                    return f'{self.years[0]} {self.model}'
+                return f'{self.years[0]}-{self.years[-1]} {self.model}'
+            return str(self.model)
         return 'Unknown year/model'
     
     def __hash__(self):
-        return hash((self.context, self.prefix, self.low, self.high))
+        return hash(self.id)
     
     def __eq__(self, other):
-        return self.context == other.context and self.prefix == other.prefix and self.low == other.low and self.high == other.high
+        return self.id == other.id
     
     def __lt__(self, other):
-        if self.context == other.context:
-            if self.prefix and other.prefix and self.prefix != other.prefix:
-                return self.prefix < other.prefix
-            if self.prefix and not other.prefix:
-                return False
-            if not self.prefix and other.prefix:
-                return True
-            return self.low < other.low
-        return self.context < other.context
+        if self.agency == other.agency:
+            return self.key < other.key
+        return self.agency < other.agency
     
-    def __iter__(self):
-        for number in range(self.low, self.high + 1):
-            if number not in self.exceptions:
-                yield Bus(self.agency, self.with_prefix(number), self)
-    
-    def __contains__(self, bus_number):
-        if self.prefix and not bus_number.startswith(self.prefix):
-            return False
-        if not self.prefix and len([c for c in bus_number if not c.isdigit()]) > 0:
-            return False
-        number = self.without_prefix(bus_number)
-        if number in self.exceptions:
-            return False
-        return self.low <= number <= self.high
-    
-    def previous_bus(self, bus_number):
-        '''The previous bus before the given bus number'''
-        number = self.without_prefix(bus_number)
-        if number <= self.low:
+    def previous_vehicle(self, vehicle):
+        '''The previous vehicle before the given vehicle'''
+        try:
+            index = self.vehicles.index(vehicle)
+            return self.vehicles[index - 1]
+        except (IndexError, ValueError):
             return None
-        previous_bus_number = number - 1
-        if previous_bus_number in self.exceptions:
-            return self.previous_bus(previous_bus_number)
-        return Bus(self.agency, self.with_prefix(previous_bus_number), self)
     
-    def next_bus(self, bus_number):
-        '''The next bus following the given bus number'''
-        number = self.without_prefix(bus_number)
-        if number >= self.high:
+    def next_vehicle(self, vehicle):
+        '''The next vehicle following the given vehicle'''
+        try:
+            index = self.vehicles.index(vehicle)
+            return self.vehicles[index + 1]
+        except (IndexError, ValueError):
             return None
-        next_bus_number = number + 1
-        if next_bus_number in self.exceptions:
-            return self.next_bus(next_bus_number)
-        return Bus(self.agency, self.with_prefix(next_bus_number), self)
     
-    def with_prefix(self, number):
-        if self.prefix:
-            return f'{self.prefix}{number}'
-        return str(number)
-    
-    def without_prefix(self, number):
-        if self.prefix:
-            return int(number[len(self.prefix):])
-        return int(''.join(c for c in number if c.isdigit()))
+    @classmethod
+    def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
+        vehicles = []
+        for row in rows:
+            if 'id' in row:
+                id = row['id']
+                del row['id']
+                if agency.vehicle_name_length:
+                    if type(id) is int:
+                        name = f'{id:0{agency.vehicle_name_length}d}'
+                        id = str(id)
+                    else:
+                        id = str(id)
+                        name = id[:agency.vehicle_name_length]
+                else:
+                    id = str(id)
+                    name = id
+                if 'prefix' in row:
+                    prefix = str(row['prefix'])
+                    id = f'{prefix}{id}'
+                    name = f'{prefix}{name}'
+                    del row['prefix']
+                vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+            else:
+                low = row['low']
+                high = row['high']
+                del row['low']
+                del row['high']
+                if 'prefix' in row:
+                    prefix = row['prefix']
+                    del row['prefix']
+                else:
+                    prefix = None
+                for id in range(low, high + 1):
+                    if agency.vehicle_name_length:
+                        if type(id) is int:
+                            name = f'{id:0{agency.vehicle_name_length}d}'
+                            id = str(id)
+                        else:
+                            id = str(id)
+                            name = id[:agency.vehicle_name_length]
+                    else:
+                        id = str(id)
+                        name = id
+                    if prefix:
+                        id = f'{prefix}{id}'
+                        name = f'{prefix}{name}'
+                    vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+        return cls(order_id, agency, model, vehicles)

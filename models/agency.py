@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from models.context import Context
 
@@ -23,6 +23,13 @@ class Agency:
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
+    enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
+    nis_colour: str = DEFAULT_NIS_COLOUR
+    default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
+    custom_route_numbers: dict[str, str] = field(default_factory=dict)
+    filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    vehicle_type: str = DEFAULT_VEHICLE_TYPE
+    vehicle_type_plural: str = DEFAULT_VEHICLE_TYPE_PLURAL
     invalid_realtime_percentage: int = DEFAULT_INVALID_REALTIME_PERCENTAGE
     
     @property

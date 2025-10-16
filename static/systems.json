@@ -2,14 +2,16 @@
     "calgary-transit": {
         "southern-alberta": {
             "calgary": {
-                "name": "Calgary"
+                "name": "Calgary",
+                "max_invalid_positions": 20
             }
         }
     },
     "edmonton-transit-service": {
         "northern-alberta": {
             "edmonton": {
-                "name": "Edmonton"
+                "name": "Edmonton",
+                "max_invalid_positions": 20
             }
         }
     },
@@ -17,7 +19,7 @@
         "northern-alberta": {
             "grande-prairie": {
                 "name": "Grande Prairie",
-                "colour_routes": "000000"
+                "ignore_route_colour": "000000"
             }
         }
     },
@@ -39,14 +41,15 @@
         "northern-alberta": {
             "red-deer": {
                 "name": "Red Deer",
-                "colour_routes": "ffffff"
+                "ignore_route_colour": "ffffff"
             }
         }
     },
     "roam": {
         "southern-alberta": {
             "banff": {
-                "name": "Banff"
+                "name": "Banff",
+                "max_invalid_positions": 5
             }
         }
     },

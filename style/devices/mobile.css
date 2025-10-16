@@ -95,6 +95,10 @@ table th {
     --image-size: 36px;
 }
 
+#refresh-button-placeholder {
+    width: 36px;
+}
+
 #search {
     order: 2;
     border-bottom-width: 1px;
@@ -202,6 +206,10 @@ table th {
     --image-size: 32px;
 }
 
+.vehicle {
+    min-width: 34px;
+}
+
 .button {
     font-size: 14pt;
     overflow: hidden;
@@ -283,6 +291,10 @@ table th {
 .tab-button-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.table-border-wrapper {
+    width: 100%;
 }
 
 .tablet-only {

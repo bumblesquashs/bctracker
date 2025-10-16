@@ -4,6 +4,7 @@
 % rebase('base')
 
 % include('components/svg_script', name='fish')
+% include('components/svg_script', name='snail')
 % include('components/svg_script', name='occupancy/no-people')
 % include('components/svg_script', name='occupancy/one-person')
 % include('components/svg_script', name='occupancy/two-people')
@@ -18,13 +19,13 @@
     </div>
 </div>
 
-<div id="no-buses-message" class="{{ 'display-none' if positions else '' }}">
+<div id="no-vehicles-message" class="{{ 'display-none' if positions else '' }}">
     % if not context.realtime_enabled:
         <i>{{ context }} realtime information is not supported</i>
     % elif context.system:
-        <i>There are no {{ context }} buses out right now</i>
+        <i>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</i>
     % else:
-        <i>There are no buses out right now</i>
+        <i>There are no {{ context.vehicle_type_plural.lower() }} out right now</i>
     % end
 </div>
 
@@ -54,11 +55,11 @@
                         </div>
                         <span>Show Stops</span>
                     </div>
-                    <div class="option" onclick="toggleNISBuses()">
+                    <div class="option" onclick="toggleNISVehicles()">
                         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                             % include('components/svg', name='status/check')
                         </div>
-                        <span>Show NIS Buses</span>
+                        <span>Show NIS {{ context.vehicle_type_plural }}</span>
                     </div>
                 </div>
             </div>
@@ -69,26 +70,32 @@
             </div>
             <div class="content">
                 <div class="options-container">
-                    <div class="option" onclick="setBusMarkerStyle('default')">
-                        <div id="bus-marker-style-default" class="radio-button {{ 'selected' if not bus_marker_style or bus_marker_style == 'default' else '' }}"></div>
-                        <div>Bus Type</div>
+                    <div class="option" onclick="setVehicleMarkerStyle('default')">
+                        <div id="vehicle-marker-style-default" class="radio-button {{ 'selected' if not vehicle_marker_style or vehicle_marker_style == 'default' else '' }}"></div>
+                        <div>Vehicle Type</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('mini')">
-                        <div id="bus-marker-style-mini" class="radio-button {{ 'selected' if bus_marker_style == 'mini' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('mini')">
+                        <div id="vehicle-marker-style-mini" class="radio-button {{ 'selected' if vehicle_marker_style == 'mini' else '' }}"></div>
                         <div>Mini</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('route')">
-                        <div id="bus-marker-style-route" class="radio-button {{ 'selected' if bus_marker_style == 'route' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('route')">
+                        <div id="vehicle-marker-style-route" class="radio-button {{ 'selected' if vehicle_marker_style == 'route' else '' }}"></div>
                         <div>Route Number</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('adherence')">
-                        <div id="bus-marker-style-adherence" class="radio-button {{ 'selected' if bus_marker_style == 'adherence' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('adherence')">
+                        <div id="vehicle-marker-style-adherence" class="radio-button {{ 'selected' if vehicle_marker_style == 'adherence' else '' }}"></div>
                         <div>Schedule Adherence</div>
                     </div>
-                    <div class="option" onclick="setBusMarkerStyle('occupancy')">
-                        <div id="bus-marker-style-occupancy" class="radio-button {{ 'selected' if bus_marker_style == 'occupancy' else '' }}"></div>
+                    <div class="option" onclick="setVehicleMarkerStyle('occupancy')">
+                        <div id="vehicle-marker-style-occupancy" class="radio-button {{ 'selected' if vehicle_marker_style == 'occupancy' else '' }}"></div>
                         <div>Occupancy</div>
                     </div>
+                    % if show_speed:
+                        <div class="option" onclick="setVehicleMarkerStyle('speed')">
+                            <div id="vehicle-marker-style-speed" class="radio-button {{ 'selected' if vehicle_marker_style == 'speed' else '' }}"></div>
+                            <div>Speed</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>
@@ -113,11 +120,11 @@
     let automaticRefresh = "{{ auto_refresh }}" !== "False";
     let showRouteLines = "{{ show_route_lines }}" !== "False";
     let showStops = "{{ show_stops }}" !== "False";
-    let showNISBuses = "{{ show_nis }}" !== "False";
-    let busMarkerStyle = "{{ bus_marker_style or 'default' }}";
+    let showNISVehicles = "{{ show_nis }}" !== "False";
+    let vehicleMarkerStyle = "{{ vehicle_marker_style or 'default' }}";
     let hoverPosition = null;
     
-    let busMarkers = [];
+    let vehicleMarkers = [];
     
     const shapes = {};
     
@@ -143,17 +150,17 @@
     
     function updateMap(resetCoordinates) {
         currentShapeIDs = [];
-        for (const marker of busMarkers) {
+        for (const marker of vehicleMarkers) {
             map.removeOverlay(marker);
         }
-        busMarkers = [];
+        vehicleMarkers = [];
         
         const area = new Area();
         
         if (positions.length === 0) {
-            document.getElementById("no-buses-message").classList.remove("display-none");
+            document.getElementById("no-vehicles-message").classList.remove("display-none");
         } else {
-            document.getElementById("no-buses-message").classList.add("display-none");
+            document.getElementById("no-vehicles-message").classList.add("display-none");
         }
         
         for (const position of positions) {
@@ -167,28 +174,33 @@
             const adherence = position.adherence;
             
             const element = document.createElement("div");
-            element.id = "bus-marker-" + position.bus_number;
+            element.id = "vehicle-marker-" + position.vehicle_id;
             element.className = "marker";
+            if (position.offline) {
+                element.classList.add("offline");
+            }
             if (position.shape_id === null || position.shape_id === undefined) {
-                element.classList.add("nis-bus");
-                if (!showNISBuses) {
+                element.classList.add("nis-vehicle");
+                if (!showNISVehicles) {
                     element.classList.add("display-none");
                 }
             }
             if (position.bearing !== undefined) {
-                const sideWidthValue = busMarkerStyle == "mini" ? 8 : 16;
-                const bottomWidthValue = busMarkerStyle == "mini" ? 18 : 26;
+                const sideWidthValue = vehicleMarkerStyle == "mini" ? 8 : 16;
+                const bottomWidthValue = vehicleMarkerStyle == "mini" ? 18 : 26;
                 const length = Math.floor(position.speed / 10);
                 const bearing = document.createElement("div");
                 bearing.className = "bearing";
-                if (busMarkerStyle === "adherence") {
+                if (vehicleMarkerStyle === "adherence") {
                     bearing.classList.add('adherence');
                     if (adherence !== undefined && adherence !== null) {
                         bearing.classList.add(adherence.status_class)
                     }
-                } else if (busMarkerStyle === "occupancy") {
+                } else if (vehicleMarkerStyle === "occupancy") {
                     bearing.classList.add("occupancy");
                     bearing.classList.add(position.occupancy_status_class);
+                } else if (vehicleMarkerStyle === "livery") {
+                    bearing.classList.add("livery-style");
                 } else {
                     bearing.style.borderBottomColor = "#" + position.colour;
                 }
@@ -201,14 +213,14 @@
             }
             
             let icon;
-            if (position.bus_number < 0) {
+            if (position.vehicle_id.startsWith("-")) {
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
                 if (currentSystemID === null) {
-                    icon.href = getUrl(currentSystemID, "bus/" + position.agency_id + "/" + position.bus_url_id, true);
+                    icon.href = getUrl(currentSystemID, "bus/" + position.agency_id + "/" + position.vehicle_url_id, true);
                 } else {
-                    icon.href = getUrl(currentSystemID, "bus/" + position.bus_url_id, true);
+                    icon.href = getUrl(currentSystemID, "bus/" + position.vehicle_url_id, true);
                 }
                 icon.innerHTML = "<div class='link'></div>"
             }
@@ -221,19 +233,21 @@
             }
             element.appendChild(icon);
             
-            if (busMarkerStyle === "route") {
-                icon.classList.add("bus_route");
+            if (vehicleMarkerStyle === "route") {
+                icon.classList.add("vehicle_route");
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
+                } else if (adherence && adherence.value <= -66) {
+                    icon.innerHTML += getSVG("snail");
                 } else {
                     icon.innerHTML += position.route_number;
                 }
                 icon.style.backgroundColor = "#" + position.colour;
-            } else if (busMarkerStyle === "mini") {
+            } else if (vehicleMarkerStyle === "mini") {
                 element.classList.add("small");
                 icon.classList.add("mini");
                 icon.style.backgroundColor = "#" + position.colour;
-            } else if (busMarkerStyle === "adherence") {
+            } else if (vehicleMarkerStyle === "adherence") {
                 icon.classList.add("adherence");
                 if (adherence === undefined || adherence === null) {
                     if (position.lat === 0 && position.lon === 0) {
@@ -246,6 +260,8 @@
                 } else {
                     if (position.lat === 0 && position.lon === 0) {
                         icon.innerHTML += getSVG("fish");
+                    } else if (adherence.value <= -66) {
+                        icon.innerHTML += getSVG("snail");
                     } else {
                         icon.innerHTML += adherence.value;
                     }
@@ -255,19 +271,30 @@
                         icon.classList.add("smaller-font");
                     }
                 }
-            } else if (busMarkerStyle === "occupancy") {
+            } else if (vehicleMarkerStyle === "occupancy" && position.occupancy_icon) {
                 icon.classList.add("occupancy");
                 icon.classList.add(position.occupancy_status_class);
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
+                } else if (adherence && adherence.value <= -66) {
+                    icon.innerHTML += getSVG("snail");
                 } else {
                     icon.innerHTML += getSVG(position.occupancy_icon);
                 }
+            } else if (vehicleMarkerStyle === "livery" && position.livery) {
+                icon.classList.add("livery");
+                icon.innerHTML = '<img src="/img/liveries/' + position.livery  +'.png" />';
+            } else if (vehicleMarkerStyle === "speed" && position.speed !== undefined) {
+                icon.classList.add("speed");
+                icon.innerHTML = position.speed + '<div class="units">km/h</div>';
+                icon.style.backgroundColor = "#" + position.colour;
             } else {
                 if (position.lat === 0 && position.lon === 0) {
                     icon.innerHTML += getSVG("fish");
+                } else if (adherence && adherence.value <= -66) {
+                    icon.innerHTML += getSVG("snail");
                 } else {
-                    icon.innerHTML += getSVG(position.bus_icon);
+                    icon.innerHTML += getSVG(position.vehicle_icon);
                 }
                 icon.style.backgroundColor = "#" + position.colour;
             }
@@ -278,7 +305,7 @@
             
             const title = document.createElement("div");
             title.className = "title";
-            title.innerHTML = position.bus_display;
+            title.innerHTML = position.vehicle_name;
             if (position.decoration != null) {
                 title.innerHTML += " <span class='decoration'>" + position.decoration + "</span>";
             }
@@ -290,22 +317,24 @@
             
             const model = document.createElement("div");
             model.className = "lighter-text";
-            model.innerHTML = position.bus_order;
+            model.innerHTML = position.vehicle_year_model;
             content.appendChild(model);
             
-            const headsign = document.createElement("div");
-            if (position.headsign === "Not In Service") {
-                headsign.innerHTML = position.headsign;
-            } else {
-                headsign.className = "headsign";
-            
-                const routeLine = document.createElement("div");
-                routeLine.className = "route-line";
-                routeLine.style.backgroundColor = "#" + position.colour;
+            if (!position.offline) {
+                const headsign = document.createElement("div");
+                if (position.headsign === "Not In Service") {
+                    headsign.innerHTML = position.headsign;
+                } else {
+                    headsign.className = "headsign";
                 
-                headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                    const routeLine = document.createElement("div");
+                    routeLine.className = "route-line";
+                    routeLine.style.backgroundColor = "#" + position.colour;
+                    
+                    headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                }
+                content.appendChild(headsign);
             }
-            content.appendChild(headsign);
         
             const footer = document.createElement("div");
             footer.className = "lighter-text";
@@ -329,6 +358,13 @@
                 });
             }
             
+            if ("{{ show_speed }}" === "True" && position.speed !== undefined) {
+                const speedElement = document.createElement("div");
+                speedElement.className = "lighter-text";
+                speedElement.innerHTML = position.speed + " km/h";
+                content.appendChild(speedElement);
+            }
+            
             const iconsRow = document.createElement("div");
             iconsRow.className = "row center gap-5";
             content.appendChild(iconsRow);
@@ -340,11 +376,13 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            const occupancyIcon = document.createElement("div");
-            occupancyIcon.className = "occupancy-icon";
-            occupancyIcon.classList.add(position.occupancy_status_class);
-            occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
-            iconsRow.appendChild(occupancyIcon);
+            if (!position.offline && position.occupancy_icon) {
+                const occupancyIcon = document.createElement("div");
+                occupancyIcon.className = "occupancy-icon";
+                occupancyIcon.classList.add(position.occupancy_status_class);
+                occupancyIcon.innerHTML = getSVG(position.occupancy_icon);
+                iconsRow.appendChild(occupancyIcon);
+            }
             
             const agencyLogo = document.createElement("img");
             agencyLogo.className = "agency-logo";
@@ -365,7 +403,7 @@
                 stopEvent: false,
             });
             map.addOverlay(marker);
-            busMarkers.push(marker);
+            vehicleMarkers.push(marker);
         }
         
         if (resetCoordinates && area.isValid) {
@@ -435,14 +473,14 @@
         }
     }
     
-    function toggleNISBuses() {
-        showNISBuses = !showNISBuses;
+    function toggleNISVehicles() {
+        showNISVehicles = !showNISVehicles;
         const checkbox = document.getElementById("show-nis-checkbox");
         checkbox.classList.toggle("selected");
-        setCookie("show_nis", showNISBuses ? "true" : "false");
+        setCookie("show_nis", showNISVehicles ? "true" : "false");
         
-        for (const element of document.getElementsByClassName("nis-bus")) {
-            if (showNISBuses) {
+        for (const element of document.getElementsByClassName("nis-vehicle")) {
+            if (showNISVehicles) {
                 element.classList.remove("display-none");
             } else {
                 element.classList.add("display-none");
@@ -450,11 +488,11 @@
         }
     }
     
-    function setBusMarkerStyle(style) {
-        document.getElementById("bus-marker-style-" + busMarkerStyle).classList.remove("selected");
-        busMarkerStyle = style;
-        document.getElementById("bus-marker-style-" + style).classList.add("selected");
-        setCookie("bus_marker_style", style);
+    function setVehicleMarkerStyle(style) {
+        document.getElementById("vehicle-marker-style-" + vehicleMarkerStyle).classList.remove("selected");
+        vehicleMarkerStyle = style;
+        document.getElementById("vehicle-marker-style-" + style).classList.add("selected");
+        setCookie("vehicle_marker_style", style);
         updateMap(false);
     }
     

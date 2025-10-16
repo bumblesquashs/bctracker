@@ -24,15 +24,16 @@ if __name__ == '__main__':
     
     repositories.agency = AgencyRepository()
     repositories.decoration = DecorationRepository()
+    repositories.livery = LiveryRepository()
     repositories.model = ModelRepository()
     repositories.order = OrderRepository()
     repositories.region = RegionRepository()
     repositories.system = SystemRepository()
     repositories.theme = ThemeRepository()
     
+    repositories.allocation = AllocationRepository(database)
     repositories.assignment = AssignmentRepository(database)
     repositories.departure = DepartureRepository(database)
-    repositories.overview = OverviewRepository(database)
     repositories.point = PointRepository(database)
     repositories.position = PositionRepository(database)
     repositories.record = RecordRepository(database)

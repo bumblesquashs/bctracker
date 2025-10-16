@@ -4,48 +4,50 @@ from datetime import timedelta
 
 from database import Database
 
-from models.bus import Bus
+from models.block import Block
 from models.context import Context
 from models.date import Date
 from models.record import Record
+from models.time import Time
+from models.vehicle import Vehicle
 
 @dataclass(slots=True)
 class RecordRepository:
     
     database: Database
     
-    def create(self, context: Context, bus, date, block, time, trip):
+    def create(self, allocation_id: int, date: Date, block: Block, time: Time, trip_id: str):
         '''Inserts a new record into the database'''
-        bus_number = getattr(bus, 'number', bus)
-        block_id = getattr(block, 'id', block)
-        record_id = self.database.insert('record', {
-            'agency_id': context.agency_id,
-            'bus_number': bus_number,
-            'date': date.format_db(),
-            'system_id': context.system_id,
-            'block_id': block_id,
-            'routes': block.get_routes_string(date=date),
-            'start_time': block.get_start_time(date=date).format_db(),
-            'end_time': block.get_end_time(date=date).format_db(),
-            'first_seen': time.format_db(),
-            'last_seen': time.format_db()
-        })
-        self.create_trip(record_id, trip)
+        record_id = self.database.insert(
+            table='record',
+            values={
+                'allocation_id': allocation_id,
+                'date': date.format_db(),
+                'block_id': block.id,
+                'route_numbers': block.get_routes_string(date=date),
+                'start_time': block.get_start_time(date=date).format_db(),
+                'end_time': block.get_end_time(date=date).format_db(),
+                'first_seen': time.format_db(),
+                'last_seen': time.format_db()
+            }
+        )
+        self.create_trip(record_id, trip_id)
         return record_id
     
-    def create_trip(self, record, trip):
+    def create_trip(self, record_id: int, trip_id: str):
         '''Inserts a new trip record into the database'''
-        record_id = getattr(record, 'id', record)
-        trip_id = getattr(trip, 'id', trip)
-        self.database.insert('trip_record', {
-            'record_id': record_id,
-            'trip_id': trip_id
-        })
+        self.database.insert(
+            table='trip_record',
+            values={
+                'record_id': record_id,
+                'trip_id': trip_id
+            }
+        )
     
-    def update(self, record, time):
+    def update(self, record_id: int, time: Time):
         '''Updates a record in the database'''
-        record_id = getattr(record, 'id', record)
-        self.database.update('record',
+        self.database.update(
+            table='record',
             values={
                 'last_seen': time.format_db()
             },
@@ -54,16 +56,17 @@ class RecordRepository:
             }
         )
     
-    def find_all(self, context: Context = Context(), bus=None, block=None, trip=None, limit=None, page=None) -> list[Record]:
-        '''Returns all records that match the given context, bus, block, and trip'''
-        bus_number = getattr(bus, 'number', bus)
-        block_id = getattr(block, 'id', block)
-        trip_id = getattr(trip, 'id', trip)
-        joins = {}
+    def find_all(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None, limit: int | None = None, page: int | None = None) -> list[Record]:
+        '''Returns all records that match the given context, vehicle, block, and trip'''
+        joins = {
+            'allocation': {
+                'allocation.allocation_id': 'record.allocation_id'
+            }
+        }
         filters = {
-            'record.system_id': context.system_id,
-            'record.agency_id': context.agency_id,
-            'record.bus_number': bus_number,
+            'allocation.agency_id': context.agency_id,
+            'allocation.vehicle_id': vehicle_id,
+            'allocation.system_id': context.system_id,
             'record.block_id': block_id
         }
         if trip_id:
@@ -71,15 +74,17 @@ class RecordRepository:
                 'trip_record.record_id': 'record.record_id'
             }
             filters['trip_record.trip_id'] = trip_id
-        return self.database.select('record', 
+        return self.database.select(
+            table='record', 
             columns={
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id',
+                'allocation.system_id': 'system_id',
                 'record.record_id': 'id',
-                'record.agency_id': 'agency_id',
-                'record.bus_number': 'bus_number',
+                'record.allocation_id': 'allocation_id',
                 'record.date': 'date',
-                'record.system_id': 'system_id',
                 'record.block_id': 'block_id',
-                'record.routes': 'routes',
+                'record.route_numbers': 'route_numbers',
                 'record.start_time': 'start_time',
                 'record.end_time': 'end_time',
                 'record.first_seen': 'first_seen',
@@ -96,62 +101,73 @@ class RecordRepository:
             initializer=Record.from_db
         )
     
-    def find_trip_ids(self, record) -> list[str]:
+    def find_trip_ids(self, record_id: int) -> list[str]:
         '''Returns all trip IDs associated with the given record'''
-        record_id = getattr(record, 'id', record)
         return self.database.select('trip_record', columns=['trip_id'], filters={'record_id': record_id}, initializer=lambda r: r['trip_id'])
     
-    def find_recorded_today(self, context: Context, trips) -> dict[str: Bus]:
-        '''Returns all bus numbers matching the given context and trips that were recorded on the current date'''
-        trip_ids = [getattr(t, 'id', t) for t in trips]
+    def find_recorded_today(self, context: Context, trip_ids: list[str]) -> dict[str: Vehicle]:
+        '''Returns all vehicles matching the given context and trips that were recorded on the current date'''
         date = Date.today(context.timezone)
-        rows = self.database.select('trip_record',
+        rows = self.database.select(
+            table='trip_record',
             columns={
                 'trip_record.trip_id': 'trip_id',
-                'record.agency_id': 'agency_id',
-                'record.bus_number': 'bus_number'
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id'
             },
             joins={
                 'record': {
                     'record.record_id': 'trip_record.record_id'
+                },
+                'allocation': {
+                    'allocation.allocation_id': 'record.allocation_id'
                 }
             },
             filters={
-                'record.system_id': context.system_id,
+                'allocation.agency_id': context.agency_id,
+                'allocation.system_id': context.system_id,
                 'record.date': date.format_db(),
                 'trip_record.trip_id': trip_ids
             },
             order_by='record.last_seen ASC'
         )
-        return {row['trip_id']: Bus.find(row.context(), row['bus_number']) for row in rows}
+        return {row['trip_id']: context.find_vehicle(row['vehicle_id']) for row in rows}
     
-    def find_recorded_today_by_block(self, context: Context) -> dict[str, Bus]:
-        '''Returns all bus numbers matching the given context that werer ecorded on the current date'''
+    def find_recorded_today_by_block(self, context: Context) -> dict[str, Vehicle]:
+        '''Returns all vehicles matching the given context that were recorded on the current date'''
         date = Date.today(context.timezone)
-        rows = self.database.select('record',
+        rows = self.database.select(
+            table='record',
             columns={
                 'record.block_id': 'block_id',
-                'record.agency_id': 'agency_id',
-                'record.bus_number': 'bus_number'
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id'
             },
             filters={
-                'record.system_id': context.system_id,
+                'allocation.agency_id': context.agency_id,
+                'allocation.system_id': context.system_id,
                 'record.date': date.format_db()
+            },
+            joins={
+                'allocation': {
+                    'allocation.allocation_id': 'record.allocation_id'
+                }
             },
             order_by='record.last_seen ASC'
         )
-        return {row['block_id']: Bus.find(row.context(), row['bus_number']) for row in rows}
+        return {row['block_id']: context.find_vehicle(row['vehicle_id']) for row in rows}
     
-    def count(self, context: Context = Context(), bus=None, block=None, trip=None) -> int:
-        '''Returns the number of records for the given system, bus, block, and trip'''
-        bus_number = getattr(bus, 'number', bus)
-        block_id = getattr(block, 'id', block)
-        trip_id = getattr(trip, 'id', trip)
-        joins = {}
+    def count(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None) -> int:
+        '''Returns the number of records for the given system, vehicle, block, and trip'''
+        joins = {
+            'allocation': {
+                'allocation.allocation_id': 'record.allocation_id'
+            }
+        }
         filters = {
-            'record.system_id': context.system_id,
-            'record.agency_id': context.agency_id,
-            'record.bus_number': bus_number,
+            'allocation.agency_id': context.agency_id,
+            'allocation.vehicle_id': vehicle_id,
+            'allocation.system_id': context.system_id,
             'record.block_id': block_id
         }
         if trip_id:
@@ -182,12 +198,13 @@ class RecordRepository:
                 SELECT trip_record_id
                 FROM trip_record
                 JOIN record ON record.record_id = trip_record.record_id
+                JOIN allocation ON allocation.allocation_id = record.allocation_id
                 WHERE record.date < ?
                 AND NOT EXISTS (
                     SELECT 1
                     FROM trip
                     WHERE trip.trip_id = trip_record.trip_id
-                        AND trip.system_id = record.system_id
+                        AND trip.system_id = allocation.system_id
                 )
             )
         ''', [date.format_db()])

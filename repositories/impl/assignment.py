@@ -12,33 +12,40 @@ class AssignmentRepository:
     
     database: Database
     
-    def create(self, context: Context, block, bus, date):
+    def create(self, block_id: str, allocation_id: int, date: Date):
         '''Inserts a new assignment into the database'''
-        block_id = getattr(block, 'id', block)
-        bus_number = getattr(bus, 'number', bus)
-        self.database.insert('assignment', {
-            'system_id': context.system_id,
-            'block_id': block_id,
-            'bus_number': bus_number,
-            'date': date.format_db()
-        })
+        self.database.insert(
+            table='assignment',
+            values={
+                'block_id': block_id,
+                'allocation_id': allocation_id,
+                'date': date.format_db()
+            }
+        )
     
-    def find(self, context: Context, block) -> Assignment | None:
+    def find(self, block_id: str, allocation_id: int, date: Date) -> Assignment | None:
         '''Returns the assignment for the given context and block'''
-        block_id = getattr(block, 'id', block)
-        date = Date.today(context.timezone)
-        assignments = self.database.select('assignment',
+        assignments = self.database.select(
+            table='assignment',
             columns={
-                'assignment.system_id': 'system_id',
                 'assignment.block_id': 'block_id',
-                'assignment.bus_number': 'bus_number',
+                'assignment.allocation_id': 'allocation_id',
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id',
+                'allocation.system_id': 'system_id',
                 'assignment.date': 'date'
             },
             filters={
-                'assignment.system_id': context.system_id,
                 'assignment.block_id': block_id,
+                'assignment.allocation_id': allocation_id,
                 'assignment.date': date.format_db()
             },
+            joins={
+                'allocation': {
+                    'allocation.allocation_id': 'assignment.allocation_id'
+                }
+            },
+            limit=1,
             initializer=Assignment.from_db
         )
         try:
@@ -46,53 +53,87 @@ class AssignmentRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, block=None, bus=None, trip=None, route=None, stop=None) -> list[Assignment]:
-        '''Returns all assignments for the given block, bus, trip, route, and stop'''
-        block_id = getattr(block, 'id', block)
-        bus_number = getattr(bus, 'number', bus)
-        trip_id = getattr(trip, 'id', trip)
-        route_id = getattr(route, 'id', route)
-        stop_id = getattr(stop, 'id', stop)
+    def find_by_context(self, context: Context, block_id: str) -> Assignment | None:
+        assignments = self.database.select(
+            table='assignment',
+            columns={
+                'assignment.block_id': 'block_id',
+                'assignment.allocation_id': 'allocation_id',
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id',
+                'allocation.system_id': 'system_id',
+                'assignment.date': 'date'
+            },
+            filters={
+                'allocation.agency_id': context.agency_id,
+                'allocation.system_id': context.system_id,
+                'assignment.block_id': block_id
+            },
+            joins={
+                'allocation': {
+                    'allocation.allocation_id': 'assignment.allocation_id'
+                }
+            },
+            limit=1,
+            initializer=Assignment.from_db
+        )
+        try:
+            return assignments[0]
+        except IndexError:
+            return None
+    
+    def find_all(self, context: Context, block_id: str | None = None, vehicle_id: str | None = None, trip_id: str | None = None, route_id: str | None = None, stop_id: str | None = None) -> list[Assignment]:
+        '''Returns all assignments for the given block, vehicle, trip, route, and stop'''
         date = Date.today(context.timezone)
-        joins = {}
+        joins = {
+            'allocation': {
+                'allocation.allocation_id': 'assignment.allocation_id'
+            }
+        }
         filters = {
-            'assignment.system_id': context.system_id,
+            'allocation.agency_id': context.agency_id,
+            'allocation.vehicle_id': vehicle_id,
+            'allocation.system_id': context.system_id,
             'assignment.block_id': block_id,
-            'assignment.bus_number': bus_number,
             'assignment.date': date.format_db()
         }
         if trip_id or route_id or stop_id:
             joins['trip'] = {
-                'trip.system_id': 'assignment.system_id',
+                # 'trip.agency_id': 'allocation.agency_id',
+                'trip.system_id': 'allocation.system_id',
                 'trip.block_id': 'assignment.block_id'
             }
             filters['trip.trip_id'] = trip_id
             filters['trip.route_id'] = route_id
             if stop_id:
                 joins['departure'] = {
+                    # 'departure.agency_id': 'trip.agency_id',
                     'departure.system_id': 'trip.system_id',
                     'departure.trip_id': 'trip.trip_id'
                 }
                 filters['departure.stop_id'] = stop_id
-        assignments = self.database.select('assignment',
+        assignments = self.database.select(
+            table='assignment',
             columns={
-                'assignment.system_id': 'system_id',
                 'assignment.block_id': 'block_id',
-                'assignment.bus_number': 'bus_number',
+                'assignment.allocation_id': 'allocation_id',
+                'allocation.agency_id': 'agency_id',
+                'allocation.vehicle_id': 'vehicle_id',
+                'allocation.system_id': 'system_id',
                 'assignment.date': 'date'
             },
             joins=joins,
             filters=filters,
             initializer=Assignment.from_db
         )
-        return {a.key: a for a in assignments}
+        return assignments
     
-    def delete_all(self, context: Context, block=None, bus=None):
+    def delete_all(self, block_id: str | None = None, allocation_id: int | None = None):
         '''Deletes all assignments from the database'''
-        block_id = getattr(block, 'id', block)
-        bus_number = getattr(bus, 'number', bus)
-        self.database.delete('assignment', {
-            'system_id': context.system_id,
-            'block_id': block_id,
-            'bus_number': bus_number
-        })
+        self.database.delete(
+            table='assignment',
+            filters={
+                'block_id': block_id,
+                'allocation_id': allocation_id
+            }
+        )

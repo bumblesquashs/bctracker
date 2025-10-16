@@ -45,11 +45,11 @@ class Service:
     '''A set of dates when a transit service is operating'''
     
     system: System
-    id: int
+    id: str
     schedule: Schedule
     
     @classmethod
-    def from_csv(cls, row, context: Context, exceptions):
+    def from_csv(cls, row, context: Context, exceptions, feed_date_range):
         '''Returns a service initialized from the given CSV row'''
         id = row['service_id']
         start_date = Date.parse(row['start_date'], context.timezone, '%Y%m%d')
@@ -67,6 +67,12 @@ class Service:
         service_exceptions = {e for e in exceptions.get(id, [])}
         added_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.INCLUDED}
         removed_dates = {e.date for e in service_exceptions if e.type == ServiceExceptionType.EXCLUDED}
+        
+        if feed_date_range:
+            if feed_date_range.start > date_range.start:
+                date_range.start = feed_date_range.start
+            if feed_date_range.end < date_range.end:
+                date_range.end = feed_date_range.end
         
         dates = {d for d in date_range if d.weekday in weekdays}
         dates.update(added_dates)

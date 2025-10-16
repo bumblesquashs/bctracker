@@ -3,9 +3,9 @@
 
 <div id="page-header">
     <h1>Realtime</h1>
-    <h2>Currently active vehicles</h2>
+    <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All Buses</a>
+        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
         <span class="tab-button current">By Route</span>
         <a href="{{ get_url(context, 'realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
@@ -17,11 +17,11 @@
 </div>
 
 <div class="options-container">
-    <div class="option" onclick="toggleNISBuses()">
+    <div class="option" onclick="toggleNISVehicles()">
         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
             % include('components/svg', name='status/check')
         </div>
-        <div>Show NIS Buses</div>
+        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
 </div>
 
@@ -47,49 +47,51 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Bus</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 % if not context.system:
                                     <th class="desktop-only">System</th>
                                 % end
                                 <th>Headsign</th>
-                                <th class="non-mobile">Block</th>
+                                % if context.enable_blocks:
+                                    <th class="non-mobile">Block</th>
+                                % end
                                 <th class="non-mobile">Trip</th>
                                 <th class="desktop-only">Next Stop</th>
                             </tr>
                         </thead>
                         <tbody>
-                            % last_bus = None
+                            % last_vehicle = None
                             % for position in sorted(route_positions):
-                                % bus = position.bus
-                                % order = bus.order
-                                % if not last_bus:
+                                % vehicle = position.vehicle
+                                % order_id = vehicle.order_id
+                                % if not last_vehicle:
                                     % same_order = True
-                                % elif not order and not last_bus.order:
+                                % elif not order_id and not last_vehicle.order_id:
                                     % same_order = True
-                                % elif not order or not last_bus.order:
+                                % elif not order_id or not last_vehicle.order_id:
                                     % same_order = False
                                 % else:
-                                    % same_order = order == last_bus.order
+                                    % same_order = order_id == last_vehicle.order_id
                                 % end
-                                % last_bus = bus
+                                % last_vehicle = vehicle
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 <div class="row gap-5">
                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order')
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order')
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % if not context.system:
                                         <td class="desktop-only">{{ position.context }}</td>
@@ -112,9 +114,11 @@
                                             % end
                                         </div>
                                     </td>
-                                    <td class="non-mobile">
-                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                    </td>
+                                    % if context.enable_blocks:
+                                        <td class="non-mobile">
+                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                        </td>
+                                    % end
                                     <td class="non-mobile">
                                         % include('components/trip')
                                     </td>
@@ -137,46 +141,51 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <table class="striped">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Bus</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 % if not context.system:
                                     <th>System</th>
                                 % end
+                                <th>Next Stop</th>
                             </tr>
                         </thead>
                         <tbody>
-                            % last_bus = None
+                            % last_vehicle = None
                             % for position in no_route_positions:
-                                % bus = position.bus
-                                % order = bus.order
-                                % if not last_bus:
+                                % vehicle = position.vehicle
+                                % stop = position.stop
+                                % order_id = vehicle.order_id
+                                % if not last_vehicle:
                                     % same_order = True
-                                % elif not order and not last_bus.order:
+                                % elif not order_id and not last_vehicle.order_id:
                                     % same_order = True
-                                % elif not order or not last_bus.order:
+                                % elif not order_id or not last_vehicle.order_id:
                                     % same_order = False
                                 % else:
-                                    % same_order = order == last_bus.order
+                                    % same_order = order_id == last_vehicle.order_id
                                 % end
-                                % last_bus = bus
+                                % last_vehicle = vehicle
                                 <tr class="{{'' if same_order else 'divider'}}">
                                     <td>
                                         <div class="column">
-                                            % include('components/bus')
+                                            % include('components/vehicle')
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order')
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order')
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % if not context.system:
                                         <td>{{ position.context }}</td>
                                     % end
+                                    <td>
+                                        % include('components/stop')
+                                    </td>
                                 </tr>
                             % end
                         </tbody>
@@ -198,7 +207,7 @@
             <p>Please choose a system.</p>
         % elif not context.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
-            <p>You can browse schedule data for using the links above, or choose a different system.</p>
+            <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">
                 % include('components/systems')
             </div>
@@ -206,17 +215,17 @@
             <h3>{{ context }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no {{ context }} buses in service right now</h3>
-            <p>You can see all active buses, including ones not in service, by selecting the <b>Show NIS Buses</b> checkbox.</p>
+            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} in service right now</h3>
+            <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
         % else:
-            <h3>There are no {{ context }} buses out right now</h3>
+            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>
 % end
 
 <script>
-    function toggleNISBuses() {
+    function toggleNISVehicles() {
         window.location = "{{ get_url(context, 'realtime', 'routes', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

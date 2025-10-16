@@ -55,11 +55,10 @@ class RealtimeService:
                     vehicle_id = vehicle.vehicle.id
                 vehicle_name_length = context.vehicle_name_length
                 if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:]
-                bus_number = str(vehicle_id)
+                    vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
             except:
-                bus_number = str(-(index + 1))
-            repositories.position.create(context, bus_number, vehicle)
+                vehicle_id = str(-(index + 1))
+            repositories.position.create(context, vehicle_id, vehicle)
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
     
@@ -68,37 +67,51 @@ class RealtimeService:
         for position in repositories.position.find_all():
             try:
                 context = position.context
-                bus = position.bus
-                if not bus.is_known:
+                vehicle = position.vehicle
+                if not vehicle.is_known:
                     continue
                 date = Date.today(context.timezone)
                 time = Time.now(context.timezone)
-                overview = repositories.overview.find(bus.number)
-                trip = position.trip
-                if trip:
-                    block = trip.block
-                    assignment = repositories.assignment.find(context, block)
-                    if not assignment or assignment.bus_number != bus.number:
-                        repositories.assignment.delete_all(context, block=block)
-                        repositories.assignment.delete_all(Context(), bus=bus)
-                        repositories.assignment.create(context, block, bus, date)
-                    if overview and overview.last_record:
-                        last_record = overview.last_record
-                        if last_record.date == date and last_record.block_id == block.id:
-                            repositories.record.update(last_record, time)
-                            trip_ids = repositories.record.find_trip_ids(last_record)
-                            if trip.id not in trip_ids:
-                                repositories.record.create_trip(last_record, trip)
-                            continue
-                    record_id = repositories.record.create(context, bus, date, block, time, trip)
+                
+                allocation = repositories.allocation.find_active(context.without_system(), vehicle.id)
+                if allocation:
+                    if allocation.context == context:
+                        repositories.allocation.set_last_seen(allocation.id, date, position)
+                        allocation_id = allocation.id
+                        first_record = allocation.first_record
+                        last_record = allocation.last_record
+                    else:
+                        repositories.allocation.set_inactive(allocation.id)
+                        repositories.assignment.delete_all(allocation_id=allocation.id)
+                        allocation_id = repositories.allocation.create(context, vehicle.id, date, position)
+                        repositories.transfer.create(date, allocation.id, allocation_id)
+                        first_record = None
+                        last_record = None
                 else:
-                    record_id = None
-                if overview:
-                    repositories.overview.update(context, overview, date, record_id)
-                    if overview.last_seen_context != context:
-                        repositories.transfer.create(bus, date, overview.last_seen_context, context)
-                else:
-                    repositories.overview.create(context, bus, date, record_id)
+                    allocation_id = repositories.allocation.create(context, vehicle.id, date, position)
+                    first_record = None
+                    last_record = None
+                
+                if position.trip and position.block_id and position.block:
+                    assignment = repositories.assignment.find(position.block_id, allocation_id, date)
+                    if not assignment or assignment.allocation_id != allocation_id:
+                        repositories.assignment.delete_all(block_id=position.block_id)
+                        repositories.assignment.delete_all(allocation_id=allocation_id)
+                        repositories.assignment.create(position.block_id, allocation_id, date)
+                    
+                    if last_record and last_record.date == date and last_record.block_id == position.block_id:
+                        record_id = last_record.id
+                        repositories.record.update(last_record.id, time)
+                        trip_ids = repositories.record.find_trip_ids(last_record.id)
+                        if position.trip_id not in trip_ids:
+                            repositories.record.create_trip(last_record.id, position.trip_id)
+                    else:
+                        record_id = repositories.record.create(allocation_id, date, position.block, time, position.trip_id)
+                    
+                    if not first_record:
+                        repositories.allocation.set_first_record(allocation_id, record_id)
+                    if not last_record or last_record.id != record_id:
+                        repositories.allocation.set_last_record(allocation_id, record_id)
             except Exception as e:
                 print(f'Failed to update records: {e}')
         self.database.commit()
@@ -128,7 +141,7 @@ class RealtimeService:
                 else:
                     invalid_count += 1
         if context.invalid_realtime_percentage:
-            if len(positions) >= 20:
+            if len(positions) >= context.max_invalid_positions:
                 return (invalid_count / len(positions)) < context.invalid_realtime_percentage
             return True
-        return invalid_count == 0
+        return invalid_count <= context.max_invalid_positions

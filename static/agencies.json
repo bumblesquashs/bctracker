@@ -37,6 +37,7 @@
         "gtfs_url": "https://medicinehat.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/",
         "realtime_url": "https://medicinehat.tmix.se/gtfs-realtime/vehicleupdates.pb",
         "vehicle_name_length": 3,
+        "prefix_headsigns": true,
         "distance_scale": 1000
     },
     "red-deer-transit": {
@@ -63,6 +64,7 @@
         "website": "https://www.rmwb.ca/en/transit/transit.aspx",
         "gtfs_url": "https://rmwb-gtfsrt.civilia.ca/gtfs?key=0C4bE1ff25e445788A128B1D6248D201",
         "realtime_url": "https://rmwb-gtfsrt.civilia.ca/pb/vehiclePositions.pb?key=0C4bE1ff25e445788A128B1D6248D201",
+        "accurate_seconds": false,
         "prefix_headsigns": true,
         "prefer_stop_id": true,
         "show_stop_number": false,

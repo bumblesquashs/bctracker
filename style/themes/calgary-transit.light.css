@@ -28,6 +28,8 @@
     --status-bar-hover: #A30000;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #666666;
+    
     --loading-background: #FFFFFF;
     --loading-foreground: #FF0808;
     
@@ -42,6 +44,9 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --amenity-background: #CBCBCB;
+    --amenity-color: #000000;
     
     --beta-tag-background: #A30000;
     --beta-tag-text: #FFFFFF;
@@ -78,10 +83,6 @@ input[type="text"]:focus {
     border-color: #A30000;
 }
 
-table {
-    border-color: #666666;
-}
-
 table tbody tr:hover {
     background-color: #CBCBCB;
 }
@@ -91,14 +92,9 @@ table tbody tr.header {
     color: #FFFFFF;
 }
 
-table td {
-    border-color: #666666;
-}
-
 table th {
     background-color: #FF0808;
     color: #FFFFFF;
-    border-color: #666666;
 }
 
 table tr {
@@ -341,7 +337,7 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
 }
 
@@ -372,6 +368,10 @@ table tr.table-button:hover {
     --image-color: #666666;
 }
 
+.paging {
+    --image-color: #666666;
+}
+
 .paging .page {
     background-color: #E6E6E6;
     color: #000000;
@@ -388,10 +388,6 @@ table tr.table-button:hover {
 
 .paging .page.current:hover {
     background-color: #FF0808;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

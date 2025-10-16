@@ -68,6 +68,10 @@ table th {
     --image-size: 28px;
 }
 
+#refresh-button-placeholder {
+    width: 28px;
+}
+
 #search {
     order: 2;
     border-bottom-width: 1px;
@@ -170,6 +174,10 @@ table th {
     --image-size: 28px;
 }
 
+.vehicle {
+    min-width: 38px;
+}
+
 .button {
     font-size: 14pt;
     overflow: hidden;
@@ -239,6 +247,10 @@ button.compact {
 .tab-button-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.table-border-wrapper {
+    width: 100%;
 }
 
 .tab-button {

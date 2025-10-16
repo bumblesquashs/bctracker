@@ -30,6 +30,8 @@
     --status-bar-hover: #330100;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #565656;
+    
     --loading-background: #2F2F2F;
     --loading-foreground: #530200;
     
@@ -44,6 +46,9 @@
     --map-control-background: rgba(30, 30, 30, 0.7);
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
+    
+    --amenity-background: #565656;
+    --amenity-color: #FFFFFF;
     
     --beta-tag-background: #330100;
     --beta-tag-text: #FFFFFF;
@@ -88,10 +93,6 @@ iframe {
     color-scheme: light;
 }
 
-table {
-    border-color: #565656;
-}
-
 table tbody tr:hover {
     background-color: #565656;
 }
@@ -101,14 +102,9 @@ table tbody tr.header {
     color: #FFFFFF;
 }
 
-table td {
-    border-color: #565656;
-}
-
 table th {
     background-color: #860300;
     color: #FFFFFF;
-    border-color: #565656;
 }
 
 table tr {
@@ -351,7 +347,7 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
 }
 
@@ -381,6 +377,10 @@ table tr.table-button:hover {
     --image-color: #565656;
 }
 
+.paging {
+    --image-color: #989898;
+}
+
 .paging .page {
     background-color: #393939;
     color: #FFFFFF;
@@ -397,10 +397,6 @@ table tr.table-button:hover {
 
 .paging .page.current:hover {
     background-color: #530200;
-}
-
-.record-warnings {
-    --image-color: #FF0000;
 }
 
 .route {

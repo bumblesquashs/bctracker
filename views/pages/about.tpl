@@ -11,16 +11,17 @@
             <div class="content">
                 <p>
                     ABTracker is a browser for <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data from transit agencies around Alberta.
-                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in AB communities.
+                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down vehicles in AB communities.
                 </p>
                 <p>Currently, we include information from these transit agencies:</p>
-                <ul>
+                <div class="column gap-5">
                     % for agency in agencies:
-                        <li>
-                            <a href="{{ agency.website }}">{{ agency }}</a>
-                        </li>
+                        <div class="row">
+                            % include('components/agency_logo')
+                            <a href="{{ agency.website }}" target="_blank">{{ agency }}</a>
+                        </div>
                     % end
-                </ul>
+                </div>
             </div>
         </div>
         <div class="section">

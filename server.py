@@ -9,11 +9,11 @@ import cherrypy as cp
 from database import Database
 from settings import Settings
 
-from models.bus import Bus
 from models.context import Context
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.stop import StopType
 from models.time import Time
 from models.timestamp import Timestamp
 
@@ -21,7 +21,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 2
+VERSION = 3
 
 random = Random()
 
@@ -55,12 +55,12 @@ class Server(Bottle):
         self.add('/realtime/models', callback=self.realtime_models)
         self.add('/realtime/speed', callback=self.realtime_speed)
         self.add('/fleet', callback=self.fleet)
-        self.add('/bus/<bus_number>', callback=self.bus_overview)
-        self.add('/bus/<bus_number>/map', callback=self.bus_map)
-        self.add('/bus/<bus_number>/history', callback=self.bus_history)
-        self.add('/bus/<bus_agency>/<bus_number>', callback=self.bus_overview)
-        self.add('/bus/<bus_agency>/<bus_number>/map', callback=self.bus_map)
-        self.add('/bus/<bus_agency>/<bus_number>/history', callback=self.bus_history)
+        self.add('/bus/<vehicle_id>', callback=self.vehicle_overview)
+        self.add('/bus/<vehicle_id>/map', callback=self.vehicle_map)
+        self.add('/bus/<vehicle_id>/history', callback=self.vehicle_history)
+        self.add('/bus/<agency_id>/<vehicle_id>', callback=self.vehicle_overview)
+        self.add('/bus/<agency_id>/<vehicle_id>/map', callback=self.vehicle_map)
+        self.add('/bus/<agency_id>/<vehicle_id>/history', callback=self.vehicle_history)
         self.add('/history', callback=self.history_last_seen)
         self.add('/history/first-seen', callback=self.history_first_seen)
         self.add('/history/transfers', callback=self.history_transfers)
@@ -80,6 +80,7 @@ class Server(Bottle):
         self.add('/trips/<trip_id>/map', callback=self.trip_map)
         self.add('/trips/<trip_id>/history', callback=self.trip_history)
         self.add('/stops', callback=self.stops)
+        self.add('/stops/stations', callback=self.stations)
         self.add('/stops/<stop_number>', callback=self.stop_overview)
         self.add('/stops/<stop_number>/map', callback=self.stop_map)
         self.add('/stops/<stop_number>/schedule', callback=self.stop_schedule)
@@ -154,7 +155,7 @@ class Server(Bottle):
                 try:
                     services.gtfs.load(context, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, True)
+                        services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
@@ -204,7 +205,7 @@ class Server(Bottle):
         is_admin = self.validate_admin()
         
         time_format = self.query_cookie('time_format')
-        bus_marker_style = self.query_cookie('bus_marker_style')
+        vehicle_marker_style = self.query_cookie('vehicle_marker_style')
         hide_systems = self.query_cookie('hide_systems') != 'no'
         if context.system:
             last_updated = context.system.last_updated
@@ -247,7 +248,7 @@ class Server(Bottle):
             theme_variant=theme_variant,
             high_contrast=high_contrast,
             time_format=time_format,
-            bus_marker_style=bus_marker_style,
+            vehicle_marker_style=vehicle_marker_style,
             hide_systems=hide_systems,
             show_speed=request.get_cookie('speed') == '1994',
             show_random=request.get_cookie('random') == 'kumquat',
@@ -310,7 +311,7 @@ class Server(Bottle):
             return value
         return options[0]
     
-    def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', validate_system=True, callback=None):
+    def add(self, base_path, method='GET', append_slash=True, require_admin=False, system_key='system_id', agency_key='agency_id', validate_system=True, callback=None):
         '''Adds an endpoint to the server'''
         if not callback:
             return
@@ -332,13 +333,21 @@ class Server(Bottle):
                 system = repositories.system.find(system_id)
                 if validate_system and not system:
                     raise HTTPError(404)
+                if system:
+                    agency = system.agency
+                else:
+                    agency = None
                 del kwargs[system_key]
+                if agency_key in kwargs:
+                    del kwargs[agency_key]
             else:
+                if agency_key in kwargs:
+                     agency_id = kwargs[agency_key]
+                     agency = repositories.agency.find(agency_id)
+                     del kwargs[agency_key]
+                else:
+                     agency = None
                 system = None
-            if system:
-                agency = system.agency
-            else:
-                agency = None
             context = Context(agency, system)
             return callback(context=context, *args, **kwargs)
         self.route(paths, method, callback=endpoint)
@@ -364,12 +373,16 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
+        favourites = self.get_favourites()
+        order_ids = {f.value.order_id for f in favourites if f.type == 'vehicle' and f.value.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='home',
             title='Home',
             enable_refresh=False,
-            favourites=self.get_favourites()
+            favourites=favourites,
+            orders=orders
         )
     
     def news(self, context: Context):
@@ -407,13 +420,16 @@ class Server(Bottle):
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
+        order_ids = {p.vehicle.order_id for p in positions if p.vehicle.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='realtime/all',
             title='Realtime',
             path=['realtime'],
             positions=positions,
-            show_nis=show_nis
+            show_nis=show_nis,
+            orders=orders
         )
     
     def realtime_routes(self, context: Context):
@@ -435,13 +451,15 @@ class Server(Bottle):
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
             positions = [p for p in positions if p.trip]
+        orders = repositories.order.find_all(context)
         return self.page(
             context=context,
             name='realtime/models',
             title='Realtime',
             path=['realtime', 'models'],
             positions=positions,
-            show_nis=show_nis
+            show_nis=show_nis,
+            orders = orders
         )
     
     def realtime_speed(self, context: Context):
@@ -461,157 +479,166 @@ class Server(Bottle):
     
     def fleet(self, context: Context):
         orders = repositories.order.find_all(context)
-        overviews = repositories.overview.find_all()
+        allocations = repositories.allocation.find_all(Context())
         return self.page(
             context=context,
             name='fleet',
             title='Fleet',
             path=['fleet'],
             orders=[o for o in sorted(orders) if o.visible],
-            overviews={o.bus.number: o for o in overviews}
+            allocations=allocations
         )
     
-    def bus_overview(self, context: Context, bus_number, bus_agency=None):
-        if bus_agency:
-            bus_agency = repositories.agency.find(bus_agency)
-            if not bus_agency:
-                raise HTTPError(404)
-        else:
-            if context.agency:
-                bus_agency = context.agency
-            else:
-                return self.error_page(
-                    context=context,
-                    name='agency_required',
-                    title='Select an Agency',
-                    bus_number=bus_number
-                )
+    def vehicle_overview(self, context: Context, vehicle_id):
         if not context.agency:
-            context.agency = bus_agency
-        bus = Bus.find(context, bus_number)
-        overview = repositories.overview.find(bus)
-        if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
-                name='invalid_bus',
-                title='Unknown Bus',
-                bus_number=bus_number
+                name='agency_required',
+                title='Select an Agency',
+                vehicle_id=vehicle_id
             )
-        position = repositories.position.find(bus)
-        records = repositories.record.find_all(Context(agency=bus.agency), bus=bus, limit=20)
+        vehicle = context.find_vehicle(vehicle_id)
+        allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
+        if (not vehicle.order_id and not allocation) or not vehicle.visible:
+            return self.error_page(
+                context=context,
+                name='invalid_vehicle',
+                title=f'Unknown {context.vehicle_type}',
+                vehicle_id=vehicle_id
+            )
+        order = repositories.order.find_order(context, vehicle.order_id)
+        position = repositories.position.find(context.agency_id, vehicle_id)
+        if allocation:
+            last_position = allocation.last_position
+        else:
+            last_position = None
+        records = repositories.record.find_all(vehicle_id=vehicle_id, limit=20)
+        if vehicle.livery:
+            livery = repositories.livery.find(context.agency_id, vehicle.livery)
+        else:
+            livery = None
+        if position and position.trip and position.sequence is not None:
+            upcoming_departures = repositories.departure.find_upcoming(position.context, position.trip_id, position.sequence)
+        else:
+            upcoming_departures = []
+        model = vehicle.model
+        if model and model.type.title_prefix:
+            title = f'{model.type.title_prefix} {vehicle}'
+        else:
+            title = str(vehicle)
         return self.page(
             context=context,
-            name='bus/overview',
-            title=f'Bus {bus}',
-            include_maps=bool(position),
-            bus=bus,
+            name='vehicle/overview',
+            title=title,
+            include_maps=bool(position) or bool(last_position),
+            vehicle=vehicle,
+            order=order,
             position=position,
+            last_position=last_position,
             records=records,
-            overview=overview,
-            favourite=Favourite('vehicle', bus),
+            livery=livery,
+            upcoming_departures=upcoming_departures,
+            allocation=allocation,
+            favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites()
         )
     
-    def bus_map(self, context: Context, bus_number, bus_agency=None):
-        if bus_agency:
-            bus_agency = repositories.agency.find(bus_agency)
-            if not bus_agency:
-                raise HTTPError(404)
-        else:
-            if context.agency:
-                bus_agency = context.agency
-            else:
-                return self.error_page(
-                    context=context,
-                    name='agency_required',
-                    title='Select an Agency',
-                    bus_number=bus_number
-                )
+    def vehicle_map(self, context: Context, vehicle_id):
         if not context.agency:
-            context.agency = bus_agency
-        bus = Bus.find(context, bus_number)
-        overview = repositories.overview.find(bus)
-        if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
-                name='invalid_bus',
-                title='Unknown Bus',
-                bus_number=bus_number
+                name='agency_required',
+                title='Select an Agency',
+                vehicle_id=vehicle_id
             )
-        position = repositories.position.find(bus)
+        vehicle = context.find_vehicle(vehicle_id)
+        allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
+        if (not vehicle.order_id and not allocation) or not vehicle.visible:
+            return self.error_page(
+                context=context,
+                name='invalid_vehicle',
+                title=f'Unknown {context.vehicle_type}',
+                vehicle_id=vehicle_id
+            )
+        position = repositories.position.find(context.agency_id, vehicle_id)
+        if allocation:
+            last_position = allocation.last_position
+        else:
+            last_position = None
+        model = vehicle.model
+        if model and model.type.title_prefix:
+            title = f'{model.type.title_prefix} {vehicle}'
+        else:
+            title = str(vehicle)
         return self.page(
             context=context,
-            name='bus/map',
-            title=f'Bus {bus}',
-            full_map=bool(position),
-            bus=bus,
+            name='vehicle/map',
+            title=title,
+            full_map=bool(position) or bool(last_position),
+            vehicle=vehicle,
             position=position,
-            favourite=Favourite('vehicle', bus),
+            last_position=last_position,
+            favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites()
         )
     
-    def bus_history(self, context: Context, bus_number, bus_agency=None):
-        if bus_agency:
-            bus_agency = repositories.agency.find(bus_agency)
-            if not bus_agency:
-                raise HTTPError(404)
-        else:
-            if context.agency:
-                bus_agency = context.agency
-            else:
-                return self.error_page(
-                    context=context,
-                    name='agency_required',
-                    title='Select an Agency',
-                    bus_number=bus_number
-                )
+    def vehicle_history(self, context: Context, vehicle_id):
         if not context.agency:
-            context.agency = bus_agency
-        bus = Bus.find(context, bus_number)
-        overview = repositories.overview.find(bus)
-        if (not bus.order and not overview) or not bus.visible:
             return self.error_page(
                 context=context,
-                name='invalid_bus',
-                title='Unknown Bus',
-                bus_number=bus_number
+                name='agency_required',
+                title='Select an Agency',
+                vehicle_id=vehicle_id
+            )
+        vehicle = context.find_vehicle(vehicle_id)
+        allocations = repositories.allocation.find_all(context.without_system(), vehicle_id)
+        if (not vehicle.order_id and not allocations) or not vehicle.visible:
+            return self.error_page(
+                context=context,
+                name='invalid_vehicle',
+                title=f'Unknown {context.vehicle_type}',
+                vehicle_id=vehicle_id
             )
         try:
             page = int(request.query['page'])
         except (KeyError, ValueError):
             page = 1
         items_per_page = 100
-        total_items = repositories.record.count(Context(agency=bus.agency), bus=bus)
+        total_items = repositories.record.count(context.without_system(), vehicle_id=vehicle_id)
         if page < 1:
             records = []
         else:
-            records = repositories.record.find_all(Context(agency=bus.agency), bus=bus, limit=items_per_page, page=page)
-        transfers = repositories.transfer.find_all(bus=bus)
-        tracked_systems = set()
+            records = repositories.record.find_all(context.without_system(), vehicle_id=vehicle_id, limit=items_per_page, page=page)
+        transfers = repositories.transfer.find_all_by_vehicle(context, vehicle_id)
         events = []
-        if overview:
-            tracked_systems.add(overview.first_seen_context.system)
-            tracked_systems.add(overview.last_seen_context.system)
-            events.append(Event(overview.first_seen_date, 'First Seen'))
-            if overview.first_record:
-                events.append(Event(overview.first_record.date, 'First Tracked'))
-            events.append(Event(overview.last_seen_date, 'Last Seen'))
-            if overview.last_record:
-                events.append(Event(overview.last_record.date, 'Last Tracked'))
-            for transfer in transfers:
-                tracked_systems.add(transfer.old_context.system)
-                tracked_systems.add(transfer.new_context.system)
-                events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
+        first_seen_dates = {a.first_seen for a in allocations}
+        if first_seen_dates:
+            events.append(Event(min(first_seen_dates), 'First Seen'))
+        first_tracked_dates = {a.first_record.date for a in allocations if a.first_record}
+        if first_tracked_dates:
+            events.append(Event(min(first_tracked_dates), 'First Tracked'))
+        last_seen_dates = {a.last_seen for a in allocations}
+        if last_seen_dates:
+            events.append(Event(max(last_seen_dates), 'Last Seen'))
+        last_tracked_dates = {a.last_record.date for a in allocations if a.last_record}
+        if last_tracked_dates:
+            events.append(Event(max(last_tracked_dates), 'Last Tracked'))
+        for transfer in transfers:
+            events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
+        model = vehicle.model
+        if model and model.type.title_prefix:
+            title = f'{model.type.title_prefix} {vehicle}'
+        else:
+            title = str(vehicle)
         return self.page(
             context=context,
-            name='bus/history',
-            title=f'Bus {bus}',
-            bus=bus,
+            name='vehicle/history',
+            title=title,
+            vehicle=vehicle,
             records=records,
-            overview=overview,
-            tracked_systems=tracked_systems,
+            allocations=sorted(allocations, reverse=True),
             events=events,
-            favourite=Favourite('vehicle', bus),
+            favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites(),
             page=page,
             items_per_page=items_per_page,
@@ -619,64 +646,86 @@ class Server(Bottle):
         )
     
     def history_last_seen(self, context: Context):
-        overviews = [o for o in repositories.overview.find_all(context=context) if o.last_record and o.bus.visible]
+        show_transfers = self.query_cookie('show_transfers', 'true') == 'true'
+        allocations = [a for a in repositories.allocation.find_all_last_seen(context, None if show_transfers else True) if a.vehicle.visible]
         try:
             days = int(request.query['days'])
         except (KeyError, ValueError):
             days = None
         if days:
             date = Date.today(context.timezone) - timedelta(days=days)
-            overviews = [o for o in overviews if o.last_record.date > date]
+            allocations = [a for a in allocations if a.last_date > date]
+        order_ids = {a.vehicle.order_id for a in allocations if a.vehicle.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='history/last_seen',
-            title='Vehicle History',
+            title=f'{context.vehicle_type} History',
             path=['history'],
             path_args={
                 'days': days
             },
-            overviews=sorted(overviews, key=lambda o: o.bus),
+            allocations=sorted(allocations, key=lambda a: a.vehicle),
+            show_transfers=show_transfers,
+            orders=orders,
             days=days
         )
     
     def history_first_seen(self, context: Context):
-        overviews = [o for o in repositories.overview.find_all(context=context) if o.first_record and o.bus.visible]
+        show_transfers = self.query_cookie('show_transfers', 'true') == 'true'
+        allocations = [a for a in repositories.allocation.find_all_first_seen(context, None if show_transfers else True) if a.vehicle.visible]
         return self.page(
             context=context,
             name='history/first_seen',
-            title='Vehicle History',
+            title=f'{context.vehicle_type} History',
             path=['history', 'first-seen'],
-            overviews=sorted(overviews, key=lambda o: (o.first_record.date, o.first_record.first_seen, o.bus), reverse=True)
+            allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.vehicle), reverse=True),
+            show_transfers=show_transfers
         )
     
     def history_transfers(self, context: Context):
         filter = request.query.get('filter')
         if filter == 'from':
-            transfers = repositories.transfer.find_all(old_context=context)
+            transfers = repositories.transfer.find_all(context, Context())
         elif filter == 'to':
-            transfers = repositories.transfer.find_all(new_context=context)
+            transfers = repositories.transfer.find_all(Context(), context)
         else:
-            transfers = repositories.transfer.find_all(old_context=context,new_context=context)
+            transfers = repositories.transfer.find_all(context, context)
         return self.page(
             context=context,
             name='history/transfers',
-            title='Vehicle History',
+            title='Transfers',
             path=['history', 'transfers'],
-            transfers=[t for t in transfers if t.bus.visible],
+            transfers=[t for t in transfers if t.new_vehicle.visible],
             filter=filter
         )
     
     def routes_list(self, context: Context):
+        if context.system:
+            routes = repositories.route.find_all(context)
+            context.system.update_route_caches([r.id for r in routes])
+        else:
+            routes = []
         return self.page(
             context=context,
             name='routes/list',
             title='Routes',
             path=['routes'],
-            enable_refresh=False
+            enable_refresh=False,
+            routes=sorted(routes)
         )
     
     def routes_map(self, context: Context):
-        routes = repositories.route.find_all(context)
+        if context.system:
+            routes = repositories.route.find_all(context)
+            context.system.update_route_caches([r.id for r in routes])
+        else:
+            # Workaround as default context is currently for BC Transit only
+            routes = repositories.route.find_all(Context())
+            systems = {r.system for r in routes}
+            for system in systems:
+                system_route_ids = [r.id for r in routes if r.system == system]
+                system.update_route_caches(system_route_ids)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             context=context,
@@ -690,6 +739,7 @@ class Server(Bottle):
         )
     
     def route_overview(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -709,6 +759,7 @@ class Server(Bottle):
                 route_number=route_number
             )
         trips = sorted(route.get_trips(date=Date.today(context.timezone)))
+        assignments = repositories.assignment.find_all(context, route_id=route.id)
         return self.page(
             context=context,
             name='route/overview',
@@ -716,14 +767,15 @@ class Server(Bottle):
             include_maps=len(route.trips) > 0,
             route=route,
             trips=trips,
-            recorded_today=repositories.record.find_recorded_today(context, trips),
-            assignments=repositories.assignment.find_all(context, route=route),
-            positions=repositories.position.find_all(context, route=route),
+            recorded_today=repositories.record.find_recorded_today(context, [t.id for t in trips]),
+            assignments={a.block_id: a for a in assignments},
+            positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
     
     def route_map(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -748,12 +800,14 @@ class Server(Bottle):
             title=str(route),
             full_map=len(route.trips) > 0,
             route=route,
-            positions=repositories.position.find_all(context, route=route),
+            departures=repositories.departure.find_all(context, route_id=route.id),
+            positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
             favourites=self.get_favourites()
         )
     
     def route_schedule(self, context: Context, route_number):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -783,6 +837,7 @@ class Server(Bottle):
         )
     
     def route_schedule_date(self, context: Context, route_number, date_string):
+        route_number=route_number.replace('-and-', '/')
         if not context.system:
             return self.error_page(
                 context=context,
@@ -815,15 +870,15 @@ class Server(Bottle):
     
     def blocks_overview(self, context: Context):
         if context.system and context.realtime_enabled:
-            recorded_buses = repositories.record.find_recorded_today_by_block(context)
+            recorded_vehicles = repositories.record.find_recorded_today_by_block(context)
         else:
-            recorded_buses = {}
+            recorded_vehicles = {}
         return self.page(
             context=context,
             name='blocks/overview',
             title='Blocks',
             path=['blocks'],
-            recorded_buses=recorded_buses
+            recorded_vehicles=recorded_vehicles
         )
     
     def blocks_schedule(self, context: Context):
@@ -868,8 +923,8 @@ class Server(Bottle):
             title=f'Block {block.id}',
             include_maps=True,
             block=block,
-            positions=repositories.position.find_all(context, block=block),
-            assignment=repositories.assignment.find(context, block)
+            positions=repositories.position.find_all(context, block_id=block_id),
+            assignment=repositories.assignment.find_by_context(context, block_id)
         )
     
     def block_map(self, context: Context, block_id):
@@ -894,7 +949,8 @@ class Server(Bottle):
             title=f'Block {block.id}',
             full_map=True,
             block=block,
-            positions=repositories.position.find_all(context, block=block)
+            departures=repositories.departure.find_all(context, block_id=block_id),
+            positions=repositories.position.find_all(context, block_id=block_id)
         )
     
     def block_history(self, context: Context, block_id):
@@ -913,7 +969,9 @@ class Server(Bottle):
                 title='Unknown Block',
                 block_id=block_id
             )
-        records = repositories.record.find_all(context, block=block)
+        records = repositories.record.find_all(context, block_id=block_id)
+        order_ids = {r.vehicle.order_id for r in records if r.vehicle.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -923,6 +981,7 @@ class Server(Bottle):
             name='block/history',
             title=f'Block {block.id}',
             block=block,
+            orders=orders,
             records=records,
             events=events
         )
@@ -949,8 +1008,8 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             include_maps=True,
             trip=trip,
-            positions=repositories.position.find_all(context, trip=trip),
-            assignment=repositories.assignment.find(context, trip.block_id)
+            positions=repositories.position.find_all(context, trip_id=trip_id),
+            assignment=repositories.assignment.find_by_context(context, trip.block_id)
         )
     
     def trip_map(self, context: Context, trip_id):
@@ -975,7 +1034,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             full_map=True,
             trip=trip,
-            positions=repositories.position.find_all(context, trip=trip)
+            positions=repositories.position.find_all(context, trip_id=trip_id)
         )
     
     def trip_history(self, context: Context, trip_id):
@@ -994,7 +1053,9 @@ class Server(Bottle):
                 title='Unknown Trip',
                 trip_id=trip_id
             )
-        records = repositories.record.find_all(context, trip=trip)
+        records = repositories.record.find_all(context, trip_id=trip_id)
+        order_ids = {r.vehicle.order_id for r in records if r.vehicle.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         events = []
         if records:
             events.append(Event(records[0].date, 'Last Tracked'))
@@ -1005,6 +1066,7 @@ class Server(Bottle):
             title=f'Trip {trip.id}',
             trip=trip,
             records=records,
+            orders=orders,
             events=events
         )
     
@@ -1033,6 +1095,8 @@ class Server(Bottle):
         items_per_page = 100
         if context.system:
             stops = context.system.get_stops()
+            show_stations_tab = any(s.type == StopType.STATION for s in stops)
+            stops = [s for s in stops if s.type != StopType.STATION]
             if search:
                 stops = [s for s in stops if search.lower() in s.name.lower()]
             for route_url_id in routes_filter:
@@ -1048,17 +1112,20 @@ class Server(Bottle):
                 stops = []
             else:
                 stops = stops[start_index:end_index]
+            context.system.update_stop_caches([s.id for s in stops])
         else:
             stops = []
+            show_stations_tab = False
             total_items = 0
         return self.page(
             context=context,
-            name='stops',
+            name='stops/stops',
             title='Stops',
             path=['stops'],
             path_args=path_args,
             enable_refresh=False,
             stops=stops,
+            show_stations_tab=show_stations_tab,
             search=search,
             routes_filter=routes_filter,
             sort=sort,
@@ -1066,6 +1133,20 @@ class Server(Bottle):
             page=page,
             items_per_page=items_per_page,
             total_items=total_items
+        )
+    
+    def stations(self, context: Context):
+        if context.system:
+            stops = [s for s in context.system.get_stops() if s.type == StopType.STATION]
+            context.system.update_stop_caches([s.id for s in stops])
+        else:
+            stops = []
+        return self.page(
+            context=context,
+            name='stops/stations',
+            title='Stations',
+            path=['stops', 'stations'],
+            stops=stops
         )
     
     def stop_overview(self, context: Context, stop_number):
@@ -1087,18 +1168,32 @@ class Server(Bottle):
                 title='Unknown Stop',
                 stop_number=stop_number
             )
+        if stop.type == StopType.STATION:
+            nearby_stops = []
+        else:
+            all_stops = context.system.get_stops()
+            nearby_stops = sorted({s for s in all_stops if s.is_near(stop.lat, stop.lon) and s != stop and s.type != StopType.STATION})
+        child_stops = repositories.stop.find_all(context, parent_id=stop.id)
+        if stop.parent_id:
+            parent_stop = repositories.stop.find(context, stop_id=stop.parent_id)
+        else:
+            parent_stop = None
         departures = stop.find_departures(date=Date.today(context.timezone))
-        trips = [d.trip for d in departures]
-        positions = repositories.position.find_all(context, trip=trips)
+        trip_ids = [d.trip_id for d in departures]
+        positions = repositories.position.find_all(context, trip_id=trip_ids)
+        assignments = repositories.assignment.find_all(context, stop_id=stop.id)
         return self.page(
             context=context,
             name='stop/overview',
             title=str(stop),
             include_maps=True,
             stop=stop,
+            nearby_stops=nearby_stops,
+            child_stops=child_stops,
+            parent_stop=parent_stop,
             departures=departures,
-            recorded_today=repositories.record.find_recorded_today(context, trips),
-            assignments=repositories.assignment.find_all(context, stop=stop),
+            recorded_today=repositories.record.find_recorded_today(context, trip_ids),
+            assignments={a.block_id: a for a in assignments},
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
@@ -1129,6 +1224,7 @@ class Server(Bottle):
             context=context,
             full_map=True,
             stop=stop,
+            adjacent_departures=repositories.departure.find_adjacent(context, stop.id),
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
         )
@@ -1239,20 +1335,22 @@ class Server(Bottle):
         systems = list(repositories.system.find_all())
         system = random.choice(systems)
         context = system.context
-        options = ['route', 'stop', 'block', 'trip']
+        options = ['route', 'stop', 'trip']
+        if context.enable_blocks:
+            options.append('block')
         if system.realtime_enabled:
-            options.append('bus')
+            options.append('vehicle')
         selection = random.choice(options)
         match selection:
-            case 'bus':
-                overviews = system.get_overviews()
-                if not overviews:
+            case 'vehicle':
+                allocations = system.get_allocations()
+                if not allocations:
                     redirect(self.get_url(context))
-                overview = random.choice(overviews)
+                allocation = random.choice(allocations)
                 if system:
-                    redirect(self.get_url(context, 'bus', overview.bus))
+                    redirect(self.get_url(context, 'bus', allocation.vehicle))
                 else:
-                    redirect(self.get_url(context, 'bus', overview.agency, overview.bus))
+                    redirect(self.get_url(context, 'bus', allocation.context.agency, allocation.vehicle))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
@@ -1338,13 +1436,36 @@ class Server(Bottle):
         lon = float(request.query['lon'])
         size = float(request.query.get('size', 0.01))
         stops = repositories.stop.find_all(context, lat=lat, lon=lon, size=size)
+        if context.system:
+            context.system.update_stop_caches([s.id for s in stops])
+        else:
+            systems = {s.system for s in stops}
+            for system in systems:
+                system_stop_ids = [s.id for s in stops if s.system == system]
+                system.update_stop_caches(system_stop_ids)
         return {
             'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
     
     def api_routes(self, context: Context):
-        routes = repositories.route.find_all(context)
+        if context.system:
+            routes = repositories.route.find_all(context)
+            context.system.update_route_caches([r.id for r in routes])
+        else:
+            # Workaround as default context is currently for BC Transit only
+            routes = repositories.route.find_all(Context())
+            systems = {r.system for r in routes}
+            for system in systems:
+                system_route_ids = [r.id for r in routes if r.system == system]
+                system.update_route_caches(system_route_ids)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
+        if context.system:
+            context.system.update_trip_caches([t.id for t in trips])
+        else:
+            systems = {t.system for t in trips}
+            for system in systems:
+                system_trip_ids = [t.id for t in trips if t.system == system]
+                system.update_trip_caches(system_trip_ids)
         shape_ids = set()
         shape_trips = []
         for trip in trips:
@@ -1361,18 +1482,17 @@ class Server(Bottle):
         query = request.forms.get('query', '')
         page = int(request.forms.get('page', 0))
         count = int(request.forms.get('count', 10))
-        include_buses = int(request.forms.get('include_buses', 1)) == 1
+        include_vehicles = int(request.forms.get('include_vehicles', 1)) == 1
         include_routes = int(request.forms.get('include_routes', 1)) == 1
         include_stops = int(request.forms.get('include_stops', 1)) == 1
         include_blocks = int(request.forms.get('include_blocks', 1)) == 1
         matches = []
         if query != '':
-            if query.isnumeric() and context.realtime_enabled:
-                if include_buses:
-                    bus_numbers = repositories.overview.find_bus_numbers(context)
-                    matches += repositories.order.find_matches(context, query, bus_numbers)
+            if context.realtime_enabled and include_vehicles:
+                vehicle_ids = repositories.allocation.find_vehicle_ids(context)
+                matches += repositories.order.find_matches(context, query, vehicle_ids)
             if context.system:
-                if include_blocks:
+                if include_blocks and context.enable_blocks:
                     matches += context.system.search_blocks(query)
                 if include_routes:
                     matches += context.system.search_routes(query)
@@ -1416,7 +1536,7 @@ class Server(Bottle):
                 try:
                     services.gtfs.load(context)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, True)
+                        services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     print(f'Error loading data for {context}: {e}')
