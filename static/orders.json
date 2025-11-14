@@ -20,6 +20,9 @@
             ],
             [
                 { "year": 2022, "low": 9543, "high": 9550, "livery": "green-blue-stripes", "usb_charging": true }
+            ],
+            [
+                { "year": 2025, "low": 9551, "high": 9579, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "alexander-dennis-enviro500h": [
@@ -271,6 +274,9 @@
         "new-flyer-xe40": [
             [
                 { "year": 2025, "low": 7500, "high": 7524, "livery": "green-front", "usb_charging": true }
+            ],
+            [
+                { "year": 2026, "low": 7525, "high": 7532, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "new-flyer-xn40": [
@@ -350,6 +356,9 @@
         "nova-bus-lfse+": [
             [
                 { "year": 2025, "low": 7010, "high": 7011, "livery": "green-front", "usb_charging": true }
+            ],
+            [
+                { "year": 2025, "low": 7012, "high": 7042, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "proterra-zx5": [
