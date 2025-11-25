@@ -39,8 +39,8 @@
             "victoria": {
                 "name": "Victoria",
                 "remote_id": 48,
-                "gtfs_cutoff": "2025-12-07",
-                "max_invalid_positions": 3
+                "max_invalid_positions": 3,
+                "ignore_route_colour": "000000"
             },
             "west-coast": {
                 "name": "West Coast",
