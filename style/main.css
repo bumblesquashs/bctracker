@@ -10,6 +10,7 @@ a {
 }
 
 body {
+    background-color: var(--navigation-bar-background);
     font-family: var(--serif-font);
 }
 

@@ -56,7 +56,6 @@ a {
 }
 
 body {
-    background-color: #FFFFFF;
     color: #000000;
 }
 
@@ -112,6 +111,10 @@ table tr.table-button {
 
 table tr.table-button:hover {
     background-color: #001325;
+}
+
+#content {
+    background-color: #FFFFFF;
 }
 
 #loading-stop {

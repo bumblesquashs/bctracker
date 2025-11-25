@@ -54,7 +54,6 @@ a {
 }
 
 body {
-    background-color: #FFFFFF;
     color: #000000;
 }
 
@@ -112,12 +111,16 @@ table tr.table-button:hover {
     background-color: #840000;
 }
 
-#map.preview {
-    border-color: #666666;
+#content {
+    background-color: #FFFFFF;
 }
 
 #loading-stop {
     --image-color: #FFFFFF;
+}
+
+#map.preview {
+    border-color: #666666;
 }
 
 #map-controls .control.active {

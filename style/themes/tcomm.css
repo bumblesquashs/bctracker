@@ -49,7 +49,6 @@ a {
 }
 
 body {
-    background-color: #FFFFFF;
     color: #000000;
 }
 
@@ -114,6 +113,10 @@ table tr.table-button {
 table tr.table-button:hover {
     background: #DFDFDF;
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
+#content {
+    background-color: #FFFFFF;
 }
 
 #loading-stop {
