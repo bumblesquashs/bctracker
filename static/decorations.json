@@ -15,10 +15,18 @@
             "description": "Santa Bus",
             "enabled": false
         },
+        "1254": {
+            "text": "🎅",
+            "description": "Santa Bus"
+        },
         "4017": {
             "text": "🎅",
             "description": "Santa Bus",
             "enabled": false
+        },
+        "6021": {
+            "text": "🎅",
+            "description": "Santa Bus"
         },
         "6022": {
             "text": "🎅",
@@ -36,8 +44,7 @@
         },
         "9434": {
             "text": "🎅",
-            "description": "Santa Bus",
-            "enabled": false
+            "description": "Santa Bus"
         },
         "9458": {
             "text": "🏳️‍🌈",
