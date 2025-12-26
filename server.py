@@ -21,7 +21,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 63
+VERSION = 64
 
 random = Random()
 
