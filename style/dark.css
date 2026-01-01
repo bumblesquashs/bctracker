@@ -41,6 +41,34 @@
     --image-color: #ABABAB;
 }
 
+.log-line.critical {
+    background-color: #700000;
+    color: #FF7F7F;
+    font-weight: bold;
+}
+
+.log-line.debug {
+    background-color: #2F2F2F;
+    color: #CBCBCB;
+}
+
+.log-line.error {
+    background-color: #FF0000;
+    color: #FF7F7F;
+    font-weight: bold;
+}
+
+.log-line.info {
+    background-color: #00284C;
+    color: #F1F8FF;
+}
+
+.log-line.warning {
+    background-color: #4C1F00;
+    color: #FF6A00;
+    font-weight: bold;
+}
+
 .marker .bearing {
     filter: brightness(80%);
 }

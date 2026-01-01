@@ -6,6 +6,10 @@
 <div id="page-header">
     <h1>Administration</h1>
     <h2>Tools for server and system management</h2>
+    <div class="tab-button-bar">
+        <span class="tab-button current">Management</span>
+        <a href="{{ get_url(context, 'admin', 'logs') }}" class="tab-button">Logs</a>
+    </div>
 </div>
 
 <div class="page-container">

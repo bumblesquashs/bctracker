@@ -1,9 +1,8 @@
 
-from logging.handlers import TimedRotatingFileHandler
-from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
 from random import Random
+from time import time
 import cherrypy as cp
 
 from database import Database
@@ -89,6 +88,7 @@ class Server(Bottle):
         self.add('/systems', callback=self.systems)
         self.add('/random', callback=self.random)
         self.add('/admin', require_admin=True, callback=self.admin)
+        self.add('/admin/logs', require_admin=True, callback=self.admin_logs)
         
         # Frames
         self.add('/frame/nearby', append_slash=False, callback=self.frame_nearby)
@@ -120,18 +120,20 @@ class Server(Bottle):
         '''Loads all required data and launches the server'''
         self.running = True
         
+        services.log.info('Server started')
+        
         cp.config.update('server.conf')
         self.settings.setup(cp.config)
         
         self.database.connect()
         
         if args.debug:
-            services.log.info('Starting bottle in DEBUG mode')
+            services.log.debug('Starting bottle in DEBUG mode')
             debug(True)
         if args.reload:
-            services.log.info('Forcing GTFS redownload')
+            services.log.debug('Forcing GTFS redownload')
         if args.updatedb:
-            services.log.info('Forcing database refresh')
+            services.log.debug('Forcing database refresh')
         
         repositories.decoration.load()
         repositories.order.load()
@@ -140,10 +142,7 @@ class Server(Bottle):
         
         repositories.position.delete_all()
         
-        handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
-        log = WSGILogger(self, [handler], ApacheFormatter())
-        
-        cp.tree.graft(log, '/')
+        cp.tree.graft(services.log.get_access_logger(self), '/')
         cp.server.start()
         
         for system in repositories.system.find_all():
@@ -167,6 +166,7 @@ class Server(Bottle):
     
     def stop(self):
         '''Terminates the server'''
+        services.log.info('Server shut down')
         self.running = False
         services.cron.stop()
         self.database.disconnect()
@@ -335,10 +335,16 @@ class Server(Bottle):
                 system = None
             if system:
                 agency = system.agency
-            else:                
+            else:
                 agency = repositories.agency.find('bc-transit')
             context = Context(agency, system)
-            return callback(context=context, *args, **kwargs)
+            start_time = time()
+            result = callback(context=context, *args, **kwargs)
+            end_time = time()
+            duration = end_time - start_time
+            if duration >= 5:
+                services.log.warning(f'Slow response to {request.path} ({round(duration, 2)}s)')
+            return result
         self.route(paths, method, callback=endpoint)
     
     # =============================================================
@@ -1344,11 +1350,22 @@ class Server(Bottle):
     def admin(self, context: Context):
         return self.page(
             context=context,
-            name='admin',
+            name='admin/management',
             title='Administration',
             path=['admin'],
             enable_refresh=False,
             disable_indexing=True
+        )
+    
+    def admin_logs(self, context: Context):
+        return self.page(
+            context=context,
+            name='admin/logs',
+            title='Logs',
+            path=['admin', 'logs'],
+            enable_refresh=False,
+            disable_indexing=True,
+            logs=services.log.read_logs()
         )
     
     # =============================================================

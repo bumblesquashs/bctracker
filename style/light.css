@@ -33,6 +33,34 @@
     --image-color: #666666;
 }
 
+.log-line.critical {
+    background-color: #FF7F7F;
+    color: #7A0000;
+    font-weight: bold;
+}
+
+.log-line.debug {
+    background-color: #E6E6E6;
+    color: #666666;
+}
+
+.log-line.error {
+    background-color: #FF7F7F;
+    color: #FF0000;
+    font-weight: bold;
+}
+
+.log-line.info {
+    background-color: #F1F8FF;
+    color: #3C5ABE;
+}
+
+.log-line.warning {
+    background-color: #FFE9D3;
+    color: #FF9A3A;
+    font-weight: bold;
+}
+
 .marker .icon.speed {
     color: #FFFFFF;
 }
