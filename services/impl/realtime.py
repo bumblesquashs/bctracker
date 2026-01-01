@@ -16,6 +16,7 @@ from models.time import Time
 from models.timestamp import Timestamp
 
 import repositories
+import services
 
 @dataclass(slots=True)
 class RealtimeService:
@@ -29,8 +30,6 @@ class RealtimeService:
         if not context.realtime_enabled:
             return
         data_path = f'data/realtime/{context.system_id}.bin'
-        
-        print(f'Updating realtime data for {context}')
         
         if path.exists(data_path):
             if self.settings.enable_realtime_backups:
@@ -110,7 +109,7 @@ class RealtimeService:
                     if not last_record or last_record.id != record_id:
                         repositories.allocation.set_last_record(allocation_id, record_id)
             except Exception as e:
-                print(f'Failed to update records: {e}')
+                services.log.error(f'Failed to update records: {e}')
         self.database.commit()
     
     def get_last_updated(self):

@@ -124,14 +124,14 @@ class Server(Bottle):
         self.settings.setup(cp.config)
         
         self.database.connect()
-            
+        
         if args.debug:
-            print('Starting bottle in DEBUG mode')
+            services.log.info('Starting bottle in DEBUG mode')
             debug(True)
         if args.reload:
-            print('Forcing GTFS redownload')
+            services.log.info('Forcing GTFS redownload')
         if args.updatedb:
-            print('Forcing database refresh')
+            services.log.info('Forcing database refresh')
         
         repositories.decoration.load()
         repositories.order.load()
@@ -155,14 +155,14 @@ class Server(Bottle):
                         services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {context}: {e}')
+                    services.log.error(f'Error loading data for {context}: {e}')
                 if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
                 services.realtime.update_records()
             except Exception as e:
-                print(f'Error updating records: {e}')
+                services.log.error(f'Error updating records: {e}')
             services.cron.start()
     
     def stop(self):
@@ -1504,14 +1504,14 @@ class Server(Bottle):
                         services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {context}: {e}')
+                    services.log.error(f'Error loading data for {context}: {e}')
                 if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
                 services.realtime.update_records()
             except Exception as e:
-                print(f'Error updating records: {e}')
+                services.log.error(f'Error updating records: {e}')
             services.cron.start()
         return 'Success'
     
@@ -1548,7 +1548,7 @@ class Server(Bottle):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading GTFS data for {context}: {e}')
+            services.log.error(f'Error loading GTFS data for {context}: {e}')
             return str(e)
     
     def api_admin_reload_realtime(self, context: Context, reload_system_id):
@@ -1563,7 +1563,7 @@ class Server(Bottle):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading realtime data for {context}: {e}')
+            services.log.error(f'Error loading realtime data for {context}: {e}')
             return str(e)
     
     # =============================================================
