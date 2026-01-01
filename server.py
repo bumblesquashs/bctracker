@@ -652,6 +652,10 @@ class Server(Bottle):
         )
     
     def history_transfers(self, context: Context):
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
         filter = request.query.get('filter')
         if filter == 'from':
             transfers = repositories.transfer.find_all(context, Context())
@@ -659,12 +663,24 @@ class Server(Bottle):
             transfers = repositories.transfer.find_all(Context(), context)
         else:
             transfers = repositories.transfer.find_all(context, context)
+        visible_transfers = [t for t in transfers if t.new_vehicle.visible]
+        items_per_page = 100
+        start_index = (page - 1) * items_per_page
+        end_index = page * items_per_page
+        if page < 1:
+            paged_transfers = []
+        else:
+            paged_transfers = visible_transfers[start_index:end_index]
         return self.page(
             context=context,
             name='history/transfers',
             title='Transfers',
             path=['history', 'transfers'],
-            transfers=[t for t in transfers if t.new_vehicle.visible],
+            transfers=visible_transfers,
+            paged_transfers=paged_transfers,
+            page=page,
+            items_per_page=items_per_page,
+            total_items=len(visible_transfers),
             filter=filter
         )
     
