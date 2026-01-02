@@ -28,11 +28,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % logs.append('[2026-01-01 00:00:00] DEBUG: Testing debug UI')
-                        % logs.append('[2026-01-01 00:00:00] INFO: Testing info UI')
-                        % logs.append('[2026-01-01 00:00:00] WARNING: Testing warning UI')
-                        % logs.append('[2026-01-01 00:00:00] ERROR: Testing error UI')
-                        % logs.append('[2026-01-01 00:00:00] CRITICAL: Testing critical UI')
                         % for log in list(reversed(logs))[:500]:
                             % parts = log.split(': ', 1)
                             % data = parts[0]
