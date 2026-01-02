@@ -47,6 +47,8 @@ class CronService:
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
+        date = Date.today()
+        services.log.info(f'Running GTFS cron job for {date}')
         for system in repositories.system.find_all():
             context = system.context
             if self.running:
@@ -59,7 +61,6 @@ class CronService:
         if self.running:
             repositories.record.delete_stale_trip_records()
             self.database.archive()
-            date = Date.today()
             services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
     
     def handle_realtime(self):
@@ -68,8 +69,8 @@ class CronService:
             return
         self.updating_realtime = True
         date = Date.today()
-        time = Time.now()
-        services.log.info(f'Running cron job for {date} at {time}')
+        time = Time.now(accurate_seconds=False)
+        services.log.info(f'Running realtime cron job for {date} at {time}')
         for system in repositories.system.find_all():
             context = system.context
             if self.running:
