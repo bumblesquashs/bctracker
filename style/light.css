@@ -34,31 +34,33 @@
 }
 
 .log-line.critical {
-    background-color: #FF7F7F;
+    background-color: #D57C7C;
     color: #7A0000;
-    font-weight: bold;
+    --image-color: #7A0000;
 }
 
 .log-line.debug {
     background-color: #E6E6E6;
     color: #666666;
+    --image-color: #666666;
 }
 
 .log-line.error {
-    background-color: #FF7F7F;
+    background-color: #FFA5A5;
     color: #FF0000;
-    font-weight: bold;
+    --image-color: #FF0000;
 }
 
 .log-line.info {
     background-color: #F1F8FF;
     color: #3C5ABE;
+    --image-color: #3C5ABE;
 }
 
 .log-line.warning {
     background-color: #FFE9D3;
     color: #FF9A3A;
-    font-weight: bold;
+    --image-color: #FF9A3A;
 }
 
 .marker .icon.speed {

@@ -239,6 +239,11 @@ table th {
     gap: 20px;
 }
 
+.log-line .title {
+    font-size: 14pt;
+    --image-size: 20px;
+}
+
 .non-mobile {
     display: none !important;
 }

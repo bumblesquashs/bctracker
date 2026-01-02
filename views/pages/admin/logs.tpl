@@ -22,12 +22,17 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Timestamp</th>
+                            <th class="non-mobile">Timestamp</th>
                             <th class="non-mobile">Level</th>
                             <th>Message</th>
                         </tr>
                     </thead>
                     <tbody>
+                        % logs.append('[2026-01-01 00:00:00] DEBUG: Testing debug UI')
+                        % logs.append('[2026-01-01 00:00:00] INFO: Testing info UI')
+                        % logs.append('[2026-01-01 00:00:00] WARNING: Testing warning UI')
+                        % logs.append('[2026-01-01 00:00:00] ERROR: Testing error UI')
+                        % logs.append('[2026-01-01 00:00:00] CRITICAL: Testing critical UI')
                         % for log in list(reversed(logs))[:300]:
                             % parts = log.split(': ', 1)
                             % data = parts[0]
@@ -36,9 +41,17 @@
                             % log_timestamp = data_parts[0][1:]
                             % level = data_parts[1]
                             <tr class="log-line {{ level.lower() }}">
-                                <td>{{ log_timestamp }}</td>
-                                <td class="non-mobile">{{ level.title() }}</td>
-                                <td>{{ message }}</td>
+                                <td>
+                                    <div class="column">
+                                        <div class="row title">
+                                            % include('components/svg', name=f'status/{level.lower()}')
+                                            {{ log_timestamp }}
+                                        </div>
+                                        <div class="mobile-only">{{ message }}</div>
+                                    </div>
+                                </td>
+                                <td class="non-mobile level">{{ level.title() }}</td>
+                                <td class="non-mobile">{{ message }}</td>
                             </tr>
                         % end
                     </tbody>

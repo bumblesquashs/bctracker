@@ -940,6 +940,15 @@ table tr.table-button {
     border-radius: 5px;
 }
 
+.log-line .title {
+    font-weight: bold;
+    --image-size: 18px;
+}
+
+.log-line .level {
+    font-weight: bold;
+}
+
 .marker {
     position: relative;
     font-family: var(--sans-serif-font);

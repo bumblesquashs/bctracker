@@ -69,7 +69,7 @@ class CronService:
             return
         self.updating_realtime = True
         date = Date.today()
-        time = Time.now()
+        time = Time.now(accurate_seconds=False)
         services.log.info(f'Running realtime cron job for {date} at {time}')
         for system in repositories.system.find_all():
             context = system.context

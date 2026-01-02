@@ -342,7 +342,7 @@ class Server(Bottle):
             result = callback(context=context, *args, **kwargs)
             end_time = time()
             duration = end_time - start_time
-            if duration >= 5:
+            if duration >= 10:
                 services.log.warning(f'Slow response to {request.path} ({round(duration, 2)}s)')
             return result
         self.route(paths, method, callback=endpoint)
