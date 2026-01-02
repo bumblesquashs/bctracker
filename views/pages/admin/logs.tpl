@@ -13,10 +13,10 @@
 <div class="container">
     <div class="section">
         <div class="content">
-            % if len(logs) < 300:
+            % if len(logs) < 500:
                 Showing {{ len(logs) }} lines
             % else:
-                Showing last 300 of {{ len(logs) }} lines
+                Showing last 500 of {{ len(logs) }} lines
             % end
             <div class="table-border-wrapper">
                 <table>
@@ -33,7 +33,7 @@
                         % logs.append('[2026-01-01 00:00:00] WARNING: Testing warning UI')
                         % logs.append('[2026-01-01 00:00:00] ERROR: Testing error UI')
                         % logs.append('[2026-01-01 00:00:00] CRITICAL: Testing critical UI')
-                        % for log in list(reversed(logs))[:300]:
+                        % for log in list(reversed(logs))[:500]:
                             % parts = log.split(': ', 1)
                             % data = parts[0]
                             % message = parts[1]
