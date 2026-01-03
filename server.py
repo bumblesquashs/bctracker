@@ -1374,6 +1374,11 @@ class Server(Bottle):
         )
     
     def admin_logs(self, context: Context):
+        logs = services.log.read_logs()
+        level = request.query.get('level')
+        total_logs = len(logs)
+        if level:
+            logs = [l for l in logs if l.level.lower() == level.lower()]
         return self.page(
             context=context,
             name='admin/logs',
@@ -1381,7 +1386,9 @@ class Server(Bottle):
             path=['admin', 'logs'],
             enable_refresh=False,
             disable_indexing=True,
-            logs=services.log.read_logs()
+            total_logs=total_logs,
+            logs=logs[:self.settings.admin_logs_count],
+            level=level
         )
     
     # =============================================================

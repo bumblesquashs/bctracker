@@ -7,6 +7,8 @@ from requestlogger import WSGILogger, ApacheFormatter
 
 from dataclasses import dataclass
 
+from models.log import Log
+
 @dataclass(init=False, slots=True)
 class LogService:
     
@@ -49,10 +51,20 @@ class LogService:
         handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
         return WSGILogger(server, [handler], ApacheFormatter())
     
-    def read_logs(self) -> list[str]:
+    def read_logs(self) -> list[Log]:
         try:
             with open(f'logs/{self.name}.log', 'r') as file:
-                return file.readlines()
+                lines = file.readlines()
+            logs = []
+            for line in lines:
+                parts = line.split(': ', 1)
+                data = parts[0]
+                message = parts[1]
+                data_parts = data.split('] ', 1)
+                timestamp = data_parts[0][1:]
+                level = data_parts[1]
+                logs.append(Log(timestamp, level, message))
+            return list(reversed(logs))
         except Exception as e:
             self.error(f'Failed to read logs: {e}')
             return []

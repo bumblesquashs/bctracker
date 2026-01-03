@@ -943,6 +943,7 @@ table tr.table-button {
 .log-line .title {
     font-weight: bold;
     --image-size: 18px;
+    text-wrap: nowrap;
 }
 
 .log-line .level {
