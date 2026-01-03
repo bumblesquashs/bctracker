@@ -55,15 +55,7 @@ class LogService:
         try:
             with open(f'logs/{self.name}.log', 'r') as file:
                 lines = file.readlines()
-            logs = []
-            for line in lines:
-                parts = line.split(': ', 1)
-                data = parts[0]
-                message = parts[1]
-                data_parts = data.split('] ', 1)
-                timestamp = data_parts[0][1:]
-                level = data_parts[1]
-                logs.append(Log(timestamp, level, message))
+            logs = [Log.from_line(l) for l in lines]
             return list(reversed(logs))
         except Exception as e:
             self.error(f'Failed to read logs: {e}')

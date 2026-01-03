@@ -1,4 +1,6 @@
 
+% from models.log import LogLevel
+
 % rebase('base')
 
 <div id="page-header">
@@ -26,23 +28,23 @@
                                 <div>All Logs</div>
                             </div>
                             <div class="option" onclick="setLevel('debug')">
-                                <div class="radio-button {{ 'selected' if level == 'debug' else '' }}"></div>
+                                <div class="radio-button {{ 'selected' if level == LogLevel.DEBUG else '' }}"></div>
                                 <div>Debug</div>
                             </div>
                             <div class="option" onclick="setLevel('info')">
-                                <div class="radio-button {{ 'selected' if level == 'info' else '' }}"></div>
+                                <div class="radio-button {{ 'selected' if level == LogLevel.INFO else '' }}"></div>
                                 <div>Info</div>
                             </div>
                             <div class="option" onclick="setLevel('warning')">
-                                <div class="radio-button {{ 'selected' if level == 'warning' else '' }}"></div>
+                                <div class="radio-button {{ 'selected' if level == LogLevel.WARNING else '' }}"></div>
                                 <div>Warning</div>
                             </div>
                             <div class="option" onclick="setLevel('error')">
-                                <div class="radio-button {{ 'selected' if level == 'error' else '' }}"></div>
+                                <div class="radio-button {{ 'selected' if level == LogLevel.ERROR else '' }}"></div>
                                 <div>Error</div>
                             </div>
                             <div class="option" onclick="setLevel('critical')">
-                                <div class="radio-button {{ 'selected' if level == 'critical' else '' }}"></div>
+                                <div class="radio-button {{ 'selected' if level == LogLevel.CRITICAL else '' }}"></div>
                                 <div>Critical</div>
                             </div>
                         </div>
@@ -84,17 +86,17 @@
                             </thead>
                             <tbody>
                                 % for log in logs:
-                                    <tr class="log-line {{ log.level.lower() }}">
+                                    <tr class="log-line {{ log.level.value }}">
                                         <td>
                                             <div class="column">
                                                 <div class="row title">
-                                                    % include('components/svg', name=f'status/{log.level.lower()}')
+                                                    % include('components/svg', name=f'status/{log.level.value}')
                                                     {{ log.timestamp }}
                                                 </div>
                                                 <div class="mobile-only">{{ log.message }}</div>
                                             </div>
                                         </td>
-                                        <td class="non-mobile level">{{ log.level.title() }}</td>
+                                        <td class="non-mobile level">{{ log.level }}</td>
                                         <td class="non-mobile">{{ log.message }}</td>
                                     </tr>
                                 % end
