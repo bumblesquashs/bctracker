@@ -240,8 +240,7 @@ table th {
 }
 
 .log-line .title {
-    font-size: 14pt;
-    --image-size: 20px;
+    font-size: 12pt;
 }
 
 .non-mobile {
