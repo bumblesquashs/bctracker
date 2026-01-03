@@ -309,6 +309,15 @@
             
             <div class="flex-1"></div>
             
+            % if is_admin:
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'admin') }}">
+                    % include('components/svg', name='admin')
+                    <div class="tooltip left">
+                        <div class="title">Administration</div>
+                    </div>
+                </a>
+            % end
+            
             % if show_random:
                 <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'random') }}">
                     % include('components/svg', name='random')
@@ -404,6 +413,12 @@
                 <a class="menu-button" href="{{ get_url(context, 'random') }}">
                     % include('components/svg', name='random')
                     <span>Random Page</span>
+                </a>
+            % end
+            % if is_admin:
+                <a class="menu-button" href="{{ get_url(context, 'admin') }}">
+                    % include('components/svg', name='admin')
+                    <span>Administration</span>
                 </a>
             % end
         </div>
