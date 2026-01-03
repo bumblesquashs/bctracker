@@ -1611,6 +1611,7 @@ class Server(Bottle):
     # =============================================================
     
     def error_403(self, error):
+        services.log.warning(f'403 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='403', 
@@ -1619,6 +1620,7 @@ class Server(Bottle):
         )
     
     def error_404(self, error):
+        services.log.warning(f'404 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='404',
@@ -1627,6 +1629,7 @@ class Server(Bottle):
         )
     
     def error_500(self, error):
+        services.log.error(f'500 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='500',
