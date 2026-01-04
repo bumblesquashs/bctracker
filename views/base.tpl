@@ -25,6 +25,7 @@
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-16.png" sizes="16x16" />
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
+        <link rel="apple-touch-icon" type="image/png" href="/img/bc-tracker/apple-touch-icon.png" sizes="180x180">
         
         % if context.system:
             <meta name="description" content="{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking" />
