@@ -940,8 +940,14 @@ table tr.table-button {
     border-radius: 5px;
 }
 
+.log-line {
+    font-family: var(--mono-font);
+    font-size: 10pt;
+}
+
 .log-line .title {
     font-weight: bold;
+    text-wrap: nowrap;
     --image-size: 18px;
 }
 

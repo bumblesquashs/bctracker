@@ -12,6 +12,7 @@ from models.context import Context
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.log import LogLevel
 from models.stop import StopType
 from models.time import Time
 from models.timestamp import Timestamp
@@ -1374,6 +1375,11 @@ class Server(Bottle):
         )
     
     def admin_logs(self, context: Context):
+        logs = services.log.read_logs()
+        level = LogLevel.parse(request.query.get('level'))
+        total_logs = len(logs)
+        if level:
+            logs = [l for l in logs if l.level == level]
         return self.page(
             context=context,
             name='admin/logs',
@@ -1381,7 +1387,9 @@ class Server(Bottle):
             path=['admin', 'logs'],
             enable_refresh=False,
             disable_indexing=True,
-            logs=services.log.read_logs()
+            total_logs=total_logs,
+            logs=logs[:self.settings.admin_logs_count],
+            level=level
         )
     
     # =============================================================
@@ -1604,6 +1612,7 @@ class Server(Bottle):
     # =============================================================
     
     def error_403(self, error):
+        services.log.warning(f'403 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='403', 
@@ -1612,6 +1621,7 @@ class Server(Bottle):
         )
     
     def error_404(self, error):
+        services.log.warning(f'404 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='404',
@@ -1620,6 +1630,7 @@ class Server(Bottle):
         )
     
     def error_500(self, error):
+        services.log.error(f'500 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='500',
