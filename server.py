@@ -1621,7 +1621,8 @@ class Server(Bottle):
         )
     
     def error_404(self, error):
-        services.log.warning(f'404 response to {request.path}')
+        # Not logging due to spam from bots on invalid pages, and browsers attempting to access non-existant icons
+        # services.log.warning(f'404 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='404',
