@@ -25,7 +25,7 @@
     </div>
 </div>
 
-% if positions:
+% if context.system and positions:
     <div class="container">
         % for route in context.system.get_routes():
             % route_positions = [p for p in positions if p.trip and p.trip.route == route]
