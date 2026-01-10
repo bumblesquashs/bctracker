@@ -5,9 +5,7 @@
                 { "year": 2004, "low": 9041, "high": 9049, "livery": "green-blue-stripes" }
             ],
             [
-                { "year": 2008, "low": 9501, "high": 9517, "livery": "green-blue-stripes" },
-                { "year": 2008, "id": 9518, "name": "BO Machine", "livery": "green-blue-stripes" },
-                { "year": 2008, "low": 9519, "high": 9526, "livery": "green-blue-stripes" }
+                { "year": 2008, "low": 9501, "high": 9526, "livery": "green-blue-stripes" }
             ],
             [
                 { "year": 2007, "id": 9528, "livery": "green-blue-stripes" }
