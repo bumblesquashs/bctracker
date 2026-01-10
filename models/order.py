@@ -79,16 +79,24 @@ class Order:
             if 'id' in row:
                 id = row['id']
                 del row['id']
+                try:
+                    name = row['name']
+                    del row['name']
+                except:
+                    name = None
                 if agency.vehicle_name_length:
                     if type(id) is int:
-                        name = f'{id:0{agency.vehicle_name_length}d}'
+                        if not name:
+                            name = f'{id:0{agency.vehicle_name_length}d}'
                         id = str(id)
                     else:
                         id = str(id)
-                        name = id[:agency.vehicle_name_length]
+                        if not name:
+                            name = id[:agency.vehicle_name_length]
                 else:
                     id = str(id)
-                    name = id
+                    if not name:
+                        name = id
                 vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
             else:
                 low = row['low']
