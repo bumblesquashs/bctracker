@@ -121,6 +121,9 @@
             ],
             [
                 { "year": 2024, "low": 8522, "high": 8596 }
+            ],
+            [
+                { "year": 2025, "low": 8597, "high": 8656 }
             ]
         ]
     },
@@ -157,6 +160,11 @@
             ],
             [
                 { "year": 2021, "low": 6971, "high": 6972, "prefix": "P" }
+            ]
+        ],
+        "ford-arboc-e-450-sof-27": [
+            [
+                { "low": 5000, "high": 5002, "prefix": "F" }
             ]
         ],
         "grande-west-vicinity-30": [
@@ -298,6 +306,14 @@
             ],
             [
                 { "year": 2025, "low": 940, "high": 949, "prefix": "A" }
+            ],
+            [
+                { "year": 2025, "low": 2038, "high": 2042, "prefix": "S" }
+            ]
+        ],
+        "nova-bus-lfs-artic-4": [
+            [
+                { "year": 2025, "low" 832, "high": 833, "prefix": "A" }
             ]
         ],
         "nova-bus-lfs-hev-3": [
@@ -592,6 +608,11 @@
             [
                 { "year": 2015, "low": 1997, "high": 1999 },
                 { "year": 2015, "low": 100, "high": 108, "prefix": "19-" }
+            ]
+        ],
+        "nova-bus-lfs-3": [
+            [
+                { "year": 2010, "id" 900, "prefix": "19-" }
             ]
         ]
     }
