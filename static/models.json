@@ -17,6 +17,12 @@
             "name": "XD60",
             "length": 60,
             "fuel": "Diesel"
+        },
+        "nova-bus-lfs-artic-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS Artic (4th Gen)",
+            "length": 62,
+            "fuel": "Diesel"
         }
     },
     "coach": {
