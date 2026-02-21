@@ -236,6 +236,12 @@
             "manufacturer": "Dodge",
             "name": "Grand Caravan"
         },
+        "ford-arboc-e-450-sof-27": {
+            "manufacturer": "Ford/ARBOC",
+            "name": "E-450/SOF 27",
+            "length": 27,
+            "fuel": "Gasoline"
+        },
         "ford-champion-e-450-challenger": {
             "manufacturer": "Ford/Champion",
             "name": "E-450/Challenger"
