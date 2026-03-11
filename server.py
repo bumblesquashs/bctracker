@@ -1,9 +1,8 @@
 
-from logging.handlers import TimedRotatingFileHandler
-from requestlogger import WSGILogger, ApacheFormatter
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
 from random import Random
+from time import time
 import cherrypy as cp
 
 from database import Database
@@ -13,6 +12,7 @@ from models.context import Context
 from models.date import Date
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
+from models.log import LogLevel
 from models.stop import StopType
 from models.time import Time
 from models.timestamp import Timestamp
@@ -92,6 +92,7 @@ class Server(Bottle):
         self.add('/systems', callback=self.systems)
         self.add('/random', callback=self.random)
         self.add('/admin', require_admin=True, callback=self.admin)
+        self.add('/admin/logs', require_admin=True, callback=self.admin_logs)
         
         # Frames
         self.add('/frame/nearby', append_slash=False, callback=self.frame_nearby)
@@ -123,18 +124,20 @@ class Server(Bottle):
         '''Loads all required data and launches the server'''
         self.running = True
         
+        services.log.info('Server started')
+        
         cp.config.update('server.conf')
         self.settings.setup(cp.config)
         
         self.database.connect()
-            
+        
         if args.debug:
-            print('Starting bottle in DEBUG mode')
+            services.log.debug('Starting bottle in DEBUG mode')
             debug(True)
         if args.reload:
-            print('Forcing GTFS redownload')
+            services.log.debug('Forcing GTFS redownload')
         if args.updatedb:
-            print('Forcing database refresh')
+            services.log.debug('Forcing database refresh')
         
         repositories.decoration.load()
         repositories.order.load()
@@ -143,10 +146,7 @@ class Server(Bottle):
         
         repositories.position.delete_all()
         
-        handler = TimedRotatingFileHandler(filename='logs/access_log.log', when='d', interval=7)
-        log = WSGILogger(self, [handler], ApacheFormatter())
-        
-        cp.tree.graft(log, '/')
+        cp.tree.graft(services.log.get_access_logger(self), '/')
         cp.server.start()
         
         for system in repositories.system.find_all():
@@ -158,18 +158,19 @@ class Server(Bottle):
                         services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {context}: {e}')
+                    services.log.error(f'Error loading data for {context}: {e}')
                 if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
                 services.realtime.update_records()
             except Exception as e:
-                print(f'Error updating records: {e}')
+                services.log.error(f'Error updating records: {e}')
             services.cron.start()
     
     def stop(self):
         '''Terminates the server'''
+        services.log.info('Server shut down')
         self.running = False
         services.cron.stop()
         self.database.disconnect()
@@ -349,7 +350,13 @@ class Server(Bottle):
                      agency = None
                 system = None
             context = Context(agency, system)
-            return callback(context=context, *args, **kwargs)
+            start_time = time()
+            result = callback(context=context, *args, **kwargs)
+            end_time = time()
+            duration = end_time - start_time
+            if duration >= 10:
+                services.log.warning(f'Slow response to {request.path} ({round(duration, 2)}s)')
+            return result
         self.route(paths, method, callback=endpoint)
     
     # =============================================================
@@ -684,6 +691,10 @@ class Server(Bottle):
         )
     
     def history_transfers(self, context: Context):
+        try:
+            page = int(request.query['page'])
+        except (KeyError, ValueError):
+            page = 1
         filter = request.query.get('filter')
         if filter == 'from':
             transfers = repositories.transfer.find_all(context, Context())
@@ -691,12 +702,24 @@ class Server(Bottle):
             transfers = repositories.transfer.find_all(Context(), context)
         else:
             transfers = repositories.transfer.find_all(context, context)
+        visible_transfers = [t for t in transfers if t.new_vehicle.visible]
+        items_per_page = 100
+        start_index = (page - 1) * items_per_page
+        end_index = page * items_per_page
+        if page < 1:
+            paged_transfers = []
+        else:
+            paged_transfers = visible_transfers[start_index:end_index]
         return self.page(
             context=context,
             name='history/transfers',
             title='Transfers',
             path=['history', 'transfers'],
-            transfers=[t for t in transfers if t.new_vehicle.visible],
+            transfers=visible_transfers,
+            paged_transfers=paged_transfers,
+            page=page,
+            items_per_page=items_per_page,
+            total_items=len(visible_transfers),
             filter=filter
         )
     
@@ -1379,11 +1402,29 @@ class Server(Bottle):
     def admin(self, context: Context):
         return self.page(
             context=context,
-            name='admin',
+            name='admin/management',
             title='Administration',
             path=['admin'],
             enable_refresh=False,
             disable_indexing=True
+        )
+    
+    def admin_logs(self, context: Context):
+        logs = services.log.read_logs()
+        level = LogLevel.parse(request.query.get('level'))
+        total_logs = len(logs)
+        if level:
+            logs = [l for l in logs if l.level == level]
+        return self.page(
+            context=context,
+            name='admin/logs',
+            title='Logs',
+            path=['admin', 'logs'],
+            enable_refresh=False,
+            disable_indexing=True,
+            total_logs=total_logs,
+            logs=logs[:self.settings.admin_logs_count],
+            level=level
         )
     
     # =============================================================
@@ -1539,14 +1580,14 @@ class Server(Bottle):
                         services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {context}: {e}')
+                    services.log.error(f'Error loading data for {context}: {e}')
                 if not system.gtfs_downloaded or not services.realtime.validate(context):
                     system.reload_backoff.increase_value()
         if self.running:
             try:
                 services.realtime.update_records()
             except Exception as e:
-                print(f'Error updating records: {e}')
+                services.log.error(f'Error updating records: {e}')
             services.cron.start()
         return 'Success'
     
@@ -1583,7 +1624,7 @@ class Server(Bottle):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading GTFS data for {context}: {e}')
+            services.log.error(f'Error loading GTFS data for {context}: {e}')
             return str(e)
     
     def api_admin_reload_realtime(self, context: Context, reload_system_id):
@@ -1598,7 +1639,7 @@ class Server(Bottle):
                 system.reload_backoff.increase_value()
             return 'Success'
         except Exception as e:
-            print(f'Error loading realtime data for {context}: {e}')
+            services.log.error(f'Error loading realtime data for {context}: {e}')
             return str(e)
     
     # =============================================================
@@ -1606,6 +1647,7 @@ class Server(Bottle):
     # =============================================================
     
     def error_403(self, error):
+        services.log.warning(f'403 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='403', 
@@ -1614,6 +1656,8 @@ class Server(Bottle):
         )
     
     def error_404(self, error):
+        # Not logging due to spam from bots on invalid pages, and browsers attempting to access non-existant icons
+        # services.log.warning(f'404 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='404',
@@ -1622,6 +1666,7 @@ class Server(Bottle):
         )
     
     def error_500(self, error):
+        services.log.error(f'500 response to {request.path}')
         return self.error_page(
             context=Context(),
             name='500',

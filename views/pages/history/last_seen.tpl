@@ -243,7 +243,7 @@
                                         <td colspan="5">
                                             <div class="row space-between">
                                                 <div>{{! order }}</div>
-                                                <div>{{ len(order_allocations) }}</div>
+                                                <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
                                             </div>
                                         </td>
                                     </tr>

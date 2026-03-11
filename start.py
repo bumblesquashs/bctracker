@@ -42,6 +42,7 @@ if __name__ == '__main__':
     repositories.transfer = TransferRepository(database)
     repositories.trip = TripRepository(database)
     
+    services.log = LogService()
     services.backup = BackupService(database, settings)
     services.gtfs = GTFSService(database, settings)
     services.realtime = RealtimeService(database, settings)

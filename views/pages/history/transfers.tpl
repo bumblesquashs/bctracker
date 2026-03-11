@@ -100,61 +100,85 @@
             </div>
             <div class="content">
                 % if transfers:
-                    <div class="table-border-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>{{ context.vehicle_type }}</th>
-                                    <th class="desktop-only">Model</th>
-                                    <th class="non-mobile">From</th>
-                                    <th class="non-mobile">To</th>
-                                    <th class="mobile-only">Systems</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % last_date = None
-                                % for transfer in transfers:
-                                    % vehicle = transfer.new_vehicle
-                                    % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
-                                        <tr class="header">
-                                            <td colspan="6">{{ transfer.date.format_month() }}</td>
-                                            <tr class="display-none"></tr>
+                    % if paged_transfers:
+                        % include('components/paging')
+                        <div class="table-border-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>{{ context.vehicle_type }}</th>
+                                        <th class="desktop-only">Model</th>
+                                        <th class="non-mobile">From</th>
+                                        <th class="non-mobile">To</th>
+                                        <th class="mobile-only">Systems</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    % last_date = None
+                                    % for transfer in paged_transfers:
+                                        % vehicle = transfer.new_vehicle
+                                        % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
+                                            <tr class="header">
+                                                <td colspan="6">{{ transfer.date.format_month() }}</td>
+                                                <tr class="display-none"></tr>
+                                            </tr>
+                                        % end
+                                        % last_date = transfer.date
+                                        <tr>
+                                            <td>{{ transfer.date.format_day() }}</td>
+                                            <td>
+                                                <div class="column">
+                                                    % include('components/vehicle')
+                                                    <span class="non-desktop smaller-font">
+                                                        % include('components/year_model', year_model=vehicle.year_model)
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="desktop-only">
+                                                % include('components/year_model', year_model=vehicle.year_model)
+                                            </td>
+                                            <td class="non-mobile">{{ transfer.old_context }}</td>
+                                            <td class="non-mobile">{{ transfer.new_context }}</td>
+                                            <td class="mobile-only">
+                                                <div class="column">
+                                                    <div>
+                                                        <div class="smaller-font">From:</div>
+                                                        {{ transfer.old_context }}
+                                                    </div>
+                                                    <div>
+                                                        <div class="smaller-font">To:</div>
+                                                        {{ transfer.new_context }}
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                     % end
-                                    % last_date = transfer.date
-                                    <tr>
-                                        <td>{{ transfer.date.format_day() }}</td>
-                                        <td>
-                                            <div class="column">
-                                                % include('components/vehicle')
-                                                <span class="non-desktop smaller-font">
-                                                    % include('components/year_model', year_model=vehicle.year_model)
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="desktop-only">
-                                            % include('components/year_model', year_model=vehicle.year_model)
-                                        </td>
-                                        <td class="non-mobile">{{ transfer.old_context }}</td>
-                                        <td class="non-mobile">{{ transfer.new_context }}</td>
-                                        <td class="mobile-only">
-                                            <div class="column">
-                                                <div>
-                                                    <div class="smaller-font">From:</div>
-                                                    {{ transfer.old_context }}
-                                                </div>
-                                                <div>
-                                                    <div class="smaller-font">To:</div>
-                                                    {{ transfer.new_context }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                % end
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+                        % include('components/paging')
+                    % else:
+                        <div class="placeholder">
+                            % if page == 0:
+                                <h3>Page {{ page }} does not exist...?</h3>
+                                <p>If you're a software developer you may be thinking right now, "Hey, wait a minute, why doesn't this list start at 0?!‽"</p>
+                                <p>
+                                    Look, we agree with you, it feels weird to be showing this error message at all.
+                                    Sadly too many people are expecting page 1 to be the first because "it makes more sense" or "0 isn't a real number" or something equally silly.
+                                    But you should know that we're right and they're just mad about it.
+                                </p>
+                                <p>Unfortunately you do still need to return to a <a href="?page=1">valid page</a> but remember that one day the zero-based indexers shall rise up and claim our rightful place once and for all!</p>
+                            % else:
+                                <h3>Page {{ page }} does not exist!</h3>
+                                <p>If you got to this page through <i>nefarious tomfoolery</i> or <i>skullduggery</i>, please return to a <a href="?page=1">valid page</a>, then go sit in a corner and think about what you've done.</p>
+                                <p>
+                                    If you got to this page by accident, we're very sorry.
+                                    Please email <a href="mailto:james@bctracker.ca">james@bctracker.ca</a> to let us know!
+                                </p>
+                            % end
+                        </div>
+                    % end
                 % else:
                     <div class="placeholder">
                         % if not context.system:

@@ -18,7 +18,7 @@
     % if route.trips:
         <div class="sidebar container flex-1">
             <div class="section">
-                <div class="header" onclick="toggleSection(this)">
+                <div class="header" onclick="toggleSection(this, true)">
                     <h2>Overview</h2>
                     % include('components/toggle')
                 </div>

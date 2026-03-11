@@ -10,7 +10,7 @@
 <div class="page-container">
     <div id="current-location" class="sidebar container flex-1 display-none">
         <div class="section">
-            <div class="header" onclick="toggleSection(this)">
+            <div class="header" onclick="toggleSection(this, true)">
                 <h2>Current Location</h2>
                 % include('components/toggle')
             </div>

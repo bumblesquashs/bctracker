@@ -228,9 +228,17 @@
                 document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ settings.cookie_domain if settings.cookie_domain else '' }};path=/";
             }
             
-            function toggleSection(header) {
+            function toggleSection(header, reloadMap = false) {
                 const section = header.parentElement;
                 section.classList.toggle("closed");
+                if (reloadMap && "map" in window) {
+                    if (section.classList.contains("closed")) {
+                        map.setTarget(null);
+                    } else {
+                        map.setTarget(document.getElementById("map"));
+                        map.updateSize();
+                    }
+                }
             }
             
             function getTimestampOffset() {
@@ -302,6 +310,15 @@
             <a class="navigation-button desktop-only" href="{{ get_url(context, 'about') }}">About</a>
             
             <div class="flex-1"></div>
+            
+            % if is_admin:
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'admin') }}">
+                    % include('components/svg', name='admin')
+                    <div class="tooltip left">
+                        <div class="title">Administration</div>
+                    </div>
+                </a>
+            % end
             
             % if show_random:
                 <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'random') }}">
@@ -400,6 +417,12 @@
                     <span>Random Page</span>
                 </a>
             % end
+            % if is_admin:
+                <a class="menu-button" href="{{ get_url(context, 'admin') }}">
+                    % include('components/svg', name='admin')
+                    <span>Administration</span>
+                </a>
+            % end
         </div>
         <div id="status-bar">
             <div id="system-menu-toggle" onclick="toggleSystemMenuMobile()">
@@ -457,15 +480,7 @@
             </div>
             <div id="main">
                 <div id="banners">
-                    % from models.date import Date
-                    % if context.system_id == 'cowichan-valley' and today < Date(2025, 10, 6, context.timezone):
-                        <div class="banner">
-                            <div class="content">
-                                <h1>Service in the Cowichan Valley area will resume on October 6th</h1>
-                                <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
-                            </div>
-                        </div>
-                    % end
+                    <!-- No banners at the moment -->
                 </div>
                 % if full_map:
                     <div id="map" class="full-screen"></div>

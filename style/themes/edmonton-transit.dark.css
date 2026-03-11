@@ -47,13 +47,11 @@
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
     
-<<<<<<< HEAD:style/themes/edmonton-transit.dark.css
     --beta-tag-background: #012031;
     --beta-tag-text: #FFFFFF;
-=======
-    --amenity-background: #565656;
+    
+    --amenity-background: #012E46;
     --amenity-color: #FFFFFF;
->>>>>>> 353126089f3f6a108c61dfa701b2cce77b80e286:style/themes/bc-transit.dark.css
 }
 
 a {
@@ -61,7 +59,6 @@ a {
 }
 
 body {
-    background-color: #2F2F2F;
     color: #FFFFFF;
 }
 
@@ -125,6 +122,10 @@ table tr.table-button {
 
 table tr.table-button:hover {
     background-color: #012E46;
+}
+
+#content {
+    background-color: #2F2F2F;
 }
 
 #loading-stop {

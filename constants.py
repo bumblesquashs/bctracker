@@ -25,3 +25,6 @@ DEFAULT_MAX_INVALID_POSITIONS = 0
 
 # Date/time config
 DEFAULT_TIMEZONE = pytz.timezone('America/Edmonton')
+
+# Logging config
+DEFAULT_ADMIN_LOGS_COUNT = 2000

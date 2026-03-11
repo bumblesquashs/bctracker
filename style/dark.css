@@ -41,6 +41,36 @@
     --image-color: #ABABAB;
 }
 
+.log-line.critical {
+    background-color: #2E0000;
+    color: #D57C7C;
+    --image-color: #D57C7C;
+}
+
+.log-line.debug {
+    background-color: #111111;
+    color: #CBCBCB;
+    --image-color: #CBCBCB;
+}
+
+.log-line.error {
+    background-color: #831616;
+    color: #FFA5A5;
+    --image-color: #FFA5A5;
+}
+
+.log-line.info {
+    background-color: #051754;
+    color: #F1F8FF;
+    --image-color: #F1F8FF;
+}
+
+.log-line.warning {
+    background-color: #683300;
+    color: #EF9744;
+    --image-color: #EF9744;
+}
+
 .marker .bearing {
     filter: brightness(80%);
 }

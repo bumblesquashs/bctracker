@@ -19,6 +19,7 @@ from models.service import Service, ServiceException
 from models.sheet import Sheet
 
 import repositories
+import services
 
 @dataclass(slots=True)
 class GTFSService:
@@ -50,16 +51,16 @@ class GTFSService:
             feed_date_range = None
         
         try:
-            services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
+            calendar_services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
         except:
-            services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
+            calendar_services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
         gtfs_cutoff = context.gtfs_cutoff
         if gtfs_cutoff:
             cutoff_date = Date.parse(gtfs_cutoff, context.timezone)
             if cutoff_date > Date.today(context.timezone):
-                services = [s for s in services if s.schedule.date_range.start <= cutoff_date]
-                filter_service_ids = {s.id for s in services}
+                calendar_services = [s for s in calendar_services if s.schedule.date_range.start <= cutoff_date]
+                filter_service_ids = {s.id for s in calendar_services}
             else:
                 filter_service_ids = set()
         else:
@@ -68,10 +69,10 @@ class GTFSService:
         if update_db:
             self.update_database(context, filter_service_ids)
         
-        print(f'Loading GTFS data for {context}')
+        services.log.info(f'Loading GTFS data for {context}')
         
-        context.system.services = {s.id: s for s in services}
-        context.system.sheets = combine_sheets(context, services)
+        context.system.services = {s.id: s for s in calendar_services}
+        context.system.sheets = combine_sheets(context, calendar_services)
         
         stops = repositories.stop.find_all(context)
         context.system.stops = {s.id: s for s in stops}
@@ -95,7 +96,7 @@ class GTFSService:
     
     def download(self, context: Context):
         '''Downloads the GTFS for the given system'''
-        print(f'Downloading GTFS data for {context}')
+        services.log.info(f'Downloading GTFS data for {context}')
         
         data_zip_path = f'data/gtfs/{context.system_id}.zip'
         data_path = f'data/gtfs/{context.system_id}'
@@ -120,7 +121,7 @@ class GTFSService:
     
     def update_database(self, context: Context, filter_service_ids: set[str]):
         '''Updates cached GTFS data for the given system'''
-        print(f'Updating database with GTFS data for {context}')
+        services.log.info(f'Updating database with GTFS data for {context}')
         
         repositories.departure.delete_all(context)
         repositories.trip.delete_all(context)

@@ -1,12 +1,15 @@
 
 from dataclasses import dataclass
 
+from constants import DEFAULT_ADMIN_LOGS_COUNT
+
 @dataclass(slots=True)
 class Settings:
     
     # Basic settings
     cron_id: str = 'bctracker-muncher'
     admin_key: str | None = None
+    admin_logs_count: int = DEFAULT_ADMIN_LOGS_COUNT
     
     # Domain settings
     all_systems_domain: str | None = None
@@ -26,6 +29,10 @@ class Settings:
     def setup(self, config):
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
         self.admin_key = config.get('admin_key')
+        try:
+            self.admin_logs_count = int(config['admin_logs_count'])
+        except:
+            pass
         
         self.all_systems_domain = config['all_systems_domain']
         self.system_domain = config['system_domain']
