@@ -33,7 +33,7 @@ class Order:
     
     def __post_init__(self):
         self.key = min([b.key for b in self.vehicles])
-        self.years = sorted({b.year for b in self.vehicles})
+        self.years = sorted({b.year for b in self.vehicles if b.year})
         self.visible = any(b.visible for b in self.vehicles)
     
     def __str__(self):
