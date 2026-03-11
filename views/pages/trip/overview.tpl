@@ -49,11 +49,13 @@
                         % end
                     </div>
                     % if context.enable_blocks:
-                        <div class="section">
-                            % include('components/block_timeline', block=trip.block)
-                        </div>
+                        % block = trip.block
+                        % if block:
+                            <div class="section">
+                                % include('components/block_timeline', block=trip.block)
+                            </div>
+                        % endif
                         <div class="row section">
-                            % block = trip.block
                             <div class="name">Block</div>
                             <div class="value">
                                 % if block:
