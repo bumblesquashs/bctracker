@@ -51,6 +51,8 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                % full_total = 0
+                                % full_progress = 0
                                 % for region in regions:
                                     % region_systems = [s for s in repositories.system.find_all(enabled_only=False) if s.region == region]
                                     % if region_systems:
@@ -61,6 +63,8 @@
                                         % for system in sorted(region_systems):
                                             % total = len(system.routes) + len(system.stops) + len(system.trips)
                                             % progress = len(system.route_caches) + len(system.stop_caches) + len(system.trip_caches)
+                                            % full_total += total
+                                            % full_progress += progress
                                             <tr>
                                                 <td>
                                                     <div class="row">
@@ -134,6 +138,14 @@
                                         % end
                                     % end
                                 % end
+                                <tr class="header">
+                                    <td class="section" colspan="5">
+                                        <div class="row space-between">
+                                            <div>Cache Total</div>
+                                            % include('components/percentage', numerator=full_progress, denominator=full_total, low_cutoff=60, high_cutoff=90, inverted=True)
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

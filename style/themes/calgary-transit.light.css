@@ -118,6 +118,10 @@ table tr.table-button:hover {
     background-color: #FFFFFF;
 }
 
+#content {
+    background-color: #FFFFFF;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
