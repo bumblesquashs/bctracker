@@ -54,7 +54,7 @@
                             <div class="section">
                                 % include('components/block_timeline', block=trip.block)
                             </div>
-                        % endif
+                        % end
                         <div class="row section">
                             <div class="name">Block</div>
                             <div class="value">
