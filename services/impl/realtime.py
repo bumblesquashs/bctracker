@@ -56,7 +56,10 @@ class RealtimeService:
                     vehicle_id = '0'
             except:
                 vehicle_id = str(-(index + 1))
-            repositories.position.create(context, vehicle_id, vehicle)
+            try:
+                repositories.position.create(context, vehicle_id, vehicle)
+            except Exception as e:
+                services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
     
