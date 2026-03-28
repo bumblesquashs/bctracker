@@ -520,7 +520,9 @@
                 % end
                 <div id="page">{{ !base }}</div>
             </div>
-            % include('components/chat')
+            % if today.month == 4:
+                % include('components/chat')
+            % end
             <div id="search" class="display-none" tabindex="0">
                 <div id="search-header">
                     <div id="search-bar">

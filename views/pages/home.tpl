@@ -288,6 +288,40 @@
             </div>
             <div class="content">
                 <div class="container">
+                    % if today.month == 4:
+                        <div class="news-post">
+                            <div class="header">
+                                <h3>BCTracker AI Chat</h3>
+                                April 1st, 2026
+                            </div>
+                            <div class="content">
+                                <p class="lighter-text">Sure, here is a news post for the new AI chat feature written in the style of the BCTracker developers:</p>
+                                <p>
+                                    It's never too late to jump on the bandwagon.
+                                    BCTracker is finally introducing an AI chat to help you get information faster!
+                                </p>
+                                <p>
+                                    For your convenience, the chat is designed to take up a large portion of your screen and there's no way to remove it, so you can't just ignore this amazing new feature.
+                                    All responses are guaranteed to be 100% correct anyways - you probably won't even need the rest of the website anymore.
+                                </p>
+                                <h3>Q&A</h3>
+                                <b>Any concerns about environmental impact?</b>
+                                <p>BC Transit's new electric buses will surely offset any harm, and we're going to start drinking less water so more can go to the AI.</p>
+                                <b>Was the training data used with permission?</b>
+                                <p>Incredibly, when the AI was created it already knew everything there is to know about transit - we didn't have to train it at all.</p>
+                                <b>What if the AI doesn't work correctly?</b>
+                                <p>
+                                    This should be impossible, of course.
+                                    However, if something does go wrong somehow, it's your fault for not writing a clear enough prompt.
+                                </p>
+                                <p class="lighter-text">Let me know if you'd like any modifications or something different.</p>
+                                % if today.day != 1 or now.hour >= 12:
+                                    <i>... Happy April Fools Day!</i>
+                                    <p class="smaller-font lighter-text">Disclaimer: No actual AI was used in the making of this "feature". The internet is full of enough slop already.</p>
+                                % end
+                            </div>
+                        </div>
+                    % end
                     <div class="news-post">
                         <div class="header">
                             <h3>Summer Update</h3>
