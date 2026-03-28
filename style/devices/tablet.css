@@ -32,6 +32,11 @@ table th {
     font-size: 13pt;
 }
 
+#chat {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
 #content {
     display: flex;
     flex-direction: column;

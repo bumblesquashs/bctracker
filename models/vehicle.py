@@ -84,3 +84,24 @@ class Vehicle:
     def find_decoration(self):
         '''Returns the decoration for this vehicle, if one exists'''
         return repositories.decoration.find(self.agency.id, self.id)
+    
+    def get_json(self):
+        json = {
+            'id': self.id,
+            'name': str(self),
+            'url_id': str(self.url_id)
+        }
+        year_model = self.year_model
+        if year_model:
+            json['year_model'] = year_model.replace("'", '&apos;')
+        else:
+            json['year_model'] = 'Unknown Year/Model'
+        model = self.model
+        if model and model.type:
+            json['icon'] = f'model/type/{model.type.image_name}'
+        else:
+            json['icon'] = 'ghost'
+        decoration = self.find_decoration()
+        if decoration and decoration.enabled:
+            json['decoration'] = str(decoration)
+        return json

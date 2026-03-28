@@ -40,6 +40,11 @@ table th {
     font-size: 12pt;
 }
 
+#chat {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
 #content {
     display: flex;
     flex-direction: column;

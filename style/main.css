@@ -1722,3 +1722,129 @@ table tr.table-button {
 .weekdays.compact .weekday {
     padding: 2px 5px;
 }
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--sans-serif-font);
+    font-size: 12pt;
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+
+#chat-messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    overflow: auto;
+}
+
+#chat-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    padding: 20px;
+    --image-size: 64px;
+}
+
+#chat-header .smaller-image {
+    --image-size: 36px;
+}
+
+#chat-header .mirrored {
+    transform: scale(-1, 1);
+}
+
+#chat-header hr {
+    width: 100%;
+    opacity: 50%;
+    margin: 0px;
+}
+
+#chat-header h2 {
+    font-size: 16pt;
+}
+
+#chat-placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    font-size: 12pt;
+    padding: 20px;
+}
+
+#chat-placeholder .button {
+    font-size: 10pt;
+}
+
+#chat-input-container {
+    padding: 10px;
+    padding-bottom: 20px;
+}
+
+#chat-input {
+    width: 100%;
+    font-size: 12pt;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.message.user {
+    padding: 5px 10px;
+    border-radius: 10px;
+    align-self: flex-end;
+    margin-left: 40px;
+}
+
+.message.error {
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-right: 40px;
+}
+
+.message-data-header {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    font-size: 10pt;
+    --image-size: 16px;
+}
+
+.message-data {
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px 10px;
+    --image-size: 36px;
+}
+
+#chat-thinking {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-size: 10pt;
+}
+
+#chat-thinking .loader {
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

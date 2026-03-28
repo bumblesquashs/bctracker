@@ -5,6 +5,9 @@ from random import Random
 from time import time
 import cherrypy as cp
 
+import re
+import random
+
 from database import Database
 from settings import Settings
 
@@ -20,8 +23,35 @@ from models.timestamp import Timestamp
 import repositories
 import services
 
+# Chat prompts
+GREETING_TEXT = re.compile(r'^(hi+|hello+|hey+|(was)?su+p)(!*|\?*)$')
+THANKS_TEXT = re.compile(r'^(yes,? )?(thanks|thank you|thx).*$')
+APOLOGY_TEXT = re.compile(r'^(i\'m |i am )?sorry\?*$')
+ROUTE_TEXT = re.compile(r'^.*route ([0-9][a-z0-9]*).*$')
+STOP_TEXT = re.compile(r'^.*stop ([0-9]+).*$')
+BUS_TEXT = re.compile(r'^.*bus ([0-9]+).*$')
+
+FOUND_ONE_MESSAGES = [
+    'Hope this helps!',
+    'Maybe this is what you want?',
+    'It\'s one of my favourites.',
+    'Use this knowledge carefully.'
+]
+FOUND_MULTIPLE_MESSAGES = [
+    'Hopefully one of these is helpful!',
+    'Maybe one of these is what you want?',
+    'It\'s hard to pick my favourite from these.',
+    'Use this knowledge carefully.'
+]
+NOT_FOUND_MESSAGES = [
+    'Please try something else.',
+    'Is there anything else I can help with?',
+    'That\'s too bad, I was hoping I could be more useful!',
+    'Shame on you for thinking such a thing would exist.'
+]
+
 # Increase the version to force CSS reload
-VERSION = 64
+VERSION = 65
 
 random = Random()
 
@@ -101,6 +131,7 @@ class Server(Bottle):
         self.add('/api/stops', append_slash=False, callback=self.api_stops)
         self.add('/api/routes', append_slash=False, callback=self.api_routes)
         self.add('/api/search', method='POST', callback=self.api_search)
+        self.add('/api/chat', method='POST', callback=self.api_chat)
         self.add('/api/nearby.json', append_slash=False, callback=self.api_nearby)
         self.add('/api/admin/reload-decorations', method='POST', require_admin=True, callback=self.api_admin_reload_decorations)
         self.add('/api/admin/reload-orders', method='POST', require_admin=True, callback=self.api_admin_reload_orders)
@@ -1510,6 +1541,179 @@ class Server(Bottle):
         return {
             'results': [m.get_json(context, self.get_url) for m in matches[min:max]],
             'total': len(matches)
+        }
+    
+    def api_chat(self, context: Context):
+        data = None
+        text: str = request.forms.get('text', '').lower().strip()
+        if GREETING_TEXT.match(text):
+            message = random.choice([
+                'Hello there, my name is Giuseppe! What can I help you with today?',
+                'Hi, I\'m Giuseppe. Is there anything in particular I can assist you with?',
+                'Sup.',
+                'Oh thank goodness, someone to talk to! Hey how\'s it going?'
+            ])
+        elif THANKS_TEXT.match(text):
+            message = random.choice([
+                'You\'re welcome!',
+                'Glad to be of service.',
+                'No problemo!',
+                'No need to thank me, I\'m just doing what I\'m programmed to do.'
+            ])
+            if random.choice([True, True, True, False]):
+                message += random.choice([
+                    ' Can I help with anything else?',
+                    ' Do you have any other questions for me?',
+                    ' Anything else on your mind?'
+                ])
+        elif text == 'when is the next bus leaving?' or text == 'when is the next bus leaving':
+            message = random.choice([
+                'Definitely pretty soon, I think.',
+                'Seems like it\'ll definitely be sometime today.',
+                'Right now - hurry, you\'re gonna miss it!!',
+                'The next departure from your nearest stop is in 15 minutes. Enough time for you to grab a snack and run to the bathroom, if you need to.'
+            ])
+        elif text == 'where am i?' or text == 'where am i':
+            message = random.choice([
+                'You are on planet Earth.',
+                'You are on the BCTracker website.',
+                'I\'m not totally sure. Do you see any major recognizable landmarks around you? Actually I don\'t think I could recognize any landmarks either.',
+                'Where are any of us?'
+            ])
+        elif text == 'how did i get here?' or text == 'how did i get here':
+            message = random.choice([
+                'Most likely by bus, but also possibly by car, bike, walking, or some other mode of transportation.',
+                'You probably navigated to bctracker.ca in your web browser. Or you may have clicked on a link from another website, or used a bookmark.',
+                'You have always been here.',
+                'How did any of us get here?'
+            ])
+        elif APOLOGY_TEXT.match(text):
+            message = 'It\'s ok. I forgive you.'
+        elif ROUTE_TEXT.match(text):
+            search = re.search(ROUTE_TEXT, text)
+            route_number = search.group(1)
+            if context.system:
+                route = context.system.get_route(number=route_number)
+                if route:
+                    message = f'I found one route with the number {route_number} in the {context} system. ' + random.choice(FOUND_ONE_MESSAGES)
+                    data = {
+                        'type': 'route',
+                        'route': route.get_json()
+                    }
+                else:
+                    message = f'Sorry, I couldn\'t find a route {route_number} in the {context} system. ' + random.choice(NOT_FOUND_MESSAGES)
+            else:
+                routes = repositories.route.find_all(context)
+                filtered_routes = [r for r in routes if r.number == route_number]
+                if filtered_routes:
+                    if len(filtered_routes) == 1:
+                        route = filtered_routes[0]
+                        message = f'I found one route with the number {route_number} in the {route.context} system. ' + random.choice(FOUND_ONE_MESSAGES)
+                        data = {
+                            'type': 'route',
+                            'route': route.get_json()
+                        }
+                    else:
+                        message = f'I found {len(filtered_routes)} routes with the number {route_number}. ' + random.choice(FOUND_MULTIPLE_MESSAGES)
+                        data = {
+                            'type': 'route_list',
+                            'routes': [r.get_json() for r in filtered_routes]
+                        }
+                else:
+                    message = f'Sorry, I couldn\'t find any routes with the number {route_number}. ' + random.choice(NOT_FOUND_MESSAGES)
+        elif STOP_TEXT.match(text):
+            search = re.search(STOP_TEXT, text)
+            stop_number = search.group(1)
+            if context.system:
+                stop = context.system.get_stop(number=stop_number)
+                if stop:
+                    message = f'I found one stop with the number {stop_number} in the {context} system. ' + random.choice(FOUND_ONE_MESSAGES)
+                    data = {
+                        'type': 'stop',
+                        'stop': stop.get_json()
+                    }
+                else:
+                    message = f'Sorry, I couldn\'t find a stop with the number {stop_number} in the {context} system. ' + random.choice(NOT_FOUND_MESSAGES)
+            else:
+                stops = repositories.stop.find_all(context)
+                filtered_stops = [s for s in stops if s.number == stop_number]
+                if filtered_stops:
+                    if len(filtered_stops) == 1:
+                        stop = filtered_stops[0]
+                        message = f'I found one stop with the number {stop_number} in the {stop.context} system. ' + random.choice(FOUND_ONE_MESSAGES)
+                        data = {
+                            'type': 'stop',
+                            'stop': stop.get_json()
+                        }
+                    else:
+                        message = f'I found {len(filtered_stops)} stops with the number {stop_number}. ' + random.choice(FOUND_MULTIPLE_MESSAGES)
+                        data = {
+                            'type': 'stop_list',
+                            'stops': [s.get_json() for s in filtered_stops]
+                        }
+                else:
+                    message = f'Sorry, I couldn\'t find any stops with the number {stop_number}. ' + random.choice(NOT_FOUND_MESSAGES)
+        elif BUS_TEXT.match(text):
+            search = re.search(BUS_TEXT, text)
+            vehicle_id = search.group(1)
+            vehicle = context.find_vehicle(vehicle_id)
+            allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
+            if (not vehicle.order_id and not allocation) or not vehicle.visible:
+                message = f'Sorry, I couldn\'t find a bus with the number {vehicle_id}. ' + random.choice(NOT_FOUND_MESSAGES)
+            else:
+                message = f'I found one bus with the number {vehicle_id}. ' + random.choice(FOUND_ONE_MESSAGES)
+                data = {
+                    'type': 'vehicle',
+                    'vehicle': vehicle.get_json()
+                }
+        elif random.choice([True, False]):
+            message = random.choice([
+                'Sorry, I don\'t understand. Perhaps this will help?',
+                'That doesn\'t make any sense. I\'m just gonna give you this thing and hope it\'s relevant.',
+                'Unfortunately I can\'t help you with that. Maybe you would like to know about this instead?',
+                'I don\'t know anything about that. But I do know about this:'
+            ])
+            systems = list(repositories.system.find_all())
+            system = random.choice(systems)
+            context = system.context
+            options = ['route', 'stop']
+            if system.realtime_enabled:
+                options.append('vehicle')
+            selection = random.choice(options)
+            match selection:
+                case 'vehicle':
+                    allocations = [a for a in system.get_allocations() if a.vehicle.visible]
+                    allocation = random.choice(allocations)
+                    data = {
+                        'type': 'vehicle',
+                        'vehicle': allocation.vehicle.get_json()
+                    }
+                case 'route':
+                    routes = system.get_routes()
+                    route = random.choice(routes)
+                    data = {
+                        'type': 'route',
+                        'route': route.get_json()
+                    }
+                case 'stop':
+                    stops = system.get_stops()
+                    stop = random.choice(stops)
+                    data = {
+                        'type': 'stop',
+                        'stop': stop.get_json()
+                    }
+        else:
+            message = random.choice([
+                'Sorry, I don\'t understand. Please try phrasing your question differently.',
+                'That doesn\'t make any sense. Can you word it a different way?',
+                'Unfortunately I can\'t help you with that. Do you have any other questions?',
+                'I don\'t know anything about that. Maybe try something else?',
+                'Huh???',
+                'You\'re literally not making any sense.'
+            ])
+        return {
+            'message': message,
+            'data': data
         }
     
     def api_nearby(self, context: Context):

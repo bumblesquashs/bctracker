@@ -1,3 +1,4 @@
+<!--
 <div id="top-button" class="button" onclick="scrollToTop()">Back to Top</div>
 
 <script>
@@ -32,3 +33,4 @@
         padding-bottom: 60px;
     }
 </style>
+-->

@@ -174,7 +174,9 @@ class Route:
             'colour': self.colour,
             'text_colour': self.text_colour,
             'type': str(self.type),
-            'url_id': self.url_id
+            'url_id': self.url_id,
+            'system_id': self.system.id,
+            'system_name': str(self.system)
         }
     
     def get_indicator_json(self):

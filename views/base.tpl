@@ -520,6 +520,7 @@
                 % end
                 <div id="page">{{ !base }}</div>
             </div>
+            % include('components/chat')
             <div id="search" class="display-none" tabindex="0">
                 <div id="search-header">
                     <div id="search-bar">

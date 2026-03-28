@@ -33,6 +33,12 @@ table th {
     white-space: nowrap;
 }
 
+#chat {
+    width: 275px;
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+
 #content {
     display: flex;
     flex-direction: row;
