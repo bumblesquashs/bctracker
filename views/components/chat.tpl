@@ -332,7 +332,7 @@
             setTimeout(updateThinkingText, 1000 + Math.floor(Math.random() * 1000));
         } else {
             chatThinkingMessageElement.innerHTML = selectRandom(unfortunateThinkingMessages);
-            setTimeout(updateThinkingText, 500 + Math.floor(Math.random() * 500));
+            setTimeout(updateThinkingText, 1000 + Math.floor(Math.random() * 500));
         }
     }
     
