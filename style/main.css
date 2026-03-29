@@ -1797,6 +1797,12 @@ table tr.table-button {
     font-size: 12pt;
 }
 
+#suggested-prompts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .message {
     display: flex;
     flex-direction: column;

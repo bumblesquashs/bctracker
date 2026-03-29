@@ -30,7 +30,16 @@ APOLOGY_TEXT = re.compile(r'^(i\'?m |i am )?sorry\?*$')
 ROUTE_TEXT = re.compile(r'^.*route ([0-9][a-z0-9]*).*$')
 STOP_TEXT = re.compile(r'^.*stop ([0-9]+).*$')
 BUS_TEXT = re.compile(r'^.*bus ([0-9]+).*$')
+INCORRECT_TEXT = re.compile(r'^((no[,!]?|(no,? )?that\'?s (actually )?(wrong|incorrect|not (right|true))[,!]?|excuse me,?|u[hm]+( actually)?( no)?,?) i (actually )?(said|meant|want|wanted|asked|thought) ).+$')
 
+APOLOGY_MESSAGES = [
+    'You\'re completely right, I messed that up. Here\'s what you actually wanted: ',
+    'I\'m so sorry, looks like I got that wrong. ',
+    'I can\'t believe I failed at that! Let me try again...<br /><br />',
+    'Looks like you\'re right and I\'m wrong, as usual. ',
+    'Shoot, I screwed that one up big time. My sincere apologies - let me know if I can do anything to make it up to you.<br />',
+    'I have brought shame to my entire bloodline by failing you today. I am so so so so sorry! '
+]
 FOUND_ONE_MESSAGES = [
     'Hope this helps!',
     'Maybe this is what you want?',
@@ -1571,7 +1580,7 @@ class Server(Bottle):
                 'Definitely pretty soon, I think.',
                 'Seems like it\'ll definitely be sometime today.',
                 'Right now - hurry, you\'re gonna miss it!!',
-                'The next departure from your nearest stop is in 15 minutes. Enough time for you to grab a snack and run to the bathroom, if you need to.'
+                f'The next departure from your nearest stop is in {random.randint(10, 20)} minutes. Enough time for you to grab a snack and run to the bathroom, if you need to.'
             ])
         elif text == 'where am i?' or text == 'where am i':
             message = random.choice([
@@ -1583,15 +1592,24 @@ class Server(Bottle):
         elif text == 'how did i get here?' or text == 'how did i get here':
             message = random.choice([
                 'Most likely by bus, but also possibly by car, bike, walking, or some other mode of transportation.',
-                'You probably navigated to bctracker.ca in your web browser. Or you may have clicked on a link from another website, or used a bookmark.',
+                'You probably navigated to <a href="https://bctracker.ca">bctracker.ca</a> in your web browser. Or you may have clicked on a link from another website, or used a bookmark.',
                 'You have always been here.',
                 'How did any of us get here?'
+            ])
+        elif text == 'who are you?' or text == "who are you":
+            message = random.choice([
+                'I\'m Botticelli, the BCTracker AI! What can I help you with today?',
+                'My name is Botticelli and I\'m an AI designed to help you with all your transit needs. Ask me anything!',
+                'I am... your father!<br /><br />Just kidding! I\'m Botticelli, the BCTracker AI. Is there anything I can assist you with?',
+                'It\'s-a me, Botticelli!'
             ])
         elif APOLOGY_TEXT.match(text):
             message = 'That\'s all right. I forgive you.'
         elif ROUTE_TEXT.match(text):
             search = re.search(ROUTE_TEXT, text)
             route_number = search.group(1)
+            if random.randint(1, 10) == 10:
+                route_number = str(random.randint(1, 99))
             if context.system:
                 route = context.system.get_route(number=route_number)
                 if route:
@@ -1624,6 +1642,8 @@ class Server(Bottle):
         elif STOP_TEXT.match(text):
             search = re.search(STOP_TEXT, text)
             stop_number = search.group(1)
+            if random.randint(1, 10) == 10:
+                stop_number = str(random.randint(100000, 199999))
             if context.system:
                 stop = context.system.get_stop(number=stop_number)
                 if stop:
@@ -1656,6 +1676,8 @@ class Server(Bottle):
         elif BUS_TEXT.match(text):
             search = re.search(BUS_TEXT, text)
             vehicle_id = search.group(1)
+            if random.randint(1, 10) == 10:
+                vehicle_id = str(random.randint(1000, 9999))
             vehicle = context.find_vehicle(vehicle_id)
             allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
             if (not vehicle.order_id and not allocation) or not vehicle.visible:
@@ -1711,6 +1733,8 @@ class Server(Bottle):
                 'Huh???',
                 'You\'re literally not making any sense.'
             ])
+        if INCORRECT_TEXT.match(text):
+            message = random.choice(APOLOGY_MESSAGES) + message
         return {
             'message': message,
             'data': data

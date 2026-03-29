@@ -17,9 +17,7 @@
         </div>
         <div id="chat-placeholder">
             <p>Not sure what to ask? Try these unique and carefully tailored prompts:</p>
-            <div class="button" onclick="send('When is the next bus leaving?')">When is the next bus leaving?</div>
-            <div class="button" onclick="send('Where am I?')">Where am I?</div>
-            <div class="button" onclick="send('How did I get here?')">How did I get here?</div>
+            <div id="suggested-prompts"></div>
             <p class="smaller-font lighter-text">For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page</p>
             % if now.hour >= 12:
                 <i>...Happy April Fools Day!</i>
@@ -41,6 +39,30 @@
     const messages = [];
     let thinking = false;
     let writing = false;
+    
+    const validBusNumbers = Array.prototype.concat(
+        range(1020, 1277),
+        range(2301, 2999),
+        range(3001, 3034),
+        range(3200, 3303),
+        range(4007, 4073),
+        range(4200, 4248),
+        range(4400, 4474),
+        range(6000, 6029),
+        range(7500, 7524),
+        range(9201, 9486),
+        range(9501, 9589)
+    );
+    
+    const suggestedPrompts = [
+        "When is the next bus leaving?",
+        "Where am I?",
+        "How did I get here?",
+        "Who are you?",
+        "Can you tell me about route " + (Math.floor(Math.random() * 98) + 1) + "?",
+        "What is stop " + (Math.floor(Math.random() * 99999) + 100000) + "?",
+        "I\'d like to know more about bus " + selectRandom(validBusNumbers)
+    ]
     
     const normalThinkingMessages = [
         "Thinking...",
@@ -77,6 +99,28 @@
     const chatPlaceholderElement = document.getElementById("chat-placeholder");
     const chatThinkingElement = document.getElementById("chat-thinking");
     const chatThinkingMessageElement = document.getElementById("chat-thinking-message");
+    const suggestedPromptsElement = document.getElementById("suggested-prompts");
+    
+    
+    let usedPrompts = [];
+    function addSuggestedPrompt() {
+        let prompt = selectRandom(suggestedPrompts);
+        while (usedPrompts.includes(prompt)) {
+            prompt = selectRandom(suggestedPrompts);
+        }
+        usedPrompts.push(prompt);
+        const buttonElement = document.createElement("div");
+        buttonElement.classList.add("button");
+        buttonElement.innerHTML = prompt;
+        buttonElement.onclick = function() {
+            send(prompt);
+        }
+        suggestedPromptsElement.appendChild(buttonElement);
+    }
+    
+    addSuggestedPrompt();
+    addSuggestedPrompt();
+    addSuggestedPrompt();
     
     class Message {
         constructor(actor, response) {
@@ -102,8 +146,13 @@
         
         setMessage(index) {
             const self = this;
+            if (this.text[index] === "<") {
+                while (index < this.text.length && this.text[index] !== ">") {
+                    index += 1;
+                }
+            }
             if (index >= this.text.length) {
-                this.element.innerHTML = this.text;
+                this.element.innerHTML = "<p>" + this.text + "</p>";
                 chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
                 if (this.data === null || this.data === undefined) {
                     writing = false;
@@ -120,7 +169,7 @@
                     }, 500 + Math.floor(Math.random() * 500));
                 }
             } else {
-                this.element.innerHTML = this.text.substring(0, index);
+                this.element.innerHTML = "<p>" + this.text.substring(0, index) + "</p>";
                 chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
                 setTimeout(function() {
                     self.setMessage(index + 1);
@@ -184,6 +233,9 @@
             } else if (type === "vehicle") {
                 iconElement.innerHTML = getSVG("bus");
                 nameElement.innerHTML = "Bus";
+            } else if (type === "vehicle_list") {
+                iconElement.innerHTML = getSVG("bus");
+                nameElement.innerHTML = "Buses";
             }
             headerElement.appendChild(iconElement);
             headerElement.appendChild(nameElement);
@@ -348,5 +400,11 @@
     
     function selectRandom(array) {
         return array[Math.floor(Math.random() * array.length)]
+    }
+    
+    function range(start, end) {
+        return Array.apply(null, Array(end - start)).map(function(k, i) {
+            return i + start
+        });
     }
 </script>
