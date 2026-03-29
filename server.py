@@ -26,7 +26,7 @@ import services
 # Chat prompts
 GREETING_TEXT = re.compile(r'^(hi+|hello+|hey+|(was)?su+p)(!*|\?*)$')
 THANKS_TEXT = re.compile(r'^(yes,? )?(thanks|thank you|thx).*$')
-APOLOGY_TEXT = re.compile(r'^(i\'m |i am )?sorry\?*$')
+APOLOGY_TEXT = re.compile(r'^(i\'?m |i am )?sorry\?*$')
 ROUTE_TEXT = re.compile(r'^.*route ([0-9][a-z0-9]*).*$')
 STOP_TEXT = re.compile(r'^.*stop ([0-9]+).*$')
 BUS_TEXT = re.compile(r'^.*bus ([0-9]+).*$')
@@ -1548,8 +1548,8 @@ class Server(Bottle):
         text: str = request.forms.get('text', '').lower().strip()
         if GREETING_TEXT.match(text):
             message = random.choice([
-                'Hello there, my name is Giuseppe! What can I help you with today?',
-                'Hi, I\'m Giuseppe. Is there anything in particular I can assist you with?',
+                'Hello there, my name is Botticelli! What can I help you with today?',
+                'Hi, I\'m Botticelli. Is there anything in particular I can assist you with?',
                 'Sup.',
                 'Oh thank goodness, someone to talk to! Hey how\'s it going?'
             ])
@@ -1588,7 +1588,7 @@ class Server(Bottle):
                 'How did any of us get here?'
             ])
         elif APOLOGY_TEXT.match(text):
-            message = 'It\'s ok. I forgive you.'
+            message = 'That\'s all right. I forgive you.'
         elif ROUTE_TEXT.match(text):
             search = re.search(ROUTE_TEXT, text)
             route_number = search.group(1)

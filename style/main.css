@@ -1751,6 +1751,11 @@ table tr.table-button {
     --image-size: 64px;
 }
 
+#chat-header sup {
+    font-size: 6pt;
+    padding-left: 1px;
+}
+
 #chat-header .smaller-image {
     --image-size: 36px;
 }

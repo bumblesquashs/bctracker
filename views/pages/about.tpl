@@ -6,7 +6,57 @@
 </div>
 
 <div class="page-container">
-    <div class="container flex-3">
+    % if today.month == 4 and today.day == 1:
+        <div id="ai" class="container flex-1">
+            <div class="content">
+                <div class="info-box">
+                    <h3>AI Chat Information</h3>
+                    <div class="column section">
+                        <b>What if the AI gives me false information?</b>
+                        <p>
+                            This is so astronomically unlikely that we can assume it's effectively impossible.
+                            However, if and when mistakes do occur, under no circumstances can we be held liable for any resulting damages, incidents or missed transfers.
+                        </p>
+                    </div>
+                    <div class="column section">
+                        <b>Any concerns about environmental impact?</b>
+                        <p>
+                            BC Transit's new electric buses will surely offset any harm.
+                            Also, we are looking into starting up a hydropower division (tentatively named "BCHydro") to meet the AI's growing demands for power and water.
+                        </p>
+                    </div>
+                    <div class="column section">
+                        <b>Was the training data used with permission?</b>
+                        <p>Incredibly, when the AI was created it already knew everything there is to know about transit - we didn't have to train it at all.</p>
+                    </div>
+                    <div class="column section">
+                        <b>How can I disable this feature?</b>
+                        <p>
+                            We understand our new design may take some getting used to, but soon, using our new tool will feel as natural as can be!
+                            No use clinging to the clunky methodology of the past.
+                        </p>
+                    </div>
+                    <div class="column section">
+                        <b>Why is this even necessary?</b>
+                        <p>
+                            Haven't you heard?
+                            Everythig is AI centric now, and there's clearly no going back!
+                            After all, AI tools must be essential because they're everywhere.
+                            So if we don't force it upon our users too, then we clearly lack this essential service!
+                            How can anyone take us seriously then??
+                        </p>
+                    </div>
+                    % if now.hour >= 12:
+                        <div class="column section">
+                            <i>...Happy April Fools Day!</i>
+                            <i class="lighter-text">Disclaimer: No actual AI was used in the making of this "feature". The internet is full of enough slop already.</i>
+                        </div>
+                    % end
+                </div>
+            </div>
+        </div>
+    % end
+    <div class="container {{ 'flex-2' if today.month == 3 else 'flex-3' }}">
         <div class="section">
             <div class="content">
                 <p>

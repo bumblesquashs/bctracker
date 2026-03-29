@@ -11,8 +11,8 @@
                     % include('components/svg', name='ai')
                 </div>
             </div>
-            <h2>Introducing Giuseppe, the BCTracker AI Chat</h2>
-            <p class="smaller-font lighter-text">Responses are guaranteed to be 100% accurate</p>
+            <h2>Introducing Botticelli, the BCTracker AI Chat</h2>
+            <p class="smaller-font lighter-text">Responses<sup>1</sup> are guaranteed<sup>4</sup> to be 100%<sup>†</sup> accurate<sup>7</sup></p>
             <hr />
         </div>
         <div id="chat-placeholder">
@@ -20,10 +20,14 @@
             <div class="button" onclick="send('When is the next bus leaving?')">When is the next bus leaving?</div>
             <div class="button" onclick="send('Where am I?')">Where am I?</div>
             <div class="button" onclick="send('How did I get here?')">How did I get here?</div>
+            <p class="smaller-font lighter-text">For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page</p>
+            % if now.hour >= 12:
+                <i>...Happy April Fools Day!</i>
+            % end
         </div>
         <div id="chat-thinking" style="display: none;">
             <div class="loader"></div>
-            Thinking...
+            <div id="chat-thinking-message">Thinking...</div>
         </div>
     </div>
     <div id="chat-input-container">
@@ -36,10 +40,40 @@
 <script>
     const messages = [];
     let thinking = false;
+    let writing = false;
+    
+    const normalThinkingMessages = [
+        "Thinking...",
+        "Checking references...",
+        "Searching for relevant data...",
+        "Extracting...",
+        "Extrapolating...",
+        "Indexing...",
+        "Contextualizing..."
+    ];
+    
+    const unusualThinkingMessages = [
+        "Calculating trajectories...",
+        "Consulting dictionaries...",
+        "Traversing neural pathways...",
+        "Metamorphasizing",
+        "Prophesizing..."
+    ];
+    
+    const unfortunateThinkingMessages = [
+        "Hallicinating...",
+        "Bullshitting...",
+        "Consulting internal oujia board...",
+        "Uploading personal data...",
+        "Mining Bitcoin...",
+        "Wasting time...",
+        "Forecasting stock market trends...",
+    ];
     
     const chatMessagesElement = document.getElementById("chat-messages");
     const chatPlaceholderElement = document.getElementById("chat-placeholder");
     const chatThinkingElement = document.getElementById("chat-thinking");
+    const chatThinkingMessageElement = document.getElementById("chat-thinking-message");
     
     class Message {
         constructor(actor, response) {
@@ -55,23 +89,32 @@
         show() {
             chatMessagesElement.appendChild(this.element);
             if (this.actor === "bot") {
-                let index = 1;
-                const message = this;
-                this.interval = setInterval(function () {
-                    if (index >= message.text.length) {
-                        message.element.innerHTML = message.text;
-                        clearInterval(message.interval);
-                        thinking = false;
-                        updateThinking();
-                        message.showData();
-                    } else {
-                        message.element.innerHTML = message.text.substring(0, index);
-                        index += 1;
-                    }
-                    chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
-                }, 20);
+                writing = true;
+                chatThinkingMessageElement.innerHTML = "Writing...";
+                this.setMessage(1);
             } else {
                 this.element.innerHTML = this.text;
+            }
+        }
+        
+        setMessage(index) {
+            const self = this;
+            if (index >= this.text.length) {
+                this.element.innerHTML = this.text;
+                chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
+                setTimeout(function () {
+                    self.showData();
+                    writing = false;
+                    thinking = false;
+                    updateThinking();
+                    chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
+                }, 10 + Math.floor(Math.random() * 60));
+            } else {
+                this.element.innerHTML = this.text.substring(0, index);
+                chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
+                setTimeout(function() {
+                    self.setMessage(index + 1);
+                }, 10 + Math.floor(Math.random() * 60));
             }
         }
         
@@ -102,6 +145,11 @@
             } else if (this.data.type === "vehicle") {
                 const dataElement = this.getVehicleDataElement(this.data.vehicle);
                 this.element.appendChild(dataElement);
+            } else if (this.data.type === "vehicle_list") {
+                for (const vehicle of this.data.vehicles) {
+                    const dataElement = this.getVehicleDataElement(vehicle);
+                    this.element.appendChild(dataElement);
+                }
             }
         }
         
@@ -251,7 +299,7 @@
             const data = new FormData();
             data.set("text", text);
             request.send(data);
-        }, 2000);
+        }, 2000 + Math.floor(Math.random() * 8000));
     }
     
     function updatePlaceholder() {
@@ -265,11 +313,30 @@
     function updateThinking() {
         if (thinking) {
             chatThinkingElement.style.display = "flex";
+            updateThinkingText();
         } else {
             chatThinkingElement.style.display = "none";
         }
     }
+    
+    function updateThinkingText() {
+        if (!thinking || writing) {
+            return;
+        }
+        const probability = Math.floor(Math.random() * 100)
+        if (probability <= 70) {
+            chatThinkingMessageElement.innerHTML = selectRandom(normalThinkingMessages);
+            setTimeout(updateThinkingText, 2000 + Math.floor(Math.random() * 2000));
+        } else if (probability <= 95) {
+            chatThinkingMessageElement.innerHTML = selectRandom(unusualThinkingMessages);
+            setTimeout(updateThinkingText, 1000 + Math.floor(Math.random() * 1000));
+        } else {
+            chatThinkingMessageElement.innerHTML = selectRandom(unfortunateThinkingMessages);
+            setTimeout(updateThinkingText, 500 + Math.floor(Math.random() * 500));
+        }
+    }
+    
+    function selectRandom(array) {
+        return array[Math.floor(Math.random() * array.length)]
+    }
 </script>
-
-<style>
-</style>
