@@ -116,12 +116,6 @@ table tr.table-button:hover {
     border-color: #666666;
 }
 
-#chat-input-container {
-    background-color: #E6E6E6;
-    border-color: #666666;
-    --tooltip-background: #094409;
-}
-
 #chat-header {
     --image-color: #000000;
 }

@@ -104,6 +104,77 @@ table tr.table-button:hover {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+#chat {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #FFFFFF;
+}
+
+#chat a {
+    color: #5CC3FF;
+}
+
+#chat input[type="text"] {
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+}
+
+#chay input[type="text"]:focus {
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+#chat .lighter-text {
+    color: #E6E6E6;
+}
+
+#chat .button {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+#chat .button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+#chat-header {
+    --image-color: #FFFFFF;
+}
+
+#chat .message.user {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+}
+
+#chat .message.error {
+    background-color: #D57C7C;
+    color: #7A0000;
+}
+
+#chat .message-data {
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+    --image-color: #FFFFFF;
+}
+
+#chat .message-data-header {
+    color: #E6E6E6;
+    --image-color: #E6E6E6;
+}
+
+#chat-thinking {
+    color: #E6E6E6;
+}
+
+#chat-thinking .loader {
+    border-top-color: #E50000;
+    border-right-color: #FFEE00;
+    border-bottom-color: #028121;
+    border-left-color: #004CFF;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }

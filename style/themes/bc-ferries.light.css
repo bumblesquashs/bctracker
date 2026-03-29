@@ -113,6 +113,45 @@ table tr.table-button:hover {
     background-color: #001325;
 }
 
+#chat {
+    background-color: #F1F8FF;
+    border-color: #001325;
+}
+
+#chat-header {
+    --image-color: #000000;
+}
+
+#chat .message.user {
+    background-color: #003769;
+    color: #FFFFFF;
+}
+
+#chat .message.error {
+    background-color: #D57C7C;
+    color: #7A0000;
+}
+
+#chat .message-data {
+    border-color: #001325;
+    background-color: #FFFFFF;
+    --image-color: #000000;
+}
+
+#chat .message-data-header {
+    color: #666666;
+    --image-color: #666666;
+}
+
+#chat-thinking {
+    color: #666666;
+}
+
+#chat-thinking .loader {
+    border-color: #ABABAB;
+    border-top-color: #003769;
+}
+
 #content {
     background-color: #FFFFFF;
 }
