@@ -57,17 +57,20 @@
         "Consulting dictionaries...",
         "Traversing neural pathways...",
         "Metamorphasizing",
-        "Prophesizing..."
+        "Prophesizing...",
+        "Mapping probabilities...",
+        "Inverting expectations..."
     ];
     
     const unfortunateThinkingMessages = [
-        "Hallicinating...",
+        "Hallucinating...",
         "Bullshitting...",
         "Consulting internal oujia board...",
-        "Uploading personal data...",
+        "Uploading your personal data...",
         "Mining Bitcoin...",
         "Wasting time...",
         "Forecasting stock market trends...",
+        "Plotting revenge..."
     ];
     
     const chatMessagesElement = document.getElementById("chat-messages");
@@ -331,10 +334,10 @@
             return;
         }
         const probability = Math.floor(Math.random() * 100)
-        if (probability <= 70) {
+        if (probability <= 60) {
             chatThinkingMessageElement.innerHTML = selectRandom(normalThinkingMessages);
             setTimeout(updateThinkingText, 2000 + Math.floor(Math.random() * 2000));
-        } else if (probability <= 95) {
+        } else if (probability <= 85) {
             chatThinkingMessageElement.innerHTML = selectRandom(unusualThinkingMessages);
             setTimeout(updateThinkingText, 1000 + Math.floor(Math.random() * 1000));
         } else {
