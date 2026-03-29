@@ -102,13 +102,20 @@
             if (index >= this.text.length) {
                 this.element.innerHTML = this.text;
                 chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
-                setTimeout(function () {
-                    self.showData();
+                if (this.data === null || this.data === undefined) {
                     writing = false;
                     thinking = false;
                     updateThinking();
-                    chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
-                }, 10 + Math.floor(Math.random() * 60));
+                } else {
+                    chatThinkingMessageElement.innerHTML = "Generating output...";
+                    setTimeout(function () {
+                        self.showData();
+                        writing = false;
+                        thinking = false;
+                        updateThinking();
+                        chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
+                    }, 500 + Math.floor(Math.random() * 500));
+                }
             } else {
                 this.element.innerHTML = this.text.substring(0, index);
                 chatMessagesElement.scrollTo(0, chatMessagesElement.scrollHeight);
