@@ -36,6 +36,7 @@
 </div>
 
 <script>
+    const id = Date.now();
     const messages = [];
     let thinking = false;
     let writing = false;
@@ -360,6 +361,7 @@
                 chatMessagesElement.appendChild(chatThinkingElement);
             };
             const data = new FormData();
+            data.set("id", id);
             data.set("text", text);
             data.set("path", window.location.pathname);
             request.send(data);

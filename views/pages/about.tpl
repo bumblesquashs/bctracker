@@ -30,6 +30,10 @@
                         <p>Incredibly, when the AI was created it already knew everything there is to know about transit - we didn't have to train it at all.</p>
                     </div>
                     <div class="column section">
+                        <b>Is my data being stored anywhere?</b>
+                        <p>All conversations are recorded to make sure we can provide you with the highest quality service, however we do not include any data that could identify you personally.</p>
+                    </div>
+                    <div class="column section">
                         <b>How can I disable this feature?</b>
                         <p>
                             We understand our new design may take some getting used to, but soon, using our new tool will feel as natural as can be!
@@ -47,16 +51,16 @@
                         </p>
                     </div>
                     % if now.hour >= 12:
-                        <div class="column section">
+                        <div class="column section gap-10">
                             <i>...Happy April Fools Day!</i>
-                            <i class="lighter-text">Disclaimer: No actual AI was used in the making of this "feature". The internet is full of enough slop already.</i>
+                            <p class="smaller-font lighter-text">Disclaimer: No actual AI was used in the making of this "feature". The internet is full of enough slop already.</p>
                         </div>
                     % end
                 </div>
             </div>
         </div>
     % end
-    <div class="container {{ 'flex-2' if today.month == 3 else 'flex-3' }}">
+    <div class="container {{ 'flex-2' if today.month == 4 and today.day == 1 else 'flex-3' }}">
         <div class="section">
             <div class="content">
                 <p>

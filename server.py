@@ -1555,7 +1555,9 @@ class Server(Bottle):
     
     def api_chat(self, context: Context):
         data = None
-        text: str = request.forms.get('text', '').lower().strip()
+        original_text: str = request.forms.get('text', '')
+        text = original_text.lower().strip()
+        path: str = request.forms.get('path', '').lower().strip('/')
         if GREETING_TEXT.match(text):
             message = random.choice([
                 'Hello there, my name is Botticelli! What can I help you with today?',
@@ -1607,7 +1609,6 @@ class Server(Bottle):
         elif APOLOGY_TEXT.match(text):
             message = 'That\'s all right. I forgive you.'
         elif CONTEXT_TEXT.match(text):
-            path: str = request.forms.get('path', '').lower().strip('/')
             if context.system_id and path.startswith(context.system_id):
                 path = path[len(context.system_id) + 1:]
             message = random.choice([
@@ -1942,6 +1943,13 @@ class Server(Bottle):
             ])
         if INCORRECT_TEXT.match(text):
             message = random.choice(APOLOGY_MESSAGES) + message
+        try:
+            id = request.forms.get('id', 'unknown')
+            time = Time.now(context.timezone)
+            with open('logs/af-2026.txt', 'a') as file:
+                file.write(f'{time} id:{id} ({context} /{path}): {original_text} -> {message}\n')
+        except:
+            pass
         return {
             'message': message,
             'data': data
