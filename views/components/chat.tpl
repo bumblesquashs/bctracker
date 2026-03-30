@@ -61,7 +61,8 @@
         "Who are you?",
         "Can you tell me about route " + (Math.floor(Math.random() * 98) + 1) + "?",
         "What is stop " + (Math.floor(Math.random() * 99999) + 100000) + "?",
-        "I\'d like to know more about bus " + selectRandom(validBusNumbers)
+        "I'd like to know more about bus " + selectRandom(validBusNumbers),
+        "What's on this page?"
     ]
     
     const normalThinkingMessages = [
@@ -360,6 +361,7 @@
             };
             const data = new FormData();
             data.set("text", text);
+            data.set("path", window.location.pathname);
             request.send(data);
         }, 2000 + Math.floor(Math.random() * 8000));
     }

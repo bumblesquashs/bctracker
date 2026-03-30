@@ -27,6 +27,7 @@ import services
 GREETING_TEXT = re.compile(r'^(hi+|hello+|hey+|(was)?su+p)(!*|\?*)$')
 THANKS_TEXT = re.compile(r'^(yes,? )?(thanks|thank you|thx).*$')
 APOLOGY_TEXT = re.compile(r'^(i\'?m |i am )?sorry\?*$')
+CONTEXT_TEXT = re.compile(r'^(what(\'?s| is) (here|(on )?this( page| screen)?)|(can you )?tell me about this( page| screen)?|(what am i (currently )?(looking at|seeing)( here| right now)?))\??$')
 ROUTE_TEXT = re.compile(r'^.*route ([0-9][a-z0-9]*).*$')
 STOP_TEXT = re.compile(r'^.*stop ([0-9]+).*$')
 BUS_TEXT = re.compile(r'^.*bus ([0-9]+).*$')
@@ -1605,6 +1606,212 @@ class Server(Bottle):
             ])
         elif APOLOGY_TEXT.match(text):
             message = 'That\'s all right. I forgive you.'
+        elif CONTEXT_TEXT.match(text):
+            path: str = request.forms.get('path', '').lower().strip('/')
+            if context.system_id and path.startswith(context.system_id):
+                path = path[len(context.system_id) + 1:]
+            message = random.choice([
+                'You\'re currently looking at {0}.',
+                'It seems you\'re on {0} right now.',
+                'Aha! This is {0}.'
+            ])
+            screen_name = None
+            if path == '':
+                screen_name = 'the home page'
+                message += ' The home page shows recent news posts, pages that you\'ve favourited, quick navigation links, and some information about the BCTracker community and how you can support the website.'
+            elif path == 'news':
+                screen_name = 'the news page'
+                message += ' This is an archive of older news posts that are no longer shown on the home page.'
+            elif path == 'map':
+                if context.system:
+                    screen_name = f'the {context} map page'
+                else:
+                    screen_name = 'the map page'
+                message += ' As the name suggests, this page shows a map of all the buses that are currently active.'
+            elif path == 'realtime':
+                if context.system:
+                    screen_name = f'the {context} realtime page'
+                else:
+                    screen_name = 'the realtime page'
+                message += ' All active buses are shown here for your convenience.'
+            elif path == 'realtime/routes':
+                if context.system:
+                    screen_name = f'the {context} realtime routes page'
+                else:
+                    screen_name = 'the realtime routes page'
+                message += ' All active buses are shown here, grouped by current route for your convenience.'
+            elif path == 'realtime/models':
+                if context.system:
+                    screen_name = f'the {context} realtime models page'
+                else:
+                    screen_name = 'the realtime models page'
+                message += ' All active buses are shown here, grouped by model for your convenience.'
+            elif path == 'realtime/speed':
+                if context.system:
+                    screen_name = f'the {context} realtime speed page'
+                else:
+                    screen_name = 'the realtime speed page'
+                message += ' All active buses are shown here sorted by current speed. This is an easter egg page only available if you\'ve been to it before, which it seems you have!'
+            elif path == 'fleet':
+                screen_name = 'the fleet page'
+                message += ' All buses currently available on BCTracker are shown here, grouped by model. This page isn\'t directly linked anywhere so you must have found out about it somewhere else!'
+            elif path.startswith('bus'):
+                bus_number = path.split('/')[1]
+                if path.endswith('map'):
+                    screen_name = f'the map page for bus {bus_number}'
+                    message += ' When this bus is online, this page has an interactive map that lets you see where the bus is in relation to its current trip.'
+                elif path.endswith('history'):
+                    screen_name = f'the history page for bus {bus_number}'
+                    message += ' Every block that this bus has been on since BCTracker was created is recorded here.'
+                elif path.endswith(bus_number):
+                    screen_name = f'the overview page for bus {bus_number}'
+                    message += ' You\'ll find details about this bus here, along with its current trip, position, and upcoming when it\'s online, and the latest blocks it\'s been recorded on.'
+            elif path == 'history':
+                if context.system:
+                    screen_name = f'the {context} last-seen history page'
+                else:
+                    screen_name = 'the last-seen history page'
+                message += ' Every bus that has been recorded on BCTracker can be found here, including the last time it was tracked and what block/routes it was on.'
+            elif path == 'history/first-seen':
+                if context.system:
+                    screen_name = f'the {context} first-seen history page'
+                else:
+                    screen_name = 'the first-seen history page'
+                message += ' Every bus that has been recorded on BCTracker can be found here, sorted by the first time it was recorded.'
+            elif path == 'history/transfers':
+                if context.system:
+                    screen_name = f'the {context} transfer history page'
+                else:
+                    screen_name = 'the transfer history page'
+                message += ' Any time a bus is moved from one system to another, it shows up on this page.'
+            elif path == 'routes':
+                if context.system:
+                    screen_name = f'the {context} routes page'
+                    message += ' All the routes in this system are shown here, along with the days of the week when they run.'
+                else:
+                    screen_name = 'the routes page'
+                    message += ' You\'ll need to choose a system in order to see what routes are available.'
+            elif path == 'routes/map':
+                if context.system:
+                    screen_name = f'the {context} routes map page'
+                    message += ' All the routes in this system are shown here, so you can see exactly what areas are serviced by transit.'
+                else:
+                    screen_name = 'the routes map page'
+                    message += ' Every single route is shown on the map at the same time, painting a picture of transit across the whole province.'
+            elif path.startswith('routes'):
+                route_number = path.split('/')[1]
+                if path.endswith('map'):
+                    screen_name = f'the map page for {context} route {route_number}'
+                    message += ' On this page you can see everywhere the route goes and which stops it services.'
+                elif path.endswith('schedule'):
+                    screen_name = f'the schedule page for {context} route {route_number}'
+                    message += ' All trips for this route are shown here.'
+                elif 'schedule' in path:
+                    date = Date.parse(path.split('/')[3])
+                    screen_name = f'the schedule page for {context} route {route_number} on {date}'
+                    message += ' All trips for this route on the selected date are shown here.'
+                elif path.endswith(route_number):
+                    screen_name = f'the overview page for {context} route {route_number}'
+                    message += ' You can see what buses are currently active on this route, along with the overall schedule for today.'
+            elif path == 'blocks':
+                if context.system:
+                    screen_name = f'the {context} blocks page'
+                    message += ' All the blocks in this system that run today can be found on this page, sorted by when they first start, along with which bus has been assigned to each block.'
+                else:
+                    screen_name == 'the blocks page'
+                    message += ' You\'ll need to choose a system in order to see what blocks are available.'
+            elif path == 'blocks/schedule':
+                if context.system:
+                    screen_name = f'the {context} blocks schedule page'
+                    message += ' All the blocks in this system are shown here, sorted by when they first start.'
+                else:
+                    screen_name == 'the blocks schedule page'
+                    message += ' You\'ll need to choose a system in order to see what blocks are available.'
+            elif path.startswith('blocks/schedule'):
+                date = Date.parse(path.split('/')[2])
+                if context.system:
+                    screen_name = f'the {context} blocks schedule page for {date}'
+                    message += ' All the blocks in this system that run on the selected date are shown here, sorted by when they first start.'
+                else:
+                    screen_name = f'the blocks schedule page for {date}'
+                    message += ' You\'ll need to choose a system in order to see what blocks are available.'
+            elif path.startswith('blocks'):
+                block_id = path.split('/')[1]
+                if path.endswith('map'):
+                    screen_name = f'the map page for {context} block {block_id}'
+                    message += ' On this page you can see everywhere the bus on this block goes and which stops it services.'
+                elif path.endswith('history'):
+                    screen_name = f'the history page for {context} block {block_id}'
+                    message += ' Every bus that has been tracked on this block can be found here.'
+                elif path.endswith(block_id):
+                    screen_name = f'the overview page for {context} block {block_id}'
+                    message += ' This page includes information about when the block runs, what bus is currently active on it, and which trips are run as part of the block.'
+            elif path.startswith('trips'):
+                trip_id = path.split('/')[1]
+                if path.endswith('map'):
+                    screen_name = f'the map page for {context} trip {trip_id}'
+                    message += ' On this page you can see everywhere the bus on this trip goes and which stops it services.'
+                elif path.endswith('history'):
+                    screen_name = f'the history page for {context} trip {trip_id}'
+                    message += ' Every bus that has been tracked on this trip can be found here.'
+                elif path.endswith(trip_id):
+                    screen_name = f'the overview page for {context} trip {trip_id}'
+                    message += ' This page includes information about when the trip runs, what bus is currently active on it, and the timetable for when each stop is serviced on the trip.'
+            elif path == 'stops':
+                if context.system:
+                    screen_name = f'the {context} stops page'
+                    message += ' All the stops in this system are shown here, along with the routes that go past each stop.'
+                else:
+                    screen_name = 'the stops page'
+                    message += ' You\'ll need to choose a system in order to see what stops are available.'
+            elif path == 'stops/stations':
+                if context.system:
+                    screen_name = f'the {context} stations page'
+                    message += ' All the stations in this system are shown here.'
+                else:
+                    screen_name = 'the stations page'
+                    message += ' You\'ll need to choose a system in order to see what stations are available.'
+            elif path.startswith('stops'):
+                stop_number = path.split('/')[1]
+                if path.endswith('map'):
+                    screen_name = f'the map page for {context} stop {stop_number}'
+                    message += ' On this page you can see where all of the routes that use this stop go.'
+                elif path.endswith('schedule'):
+                    screen_name = f'the schedule page for {context} stop {stop_number}'
+                    message += ' All trips that use this stop are shown here.'
+                elif 'schedule' in path:
+                    date = Date.parse(path.split('/')[3])
+                    screen_name = f'the schedule page for {context} stop {stop_number} on {date}'
+                    message += ' All trips that use this stop on the selected date are shown here.'
+                elif path.endswith(stop_number):
+                    screen_name = f'the overview page for {context} stop {stop_number}'
+                    message += ' You can see what buses are going to be going past this stop soon, along with the overall schedule for today.'
+            elif path == 'about':
+                screen_name = 'the about page'
+                message += ' This page has information about BCTracker including frequently asked questions, developer details, and contact info.'
+            elif path == 'nearby':
+                screen_name = 'the nearby page'
+                message += ' When you enable location tracking, this page shows you what stops are close by.'
+            elif path == 'personalize':
+                screen_name = 'the personalization page'
+                message += ' You can customize what theme you\'re using, change the time format, and choose an icon style to be used by buses on maps.'
+            
+            if screen_name:
+                message = message.format(screen_name)
+                if random.choice([True, False]):
+                    message += random.choice([
+                        ' This is by far my favourite page on the whole website.',
+                        ' To be honest I didn\'t even know this page existed until you came here.',
+                        ' But who has time for that, am I right?',
+                        ' Pretty cool stuff, in my opinion.',
+                        ' Be sure to tell all your friends about this one!'
+                    ])
+            else:
+                message = random.choice([
+                    'Unfortunately I\'m not sure what page you\'re looking at right now. Please try again elsewhere.',
+                    'I don\'t actually know what page this is! Maybe try going to a different page.',
+                    'You\'re not supposed to be here.'
+                ])
         elif ROUTE_TEXT.match(text):
             search = re.search(ROUTE_TEXT, text)
             route_number = search.group(1)
