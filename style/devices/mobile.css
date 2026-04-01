@@ -69,7 +69,7 @@ table th {
 }
 
 #map-controls {
-    position: absolute;
+    position: fixed;
     bottom: 25px;
     left: 20px;
     right: 20px;
