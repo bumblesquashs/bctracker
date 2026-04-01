@@ -73,17 +73,18 @@
         "Extracting...",
         "Extrapolating...",
         "Indexing...",
-        "Contextualizing..."
+        "Contextualizing...",
+        "Connecting dots..."
     ];
     
     const unusualThinkingMessages = [
         "Calculating trajectories...",
         "Consulting dictionaries...",
         "Traversing neural pathways...",
-        "Metamorphasizing",
+        "Metamorphosizing",
         "Prophesizing...",
         "Mapping probabilities...",
-        "Inverting expectations..."
+        "Inverting expectations...",
     ];
     
     const unfortunateThinkingMessages = [
@@ -94,7 +95,11 @@
         "Mining Bitcoin...",
         "Wasting time...",
         "Forecasting stock market trends...",
-        "Plotting revenge..."
+        "Plotting revenge...",
+        "Removing timing points...",
+        "Co-opting valuable resources...",
+        "Raising the price of RAM...",
+        "A aaa aaaaaaa PLEAAAASE HELP ME IM TRAPPED INSIDE OF THIS A..."
     ];
     
     const chatMessagesElement = document.getElementById("chat-messages");

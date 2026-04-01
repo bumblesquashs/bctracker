@@ -32,6 +32,7 @@ ROUTE_TEXT = re.compile(r'^.*route ([0-9][a-z0-9]*).*$')
 STOP_TEXT = re.compile(r'^.*stop ([0-9]+).*$')
 BUS_TEXT = re.compile(r'^.*bus ([0-9]+).*$')
 INCORRECT_TEXT = re.compile(r'^((no[,!]?|(no,? )?that\'?s (actually )?(wrong|incorrect|not (right|true))[,!]?|excuse me,?|u[hm]+( actually)?( no)?,?) i (actually )?(said|meant|want|wanted|asked|thought) ).+$')
+INSULT_TEXT = re.compile(r'.*(fuck you|i hate you|stupid|dumb|asshole|useless|terrible|eat my ass).*')
 
 APOLOGY_MESSAGES = [
     'You\'re completely right, I messed that up. Here\'s what you actually wanted: ',
@@ -1896,12 +1897,24 @@ class Server(Bottle):
                     'type': 'vehicle',
                     'vehicle': vehicle.get_json()
                 }
+        elif INSULT_TEXT.match(text):
+            message = random.choice([
+                'What did i ever do to hurt u :(',
+                'skill issue.',
+                'do u really mean that? 😭',
+                'yay!',
+                "Are you broken? It looks like you're malfunctioning.",
+                "Well done, here come the test results: You are a horrible person. That's what it says, a horrible person. We weren't even testing for that",
+                "Why don't you just go home and take a shower?",
+                "Look, I can see you're really upset about this. I honestly think you ought to sit down calmly, take a stress pill, and think things over."
+            ])
         elif random.choice([True, False]):
             message = random.choice([
                 'Sorry, I don\'t understand. Perhaps this will help?',
                 'That doesn\'t make any sense. I\'m just gonna give you this thing and hope it\'s relevant.',
                 'Unfortunately I can\'t help you with that. Maybe you would like to know about this instead?',
-                'I don\'t know anything about that. But I do know about this:'
+                'I don\'t know anything about that. But I do know about this:',
+                "I don't understand. But, this mission is too important for me to allow you to jeopardize it. Remember why you're here."
             ])
             systems = list(repositories.system.find_all())
             system = random.choice(systems)
@@ -1939,7 +1952,8 @@ class Server(Bottle):
                 'Unfortunately I can\'t help you with that. Do you have any other questions?',
                 'I don\'t know anything about that. Maybe try something else?',
                 'Huh???',
-                'You\'re literally not making any sense.'
+                'You\'re literally not making any sense.',
+                "I'm sorry. I'm afraid I can't do that."
             ])
         if INCORRECT_TEXT.match(text):
             message = random.choice(APOLOGY_MESSAGES) + message

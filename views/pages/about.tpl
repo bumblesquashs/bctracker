@@ -7,7 +7,7 @@
 
 <div class="page-container">
     % if today.month == 4 and today.day == 1:
-        <div id="ai" class="container flex-1">
+        <div id="ai" class="container flex-4">
             <div class="content">
                 <div class="info-box">
                     <h3>AI Chat Information</h3>
