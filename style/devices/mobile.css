@@ -41,6 +41,7 @@ table th {
 }
 
 #chat {
+    order: 3;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
@@ -59,8 +60,12 @@ table th {
 }
 
 #main {
-    order: 3;
+    order: 4;
     font-size: 12pt;
+}
+
+#map.full-screen {
+    min-height: 700px;
 }
 
 #map-controls {
