@@ -62,7 +62,7 @@ NOT_FOUND_MESSAGES = [
 ]
 
 # Increase the version to force CSS reload
-VERSION = 65
+VERSION = 66
 
 random = Random()
 
@@ -1579,6 +1579,17 @@ class Server(Bottle):
                     ' Do you have any other questions for me?',
                     ' Anything else on your mind?'
                 ])
+        elif 'bo machine' in text:
+            vehicle = context.find_vehicle('9518')
+            allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
+            if (not vehicle.order_id and not allocation) or not vehicle.visible:
+                message = f'Sorry, I couldn\'t find a bus with the number 9518. ' + random.choice(NOT_FOUND_MESSAGES)
+            else:
+                message = f'I found one bus with the number 9518. ' + random.choice(FOUND_ONE_MESSAGES)
+                data = {
+                    'type': 'vehicle',
+                    'vehicle': vehicle.get_json()
+                }
         elif text == 'when is the next bus leaving?' or text == 'when is the next bus leaving':
             message = random.choice([
                 'Definitely pretty soon, I think.',
