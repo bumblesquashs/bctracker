@@ -290,6 +290,29 @@
                 <div class="container">
                     <div class="news-post">
                         <div class="header">
+                            <h3>BCTracker AI Chat</h3>
+                            April 1st, 2026
+                        </div>
+                        <div class="content">
+                            <p class="smaller-font lighter-text">Sure, here is a news post for the new AI chat feature written in the style of the BCTracker developers:</p>
+                            <p>
+                                It's never too late to jump on the bandwagon.
+                                BCTracker is finally introducing an AI chat to help you get information faster!
+                            </p>
+                            <p>
+                                For your convenience, the chat is designed to take up a large portion of your screen and there's no way to remove it, so you can't just ignore this amazing new feature.
+                                All responses are guaranteed to be 100% correct anyways - you probably won't even need the rest of the website anymore.
+                            </p>
+                            <p>For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page.</p>
+                            <p>We hope you enjoy, and have a safe summer!</p>
+                            <p class="smaller-font lighter-text">Let me know if you'd like any modifications or something different.</p>
+                            % if today.day != 1 or now.hour >= 12:
+                                <i>... Happy April Fools Day!</i>
+                            % end
+                        </div>
+                    </div>
+                    <div class="news-post">
+                        <div class="header">
                             <h3>Summer Update</h3>
                             July 21st, 2025
                         </div>
@@ -312,44 +335,6 @@
                             </ul>
                             <p>We've also been busy making some memory usage improvements to keep the site running smoothly and prepare for larger datasets such as Translink.</p>
                             <p>See you in the next update!</p>
-                        </div>
-                    </div>
-                    <div class="news-post" id="abtracker">
-                        <div class="header">
-                            <h3>Introducing ABTracker</h3>
-                            April 1, 2025
-                        </div>
-                        <div class="content">
-                            <p>
-                                Following the great success of BCTracker, we've decided it's time to expand to new territory.
-                                The most obvious choice of course is our neighbours to the east, so without further ado we're very pleased to announce the launch of <b><a href="https://abtracker.ca">ABTracker</a></b>!
-                            </p>
-                            <p>
-                                Like BCTracker, ABTracker pulls together transit data from a bunch of larger communities in Alberta into one place, making it easy to see buses running all over the province.
-                                The following agencies/systems are supported as of this initial launch:
-                            </p>
-                            <ul>
-                                <li>Calgary Transit (Calgary)</li>
-                                <li>Edmonton Transit Service (Edmonton)</li>
-                                <li>Grande Prairie Transit (Grande Prairie)</li>
-                                <li>Lethbridge Transit (Lethbridge) <i>(no realtime)</i></li>
-                                <li>Medicine Hat Transit (Medicine Hat)</li>
-                                <li>Red Deer Transit (Red Deer) <i>(no realtime)</i></li>
-                                <li>Roam (Banff)</li>
-                                <li>Woosh (Fort McMurray)</li>
-                            </ul>
-                            <p>
-                                We hope you find ABTracker useful as we all inevitably move to Alberta for cheaper housing!
-                            </p>
-                            <p><b>UPDATE:</b></p>
-                            <p>
-                                So, despite intending for this to be a one-day April Fools joke, a lot of people really want ABTracker permanently!
-                                It turns out we were the fools all along for not anticipating this...
-                            </p>
-                            <p>
-                                Instead of taking down the website at the end of the day, we're instead going to leave it available but advertised as being in <b>beta</b>, which means that some stuff could still break or get changed at any time.
-                                Please see the <a href="https://abtracker.ca/about#beta-testing">ABTracker about page</a> for more info.
-                            </p>
                         </div>
                     </div>
                     <div>
