@@ -63,6 +63,15 @@ database.execute(
 
 database.execute(
     '''
+    DELETE FROM assignment
+    WHERE allocation_id IN (
+        SELECT allocation_id FROM allocation WHERE vehicle_id = '9337'
+    )
+    '''
+)
+
+database.execute(
+    '''
     UPDATE record
     SET allocation_id = ?
     WHERE allocation_id IN (
