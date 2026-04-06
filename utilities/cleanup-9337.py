@@ -130,6 +130,9 @@ database.update(
     values={
         'last_seen': last_record['date'],
         'active': 1
+    },
+    filters={
+        'allocation_id': allocation_id
     }
 )
 
