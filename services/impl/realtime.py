@@ -56,6 +56,11 @@ class RealtimeService:
                     vehicle_id = '0'
             except:
                 vehicle_id = str(-(index + 1))
+            
+            # Workaround for issue where 1151 is reporting as 9337, causing a bunch of "transfers" with the real 9337
+            if context.system_id == 'whistler' and vehicle_id == '9337':
+                continue
+            
             try:
                 repositories.position.create(context, vehicle_id, vehicle)
             except Exception as e:
