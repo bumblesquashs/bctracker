@@ -322,12 +322,25 @@ table tr.table-button:hover {
     border-color: #003769;
 }
 
+.info-box h3 {
+    --stop-number-background: #000E1A;
+}
+
 .info-box .section {
     border-color: #003769;
 }
 
 .info-box .option {
     --hover-background: #565656;
+}
+
+.info-box .toggle-button {
+    background-color: #003769;
+    --image-color: #FFFFFF;
+}
+
+.info-box .toggle-button:hover {
+    background-color: #00284C;
 }
 
 .lighter-text {

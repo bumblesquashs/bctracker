@@ -224,6 +224,12 @@ table th {
     background-color: var(--hover-background);
 }
 
+.page-grid {
+    display: grid;
+    gap: 20px;
+    align-items: start;
+}
+
 .sidebar table {
     align-self: stretch;
 }
@@ -258,6 +264,10 @@ table th {
         gap: 20px;
     }
     
+    .page-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
     table {
         align-self: stretch;
     }
@@ -272,7 +282,11 @@ table th {
         flex-direction: row;
         gap: 40px;
     }
-
+    
+    .page-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    
     .container.inline {
         flex-direction: row;
         flex-wrap: wrap;

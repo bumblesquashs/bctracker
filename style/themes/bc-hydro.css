@@ -305,6 +305,11 @@ table tr.table-button:hover {
 .info-box {
     background-color: #D8D8D8;
     border-color: #666666;
+    --table-border: #CBCBCB;
+}
+
+.info-box h3 {
+    --stop-number-background: #FFFFFF;
 }
 
 .info-box .section {
@@ -313,6 +318,15 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: #CBCBCB;
+}
+
+.info-box .toggle-button {
+    background-color: #CBCBCB;
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background-color: #ABABAB;
 }
 
 .lighter-text {

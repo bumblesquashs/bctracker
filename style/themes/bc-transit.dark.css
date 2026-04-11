@@ -320,12 +320,25 @@ table tr.table-button:hover {
     border-color: #565656;
 }
 
+.info-box h3 {
+    --stop-number-background: #2F2F2F;
+}
+
 .info-box .section {
     border-color: #565656;
 }
 
 .info-box .option {
     --hover-background: #565656;
+}
+
+.info-box .toggle-button {
+    background-color: #565656;
+    --image-color: #FFFFFF;
+}
+
+.info-box .toggle-button:hover {
+    background-color: #2F2F2F;
 }
 
 .lighter-text {

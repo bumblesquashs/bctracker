@@ -306,6 +306,11 @@ table tr.table-button:hover {
 .info-box {
     background-color: rgba(255, 255, 255, 0.6);
     border-color: rgba(0, 0, 0, 0.5);
+    --table-border: rgba(0, 0, 0, 0.2);
+}
+
+.info-box h3 {
+    --stop-number-background: rgba(255, 255, 255, 0.7);
 }
 
 .info-box .section {
@@ -314,6 +319,15 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: rgba(255, 255, 255, 0.6);
+}
+
+.info-box .toggle-button {
+    background-color: rgba(255, 255, 255, 0.6);
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .lighter-text {

@@ -158,11 +158,15 @@ class Route:
     def __lt__(self, other):
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order < other.sort_order
+        if self.key == other.key:
+            return self.name < other.name
         return self.key < other.key
     
     def __gt__(self, other):
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order > other.sort_order
+        if self.key == other.key:
+            return self.name > other.name
         return self.key > other.key
     
     def get_json(self):

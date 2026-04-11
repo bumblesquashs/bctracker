@@ -21,7 +21,7 @@ import repositories
 import services
 
 # Increase the version to force CSS reload
-VERSION = 64
+VERSION = 67
 
 random = Random()
 
@@ -86,6 +86,7 @@ class Server(Bottle):
         self.add('/nearby', callback=self.nearby)
         self.add('/themes', callback=self.themes)
         self.add('/personalize', callback=self.personalize)
+        self.add('/favourites', callback=self.favourites)
         self.add('/systems', callback=self.systems)
         self.add('/random', callback=self.random)
         self.add('/admin', require_admin=True, callback=self.admin)
@@ -369,16 +370,11 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
-        favourites = self.get_favourites()
-        order_ids = {f.value.order_id for f in favourites if f.type == 'vehicle' and f.value.order_id}
-        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
             context=context,
             name='home',
             title='Home',
-            enable_refresh=False,
-            favourites=favourites,
-            orders=orders
+            enable_refresh=False
         )
     
     def news(self, context: Context):
@@ -1310,6 +1306,48 @@ class Server(Bottle):
             path=['personalize'],
             enable_refresh=False,
             themes=themes
+        )
+    
+    def favourites(self, context: Context):
+        favourites = self.get_favourites()
+        route_positions = {}
+        stop_departures = {}
+        stop_positions = {}
+        stop_assignments = {}
+        vehicle_positions = {}
+        vehicle_allocations = {}
+        vehicle_records = {}
+        for favourite in favourites:
+            if favourite.type == 'route':
+                route_positions[favourite.value.id] = repositories.position.find_all(favourite.value.context, route_id=favourite.value.id)
+            elif favourite.type == 'stop':
+                departures = favourite.value.find_departures(date=Date.today(context.timezone))
+                stop_departures[favourite.value.id] = departures
+                trip_ids = [d.trip_id for d in departures]
+                positions = repositories.position.find_all(favourite.value.context, trip_id=trip_ids)
+                assignments = repositories.assignment.find_all(favourite.value.context, stop_id=favourite.value.id)
+                stop_positions[favourite.value.id] = {p.trip.id: p for p in positions}
+                stop_assignments[favourite.value.id] = {a.block_id: a for a in assignments}
+            elif favourite.type == 'vehicle':
+                vehicle_positions[favourite.value.id] = repositories.position.find(favourite.value.agency.id, favourite.value.id)
+                vehicle_allocations[favourite.value.id] = repositories.allocation.find_active(favourite.value.context.without_system(), favourite.value.id)
+                vehicle_records[favourite.value.id] = repositories.record.find_all(vehicle_id=favourite.value.id, limit=5)
+        order_ids = {f.value.order_id for f in favourites if f.type == 'vehicle' and f.value.order_id}
+        orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
+        return self.page(
+            context=context,
+            name='favourites',
+            title='Favourites',
+            path=['favourites'],
+            favourites=favourites,
+            orders=orders,
+            route_positions=route_positions,
+            stop_departures=stop_departures,
+            stop_positions=stop_positions,
+            stop_assignments=stop_assignments,
+            vehicle_positions=vehicle_positions,
+            vehicle_allocations=vehicle_allocations,
+            vehicle_records=vehicle_records
         )
     
     def systems(self, context: Context):

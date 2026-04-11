@@ -430,6 +430,27 @@ table tr.table-button:hover {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
     border-color: #CCCCCC;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    --table-border: #CBCBCB;
+}
+
+.info-box h3 {
+    --stop-number-background: #FFFFFF;
+}
+
+.info-box table {
+    box-shadow: unset;
+}
+
+.info-box table tr {
+    background-image: unset;
+}
+
+.info-box table tr:hover {
+    background-image: unset;
+}
+
+.info-box table th {
+    background-image: unset;
 }
 
 .info-box .section {
@@ -438,6 +459,20 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: #CBCBCB;
+}
+
+.info-box .toggle-button {
+    background: #EEEEEE;
+    color: #222222;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    border: 1px solid #CCCCCC;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
 
 .lighter-text {
