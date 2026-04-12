@@ -164,7 +164,7 @@
                                     <table class="open-only">
                                         <thead>
                                             <tr>
-                                                <th>Bus</th>
+                                                <th>{{ value.context.vehicle_type }}</th>
                                                 <th class="non-mobile">Headsign</th>
                                                 <th>Trip</th>
                                             </tr>
@@ -251,7 +251,7 @@
                                                     <th class="non-mobile">Headsign</th>
                                                     <th>Trip</th>
                                                     % if value.context.realtime_enabled:
-                                                        <th>Bus</th>
+                                                        <th>{{ value.context.vehicle_type }}</th>
                                                     % end
                                                 </tr>
                                             </thead>
