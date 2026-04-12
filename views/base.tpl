@@ -582,6 +582,7 @@
     let loadingResults = false;
     let enterPending = false;
     let lastSearchTimestamp = Date.now();
+    let cachedResponses = {};
     
     let searchIncludeVehicles = true;
     let searchIncludeRoutes = true;
@@ -617,6 +618,16 @@
         if (query === undefined || query === null || query === "") {
             updateSearchView([], 0, "{{ context.search_placeholder_text() }}");
         } else {
+            const cacheKey = query + "_" + searchPage;
+            if (cacheKey in cachedResponses) {
+                const response = cachedResponses[cacheKey];
+                const results = response.results;
+                const total = response.total;
+                
+                updateSearchView(results, total, total === 0 ? "No Results" : "Results");
+                return;
+            }
+            
             loadingResults = true;
             if (searchResults.length === 0) {
                 placeholderElement.innerHTML = "Loading...";
@@ -625,6 +636,7 @@
             request.open("POST", "{{ get_url(context, 'api', 'search') }}", true);
             request.responseType = "json";
             request.onload = function() {
+                cachedResponses[cacheKey] = request.response;
                 if (timestamp !== lastSearchTimestamp) {
                     // Discard outdated results
                     return;
@@ -858,6 +870,7 @@
         } else {
             element.classList.add("inactive");
         }
+        cachedResponses = {};
         searchPage = 0;
         search();
     }
