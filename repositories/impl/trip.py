@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from database import Database
 
 from models.context import Context
+from models.match import Match
 from models.trip import Trip
 
 @dataclass(slots=True)
@@ -80,6 +81,32 @@ class TripRepository:
             limit=limit,
             initializer=Trip.from_db
         )
+    
+    def find_block_matches(self, context: Context, query: str) -> list[Match]:
+        rows = self.database.select(
+            table='trip',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'block_id'
+            ],
+            distinct=True,
+            filters={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'block_id': {
+                    'LIKE': f'%{query}%'
+                }
+            }
+        )
+        matches = []
+        for row in rows:
+            context = row.context()
+            if context.system:
+                block = context.system.get_block(row['block_id'])
+                if block:
+                    matches.append(block.get_match(query))
+        return matches
     
     def delete_all(self, context: Context):
         '''Deletes all trips for the given context from the database'''

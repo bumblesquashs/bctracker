@@ -130,4 +130,4 @@ class Block:
             message = f'Route {routes}'
         else:
             message = f'Routes {routes}'
-        return Match(f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)
+        return Match(self.context, f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)

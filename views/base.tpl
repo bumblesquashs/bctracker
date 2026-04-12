@@ -525,31 +525,29 @@
                     <div id="search-bar">
                         <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                     </div>
-                    % if context.system:
-                        <div id="search-filters">
-                            <div class="flex-1">Filters:</div>
-                            % if context.realtime_enabled:
-                                <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
-                                    % include('components/svg', name=context.filter_vehicles_image_name)
-                                    <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
-                                </div>
-                            % end
-                            <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
-                                % include('components/svg', name='route')
-                                <div class="tooltip left">Include Routes</div>
+                    <div id="search-filters">
+                        <div class="flex-1">Filters:</div>
+                        % if context.realtime_enabled:
+                            <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
+                                % include('components/svg', name=context.filter_vehicles_image_name)
+                                <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
                             </div>
-                            <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
-                                % include('components/svg', name='stop')
-                                <div class="tooltip left">Include Stops</div>
-                            </div>
-                            % if context.enable_blocks:
-                                <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
-                                    % include('components/svg', name='block')
-                                    <div class="tooltip left">Include Blocks</div>
-                                </div>
-                            % end
+                        % end
+                        <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
+                            % include('components/svg', name='route')
+                            <div class="tooltip left">Include Routes</div>
                         </div>
-                    % end
+                        <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
+                            % include('components/svg', name='stop')
+                            <div class="tooltip left">Include Stops</div>
+                        </div>
+                        % if context.enable_blocks:
+                            <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
+                                % include('components/svg', name='block')
+                                <div class="tooltip left">Include Blocks</div>
+                            </div>
+                        % end
+                    </div>
                 </div>
                 <div id="search-placeholder">{{ context.search_placeholder_text() }}</div>
                 <div id="search-results" class="display-none">
@@ -684,9 +682,16 @@
         details.classList.add("details");
         
         const name = document.createElement("div");
-        name.classList.add("name")
+        name.classList.add("name");
         name.innerHTML = result.name;
         details.appendChild(name);
+        
+        if (currentSystemID === null) {
+            const systemName = document.createElement("div");
+            systemName.classList.add("description");
+            systemName.innerHTML = result.system_name;
+            details.appendChild(systemName);
+        }
         
         const description = document.createElement("div");
         description.classList.add("description");
@@ -699,6 +704,7 @@
     }
     
     function updateSearchView(results, total, message) {
+        const inputElement = document.getElementById("search-input");
         const placeholderElement = document.getElementById("search-placeholder");
         const pagingElement = document.getElementById("search-paging");
         const countElement = document.getElementById("search-count");
@@ -710,6 +716,9 @@
         if (total === 0) {
             placeholderElement.classList.remove("display-none");
             placeholderElement.innerHTML = message;
+            if (inputElement.value !== "" && inputElement.value.length < 5 && searchIncludeBlocks) {
+                placeholderElement.innerHTML += "<div class='smaller-font'>Note: blocks are only shown after typing 5 or more characters</div>";
+            }
             pagingElement.classList.add("display-none");
             countElement.innerHTML = "";
             resultsElement.classList.add("display-none");

@@ -1500,18 +1500,17 @@ class Server(Bottle):
             if context.realtime_enabled and include_vehicles:
                 vehicle_ids = repositories.allocation.find_vehicle_ids(context)
                 matches += repositories.order.find_matches(context, query, vehicle_ids)
-            if context.system:
-                if include_blocks and context.enable_blocks:
-                    matches += context.system.search_blocks(query)
-                if include_routes:
-                    matches += context.system.search_routes(query)
-                if include_stops:
-                    matches += context.system.search_stops(query)
+            if include_blocks and context.enable_blocks and len(query) >= 5:
+                matches += repositories.trip.find_block_matches(context, query)
+            if include_routes:
+                matches += repositories.route.find_matches(context, query)
+            if include_stops:
+                matches += repositories.stop.find_matches(context, query)
         matches = sorted([m for m in matches if m.value > 0])
         min = page * count
         max = min + count
         return {
-            'results': [m.get_json(context, self.get_url) for m in matches[min:max]],
+            'results': [m.get_json(self.get_url) for m in matches[min:max]],
             'total': len(matches)
         }
     

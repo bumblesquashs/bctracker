@@ -5,6 +5,7 @@ from database import Database
 
 from models.area import Area
 from models.context import Context
+from models.match import Match
 from models.stop import Stop, StopType
 
 @dataclass(slots=True)
@@ -96,6 +97,36 @@ class StopRepository:
             limit=limit,
             initializer=Stop.from_db
         )
+    
+    def find_matches(self, context: Context, query: str) -> list[Match]:
+        stops = self.database.select(
+            table='stop',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'stop_id',
+                'number',
+                'name',
+                'lat',
+                'lon',
+                'parent_id',
+                'type'
+            ],
+            filters={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'OR': {
+                    'number': {
+                        'LIKE': f'%{query}%'
+                    },
+                    'name': {
+                        'LIKE': f'%{query}%'
+                    }
+                }
+            },
+            initializer=Stop.from_db
+        )
+        return [s.get_match(query) for s in stops]
     
     def find_area(self, context: Context) -> Area | None:
         '''Returns the area of all stops for the given context'''
