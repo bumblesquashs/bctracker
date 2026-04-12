@@ -227,7 +227,6 @@ table th {
 .page-grid {
     display: grid;
     gap: 20px;
-    align-items: start;
 }
 
 .sidebar table {
