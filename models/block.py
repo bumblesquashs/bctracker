@@ -57,6 +57,8 @@ class Block:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.id == other.id:
+            return self.context < other.context
         return self.id < other.id
     
     def get_trips(self, service_group=None, date=None):

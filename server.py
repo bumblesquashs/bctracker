@@ -256,18 +256,6 @@ class Server(Bottle):
             **kwargs
         )
     
-    def error_page(self, context: Context, name, title, path=None, path_args=None, **kwargs):
-        '''Returns an error page with the given name and details'''
-        return self.page(
-            context=context,
-            name=f'errors/{name}',
-            title=title,
-            path=path or [],
-            path_args=path_args or {},
-            enable_refresh=False,
-            **kwargs
-        )
-    
     def frame(self, context: Context, name, **kwargs):
         '''Returns an HTML element that can be inserted into a page'''
         return template(f'frames/{name}',
@@ -492,9 +480,9 @@ class Server(Bottle):
         vehicle = context.find_vehicle(vehicle_id)
         allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocation) or not vehicle.visible:
-            return self.error_page(
+            return self.page(
                 context=context,
-                name='invalid_vehicle',
+                name='vehicle/invalid',
                 title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
@@ -539,9 +527,9 @@ class Server(Bottle):
         vehicle = context.find_vehicle(vehicle_id)
         allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocation) or not vehicle.visible:
-            return self.error_page(
+            return self.page(
                 context=context,
-                name='invalid_vehicle',
+                name='vehicle/invalid',
                 title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
@@ -571,9 +559,9 @@ class Server(Bottle):
         vehicle = context.find_vehicle(vehicle_id)
         allocations = repositories.allocation.find_all(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocations) or not vehicle.visible:
-            return self.error_page(
+            return self.page(
                 context=context,
-                name='invalid_vehicle',
+                name='vehicle/invalid',
                 title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
@@ -735,22 +723,37 @@ class Server(Bottle):
     def route_overview(self, context: Context, route_number):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            return self.error_page(
+            routes = repositories.route.find_all(Context(), route_number=route_number)
+            if routes:
+                if len(routes) == 1:
+                    route = routes[0]
+                    redirect(self.get_url(route.context, 'routes', route))
+                return self.page(
+                    context=context,
+                    name='routes/choose',
+                    title='Choose a Route',
+                    route_number=route_number,
+                    routes=sorted(routes)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['routes', route_number]
+                name='route/invalid',
+                title='Unknown Route',
+                route_number=route_number,
+                alt_routes=[]
             )
         if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            return self.error_page(
+            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            return self.page(
                 context=context,
-                name='invalid_route',
+                name='route/invalid',
                 title='Unknown Route',
-                route_number=route_number
+                route_number=route_number,
+                alt_routes=sorted(alt_routes)
             )
         trips = sorted(route.get_trips(date=Date.today(context.timezone)))
         assignments = repositories.assignment.find_all(context, route_id=route.id)
@@ -771,22 +774,37 @@ class Server(Bottle):
     def route_map(self, context: Context, route_number):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            return self.error_page(
+            routes = repositories.route.find_all(Context(), route_number=route_number)
+            if routes:
+                if len(routes) == 1:
+                    route = routes[0]
+                    redirect(self.get_url(route.context, 'routes', route, 'map'))
+                return self.page(
+                    context=context,
+                    name='routes/choose',
+                    title='Choose a Route',
+                    route_number=route_number,
+                    routes=sorted(routes)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['routes', route_number, 'map']
+                name='route/invalid',
+                title='Unknown Route',
+                route_number=route_number,
+                alt_routes=[]
             )
         if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            return self.error_page(
+            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            return self.page(
                 context=context,
-                name='invalid_route',
+                name='route/invalid',
                 title='Unknown Route',
-                route_number=route_number
+                route_number=route_number,
+                alt_routes=sorted(alt_routes)
             )
         return self.page(
             context=context,
@@ -803,22 +821,37 @@ class Server(Bottle):
     def route_schedule(self, context: Context, route_number):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            return self.error_page(
+            routes = repositories.route.find_all(Context(), route_number=route_number)
+            if routes:
+                if len(routes) == 1:
+                    route = routes[0]
+                    redirect(self.get_url(route.context, 'routes', route, 'schedule'))
+                return self.page(
+                    context=context,
+                    name='routes/choose',
+                    title='Choose a Route',
+                    route_number=route_number,
+                    routes=sorted(routes)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['routes', route_number, 'schedule']
+                name='route/invalid',
+                title='Unknown Route',
+                route_number=route_number,
+                alt_routes=[]
             )
         if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            return self.error_page(
-                name='invalid_route',
-                title='Unknown Route',
+            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            return self.page(
                 context=context,
-                route_number=route_number
+                name='route/invalid',
+                title='Unknown Route',
+                route_number=route_number,
+                alt_routes=sorted(alt_routes)
             )
         return self.page(
             context=context,
@@ -833,22 +866,37 @@ class Server(Bottle):
     def route_schedule_date(self, context: Context, route_number, date_string):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            return self.error_page(
+            routes = repositories.route.find_all(Context(), route_number=route_number)
+            if routes:
+                if len(routes) == 1:
+                    route = routes[0]
+                    redirect(self.get_url(route.context, 'routes', route, 'schedule', date_string))
+                return self.page(
+                    context=context,
+                    name='routes/choose',
+                    title='Choose a Route',
+                    route_number=route_number,
+                    routes=sorted(routes)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['routes', route_number, 'schedule']
+                name='route/invalid',
+                title='Unknown Route',
+                route_number=route_number,
+                alt_routes=[]
             )
         if context.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            return self.error_page(
+            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            return self.page(
                 context=context,
-                name='invalid_route',
+                name='route/invalid',
                 title='Unknown Route',
-                route_number=route_number
+                route_number=route_number,
+                alt_routes=sorted(alt_routes)
             )
         date = Date.parse(date_string, context.timezone)
         return self.page(
@@ -897,19 +945,36 @@ class Server(Bottle):
     
     def block_overview(self, context: Context, block_id):
         if not context.system:
-            return self.error_page(
+            systems = [s for s in repositories.system.find_all() if block_id in s.blocks]
+            blocks = [s.get_block(block_id) for s in systems]
+            if blocks:
+                if len(blocks) == 1:
+                    block = blocks[0]
+                    redirect(self.get_url(block.context, 'blocks', block))
+                return self.page(
+                    context=context,
+                    name='blocks/choose',
+                    title='Choose a Block',
+                    block_id=block_id,
+                    blocks=sorted(blocks)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['blocks', block_id]
+                name='block/invalid',
+                title='Unknown Block',
+                block_id=block_id,
+                alt_blocks=[]
             )
         block = context.system.get_block(block_id)
         if not block:
-            return self.error_page(
+            systems = [s for s in repositories.system.find_all() if block_id in s.blocks]
+            alt_blocks = [s.get_block(block_id) for s in systems]
+            return self.page(
                 context=context,
-                name='invalid_block',
+                name='block/invalid',
                 title='Unknown Block',
-                block_id=block_id
+                block_id=block_id,
+                alt_blocks=sorted(alt_blocks)
             )
         return self.page(
             context=context,
@@ -923,19 +988,36 @@ class Server(Bottle):
     
     def block_map(self, context: Context, block_id):
         if not context.system:
-            return self.error_page(
+            systems = [s for s in repositories.system.find_all() if block_id in s.blocks]
+            blocks = [s.get_block(block_id) for s in systems]
+            if blocks:
+                if len(blocks) == 1:
+                    block = blocks[0]
+                    redirect(self.get_url(block.context, 'blocks', block, 'map'))
+                return self.page(
+                    context=context,
+                    name='blocks/choose',
+                    title='Choose a Block',
+                    block_id=block_id,
+                    blocks=sorted(blocks)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['blocks', block_id, 'map']
+                name='block/invalid',
+                title='Unknown Block',
+                block_id=block_id,
+                alt_blocks=[]
             )
         block = context.system.get_block(block_id)
         if not block:
-            return self.error_page(
+            systems = [s for s in repositories.system.find_all() if block_id in s.blocks]
+            alt_blocks = [s.get_block(block_id) for s in systems]
+            return self.page(
                 context=context,
-                name='invalid_block',
+                name='block/invalid',
                 title='Unknown Block',
-                block_id=block_id
+                block_id=block_id,
+                alt_blocks=sorted(alt_blocks)
             )
         return self.page(
             context=context,
@@ -949,19 +1031,36 @@ class Server(Bottle):
     
     def block_history(self, context: Context, block_id):
         if not context.system:
-            return self.error_page(
+            systems = [s for s in repositories.system.find_all() if block_id in s.blocks]
+            blocks = [s.get_block(block_id) for s in systems]
+            if blocks:
+                if len(blocks) == 1:
+                    block = blocks[0]
+                    redirect(self.get_url(block.context, 'blocks', block, 'history'))
+                return self.page(
+                    context=context,
+                    name='blocks/choose',
+                    title='Choose a Block',
+                    block_id=block_id,
+                    blocks=sorted(blocks)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['blocks', block_id, 'history']
+                name='block/invalid',
+                title='Unknown Block',
+                block_id=block_id,
+                alt_blocks=[]
             )
         block = context.system.get_block(block_id)
         if not block:
-            return self.error_page(
+            systems = [s for s in repositories.system.find_all() if block_id in s.blocks]
+            alt_blocks = [s.get_block(block_id) for s in systems]
+            return self.page(
                 context=context,
-                name='invalid_block',
+                name='block/invalid',
                 title='Unknown Block',
-                block_id=block_id
+                block_id=block_id,
+                alt_blocks=sorted(alt_blocks)
             )
         records = repositories.record.find_all(context, block_id=block_id)
         order_ids = {r.vehicle.order_id for r in records if r.vehicle.order_id}
@@ -982,19 +1081,34 @@ class Server(Bottle):
     
     def trip_overview(self, context: Context, trip_id):
         if not context.system:
-            return self.error_page(
+            trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            if trips:
+                if len(trips) == 1:
+                    trip = trips[0]
+                    redirect(self.get_url(trip.context, 'trips', trip))
+                return self.page(
+                    context=context,
+                    name='trips/choose',
+                    title='Choose a Trip',
+                    trip_id=trip_id,
+                    trips=sorted(trips)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['trips', trip_id]
+                name='trip/invalid',
+                title='Unknown Trip',
+                trip_id=trip_id,
+                alt_trips=[]
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
-            return self.error_page(
+            alt_trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            return self.page(
                 context=context,
-                name='invalid_trip',
+                name='trip/invalid',
                 title='Unknown Trip',
-                trip_id=trip_id
+                trip_id=trip_id,
+                alt_trips=sorted(alt_trips)
             )
         return self.page(
             context=context,
@@ -1008,19 +1122,34 @@ class Server(Bottle):
     
     def trip_map(self, context: Context, trip_id):
         if not context.system:
-            return self.error_page(
+            trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            if trips:
+                if len(trips) == 1:
+                    trip = trips[0]
+                    redirect(self.get_url(trip.context, 'trips', trip, 'map'))
+                return self.page(
+                    context=context,
+                    name='trips/choose',
+                    title='Choose a Trip',
+                    trip_id=trip_id,
+                    trips=sorted(trips)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['trips', trip_id, 'map']
+                name='trip/invalid',
+                title='Unknown Trip',
+                trip_id=trip_id,
+                alt_trips=[]
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
-            return self.error_page(
+            alt_trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            return self.page(
                 context=context,
-                name='invalid_trip',
+                name='trip/invalid',
                 title='Unknown Trip',
-                trip_id=trip_id
+                trip_id=trip_id,
+                alt_trips=sorted(alt_trips)
             )
         return self.page(
             context=context,
@@ -1033,19 +1162,34 @@ class Server(Bottle):
     
     def trip_history(self, context: Context, trip_id):
         if not context.system:
-            return self.error_page(
+            trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            if trips:
+                if len(trips) == 1:
+                    trip = trips[0]
+                    redirect(self.get_url(trip.context, 'trips', trip, 'history'))
+                return self.page(
+                    context=context,
+                    name='trips/choose',
+                    title='Choose a Trip',
+                    trip_id=trip_id,
+                    trips=sorted(trips)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['trips', trip_id, 'history']
+                name='trip/invalid',
+                title='Unknown Trip',
+                trip_id=trip_id,
+                alt_trips=[]
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
-            return self.error_page(
+            alt_trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            return self.page(
                 context=context,
-                name='invalid_trip',
+                name='trip/invalid',
                 title='Unknown Trip',
-                trip_id=trip_id
+                trip_id=trip_id,
+                alt_trips=sorted(alt_trips)
             )
         records = repositories.record.find_all(context, trip_id=trip_id)
         order_ids = {r.vehicle.order_id for r in records if r.vehicle.order_id}
@@ -1145,22 +1289,37 @@ class Server(Bottle):
     
     def stop_overview(self, context: Context, stop_number):
         if not context.system:
-            return self.error_page(
+            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            if stops:
+                if len(stops) == 1:
+                    stop = stops[0]
+                    redirect(self.get_url(stop.context, 'stops', stop))
+                return self.page(
+                    context=context,
+                    name='stops/choose',
+                    title='Choose a Stop',
+                    stop_number=stop_number,
+                    stops=sorted(stops)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['stops', stop_number]
+                name='stop/invalid',
+                title='Unknown Stop',
+                stop_number=stop_number,
+                alt_stops=[]
             )
         if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            return self.error_page(
+            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            return self.page(
                 context=context,
-                name='invalid_stop',
+                name='stop/invalid',
                 title='Unknown Stop',
-                stop_number=stop_number
+                stop_number=stop_number,
+                alt_stops=sorted(alt_stops)
             )
         if stop.type == StopType.STATION:
             nearby_stops = []
@@ -1195,22 +1354,37 @@ class Server(Bottle):
     
     def stop_map(self, context: Context, stop_number):
         if not context.system:
-            return self.error_page(
-                name='system_required',
-                title='System Required',
-                path=['stops', stop_number, 'map'],
-                context=context
+            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            if stops:
+                if len(stops) == 1:
+                    stop = stops[0]
+                    redirect(self.get_url(stop.context, 'stops', stop, 'map'))
+                return self.page(
+                    context=context,
+                    name='stops/choose',
+                    title='Choose a Stop',
+                    stop_number=stop_number,
+                    stops=sorted(stops)
+                )
+            return self.page(
+                context=context,
+                name='stop/invalid',
+                title='Unknown Stop',
+                stop_number=stop_number,
+                alt_stops=[]
             )
         if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            return self.error_page(
-                name='invalid_stop',
-                title='Unknown Stop',
+            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            return self.page(
                 context=context,
-                stop_number=stop_number
+                name='stop/invalid',
+                title='Unknown Stop',
+                stop_number=stop_number,
+                alt_stops=sorted(alt_stops)
             )
         return self.page(
             name='stop/map',
@@ -1225,22 +1399,37 @@ class Server(Bottle):
     
     def stop_schedule(self, context: Context, stop_number):
         if not context.system:
-            return self.error_page(
+            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            if stops:
+                if len(stops) == 1:
+                    stop = stops[0]
+                    redirect(self.get_url(stop.context, 'stops', stop, 'schedule'))
+                return self.page(
+                    context=context,
+                    name='stops/choose',
+                    title='Choose a Stop',
+                    stop_number=stop_number,
+                    stops=sorted(stops)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['stops', stop_number, 'schedule']
+                name='stop/invalid',
+                title='Unknown Stop',
+                stop_number=stop_number,
+                alt_stops=[]
             )
         if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            return self.error_page(
+            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            return self.page(
                 context=context,
-                name='invalid_stop',
+                name='stop/invalid',
                 title='Unknown Stop',
-                stop_number=stop_number
+                stop_number=stop_number,
+                alt_stops=sorted(alt_stops)
             )
         return self.page(
             context=context,
@@ -1254,22 +1443,37 @@ class Server(Bottle):
     
     def stop_schedule_date(self, context: Context, stop_number, date_string):
         if not context.system:
-            return self.error_page(
+            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            if stops:
+                if len(stops) == 1:
+                    stop = stops[0]
+                    redirect(self.get_url(stop.context, 'stops', stop, 'schedule', date_string))
+                return self.page(
+                    context=context,
+                    name='stops/choose',
+                    title='Choose a Stop',
+                    stop_number=stop_number,
+                    stops=sorted(stops)
+                )
+            return self.page(
                 context=context,
-                name='system_required',
-                title='System Required',
-                path=['stops', stop_number, 'schedule']
+                name='stop/invalid',
+                title='Unknown Stop',
+                stop_number=stop_number,
+                alt_stops=[]
             )
         if context.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            return self.error_page(
+            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            return self.page(
                 context=context,
-                name='invalid_stop',
+                name='stop/invalid',
                 title='Unknown Stop',
-                stop_number=stop_number
+                stop_number=stop_number,
+                alt_stops=sorted(alt_stops)
             )
         date = Date.parse(date_string, context.timezone)
         return self.page(
@@ -1616,9 +1820,9 @@ class Server(Bottle):
     
     def error_403(self, error):
         services.log.warning(f'403 response to {request.path}')
-        return self.error_page(
+        return self.page(
             context=Context(),
-            name='403', 
+            name='errors/403', 
             title='Forbidden',
             error=error
         )
@@ -1626,18 +1830,18 @@ class Server(Bottle):
     def error_404(self, error):
         # Not logging due to spam from bots on invalid pages, and browsers attempting to access non-existant icons
         # services.log.warning(f'404 response to {request.path}')
-        return self.error_page(
+        return self.page(
             context=Context(),
-            name='404',
+            name='errors/404',
             title='Not Found',
             error=error
         )
     
     def error_500(self, error):
         services.log.error(f'500 response to {request.path}')
-        return self.error_page(
+        return self.page(
             context=Context(),
-            name='500',
+            name='errors/500',
             title='Internal Error',
             error=error
         )
