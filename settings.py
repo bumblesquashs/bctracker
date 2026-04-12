@@ -25,6 +25,7 @@ class Settings:
     enable_gtfs_backups: bool = True
     enable_realtime_backups: bool = True
     enable_database_backups: bool = True
+    await_realtime: bool = False
     
     def setup(self, config):
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
@@ -45,3 +46,4 @@ class Settings:
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'
         self.enable_database_backups = config.get('enable_database_backups', 'true') == 'true'
+        self.await_realtime = config.get('await_realtime', 'false') == 'true'

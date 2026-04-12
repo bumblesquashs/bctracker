@@ -2,7 +2,7 @@
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
 from random import Random
-from time import time
+from time import time, sleep
 import cherrypy as cp
 
 from database import Database
@@ -326,6 +326,9 @@ class Server(Bottle):
         def endpoint(*args, **kwargs):
             if require_admin and not self.validate_admin():
                 raise HTTPError(403)
+            if self.settings.await_realtime:
+                while services.cron.updating_realtime:
+                    sleep(1)
             if system_key in kwargs:
                 system_id = kwargs[system_key]
                 system = repositories.system.find(system_id)
