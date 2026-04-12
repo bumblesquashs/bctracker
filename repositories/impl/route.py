@@ -86,7 +86,7 @@ class RouteRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit: int | None = None) -> list[Route]:
+    def find_all(self, context: Context, route_number: str | None = None, limit: int | None = None) -> list[Route]:
         '''Returns all routes that match the given context'''
         return self.database.select(
             table='route',
@@ -103,7 +103,8 @@ class RouteRepository:
             ],
             filters={
                 # 'agency_id': context.agency_id,
-                'system_id': context.system_id
+                'system_id': context.system_id,
+                'number': route_number
             },
             limit=limit,
             initializer=Route.from_db

@@ -56,7 +56,7 @@ class TripRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, route_id: str | None = None, block_id: str | None = None, limit: int | None = None) -> list[Trip]:
+    def find_all(self, context: Context, trip_id: str | None = None, route_id: str | None = None, block_id: str | None = None, limit: int | None = None) -> list[Trip]:
         '''Returns all trips that match the given context, route, and block'''
         return self.database.select(
             table='trip',
@@ -74,6 +74,7 @@ class TripRepository:
             filters={
                 # 'agency_id': context.agency_id,
                 'system_id': context.system_id,
+                'trip_id': trip_id,
                 'route_id': route_id,
                 'block_id': block_id
             },

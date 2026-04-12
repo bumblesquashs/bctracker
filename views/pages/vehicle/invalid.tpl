@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Error: {{ context.vehicle_type }} {{ vehicle_id }} Not Found</h1>
+    <h1>{{ context.vehicle_type }} {{ vehicle_id }} Not Found</h1>
 </div>
 
 <div class="placeholder">

@@ -64,13 +64,15 @@ class Context:
     def gtfs_loaded(self):
         if self.system:
             return self.system.gtfs_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.gtfs_loaded for s in systems)
     
     @property
     def realtime_loaded(self):
         if self.system:
             return self.system.realtime_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.realtime_loaded for s in systems)
     
     @property
     def timezone(self):

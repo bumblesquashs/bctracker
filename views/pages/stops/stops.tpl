@@ -265,7 +265,7 @@
                                         <div class="row">
                                             % include('components/agency_logo', agency=system.agency)
                                             <div class="column">
-                                                <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+                                                <a href="{{ get_url(system.context, *path, search=search) }}">{{ system }}</a>
                                                 <span class="mobile-only smaller-font">
                                                     % if system.gtfs_loaded:
                                                         % if count == 1:

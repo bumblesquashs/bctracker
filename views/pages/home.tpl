@@ -58,43 +58,7 @@
                     }
                 </script>
                 
-                % if context.system:
-                    % if context.realtime_enabled:
-                        <form onsubmit="vehicleSearch()" action="javascript:void(0)">
-                            <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
-                            <div class="input-container">
-                                <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
-                                <input type="submit" value="Search" class="button">
-                            </div>
-                        </form>
-                    % end
-                    
-                    <form onsubmit="routeSearch()" action="javascript:void(0)">
-                        <label for="route_search">Route Number:</label>
-                        <div class="input-container">
-                            <input type="text" id="route_search" name="route_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    
-                    <form onsubmit="stopSearch()" action="javascript:void(0)">
-                        <label for="stop_search">Stop Number or Name:</label>
-                        <div class="input-container">
-                            <input type="text" id="stop_search" name="stop_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    
-                    % if context.enable_blocks:
-                        <form onsubmit="blockSearch()" action="javascript:void(0)">
-                            <label for="block_search">Block ID:</label>
-                            <div class="input-container">
-                                <input type="text" id="block_search" name="block_search" method="post" size="10">
-                                <input type="submit" value="Search" class="button">
-                            </div>
-                        </form>
-                    % end
-                % else:
+                % if context.realtime_enabled:
                     <form onsubmit="vehicleSearch()" action="javascript:void(0)">
                         <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                         <div class="input-container">
@@ -102,7 +66,32 @@
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
-                    <p>Choose a system to search for routes and stops</p>
+                % end
+                
+                <form onsubmit="routeSearch()" action="javascript:void(0)">
+                    <label for="route_search">Route Number:</label>
+                    <div class="input-container">
+                        <input type="text" id="route_search" name="route_search" method="post" size="10">
+                        <input type="submit" value="Search" class="button">
+                    </div>
+                </form>
+                
+                <form onsubmit="stopSearch()" action="javascript:void(0)">
+                    <label for="stop_search">Stop Number or Name:</label>
+                    <div class="input-container">
+                        <input type="text" id="stop_search" name="stop_search" method="post" size="10">
+                        <input type="submit" value="Search" class="button">
+                    </div>
+                </form>
+                
+                % if context.enable_blocks:
+                    <form onsubmit="blockSearch()" action="javascript:void(0)">
+                        <label for="block_search">Block ID:</label>
+                        <div class="input-container">
+                            <input type="text" id="block_search" name="block_search" method="post" size="10">
+                            <input type="submit" value="Search" class="button">
+                        </div>
+                    </form>
                 % end
             </div>
         </div>
