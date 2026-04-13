@@ -290,7 +290,7 @@
                             </p>
                             <p>
                                 For your convenience, the chat is designed to take up a large portion of your screen and there's no way to remove it, so you can't just ignore this amazing new feature.
-                                All responses are guaranteed to be 100% correct anyways - you probably won't even need the rest of the website anymore.
+                                All responses are guaranteed to be 100% correct anyways — you probably won't even need the rest of the website anymore.
                             </p>
                             <p>For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page.</p>
                             <p>We hope you enjoy, and have a safe summer!</p>
