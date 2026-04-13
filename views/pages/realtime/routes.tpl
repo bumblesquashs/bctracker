@@ -25,13 +25,11 @@
     </div>
 </div>
 
-% if context.system and positions:
+% if positions:
+    % routes = {p.trip.route for p in positions if p.trip and p.route}
     <div class="container">
-        % for route in context.system.get_routes():
+        % for route in sorted(routes):
             % route_positions = [p for p in positions if p.trip and p.trip.route == route]
-            % if not route_positions:
-                % continue
-            % end
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     <div class="column">
@@ -39,7 +37,13 @@
                             % include('components/route')
                             <div>{{! route.display_name }}</div>
                         </h2>
-                        <a href="{{ get_url(route.context, 'routes', route) }}">View schedule and details</a>
+                        <div class="row">
+                            % if not context.system:
+                                <div class="lighter-text">{{ route.context }}</div>
+                                <div class="lighter-text">•</div>
+                            % end
+                            <a href="{{ get_url(route.context, 'routes', route) }}">View schedule and details</a>
+                        </div>
                     </div>
                     % include('components/toggle')
                 </div>
@@ -49,9 +53,6 @@
                             <tr>
                                 <th>{{ context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
-                                % if not context.system:
-                                    <th class="desktop-only">System</th>
-                                % end
                                 <th>Headsign</th>
                                 % if context.enable_blocks:
                                     <th class="non-mobile">Block</th>
@@ -93,9 +94,6 @@
                                     <td class="desktop-only">
                                         % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
-                                    % if not context.system:
-                                        <td class="desktop-only">{{ position.context }}</td>
-                                    % end
                                     % trip = position.trip
                                     % block = trip.block
                                     % stop = position.stop
@@ -199,8 +197,17 @@
 % else:
     <div class="placeholder">
         % if not context.system:
-            <h3>Realtime routes can only be viewed for individual systems.</h3>
-            <p>Please choose a system.</p>
+            % if show_nis:
+                <h3>There are no {{ context.vehicle_type_plural.lower() }} out right now</h3>
+                <p>
+                    None of our current agencies operate late night service, so this should be the case overnight.
+                    If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
+                </p>
+                <p>Please check again later!</p>
+            % else:
+                <h3>There are no {{ context.vehicle_type_plural.lower() }} in service right now</h3>
+                <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
+            % end
         % elif not context.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
