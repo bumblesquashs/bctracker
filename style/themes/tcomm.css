@@ -293,6 +293,7 @@ table tr.table-button:hover {
     text-decoration: none;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
 }
 
 #system-menu .system-button:hover {

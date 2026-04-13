@@ -430,7 +430,12 @@
             <div class="details">
                 <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
                     % if context.system:
-                        {{ context }}
+                        <div class="row">
+                            {{ context }}
+                            % if context.system_id in favourite_system_ids:
+                                % include('components/svg', name='action/favourite')
+                            % end
+                        </div>
                     % else:
                         All Transit Systems
                     % end
@@ -457,6 +462,25 @@
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % end
+                % if favourite_system_ids:
+                    <div class="header">Favourites</div>
+                    % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
+                    % for system in favourite_systems:
+                        % if system == context.system:
+                            <div class="system-button current">
+                                % include('components/agency_logo', agency=system.agency)
+                                <div class="flex-1">{{ system }}</div>
+                                % include('components/svg', name='action/favourite')
+                            </div>
+                        % else:
+                            <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
+                                % include('components/agency_logo', agency=system.agency)
+                                <div class="flex-1">{{ system }}</div>
+                                % include('components/svg', name='action/favourite')
+                            </a>
+                        % end
+                    % end
+                % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if region_systems:
@@ -465,12 +489,18 @@
                             % if system == context.system:
                                 <div class="system-button current">
                                     % include('components/agency_logo', agency=system.agency)
-                                    <div>{{ system }}</div>
+                                    <div class="flex-1">{{ system }}</div>
+                                    % if system.id in favourite_system_ids:
+                                        % include('components/svg', name='action/favourite')
+                                    % end
                                 </div>
                             % else:
                                 <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
                                     % include('components/agency_logo', agency=system.agency)
-                                    <div>{{ system }}</div>
+                                    <div class="flex-1">{{ system }}</div>
+                                    % if system.id in favourite_system_ids:
+                                        % include('components/svg', name='action/favourite')
+                                    % end
                                 </a>
                             % end
                         % end

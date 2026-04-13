@@ -6,11 +6,40 @@
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
     % if context.system:
-        % if context.realtime_enabled:
-            <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
-        % else:
-            <h2>{{ context }} Transit Schedules</h2>
-        % end
+        <div class="row">
+            % if context.realtime_enabled:
+                <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
+            % else:
+                <h2>{{ context }} Transit Schedules</h2>
+            % end
+            % if len(favourite_system_ids) >= 5 and context.system_id not in favourite_system_ids:
+                <div class="favourite disabled tooltip-anchor">
+                    % include('components/svg', name='action/non-favourite')
+                    <div class="tooltip right">You can only have 5 favourite systems at a time</div>
+                </div>
+            % else:
+                % new_favourite_systems = set(favourite_system_ids)
+                % if context.system_id in favourite_system_ids:
+                    <div class="favourite tooltip-anchor" onclick="updateFavouriteSystems()">
+                        % include('components/svg', name='action/favourite')
+                        <div class="tooltip right">Remove favourite system</div>
+                    </div>
+                    % new_favourite_systems.remove(context.system_id)
+                % else:
+                    <div class="favourite tooltip-anchor" onclick="updateFavouriteSystems()">
+                        % include('components/svg', name='action/non-favourite')
+                        <div class="tooltip right">Add favourite system</div>
+                    </div>
+                    % new_favourite_systems.add(context.system_id)
+                % end
+                % new_favourite_systems_string = ','.join(sorted(new_favourite_systems))
+                <script>
+                    function updateFavouriteSystems() {
+                        window.location = "?favourite_systems={{ new_favourite_systems_string }}";
+                    }
+                </script>
+            % end
+        </div>
     % else:
         <h2>British Columbia Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
     % end

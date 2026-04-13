@@ -230,6 +230,7 @@ table tr.table-button:hover {
 
 #system-menu .system-button {
     color: #FFFFFF;
+    --image-color: #5CC3FF;
 }
 
 #system-menu .system-button:hover {
