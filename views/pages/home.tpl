@@ -131,133 +131,8 @@
             </div>
             <div class="content">
                 <p>
-                    Add up to 20 favourites using the
-                    % include('components/svg', name='action/non-favourite')
-                    button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
+                    Favourites have been moved to a <a href="{{ get_url(context, 'favourites') }}">dedicated page</a> with more details!
                 </p>
-                % if favourites:
-                    % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
-                    % route_favourites = [f for f in favourites if f.type == 'route']
-                    % stop_favourites = [f for f in favourites if f.type == 'stop']
-                    <div class="container">
-                        % if vehicle_favourites:
-                            <div class="section">
-                                <div class="content">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>{{ context.vehicle_type }}</th>
-                                                <th>Headsign</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % for order in orders:
-                                                % order_favourites = [f for f in vehicle_favourites if f.value.order_id == order.id]
-                                                <tr class="header">
-                                                    <td colspan="2">{{! order }}</td>
-                                                </tr>
-                                                <tr class="display-none"></tr>
-                                                % for favourite in order_favourites:
-                                                    % value = favourite.value
-                                                    % position = repositories.position.find(value.agency.id, value.id)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="row">
-                                                                % include('components/vehicle', vehicle=value)
-                                                                % if position:
-                                                                    <div class="row gap-5">
-                                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                                                                        % include('components/adherence', adherence=position.adherence)
-                                                                    </div>
-                                                                % end
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            % if position and position.trip:
-                                                                % include('components/headsign', departure=position.departure, trip=position.trip)
-                                                            % else:
-                                                                <div class="lighter-text">Not In Service</div>
-                                                            % end
-                                                        </td>
-                                                    </tr>
-                                                % end
-                                            % end
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        % end
-                        % if route_favourites:
-                            <div class="section">
-                                <div class="content">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Route</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % favourite_systems = {f.value.context.system for f in route_favourites}
-                                            % for system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.value.context.system == system]
-                                                <tr class="header">
-                                                    <td>{{ system }}</td>
-                                                </tr>
-                                                <tr class="display-none"></tr>
-                                                % for favourite in system_favourites:
-                                                    % value = favourite.value
-                                                    <tr>
-                                                        <td>
-                                                            <div class="row">
-                                                                % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.context, 'routes', value) }}">{{! value.display_name }}</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                % end
-                                            % end
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        % end
-                        % if stop_favourites:
-                            <div class="section">
-                                <div class="content">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Stop</th>
-                                                <th>Routes</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % favourite_systems = {f.value.context.system for f in stop_favourites}
-                                            % for system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == system]
-                                                <tr class="header">
-                                                    <td colspan="2">{{ system }}</td>
-                                                </tr>
-                                                <tr class="display-none"></tr>
-                                                % for favourite in system_favourites:
-                                                    % value = favourite.value
-                                                    <tr>
-                                                        <td>
-                                                            % include('components/stop', stop=value)
-                                                        </td>
-                                                        <td>
-                                                            % include('components/route_list', routes=value.routes)
-                                                        </td>
-                                                    </tr>
-                                                % end
-                                            % end
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        % end
-                    </div>
-                % end
             </div>
         </div>
     </div>
@@ -308,6 +183,34 @@
                 <div class="container">
                     <div class="news-post">
                         <div class="header">
+                            <h3>Spring Update</h3>
+                            April 13th, 2026
+                        </div>
+                        <div class="content">
+                            <p>
+                                Long time no post!
+                                We've made a few improvements to favourites on the site.
+                            </p>
+                            <ul>
+                                <li>You can now add favourite systems, which are shown at the top of the systems list</li>
+                                <li>
+                                    Favourite buses, routes, and stops now have a <a href="{{ get_url(context, 'favourites') }}">dedicated page</a>
+                                    <ul>
+                                        <li>On desktop this can be accessed via the star icon in the navigation bar, on mobile it can be found in the navigation menu</li>
+                                    </ul>
+                                </li>
+                                <li>With more room to show favourites, you can now easily see bus history, active buses on routes, and upcoming departures from stops</li>
+                            </ul>
+                            <p>
+                                We've also made some improvements to searching across all transit systems.
+                                Routes, stops, and blocks can be searched at any time.
+                                With the quick search, if there's more than one result, you'll be prompted to choose the one you're looking for.
+                            </p>
+                            <p>As always, thank you for choosing BCTracker!</p>
+                        </div>
+                    </div>
+                    <div class="news-post">
+                        <div class="header">
                             <h3>BCTracker AI Chat</h3>
                             April 1st, 2026
                         </div>
@@ -324,35 +227,7 @@
                             <p>For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page.</p>
                             <p>We hope you enjoy, and have a safe summer!</p>
                             <p class="smaller-font lighter-text">Let me know if you'd like any modifications or something different.</p>
-                            % if today.day != 1 or now.hour >= 12:
-                                <i>... Happy April Fools Day!</i>
-                            % end
-                        </div>
-                    </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Summer Update</h3>
-                            July 21st, 2025
-                        </div>
-                        <div class="content">
-                            <p>
-                                Let's jump right in with the big news: BCTracker now includes schedule data for <b>BC Ferries</b>!
-                                We're still figuring out the best way to integrate realtime data for tracking vessels, so that will be added down the road.
-                                In the meantime we hope the schedule information is still useful!
-                            </p>
-                            <p>
-                                As always, there's been a bunch of other improvements since our last update post that you may have noticed already.
-                                This includes:
-                            </p>
-                            <ul>
-                                <li>Stop icons on the main map page</li>
-                                <li>Geolocation and dark mode for maps</li>
-                                <li>Redesigned status bar on desktop</li>
-                                <li>Trips with changing headsigns</li>
-                                <li>The new <b>West Coast</b> system</li>
-                            </ul>
-                            <p>We've also been busy making some memory usage improvements to keep the site running smoothly and prepare for larger datasets such as Translink.</p>
-                            <p>See you in the next update!</p>
+                            <i>... Happy April Fools Day!</i>
                         </div>
                     </div>
                     <div>

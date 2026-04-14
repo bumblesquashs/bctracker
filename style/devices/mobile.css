@@ -261,6 +261,12 @@ table th {
     gap: 20px;
 }
 
+.page-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .placeholder {
     align-items: stretch;
 }

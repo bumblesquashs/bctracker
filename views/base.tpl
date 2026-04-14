@@ -328,6 +328,13 @@
                 </a>
             % end
             
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'favourites') }}">
+                % include('components/svg', name='action/favourite')
+                <div class="tooltip left">
+                    <div class="title">Favourites</div>
+                </div>
+            </a>
+            
             <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'nearby') }}">
                 % include('components/svg', name='nearby')
                 <div class="tooltip left">
@@ -401,6 +408,10 @@
             <a class="menu-button" href="{{ get_url(context, 'about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
+            </a>
+            <a class="menu-button" href="{{ get_url(context, 'favourites') }}">
+                % include('components/svg', name='action/favourite')
+                <span>Favourites</span>
             </a>
             <a class="menu-button" href="{{ get_url(context, 'nearby') }}">
                 % include('components/svg', name='nearby')
