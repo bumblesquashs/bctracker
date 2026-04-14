@@ -151,10 +151,6 @@ table th {
 
 #system {
     align-self: stretch;
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    align-items: center;
     cursor: pointer;
     padding: 10px 20px;
 }

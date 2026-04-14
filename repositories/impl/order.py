@@ -98,5 +98,5 @@ class OrderRepository:
                 name += f' {decoration}'
             if title_prefix:
                 name = f'{title_prefix} {name}'
-            matches.append(Match(name, year_model, model_icon, f'bus/{vehicle.url_id}', value))
+            matches.append(Match(context, name, year_model, model_icon, f'bus/{vehicle.url_id}', value))
         return matches

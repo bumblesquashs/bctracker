@@ -64,13 +64,15 @@ class Context:
     def gtfs_loaded(self):
         if self.system:
             return self.system.gtfs_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.gtfs_loaded for s in systems)
     
     @property
     def realtime_loaded(self):
         if self.system:
             return self.system.realtime_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.realtime_loaded for s in systems)
     
     @property
     def timezone(self):
@@ -216,18 +218,23 @@ class Context:
     
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''
+        values = []
+        if self.realtime_enabled:
+            values.append(self.vehicle_type_plural.lower())
+        values.append('routes')
+        values.append('stops')
+        if self.enable_blocks:
+            values.append('blocks')
         if self.system:
-            values = []
-            if self.realtime_enabled:
-                values.append(self.vehicle_type_plural.lower())
-            values.append('routes')
-            values.append('stops')
-            if self.enable_blocks:
-                values.append('blocks')
             if len(values) == 1:
                 return f'Search for {self} {values[0]}'
             if len(values) == 2:
                 return f'Search for {self} {values[0]} and {values[1]}'
             values_string = ', '.join(values[:-1])
             return f'Search for {self} {values_string}, and {values[-1]}'
-        return f'Search for {self.vehicle_type_plural.lower()} in all systems'
+        if len(values) == 1:
+            return f'Search for {values[0]} in all systems'
+        if len(values) == 2:
+            return f'Search for {values[0]} and {values[1]} in all systems'
+        values_string = ', '.join(values[:-1])
+        return f'Search for {values_string}, and {values[-1]} in all systems'

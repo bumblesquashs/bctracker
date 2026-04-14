@@ -6,9 +6,7 @@
     <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
         <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
-        % if context.system:
-            <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
-        % end
+        <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
         <span class="tab-button current">By Model</span>
         % if show_speed:
             <a href="{{ get_url(context, 'realtime', 'speed') }}" class="tab-button">By Speed</a>

@@ -180,6 +180,8 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.id == other.id:
+            return self.headsign < other.headsign
         if self.start_time == other.start_time:
             return self.service < other.service
         return self.start_time < other.start_time

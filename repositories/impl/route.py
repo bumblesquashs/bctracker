@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from database import Database
 
 from models.context import Context
+from models.match import Match
 from models.route import Route
 
 @dataclass(slots=True)
@@ -86,7 +87,7 @@ class RouteRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, limit: int | None = None) -> list[Route]:
+    def find_all(self, context: Context, route_number: str | None = None, limit: int | None = None) -> list[Route]:
         '''Returns all routes that match the given context'''
         return self.database.select(
             table='route',
@@ -103,11 +104,42 @@ class RouteRepository:
             ],
             filters={
                 # 'agency_id': context.agency_id,
-                'system_id': context.system_id
+                'system_id': context.system_id,
+                'number': route_number
             },
             limit=limit,
             initializer=Route.from_db
         )
+    
+    def find_matches(self, context: Context, query: str) -> list[Match]:
+        routes = self.database.select(
+            table='route',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'route_id',
+                'number',
+                'name',
+                'colour',
+                'text_colour',
+                'type',
+                'sort_order'
+            ],
+            filters={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'OR': {
+                    'number': {
+                        'LIKE': f'%{query}%'
+                    },
+                    'name': {
+                        'LIKE': f'%{query}%'
+                    }
+                }
+            },
+            initializer=Route.from_db
+        )
+        return [r.get_match(query) for r in routes]
     
     def delete_all(self, context: Context):
         '''Deletes all routes for the given context from the database'''

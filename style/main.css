@@ -500,8 +500,13 @@ table tr.table-button {
 }
 
 #system {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
     font-weight: bold;
     font-size: 14pt;
+    --image-size: 20px;
 }
 
 #system-menu {
@@ -518,6 +523,7 @@ table tr.table-button {
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    --image-size: 18px;
 }
 
 #system-menu .system-button.current {

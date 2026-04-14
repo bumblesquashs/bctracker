@@ -6,11 +6,40 @@
 <div id="page-header">
     <h1>Welcome to BCTracker!</h1>
     % if context.system:
-        % if context.realtime_enabled:
-            <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
-        % else:
-            <h2>{{ context }} Transit Schedules</h2>
-        % end
+        <div class="row">
+            % if context.realtime_enabled:
+                <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
+            % else:
+                <h2>{{ context }} Transit Schedules</h2>
+            % end
+            % if len(favourite_system_ids) >= 5 and context.system_id not in favourite_system_ids:
+                <div class="favourite disabled tooltip-anchor">
+                    % include('components/svg', name='action/non-favourite')
+                    <div class="tooltip right">You can only have 5 favourite systems at a time</div>
+                </div>
+            % else:
+                % new_favourite_systems = set(favourite_system_ids)
+                % if context.system_id in favourite_system_ids:
+                    <div class="favourite tooltip-anchor" onclick="updateFavouriteSystems()">
+                        % include('components/svg', name='action/favourite')
+                        <div class="tooltip right">Remove favourite system</div>
+                    </div>
+                    % new_favourite_systems.remove(context.system_id)
+                % else:
+                    <div class="favourite tooltip-anchor" onclick="updateFavouriteSystems()">
+                        % include('components/svg', name='action/non-favourite')
+                        <div class="tooltip right">Add favourite system</div>
+                    </div>
+                    % new_favourite_systems.add(context.system_id)
+                % end
+                % new_favourite_systems_string = ','.join(sorted(new_favourite_systems))
+                <script>
+                    function updateFavouriteSystems() {
+                        window.location = "?favourite_systems={{ new_favourite_systems_string }}";
+                    }
+                </script>
+            % end
+        </div>
     % else:
         <h2>British Columbia Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
     % end
@@ -58,43 +87,7 @@
                     }
                 </script>
                 
-                % if context.system:
-                    % if context.realtime_enabled:
-                        <form onsubmit="vehicleSearch()" action="javascript:void(0)">
-                            <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
-                            <div class="input-container">
-                                <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
-                                <input type="submit" value="Search" class="button">
-                            </div>
-                        </form>
-                    % end
-                    
-                    <form onsubmit="routeSearch()" action="javascript:void(0)">
-                        <label for="route_search">Route Number:</label>
-                        <div class="input-container">
-                            <input type="text" id="route_search" name="route_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    
-                    <form onsubmit="stopSearch()" action="javascript:void(0)">
-                        <label for="stop_search">Stop Number or Name:</label>
-                        <div class="input-container">
-                            <input type="text" id="stop_search" name="stop_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    
-                    % if context.enable_blocks:
-                        <form onsubmit="blockSearch()" action="javascript:void(0)">
-                            <label for="block_search">Block ID:</label>
-                            <div class="input-container">
-                                <input type="text" id="block_search" name="block_search" method="post" size="10">
-                                <input type="submit" value="Search" class="button">
-                            </div>
-                        </form>
-                    % end
-                % else:
+                % if context.realtime_enabled:
                     <form onsubmit="vehicleSearch()" action="javascript:void(0)">
                         <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                         <div class="input-container">
@@ -102,7 +95,32 @@
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
-                    <p>Choose a system to search for routes and stops</p>
+                % end
+                
+                <form onsubmit="routeSearch()" action="javascript:void(0)">
+                    <label for="route_search">Route Number:</label>
+                    <div class="input-container">
+                        <input type="text" id="route_search" name="route_search" method="post" size="10">
+                        <input type="submit" value="Search" class="button">
+                    </div>
+                </form>
+                
+                <form onsubmit="stopSearch()" action="javascript:void(0)">
+                    <label for="stop_search">Stop Number or Name:</label>
+                    <div class="input-container">
+                        <input type="text" id="stop_search" name="stop_search" method="post" size="10">
+                        <input type="submit" value="Search" class="button">
+                    </div>
+                </form>
+                
+                % if context.enable_blocks:
+                    <form onsubmit="blockSearch()" action="javascript:void(0)">
+                        <label for="block_search">Block ID:</label>
+                        <div class="input-container">
+                            <input type="text" id="block_search" name="block_search" method="post" size="10">
+                            <input type="submit" value="Search" class="button">
+                        </div>
+                    </form>
                 % end
             </div>
         </div>
@@ -176,7 +194,7 @@
                             </p>
                             <p>
                                 For your convenience, the chat is designed to take up a large portion of your screen and there's no way to remove it, so you can't just ignore this amazing new feature.
-                                All responses are guaranteed to be 100% correct anyways - you probably won't even need the rest of the website anymore.
+                                All responses are guaranteed to be 100% correct anyways — you probably won't even need the rest of the website anymore.
                             </p>
                             <p>For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page.</p>
                             <p>We hope you enjoy, and have a safe summer!</p>

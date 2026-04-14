@@ -232,7 +232,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
+        return Match(self.context, f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
