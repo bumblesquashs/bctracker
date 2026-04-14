@@ -221,6 +221,7 @@ table tr.table-button:hover {
 
 #system-menu .system-button {
     color: #000000;
+    --image-color: #003769;
 }
 
 #system-menu .system-button:hover {

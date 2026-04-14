@@ -205,6 +205,11 @@ class Server(Bottle):
         time_format = self.query_cookie('time_format')
         vehicle_marker_style = self.query_cookie('vehicle_marker_style')
         hide_systems = self.query_cookie('hide_systems') != 'no'
+        favourite_systems = self.query_cookie('favourite_systems')
+        if favourite_systems:
+            favourite_system_ids = set(favourite_systems.split(','))
+        else:
+            favourite_system_ids = set()
         if context.system:
             last_updated = context.system.last_updated
             today = Date.today(context.timezone)
@@ -248,6 +253,7 @@ class Server(Bottle):
             time_format=time_format,
             vehicle_marker_style=vehicle_marker_style,
             hide_systems=hide_systems,
+            favourite_system_ids=favourite_system_ids,
             show_speed=request.get_cookie('speed') == '1994',
             show_random=request.get_cookie('random') == 'kumquat',
             today=today,

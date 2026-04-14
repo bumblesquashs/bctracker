@@ -171,6 +171,7 @@ table th {
 
 #system {
     text-align: center;
+    align-self: center;
 }
 
 #system-menu {
