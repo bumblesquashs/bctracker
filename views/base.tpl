@@ -430,12 +430,10 @@
             <div class="details">
                 <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
                     % if context.system:
-                        <div class="row">
-                            {{ context }}
-                            % if context.system_id in favourite_system_ids:
-                                % include('components/svg', name='action/favourite')
-                            % end
-                        </div>
+                        {{ context }}
+                        % if context.system_id in favourite_system_ids:
+                            % include('components/svg', name='action/favourite')
+                        % end
                     % else:
                         All Transit Systems
                     % end
