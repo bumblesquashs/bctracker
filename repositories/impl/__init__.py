@@ -7,6 +7,8 @@ from .departure import DepartureRepository
 from .livery import LiveryRepository
 from .model import ModelRepository
 from .order import OrderRepository
+from .photo import PhotoRepository
+from .photographer import PhotographerRepository
 from .point import PointRepository
 from .position import PositionRepository
 from .record import RecordRepository

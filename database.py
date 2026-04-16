@@ -162,6 +162,34 @@ SQL_SCRIPTS = [
             PRIMARY KEY (system_id, shape_id, sequence)
         )
     ''',
+    '''
+        CREATE TABLE IF NOT EXISTS photographer (
+            photographer_id INTEGER PRIMARY KEY ASC,
+            name TEXT NOT NULL,
+            username TEXT
+            url TEXT
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS photo (
+            photo_id INTEGER PRIMARY KEY ASC,
+            path TEXT NOT NULL,
+            bytes INTEGER NOT NULL,
+            width INTEGER NOT NULL,
+            height INTEGER NOT NULL,
+            agency_id TEXT,
+            system_id TEXT,
+            date TEXT,
+            time TEXT,
+            photographer_id INTEGER,
+            description TEXT,
+            vehicle_id TEXT,
+            route_number TEXT,
+            stop_number TEXT,
+            approved INTEGER NOT NULL,
+            FOREIGN KEY (photographer_id) REFERENCES photographer (photographer_id) ON DELETE SET NULL
+        )
+    ''',
     'CREATE INDEX IF NOT EXISTS allocation_agency_vehicle ON allocation (agency_id, vehicle_id)',
     'CREATE INDEX IF NOT EXISTS record_allocation ON record (allocation_id)',
     'CREATE INDEX IF NOT EXISTS trip_record_record_id ON trip_record (record_id)',

@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from .impl.livery import LiveryRepository
     from .impl.model import ModelRepository
     from .impl.order import OrderRepository
+    from .impl.photo import PhotoRepository
+    from .impl.photographer import PhotographerRepository
     from .impl.point import PointRepository
     from .impl.position import PositionRepository
     from .impl.record import RecordRepository
@@ -30,6 +32,8 @@ departure: DepartureRepository
 livery: LiveryRepository
 model: ModelRepository
 order: OrderRepository
+photo: PhotoRepository
+photographer: PhotographerRepository
 point: PointRepository
 position: PositionRepository
 record: RecordRepository
