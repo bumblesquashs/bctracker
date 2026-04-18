@@ -124,16 +124,6 @@ table tr.table-button:hover {
     --map-control-icon: #365CCB;
 }
 
-#nearby-status.loading {
-    background-color: #EEEEEE;
-    border-color: #DDDDDD;
-}
-
-#nearby-status.error {
-    border-color: #FF0000;
-    background-color: #FFCCCC;
-}
-
 #page {
     --image-color: #666666;
 }

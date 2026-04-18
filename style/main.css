@@ -352,18 +352,20 @@ table tr.table-button {
     background-color: var(--navigation-bar-foreground);
 }
 
-#nearby-status {
-    padding: 10px;
-    border-width: 1px;
-    border-style: solid;
-}
-
-#nearby-status.success {
-    display: none;
-}
-
-#nearby-status #status-title {
-    font-weight: bold;
+#nearby-error {
+    position: absolute;
+    z-index: 0;
+    left: 20px;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    --image-size: 96px;
 }
 
 #page {

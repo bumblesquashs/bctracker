@@ -92,9 +92,6 @@ class Server(Bottle):
         self.add('/admin', require_admin=True, callback=self.admin)
         self.add('/admin/logs', require_admin=True, callback=self.admin_logs)
         
-        # Frames
-        self.add('/frame/nearby', append_slash=False, callback=self.frame_nearby)
-        
         # API endpoints
         self.add('/api/health-check', append_slash=False, callback=self.api_health_check)
         self.add('/api/positions', append_slash=False, callback=self.api_positions)
@@ -102,7 +99,6 @@ class Server(Bottle):
         self.add('/api/stops', append_slash=False, callback=self.api_stops)
         self.add('/api/routes', append_slash=False, callback=self.api_routes)
         self.add('/api/search', method='POST', callback=self.api_search)
-        self.add('/api/nearby.json', append_slash=False, callback=self.api_nearby)
         self.add('/api/admin/reload-decorations', method='POST', require_admin=True, callback=self.api_admin_reload_decorations)
         self.add('/api/admin/reload-orders', method='POST', require_admin=True, callback=self.api_admin_reload_orders)
         self.add('/api/admin/reload-systems', method='POST', require_admin=True, callback=self.api_admin_reload_systems)
@@ -260,16 +256,6 @@ class Server(Bottle):
             today=today,
             now=now,
             timestamp=timestamp,
-            **kwargs
-        )
-    
-    def frame(self, context: Context, name, **kwargs):
-        '''Returns an HTML element that can be inserted into a page'''
-        return template(f'frames/{name}',
-            context=context,
-            get_url=self.get_url,
-            time_format=request.get_cookie('time_format'),
-            show_speed=request.get_cookie('speed') == '1994',
             **kwargs
         )
     
@@ -1499,12 +1485,28 @@ class Server(Bottle):
         )
     
     def nearby(self, context: Context):
+        lat = request.query.get('lat')
+        lon = request.query.get('lon')
+        if lat is not None and lon is not None:
+            lat = float(lat)
+            lon = float(lon)
+            size = 0.001
+            stops = repositories.stop.find_all(context, lat=lat - (size / 2), lon=lon - (size / 2), size=size)
+        else:
+            stops = []
         return self.page(
             context=context,
             name='nearby',
             title='Nearby Stops',
             path=['nearby'],
-            include_maps=True
+            path_args={
+                'lat': lat,
+                'lon': lon
+            },
+            include_maps=lat and lon,
+            lat=lat,
+            lon=lon,
+            stops=sorted(stops)
         )
     
     def themes(self, context: Context):
@@ -1644,23 +1646,6 @@ class Server(Bottle):
         )
     
     # =============================================================
-    # Frames
-    # =============================================================
-    
-    def frame_nearby(self, context: Context):
-        if not context.system:
-            response.status = 400
-            return None
-        stops = sorted(context.system.get_stops())
-        lat = float(request.query.get('lat'))
-        lon = float(request.query.get('lon'))
-        return self.frame(
-            context=context,
-            name='nearby',
-            stops=sorted([s for s in stops if s.is_near(lat, lon)])
-        )
-    
-    # =============================================================
     # API endpoints
     # =============================================================
     
@@ -1760,18 +1745,6 @@ class Server(Bottle):
         return {
             'results': [m.get_json(self.get_url) for m in matches[min:max]],
             'total': len(matches)
-        }
-    
-    def api_nearby(self, context: Context):
-        if not context.system:
-            return {
-                'stops': []
-            }
-        lat = float(request.query.get('lat'))
-        lon = float(request.query.get('lon'))
-        stops = sorted([s for s in context.system.get_stops() if s.is_near(lat, lon)])
-        return {
-            'stops': [s.get_json() for s in stops]
         }
     
     def api_admin_reload_decorations(self, context: Context):

@@ -454,7 +454,7 @@
                 map.getView().setCenter(ol.proj.fromLonLat(area.point));
                 map.getView().setZoom(15);
             } else {
-                const padding = parseInt("{{ 20 if is_preview else 100 }}");
+                const padding = parseInt("{{ get('preview_padding', 20) if is_preview else 100 }}");
                 map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
                     padding: [padding, padding, padding, padding]
                 })

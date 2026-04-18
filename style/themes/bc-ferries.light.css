@@ -133,16 +133,6 @@ table tr.table-button:hover {
     --tooltip-background: #001325;
 }
 
-#nearby-status.loading {
-    background-color: #F1F8FF;
-    border-color: #001325;
-}
-
-#nearby-status.error {
-    border-color: #FF0000;
-    background-color: #FFCCCC;
-}
-
 #page {
     --image-color: #000000;
 }
