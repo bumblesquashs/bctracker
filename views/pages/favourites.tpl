@@ -152,7 +152,7 @@
                                         </h3>
                                         <div class="row">
                                             <div>{{ value.context }}</div>
-                                            % include('components/weekdays', schedule=value.schedule, compact=True, schedule_path=f'routes/{value.url_id}/schedule')
+                                            % include('components/weekdays', context=value.context, schedule=value.schedule, compact=True, schedule_path=f'routes/{value.url_id}/schedule')
                                         </div>
                                     </div>
                                     <div class="toggle-button" onclick="toggleInfoBox(this)">

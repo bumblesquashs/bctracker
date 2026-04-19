@@ -1753,10 +1753,6 @@ table tr.table-button {
     font-weight: bold;
 }
 
-.trip {
-    align-self: flex-start;
-}
-
 .warning-box {
     display: flex;
     flex-direction: row;
