@@ -57,7 +57,7 @@ class GTFSService:
         gtfs_cutoff = context.gtfs_cutoff
         if gtfs_cutoff:
             cutoff_date = Date.parse(gtfs_cutoff, context.timezone)
-            if cutoff_date > Date.today(context.timezone):
+            if cutoff_date > context.today:
                 calendar_services = [s for s in calendar_services if s.schedule.date_range.start <= cutoff_date]
                 filter_service_ids = {s.id for s in calendar_services}
             else:
@@ -149,7 +149,7 @@ class GTFSService:
             return False
         end_dates = [s.schedule.date_range.end for s in context.system.get_services()]
         if end_dates:
-            return Date.today(context.timezone) < max(end_dates) - timedelta(days=7)
+            return context.today < max(end_dates) - timedelta(days=7)
         return True
 
 def read_csv(context: Context, name, initializer):

@@ -52,8 +52,7 @@ class CronService:
             context = system.context
             if self.running:
                 try:
-                    date = Date.today(context.timezone)
-                    if date.weekday == Weekday.MON or not services.gtfs.validate(context):
+                    if context.today.weekday == Weekday.MON or not services.gtfs.validate(context):
                         services.gtfs.load(context, system.enable_force_gtfs)
                 except Exception as e:
                     services.log.error(f'Error loading GTFS data for {context}: {e}')

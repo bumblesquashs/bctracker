@@ -10,8 +10,6 @@ import protobuf.data.gtfs_realtime_pb2 as protobuf
 from database import Database
 
 from models.context import Context
-from models.date import Date
-from models.time import Time
 from models.timestamp import Timestamp
 
 import repositories
@@ -22,7 +20,7 @@ import settings
 class RealtimeService:
     
     database: Database
-    last_updated: Date | None = None
+    last_updated: Timestamp | None = None
     
     def update(self, context: Context):
         '''Downloads realtime data for the given context and stores it in the database'''
@@ -65,7 +63,7 @@ class RealtimeService:
             except Exception as e:
                 services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         self.last_updated = Timestamp.now(accurate_seconds=False)
-        context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
+        context.system.last_updated = context.timestamp
     
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
@@ -75,8 +73,8 @@ class RealtimeService:
                 vehicle = position.vehicle
                 if not vehicle.is_known:
                     continue
-                date = Date.today(context.timezone)
-                time = Time.now(context.timezone)
+                date = context.today
+                time = context.now
                 
                 allocation = repositories.allocation.find_active(context.without_system(), vehicle.id)
                 if allocation:

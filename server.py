@@ -13,8 +13,6 @@ from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
 from models.stop import StopType
-from models.time import Time
-from models.timestamp import Timestamp
 
 import repositories
 import services
@@ -191,14 +189,11 @@ class Server(Bottle):
             favourite_system_ids = set()
         if context.system:
             last_updated = context.system.last_updated
-            today = Date.today(context.timezone)
-            now = Time.now(context.timezone, False)
-            timestamp = Timestamp.now(context.timezone)
         else:
             last_updated = services.realtime.get_last_updated()
-            today = Date.today()
-            now = Time.now()
-            timestamp = Timestamp.now()
+        today = context.today
+        now = context.now
+        timestamp = context.timestamp
         theme_id = self.query_cookie('theme')
         theme = repositories.theme.find(theme_id)
         if not theme:
@@ -598,7 +593,7 @@ class Server(Bottle):
         except (KeyError, ValueError):
             days = None
         if days:
-            date = Date.today(context.timezone) - timedelta(days=days)
+            date = context.today - timedelta(days=days)
             allocations = [a for a in allocations if a.last_date > date]
         order_ids = {a.vehicle.order_id for a in allocations if a.vehicle.order_id}
         orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
@@ -734,7 +729,7 @@ class Server(Bottle):
                 route_number=route_number,
                 alt_routes=sorted(alt_routes)
             )
-        trips = sorted(route.get_trips(date=Date.today(context.timezone)))
+        trips = sorted(route.get_trips(date=context.today))
         assignments = repositories.assignment.find_all(context, route_id=route.id)
         return self.page(
             context=context,
@@ -1310,7 +1305,7 @@ class Server(Bottle):
             parent_stop = repositories.stop.find(context, stop_id=stop.parent_id)
         else:
             parent_stop = None
-        departures = stop.find_departures(date=Date.today(context.timezone))
+        departures = stop.find_departures(date=context.today)
         trip_ids = [d.trip_id for d in departures]
         positions = repositories.position.find_all(context, trip_id=trip_ids)
         assignments = repositories.assignment.find_all(context, stop_id=stop.id)
@@ -1511,7 +1506,7 @@ class Server(Bottle):
             if favourite.type == 'route':
                 route_positions[favourite.value.id] = repositories.position.find_all(favourite.value.context, route_id=favourite.value.id)
             elif favourite.type == 'stop':
-                departures = favourite.value.find_departures(date=Date.today(context.timezone))
+                departures = favourite.value.find_departures(date=context.today)
                 stop_departures[favourite.value.id] = departures
                 trip_ids = [d.trip_id for d in departures]
                 positions = repositories.position.find_all(favourite.value.context, trip_id=trip_ids)

@@ -11,6 +11,10 @@ from dataclasses import dataclass
 
 from constants import *
 
+from models.date import Date
+from models.time import Time
+from models.timestamp import Timestamp
+
 import repositories
 import settings
 
@@ -176,6 +180,18 @@ class Context:
         if self.system:
             return self.system.max_invalid_positions
         return DEFAULT_MAX_INVALID_POSITIONS
+    
+    @property
+    def today(self) -> Date:
+        return Date.today(self.timezone)
+    
+    @property
+    def now(self) -> Time:
+        return Time.now(self.timezone, self.accurate_seconds)
+    
+    @property
+    def timestamp(self) -> Timestamp:
+        return Timestamp.now(self.timezone, self.accurate_seconds)
     
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
