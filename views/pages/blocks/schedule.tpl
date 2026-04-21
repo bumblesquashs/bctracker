@@ -120,7 +120,7 @@
                     </thead>
                     <tbody>
                         % for region in regions:
-                            % region_systems = [s for s in systems if s.region == region]
+                            % region_systems = [s for s in systems if s.region == region and s.agency.enable_blocks]
                             % if region_systems:
                                 <tr class="header">
                                     <td colspan="3">{{ region }}</td>
