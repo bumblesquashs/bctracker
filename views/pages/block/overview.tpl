@@ -1,7 +1,4 @@
 
-% from models.date import Date
-% import repositories
-
 % rebase('base')
 
 <div id="page-header">
@@ -18,8 +15,6 @@
 % sheets = block.sheets
 % routes = block.get_routes()
 % trips = block.get_trips()
-
-% today = Date.today(block.context.timezone)
 
 <div class="page-container">
     <div class="sidebar container flex-1">

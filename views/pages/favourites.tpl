@@ -1,5 +1,4 @@
 
-% from datetime import timedelta
 % from math import floor
 
 % rebase('base')
@@ -306,11 +305,10 @@
                                             </tbody>
                                         </table>
                                     % else:
-                                        % tomorrow = today.next()
                                         <div class="placeholder open-only">
                                             <p>
                                                 There are no departures for the rest of today.
-                                                <a href="{{ value.url('schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                                <a href="{{ value.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
                                             </p>
                                         </div>
                                     % end

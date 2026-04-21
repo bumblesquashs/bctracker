@@ -1,6 +1,4 @@
 
-% import json
-
 % rebase('base')
 
 <div id="page-header">

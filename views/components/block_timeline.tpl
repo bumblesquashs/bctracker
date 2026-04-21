@@ -1,7 +1,4 @@
 
-% from datetime import timedelta
-
-% from models.date import Date
 % from models.time import Time
 
 % service_group = get('service_group')
@@ -33,10 +30,8 @@
                 </a>
             % end
             
-            % date = Date.today(block.context.timezone)
-            % time = Time.now(block.context.timezone)
-            % if start_time < time and end_time > time and date in block.schedule:
-                % offset_minutes = time.get_minutes() - start_time.get_minutes()
+            % if start_time < now and end_time > now and today in block.schedule:
+                % offset_minutes = now.get_minutes() - start_time.get_minutes()
                 % offset_percentage = (offset_minutes / total_minutes) * 100
                 <div class="now" style="left: {{ offset_percentage }}%;">
                     

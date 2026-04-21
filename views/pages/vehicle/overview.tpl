@@ -1,7 +1,4 @@
 
-% from datetime import timedelta
-
-% from models.date import Date
 % from models.model import ModelType
 
 % rebase('base')
@@ -106,18 +103,17 @@
                         % if context.enable_blocks:
                             % if block:
                                 <div class="section">
-                                    % include('components/block_timeline', date=Date.today(block.context.timezone))
+                                    % include('components/block_timeline', date=today)
                                 </div>
                             % elif allocation:
                                 % last_record = allocation.last_record
                                 % if last_record and last_record.date.is_today:
                                     % last_block = last_record.block
                                     % if last_block:
-                                        % date = Date.today(last_block.context.timezone)
-                                        % end_time = last_block.get_end_time(date=date)
+                                        % end_time = last_block.get_end_time(date=today)
                                         % if end_time and end_time.is_later:
                                             <div class="section no-flex">
-                                                % include('components/block_timeline', block=last_block, date=date)
+                                                % include('components/block_timeline', block=last_block, date=today)
                                             </div>
                                         % end
                                     % end
@@ -162,10 +158,9 @@
                                 <div class="name">Block</div>
                                 <div class="value">
                                     <a href="{{ block.url() }}">{{ block.id }}</a>
-                                    % date = Date.today(block.context.timezone)
-                                    % start_time = block.get_start_time(date=date).format_web(time_format)
-                                    % end_time = block.get_end_time(date=date).format_web(time_format)
-                                    % duration = block.get_duration(date=date)
+                                    % start_time = block.get_start_time(date=today).format_web(time_format)
+                                    % end_time = block.get_end_time(date=today).format_web(time_format)
+                                    % duration = block.get_duration(date=today)
                                     <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                                 </div>
                             </div>

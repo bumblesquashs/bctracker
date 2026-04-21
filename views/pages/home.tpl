@@ -1,6 +1,4 @@
 
-% import repositories
-
 % rebase('base')
 
 <div id="page-header">
