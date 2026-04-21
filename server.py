@@ -237,6 +237,7 @@ class Server(Bottle):
             today=today,
             now=now,
             timestamp=timestamp,
+            svg_cache={},
             **kwargs
         )
     
