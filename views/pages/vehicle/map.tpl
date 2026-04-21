@@ -21,9 +21,9 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'bus', vehicle) }}" class="tab-button">Overview</a>
+        <a href="{{ vehicle.url() }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        <a href="{{ get_url(context, 'bus', vehicle, 'history') }}" class="tab-button">History</a>
+        <a href="{{ vehicle.url('history') }}" class="tab-button">History</a>
     </div>
 </div>
 

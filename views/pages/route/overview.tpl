@@ -9,8 +9,8 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'routes', route, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(context, 'routes', route, 'schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ route.url('map') }}" class="tab-button">Map</a>
+        <a href="{{ route.url('schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -47,7 +47,7 @@
                                     % for variant in variants:
                                         <div class="row">
                                             % include('components/route', route=variant)
-                                            <a href="{{ get_url(variant.context, 'routes', variant) }}">{{! variant.display_name }}</a>
+                                            <a href="{{ variate.url() }}">{{! variant.display_name }}</a>
                                         </div>
                                     % end
                                 </div>
@@ -125,7 +125,7 @@
                                     % if context.enable_blocks:
                                         <td class="non-mobile">
                                             % block = trip.block
-                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                            <a href="{{ block.url() }}">{{ block.id }}</a>
                                         </td>
                                     % end
                                     <td class="non-mobile">
@@ -204,7 +204,7 @@
                                                             % if context.enable_blocks:
                                                                 <td class="non-mobile">
                                                                     % block = trip.block
-                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 </td>
                                                             % end
                                                             <td>
@@ -278,7 +278,7 @@
                     <div class="placeholder">
                         % if context.gtfs_loaded:
                             <h3>There are no trips for this route today</h3>
-                            <p>You can check the <a href="{{ get_url(context, 'routes', route, 'schedule') }}">full schedule</a> for more information about when this route runs.</p>
+                            <p>You can check the <a href="{{ route.url('schedule') }}">full schedule</a> for more information about when this route runs.</p>
                         % else:
                             <h3>Trips for this route are unavailable</h3>
                             <p>System data is currently loading and will be available soon.</p>

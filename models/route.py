@@ -169,6 +169,9 @@ class Route:
             return self.name > other.name
         return self.key > other.key
     
+    def url(self, *args, **kwargs):
+        return self.context.url('routes', self, *args, **kwargs)
+    
     def get_json(self):
         '''Returns a representation of this route in JSON-compatible format'''
         return {

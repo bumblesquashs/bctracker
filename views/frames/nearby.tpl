@@ -22,7 +22,7 @@
                     <h3>
                         % include('components/stop', include_link=False)
                     </h3>
-                    <a href="{{ get_url(stop.context, 'stops', stop) }}">View stop schedule and details</a>
+                    <a href="{{ stop.url() }}">View stop schedule and details</a>
                 </div>
                 % include('components/toggle')
             </div>
@@ -67,7 +67,7 @@
                     % tomorrow = Date.today() + timedelta(days=1)
                     <p>
                         There are no departures for the rest of today.
-                        <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                        <a href="{{ stop.url('schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                     </p>
                 % end
             </div>

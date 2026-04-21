@@ -12,7 +12,7 @@
     </div>
     <div class="column gap-10 stretch">
         <div class="tab-button-bar">
-            <a href="{{ get_url(context, 'routes') }}" class="tab-button">List</a>
+            <a href="{{ context.url('routes') }}" class="tab-button">List</a>
             <span class="tab-button current">Map</span>
         </div>
     </div>
@@ -158,7 +158,7 @@
         document.body.onload = function() {
             startLoading();
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(context, 'api', 'routes') }}", true);
+            request.open("GET", "{{ context.url('api', 'routes') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {

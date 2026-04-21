@@ -9,7 +9,6 @@ import csv
 import requests
 
 from database import Database
-from settings import Settings
 
 from models.block import Block
 from models.context import Context
@@ -20,12 +19,12 @@ from models.sheet import Sheet
 
 import repositories
 import services
+import settings
 
 @dataclass(slots=True)
 class GTFSService:
     
     database: Database
-    settings: Settings
     
     def load(self, context: Context, force_download=False, update_db=False):
         '''Loads the GTFS for the given context into memory'''
@@ -102,7 +101,7 @@ class GTFSService:
         data_path = f'data/gtfs/{context.system_id}'
         
         if path.exists(data_zip_path):
-            if self.settings.enable_gtfs_backups:
+            if settings.current.enable_gtfs_backups:
                 formatted_date = datetime.now().strftime('%Y-%m-%d')
                 archives_path = f'archives/gtfs/{context.system_id}_{formatted_date}.zip'
                 rename(data_zip_path, archives_path)

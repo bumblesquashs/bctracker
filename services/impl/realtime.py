@@ -8,7 +8,6 @@ import requests
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 from database import Database
-from settings import Settings
 
 from models.context import Context
 from models.date import Date
@@ -17,12 +16,12 @@ from models.timestamp import Timestamp
 
 import repositories
 import services
+import settings
 
 @dataclass(slots=True)
 class RealtimeService:
     
     database: Database
-    settings: Settings
     last_updated: Date | None = None
     
     def update(self, context: Context):
@@ -32,7 +31,7 @@ class RealtimeService:
         data_path = f'data/realtime/{context.system_id}.bin'
         
         if path.exists(data_path):
-            if self.settings.enable_realtime_backups:
+            if settings.current.enable_realtime_backups:
                 formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
                 archives_path = f'archives/realtime/{context.system_id}_{formatted_date}.bin'
                 rename(data_path, archives_path)
@@ -40,7 +39,7 @@ class RealtimeService:
                 remove(data_path)
         data = protobuf.FeedMessage()
         with requests.get(context.system.realtime_url, timeout=10) as r:
-            if self.settings.enable_realtime_backups:
+            if settings.current.enable_realtime_backups:
                 with open(data_path, 'wb') as f:
                     f.write(r.content)
             data.ParseFromString(r.content)

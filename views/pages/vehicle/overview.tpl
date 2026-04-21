@@ -33,8 +33,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'bus', vehicle, 'map') }}" class="tab-button">Map</a>
-        <a href="{{ get_url(context, 'bus', vehicle, 'history') }}" class="tab-button">History</a>
+        <a href="{{ vehicle.url('map') }}" class="tab-button">Map</a>
+        <a href="{{ vehicle.url('history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -99,7 +99,7 @@
                             <div class="section">
                                 <div class="row">
                                     % include('components/route')
-                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                    <a href="{{ route.url() }}">{{! route.display_name }}</a>
                                 </div>
                             </div>
                         % end
@@ -139,7 +139,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
+                                <a href="{{ position.context.url() }}">{{ position.context }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -161,7 +161,7 @@
                             <div class="row section">
                                 <div class="name">Block</div>
                                 <div class="value">
-                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                     % date = Date.today(block.context.timezone)
                                     % start_time = block.get_start_time(date=date).format_web(time_format)
                                     % end_time = block.get_end_time(date=date).format_web(time_format)
@@ -213,7 +213,7 @@
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
+                                    <a href="{{ allocation.context.url() }}">{{ allocation.context }}</a>
                                 </div>
                             </div>
                         % end
@@ -400,7 +400,7 @@
                                                     <div class="row space-between">
                                                         % if record.is_available:
                                                             % block = record.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
                                                         % else:
                                                             <span>{{ record.block_id }}</span>
                                                         % end

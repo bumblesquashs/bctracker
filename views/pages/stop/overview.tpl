@@ -16,9 +16,9 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ stop.url('map') }}" class="tab-button">Map</a>
         % if stop.type != StopType.STATION:
-            <a href="{{ get_url(context, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
+            <a href="{{ stop.url('schedule') }}" class="tab-button">Schedule</a>
         % end
     </div>
 </div>
@@ -52,7 +52,7 @@
                             % for route in routes:
                                 <div class="row">
                                     % include('components/route')
-                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                    <a href="{{ route.url() }}">{{! route.display_name }}</a>
                                 </div>
                             % end
                         </div>
@@ -110,7 +110,7 @@
                         <tbody>
                             % for alt_stop in alt_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(alt_stop.context, 'stops', alt_stop) }}">{{ alt_stop.context }}</a></td>
+                                    <td><a href="{{ alt_stop.url() }}">{{ alt_stop.context }}</a></td>
                                     <td>
                                         % include('components/route_list', routes=alt_stop.routes)
                                     </td>
@@ -140,7 +140,7 @@
                             <h2>
                                 % include('components/stop', stop=child_stop, include_link=False)
                             </h2>
-                            <a href="{{ get_url(child_stop.context, 'stops', child_stop) }}">View stop schedule and details</a>
+                            <a href="{{ child_stop.url() }}">View stop schedule and details</a>
                         </div>
                         % include('components/toggle')
                     </div>
@@ -185,7 +185,7 @@
                             % tomorrow = Date.today() + timedelta(days=1)
                             <p>
                                 There are no departures for the rest of today.
-                                <a href="{{ get_url(child_stop.context, 'stops', child_stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                <a href="{{ child_stop.url('schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                             </p>
                         % end
                     </div>
@@ -243,7 +243,7 @@
                             <div class="placeholder">
                                 <p>
                                     There are no departures for the rest of today.
-                                    <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                    <a href="{{ stop.url('schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                                 </p>
                             </div>
                         % end
@@ -297,7 +297,7 @@
                         <div class="placeholder">
                             % if context.gtfs_loaded:
                                 <h3>There are no departures from this stop today</h3>
-                                <p>You can check the <a href="{{ get_url(stop.context, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                                <p>You can check the <a href="{{ stop.url('schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                             % else:
                                 <h3>Departures for this stop are unavailable</h3>
                                 <p>System data is currently loading and will be available soon.</p>

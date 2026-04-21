@@ -14,9 +14,9 @@
     </h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ trip.url('map') }}" class="tab-button">Map</a>
         % if context.realtime_enabled:
-            <a href="{{ get_url(context, 'trips', trip, 'history') }}" class="tab-button">History</a>
+            <a href="{{ trip.url('history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -42,7 +42,7 @@
                         % if route:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ route.url() }}">{{! route.display_name }}</a>
                             </div>
                         % else:
                             <div class="lighter-text">Unknown Route</div>
@@ -59,7 +59,7 @@
                             <div class="name">Block</div>
                             <div class="value">
                                 % if block:
-                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                 % else:
                                     <span class="lighter-text">Loading</span>
                                 % end
@@ -143,7 +143,7 @@
                                     % if context.enable_blocks:
                                         <td class="non-mobile">
                                             % if block:
-                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                <a href="{{ block.url() }}">{{ block.id }}</a>
                                             % else:
                                                 <div class="lighter-text">Unknown</div>
                                             % end

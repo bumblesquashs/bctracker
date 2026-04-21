@@ -17,7 +17,7 @@
                     It may be from a different system - the following systems have a route with that number
                     <ul>
                         % for route in alt_routes:
-                            <li>{{ route.context }}: <a href="{{ get_url(route.context, 'routes', route) }}">{{ route }}</a></li>
+                            <li>{{ route.context }}: <a href="{{ route.url() }}">{{ route }}</a></li>
                         % end
                     </ul>
                 </li>

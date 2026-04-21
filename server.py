@@ -6,7 +6,6 @@ from time import time, sleep
 import cherrypy as cp
 
 from database import Database
-from settings import Settings
 
 from models.context import Context
 from models.date import Date
@@ -19,6 +18,7 @@ from models.timestamp import Timestamp
 
 import repositories
 import services
+import settings
 
 # Increase the version to force CSS reload
 VERSION = 68
@@ -29,16 +29,14 @@ class Server(Bottle):
     
     __slots__ = (
         'database',
-        'settings',
         'running'
     )
     
-    def __init__(self, database: Database, settings: Settings):
+    def __init__(self, database: Database):
         super().__init__()
         self.running = False
         
         self.database = database
-        self.settings = settings
         
         # Static files
         self.add('/style/<name:path>', append_slash=False, validate_system=False, callback=self.style)
@@ -125,7 +123,7 @@ class Server(Bottle):
         services.log.info('Server started')
         
         cp.config.update('server.conf')
-        self.settings.setup(cp.config)
+        settings.current.setup(cp.config)
         
         self.database.connect()
         
@@ -175,29 +173,9 @@ class Server(Bottle):
         if cp.server.running:
             cp.server.stop()
     
-    def get_url(self, context: Context, *args, **kwargs):
-        '''Returns a URL formatted based on the given context and path'''
-        components = []
-        for arg in args:
-            try:
-                components.append(str(arg.url_id))
-            except AttributeError:
-                components.append(str(arg))
-        path = '/'.join(components)
-        system_id = context.system_id
-        if system_id:
-            url = self.settings.system_domain.format(system_id, path).rstrip('/')
-        else:
-            url = self.settings.all_systems_domain.format(path).rstrip('/')
-        query_args = {k:v for k, v in kwargs.items() if v is not None}
-        if query_args:
-            query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
-            url += f'?{query}'
-        return url
-    
     def validate_admin(self):
         '''Checks if the admin key in the query/cookie matches the expected admin key'''
-        return not self.settings.admin_key or self.query_cookie('admin_key', max_age_days=1) == self.settings.admin_key
+        return not settings.current.admin_key or self.query_cookie('admin_key', max_age_days=1) == settings.current.admin_key
     
     def page(self, context: Context, name, title, path=None, path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
         '''Returns an HTML page with the given name and details'''
@@ -233,7 +211,7 @@ class Server(Bottle):
         theme_variant = self.query_cookie('theme_variant')
         high_contrast = self.query_cookie('high_contrast') == 'enabled'
         return template(f'pages/{name}',
-            settings=self.settings,
+            settings=settings.current,
             version=VERSION,
             title=title,
             path=path or [],
@@ -246,7 +224,6 @@ class Server(Bottle):
             systems=repositories.system.find_all(),
             agencies=repositories.agency.find_all(),
             is_admin=is_admin,
-            get_url=self.get_url,
             last_updated=last_updated,
             theme=theme,
             theme_variant=theme_variant,
@@ -267,7 +244,6 @@ class Server(Bottle):
         '''Returns an HTML element that can be inserted into a page'''
         return template(f'frames/{name}',
             context=context,
-            get_url=self.get_url,
             time_format=request.get_cookie('time_format'),
             show_speed=request.get_cookie('speed') == '1994',
             **kwargs
@@ -276,8 +252,8 @@ class Server(Bottle):
     def set_cookie(self, key, value, max_age_days=3650):
         '''Creates a cookie using the given key and value'''
         max_age = 60 * 60 * 24 * max_age_days
-        if self.settings.cookie_domain:
-            response.set_cookie(key, value, max_age=max_age, domain=self.settings.cookie_domain, path='/')
+        if settings.current.cookie_domain:
+            response.set_cookie(key, value, max_age=max_age, domain=settings.current.cookie_domain, path='/')
         else:
             response.set_cookie(key, value, max_age=max_age, path='/')
     
@@ -321,7 +297,7 @@ class Server(Bottle):
         def endpoint(*args, **kwargs):
             if require_admin and not self.validate_admin():
                 raise HTTPError(403)
-            if self.settings.await_realtime:
+            if settings.current.await_realtime:
                 while services.cron.updating_realtime:
                     sleep(1)
             if system_key in kwargs:
@@ -729,7 +705,7 @@ class Server(Bottle):
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
-                    redirect(self.get_url(route.context, 'routes', route))
+                    redirect(route.url())
                 return self.page(
                     context=context,
                     name='routes/choose',
@@ -780,7 +756,7 @@ class Server(Bottle):
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
-                    redirect(self.get_url(route.context, 'routes', route, 'map'))
+                    redirect(route.url('map'))
                 return self.page(
                     context=context,
                     name='routes/choose',
@@ -827,7 +803,7 @@ class Server(Bottle):
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
-                    redirect(self.get_url(route.context, 'routes', route, 'schedule'))
+                    redirect(route.url('schedule'))
                 return self.page(
                     context=context,
                     name='routes/choose',
@@ -872,7 +848,7 @@ class Server(Bottle):
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
-                    redirect(self.get_url(route.context, 'routes', route, 'schedule', date_string))
+                    redirect(route.url('schedule', date_string))
                 return self.page(
                     context=context,
                     name='routes/choose',
@@ -952,7 +928,7 @@ class Server(Bottle):
             if blocks:
                 if len(blocks) == 1:
                     block = blocks[0]
-                    redirect(self.get_url(block.context, 'blocks', block))
+                    redirect(block.url())
                 return self.page(
                     context=context,
                     name='blocks/choose',
@@ -995,7 +971,7 @@ class Server(Bottle):
             if blocks:
                 if len(blocks) == 1:
                     block = blocks[0]
-                    redirect(self.get_url(block.context, 'blocks', block, 'map'))
+                    redirect(block.url('map'))
                 return self.page(
                     context=context,
                     name='blocks/choose',
@@ -1038,7 +1014,7 @@ class Server(Bottle):
             if blocks:
                 if len(blocks) == 1:
                     block = blocks[0]
-                    redirect(self.get_url(block.context, 'blocks', block, 'history'))
+                    redirect(block.url('history'))
                 return self.page(
                     context=context,
                     name='blocks/choose',
@@ -1087,7 +1063,7 @@ class Server(Bottle):
             if trips:
                 if len(trips) == 1:
                     trip = trips[0]
-                    redirect(self.get_url(trip.context, 'trips', trip))
+                    redirect(trip.url())
                 return self.page(
                     context=context,
                     name='trips/choose',
@@ -1128,7 +1104,7 @@ class Server(Bottle):
             if trips:
                 if len(trips) == 1:
                     trip = trips[0]
-                    redirect(self.get_url(trip.context, 'trips', trip, 'map'))
+                    redirect(trip.url('map'))
                 return self.page(
                     context=context,
                     name='trips/choose',
@@ -1168,7 +1144,7 @@ class Server(Bottle):
             if trips:
                 if len(trips) == 1:
                     trip = trips[0]
-                    redirect(self.get_url(trip.context, 'trips', trip, 'history'))
+                    redirect(trip.url('history'))
                 return self.page(
                     context=context,
                     name='trips/choose',
@@ -1295,7 +1271,7 @@ class Server(Bottle):
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
-                    redirect(self.get_url(stop.context, 'stops', stop))
+                    redirect(stop.url())
                 return self.page(
                     context=context,
                     name='stops/choose',
@@ -1360,7 +1336,7 @@ class Server(Bottle):
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
-                    redirect(self.get_url(stop.context, 'stops', stop, 'map'))
+                    redirect(stop.url('map'))
                 return self.page(
                     context=context,
                     name='stops/choose',
@@ -1405,7 +1381,7 @@ class Server(Bottle):
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
-                    redirect(self.get_url(stop.context, 'stops', stop, 'schedule'))
+                    redirect(stop.url('schedule'))
                 return self.page(
                     context=context,
                     name='stops/choose',
@@ -1449,7 +1425,7 @@ class Server(Bottle):
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
-                    redirect(self.get_url(stop.context, 'stops', stop, 'schedule', date_string))
+                    redirect(stop.url('schedule', date_string))
                 return self.page(
                     context=context,
                     name='stops/choose',
@@ -1508,7 +1484,7 @@ class Server(Bottle):
         )
     
     def themes(self, context: Context):
-        redirect(self.get_url(context, 'personalize'))
+        redirect(context.url('personalize'))
     
     def personalize(self, context: Context):
         themes = repositories.theme.find_all()
@@ -1587,33 +1563,33 @@ class Server(Bottle):
             case 'vehicle':
                 allocations = system.get_allocations()
                 if not allocations:
-                    redirect(self.get_url(context))
+                    redirect(context.url())
                 allocation = random.choice(allocations)
-                redirect(self.get_url(context, 'bus', allocation.vehicle))
+                redirect(context.url('bus', allocation.vehicle))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
-                    redirect(self.get_url(context))
+                    redirect(context.url())
                 route = random.choice(routes)
-                redirect(self.get_url(context, 'routes', route))
+                redirect(context.url('routes', route))
             case 'stop':
                 stops = system.get_stops()
                 if not stops:
-                    redirect(self.get_url(context))
+                    redirect(context.url())
                 stop = random.choice(stops)
-                redirect(self.get_url(context, 'stops', stop))
+                redirect(context.url('stops', stop))
             case 'block':
                 blocks = system.get_blocks()
                 if not blocks:
-                    redirect(self.get_url(context))
+                    redirect(context.url())
                 block = random.choice(blocks)
-                redirect(self.get_url(context, 'blocks', block))
+                redirect(context.url('blocks', block))
             case 'trip':
                 trips = list(system.get_trips())
                 if not trips:
-                    redirect(self.get_url(context))
+                    redirect(context.url())
                 trip = random.choice(trips)
-                redirect(self.get_url(context, 'trips', trip))
+                redirect(context.url('trips', trip))
     
     def admin(self, context: Context):
         return self.page(
@@ -1639,7 +1615,7 @@ class Server(Bottle):
             enable_refresh=False,
             disable_indexing=True,
             total_logs=total_logs,
-            logs=logs[:self.settings.admin_logs_count],
+            logs=logs[:settings.current.admin_logs_count],
             level=level
         )
     
@@ -1758,7 +1734,7 @@ class Server(Bottle):
         min = page * count
         max = min + count
         return {
-            'results': [m.get_json(self.get_url) for m in matches[min:max]],
+            'results': [m.get_json() for m in matches[min:max]],
             'total': len(matches)
         }
     
