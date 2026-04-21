@@ -157,6 +157,10 @@ table tr.table-button {
     flex: 1;
 }
 
+#favourite-systems-dropdown {
+    display: none;
+}
+
 #last-updated {
     font-size: 12pt;
 }

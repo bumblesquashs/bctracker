@@ -115,6 +115,28 @@ table tr.table-button:hover {
     background-color: #FFFFFF;
 }
 
+#favourite-systems-dropdown {
+    background-color: #E6E6E6;
+    border-color: #666666;
+}
+
+#favourite-systems-dropdown .system-button {
+    color: #000000;
+    --image-color: #E20000;
+}
+
+#favourite-systems-dropdown .system-button:hover {
+    background-color: #CBCBCB;
+}
+
+#favourite-systems-dropdown .system-button.current {
+    background-color: #CBCBCB;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-color: #666666;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }

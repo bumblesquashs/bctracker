@@ -439,7 +439,7 @@
                 % include('components/svg', name='system')
             </div>
             <div class="details">
-                <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
+                <div id="system" class="tooltip-anchor {{ 'enable-dropdown' if hide_systems else '' }}" onclick="toggleSystemMenuDesktop()">
                     % if context.system:
                         {{ context }}
                         % if context.system_id in favourite_system_ids:
@@ -449,6 +449,31 @@
                         All Transit Systems
                     % end
                     <div class="tooltip right">Toggle Systems List</div>
+                    % if favourite_system_ids:
+                        <div id="favourite-systems-dropdown">
+                            % if context.system:
+                                <a href="{{ get_url(Context(), *path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
+                            % else:
+                                <span class="system-button current all-systems" onclick="event.stopPropagation()">All Transit Systems</span>
+                            % end
+                            % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
+                            % for system in favourite_systems:
+                                % if system == context.system:
+                                    <div class="system-button current" onclick="event.stopPropagation()">
+                                        % include('components/agency_logo', agency=system.agency)
+                                        <div class="flex-1">{{ system }}</div>
+                                        % include('components/svg', name='action/favourite')
+                                    </div>
+                                % else:
+                                    <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button" onclick="event.stopPropagation()">
+                                        % include('components/agency_logo', agency=system.agency)
+                                        <div class="flex-1">{{ system }}</div>
+                                        % include('components/svg', name='action/favourite')
+                                    </a>
+                                % end
+                            % end
+                        </div>
+                    % end
                 </div>
                 % if last_updated:
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
@@ -946,6 +971,7 @@
     }
     
     function toggleSystemMenuDesktop() {
+        document.getElementById("system").classList.toggle("enable-dropdown");
         const element = document.getElementById("system-menu");
         element.classList.toggle("collapse-desktop");
         if (element.classList.contains("collapse-desktop")) {
