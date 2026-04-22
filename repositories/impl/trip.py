@@ -15,6 +15,10 @@ class TripRepository:
     def create(self, context: Context, row: dict):
         '''Inserts a new trip into the database'''
         try:
+            block_id = row['block_id']
+        except KeyError:
+            block_id = None
+        try:
             direction_id = int(row['direction_id'])
         except (KeyError, ValueError):
             direction_id = None
@@ -26,7 +30,7 @@ class TripRepository:
                 'trip_id': row['trip_id'],
                 'route_id': row['route_id'],
                 'service_id': row['service_id'],
-                'block_id': row['block_id'],
+                'block_id': block_id,
                 'direction_id': direction_id,
                 'shape_id': row['shape_id'],
                 'headsign': row['trip_headsign']
