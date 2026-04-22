@@ -47,10 +47,16 @@
                                 map.updateSize();
                                 map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
                                 map.getView().setZoom(17);
+                            } else if ("{{ len(stops) }}" === "1") {
+                                map.getView().setZoom(17);
                             }
                         }
                         
-                        showCurrentLocation();
+                        const existingOnLoad = document.body.onload
+                        document.body.onload = function() {
+                            existingOnLoad();
+                            showCurrentLocation();
+                        }
                     </script>
                 </div>
             </div>
@@ -65,7 +71,7 @@
                 <div class="content">
                     <div class="container">
                         % if stops:
-                            % for stop in stops:
+                            % for stop in sorted(stops, key=lambda s: s.get_distance(lat, lon)):
                                 % departures = stop.find_departures(date=today)
                                 % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
                                 % upcoming_count = 3 + floor(len(routes) / 3)
@@ -122,7 +128,7 @@
                                                         % if not last_time:
                                                             % last_time = departure.time
                                                         % end
-                                                        % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                                         % last_time = departure.time
                                                     % end
                                                 </tbody>

@@ -1463,7 +1463,7 @@ class Server(Bottle):
         if lat is not None and lon is not None:
             lat = float(lat)
             lon = float(lon)
-            size = 0.001
+            size = 0.0015
             stops = repositories.stop.find_all(context, lat=lat - (size / 2), lon=lon - (size / 2), size=size)
         else:
             stops = []
@@ -1479,7 +1479,7 @@ class Server(Bottle):
             include_maps=lat and lon,
             lat=lat,
             lon=lon,
-            stops=sorted(stops)
+            stops=stops
         )
     
     def themes(self, context: Context):
